@@ -1,0 +1,98 @@
+<!DOCTYPE node PUBLIC '-//freedesktop//DTD D-BUS Object Introspection 1.0//EN' 'http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd'>
+<node>
+    <interface name="com.deepin.dde.daemon.Launcher">
+        <method name="GetAllCategoryInfos">
+            <arg type="a(sxas)" direction="out"/>
+            <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="CategoryInfoList"/>
+        </method>
+        <method name="GetAllFrequency">
+            <arg type="a(st)" direction="out"/>
+            <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="AppFrequencyInfoList"/>
+        </method>
+        <method name="GetAllItemInfos">
+            <arg type="a(ssssxx)" direction="out"/>
+            <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="AllItemInfosList"/>
+        </method>
+        <method name="GetAllNewInstalledApps">
+            <arg type="as" direction="out"/>
+        </method>
+        <method name="GetAllTimeInstalled">
+            <arg type="a(sx)" direction="out"/>
+            <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="AppInstalledTimeInfoList"/>
+        </method>
+        <method name="GetCategoryInfo">
+            <arg type="x" direction="in"/>
+            <arg type="(sxas)" direction="out"/>
+            <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="CategoryInfo"/>
+        </method>
+        <method name="GetItemInfo">
+            <arg type="s" direction="in"/>
+            <arg type="(ssssxx)" direction="out"/>
+            <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="ItemInfo"/>
+        </method>
+        <method name="IsItemOnDesktop">
+            <arg type="s" direction="in"/>
+            <arg type="b" direction="out"/>
+        </method>
+        <method name="MarkLaunched">
+            <arg type="s" direction="in"/>
+        </method>
+        <method name="RecordFrequency">
+            <arg type="s" direction="in"/>
+        </method>
+        <method name="RecordRate">
+            <arg type="s" direction="in"/>
+        </method>
+        <method name="RequestRemoveFromDesktop">
+            <arg type="s" direction="in"/>
+            <arg type="b" direction="out"/>
+        </method>
+        <method name="RequestSendToDesktop">
+            <arg type="s" direction="in"/>
+            <arg type="b" direction="out"/>
+        </method>
+        <method name="RequestUninstall">
+            <arg type="s" direction="in"/>
+            <arg type="b" direction="in"/>
+        </method>
+        <method name="Search">
+            <arg type="s" direction="in"/>
+        </method>
+        <signal name="ItemChanged">
+            <arg type="s"/>
+            <arg type="(ssssxx)"/>
+            <annotation name="org.qtproject.QtDBus.QtTypeName.In1" value="ItemInfo"/>
+            <arg type="x"/>
+        </signal>
+        <signal name="UninstallSuccess">
+            <arg type="s"/>
+        </signal>
+        <signal name="UninstallFailed">
+            <arg type="s"/>
+            <arg type="s"/>
+        </signal>
+        <signal name="SendToDesktopSuccess">
+            <arg type="s"/>
+        </signal>
+        <signal name="SendToDesktopFailed">
+            <arg type="s"/>
+            <arg type="s"/>
+        </signal>
+        <signal name="RemoveFromDesktopSuccess">
+            <arg type="s"/>
+        </signal>
+        <signal name="RemoveFromDesktopFailed">
+            <arg type="s"/>
+            <arg type="s"/>
+        </signal>
+        <signal name="SearchDone">
+            <arg type="as"/>
+        </signal>
+        <signal name="NewAppLaunched">
+            <arg type="s"/>
+        </signal>
+        <signal name="NewAppMarkedAsLaunched">
+            <arg type="s"/>
+        </signal>
+    </interface>
+</node>

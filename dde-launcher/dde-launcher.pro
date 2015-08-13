@@ -8,7 +8,7 @@ QT       += core gui dbus x11extras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = dde-luancher
+TARGET = dde-launcher
 TEMPLATE = app
 
 PKGCONFIG += x11 xcb xcb-ewmh
@@ -73,3 +73,5 @@ RESOURCES += \
     oldskin.qrc \
     images.qrc
 
+target.path = /usr/bin/
+INSTALLS += target

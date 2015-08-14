@@ -20,7 +20,7 @@ void NavigationBar::initUI(int width){
     m_layout->setCurrentIndex(0);
     setLayout(m_layout);
     setFixedSize(width, qApp->desktop()->screenGeometry().height());
-    setStyleSheet(getQssFromFile(":/skin/qss/buttons.qss"));
+    setStyleSheet(getQssFromFile(":/qss/skin/qss/buttons.qss"));
 }
 
 void NavigationBar::initConnect(){

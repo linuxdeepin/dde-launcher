@@ -6,26 +6,38 @@
 #include "navigationbar.h"
 #include "app/global.h"
 #include "Logger.h"
+#include "transparentframe.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QStackedLayout>
 #include <QHBoxLayout>
+#include <QButtonGroup>
+#include <QPushButton>
+#include <QApplication>
+
+QButtonGroup LauncherFrame::buttonGroup(qApp);
 
 LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
 {
+    LauncherFrame::buttonGroup.setExclusive(true);
     setAttribute(Qt::WA_DeleteOnClose);
-    setWindowFlags(Qt::FramelessWindowHint);
-    setWindowState(Qt::WindowFullScreen);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
     setFixedSize(qApp->desktop()->screenGeometry().size());
     setObjectName("LauncherFrame");
     computerGrid(160, 60, 24, 160);
     initUI();
     initConnect();
-    setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
+    setStyleSheet(getQssFromFile(":/qss/skin/qss/main.qss"));
 }
 
 
 void LauncherFrame::initUI(){
+    LOG_INFO() << "initUI";
+    m_clearCheckedButton = new QPushButton(this);
+    m_clearCheckedButton->setCheckable(true);
+    m_clearCheckedButton->hide();
+    LauncherFrame::buttonGroup.addButton(m_clearCheckedButton, 0);
+
     m_categoryFrame = new CategoryFrame(this);
     m_categoryFrame->initUI(m_leftMargin, m_rightMargin, m_column, m_itemWidth, m_gridwidth);
 
@@ -46,6 +58,8 @@ void LauncherFrame::initUI(){
     setLayout(m_layout);
     m_layout->setCurrentIndex(0);
     m_displayModeFrame = new DisplayModeFrame(this);
+
+    LOG_INFO() << "initUI finished";
 }
 
 void LauncherFrame::computerGrid(int minimumLeftMargin, int minimumTopMargin, int miniSpacing, int itemWidth){
@@ -70,6 +84,7 @@ void LauncherFrame::initConnect(){
     connect(m_displayModeFrame, SIGNAL(visibleChanged(bool)), this, SLOT(toggleDisableNavgationBar(bool)));
     connect(m_displayModeFrame, SIGNAL(sortModeChanged(int)), this, SLOT(showAppTableWidgetByMode(int)));
     connect(m_displayModeFrame, SIGNAL(categoryModeChanged(int)), this, SLOT(showNavigationBarByMode(int)));
+    connect(signalManager, SIGNAL(mouseReleased()), this, SLOT(handleMouseReleased()));
 }
 
 
@@ -95,13 +110,24 @@ void LauncherFrame::showNavigationBarByMode(int mode){
 }
 
 void LauncherFrame::mouseReleaseEvent(QMouseEvent *event){
-
+    emit signalManager->mouseReleased();
+    QFrame::mouseReleaseEvent(event);
 }
 
 void LauncherFrame::keyPressEvent(QKeyEvent *event){
     if (event->key() == Qt::Key_Escape){
         close();
     }
+    QFrame::keyPressEvent(event);
+}
+
+void LauncherFrame::toggle(){
+    setVisible(!isVisible());
+}
+
+void LauncherFrame::handleMouseReleased(){
+    m_clearCheckedButton->click();
+//    toggle();
 }
 
 LauncherFrame::~LauncherFrame()

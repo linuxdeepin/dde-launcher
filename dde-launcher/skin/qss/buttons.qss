@@ -3,11 +3,11 @@ QFrame#DisplayModeFrame{
 }
 
 QFrame#DisplayModeFrame > BaseCheckedButton#ViewModeButton{
-    border-image: url(:/skin/images/category_50.svg);
+    border-image: url(:/images/skin/images/category_50.svg);
 }
 
 QFrame#DisplayModeFrame > BaseCheckedButton#ViewModeButton:hover{
-    border-image: url(:/skin/images/category_100.svg);
+    border-image: url(:/images/skin/images/category_100.svg);
 }
 
 
@@ -62,136 +62,136 @@ BaseCheckedButton#CategoryTextButton:checked{
 
 
 BaseCheckedButton#internet{
-    border-image: url(:/skin/images/internet_50.svg);
+    border-image: url(:/images/skin/images/internet_50.svg);
 }
 
 BaseCheckedButton#internet:checked{
-    border-image: url(:/skin/images/internet_100.svg);
+    border-image: url(:/images/skin/images/internet_100.svg);
 }
 
 BaseCheckedButton#internet:disabled{
-    border-image: url(:/skin/images/internet_10.svg);
+    border-image: url(:/images/skin/images/internet_10.svg);
 }
 
 BaseCheckedButton#multimedia{
-    border-image: url(:/skin/images/multimedia_50.svg);
+    border-image: url(:/images/skin/images/multimedia_50.svg);
 }
 
 BaseCheckedButton#multimedia:checked{
-    border-image: url(:/skin/images/multimedia_100.svg);
+    border-image: url(:/images/skin/images/multimedia_100.svg);
 }
 
 BaseCheckedButton#multimedia:disabled{
-    border-image: url(:/skin/images/multimedia_10.svg);
+    border-image: url(:/images/skin/images/multimedia_10.svg);
 }
 
 BaseCheckedButton#games{
-    border-image: url(:/skin/images/games_50.svg);
+    border-image: url(:/images/skin/images/games_50.svg);
 }
 
 BaseCheckedButton#games:checked{
-    border-image: url(:/skin/images/games_100.svg);
+    border-image: url(:/images/skin/images/games_100.svg);
 }
 
 BaseCheckedButton#games:disabled{
-    border-image: url(:/skin/images/games_10.svg);
+    border-image: url(:/images/skin/images/games_10.svg);
 }
 
 BaseCheckedButton#graphics{
-    border-image: url(:/skin/images/graphics_50.svg);
+    border-image: url(:/images/skin/images/graphics_50.svg);
 }
 
 BaseCheckedButton#graphics:checked{
-    border-image: url(:/skin/images/graphics_100.svg);
+    border-image: url(:/images/skin/images/graphics_100.svg);
 }
 
 BaseCheckedButton#graphics:disabled{
-    border-image: url(:/skin/images/graphics_10.svg);
+    border-image: url(:/images/skin/images/graphics_10.svg);
 }
 
 BaseCheckedButton#productivity{
-    border-image: url(:/skin/images/productivity_50.svg);
+    border-image: url(:/images/skin/images/productivity_50.svg);
 }
 
 BaseCheckedButton#productivity:checked{
-    border-image: url(:/skin/images/productivity_100.svg);
+    border-image: url(:/images/skin/images/productivity_100.svg);
 }
 
 BaseCheckedButton#productivity:disabled{
-    border-image: url(:/skin/images/productivity_10.svg);
+    border-image: url(:/images/skin/images/productivity_10.svg);
 }
 
 
 BaseCheckedButton#industry{
-    border-image: url(:/skin/images/industry_50.png);
+    border-image: url(:/images/skin/images/industry_50.png);
 }
 
 BaseCheckedButton#industry:checked{
-    border-image: url(:/skin/images/industry_100.png);
+    border-image: url(:/images/skin/images/industry_100.png);
 }
 
 BaseCheckedButton#industry:disabled{
-    border-image: url(:/skin/images/industry_10.png);
+    border-image: url(:/images/skin/images/industry_10.png);
 }
 
 
 BaseCheckedButton#education{
-    border-image: url(:/skin/images/education_50.svg);
+    border-image: url(:/images/skin/images/education_50.svg);
 }
 
 BaseCheckedButton#education:checked{
-    border-image: url(:/skin/images/education_100.svg);
+    border-image: url(:/images/skin/images/education_100.svg);
 }
 
 BaseCheckedButton#education:disabled{
-    border-image: url(:/skin/images/education_10.svg);
+    border-image: url(:/images/skin/images/education_10.svg);
 }
 
 BaseCheckedButton#development{
-    border-image: url(:/skin/images/development_50.svg);
+    border-image: url(:/images/skin/images/development_50.svg);
 }
 
 BaseCheckedButton#development:checked{
-    border-image: url(:/skin/images/development_100.svg);
+    border-image: url(:/images/skin/images/development_100.svg);
 }
 
 BaseCheckedButton#development:disabled{
-    border-image: url(:/skin/images/development_10.svg);
+    border-image: url(:/images/skin/images/development_10.svg);
 }
 
 
 BaseCheckedButton#system{
-    border-image: url(:/skin/images/system_50.svg);
+    border-image: url(:/images/skin/images/system_50.svg);
 }
 
 BaseCheckedButton#system:checked{
-    border-image: url(:/skin/images/system_100.svg);
+    border-image: url(:/images/skin/images/system_100.svg);
 }
 
 BaseCheckedButton#system:disabled{
-    border-image: url(:/skin/images/system_10.svg);
+    border-image: url(:/images/skin/images/system_10.svg);
 }
 
 BaseCheckedButton#utilities{
-    border-image: url(:/skin/images/utilities_50.png);
+    border-image: url(:/images/skin/images/utilities_50.png);
 }
 
 BaseCheckedButton#utilities:checked{
-    border-image: url(:/skin/images/utilities_100.png);
+    border-image: url(:/images/skin/images/utilities_100.png);
 }
 
 BaseCheckedButton#utilities:disabled{
-    border-image: url(:/skin/images/utilities_10.png);
+    border-image: url(:/images/skin/images/utilities_10.png);
 }
 
 BaseCheckedButton#others{
-    border-image: url(:/skin/images/others_50.svg);
+    border-image: url(:/images/skin/images/others_50.svg);
 }
 
 BaseCheckedButton#others:checked{
-    border-image: url(:/skin/images/others_100.svg);
+    border-image: url(:/images/skin/images/others_100.svg);
 }
 
 BaseCheckedButton#others:disabled{
-    border-image: url(:/skin/images/others_10.svg);
+    border-image: url(:/images/skin/images/others_10.svg);
 }

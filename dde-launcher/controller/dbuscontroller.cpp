@@ -1,8 +1,10 @@
 #include "dbuscontroller.h"
 #include "dbusinterface/launcher_interface.h"
 #include "dbusinterface/fileInfo_interface.h"
+#include "dbusinterface/startmanager_interface.h"
 #include "Logger.h"
 #include "app/global.h"
+#include "controller/menucontroller.h"
 
 #include <QtCore>
 #include <QtDBus>
@@ -11,6 +13,9 @@ DBusController::DBusController(QObject *parent) : QObject(parent)
 {
     m_launcherInterface = new LauncherInterface(Launcher_service, Launcher_path, QDBusConnection::sessionBus(), this);
     m_fileInfoInterface = new FileInfoInterface(FileInfo_service, FileInfo_path, QDBusConnection::sessionBus(), this);
+    m_startManagerInterface = new StartManagerInterface(StartManager_service, StartManager_path, QDBusConnection::sessionBus(), this);
+    m_menuController = new MenuController(this);
+    initConnect();
 }
 
 void DBusController::init(){
@@ -20,7 +25,30 @@ void DBusController::init(){
 
 }
 
+void DBusController::initConnect(){
+    connect(m_launcherInterface, SIGNAL(UninstallSuccess(QString)),
+            m_menuController, SLOT(handleUninstallSuccess(QString)));
+    connect(m_launcherInterface, SIGNAL(UninstallFailed(QString,QString)),
+            m_menuController, SLOT(handleUninstallFail(QString,QString)));
+    connect(signalManager, SIGNAL(itemDeleted(QString)), this, SLOT(updateAppTable(QString)));
+}
+
+void DBusController::updateAppTable(QString appKey){
+    LOG_INFO() << "updateAppTable" << appKey;
+    init();
+}
+
+LauncherInterface* DBusController::getLauncherInterface(){
+    return m_launcherInterface;
+}
+
+StartManagerInterface* DBusController::getStartManagerInterface(){
+    return m_startManagerInterface;
+}
+
 void DBusController::getCategoryInfoList(){
+    m_appIcons.clear();
+    m_itemInfos.clear();
     QDBusPendingReply<CategoryInfoList> reply = m_launcherInterface->GetAllCategoryInfos();
     reply.waitForFinished();
     if (!reply.isError()){

@@ -54,7 +54,7 @@ void DisplayModeFrame::initUI(){
     m_buttonFrame->move(m_viewModeButton->x(), m_viewModeButton->y() + m_viewModeButton->height());
     m_buttonFrame->hide();
 
-    setStyleSheet(getQssFromFile(":/skin/qss/buttons.qss"));
+    setStyleSheet(getQssFromFile(":/qss/skin/qss/buttons.qss"));
 }
 
 

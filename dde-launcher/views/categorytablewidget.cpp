@@ -2,6 +2,7 @@
 #include "widgets/util.h"
 #include "app/global.h"
 #include "categoryitem.h"
+#include "appitem.h"
 #include "Logger.h"
 #include <QWheelEvent>
 #include <QHeaderView>
@@ -11,7 +12,6 @@
 CategoryTableWidget::CategoryTableWidget(QWidget *parent) : BaseTableWidget(parent)
 {
     setObjectName("CategoryTableWidget");
-    setStyleSheet(getQssFromFile(":/skin/qss/Tablewidget.qss"));
     initConnect();
 }
 
@@ -31,10 +31,10 @@ void CategoryTableWidget::setGridParameter(int column, int girdWidth, int itemWi
         setColumnWidth(i, m_gridWidth);
     }
 
-    int desktopHeight =  qApp->desktop()->screenGeometry().height();
-    int bottomMargin = qApp->desktop()->screenGeometry().height() - qApp->desktop()->availableGeometry().height();
-    setFixedHeight(desktopHeight - 2* bottomMargin);
-
+//    int desktopHeight =  qApp->desktop()->screenGeometry().height();
+//    int bottomMargin = qApp->desktop()->screenGeometry().height() -
+//            qApp->desktop()->availableGeometry().height();
+    setFixedWidth(m_column * m_gridWidth);
 }
 
 void CategoryTableWidget::setItemInfosMap(const QMap<QString, ItemInfo> &itemInfos){
@@ -72,11 +72,11 @@ void CategoryTableWidget::addCategoryItem(int row, QString key){
      QTableWidgetItem* item = new QTableWidgetItem();
      item->setFlags(Qt::NoItemFlags);
      setSpan(row, 0, 1, m_column);
-     setRowHeight(row, 40);
+     setRowHeight(row, 60);
      setItem(row, 0, item);
 
      CategoryItem* categoryItem = new CategoryItem(key);
-     categoryItem->setFixedSize(m_gridWidth * m_column, 40);
+     categoryItem->setFixedSize(m_gridWidth * m_column, rowHeight(row));
      setCellWidget(row, 0, categoryItem);
      m_categoryItems.insert(key, categoryItem);
 }
@@ -101,6 +101,7 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
             const ItemInfo& itemInfo = m_itemInfosMap.value(appKey);
 
             AppItem* appItem = new AppItem(itemInfo.url, itemInfo.icon, itemInfo.name);
+            appItem->setAppKey(itemInfo.key);
             appItem->setFixedSize(m_gridWidth, m_gridWidth);
             setCellWidget(_row, column, appItem);
        }else{
@@ -112,15 +113,15 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
        int desktopHeight =  qApp->desktop()->screenGeometry().height();
        int bottomMargin = qApp->desktop()->screenGeometry().height() - qApp->desktop()->availableGeometry().height();
        int othersCategoryHeight = categoryItemHeight + m_gridWidth * (endRow - startRow);
-       if (othersCategoryHeight <  desktopHeight - 2 * bottomMargin){
+       if (othersCategoryHeight <  desktopHeight - bottomMargin - 20){
            insertRow(endRow);
-           setRowHeight(endRow, height() - othersCategoryHeight);
+           setRowHeight(endRow, height() - othersCategoryHeight + 20);
        }
    }
 }
 
 void CategoryTableWidget::addItems(const CategoryInfoList &categoryInfoList){
-    clearContents();
+    clear();
     int row = 0;
     foreach (CategoryInfo info, categoryInfoList) {
         if(info.items.count() > 0){

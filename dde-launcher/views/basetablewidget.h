@@ -2,6 +2,7 @@
 #define BASETABLEWIDGET_H
 
 #include <QTableWidget>
+class QMouseEvent;
 
 class BaseTableWidget : public QTableWidget
 {
@@ -14,6 +15,11 @@ signals:
 
 public slots:
     void setItemUnChecked();
+
+protected:
+    void mouseReleaseEvent(QMouseEvent* event);
+
+
 };
 
 #endif // BASETABLEWIDGET_H

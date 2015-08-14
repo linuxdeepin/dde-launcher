@@ -16,6 +16,7 @@ CONFIG += c++11 link_pkgconfig
 
 include(./widgets/widgets.pri)
 include(./cutelogger/cutelogger.pri)
+include(./dialogs/dialogs.pri)
 
 SOURCES += main.cpp \
     views/launcherframe.cpp \
@@ -38,8 +39,14 @@ SOURCES += main.cpp \
     controller/dbuscontroller.cpp \
     dbusinterface/fileInfo_interface.cpp \
     views/appitem.cpp \
-    views/appitemmanager.cpp \
-    views/categoryitem.cpp
+    views/categoryitem.cpp \
+    dbusinterface/menumanager_interface.cpp \
+    dbusinterface/menu_interface.cpp \
+    controller/menucontroller.cpp \
+    dbusinterface/dbusdockedappmanager.cpp \
+    views/transparentframe.cpp \
+    views/borderbutton.cpp \
+    dbusinterface/startmanager_interface.cpp
 
 HEADERS += \
     views/launcherframe.h \
@@ -65,13 +72,19 @@ HEADERS += \
     controller/dbuscontroller.h \
     dbusinterface/fileInfo_interface.h \
     views/appitem.h \
-    views/appitemmanager.h \
     views/fwd.h \
-    views/categoryitem.h
+    views/categoryitem.h \
+    dbusinterface/menumanager_interface.h \
+    dbusinterface/menu_interface.h \
+    controller/menucontroller.h \
+    dbusinterface/dbusdockedappmanager.h \
+    views/transparentframe.h \
+    views/borderbutton.h \
+    dbusinterface/startmanager_interface.h
 
 RESOURCES += \
-    oldskin.qrc \
-    images.qrc
+    skin.qrc \
+    dialogs.qrc
 
 target.path = /usr/bin/
 INSTALLS += target

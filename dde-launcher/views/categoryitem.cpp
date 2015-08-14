@@ -25,7 +25,7 @@ void CategoryItem::initUI(QString text){
     whiteLineLabel->setFixedHeight(1);
 
     QHBoxLayout* mainLayout = new QHBoxLayout;
-    mainLayout->addWidget(label);
+    mainLayout->addWidget(label, Qt::AlignTop);
 
     QVBoxLayout* lineLayout = new QVBoxLayout;
     lineLayout->addStretch();
@@ -34,7 +34,7 @@ void CategoryItem::initUI(QString text){
     lineLayout->addStretch();
     lineLayout->setSpacing(0);
     lineLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->addLayout(lineLayout);
+    mainLayout->addLayout(lineLayout, Qt::AlignTop);
     mainLayout->setSpacing(15);
     mainLayout->setContentsMargins(5, 0, 0, 0);
     setLayout(mainLayout);

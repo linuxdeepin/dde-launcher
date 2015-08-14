@@ -16,7 +16,6 @@ AppTableWidget::AppTableWidget(QWidget *parent) : BaseTableWidget(parent)
 {
     setVerticalScrollMode(ScrollPerPixel);
     setObjectName("AppTableWidget");
-    setStyleSheet(getQssFromFile(":/skin/qss/Tablewidget.qss"));
     initConnect();
 }
 
@@ -39,17 +38,15 @@ void AppTableWidget::addItem(ItemInfo itemInfo, int index){
     int row = index / m_column;
     int column = index % m_column;
 
-
-    QTableWidgetItem* item = new QTableWidgetItem();
-    setItem(row, column, item);
     AppItem* appItem = new AppItem(itemInfo.url, itemInfo.icon, itemInfo.name);
+    appItem->setAppKey(itemInfo.key);
     appItem->setFixedSize(m_gridWidth, m_gridWidth);
     setCellWidget(row, column, appItem);
 }
 
 
 void AppTableWidget::addItems(const QList<ItemInfo> &itemInfos){
-    clearContents();
+    clear();
     setRowCount(itemInfos.length() / m_column + 1);
     for(int i=0; i< rowCount(); i++){
         setRowHeight(i, m_gridWidth);

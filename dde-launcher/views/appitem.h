@@ -5,8 +5,9 @@
 #include <QtGui>
 #include <QtWidgets>
 
-
+class BorderButton;
 class ElidedLabel;
+
 
 class AppItem : public QFrame
 {
@@ -25,6 +26,8 @@ public:
     QPixmap getAppIcon();
     QString getAppName();
     QString getUrl();
+    QString getAppKey();
+    BorderButton* getBorderButton();
 
 signals:
 
@@ -32,21 +35,22 @@ public slots:
     void setAppIcon(QString icon);
     void setAppIcon(QPixmap& icon);
     void setAppName(QString name);
+    void setAppKey(QString key);
     void setUrl(QString url);
+    void showMenu(QPoint pos);
 
 protected:
-    void mousePressEvent(QMouseEvent* event);
-    void resizeEvent(QResizeEvent* event);
-    void enterEvent(QEvent* event);
-    void leaveEvent(QEvent* event);
-
+    void mouseReleaseEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent *event);
 private:
     QLabel* m_iconLabel;
-    QLabel* m_borderLabel;
+    BorderButton* m_borderButton;
     ElidedLabel* m_nameLabel;
     QPixmap m_appIcon;
     QString m_appName = "";
     QString m_url;
+    QString m_key;
+
 };
 
 #endif // APPITEM_H

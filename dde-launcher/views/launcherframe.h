@@ -8,6 +8,8 @@ class CategoryFrame;
 class AppTableWidget;
 class DisplayModeFrame;
 class QStackedLayout;
+class QButtonGroup;
+class QPushButton;
 
 class LauncherFrame : public QFrame
 {
@@ -15,6 +17,8 @@ class LauncherFrame : public QFrame
 public:
     explicit LauncherFrame(QWidget *parent = 0);
     ~LauncherFrame();
+
+    static QButtonGroup buttonGroup;
 
     void initUI();
     void initConnect();
@@ -26,6 +30,8 @@ public slots:
        void toggleDisableNavgationBar(bool flag);
        void showAppTableWidgetByMode(int mode);
        void showNavigationBarByMode(int mode);
+       void handleMouseReleased();
+       void toggle();
 
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
@@ -45,6 +51,8 @@ private:
     DisplayModeFrame* m_displayModeFrame;
     CategoryFrame* m_categoryFrame;
     AppTableWidget* m_appTableWidget;
+
+    QPushButton* m_clearCheckedButton;
 };
 
 #endif // LAUNCHERFRAME_H

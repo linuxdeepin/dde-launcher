@@ -1,5 +1,6 @@
 #include "launcherapp.h"
 #include "views/launcherframe.h"
+#include "Logger.h"
 
 LauncherApp::LauncherApp(QObject *parent) : QObject(parent)
 {
@@ -8,6 +9,7 @@ LauncherApp::LauncherApp(QObject *parent) : QObject(parent)
 
 void LauncherApp::show(){
     m_launcherFrame->show();
+    LOG_INFO() << "LauncherApp show";
 }
 
 LauncherApp::~LauncherApp()

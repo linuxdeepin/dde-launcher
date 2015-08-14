@@ -1,8 +1,11 @@
 #include "appitem.h"
 #include "widgets/elidelabel.h"
 #include "widgets/util.h"
+#include "app/global.h"
+#include "borderbutton.h"
 #include "Logger.h"
-
+#include <QApplication>
+#include "launcherframe.h"
 
 AppItem::AppItem(QWidget *parent) : QFrame(parent)
 {
@@ -67,27 +70,32 @@ void AppItem::initUI(){
 
     m_iconLabel->setFixedSize(48, 48);
 
-    m_borderLabel = new QLabel(this);
-    m_borderLabel->setObjectName("BorderLabel");
+    m_borderButton = new BorderButton(this);
+    m_borderButton->setFixedSize(120, 120);
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(m_iconLabel, 0, Qt::AlignHCenter);
     mainLayout->addWidget(m_nameLabel, 0, Qt::AlignHCenter);
     mainLayout->setSpacing(10);
     mainLayout->setContentsMargins(10, 10, 10, 10);
-    m_borderLabel->setLayout(mainLayout);
+    m_borderButton->setLayout(mainLayout);
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(m_borderLabel);
-    layout->setSpacing(0);
-    layout->setContentsMargins(40, 40, 40, 40);
-    setLayout(mainLayout);
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->addWidget(m_borderButton, Qt::AlignCenter);
+    layout->setContentsMargins(0, 0, 0, 0);
+    setLayout(layout);
+
+    LauncherFrame::buttonGroup.addButton(m_borderButton);
+    setMouseTracking(true);
 }
 
 void AppItem::initConnect(){
-
+    connect(m_borderButton, SIGNAL(rightClicked(QPoint)), this, SLOT(showMenu(QPoint)));
 }
 
-
+void AppItem::showMenu(QPoint pos){
+    qDebug() << m_key;
+    emit signalManager->contextMenuShowed(m_key, pos);
+}
 
 QString AppItem::getAppName(){
     return m_appName;
@@ -116,35 +124,43 @@ void AppItem::setUrl(QString url){
     m_url = url;
 }
 
+QString AppItem::getAppKey(){
+    return m_key;
+}
+
+void AppItem::setAppKey(QString key){
+    m_key = key;
+}
+
 QString AppItem::getUrl(){
     return m_url;
 }
 
-void AppItem::resizeEvent(QResizeEvent *event){
-    QFrame::resizeEvent(event);
+BorderButton* AppItem::getBorderButton(){
+    return m_borderButton;
 }
 
-void AppItem::mousePressEvent(QMouseEvent *event){
-    if (event->button() == Qt::RightButton){
-//       emit signalManager->contextMenuShowed(m_url, mapToGlobal(event->pos()));
+void AppItem::mouseMoveEvent(QMouseEvent *event){
+    if (getBorderButton()->geometry().contains(event->pos())){
+
+    }else{
+        emit signalManager->mouseReleased();
     }
-    QFrame::mousePressEvent(event);
+    QFrame::mouseMoveEvent(event);
 }
 
-void AppItem::enterEvent(QEvent *event){
-    m_borderLabel->setStyleSheet("QLabel#BorderLabel{\
-                                 background-color: rgba(0, 0, 0, 0.2);\
-                                 border: 2px solid rgba(255, 255, 255, 0.15);\
-                                 border-radius: 4px;}");
-    QFrame::enterEvent(event);
-}
+void AppItem::mouseReleaseEvent(QMouseEvent *event){
+    if (getBorderButton()->geometry().contains(event->pos())){
 
-void AppItem::leaveEvent(QEvent *event){
-    m_borderLabel->setStyleSheet("QLabel#BorderLabel{border: none}");
-    QFrame::leaveEvent(event);
+    }else{
+        emit signalManager->mouseReleased();
+    }
+    QFrame::mouseReleaseEvent(event);
 }
 
 AppItem::~AppItem()
 {
-    LOG_INFO() << this << "Desktop Item delete";
+    if (LauncherFrame::buttonGroup.buttons().contains(m_borderButton)){
+        LauncherFrame::buttonGroup.removeButton(m_borderButton);
+    }
 }

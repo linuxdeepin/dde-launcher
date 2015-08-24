@@ -19,6 +19,10 @@ class MenuController;
 #define StartManager_service "com.deepin.SessionManager"
 #define StartManager_path "/com/deepin/StartManager"
 
+bool appNameLessThan(const ItemInfo &info1, const ItemInfo &info2);
+bool installTimeLessThan(const ItemInfo &info1, const ItemInfo &info2);
+bool useFrequencyLessThan(const AppFrequencyInfo &info1, const AppFrequencyInfo &info2);
+
 class DBusController : public QObject
 {
     Q_OBJECT
@@ -33,7 +37,9 @@ public:
     LauncherInterface* getLauncherInterface();
     StartManagerInterface* getStartManagerInterface();
     ItemInfo getItemInfo(QString appKey);
-    QString getThemeIconByAppKey(QString appKey, int size=48);
+
+    void sortedByAppName(QList<ItemInfo> infos);
+    void sortedByInstallTime(QList<ItemInfo> infos);
 
 signals:
 
@@ -48,8 +54,14 @@ private:
     AppInstalledTimeInfoList m_appInstalledTimeInfoList;
     AppFrequencyInfoList m_appFrequencyInfoList;
     CategoryInfoList m_categoryInfoList;
-    QMap<QString, QString> m_appIcons;
+    CategoryInfoList m_categoryAppNameSortedInfoList;
+
     QMap<QString, ItemInfo> m_itemInfos;
+    QMap<QString, QStringList> m_categoryAppNames;
+
+    QList<ItemInfo> m_appNameSortedList;
+    QList<ItemInfo> m_installTimeSortedList;
+    QList<ItemInfo> m_useFrequencySortedList;
 };
 
 #endif // DBUSCONTROLLER_H

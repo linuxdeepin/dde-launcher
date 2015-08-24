@@ -9,6 +9,20 @@
 #include <QtCore>
 #include <QtDBus>
 
+bool appNameLessThan(const ItemInfo &info1, const ItemInfo &info2)
+{
+    return info1.name < info2.name;
+}
+
+bool installTimeLessThan(const ItemInfo &info1, const ItemInfo &info2)
+{
+    return info1.intsalledTime < info2.intsalledTime;
+}
+
+bool useFrequencyMoreThan(const AppFrequencyInfo &info1, const AppFrequencyInfo &info2){
+    return info1.count > info2.count;
+}
+
 DBusController::DBusController(QObject *parent) : QObject(parent)
 {
     m_launcherInterface = new LauncherInterface(Launcher_service, Launcher_path, QDBusConnection::sessionBus(), this);
@@ -47,7 +61,6 @@ StartManagerInterface* DBusController::getStartManagerInterface(){
 }
 
 void DBusController::getCategoryInfoList(){
-    m_appIcons.clear();
     m_itemInfos.clear();
     QDBusPendingReply<CategoryInfoList> reply = m_launcherInterface->GetAllCategoryInfos();
     reply.waitForFinished();
@@ -57,18 +70,42 @@ void DBusController::getCategoryInfoList(){
             if (item.key == "all" && item.id == -1){
                 foreach (QString appKey, item.items){
                     ItemInfo itemInfo= getItemInfo(appKey);
-                    QString icon = getThemeIconByAppKey(itemInfo.iconKey, 48);
-                    itemInfo.icon = icon;
-                    m_appIcons.insert(appKey, icon);
                     m_itemInfos.insert(appKey, itemInfo);
                 }
                 emit signalManager->itemInfosChanged(m_itemInfos);
             }
         }
-        emit signalManager->categoryInfosChanged(m_categoryInfoList);
+
+        sortedByAppName(m_itemInfos.values());
+        foreach (CategoryInfo item, m_categoryInfoList) {
+            if (item.key != "all" && item.id != -1){
+                QStringList appKeys;
+                foreach (ItemInfo itemInfo, m_appNameSortedList) {
+                    if (item.items.contains(itemInfo.key)){
+                        appKeys.append(itemInfo.key);
+                    }
+                }
+                item.items = appKeys;
+            }
+            m_categoryAppNameSortedInfoList.append(item);
+        }
+        emit signalManager->categoryInfosChanged(m_categoryAppNameSortedInfoList);
     }else{
         LOG_ERROR() << reply.error().message();
     }
+}
+
+
+void DBusController::sortedByAppName(QList<ItemInfo> infos){
+    std::sort(infos.begin(), infos.end(), appNameLessThan);
+    m_appNameSortedList = infos;
+    emit signalManager->appNameItemInfoListChanged(m_appNameSortedList);
+}
+
+void DBusController::sortedByInstallTime(QList<ItemInfo> infos){
+    std::sort(infos.begin(), infos.end(), installTimeLessThan);
+    m_installTimeSortedList = infos;
+    emit signalManager->installTimeItemInfoListChanged(m_installTimeSortedList);
 }
 
 void DBusController::getAllFrequencyItems(){
@@ -76,25 +113,23 @@ void DBusController::getAllFrequencyItems(){
     reply.waitForFinished();
     if (!reply.isError()){
         m_appFrequencyInfoList = qdbus_cast<AppFrequencyInfoList>(reply.argumentAt(0));
-        foreach (AppFrequencyInfo item, m_appFrequencyInfoList) {
-//            LOG_INFO() << item.key << item.count;
+        std::sort(m_appFrequencyInfoList.begin(), m_appFrequencyInfoList.end(), useFrequencyMoreThan);
+        for(int i=0; i< m_appFrequencyInfoList.count(); i++){
+            QString key = m_appFrequencyInfoList.at(i).key;
+            if (m_itemInfos.contains(key)){
+                m_useFrequencySortedList.append(m_itemInfos.value(key));
+            }
         }
+        emit signalManager->useFrequencyItemInfoListChanged(m_useFrequencySortedList);
     }else{
         LOG_ERROR() << reply.error().message();
     }
+
+
 }
 
 void DBusController::getInstalledTimeItems(){
-    QDBusPendingReply<AppInstalledTimeInfoList> reply = m_launcherInterface->GetAllTimeInstalled();
-    reply.waitForFinished();
-    if (!reply.isError()){
-        m_appInstalledTimeInfoList = qdbus_cast<AppInstalledTimeInfoList>(reply.argumentAt(0));
-        foreach (AppInstalledTimeInfo item, m_appInstalledTimeInfoList) {
-//            LOG_INFO() << item.key << item.intsalledTime;
-        }
-    }else{
-        LOG_ERROR() << reply.error().message();
-    }
+    sortedByInstallTime(m_itemInfos.values());
 }
 
 
@@ -108,18 +143,6 @@ ItemInfo DBusController::getItemInfo(QString appKey){
     }else{
         LOG_ERROR() << reply.error().message();
         return itemInfo;
-    }
-}
-
-QString DBusController::getThemeIconByAppKey(QString appKey, int size){
-    QDBusPendingReply<QString> reply = m_fileInfoInterface->GetThemeIcon(appKey, size);
-    reply.waitForFinished();
-    if (!reply.isError()){
-        QString iconUrl = reply.argumentAt(0).toString();
-        return iconUrl;
-    }else{
-        LOG_ERROR() << reply.error().message();
-        return "";
     }
 }
 

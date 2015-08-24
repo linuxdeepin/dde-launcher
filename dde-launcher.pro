@@ -4,14 +4,14 @@
 #
 #-------------------------------------------------
 
-QT       += core gui dbus x11extras
+QT       += core gui dbus x11extras svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = dde-launcher
 TEMPLATE = app
 
-PKGCONFIG += x11 xcb xcb-ewmh
+PKGCONFIG += x11 gtk+-2.0 xcb xcb-ewmh
 CONFIG += c++11 link_pkgconfig
 
 include(./widgets/widgets.pri)
@@ -44,7 +44,6 @@ SOURCES += main.cpp \
     dbusinterface/menu_interface.cpp \
     controller/menucontroller.cpp \
     dbusinterface/dbusdockedappmanager.cpp \
-    views/transparentframe.cpp \
     views/borderbutton.cpp \
     dbusinterface/startmanager_interface.cpp
 
@@ -78,7 +77,6 @@ HEADERS += \
     dbusinterface/menu_interface.h \
     controller/menucontroller.h \
     dbusinterface/dbusdockedappmanager.h \
-    views/transparentframe.h \
     views/borderbutton.h \
     dbusinterface/startmanager_interface.h
 

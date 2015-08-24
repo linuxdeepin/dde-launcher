@@ -15,9 +15,6 @@ class AppItem : public QFrame
 public:
 
     explicit AppItem(QWidget *parent = 0);
-    explicit AppItem(QString icon, QString name, QWidget *parent = 0);
-    explicit AppItem(QPixmap icon, QString name, QWidget *parent = 0);
-    explicit AppItem(QString url, QString icon, QString name, QWidget *parent = 0);
     ~AppItem();
 
     void initUI();
@@ -33,7 +30,7 @@ signals:
 
 public slots:
     void setAppIcon(QString icon);
-    void setAppIcon(QPixmap& icon);
+    void setAppIcon(QPixmap icon);
     void setAppName(QString name);
     void setAppKey(QString key);
     void setUrl(QString url);
@@ -48,8 +45,8 @@ private:
     ElidedLabel* m_nameLabel;
     QPixmap m_appIcon;
     QString m_appName = "";
-    QString m_url;
-    QString m_key;
+    QString m_url = "";
+    QString m_appKey = "";
 
 };
 

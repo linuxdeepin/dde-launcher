@@ -18,49 +18,6 @@ AppItem::AppItem(QWidget *parent) : QFrame(parent)
     setAppName(m_appName);
 }
 
-AppItem::AppItem(QString icon, QString name, QWidget *parent):
-    QFrame(parent)
-{
-    setAttribute(Qt::WA_DeleteOnClose);
-    m_appIcon = QPixmap(icon);
-    m_appName = name;
-    setObjectName("AppItem");
-    initUI();
-    initConnect();
-
-    setAppIcon(m_appIcon);
-    setAppName(m_appName);
-}
-
-AppItem::AppItem(QPixmap icon, QString name, QWidget *parent):
-    QFrame(parent)
-{
-    setAttribute(Qt::WA_DeleteOnClose);
-    m_appIcon = icon;
-    m_appName = name;
-    setObjectName("AppItem");
-    initUI();
-    initConnect();
-
-    setAppIcon(m_appIcon);
-    setAppName(m_appName);
-}
-
-AppItem::AppItem(QString url, QString icon, QString name, QWidget *parent):
-    QFrame(parent)
-{
-    setAttribute(Qt::WA_DeleteOnClose);
-    m_url = url;
-    m_appIcon = QPixmap(icon);
-    m_appName = name;
-    setObjectName("AppItem");
-    initUI();
-    initConnect();
-    setAppIcon(m_appIcon);
-    setAppName(m_appName);
-}
-
-
 void AppItem::initUI(){
     m_iconLabel = new QLabel;
     m_iconLabel->setObjectName("Icon");
@@ -90,11 +47,14 @@ void AppItem::initUI(){
 
 void AppItem::initConnect(){
     connect(m_borderButton, SIGNAL(rightClicked(QPoint)), this, SLOT(showMenu(QPoint)));
+    connect(m_borderButton, &BorderButton::clicked, [=](){
+        emit signalManager->appOpened(m_appKey);
+    });
 }
 
 void AppItem::showMenu(QPoint pos){
-    qDebug() << m_key;
-    emit signalManager->contextMenuShowed(m_key, pos);
+    qDebug() << m_appKey;
+    emit signalManager->contextMenuShowed(m_appKey, pos);
 }
 
 QString AppItem::getAppName(){
@@ -115,9 +75,11 @@ void AppItem::setAppIcon(QString icon){
      m_iconLabel->setPixmap(m_appIcon.scaled(m_iconLabel->size()));
 }
 
-void AppItem::setAppIcon(QPixmap &icon){
+void AppItem::setAppIcon(QPixmap icon){
      m_appIcon = icon;
-     m_iconLabel->setPixmap(m_appIcon.scaled(m_iconLabel->size()));
+     if (!icon.isNull()){
+        m_iconLabel->setPixmap(m_appIcon.scaled(m_iconLabel->size()));
+     }
 }
 
 void AppItem::setUrl(QString url){
@@ -125,11 +87,11 @@ void AppItem::setUrl(QString url){
 }
 
 QString AppItem::getAppKey(){
-    return m_key;
+    return m_appKey;
 }
 
 void AppItem::setAppKey(QString key){
-    m_key = key;
+    m_appKey = key;
 }
 
 QString AppItem::getUrl(){

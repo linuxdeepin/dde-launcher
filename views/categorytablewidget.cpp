@@ -1,5 +1,6 @@
 #include "categorytablewidget.h"
 #include "widgets/util.h"
+#include "widgets/themeappicon.h"
 #include "app/global.h"
 #include "categoryitem.h"
 #include "appitem.h"
@@ -100,8 +101,11 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
        if (m_itemInfosMap.contains(appKey)){
             const ItemInfo& itemInfo = m_itemInfosMap.value(appKey);
 
-            AppItem* appItem = new AppItem(itemInfo.url, itemInfo.icon, itemInfo.name);
+            AppItem* appItem = new AppItem();
             appItem->setAppKey(itemInfo.key);
+            appItem->setUrl(itemInfo.url);
+            appItem->setAppName(itemInfo.name);
+            appItem->setAppIcon(ThemeAppIcon::getIconPixmap(itemInfo.iconKey));
             appItem->setFixedSize(m_gridWidth, m_gridWidth);
             setCellWidget(_row, column, appItem);
        }else{

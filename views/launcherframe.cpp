@@ -6,7 +6,6 @@
 #include "navigationbar.h"
 #include "app/global.h"
 #include "Logger.h"
-#include "transparentframe.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QStackedLayout>
@@ -132,6 +131,6 @@ void LauncherFrame::handleMouseReleased(){
 
 LauncherFrame::~LauncherFrame()
 {
-
+    qDebug() << "~LauncherFrame";
 }
 

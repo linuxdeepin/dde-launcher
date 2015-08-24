@@ -28,6 +28,7 @@ MenuController::MenuController(QObject *parent) : QObject(parent)
 void MenuController::initConnect(){
     connect(signalManager, SIGNAL(contextMenuShowed(QString,QPoint)),
             this, SLOT(showMenuByAppItem(QString,QPoint)));
+    connect(signalManager, SIGNAL(appOpened(QString)), this, SLOT(handleOpen(QString)));
 }
 
 MenuController::~MenuController()

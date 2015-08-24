@@ -1,5 +1,6 @@
 #include "apptablewidget.h"
 #include "widgets/util.h"
+#include "widgets/themeappicon.h"
 #include "app/global.h"
 #include "dbusinterface/dbustype.h"
 #include "Logger.h"
@@ -20,6 +21,12 @@ AppTableWidget::AppTableWidget(QWidget *parent) : BaseTableWidget(parent)
 }
 
 void AppTableWidget::initConnect(){
+    connect(signalManager, SIGNAL(appNameItemInfoListChanged(QList<ItemInfo>)),
+            this, SLOT(setAppNameItemInfoList(QList<ItemInfo>)));
+    connect(signalManager, SIGNAL(installTimeItemInfoListChanged(QList<ItemInfo>)),
+            this, SLOT(setInstallTimeItemInfoList(QList<ItemInfo>)));
+    connect(signalManager, SIGNAL(useFrequencyItemInfoListChanged(QList<ItemInfo>)),
+            this, SLOT(setuseFrequencyItemInfoList(QList<ItemInfo>)));
     connect(signalManager, SIGNAL(sortModeChanged(int)), this, SLOT(showBySortedMode(int)));
     connect(signalManager, SIGNAL(itemInfosChanged(QMap<QString,ItemInfo>)), this, SLOT(setItemInfosMap(QMap<QString,ItemInfo>)));
 }
@@ -38,8 +45,11 @@ void AppTableWidget::addItem(ItemInfo itemInfo, int index){
     int row = index / m_column;
     int column = index % m_column;
 
-    AppItem* appItem = new AppItem(itemInfo.url, itemInfo.icon, itemInfo.name);
+    AppItem* appItem = new AppItem();
     appItem->setAppKey(itemInfo.key);
+    appItem->setUrl(itemInfo.url);
+    appItem->setAppName(itemInfo.name);
+    appItem->setAppIcon(ThemeAppIcon::getIconPixmap(itemInfo.iconKey));
     appItem->setFixedSize(m_gridWidth, m_gridWidth);
     setCellWidget(row, column, appItem);
 }
@@ -72,21 +82,28 @@ void AppTableWidget::showBySortedMode(int mode){
     }
 }
 
-void AppTableWidget::showbyName(){
-    addItems(m_itemInfosMap.values());
+void AppTableWidget::setAppNameItemInfoList(const QList<ItemInfo> &infoList){
+    m_appNameItemInfoList = infoList;
 }
 
+void AppTableWidget::setInstallTimeItemInfoList(const QList<ItemInfo> &infoList){
+    m_InstalltimeItemInfoList= infoList;
+}
+
+void AppTableWidget::setuseFrequencyItemInfoList(const QList<ItemInfo> &infoList){
+    m_useFrequencyItemInfoList = infoList;
+}
+
+void AppTableWidget::showbyName(){
+    addItems(m_appNameItemInfoList);
+}
 
 void AppTableWidget::showByInstalledTime(){
-    addItems(m_itemInfosMap.values());
+    addItems(m_InstalltimeItemInfoList);
 }
 
 void AppTableWidget::showByFrequency(){
-    QList<ItemInfo> itemInfos;
-    for(int i = m_itemInfosMap.values().count() - 1; i>0; i--){
-        itemInfos.append(m_itemInfosMap.values().at(i));
-    }
-    addItems(itemInfos);
+    addItems(m_useFrequencyItemInfoList);
 }
 
 void AppTableWidget::wheelEvent(QWheelEvent *event){

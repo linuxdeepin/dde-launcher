@@ -58,7 +58,22 @@ void LauncherFrame::initUI(){
     m_layout->setCurrentIndex(0);
     m_displayModeFrame = new DisplayModeFrame(this);
 
-    LOG_INFO() << "initUI finished";
+
+//    int desktopWidth = qApp->desktop()->screenGeometry().width();
+//    int desktopHeight = qApp->desktop()->screenGeometry().height();
+//    QPixmap pixmap(desktopWidth, desktopHeight);
+//    QPixmap temp(pixmap.size());
+//    temp.fill(Qt::transparent);
+//    QPainter p(&temp);
+//    p.setCompositionMode(QPainter::CompositionMode_Source);
+//    p.drawPixmap(0, 0, pixmap);
+//    p.drawText(0, 0, "dfffffffffff");
+//    p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+//    p.fillRect(temp.rect(), Qt::red);
+//    p.end();
+//    pixmap = temp;
+//    pixmap.save( "/home/djf/path.png" );
+//    setMask(QBitmap(pixmap));
 }
 
 void LauncherFrame::computerGrid(int minimumLeftMargin, int minimumTopMargin, int miniSpacing, int itemWidth){
@@ -116,6 +131,15 @@ void LauncherFrame::mouseReleaseEvent(QMouseEvent *event){
 void LauncherFrame::keyPressEvent(QKeyEvent *event){
     if (event->key() == Qt::Key_Escape){
         close();
+    }
+    if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Up){
+        emit signalManager->keyDirectionPressed(Qt::Key_Up);
+    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Down) {
+        emit signalManager->keyDirectionPressed(Qt::Key_Down);
+    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Left){
+        emit signalManager->keyDirectionPressed(Qt::Key_Left);
+    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Right){
+        emit signalManager->keyDirectionPressed(Qt::Key_Right);
     }
     QFrame::keyPressEvent(event);
 }

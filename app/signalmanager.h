@@ -44,7 +44,9 @@ signals:
     /*Open app by click*/
     void appOpened(QString appKey);
 
-public slots:
+    /*Keyboard event*/
+    void keyDirectionPressed(Qt::Key direction);
+
 };
 
 #endif // SIGNALMANAGER_H

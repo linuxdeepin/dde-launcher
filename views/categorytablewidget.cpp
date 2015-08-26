@@ -4,6 +4,7 @@
 #include "app/global.h"
 #include "categoryitem.h"
 #include "appitem.h"
+#include "borderbutton.h"
 #include "Logger.h"
 #include <QWheelEvent>
 #include <QHeaderView>
@@ -17,10 +18,16 @@ CategoryTableWidget::CategoryTableWidget(QWidget *parent) : BaseTableWidget(pare
 }
 
 void CategoryTableWidget::initConnect(){
-    connect(signalManager, SIGNAL(categoryInfosChanged(CategoryInfoList)), this, SLOT(setCategoryInfoList(CategoryInfoList)));
-    connect(signalManager, SIGNAL(itemInfosChanged(QMap<QString,ItemInfo>)), this, SLOT(setItemInfosMap(QMap<QString,ItemInfo>)));
-    connect(signalManager, SIGNAL(navigationButtonClicked(QString)), this, SLOT(scrollToCategory(QString)));
-    connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(handleScrollBarValueChanged(int)));
+    connect(signalManager, SIGNAL(keyDirectionPressed(Qt::Key)),
+            this, SLOT(handleDirectionKeyPressed(Qt::Key)));
+    connect(signalManager, SIGNAL(categoryInfosChanged(CategoryInfoList)),
+            this, SLOT(setCategoryInfoList(CategoryInfoList)));
+    connect(signalManager, SIGNAL(itemInfosChanged(QMap<QString,ItemInfo>)),
+            this, SLOT(setItemInfosMap(QMap<QString,ItemInfo>)));
+    connect(signalManager, SIGNAL(navigationButtonClicked(QString)),
+            this, SLOT(scrollToCategory(QString)));
+    connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
+            this, SLOT(handleScrollBarValueChanged(int)));
 }
 
 void CategoryTableWidget::setGridParameter(int column, int girdWidth, int itemWidth){

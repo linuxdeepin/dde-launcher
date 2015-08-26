@@ -15,6 +15,13 @@ public:
     explicit CategoryTableWidget(QWidget *parent = 0);
     ~CategoryTableWidget();
     void initConnect();
+//    void firstHighlight();
+//    void hightlightItem(int row, int column);
+
+//    void handleKeyUpPressed();
+//    void handleKeyDownPressed();
+//    void handleKeyLeftPressed();
+//    void handleKeyRightPressed();
 
 signals:
 

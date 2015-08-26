@@ -4,13 +4,19 @@
 #include <QWidget>
 #include <QDebug>
 #include <QButtonGroup>
+#include <QStyle>
 #include "app/global.h"
+#include "widgets/util.h"
 #include "launcherframe.h"
 
 BorderButton::BorderButton(QWidget *parent) : QPushButton(parent)
 {
     setCheckable(true);
+    setFocusPolicy(Qt::NoFocus);
     setObjectName("BorderButton");
+    setMouseTracking(true);
+    setProperty("state", "normal");
+    setStyleSheet(getQssFromFile(":/qss/skin/qss/main.qss"));
 }
 
 void BorderButton::mousePressEvent(QMouseEvent *event){
@@ -25,9 +31,28 @@ void BorderButton::enterEvent(QEvent *event){
     QPushButton::enterEvent(event);
 }
 
-void BorderButton::leaveEvent(QEvent *event){
+void BorderButton::updateStyle(){
+    style()->unpolish(this);
+    style()->polish(this);
+    update();
+}
 
-    QPushButton::leaveEvent(event);
+bool BorderButton::isHighlight() const {
+    return m_isHighlight;
+}
+
+void BorderButton::setHighlight(bool isHightlight){
+    m_isHighlight = isHightlight;
+    if (isHightlight){
+        setProperty("state", "Highlight");
+    }else{
+        setProperty("state", "normal");
+    }
+    updateStyle();
+}
+
+void BorderButton::toggleHighlight(){
+    setHighlight(!isHighlight());
 }
 
 BorderButton::~BorderButton()

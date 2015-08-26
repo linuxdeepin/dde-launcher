@@ -16,6 +16,7 @@ AppItem::AppItem(QWidget *parent) : QFrame(parent)
     initConnect();
     setAppIcon(m_appIcon);
     setAppName(m_appName);
+    setMouseTracking(true);
 }
 
 void AppItem::initUI(){
@@ -42,7 +43,6 @@ void AppItem::initUI(){
     setLayout(layout);
 
     LauncherFrame::buttonGroup.addButton(m_borderButton);
-    setMouseTracking(true);
 }
 
 void AppItem::initConnect(){

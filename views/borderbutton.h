@@ -13,19 +13,23 @@ public:
     explicit BorderButton(QWidget *parent = 0);
     ~BorderButton();
 
+    bool isHighlight() const;
+    void updateStyle();
+
 signals:
     void rightClicked(QPoint pos);
 
 public slots:
-
+    void setHighlight(bool isHightlight);
+    void toggleHighlight();
 
 protected:
     void mousePressEvent(QMouseEvent* event);
     void enterEvent(QEvent* event);
-    void leaveEvent(QEvent* event);
 
 private:
     bool m_checked = false;
+    bool m_isHighlight = false;
 };
 
 #endif // BORDERBUTTON_H

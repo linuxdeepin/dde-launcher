@@ -21,6 +21,8 @@ AppTableWidget::AppTableWidget(QWidget *parent) : BaseTableWidget(parent)
 }
 
 void AppTableWidget::initConnect(){
+    connect(signalManager, SIGNAL(keyDirectionPressed(Qt::Key)),
+            this, SLOT(handleDirectionKeyPressed(Qt::Key)));
     connect(signalManager, SIGNAL(appNameItemInfoListChanged(QList<ItemInfo>)),
             this, SLOT(setAppNameItemInfoList(QList<ItemInfo>)));
     connect(signalManager, SIGNAL(installTimeItemInfoListChanged(QList<ItemInfo>)),
@@ -80,6 +82,7 @@ void AppTableWidget::showBySortedMode(int mode){
     }else if (mode == 4){
         showByFrequency();
     }
+    clearHighlight();
 }
 
 void AppTableWidget::setAppNameItemInfoList(const QList<ItemInfo> &infoList){

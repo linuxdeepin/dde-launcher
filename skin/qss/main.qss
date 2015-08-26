@@ -2,6 +2,11 @@ QFrame#LauncherFrame{
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(33, 50, 70, 255), stop:0.5 rgba(70, 255, 255, 255), stop:1 rgba(255, 255, 255, 20));
 }
 
+QLabel#MaskLabel{
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 1));;
+    border: 1px solid rgba(255, 255, 255, 255);
+}
+
 QFrame#AppBox{
     background-color: transparent;
 }
@@ -84,9 +89,21 @@ QLineEdit {
 }
 
 
-QPushButton#BorderButton{
+QPushButton#BorderButton[state="normal"]{
     background-color:transparent;
     border: 2px solid rgba(0, 0, 0, 0);
+}
+
+QPushButton#BorderButton[state="Highlight"]{
+    background-color:rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+}
+
+QPushButton#BorderButton[state="Highlight"]:checked{
+    background-color:rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
 }
 
 QPushButton#BorderButton:checked{

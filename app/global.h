@@ -10,5 +10,6 @@
 
 const int leftMargin = 50;
 
+
 #endif // GLOBAL
 

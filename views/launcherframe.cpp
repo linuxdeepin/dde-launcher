@@ -130,7 +130,9 @@ void LauncherFrame::mouseReleaseEvent(QMouseEvent *event){
 
 void LauncherFrame::keyPressEvent(QKeyEvent *event){
     if (event->key() == Qt::Key_Escape){
+        #if !defined(QT_NO_DEBUG)
         close();
+        #endif
     }
     if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Up){
         emit signalManager->keyDirectionPressed(Qt::Key_Up);

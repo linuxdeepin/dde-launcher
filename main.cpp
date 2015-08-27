@@ -1,6 +1,7 @@
 #include "app/launcherapp.h"
 #include "app/define.h"
 #include "app/global.h"
+#include "widgets/themeappicon.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -8,8 +9,8 @@ int main(int argc, char *argv[])
     debug_daemon_off();
     QApplication a(argc, argv);
     debug_log_console_on();
+    Singleton<ThemeAppIcon>::instance()->gtkInit();
     LauncherApp launcher;
-//    appItemManager->init();
     dbusController->init();
     launcher.show();
 

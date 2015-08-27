@@ -15,6 +15,10 @@ ThemeAppIcon::ThemeAppIcon(QObject *parent) : QObject(parent)
 
 }
 
+void ThemeAppIcon::gtkInit(){
+    gtk_init(NULL, NULL);
+}
+
 QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
     QPixmap pixmap(width, height);
     // iconPath is an absolute path of the system.

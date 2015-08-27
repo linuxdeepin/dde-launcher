@@ -76,58 +76,45 @@ QString MenuController::createMenuContent(QString appKey){
     }
     QJsonObject uninstallObj = createMenuItem(4, tr("Uninstall"));
 
-    QJsonArray items = {openObj, seperatorObj1, desktopObj, dockObj, seperatorObj2, startupObj, uninstallObj};
-    QJsonObject menuObj
-    {
-        {"checkableMenu",false},
-        {"singleCheck", false},
-        { "items", items}
-    };
+    QJsonArray items;
+    items.append(openObj);
+    items.append(seperatorObj1);
+    items.append(desktopObj);
+    items.append(dockObj);
+    items.append(seperatorObj2);
+    items.append(startupObj);
+    items.append(uninstallObj);
+
+    QJsonObject menuObj;
+    menuObj["checkableMenu"] = false;
+    menuObj["singleCheck"] = false;
+    menuObj["items"] = items;
 
     return QString(QJsonDocument(menuObj).toJson());
 }
 
 QJsonObject MenuController::createMenuItem(int itemId, QString itemText){
-    QJsonObject itemObj
-    {
-        {"itemId", QString::number(itemId)},
-        {"itemText", itemText},
-        {"isActive", true},
-        {"isCheckable", false},
-        {"checked", false},
-        {"itemIcon", ""},
-        {"itemIconHover", ""},
-        {"itemIconInactive", ""},
-        {"showCheckMark", false},
-        {"itemSubMenu", QJsonObject{
-            {"checkableMenu", false},
-            {"singleCheck", false},
-            {"items", QJsonArray()}
-        }}
-    };
+    QJsonObject itemObj;
+    itemObj["itemId"] = QString::number(itemId);
+    itemObj["itemText"] = itemText;
+    itemObj["isActive"] = true;
+    itemObj["isCheckable"] = false;
+    itemObj["checked"] = false;
+    itemObj["itemIcon"] = "";
+    itemObj["itemIconHover"] = "";
+    itemObj["itemIconInactive"] = "";
+    itemObj["showCheckMark"] = false;
+    QJsonObject subMenuObj;
+    subMenuObj["checkableMenu"] = false;
+    subMenuObj["singleCheck"] = false;
+    subMenuObj["items"] = QJsonArray();
+    itemObj["itemSubMenu"] = subMenuObj;
     return itemObj;
 }
 
 
 QJsonObject MenuController::createSeperator(){
-    QJsonObject itemObj
-    {
-        {"itemId", ""},
-        {"itemText", ""},
-        {"isActive", true},
-        {"isCheckable", false},
-        {"checked", false},
-        {"itemIcon", ""},
-        {"itemIconHover", ""},
-        {"itemIconInactive", ""},
-        {"showCheckMark", false},
-        {"itemSubMenu", QJsonObject{
-            {"checkableMenu", false},
-            {"singleCheck", false},
-            {"items", QJsonArray()},
-        }}
-    };
-    return itemObj;
+    return createMenuItem(-100, "");
 }
 
 
@@ -171,14 +158,11 @@ bool MenuController::isItemStartup(QString appKey){
 
 
 QString MenuController::JsonToQString(QPoint pos, QString menucontent) {
-    QJsonObject menuObj
-    {
-        {"x", pos.x()},
-        {"y", pos.y()},
-        {"isDockMenu", false},
-        {"menuJsonContent", menucontent}
-    };
-
+    QJsonObject menuObj;
+    menuObj["x"] = pos.x();
+    menuObj["y"] = pos.y();
+    menuObj["isDockMenu"] = false;
+    menuObj["menuJsonContent"] = menucontent;
     return QString(QJsonDocument(menuObj).toJson());
 }
 

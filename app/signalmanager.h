@@ -47,6 +47,9 @@ signals:
     /*Keyboard event*/
     void keyDirectionPressed(Qt::Key direction);
 
+    /*Hide*/
+    void Hide();
+
 };
 
 #endif // SIGNALMANAGER_H

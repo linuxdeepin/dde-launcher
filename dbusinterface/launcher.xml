@@ -1,0 +1,11 @@
+<!DOCTYPE node PUBLIC '-//freedesktop//DTD D-BUS Object Introspection 1.0//EN' 'http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd'>
+<node>
+    <interface name="com.deepin.dde.Launcher">
+        <method name="Exit"></method>
+        <method name="Show"></method>
+        <method name="Hide"></method>
+        <method name="Toggle"></method>
+        <signal name="Closed"></signal>
+        <signal name="Shown"></signal>
+    </interface>
+</node>

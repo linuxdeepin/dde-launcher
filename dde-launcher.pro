@@ -45,7 +45,9 @@ SOURCES += main.cpp \
     controller/menucontroller.cpp \
     dbusinterface/dbusdockedappmanager.cpp \
     views/borderbutton.cpp \
-    dbusinterface/startmanager_interface.cpp
+    dbusinterface/startmanager_interface.cpp \
+    dbusinterface/launcheradaptor.cpp \
+    dbusinterface/dde_launchder_interface.cpp
 
 HEADERS += \
     views/launcherframe.h \
@@ -78,7 +80,9 @@ HEADERS += \
     controller/menucontroller.h \
     dbusinterface/dbusdockedappmanager.h \
     views/borderbutton.h \
-    dbusinterface/startmanager_interface.h
+    dbusinterface/startmanager_interface.h \
+    dbusinterface/launcheradaptor.h \
+    dbusinterface/dde_launcher_interface.h
 
 RESOURCES += \
     skin.qrc \

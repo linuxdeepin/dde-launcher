@@ -5,6 +5,7 @@
 #include "categoryframe.h"
 #include "navigationbar.h"
 #include "app/global.h"
+#include "app/xcb_misc.h"
 #include "Logger.h"
 #include <QApplication>
 #include <QDesktopWidget>
@@ -13,20 +14,25 @@
 #include <QButtonGroup>
 #include <QPushButton>
 #include <QApplication>
+#include <QCloseEvent>
+#include <QDBusConnection>
+
 
 QButtonGroup LauncherFrame::buttonGroup(qApp);
 
 LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
 {
     LauncherFrame::buttonGroup.setExclusive(true);
+    XcbMisc::instance()->setLauncher(winId());
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
-    setFixedSize(qApp->desktop()->screenGeometry().size());
+    setGeometry(qApp->desktop()->screenGeometry());
     setObjectName("LauncherFrame");
     computerGrid(160, 60, 24, 160);
     initUI();
     initConnect();
     setStyleSheet(getQssFromFile(":/qss/skin/qss/main.qss"));
+    qDebug() << qApp->desktop()->screenGeometry();
 }
 
 
@@ -99,6 +105,8 @@ void LauncherFrame::initConnect(){
     connect(m_displayModeFrame, SIGNAL(sortModeChanged(int)), this, SLOT(showAppTableWidgetByMode(int)));
     connect(m_displayModeFrame, SIGNAL(categoryModeChanged(int)), this, SLOT(showNavigationBarByMode(int)));
     connect(signalManager, SIGNAL(mouseReleased()), this, SLOT(handleMouseReleased()));
+    connect(signalManager, SIGNAL(Hide()), this, SLOT(Hide()));
+    connect(qApp, SIGNAL(aboutToQuit()), this, SIGNAL(Closed()));
 }
 
 
@@ -125,13 +133,14 @@ void LauncherFrame::showNavigationBarByMode(int mode){
 
 void LauncherFrame::mouseReleaseEvent(QMouseEvent *event){
     emit signalManager->mouseReleased();
+    Hide();
     QFrame::mouseReleaseEvent(event);
 }
 
 void LauncherFrame::keyPressEvent(QKeyEvent *event){
     if (event->key() == Qt::Key_Escape){
         #if !defined(QT_NO_DEBUG)
-        close();
+        qApp->quit();
         #endif
     }
     if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Up){
@@ -146,17 +155,43 @@ void LauncherFrame::keyPressEvent(QKeyEvent *event){
     QFrame::keyPressEvent(event);
 }
 
-void LauncherFrame::toggle(){
-    setVisible(!isVisible());
+void LauncherFrame::closeEvent(QCloseEvent *event){
+    qDebug() << event;
+    QDBusConnection conn = QDBusConnection::sessionBus();
+    conn.unregisterObject("/com/deepin/dde/Launcher");
+//    conn.unregisterObject("/com/deepin/dde/Launcher", this);
+    conn.unregisterService("com.deepin.dde.Launcher");
+    qDebug() << "~LauncherFrame";
+    QFrame::closeEvent(event);
+}
+
+void LauncherFrame::Exit(){
+    qApp->quit();
+}
+
+void LauncherFrame::Hide(){
+    hide();
+}
+
+void LauncherFrame::Show(){
+    show();
+    emit Shown();
+}
+
+void LauncherFrame::Toggle(){
+//    setVisible(!isVisible());
+    if (isVisible()){
+        Hide();
+    }else{
+        Show();
+    }
 }
 
 void LauncherFrame::handleMouseReleased(){
     m_clearCheckedButton->click();
-//    toggle();
 }
 
 LauncherFrame::~LauncherFrame()
 {
-    qDebug() << "~LauncherFrame";
 }
 

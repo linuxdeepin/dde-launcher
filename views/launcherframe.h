@@ -10,6 +10,7 @@ class DisplayModeFrame;
 class QStackedLayout;
 class QButtonGroup;
 class QPushButton;
+class QCloseEvent;
 
 class LauncherFrame : public QFrame
 {
@@ -25,17 +26,23 @@ public:
     void computerGrid(int minimumLeftMargin, int minimumTopMargin, int miniSpacing ,int itemWidth);
 
 signals:
+    void Closed();
+    void Shown();
 
 public slots:
        void toggleDisableNavgationBar(bool flag);
        void showAppTableWidgetByMode(int mode);
        void showNavigationBarByMode(int mode);
        void handleMouseReleased();
-       void toggle();
+       void Exit();
+       void Hide();
+       void Show();
+       void Toggle();
 
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
+    void closeEvent(QCloseEvent* event);
 
 private:
     int m_leftMargin;

@@ -53,6 +53,7 @@ void BaseTableWidget::mouseReleaseEvent(QMouseEvent *event){
     }else{
         emit signalManager->mouseReleased();
     }
+    emit signalManager->Hide();
     QTableWidget::mouseReleaseEvent(event);
 }
 

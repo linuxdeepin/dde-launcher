@@ -159,6 +159,7 @@ void LauncherFrame::showNavigationBarByMode(){
 }
 
 void LauncherFrame::mouseReleaseEvent(QMouseEvent *event){
+    qDebug() << event;
     emit signalManager->mouseReleased();
     Hide();
     QFrame::mouseReleaseEvent(event);
@@ -231,6 +232,7 @@ void LauncherFrame::Show(){
     emit signalManager->launcheRefreshed();
     LOG_INFO() << "=============launcheRefreshed";
     show();
+    setFocus();
     emit Shown();
 }
 

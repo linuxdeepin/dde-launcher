@@ -210,9 +210,9 @@ void MenuController::menuItemInvoked(QString itemId, bool flag){
 
 
 void MenuController::handleOpen(QString appKey){
+    emit signalManager->Hide();
     QString url = dbusController->getItemInfo(appKey).url;
     LOG_INFO() << "handleOpen" << appKey << url;
-
     QDBusPendingReply<bool> reply = dbusController->getStartManagerInterface()->Launch(appKey);
     reply.waitForFinished();
     if (!reply.isError()) {
@@ -291,7 +291,7 @@ void MenuController::handleToStartup(QString appKey){
 void MenuController::handleUninstall(QString appKey){
     LOG_INFO() << "handleUninstall" << appKey;
     ConfirmUninstallDialog d;
-    QString message = tr("Are you sure to uninstall") + appKey;
+    QString message = tr("Are you sure to uninstall ") + appKey;
     d.setMessage(message);
     connect(&d, SIGNAL(buttonClicked(int)), this, SLOT(handleUninstallAction(int)));
     int code = d.exec();

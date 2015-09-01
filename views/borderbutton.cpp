@@ -22,6 +22,7 @@ BorderButton::BorderButton(QWidget *parent) : QPushButton(parent)
 void BorderButton::mousePressEvent(QMouseEvent *event){
     if (event->button() == Qt::RightButton){
        emit rightClicked(mapToGlobal(event->pos()));
+       return;
     }
     QPushButton::mousePressEvent(event);
 }

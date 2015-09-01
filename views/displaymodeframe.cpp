@@ -59,6 +59,7 @@ void DisplayModeFrame::initUI(){
 
 
 void DisplayModeFrame::initConnect(){
+    connect(signalManager, SIGNAL(viewModeChanged(int)), this, SLOT(checkButton(int)));
     connect(m_viewModeButton, SIGNAL(mouseEnterToggled(bool)), this, SLOT(toggleButtonFrameByViewButton(bool)));
     connect(m_buttonFrame, SIGNAL(mouseEnterToggled(bool)), this, SLOT(toggleButtonFrameBySelf(bool)));
     connect(m_delayHideTimer, SIGNAL(timeout()), this, SLOT(hideButtonFrame()));
@@ -102,6 +103,7 @@ int DisplayModeFrame::getCategoryDisplayMode(){
 void DisplayModeFrame::setCategoryDisplayMode(int mode){
     m_categoryDisplayMode = mode;
     emit categoryModeChanged(mode);
+    emit signalManager->categoryModeChanged(mode);
 }
 
 int DisplayModeFrame::getSortMode(){
@@ -109,20 +111,26 @@ int DisplayModeFrame::getSortMode(){
 }
 
 void DisplayModeFrame::setSortMode(int mode){
-
     m_sortMode = mode;
     emit sortModeChanged(mode);
+    emit signalManager->sortedModeChanged(mode);
+}
+
+void DisplayModeFrame::checkButton(int mode){
+   m_buttonGroup->button(mode)->click();
 }
 
 void DisplayModeFrame::setViewMode(int mode){
     m_viewMode = mode;
     m_viewModeButton->setNormalIconByMode(m_viewMode);
-    if (mode == 0 || mode == 3 || mode == 4){
+    if (mode == 0){
         setSortMode(mode);
+    }else if (mode == 3 || mode == 4){
+        setSortMode(mode - 1);
     }else if (mode == 1 || mode ==2){
-        setCategoryDisplayMode(mode);
+        setSortMode(1);
+        setCategoryDisplayMode(mode - 1);
     }
-
     hideButtonFrame();
 }
 

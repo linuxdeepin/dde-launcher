@@ -1,5 +1,6 @@
 #include "dbuscontroller.h"
 #include "dbusinterface/launcher_interface.h"
+#include "dbusinterface/launchersettings_interface.h"
 #include "dbusinterface/fileInfo_interface.h"
 #include "dbusinterface/startmanager_interface.h"
 #include "Logger.h"
@@ -26,6 +27,7 @@ bool useFrequencyMoreThan(const AppFrequencyInfo &info1, const AppFrequencyInfo 
 DBusController::DBusController(QObject *parent) : QObject(parent)
 {
     m_launcherInterface = new LauncherInterface(Launcher_service, Launcher_path, QDBusConnection::sessionBus(), this);
+    m_launcherSettingsInterface = new LauncherSettingsInterface(Launcher_service, Launcher_path, QDBusConnection::sessionBus(), this);
     m_fileInfoInterface = new FileInfoInterface(FileInfo_service, FileInfo_path, QDBusConnection::sessionBus(), this);
     m_startManagerInterface = new StartManagerInterface(StartManager_service, StartManager_path, QDBusConnection::sessionBus(), this);
     m_menuController = new MenuController(this);
@@ -33,10 +35,20 @@ DBusController::DBusController(QObject *parent) : QObject(parent)
 }
 
 void DBusController::init(){
+    LOG_INFO() << "get Launcher data";
     getCategoryInfoList();
     getInstalledTimeItems();
     getAllFrequencyItems();
-
+    int sortedMode= getSortMethod();
+    int categoryMode = getCategoryDisplayMode();
+    LOG_INFO() << sortedMode << categoryMode << "========";
+    if (sortedMode == 0){
+        emit signalManager->viewModeChanged(0);
+    }else if (sortedMode == 1){
+        emit signalManager->viewModeChanged(categoryMode + 1);
+    }else if (sortedMode == 2 || sortedMode == 3){
+        emit signalManager->viewModeChanged(sortedMode + 1);
+    }
 }
 
 void DBusController::initConnect(){
@@ -44,7 +56,13 @@ void DBusController::initConnect(){
             m_menuController, SLOT(handleUninstallSuccess(QString)));
     connect(m_launcherInterface, SIGNAL(UninstallFailed(QString,QString)),
             m_menuController, SLOT(handleUninstallFail(QString,QString)));
+    connect(m_launcherInterface, SIGNAL(SearchDone(QStringList)),
+            this, SLOT(searchDone(QStringList)));
+    connect(signalManager, SIGNAL(launcheRefreshed()), this, SLOT(init()));
+    connect(signalManager, SIGNAL(search(QString)), m_launcherInterface, SLOT(Search(QString)));
     connect(signalManager, SIGNAL(itemDeleted(QString)), this, SLOT(updateAppTable(QString)));
+    connect(signalManager, SIGNAL(sortedModeChanged(int)), this, SLOT(setSortMethod(int)));
+    connect(signalManager, SIGNAL(categoryModeChanged(int)), this, SLOT(setCategoryDisplayMode(int)));
 }
 
 void DBusController::updateAppTable(QString appKey){
@@ -62,6 +80,7 @@ StartManagerInterface* DBusController::getStartManagerInterface(){
 
 void DBusController::getCategoryInfoList(){
     m_itemInfos.clear();
+    m_categoryAppNameSortedInfoList.clear();
     QDBusPendingReply<CategoryInfoList> reply = m_launcherInterface->GetAllCategoryInfos();
     reply.waitForFinished();
     if (!reply.isError()){
@@ -98,17 +117,20 @@ void DBusController::getCategoryInfoList(){
 
 void DBusController::sortedByAppName(QList<ItemInfo> infos){
     std::sort(infos.begin(), infos.end(), appNameLessThan);
+    m_appNameSortedList.clear();
     m_appNameSortedList = infos;
     emit signalManager->appNameItemInfoListChanged(m_appNameSortedList);
 }
 
 void DBusController::sortedByInstallTime(QList<ItemInfo> infos){
     std::sort(infos.begin(), infos.end(), installTimeLessThan);
+    m_installTimeSortedList.clear();
     m_installTimeSortedList = infos;
     emit signalManager->installTimeItemInfoListChanged(m_installTimeSortedList);
 }
 
 void DBusController::getAllFrequencyItems(){
+    m_useFrequencySortedList.clear();
     QDBusPendingReply<AppFrequencyInfoList> reply = m_launcherInterface->GetAllFrequency();
     reply.waitForFinished();
     if (!reply.isError()){
@@ -144,6 +166,48 @@ ItemInfo DBusController::getItemInfo(QString appKey){
         LOG_ERROR() << reply.error().message();
         return itemInfo;
     }
+}
+
+int DBusController::getCategoryDisplayMode(){
+    QDBusPendingReply<qlonglong> reply = m_launcherSettingsInterface->GetCategoryDisplayMode();
+    reply.waitForFinished();
+    if (!reply.isError()){
+        qlonglong mode = reply.argumentAt(0).toLongLong();
+        return mode;
+    }else{
+        LOG_ERROR() << reply.error().message();
+        return 0;
+    }
+}
+
+void DBusController::setCategoryDisplayMode(int mode){
+    QDBusPendingReply<qlonglong> reply = m_launcherSettingsInterface->SetCategoryDisplayMode(mode);
+}
+
+
+int DBusController::getSortMethod(){
+    QDBusPendingReply<qlonglong> reply = m_launcherSettingsInterface->GetSortMethod();
+    reply.waitForFinished();
+    if (!reply.isError()){
+        qlonglong mode = reply.argumentAt(0).toLongLong();
+        return mode;
+    }else{
+        LOG_ERROR() << reply.error().message();
+        return 0;
+    }
+}
+
+void DBusController::setSortMethod(int mode){
+    QDBusPendingReply<qlonglong> reply = m_launcherSettingsInterface->SetSortMethod(mode);
+}
+
+void DBusController::searchDone(QStringList appKeys){
+    m_searchList.clear();
+    foreach(QString appKey, appKeys){
+        m_searchList.append(m_itemInfos.value(appKey));
+    }
+    emit signalManager->showSearchResult();
+    emit signalManager->searchItemInfoListChanged(m_searchList);
 }
 
 DBusController::~DBusController()

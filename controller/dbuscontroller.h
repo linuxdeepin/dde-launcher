@@ -6,6 +6,7 @@
 #include "dbusinterface/dbustype.h"
 
 class LauncherInterface;
+class LauncherSettingsInterface;
 class FileInfoInterface;
 class StartManagerInterface;
 class MenuController;
@@ -29,11 +30,14 @@ class DBusController : public QObject
 public:
     explicit DBusController(QObject *parent = 0);
     ~DBusController();
-    void init();
     void initConnect();
     void getCategoryInfoList();
     void getInstalledTimeItems();
     void getAllFrequencyItems();
+    int getSortMethod();
+    int getCategoryDisplayMode();
+
+
     LauncherInterface* getLauncherInterface();
     StartManagerInterface* getStartManagerInterface();
     ItemInfo getItemInfo(QString appKey);
@@ -44,10 +48,15 @@ public:
 signals:
 
 public slots:
+    void init();
     void updateAppTable(QString appKey);
+    void searchDone(QStringList appKeys);
+    void setCategoryDisplayMode(int mode);
+    void setSortMethod(int mode);
 
 private:
     LauncherInterface* m_launcherInterface;
+    LauncherSettingsInterface* m_launcherSettingsInterface;
     FileInfoInterface* m_fileInfoInterface;
     StartManagerInterface* m_startManagerInterface;
     MenuController* m_menuController;
@@ -62,6 +71,7 @@ private:
     QList<ItemInfo> m_appNameSortedList;
     QList<ItemInfo> m_installTimeSortedList;
     QList<ItemInfo> m_useFrequencySortedList;
+    QList<ItemInfo> m_searchList;
 };
 
 #endif // DBUSCONTROLLER_H

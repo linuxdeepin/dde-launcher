@@ -49,7 +49,7 @@ void AppItem::initConnect(){
     connect(m_borderButton, SIGNAL(rightClicked(QPoint)), this, SLOT(showMenu(QPoint)));
     connect(m_borderButton, &BorderButton::clicked, [=](){
         emit signalManager->Hide();
-        emit signalManager->appOpened(m_appKey);
+        emit signalManager->appOpened(m_url);
     });
 }
 

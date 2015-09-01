@@ -28,12 +28,15 @@ public slots:
     void setAppNameItemInfoList(const QList<ItemInfo>& infoList);
     void setInstallTimeItemInfoList(const QList<ItemInfo>& infoList);
     void setuseFrequencyItemInfoList(const QList<ItemInfo>& infoList);
-
+    void showSearchResult(const QList<ItemInfo>& infoList);
 
     void showbyName();
     void showByInstalledTime();
     void showByFrequency();
     void showBySortedMode(int mode);
+    void showNormalMode();
+
+    void openCheckedApp();
 
 protected:
     void wheelEvent(QWheelEvent* event);
@@ -42,6 +45,7 @@ private:
     int m_column;
     int m_gridWidth;
     int m_itemWidth;
+    int m_currentMode;
     QMap<QString, ItemInfo> m_itemInfosMap;
 
     QList<ItemInfo> m_appNameItemInfoList;

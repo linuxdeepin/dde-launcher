@@ -19,6 +19,7 @@ BaseTableWidget::BaseTableWidget(QWidget *parent) : QTableWidget(parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameShape(QFrame::NoFrame);
+    setFocusPolicy(Qt::NoFocus);
 //    setMouseTracking(true);
     verticalHeader()->hide();
     horizontalHeader()->hide();
@@ -63,8 +64,8 @@ void BaseTableWidget::hideEvent(QHideEvent *event){
 }
 
 void BaseTableWidget::clearHighlight(){
-    p_highlightRow = -1;
-    p_highlightColumn = -1;
+    m_highlightRow = -1;
+    m_highlightColumn = -1;
 }
 
 void BaseTableWidget::handleDirectionKeyPressed(Qt::Key key){
@@ -82,14 +83,14 @@ void BaseTableWidget::handleDirectionKeyPressed(Qt::Key key){
 }
 
 void BaseTableWidget::handleKeyUpPressed(){
-    if (p_highlightRow == -1 && p_highlightColumn == -1){
+    if (m_highlightRow == -1 && m_highlightColumn == -1){
         firstHighlight();
-    }else if (p_highlightRow == 0 && p_highlightColumn == 0){
+    }else if (m_highlightRow == 0 && m_highlightColumn == 0){
         qDebug() << "first row";
-    }else if (p_highlightRow >= 1 && p_highlightColumn >= 0){
+    }else if (m_highlightRow >= 1 && m_highlightColumn >= 0){
         bool highlighted = false;
-        for (int i= (p_highlightRow - 1); i>= 0; i--){
-            for (int j=p_highlightColumn; j >=0; j--){
+        for (int i= (m_highlightRow - 1); i>= 0; i--){
+            for (int j=m_highlightColumn; j >=0; j--){
                 if (cellWidget(i, j)){
                     QString className = QString(cellWidget(i, j)->metaObject()->className());
                     if (className == "AppItem"){
@@ -107,12 +108,12 @@ void BaseTableWidget::handleKeyUpPressed(){
 }
 
 void BaseTableWidget::handleKeyDownPressed(){
-    if (p_highlightRow == -1 && p_highlightColumn == -1){
+    if (m_highlightRow == -1 && m_highlightColumn == -1){
         firstHighlight();
-    }else if (p_highlightRow < (rowCount() - 1) && p_highlightColumn >= 0){
+    }else if (m_highlightRow < (rowCount() - 1) && m_highlightColumn >= 0){
         bool highlighted = false;
-        for (int i= (p_highlightRow + 1); i< rowCount(); i++){
-            for (int j=p_highlightColumn; j >=0; j--){
+        for (int i= (m_highlightRow + 1); i< rowCount(); i++){
+            for (int j=m_highlightColumn; j >=0; j--){
                 if (cellWidget(i, j)){
                     QString className = QString(cellWidget(i, j)->metaObject()->className());
                     if (className == "AppItem"){
@@ -126,29 +127,29 @@ void BaseTableWidget::handleKeyDownPressed(){
                 break;
             }
         }
-    }else if (p_highlightRow == (rowCount() - 1) && p_highlightColumn >= 0){
+    }else if (m_highlightRow == (rowCount() - 1) && m_highlightColumn >= 0){
         qDebug() << "last row";
     }
 }
 
 void BaseTableWidget::handleKeyLeftPressed(){
-    if (p_highlightRow == -1 && p_highlightColumn == -1){
+    if (m_highlightRow == -1 && m_highlightColumn == -1){
         firstHighlight();
-    }else if (p_highlightRow == 0 && p_highlightColumn == 0){
+    }else if (m_highlightRow == 0 && m_highlightColumn == 0){
         qDebug() << "first column";
-    }else if (p_highlightColumn >= 0 && p_highlightRow >= 0){
-        for (int i= (p_highlightColumn - 1); i>= 0; i--){
-            qDebug() << cellWidget(p_highlightRow, i);
-            if (cellWidget(p_highlightRow, i)){
-                QString className = QString(cellWidget(p_highlightRow, i)->metaObject()->className());
+    }else if (m_highlightColumn >= 0 && m_highlightRow >= 0){
+        for (int i= (m_highlightColumn - 1); i>= 0; i--){
+            qDebug() << cellWidget(m_highlightRow, i);
+            if (cellWidget(m_highlightRow, i)){
+                QString className = QString(cellWidget(m_highlightRow, i)->metaObject()->className());
                 if (className == "AppItem"){
-                    qDebug() << p_highlightRow << i;
-                    hightlightItem(p_highlightRow, i);
+                    qDebug() << m_highlightRow << i;
+                    hightlightItem(m_highlightRow, i);
                     return;
                 }
             }
         }
-        for (int i = (p_highlightRow -1); i >0; i--){
+        for (int i = (m_highlightRow -1); i >0; i--){
             for (int j= (columnCount() - 1); j > 0; j--){
                 if (cellWidget(i, j)){
                     QString className = QString(cellWidget(i, j)->metaObject()->className());
@@ -163,20 +164,20 @@ void BaseTableWidget::handleKeyLeftPressed(){
 }
 
 void BaseTableWidget::handleKeyRightPressed(){
-    if (p_highlightRow == -1 && p_highlightColumn == -1){
+    if (m_highlightRow == -1 && m_highlightColumn == -1){
         firstHighlight();
-    }else if (p_highlightColumn <= (columnCount() - 1) && p_highlightRow >= 0){
-        for (int j= (p_highlightColumn + 1); j< columnCount(); j++){
-            if (cellWidget(p_highlightRow, j)){
-                QString className = QString(cellWidget(p_highlightRow, j)->metaObject()->className());
+    }else if (m_highlightColumn <= (columnCount() - 1) && m_highlightRow >= 0){
+        for (int j= (m_highlightColumn + 1); j< columnCount(); j++){
+            if (cellWidget(m_highlightRow, j)){
+                QString className = QString(cellWidget(m_highlightRow, j)->metaObject()->className());
                 if (className == "AppItem"){
-                    hightlightItem(p_highlightRow, j);
+                    hightlightItem(m_highlightRow, j);
                     return;
                 }
             }
         }
 
-        for(int i=(p_highlightRow + 1); i< rowCount(); i++){
+        for(int i=(m_highlightRow + 1); i< rowCount(); i++){
             for (int j= 0; j< columnCount(); j++){
                 if (cellWidget(i, j)){
                     QString className = QString(cellWidget(i, j)->metaObject()->className());
@@ -195,10 +196,7 @@ void BaseTableWidget::firstHighlight(){
         if (cellWidget(i, 0)){
             QString className = QString(cellWidget(i, 0)->metaObject()->className());
             if (className == "AppItem"){
-                AppItem* appItem = static_cast<AppItem*>(cellWidget(i, 0));
-                appItem->getBorderButton()->setHighlight(true);
-                p_highlightRow = i;
-                p_highlightColumn = 0;
+                setHighLight(i, 0);
                 return;
             }
         }
@@ -206,21 +204,32 @@ void BaseTableWidget::firstHighlight(){
 }
 
 void BaseTableWidget::hightlightItem(int row, int column){
-    QString lastName = QString(cellWidget(p_highlightRow, p_highlightColumn)->metaObject()->className());
+    QString lastName = QString(cellWidget(m_highlightRow, m_highlightColumn)->metaObject()->className());
     if (lastName == "AppItem"){
-        AppItem* appItem = static_cast<AppItem*>(cellWidget(p_highlightRow, p_highlightColumn));
+        AppItem* appItem = static_cast<AppItem*>(cellWidget(m_highlightRow, m_highlightColumn));
         appItem->getBorderButton()->setHighlight(false);
     }
     QString className = QString(cellWidget(row, column)->metaObject()->className());
     if (className== "AppItem"){
-        AppItem* appItem = static_cast<AppItem*>(cellWidget(row, column));
-        appItem->getBorderButton()->setHighlight(true);
-        p_highlightRow = row;
-        p_highlightColumn = column;
-        scrollToItem(item(p_highlightRow, p_highlightColumn));
+        setHighLight(row, column);
+        scrollToItem(item(row, column));
     }
 }
 
+void BaseTableWidget::setHighLight(int hRow, int hColumn){
+    AppItem* appItem = static_cast<AppItem*>(cellWidget(hRow, hColumn));
+    appItem->getBorderButton()->setHighlight(true);
+    m_highlightRow = hRow;
+    m_highlightColumn = hColumn;
+}
+
+int BaseTableWidget::getHighLightRow() const {
+    return m_highlightRow;
+}
+
+int BaseTableWidget::getHighLightColumn() const {
+    return m_highlightColumn;
+}
 
 BaseTableWidget::~BaseTableWidget()
 {

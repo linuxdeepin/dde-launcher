@@ -47,7 +47,9 @@ SOURCES += main.cpp \
     views/borderbutton.cpp \
     dbusinterface/startmanager_interface.cpp \
     dbusinterface/launcheradaptor.cpp \
-    dbusinterface/dde_launchder_interface.cpp
+    dbusinterface/dde_launchder_interface.cpp \
+    views/searchlineedit.cpp \
+    dbusinterface/launchersettings_interface.cpp
 
 HEADERS += \
     views/launcherframe.h \
@@ -82,7 +84,9 @@ HEADERS += \
     views/borderbutton.h \
     dbusinterface/startmanager_interface.h \
     dbusinterface/launcheradaptor.h \
-    dbusinterface/dde_launcher_interface.h
+    dbusinterface/dde_launcher_interface.h \
+    views/searchlineedit.h \
+    dbusinterface/launchersettings_interface.h
 
 RESOURCES += \
     skin.qrc \

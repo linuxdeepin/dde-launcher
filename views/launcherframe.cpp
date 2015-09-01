@@ -7,6 +7,8 @@
 #include "app/global.h"
 #include "app/xcb_misc.h"
 #include "Logger.h"
+#include "searchlineedit.h"
+#include "categorytablewidget.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QStackedLayout>
@@ -65,6 +67,10 @@ void LauncherFrame::initUI(){
     m_displayModeFrame = new DisplayModeFrame(this);
 
 
+
+    m_searchLineEdit = new SearchLineEdit(this);
+    m_searchLineEdit->hide();
+
 //    int desktopWidth = qApp->desktop()->screenGeometry().width();
 //    int desktopHeight = qApp->desktop()->screenGeometry().height();
 //    QPixmap pixmap(desktopWidth, desktopHeight);
@@ -102,10 +108,14 @@ void LauncherFrame::computerGrid(int minimumLeftMargin, int minimumTopMargin, in
 
 void LauncherFrame::initConnect(){
     connect(m_displayModeFrame, SIGNAL(visibleChanged(bool)), this, SLOT(toggleDisableNavgationBar(bool)));
-    connect(m_displayModeFrame, SIGNAL(sortModeChanged(int)), this, SLOT(showAppTableWidgetByMode(int)));
-    connect(m_displayModeFrame, SIGNAL(categoryModeChanged(int)), this, SLOT(showNavigationBarByMode(int)));
+    connect(m_displayModeFrame, SIGNAL(sortModeChanged(int)), this, SLOT(showSortedMode(int)));
+    connect(m_displayModeFrame, SIGNAL(categoryModeChanged(int)), this, SLOT(showCategoryMode(int)));
+    connect(m_searchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(handleSearch(QString)));
+    connect(signalManager, SIGNAL(startSearched(QString)), m_searchLineEdit, SLOT(setText(QString)));
+    connect(signalManager, SIGNAL(showSearchResult()), this, SLOT(showAppTableWidget()));
     connect(signalManager, SIGNAL(mouseReleased()), this, SLOT(handleMouseReleased()));
     connect(signalManager, SIGNAL(Hide()), this, SLOT(Hide()));
+    connect(signalManager, SIGNAL(appOpened(QString)), this, SLOT(handleAppOpened(QString)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SIGNAL(Closed()));
 }
 
@@ -114,21 +124,38 @@ void LauncherFrame::toggleDisableNavgationBar(bool flag){
     m_categoryFrame->getNavigationBar()->setDisabled(flag);
 }
 
-void LauncherFrame::showAppTableWidgetByMode(int mode){
-    m_layout->setCurrentIndex(1);
-    m_displayModeFrame->raise();
-    emit signalManager->sortModeChanged(mode);
+void LauncherFrame::showSortedMode(int mode){
+    LOG_INFO() << mode;
+    if (mode == 1){
+        showNavigationBarByMode();
+    }else{
+        showAppTableWidgetByMode(mode);
+    }
 }
 
-void LauncherFrame::showNavigationBarByMode(int mode){
-    m_layout->setCurrentIndex(0);
-    m_displayModeFrame->raise();
+void LauncherFrame::showCategoryMode(int mode){
+   m_categoryFrame->getNavigationBar()->setCurrentIndex(mode);
+   m_categoryFrame->getNavigationBar();
+   m_categoryFrame->getCategoryTabelWidget()->show();
+}
 
-    if (mode == 1){
-        m_categoryFrame->getNavigationBar()->setCurrentIndex(0);
-    }else if (mode == 2){
-        m_categoryFrame->getNavigationBar()->setCurrentIndex(1);
-    }
+void LauncherFrame::showAppTableWidget(){
+    m_layout->setCurrentIndex(1);
+    m_appTableWidget->clear();
+    m_displayModeFrame->hide();
+}
+
+void LauncherFrame::showAppTableWidgetByMode(int mode){
+    m_layout->setCurrentIndex(1);
+    m_displayModeFrame->show();
+    m_displayModeFrame->raise();
+    m_appTableWidget->showBySortedMode(mode);
+}
+
+void LauncherFrame::showNavigationBarByMode(){
+    m_layout->setCurrentIndex(0);
+    m_displayModeFrame->show();
+    m_displayModeFrame->raise();
 }
 
 void LauncherFrame::mouseReleaseEvent(QMouseEvent *event){
@@ -139,11 +166,12 @@ void LauncherFrame::mouseReleaseEvent(QMouseEvent *event){
 
 void LauncherFrame::keyPressEvent(QKeyEvent *event){
     if (event->key() == Qt::Key_Escape){
-        #if !defined(QT_NO_DEBUG)
-        qApp->quit();
-        #endif
-    }
-    if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Up){
+        if (m_searchLineEdit->isVisible()){
+            hideSearchEdit();
+        }else{
+            hide();
+        }
+    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Up){
         emit signalManager->keyDirectionPressed(Qt::Key_Up);
     }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Down) {
         emit signalManager->keyDirectionPressed(Qt::Key_Down);
@@ -151,6 +179,17 @@ void LauncherFrame::keyPressEvent(QKeyEvent *event){
         emit signalManager->keyDirectionPressed(Qt::Key_Left);
     }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Right){
         emit signalManager->keyDirectionPressed(Qt::Key_Right);
+    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Return){
+        qDebug() << "Enter Pressed";
+        if (m_layout->currentIndex() == 0){
+            emit signalManager->appOpenedInCategoryMode();
+        }else{
+            emit signalManager->appOpenedInAppMode();
+        }
+    }else if (event->text().trimmed().length() > 0){
+        m_searchLineEdit->raise();
+        m_searchLineEdit->show();
+        emit signalManager->startSearched(event->text());
     }
     QFrame::keyPressEvent(event);
 }
@@ -159,7 +198,6 @@ void LauncherFrame::closeEvent(QCloseEvent *event){
     qDebug() << event;
     QDBusConnection conn = QDBusConnection::sessionBus();
     conn.unregisterObject("/com/deepin/dde/Launcher");
-//    conn.unregisterObject("/com/deepin/dde/Launcher", this);
     conn.unregisterService("com.deepin.dde.Launcher");
     qDebug() << "~LauncherFrame";
     QFrame::closeEvent(event);
@@ -171,15 +209,23 @@ void LauncherFrame::Exit(){
 
 void LauncherFrame::Hide(){
     hide();
+    m_searchLineEdit->hide();
+    m_searchLineEdit->clearFocus();
+    m_searchLineEdit->setText("");
+    setFocus();
+    if (m_layout->currentIndex() == 0){
+
+    }
 }
 
 void LauncherFrame::Show(){
+    emit signalManager->launcheRefreshed();
+    LOG_INFO() << "=============launcheRefreshed";
     show();
     emit Shown();
 }
 
 void LauncherFrame::Toggle(){
-//    setVisible(!isVisible());
     if (isVisible()){
         Hide();
     }else{
@@ -189,6 +235,27 @@ void LauncherFrame::Toggle(){
 
 void LauncherFrame::handleMouseReleased(){
     m_clearCheckedButton->click();
+}
+
+void LauncherFrame::handleSearch(const QString &text){
+    if (text.length() == 0){
+        hideSearchEdit();
+    }else{
+        emit signalManager->search(text);
+    }
+}
+
+void LauncherFrame::hideSearchEdit(){
+    if(m_searchLineEdit->isVisible()){
+        m_searchLineEdit->hide();
+        m_searchLineEdit->clearFocus();
+        setFocus();
+        emit signalManager->launcheRefreshed();
+    }
+}
+
+void LauncherFrame::handleAppOpened(const QString &appKey){
+    Hide();
 }
 
 LauncherFrame::~LauncherFrame()

@@ -19,6 +19,8 @@ public:
     void handleKeyDownPressed();
     void handleKeyLeftPressed();
     void handleKeyRightPressed();
+    int getHighLightRow() const;
+    int getHighLightColumn() const;
 
 signals:
 
@@ -26,12 +28,15 @@ public slots:
     void clearHighlight();
     void setItemUnChecked();
     void handleDirectionKeyPressed(Qt::Key key);
+    void setHighLight(int hRow, int hColumn);
 
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void hideEvent(QHideEvent* event);
-    int p_highlightRow = -1;
-    int p_highlightColumn = -1;
+
+private:
+    int m_highlightRow = -1;
+    int m_highlightColumn = -1;
 
 };
 

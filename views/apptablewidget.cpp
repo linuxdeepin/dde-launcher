@@ -29,8 +29,11 @@ void AppTableWidget::initConnect(){
             this, SLOT(setInstallTimeItemInfoList(QList<ItemInfo>)));
     connect(signalManager, SIGNAL(useFrequencyItemInfoListChanged(QList<ItemInfo>)),
             this, SLOT(setuseFrequencyItemInfoList(QList<ItemInfo>)));
-    connect(signalManager, SIGNAL(sortModeChanged(int)), this, SLOT(showBySortedMode(int)));
+    connect(signalManager, SIGNAL(searchItemInfoListChanged(QList<ItemInfo>)),
+            this, SLOT(showSearchResult(QList<ItemInfo>)));
     connect(signalManager, SIGNAL(itemInfosChanged(QMap<QString,ItemInfo>)), this, SLOT(setItemInfosMap(QMap<QString,ItemInfo>)));
+
+    connect(signalManager, SIGNAL(appOpenedInAppMode()), this, SLOT(openCheckedApp()));
 }
 
 void AppTableWidget::setGridParameter(int column, int girdWidth, int itemWidth){
@@ -59,6 +62,13 @@ void AppTableWidget::addItem(ItemInfo itemInfo, int index){
 
 void AppTableWidget::addItems(const QList<ItemInfo> &itemInfos){
     clear();
+    clearContents();
+    int rc = rowCount();
+    for(int i=0; i< rc; i++){
+        removeRow(0);
+    }
+
+    verticalScrollBar()->setValue(0);
     setRowCount(itemInfos.length() / m_column + 1);
     for(int i=0; i< rowCount(); i++){
         setRowHeight(i, m_gridWidth);
@@ -71,29 +81,34 @@ void AppTableWidget::addItems(const QList<ItemInfo> &itemInfos){
 }
 
 void AppTableWidget::setItemInfosMap(const QMap<QString, ItemInfo> &itemInfos){
+    m_itemInfosMap.clear();
     m_itemInfosMap = itemInfos;
 }
 
 void AppTableWidget::showBySortedMode(int mode){
     if (mode == 0){
         showbyName();
-    }else if (mode == 3){
+    }else if (mode == 2){
         showByInstalledTime();
-    }else if (mode == 4){
+    }else if (mode == 3){
         showByFrequency();
     }
     clearHighlight();
+    m_currentMode = mode;
 }
 
 void AppTableWidget::setAppNameItemInfoList(const QList<ItemInfo> &infoList){
+    m_appNameItemInfoList.clear();
     m_appNameItemInfoList = infoList;
 }
 
 void AppTableWidget::setInstallTimeItemInfoList(const QList<ItemInfo> &infoList){
+    m_InstalltimeItemInfoList.clear();
     m_InstalltimeItemInfoList= infoList;
 }
 
 void AppTableWidget::setuseFrequencyItemInfoList(const QList<ItemInfo> &infoList){
+    m_useFrequencyItemInfoList.clear();
     m_useFrequencyItemInfoList = infoList;
 }
 
@@ -109,6 +124,14 @@ void AppTableWidget::showByFrequency(){
     addItems(m_useFrequencyItemInfoList);
 }
 
+void AppTableWidget::showSearchResult(const QList<ItemInfo> &infoList){
+    addItems(infoList);
+}
+
+void AppTableWidget::showNormalMode(){
+    showBySortedMode(m_currentMode);
+}
+
 void AppTableWidget::wheelEvent(QWheelEvent *event){
     int value = verticalScrollBar()->value();
     int miniimun = verticalScrollBar()->minimum();
@@ -120,6 +143,31 @@ void AppTableWidget::wheelEvent(QWheelEvent *event){
     }else{
         if (value < maximum){
             verticalScrollBar()->setValue(value + 40);
+        }
+    }
+}
+
+void AppTableWidget::openCheckedApp(){
+    int hRow = getHighLightRow();
+    int hColumn = getHighLightColumn();
+    if (hRow == -1 && hColumn == -1){
+        for (int i=0; i< rowCount(); i++){
+            if (cellWidget(0, 0)){
+                QString className = QString(cellWidget(0, 0)->metaObject()->className());
+                if (className == "AppItem"){
+                    AppItem* appItem = static_cast<AppItem*>(cellWidget(0, 0));
+                    emit signalManager->appOpened(appItem->getUrl());
+                    break;
+                }
+            }
+        }
+    }else{
+        if (cellWidget(hRow, hColumn)){
+            QString className = QString(cellWidget(hRow, hColumn)->metaObject()->className());
+            if (className == "AppItem"){
+                AppItem* appItem = static_cast<AppItem*>(cellWidget(hRow, hColumn));
+                emit signalManager->appOpened(appItem->getUrl());
+            }
         }
     }
 }

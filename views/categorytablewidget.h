@@ -6,8 +6,6 @@
 class QWheelEvent;
 class CategoryItem;
 
-static int categoryItemHeight = 80;
-
 class CategoryTableWidget : public BaseTableWidget
 {
     Q_OBJECT
@@ -36,6 +34,8 @@ public slots:
 
     void handleScrollBarValueChanged(int value);
     void scrollToCategory(QString key);
+
+    void openCheckedApp();
 
 protected:
     void wheelEvent(QWheelEvent* event);

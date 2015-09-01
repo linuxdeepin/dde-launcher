@@ -11,6 +11,8 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
+static int categoryItemHeight = 80;
+
 CategoryTableWidget::CategoryTableWidget(QWidget *parent) : BaseTableWidget(parent)
 {
     setObjectName("CategoryTableWidget");
@@ -26,6 +28,8 @@ void CategoryTableWidget::initConnect(){
             this, SLOT(setItemInfosMap(QMap<QString,ItemInfo>)));
     connect(signalManager, SIGNAL(navigationButtonClicked(QString)),
             this, SLOT(scrollToCategory(QString)));
+    connect(signalManager, SIGNAL(appOpenedInCategoryMode()),
+            this, SLOT(openCheckedApp()));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(handleScrollBarValueChanged(int)));
 }
@@ -46,11 +50,16 @@ void CategoryTableWidget::setGridParameter(int column, int girdWidth, int itemWi
 }
 
 void CategoryTableWidget::setItemInfosMap(const QMap<QString, ItemInfo> &itemInfos){
+    m_itemInfosMap.clear();
     m_itemInfosMap = itemInfos;
 }
 
 void CategoryTableWidget::setCategoryInfoList(const CategoryInfoList &categoryInfoList){
+    LOG_INFO() << "setCategoryInfoList" << categoryInfoList.length();
     m_categoryInfoList = categoryInfoList;
+
+    m_sortedCategoryInfoList.clear();
+
     for(int i = 0; i<= 9; i++ ) {
         foreach (CategoryInfo info, categoryInfoList) {
             if (info.id == i){
@@ -133,6 +142,13 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
 
 void CategoryTableWidget::addItems(const CategoryInfoList &categoryInfoList){
     clear();
+    clearContents();
+    int rc = rowCount();
+    for(int i=0; i< rc; i++){
+        removeRow(0);
+    }
+    verticalScrollBar()->setValue(0);
+
     int row = 0;
     foreach (CategoryInfo info, categoryInfoList) {
         if(info.items.count() > 0){
@@ -169,6 +185,32 @@ void CategoryTableWidget::handleScrollBarValueChanged(int value){
         value -= 1;
         if (value < 0){
             break;
+        }
+    }
+}
+
+void CategoryTableWidget::openCheckedApp(){
+    int hRow = getHighLightRow();
+    int hColumn = getHighLightColumn();
+    qDebug() << hRow << hColumn << "openCheckedApp";
+    if (hRow == -1 && hColumn == -1){
+        for (int i=0; i< rowCount(); i++){
+            if (cellWidget(i, 0)){
+                QString className = QString(cellWidget(i, 0)->metaObject()->className());
+                if (className == "AppItem"){
+                    AppItem* appItem = static_cast<AppItem*>(cellWidget(i, 0));
+                    emit signalManager->appOpened(appItem->getUrl());
+                    break;
+                }
+            }
+        }
+    }else{
+        if (cellWidget(hRow, hColumn)){
+            QString className = QString(cellWidget(hRow, hColumn)->metaObject()->className());
+            if (className == "AppItem"){
+                AppItem* appItem = static_cast<AppItem*>(cellWidget(hRow, hColumn));
+                emit signalManager->appOpened(appItem->getUrl());
+            }
         }
     }
 }

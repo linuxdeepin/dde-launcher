@@ -51,6 +51,7 @@
         <file>skin/images/industry_100.png</file>
         <file>skin/images/industry_50.png</file>
         <file>skin/images/industry_10.png</file>
+        <file>skin/img/search.png</file>
     </qresource>
     <qresource prefix="/qss">
         <file>skin/qss/Tablewidget.qss</file>

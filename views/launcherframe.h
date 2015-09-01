@@ -11,6 +11,7 @@ class QStackedLayout;
 class QButtonGroup;
 class QPushButton;
 class QCloseEvent;
+class SearchLineEdit;
 
 class LauncherFrame : public QFrame
 {
@@ -30,14 +31,21 @@ signals:
     void Shown();
 
 public slots:
-       void toggleDisableNavgationBar(bool flag);
-       void showAppTableWidgetByMode(int mode);
-       void showNavigationBarByMode(int mode);
-       void handleMouseReleased();
-       void Exit();
-       void Hide();
-       void Show();
-       void Toggle();
+    void showSortedMode(int mode);
+    void showCategoryMode(int mode);
+    void toggleDisableNavgationBar(bool flag);
+    void showAppTableWidgetByMode(int mode);
+    void showNavigationBarByMode();
+    void handleMouseReleased();
+    void showAppTableWidget();
+    void Exit();
+    void Hide();
+    void Show();
+    void Toggle();
+    void handleSearch(const QString& text);
+    void hideSearchEdit();
+
+    void handleAppOpened(const QString& appKey);
 
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
@@ -60,6 +68,8 @@ private:
     AppTableWidget* m_appTableWidget;
 
     QPushButton* m_clearCheckedButton;
+
+    SearchLineEdit* m_searchLineEdit;
 };
 
 #endif // LAUNCHERFRAME_H

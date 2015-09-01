@@ -3,6 +3,7 @@
 #include "app/global.h"
 #include "widgets/themeappicon.h"
 #include "dbusinterface/dde_launcher_interface.h"
+#include "dbusinterface/launcher_interface.h"
 #include <QApplication>
 #include <QDBusConnection>
 #include <QDBusInterface>
@@ -14,6 +15,7 @@ int main(int argc, char *argv[])
     QDBusConnection conn = QDBusConnection::sessionBus();
     if(conn.registerService(LauncherServiceName)){
         debug_log_console_on();
+        RegisterDdeSession();
         Singleton<ThemeAppIcon>::instance()->gtkInit();
         LauncherApp launcher;
         dbusController->init();

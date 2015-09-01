@@ -17,12 +17,21 @@ public:
     };
 
 signals:
+    void launcheRefreshed();
     void appNameItemInfoListChanged(const QList<ItemInfo>& infoList);
     void installTimeItemInfoListChanged(const QList<ItemInfo>& infoList);
     void useFrequencyItemInfoListChanged(const QList<ItemInfo>& infoList);
+    /*search*/
+    void searchItemInfoListChanged(const QList<ItemInfo>& infoList);
+    void showSearchResult();
+    void startSearched(QString key);
+    void search(QString appKey);
 
+    void viewModeChanged(int mode);
+
+    void sortedModeChanged(int mode);
     void categoryModeChanged(int mode);
-    void sortModeChanged(int mode);
+
     void itemInfosChanged(const QMap<QString, ItemInfo>& itemInfos);
     void categoryInfosChanged(const CategoryInfoList& categoryInfoList);
 
@@ -41,8 +50,10 @@ signals:
     /*unistall delete item in table*/
     void itemDeleted(QString appKey);
 
-    /*Open app by click*/
+    /*Open app by click/Press Enter*/
     void appOpened(QString appKey);
+    void appOpenedInCategoryMode();
+    void appOpenedInAppMode();
 
     /*Keyboard event*/
     void keyDirectionPressed(Qt::Key direction);

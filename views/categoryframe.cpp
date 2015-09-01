@@ -6,14 +6,14 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
+const int BottomMargin = 70;
+
 CategoryFrame::CategoryFrame(QWidget *parent) : QFrame(parent)
 {
 
 }
 
 void CategoryFrame::initUI(int leftMargin, int rightMargin, int column, int itemWidth, int gridWidth){
-    int bottomMargin = qApp->desktop()->screenGeometry().height() -
-            qApp->desktop()->availableGeometry().height();
     setGeometry(qApp->desktop()->screenGeometry());
     m_navigationBar = new NavigationBar(this);
     m_navigationBar->initUI(leftMargin);
@@ -23,8 +23,7 @@ void CategoryFrame::initUI(int leftMargin, int rightMargin, int column, int item
 
     QVBoxLayout* tableLayout = new QVBoxLayout;
     tableLayout->addWidget(m_categoryTableWidget);
-    tableLayout->setContentsMargins(0, 20, 0, bottomMargin);
-
+    tableLayout->setContentsMargins(0, 20, 0, BottomMargin);
 
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(m_navigationBar);
@@ -45,7 +44,6 @@ NavigationBar* CategoryFrame::getNavigationBar(){
 CategoryTableWidget* CategoryFrame::getCategoryTabelWidget(){
     return m_categoryTableWidget;
 }
-
 
 CategoryFrame::~CategoryFrame()
 {

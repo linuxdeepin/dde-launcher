@@ -218,6 +218,7 @@ void MenuController::handleOpen(QString appKey){
     if (!reply.isError()) {
         bool ret = reply.argumentAt(0).toBool();
         LOG_INFO() << "Launch app:" << ret;
+
     } else {
     }
 }

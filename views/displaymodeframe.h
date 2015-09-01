@@ -31,6 +31,7 @@ signals:
 public slots:
     void setCategoryDisplayMode(int mode);
     void setSortMode(int mode);
+    void checkButton(int mode);
     void setViewMode(int mode);
 
     void toggleButtonFrameByViewButton(bool flag);

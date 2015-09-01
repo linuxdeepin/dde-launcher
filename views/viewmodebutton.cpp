@@ -3,7 +3,7 @@
 
 ViewModeButton::ViewModeButton(QWidget *parent) : BaseCheckedButton(parent)
 {
-    setNormalIconByMode(1);
+//    setNormalIconByMode(1);
 }
 
 void ViewModeButton::setNormalIconByMode(int mode){

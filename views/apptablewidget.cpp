@@ -67,6 +67,7 @@ void AppTableWidget::addItems(const QList<ItemInfo> &itemInfos){
     for(int i=0; i< rc; i++){
         removeRow(0);
     }
+    clearHighlight();
 
     verticalScrollBar()->setValue(0);
     setRowCount(itemInfos.length() / m_column + 1);

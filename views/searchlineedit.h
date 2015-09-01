@@ -3,7 +3,7 @@
 
 #include <QFrame>
 class QLabel;
-class QLineEdit;
+class DLineEdit;
 class QResizeEvent;
 
 class SearchLineEdit : public QFrame
@@ -26,7 +26,7 @@ public slots:
 
 private:
     QLabel* m_iconLabel;
-    QLineEdit* m_lineEdit;
+    DLineEdit* m_lineEdit;
 };
 
 #endif // SEARCHLINEEDIT_H

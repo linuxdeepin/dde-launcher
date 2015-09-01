@@ -45,7 +45,7 @@ public slots:
     void handleSearch(const QString& text);
     void hideSearchEdit();
 
-    void handleAppOpened(const QString& appKey);
+    void handleAppOpened(const QString& appUrl);
 
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
@@ -62,6 +62,7 @@ private:
     int m_row;
     int m_itemWidth;
     int m_gridwidth;
+    QString m_searchText;
     QStackedLayout* m_layout;
     DisplayModeFrame* m_displayModeFrame;
     CategoryFrame* m_categoryFrame;

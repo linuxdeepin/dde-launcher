@@ -49,7 +49,8 @@ SOURCES += main.cpp \
     dbusinterface/launcheradaptor.cpp \
     dbusinterface/dde_launchder_interface.cpp \
     views/searchlineedit.cpp \
-    dbusinterface/launchersettings_interface.cpp
+    dbusinterface/launchersettings_interface.cpp \
+    views/dlineedit.cpp
 
 HEADERS += \
     views/launcherframe.h \
@@ -86,7 +87,8 @@ HEADERS += \
     dbusinterface/launcheradaptor.h \
     dbusinterface/dde_launcher_interface.h \
     views/searchlineedit.h \
-    dbusinterface/launchersettings_interface.h
+    dbusinterface/launchersettings_interface.h \
+    views/dlineedit.h
 
 RESOURCES += \
     skin.qrc \

@@ -186,10 +186,19 @@ void LauncherFrame::keyPressEvent(QKeyEvent *event){
         }else{
             emit signalManager->appOpenedInAppMode();
         }
+    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Backspace){
+        if (m_searchLineEdit->isVisible()){
+            m_searchText.remove(m_searchText.length() - 1, 1);
+            emit signalManager->startSearched(m_searchText);
+        }
     }else if (event->text().trimmed().length() > 0){
-        m_searchLineEdit->raise();
-        m_searchLineEdit->show();
-        emit signalManager->startSearched(event->text());
+        if (!m_searchLineEdit->isVisible()){
+            m_searchText.clear();
+            m_searchLineEdit->raise();
+            m_searchLineEdit->show();
+        }
+        m_searchText.append(event->text());
+        emit signalManager->startSearched(m_searchText);
     }
     QFrame::keyPressEvent(event);
 }
@@ -254,7 +263,8 @@ void LauncherFrame::hideSearchEdit(){
     }
 }
 
-void LauncherFrame::handleAppOpened(const QString &appKey){
+void LauncherFrame::handleAppOpened(const QString &appUrl){
+    Q_UNUSED(appUrl)
     Hide();
 }
 

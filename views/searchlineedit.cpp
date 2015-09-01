@@ -1,5 +1,5 @@
 #include "searchlineedit.h"
-#include <QLineEdit>
+#include "dlineedit.h"
 #include <QLabel>
 #include <QResizeEvent>
 #include <QApplication>
@@ -12,7 +12,7 @@
 
 SearchLineEdit::SearchLineEdit(QWidget *parent) :
     QFrame(parent),
-    m_lineEdit(new QLineEdit),
+    m_lineEdit(new DLineEdit),
     m_iconLabel(new QLabel)
 {
     initUI();
@@ -26,7 +26,8 @@ void SearchLineEdit::initUI(){
     m_lineEdit->setObjectName("SearchLineEdit");
     m_lineEdit->setFixedHeight(30);
     m_lineEdit->setMaxLength(255);
-
+    m_lineEdit->setReadOnly(true);
+    m_lineEdit->setFocusPolicy(Qt::NoFocus);
 
     QHBoxLayout* searchLayout = new QHBoxLayout;
     searchLayout->addWidget(m_iconLabel);
@@ -43,7 +44,7 @@ void SearchLineEdit::initConnect(){
 
 void SearchLineEdit::setText(const QString &text){
     m_lineEdit->setText(text);
-    setSearchFocus();
+//    setSearchFocus();
 }
 
 void SearchLineEdit::handleTextChanged(const QString &text){

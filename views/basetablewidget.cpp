@@ -57,6 +57,8 @@ void BaseTableWidget::mouseReleaseEvent(QMouseEvent *event){
         if (event->button() != Qt::RightButton){
             emit signalManager->Hide();
         }
+    }else{
+        emit signalManager->Hide();
     }
 
 

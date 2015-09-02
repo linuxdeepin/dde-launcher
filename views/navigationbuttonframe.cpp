@@ -8,10 +8,10 @@
 
 NavigationButtonFrame::NavigationButtonFrame(int mode, QWidget *parent) : QFrame(parent)
 {
-    m_categroyKeys << "internet" << "multimedia" << "games";
-    m_categroyKeys << "graphics" << "productivity" << "industry";
-    m_categroyKeys << "education" << "development" << "system";
-    m_categroyKeys << "utilities" << "others";
+    m_categroyKeys << tr("internet") << tr("multimedia") << tr("games");
+    m_categroyKeys << tr("graphics") << tr("productivity") << tr("industry");
+    m_categroyKeys << tr("education") << tr("development") << tr("system");
+    m_categroyKeys << tr("utilities") << tr("others");
 
     m_buttonGroup = new QButtonGroup(this);
     m_buttonGroup->setExclusive(true);
@@ -28,25 +28,31 @@ void NavigationButtonFrame::initConnect(){
 void NavigationButtonFrame::initByMode(int mode){
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addStretch();
+
+    QFrame* buttonFrame = new QFrame;
+    buttonFrame->setAttribute(Qt::WA_NoMousePropagation);
+    QVBoxLayout* buttonLayout = new QVBoxLayout;
     foreach (QString key, m_categroyKeys) {
         if (mode == 0){
             BaseCheckedButton* button = new BaseCheckedButton(this);
             button->setFixedSize(32, 32);
-//            LOG_INFO() << button << key;
             button->setObjectName(key);
-            layout->addWidget(button);
+            buttonLayout->addWidget(button);
             m_buttonGroup->addButton(button, m_categroyKeys.indexOf(key));
         }else{
             BaseCheckedButton* button = new BaseCheckedButton(key, this);
             button->setObjectName("CategoryTextButton");
-            button->setFixedSize(160 - leftMargin, 24);
-            layout->addWidget(button);
+            button->setFixedSize(160 - NavgationBarLeftMargin, 24);
+            buttonLayout->addWidget(button);
             m_buttonGroup->addButton(button, m_categroyKeys.indexOf(key));
         }
     }
+    buttonLayout->setSpacing(20);
+    buttonFrame->setLayout(buttonLayout);
+
+    layout->addWidget(buttonFrame);
     m_buttonGroup->buttons().at(0)->click();
-    layout->setSpacing(20);
-    layout->setContentsMargins(leftMargin, 0, 0, 0);
+    layout->setContentsMargins(NavgationBarLeftMargin, 0, 0, 0);
     layout->addStretch();
     setLayout(layout);
 }

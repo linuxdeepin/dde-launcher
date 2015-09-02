@@ -26,7 +26,7 @@ void DisplayModeFrame::initUI(){
 
     m_viewModeButton = new ViewModeButton(this);
     m_viewModeButton->setFixedSize(32, 32);
-    m_viewModeButton->move(leftMargin, 40);
+    m_viewModeButton->move(NavgationBarLeftMargin, 40);
 
     m_buttonGroup = new QButtonGroup(this);
     m_nameButton = new BaseCheckedButton(tr("按名称"), this);

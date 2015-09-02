@@ -12,6 +12,7 @@ class QButtonGroup;
 class QPushButton;
 class QCloseEvent;
 class SearchLineEdit;
+class BackgroundLabel;
 
 class LauncherFrame : public QFrame
 {
@@ -71,6 +72,8 @@ private:
     QPushButton* m_clearCheckedButton;
 
     SearchLineEdit* m_searchLineEdit;
+
+    BackgroundLabel* m_backgroundLabel;
 };
 
 #endif // LAUNCHERFRAME_H

@@ -11,12 +11,13 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = dde-launcher
 TEMPLATE = app
 
-PKGCONFIG += x11 gtk+-2.0 xcb xcb-ewmh
+PKGCONFIG += x11 gtk+-2.0 xcb xcb-ewmh gsettings-qt
 CONFIG += c++11 link_pkgconfig
 
 include(./widgets/widgets.pri)
 include(./cutelogger/cutelogger.pri)
 include(./dialogs/dialogs.pri)
+include(./background/background.pri)
 
 SOURCES += main.cpp \
     views/launcherframe.cpp \

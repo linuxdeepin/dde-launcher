@@ -9,6 +9,7 @@
 #include "Logger.h"
 #include "searchlineedit.h"
 #include "categorytablewidget.h"
+#include "background/backgroundlabel.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QStackedLayout>
@@ -40,6 +41,7 @@ LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
 
 void LauncherFrame::initUI(){
     LOG_INFO() << "initUI";
+    m_backgroundLabel = new BackgroundLabel(true, this);
     m_clearCheckedButton = new QPushButton(this);
     m_clearCheckedButton->setCheckable(true);
     m_clearCheckedButton->hide();

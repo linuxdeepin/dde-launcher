@@ -18,7 +18,6 @@ DisplayModeFrame::DisplayModeFrame(QWidget *parent) : QFrame(parent)
 
 void DisplayModeFrame::initUI(){
     setObjectName("DisplayModeFrame");
-    setGeometry(0, 0, 160, 72);
 
     m_delayHideTimer = new QTimer(this);
     m_delayHideTimer->setSingleShot(true);
@@ -84,7 +83,7 @@ void DisplayModeFrame::toggleButtonFrameBySelf(bool flag){
 }
 
 void DisplayModeFrame::showButtonFrame(){
-    setGeometry(0, 0, 160, 200);
+    setGeometry(0, 0, 160, 210);
     m_buttonFrame->show();
     emit visibleChanged(true);
 }

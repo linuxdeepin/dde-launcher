@@ -36,6 +36,7 @@ DBusController::DBusController(QObject *parent) : QObject(parent)
 
 void DBusController::init(){
     LOG_INFO() << "get Launcher data";
+    getAutoStartList();
     getCategoryInfoList();
     getInstalledTimeItems();
     getAllFrequencyItems();
@@ -78,6 +79,20 @@ StartManagerInterface* DBusController::getStartManagerInterface(){
     return m_startManagerInterface;
 }
 
+void DBusController::getAutoStartList(){
+    m_autoStartList.clear();
+    QDBusPendingReply<QStringList> reply = m_startManagerInterface->AutostartList();
+    reply.waitForFinished();
+    if (!reply.isError()){
+        QStringList urlList = reply.argumentAt(0).toStringList();
+        foreach (QString url, urlList) {
+            m_autoStartList.append(QFileInfo(url).fileName());
+        }
+    }else{
+        LOG_ERROR() << reply.error().message();
+    }
+}
+
 void DBusController::getCategoryInfoList(){
     m_itemInfos.clear();
     m_categoryAppNameSortedInfoList.clear();
@@ -89,6 +104,9 @@ void DBusController::getCategoryInfoList(){
             if (item.key == "all" && item.id == -1){
                 foreach (QString appKey, item.items){
                     ItemInfo itemInfo= getItemInfo(appKey);
+                    if (m_autoStartList.contains(QFileInfo(itemInfo.url).fileName())){
+                        itemInfo.isAutoStart = true;
+                    }
                     m_itemInfos.insert(appKey, itemInfo);
                 }
                 emit signalManager->itemInfosChanged(m_itemInfos);

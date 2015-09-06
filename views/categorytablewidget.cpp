@@ -30,6 +30,10 @@ void CategoryTableWidget::initConnect(){
             this, SLOT(scrollToCategory(QString)));
     connect(signalManager, SIGNAL(appOpenedInCategoryMode()),
             this, SLOT(openCheckedApp()));
+    connect(signalManager, SIGNAL(showAutoStartLabel(QString)),
+            this, SLOT(showAutoStartLabel(QString)));
+    connect(signalManager, SIGNAL(hideAutoStartLabel(QString)),
+            this, SLOT(hideAutoStartLabel(QString)));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(handleScrollBarValueChanged(int)));
 }
@@ -117,13 +121,15 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
        if (m_itemInfosMap.contains(appKey)){
             const ItemInfo& itemInfo = m_itemInfosMap.value(appKey);
 
-            AppItem* appItem = new AppItem();
+            AppItem* appItem = new AppItem(itemInfo.isAutoStart);
             appItem->setAppKey(itemInfo.key);
             appItem->setUrl(itemInfo.url);
             appItem->setAppName(itemInfo.name);
             appItem->setAppIcon(ThemeAppIcon::getIconPixmap(itemInfo.iconKey));
             appItem->setFixedSize(m_gridWidth, m_gridWidth);
             setCellWidget(_row, column, appItem);
+            qDebug() << appKey << "=======";
+            m_appItems.insert(appKey, appItem);
        }else{
            LOG_INFO() << appKey << m_itemInfosMap.keys();
        }
@@ -143,6 +149,7 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
 void CategoryTableWidget::addItems(const CategoryInfoList &categoryInfoList){
     clear();
     clearContents();
+    m_appItems.clear();
     int rc = rowCount();
     for(int i=0; i< rc; i++){
         removeRow(0);
@@ -212,6 +219,18 @@ void CategoryTableWidget::openCheckedApp(){
                 emit signalManager->appOpened(appItem->getUrl());
             }
         }
+    }
+}
+
+void CategoryTableWidget::showAutoStartLabel(QString appKey){
+    if (m_appItems.contains(appKey)){
+        reinterpret_cast<AppItem*>(m_appItems.value(appKey))->showAutoStartLabel();
+    }
+}
+
+void CategoryTableWidget::hideAutoStartLabel(QString appKey){
+    if (m_appItems.contains(appKey)){
+        reinterpret_cast<AppItem*>(m_appItems.value(appKey))->hideAutoStartLabel();
     }
 }
 

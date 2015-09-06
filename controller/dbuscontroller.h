@@ -31,8 +31,10 @@ public:
     explicit DBusController(QObject *parent = 0);
     ~DBusController();
     void initConnect();
+
     void getCategoryInfoList();
     void getInstalledTimeItems();
+    void getAutoStartList();
     void getAllFrequencyItems();
     int getSortMethod();
     int getCategoryDisplayMode();
@@ -68,6 +70,7 @@ private:
     QMap<QString, ItemInfo> m_itemInfos;
     QMap<QString, QStringList> m_categoryAppNames;
 
+    QStringList m_autoStartList;
     QList<ItemInfo> m_appNameSortedList;
     QList<ItemInfo> m_installTimeSortedList;
     QList<ItemInfo> m_useFrequencySortedList;

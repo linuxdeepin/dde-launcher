@@ -61,6 +61,9 @@ signals:
     /*Hide*/
     void Hide();
 
+    /*show/hide autoStartLabel*/
+    void showAutoStartLabel(QString appKey);
+    void hideAutoStartLabel(QString appKey);
 };
 
 #endif // SIGNALMANAGER_H

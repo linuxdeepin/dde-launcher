@@ -7,7 +7,7 @@
 
 NavigationBar::NavigationBar(QWidget *parent) : QFrame(parent)
 {
-
+    setObjectName("NavigationBar");
 }
 
 

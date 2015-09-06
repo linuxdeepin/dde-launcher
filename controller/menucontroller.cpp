@@ -232,6 +232,7 @@ void MenuController::handleToDesktop(QString appKey){
             bool ret = reply.argumentAt(0).toBool();
             LOG_INFO() << "remove from desktop:" << ret;
         } else {
+            LOG_ERROR() << reply.error().message();
         }
     }else{
         QDBusPendingReply<bool> reply = dbusController->getLauncherInterface()->RequestSendToDesktop(appKey);
@@ -240,6 +241,7 @@ void MenuController::handleToDesktop(QString appKey){
             bool ret = reply.argumentAt(0).toBool();
             LOG_INFO() << "send to desktop:" << ret;
         } else {
+            LOG_ERROR() << reply.error().message();
         }
     }
 }
@@ -253,6 +255,7 @@ void MenuController::handleToDock(QString appKey){
             bool ret = reply.argumentAt(0).toBool();
             LOG_INFO() << "remove from dock:" << ret;
         } else {
+            LOG_ERROR() << reply.error().message();
         }
     }else{
         QDBusPendingReply<bool> reply =  m_dockAppManagerInterface->ReqeustDock(appKey, "", "", "");
@@ -261,6 +264,7 @@ void MenuController::handleToDock(QString appKey){
             bool ret = reply.argumentAt(0).toBool();
             LOG_INFO() << "send to dock:" << ret;
         } else {
+            LOG_ERROR() << reply.error().message();
         }
     }
 }
@@ -275,7 +279,11 @@ void MenuController::handleToStartup(QString appKey){
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();
             LOG_INFO() << "remove from startup:" << ret;
+            if (ret) {
+                emit signalManager->hideAutoStartLabel(appKey);
+            }
         } else {
+            LOG_ERROR() << reply.error().message();
         }
     }else{
         QDBusPendingReply<bool> reply =  dbusController->getStartManagerInterface()->AddAutostart(url);
@@ -283,7 +291,11 @@ void MenuController::handleToStartup(QString appKey){
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();
             LOG_INFO() << "add to startup:" << ret;
+            if (ret){
+                emit signalManager->showAutoStartLabel(appKey);
+            }
         } else {
+            LOG_ERROR() << reply.error().message();
         }
     }
 }

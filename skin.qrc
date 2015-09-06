@@ -45,13 +45,14 @@
         <file>skin/images/use_frequency_10.svg</file>
         <file>skin/images/use_frequency_100.svg</file>
         <file>skin/images/use_frequency_50.svg</file>
-        <file>skin/images/utilities_100.png</file>
-        <file>skin/images/utilities_50.png</file>
-        <file>skin/images/utilities_10.png</file>
-        <file>skin/images/industry_100.png</file>
-        <file>skin/images/industry_50.png</file>
-        <file>skin/images/industry_10.png</file>
         <file>skin/img/search.png</file>
+        <file>skin/images/emblem-autostart.png</file>
+        <file>skin/images/utilities_10.svg</file>
+        <file>skin/images/utilities_50.svg</file>
+        <file>skin/images/utilities_100.svg</file>
+        <file>skin/images/industry_10.svg</file>
+        <file>skin/images/industry_50.svg</file>
+        <file>skin/images/industry_100.svg</file>
     </qresource>
     <qresource prefix="/qss">
         <file>skin/qss/Tablewidget.qss</file>

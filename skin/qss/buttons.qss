@@ -1,15 +1,10 @@
-QFrame#DisplayModeFrame{
+QFrame#NavigationBar{
     background-color: transparent;
 }
 
-QFrame#DisplayModeFrame > BaseCheckedButton#ViewModeButton{
-    border-image: url(:/images/skin/images/category_50.svg);
+QFrame#NavigationButtonFrame{
+    background-color: transparent;
 }
-
-QFrame#DisplayModeFrame > BaseCheckedButton#ViewModeButton:hover{
-    border-image: url(:/images/skin/images/category_100.svg);
-}
-
 
 BaseCheckedButton{
     background-color: transparent;
@@ -123,15 +118,15 @@ BaseCheckedButton#productivity:disabled{
 
 
 BaseCheckedButton#industry{
-    border-image: url(:/images/skin/images/industry_50.png);
+    border-image: url(:/images/skin/images/industry_50.svg);
 }
 
 BaseCheckedButton#industry:checked{
-    border-image: url(:/images/skin/images/industry_100.png);
+    border-image: url(:/images/skin/images/industry_100.svg);
 }
 
 BaseCheckedButton#industry:disabled{
-    border-image: url(:/images/skin/images/industry_10.png);
+    border-image: url(:/images/skin/images/industry_10.svg);
 }
 
 
@@ -173,15 +168,15 @@ BaseCheckedButton#system:disabled{
 }
 
 BaseCheckedButton#utilities{
-    border-image: url(:/images/skin/images/utilities_50.png);
+    border-image: url(:/images/skin/images/utilities_50.svg);
 }
 
 BaseCheckedButton#utilities:checked{
-    border-image: url(:/images/skin/images/utilities_100.png);
+    border-image: url(:/images/skin/images/utilities_100.svg);
 }
 
 BaseCheckedButton#utilities:disabled{
-    border-image: url(:/images/skin/images/utilities_10.png);
+    border-image: url(:/images/skin/images/utilities_10.svg);
 }
 
 BaseCheckedButton#others{

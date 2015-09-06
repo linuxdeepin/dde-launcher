@@ -14,7 +14,7 @@ class AppItem : public QFrame
     Q_OBJECT
 public:
 
-    explicit AppItem(QWidget *parent = 0);
+    explicit AppItem(bool isAutoStart=false, QWidget *parent = 0);
     ~AppItem();
 
     void initUI();
@@ -35,19 +35,22 @@ public slots:
     void setAppKey(QString key);
     void setUrl(QString url);
     void showMenu(QPoint pos);
+    void showAutoStartLabel();
+    void hideAutoStartLabel();
 
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent *event);
 private:
     QLabel* m_iconLabel;
+    QLabel* m_autoStartLabel;
     BorderButton* m_borderButton;
     ElidedLabel* m_nameLabel;
-    QPixmap m_appIcon;
+    QPixmap m_appIcon = QPixmap();
     QString m_appName = "";
     QString m_url = "";
     QString m_appKey = "";
-
+    bool m_isAutoStart = false;
 };
 
 #endif // APPITEM_H

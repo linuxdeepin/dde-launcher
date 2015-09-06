@@ -5,6 +5,7 @@
 #include "dbusinterface/dbustype.h"
 class QWheelEvent;
 class CategoryItem;
+class AppItem;
 
 class CategoryTableWidget : public BaseTableWidget
 {
@@ -13,13 +14,6 @@ public:
     explicit CategoryTableWidget(QWidget *parent = 0);
     ~CategoryTableWidget();
     void initConnect();
-//    void firstHighlight();
-//    void hightlightItem(int row, int column);
-
-//    void handleKeyUpPressed();
-//    void handleKeyDownPressed();
-//    void handleKeyLeftPressed();
-//    void handleKeyRightPressed();
 
 signals:
 
@@ -36,6 +30,8 @@ public slots:
     void scrollToCategory(QString key);
 
     void openCheckedApp();
+    void showAutoStartLabel(QString appKey);
+    void hideAutoStartLabel(QString appKey);
 
 protected:
     void wheelEvent(QWheelEvent* event);
@@ -48,6 +44,7 @@ private:
     CategoryInfoList m_categoryInfoList;
     CategoryInfoList m_sortedCategoryInfoList;
     QMap<QString, CategoryItem*> m_categoryItems;
+    QMap<QString, AppItem*> m_appItems;
 };
 
 #endif // SECTIONTABLEWIDGET_H

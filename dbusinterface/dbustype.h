@@ -69,6 +69,7 @@ public:
     qlonglong intsalledTime;
 
     /*add url*/
+    bool isAutoStart=false;
     QString icon;
 
     ItemInfo();

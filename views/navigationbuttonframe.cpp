@@ -26,6 +26,8 @@ void NavigationButtonFrame::initConnect(){
 }
 
 void NavigationButtonFrame::initByMode(int mode){
+    setObjectName("NavigationButtonFrame");
+
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addStretch();
 
@@ -48,6 +50,7 @@ void NavigationButtonFrame::initByMode(int mode){
         }
     }
     buttonLayout->setSpacing(20);
+    buttonLayout->setContentsMargins(0, 0, 0, 0);
     buttonFrame->setLayout(buttonLayout);
 
     layout->addWidget(buttonFrame);

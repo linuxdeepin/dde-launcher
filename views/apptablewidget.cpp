@@ -34,6 +34,11 @@ void AppTableWidget::initConnect(){
     connect(signalManager, SIGNAL(itemInfosChanged(QMap<QString,ItemInfo>)), this, SLOT(setItemInfosMap(QMap<QString,ItemInfo>)));
 
     connect(signalManager, SIGNAL(appOpenedInAppMode()), this, SLOT(openCheckedApp()));
+
+    connect(signalManager, SIGNAL(showAutoStartLabel(QString)),
+            this, SLOT(showAutoStartLabel(QString)));
+    connect(signalManager, SIGNAL(hideAutoStartLabel(QString)),
+            this, SLOT(hideAutoStartLabel(QString)));
 }
 
 void AppTableWidget::setGridParameter(int column, int girdWidth, int itemWidth){
@@ -50,19 +55,22 @@ void AppTableWidget::addItem(ItemInfo itemInfo, int index){
     int row = index / m_column;
     int column = index % m_column;
 
-    AppItem* appItem = new AppItem();
+    AppItem* appItem = new AppItem(itemInfo.isAutoStart);
     appItem->setAppKey(itemInfo.key);
     appItem->setUrl(itemInfo.url);
     appItem->setAppName(itemInfo.name);
     appItem->setAppIcon(ThemeAppIcon::getIconPixmap(itemInfo.iconKey));
     appItem->setFixedSize(m_gridWidth, m_gridWidth);
     setCellWidget(row, column, appItem);
+
+    m_appItems.insert(itemInfo.key, appItem);
 }
 
 
 void AppTableWidget::addItems(const QList<ItemInfo> &itemInfos){
     clear();
     clearContents();
+    m_appItems.clear();
     int rc = rowCount();
     for(int i=0; i< rc; i++){
         removeRow(0);
@@ -170,6 +178,18 @@ void AppTableWidget::openCheckedApp(){
                 emit signalManager->appOpened(appItem->getUrl());
             }
         }
+    }
+}
+
+void AppTableWidget::showAutoStartLabel(QString appKey){
+    if (m_appItems.contains(appKey)){
+        reinterpret_cast<AppItem*>(m_appItems.value(appKey))->showAutoStartLabel();
+    }
+}
+
+void AppTableWidget::hideAutoStartLabel(QString appKey){
+    if (m_appItems.contains(appKey)){
+        reinterpret_cast<AppItem*>(m_appItems.value(appKey))->hideAutoStartLabel();
     }
 }
 

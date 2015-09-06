@@ -6,6 +6,7 @@
 #include "dbusinterface/dbustype.h"
 
 class QWheelEvent;
+class AppItem;
 
 class AppTableWidget : public BaseTableWidget
 {
@@ -38,6 +39,9 @@ public slots:
 
     void openCheckedApp();
 
+    void showAutoStartLabel(QString appKey);
+    void hideAutoStartLabel(QString appKey);
+
 protected:
     void wheelEvent(QWheelEvent* event);
 
@@ -51,6 +55,8 @@ private:
     QList<ItemInfo> m_appNameItemInfoList;
     QList<ItemInfo> m_InstalltimeItemInfoList;
     QList<ItemInfo> m_useFrequencyItemInfoList;
+
+    QMap<QString, AppItem*> m_appItems;
 };
 
 #endif // APPTABLEWIDGET_H

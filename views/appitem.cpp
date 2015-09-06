@@ -7,10 +7,10 @@
 #include <QApplication>
 #include "launcherframe.h"
 
-AppItem::AppItem(QWidget *parent) : QFrame(parent)
+AppItem::AppItem(bool isAutoStart, QWidget* parent): QFrame(parent),
+    m_isAutoStart(isAutoStart)
 {
     setAttribute(Qt::WA_DeleteOnClose);
-    m_appIcon = QPixmap();
     setObjectName("AppItem");
     initUI();
     initConnect();
@@ -23,6 +23,11 @@ void AppItem::initUI(){
     m_iconLabel = new QLabel;
     m_iconLabel->setObjectName("Icon");
     m_iconLabel->setScaledContents(true);
+
+    m_autoStartLabel = new QLabel(m_iconLabel);
+    m_autoStartLabel->setFixedSize(16, 16);
+    m_autoStartLabel->setPixmap(QPixmap(":/images/skin/images/emblem-autostart.png"));
+
     m_nameLabel = new ElidedLabel;
     m_nameLabel->setObjectName("Name");
 
@@ -41,6 +46,12 @@ void AppItem::initUI(){
     layout->addWidget(m_borderButton, Qt::AlignCenter);
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
+
+    if (m_isAutoStart){
+        showAutoStartLabel();
+    }else{
+        hideAutoStartLabel();
+    }
 
     LauncherFrame::buttonGroup.addButton(m_borderButton);
 }
@@ -71,8 +82,7 @@ QPixmap AppItem::getAppIcon(){
 }
 
 void AppItem::setAppIcon(QString icon){
-     m_appIcon = QPixmap(icon);
-     m_iconLabel->setPixmap(m_appIcon.scaled(m_iconLabel->size()));
+     setAppIcon(QPixmap(icon));
 }
 
 void AppItem::setAppIcon(QPixmap icon){
@@ -100,6 +110,17 @@ QString AppItem::getUrl(){
 
 BorderButton* AppItem::getBorderButton(){
     return m_borderButton;
+}
+
+void AppItem::showAutoStartLabel(){
+    m_autoStartLabel->move(0, m_iconLabel->height() - m_autoStartLabel->height());
+    m_autoStartLabel->show();
+    m_isAutoStart = true;
+}
+
+void AppItem::hideAutoStartLabel(){
+    m_autoStartLabel->hide();
+    m_isAutoStart = false;
 }
 
 void AppItem::mouseMoveEvent(QMouseEvent *event){

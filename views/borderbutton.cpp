@@ -16,7 +16,6 @@ BorderButton::BorderButton(QWidget *parent) : QPushButton(parent)
     setCheckable(true);
     setFocusPolicy(Qt::NoFocus);
     setObjectName("BorderButton");
-    setMouseTracking(true);
     setProperty("state", "normal");
     setStyleSheet(getQssFromFile(":/qss/skin/qss/main.qss"));
 }
@@ -64,10 +63,13 @@ void BorderButton::mousePressEvent(QMouseEvent *event){
     if (event->button() == Qt::RightButton){
        emit rightClicked(mapToGlobal(event->pos()));
        return;
-    }else if (event->button() == Qt::LeftButton){
-        startDrag(event);
     }
     QPushButton::mousePressEvent(event);
+}
+
+void BorderButton::mouseMoveEvent(QMouseEvent *event){
+    startDrag(event);
+    QPushButton::mouseMoveEvent(event);
 }
 
 void BorderButton::enterEvent(QEvent *event){

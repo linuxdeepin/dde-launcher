@@ -218,8 +218,12 @@ void MenuController::handleOpen(QString appKey){
     if (!reply.isError()) {
         bool ret = reply.argumentAt(0).toBool();
         LOG_INFO() << "Launch app:" << ret;
-
+        if (ret){
+            dbusController->getLauncherInterface()->MarkLaunched(appKey);
+            dbusController->getLauncherInterface()->RecordFrequency(appKey);
+        }
     } else {
+        LOG_ERROR() << reply.error().message();
     }
 }
 

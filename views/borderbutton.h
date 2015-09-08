@@ -22,6 +22,7 @@ signals:
 public slots:
     void setHighlight(bool isHightlight);
     void toggleHighlight();
+    void startDrag(QMouseEvent* event);
 
 protected:
     void mousePressEvent(QMouseEvent* event);

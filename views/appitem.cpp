@@ -32,6 +32,7 @@ void AppItem::initUI(){
     m_nameLabel->setObjectName("Name");
 
     m_iconLabel->setFixedSize(48, 48);
+    m_nameLabel->setFixedSize(100, 42);
 
     m_borderButton = new BorderButton(this);
     m_borderButton->setFixedSize(120, 120);
@@ -88,7 +89,8 @@ void AppItem::setAppIcon(QString icon){
 void AppItem::setAppIcon(QPixmap icon){
      m_appIcon = icon;
      if (!icon.isNull()){
-        m_iconLabel->setPixmap(m_appIcon.scaled(m_iconLabel->size()));
+//        m_iconLabel->setPixmap(m_appIcon.scaled(m_iconLabel->size()));
+         m_iconLabel->setPixmap(m_appIcon);
      }
 }
 

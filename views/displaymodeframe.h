@@ -9,6 +9,7 @@ class QButtonGroup;
 class BaseFrame;
 class ViewModeButton;
 class QTimer;
+class QPropertyAnimation;
 
 class DisplayModeFrame : public QFrame
 {

@@ -8,6 +8,7 @@
 #include <QVBoxLayout>
 #include <QButtonGroup>
 #include <QTimer>
+#include <QPropertyAnimation>
 
 DisplayModeFrame::DisplayModeFrame(QWidget *parent) : QFrame(parent)
 {
@@ -51,7 +52,7 @@ void DisplayModeFrame::initUI(){
     m_buttonFrame->setLayout(buttonLayout);
 
     m_buttonFrame->move(m_viewModeButton->x(), m_viewModeButton->y() + m_viewModeButton->height());
-    m_buttonFrame->hide();
+//    m_buttonFrame->hide();
 
     setStyleSheet(getQssFromFile(":/qss/skin/qss/buttons.qss"));
 }
@@ -66,9 +67,14 @@ void DisplayModeFrame::initConnect(){
 }
 
 void DisplayModeFrame::toggleButtonFrameByViewButton(bool flag){
+
     m_viewModeButton->setHoverIconByMode(m_viewMode);
-    if (flag && !m_buttonFrame->isVisible()){
-        showButtonFrame();
+    if (m_viewModeButton->geometry().contains(QCursor::pos())){
+        m_delayHideTimer->stop();
+    }
+    if (flag && m_viewModeButton->geometry().contains(QCursor::pos())){
+        if(!m_buttonFrame->isVisible())
+            showButtonFrame();
     }else{
         m_delayHideTimer->start();
     }
@@ -85,6 +91,12 @@ void DisplayModeFrame::toggleButtonFrameBySelf(bool flag){
 void DisplayModeFrame::showButtonFrame(){
     setGeometry(0, 0, 160, 210);
     m_buttonFrame->show();
+    QPropertyAnimation *animation = new QPropertyAnimation(m_buttonFrame, "geometry");
+    connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
+    animation->setDuration(100);
+    animation->setStartValue(QRect(m_buttonFrame->x(), m_buttonFrame->y(), 160, 72));
+    animation->setEndValue(QRect(m_buttonFrame->x(), m_buttonFrame->y(), 160, 210 - m_buttonFrame->y()));
+    animation->start();
     emit visibleChanged(true);
 }
 

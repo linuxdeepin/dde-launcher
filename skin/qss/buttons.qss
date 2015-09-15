@@ -24,7 +24,7 @@ BaseCheckedButton:hover{
 BaseCheckedButton:checked{
     background-color: transparent;
     border:none;
-    color: rgba(67, 255, 255, 255);
+    color: #01bdff;
     text-align: left bottom;
 }
 

@@ -53,26 +53,26 @@ QString MenuController::createMenuContent(QString appKey){
     m_isItemOnDock = isItemOnDock(appKey);
     m_isItemStartup = isItemStartup(appKey);
 
-    QJsonObject openObj = createMenuItem(0, tr("Open(O)"));
+    QJsonObject openObj = createMenuItem(0, tr("Open(_O)"));
     QJsonObject seperatorObj1 = createSeperator();
     QJsonObject desktopObj;
     if (m_isItemOnDesktop){
-        desktopObj = createMenuItem(1, tr("Remove from desktop(F)"));
+        desktopObj = createMenuItem(1, tr("Remove from desktop(_F)"));
     }else{
-        desktopObj = createMenuItem(1, tr("Send to desktop(E)"));
+        desktopObj = createMenuItem(1, tr("Send to desktop(_E)"));
     }
     QJsonObject dockObj;
     if (m_isItemOnDock){
-        dockObj = createMenuItem(2, tr("Remove from dock(F)"));
+        dockObj = createMenuItem(2, tr("Remove from dock(_F)"));
     }else{
-        dockObj = createMenuItem(2, tr("Send to dock(E)"));
+        dockObj = createMenuItem(2, tr("Send to dock(_C)"));
     }
     QJsonObject seperatorObj2 = createSeperator();
     QJsonObject startupObj;
     if (m_isItemStartup){
-        startupObj = createMenuItem(3, tr("remove from startup(R)"));
+        startupObj = createMenuItem(3, tr("remove from startup(_R)"));
     }else{
-        startupObj = createMenuItem(3, tr("Add to startup(A)"));
+        startupObj = createMenuItem(3, tr("Add to startup(_A)"));
     }
     QJsonObject uninstallObj = createMenuItem(4, tr("Uninstall"));
 

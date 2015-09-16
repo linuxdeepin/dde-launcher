@@ -82,6 +82,8 @@ void XcbMisc::set_strut_partial(xcb_window_t winId, Orientation orientation, uin
 }
 
 void XcbMisc::setLauncher(xcb_window_t winId){
-    xcb_atom_t atoms[2] = { m_ewmh_connection._NET_WM_STATE_SKIP_PAGER, m_ewmh_connection._NET_WM_STATE_SKIP_TASKBAR};
-    xcb_ewmh_set_wm_state(&m_ewmh_connection, winId, 2, atoms);
+    xcb_atom_t atoms_state[2] = {m_ewmh_connection._NET_WM_STATE_SKIP_PAGER, m_ewmh_connection._NET_WM_STATE_SKIP_TASKBAR};
+    xcb_atom_t atoms_type[1] = { m_ewmh_connection._NET_WM_WINDOW_TYPE_DIALOG};
+    xcb_ewmh_set_wm_window_type(&m_ewmh_connection, winId, 1, atoms_type);
+    xcb_ewmh_set_wm_state(&m_ewmh_connection, winId, 2, atoms_state);
 }

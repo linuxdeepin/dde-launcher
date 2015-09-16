@@ -26,9 +26,8 @@ QButtonGroup LauncherFrame::buttonGroup(qApp);
 LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
 {
     LauncherFrame::buttonGroup.setExclusive(true);
-    XcbMisc::instance()->setLauncher(winId());
     setAttribute(Qt::WA_DeleteOnClose);
-    setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
+    setWindowFlags(Qt::FramelessWindowHint);
     setGeometry(qApp->desktop()->screenGeometry());
     setObjectName("LauncherFrame");
     computerGrid(160, 60, 24, 160);
@@ -246,6 +245,8 @@ void LauncherFrame::Show(){
     LOG_INFO() << "=============launcheRefreshed";
     show();
     setFocus();
+    raise();
+    activateWindow();
     emit Shown();
 }
 

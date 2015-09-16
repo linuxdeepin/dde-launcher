@@ -12,12 +12,10 @@ LauncherApp::LauncherApp(QObject *parent) : QObject(parent)
     new LauncherAdaptor(m_launcherFrame);
     QDBusConnection conn = QDBusConnection::sessionBus();
     conn.registerObject(LauncherPathName, m_launcherFrame);
-    m_launcherFrame->setWindowState(Qt::WindowNoState);
-    XcbMisc::instance()->setLauncher(m_launcherFrame->winId());
 }
 
 void LauncherApp::show(){
-    m_launcherFrame->show();
+    m_launcherFrame->Show();
     LOG_INFO() << "LauncherApp show";
 }
 

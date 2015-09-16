@@ -27,7 +27,7 @@ LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
 {
     LauncherFrame::buttonGroup.setExclusive(true);
     setAttribute(Qt::WA_DeleteOnClose);
-    setWindowFlags(Qt::FramelessWindowHint);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
     setGeometry(qApp->desktop()->screenGeometry());
     setObjectName("LauncherFrame");
     computerGrid(160, 60, 24, 160);

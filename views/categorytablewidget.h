@@ -6,6 +6,7 @@
 class QWheelEvent;
 class CategoryItem;
 class AppItem;
+class QPropertyAnimation;
 
 class CategoryTableWidget : public BaseTableWidget
 {
@@ -45,6 +46,8 @@ private:
     CategoryInfoList m_sortedCategoryInfoList;
     QMap<QString, CategoryItem*> m_categoryItems;
     QMap<QString, AppItem*> m_appItems;
+
+    QPropertyAnimation* m_scrollAnimation;
 };
 
 #endif // SECTIONTABLEWIDGET_H

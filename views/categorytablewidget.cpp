@@ -10,6 +10,7 @@
 #include <QHeaderView>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QPropertyAnimation>
 
 static int categoryItemHeight = 80;
 
@@ -17,6 +18,10 @@ CategoryTableWidget::CategoryTableWidget(QWidget *parent) : BaseTableWidget(pare
 {
     setObjectName("CategoryTableWidget");
     initConnect();
+    m_scrollAnimation = new QPropertyAnimation;
+    m_scrollAnimation->setTargetObject(verticalScrollBar());
+    m_scrollAnimation->setPropertyName("value");
+    m_scrollAnimation->setDuration(100);
 }
 
 void CategoryTableWidget::initConnect(){
@@ -168,13 +173,18 @@ void CategoryTableWidget::addItems(const CategoryInfoList &categoryInfoList){
 }
 
 void CategoryTableWidget::scrollToCategory(QString key){
+    int start = verticalScrollBar()->value();
+    int end = start;
     if (m_categoryItems.contains(key)){
         for (int i=0; i< rowCount() ; i++){
             if (m_categoryItems.value(key) == static_cast<CategoryItem*>(cellWidget(i, 0))){
-                scrollToItem(item(i, 0), PositionAtTop);
+                end = i;
             }
         }
     }
+    m_scrollAnimation->setStartValue(start);
+    m_scrollAnimation->setEndValue(end);
+    m_scrollAnimation->start();
 }
 
 void CategoryTableWidget::handleScrollBarValueChanged(int value){
@@ -182,8 +192,10 @@ void CategoryTableWidget::handleScrollBarValueChanged(int value){
         if (m_categoryItems.values().contains(static_cast<CategoryItem*>(cellWidget(value, 0)))){
             foreach (QString key, m_categoryItems.keys()) {
                 if (m_categoryItems.value(key)  == cellWidget(value, 0)){
-                    LOG_INFO() << key;
-                    emit signalManager->checkNavigationButtonByKey(key);
+                    LOG_INFO() << key << m_scrollAnimation->state();
+                    if (m_scrollAnimation->state() != QPropertyAnimation::Running){
+                        emit signalManager->checkNavigationButtonByKey(key);
+                    }
                     break;
                 }
             }

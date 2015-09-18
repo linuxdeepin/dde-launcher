@@ -32,31 +32,22 @@ void BorderButton::startDrag(QMouseEvent *event){
     iconLabel->setScaledContents(true);
     iconLabel->setPixmap(dynamic_cast<AppItem*>(parent())->getAppIcon());
     iconLabel->setFixedSize(48, 48);
-    ElidedLabel* nameLabel = new ElidedLabel;
-    nameLabel->setObjectName("Name");
-    nameLabel->setFullText(dynamic_cast<AppItem*>(parent())->getAppName());
-    QPushButton* button = new QPushButton(this);
-    button->setFixedSize(120, 120);
-    QVBoxLayout *mainLayout = new QVBoxLayout(button);
-    mainLayout->addWidget(iconLabel, 0, Qt::AlignHCenter);
-    mainLayout->addWidget(nameLabel, 0, Qt::AlignHCenter);
-    mainLayout->setSpacing(10);
-    mainLayout->setContentsMargins(10, 10, 10, 10);
-    button->setLayout(mainLayout);
-    button->setStyleSheet("background-color: transparent");
-    QPixmap dragPixmap = button->grab();
-
+    iconLabel->setStyleSheet("background-color: transparent");
+    QPixmap dragPixmap = iconLabel->grab();
     QDrag* pDrag = new QDrag(this);
     pDrag->setMimeData(mimeData);
     pDrag->setPixmap(dragPixmap);
-    pDrag->setHotSpot(event->pos());
+
+    pDrag->setHotSpot(event->pos() + QPoint(-36, -10));
+//    pDrag->setDragCursor(QCursor(Qt::PointingHandCursor).pixmap(), Qt::MoveAction);
+
     Qt::DropAction action = pDrag->exec(Qt::MoveAction | Qt::CopyAction, Qt::CopyAction);
     if (action == Qt::MoveAction){
         qDebug() << "not support MoveAction";
     }else{
         qDebug() << action;
     }
-    button->deleteLater();
+    iconLabel->deleteLater();
 }
 
 void BorderButton::mousePressEvent(QMouseEvent *event){

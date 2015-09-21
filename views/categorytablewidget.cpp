@@ -20,7 +20,7 @@ CategoryTableWidget::CategoryTableWidget(QWidget *parent) : BaseTableWidget(pare
     initConnect();
 
     QEasingCurve cubic(QEasingCurve::BezierSpline);
-    cubic.addCubicBezierSegment(QPointF(0.28, 0.9), QPointF(0.7, 0.1), QPointF(0.9999, 0.9999));
+    cubic.addCubicBezierSegment(QPointF(0.28, 0.9), QPointF(0.7, 0.1), QPointF(1.0, 1.0));
     m_scrollAnimation = new QPropertyAnimation;
     m_scrollAnimation->setEasingCurve(cubic);
     m_scrollAnimation->setTargetObject(verticalScrollBar());
@@ -186,6 +186,12 @@ void CategoryTableWidget::scrollToCategory(QString key){
             }
         }
     }
+    if (start > end){
+        start += 1;
+    }else{
+        end += 1;
+    }
+
     m_scrollAnimation->setStartValue(start);
     m_scrollAnimation->setEndValue(end);
     m_scrollAnimation->start();

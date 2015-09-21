@@ -2,6 +2,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QGraphicsDropShadowEffect>
 
 CategoryItem::CategoryItem(QString text, QWidget *parent) : QFrame(parent)
 {
@@ -9,13 +10,13 @@ CategoryItem::CategoryItem(QString text, QWidget *parent) : QFrame(parent)
 }
 
 void CategoryItem::initUI(QString text){
-    QLabel* label = new QLabel(text, this);
-    label->setStyleSheet("color: white;\
+    m_titleLabel = new QLabel(text, this);
+    m_titleLabel->setStyleSheet("color: white;\
                          font-size: 20px;");
     QFont font;
     font.setPixelSize(20);
-    label->setFont(font);
-    label->setFixedWidth(label->fontMetrics().width(text));
+    m_titleLabel->setFont(font);
+    m_titleLabel->setFixedWidth(m_titleLabel->fontMetrics().width(text));
 //    label->setObjectName("CategoryItemText");
     QLabel* blackLineLabel = new QLabel;
     blackLineLabel->setObjectName("CategoryItemBlackLine");
@@ -25,7 +26,7 @@ void CategoryItem::initUI(QString text){
     whiteLineLabel->setFixedHeight(1);
 
     QHBoxLayout* mainLayout = new QHBoxLayout;
-    mainLayout->addWidget(label, Qt::AlignTop);
+    mainLayout->addWidget(m_titleLabel, Qt::AlignTop);
 
     QVBoxLayout* lineLayout = new QVBoxLayout;
     lineLayout->addStretch();
@@ -38,6 +39,16 @@ void CategoryItem::initUI(QString text){
     mainLayout->setSpacing(15);
     mainLayout->setContentsMargins(5, 0, 0, 0);
     setLayout(mainLayout);
+
+    addTextShadow();
+}
+
+void CategoryItem::addTextShadow(){
+    QGraphicsDropShadowEffect *textShadow = new QGraphicsDropShadowEffect;
+    textShadow->setBlurRadius(4);
+    textShadow->setColor(QColor(0, 0, 0, 128));
+    textShadow->setOffset(0, 2);
+    m_titleLabel->setGraphicsEffect(textShadow);
 }
 
 CategoryItem::~CategoryItem()

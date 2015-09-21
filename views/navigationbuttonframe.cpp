@@ -4,6 +4,7 @@
 #include "app/global.h"
 #include <QVBoxLayout>
 #include <QButtonGroup>
+#include <QGraphicsDropShadowEffect>
 
 
 NavigationButtonFrame::NavigationButtonFrame(int mode, QWidget *parent) : QFrame(parent)
@@ -58,6 +59,8 @@ void NavigationButtonFrame::initByMode(int mode){
     layout->setContentsMargins(NavgationBarLeftMargin, 0, 0, 0);
     layout->addStretch();
     setLayout(layout);
+
+    addTextShadow();
 }
 
 void NavigationButtonFrame::hideButtons(const QStringList &keys){
@@ -75,6 +78,14 @@ void NavigationButtonFrame::handleButtonClicked(int id){
 void NavigationButtonFrame::checkButtonByKey(QString key){
     int index = m_categroyKeys.indexOf(key);
     m_buttonGroup->button(index)->setChecked(true);
+}
+
+void NavigationButtonFrame::addTextShadow(){
+    QGraphicsDropShadowEffect *textShadow = new QGraphicsDropShadowEffect;
+    textShadow->setBlurRadius(4);
+    textShadow->setColor(QColor(0, 0, 0, 128));
+    textShadow->setOffset(0, 2);
+    setGraphicsEffect(textShadow);
 }
 
 NavigationButtonFrame::~NavigationButtonFrame()

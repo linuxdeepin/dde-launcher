@@ -46,6 +46,10 @@ signals:
 
     /*mouse release on whole window*/
     void mouseReleased();
+    void rightMouseReleased(QString url);
+
+    /*checked item or not*/
+    void highlightChanged(bool isHighLight);
 
     /*unistall delete item in table*/
     void itemDeleted(QString appKey);

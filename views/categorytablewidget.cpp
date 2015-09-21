@@ -18,10 +18,14 @@ CategoryTableWidget::CategoryTableWidget(QWidget *parent) : BaseTableWidget(pare
 {
     setObjectName("CategoryTableWidget");
     initConnect();
+
+    QEasingCurve cubic(QEasingCurve::BezierSpline);
+    cubic.addCubicBezierSegment(QPointF(0.28, 0.9), QPointF(0.7, 0.1), QPointF(0.9999, 0.9999));
     m_scrollAnimation = new QPropertyAnimation;
+    m_scrollAnimation->setEasingCurve(cubic);
     m_scrollAnimation->setTargetObject(verticalScrollBar());
     m_scrollAnimation->setPropertyName("value");
-    m_scrollAnimation->setDuration(100);
+    m_scrollAnimation->setDuration(200);
 }
 
 void CategoryTableWidget::initConnect(){

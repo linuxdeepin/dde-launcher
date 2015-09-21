@@ -9,6 +9,8 @@
 #include <QButtonGroup>
 #include <QTimer>
 #include <QPropertyAnimation>
+#include <QGraphicsDropShadowEffect>
+
 
 DisplayModeFrame::DisplayModeFrame(QWidget *parent) : QFrame(parent)
 {
@@ -31,9 +33,9 @@ void DisplayModeFrame::initUI(){
     m_buttonGroup = new QButtonGroup(this);
     m_nameButton = new BaseCheckedButton(tr("按名称"), this);
     m_buttonGroup->addButton(m_nameButton, 0);
-    m_categoryIconButton = new BaseCheckedButton(tr("按分类（图标）"), this);
+    m_categoryIconButton = new BaseCheckedButton(tr("按分类 (图标)"), this);
     m_buttonGroup->addButton(m_categoryIconButton, 1);
-    m_categoryNameButton = new BaseCheckedButton(tr("按分类 （文字）"), this);
+    m_categoryNameButton = new BaseCheckedButton(tr("按分类 (文字)"), this);
     m_buttonGroup->addButton(m_categoryNameButton, 2);
     m_installTimeButton = new BaseCheckedButton(tr("按安装时间"), this);
     m_buttonGroup->addButton(m_installTimeButton, 3);
@@ -55,6 +57,8 @@ void DisplayModeFrame::initUI(){
 //    m_buttonFrame->hide();
 
     setStyleSheet(getQssFromFile(":/qss/skin/qss/buttons.qss"));
+
+    addTextShadow();
 }
 
 
@@ -144,6 +148,15 @@ void DisplayModeFrame::setViewMode(int mode){
     }
     hideButtonFrame();
 }
+
+void DisplayModeFrame::addTextShadow(){
+    QGraphicsDropShadowEffect *textShadow = new QGraphicsDropShadowEffect;
+    textShadow->setBlurRadius(4);
+    textShadow->setColor(QColor(0, 0, 0, 128));
+    textShadow->setOffset(0, 2);
+    setGraphicsEffect(textShadow);
+}
+
 
 DisplayModeFrame::~DisplayModeFrame()
 {

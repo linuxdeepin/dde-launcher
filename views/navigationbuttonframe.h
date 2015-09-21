@@ -24,6 +24,8 @@ public slots:
     void handleButtonClicked(int id);
     void checkButtonByKey(QString key);
 
+    void addTextShadow();
+
 private:
     QStringList m_categroyKeys;
     QButtonGroup* m_buttonGroup;

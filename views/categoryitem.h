@@ -3,6 +3,8 @@
 
 #include <QFrame>
 
+class QLabel;
+
 class CategoryItem : public QFrame
 {
     Q_OBJECT
@@ -15,6 +17,10 @@ public:
 signals:
 
 public slots:
+    void addTextShadow();
+
+private:
+    QLabel* m_titleLabel;
 };
 
 #endif // CATEGORYITEM_H

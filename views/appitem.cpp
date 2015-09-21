@@ -5,7 +5,7 @@
 #include "borderbutton.h"
 #include "Logger.h"
 #include <QApplication>
-#include "launcherframe.h"
+#include <QGraphicsDropShadowEffect>
 
 AppItem::AppItem(bool isAutoStart, QWidget* parent): QFrame(parent),
     m_isAutoStart(isAutoStart)
@@ -35,7 +35,7 @@ void AppItem::initUI(){
     m_nameLabel->setFixedSize(100, 42);
 
     m_borderButton = new BorderButton(this);
-    m_borderButton->setFixedSize(120, 120);
+    m_borderButton->setFixedSize(144, 144);
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(m_iconLabel, 0, Qt::AlignHCenter);
     mainLayout->addWidget(m_nameLabel, 0, Qt::AlignHCenter);
@@ -53,8 +53,6 @@ void AppItem::initUI(){
     }else{
         hideAutoStartLabel();
     }
-
-    LauncherFrame::buttonGroup.addButton(m_borderButton);
 }
 
 void AppItem::initConnect(){
@@ -62,6 +60,7 @@ void AppItem::initConnect(){
     connect(m_borderButton, &BorderButton::clicked, [=](){
         emit signalManager->appOpened(m_url);
     });
+    connect(signalManager, SIGNAL(rightMouseReleased(QString)), this, SLOT(handleRightMouseReleased(QString)));
 }
 
 void AppItem::showMenu(QPoint pos){
@@ -136,16 +135,21 @@ void AppItem::mouseMoveEvent(QMouseEvent *event){
 
 void AppItem::mouseReleaseEvent(QMouseEvent *event){
     if (getBorderButton()->geometry().contains(event->pos())){
-
+        emit signalManager->rightMouseReleased(m_url);
     }else{
         emit signalManager->mouseReleased();
     }
     QFrame::mouseReleaseEvent(event);
 }
 
+void AppItem::handleRightMouseReleased(QString url){
+    if (url == m_url){
+        getBorderButton()->setHighlight(true);
+    }else{
+        getBorderButton()->setHighlight(false);
+    }
+}
+
 AppItem::~AppItem()
 {
-    if (LauncherFrame::buttonGroup.buttons().contains(m_borderButton)){
-        LauncherFrame::buttonGroup.removeButton(m_borderButton);
-    }
 }

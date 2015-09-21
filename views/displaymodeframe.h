@@ -40,6 +40,7 @@ public slots:
     void showButtonFrame();
     void hideButtonFrame();
 
+    void addTextShadow();
 
 private:
     int m_categoryDisplayMode;

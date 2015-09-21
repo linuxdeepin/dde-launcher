@@ -19,13 +19,11 @@
 #include <QApplication>
 #include <QCloseEvent>
 #include <QDBusConnection>
+#include <QGraphicsDropShadowEffect>
 
-
-QButtonGroup LauncherFrame::buttonGroup(qApp);
 
 LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
 {
-    LauncherFrame::buttonGroup.setExclusive(true);
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
     setGeometry(qApp->desktop()->screenGeometry());
@@ -44,7 +42,6 @@ void LauncherFrame::initUI(){
     m_clearCheckedButton = new QPushButton(this);
     m_clearCheckedButton->setCheckable(true);
     m_clearCheckedButton->hide();
-    LauncherFrame::buttonGroup.addButton(m_clearCheckedButton, 0);
 
     m_categoryFrame = new CategoryFrame(this);
     m_categoryFrame->initUI(m_leftMargin, m_rightMargin, m_column, m_itemWidth, m_gridwidth);
@@ -259,7 +256,7 @@ void LauncherFrame::Toggle(){
 }
 
 void LauncherFrame::handleMouseReleased(){
-    m_clearCheckedButton->click();
+    emit signalManager->highlightChanged(false);
 }
 
 void LauncherFrame::handleSearch(const QString &text){

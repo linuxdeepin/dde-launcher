@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QButtonGroup>
 #include <QStyle>
+#include <QGraphicsOpacityEffect>
 #include "app/global.h"
 #include "widgets/util.h"
 #include "launcherframe.h"
@@ -13,11 +14,13 @@
 
 BorderButton::BorderButton(QWidget *parent) : QPushButton(parent)
 {
-    setCheckable(true);
+//    setCheckable(true);
     setFocusPolicy(Qt::NoFocus);
     setObjectName("BorderButton");
     setProperty("state", "normal");
     setStyleSheet(getQssFromFile(":/qss/skin/qss/main.qss"));
+    addTextShadow();
+    connect(signalManager, SIGNAL(highlightChanged(bool)), this, SLOT(setHighlight(bool)));
 }
 
 void BorderButton::startDrag(QMouseEvent *event){
@@ -59,13 +62,31 @@ void BorderButton::mousePressEvent(QMouseEvent *event){
 }
 
 void BorderButton::mouseMoveEvent(QMouseEvent *event){
+    setCuted(true);
     startDrag(event);
+    setCuted(false);
     QPushButton::mouseMoveEvent(event);
 }
 
 void BorderButton::enterEvent(QEvent *event){
-    setChecked(true);
+    setHighlight(true);
     QPushButton::enterEvent(event);
+}
+
+
+void BorderButton::leaveEvent(QEvent *event){
+    QPushButton::leaveEvent(event);
+}
+
+void BorderButton::paintEvent(QPaintEvent *event){
+     if (m_isHighlight){
+         QPainter painter(this);
+         painter.setPen(QPen(QColor(255, 255, 255, 51), 2));
+         painter.setBrush(QColor(0, 0 , 0, 76));
+         painter.setRenderHint(QPainter::Antialiasing, true);
+         painter.drawRoundedRect(QRect(2, 2, 140, 140), 10, 10, Qt::RelativeSize);
+     }
+     QPushButton::paintEvent(event);
 }
 
 void BorderButton::updateStyle(){
@@ -80,16 +101,37 @@ bool BorderButton::isHighlight() const {
 
 void BorderButton::setHighlight(bool isHightlight){
     m_isHighlight = isHightlight;
-    if (isHightlight){
-        setProperty("state", "Highlight");
-    }else{
-        setProperty("state", "normal");
-    }
-    updateStyle();
+    update();
 }
 
 void BorderButton::toggleHighlight(){
     setHighlight(!isHighlight());
+}
+
+void BorderButton::setCuted(bool isCuted){
+    if (m_isCuted == isCuted){
+        return;
+    }
+    if (isCuted){
+        setHighlight(false);
+        QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect;
+        effect->setOpacity(0.3);
+        setGraphicsEffect(effect);
+    }else{
+        QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect;
+        effect->setOpacity(1);
+        setGraphicsEffect(effect);
+        addTextShadow();
+    }
+    m_isCuted = isCuted;
+}
+
+void BorderButton::addTextShadow(){
+    QGraphicsDropShadowEffect *textShadow = new QGraphicsDropShadowEffect;
+    textShadow->setBlurRadius(4);
+    textShadow->setColor(QColor(0, 0, 0, 128));
+    textShadow->setOffset(0, 2);
+    setGraphicsEffect(textShadow);
 }
 
 BorderButton::~BorderButton()

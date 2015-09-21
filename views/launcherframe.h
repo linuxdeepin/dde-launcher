@@ -21,8 +21,6 @@ public:
     explicit LauncherFrame(QWidget *parent = 0);
     ~LauncherFrame();
 
-    static QButtonGroup buttonGroup;
-
     void initUI();
     void initConnect();
     void computerGrid(int minimumLeftMargin, int minimumTopMargin, int miniSpacing ,int itemWidth);

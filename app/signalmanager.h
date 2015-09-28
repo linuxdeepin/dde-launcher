@@ -17,6 +17,7 @@ public:
     };
 
 signals:
+    void requestData();
     void launcheRefreshed();
     void appNameItemInfoListChanged(const QList<ItemInfo>& infoList);
     void installTimeItemInfoListChanged(const QList<ItemInfo>& infoList);

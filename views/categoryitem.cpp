@@ -1,4 +1,5 @@
 #include "categoryitem.h"
+#include "app/global.h"
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -10,7 +11,8 @@ CategoryItem::CategoryItem(QString text, QWidget *parent) : QFrame(parent)
 }
 
 void CategoryItem::initUI(QString text){
-    m_titleLabel = new QLabel(text, this);
+    int index = CategroyKeys.indexOf(text);
+    m_titleLabel = new QLabel(CategoryNames.at(index), this);
     m_titleLabel->setStyleSheet("color: white;\
                          font-size: 20px;");
     QFont font;

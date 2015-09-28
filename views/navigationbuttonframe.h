@@ -27,7 +27,6 @@ public slots:
     void addTextShadow();
 
 private:
-    QStringList m_categroyKeys;
     QButtonGroup* m_buttonGroup;
     int m_currentIndex = 0;
 };

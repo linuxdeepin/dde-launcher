@@ -68,7 +68,7 @@ void CategoryTableWidget::setItemInfosMap(const QMap<QString, ItemInfo> &itemInf
 }
 
 void CategoryTableWidget::setCategoryInfoList(const CategoryInfoList &categoryInfoList){
-    LOG_INFO() << "setCategoryInfoList" << categoryInfoList.length();
+    qDebug() << "setCategoryInfoList" << categoryInfoList.length();
     m_categoryInfoList = categoryInfoList;
 
     m_sortedCategoryInfoList.clear();
@@ -139,7 +139,7 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
             setCellWidget(_row, column, appItem);
             m_appItems.insert(appKey, appItem);
        }else{
-           LOG_INFO() << appKey << m_itemInfosMap.keys();
+           qDebug() << appKey << m_itemInfosMap.keys();
        }
    }
 
@@ -205,7 +205,7 @@ void CategoryTableWidget::handleScrollBarValueChanged(int value){
         if (m_categoryItems.values().contains(static_cast<CategoryItem*>(cellWidget(value, 0)))){
             foreach (QString key, m_categoryItems.keys()) {
                 if (m_categoryItems.value(key)  == cellWidget(value, 0)){
-                    LOG_INFO() << key << m_scrollAnimation->state();
+                    qDebug() << key << m_scrollAnimation->state();
                     if (m_scrollAnimation->state() != QPropertyAnimation::Running){
                         emit signalManager->checkNavigationButtonByKey(key);
                     }

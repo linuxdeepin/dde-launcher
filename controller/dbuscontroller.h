@@ -51,6 +51,7 @@ signals:
 
 public slots:
     void init();
+    void handleItemChanged(const QString &action, ItemInfo itemInfo, qlonglong categoryInfoId);
     void updateAppTable(QString appKey);
     void searchDone(QStringList appKeys);
     void setCategoryDisplayMode(int mode);

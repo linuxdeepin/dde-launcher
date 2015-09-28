@@ -31,15 +31,15 @@ void DisplayModeFrame::initUI(){
     m_viewModeButton->move(NavgationBarLeftMargin, 40);
 
     m_buttonGroup = new QButtonGroup(this);
-    m_nameButton = new BaseCheckedButton(tr("按名称"), this);
+    m_nameButton = new BaseCheckedButton(tr("By name"), this);
     m_buttonGroup->addButton(m_nameButton, 0);
-    m_categoryIconButton = new BaseCheckedButton(tr("按分类 (图标)"), this);
+    m_categoryIconButton = new BaseCheckedButton(tr("By category (icon)"), this);
     m_buttonGroup->addButton(m_categoryIconButton, 1);
-    m_categoryNameButton = new BaseCheckedButton(tr("按分类 (文字)"), this);
+    m_categoryNameButton = new BaseCheckedButton(tr("By categpry (text)"), this);
     m_buttonGroup->addButton(m_categoryNameButton, 2);
-    m_installTimeButton = new BaseCheckedButton(tr("按安装时间"), this);
+    m_installTimeButton = new BaseCheckedButton(tr("By time installed"), this);
     m_buttonGroup->addButton(m_installTimeButton, 3);
-    m_useFrequencyButton = new BaseCheckedButton(tr("按使用频率"), this);
+    m_useFrequencyButton = new BaseCheckedButton(tr("By frequency"), this);
     m_buttonGroup->addButton(m_useFrequencyButton, 4);
 
     m_buttonFrame = new BaseFrame(this);
@@ -54,8 +54,6 @@ void DisplayModeFrame::initUI(){
     m_buttonFrame->setLayout(buttonLayout);
 
     m_buttonFrame->move(m_viewModeButton->x(), m_viewModeButton->y() + m_viewModeButton->height());
-//    m_buttonFrame->hide();
-
     setStyleSheet(getQssFromFile(":/qss/skin/qss/buttons.qss"));
 
     addTextShadow();

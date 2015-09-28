@@ -4,7 +4,6 @@
 #include "logmanager.h"
 #include "daemon.h"
 #include "widgets/singleton.h"
-#include <Logger.h>
 
 #include <QDBusInterface>
 #include <QDBusConnection>
@@ -19,10 +18,9 @@ void debug_daemon_off(){
 // let startdde know that we've already started.
 void RegisterDdeSession()
 {
-    char *envName = "DDE_SESSION_PROCESS_COOKIE_ID";
-
-    QByteArray cookie = qgetenv(envName);
-    qunsetenv(envName);
+    const QString envName = "DDE_SESSION_PROCESS_COOKIE_ID";
+    QByteArray cookie = qgetenv(envName.toLatin1().constData());
+    qunsetenv(envName.toLatin1().constData());
 
     if (!cookie.isEmpty()) {
         QDBusInterface iface("com.deepin.SessionManager",

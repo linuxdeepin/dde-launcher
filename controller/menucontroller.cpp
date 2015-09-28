@@ -44,7 +44,7 @@ void MenuController::showMenuByAppItem(QString appKey, QPoint pos){
     if (menuDBusObjectpath.length() > 0){
         showMenu(menuDBusObjectpath, menuJsonContent);
     }else{
-        LOG_ERROR() << "register menu fail!";
+        qCritical() << "register menu fail!";
     }
 }
 
@@ -125,9 +125,9 @@ bool MenuController::isItemOnDesktop(QString appKey){
     if (!reply.isError()){
         flag = reply.argumentAt(0).toBool();
     } else {
-        LOG_ERROR() << reply.error().message();
+        qCritical() << reply.error().message();
     }
-    LOG_INFO() << appKey << flag;
+    qDebug() << appKey << flag;
     return flag;
 }
 
@@ -138,7 +138,7 @@ bool MenuController::isItemOnDock(QString appKey){
     if (!reply.isError()){
         flag = reply.argumentAt(0).toBool();
     } else {
-        LOG_ERROR() << reply.error().message();
+        qCritical() << reply.error().message();
     }
     return flag;
 }
@@ -151,7 +151,7 @@ bool MenuController::isItemStartup(QString appKey){
     if (!reply.isError()){
         flag = reply.argumentAt(0).toBool();
     } else {
-        LOG_ERROR() << reply.error().message();
+        qCritical() << reply.error().message();
     }
     return flag;
 }
@@ -186,7 +186,7 @@ void MenuController::showMenu(QString menuDBusObjectPath, QString menuContent) {
 void MenuController::menuItemInvoked(QString itemId, bool flag){
     Q_UNUSED(flag)
     int id = itemId.toInt();
-    LOG_INFO() << "menuItemInvoked" << itemId;
+    qDebug() << "menuItemInvoked" << itemId;
     switch (id) {
     case 0:
         handleOpen(m_appKeyRightClicked);
@@ -212,100 +212,100 @@ void MenuController::menuItemInvoked(QString itemId, bool flag){
 void MenuController::handleOpen(QString appKey){
     emit signalManager->Hide();
     QString url = dbusController->getItemInfo(appKey).url;
-    LOG_INFO() << "handleOpen" << appKey << url;
+    qDebug() << "handleOpen" << appKey << url;
     QDBusPendingReply<bool> reply = dbusController->getStartManagerInterface()->Launch(appKey);
     reply.waitForFinished();
     if (!reply.isError()) {
         bool ret = reply.argumentAt(0).toBool();
-        LOG_INFO() << "Launch app:" << ret;
+        qDebug() << "Launch app:" << ret;
         if (ret){
             dbusController->getLauncherInterface()->MarkLaunched(appKey);
             dbusController->getLauncherInterface()->RecordFrequency(appKey);
         }
     } else {
-        LOG_ERROR() << reply.error().message();
+        qCritical() << reply.error().message();
     }
 }
 
 void MenuController::handleToDesktop(QString appKey){
-    LOG_INFO() << "handleToDesktop" << appKey;
+    qDebug() << "handleToDesktop" << appKey;
     if (m_isItemOnDesktop){
         QDBusPendingReply<bool> reply = dbusController->getLauncherInterface()->RequestRemoveFromDesktop(appKey);
         reply.waitForFinished();
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();
-            LOG_INFO() << "remove from desktop:" << ret;
+            qDebug() << "remove from desktop:" << ret;
         } else {
-            LOG_ERROR() << reply.error().message();
+            qCritical() << reply.error().message();
         }
     }else{
         QDBusPendingReply<bool> reply = dbusController->getLauncherInterface()->RequestSendToDesktop(appKey);
         reply.waitForFinished();
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();
-            LOG_INFO() << "send to desktop:" << ret;
+            qDebug() << "send to desktop:" << ret;
         } else {
-            LOG_ERROR() << reply.error().message();
+            qCritical() << reply.error().message();
         }
     }
 }
 
 void MenuController::handleToDock(QString appKey){
-    LOG_INFO() << "handleToDock" << appKey;
+    qDebug() << "handleToDock" << appKey;
     if (m_isItemOnDock){
         QDBusPendingReply<bool> reply = m_dockAppManagerInterface->RequestUndock(appKey);
         reply.waitForFinished();
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();
-            LOG_INFO() << "remove from dock:" << ret;
+            qDebug() << "remove from dock:" << ret;
         } else {
-            LOG_ERROR() << reply.error().message();
+            qCritical() << reply.error().message();
         }
     }else{
         QDBusPendingReply<bool> reply =  m_dockAppManagerInterface->ReqeustDock(appKey, "", "", "");
         reply.waitForFinished();
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();
-            LOG_INFO() << "send to dock:" << ret;
+            qDebug() << "send to dock:" << ret;
         } else {
-            LOG_ERROR() << reply.error().message();
+            qCritical() << reply.error().message();
         }
     }
 }
 
 void MenuController::handleToStartup(QString appKey){
     QString url = dbusController->getItemInfo(appKey).url;
-    LOG_INFO() << "handleToStartup" << appKey << url;
+    qDebug() << "handleToStartup" << appKey << url;
 
     if (m_isItemStartup){
         QDBusPendingReply<bool> reply = dbusController->getStartManagerInterface()->RemoveAutostart(url);
         reply.waitForFinished();
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();
-            LOG_INFO() << "remove from startup:" << ret;
+            qDebug() << "remove from startup:" << ret;
             if (ret) {
                 emit signalManager->hideAutoStartLabel(appKey);
             }
         } else {
-            LOG_ERROR() << reply.error().message();
+            qCritical() << reply.error().message();
         }
     }else{
         QDBusPendingReply<bool> reply =  dbusController->getStartManagerInterface()->AddAutostart(url);
         reply.waitForFinished();
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();
-            LOG_INFO() << "add to startup:" << ret;
+            qDebug() << "add to startup:" << ret;
             if (ret){
                 emit signalManager->showAutoStartLabel(appKey);
             }
         } else {
-            LOG_ERROR() << reply.error().message();
+            qCritical() << reply.error().message();
         }
     }
 }
 
 void MenuController::handleUninstall(QString appKey){
-    LOG_INFO() << "handleUninstall" << appKey;
+    qDebug() << "handleUninstall" << appKey;
     ConfirmUninstallDialog d;
     d.setWindowFlags(Qt::SplashScreen);
     QString message = tr("Are you sure to uninstall ") + appKey;
@@ -332,17 +332,17 @@ void MenuController::startUnistall(QString appKey){
     QDBusPendingReply<> reply = dbusController->getLauncherInterface()->RequestUninstall(appKey, false);
     reply.waitForFinished();
     if (!reply.isError()) {
-        LOG_INFO() << "unistall action finished!";
+        qDebug() << "unistall action finished!";
     } else {
-        LOG_INFO() << "unistall action fail";
+        qDebug() << "unistall action fail";
     }
 }
 
 void MenuController::handleUninstallSuccess(const QString &appKey){
-    LOG_INFO() << "handleUninstallSuccess" << appKey;
+    qDebug() << "handleUninstallSuccess" << appKey;
     emit signalManager->itemDeleted(appKey);
 }
 
 void MenuController::handleUninstallFail(const QString &appKey, const QString &message){
-    LOG_INFO() << "handleUninstallFail" << appKey << message;
+    qDebug() << "handleUninstallFail" << appKey << message;
 }

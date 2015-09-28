@@ -5,6 +5,7 @@
 #include "dbusinterface/dbustype.h"
 #include "Logger.h"
 #include "appitem.h"
+#include "borderbutton.h"
 #include "dbusinterface/dbustype.h"
 #include "fwd.h"
 
@@ -64,6 +65,8 @@ void AppTableWidget::addItem(ItemInfo itemInfo, int index){
     setCellWidget(row, column, appItem);
 
     m_appItems.insert(itemInfo.key, appItem);
+
+    emit signalManager->highlightChanged(false);
 }
 
 

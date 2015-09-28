@@ -37,7 +37,7 @@ LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
 
 
 void LauncherFrame::initUI(){
-    LOG_INFO() << "initUI";
+    qDebug() << "initUI";
     m_backgroundLabel = new BackgroundLabel(true, this);
     m_clearCheckedButton = new QPushButton(this);
     m_clearCheckedButton->setCheckable(true);
@@ -81,8 +81,8 @@ void LauncherFrame::computerGrid(int minimumLeftMargin, int minimumTopMargin, in
     m_row = (desktopHeight - minimumTopMargin) / m_gridwidth;
     m_topMargin = (desktopHeight - m_row * m_gridwidth) / 2;
     m_bottomMargin = desktopHeight - m_row * m_gridwidth - m_topMargin;
-    LOG_INFO() << m_column << m_itemWidth << m_spacing << m_leftMargin << m_rightMargin;
-    LOG_INFO() << m_row << m_topMargin << m_bottomMargin;
+    qDebug() << m_column << m_itemWidth << m_spacing << m_leftMargin << m_rightMargin;
+    qDebug() << m_row << m_topMargin << m_bottomMargin;
 }
 
 
@@ -106,7 +106,7 @@ void LauncherFrame::toggleDisableNavgationBar(bool flag){
 }
 
 void LauncherFrame::showSortedMode(int mode){
-    LOG_INFO() << mode;
+    qDebug() << mode;
     if (mode == 1){
         showNavigationBarByMode();
     }else{
@@ -211,8 +211,6 @@ void LauncherFrame::Hide(){
 }
 
 void LauncherFrame::Show(){
-    emit signalManager->launcheRefreshed();
-    LOG_INFO() << "=============launcheRefreshed";
     show();
     setFocus();
     raise();

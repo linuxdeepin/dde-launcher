@@ -4,6 +4,7 @@
 #include "widgets/themeappicon.h"
 #include "dbusinterface/dde_launcher_interface.h"
 #include "dbusinterface/launcher_interface.h"
+#include "controller/dbusworker.h"
 #include <QApplication>
 #include <QDBusConnection>
 #include <QDBusInterface>
@@ -18,11 +19,17 @@ int main(int argc, char *argv[])
         RegisterDdeSession();
         Singleton<ThemeAppIcon>::instance()->gtkInit();
         LauncherApp launcher;
-        dbusController->init();
         launcher.show();
-        LOG_INFO() << "Starting the launcher application";
+
+        DBusWorker worker;
+        QThread dbusThread;
+        worker.moveToThread(&dbusThread);
+        dbusThread.start();
+        emit signalManager->requestData();
+
+        qDebug() << "Starting the launcher application";
         int reslut = a.exec();
-        LOG_INFO() << "exits " << a.applicationName() << reslut;
+        qDebug() << "exits " << a.applicationName() << reslut;
         return reslut;
     }else{
         DDeLauncherInterface ddeLauncherInterface(LauncherServiceName, LauncherPathName, conn);

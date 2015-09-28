@@ -6,14 +6,8 @@
 #include <QButtonGroup>
 #include <QGraphicsDropShadowEffect>
 
-
 NavigationButtonFrame::NavigationButtonFrame(int mode, QWidget *parent) : QFrame(parent)
 {
-    m_categroyKeys << tr("internet") << tr("multimedia") << tr("games");
-    m_categroyKeys << tr("graphics") << tr("productivity") << tr("industry");
-    m_categroyKeys << tr("education") << tr("development") << tr("system");
-    m_categroyKeys << tr("utilities") << tr("others");
-
     m_buttonGroup = new QButtonGroup(this);
     m_buttonGroup->setExclusive(true);
     initByMode(mode);
@@ -36,19 +30,23 @@ void NavigationButtonFrame::initByMode(int mode){
     QFrame* buttonFrame = new QFrame;
     buttonFrame->setAttribute(Qt::WA_NoMousePropagation);
     QVBoxLayout* buttonLayout = new QVBoxLayout;
-    foreach (QString key, m_categroyKeys) {
+    foreach (QString key, CategroyKeys) {
         if (mode == 0){
             BaseCheckedButton* button = new BaseCheckedButton(this);
             button->setFixedSize(32, 32);
             button->setObjectName(key);
             buttonLayout->addWidget(button);
-            m_buttonGroup->addButton(button, m_categroyKeys.indexOf(key));
+            m_buttonGroup->addButton(button, CategroyKeys.indexOf(key));
+            button->hide();
         }else{
-            BaseCheckedButton* button = new BaseCheckedButton(key, this);
+            int index = CategroyKeys.indexOf(key);
+            QString name = CategoryNames.at(index);
+            BaseCheckedButton* button = new BaseCheckedButton(name, this);
             button->setObjectName("CategoryTextButton");
             button->setFixedSize(160 - NavgationBarLeftMargin, 24);
             buttonLayout->addWidget(button);
-            m_buttonGroup->addButton(button, m_categroyKeys.indexOf(key));
+            m_buttonGroup->addButton(button, CategroyKeys.indexOf(key));
+            button->hide();
         }
     }
     buttonLayout->setSpacing(20);
@@ -65,20 +63,22 @@ void NavigationButtonFrame::initByMode(int mode){
 }
 
 void NavigationButtonFrame::hideButtons(const QStringList &keys){
-    foreach (QString key, keys) {
-        int index = m_categroyKeys.indexOf(key);
-        m_buttonGroup->button(index)->hide();
+    foreach (QString key, CategroyKeys) {
+        if (!keys.contains(key)){
+            int index = CategroyKeys.indexOf(key);
+            m_buttonGroup->button(index)->show();
+        }
     }
 }
 
 
 void NavigationButtonFrame::handleButtonClicked(int id){
-    emit signalManager->navigationButtonClicked(m_categroyKeys.at(id));
+    emit signalManager->navigationButtonClicked(CategroyKeys.at(id));
     emit currentIndexChanged(id);
 }
 
 void NavigationButtonFrame::checkButtonByKey(QString key){
-    int index = m_categroyKeys.indexOf(key);
+    int index = CategroyKeys.indexOf(key);
     emit currentIndexChanged(index);
     qDebug() << "currentIndexChanged" << index;
 }

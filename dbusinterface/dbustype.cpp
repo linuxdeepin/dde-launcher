@@ -110,8 +110,11 @@ void ItemInfo::registerMetaType()
 {
     qRegisterMetaType<ItemInfo>("ItemInfo");
     qDBusRegisterMetaType<ItemInfo>();
+    qRegisterMetaType<QMap<QString,ItemInfo>>("QMap<QString,ItemInfo>");
+    qDBusRegisterMetaType<QMap<QString,ItemInfo>>();
+    qRegisterMetaType<QList<ItemInfo>>("QList<ItemInfo>");
+    qDBusRegisterMetaType<QList<ItemInfo>>();
 }
-
 
 QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo &obj)
 {

@@ -16,7 +16,7 @@ LauncherApp::LauncherApp(QObject *parent) : QObject(parent)
 
 void LauncherApp::show(){
     m_launcherFrame->Show();
-    LOG_INFO() << "LauncherApp show";
+    qDebug() << "LauncherApp show";
 }
 
 LauncherApp::~LauncherApp()

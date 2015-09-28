@@ -3,10 +3,9 @@
 #include "dbusinterface/launchersettings_interface.h"
 #include "dbusinterface/fileInfo_interface.h"
 #include "dbusinterface/startmanager_interface.h"
-#include "Logger.h"
 #include "app/global.h"
 #include "controller/menucontroller.h"
-
+#include <QDebug>
 #include <QtCore>
 #include <QtDBus>
 
@@ -35,14 +34,14 @@ DBusController::DBusController(QObject *parent) : QObject(parent)
 }
 
 void DBusController::init(){
-    LOG_INFO() << "get Launcher data";
+    qDebug() << "get Launcher data";
     getAutoStartList();
     getCategoryInfoList();
     getInstalledTimeItems();
     getAllFrequencyItems();
     int sortedMode= getSortMethod();
     int categoryMode = getCategoryDisplayMode();
-    LOG_INFO() << sortedMode << categoryMode << "========";
+    qDebug() << sortedMode << categoryMode << "========";
     if (sortedMode == 0){
         emit signalManager->viewModeChanged(0);
     }else if (sortedMode == 1){
@@ -53,6 +52,8 @@ void DBusController::init(){
 }
 
 void DBusController::initConnect(){
+    connect(m_launcherInterface, SIGNAL(ItemChanged(QString,ItemInfo,qlonglong)),
+            this, SLOT(handleItemChanged(QString,ItemInfo,qlonglong)));
     connect(m_launcherInterface, SIGNAL(UninstallSuccess(QString)),
             m_menuController, SLOT(handleUninstallSuccess(QString)));
     connect(m_launcherInterface, SIGNAL(UninstallFailed(QString,QString)),
@@ -64,11 +65,23 @@ void DBusController::initConnect(){
 //    connect(signalManager, SIGNAL(itemDeleted(QString)), this, SLOT(updateAppTable(QString)));
     connect(signalManager, SIGNAL(sortedModeChanged(int)), this, SLOT(setSortMethod(int)));
     connect(signalManager, SIGNAL(categoryModeChanged(int)), this, SLOT(setCategoryDisplayMode(int)));
+
 }
 
 void DBusController::updateAppTable(QString appKey){
-    LOG_INFO() << "updateAppTable" << appKey;
+    qDebug() << "updateAppTable" << appKey;
     init();
+}
+
+void DBusController::handleItemChanged(const QString &action, ItemInfo itemInfo,
+                                       qlonglong categoryInfoId){
+    qDebug() << action << categoryInfoId;
+    if (action == "created"){
+    }else if (action == "updated"){
+    }else if (action == "deleted"){
+    }else{
+    }
+    emit signalManager->launcheRefreshed();
 }
 
 LauncherInterface* DBusController::getLauncherInterface(){
@@ -89,7 +102,7 @@ void DBusController::getAutoStartList(){
             m_autoStartList.append(QFileInfo(url).fileName());
         }
     }else{
-        LOG_ERROR() << reply.error().message();
+        qCritical() << reply.error().message();
     }
 }
 
@@ -123,12 +136,15 @@ void DBusController::getCategoryInfoList(){
                     }
                 }
                 item.items = appKeys;
+
+                qDebug() << appKeys;
             }
             m_categoryAppNameSortedInfoList.append(item);
         }
+        qDebug() << "m_categoryAppNameSortedInfoList"<< m_categoryAppNameSortedInfoList.length();
         emit signalManager->categoryInfosChanged(m_categoryAppNameSortedInfoList);
     }else{
-        LOG_ERROR() << reply.error().message();
+        qCritical() << reply.error().message();
     }
 }
 
@@ -162,7 +178,7 @@ void DBusController::getAllFrequencyItems(){
         }
         emit signalManager->useFrequencyItemInfoListChanged(m_useFrequencySortedList);
     }else{
-        LOG_ERROR() << reply.error().message();
+        qCritical() << reply.error().message();
     }
 
 
@@ -181,7 +197,7 @@ ItemInfo DBusController::getItemInfo(QString appKey){
         itemInfo = qdbus_cast<ItemInfo>(reply.argumentAt(0));
         return itemInfo;
     }else{
-        LOG_ERROR() << reply.error().message();
+        qCritical() << reply.error().message();
         return itemInfo;
     }
 }
@@ -193,7 +209,7 @@ int DBusController::getCategoryDisplayMode(){
         qlonglong mode = reply.argumentAt(0).toLongLong();
         return mode;
     }else{
-        LOG_ERROR() << reply.error().message();
+        qCritical() << reply.error().message();
         return 0;
     }
 }
@@ -210,7 +226,7 @@ int DBusController::getSortMethod(){
         qlonglong mode = reply.argumentAt(0).toLongLong();
         return mode;
     }else{
-        LOG_ERROR() << reply.error().message();
+        qCritical() << reply.error().message();
         return 0;
     }
 }

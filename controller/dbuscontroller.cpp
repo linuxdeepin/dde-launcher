@@ -61,7 +61,7 @@ void DBusController::initConnect(){
             this, SLOT(searchDone(QStringList)));
     connect(signalManager, SIGNAL(launcheRefreshed()), this, SLOT(init()));
     connect(signalManager, SIGNAL(search(QString)), m_launcherInterface, SLOT(Search(QString)));
-    connect(signalManager, SIGNAL(itemDeleted(QString)), this, SLOT(updateAppTable(QString)));
+//    connect(signalManager, SIGNAL(itemDeleted(QString)), this, SLOT(updateAppTable(QString)));
     connect(signalManager, SIGNAL(sortedModeChanged(int)), this, SLOT(setSortMethod(int)));
     connect(signalManager, SIGNAL(categoryModeChanged(int)), this, SLOT(setCategoryDisplayMode(int)));
 }

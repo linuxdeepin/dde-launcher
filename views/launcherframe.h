@@ -46,6 +46,8 @@ public slots:
 
     void handleAppOpened(const QString& appUrl);
 
+    void uninstallUpdateTable(QString appKey);
+
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);

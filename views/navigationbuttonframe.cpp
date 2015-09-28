@@ -24,6 +24,7 @@ void NavigationButtonFrame::initConnect(){
     connect(signalManager, SIGNAL(hideNavigationButtonByKeys(QStringList)), this, SLOT(hideButtons(QStringList)));
     connect(signalManager, SIGNAL(checkNavigationButtonByKey(QString)), this, SLOT(checkButtonByKey(QString)));
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(handleButtonClicked(int)));
+    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentIndex(int)));
 }
 
 void NavigationButtonFrame::initByMode(int mode){
@@ -73,11 +74,21 @@ void NavigationButtonFrame::hideButtons(const QStringList &keys){
 
 void NavigationButtonFrame::handleButtonClicked(int id){
     emit signalManager->navigationButtonClicked(m_categroyKeys.at(id));
+    emit currentIndexChanged(id);
 }
 
 void NavigationButtonFrame::checkButtonByKey(QString key){
     int index = m_categroyKeys.indexOf(key);
-    m_buttonGroup->button(index)->setChecked(true);
+    emit currentIndexChanged(index);
+    qDebug() << "currentIndexChanged" << index;
+}
+
+void NavigationButtonFrame::setCurrentIndex(int currentIndex){
+    qDebug() << this << m_currentIndex << currentIndex;
+    if (m_currentIndex == currentIndex)
+        return;
+    m_currentIndex = currentIndex;
+    m_buttonGroup->button(currentIndex)->setChecked(true);
 }
 
 void NavigationButtonFrame::addTextShadow(){

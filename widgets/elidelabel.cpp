@@ -20,7 +20,7 @@ ElidedLabel::ElidedLabel(const QString &text, QWidget *parent, Qt::WindowFlags f
 
 void ElidedLabel::setFullText(const QString &text)
 {
-    qDebug() << "setFullText" << text;
+//    qDebug() << "setFullText" << text;
     m_fullText = text;
 //    this->setText(text);
     elideText();

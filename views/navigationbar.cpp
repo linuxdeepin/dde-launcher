@@ -21,10 +21,12 @@ void NavigationBar::initUI(int width){
     setLayout(m_layout);
     setFixedSize(width, qApp->desktop()->screenGeometry().height());
     setStyleSheet(getQssFromFile(":/qss/skin/qss/buttons.qss"));
+    initConnect();
 }
 
 void NavigationBar::initConnect(){
-
+    connect(m_iconFrame, SIGNAL(currentIndexChanged(int)), m_textFrame, SLOT(setCurrentIndex(int)));
+    connect(m_textFrame, SIGNAL(currentIndexChanged(int)), m_iconFrame, SLOT(setCurrentIndex(int)));
 }
 
 NavigationButtonFrame* NavigationBar::getIconFrame(){

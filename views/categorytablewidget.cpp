@@ -137,7 +137,6 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
             appItem->setAppIcon(ThemeAppIcon::getIconPixmap(itemInfo.iconKey));
             appItem->setFixedSize(m_gridWidth, m_gridWidth);
             setCellWidget(_row, column, appItem);
-            qDebug() << appKey << "=======";
             m_appItems.insert(appKey, appItem);
        }else{
            LOG_INFO() << appKey << m_itemInfosMap.keys();
@@ -174,6 +173,10 @@ void CategoryTableWidget::addItems(const CategoryInfoList &categoryInfoList){
             addItems(rowCount(), info.key,  info.items);
         }
     }
+}
+
+void CategoryTableWidget::removeItem(QString appKey){
+
 }
 
 void CategoryTableWidget::scrollToCategory(QString key){

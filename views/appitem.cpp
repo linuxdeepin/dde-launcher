@@ -30,6 +30,7 @@ void AppItem::initUI(){
 
     m_nameLabel = new ElidedLabel;
     m_nameLabel->setObjectName("Name");
+    m_nameLabel->setAlignment(Qt::AlignTop| Qt::AlignHCenter);
 
     m_iconLabel->setFixedSize(48, 48);
     m_nameLabel->setFixedSize(100, 42);

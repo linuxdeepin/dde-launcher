@@ -66,35 +66,6 @@ void LauncherFrame::initUI(){
 
     m_searchLineEdit = new SearchLineEdit(this);
     m_searchLineEdit->hide();
-
-
-//    QPoint start(100, 100);
-//    QPixmap pixmap = this->grab();
-//    qDebug() << start << "===========" << appBox->geometry() << "xxxxxxxxxxxxxxxxxxx";
-
-//    QPainter p;
-//    p.begin(&pixmap);
-//    QLinearGradient gradient(pixmap.rect().topLeft(), pixmap.rect().bottomLeft());
-//    gradient.setColorAt(0, Qt::white);
-//    gradient.setColorAt(0.2, Qt::transparent);
-//    gradient.setColorAt(0.3, QColor(0, 0, 0, 0));
-//    gradient.setColorAt(0.7, QColor(0, 0, 0, 0));
-//    gradient.setColorAt(0.8, Qt::transparent);
-//    gradient.setColorAt(1, Qt::white);
-//    p.setCompositionMode(QPainter::CompositionMode_DestinationOut);
-//    p.setBrush(gradient);
-//    p.end();
-
-//    pixmap.save("/home/djf/xxxxxxx.png");
-
-//    QLabel * mask = new QLabel(this);
-//    mask->setAttribute(Qt::WA_TransparentForMouseEvents);
-//    mask->resize(pixmap.size());
-//    mask->setPixmap(pixmap);
-//    mask->move(start);
-//    mask->raise();
-
-
 }
 
 void LauncherFrame::computerGrid(int minimumLeftMargin, int minimumTopMargin, int miniSpacing, int itemWidth){
@@ -125,6 +96,7 @@ void LauncherFrame::initConnect(){
     connect(signalManager, SIGNAL(mouseReleased()), this, SLOT(handleMouseReleased()));
     connect(signalManager, SIGNAL(Hide()), this, SLOT(Hide()));
     connect(signalManager, SIGNAL(appOpened(QString)), this, SLOT(handleAppOpened(QString)));
+    connect(signalManager, SIGNAL(itemDeleted(QString)), this, SLOT(uninstallUpdateTable(QString)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SIGNAL(Closed()));
 }
 
@@ -218,11 +190,12 @@ void LauncherFrame::closeEvent(QCloseEvent *event){
     QDBusConnection conn = QDBusConnection::sessionBus();
     conn.unregisterObject("/com/deepin/dde/Launcher");
     conn.unregisterService("com.deepin.dde.Launcher");
-    qDebug() << "~LauncherFrame";
     QFrame::closeEvent(event);
 }
 
 void LauncherFrame::Exit(){
+    qDebug() << "LauncherFrame::Exit()";
+    close();
     qApp->quit();
 }
 
@@ -281,7 +254,12 @@ void LauncherFrame::handleAppOpened(const QString &appUrl){
     Hide();
 }
 
+void LauncherFrame::uninstallUpdateTable(QString appKey){
+    qDebug() << appKey;
+}
+
 LauncherFrame::~LauncherFrame()
 {
+    qDebug() << "~LauncherFrame";
 }
 

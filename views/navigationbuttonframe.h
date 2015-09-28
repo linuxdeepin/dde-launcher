@@ -18,17 +18,18 @@ public:
     void initByMode(int mode);
 
 signals:
-
+    void currentIndexChanged(int index);
 public slots:
     void hideButtons(const QStringList& keys);
     void handleButtonClicked(int id);
     void checkButtonByKey(QString key);
-
+    void setCurrentIndex(int currentIndex);
     void addTextShadow();
 
 private:
     QStringList m_categroyKeys;
     QButtonGroup* m_buttonGroup;
+    int m_currentIndex = 0;
 };
 
 #endif // NAVIGATIONBUTTONFRAME_H

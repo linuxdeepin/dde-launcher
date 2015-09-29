@@ -219,7 +219,11 @@ void BaseTableWidget::hightlightItem(int row, int column){
     QString className = QString(cellWidget(row, column)->metaObject()->className());
     if (className== "AppItem"){
         setHighLight(row, column);
-        scrollToItem(item(row, column));
+        if (row == 1){
+            verticalScrollBar()->setValue(0);
+        }else{
+            verticalScrollBar()->setValue(row);
+        }
     }
 }
 

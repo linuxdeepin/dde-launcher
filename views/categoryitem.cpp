@@ -14,12 +14,11 @@ CategoryItem::CategoryItem(QString text, QWidget *parent) : QFrame(parent)
 void CategoryItem::initUI(QString text){
     int index = CategroyKeys.indexOf(text);
     m_titleLabel = new QLabel(QCoreApplication::translate("QObject", CategoryNames.at(index).toLatin1()), this);
-    m_titleLabel->setStyleSheet("color: white;\
-                         font-size: 20px;");
+    m_titleLabel->setStyleSheet("color: white");
     QFont font;
     font.setPixelSize(20);
     m_titleLabel->setFont(font);
-    m_titleLabel->setFixedWidth(m_titleLabel->fontMetrics().width(text));
+    m_titleLabel->setFixedWidth(m_titleLabel->fontMetrics().width(m_titleLabel->text()) + 10);
 //    label->setObjectName("CategoryItemText");
     QLabel* blackLineLabel = new QLabel;
     blackLineLabel->setObjectName("CategoryItemBlackLine");

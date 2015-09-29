@@ -93,6 +93,8 @@ HEADERS += \
     views/dlineedit.h \
     controller/dbusworker.h
 
+TRANSLATIONS += translations/dde-launcher.ts
+
 RESOURCES += \
     skin.qrc \
     dialogs.qrc

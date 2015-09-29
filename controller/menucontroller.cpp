@@ -308,12 +308,10 @@ void MenuController::handleUninstall(QString appKey){
     qDebug() << "handleUninstall" << appKey;
     ConfirmUninstallDialog d;
     d.setWindowFlags(Qt::SplashScreen);
-    QString message = tr("Are you sure to uninstall ") + appKey;
+    QString message = tr("Are you sure to uninstall %1").arg(appKey);
     d.setMessage(message);
     connect(&d, SIGNAL(buttonClicked(int)), this, SLOT(handleUninstallAction(int)));
     d.exec();
-    //    int code = d.exec();
-//    qDebug() << code << "dialog close";
 }
 
 void MenuController::handleUninstallAction(int id){

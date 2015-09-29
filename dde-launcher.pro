@@ -100,4 +100,8 @@ RESOURCES += \
     dialogs.qrc
 
 target.path = /usr/bin/
-INSTALLS += target
+
+qm_files.files = translations/*.qm
+qm_files.path  = /usr/share/dde-launcher/translations
+
+INSTALLS += target qm_files

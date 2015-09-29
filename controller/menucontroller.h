@@ -8,6 +8,7 @@ class MenumanagerInterface;
 class MenuInterface;
 class DBusDockedAppManager;
 class QJsonObject;
+class NotificationInterface;
 
 #define MenuManager_service "com.deepin.menu"
 #define MenuManager_path "/com/deepin/menu"
@@ -56,6 +57,7 @@ private:
     MenumanagerInterface* m_menuManagerInterface;
     MenuInterface* m_menuInterface;
     DBusDockedAppManager* m_dockAppManagerInterface;
+    NotificationInterface* m_notifcationInterface;
 
     QString m_appKeyRightClicked;
     bool m_isItemOnDesktop;

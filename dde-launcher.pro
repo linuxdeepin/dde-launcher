@@ -52,7 +52,8 @@ SOURCES += main.cpp \
     views/searchlineedit.cpp \
     dbusinterface/launchersettings_interface.cpp \
     views/dlineedit.cpp \
-    controller/dbusworker.cpp
+    controller/dbusworker.cpp \
+    dbusinterface/notification_interface.cpp
 
 HEADERS += \
     views/launcherframe.h \
@@ -91,7 +92,8 @@ HEADERS += \
     views/searchlineedit.h \
     dbusinterface/launchersettings_interface.h \
     views/dlineedit.h \
-    controller/dbusworker.h
+    controller/dbusworker.h \
+    dbusinterface/notification_interface.h
 
 TRANSLATIONS += translations/dde-launcher.ts
 

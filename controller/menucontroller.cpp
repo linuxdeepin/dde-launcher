@@ -9,6 +9,9 @@
 #include "dialogs/confirmuninstalldialog.h"
 #include "Logger.h"
 #include "dbuscontroller.h"
+#include "dbusinterface/notification_interface.h"
+#include "widgets/themeappicon.h"
+#include "widgets/util.h"
 #include <QDBusObjectPath>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -20,6 +23,10 @@ MenuController::MenuController(QObject *parent) : QObject(parent)
 {
     m_menuManagerInterface = new MenumanagerInterface(MenuManager_service, MenuManager_path, QDBusConnection::sessionBus(), this);
     m_dockAppManagerInterface = new DBusDockedAppManager(this);
+    m_notifcationInterface = new NotificationInterface(NotificationInterface::staticServiceName(),
+                                                       NotificationInterface::staticObjectPathName(),
+                                                       QDBusConnection::sessionBus(),
+                                                       this);
     m_menuInterface = NULL;
     initConnect();
 }
@@ -331,13 +338,26 @@ void MenuController::startUnistall(QString appKey){
     reply.waitForFinished();
     if (!reply.isError()) {
         qDebug() << "unistall action finished!";
+        handleUninstallSuccess(appKey);
     } else {
         qDebug() << "unistall action fail";
     }
 }
 
 void MenuController::handleUninstallSuccess(const QString &appKey){
-    qDebug() << "handleUninstallSuccess" << appKey;
+    QString cachePath = joinPath(getThumbnailsPath(), QString("%1.png").arg(appKey));
+    QString summary = "";
+    QString message = QString("uninstall %1 successfully!").arg(appKey);
+    m_notifcationInterface->Notify("dde-launcher",
+                                   0,
+                                   cachePath,
+                                   summary,
+                                   message,
+                                    QStringList(),
+                                    QVariantMap(),
+                                   0);
+
+    qDebug() << "handleUninstallSuccess" << appKey << cachePath;
     emit signalManager->itemDeleted(appKey);
 }
 

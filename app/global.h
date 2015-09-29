@@ -41,4 +41,5 @@ const QStringList CategoryNames{ QObject::tr("internet"),
                                  QObject::tr("utilities"),
                                  QObject::tr("others")
                                };
+
 #endif // GLOBAL

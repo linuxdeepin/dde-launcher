@@ -205,9 +205,7 @@ void LauncherFrame::Hide(){
     m_searchLineEdit->clearFocus();
     m_searchLineEdit->setText("");
     setFocus();
-    if (m_layout->currentIndex() == 0){
-
-    }
+    emit signalManager->launcheRefreshed();
 }
 
 void LauncherFrame::Show(){

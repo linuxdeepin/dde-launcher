@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QCoreApplication>
 #include <QGraphicsDropShadowEffect>
 
 CategoryItem::CategoryItem(QString text, QWidget *parent) : QFrame(parent)
@@ -12,7 +13,7 @@ CategoryItem::CategoryItem(QString text, QWidget *parent) : QFrame(parent)
 
 void CategoryItem::initUI(QString text){
     int index = CategroyKeys.indexOf(text);
-    m_titleLabel = new QLabel(CategoryNames.at(index), this);
+    m_titleLabel = new QLabel(QCoreApplication::translate("QObject", CategoryNames.at(index).toLatin1()), this);
     m_titleLabel->setStyleSheet("color: white;\
                          font-size: 20px;");
     QFont font;

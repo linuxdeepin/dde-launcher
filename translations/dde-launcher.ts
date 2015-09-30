@@ -33,7 +33,7 @@
     </message>
     <message>
         <location filename="../views/displaymodeframe.cpp" line="38"/>
-        <source>By categpry (text)</source>
+        <source>By category (text)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -50,47 +50,47 @@
 <context>
     <name>MenuController</name>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="56"/>
+        <location filename="../controller/menucontroller.cpp" line="63"/>
         <source>Open(_O)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="60"/>
+        <location filename="../controller/menucontroller.cpp" line="67"/>
         <source>Remove from desktop(_F)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="62"/>
+        <location filename="../controller/menucontroller.cpp" line="69"/>
         <source>Send to desktop(_E)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="66"/>
+        <location filename="../controller/menucontroller.cpp" line="73"/>
         <source>Remove from dock(_F)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="68"/>
+        <location filename="../controller/menucontroller.cpp" line="75"/>
         <source>Send to dock(_C)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="73"/>
+        <location filename="../controller/menucontroller.cpp" line="80"/>
         <source>remove from startup(_R)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="75"/>
+        <location filename="../controller/menucontroller.cpp" line="82"/>
         <source>Add to startup(_A)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="77"/>
+        <location filename="../controller/menucontroller.cpp" line="84"/>
         <source>Uninstall</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="311"/>
+        <location filename="../controller/menucontroller.cpp" line="318"/>
         <source>Are you sure to uninstall %1</source>
         <translation type="unfinished"></translation>
     </message>

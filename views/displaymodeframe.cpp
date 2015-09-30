@@ -35,7 +35,7 @@ void DisplayModeFrame::initUI(){
     m_buttonGroup->addButton(m_nameButton, 0);
     m_categoryIconButton = new BaseCheckedButton(tr("By category (icon)"), this);
     m_buttonGroup->addButton(m_categoryIconButton, 1);
-    m_categoryNameButton = new BaseCheckedButton(tr("By categpry (text)"), this);
+    m_categoryNameButton = new BaseCheckedButton(tr("By category (text)"), this);
     m_buttonGroup->addButton(m_categoryNameButton, 2);
     m_installTimeButton = new BaseCheckedButton(tr("By time installed"), this);
     m_buttonGroup->addButton(m_installTimeButton, 3);

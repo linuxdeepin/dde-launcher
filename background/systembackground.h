@@ -15,6 +15,9 @@ public:
     bool isBlur() const ;
     QSize getBackgroundSize() const;
     const QPixmap& getBackground();
+
+    QString joinPath(const QString& path, const QString& fileName);
+    QString getBackgroundsPath();
 signals:
     void backgroundChanged(const QPixmap& backgroundPixmap);
 

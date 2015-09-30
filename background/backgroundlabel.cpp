@@ -25,7 +25,7 @@ void BackgroundLabel::setBlur(bool isBlur){
 }
 
 void BackgroundLabel::resizeEvent(QResizeEvent *event){
-    m_systemBackground->setBackgroundSize(size());
+//    m_systemBackground->setBackgroundSize(size());
     QLabel::resizeEvent(event);
 }
 

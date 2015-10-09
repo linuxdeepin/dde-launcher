@@ -173,7 +173,7 @@ void LauncherFrame::keyPressEvent(QKeyEvent *event){
             m_searchText.remove(m_searchText.length() - 1, 1);
             emit signalManager->startSearched(m_searchText);
         }
-    }else if (event->text().trimmed().length() > 0){
+    }else if (event->text().trimmed().length() > 0 && event->key() != Qt::Key_Delete){
         if (!m_searchLineEdit->isVisible()){
             m_searchText.clear();
             m_searchLineEdit->raise();

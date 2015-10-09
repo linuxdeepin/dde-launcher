@@ -193,6 +193,14 @@ void LauncherFrame::closeEvent(QCloseEvent *event){
     QFrame::closeEvent(event);
 }
 
+void LauncherFrame::changeEvent(QEvent *event){
+    if (event->type() == QEvent::ActivationChange){
+        if (hasFocus()){
+            Hide();
+        }
+    }
+}
+
 void LauncherFrame::Exit(){
     qDebug() << "LauncherFrame::Exit()";
     close();

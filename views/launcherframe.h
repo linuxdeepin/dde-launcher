@@ -52,6 +52,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
     void closeEvent(QCloseEvent* event);
+    void changeEvent(QEvent* event);
 
 private:
     int m_leftMargin;

@@ -55,8 +55,8 @@ void BorderButton::startDrag(QMouseEvent *event){
 
 void BorderButton::mousePressEvent(QMouseEvent *event){
     if (event->button() == Qt::RightButton){
+       emit signalManager->rightClickedChanged(true);
        emit rightClicked(mapToGlobal(event->pos()));
-       return;
     }
     QPushButton::mousePressEvent(event);
 }

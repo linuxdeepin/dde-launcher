@@ -187,6 +187,7 @@ void MenuController::showMenu(QString menuDBusObjectPath, QString menuContent) {
     m_menuInterface = new MenuInterface(MenuManager_service, menuDBusObjectPath, QDBusConnection::sessionBus(), this);
     m_menuInterface->ShowMenu(menuContent);
     connect(m_menuInterface, SIGNAL(ItemInvoked(QString, bool)),this, SLOT(menuItemInvoked(QString,bool)));
+    connect(m_menuInterface, SIGNAL(MenuUnregistered()), this, SLOT(handleMenuClosed()));
     connect(m_menuInterface, SIGNAL(MenuUnregistered()), m_menuInterface, SLOT(deleteLater()));
 }
 
@@ -232,6 +233,10 @@ void MenuController::handleOpen(QString appKey){
     } else {
         qCritical() << reply.error().message();
     }
+}
+
+void MenuController::handleMenuClosed(){
+    emit signalManager->rightClickedChanged(false);
 }
 
 void MenuController::handleToDesktop(QString appKey){

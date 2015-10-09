@@ -53,6 +53,8 @@ public slots:
     void handleUninstallSuccess(const QString& appKey);
     void handleUninstallFail(const QString& appKey, const QString& message);
 
+    void handleMenuClosed();
+
 private:
     MenumanagerInterface* m_menuManagerInterface;
     MenuInterface* m_menuInterface;

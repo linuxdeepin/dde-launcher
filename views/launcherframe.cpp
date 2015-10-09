@@ -97,6 +97,7 @@ void LauncherFrame::initConnect(){
     connect(signalManager, SIGNAL(Hide()), this, SLOT(Hide()));
     connect(signalManager, SIGNAL(appOpened(QString)), this, SLOT(handleAppOpened(QString)));
     connect(signalManager, SIGNAL(itemDeleted(QString)), this, SLOT(uninstallUpdateTable(QString)));
+    connect(signalManager, SIGNAL(rightClickedChanged(bool)), this, SLOT(setRightclicked(bool)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SIGNAL(Closed()));
 }
 
@@ -141,8 +142,10 @@ void LauncherFrame::showNavigationBarByMode(){
 
 void LauncherFrame::mouseReleaseEvent(QMouseEvent *event){
     qDebug() << event;
-    emit signalManager->mouseReleased();
-    Hide();
+    if (event->button() == Qt::LeftButton){
+        emit signalManager->mouseReleased();
+        Hide();
+    }
     QFrame::mouseReleaseEvent(event);
 }
 
@@ -195,10 +198,17 @@ void LauncherFrame::closeEvent(QCloseEvent *event){
 
 void LauncherFrame::changeEvent(QEvent *event){
     if (event->type() == QEvent::ActivationChange){
-        if (hasFocus()){
-            Hide();
+        if (hasFocus() && !m_rightclicked){
+            // in case that the uninstall window is shown.
+            if (qApp->topLevelWindows().length() == 1){
+                Hide();
+            };
         }
     }
+}
+
+void LauncherFrame::setRightclicked(bool flag){
+    m_rightclicked = flag;
 }
 
 void LauncherFrame::Exit(){
@@ -217,6 +227,7 @@ void LauncherFrame::Hide(){
 }
 
 void LauncherFrame::Show(){
+    m_rightclicked = false;
     show();
     setFocus();
     raise();

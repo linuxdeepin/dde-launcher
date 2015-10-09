@@ -44,6 +44,7 @@ signals:
 
     /*context menu*/
     void contextMenuShowed(QString url, QPoint pos);
+    void rightClickedChanged(bool flag);
 
     /*mouse release on whole window*/
     void mouseReleased();

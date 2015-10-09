@@ -48,6 +48,8 @@ public slots:
 
     void uninstallUpdateTable(QString appKey);
 
+    void setRightclicked(bool flag);
+
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
@@ -64,6 +66,7 @@ private:
     int m_row;
     int m_itemWidth;
     int m_gridwidth;
+    bool m_rightclicked = false;
     QString m_searchText;
     QStackedLayout* m_layout;
     DisplayModeFrame* m_displayModeFrame;

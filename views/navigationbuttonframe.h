@@ -26,6 +26,8 @@ public slots:
     void setCurrentIndex(int currentIndex);
     void addTextShadow();
 
+    void checkFirstButton();
+
 private:
     QButtonGroup* m_buttonGroup;
     int m_currentIndex = 0;

@@ -232,6 +232,7 @@ void LauncherFrame::Show(){
     setFocus();
     raise();
     activateWindow();
+    emit signalManager->firstButtonChecked();
     emit Shown();
 }
 

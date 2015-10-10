@@ -70,6 +70,9 @@ signals:
     /*show/hide autoStartLabel*/
     void showAutoStartLabel(QString appKey);
     void hideAutoStartLabel(QString appKey);
+
+    /*check first category button when hide*/
+    void firstButtonChecked();
 };
 
 #endif // SIGNALMANAGER_H

@@ -19,6 +19,7 @@ void NavigationButtonFrame::initConnect(){
     connect(signalManager, SIGNAL(checkNavigationButtonByKey(QString)), this, SLOT(checkButtonByKey(QString)));
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(handleButtonClicked(int)));
     connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentIndex(int)));
+    connect(signalManager, SIGNAL(firstButtonChecked()), this, SLOT(checkFirstButton()));
 }
 
 void NavigationButtonFrame::initByMode(int mode){
@@ -89,6 +90,15 @@ void NavigationButtonFrame::setCurrentIndex(int currentIndex){
         return;
     m_currentIndex = currentIndex;
     m_buttonGroup->button(currentIndex)->setChecked(true);
+}
+
+void NavigationButtonFrame::checkFirstButton(){
+    for(int i=0; i<m_buttonGroup->buttons().length(); i++){
+        if (m_buttonGroup->button(i)->isVisible()){
+            m_buttonGroup->button(i)->click();
+            break;
+        }
+    }
 }
 
 void NavigationButtonFrame::addTextShadow(){

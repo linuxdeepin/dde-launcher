@@ -41,7 +41,7 @@ void BorderButton::startDrag(QMouseEvent *event){
     pDrag->setMimeData(mimeData);
     pDrag->setPixmap(dragPixmap);
 
-    pDrag->setHotSpot(event->pos() + QPoint(-36, -10));
+    pDrag->setHotSpot(event->pos() + QPoint(24, 24) - mapFromGlobal(QCursor::pos()));
 //    pDrag->setDragCursor(QCursor(Qt::PointingHandCursor).pixmap(), Qt::MoveAction);
 
     Qt::DropAction action = pDrag->exec(Qt::MoveAction | Qt::CopyAction, Qt::CopyAction);

@@ -20,6 +20,10 @@ BackgroundLabel::BackgroundLabel(bool isBlur, QWidget* parent)
             this, SLOT(setPixmap(QPixmap)));
 }
 
+QString BackgroundLabel::getCacheUrl(){
+    return m_systemBackground->getCacheUrl();
+}
+
 void BackgroundLabel::setBlur(bool isBlur){
     m_systemBackground->setBlur(isBlur);
 }

@@ -3,6 +3,7 @@
 #include "dbusinterface/launchersettings_interface.h"
 #include "dbusinterface/fileInfo_interface.h"
 #include "dbusinterface/startmanager_interface.h"
+#include "dbusinterface/displayinterface.h"
 #include "app/global.h"
 #include "controller/menucontroller.h"
 #include <QDebug>
@@ -29,6 +30,7 @@ DBusController::DBusController(QObject *parent) : QObject(parent)
     m_launcherSettingsInterface = new LauncherSettingsInterface(Launcher_service, Launcher_path, QDBusConnection::sessionBus(), this);
     m_fileInfoInterface = new FileInfoInterface(FileInfo_service, FileInfo_path, QDBusConnection::sessionBus(), this);
     m_startManagerInterface = new StartManagerInterface(StartManager_service, StartManager_path, QDBusConnection::sessionBus(), this);
+    m_displayInterface = new DisplayInterface(this);
     m_menuController = new MenuController(this);
     initConnect();
 }
@@ -41,7 +43,7 @@ void DBusController::init(){
     getAllFrequencyItems();
     int sortedMode= getSortMethod();
     int categoryMode = getCategoryDisplayMode();
-    qDebug() << sortedMode << categoryMode << "========";
+
     if (sortedMode == 0){
         emit signalManager->viewModeChanged(0);
     }else if (sortedMode == 1){
@@ -65,7 +67,7 @@ void DBusController::initConnect(){
 //    connect(signalManager, SIGNAL(itemDeleted(QString)), this, SLOT(updateAppTable(QString)));
     connect(signalManager, SIGNAL(sortedModeChanged(int)), this, SLOT(setSortMethod(int)));
     connect(signalManager, SIGNAL(categoryModeChanged(int)), this, SLOT(setCategoryDisplayMode(int)));
-
+    connect(m_displayInterface, SIGNAL(PrimaryRectChanged()), signalManager, SIGNAL(screenGeometryChanged()));
 }
 
 void DBusController::updateAppTable(QString appKey){

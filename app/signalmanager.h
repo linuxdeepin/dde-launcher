@@ -73,6 +73,9 @@ signals:
 
     /*check first category button when hide*/
     void firstButtonChecked();
+
+    /*screen geometry changed*/
+    void screenGeometryChanged();
 };
 
 #endif // SIGNALMANAGER_H

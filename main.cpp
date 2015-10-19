@@ -4,7 +4,6 @@
 #include "widgets/themeappicon.h"
 #include "dbusinterface/dde_launcher_interface.h"
 #include "dbusinterface/launcher_interface.h"
-#include "controller/dbusworker.h"
 
 #include <QApplication>
 #include <QTranslator>
@@ -19,22 +18,19 @@ int main(int argc, char *argv[])
     QDBusConnection conn = QDBusConnection::sessionBus();
     if(conn.registerService(LauncherServiceName)){
         // setup translator
+        qApp->setOrganizationName("deepin");
+        qApp->setApplicationName("dde-launcher");
+        qApp->setApplicationVersion("2015-1.0");
+
 		QTranslator translator;
 		translator.load("/usr/share/dde-launcher/translations/dde-launcher_" + QLocale::system().name() + ".qm");
 		a.installTranslator(&translator);
-
 
         debug_log_console_on();
         RegisterDdeSession();
         Singleton<ThemeAppIcon>::instance()->gtkInit();
         LauncherApp launcher;
         launcher.show();
-
-        DBusWorker worker;
-        QThread dbusThread;
-        worker.moveToThread(&dbusThread);
-        dbusThread.start();
-        emit signalManager->requestData();
 
         qDebug() << "Starting the launcher application";
         int reslut = a.exec();

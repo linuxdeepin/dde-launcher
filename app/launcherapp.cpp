@@ -4,7 +4,9 @@
 #include "dbusinterface/launcheradaptor.h"
 #include "app/global.h"
 #include "app/xcb_misc.h"
+#include "controller/dbusworker.h"
 #include <QDBusConnection>
+#include <QThread>
 
 LauncherApp::LauncherApp(QObject *parent) : QObject(parent)
 {
@@ -12,11 +14,17 @@ LauncherApp::LauncherApp(QObject *parent) : QObject(parent)
     new LauncherAdaptor(m_launcherFrame);
     QDBusConnection conn = QDBusConnection::sessionBus();
     conn.registerObject(LauncherPathName, m_launcherFrame);
+
+    m_dbusWorker = new DBusWorker;
+    m_dbusThread = new QThread;
+    m_dbusWorker->moveToThread(m_dbusThread);
 }
 
 void LauncherApp::show(){
     m_launcherFrame->Show();
     qDebug() << "LauncherApp show";
+    m_dbusThread->start();
+    emit signalManager->requestData();
 }
 
 LauncherApp::~LauncherApp()

@@ -54,14 +54,19 @@ const QPixmap& SystemBackground::getBackground(){
     return m_backgroundPixmap;
 }
 
+QString SystemBackground::getCacheUrl(){
+    return m_cacheUrl;
+}
+
 void SystemBackground::updateBackgroud(){
     QString lastModifiedtime = QString::number(QFileInfo(m_backgroundUrl).lastModified().toMSecsSinceEpoch());
-    QString cacheUrl = joinPath(getBackgroundsPath(),
+    m_cacheUrl = joinPath(getBackgroundsPath(),
                                 QString("%1_%2.png").arg(
                                     QFileInfo(m_backgroundUrl).baseName(), lastModifiedtime));
-    if (QFileInfo(cacheUrl).exists()){
-        qDebug() << cacheUrl;
-        m_backgroundPixmap = QPixmap(cacheUrl);
+
+    if (QFileInfo(m_cacheUrl).exists()){
+        qDebug() << m_cacheUrl;
+        m_backgroundPixmap = QPixmap(m_cacheUrl);
     }else{
         m_backgroundPixmap = QPixmap(m_backgroundUrl);
         QPixmap tempPixmap = m_backgroundPixmap.scaled(m_backgroundSize);
@@ -73,7 +78,7 @@ void SystemBackground::updateBackgroud(){
             painter.end();
         }
         m_backgroundPixmap = tempPixmap;
-        m_backgroundPixmap.save(cacheUrl);
+        m_backgroundPixmap.save(m_cacheUrl);
     }
     emit backgroundChanged(m_backgroundPixmap);
 }

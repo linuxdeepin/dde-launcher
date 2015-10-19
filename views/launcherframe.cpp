@@ -98,6 +98,7 @@ void LauncherFrame::initConnect(){
     connect(signalManager, SIGNAL(appOpened(QString)), this, SLOT(handleAppOpened(QString)));
     connect(signalManager, SIGNAL(itemDeleted(QString)), this, SLOT(uninstallUpdateTable(QString)));
     connect(signalManager, SIGNAL(rightClickedChanged(bool)), this, SLOT(setRightclicked(bool)));
+    connect(signalManager, SIGNAL(screenGeometryChanged()), this , SLOT(handleScreenGeometryChanged()));
     connect(qApp, SIGNAL(aboutToQuit()), this, SIGNAL(Closed()));
 }
 
@@ -107,7 +108,6 @@ void LauncherFrame::toggleDisableNavgationBar(bool flag){
 }
 
 void LauncherFrame::showSortedMode(int mode){
-    qDebug() << mode;
     if (mode == 1){
         showNavigationBarByMode();
     }else{
@@ -209,6 +209,15 @@ void LauncherFrame::changeEvent(QEvent *event){
 
 void LauncherFrame::setRightclicked(bool flag){
     m_rightclicked = flag;
+}
+
+void LauncherFrame::handleScreenGeometryChanged(){
+    QFileInfo fileInfo(m_backgroundLabel->getCacheUrl());
+    if (fileInfo.exists()){
+        bool flag = QFile::remove(m_backgroundLabel->getCacheUrl());
+        qDebug() << "remove" << m_backgroundLabel->getCacheUrl() << flag;
+    }
+    qApp->quit();
 }
 
 void LauncherFrame::Exit(){

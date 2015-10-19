@@ -18,6 +18,7 @@ public:
 
     QString joinPath(const QString& path, const QString& fileName);
     QString getBackgroundsPath();
+    QString getCacheUrl();
 signals:
     void backgroundChanged(const QPixmap& backgroundPixmap);
 
@@ -32,6 +33,7 @@ private:
     bool m_isBlur;
     QGSettings* m_gsettings;
     QString m_backgroundUrl;
+    QString m_cacheUrl;
     QPixmap m_backgroundPixmap;
 };
 

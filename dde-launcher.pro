@@ -53,7 +53,8 @@ SOURCES += main.cpp \
     dbusinterface/launchersettings_interface.cpp \
     views/dlineedit.cpp \
     controller/dbusworker.cpp \
-    dbusinterface/notification_interface.cpp
+    dbusinterface/notification_interface.cpp \
+    dbusinterface/displayinterface.cpp
 
 HEADERS += \
     views/launcherframe.h \
@@ -93,7 +94,8 @@ HEADERS += \
     dbusinterface/launchersettings_interface.h \
     views/dlineedit.h \
     controller/dbusworker.h \
-    dbusinterface/notification_interface.h
+    dbusinterface/notification_interface.h \
+    dbusinterface/displayinterface.h
 
 TRANSLATIONS += translations/dde-launcher.ts
 

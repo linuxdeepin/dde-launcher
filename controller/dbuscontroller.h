@@ -10,6 +10,7 @@ class LauncherSettingsInterface;
 class FileInfoInterface;
 class StartManagerInterface;
 class MenuController;
+class DisplayInterface;
 
 #define Launcher_service "com.deepin.dde.daemon.Launcher"
 #define Launcher_path "/com/deepin/dde/daemon/Launcher"
@@ -62,6 +63,7 @@ private:
     LauncherSettingsInterface* m_launcherSettingsInterface;
     FileInfoInterface* m_fileInfoInterface;
     StartManagerInterface* m_startManagerInterface;
+    DisplayInterface* m_displayInterface;
     MenuController* m_menuController;
     AppInstalledTimeInfoList m_appInstalledTimeInfoList;
     AppFrequencyInfoList m_appFrequencyInfoList;

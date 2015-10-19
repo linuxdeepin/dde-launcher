@@ -4,6 +4,7 @@
 #include <QObject>
 
 class LauncherFrame;
+class DBusWorker;
 
 class LauncherApp : public QObject
 {
@@ -19,6 +20,8 @@ public slots:
 
 private:
     LauncherFrame* m_launcherFrame;
+    DBusWorker* m_dbusWorker;
+    QThread* m_dbusThread;
 };
 
 #endif // LAUNCHERAPP_H

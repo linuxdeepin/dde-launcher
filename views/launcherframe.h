@@ -50,6 +50,8 @@ public slots:
 
     void setRightclicked(bool flag);
 
+    void handleScreenGeometryChanged();
+
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);

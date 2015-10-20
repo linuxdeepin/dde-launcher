@@ -18,6 +18,7 @@
 #include <QJsonDocument>
 #include <QDBusPendingReply>
 #include <QVariant>
+#include <QProcess>
 
 MenuController::MenuController(QObject *parent) : QObject(parent)
 {
@@ -353,16 +354,17 @@ void MenuController::handleUninstallSuccess(const QString &appKey){
     QString cachePath = joinPath(getThumbnailsPath(), QString("%1.png").arg(appKey));
     QString summary = "";
     QString message = QString("uninstall %1 successfully!").arg(appKey);
-    m_notifcationInterface->Notify("dde-launcher",
-                                   0,
-                                   cachePath,
-                                   summary,
-                                   message,
-                                    QStringList(),
-                                    QVariantMap(),
-                                   0);
-
-    qDebug() << "handleUninstallSuccess" << appKey << cachePath;
+//    m_notifcationInterface->Notify("dde-launcher",
+//                                   0,
+//                                   cachePath,
+//                                   summary,
+//                                   message,
+//                                    QStringList(),
+//                                    QVariantMap(),
+//                                   0);
+    QString command = QString("notify-send \"%1\" -a %2 -t 5 -i \"%3\"").arg(message , appKey, cachePath);
+    QProcess::execute(command);
+    qDebug() << "handleUninstallSuccess" << appKey << cachePath << command;
     emit signalManager->itemDeleted(appKey);
 }
 

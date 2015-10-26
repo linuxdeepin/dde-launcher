@@ -17,6 +17,7 @@ signals:
 
 public slots:
     void show();
+    void handleUninstall(QString appKey);
 
 private:
     LauncherFrame* m_launcherFrame;

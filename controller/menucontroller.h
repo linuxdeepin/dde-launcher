@@ -47,7 +47,6 @@ public slots:
     void handleToDock(QString appKey);
     void handleToStartup(QString appKey);
 
-    void handleUninstall(QString appKey);
     void handleUninstallAction(int id);
     void startUnistall(QString appKey);
     void handleUninstallSuccess(const QString& appKey);

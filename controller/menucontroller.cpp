@@ -6,7 +6,6 @@
 #include "dbusinterface/startmanager_interface.h"
 #include "app/global.h"
 #include "dbusinterface/dbustype.h"
-#include "dialogs/confirmuninstalldialog.h"
 #include "Logger.h"
 #include "dbuscontroller.h"
 #include "dbusinterface/notification_interface.h"
@@ -190,6 +189,7 @@ void MenuController::showMenu(QString menuDBusObjectPath, QString menuContent) {
     connect(m_menuInterface, SIGNAL(ItemInvoked(QString, bool)),this, SLOT(menuItemInvoked(QString,bool)));
     connect(m_menuInterface, SIGNAL(MenuUnregistered()), this, SLOT(handleMenuClosed()));
     connect(m_menuInterface, SIGNAL(MenuUnregistered()), m_menuInterface, SLOT(deleteLater()));
+    connect(signalManager, SIGNAL(uninstallActionChanged(int)), this, SLOT(handleUninstallAction(int)));
 }
 
 void MenuController::menuItemInvoked(QString itemId, bool flag){
@@ -210,7 +210,7 @@ void MenuController::menuItemInvoked(QString itemId, bool flag){
         handleToStartup(m_appKeyRightClicked);
         break;
     case 4:
-        handleUninstall(m_appKeyRightClicked);
+        emit signalManager->appUninstalled(m_appKeyRightClicked);
         break;
     default:
         break;
@@ -317,16 +317,6 @@ void MenuController::handleToStartup(QString appKey){
     }
 }
 
-void MenuController::handleUninstall(QString appKey){
-    qDebug() << "handleUninstall" << appKey;
-    ConfirmUninstallDialog d;
-    d.setWindowFlags(Qt::SplashScreen);
-    QString message = tr("Are you sure to uninstall %1").arg(appKey);
-    d.setMessage(message);
-    connect(&d, SIGNAL(buttonClicked(int)), this, SLOT(handleUninstallAction(int)));
-    d.exec();
-}
-
 void MenuController::handleUninstallAction(int id){
     switch (id) {
     case 0:
@@ -363,6 +353,7 @@ void MenuController::handleUninstallSuccess(const QString &appKey){
 //                                    QVariantMap(),
 //                                   0);
     QString command = QString("notify-send \"%1\" -a %2 -t 5 -i \"%3\"").arg(message , appKey, cachePath);
+
     QProcess::execute(command);
     qDebug() << "handleUninstallSuccess" << appKey << cachePath << command;
     emit signalManager->itemDeleted(appKey);

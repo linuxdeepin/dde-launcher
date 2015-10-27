@@ -64,13 +64,13 @@ QString MenuController::createMenuContent(QString appKey){
     QJsonObject seperatorObj1 = createSeperator();
     QJsonObject desktopObj;
     if (m_isItemOnDesktop){
-        desktopObj = createMenuItem(1, tr("Remove from desktop(_F)"));
+        desktopObj = createMenuItem(1, tr("Remove from desktop"));
     }else{
         desktopObj = createMenuItem(1, tr("Send to desktop(_E)"));
     }
     QJsonObject dockObj;
     if (m_isItemOnDock){
-        dockObj = createMenuItem(2, tr("Remove from dock(_F)"));
+        dockObj = createMenuItem(2, tr("Remove from dock"));
     }else{
         dockObj = createMenuItem(2, tr("Send to dock(_C)"));
     }
@@ -342,8 +342,7 @@ void MenuController::startUnistall(QString appKey){
 
 void MenuController::handleUninstallSuccess(const QString &appKey){
     QString cachePath = joinPath(getThumbnailsPath(), QString("%1.png").arg(appKey));
-    QString summary = "";
-    QString message = QString("uninstall %1 successfully!").arg(appKey);
+    QString message = tr("Uninstall %1 successfully!").arg(appKey);
 //    m_notifcationInterface->Notify("dde-launcher",
 //                                   0,
 //                                   cachePath,

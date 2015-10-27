@@ -48,6 +48,14 @@
     </message>
 </context>
 <context>
+    <name>LauncherApp</name>
+    <message>
+        <location filename="../app/launcherapp.cpp" line="36"/>
+        <source>Are you sure to uninstall %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MenuController</name>
     <message>
         <location filename="../controller/menucontroller.cpp" line="63"/>
@@ -56,7 +64,7 @@
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="67"/>
-        <source>Remove from desktop(_F)</source>
+        <source>Remove from desktop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -66,7 +74,7 @@
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="73"/>
-        <source>Remove from dock(_F)</source>
+        <source>Remove from dock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -90,8 +98,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="318"/>
-        <source>Are you sure to uninstall %1</source>
+        <location filename="../controller/menucontroller.cpp" line="345"/>
+        <source>Uninstall %1 successfully!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

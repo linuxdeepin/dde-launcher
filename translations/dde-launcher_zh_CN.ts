@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>ConfirmUninstallDialog</name>
     <message>
@@ -46,6 +48,14 @@
     </message>
 </context>
 <context>
+    <name>LauncherApp</name>
+    <message>
+        <location filename="../app/launcherapp.cpp" line="36"/>
+        <source>Are you sure to uninstall %1</source>
+        <translation>您确定要卸载%1</translation>
+    </message>
+</context>
+<context>
     <name>MenuController</name>
     <message>
         <location filename="../controller/menucontroller.cpp" line="63"/>
@@ -53,19 +63,19 @@
         <translation>打开(_O)</translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="67"/>
-        <source>Remove from desktop(_F)</source>
-        <translation>从桌面上移除(_F)</translation>
-    </message>
-    <message>
         <location filename="../controller/menucontroller.cpp" line="69"/>
         <source>Send to desktop(_E)</source>
         <translation>发送到桌面(_E)</translation>
     </message>
     <message>
+        <location filename="../controller/menucontroller.cpp" line="67"/>
+        <source>Remove from desktop</source>
+        <translation>从桌面上移除</translation>
+    </message>
+    <message>
         <location filename="../controller/menucontroller.cpp" line="73"/>
-        <source>Remove from dock(_F)</source>
-        <translation>从任务栏上移除(_F)</translation>
+        <source>Remove from dock</source>
+        <translation>从任务栏上移除</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="75"/>
@@ -88,9 +98,9 @@
         <translation>卸载</translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="318"/>
-        <source>Are you sure to uninstall %1</source>
-        <translation>您确定要卸载%1</translation>
+        <location filename="../controller/menucontroller.cpp" line="345"/>
+        <source>Uninstall %1 successfully!</source>
+        <translation>卸载%1成功!</translation>
     </message>
 </context>
 <context>

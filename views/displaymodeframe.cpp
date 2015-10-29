@@ -68,6 +68,10 @@ void DisplayModeFrame::initConnect(){
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(setViewMode(int)));
 }
 
+BaseFrame* DisplayModeFrame::getButtonFrame(){
+    return m_buttonFrame;
+}
+
 void DisplayModeFrame::toggleButtonFrameByViewButton(bool flag){
 
     m_viewModeButton->setHoverIconByMode(m_viewMode);

@@ -23,6 +23,8 @@ public:
     int getCategoryDisplayMode();
     int getSortMode();
 
+    BaseFrame* getButtonFrame();
+
 
 signals:
     void categoryModeChanged(int mode);

@@ -10,6 +10,7 @@
 #include "searchlineedit.h"
 #include "categorytablewidget.h"
 #include "background/backgroundlabel.h"
+#include "baseframe.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QStackedLayout>
@@ -143,8 +144,10 @@ void LauncherFrame::showNavigationBarByMode(){
 void LauncherFrame::mouseReleaseEvent(QMouseEvent *event){
     qDebug() << event;
     if (event->button() == Qt::LeftButton){
-        emit signalManager->mouseReleased();
-        Hide();
+        if (!m_displayModeFrame->getButtonFrame()->isVisible()){
+            emit signalManager->mouseReleased();
+            Hide();
+        }
     }
     QFrame::mouseReleaseEvent(event);
 }

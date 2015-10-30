@@ -50,7 +50,7 @@ void NavigationButtonFrame::initByMode(int mode){
             button->hide();
         }
     }
-    buttonLayout->setSpacing(20);
+    buttonLayout->setSpacing(24);
     buttonLayout->setContentsMargins(0, 0, 0, 0);
     buttonFrame->setLayout(buttonLayout);
 

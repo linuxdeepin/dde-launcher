@@ -12,7 +12,7 @@ public:
 
     void gtkInit();
 
-    static QPixmap getIconPixmap(QString iconPath, int width=48, int height=48);
+    static QPixmap getIconPixmap(QString iconPath, int width=64, int height=64);
     static QString getThemeIconPath(QString iconName);
 
 signals:

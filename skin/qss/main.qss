@@ -30,7 +30,8 @@ QLabel#Name {
     background-color: rgba(0, 0, 0, 0);
 /*    border: 2px solid rgba(255, 255, 255, 255);
     border-radius: 4px;
-*/    color:white
+*/    color:white;
+    font-size: 12px;
 }
 
 QFrame#Border{

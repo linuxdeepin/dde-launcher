@@ -32,15 +32,17 @@ void AppItem::initUI(){
     m_nameLabel->setObjectName("Name");
     m_nameLabel->setAlignment(Qt::AlignTop| Qt::AlignHCenter);
 
-    m_iconLabel->setFixedSize(48, 48);
-    m_nameLabel->setFixedSize(100, 42);
+    m_iconLabel->setFixedSize(64, 64);
+    m_nameLabel->setFixedSize(100, 34);
 
     m_borderButton = new BorderButton(this);
     m_borderButton->setFixedSize(144, 144);
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->addSpacing(14);
     mainLayout->addWidget(m_iconLabel, 0, Qt::AlignHCenter);
+    mainLayout->addSpacing(8);
     mainLayout->addWidget(m_nameLabel, 0, Qt::AlignHCenter);
-    mainLayout->setSpacing(10);
+    mainLayout->setSpacing(0);
     mainLayout->setContentsMargins(10, 10, 10, 10);
     m_borderButton->setLayout(mainLayout);
 
@@ -92,6 +94,7 @@ void AppItem::setAppIcon(QPixmap icon){
 //        m_iconLabel->setPixmap(m_appIcon.scaled(m_iconLabel->size()));
          m_iconLabel->setPixmap(m_appIcon);
          QString cachePath = joinPath(getThumbnailsPath(), QString("%1.png").arg(m_appKey));
+         qDebug() << m_appIcon.size() << cachePath << QFileInfo(cachePath).exists();
          if (!QFileInfo(cachePath).exists())
             m_appIcon.save(cachePath);
      }

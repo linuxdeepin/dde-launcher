@@ -3,6 +3,7 @@
 #include <QPainter>
 #include <QSvgRenderer>
 #include <QPixmap>
+#include <QDebug>
 
 #undef signals
 extern "C" {
@@ -35,10 +36,11 @@ QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
     } else {
         // try to read the iconPath as a icon name.
         QString path = getThemeIconPath(iconPath);
+        qDebug() << path;
         if (path.endsWith(".svg")) {
             QSvgRenderer renderer(path);
             pixmap.fill(Qt::transparent);
-
+            pixmap.scaled(64, 64);
             QPainter painter;
             painter.begin(&pixmap);
 
@@ -60,7 +62,7 @@ QString ThemeAppIcon::getThemeIconPath(QString iconName)
 
     GtkIconTheme* theme = gtk_icon_theme_get_default();
 
-    GtkIconInfo* info = gtk_icon_theme_lookup_icon(theme, name, 48, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+    GtkIconInfo* info = gtk_icon_theme_lookup_icon(theme, name, 64, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
     if (info) {
         char* path = g_strdup(gtk_icon_info_get_filename(info));

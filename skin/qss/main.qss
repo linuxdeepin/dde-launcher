@@ -1,5 +1,5 @@
 QFrame#LauncherFrame{
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(33, 50, 70, 255), stop:0.5 rgba(70, 255, 255, 255), stop:1 rgba(255, 255, 255, 20));
+    background-color: rgba(0, 0, 0, 0);
 }
 
 QLabel#MaskLabel{

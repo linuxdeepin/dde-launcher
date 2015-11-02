@@ -94,7 +94,7 @@ void AppItem::setAppIcon(QPixmap icon){
 //        m_iconLabel->setPixmap(m_appIcon.scaled(m_iconLabel->size()));
          m_iconLabel->setPixmap(m_appIcon);
          QString cachePath = joinPath(getThumbnailsPath(), QString("%1.png").arg(m_appKey));
-         qDebug() << m_appIcon.size() << cachePath << QFileInfo(cachePath).exists();
+//         qDebug() << m_appIcon.size() << cachePath << QFileInfo(cachePath).exists();
          if (!QFileInfo(cachePath).exists())
             m_appIcon.save(cachePath);
      }

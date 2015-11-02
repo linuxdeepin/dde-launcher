@@ -7,6 +7,8 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QDateTime>
+#include <QDesktopWidget>
+#include <QApplication>
 #include <QDebug>
 
 QT_BEGIN_NAMESPACE
@@ -69,15 +71,33 @@ void SystemBackground::updateBackgroud(){
         m_backgroundPixmap = QPixmap(m_cacheUrl);
     }else{
         m_backgroundPixmap = QPixmap(m_backgroundUrl);
-        QPixmap tempPixmap = m_backgroundPixmap.scaled(m_backgroundSize);
+        int refWidth = qApp->desktop()->geometry().width();
+        int refHeight = qApp->desktop()->geometry().height();
+        int imgWidth = m_backgroundPixmap.size().width();
+        int imgHeight = m_backgroundPixmap.size().height();
+        QRect r = getPreferScaleClipRect(refWidth, refHeight, imgWidth, imgHeight);
+        QPixmap blurPixmap(QSize(r.width(), r.height()));
+        QPixmap tempPixmap(QSize(r.width() + 40, r.height() + 40));
+        tempPixmap.fill(QColor(0, 0, 0, 0));
+
         if (m_isBlur){
-            QPainter painter;
-            painter.begin(&tempPixmap);
+            QPainter painter1;
+            painter1.begin(&tempPixmap);
+            painter1.drawImage(20, 20, m_backgroundPixmap.toImage(), r.x(), r.y(), r.width(), r.height());
+            painter1.end();
+
+            QPainter painter2;
+            painter2.begin(&tempPixmap);
             QImage backgroundImage = tempPixmap.toImage();
-            qt_blurImage(&painter, backgroundImage, 100, false, false);
-            painter.end();
+            qt_blurImage(&painter2, backgroundImage, 100, false, false);
+            painter2.end();
+
+            QPainter painter3;
+            painter3.begin(&blurPixmap);
+            painter3.drawImage(0, 0, tempPixmap.toImage(), 20, 20, r.width(), r.height());
+            painter3.end();
         }
-        m_backgroundPixmap = tempPixmap;
+        m_backgroundPixmap = blurPixmap.scaled(m_backgroundSize);
         m_backgroundPixmap.save(m_cacheUrl);
     }
     emit backgroundChanged(m_backgroundPixmap);
@@ -89,6 +109,24 @@ void SystemBackground::handleBackgroundChanged(const QString &key){
         qDebug() << "background changed: " << m_backgroundUrl;
         updateBackgroud();
     }
+}
+
+QRect SystemBackground::getPreferScaleClipRect(int refWidth, int refHeight, int imgWidth, int imgHeight){
+    if (refWidth*refHeight == 0 || imgWidth * imgHeight == 0){
+        return QRect(0, 0, 0, 0);
+    }
+    float scale = float(refWidth) / float(refHeight);
+    int w = imgWidth;
+    int h = int(float(w) / scale);
+    int x = 0, y = 0;
+    if (h < imgHeight){
+        y = (imgHeight - h) / 2;
+    }else{
+        h = imgHeight;
+        w = int(float(h) * scale);
+        x = (imgWidth - w) / 2;
+    }
+    return QRect(x, y, w, h);
 }
 
 QString SystemBackground::joinPath(const QString& path, const QString& fileName){

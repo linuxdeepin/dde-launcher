@@ -139,7 +139,7 @@ void DBusController::getCategoryInfoList(){
                 }
                 item.items = appKeys;
 
-                qDebug() << appKeys;
+//                qDebug() << appKeys;
             }
             m_categoryAppNameSortedInfoList.append(item);
         }

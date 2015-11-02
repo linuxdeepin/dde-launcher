@@ -19,6 +19,7 @@ public:
     QString joinPath(const QString& path, const QString& fileName);
     QString getBackgroundsPath();
     QString getCacheUrl();
+    QRect getPreferScaleClipRect(int refWidth, int refHeight, int width, int height);
 signals:
     void backgroundChanged(const QPixmap& backgroundPixmap);
 

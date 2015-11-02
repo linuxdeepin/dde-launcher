@@ -60,7 +60,9 @@ void NavigationButtonFrame::initByMode(int mode){
     layout->addStretch();
     setLayout(layout);
 
-    addTextShadow();
+    if (mode == 1){
+        addTextShadow();
+    }
 }
 
 void NavigationButtonFrame::hideButtons(const QStringList &keys){

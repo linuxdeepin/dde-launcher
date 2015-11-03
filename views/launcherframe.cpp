@@ -169,11 +169,11 @@ void LauncherFrame::keyPressEvent(QKeyEvent *event){
         emit signalManager->keyDirectionPressed(Qt::Key_Down);
     }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Left){
         emit signalManager->keyDirectionPressed(Qt::Key_Left);
-    }else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_F){
+    }else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_B){
         emit signalManager->keyDirectionPressed(Qt::Key_Left);
     }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Right){
         emit signalManager->keyDirectionPressed(Qt::Key_Right);
-    }else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_B){
+    }else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_F){
         emit signalManager->keyDirectionPressed(Qt::Key_Right);
     }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Return){
         qDebug() << "Enter Pressed";

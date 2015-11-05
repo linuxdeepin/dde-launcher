@@ -14,7 +14,7 @@ BaseTableWidget::BaseTableWidget(QWidget *parent) : QTableWidget(parent)
     setSelectionBehavior(SelectItems);
     setSelectionMode(NoSelection);
     setDragDropMode(NoDragDrop);
-    setVerticalScrollMode(ScrollPerItem);
+    setVerticalScrollMode(ScrollPerPixel);
     setEditTriggers(NoEditTriggers);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

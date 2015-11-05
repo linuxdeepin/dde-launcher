@@ -19,10 +19,8 @@ CategoryTableWidget::CategoryTableWidget(QWidget *parent) : BaseTableWidget(pare
     setObjectName("CategoryTableWidget");
     initConnect();
 
-    QEasingCurve cubic(QEasingCurve::BezierSpline);
-    cubic.addCubicBezierSegment(QPointF(0.28, 0.9), QPointF(0.7, 0.1), QPointF(1.0, 1.0));
     m_scrollAnimation = new QPropertyAnimation;
-    m_scrollAnimation->setEasingCurve(cubic);
+    m_scrollAnimation->setEasingCurve(QEasingCurve::InCubic);
     m_scrollAnimation->setTargetObject(verticalScrollBar());
     m_scrollAnimation->setPropertyName("value");
     m_scrollAnimation->setDuration(200);
@@ -181,18 +179,15 @@ void CategoryTableWidget::removeItem(QString appKey){
 
 void CategoryTableWidget::scrollToCategory(QString key){
     int start = verticalScrollBar()->value();
-    int end = start;
+    int end = 0;
     if (m_categoryItems.contains(key)){
         for (int i=0; i< rowCount() ; i++){
             if (m_categoryItems.value(key) == static_cast<CategoryItem*>(cellWidget(i, 0))){
-                end = i;
+                break;
+            } else {
+                end += rowHeight(i);
             }
         }
-    }
-    if (start > end){
-        start += 1;
-    }else{
-        end += 1;
     }
 
     m_scrollAnimation->setStartValue(start);
@@ -201,22 +196,30 @@ void CategoryTableWidget::scrollToCategory(QString key){
 }
 
 void CategoryTableWidget::handleScrollBarValueChanged(int value){
-    while (true) {
-        if (m_categoryItems.values().contains(static_cast<CategoryItem*>(cellWidget(value, 0)))){
-            foreach (QString key, m_categoryItems.keys()) {
-                if (m_categoryItems.value(key)  == cellWidget(value, 0)){
-                    qDebug() << key << m_scrollAnimation->state();
-                    if (m_scrollAnimation->state() != QPropertyAnimation::Running){
-                        emit signalManager->checkNavigationButtonByKey(key);
-                    }
-                    break;
-                }
+    if (m_scrollAnimation->state() == QPropertyAnimation::Running) return;
+
+    int counter = 0;
+    int targetRow = 0;
+
+    // TODO: 50 is not very precise here, the value should be the real height of
+    // the others category.
+    if (qAbs(value - verticalScrollBar()->maximum()) < 50) {
+        emit signalManager->checkNavigationButtonByKey("others");
+        return;
+    } else {
+        for (int i=0; i< rowCount() ; i++){
+            counter += rowHeight(i);
+
+            if (value <= counter) {
+                targetRow = qMax(0, i - 1);
+                break;
             }
-            break;
         }
-        value -= 1;
-        if (value < 0){
-            break;
+    }
+
+    foreach (QString key, m_categoryItems.keys()) {
+        if (m_categoryItems.value(key)  == cellWidget(targetRow, 0)){
+            emit signalManager->checkNavigationButtonByKey(key);
         }
     }
 }
@@ -260,16 +263,18 @@ void CategoryTableWidget::hideAutoStartLabel(QString appKey){
 }
 
 void CategoryTableWidget::wheelEvent(QWheelEvent *event){
+    int scrollStep = 40;
+
     int value = verticalScrollBar()->value();
     int miniimun = verticalScrollBar()->minimum();
     int maximum = verticalScrollBar()->maximum();
     if (event->angleDelta().y() > 0){
         if (value >= miniimun){
-            verticalScrollBar()->setValue(value - 1);
+            verticalScrollBar()->setValue(value - scrollStep);
         }
     }else{
         if (value < maximum){
-            verticalScrollBar()->setValue(value + 1);
+            verticalScrollBar()->setValue(value + scrollStep);
         }
     }
 }

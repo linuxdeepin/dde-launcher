@@ -16,7 +16,6 @@
 
 AppTableWidget::AppTableWidget(QWidget *parent) : BaseTableWidget(parent)
 {
-    setVerticalScrollMode(ScrollPerPixel);
     setObjectName("AppTableWidget");
     initConnect();
 }

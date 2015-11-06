@@ -63,38 +63,55 @@ QString SystemBackground::getCacheUrl(){
 void SystemBackground::updateBackgroud(){
     QString lastModifiedtime = QString::number(QFileInfo(m_backgroundUrl).lastModified().toMSecsSinceEpoch());
     m_cacheUrl = joinPath(getBackgroundsPath(),
-                                QString("%1_%2.png").arg(
-                                    QFileInfo(m_backgroundUrl).baseName(), lastModifiedtime));
+                          QString("%1_%2.png").arg(
+                              QFileInfo(m_backgroundUrl).baseName(), lastModifiedtime));
 
     if (QFileInfo(m_cacheUrl).exists()){
         qDebug() << m_cacheUrl;
         m_backgroundPixmap = QPixmap(m_cacheUrl);
     }else{
         m_backgroundPixmap = QPixmap(m_backgroundUrl);
-        int refWidth = qApp->desktop()->geometry().width();
-        int refHeight = qApp->desktop()->geometry().height();
+
+        int sideEffectInnerGlowRadius = 100;
+        int blurRadius = 100;
+        int refWidth = m_backgroundSize.width();
+        int refHeight = m_backgroundSize.height();
         int imgWidth = m_backgroundPixmap.size().width();
         int imgHeight = m_backgroundPixmap.size().height();
+
         QRect r = getPreferScaleClipRect(refWidth, refHeight, imgWidth, imgHeight);
+
         QPixmap blurPixmap(QSize(r.width(), r.height()));
-        QPixmap tempPixmap(QSize(r.width() + 40, r.height() + 40));
-        tempPixmap.fill(QColor(0, 0, 0, 0));
+        QPixmap tempPixmap(QSize(r.width() + sideEffectInnerGlowRadius,
+                                 r.height() + sideEffectInnerGlowRadius));
+        blurPixmap.fill(Qt::transparent);
+        tempPixmap.fill(Qt::transparent);
 
         if (m_isBlur){
             QPainter painter1;
             painter1.begin(&tempPixmap);
-            painter1.drawImage(20, 20, m_backgroundPixmap.toImage(), r.x(), r.y(), r.width(), r.height());
+            // qt_blurImage has problems processing the border part of images.
+            // We can first fill the background with the scaled one, providing
+            // some clues to qt_blurImage
+            painter1.drawPixmap(0, 0, m_backgroundPixmap.scaled(tempPixmap.size()));
+            painter1.drawPixmap(sideEffectInnerGlowRadius / 2,
+                                sideEffectInnerGlowRadius / 2,
+                                m_backgroundPixmap,
+                                r.x(), r.y(), r.width(), r.height());
             painter1.end();
 
             QPainter painter2;
             painter2.begin(&tempPixmap);
             QImage backgroundImage = tempPixmap.toImage();
-            qt_blurImage(&painter2, backgroundImage, 100, false, false);
+            qt_blurImage(&painter2, backgroundImage, blurRadius, false, false);
             painter2.end();
 
             QPainter painter3;
             painter3.begin(&blurPixmap);
-            painter3.drawImage(0, 0, tempPixmap.toImage(), 20, 20, r.width(), r.height());
+            painter3.drawPixmap(0, 0, tempPixmap,
+                                sideEffectInnerGlowRadius / 2,
+                                sideEffectInnerGlowRadius / 2,
+                                r.width(), r.height());
             painter3.end();
         }
         m_backgroundPixmap = blurPixmap.scaled(m_backgroundSize);

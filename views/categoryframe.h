@@ -3,6 +3,7 @@
 
 #include <QFrame>
 
+class QShowEvent;
 class NavigationBar;
 class CategoryTableWidget;
 
@@ -16,9 +17,15 @@ public:
     void initUI(int leftMargin, int rightMargin, int column, int itemWidth, int gridWidth);
     NavigationBar* getNavigationBar();
     CategoryTableWidget* getCategoryTabelWidget();
-signals:
 
-public slots:
+    QRect topGradientRect() const;
+    QRect bottomGradientRect() const;
+
+signals:
+    void showed();
+
+protected:
+    void showEvent(QShowEvent *);
 
 private:
     NavigationBar* m_navigationBar;

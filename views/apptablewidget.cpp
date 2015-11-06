@@ -11,6 +11,7 @@
 
 #include <QTableWidgetItem>
 #include <QWheelEvent>
+#include <QShowEvent>
 #include <QScrollBar>
 
 
@@ -156,6 +157,12 @@ void AppTableWidget::wheelEvent(QWheelEvent *event){
             verticalScrollBar()->setValue(value + 40);
         }
     }
+}
+
+void AppTableWidget::showEvent(QShowEvent * event)
+{
+    emit showed();
+    BaseTableWidget::showEvent(event);
 }
 
 void AppTableWidget::openCheckedApp(){

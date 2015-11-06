@@ -2,13 +2,16 @@
 
 #include "categorytablewidget.h"
 #include "navigationbar.h"
+#include "app/global.h"
 #include <QHBoxLayout>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QShowEvent>
 
 const int BottomMargin = 70;
 
-CategoryFrame::CategoryFrame(QWidget *parent) : QFrame(parent)
+CategoryFrame::CategoryFrame(QWidget *parent) :
+    QFrame(parent)
 {
 
 }
@@ -50,3 +53,29 @@ CategoryFrame::~CategoryFrame()
 
 }
 
+void CategoryFrame::showEvent(QShowEvent * event)
+{
+    emit showed();
+    QFrame::showEvent(event);
+}
+
+QRect CategoryFrame::topGradientRect() const
+{
+    QPoint topLeft = m_categoryTableWidget->mapTo(parentWidget(),
+                                                  QPoint(0, 0));
+    QSize size(m_categoryTableWidget->width(), TopBottomGradientHeight);
+
+    return QRect(topLeft, size);
+}
+
+QRect CategoryFrame::bottomGradientRect() const
+{
+    QPoint bottomLeft = m_categoryTableWidget->mapTo(parentWidget(),
+                                                     m_categoryTableWidget->rect().bottomLeft());
+    QSize size(m_categoryTableWidget->width(), TopBottomGradientHeight);
+    // FIXME: workaround here, to fix the bug that the bottom gradient
+    // if one pixel above the bottom of m_appTableWidget.
+    QPoint topLeft(bottomLeft.x(), bottomLeft.y() + 1 - size.height());
+
+    return QRect(topLeft, size);
+}

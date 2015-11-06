@@ -13,6 +13,7 @@ class QPushButton;
 class QCloseEvent;
 class SearchLineEdit;
 class BackgroundLabel;
+class GradientLabel;
 
 class LauncherFrame : public QFrame
 {
@@ -43,14 +44,11 @@ public slots:
     void Toggle();
     void handleSearch(const QString& text);
     void hideSearchEdit();
-
     void handleAppOpened(const QString& appUrl);
-
     void uninstallUpdateTable(QString appKey);
-
     void setRightclicked(bool flag);
-
     void handleScreenGeometryChanged();
+    void showGradients() const;
 
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
@@ -74,12 +72,11 @@ private:
     DisplayModeFrame* m_displayModeFrame;
     CategoryFrame* m_categoryFrame;
     AppTableWidget* m_appTableWidget;
-
     QPushButton* m_clearCheckedButton;
-
     SearchLineEdit* m_searchLineEdit;
-
     BackgroundLabel* m_backgroundLabel;
+    GradientLabel * m_topGradient;
+    GradientLabel * m_bottomGradient;
 };
 
 #endif // LAUNCHERFRAME_H

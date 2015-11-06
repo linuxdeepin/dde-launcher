@@ -21,6 +21,7 @@
 #include <QCloseEvent>
 #include <QDBusConnection>
 #include <QGraphicsDropShadowEffect>
+#include <views/gradientlabel.h>
 
 
 LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
@@ -67,6 +68,10 @@ void LauncherFrame::initUI(){
 
     m_searchLineEdit = new SearchLineEdit(this);
     m_searchLineEdit->hide();
+
+    m_topGradient = new GradientLabel(this);
+    m_bottomGradient = new GradientLabel(this);
+    m_bottomGradient->setDirection(GradientLabel::BottomToTop);
 }
 
 void LauncherFrame::computerGrid(int minimumLeftMargin, int minimumTopMargin, int miniSpacing, int itemWidth){
@@ -101,6 +106,8 @@ void LauncherFrame::initConnect(){
     connect(signalManager, SIGNAL(rightClickedChanged(bool)), this, SLOT(setRightclicked(bool)));
     connect(signalManager, SIGNAL(screenGeometryChanged()), this , SLOT(handleScreenGeometryChanged()));
     connect(qApp, SIGNAL(aboutToQuit()), this, SIGNAL(Closed()));
+    connect(m_categoryFrame, SIGNAL(showed()), this, SLOT(showGradients()));
+    connect(m_appTableWidget, SIGNAL(showed()), this, SLOT(showGradients()));
 }
 
 
@@ -299,3 +306,38 @@ LauncherFrame::~LauncherFrame()
     qDebug() << "~LauncherFrame";
 }
 
+void LauncherFrame::showGradients() const
+{
+    if (m_categoryFrame->isVisible()) {
+        QRect top = m_categoryFrame->topGradientRect();
+        m_topGradient->setPixmap(m_backgroundLabel->pixmap()->copy(top));
+        m_topGradient->resize(top.size());
+        m_topGradient->move(top.topLeft());
+        m_topGradient->raise();
+
+        QRect bottom = m_categoryFrame->bottomGradientRect();
+        m_bottomGradient->setPixmap(m_backgroundLabel->pixmap()->copy(bottom));
+        m_bottomGradient->resize(bottom.size());
+        m_bottomGradient->move(bottom.topLeft());
+        m_bottomGradient->raise();
+    } else if (m_appTableWidget->isVisible()) {
+        QSize size(m_appTableWidget->width(), TopBottomGradientHeight);
+        QPoint topLeft = m_appTableWidget->mapTo(this, QPoint(0, 0));
+        QRect top(topLeft, size);
+
+        m_topGradient->setPixmap(m_backgroundLabel->pixmap()->copy(top));
+        m_topGradient->resize(top.size());
+        m_topGradient->move(top.topLeft());
+        m_topGradient->raise();
+
+        QPoint bottomLeft = m_appTableWidget->mapTo(this, m_appTableWidget->rect().bottomLeft());
+        // FIXME: workaround here, to fix the bug that the bottom gradient
+        // if one pixel above the bottom of m_appTableWidget.
+        QRect bottom(bottomLeft.x(), bottomLeft.y() + 1 - size.height(), size.width(), size.height());
+
+        m_bottomGradient->setPixmap(m_backgroundLabel->pixmap()->copy(bottom));
+        m_bottomGradient->resize(bottom.size());
+        m_bottomGradient->move(bottom.topLeft());
+        m_bottomGradient->raise();
+    }
+}

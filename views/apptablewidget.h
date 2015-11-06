@@ -6,6 +6,7 @@
 #include "dbusinterface/dbustype.h"
 
 class QWheelEvent;
+class ShowEvent;
 class AppItem;
 
 class AppTableWidget : public BaseTableWidget
@@ -19,6 +20,7 @@ public:
     void setGridParameter(int column, int girdWidth, int itemWidth);
 
 signals:
+    void showed();
 
 public slots:
     void addItem(ItemInfo itemInfo, int index);
@@ -43,7 +45,8 @@ public slots:
     void hideAutoStartLabel(QString appKey);
 
 protected:
-    void wheelEvent(QWheelEvent* event);
+    void wheelEvent(QWheelEvent *);
+    void showEvent(QShowEvent *);
 
 private:
     int m_column;

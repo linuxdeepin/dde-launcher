@@ -100,6 +100,11 @@ bool BorderButton::isHighlight() const {
 }
 
 void BorderButton::setHighlight(bool isHightlight){
+    // mutually exclusive with other BorderButtons.
+    if (isHightlight) {
+        emit signalManager->highlightChanged(false);
+    }
+
     m_isHighlight = isHightlight;
     update();
 }

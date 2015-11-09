@@ -43,6 +43,8 @@ void CategoryTableWidget::initConnect(){
             this, SLOT(hideAutoStartLabel(QString)));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(handleScrollBarValueChanged(int)));
+    connect(this, SIGNAL(currentAppItemChanged(QString)),
+            this, SLOT(handleCurrentAppItemChanged(QString)));
 }
 
 void CategoryTableWidget::setGridParameter(int column, int girdWidth, int itemWidth){
@@ -175,6 +177,15 @@ void CategoryTableWidget::addItems(const CategoryInfoList &categoryInfoList){
 
 void CategoryTableWidget::removeItem(QString appKey){
 
+}
+
+void CategoryTableWidget::handleCurrentAppItemChanged(QString appKey){
+    foreach (CategoryInfo info, m_categoryInfoList) {
+        if (info.key != "all" && info.items.contains(appKey)){
+            emit signalManager->checkNavigationButtonByKey(info.key);
+            break;
+        }
+    }
 }
 
 void CategoryTableWidget::scrollToCategory(QString key){

@@ -124,6 +124,7 @@ void BaseTableWidget::handleKeyDownPressed(){
                 if (cellWidget(i, j)){
                     QString className = QString(cellWidget(i, j)->metaObject()->className());
                     if (className == "AppItem"){
+                        qDebug() << i << j;
                         hightlightItem(i, j);
                         highlighted = true;
                         break;
@@ -222,7 +223,7 @@ void BaseTableWidget::hightlightItem(int row, int column){
         if (row == 1){
             verticalScrollBar()->setValue(0);
         }else{
-            verticalScrollBar()->setValue(row);
+            scrollToItem(item(row, column), QAbstractItemView::PositionAtTop);
         }
     }
 }
@@ -232,6 +233,7 @@ void BaseTableWidget::setHighLight(int hRow, int hColumn){
     appItem->getBorderButton()->setHighlight(true);
     m_highlightRow = hRow;
     m_highlightColumn = hColumn;
+    emit currentAppItemChanged(appItem->getAppKey());
 }
 
 int BaseTableWidget::getHighLightRow() const {

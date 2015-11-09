@@ -23,6 +23,7 @@ public:
     int getHighLightColumn() const;
 
 signals:
+    void currentAppItemChanged(QString appKey);
 
 public slots:
     void clearHighlight();

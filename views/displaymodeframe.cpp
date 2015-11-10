@@ -152,11 +152,11 @@ void DisplayModeFrame::setViewMode(int mode){
 }
 
 void DisplayModeFrame::addTextShadow(){
-    QGraphicsDropShadowEffect *textShadow = new QGraphicsDropShadowEffect;
+    QGraphicsDropShadowEffect *textShadow = new QGraphicsDropShadowEffect(m_buttonFrame);
     textShadow->setBlurRadius(4);
     textShadow->setColor(QColor(0, 0, 0, 128));
     textShadow->setOffset(0, 2);
-    setGraphicsEffect(textShadow);
+    m_buttonFrame->setGraphicsEffect(textShadow);
 }
 
 

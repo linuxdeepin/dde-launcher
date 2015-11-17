@@ -202,7 +202,12 @@ void LauncherFrame::keyPressEvent(QKeyEvent *event){
         }
         m_searchText.append(event->text());
         emit signalManager->startSearched(m_searchText);
+    } else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Tab) {
+        emit signalManager->keyDirectionPressed(Qt::Key_Right);
+    } else if ((event->modifiers() & Qt::ShiftModifier) && event->key() == Qt::Key_Backtab) {
+        emit signalManager->keyDirectionPressed(Qt::Key_Left);
     }
+
     QFrame::keyPressEvent(event);
 }
 

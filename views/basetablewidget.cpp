@@ -157,7 +157,7 @@ void BaseTableWidget::handleKeyLeftPressed(){
                 }
             }
         }
-        for (int i = (m_highlightRow -1); i >0; i--){
+        for (int i = (m_highlightRow -1); i >=0; i--){
             for (int j= (columnCount() - 1); j > 0; j--){
                 if (cellWidget(i, j)){
                     QString className = QString(cellWidget(i, j)->metaObject()->className());

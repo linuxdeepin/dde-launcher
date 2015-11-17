@@ -254,14 +254,14 @@ void LauncherFrame::Hide(){
     m_searchLineEdit->hide();
     m_searchLineEdit->clearFocus();
     m_searchLineEdit->setText("");
-    setFocus();
+//    setFocus();
     emit signalManager->launcheRefreshed();
 }
 
 void LauncherFrame::Show(){
     m_rightclicked = false;
     show();
-    setFocus();
+//    setFocus();
     raise();
     activateWindow();
     emit signalManager->firstButtonChecked();
@@ -292,7 +292,7 @@ void LauncherFrame::hideSearchEdit(){
     if(m_searchLineEdit->isVisible()){
         m_searchLineEdit->hide();
         m_searchLineEdit->clearFocus();
-        setFocus();
+//        setFocus();
         emit signalManager->launcheRefreshed();
     }
 }

@@ -63,8 +63,10 @@ QString SystemBackground::getCacheUrl(){
 void SystemBackground::updateBackgroud(){
     QString lastModifiedtime = QString::number(QFileInfo(m_backgroundUrl).lastModified().toMSecsSinceEpoch());
     m_cacheUrl = joinPath(getBackgroundsPath(),
-                          QString("%1_%2.png").arg(
-                              QFileInfo(m_backgroundUrl).baseName(), lastModifiedtime));
+                          QString("%1_%2_%3_%4.png").arg(
+                              QFileInfo(m_backgroundUrl).baseName(), lastModifiedtime,
+                              QString::number(m_backgroundSize.width()),
+                              QString::number(m_backgroundSize.height())));
 
     if (QFileInfo(m_cacheUrl).exists()){
         qDebug() << m_cacheUrl;

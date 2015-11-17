@@ -68,6 +68,7 @@ void DBusController::initConnect(){
     connect(signalManager, SIGNAL(sortedModeChanged(int)), this, SLOT(setSortMethod(int)));
     connect(signalManager, SIGNAL(categoryModeChanged(int)), this, SLOT(setCategoryDisplayMode(int)));
     connect(m_displayInterface, SIGNAL(PrimaryRectChanged()), signalManager, SIGNAL(screenGeometryChanged()));
+    connect(m_displayInterface, SIGNAL(PrimaryChanged()), signalManager, SIGNAL(screenGeometryChanged()));
 }
 
 void DBusController::updateAppTable(QString appKey){
@@ -92,6 +93,10 @@ LauncherInterface* DBusController::getLauncherInterface(){
 
 StartManagerInterface* DBusController::getStartManagerInterface(){
     return m_startManagerInterface;
+}
+
+DisplayInterface* DBusController::getDisplayInterface(){
+    return m_displayInterface;
 }
 
 void DBusController::getAutoStartList(){

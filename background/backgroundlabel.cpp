@@ -8,10 +8,11 @@ BackgroundLabel::BackgroundLabel(bool isBlur, QWidget* parent)
     : QLabel(parent)
 {
     setWindowFlags(Qt::FramelessWindowHint);
-    setGeometry(qApp->desktop()->screenGeometry());
     if (parent){
+        setFixedSize(parent->size());
         m_systemBackground = new SystemBackground(parent->size(), isBlur, this);
     }else{
+        setGeometry(qApp->desktop()->screenGeometry());
         QSize desktopSize = qApp->desktop()->screenGeometry().size();
         m_systemBackground = new SystemBackground(desktopSize, isBlur, this);
     }

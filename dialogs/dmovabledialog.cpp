@@ -28,7 +28,12 @@ QPushButton* DMovabelDialog::getCloseButton(){
 
 void DMovabelDialog::moveCenter(){
     QRect qr = frameGeometry();
-    QPoint cp = qApp->desktop()->availableGeometry().center();
+    QPoint cp;
+    if (parent()){
+        cp = static_cast<QWidget*>(parent())->geometry().center();
+    }else{
+        cp = qApp->desktop()->availableGeometry().center();
+    }
     qr.moveCenter(cp);
     move(qr.topLeft());
 }

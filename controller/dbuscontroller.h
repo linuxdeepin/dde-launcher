@@ -43,6 +43,7 @@ public:
 
     LauncherInterface* getLauncherInterface();
     StartManagerInterface* getStartManagerInterface();
+    DisplayInterface* getDisplayInterface();
     ItemInfo getItemInfo(QString appKey);
 
     void sortedByAppName(QList<ItemInfo> infos);

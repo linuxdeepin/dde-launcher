@@ -17,7 +17,7 @@ CategoryFrame::CategoryFrame(QWidget *parent) :
 }
 
 void CategoryFrame::initUI(int leftMargin, int rightMargin, int column, int itemWidth, int gridWidth){
-    setGeometry(qApp->desktop()->screenGeometry());
+    setGeometry(static_cast<QWidget*>(parent())->geometry());
     m_navigationBar = new NavigationBar(this);
     m_navigationBar->initUI(leftMargin);
 

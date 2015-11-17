@@ -11,6 +11,7 @@
 #include "categorytablewidget.h"
 #include "background/backgroundlabel.h"
 #include "baseframe.h"
+#include "dbusinterface/displayinterface.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QStackedLayout>
@@ -28,13 +29,17 @@ LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
-    setGeometry(qApp->desktop()->screenGeometry());
+    QRect primaryRect =  QRect(dbusController->getDisplayInterface()->primaryRect());
+
+    move(primaryRect.x(), primaryRect.y());
+    setFixedSize(primaryRect.width(), primaryRect.height());
+
     setObjectName("LauncherFrame");
     computerGrid(160, 60, 24, 160);
     initUI();
     initConnect();
     setStyleSheet(getQssFromFile(":/qss/skin/qss/main.qss"));
-    qDebug() << qApp->desktop()->screenGeometry();
+    qDebug() << geometry();
 }
 
 
@@ -75,8 +80,8 @@ void LauncherFrame::initUI(){
 }
 
 void LauncherFrame::computerGrid(int minimumLeftMargin, int minimumTopMargin, int miniSpacing, int itemWidth){
-    int desktopWidth = qApp->desktop()->screenGeometry().width();
-    int desktopHeight = qApp->desktop()->screenGeometry().height();
+    int desktopWidth = width();
+    int desktopHeight = height();
     m_itemWidth = itemWidth;
     m_column = (desktopWidth - minimumLeftMargin * 2) / (itemWidth + miniSpacing);
     m_spacing = (desktopWidth  - minimumLeftMargin * 2) / m_column - itemWidth;
@@ -235,11 +240,11 @@ void LauncherFrame::setRightclicked(bool flag){
 }
 
 void LauncherFrame::handleScreenGeometryChanged(){
-    QFileInfo fileInfo(m_backgroundLabel->getCacheUrl());
-    if (fileInfo.exists()){
-        bool flag = QFile::remove(m_backgroundLabel->getCacheUrl());
-        qDebug() << "remove" << m_backgroundLabel->getCacheUrl() << flag;
-    }
+//    QFileInfo fileInfo(m_backgroundLabel->getCacheUrl());
+//    if (fileInfo.exists()){
+//        bool flag = QFile::remove(m_backgroundLabel->getCacheUrl());
+//        qDebug() << "remove" << m_backgroundLabel->getCacheUrl() << flag;
+//    }
     qApp->quit();
 }
 

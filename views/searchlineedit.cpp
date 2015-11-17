@@ -60,7 +60,7 @@ void SearchLineEdit::setSearchFocus(){
 }
 
 void SearchLineEdit::resizeEvent(QResizeEvent *event){
-    int screenWidth = qApp->desktop()->screenGeometry().width();
+    int screenWidth = static_cast<QWidget*>(parent())->width();
     move((screenWidth - width()) / 2, 5);
     QFrame::resizeEvent(event);
 }

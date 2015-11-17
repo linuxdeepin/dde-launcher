@@ -22,6 +22,9 @@ void ThemeAppIcon::gtkInit(){
 }
 
 QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
+    if (iconPath.length() == 0){
+        iconPath = "application-default-icon";
+    }
     QPixmap pixmap(width, height);
     // iconPath is an absolute path of the system.
     if (QFile::exists(iconPath)) {
@@ -33,7 +36,7 @@ QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
             QByteArray data = QByteArray::fromBase64(strs.at(1).toLatin1());
             pixmap.loadFromData(data);
         }
-    } else {
+    }else {
         // try to read the iconPath as a icon name.
         QString path = getThemeIconPath(iconPath);
 //        qDebug() << path;

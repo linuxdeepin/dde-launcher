@@ -39,7 +39,8 @@ public slots:
     void hideAutoStartLabel();
 
     void handleRightMouseReleased(QString url);
-
+    void addTextShadow();
+    void disalbelTextShadow();
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent *event);

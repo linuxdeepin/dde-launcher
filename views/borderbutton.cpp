@@ -19,7 +19,7 @@ BorderButton::BorderButton(QWidget *parent) : QPushButton(parent)
     setObjectName("BorderButton");
     setProperty("state", "normal");
     setStyleSheet(getQssFromFile(":/qss/skin/qss/main.qss"));
-    addTextShadow();
+//    addTextShadow();
     connect(signalManager, SIGNAL(highlightChanged(bool)), this, SLOT(setHighlight(bool)));
 }
 
@@ -119,14 +119,16 @@ void BorderButton::setCuted(bool isCuted){
     }
     if (isCuted){
         setHighlight(false);
+        emit graphicsEffectOn();
         QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect;
         effect->setOpacity(0.3);
         setGraphicsEffect(effect);
     }else{
+        emit graphicsEffectOff();
         QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect;
         effect->setOpacity(1);
         setGraphicsEffect(effect);
-        addTextShadow();
+        graphicsEffect()->setEnabled(false);
     }
     m_isCuted = isCuted;
 }

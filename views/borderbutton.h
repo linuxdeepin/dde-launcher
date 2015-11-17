@@ -18,6 +18,8 @@ public:
 
 signals:
     void rightClicked(QPoint pos);
+    void graphicsEffectOn();
+    void graphicsEffectOff();
 
 public slots:
     void setHighlight(bool isHightlight);

@@ -17,6 +17,7 @@ AppItem::AppItem(bool isAutoStart, QWidget* parent): QFrame(parent),
     setAppIcon(m_appIcon);
     setAppName(m_appName);
     setMouseTracking(true);
+    addTextShadow();
 }
 
 void AppItem::initUI(){
@@ -64,6 +65,9 @@ void AppItem::initConnect(){
         emit signalManager->appOpened(m_url);
     });
     connect(signalManager, SIGNAL(rightMouseReleased(QString)), this, SLOT(handleRightMouseReleased(QString)));
+
+    connect(m_borderButton, SIGNAL(graphicsEffectOn()), this, SLOT(disalbelTextShadow()));
+    connect(m_borderButton, SIGNAL(graphicsEffectOff()), this, SLOT(addTextShadow()));
 }
 
 void AppItem::showMenu(QPoint pos){
@@ -154,6 +158,20 @@ void AppItem::handleRightMouseReleased(QString url){
         getBorderButton()->setHighlight(true);
     }else{
         getBorderButton()->setHighlight(false);
+    }
+}
+
+void AppItem::addTextShadow(){
+    QGraphicsDropShadowEffect *textShadow = new QGraphicsDropShadowEffect;
+    textShadow->setBlurRadius(4);
+    textShadow->setColor(QColor(0, 0, 0, 128));
+    textShadow->setOffset(0, 2);
+    m_nameLabel->setGraphicsEffect(textShadow);
+}
+
+void AppItem::disalbelTextShadow(){
+    if (m_nameLabel->graphicsEffect()){
+        m_nameLabel->graphicsEffect()->setEnabled(false);
     }
 }
 

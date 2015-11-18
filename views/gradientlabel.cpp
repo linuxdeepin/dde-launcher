@@ -8,7 +8,7 @@ GradientLabel::GradientLabel(QWidget *parent) :
     QLabel(parent),
     m_direction(GradientLabel::TopToBottom)
 {
-
+    setAttribute(Qt::WA_TransparentForMouseEvents);
 }
 
 GradientLabel::Direction GradientLabel::direction() const

@@ -12,7 +12,7 @@
 #define dbusController Singleton<DBusController>::instance()
 
 const int NavgationBarLeftMargin = 50;
-const int TopBottomGradientHeight = 100;
+const int TopBottomGradientHeight = 60;
 const QString LauncherServiceName="com.deepin.dde.Launcher";
 const QString LauncherPathName="/com/deepin/dde/Launcher";
 

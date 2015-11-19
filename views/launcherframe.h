@@ -21,6 +21,14 @@ class LauncherFrame : public QFrame
 public:
     explicit LauncherFrame(QWidget *parent = 0);
     ~LauncherFrame();
+    static int AppItemTopSpacing;
+    static int AppItemIconNameSpacing;
+    static int AppItemMargin;
+    static int IconSize;
+    static int GridSpacing;
+    static int GridSize;
+    static int BorderSize;
+    static void setIconSizeByDpi(int width, int height);
 
     void initUI();
     void initConnect();

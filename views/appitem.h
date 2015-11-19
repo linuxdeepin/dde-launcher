@@ -25,6 +25,7 @@ public:
     QString getUrl();
     QString getAppKey();
     BorderButton* getBorderButton();
+    int getIconSize();
 
 signals:
 

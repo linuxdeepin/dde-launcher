@@ -60,7 +60,9 @@ void AppTableWidget::addItem(ItemInfo itemInfo, int index){
     appItem->setAppKey(itemInfo.key);
     appItem->setUrl(itemInfo.url);
     appItem->setAppName(itemInfo.name);
-    appItem->setAppIcon(ThemeAppIcon::getIconPixmap(itemInfo.iconKey));
+
+    int size = appItem->getIconSize();
+    appItem->setAppIcon(ThemeAppIcon::getIconPixmap(itemInfo.iconKey, size, size));
     appItem->setFixedSize(m_gridWidth, m_gridWidth);
     setCellWidget(row, column, appItem);
 

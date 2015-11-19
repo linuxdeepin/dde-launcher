@@ -26,7 +26,7 @@ QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
         iconPath = "application-default-icon";
     }
     QPixmap pixmap(width, height);
-    // iconPath is an absolute path of the system.
+    // iconPath is an absolute path of the system
     if (QFile::exists(iconPath)) {
         pixmap = QPixmap(iconPath);
     } else if (iconPath.startsWith("data:image/")){
@@ -38,12 +38,12 @@ QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
         }
     }else {
         // try to read the iconPath as a icon name.
-        QString path = getThemeIconPath(iconPath);
+        QString path = getThemeIconPath(iconPath, width);
 //        qDebug() << path;
         if (path.endsWith(".svg")) {
             QSvgRenderer renderer(path);
             pixmap.fill(Qt::transparent);
-            pixmap.scaled(64, 64);
+            pixmap.scaled(width, height);
             QPainter painter;
             painter.begin(&pixmap);
 
@@ -58,14 +58,14 @@ QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
     return pixmap;
 }
 
-QString ThemeAppIcon::getThemeIconPath(QString iconName)
+QString ThemeAppIcon::getThemeIconPath(QString iconName, int size)
 {
     QByteArray bytes = iconName.toUtf8();
     const char *name = bytes.constData();
 
     GtkIconTheme* theme = gtk_icon_theme_get_default();
 
-    GtkIconInfo* info = gtk_icon_theme_lookup_icon(theme, name, 64, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+    GtkIconInfo* info = gtk_icon_theme_lookup_icon(theme, name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
     if (info) {
         char* path = g_strdup(gtk_icon_info_get_filename(info));

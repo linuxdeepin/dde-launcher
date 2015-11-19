@@ -25,6 +25,15 @@
 #include <views/gradientlabel.h>
 
 
+int LauncherFrame::AppItemTopSpacing = 14;
+int LauncherFrame::AppItemIconNameSpacing = 8;
+int LauncherFrame::AppItemMargin = 10;
+int LauncherFrame::IconSize = 64;
+int LauncherFrame::GridSpacing = 24;
+int LauncherFrame::GridSize = 160;
+int LauncherFrame::BorderSize = 144;
+
+
 LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -34,14 +43,43 @@ LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
     move(primaryRect.x(), primaryRect.y());
     setFixedSize(primaryRect.width(), primaryRect.height());
 
+    LauncherFrame::setIconSizeByDpi(primaryRect.width(), primaryRect.height());
+
     setObjectName("LauncherFrame");
-    computerGrid(160, 60, 24, 160);
+    computerGrid(160, 60, LauncherFrame::GridSpacing, LauncherFrame::GridSize);
     initUI();
     initConnect();
     setStyleSheet(getQssFromFile(":/qss/skin/qss/main.qss"));
     qDebug() << geometry();
 }
 
+void LauncherFrame::setIconSizeByDpi(int width, int height){
+    if (width <= 1000 && height <= 700){
+        LauncherFrame::AppItemTopSpacing = 4;
+        LauncherFrame::AppItemIconNameSpacing = 8;
+        LauncherFrame::AppItemMargin = 4;
+        LauncherFrame::IconSize = 48;
+        LauncherFrame::GridSpacing = 16;
+        LauncherFrame::GridSize = 100;
+        LauncherFrame::BorderSize = 100;
+    }else if (width <= 1440 && height <= 900){
+        LauncherFrame::AppItemTopSpacing = 14;
+        LauncherFrame::AppItemIconNameSpacing = 8;
+        LauncherFrame::AppItemMargin = 10;
+        LauncherFrame::IconSize = 48;
+        LauncherFrame::GridSpacing = 24;
+        LauncherFrame::GridSize = 120;
+        LauncherFrame::BorderSize = 120;
+    }else{
+        LauncherFrame::AppItemTopSpacing = 14;
+        LauncherFrame::AppItemIconNameSpacing = 8;
+        LauncherFrame::AppItemMargin = 10;
+        LauncherFrame::IconSize = 64;
+        LauncherFrame::GridSpacing = 24;
+        LauncherFrame::GridSize = 160;
+        LauncherFrame::BorderSize = 144;
+    }
+}
 
 void LauncherFrame::initUI(){
     qDebug() << "initUI";

@@ -4,6 +4,7 @@
 #include "app/global.h"
 #include "borderbutton.h"
 #include "Logger.h"
+#include "views/launcherframe.h"
 #include <QApplication>
 #include <QGraphicsDropShadowEffect>
 
@@ -33,18 +34,19 @@ void AppItem::initUI(){
     m_nameLabel->setObjectName("Name");
     m_nameLabel->setAlignment(Qt::AlignTop| Qt::AlignHCenter);
 
-    m_iconLabel->setFixedSize(64, 64);
-    m_nameLabel->setFixedSize(100, 34);
+    m_iconLabel->setFixedSize(LauncherFrame::IconSize, LauncherFrame::IconSize);
+    m_nameLabel->setFixedSize(LauncherFrame::BorderSize - 20, 34);
 
     m_borderButton = new BorderButton(this);
-    m_borderButton->setFixedSize(144, 144);
+    m_borderButton->setFixedSize(LauncherFrame::BorderSize + 4, LauncherFrame::BorderSize + 4);
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->addSpacing(14);
+    mainLayout->addSpacing(LauncherFrame::AppItemTopSpacing);
     mainLayout->addWidget(m_iconLabel, 0, Qt::AlignHCenter);
-    mainLayout->addSpacing(8);
+    mainLayout->addSpacing(LauncherFrame::AppItemIconNameSpacing);
     mainLayout->addWidget(m_nameLabel, 0, Qt::AlignHCenter);
     mainLayout->setSpacing(0);
-    mainLayout->setContentsMargins(10, 10, 10, 10);
+    int margin = LauncherFrame::AppItemMargin;
+    mainLayout->setContentsMargins(margin, margin, margin, margin);
     m_borderButton->setLayout(mainLayout);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
@@ -97,7 +99,7 @@ void AppItem::setAppIcon(QPixmap icon){
      if (!icon.isNull()){
 //        m_iconLabel->setPixmap(m_appIcon.scaled(m_iconLabel->size()));
          m_iconLabel->setPixmap(m_appIcon);
-         QString cachePath = joinPath(getThumbnailsPath(), QString("%1.png").arg(m_appKey));
+         QString cachePath = joinPath(getThumbnailsPath(), QString("%1_%2.png").arg(m_appKey, QString::number(LauncherFrame::IconSize)));
 //         qDebug() << m_appIcon.size() << cachePath << QFileInfo(cachePath).exists();
          if (!QFileInfo(cachePath).exists())
             m_appIcon.save(cachePath);
@@ -118,6 +120,10 @@ void AppItem::setAppKey(QString key){
 
 QString AppItem::getUrl(){
     return m_url;
+}
+
+int AppItem::getIconSize(){
+    return LauncherFrame::IconSize;
 }
 
 BorderButton* AppItem::getBorderButton(){

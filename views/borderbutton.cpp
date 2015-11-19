@@ -11,6 +11,8 @@
 #include "launcherframe.h"
 #include "appitem.h"
 #include "widgets/elidelabel.h"
+#include "launcherframe.h"
+
 
 BorderButton::BorderButton(QWidget *parent) : QPushButton(parent)
 {
@@ -34,7 +36,9 @@ void BorderButton::startDrag(QMouseEvent *event){
     iconLabel->setObjectName("Icon");
     iconLabel->setScaledContents(true);
     iconLabel->setPixmap(dynamic_cast<AppItem*>(parent())->getAppIcon());
-    iconLabel->setFixedSize(48, 48);
+
+
+    iconLabel->setFixedSize(LauncherFrame::IconSize, LauncherFrame::IconSize);
     iconLabel->setStyleSheet("background-color: transparent");
     QPixmap dragPixmap = iconLabel->grab();
     QDrag* pDrag = new QDrag(this);
@@ -84,7 +88,7 @@ void BorderButton::paintEvent(QPaintEvent *event){
          painter.setPen(QPen(QColor(255, 255, 255, 51), 2));
          painter.setBrush(QColor(0, 0 , 0, 76));
          painter.setRenderHint(QPainter::Antialiasing, true);
-         painter.drawRoundedRect(QRect(2, 2, 140, 140), 10, 10, Qt::RelativeSize);
+         painter.drawRoundedRect(QRect(2, 2, LauncherFrame::BorderSize, LauncherFrame::BorderSize), 10, 10, Qt::RelativeSize);
      }
      QPushButton::paintEvent(event);
 }

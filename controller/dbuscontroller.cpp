@@ -78,6 +78,7 @@ void DBusController::updateAppTable(QString appKey){
 
 void DBusController::handleItemChanged(const QString &action, ItemInfo itemInfo,
                                        qlonglong categoryInfoId){
+    Q_UNUSED(itemInfo)
     qDebug() << action << categoryInfoId;
     if (action == "created"){
     }else if (action == "updated"){

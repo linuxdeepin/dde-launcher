@@ -12,8 +12,9 @@
 
 SearchLineEdit::SearchLineEdit(QWidget *parent) :
     QFrame(parent),
-    m_lineEdit(new DLineEdit),
-    m_iconLabel(new QLabel)
+    m_iconLabel(new QLabel),
+    m_lineEdit(new DLineEdit)
+
 {
     initUI();
     initConnect();

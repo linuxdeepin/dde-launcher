@@ -14,6 +14,8 @@ TEMPLATE = app
 PKGCONFIG += x11 gtk+-2.0 xcb xcb-ewmh gsettings-qt
 CONFIG += c++11 link_pkgconfig
 
+DEFINES += QT_MESSAGELOGCONTEXT
+
 include(./widgets/widgets.pri)
 include(./cutelogger/cutelogger.pri)
 include(./dialogs/dialogs.pri)
@@ -27,7 +29,6 @@ SOURCES += main.cpp \
     views/categoryframe.cpp \
     app/xcb_misc.cpp \
     app/daemon.cpp \
-    app/logmanager.cpp \
     app/launcherapp.cpp \
     views/categorytablewidget.cpp \
     views/displaymodeframe.cpp \
@@ -66,7 +67,6 @@ HEADERS += \
     app/define.h \
     app/xcb_misc.h \
     app/daemon.h \
-    app/logmanager.h \
     app/launcherapp.h \
     views/categorytablewidget.h \
     app/signalmanager.h \

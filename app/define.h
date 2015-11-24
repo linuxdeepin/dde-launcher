@@ -34,9 +34,9 @@ void RegisterDdeSession()
 
 void debug_log_console_on(){
     #if !defined(QT_NO_DEBUG)
-    Singleton<LogManager>::instance()->initConsoleAppender();
+    LogManager::instance()->initConsoleAppender();
     #endif
-    Singleton<LogManager>::instance()->initRollingFileAppender();
+    LogManager::instance()->initRollingFileAppender();
 }
 
 #endif // DEFINE_H

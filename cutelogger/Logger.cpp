@@ -66,7 +66,7 @@
  *   consoleAppender->setFormat("[%{type:-7}] <%{Function}> %{message}\n");
  *   logger->registerAppender(consoleAppender);
  *   ...
- *   qDebug("Starting the application");
+ *   LOG_INFO("Starting the application");
  *   int result = app.exec();
  *   ...
  *   if (result)
@@ -87,10 +87,10 @@
  *       created before any of the Logger's functions are called.
  *
  * \sa logger
- * \sa LOG_TRACE, LOG_DEBUG, qDebug, LOG_WARNING, qCritical, LOG_FATAL
+ * \sa LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARNING, LOG_ERROR, LOG_FATAL
  * \sa LOG_CTRACE, LOG_CDEBUG, LOG_CINFO, LOG_CWARNING, LOG_CERROR, LOG_CFATAL
  * \sa LOG_ASSERT
- * \sa LOG_TRACE_TIME, LOG_DEBUG_TIME, qDebug_TIME
+ * \sa LOG_TRACE_TIME, LOG_DEBUG_TIME, LOG_INFO_TIME
  * \sa AbstractAppender
  */
 
@@ -122,7 +122,7 @@
  * \c __LINE__ and the standart Qt \c Q_FUNC_INFO macros to automatically determine the needed parameters to call
  * Logger::write().
  *
- * \note This and other (qDebug() etc...) macros uses the variadic macro arguments to give convinient usage form for
+ * \note This and other (LOG_INFO() etc...) macros uses the variadic macro arguments to give convinient usage form for
  * the different versions of Logger::write() (using the QString or const char* argument or returning the QDebug class
  * instance). Not all compilers will support this. Please, consider reviewing your compiler documentation to ensure
  * it support __VA_ARGS__ macro.
@@ -147,7 +147,7 @@
 
 
 /**
- * \def qDebug
+ * \def LOG_INFO
  *
  * \brief Writes the info log record
  *
@@ -175,7 +175,7 @@
 
 
 /**
- * \def qCritical
+ * \def LOG_ERROR
  *
  * \brief Write the error log record
  * This macro records the error log record using the Logger::write() function. It works similar to the LOG_TRACE()
@@ -403,7 +403,7 @@
  * \endcode
  *
  * \note Macro switches to logging the seconds instead of milliseconds when the execution time reaches 10000 ms.
- * \sa LOG_DEBUG_TIME, qDebug_TIME
+ * \sa LOG_DEBUG_TIME, LOG_INFO_TIME
  */
 
 
@@ -420,7 +420,7 @@
 
 
 /**
- * \def qDebug_TIME
+ * \def LOG_INFO_TIME
  *
  * \brief Logs the processing time of current function / code block
  *
@@ -951,7 +951,7 @@ void Logger::write(const QDateTime& timeStamp, LogLevel logLevel, const char* fi
  * Writes the log records with the supplied arguments to all the registered appenders.
  *
  * \note It is not recommended to call this function directly. Instead of this you can just call one of the macros
- *       (LOG_TRACE, LOG_DEBUG, qDebug, LOG_WARNING, qCritical, LOG_FATAL) that will supply all the needed
+ *       (LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARNING, LOG_ERROR, LOG_FATAL) that will supply all the needed
  *       information to this function.
  *
  * \param timeStamp - the time stamp of the record
@@ -966,7 +966,7 @@ void Logger::write(const QDateTime& timeStamp, LogLevel logLevel, const char* fi
  *       function, which will interrupt the running of your software and begin the writing of the core dump.
  *
  * \sa LogLevel
- * \sa LOG_TRACE, LOG_DEBUG, qDebug, LOG_WARNING, qCritical, LOG_FATAL
+ * \sa LOG_TRACE, LOG_DEBUG, LOG_INFO, LOG_WARNING, LOG_ERROR, LOG_FATAL
  * \sa AbstractAppender
  */
 void Logger::write(const QDateTime& timeStamp, LogLevel logLevel, const char* file, int line, const char* function, const char* category,

@@ -177,7 +177,7 @@ void CategoryTableWidget::addItems(const CategoryInfoList &categoryInfoList){
 }
 
 void CategoryTableWidget::removeItem(QString appKey){
-
+    Q_UNUSED(appKey)
 }
 
 void CategoryTableWidget::handleCurrentAppItemChanged(QString appKey){

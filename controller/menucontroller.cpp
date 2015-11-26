@@ -11,6 +11,7 @@
 #include "dbusinterface/notification_interface.h"
 #include "widgets/themeappicon.h"
 #include "widgets/util.h"
+#include "views/launcherframe.h"
 #include <QDBusObjectPath>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -333,15 +334,14 @@ void MenuController::startUnistall(QString appKey){
     QDBusPendingReply<> reply = dbusController->getLauncherInterface()->RequestUninstall(appKey, false);
     reply.waitForFinished();
     if (!reply.isError()) {
-        qDebug() << "unistall action finished!";
-        handleUninstallSuccess(appKey);
+        qDebug() << "unistall function excute finished!";
     } else {
         qDebug() << "unistall action fail";
     }
 }
 
 void MenuController::handleUninstallSuccess(const QString &appKey){
-    QString cachePath = joinPath(getThumbnailsPath(), QString("%1.png").arg(appKey));
+    QString cachePath = joinPath(getThumbnailsPath(), QString("%1_%2.png").arg(appKey, QString::number(LauncherFrame::IconSize)));
     QString message = tr("Uninstall %1 successfully!").arg(appKey);
 //    m_notifcationInterface->Notify("dde-launcher",
 //                                   0,

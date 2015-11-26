@@ -15,6 +15,7 @@ public:
 
     bool isHighlight() const;
     void updateStyle();
+    void drawBorder(int borderWidth, int radius, QColor borderColor, QColor brushColor);
 
 signals:
     void rightClicked(QPoint pos);

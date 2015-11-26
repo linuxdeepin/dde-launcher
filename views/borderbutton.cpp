@@ -84,13 +84,26 @@ void BorderButton::leaveEvent(QEvent *event){
 
 void BorderButton::paintEvent(QPaintEvent *event){
      if (m_isHighlight){
-         QPainter painter(this);
-         painter.setPen(QPen(QColor(255, 255, 255, 51), 2));
-         painter.setBrush(QColor(0, 0 , 0, 76));
-         painter.setRenderHint(QPainter::Antialiasing, true);
-         painter.drawRoundedRect(QRect(2, 2, LauncherFrame::BorderSize, LauncherFrame::BorderSize), 10, 10, Qt::RelativeSize);
+         drawBorder(2, 4, QColor(255, 255, 255, 51), QColor(0, 0 , 0, 76));
      }
      QPushButton::paintEvent(event);
+}
+
+void BorderButton::drawBorder(int borderWidth, int radius, QColor borderColor, QColor brushColor){
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setPen(QPen(QColor(0, 0, 0, 0), 0));
+
+    QPen pen;
+    pen.setColor(borderColor);
+    pen.setWidth(borderWidth);
+    QPainterPath border;
+    border.addRoundedRect(QRectF(borderWidth / 2, borderWidth/2, LauncherFrame::BorderSize - borderWidth, LauncherFrame::BorderSize - borderWidth), radius * 3/4, radius*3/4);
+    painter.strokePath(border, pen);
+
+    painter.setBrush(brushColor);
+    QRect r(borderWidth, borderWidth, LauncherFrame::BorderSize - borderWidth*2, LauncherFrame::BorderSize - borderWidth*2);
+    painter.drawRoundedRect(r, radius, radius);
 }
 
 void BorderButton::updateStyle(){

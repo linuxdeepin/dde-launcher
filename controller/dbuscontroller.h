@@ -11,6 +11,7 @@ class FileInfoInterface;
 class StartManagerInterface;
 class MenuController;
 class DisplayInterface;
+class DBusClientManager;
 
 #define Launcher_service "com.deepin.dde.daemon.Launcher"
 #define Launcher_path "/com/deepin/dde/daemon/Launcher"
@@ -45,6 +46,7 @@ public:
     StartManagerInterface* getStartManagerInterface();
     DisplayInterface* getDisplayInterface();
     ItemInfo getItemInfo(QString appKey);
+    ItemInfo getLocalItemInfo(QString appKey);
 
     void sortedByAppName(QList<ItemInfo> infos);
     void sortedByInstallTime(QList<ItemInfo> infos);
@@ -70,6 +72,7 @@ private:
     AppFrequencyInfoList m_appFrequencyInfoList;
     CategoryInfoList m_categoryInfoList;
     CategoryInfoList m_categoryAppNameSortedInfoList;
+    DBusClientManager* m_dockClientManagerInterface;
 
     QMap<QString, ItemInfo> m_itemInfos;
     QMap<QString, QStringList> m_categoryAppNames;

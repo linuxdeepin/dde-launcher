@@ -6,6 +6,7 @@
 #include "dbusinterface/displayinterface.h"
 #include "app/global.h"
 #include "controller/menucontroller.h"
+#include "dbusinterface/dbusclientmanager.h"
 #include <QDebug>
 #include <QtCore>
 #include <QtDBus>
@@ -31,6 +32,7 @@ DBusController::DBusController(QObject *parent) : QObject(parent)
     m_fileInfoInterface = new FileInfoInterface(FileInfo_service, FileInfo_path, QDBusConnection::sessionBus(), this);
     m_startManagerInterface = new StartManagerInterface(StartManager_service, StartManager_path, QDBusConnection::sessionBus(), this);
     m_displayInterface = new DisplayInterface(this);
+    m_dockClientManagerInterface = new DBusClientManager;
     m_menuController = new MenuController(this);
     initConnect();
 }
@@ -69,6 +71,7 @@ void DBusController::initConnect(){
     connect(signalManager, SIGNAL(categoryModeChanged(int)), this, SLOT(setCategoryDisplayMode(int)));
     connect(m_displayInterface, SIGNAL(PrimaryRectChanged()), signalManager, SIGNAL(screenGeometryChanged()));
     connect(m_displayInterface, SIGNAL(PrimaryChanged()), signalManager, SIGNAL(screenGeometryChanged()));
+    connect(m_dockClientManagerInterface, SIGNAL(ActiveWindowChanged(uint)), signalManager, SIGNAL(activeWindowChanged(uint)));
 }
 
 void DBusController::updateAppTable(QString appKey){
@@ -208,6 +211,13 @@ ItemInfo DBusController::getItemInfo(QString appKey){
         qCritical() << reply.error().message();
         return itemInfo;
     }
+}
+
+ItemInfo DBusController::getLocalItemInfo(QString appKey){
+    if (m_itemInfos.contains(appKey)){
+        return m_itemInfos.value(appKey);
+    }
+    return ItemInfo();
 }
 
 int DBusController::getCategoryDisplayMode(){

@@ -13,6 +13,8 @@ public:
     explicit LauncherApp(QObject *parent = 0);
     ~LauncherApp();
 
+    static QMap<QString, QString> UnistallAppNames;
+
 signals:
 
 public slots:

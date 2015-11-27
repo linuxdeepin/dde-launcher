@@ -57,12 +57,15 @@ public slots:
     void setRightclicked(bool flag);
     void handleScreenGeometryChanged();
     void showGradients() const;
+    void handleActiveWindowChanged(uint windowId);
 
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
     void closeEvent(QCloseEvent* event);
-    void changeEvent(QEvent* event);
+//    void changeEvent(QEvent* event);
+
+    bool eventFilter(QObject *obj, QEvent *event);
 
 private:
     int m_leftMargin;

@@ -22,7 +22,7 @@ void ThemeAppIcon::gtkInit(){
 }
 
 QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
-    qDebug() << iconPath;
+//    qDebug() << iconPath;
     if (iconPath.length() == 0){
         iconPath = "application-default-icon";
     }

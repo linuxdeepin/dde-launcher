@@ -9,6 +9,8 @@
 #include <QDBusConnection>
 #include <QThread>
 
+QMap<QString, QString> LauncherApp::UnistallAppNames;
+
 LauncherApp::LauncherApp(QObject *parent) : QObject(parent)
 {
     m_launcherFrame = new LauncherFrame;
@@ -32,8 +34,10 @@ void LauncherApp::show(){
 
 void LauncherApp::handleUninstall(QString appKey){
     qDebug() << "handleUninstall" << appKey;
+    QString appName = dbusController->getLocalItemInfo(appKey).name;
+    LauncherApp::UnistallAppNames.insert(appKey, appName);
     ConfirmUninstallDialog d(m_launcherFrame);
-    QString message = tr("Are you sure to uninstall %1").arg(appKey);
+    QString message = tr("Are you sure to uninstall %1 ?").arg(dbusController->getLocalItemInfo(appKey).name);
     d.setMessage(message);
     connect(&d, SIGNAL(buttonClicked(int)), signalManager, SIGNAL(uninstallActionChanged(int)));
     d.exec();

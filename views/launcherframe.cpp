@@ -51,6 +51,8 @@ LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
     initConnect();
     setStyleSheet(getQssFromFile(":/qss/skin/qss/main.qss"));
     qDebug() << geometry();
+
+    installEventFilter(this);
 }
 
 void LauncherFrame::setIconSizeByDpi(int width, int height){
@@ -148,6 +150,7 @@ void LauncherFrame::initConnect(){
     connect(signalManager, SIGNAL(itemDeleted(QString)), this, SLOT(uninstallUpdateTable(QString)));
     connect(signalManager, SIGNAL(rightClickedChanged(bool)), this, SLOT(setRightclicked(bool)));
     connect(signalManager, SIGNAL(screenGeometryChanged()), this , SLOT(handleScreenGeometryChanged()));
+    connect(signalManager, SIGNAL(activeWindowChanged(uint)), this, SLOT(handleActiveWindowChanged(uint)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SIGNAL(Closed()));
     connect(m_categoryFrame, SIGNAL(showed()), this, SLOT(showGradients()));
     connect(m_appTableWidget, SIGNAL(showed()), this, SLOT(showGradients()));
@@ -262,16 +265,16 @@ void LauncherFrame::closeEvent(QCloseEvent *event){
     QFrame::closeEvent(event);
 }
 
-void LauncherFrame::changeEvent(QEvent *event){
-    if (event->type() == QEvent::ActivationChange){
-        if (hasFocus() && !m_rightclicked){
-            // in case that the uninstall window is shown.
-            if (qApp->topLevelWindows().length() == 1){
-                Hide();
-            };
-        }
-    }
-}
+//void LauncherFrame::changeEvent(QEvent *event){
+//    if (event->type() == QEvent::ActivationChange){
+//        if (hasFocus() && !m_rightclicked){
+//            // in case that the uninstall window is shown.
+//            if (qApp->topLevelWindows().length() == 1){
+//                Hide();
+//            };
+//        }
+//    }
+//}
 
 void LauncherFrame::setRightclicked(bool flag){
     m_rightclicked = flag;
@@ -387,5 +390,20 @@ void LauncherFrame::showGradients() const
         m_bottomGradient->resize(bottom.size());
         m_bottomGradient->move(bottom.topLeft());
         m_bottomGradient->raise();
+    }
+}
+
+bool LauncherFrame::eventFilter(QObject *obj, QEvent *event){
+//    qDebug() << event;
+//    if (event->type() == QEvent::WindowDeactivate && !m_rightclicked){
+//        Hide();
+//    }
+    return QFrame::eventFilter(obj, event);
+}
+
+
+void LauncherFrame::handleActiveWindowChanged(uint windowId){
+    if (windowId != window()->winId()){
+        Hide();
     }
 }

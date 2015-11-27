@@ -50,113 +50,117 @@
 <context>
     <name>LauncherApp</name>
     <message>
-        <location filename="../app/launcherapp.cpp" line="36"/>
         <source>Are you sure to uninstall %1</source>
-        <translation>您确定要卸载%1</translation>
+        <translation type="obsolete">您确定要卸载 %1 ?</translation>
+    </message>
+    <message>
+        <location filename="../app/launcherapp.cpp" line="40"/>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>您确定要卸载 %1 ?</translation>
     </message>
 </context>
 <context>
     <name>MenuController</name>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="63"/>
+        <location filename="../controller/menucontroller.cpp" line="65"/>
         <source>Open(_O)</source>
         <translation>打开(_O)</translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="69"/>
+        <location filename="../controller/menucontroller.cpp" line="71"/>
         <source>Send to desktop(_E)</source>
         <translation>发送到桌面(_E)</translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="67"/>
+        <location filename="../controller/menucontroller.cpp" line="69"/>
         <source>Remove from desktop</source>
         <translation>从桌面上移除</translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="73"/>
+        <location filename="../controller/menucontroller.cpp" line="75"/>
         <source>Remove from dock</source>
         <translation>从任务栏上移除</translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="75"/>
+        <location filename="../controller/menucontroller.cpp" line="77"/>
         <source>Send to dock(_C)</source>
         <translation>发送到任务栏(_C)</translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="80"/>
+        <location filename="../controller/menucontroller.cpp" line="82"/>
         <source>remove from startup(_R)</source>
         <translation>从开机启动项删除(_R)</translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="82"/>
+        <location filename="../controller/menucontroller.cpp" line="84"/>
         <source>Add to startup(_A)</source>
         <translation>添加至开机启动项(_A)</translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="84"/>
+        <location filename="../controller/menucontroller.cpp" line="86"/>
         <source>Uninstall</source>
         <translation>卸载</translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="345"/>
+        <location filename="../controller/menucontroller.cpp" line="351"/>
         <source>Uninstall %1 successfully!</source>
-        <translation>卸载%1成功!</translation>
+        <translation>卸载 %1 成功!</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../app/global.h" line="32"/>
+        <location filename="../app/global.h" line="33"/>
         <source>internet</source>
         <translation>网络应用</translation>
     </message>
     <message>
-        <location filename="../app/global.h" line="33"/>
+        <location filename="../app/global.h" line="34"/>
         <source>multimedia</source>
         <translation>影音播放</translation>
     </message>
     <message>
-        <location filename="../app/global.h" line="34"/>
+        <location filename="../app/global.h" line="35"/>
         <source>games</source>
         <translation>游戏娱乐</translation>
     </message>
     <message>
-        <location filename="../app/global.h" line="35"/>
+        <location filename="../app/global.h" line="36"/>
         <source>graphics</source>
         <translation>图形图像</translation>
     </message>
     <message>
-        <location filename="../app/global.h" line="36"/>
+        <location filename="../app/global.h" line="37"/>
         <source>productivity</source>
         <translation>办公软件</translation>
     </message>
     <message>
-        <location filename="../app/global.h" line="37"/>
+        <location filename="../app/global.h" line="38"/>
         <source>industry</source>
         <translation>行业软件</translation>
     </message>
     <message>
-        <location filename="../app/global.h" line="38"/>
+        <location filename="../app/global.h" line="39"/>
         <source>education</source>
         <translation>科学教育</translation>
     </message>
     <message>
-        <location filename="../app/global.h" line="39"/>
+        <location filename="../app/global.h" line="40"/>
         <source>development</source>
         <translation>编程开发</translation>
     </message>
     <message>
-        <location filename="../app/global.h" line="40"/>
+        <location filename="../app/global.h" line="41"/>
         <source>system</source>
         <translation>系统管理</translation>
     </message>
     <message>
-        <location filename="../app/global.h" line="41"/>
+        <location filename="../app/global.h" line="42"/>
         <source>utilities</source>
         <translation>实用工具</translation>
     </message>
     <message>
-        <location filename="../app/global.h" line="42"/>
+        <location filename="../app/global.h" line="43"/>
         <source>others</source>
         <translation>其他</translation>
     </message>

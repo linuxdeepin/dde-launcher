@@ -12,6 +12,7 @@
 #include "widgets/themeappicon.h"
 #include "widgets/util.h"
 #include "views/launcherframe.h"
+#include "app/launcherapp.h"
 #include <QDBusObjectPath>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -342,7 +343,12 @@ void MenuController::startUnistall(QString appKey){
 
 void MenuController::handleUninstallSuccess(const QString &appKey){
     QString cachePath = joinPath(getThumbnailsPath(), QString("%1_%2.png").arg(appKey, QString::number(LauncherFrame::IconSize)));
-    QString message = tr("Uninstall %1 successfully!").arg(appKey);
+    QString appName(appKey);
+    if (LauncherApp::UnistallAppNames.contains(appKey)){
+        appName = LauncherApp::UnistallAppNames.value(appKey);
+        LauncherApp::UnistallAppNames.remove(appKey);
+    }
+    QString message = tr("Uninstall %1 successfully!").arg(appName);
 //    m_notifcationInterface->Notify("dde-launcher",
 //                                   0,
 //                                   cachePath,

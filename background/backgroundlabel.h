@@ -14,6 +14,9 @@ public:
 
     QString getCacheUrl();
 
+signals:
+    void changed(QPixmap);
+
 protected:
     void resizeEvent(QResizeEvent* event);
 

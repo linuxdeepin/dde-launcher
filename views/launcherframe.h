@@ -57,6 +57,7 @@ public slots:
     void setRightclicked(bool flag);
     void handleScreenGeometryChanged();
     void showGradients() const;
+    void updateGradients(QPixmap) const;
     void handleActiveWindowChanged(uint windowId);
 
 protected:

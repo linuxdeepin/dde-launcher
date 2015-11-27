@@ -161,6 +161,7 @@ void LauncherFrame::initConnect(){
     connect(qApp, SIGNAL(aboutToQuit()), this, SIGNAL(Closed()));
     connect(m_categoryFrame, SIGNAL(showed()), this, SLOT(showGradients()));
     connect(m_appTableWidget, SIGNAL(showed()), this, SLOT(showGradients()));
+    connect(m_backgroundLabel, SIGNAL(changed(QPixmap)), this, SLOT(updateGradients(QPixmap)));
 }
 
 
@@ -399,6 +400,11 @@ void LauncherFrame::showGradients() const
         m_bottomGradient->move(bottom.topLeft());
         m_bottomGradient->raise();
     }
+}
+
+void LauncherFrame::updateGradients(QPixmap) const
+{
+    showGradients();
 }
 
 bool LauncherFrame::eventFilter(QObject *obj, QEvent *event){

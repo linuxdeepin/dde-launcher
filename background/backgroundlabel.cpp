@@ -19,6 +19,8 @@ BackgroundLabel::BackgroundLabel(bool isBlur, QWidget* parent)
     setPixmap(m_systemBackground->getBackground());
     connect(m_systemBackground, SIGNAL(backgroundChanged(QPixmap)),
             this, SLOT(setPixmap(QPixmap)));
+    connect(m_systemBackground, SIGNAL(backgroundChanged(QPixmap)),
+            this, SIGNAL(changed(QPixmap)));
 }
 
 QString BackgroundLabel::getCacheUrl(){

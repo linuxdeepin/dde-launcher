@@ -37,6 +37,7 @@ int LauncherFrame::BorderSize = 144;
 LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
 {
     setAttribute(Qt::WA_DeleteOnClose);
+    setAttribute(Qt::WA_InputMethodEnabled);
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
     QRect primaryRect =  QRect(dbusController->getDisplayInterface()->primaryRect());
 

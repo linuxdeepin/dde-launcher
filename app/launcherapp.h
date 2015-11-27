@@ -20,6 +20,7 @@ signals:
 public slots:
     void show();
     void handleUninstall(QString appKey);
+    void handleButtonClicked(int buttonId);
 
 private:
     LauncherFrame* m_launcherFrame;

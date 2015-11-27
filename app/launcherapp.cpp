@@ -39,8 +39,14 @@ void LauncherApp::handleUninstall(QString appKey){
     ConfirmUninstallDialog d(m_launcherFrame);
     QString message = tr("Are you sure to uninstall %1 ?").arg(dbusController->getLocalItemInfo(appKey).name);
     d.setMessage(message);
-    connect(&d, SIGNAL(buttonClicked(int)), signalManager, SIGNAL(uninstallActionChanged(int)));
+    connect(&d, SIGNAL(buttonClicked(int)), this, SLOT(handleButtonClicked(int)));
     d.exec();
+    d.deleteLater();
+}
+
+void LauncherApp::handleButtonClicked(int buttonId){
+    qDebug() << sender() <<buttonId;
+    emit signalManager->uninstallActionChanged(buttonId);
 }
 
 

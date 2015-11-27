@@ -23,6 +23,7 @@
 
 MenuController::MenuController(QObject *parent) : QObject(parent)
 {
+    qDebug() << "MenuController";
     m_menuManagerInterface = new MenumanagerInterface(MenuManager_service, MenuManager_path, QDBusConnection::sessionBus(), this);
     m_dockAppManagerInterface = new DBusDockedAppManager(this);
     m_notifcationInterface = new NotificationInterface(NotificationInterface::staticServiceName(),
@@ -38,6 +39,7 @@ void MenuController::initConnect(){
     connect(signalManager, SIGNAL(contextMenuShowed(QString,QPoint)),
             this, SLOT(showMenuByAppItem(QString,QPoint)));
     connect(signalManager, SIGNAL(appOpened(QString)), this, SLOT(handleOpen(QString)));
+    connect(signalManager, SIGNAL(uninstallActionChanged(int)), this, SLOT(handleUninstallAction(int)));
 }
 
 MenuController::~MenuController()
@@ -191,7 +193,6 @@ void MenuController::showMenu(QString menuDBusObjectPath, QString menuContent) {
     connect(m_menuInterface, SIGNAL(ItemInvoked(QString, bool)),this, SLOT(menuItemInvoked(QString,bool)));
     connect(m_menuInterface, SIGNAL(MenuUnregistered()), this, SLOT(handleMenuClosed()));
     connect(m_menuInterface, SIGNAL(MenuUnregistered()), m_menuInterface, SLOT(deleteLater()));
-    connect(signalManager, SIGNAL(uninstallActionChanged(int)), this, SLOT(handleUninstallAction(int)));
 }
 
 void MenuController::menuItemInvoked(QString itemId, bool flag){
@@ -320,6 +321,7 @@ void MenuController::handleToStartup(QString appKey){
 }
 
 void MenuController::handleUninstallAction(int id){
+    qDebug() << sender() << "handleUninstallAction" << id;
     switch (id) {
     case 0:
         break;

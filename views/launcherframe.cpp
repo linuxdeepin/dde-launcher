@@ -108,7 +108,14 @@ void LauncherFrame::initUI(){
     m_layout->addWidget(appBox);
     m_layout->setContentsMargins(0, 0, 0, 0);
     setLayout(m_layout);
-    m_layout->setCurrentIndex(0);
+
+    int mode = dbusController->getSortMethod();
+    qDebug() <<  "initUI" << mode;
+    if (mode == 0 || mode == 2 || mode == 3){
+        m_layout->setCurrentIndex(1);
+    }else{
+        m_layout->setCurrentIndex(0);
+    }
     m_displayModeFrame = new DisplayModeFrame(this);
 
     m_searchLineEdit = new SearchLineEdit(this);
@@ -162,6 +169,7 @@ void LauncherFrame::toggleDisableNavgationBar(bool flag){
 }
 
 void LauncherFrame::showSortedMode(int mode){
+    qDebug() << mode;
     if (mode == 1){
         showNavigationBarByMode();
     }else{

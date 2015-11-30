@@ -43,6 +43,8 @@ void CategoryTableWidget::initConnect(){
             this, SLOT(hideAutoStartLabel(QString)));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(handleScrollBarValueChanged(int)));
+    connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
+            this, SIGNAL(verticalPositionChanged(int)));
     connect(this, SIGNAL(currentAppItemChanged(QString)),
             this, SLOT(handleCurrentAppItemChanged(QString)));
 }
@@ -272,6 +274,13 @@ void CategoryTableWidget::hideAutoStartLabel(QString appKey){
     if (m_appItems.contains(appKey)){
         reinterpret_cast<AppItem*>(m_appItems.value(appKey))->hideAutoStartLabel();
     }
+}
+
+void CategoryTableWidget::showEvent(QShowEvent *event)
+{
+    emit verticalPositionChanged(verticalScrollBar()->value());
+
+    BaseTableWidget::showEvent(event);
 }
 
 void CategoryTableWidget::wheelEvent(QWheelEvent *event){

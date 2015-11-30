@@ -17,6 +17,7 @@ public:
     void initConnect();
 
 signals:
+    void verticalPositionChanged(int pos);
 
 public slots:
     void setGridParameter(int column, int girdWidth, int itemWidth);
@@ -39,7 +40,8 @@ public slots:
     void handleCurrentAppItemChanged(QString appKey);
 
 protected:
-    void wheelEvent(QWheelEvent* event);
+    void showEvent(QShowEvent * event);
+    void wheelEvent(QWheelEvent * event);
 private:
     int m_column;
     int m_gridWidth;

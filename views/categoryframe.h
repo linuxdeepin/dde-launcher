@@ -23,6 +23,7 @@ public:
 
 signals:
     void showed();
+    void contentScrolled(int value);
 
 protected:
     void showEvent(QShowEvent *);

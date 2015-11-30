@@ -161,6 +161,7 @@ void LauncherFrame::initConnect(){
     connect(signalManager, SIGNAL(activeWindowChanged(uint)), this, SLOT(handleActiveWindowChanged(uint)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SIGNAL(Closed()));
     connect(m_categoryFrame, SIGNAL(showed()), this, SLOT(showGradients()));
+    connect(m_categoryFrame, SIGNAL(contentScrolled(int)), this, SLOT(handleCategoryFrameContentScrolled(int)));
     connect(m_appTableWidget, SIGNAL(showed()), this, SLOT(showGradients()));
     connect(m_backgroundLabel, SIGNAL(changed(QPixmap)), this, SLOT(updateGradients(QPixmap)));
 }
@@ -297,6 +298,15 @@ void LauncherFrame::handleScreenGeometryChanged(){
 //        qDebug() << "remove" << m_backgroundLabel->getCacheUrl() << flag;
 //    }
     qApp->quit();
+}
+
+void LauncherFrame::handleCategoryFrameContentScrolled(int value)
+{
+    if (value == 0) {
+        m_topGradient->setVisible(false);
+    } else {
+        m_topGradient->setVisible(true);
+    }
 }
 
 void LauncherFrame::Exit(){

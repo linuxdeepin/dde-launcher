@@ -38,6 +38,9 @@ void CategoryFrame::initUI(int leftMargin, int rightMargin, int column, int item
     setLayout(layout);
 
     m_categoryTableWidget->setFocusPolicy(Qt::NoFocus);
+
+    connect(m_categoryTableWidget, SIGNAL(verticalPositionChanged(int)),
+            this, SIGNAL(contentScrolled(int)));
 }
 
 NavigationBar* CategoryFrame::getNavigationBar(){

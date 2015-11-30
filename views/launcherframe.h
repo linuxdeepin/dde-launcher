@@ -59,6 +59,7 @@ public slots:
     void showGradients() const;
     void updateGradients(QPixmap) const;
     void handleActiveWindowChanged(uint windowId);
+    void handleCategoryFrameContentScrolled(int value);
 
 protected:
     void mouseReleaseEvent(QMouseEvent* event);

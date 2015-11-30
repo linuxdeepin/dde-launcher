@@ -52,8 +52,6 @@ LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
     initConnect();
     setStyleSheet(getQssFromFile(":/qss/skin/qss/main.qss"));
     qDebug() << geometry();
-
-    installEventFilter(this);
 }
 
 void LauncherFrame::setIconSizeByDpi(int width, int height){
@@ -120,7 +118,6 @@ void LauncherFrame::initUI(){
     m_displayModeFrame = new DisplayModeFrame(this);
 
     m_searchLineEdit = new SearchLineEdit(this);
-    m_searchLineEdit->hide();
 
     m_topGradient = new GradientLabel(this);
     m_bottomGradient = new GradientLabel(this);
@@ -166,6 +163,9 @@ void LauncherFrame::initConnect(){
     connect(m_backgroundLabel, SIGNAL(changed(QPixmap)), this, SLOT(updateGradients(QPixmap)));
 }
 
+int LauncherFrame::currentMode(){
+    return m_layout->currentIndex();
+}
 
 void LauncherFrame::toggleDisableNavgationBar(bool flag){
     m_categoryFrame->getNavigationBar()->setDisabled(flag);
@@ -217,54 +217,6 @@ void LauncherFrame::mouseReleaseEvent(QMouseEvent *event){
 }
 
 void LauncherFrame::keyPressEvent(QKeyEvent *event){
-    if (event->key() == Qt::Key_Escape){
-        if (m_searchLineEdit->isVisible()){
-            hideSearchEdit();
-        }else{
-            hide();
-        }
-    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Up){
-        emit signalManager->keyDirectionPressed(Qt::Key_Up);
-    }else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_P){
-        emit signalManager->keyDirectionPressed(Qt::Key_Up);
-    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Down) {
-        emit signalManager->keyDirectionPressed(Qt::Key_Down);
-    }else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_N){
-        emit signalManager->keyDirectionPressed(Qt::Key_Down);
-    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Left){
-        emit signalManager->keyDirectionPressed(Qt::Key_Left);
-    }else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_B){
-        emit signalManager->keyDirectionPressed(Qt::Key_Left);
-    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Right){
-        emit signalManager->keyDirectionPressed(Qt::Key_Right);
-    }else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_F){
-        emit signalManager->keyDirectionPressed(Qt::Key_Right);
-    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Return){
-        qDebug() << "Enter Pressed";
-        if (m_layout->currentIndex() == 0){
-            emit signalManager->appOpenedInCategoryMode();
-        }else{
-            emit signalManager->appOpenedInAppMode();
-        }
-    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Backspace){
-        if (m_searchLineEdit->isVisible()){
-            m_searchText.remove(m_searchText.length() - 1, 1);
-            emit signalManager->startSearched(m_searchText);
-        }
-    }else if (event->text().trimmed().length() > 0 && event->key() != Qt::Key_Delete){
-        if (!m_searchLineEdit->isVisible()){
-            m_searchText.clear();
-            m_searchLineEdit->raise();
-            m_searchLineEdit->show();
-        }
-        m_searchText.append(event->text());
-        emit signalManager->startSearched(m_searchText);
-    } else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Tab) {
-        emit signalManager->keyDirectionPressed(Qt::Key_Right);
-    } else if ((event->modifiers() & Qt::ShiftModifier) && event->key() == Qt::Key_Backtab) {
-        emit signalManager->keyDirectionPressed(Qt::Key_Left);
-    }
-
     QFrame::keyPressEvent(event);
 }
 
@@ -276,16 +228,6 @@ void LauncherFrame::closeEvent(QCloseEvent *event){
     QFrame::closeEvent(event);
 }
 
-//void LauncherFrame::changeEvent(QEvent *event){
-//    if (event->type() == QEvent::ActivationChange){
-//        if (hasFocus() && !m_rightclicked){
-//            // in case that the uninstall window is shown.
-//            if (qApp->topLevelWindows().length() == 1){
-//                Hide();
-//            };
-//        }
-//    }
-//}
 
 void LauncherFrame::setRightclicked(bool flag){
     m_rightclicked = flag;
@@ -316,18 +258,15 @@ void LauncherFrame::Exit(){
 }
 
 void LauncherFrame::Hide(){
+    clearSearchEdit();
     hide();
-    m_searchLineEdit->hide();
-    m_searchLineEdit->clearFocus();
-    m_searchLineEdit->setText("");
-//    setFocus();
     emit signalManager->launcheRefreshed();
 }
 
 void LauncherFrame::Show(){
     m_rightclicked = false;
     show();
-//    setFocus();
+    m_searchLineEdit->setSearchFocus();
     raise();
     activateWindow();
     emit signalManager->firstButtonChecked();
@@ -348,19 +287,15 @@ void LauncherFrame::handleMouseReleased(){
 
 void LauncherFrame::handleSearch(const QString &text){
     if (text.length() == 0){
-        hideSearchEdit();
+        clearSearchEdit();
     }else{
         emit signalManager->search(text);
     }
 }
 
-void LauncherFrame::hideSearchEdit(){
-    if(m_searchLineEdit->isVisible()){
-        m_searchLineEdit->hide();
-        m_searchLineEdit->clearFocus();
-//        setFocus();
-        emit signalManager->launcheRefreshed();
-    }
+void LauncherFrame::clearSearchEdit(){
+    m_searchLineEdit->setText("");
+    emit signalManager->launcheRefreshed();
 }
 
 void LauncherFrame::handleAppOpened(const QString &appUrl){
@@ -418,20 +353,6 @@ void LauncherFrame::updateGradients(QPixmap) const
 {
     showGradients();
 }
-
-void LauncherFrame::inputMethodEvent(QInputMethodEvent *event){
-    qDebug() << event;
-    QFrame::inputMethodEvent(event);
-}
-
-bool LauncherFrame::eventFilter(QObject *obj, QEvent *event){
-//    qDebug() << event;
-//    if (event->type() == QEvent::WindowDeactivate && !m_rightclicked){
-//        Hide();
-//    }
-    return QFrame::eventFilter(obj, event);
-}
-
 
 void LauncherFrame::handleActiveWindowChanged(uint windowId){
     if (windowId != window()->winId()){

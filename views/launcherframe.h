@@ -19,6 +19,7 @@ class GradientLabel;
 class LauncherFrame : public QFrame
 {
     Q_OBJECT
+
 public:
     explicit LauncherFrame(QWidget *parent = 0);
     ~LauncherFrame();
@@ -34,6 +35,7 @@ public:
     void initUI();
     void initConnect();
     void computerGrid(int minimumLeftMargin, int minimumTopMargin, int miniSpacing ,int itemWidth);
+    int currentMode();
 
 signals:
     void Closed();
@@ -52,7 +54,7 @@ public slots:
     void Show();
     void Toggle();
     void handleSearch(const QString& text);
-    void hideSearchEdit();
+    void clearSearchEdit();
     void handleAppOpened(const QString& appUrl);
     void uninstallUpdateTable(QString appKey);
     void setRightclicked(bool flag);
@@ -66,10 +68,6 @@ protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
     void closeEvent(QCloseEvent* event);
-//    void changeEvent(QEvent* event);
-    void inputMethodEvent(QInputMethodEvent *event);
-
-    bool eventFilter(QObject *obj, QEvent *event);
 
 private:
     int m_leftMargin;

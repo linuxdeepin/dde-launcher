@@ -2,20 +2,31 @@
 #define SEARCHLINEEDIT_H
 
 #include <QFrame>
+#include <QCommonStyle>
 class QLabel;
 class DLineEdit;
 class QResizeEvent;
 
+
+class LineEditStyle : public QCommonStyle
+{
+public:
+    int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const;
+};
+
 class SearchLineEdit : public QFrame
 {
     Q_OBJECT
+
 public:
     explicit SearchLineEdit(QWidget *parent = 0);
     void initUI();
     void initConnect();
 
 protected:
+    void keyPressEvent(QKeyEvent* event);
     void resizeEvent(QResizeEvent *event);
+
 signals:
     void textChanged(const QString& text);
 

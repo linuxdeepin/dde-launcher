@@ -119,6 +119,10 @@ void DBaseDialog::setIcon(const QString &icon){
     m_iconLabel->setPixmap(QPixmap(m_icon).scaled(m_iconLabel->size()));
 }
 
+void DBaseDialog::setIcon(const QPixmap &icon){
+    m_iconLabel->setPixmap(icon.scaled(m_iconLabel->size()));
+}
+
 QString DBaseDialog::getMessage(){
     return m_message;
 }

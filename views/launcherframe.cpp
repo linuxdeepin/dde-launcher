@@ -413,9 +413,15 @@ void LauncherFrame::showGradients() const
     }
 }
 
+
 void LauncherFrame::updateGradients(QPixmap) const
 {
     showGradients();
+}
+
+void LauncherFrame::inputMethodEvent(QInputMethodEvent *event){
+    qDebug() << event;
+    QFrame::inputMethodEvent(event);
 }
 
 bool LauncherFrame::eventFilter(QObject *obj, QEvent *event){

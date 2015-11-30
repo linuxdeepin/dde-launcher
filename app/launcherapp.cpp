@@ -6,6 +6,7 @@
 #include "app/xcb_misc.h"
 #include "controller/dbusworker.h"
 #include "dialogs/confirmuninstalldialog.h"
+#include "widgets/themeappicon.h"
 #include <QDBusConnection>
 #include <QThread>
 
@@ -36,7 +37,9 @@ void LauncherApp::handleUninstall(QString appKey){
     qDebug() << "handleUninstall" << appKey;
     QString appName = dbusController->getLocalItemInfo(appKey).name;
     LauncherApp::UnistallAppNames.insert(appKey, appName);
+    QString iconKey = dbusController->getLocalItemInfo(appKey).iconKey;
     ConfirmUninstallDialog d(m_launcherFrame);
+    d.setIcon(ThemeAppIcon::getIconPixmap(iconKey, LauncherFrame::IconSize, LauncherFrame::IconSize));
     QString message = tr("Are you sure to uninstall %1 ?").arg(dbusController->getLocalItemInfo(appKey).name);
     d.setMessage(message);
     connect(&d, SIGNAL(buttonClicked(int)), this, SLOT(handleButtonClicked(int)));

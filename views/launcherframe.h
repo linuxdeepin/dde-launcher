@@ -3,6 +3,7 @@
 
 #include <QFrame>
 #include <QMouseEvent>
+#include <QInputEvent>
 
 class CategoryFrame;
 class AppTableWidget;
@@ -66,6 +67,7 @@ protected:
     void keyPressEvent(QKeyEvent* event);
     void closeEvent(QCloseEvent* event);
 //    void changeEvent(QEvent* event);
+    void inputMethodEvent(QInputMethodEvent *event);
 
     bool eventFilter(QObject *obj, QEvent *event);
 

@@ -37,6 +37,7 @@ signals:
 
 public slots:
    void setIcon(const QString& icon);
+   void setIcon(const QPixmap& icon);
    void setMessage(const QString& message);
    void setTipMessage(const QString& tipMessage);
    void setButtons(const QStringList& buttons);

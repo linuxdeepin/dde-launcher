@@ -225,7 +225,7 @@ void MenuController::handleOpen(QString appKey){
     emit signalManager->Hide();
     QString url = dbusController->getItemInfo(appKey).url;
     qDebug() << "handleOpen" << appKey << url;
-    QDBusPendingReply<bool> reply = dbusController->getStartManagerInterface()->Launch(appKey);
+    QDBusPendingReply<bool> reply = dbusController->getStartManagerInterface()->Launch(url);
     reply.waitForFinished();
     if (!reply.isError()) {
         bool ret = reply.argumentAt(0).toBool();

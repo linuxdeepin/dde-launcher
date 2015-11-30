@@ -176,7 +176,7 @@ void AppTableWidget::openCheckedApp(){
                 QString className = QString(cellWidget(0, 0)->metaObject()->className());
                 if (className == "AppItem"){
                     AppItem* appItem = static_cast<AppItem*>(cellWidget(0, 0));
-                    emit signalManager->appOpened(appItem->getUrl());
+                    emit signalManager->appOpened(appItem->getAppKey());
                     break;
                 }
             }
@@ -186,7 +186,7 @@ void AppTableWidget::openCheckedApp(){
             QString className = QString(cellWidget(hRow, hColumn)->metaObject()->className());
             if (className == "AppItem"){
                 AppItem* appItem = static_cast<AppItem*>(cellWidget(hRow, hColumn));
-                emit signalManager->appOpened(appItem->getUrl());
+                emit signalManager->appOpened(appItem->getAppKey());
             }
         }
     }

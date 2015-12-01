@@ -39,7 +39,7 @@ void MenuController::initConnect(){
     connect(signalManager, SIGNAL(contextMenuShowed(QString,QPoint)),
             this, SLOT(showMenuByAppItem(QString,QPoint)));
     connect(signalManager, SIGNAL(appOpened(QString)), this, SLOT(handleOpen(QString)));
-    connect(signalManager, SIGNAL(uninstallActionChanged(int)), this, SLOT(handleUninstallAction(int)));
+    connect(signalManager, SIGNAL(uninstallActionChanged(QString,int)), this, SLOT(handleUninstallAction(QString,int)));
 }
 
 MenuController::~MenuController()
@@ -320,17 +320,21 @@ void MenuController::handleToStartup(QString appKey){
     }
 }
 
-void MenuController::handleUninstallAction(int id){
-    qDebug() << sender() << "handleUninstallAction" << id;
+void MenuController::handleUninstallAction(QString appKey, int id){
+    qDebug() << sender() << "handleUninstallAction" << appKey << id;
     switch (id) {
     case 0:
+        if (LauncherApp::UnistallAppNames.contains(appKey)){
+            LauncherApp::UnistallAppNames.remove(appKey);
+        }
         break;
     case 1:
-        startUnistall(m_appKeyRightClicked);
+        startUnistall(appKey);
         break;
     default:
         break;
     }
+
 }
 
 void MenuController::startUnistall(QString appKey){

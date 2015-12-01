@@ -6,6 +6,7 @@
 
 ConfirmUninstallDialog::ConfirmUninstallDialog(QWidget *parent) : DBaseDialog(parent)
 {
+    m_appKey = "";
     QString icon = ":/images/skin/dialogs/images/user-trash-full.png";
     QString message = "Are you sure to uninstall this application?";
     QString tipMessage = tr("All dependencies will be removed together");
@@ -20,6 +21,14 @@ ConfirmUninstallDialog::ConfirmUninstallDialog(QWidget *parent) : DBaseDialog(pa
 
 void ConfirmUninstallDialog::handleKeyEnter(){
     handleButtonsClicked(1);
+}
+
+QString ConfirmUninstallDialog::getAppKey(){
+    return m_appKey;
+}
+
+void ConfirmUninstallDialog::setAppKey(QString appKey){
+    m_appKey = appKey;
 }
 
 ConfirmUninstallDialog::~ConfirmUninstallDialog()

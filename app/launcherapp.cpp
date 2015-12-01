@@ -9,6 +9,7 @@
 #include "widgets/themeappicon.h"
 #include <QDBusConnection>
 #include <QThread>
+#include <QDebug>
 
 QMap<QString, QString> LauncherApp::UnistallAppNames;
 
@@ -39,8 +40,9 @@ void LauncherApp::handleUninstall(QString appKey){
     LauncherApp::UnistallAppNames.insert(appKey, appName);
     QString iconKey = dbusController->getLocalItemInfo(appKey).iconKey;
     ConfirmUninstallDialog d(m_launcherFrame);
+    d.setAppKey(appKey);
     d.setIcon(ThemeAppIcon::getIconPixmap(iconKey, LauncherFrame::IconSize, LauncherFrame::IconSize));
-    QString message = tr("Are you sure to uninstall %1 ?").arg(dbusController->getLocalItemInfo(appKey).name);
+    QString message = tr("Are you sure to uninstall %1 ?").arg(appName);
     d.setMessage(message);
     connect(&d, SIGNAL(buttonClicked(int)), this, SLOT(handleButtonClicked(int)));
     d.exec();
@@ -49,7 +51,8 @@ void LauncherApp::handleUninstall(QString appKey){
 
 void LauncherApp::handleButtonClicked(int buttonId){
     qDebug() << sender() <<buttonId;
-    emit signalManager->uninstallActionChanged(buttonId);
+    QString appKey = static_cast<ConfirmUninstallDialog*>(sender())->getAppKey();
+    emit signalManager->uninstallActionChanged(appKey, buttonId);
 }
 
 

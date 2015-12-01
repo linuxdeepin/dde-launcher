@@ -17,6 +17,7 @@ class NotificationInterface;
 class MenuController : public QObject
 {
     Q_OBJECT
+
 public:
 
     explicit MenuController(QObject *parent = 0);
@@ -47,7 +48,7 @@ public slots:
     void handleToDock(QString appKey);
     void handleToStartup(QString appKey);
 
-    void handleUninstallAction(int id);
+    void handleUninstallAction(QString appKey, int id);
     void startUnistall(QString appKey);
     void handleUninstallSuccess(const QString& appKey);
     void handleUninstallFail(const QString& appKey, const QString& message);

@@ -12,6 +12,7 @@
 #include "background/backgroundlabel.h"
 #include "baseframe.h"
 #include "dbusinterface/displayinterface.h"
+#include "app/launcherapp.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QStackedLayout>
@@ -208,7 +209,8 @@ void LauncherFrame::showNavigationBarByMode(){
 void LauncherFrame::mouseReleaseEvent(QMouseEvent *event){
     qDebug() << event;
     if (event->button() == Qt::LeftButton){
-        if (!m_displayModeFrame->getButtonFrame()->isVisible()){
+        bool flag = LauncherApp::UnistallAppNames.count() == 0;
+        if (!m_displayModeFrame->getButtonFrame()->isVisible() && flag){
             emit signalManager->mouseReleased();
             Hide();
         }
@@ -378,6 +380,7 @@ bool LauncherFrame::eventFilter(QObject *obj, QEvent *event){
 }
 
 void LauncherFrame::handleActiveWindowChanged(uint windowId){
+    qDebug() << windowId << window()->winId();
     if (windowId != window()->winId()){
         Hide();
     }

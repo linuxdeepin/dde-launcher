@@ -79,7 +79,7 @@ signals:
 
     /*handle unistall action*/
     void appUninstalled(QString appKey);
-    void uninstallActionChanged(int id);
+    void uninstallActionChanged(QString appKey, int id);
 
     /*active changed signal from dock dbus client*/
     void activeWindowChanged(uint windowId);

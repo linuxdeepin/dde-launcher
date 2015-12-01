@@ -26,6 +26,10 @@ void DisplayModeFrame::initUI(){
     m_delayHideTimer->setSingleShot(true);
     m_delayHideTimer->setInterval(500);
 
+    m_delayShowTimer = new QTimer(this);
+    m_delayShowTimer->setSingleShot(true);
+    m_delayShowTimer->setInterval(200);
+
     m_viewModeButton = new ViewModeButton(this);
     m_viewModeButton->setFixedSize(32, 32);
     m_viewModeButton->move(NavgationBarLeftMargin, 40);
@@ -65,6 +69,7 @@ void DisplayModeFrame::initConnect(){
     connect(m_viewModeButton, SIGNAL(mouseEnterToggled(bool)), this, SLOT(toggleButtonFrameByViewButton(bool)));
     connect(m_buttonFrame, SIGNAL(mouseEnterToggled(bool)), this, SLOT(toggleButtonFrameBySelf(bool)));
     connect(m_delayHideTimer, SIGNAL(timeout()), this, SLOT(hideButtonFrame()));
+    connect(m_delayShowTimer, SIGNAL(timeout()), this, SLOT(showButtonFrame()));
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(setViewMode(int)));
 }
 
@@ -80,8 +85,9 @@ void DisplayModeFrame::toggleButtonFrameByViewButton(bool flag){
     }
     if (flag && m_viewModeButton->geometry().contains(QCursor::pos())){
         if(!m_buttonFrame->isVisible())
-            showButtonFrame();
+            m_delayShowTimer->start();
     }else{
+        m_delayShowTimer->stop();
         m_delayHideTimer->start();
     }
 }

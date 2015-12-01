@@ -58,6 +58,7 @@ private:
     BaseCheckedButton* m_useFrequencyButton;
     QButtonGroup* m_buttonGroup;
     QTimer* m_delayHideTimer;
+    QTimer* m_delayShowTimer;
 };
 
 #endif // DISPLAYMODEFRAME_H

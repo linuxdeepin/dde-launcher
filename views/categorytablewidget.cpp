@@ -276,6 +276,10 @@ void CategoryTableWidget::hideAutoStartLabel(QString appKey){
     }
 }
 
+void CategoryTableWidget::handleWheelEvent(QWheelEvent *event){
+    wheelEvent(event);
+}
+
 void CategoryTableWidget::showEvent(QShowEvent *event)
 {
     emit verticalPositionChanged(verticalScrollBar()->value());

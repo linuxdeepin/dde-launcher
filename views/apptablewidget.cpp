@@ -146,6 +146,10 @@ void AppTableWidget::showNormalMode(){
     showBySortedMode(m_currentMode);
 }
 
+void AppTableWidget::handleWheelEvent(QWheelEvent *event){
+    wheelEvent(event);
+}
+
 void AppTableWidget::wheelEvent(QWheelEvent *event){
     int value = verticalScrollBar()->value();
     int miniimun = verticalScrollBar()->minimum();

@@ -354,6 +354,29 @@ void LauncherFrame::updateGradients(QPixmap) const
     showGradients();
 }
 
+
+void LauncherFrame::inputMethodEvent(QInputMethodEvent *event){
+    qDebug() << event;
+    QFrame::inputMethodEvent(event);
+}
+
+void LauncherFrame::wheelEvent(QWheelEvent *event){
+    if (m_layout->currentIndex() == 0){
+        m_categoryFrame->getCategoryTabelWidget()->handleWheelEvent(event);
+    }else{
+        m_appTableWidget->handleWheelEvent(event);
+    }
+    QFrame::wheelEvent(event);
+}
+
+bool LauncherFrame::eventFilter(QObject *obj, QEvent *event){
+//    qDebug() << event;
+//    if (event->type() == QEvent::WindowDeactivate && !m_rightclicked){
+//        Hide();
+//    }
+    return QFrame::eventFilter(obj, event);
+}
+
 void LauncherFrame::handleActiveWindowChanged(uint windowId){
     if (windowId != window()->winId()){
         Hide();

@@ -44,6 +44,8 @@ public slots:
     void showAutoStartLabel(QString appKey);
     void hideAutoStartLabel(QString appKey);
 
+    void handleWheelEvent(QWheelEvent * event);
+
 protected:
     void wheelEvent(QWheelEvent *);
     void showEvent(QShowEvent *);

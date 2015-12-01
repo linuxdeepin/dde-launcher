@@ -39,6 +39,8 @@ public slots:
 
     void handleCurrentAppItemChanged(QString appKey);
 
+    void handleWheelEvent(QWheelEvent * event);
+
 protected:
     void showEvent(QShowEvent * event);
     void wheelEvent(QWheelEvent * event);

@@ -68,6 +68,11 @@ protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
     void closeEvent(QCloseEvent* event);
+//    void changeEvent(QEvent* event);
+    void inputMethodEvent(QInputMethodEvent *event);
+    void wheelEvent(QWheelEvent * event);
+    bool eventFilter(QObject *obj, QEvent *event);
+
 
 private:
     int m_leftMargin;

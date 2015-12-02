@@ -232,7 +232,7 @@ void MenuController::handleOpen(QString appKey){
         qDebug() << "Launch app:" << ret;
         if (ret){
             dbusController->getLauncherInterface()->MarkLaunched(appKey);
-            dbusController->getLauncherInterface()->RecordFrequency(appKey);
+//            dbusController->getLauncherInterface()->RecordFrequency(appKey);
         }
     } else {
         qCritical() << reply.error().message();

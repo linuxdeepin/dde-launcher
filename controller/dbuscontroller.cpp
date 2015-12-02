@@ -7,22 +7,32 @@
 #include "app/global.h"
 #include "controller/menucontroller.h"
 #include "dbusinterface/dbusclientmanager.h"
+#include "dbusinterface/pinyin_interface.h"
 #include <QDebug>
 #include <QtCore>
 #include <QtDBus>
 
+inline bool compareByName(const QString& name1, const QString& name2)
+{
+    return name1 < name2;
+}
+
 bool appNameLessThan(const ItemInfo &info1, const ItemInfo &info2)
 {
-    return info1.name < info2.name;
+    return compareByName(info1.name, info2.name);
 }
 
-bool installTimeLessThan(const ItemInfo &info1, const ItemInfo &info2)
+bool installTimeMoreThan(const ItemInfo &info1, const ItemInfo &info2)
 {
-    return info1.intsalledTime < info2.intsalledTime;
+    if (info1.installedTime > info2.installedTime) return true;
+    if (info1.installedTime < info2.installedTime) return false;
+    return compareByName(info1.name, info2.name);
 }
 
-bool useFrequencyMoreThan(const AppFrequencyInfo &info1, const AppFrequencyInfo &info2){
-    return info1.count > info2.count;
+bool useFrequencyMoreThan(const ItemInfo &info1, const ItemInfo &info2){
+    if (info1.count > info2.count) return true;
+    if (info1.count < info2.count) return false;
+    return compareByName(info1.name, info2.name);
 }
 
 DBusController::DBusController(QObject *parent) : QObject(parent)
@@ -33,6 +43,7 @@ DBusController::DBusController(QObject *parent) : QObject(parent)
     m_startManagerInterface = new StartManagerInterface(StartManager_service, StartManager_path, QDBusConnection::sessionBus(), this);
     m_displayInterface = new DisplayInterface(this);
     m_dockClientManagerInterface = new DBusClientManager;
+    m_pinyinInterface = new PinyinInterface(Pinyin_service, Pinyin_path, QDBusConnection::sessionBus(), this);
     m_menuController = new MenuController(this);
     initConnect();
 }
@@ -168,10 +179,17 @@ void DBusController::sortedByAppName(QList<ItemInfo> infos){
 }
 
 void DBusController::sortedByInstallTime(QList<ItemInfo> infos){
-    std::sort(infos.begin(), infos.end(), installTimeLessThan);
+    std::sort(infos.begin(), infos.end(), installTimeMoreThan);
     m_installTimeSortedList.clear();
     m_installTimeSortedList = infos;
     emit signalManager->installTimeItemInfoListChanged(m_installTimeSortedList);
+}
+
+void DBusController::sortedByFrequency(QList<ItemInfo> infos){
+    std::sort(infos.begin(), infos.end(), useFrequencyMoreThan);
+    m_useFrequencySortedList.clear();
+    m_useFrequencySortedList = infos;
+    emit signalManager->useFrequencyItemInfoListChanged(m_useFrequencySortedList);
 }
 
 void DBusController::getAllFrequencyItems(){
@@ -180,14 +198,13 @@ void DBusController::getAllFrequencyItems(){
     reply.waitForFinished();
     if (!reply.isError()){
         m_appFrequencyInfoList = qdbus_cast<AppFrequencyInfoList>(reply.argumentAt(0));
-        std::sort(m_appFrequencyInfoList.begin(), m_appFrequencyInfoList.end(), useFrequencyMoreThan);
         for(int i=0; i< m_appFrequencyInfoList.count(); i++){
             QString key = m_appFrequencyInfoList.at(i).key;
             if (m_itemInfos.contains(key)){
-                m_useFrequencySortedList.append(m_itemInfos.value(key));
+                m_itemInfos[key].count = m_appFrequencyInfoList.at(i).count;
             }
         }
-        emit signalManager->useFrequencyItemInfoListChanged(m_useFrequencySortedList);
+        sortedByFrequency(m_itemInfos.values());
     }else{
         qCritical() << reply.error().message();
     }
@@ -196,7 +213,21 @@ void DBusController::getAllFrequencyItems(){
 }
 
 void DBusController::getInstalledTimeItems(){
-    sortedByInstallTime(m_itemInfos.values());
+    m_installTimeSortedList.clear();
+    QDBusPendingReply<AppInstalledTimeInfoList> reply = m_launcherInterface->GetAllTimeInstalled();
+    reply.waitForFinished();
+    if (!reply.isError()){
+        m_appInstalledTimeInfoList = qdbus_cast<AppInstalledTimeInfoList>(reply.argumentAt(0));
+        for(int i=0; i< m_appInstalledTimeInfoList.count(); i++){
+            QString key = m_appInstalledTimeInfoList.at(i).key;
+            if (m_itemInfos.contains(key)){
+                m_itemInfos[key].installedTime = m_appInstalledTimeInfoList.at(i).installedTime;
+            }
+        }
+        sortedByInstallTime(m_itemInfos.values());
+    }else{
+        qCritical() << reply.error().message();
+    }
 }
 
 

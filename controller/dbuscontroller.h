@@ -12,6 +12,7 @@ class StartManagerInterface;
 class MenuController;
 class DisplayInterface;
 class DBusClientManager;
+class PinyinInterface;
 
 #define Launcher_service "com.deepin.dde.daemon.Launcher"
 #define Launcher_path "/com/deepin/dde/daemon/Launcher"
@@ -22,13 +23,17 @@ class DBusClientManager;
 #define StartManager_service "com.deepin.SessionManager"
 #define StartManager_path "/com/deepin/StartManager"
 
+#define Pinyin_service "com.deepin.api.Pinyin"
+#define Pinyin_path "/com/deepin/api/Pinyin"
+
 bool appNameLessThan(const ItemInfo &info1, const ItemInfo &info2);
-bool installTimeLessThan(const ItemInfo &info1, const ItemInfo &info2);
-bool useFrequencyLessThan(const AppFrequencyInfo &info1, const AppFrequencyInfo &info2);
+bool installTimeMoreThan(const ItemInfo &info1, const ItemInfo &info2);
+bool useFrequencyMoreThan(const ItemInfo &info1, const ItemInfo &info2);
 
 class DBusController : public QObject
 {
     Q_OBJECT
+
 public:
     explicit DBusController(QObject *parent = 0);
     ~DBusController();
@@ -50,6 +55,7 @@ public:
 
     void sortedByAppName(QList<ItemInfo> infos);
     void sortedByInstallTime(QList<ItemInfo> infos);
+    void sortedByFrequency(QList<ItemInfo> infos);
 
 signals:
 
@@ -73,6 +79,7 @@ private:
     CategoryInfoList m_categoryInfoList;
     CategoryInfoList m_categoryAppNameSortedInfoList;
     DBusClientManager* m_dockClientManagerInterface;
+    PinyinInterface* m_pinyinInterface;
 
     QMap<QString, ItemInfo> m_itemInfos;
     QMap<QString, QStringList> m_categoryAppNames;

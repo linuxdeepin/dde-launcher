@@ -84,7 +84,7 @@ void AppInstalledTimeInfo::registerMetaType()
 QDBusArgument &operator<<(QDBusArgument &argument, const AppInstalledTimeInfo &obj)
 {
     argument.beginStructure();
-    argument << obj.key << obj.intsalledTime;
+    argument << obj.key << obj.installedTime;
     argument.endStructure();
     return argument;
 }
@@ -93,7 +93,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const AppInstalledTimeInfo &o
 const QDBusArgument &operator>>(const QDBusArgument &argument, AppInstalledTimeInfo &obj)
 {
     argument.beginStructure();
-    argument >> obj.key >> obj.intsalledTime;
+    argument >> obj.key >> obj.installedTime;
     argument.endStructure();
     return argument;
 }
@@ -121,7 +121,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo &obj)
     argument.beginStructure();
     argument << obj.url << obj.name;
     argument << obj.key << obj.iconKey;
-    argument << obj.id << obj.intsalledTime;
+    argument << obj.id << obj.installedTime;
 
     argument.endStructure();
     return argument;
@@ -133,7 +133,7 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, ItemInfo &obj)
     argument.beginStructure();
     argument >> obj.url >> obj.name;
     argument >> obj.key >> obj.iconKey;
-    argument >> obj.id >> obj.intsalledTime;
+    argument >> obj.id >> obj.installedTime;
     argument.endStructure();
     return argument;
 }

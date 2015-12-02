@@ -46,6 +46,7 @@ void DisplayModeFrame::initUI(){
     m_useFrequencyButton = new BaseCheckedButton(tr("By frequency"), this);
     m_buttonGroup->addButton(m_useFrequencyButton, 4);
 
+
     m_buttonFrame = new BaseFrame(this);
     QVBoxLayout* buttonLayout = new QVBoxLayout;
     buttonLayout->addWidget(m_nameButton);
@@ -101,19 +102,33 @@ void DisplayModeFrame::toggleButtonFrameBySelf(bool flag){
 }
 
 void DisplayModeFrame::showButtonFrame(){
-    setGeometry(0, 0, 160, 210);
+    int maxWidth = 0;
+    foreach (QAbstractButton* button, m_buttonGroup->buttons()) {
+        int w = fontMetrics().width(button->text());
+        if (w >= maxWidth){
+            maxWidth = w;
+        }
+    }
+    setGeometry(0, 0, m_buttonFrame->x() + maxWidth + 10, 210);
     m_buttonFrame->show();
     QPropertyAnimation *animation = new QPropertyAnimation(m_buttonFrame, "geometry");
     connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));
     animation->setDuration(100);
-    animation->setStartValue(QRect(m_buttonFrame->x(), m_buttonFrame->y(), 160, 72));
-    animation->setEndValue(QRect(m_buttonFrame->x(), m_buttonFrame->y(), 160, 210 - m_buttonFrame->y()));
+    animation->setStartValue(QRect(m_buttonFrame->x(), m_buttonFrame->y(), width() - m_buttonFrame->x(), 72));
+    animation->setEndValue(QRect(m_buttonFrame->x(), m_buttonFrame->y(), width() - m_buttonFrame->x(), height() - m_buttonFrame->y()));
     animation->start();
     emit visibleChanged(true);
 }
 
 void DisplayModeFrame::hideButtonFrame(){
-    setGeometry(0, 0, 160, 72);
+    int maxWidth = 0;
+    foreach (QAbstractButton* button, m_buttonGroup->buttons()) {
+        int w = fontMetrics().width(button->text());
+        if (w >= maxWidth){
+            maxWidth = w;
+        }
+    }
+    setGeometry(0, 0, m_buttonFrame->x() + maxWidth + 10, 72);
     m_buttonFrame->hide();
     m_viewModeButton->setNormalIconByMode(m_viewMode);
     emit visibleChanged(false);

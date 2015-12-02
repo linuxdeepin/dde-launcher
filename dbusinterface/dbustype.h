@@ -45,7 +45,7 @@ class  AppInstalledTimeInfo
 
 public:
     QString key;
-    qlonglong intsalledTime;
+    qlonglong installedTime;
 
     AppInstalledTimeInfo();
     ~AppInstalledTimeInfo();
@@ -66,11 +66,13 @@ public:
     QString key;
     QString iconKey;
     qlonglong id;
-    qlonglong intsalledTime;
+    qlonglong installedTime;
 
     /*add url*/
     bool isAutoStart=false;
     QString icon;
+    qulonglong count;
+    QString pinyinName;
 
     ItemInfo();
     ~ItemInfo();

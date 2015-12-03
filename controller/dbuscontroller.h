@@ -45,7 +45,7 @@ public:
     void getAllFrequencyItems();
     int getSortMethod();
     int getCategoryDisplayMode();
-
+    void convertNameToPinyin();
 
     LauncherInterface* getLauncherInterface();
     StartManagerInterface* getStartManagerInterface();
@@ -56,6 +56,7 @@ public:
     void sortedByAppName(QList<ItemInfo> infos);
     void sortedByInstallTime(QList<ItemInfo> infos);
     void sortedByFrequency(QList<ItemInfo> infos);
+    QList<QList<ItemInfo>> sortPingyinEnglish(QList<ItemInfo> infos);
 
 signals:
 
@@ -89,6 +90,7 @@ private:
     QList<ItemInfo> m_installTimeSortedList;
     QList<ItemInfo> m_useFrequencySortedList;
     QList<ItemInfo> m_searchList;
+    QList<QList<ItemInfo>> m_pinyinEnglishInfos;
 };
 
 #endif // DBUSCONTROLLER_H

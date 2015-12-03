@@ -73,6 +73,7 @@ public:
     QString icon;
     qulonglong count;
     QString pinyinName;
+    QString lowerPinyinName;
 
     ItemInfo();
     ~ItemInfo();

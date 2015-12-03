@@ -19,20 +19,20 @@ inline bool compareByName(const QString& name1, const QString& name2)
 
 bool appNameLessThan(const ItemInfo &info1, const ItemInfo &info2)
 {
-    return compareByName(info1.name, info2.name);
+    return compareByName(info1.lowerPinyinName, info2.lowerPinyinName);
 }
 
 bool installTimeMoreThan(const ItemInfo &info1, const ItemInfo &info2)
 {
     if (info1.installedTime > info2.installedTime) return true;
     if (info1.installedTime < info2.installedTime) return false;
-    return compareByName(info1.name, info2.name);
+    return compareByName(info1.lowerPinyinName, info2.lowerPinyinName);
 }
 
 bool useFrequencyMoreThan(const ItemInfo &info1, const ItemInfo &info2){
     if (info1.count > info2.count) return true;
     if (info1.count < info2.count) return false;
-    return compareByName(info1.name, info2.name);
+    return compareByName(info1.lowerPinyinName, info2.lowerPinyinName);
 }
 
 DBusController::DBusController(QObject *parent) : QObject(parent)
@@ -148,6 +148,8 @@ void DBusController::getCategoryInfoList(){
             }
         }
 
+        convertNameToPinyin();
+
         sortedByAppName(m_itemInfos.values());
         foreach (CategoryInfo item, m_categoryInfoList) {
             if (item.key != "all" && item.id != -1){
@@ -170,26 +172,83 @@ void DBusController::getCategoryInfoList(){
     }
 }
 
+void DBusController::convertNameToPinyin(){
+    QStringList names;
+    foreach(QString appKey, m_itemInfos.keys()){
+        names.append(m_itemInfos.value(appKey).name);
+    }
+
+    QDBusPendingReply<QString> reply = m_pinyinInterface->QueryList(names);
+    reply.waitForFinished();
+    if (!reply.isError()){
+        QString result = reply.argumentAt(0).toString();
+        QJsonObject obj = QJsonObject::fromVariantMap(QJsonDocument::fromJson(result.toLocal8Bit()).toVariant().toMap());
+        foreach(QString appKey, m_itemInfos.keys()){
+            QString name = m_itemInfos.value(appKey).name;
+            if (obj.contains(name)){
+                  QList<QVariant> pinyins  = obj.value(name).toVariant().toList();
+                  if (pinyins.length() > 0){
+                      m_itemInfos[appKey].pinyinName = pinyins.at(0).toString();
+                      m_itemInfos[appKey].lowerPinyinName = m_itemInfos[appKey].pinyinName.toLower();
+                  }
+            }
+        }
+        m_pinyinEnglishInfos = sortPingyinEnglish(m_itemInfos.values());
+    }else{
+        qCritical() << reply.error().message();
+    }
+}
+
 
 void DBusController::sortedByAppName(QList<ItemInfo> infos){
-    std::sort(infos.begin(), infos.end(), appNameLessThan);
+    Q_UNUSED(infos)
+    QList<ItemInfo> pinyinInfos = m_pinyinEnglishInfos[0];
+    QList<ItemInfo> englishInfos = m_pinyinEnglishInfos[1];
+    std::sort(pinyinInfos.begin(), pinyinInfos.end(), appNameLessThan);
+    std::sort(englishInfos.begin(), englishInfos.end(), appNameLessThan);
     m_appNameSortedList.clear();
-    m_appNameSortedList = infos;
+    m_appNameSortedList = pinyinInfos + englishInfos;
     emit signalManager->appNameItemInfoListChanged(m_appNameSortedList);
 }
 
 void DBusController::sortedByInstallTime(QList<ItemInfo> infos){
-    std::sort(infos.begin(), infos.end(), installTimeMoreThan);
+    Q_UNUSED(infos)
+    QList<ItemInfo> pinyinInfos = m_pinyinEnglishInfos[0];
+    QList<ItemInfo> englishInfos = m_pinyinEnglishInfos[1];
+    std::sort(pinyinInfos.begin(), pinyinInfos.end(), installTimeMoreThan);
+    std::sort(englishInfos.begin(), englishInfos.end(), installTimeMoreThan);
     m_installTimeSortedList.clear();
-    m_installTimeSortedList = infos;
+    m_installTimeSortedList = pinyinInfos + englishInfos;
     emit signalManager->installTimeItemInfoListChanged(m_installTimeSortedList);
 }
 
 void DBusController::sortedByFrequency(QList<ItemInfo> infos){
-    std::sort(infos.begin(), infos.end(), useFrequencyMoreThan);
+    Q_UNUSED(infos)
+    QList<ItemInfo> pinyinInfos = m_pinyinEnglishInfos[0];
+    QList<ItemInfo> englishInfos = m_pinyinEnglishInfos[1];
+    std::sort(pinyinInfos.begin(), pinyinInfos.end(), useFrequencyMoreThan);
+    std::sort(englishInfos.begin(), englishInfos.end(), useFrequencyMoreThan);
     m_useFrequencySortedList.clear();
-    m_useFrequencySortedList = infos;
+    m_useFrequencySortedList = pinyinInfos + englishInfos;
     emit signalManager->useFrequencyItemInfoListChanged(m_useFrequencySortedList);
+}
+
+QList<QList<ItemInfo>>  DBusController::sortPingyinEnglish(QList<ItemInfo> infos){
+    QList<QList<ItemInfo>>  result;
+    QList<ItemInfo> pinyinInfos;
+    QList<ItemInfo> englishInfos;
+    foreach (ItemInfo info, infos) {
+        if (info.pinyinName.length() > 0 && info.name.length() > 0){
+            if (info.pinyinName.at(0) == info.name.at(0)){
+                englishInfos.append(info);
+            }else{
+                pinyinInfos.append(info);
+            }
+        }
+    }
+    result.append(pinyinInfos);
+    result.append(englishInfos);
+    return result;
 }
 
 void DBusController::getAllFrequencyItems(){
@@ -286,8 +345,10 @@ void DBusController::setSortMethod(int mode){
 
 void DBusController::searchDone(QStringList appKeys){
     m_searchList.clear();
-    foreach(QString appKey, appKeys){
-        m_searchList.append(m_itemInfos.value(appKey));
+    foreach (const ItemInfo& info, m_appNameSortedList) {
+        if (appKeys.contains(info.key)){
+            m_searchList.append(info);
+        }
     }
     emit signalManager->showSearchResult();
     emit signalManager->searchItemInfoListChanged(m_searchList);

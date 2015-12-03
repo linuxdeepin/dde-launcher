@@ -80,6 +80,8 @@ void DBusController::initConnect(){
     connect(signalManager, SIGNAL(itemDeleted(QString)), this, SLOT(updateAppTable(QString)));
     connect(signalManager, SIGNAL(sortedModeChanged(int)), this, SLOT(setSortMethod(int)));
     connect(signalManager, SIGNAL(categoryModeChanged(int)), this, SLOT(setCategoryDisplayMode(int)));
+    connect(signalManager, SIGNAL(installTimeRefreshed()), this, SLOT(getInstalledTimeItems()));
+    connect(signalManager, SIGNAL(frequencyRefreshed()), this, SLOT(getAllFrequencyItems()));
     connect(m_displayInterface, SIGNAL(PrimaryRectChanged()), signalManager, SIGNAL(screenGeometryChanged()));
     connect(m_displayInterface, SIGNAL(PrimaryChanged()), signalManager, SIGNAL(screenGeometryChanged()));
     connect(m_dockClientManagerInterface, SIGNAL(ActiveWindowChanged(uint)), signalManager, SIGNAL(activeWindowChanged(uint)));
@@ -212,24 +214,19 @@ void DBusController::sortedByAppName(QList<ItemInfo> infos){
 }
 
 void DBusController::sortedByInstallTime(QList<ItemInfo> infos){
-    Q_UNUSED(infos)
-    QList<ItemInfo> pinyinInfos = m_pinyinEnglishInfos[0];
-    QList<ItemInfo> englishInfos = m_pinyinEnglishInfos[1];
-    std::sort(pinyinInfos.begin(), pinyinInfos.end(), installTimeMoreThan);
-    std::sort(englishInfos.begin(), englishInfos.end(), installTimeMoreThan);
+    std::sort(infos.begin(), infos.end(), useFrequencyMoreThan);
     m_installTimeSortedList.clear();
-    m_installTimeSortedList = pinyinInfos + englishInfos;
+    m_installTimeSortedList = infos;
     emit signalManager->installTimeItemInfoListChanged(m_installTimeSortedList);
 }
 
 void DBusController::sortedByFrequency(QList<ItemInfo> infos){
-    Q_UNUSED(infos)
-    QList<ItemInfo> pinyinInfos = m_pinyinEnglishInfos[0];
-    QList<ItemInfo> englishInfos = m_pinyinEnglishInfos[1];
-    std::sort(pinyinInfos.begin(), pinyinInfos.end(), useFrequencyMoreThan);
-    std::sort(englishInfos.begin(), englishInfos.end(), useFrequencyMoreThan);
+    std::sort(infos.begin(), infos.end(), useFrequencyMoreThan);
     m_useFrequencySortedList.clear();
-    m_useFrequencySortedList = pinyinInfos + englishInfos;
+    m_useFrequencySortedList = infos;
+//    for(int i=0; i< m_useFrequencySortedList.count(); i++){
+//        qDebug() << m_useFrequencySortedList.at(i).name << m_useFrequencySortedList.at(i).count;
+//    }
     emit signalManager->useFrequencyItemInfoListChanged(m_useFrequencySortedList);
 }
 
@@ -260,7 +257,8 @@ void DBusController::getAllFrequencyItems(){
         for(int i=0; i< m_appFrequencyInfoList.count(); i++){
             QString key = m_appFrequencyInfoList.at(i).key;
             if (m_itemInfos.contains(key)){
-                m_itemInfos[key].count = m_appFrequencyInfoList.at(i).count;
+                qDebug() << key << m_appFrequencyInfoList[i].count;
+                m_itemInfos[key].count = m_appFrequencyInfoList[i].count;
             }
         }
         sortedByFrequency(m_itemInfos.values());

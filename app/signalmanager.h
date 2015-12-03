@@ -83,6 +83,12 @@ signals:
 
     /*active changed signal from dock dbus client*/
     void activeWindowChanged(uint windowId);
+
+    /*installTime refresh*/
+    void installTimeRefreshed();
+
+    /*frequency refresh*/
+    void frequencyRefreshed();
 };
 
 #endif // SIGNALMANAGER_H

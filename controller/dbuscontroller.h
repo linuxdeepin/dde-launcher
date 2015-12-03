@@ -40,9 +40,7 @@ public:
     void initConnect();
 
     void getCategoryInfoList();
-    void getInstalledTimeItems();
     void getAutoStartList();
-    void getAllFrequencyItems();
     int getSortMethod();
     int getCategoryDisplayMode();
     void convertNameToPinyin();
@@ -62,6 +60,8 @@ signals:
 
 public slots:
     void init();
+    void getInstalledTimeItems();
+    void getAllFrequencyItems();
     void handleItemChanged(const QString &action, ItemInfo itemInfo, qlonglong categoryInfoId);
     void updateAppTable(QString appKey);
     void searchDone(QStringList appKeys);

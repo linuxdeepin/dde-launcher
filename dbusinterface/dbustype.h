@@ -71,7 +71,7 @@ public:
     /*add url*/
     bool isAutoStart=false;
     QString icon;
-    qulonglong count;
+    qulonglong count = 0;
     QString pinyinName;
     QString lowerPinyinName;
 

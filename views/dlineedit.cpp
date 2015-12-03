@@ -6,14 +6,3 @@ DLineEdit::DLineEdit(QWidget *parent) :
 {
 
 }
-
-void DLineEdit::keyPressEvent(QKeyEvent *event){
-    if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Left){
-        emit signalManager->keyDirectionPressed(Qt::Key_Left);
-        return;
-    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Right){
-        emit signalManager->keyDirectionPressed(Qt::Key_Right);
-        return;
-    }
-    QLineEdit::keyPressEvent(event);
-}

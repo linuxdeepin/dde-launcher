@@ -79,7 +79,9 @@ void AppTableWidget::addItem(ItemInfo itemInfo, int index){
 void AppTableWidget::addItems(const QList<ItemInfo> &itemInfos){
     clear();
     clearContents();
+    qDeleteAll(m_appItems.values());
     m_appItems.clear();
+
     int rc = rowCount();
     for(int i=0; i< rc; i++){
         removeRow(0);

@@ -22,7 +22,7 @@ AppItem::AppItem(bool isAutoStart, QWidget* parent): QFrame(parent),
 }
 
 void AppItem::initUI(){
-    m_iconLabel = new QLabel;
+    m_iconLabel = new QLabel(this);
     m_iconLabel->setObjectName("Icon");
     m_iconLabel->setScaledContents(true);
 
@@ -30,7 +30,7 @@ void AppItem::initUI(){
     m_autoStartLabel->setFixedSize(16, 16);
     m_autoStartLabel->setPixmap(QPixmap(":/images/skin/images/emblem-autostart.png"));
 
-    m_nameLabel = new ElidedLabel;
+    m_nameLabel = new ElidedLabel(this);
     m_nameLabel->setObjectName("Name");
     m_nameLabel->setAlignment(Qt::AlignTop| Qt::AlignHCenter);
 

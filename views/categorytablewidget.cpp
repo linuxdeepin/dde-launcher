@@ -19,7 +19,7 @@ CategoryTableWidget::CategoryTableWidget(QWidget *parent) : BaseTableWidget(pare
     setObjectName("CategoryTableWidget");
     initConnect();
 
-    m_scrollAnimation = new QPropertyAnimation;
+    m_scrollAnimation = new QPropertyAnimation(this);
     m_scrollAnimation->setEasingCurve(QEasingCurve::InCubic);
     m_scrollAnimation->setTargetObject(verticalScrollBar());
     m_scrollAnimation->setPropertyName("value");
@@ -160,6 +160,7 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
 void CategoryTableWidget::addItems(const CategoryInfoList &categoryInfoList){
     clear();
     clearContents();
+    qDeleteAll(m_appItems.values());
     m_appItems.clear();
     int rc = rowCount();
     for(int i=0; i< rc; i++){
@@ -306,6 +307,6 @@ void CategoryTableWidget::wheelEvent(QWheelEvent *event){
 
 CategoryTableWidget::~CategoryTableWidget()
 {
-
+    qDeleteAll(m_categoryItems.values());
 }
 

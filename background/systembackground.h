@@ -20,6 +20,11 @@ public:
     QString getBackgroundsPath();
     QString getCacheUrl();
     QRect getPreferScaleClipRect(int refWidth, int refHeight, int width, int height);
+
+    inline QString getDefaultBackgroundUrl(){
+        return "/usr/share/backgrounds/default_background.jpg";
+    }
+
 signals:
     void backgroundChanged(const QPixmap& backgroundPixmap);
 

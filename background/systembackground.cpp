@@ -67,13 +67,16 @@ void SystemBackground::updateBackgroud(){
                               QFileInfo(m_backgroundUrl).baseName(), lastModifiedtime,
                               QString::number(m_backgroundSize.width()),
                               QString::number(m_backgroundSize.height())));
-
-    if (QFileInfo(m_cacheUrl).exists()){
+    bool isCachePixmapValid = QPixmap().load(m_cacheUrl);
+    if (QFileInfo(m_cacheUrl).exists() && isCachePixmapValid){
         qDebug() << m_cacheUrl;
         m_backgroundPixmap = QPixmap(m_cacheUrl);
     }else{
+        bool isBackgroundUrlValid = QPixmap().load(m_backgroundUrl);
+        if (!isBackgroundUrlValid){
+            m_backgroundUrl  = getDefaultBackgroundUrl();
+        }
         m_backgroundPixmap = QPixmap(m_backgroundUrl);
-
         int sideEffectInnerGlowRadius = 100;
         int blurRadius = 100;
         int refWidth = m_backgroundSize.width();

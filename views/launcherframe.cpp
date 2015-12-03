@@ -338,6 +338,9 @@ void LauncherFrame::showGradients() const
         m_topGradient->move(top.topLeft());
         m_topGradient->raise();
 
+        // in case that top gradient is invisible.
+        m_topGradient->show();
+
         QPoint bottomLeft = m_appTableWidget->mapTo(this, m_appTableWidget->rect().bottomLeft());
         // FIXME: workaround here, to fix the bug that the bottom gradient
         // if one pixel above the bottom of m_appTableWidget.

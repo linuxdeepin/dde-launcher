@@ -42,7 +42,7 @@ DBusController::DBusController(QObject *parent) : QObject(parent)
     m_fileInfoInterface = new FileInfoInterface(FileInfo_service, FileInfo_path, QDBusConnection::sessionBus(), this);
     m_startManagerInterface = new StartManagerInterface(StartManager_service, StartManager_path, QDBusConnection::sessionBus(), this);
     m_displayInterface = new DisplayInterface(this);
-    m_dockClientManagerInterface = new DBusClientManager;
+    m_dockClientManagerInterface = new DBusClientManager(this);
     m_pinyinInterface = new PinyinInterface(Pinyin_service, Pinyin_path, QDBusConnection::sessionBus(), this);
     m_menuController = new MenuController(this);
     initConnect();

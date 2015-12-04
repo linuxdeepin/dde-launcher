@@ -22,7 +22,7 @@ SystemBackground::SystemBackground(QSize size, bool isBlur, QObject *parent):
     m_backgroundSize(size),
     m_isBlur(isBlur),
     m_gsettings(new QGSettings("com.deepin.wrap.gnome.desktop.background",
-                               "/com/deepin/wrap/gnome/desktop/background/"))
+                               "/com/deepin/wrap/gnome/desktop/background/", this))
 {
     m_backgroundUrl = QUrl(m_gsettings->get(WallpaperKey).toString()).toLocalFile();
     updateBackgroud();

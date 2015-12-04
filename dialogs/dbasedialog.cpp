@@ -44,7 +44,7 @@ void DBaseDialog::initUI(const QString &icon,
     m_tipMessageLabel->setObjectName("TipMessageLabel");
     setTipMessage(m_tipMessage);
 
-    m_buttonGroup = new QButtonGroup;
+    m_buttonGroup = new QButtonGroup(this);
     QHBoxLayout* buttonLayout = new QHBoxLayout;
     foreach (QString label, m_buttonKeys) {
         int index = m_buttonKeys.indexOf(label);

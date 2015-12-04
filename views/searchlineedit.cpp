@@ -23,8 +23,8 @@ return QCommonStyle::pixelMetric(metric,option,widget);
 
 SearchLineEdit::SearchLineEdit(QWidget *parent) :
     QFrame(parent),
-    m_iconLabel(new QLabel),
-    m_lineEdit(new DLineEdit)
+    m_iconLabel(new QLabel(this)),
+    m_lineEdit(new DLineEdit(this))
 
 {
     initUI();

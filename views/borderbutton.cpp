@@ -59,8 +59,10 @@ void BorderButton::startDrag(QMouseEvent *event){
 
 void BorderButton::mousePressEvent(QMouseEvent *event){
     if (event->button() == Qt::RightButton){
+       m_isRightPressed = true;
        emit signalManager->rightClickedChanged(true);
        emit rightClicked(mapToGlobal(event->pos()));
+       qDebug() << "mousePressEvent";
     }
     QPushButton::mousePressEvent(event);
 }
@@ -77,8 +79,12 @@ void BorderButton::enterEvent(QEvent *event){
     QPushButton::enterEvent(event);
 }
 
-
 void BorderButton::leaveEvent(QEvent *event){
+    qDebug() << "leaveEvent";
+    if (!m_isRightPressed){
+        setHighlight(false);
+    }
+    m_isRightPressed = false;
     QPushButton::leaveEvent(event);
 }
 

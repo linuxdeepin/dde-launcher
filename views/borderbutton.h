@@ -40,6 +40,7 @@ private:
     bool m_checked = false;
     bool m_isHighlight = false;
     bool m_isCuted = false;
+    bool m_isRightPressed = false;
 };
 
 #endif // BORDERBUTTON_H

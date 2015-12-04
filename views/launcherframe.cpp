@@ -400,10 +400,10 @@ void LauncherFrame::wheelEvent(QWheelEvent *event){
 }
 
 bool LauncherFrame::eventFilter(QObject *obj, QEvent *event){
-//    qDebug() << event;
-//    if (event->type() == QEvent::WindowDeactivate && !m_rightclicked){
-//        Hide();
-//    }
+    qDebug() << event;
+    if (event->type() == QEvent::WindowDeactivate){
+        qDebug() << "============" << obj << event;
+    }
     return QFrame::eventFilter(obj, event);
 }
 
@@ -411,5 +411,7 @@ void LauncherFrame::handleActiveWindowChanged(uint windowId){
     qDebug() << windowId << window()->winId();
     if (windowId != window()->winId()){
         Hide();
+    }else{
+        emit signalManager->highlightChanged(false);
     }
 }

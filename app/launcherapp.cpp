@@ -45,6 +45,7 @@ void LauncherApp::handleUninstall(QString appKey){
     QString message = tr("Are you sure to uninstall %1 ?").arg(appName);
     d.setMessage(message);
     connect(&d, SIGNAL(buttonClicked(int)), this, SLOT(handleButtonClicked(int)));
+    emit signalManager->highlightChanged(false);
     d.exec();
     d.deleteLater();
 }

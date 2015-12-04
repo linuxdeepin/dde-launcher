@@ -55,6 +55,7 @@ public slots:
     void Toggle();
     void handleToggle();
     void handleSearch(const QString& text);
+    void search();
     void clearSearchEdit();
     void backNormalView();
     void handleAppOpened(const QString& appUrl);
@@ -98,6 +99,7 @@ private:
     GradientLabel * m_topGradient;
     GradientLabel * m_bottomGradient;
     int m_currentIndex = 0;
+    QTimer* m_searchTimer;
 };
 
 #endif // LAUNCHERFRAME_H

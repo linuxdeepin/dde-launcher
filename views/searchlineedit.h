@@ -22,6 +22,7 @@ public:
     explicit SearchLineEdit(QWidget *parent = 0);
     void initUI();
     void initConnect();
+    QString getText();
 
 protected:
     void keyPressEvent(QKeyEvent* event);

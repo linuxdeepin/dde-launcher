@@ -57,6 +57,10 @@ void SearchLineEdit::initConnect(){
     connect(m_lineEdit, SIGNAL(textChanged(QString)), this, SLOT(handleTextChanged(QString)));
 }
 
+QString SearchLineEdit::getText(){
+    return m_lineEdit->text();
+}
+
 void SearchLineEdit::setText(const QString &text){
     m_lineEdit->setText(text);
 //    setSearchFocus();

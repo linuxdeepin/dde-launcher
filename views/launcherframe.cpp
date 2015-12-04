@@ -54,10 +54,10 @@ LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
     setStyleSheet(getQssFromFile(":/qss/skin/qss/main.qss"));
     qDebug() << geometry();
 
-//    m_toggleTimer = new QTimer;
-//    m_toggleTimer->setSingleShot(true);
-//    m_toggleTimer->setInterval(100);
-//    connect(m_toggleTimer, SIGNAL(timeout()), this, SLOT(handleToggle()));
+    m_searchTimer = new QTimer;
+    m_searchTimer->setSingleShot(true);
+    m_searchTimer->setInterval(100);
+    connect(m_searchTimer, SIGNAL(timeout()), this, SLOT(search()));
 }
 
 void LauncherFrame::setIconSizeByDpi(int width, int height){
@@ -298,10 +298,15 @@ void LauncherFrame::handleMouseReleased(){
 
 void LauncherFrame::handleSearch(const QString &text){
     if (text.length() == 0){
+        m_searchTimer->stop();
         clearSearchEdit();
     }else{
-        emit signalManager->search(text);
+        m_searchTimer->start();
     }
+}
+
+void LauncherFrame::search(){
+    emit signalManager->search(m_searchLineEdit->getText());
 }
 
 void LauncherFrame::clearSearchEdit(){

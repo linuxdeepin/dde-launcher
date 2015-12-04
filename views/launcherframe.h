@@ -53,8 +53,10 @@ public slots:
     void Hide();
     void Show();
     void Toggle();
+    void handleToggle();
     void handleSearch(const QString& text);
     void clearSearchEdit();
+    void backNormalView();
     void handleAppOpened(const QString& appUrl);
     void uninstallUpdateTable(QString appKey);
     void setRightclicked(bool flag);
@@ -95,6 +97,7 @@ private:
     BackgroundLabel* m_backgroundLabel;
     GradientLabel * m_topGradient;
     GradientLabel * m_bottomGradient;
+    int m_currentIndex = 0;
 };
 
 #endif // LAUNCHERFRAME_H

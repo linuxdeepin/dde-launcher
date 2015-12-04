@@ -52,6 +52,10 @@ void AppTableWidget::setGridParameter(int column, int girdWidth, int itemWidth){
     }
 }
 
+int AppTableWidget::getCurrentMode(){
+    return m_currentMode;
+}
+
 void AppTableWidget::addItem(ItemInfo itemInfo, int index){
     int row = index / m_column;
     int column = index % m_column;

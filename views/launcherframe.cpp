@@ -53,6 +53,11 @@ LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
     initConnect();
     setStyleSheet(getQssFromFile(":/qss/skin/qss/main.qss"));
     qDebug() << geometry();
+
+//    m_toggleTimer = new QTimer;
+//    m_toggleTimer->setSingleShot(true);
+//    m_toggleTimer->setInterval(100);
+//    connect(m_toggleTimer, SIGNAL(timeout()), this, SLOT(handleToggle()));
 }
 
 void LauncherFrame::setIconSizeByDpi(int width, int height){
@@ -188,6 +193,7 @@ void LauncherFrame::showCategoryMode(int mode){
 }
 
 void LauncherFrame::showAppTableWidget(){
+    m_currentIndex = currentMode();
     m_layout->setCurrentIndex(1);
     m_appTableWidget->clear();
     m_displayModeFrame->hide();
@@ -262,7 +268,6 @@ void LauncherFrame::Exit(){
 void LauncherFrame::Hide(){
     clearSearchEdit();
     hide();
-    emit signalManager->launcheRefreshed();
 }
 
 void LauncherFrame::Show(){
@@ -276,6 +281,10 @@ void LauncherFrame::Show(){
 }
 
 void LauncherFrame::Toggle(){
+    handleToggle();
+}
+
+void LauncherFrame::handleToggle(){
     if (isVisible()){
         Hide();
     }else{
@@ -297,7 +306,12 @@ void LauncherFrame::handleSearch(const QString &text){
 
 void LauncherFrame::clearSearchEdit(){
     m_searchLineEdit->setText("");
-    emit signalManager->launcheRefreshed();
+    backNormalView();
+}
+
+void LauncherFrame::backNormalView(){
+    int mode = dbusController->getSortMethod();
+    showSortedMode(mode);
 }
 
 void LauncherFrame::handleAppOpened(const QString &appUrl){

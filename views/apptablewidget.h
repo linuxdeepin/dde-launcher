@@ -18,6 +18,7 @@ public:
 
     void initConnect();
     void setGridParameter(int column, int girdWidth, int itemWidth);
+    int getCurrentMode();
 
 signals:
     void showed();

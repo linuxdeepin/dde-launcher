@@ -16,6 +16,7 @@ signals:
 public slots:
 
 protected:
+    void keyPressEvent(QKeyEvent* event);
 
 };
 

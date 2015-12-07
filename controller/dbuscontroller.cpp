@@ -257,7 +257,7 @@ void DBusController::getAllFrequencyItems(){
         for(int i=0; i< m_appFrequencyInfoList.count(); i++){
             QString key = m_appFrequencyInfoList.at(i).key;
             if (m_itemInfos.contains(key)){
-                qDebug() << key << m_appFrequencyInfoList[i].count;
+//                qDebug() << key << m_appFrequencyInfoList[i].count;
                 m_itemInfos[key].count = m_appFrequencyInfoList[i].count;
             }
         }

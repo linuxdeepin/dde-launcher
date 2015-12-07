@@ -20,8 +20,8 @@ LauncherApp::LauncherApp(QObject *parent) : QObject(parent)
     QDBusConnection conn = QDBusConnection::sessionBus();
     conn.registerObject(LauncherPathName, m_launcherFrame);
 
-    m_dbusWorker = new DBusWorker(this);
-    m_dbusThread = new QThread(this);
+    m_dbusWorker = new DBusWorker;
+    m_dbusThread = new QThread;
     m_dbusWorker->moveToThread(m_dbusThread);
 
     connect(signalManager, SIGNAL(appUninstalled(QString)), this, SLOT(handleUninstall(QString)));

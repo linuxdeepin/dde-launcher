@@ -12,6 +12,7 @@
 #include "background/backgroundlabel.h"
 #include "baseframe.h"
 #include "dbusinterface/displayinterface.h"
+#include "dbusinterface/dock_interface.h"
 #include "app/launcherapp.h"
 #include <QApplication>
 #include <QDesktopWidget>
@@ -410,10 +411,17 @@ bool LauncherFrame::eventFilter(QObject *obj, QEvent *event){
 
 void LauncherFrame::handleActiveWindowChanged(uint windowId){
     qDebug() << windowId << window()->winId() << m_isDraging;
-    if (windowId != window()->winId() && !m_isDraging){
-        Hide();
+    QDBusPendingReply<qulonglong> reply = dbusController->getDockInterface()->Xid();
+    reply.waitForFinished();
+    if (!reply.isError()){
+        int dockwinId = reply.argumentAt(0).toLongLong();
+        if (windowId != window()->winId() && windowId!= dockwinId && !m_isDraging){
+                Hide();
+        }else{
+            emit signalManager->highlightChanged(false);
+        }
     }else{
-        emit signalManager->highlightChanged(false);
+        qCritical() << reply.error().message();
     }
 }
 

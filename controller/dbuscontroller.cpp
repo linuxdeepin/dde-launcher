@@ -4,6 +4,7 @@
 #include "dbusinterface/fileInfo_interface.h"
 #include "dbusinterface/startmanager_interface.h"
 #include "dbusinterface/displayinterface.h"
+#include "dbusinterface/dock_interface.h"
 #include "app/global.h"
 #include "controller/menucontroller.h"
 #include "dbusinterface/dbusclientmanager.h"
@@ -42,6 +43,7 @@ DBusController::DBusController(QObject *parent) : QObject(parent)
     m_fileInfoInterface = new FileInfoInterface(FileInfo_service, FileInfo_path, QDBusConnection::sessionBus(), this);
     m_startManagerInterface = new StartManagerInterface(StartManager_service, StartManager_path, QDBusConnection::sessionBus(), this);
     m_displayInterface = new DisplayInterface(this);
+    m_dockInterface = new DockInterface(Dock_service, Dock_path, QDBusConnection::sessionBus(), this);
     m_dockClientManagerInterface = new DBusClientManager(this);
     m_pinyinInterface = new PinyinInterface(Pinyin_service, Pinyin_path, QDBusConnection::sessionBus(), this);
     m_menuController = new MenuController(this);
@@ -114,6 +116,10 @@ StartManagerInterface* DBusController::getStartManagerInterface(){
 
 DisplayInterface* DBusController::getDisplayInterface(){
     return m_displayInterface;
+}
+
+DockInterface* DBusController::getDockInterface(){
+    return m_dockInterface;
 }
 
 void DBusController::getAutoStartList(){

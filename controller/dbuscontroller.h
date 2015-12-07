@@ -13,6 +13,7 @@ class MenuController;
 class DisplayInterface;
 class DBusClientManager;
 class PinyinInterface;
+class DockInterface;
 
 #define Launcher_service "com.deepin.dde.daemon.Launcher"
 #define Launcher_path "/com/deepin/dde/daemon/Launcher"
@@ -25,6 +26,9 @@ class PinyinInterface;
 
 #define Pinyin_service "com.deepin.api.Pinyin"
 #define Pinyin_path "/com/deepin/api/Pinyin"
+
+#define Dock_service "com.deepin.dde.dock"
+#define Dock_path "/com/deepin/dde/dock"
 
 bool appNameLessThan(const ItemInfo &info1, const ItemInfo &info2);
 bool installTimeMoreThan(const ItemInfo &info1, const ItemInfo &info2);
@@ -48,6 +52,7 @@ public:
     LauncherInterface* getLauncherInterface();
     StartManagerInterface* getStartManagerInterface();
     DisplayInterface* getDisplayInterface();
+    DockInterface* getDockInterface();
     ItemInfo getItemInfo(QString appKey);
     ItemInfo getLocalItemInfo(QString appKey);
 
@@ -74,6 +79,7 @@ private:
     FileInfoInterface* m_fileInfoInterface;
     StartManagerInterface* m_startManagerInterface;
     DisplayInterface* m_displayInterface;
+    DockInterface* m_dockInterface;
     MenuController* m_menuController;
     AppInstalledTimeInfoList m_appInstalledTimeInfoList;
     AppFrequencyInfoList m_appFrequencyInfoList;

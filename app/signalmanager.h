@@ -89,6 +89,9 @@ signals:
 
     /*frequency refresh*/
     void frequencyRefreshed();
+
+    /*AppItem dragging state changed*/
+    void appItemDragStateChanged(bool flag);
 };
 
 #endif // SIGNALMANAGER_H

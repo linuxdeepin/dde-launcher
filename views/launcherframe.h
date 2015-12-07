@@ -67,6 +67,8 @@ public slots:
     void handleActiveWindowChanged(uint windowId);
     void handleCategoryFrameContentScrolled(int value);
 
+    void setDragging(bool flag);
+
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
@@ -88,6 +90,7 @@ private:
     int m_itemWidth;
     int m_gridwidth;
     bool m_rightclicked = false;
+    bool m_isDraging = false;
     QString m_searchText;
     QStackedLayout* m_layout;
     DisplayModeFrame* m_displayModeFrame;

@@ -162,6 +162,7 @@ void LauncherFrame::initConnect(){
     connect(signalManager, SIGNAL(rightClickedChanged(bool)), this, SLOT(setRightclicked(bool)));
     connect(signalManager, SIGNAL(screenGeometryChanged()), this , SLOT(handleScreenGeometryChanged()));
     connect(signalManager, SIGNAL(activeWindowChanged(uint)), this, SLOT(handleActiveWindowChanged(uint)));
+    connect(signalManager, SIGNAL(appItemDragStateChanged(bool)), this, SLOT(setDragging(bool)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SIGNAL(Closed()));
     connect(m_categoryFrame, SIGNAL(showed()), this, SLOT(showGradients()));
     connect(m_categoryFrame, SIGNAL(contentScrolled(int)), this, SLOT(handleCategoryFrameContentScrolled(int)));
@@ -408,10 +409,14 @@ bool LauncherFrame::eventFilter(QObject *obj, QEvent *event){
 }
 
 void LauncherFrame::handleActiveWindowChanged(uint windowId){
-    qDebug() << windowId << window()->winId();
-    if (windowId != window()->winId()){
+    qDebug() << windowId << window()->winId() << m_isDraging;
+    if (windowId != window()->winId() && !m_isDraging){
         Hide();
     }else{
         emit signalManager->highlightChanged(false);
     }
+}
+
+void LauncherFrame::setDragging(bool flag){
+    m_isDraging = flag;
 }

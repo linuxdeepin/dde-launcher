@@ -83,11 +83,11 @@ void NavigationButtonFrame::handleButtonClicked(int id){
 void NavigationButtonFrame::checkButtonByKey(QString key){
     int index = CategroyKeys.indexOf(key);
     emit currentIndexChanged(index);
-    qDebug() << "currentIndexChanged" << index;
+//    qDebug() << "currentIndexChanged" << index;
 }
 
 void NavigationButtonFrame::setCurrentIndex(int currentIndex){
-    qDebug() << this << m_currentIndex << currentIndex;
+//    qDebug() << this << m_currentIndex << currentIndex;
     if (m_currentIndex == currentIndex)
         return;
     m_currentIndex = currentIndex;

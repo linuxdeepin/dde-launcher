@@ -47,12 +47,13 @@ void BorderButton::startDrag(QMouseEvent *event){
 
     pDrag->setHotSpot(event->pos() + QPoint(24, 24) - mapFromGlobal(QCursor::pos()));
 //    pDrag->setDragCursor(QCursor(Qt::PointingHandCursor).pixmap(), Qt::MoveAction);
-
+    emit signalManager->appItemDragStateChanged(true);
     Qt::DropAction action = pDrag->exec(Qt::MoveAction | Qt::CopyAction, Qt::CopyAction);
     if (action == Qt::MoveAction){
         qDebug() << "not support MoveAction";
     }else{
         qDebug() << action;
+        emit signalManager->appItemDragStateChanged(false);
     }
     iconLabel->deleteLater();
 }

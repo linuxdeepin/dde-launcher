@@ -72,6 +72,7 @@ public slots:
     void searchDone(QStringList appKeys);
     void setCategoryDisplayMode(int mode);
     void setSortMethod(int mode);
+    void refreshInstallTimeFrequency();
 
 private:
     LauncherInterface* m_launcherInterface;

@@ -268,14 +268,9 @@ void LauncherFrame::Exit(){
 }
 
 void LauncherFrame::Hide(){
-    clearSearchEdit();
     hide();
-    int mode = dbusController->getSortMethod();
-    if (mode == 2){
-        emit signalManager->installTimeRefreshed();
-    }else{
-        emit signalManager->frequencyRefreshed();
-    }
+    m_searchLineEdit->setText("");
+    emit signalManager->refreshInstallTimeFrequency();
 }
 
 void LauncherFrame::Show(){

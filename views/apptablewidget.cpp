@@ -17,6 +17,7 @@
 
 AppTableWidget::AppTableWidget(QWidget *parent) : BaseTableWidget(parent)
 {
+    m_currentMode = 0;
     setObjectName("AppTableWidget");
     initConnect();
 }
@@ -114,22 +115,28 @@ void AppTableWidget::showBySortedMode(int mode){
         showByFrequency();
     }
     clearHighlight();
-    m_currentMode = mode;
+    if (m_currentMode != mode){
+        m_currentMode = mode;
+    }
 }
 
 void AppTableWidget::setAppNameItemInfoList(const QList<ItemInfo> &infoList){
     m_appNameItemInfoList.clear();
     m_appNameItemInfoList = infoList;
+    showBySortedMode(m_currentMode);
 }
 
 void AppTableWidget::setInstallTimeItemInfoList(const QList<ItemInfo> &infoList){
     m_InstalltimeItemInfoList.clear();
     m_InstalltimeItemInfoList= infoList;
+    showBySortedMode(m_currentMode);
 }
 
 void AppTableWidget::setuseFrequencyItemInfoList(const QList<ItemInfo> &infoList){
     m_useFrequencyItemInfoList.clear();
     m_useFrequencyItemInfoList = infoList;
+    showBySortedMode(m_currentMode);
+
 }
 
 void AppTableWidget::showbyName(){

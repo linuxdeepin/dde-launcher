@@ -84,6 +84,7 @@ void DBusController::initConnect(){
     connect(signalManager, SIGNAL(categoryModeChanged(int)), this, SLOT(setCategoryDisplayMode(int)));
     connect(signalManager, SIGNAL(installTimeRefreshed()), this, SLOT(getInstalledTimeItems()));
     connect(signalManager, SIGNAL(frequencyRefreshed()), this, SLOT(getAllFrequencyItems()));
+    connect(signalManager, SIGNAL(refreshInstallTimeFrequency()), this, SLOT(refreshInstallTimeFrequency()));
     connect(m_displayInterface, SIGNAL(PrimaryRectChanged()), signalManager, SIGNAL(screenGeometryChanged()));
     connect(m_displayInterface, SIGNAL(PrimaryChanged()), signalManager, SIGNAL(screenGeometryChanged()));
     connect(m_dockClientManagerInterface, SIGNAL(ActiveWindowChanged(uint)), signalManager, SIGNAL(activeWindowChanged(uint)));
@@ -345,6 +346,16 @@ int DBusController::getSortMethod(){
 
 void DBusController::setSortMethod(int mode){
     QDBusPendingReply<qlonglong> reply = m_launcherSettingsInterface->SetSortMethod(mode);
+}
+
+void DBusController::refreshInstallTimeFrequency(){
+    int mode = getSortMethod();
+    qDebug() << "refreshInstallTimeFrequency" << mode;
+    if (mode == 2){
+        emit signalManager->installTimeRefreshed();
+    }else if (mode == 3){
+        emit signalManager->frequencyRefreshed();
+    }
 }
 
 void DBusController::searchDone(QStringList appKeys){

@@ -92,6 +92,9 @@ signals:
 
     /*AppItem dragging state changed*/
     void appItemDragStateChanged(bool flag);
+
+    /*hide refresh installtime or frequency data*/
+    void refreshInstallTimeFrequency();
 };
 
 #endif // SIGNALMANAGER_H

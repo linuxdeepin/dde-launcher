@@ -8,6 +8,7 @@
 #include "borderbutton.h"
 #include "dbusinterface/dbustype.h"
 #include "fwd.h"
+#include "launcherframe.h"
 
 #include <QTableWidgetItem>
 #include <QWheelEvent>
@@ -25,15 +26,6 @@ AppTableWidget::AppTableWidget(QWidget *parent) : BaseTableWidget(parent)
 void AppTableWidget::initConnect(){
     connect(signalManager, SIGNAL(keyDirectionPressed(Qt::Key)),
             this, SLOT(handleDirectionKeyPressed(Qt::Key)));
-    connect(signalManager, SIGNAL(appNameItemInfoListChanged(QList<ItemInfo>)),
-            this, SLOT(setAppNameItemInfoList(QList<ItemInfo>)));
-    connect(signalManager, SIGNAL(installTimeItemInfoListChanged(QList<ItemInfo>)),
-            this, SLOT(setInstallTimeItemInfoList(QList<ItemInfo>)));
-    connect(signalManager, SIGNAL(useFrequencyItemInfoListChanged(QList<ItemInfo>)),
-            this, SLOT(setuseFrequencyItemInfoList(QList<ItemInfo>)));
-    connect(signalManager, SIGNAL(searchItemInfoListChanged(QList<ItemInfo>)),
-            this, SLOT(showSearchResult(QList<ItemInfo>)));
-    connect(signalManager, SIGNAL(itemInfosChanged(QMap<QString,ItemInfo>)), this, SLOT(setItemInfosMap(QMap<QString,ItemInfo>)));
 
     connect(signalManager, SIGNAL(appOpenedInAppMode()), this, SLOT(openCheckedApp()));
 
@@ -60,33 +52,26 @@ int AppTableWidget::getCurrentMode(){
 void AppTableWidget::addItem(ItemInfo itemInfo, int index){
     int row = index / m_column;
     int column = index % m_column;
-
-    AppItem* appItem = new AppItem(itemInfo.isAutoStart);
-    appItem->setAppKey(itemInfo.key);
-    appItem->setUrl(itemInfo.url);
-    appItem->setAppName(itemInfo.name);
-
-    int size = appItem->getIconSize();
-    appItem->setAppIcon(ThemeAppIcon::getIconPixmap(itemInfo.iconKey, size, size));
-    appItem->setFixedSize(m_gridWidth, m_gridWidth);
-    setCellWidget(row, column, appItem);
-
-    m_appItems.insert(itemInfo.key, appItem);
-
+    AppItem* appItem = appItemManager->getAppItemByKey(itemInfo.key);
+    if (appItem){
+        appItem->setParent(this);
+        appItem->setFixedSize(m_gridWidth, m_gridWidth);
+        setCellWidget(row, column, appItem);
+        appItem->show();
+    }else{
+        qDebug() << itemInfo.key;
+    }
     emit signalManager->highlightChanged(false);
 }
 
 
 void AppTableWidget::addItems(const QList<ItemInfo> &itemInfos){
-    clear();
     clearContents();
-    qDeleteAll(m_appItems.values());
-    m_appItems.clear();
-
     int rc = rowCount();
     for(int i=0; i< rc; i++){
         removeRow(0);
     }
+
     clearHighlight();
 
     verticalScrollBar()->setValue(0);
@@ -94,19 +79,15 @@ void AppTableWidget::addItems(const QList<ItemInfo> &itemInfos){
     for(int i=0; i< rowCount(); i++){
         setRowHeight(i, m_gridWidth);
     }
+    setItemUnChecked();
+
     for (int i=0; i< itemInfos.length(); i++) {
         addItem(itemInfos.at(i), i);
     }
-
-    setItemUnChecked();
-}
-
-void AppTableWidget::setItemInfosMap(const QMap<QString, ItemInfo> &itemInfos){
-    m_itemInfosMap.clear();
-    m_itemInfosMap = itemInfos;
 }
 
 void AppTableWidget::showBySortedMode(int mode){
+    qDebug() << mode;
     if (mode == 0){
         showbyName();
     }else if (mode == 2){
@@ -121,34 +102,30 @@ void AppTableWidget::showBySortedMode(int mode){
 }
 
 void AppTableWidget::setAppNameItemInfoList(const QList<ItemInfo> &infoList){
-    m_appNameItemInfoList.clear();
-    m_appNameItemInfoList = infoList;
+    qDebug() << "setAppNameItemInfoList";
     showBySortedMode(m_currentMode);
 }
 
 void AppTableWidget::setInstallTimeItemInfoList(const QList<ItemInfo> &infoList){
-    m_InstalltimeItemInfoList.clear();
-    m_InstalltimeItemInfoList= infoList;
+    qDebug() << "setInstallTimeItemInfoList";
     showBySortedMode(m_currentMode);
 }
 
 void AppTableWidget::setuseFrequencyItemInfoList(const QList<ItemInfo> &infoList){
-    m_useFrequencyItemInfoList.clear();
-    m_useFrequencyItemInfoList = infoList;
+    qDebug() << "setuseFrequencyItemInfoList";
     showBySortedMode(m_currentMode);
-
 }
 
 void AppTableWidget::showbyName(){
-    addItems(m_appNameItemInfoList);
+    addItems(appItemManager->getAppNameItemInfos());
 }
 
 void AppTableWidget::showByInstalledTime(){
-    addItems(m_InstalltimeItemInfoList);
+    addItems(appItemManager->getInstallTimeItemInfos());
 }
 
 void AppTableWidget::showByFrequency(){
-    addItems(m_useFrequencyItemInfoList);
+    addItems(appItemManager->getUseFrequencyItemInfos());
 }
 
 void AppTableWidget::showSearchResult(const QList<ItemInfo> &infoList){
@@ -210,14 +187,14 @@ void AppTableWidget::openCheckedApp(){
 }
 
 void AppTableWidget::showAutoStartLabel(QString appKey){
-    if (m_appItems.contains(appKey)){
-        reinterpret_cast<AppItem*>(m_appItems.value(appKey))->showAutoStartLabel();
+    if (appItemManager->getAppItems().contains(appKey)){
+        reinterpret_cast<AppItem*>(appItemManager->getAppItems().value(appKey))->showAutoStartLabel();
     }
 }
 
 void AppTableWidget::hideAutoStartLabel(QString appKey){
-    if (m_appItems.contains(appKey)){
-        reinterpret_cast<AppItem*>(m_appItems.value(appKey))->hideAutoStartLabel();
+    if (appItemManager->getAppItems().contains(appKey)){
+        reinterpret_cast<AppItem*>(appItemManager->getAppItems().value(appKey))->hideAutoStartLabel();
     }
 }
 

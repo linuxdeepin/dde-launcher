@@ -9,6 +9,7 @@
 CategoryItem::CategoryItem(QString text, QWidget *parent) : QFrame(parent)
 {
     initUI(text);
+    installEventFilter(this);
 }
 
 void CategoryItem::initUI(QString text){
@@ -51,6 +52,14 @@ void CategoryItem::addTextShadow(){
     textShadow->setColor(QColor(0, 0, 0, 128));
     textShadow->setOffset(0, 2);
     m_titleLabel->setGraphicsEffect(textShadow);
+}
+
+bool CategoryItem::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::DeferredDelete){
+        return true;
+    }
+    QFrame::eventFilter(obj, event);
 }
 
 CategoryItem::~CategoryItem()

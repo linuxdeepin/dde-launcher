@@ -4,12 +4,14 @@
 #include "widgets/singleton.h"
 #include "signalmanager.h"
 #include "controller/dbuscontroller.h"
+#include "views/appitemmanager.h"
 #include <QString>
 #include <QStringList>
 #include <QObject>
 
 #define signalManager  Singleton<SignalManager>::instance()
 #define dbusController Singleton<DBusController>::instance()
+#define appItemManager Singleton<AppItemManager>::instance()
 
 const int NavgationBarLeftMargin = 50;
 const int TopBottomGradientHeight = 60;

@@ -4,6 +4,7 @@
 #include <QFrame>
 #include <QMouseEvent>
 #include <QInputEvent>
+#include <dbusinterface/dbustype.h>
 
 class CategoryFrame;
 class AppTableWidget;
@@ -49,6 +50,8 @@ public slots:
     void showNavigationBarByMode();
     void handleMouseReleased();
     void showAppTableWidget();
+    void showCategoryTable();
+    void showSearchResult(const QList<ItemInfo>& infoList);
     void Exit();
     void Hide();
     void Show();

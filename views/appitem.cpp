@@ -19,6 +19,7 @@ AppItem::AppItem(bool isAutoStart, QWidget* parent): QFrame(parent),
     setAppName(m_appName);
     setMouseTracking(true);
     addTextShadow();
+    installEventFilter(this);
 }
 
 void AppItem::initUI(){
@@ -150,6 +151,14 @@ void AppItem::mouseMoveEvent(QMouseEvent *event){
     QFrame::mouseMoveEvent(event);
 }
 
+bool AppItem::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::DeferredDelete){
+        return true;
+    }
+    return QFrame::eventFilter(obj, event);
+}
+
 void AppItem::mouseReleaseEvent(QMouseEvent *event){
     if (getBorderButton()->geometry().contains(event->pos())){
         emit signalManager->rightMouseReleased(m_url);
@@ -183,4 +192,5 @@ void AppItem::disalbelTextShadow(){
 
 AppItem::~AppItem()
 {
+    qDebug() << this;
 }

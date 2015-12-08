@@ -20,9 +20,11 @@ signals:
     void verticalPositionChanged(int pos);
 
 public slots:
+    void show();
     void setGridParameter(int column, int girdWidth, int itemWidth);
-    void setItemInfosMap(const QMap<QString, ItemInfo>& itemInfos);
+
     void setCategoryInfoList(const CategoryInfoList& categoryInfoList);
+    void showAppItems();
 
     void addCategoryItem(int row,  QString key);
     void addItems(int row, QString categoryKey, QStringList appKeys);
@@ -48,12 +50,6 @@ private:
     int m_column;
     int m_gridWidth;
     int m_itemWidth;
-    QStringList m_hideKeys;
-    QMap<QString, ItemInfo> m_itemInfosMap;
-    CategoryInfoList m_categoryInfoList;
-    CategoryInfoList m_sortedCategoryInfoList;
-    QMap<QString, CategoryItem*> m_categoryItems;
-    QMap<QString, AppItem*> m_appItems;
 
     QPropertyAnimation* m_scrollAnimation;
 };

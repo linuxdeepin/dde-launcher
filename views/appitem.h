@@ -45,6 +45,7 @@ public slots:
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event);
 private:
     QLabel* m_iconLabel;
     QLabel* m_autoStartLabel;

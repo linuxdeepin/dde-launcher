@@ -27,7 +27,7 @@ public slots:
     void addItem(ItemInfo itemInfo, int index);
     void addItems(const QList<ItemInfo>& itemInfos);
 
-    void setItemInfosMap(const QMap<QString, ItemInfo>& itemInfos);
+//    void setItemInfosMap(const QMap<QString, ItemInfo>& itemInfos);
 
     void setAppNameItemInfoList(const QList<ItemInfo>& infoList);
     void setInstallTimeItemInfoList(const QList<ItemInfo>& infoList);
@@ -56,13 +56,13 @@ private:
     int m_gridWidth;
     int m_itemWidth;
     int m_currentMode;
-    QMap<QString, ItemInfo> m_itemInfosMap;
+//    QMap<QString, ItemInfo> m_itemInfosMap;
 
-    QList<ItemInfo> m_appNameItemInfoList;
-    QList<ItemInfo> m_InstalltimeItemInfoList;
-    QList<ItemInfo> m_useFrequencyItemInfoList;
+//    QList<ItemInfo> m_appNameItemInfoList;
+//    QList<ItemInfo> m_InstalltimeItemInfoList;
+//    QList<ItemInfo> m_useFrequencyItemInfoList;
 
-    QMap<QString, AppItem*> m_appItems;
+//    QMap<QString, AppItem*> m_appItems;
 };
 
 #endif // APPTABLEWIDGET_H

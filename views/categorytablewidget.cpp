@@ -18,7 +18,7 @@ CategoryTableWidget::CategoryTableWidget(QWidget *parent) : BaseTableWidget(pare
 {
     setObjectName("CategoryTableWidget");
     initConnect();
-
+    qDebug() << this;
     m_scrollAnimation = new QPropertyAnimation(this);
     m_scrollAnimation->setEasingCurve(QEasingCurve::InCubic);
     m_scrollAnimation->setTargetObject(verticalScrollBar());
@@ -29,10 +29,7 @@ CategoryTableWidget::CategoryTableWidget(QWidget *parent) : BaseTableWidget(pare
 void CategoryTableWidget::initConnect(){
     connect(signalManager, SIGNAL(keyDirectionPressed(Qt::Key)),
             this, SLOT(handleDirectionKeyPressed(Qt::Key)));
-    connect(signalManager, SIGNAL(categoryInfosChanged(CategoryInfoList)),
-            this, SLOT(setCategoryInfoList(CategoryInfoList)));
-    connect(signalManager, SIGNAL(itemInfosChanged(QMap<QString,ItemInfo>)),
-            this, SLOT(setItemInfosMap(QMap<QString,ItemInfo>)));
+
     connect(signalManager, SIGNAL(navigationButtonClicked(QString)),
             this, SLOT(scrollToCategory(QString)));
     connect(signalManager, SIGNAL(appOpenedInCategoryMode()),
@@ -49,6 +46,11 @@ void CategoryTableWidget::initConnect(){
             this, SLOT(handleCurrentAppItemChanged(QString)));
 }
 
+void CategoryTableWidget::show()
+{
+    BaseTableWidget::show();
+}
+
 void CategoryTableWidget::setGridParameter(int column, int girdWidth, int itemWidth){
     m_column = column;
     m_gridWidth = girdWidth;
@@ -57,46 +59,20 @@ void CategoryTableWidget::setGridParameter(int column, int girdWidth, int itemWi
     for(int i=0; i< m_column; i++){
         setColumnWidth(i, m_gridWidth);
     }
-
-//    int desktopHeight =  qApp->desktop()->screenGeometry().height();
-//    int bottomMargin = qApp->desktop()->screenGeometry().height() -
-//            qApp->desktop()->availableGeometry().height();
     setFixedWidth(m_column * m_gridWidth);
-}
-
-void CategoryTableWidget::setItemInfosMap(const QMap<QString, ItemInfo> &itemInfos){
-    m_itemInfosMap.clear();
-    m_itemInfosMap = itemInfos;
 }
 
 void CategoryTableWidget::setCategoryInfoList(const CategoryInfoList &categoryInfoList){
     qDebug() << "setCategoryInfoList" << categoryInfoList.length();
-    m_categoryInfoList = categoryInfoList;
+    emit signalManager->hideNavigationButtonByKeys(appItemManager->getHideKeys());
+    addItems(appItemManager->getSortedCategoryInfoList());
+    setItemUnChecked();
+}
 
-    m_sortedCategoryInfoList.clear();
-
-    for(int i = 0; i<= 9; i++ ) {
-        foreach (CategoryInfo info, categoryInfoList) {
-            if (info.id == i){
-                m_sortedCategoryInfoList.append(info);
-            }
-        }
-    }
-    foreach (CategoryInfo info, categoryInfoList) {
-        if (info.id == -2){
-            m_sortedCategoryInfoList.append(info);
-        }
-    }
-
-    foreach (CategoryInfo info, m_sortedCategoryInfoList) {
-        if (info.items.count() == 0){
-            m_hideKeys.append(info.key);
-        }
-    }
-    emit signalManager->hideNavigationButtonByKeys(m_hideKeys);
-
-    addItems(m_sortedCategoryInfoList);
-
+void CategoryTableWidget::showAppItems()
+{
+    emit signalManager->hideNavigationButtonByKeys(appItemManager->getHideKeys());
+    addItems(appItemManager->getSortedCategoryInfoList());
     setItemUnChecked();
 }
 
@@ -107,10 +83,13 @@ void CategoryTableWidget::addCategoryItem(int row, QString key){
      setRowHeight(row, 60);
      setItem(row, 0, item);
 
-     CategoryItem* categoryItem = new CategoryItem(key);
-     categoryItem->setFixedSize(m_gridWidth * m_column, rowHeight(row));
-     setCellWidget(row, 0, categoryItem);
-     m_categoryItems.insert(key, categoryItem);
+
+     CategoryItem* categoryItem = appItemManager->getCategoryItemByKey(key);
+     if (categoryItem){
+        categoryItem->setParent(this);
+        categoryItem->setFixedSize(m_gridWidth * m_column, rowHeight(row));
+        setCellWidget(row, 0, categoryItem);
+     }
 }
 
 void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList appKeys){
@@ -129,20 +108,14 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
        int _row = startRow + appKeys.indexOf(appKey) / m_column;
        int column = appKeys.indexOf(appKey) % m_column;
 
-       if (m_itemInfosMap.contains(appKey)){
-            const ItemInfo& itemInfo = m_itemInfosMap.value(appKey);
-
-            AppItem* appItem = new AppItem(itemInfo.isAutoStart);
-            appItem->setAppKey(itemInfo.key);
-            appItem->setUrl(itemInfo.url);
-            appItem->setAppName(itemInfo.name);
-            int size = appItem->getIconSize();
-            appItem->setAppIcon(ThemeAppIcon::getIconPixmap(itemInfo.iconKey, size, size));
-            appItem->setFixedSize(m_gridWidth, m_gridWidth);
-            setCellWidget(_row, column, appItem);
-            m_appItems.insert(appKey, appItem);
+       AppItem* appItem = appItemManager->getAppItemByKey(appKey);
+       if (appItem){
+           appItem->setParent(this);
+           appItem->setFixedSize(m_gridWidth, m_gridWidth);
+           setCellWidget(_row, column, appItem);
+           appItem->show();
        }else{
-           qDebug() << appKey << m_itemInfosMap.keys();
+           qDebug() << appKey;
        }
    }
 
@@ -158,10 +131,8 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
 }
 
 void CategoryTableWidget::addItems(const CategoryInfoList &categoryInfoList){
-    clear();
     clearContents();
-    qDeleteAll(m_appItems.values());
-    m_appItems.clear();
+
     int rc = rowCount();
     for(int i=0; i< rc; i++){
         removeRow(0);
@@ -184,7 +155,7 @@ void CategoryTableWidget::removeItem(QString appKey){
 }
 
 void CategoryTableWidget::handleCurrentAppItemChanged(QString appKey){
-    foreach (CategoryInfo info, m_categoryInfoList) {
+    foreach (CategoryInfo info, appItemManager->getCategoryInfoList()) {
         if (info.key != "all" && info.items.contains(appKey)){
             emit signalManager->checkNavigationButtonByKey(info.key);
             break;
@@ -195,9 +166,9 @@ void CategoryTableWidget::handleCurrentAppItemChanged(QString appKey){
 void CategoryTableWidget::scrollToCategory(QString key){
     int start = verticalScrollBar()->value();
     int end = 0;
-    if (m_categoryItems.contains(key)){
+    if (appItemManager->getCategoryItems().contains(key)){
         for (int i=0; i< rowCount() ; i++){
-            if (m_categoryItems.value(key) == static_cast<CategoryItem*>(cellWidget(i, 0))){
+            if (appItemManager->getCategoryItems().value(key) == static_cast<CategoryItem*>(cellWidget(i, 0))){
                 break;
             } else {
                 end += rowHeight(i);
@@ -232,8 +203,8 @@ void CategoryTableWidget::handleScrollBarValueChanged(int value){
         }
     }
 
-    foreach (QString key, m_categoryItems.keys()) {
-        if (m_categoryItems.value(key)  == cellWidget(targetRow, 0)){
+    foreach (QString key, appItemManager->getCategoryItems().keys()) {
+        if (appItemManager->getCategoryItems().value(key)  == cellWidget(targetRow, 0)){
             emit signalManager->checkNavigationButtonByKey(key);
         }
     }
@@ -266,14 +237,14 @@ void CategoryTableWidget::openCheckedApp(){
 }
 
 void CategoryTableWidget::showAutoStartLabel(QString appKey){
-    if (m_appItems.contains(appKey)){
-        reinterpret_cast<AppItem*>(m_appItems.value(appKey))->showAutoStartLabel();
+    if (appItemManager->getAppItems().contains(appKey)){
+        reinterpret_cast<AppItem*>(appItemManager->getAppItems().value(appKey))->showAutoStartLabel();
     }
 }
 
 void CategoryTableWidget::hideAutoStartLabel(QString appKey){
-    if (m_appItems.contains(appKey)){
-        reinterpret_cast<AppItem*>(m_appItems.value(appKey))->hideAutoStartLabel();
+    if (appItemManager->getAppItems().contains(appKey)){
+        reinterpret_cast<AppItem*>(appItemManager->getAppItems().value(appKey))->hideAutoStartLabel();
     }
 }
 
@@ -307,6 +278,6 @@ void CategoryTableWidget::wheelEvent(QWheelEvent *event){
 
 CategoryTableWidget::~CategoryTableWidget()
 {
-    qDeleteAll(m_categoryItems.values());
+
 }
 

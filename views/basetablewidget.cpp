@@ -53,15 +53,15 @@ void BaseTableWidget::mouseReleaseEvent(QMouseEvent *event){
         emit signalManager->mouseReleased();
     }
 
-    if (cellWidget(item->row(), item->column())){
-        if (event->button() != Qt::RightButton){
+    if (item){
+        if (cellWidget(item->row(), item->column())){
+            if (event->button() != Qt::RightButton){
+                emit signalManager->Hide();
+            }
+        }else{
             emit signalManager->Hide();
         }
-    }else{
-        emit signalManager->Hide();
     }
-
-
     QTableWidget::mouseReleaseEvent(event);
 }
 

@@ -19,6 +19,9 @@ signals:
 public slots:
     void addTextShadow();
 
+protected:
+    bool eventFilter(QObject *obj, QEvent *event);
+
 private:
     QLabel* m_titleLabel;
 };

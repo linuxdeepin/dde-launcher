@@ -56,6 +56,11 @@ void DBusController::init(){
     getCategoryInfoList();
     getInstalledTimeItems();
     getAllFrequencyItems();
+    refreshUI();
+}
+
+void DBusController::refreshUI()
+{
     int sortedMode= getSortMethod();
     int categoryMode = getCategoryDisplayMode();
 
@@ -92,7 +97,7 @@ void DBusController::initConnect(){
 
 void DBusController::updateAppTable(QString appKey){
     qDebug() << "updateAppTable" << appKey;
-    init();
+    emit signalManager->launcheRefreshed();
 }
 
 void DBusController::handleItemChanged(const QString &action, ItemInfo itemInfo,
@@ -356,6 +361,7 @@ void DBusController::refreshInstallTimeFrequency(){
     }else if (mode == 3){
         emit signalManager->frequencyRefreshed();
     }
+    refreshUI();
 }
 
 void DBusController::searchDone(QStringList appKeys){
@@ -365,7 +371,6 @@ void DBusController::searchDone(QStringList appKeys){
             m_searchList.append(info);
         }
     }
-    emit signalManager->showSearchResult();
     emit signalManager->searchItemInfoListChanged(m_searchList);
 }
 

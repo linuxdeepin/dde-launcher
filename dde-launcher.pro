@@ -59,7 +59,8 @@ SOURCES += main.cpp \
     views/gradientlabel.cpp \
     dbusinterface/dbusclientmanager.cpp \
     dbusinterface/pinyin_interface.cpp \
-    dbusinterface/dock_interface.cpp
+    dbusinterface/dock_interface.cpp \
+    views/appitemmanager.cpp
 
 HEADERS += \
     views/launcherframe.h \
@@ -103,7 +104,8 @@ HEADERS += \
     views/gradientlabel.h \
     dbusinterface/dbusclientmanager.h \
     dbusinterface/pinyin_interface.h \
-    dbusinterface/dock_interface.h
+    dbusinterface/dock_interface.h \
+    views/appitemmanager.h
 
 TRANSLATIONS += translations/dde-launcher.ts
 

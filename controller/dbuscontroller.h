@@ -65,6 +65,7 @@ signals:
 
 public slots:
     void init();
+    void refreshUI();
     void getInstalledTimeItems();
     void getAllFrequencyItems();
     void handleItemChanged(const QString &action, ItemInfo itemInfo, qlonglong categoryInfoId);

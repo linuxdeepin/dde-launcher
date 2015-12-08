@@ -50,6 +50,7 @@ LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
 
     setObjectName("LauncherFrame");
     computerGrid(160, 60, LauncherFrame::GridSpacing, LauncherFrame::GridSize);
+    appItemManager->init();
     initUI();
     initConnect();
     setStyleSheet(getQssFromFile(":/qss/skin/qss/main.qss"));
@@ -129,6 +130,7 @@ void LauncherFrame::initUI(){
     m_topGradient = new GradientLabel(this);
     m_bottomGradient = new GradientLabel(this);
     m_bottomGradient->setDirection(GradientLabel::BottomToTop);
+
 }
 
 void LauncherFrame::computerGrid(int minimumLeftMargin, int minimumTopMargin, int miniSpacing, int itemWidth){
@@ -155,7 +157,9 @@ void LauncherFrame::initConnect(){
     connect(m_displayModeFrame, SIGNAL(categoryModeChanged(int)), this, SLOT(showCategoryMode(int)));
     connect(m_searchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(handleSearch(QString)));
     connect(signalManager, SIGNAL(startSearched(QString)), m_searchLineEdit, SLOT(setText(QString)));
-    connect(signalManager, SIGNAL(showSearchResult()), this, SLOT(showAppTableWidget()));
+    connect(signalManager, SIGNAL(searchItemInfoListChanged(QList<ItemInfo>)),
+            this, SLOT(showSearchResult(QList<ItemInfo>)));
+
     connect(signalManager, SIGNAL(mouseReleased()), this, SLOT(handleMouseReleased()));
     connect(signalManager, SIGNAL(Hide()), this, SLOT(Hide()));
     connect(signalManager, SIGNAL(appOpened(QString)), this, SLOT(handleAppOpened(QString)));
@@ -183,22 +187,32 @@ void LauncherFrame::showSortedMode(int mode){
     qDebug() << mode;
     if (mode == 1){
         showNavigationBarByMode();
+        showCategoryTable();
     }else{
         showAppTableWidgetByMode(mode);
     }
 }
 
 void LauncherFrame::showCategoryMode(int mode){
+   qDebug() << mode;
    m_categoryFrame->getNavigationBar()->setCurrentIndex(mode);
-   m_categoryFrame->getNavigationBar();
-   m_categoryFrame->getCategoryTabelWidget()->show();
+   showCategoryTable();
 }
 
 void LauncherFrame::showAppTableWidget(){
     m_currentIndex = currentMode();
     m_layout->setCurrentIndex(1);
-    m_appTableWidget->clear();
     m_displayModeFrame->hide();
+}
+
+void LauncherFrame::showCategoryTable()
+{
+    m_categoryFrame->getCategoryTabelWidget()->setCategoryInfoList(appItemManager->getSortedCategoryInfoList());
+}
+
+void LauncherFrame::showSearchResult(const QList<ItemInfo> &infoList){
+    showAppTableWidget();
+    m_appTableWidget->showSearchResult(infoList);
 }
 
 void LauncherFrame::showAppTableWidgetByMode(int mode){
@@ -269,6 +283,7 @@ void LauncherFrame::Exit(){
 
 void LauncherFrame::Hide(){
     hide();
+    emit Closed();
     m_searchLineEdit->setText("");
     emit signalManager->refreshInstallTimeFrequency();
 }

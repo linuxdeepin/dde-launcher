@@ -55,6 +55,14 @@ BaseCheckedButton#CategoryTextButton:checked{
 }
 
 
+BaseCheckedButton#CategoryTextButton:disabled{
+    background-color: transparent;
+    border:none;
+    color: rgba(255, 255, 255, 26);
+    padding-left: 0px;
+    text-align: left center;
+}
+
 
 BaseCheckedButton#internet{
     border-image: url(:/images/skin/images/internet_50.svg);

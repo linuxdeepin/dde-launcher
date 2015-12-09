@@ -31,9 +31,12 @@ int LauncherFrame::AppItemTopSpacing = 14;
 int LauncherFrame::AppItemIconNameSpacing = 8;
 int LauncherFrame::AppItemMargin = 10;
 int LauncherFrame::IconSize = 64;
+int LauncherFrame::TextHeight = 34;
 int LauncherFrame::GridSpacing = 24;
 int LauncherFrame::GridSize = 160;
 int LauncherFrame::BorderSize = 144;
+int LauncherFrame::BorderWidth = 100;
+int LauncherFrame::BorderHeight = 100;
 
 
 LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
@@ -46,7 +49,6 @@ LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
     move(primaryRect.x(), primaryRect.y());
     setFixedSize(primaryRect.width(), primaryRect.height());
 
-    LauncherFrame::setIconSizeByDpi(primaryRect.width(), primaryRect.height());
 
     setObjectName("LauncherFrame");
     computerGrid(160, 60, LauncherFrame::GridSpacing, LauncherFrame::GridSize);
@@ -62,34 +64,6 @@ LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
     connect(m_searchTimer, SIGNAL(timeout()), this, SLOT(search()));
 }
 
-void LauncherFrame::setIconSizeByDpi(int width, int height){
-    if (width <= 1000 && height <= 700){
-        LauncherFrame::AppItemTopSpacing = 4;
-        LauncherFrame::AppItemIconNameSpacing = 8;
-        LauncherFrame::AppItemMargin = 4;
-        LauncherFrame::IconSize = 48;
-        LauncherFrame::GridSpacing = 16;
-        LauncherFrame::GridSize = 100;
-        LauncherFrame::BorderSize = 100;
-    }else if (width <= 1440 && height <= 900){
-        LauncherFrame::AppItemTopSpacing = 14;
-        LauncherFrame::AppItemIconNameSpacing = 8;
-        LauncherFrame::AppItemMargin = 10;
-        LauncherFrame::IconSize = 48;
-        LauncherFrame::GridSpacing = 24;
-        LauncherFrame::GridSize = 120;
-        LauncherFrame::BorderSize = 120;
-    }else{
-        LauncherFrame::AppItemTopSpacing = 14;
-        LauncherFrame::AppItemIconNameSpacing = 8;
-        LauncherFrame::AppItemMargin = 10;
-        LauncherFrame::IconSize = 64;
-        LauncherFrame::GridSpacing = 24;
-        LauncherFrame::GridSize = 160;
-        LauncherFrame::BorderSize = 144;
-    }
-}
-
 void LauncherFrame::initUI(){
     qDebug() << "initUI";
     m_backgroundLabel = new BackgroundLabel(true, this);
@@ -98,12 +72,12 @@ void LauncherFrame::initUI(){
     m_clearCheckedButton->hide();
 
     m_categoryFrame = new CategoryFrame(this);
-    m_categoryFrame->initUI(m_leftMargin, m_rightMargin, m_column, m_itemWidth, m_gridwidth);
+    m_categoryFrame->initUI(m_leftMargin, m_rightMargin, m_column, m_itemWidth, m_gridWidth, m_gridHeight);
 
     QFrame* appBox = new QFrame;
     appBox->setObjectName("AppBox");
     m_appTableWidget = new AppTableWidget(this);
-    m_appTableWidget->setGridParameter(m_column, m_gridwidth, m_itemWidth);
+    m_appTableWidget->setGridParameter(m_column, m_gridWidth, m_gridHeight, m_itemWidth);
 
     QHBoxLayout* appLayout = new QHBoxLayout(appBox);
     appLayout->addWidget(m_appTableWidget);
@@ -136,17 +110,93 @@ void LauncherFrame::initUI(){
 void LauncherFrame::computerGrid(int minimumLeftMargin, int minimumTopMargin, int miniSpacing, int itemWidth){
     int desktopWidth = width();
     int desktopHeight = height();
-    m_itemWidth = itemWidth;
-    m_column = (desktopWidth - minimumLeftMargin * 2) / (itemWidth + miniSpacing);
-    m_spacing = (desktopWidth  - minimumLeftMargin * 2) / m_column - itemWidth;
-    m_gridwidth = m_spacing + itemWidth;
-    m_leftMargin = (desktopWidth - m_column * m_gridwidth)/ 2;
-    m_rightMargin = desktopWidth - m_leftMargin - m_column * m_gridwidth;
 
-    m_row = (desktopHeight - minimumTopMargin) / m_gridwidth;
-    m_topMargin = (desktopHeight - m_row * m_gridwidth) / 2;
-    m_bottomMargin = desktopHeight - m_row * m_gridwidth - m_topMargin;
-    qDebug() << m_column << m_itemWidth << m_spacing << m_leftMargin << m_rightMargin;
+    if (desktopWidth <= 700){
+        m_column = 4;
+    }else if (desktopWidth <= 800){
+        m_column = 5;
+    }else{
+        m_column = 7;
+    }
+
+    if (desktopHeight <= 400){
+        m_row = 2;
+    }else if (desktopHeight <= 700){
+        m_row = 3;
+    }else{
+        m_row = 4;
+    }
+
+    m_spacing = miniSpacing;
+
+    m_itemWidth =  (desktopWidth - minimumLeftMargin * 2 - m_spacing * m_column) / m_column;
+    m_gridHeight =  (desktopHeight - minimumTopMargin * 2 - m_spacing * m_row) / m_row;
+    m_gridWidth = m_spacing + m_itemWidth;
+
+    m_leftMargin = (desktopWidth - m_column * m_gridWidth)/ 2;
+    m_rightMargin = desktopWidth - m_leftMargin - m_column * m_gridWidth;
+
+    m_topMargin = (desktopHeight - m_row * m_gridHeight) / 2;
+    m_bottomMargin = desktopHeight - m_row * m_gridHeight - m_topMargin;
+
+//    m_itemWidth = itemWidth;
+//    m_column = (desktopWidth - minimumLeftMargin * 2) / (itemWidth + miniSpacing);
+//    m_spacing = (desktopWidth  - minimumLeftMargin * 2) / m_column - itemWidth;
+//    m_gridWidth = m_spacing + itemWidth;
+//    m_leftMargin = (desktopWidth - m_column * m_gridWidth)/ 2;
+//    m_rightMargin = desktopWidth - m_leftMargin - m_column * m_gridWidth;
+
+//    m_row = (desktopHeight - minimumTopMargin) / m_gridWidth;
+//    m_topMargin = (desktopHeight - m_row * m_gridWidth) / 2;
+//    m_bottomMargin = desktopHeight - m_row * m_gridWidth - m_topMargin;
+
+
+    LauncherFrame::AppItemTopSpacing = 4;
+    LauncherFrame::AppItemIconNameSpacing = 4;
+    LauncherFrame::AppItemMargin = 4;
+
+    if (m_itemWidth > 2 * 64){
+        LauncherFrame::IconSize = 64;
+    }else{
+        LauncherFrame::IconSize = 48;
+    }
+
+    int appItemDefaultHeight = LauncherFrame::AppItemTopSpacing + LauncherFrame::AppItemIconNameSpacing + LauncherFrame::IconSize + LauncherFrame::TextHeight;
+    LauncherFrame::BorderHeight = m_gridHeight - m_spacing;
+    if (LauncherFrame::BorderHeight < appItemDefaultHeight){
+        qDebug() << "less than "<< appItemDefaultHeight;
+        if (LauncherFrame::BorderHeight > (LauncherFrame::IconSize + LauncherFrame::TextHeight)){
+            LauncherFrame::AppItemTopSpacing = (LauncherFrame::BorderHeight - LauncherFrame::IconSize - LauncherFrame::TextHeight) / 2;
+            LauncherFrame::AppItemIconNameSpacing = LauncherFrame::AppItemTopSpacing;
+            LauncherFrame::AppItemMargin = 0;
+        }else{
+            LauncherFrame::BorderHeight = LauncherFrame::IconSize + LauncherFrame::TextHeight;
+            LauncherFrame::AppItemTopSpacing = 0;
+            LauncherFrame::AppItemIconNameSpacing = 0;
+            LauncherFrame::AppItemMargin = 0;
+        }
+    }else{
+        LauncherFrame::BorderHeight = m_gridHeight - m_spacing;
+        int spacing = (LauncherFrame::BorderHeight - LauncherFrame::IconSize - LauncherFrame::TextHeight) / 4;
+        LauncherFrame::AppItemTopSpacing = spacing;
+        LauncherFrame::AppItemIconNameSpacing = 8;
+        LauncherFrame::AppItemMargin = 4;
+
+        qDebug() << "more than "<<  appItemDefaultHeight << spacing;
+
+    }
+    LauncherFrame::BorderWidth = m_itemWidth;
+
+    if (desktopWidth > 1440){
+        LauncherFrame::BorderHeight = 144;
+        LauncherFrame::BorderWidth = 144;
+    }else if (desktopWidth == 1440){
+        LauncherFrame::BorderHeight = 120;
+        LauncherFrame::BorderWidth = 120;
+    }
+
+    qDebug() << m_column << m_itemWidth  << m_gridWidth << m_gridHeight << m_spacing << m_leftMargin << m_rightMargin;
+    qDebug() << LauncherFrame::BorderWidth << LauncherFrame::BorderHeight;
     qDebug() << m_row << m_topMargin << m_bottomMargin;
 }
 

@@ -28,10 +28,12 @@ public:
     static int AppItemIconNameSpacing;
     static int AppItemMargin;
     static int IconSize;
+    static int TextHeight;
     static int GridSpacing;
     static int GridSize;
     static int BorderSize;
-    static void setIconSizeByDpi(int width, int height);
+    static int BorderWidth;
+    static int BorderHeight;
 
     void initUI();
     void initConnect();
@@ -91,7 +93,8 @@ private:
     int m_column;
     int m_row;
     int m_itemWidth;
-    int m_gridwidth;
+    int m_gridWidth;
+    int m_gridHeight;
     bool m_rightclicked = false;
     bool m_isDraging = false;
     QString m_searchText;

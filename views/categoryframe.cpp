@@ -16,13 +16,13 @@ CategoryFrame::CategoryFrame(QWidget *parent) :
 
 }
 
-void CategoryFrame::initUI(int leftMargin, int rightMargin, int column, int itemWidth, int gridWidth){
+void CategoryFrame::initUI(int leftMargin, int rightMargin, int column, int itemWidth, int gridWidth, int gridHeight){
     setGeometry(static_cast<QWidget*>(parent())->geometry());
     m_navigationBar = new NavigationBar(this);
     m_navigationBar->initUI(leftMargin);
 
     m_categoryTableWidget = new CategoryTableWidget(this);
-    m_categoryTableWidget->setGridParameter(column, gridWidth, itemWidth);
+    m_categoryTableWidget->setGridParameter(column, gridWidth, gridHeight, itemWidth);
 
     QVBoxLayout* tableLayout = new QVBoxLayout;
     tableLayout->addWidget(m_categoryTableWidget);

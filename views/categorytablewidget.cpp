@@ -51,9 +51,10 @@ void CategoryTableWidget::show()
     BaseTableWidget::show();
 }
 
-void CategoryTableWidget::setGridParameter(int column, int girdWidth, int itemWidth){
+void CategoryTableWidget::setGridParameter(int column, int girdWidth, int gridHeight, int itemWidth){
     m_column = column;
     m_gridWidth = girdWidth;
+    m_gridHeight = gridHeight;
     m_itemWidth = itemWidth;
     setColumnCount(m_column);
     for(int i=0; i< m_column; i++){
@@ -102,7 +103,7 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
     }
     for(int i=startRow; i< endRow; i++){
        insertRow(i);
-       setRowHeight(i, m_gridWidth);
+       setRowHeight(i, m_gridHeight);
     }
     foreach (QString appKey, appKeys) {
        int _row = startRow + appKeys.indexOf(appKey) / m_column;
@@ -111,7 +112,7 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
        AppItem* appItem = appItemManager->getAppItemByKey(appKey);
        if (appItem){
            appItem->setParent(this);
-           appItem->setFixedSize(m_gridWidth, m_gridWidth);
+           appItem->setFixedSize(m_gridWidth, m_gridHeight);
            setCellWidget(_row, column, appItem);
            appItem->show();
        }else{

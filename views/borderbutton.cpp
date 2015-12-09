@@ -105,11 +105,11 @@ void BorderButton::drawBorder(int borderWidth, int radius, QColor borderColor, Q
     pen.setColor(borderColor);
     pen.setWidth(borderWidth);
     QPainterPath border;
-    border.addRoundedRect(QRectF(borderWidth / 2, borderWidth/2, LauncherFrame::BorderSize - borderWidth, LauncherFrame::BorderSize - borderWidth), radius * 3/4, radius*3/4);
+    border.addRoundedRect(QRectF(borderWidth / 2, borderWidth/2, LauncherFrame::BorderWidth + 2 * LauncherFrame::AppItemMargin - borderWidth, LauncherFrame::BorderHeight + 2 * LauncherFrame::AppItemMargin - borderWidth), radius * 3/4, radius*3/4);
     painter.strokePath(border, pen);
 
     painter.setBrush(brushColor);
-    QRect r(borderWidth, borderWidth, LauncherFrame::BorderSize - borderWidth*2, LauncherFrame::BorderSize - borderWidth*2);
+    QRect r(borderWidth, borderWidth, LauncherFrame::BorderWidth + 2 * LauncherFrame::AppItemMargin - borderWidth*2, LauncherFrame::BorderHeight + 2 * LauncherFrame::AppItemMargin - borderWidth*2);
     painter.drawRoundedRect(r, radius, radius);
 }
 

@@ -36,17 +36,17 @@ void AppItem::initUI(){
     m_nameLabel->setAlignment(Qt::AlignTop| Qt::AlignHCenter);
 
     m_iconLabel->setFixedSize(LauncherFrame::IconSize, LauncherFrame::IconSize);
-    m_nameLabel->setFixedSize(LauncherFrame::BorderSize - 20, 34);
+    m_nameLabel->setFixedSize(LauncherFrame::BorderWidth - 4, LauncherFrame::TextHeight);
 
+    int margin = LauncherFrame::AppItemMargin;
     m_borderButton = new BorderButton(this);
-    m_borderButton->setFixedSize(LauncherFrame::BorderSize + 4, LauncherFrame::BorderSize + 4);
+    m_borderButton->setFixedSize(LauncherFrame::BorderWidth + margin * 2, LauncherFrame::BorderHeight + margin * 2);
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addSpacing(LauncherFrame::AppItemTopSpacing);
     mainLayout->addWidget(m_iconLabel, 0, Qt::AlignHCenter);
     mainLayout->addSpacing(LauncherFrame::AppItemIconNameSpacing);
     mainLayout->addWidget(m_nameLabel, 0, Qt::AlignHCenter);
     mainLayout->setSpacing(0);
-    int margin = LauncherFrame::AppItemMargin;
     mainLayout->setContentsMargins(margin, margin, margin, margin);
     m_borderButton->setLayout(mainLayout);
 

@@ -14,7 +14,7 @@ public:
     explicit CategoryFrame(QWidget *parent = 0);
     ~CategoryFrame();
 
-    void initUI(int leftMargin, int rightMargin, int column, int itemWidth, int gridWidth);
+    void initUI(int leftMargin, int rightMargin, int column, int itemWidth, int gridWidth, int gridHeight);
     NavigationBar* getNavigationBar();
     CategoryTableWidget* getCategoryTabelWidget();
 

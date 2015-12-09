@@ -35,9 +35,10 @@ void AppTableWidget::initConnect(){
             this, SLOT(hideAutoStartLabel(QString)));
 }
 
-void AppTableWidget::setGridParameter(int column, int girdWidth, int itemWidth){
+void AppTableWidget::setGridParameter(int column, int girdWidth, int gridHeight, int itemWidth){
     m_column = column;
     m_gridWidth = girdWidth;
+    m_gridHeight = gridHeight;
     m_itemWidth = itemWidth;
     setColumnCount(m_column);
     for(int i=0; i< m_column; i++){
@@ -55,7 +56,7 @@ void AppTableWidget::addItem(ItemInfo itemInfo, int index){
     AppItem* appItem = appItemManager->getAppItemByKey(itemInfo.key);
     if (appItem){
         appItem->setParent(this);
-        appItem->setFixedSize(m_gridWidth, m_gridWidth);
+        appItem->setFixedSize(m_gridWidth, m_gridHeight);
         setCellWidget(row, column, appItem);
         appItem->show();
     }else{
@@ -77,7 +78,7 @@ void AppTableWidget::addItems(const QList<ItemInfo> &itemInfos){
     verticalScrollBar()->setValue(0);
     setRowCount(itemInfos.length() / m_column + 1);
     for(int i=0; i< rowCount(); i++){
-        setRowHeight(i, m_gridWidth);
+        setRowHeight(i, m_gridHeight);
     }
     setItemUnChecked();
 

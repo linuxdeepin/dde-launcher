@@ -21,7 +21,7 @@ signals:
 
 public slots:
     void show();
-    void setGridParameter(int column, int girdWidth, int itemWidth);
+    void setGridParameter(int column, int girdWidth, int gridHeight, int itemWidth);
 
     void setCategoryInfoList(const CategoryInfoList& categoryInfoList);
     void showAppItems();
@@ -49,6 +49,7 @@ protected:
 private:
     int m_column;
     int m_gridWidth;
+    int m_gridHeight;
     int m_itemWidth;
 
     QPropertyAnimation* m_scrollAnimation;

@@ -109,7 +109,7 @@ void DisplayModeFrame::showButtonFrame(){
             maxWidth = w;
         }
     }
-    setGeometry(0, 0, m_buttonFrame->x() + maxWidth + 10, 210);
+    setGeometry(0, 0, m_buttonFrame->x() + maxWidth + 10, 220);
     m_buttonFrame->show();
     QPropertyAnimation *animation = new QPropertyAnimation(m_buttonFrame, "geometry");
     connect(animation, SIGNAL(finished()), animation, SLOT(deleteLater()));

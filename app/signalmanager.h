@@ -95,6 +95,9 @@ signals:
 
     /*hide refresh installtime or frequency data*/
     void refreshInstallTimeFrequency();
+
+    /*gtk theme changed*/
+    void gtkIconThemeChanged();
 };
 
 #endif // SIGNALMANAGER_H

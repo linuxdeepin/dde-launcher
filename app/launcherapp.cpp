@@ -25,6 +25,7 @@ LauncherApp::LauncherApp(QObject *parent) : QObject(parent)
     m_dbusWorker->moveToThread(m_dbusThread);
 
     connect(signalManager, SIGNAL(appUninstalled(QString)), this, SLOT(handleUninstall(QString)));
+    connect(signalManager, SIGNAL(gtkIconThemeChanged()), qApp, SLOT(quit()));
 }
 
 void LauncherApp::show(){

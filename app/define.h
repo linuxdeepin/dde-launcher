@@ -4,16 +4,43 @@
 #include "logmanager.h"
 #include "daemon.h"
 #include "widgets/singleton.h"
+#include "global.h"
 
 #include <QDBusInterface>
 #include <QDBusConnection>
 #include <QDBusPendingCall>
+
+
+#undef signals
+extern "C" {
+  #include <gtk/gtk.h>
+}
+#define signals public
+
+static void requrestUpdateIcons()
+{
+    GtkIconTheme* gs = gtk_icon_theme_get_default();
+    auto a = gtk_icon_theme_get_example_icon_name(gs);
+    if (a != NULL) g_free(a);
+    //can not passing QObject to the callback function,so use signal
+    emit signalManager->gtkIconThemeChanged();
+}
+
+void initGtkThemeWatcher()
+{
+    GtkIconTheme* gs = gtk_icon_theme_get_default();
+    g_signal_connect(gs, "changed",
+                     G_CALLBACK(requrestUpdateIcons), NULL);
+    auto a = gtk_icon_theme_get_example_icon_name(gs);
+    if (a != NULL) g_free(a);
+}
 
 void debug_daemon_off(){
     #if defined(QT_NO_DEBUG)
     daemonize();
     #endif
 }
+
 
 // let startdde know that we've already started.
 void RegisterDdeSession()

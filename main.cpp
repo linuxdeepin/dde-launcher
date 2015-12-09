@@ -32,6 +32,10 @@ int main(int argc, char *argv[])
         LauncherApp launcher;
         launcher.show();
 
+        gtk_init(NULL, NULL);
+        gdk_error_trap_push();
+        initGtkThemeWatcher();
+
         qDebug() << "Starting the launcher application";
         int reslut = a.exec();
         qDebug() << "exits " << a.applicationName() << reslut;

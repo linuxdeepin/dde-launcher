@@ -35,7 +35,7 @@ void NavigationButtonFrame::initByMode(int mode){
         if (mode == 0){
             BaseCheckedButton* button = new BaseCheckedButton(this);
             button->setFixedSize(32, 32);
-            button->setObjectName(key);
+            button->setObjectName(key.toLower());
             buttonLayout->addWidget(button);
             m_buttonGroup->addButton(button, CategroyKeys.indexOf(key));
             button->hide();

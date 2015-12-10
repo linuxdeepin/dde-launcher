@@ -191,7 +191,7 @@ void CategoryTableWidget::handleScrollBarValueChanged(int value){
     // TODO: 50 is not very precise here, the value should be the real height of
     // the others category.
     if (qAbs(value - verticalScrollBar()->maximum()) < 50) {
-        emit signalManager->checkNavigationButtonByKey("others");
+        emit signalManager->checkNavigationButtonByKey("Others");
         return;
     } else {
         for (int i=0; i< rowCount() ; i++){

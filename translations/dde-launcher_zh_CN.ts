@@ -50,11 +50,7 @@
 <context>
     <name>LauncherApp</name>
     <message>
-        <source>Are you sure to uninstall %1</source>
-        <translation type="obsolete">您确定要卸载 %1 ?</translation>
-    </message>
-    <message>
-        <location filename="../app/launcherapp.cpp" line="45"/>
+        <location filename="../app/launcherapp.cpp" line="47"/>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>您确定要卸载 %1 ?</translation>
     </message>
@@ -92,10 +88,6 @@
         <translation>从开机启动项删除(_R)</translation>
     </message>
     <message>
-        <source>remove from startup(_R)</source>
-        <translation type="vanished">从开机启动项删除(_R)</translation>
-    </message>
-    <message>
         <location filename="../controller/menucontroller.cpp" line="86"/>
         <source>Add to startup(_A)</source>
         <translation>添加至开机启动项(_A)</translation>
@@ -106,7 +98,7 @@
         <translation>卸载</translation>
     </message>
     <message>
-        <location filename="../controller/menucontroller.cpp" line="357"/>
+        <location filename="../controller/menucontroller.cpp" line="358"/>
         <source>Uninstall %1 successfully!</source>
         <translation>卸载 %1 成功!</translation>
     </message>
@@ -115,58 +107,58 @@
     <name>QObject</name>
     <message>
         <location filename="../app/global.h" line="35"/>
-        <source>internet</source>
+        <source>Internet</source>
         <translation>网络应用</translation>
     </message>
     <message>
         <location filename="../app/global.h" line="36"/>
-        <source>multimedia</source>
-        <translation>影音播放</translation>
-    </message>
-    <message>
-        <location filename="../app/global.h" line="37"/>
-        <source>games</source>
-        <translation>游戏娱乐</translation>
-    </message>
-    <message>
-        <location filename="../app/global.h" line="38"/>
-        <source>graphics</source>
-        <translation>图形图像</translation>
-    </message>
-    <message>
-        <location filename="../app/global.h" line="39"/>
-        <source>productivity</source>
+        <source>Office</source>
         <translation>办公软件</translation>
     </message>
     <message>
-        <location filename="../app/global.h" line="40"/>
-        <source>industry</source>
-        <translation>行业软件</translation>
-    </message>
-    <message>
-        <location filename="../app/global.h" line="41"/>
-        <source>education</source>
-        <translation>科学教育</translation>
-    </message>
-    <message>
-        <location filename="../app/global.h" line="42"/>
-        <source>development</source>
+        <location filename="../app/global.h" line="37"/>
+        <source>Development</source>
         <translation>编程开发</translation>
     </message>
     <message>
+        <location filename="../app/global.h" line="38"/>
+        <source>Reading</source>
+        <translation>翻译阅读</translation>
+    </message>
+    <message>
+        <location filename="../app/global.h" line="39"/>
+        <source>Graphics</source>
+        <translation>图形图像</translation>
+    </message>
+    <message>
+        <location filename="../app/global.h" line="40"/>
+        <source>Game</source>
+        <translation>游戏娱乐</translation>
+    </message>
+    <message>
+        <location filename="../app/global.h" line="41"/>
+        <source>Music</source>
+        <translation>音乐软件</translation>
+    </message>
+    <message>
+        <location filename="../app/global.h" line="42"/>
+        <source>System</source>
+        <translation>系统工具</translation>
+    </message>
+    <message>
         <location filename="../app/global.h" line="43"/>
-        <source>system</source>
-        <translation>系统管理</translation>
+        <source>Video</source>
+        <translation>视频软件</translation>
     </message>
     <message>
         <location filename="../app/global.h" line="44"/>
-        <source>utilities</source>
-        <translation>实用工具</translation>
+        <source>Chat</source>
+        <translation>聊天软件</translation>
     </message>
     <message>
         <location filename="../app/global.h" line="45"/>
-        <source>others</source>
-        <translation>其他</translation>
+        <source>Others</source>
+        <translation>其他软件</translation>
     </message>
 </context>
 </TS>

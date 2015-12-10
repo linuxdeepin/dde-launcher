@@ -19,30 +19,30 @@ const QString LauncherServiceName="com.deepin.dde.Launcher";
 const QString LauncherPathName="/com/deepin/dde/Launcher";
 
 const QStringList CategroyKeys{
-    "internet" ,
-    "multimedia",
-    "games",
-    "graphics",
-    "productivity",
-    "industry",
-    "education",
-    "development",
-    "system",
-    "utilities",
-    "others"
+    "Internet",
+    "Office",
+    "Development",
+    "Reading",
+    "Graphics",
+    "Game",
+    "Music",
+    "System",
+    "Video",
+    "Chat",
+    "Others"
 };
 
-const QStringList CategoryNames{ QObject::tr("internet"),
-                                 QObject::tr("multimedia"),
-                                 QObject::tr("games"),
-                                 QObject::tr("graphics"),
-                                 QObject::tr("productivity"),
-                                 QObject::tr("industry"),
-                                 QObject::tr("education"),
-                                 QObject::tr("development"),
-                                 QObject::tr("system"),
-                                 QObject::tr("utilities"),
-                                 QObject::tr("others")
+const QStringList CategoryNames{ QObject::tr("Internet"),
+                                 QObject::tr("Office"),
+                                 QObject::tr("Development"),
+                                 QObject::tr("Reading"),
+                                 QObject::tr("Graphics"),
+                                 QObject::tr("Game"),
+                                 QObject::tr("Music"),
+                                 QObject::tr("System"),
+                                 QObject::tr("Video"),
+                                 QObject::tr("Chat"),
+                                 QObject::tr("Others")
                                };
 
 #endif // GLOBAL

@@ -59,7 +59,7 @@ bool CategoryItem::eventFilter(QObject *obj, QEvent *event)
     if (event->type() == QEvent::DeferredDelete){
         return true;
     }
-    QFrame::eventFilter(obj, event);
+    return QFrame::eventFilter(obj, event);
 }
 
 CategoryItem::~CategoryItem()

@@ -76,28 +76,40 @@ BaseCheckedButton#internet:disabled{
     border-image: url(:/images/skin/images/internet_10.svg);
 }
 
-BaseCheckedButton#multimedia{
-    border-image: url(:/images/skin/images/multimedia_50.svg);
+BaseCheckedButton#music{
+    border-image: url(:/images/skin/images/music_50.svg);
 }
 
-BaseCheckedButton#multimedia:checked{
-    border-image: url(:/images/skin/images/multimedia_100.svg);
+BaseCheckedButton#music:checked{
+    border-image: url(:/images/skin/images/music_100.svg);
 }
 
-BaseCheckedButton#multimedia:disabled{
-    border-image: url(:/images/skin/images/multimedia_10.svg);
+BaseCheckedButton#music:disabled{
+    border-image: url(:/images/skin/images/music_10.svg);
 }
 
-BaseCheckedButton#games{
-    border-image: url(:/images/skin/images/games_50.svg);
+BaseCheckedButton#video{
+    border-image: url(:/images/skin/images/video_50.svg);
 }
 
-BaseCheckedButton#games:checked{
-    border-image: url(:/images/skin/images/games_100.svg);
+BaseCheckedButton#video:checked{
+    border-image: url(:/images/skin/images/video_100.svg);
 }
 
-BaseCheckedButton#games:disabled{
-    border-image: url(:/images/skin/images/games_10.svg);
+BaseCheckedButton#video:disabled{
+    border-image: url(:/images/skin/images/video_10.svg);
+}
+
+BaseCheckedButton#game{
+    border-image: url(:/images/skin/images/game_50.svg);
+}
+
+BaseCheckedButton#game:checked{
+    border-image: url(:/images/skin/images/game_100.svg);
+}
+
+BaseCheckedButton#game:disabled{
+    border-image: url(:/images/skin/images/game_10.svg);
 }
 
 BaseCheckedButton#graphics{
@@ -112,42 +124,29 @@ BaseCheckedButton#graphics:disabled{
     border-image: url(:/images/skin/images/graphics_10.svg);
 }
 
-BaseCheckedButton#productivity{
-    border-image: url(:/images/skin/images/productivity_50.svg);
+BaseCheckedButton#office{
+    border-image: url(:/images/skin/images/office_50.svg);
 }
 
-BaseCheckedButton#productivity:checked{
-    border-image: url(:/images/skin/images/productivity_100.svg);
+BaseCheckedButton#office:checked{
+    border-image: url(:/images/skin/images/office_100.svg);
 }
 
-BaseCheckedButton#productivity:disabled{
-    border-image: url(:/images/skin/images/productivity_10.svg);
-}
-
-
-BaseCheckedButton#industry{
-    border-image: url(:/images/skin/images/industry_50.svg);
-}
-
-BaseCheckedButton#industry:checked{
-    border-image: url(:/images/skin/images/industry_100.svg);
-}
-
-BaseCheckedButton#industry:disabled{
-    border-image: url(:/images/skin/images/industry_10.svg);
+BaseCheckedButton#office:disabled{
+    border-image: url(:/images/skin/images/office_10.svg);
 }
 
 
-BaseCheckedButton#education{
-    border-image: url(:/images/skin/images/education_50.svg);
+BaseCheckedButton#reading{
+    border-image: url(:/images/skin/images/reading_50.svg);
 }
 
-BaseCheckedButton#education:checked{
-    border-image: url(:/images/skin/images/education_100.svg);
+BaseCheckedButton#reading:checked{
+    border-image: url(:/images/skin/images/reading_100.svg);
 }
 
-BaseCheckedButton#education:disabled{
-    border-image: url(:/images/skin/images/education_10.svg);
+BaseCheckedButton#reading:disabled{
+    border-image: url(:/images/skin/images/reading_10.svg);
 }
 
 BaseCheckedButton#development{
@@ -175,17 +174,19 @@ BaseCheckedButton#system:disabled{
     border-image: url(:/images/skin/images/system_10.svg);
 }
 
-BaseCheckedButton#utilities{
-    border-image: url(:/images/skin/images/utilities_50.svg);
+
+BaseCheckedButton#chat{
+    border-image: url(:/images/skin/images/chat_50.svg);
 }
 
-BaseCheckedButton#utilities:checked{
-    border-image: url(:/images/skin/images/utilities_100.svg);
+BaseCheckedButton#chat:checked{
+    border-image: url(:/images/skin/images/chat_100.svg);
 }
 
-BaseCheckedButton#utilities:disabled{
-    border-image: url(:/images/skin/images/utilities_10.svg);
+BaseCheckedButton#chat:disabled{
+    border-image: url(:/images/skin/images/chat_10.svg);
 }
+
 
 BaseCheckedButton#others{
     border-image: url(:/images/skin/images/others_50.svg);

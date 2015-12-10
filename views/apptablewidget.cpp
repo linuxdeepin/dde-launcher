@@ -105,16 +105,19 @@ void AppTableWidget::showBySortedMode(int mode){
 }
 
 void AppTableWidget::setAppNameItemInfoList(const QList<ItemInfo> &infoList){
+    Q_UNUSED(infoList)
     qDebug() << "setAppNameItemInfoList";
     showBySortedMode(m_currentMode);
 }
 
 void AppTableWidget::setInstallTimeItemInfoList(const QList<ItemInfo> &infoList){
+    Q_UNUSED(infoList)
     qDebug() << "setInstallTimeItemInfoList";
     showBySortedMode(m_currentMode);
 }
 
 void AppTableWidget::setuseFrequencyItemInfoList(const QList<ItemInfo> &infoList){
+    Q_UNUSED(infoList)
     qDebug() << "setuseFrequencyItemInfoList";
     showBySortedMode(m_currentMode);
 }

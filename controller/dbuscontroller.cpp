@@ -110,7 +110,7 @@ void DBusController::handleItemChanged(const QString &action, ItemInfo itemInfo,
     emit signalManager->launcheRefreshed();
     if (action == "created"){
     }else if (action == "updated"){
-        emit signalManager->newinstalllindicatorShowed(itemInfo.key);
+//        emit signalManager->newinstalllindicatorShowed(itemInfo.key);
     }else if (action == "deleted"){
     }else{
     }

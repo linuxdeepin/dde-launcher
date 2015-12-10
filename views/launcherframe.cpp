@@ -470,6 +470,10 @@ bool LauncherFrame::eventFilter(QObject *obj, QEvent *event){
 }
 
 void LauncherFrame::handleActiveWindowChanged(uint windowId){
+    if  (!isVisible() || windowId == window()->winId()){
+        return;
+    }
+
     qDebug() << windowId << window()->winId() << m_isDraging;
     QDBusPendingReply<qulonglong> reply = dbusController->getDockInterface()->Xid();
     reply.waitForFinished();

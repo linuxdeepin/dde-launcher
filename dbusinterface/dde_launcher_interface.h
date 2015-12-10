@@ -8,8 +8,8 @@
  * Do not edit! All changes made to it will be lost.
  */
 
-#ifndef DDE_LAUNCHER_INTERFACE_H_1440725179
-#define DDE_LAUNCHER_INTERFACE_H_1440725179
+#ifndef DDE_LAUNCHER_INTERFACE_H_1449729206
+#define DDE_LAUNCHER_INTERFACE_H_1449729206
 
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>
@@ -52,6 +52,13 @@ public Q_SLOTS: // METHODS
     {
         QList<QVariant> argumentList;
         return asyncCallWithArgumentList(QStringLiteral("Show"), argumentList);
+    }
+
+    inline QDBusPendingReply<> ShowByMode(qlonglong in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("ShowByMode"), argumentList);
     }
 
     inline QDBusPendingReply<> Toggle()

@@ -4,6 +4,7 @@
 #include "widgets/themeappicon.h"
 #include "dbusinterface/dde_launcher_interface.h"
 #include "dbusinterface/launcher_interface.h"
+#include "widgets/commandlinemanager.h"
 
 #include <QApplication>
 #include <QTranslator>
@@ -27,6 +28,7 @@ int main(int argc, char *argv[])
 		a.installTranslator(&translator);
 
         debug_log_console_on();
+
         RegisterDdeSession();
         Singleton<ThemeAppIcon>::instance()->gtkInit();
         LauncherApp launcher;
@@ -37,12 +39,22 @@ int main(int argc, char *argv[])
         initGtkThemeWatcher();
 
         qDebug() << "Starting the launcher application";
+
+
+        LauncherApp::addCommandOptions();
+        qDebug() << "CommandLineManager::instance()" << CommandLineManager::instance();
         int reslut = a.exec();
         qDebug() << "exits " << a.applicationName() << reslut;
         return reslut;
     }else{
+        LauncherApp::addCommandOptions();
         DDeLauncherInterface ddeLauncherInterface(LauncherServiceName, LauncherPathName, conn);
-        ddeLauncherInterface.Toggle();
+        if (CommandLineManager::instance()->isSet("mode")){
+            qlonglong mode = CommandLineManager::instance()->value("mode").toLongLong();
+            ddeLauncherInterface.ShowByMode(mode);
+        }else{
+            ddeLauncherInterface.Toggle();
+        }
         return 0;
     }
 }

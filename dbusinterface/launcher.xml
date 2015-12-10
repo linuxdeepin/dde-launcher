@@ -5,6 +5,9 @@
         <method name="Show"></method>
         <method name="Hide"></method>
         <method name="Toggle"></method>
+        <method name="ShowByMode">
+        	<arg type="x" direction="in"></arg>
+        </method>
         <signal name="Closed"></signal>
         <signal name="Shown"></signal>
     </interface>

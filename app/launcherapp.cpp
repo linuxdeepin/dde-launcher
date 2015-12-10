@@ -7,6 +7,7 @@
 #include "controller/dbusworker.h"
 #include "dialogs/confirmuninstalldialog.h"
 #include "widgets/themeappicon.h"
+#include "widgets/commandlinemanager.h"
 #include <QDBusConnection>
 #include <QThread>
 #include <QDebug>
@@ -63,4 +64,11 @@ LauncherApp::~LauncherApp()
     m_launcherFrame->deleteLater();
     m_dbusWorker->deleteLater();
     m_dbusThread->deleteLater();
+}
+
+void LauncherApp::addCommandOptions()
+{
+    QCommandLineOption modeOption(QStringList() << "m" << "mode", "swicth mode", "0");
+    CommandLineManager::instance()->addOption(modeOption);
+    CommandLineManager::instance()->initOptions();
 }

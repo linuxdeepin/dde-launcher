@@ -348,6 +348,12 @@ void LauncherFrame::Show(){
     emit Shown();
 }
 
+void LauncherFrame::ShowByMode(qlonglong mode)
+{
+    emit signalManager->viewModeChanged(mode);
+    Show();
+}
+
 void LauncherFrame::Toggle(){
     handleToggle();
 }
@@ -470,10 +476,9 @@ bool LauncherFrame::eventFilter(QObject *obj, QEvent *event){
 }
 
 void LauncherFrame::handleActiveWindowChanged(uint windowId){
-    if  (!isVisible() || windowId == window()->winId()){
+    if (!isVisible() || windowId == window()->winId()){
         return;
     }
-
     qDebug() << windowId << window()->winId() << m_isDraging;
     QDBusPendingReply<qulonglong> reply = dbusController->getDockInterface()->Xid();
     reply.waitForFinished();

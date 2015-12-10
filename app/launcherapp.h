@@ -14,7 +14,7 @@ public:
     ~LauncherApp();
 
     static QMap<QString, QString> UnistallAppNames;
-
+    static void addCommandOptions();
 signals:
 
 public slots:

@@ -57,6 +57,7 @@ public slots:
     void Exit();
     void Hide();
     void Show();
+    void ShowByMode(qlonglong mode);
     void Toggle();
     void handleToggle();
     void handleSearch(const QString& text);

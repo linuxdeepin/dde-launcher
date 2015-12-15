@@ -3,13 +3,26 @@
 #include <QPainter>
 #include <QSvgRenderer>
 #include <QPixmap>
+#include <QDir>
 #include <QDebug>
 
 #undef signals
 extern "C" {
-  #include <gtk/gtk.h>
+    #include <string.h>
+    #include <gtk/gtk.h>
+    #include <gio/gdesktopappinfo.h>
 }
 #define signals public
+
+static GtkIconTheme* them = NULL;
+
+inline char* get_icon_theme_name()
+{
+    GtkSettings* gs = gtk_settings_get_default();
+    char* name = NULL;
+    g_object_get(gs, "gtk-icon-theme-name", &name, NULL);
+    return name;
+}
 
 ThemeAppIcon::ThemeAppIcon(QObject *parent) : QObject(parent)
 {
@@ -22,13 +35,14 @@ void ThemeAppIcon::gtkInit(){
 }
 
 QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
-//    qDebug() << iconPath;
+    qDebug() << iconPath;
     if (iconPath.length() == 0){
         iconPath = "application-default-icon";
     }
     QPixmap pixmap(width, height);
     // iconPath is an absolute path of the system
-    if (QFile::exists(iconPath)) {
+    qDebug() << QFile::exists(iconPath) << iconPath.contains(QDir::separator()) << iconPath.startsWith("data:image/");
+    if (QFile::exists(iconPath) && iconPath.contains(QDir::separator())) {
         pixmap = QPixmap(iconPath);
     } else if (iconPath.startsWith("data:image/")){
         // iconPath is a string representing an inline image.
@@ -40,7 +54,10 @@ QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
     }else {
         // try to read the iconPath as a icon name.
         QString path = getThemeIconPath(iconPath, width);
-//        qDebug() << path;
+        qDebug() << "getThemeIconPath:" << path;
+        if (path.length() == 0){
+            return getIconPixmap("application-default-icon", width, height);
+        }
         if (path.endsWith(".svg")) {
             QSvgRenderer renderer(path);
             pixmap.fill(Qt::transparent);
@@ -54,6 +71,7 @@ QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
         } else {
             pixmap.load(path);
         }
+
     }
 
     return pixmap;
@@ -62,24 +80,51 @@ QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
 QString ThemeAppIcon::getThemeIconPath(QString iconName, int size)
 {
     QByteArray bytes = iconName.toUtf8();
-    const char *name = bytes.constData();
+    char *name = bytes.data();
 
-    GtkIconTheme* theme = gtk_icon_theme_get_default();
+    if (g_path_is_absolute(name))
+            return g_strdup(name);
 
-    GtkIconInfo* info = gtk_icon_theme_lookup_icon(theme, name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+        g_return_val_if_fail(name != NULL, NULL);
 
-    if (info) {
+        int pic_name_len = strlen(name);
+        char* ext = strrchr(name, '.');
+        if (ext != NULL) {
+            if (g_ascii_strcasecmp(ext+1, "png") == 0 || g_ascii_strcasecmp(ext+1, "svg") == 0 || g_ascii_strcasecmp(ext+1, "jpg") == 0) {
+                pic_name_len = ext - name;
+                qDebug() << "desktop's Icon name should an absoulte path or an basename without extension";
+            }
+        }
+
+        // In pratice, default icon theme may not gets the right icon path when program starting.
+        if (them == NULL)
+            them = gtk_icon_theme_new();
+        char* icon_theme_name = get_icon_theme_name();
+        gtk_icon_theme_set_custom_theme(them, icon_theme_name);
+        g_free(icon_theme_name);
+
+        char* pic_name = g_strndup(name, pic_name_len);
+        GtkIconInfo* info = gtk_icon_theme_lookup_icon(them, pic_name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+
+        if (info == NULL) {
+            qWarning() << "get gtk icon theme info failed for" << pic_name;
+            g_free(pic_name);
+            return "";
+        }
+        g_free(pic_name);
+
         char* path = g_strdup(gtk_icon_info_get_filename(info));
-#if GTK_MAJOR_VERSION >= 3
+
+    #if GTK_MAJOR_VERSION >= 3
         g_object_unref(info);
-#elif GTK_MAJOR_VERSION == 2
+    #elif GTK_MAJOR_VERSION == 2
         gtk_icon_info_free(info);
-#endif
-        return QString(path);
-    } else {
-        return "";
-    }
+    #endif
+        g_debug("get icon from icon theme is: %s", path);
+        return path;
 }
+
+
 
 ThemeAppIcon::~ThemeAppIcon()
 {

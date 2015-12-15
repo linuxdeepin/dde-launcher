@@ -336,6 +336,7 @@ void LauncherFrame::Hide(){
     emit Closed();
     m_searchLineEdit->setText("");
     emit signalManager->refreshInstallTimeFrequency();
+    emit signalManager->firstButtonChecked();
 }
 
 void LauncherFrame::Show(){
@@ -344,7 +345,6 @@ void LauncherFrame::Show(){
     m_searchLineEdit->setSearchFocus();
     raise();
     activateWindow();
-    emit signalManager->firstButtonChecked();
     emit Shown();
 }
 

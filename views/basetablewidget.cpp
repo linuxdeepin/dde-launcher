@@ -224,7 +224,7 @@ void BaseTableWidget::hightlightItem(int row, int column){
         if (row == 1){
             verticalScrollBar()->setValue(0);
         }else{
-            scrollToItem(item(row, column), QAbstractItemView::EnsureVisible);
+            scrollToItem(item(row, column), QAbstractItemView::PositionAtTop);
         }
     }
 }

@@ -148,18 +148,16 @@ void BaseTableWidget::handleKeyLeftPressed(){
         qDebug() << "first column";
     }else if (m_highlightColumn >= 0 && m_highlightRow >= 0){
         for (int i= (m_highlightColumn - 1); i>= 0; i--){
-            qDebug() << cellWidget(m_highlightRow, i);
             if (cellWidget(m_highlightRow, i)){
                 QString className = QString(cellWidget(m_highlightRow, i)->metaObject()->className());
                 if (className == "AppItem"){
-                    qDebug() << m_highlightRow << i;
                     hightlightItem(m_highlightRow, i);
                     return;
                 }
             }
         }
         for (int i = (m_highlightRow -1); i >=0; i--){
-            for (int j= (columnCount() - 1); j > 0; j--){
+            for (int j= (columnCount() - 1); j >= 0; j--){
                 if (cellWidget(i, j)){
                     QString className = QString(cellWidget(i, j)->metaObject()->className());
                     if (className == "AppItem"){

@@ -98,6 +98,7 @@ private:
     int m_gridHeight;
     bool m_rightclicked = false;
     bool m_isDraging = false;
+    QPoint m_primaryPos;
     QString m_searchText;
     QStackedLayout* m_layout;
     DisplayModeFrame* m_displayModeFrame;

@@ -44,9 +44,10 @@ LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
     setAttribute(Qt::WA_DeleteOnClose);
     setAttribute(Qt::WA_InputMethodEnabled);
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
-    QRect primaryRect =  QRect(dbusController->getDisplayInterface()->primaryRect());
 
-    move(primaryRect.x(), primaryRect.y());
+    QRect primaryRect = QRect(dbusController->getDisplayInterface()->primaryRect());
+    m_primaryPos = QPoint(primaryRect.x(), primaryRect.y());
+    move(m_primaryPos);
     setFixedSize(primaryRect.width(), primaryRect.height());
 
 
@@ -340,12 +341,14 @@ void LauncherFrame::Hide(){
 }
 
 void LauncherFrame::Show(){
+    move(m_primaryPos);
     m_rightclicked = false;
     show();
     m_searchLineEdit->setSearchFocus();
     raise();
     activateWindow();
     emit Shown();
+    qDebug() << geometry();
 }
 
 void LauncherFrame::ShowByMode(qlonglong mode)

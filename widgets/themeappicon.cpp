@@ -107,9 +107,12 @@ QString ThemeAppIcon::getThemeIconPath(QString iconName, int size)
         GtkIconInfo* info = gtk_icon_theme_lookup_icon(them, pic_name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
         if (info == NULL) {
-            qWarning() << "get gtk icon theme info failed for" << pic_name;
-            g_free(pic_name);
-            return "";
+            info = gtk_icon_theme_lookup_icon(gtk_icon_theme_get_default(), pic_name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+            if (info == NULL) {
+                qWarning() << "get gtk icon theme info failed for" << pic_name;
+                g_free(pic_name);
+                return "";
+            }
         }
         g_free(pic_name);
 

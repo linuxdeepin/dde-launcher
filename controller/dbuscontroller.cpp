@@ -226,7 +226,7 @@ void DBusController::sortedByAppName(QList<ItemInfo> infos){
 }
 
 void DBusController::sortedByInstallTime(QList<ItemInfo> infos){
-    std::sort(infos.begin(), infos.end(), useFrequencyMoreThan);
+    std::sort(infos.begin(), infos.end(), installTimeMoreThan);
     m_installTimeSortedList.clear();
     m_installTimeSortedList = infos;
     emit signalManager->installTimeItemInfoListChanged(m_installTimeSortedList);

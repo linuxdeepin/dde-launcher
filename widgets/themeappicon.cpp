@@ -37,7 +37,7 @@ void ThemeAppIcon::gtkInit(){
 QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
     qDebug() << iconPath;
     if (iconPath.length() == 0){
-        iconPath = "application-default-icon";
+        iconPath = "application-x-desktop";
     }
     QPixmap pixmap(width, height);
     // iconPath is an absolute path of the system
@@ -56,7 +56,7 @@ QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
         QString path = getThemeIconPath(iconPath, width);
         qDebug() << "getThemeIconPath:" << path;
         if (path.length() == 0){
-            return getIconPixmap("application-default-icon", width, height);
+            path = ":/images/skin/images/application-default-icon.svg";
         }
         if (path.endsWith(".svg")) {
             QSvgRenderer renderer(path);

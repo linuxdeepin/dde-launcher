@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = dde-launcher
 TEMPLATE = app
 
-PKGCONFIG += x11 gtk+-2.0 xcb xcb-ewmh gsettings-qt
+PKGCONFIG += x11 gtk+-2.0 xcb xcb-ewmh gsettings-qt gio-unix-2.0
 CONFIG += c++11 link_pkgconfig
 
 DEFINES += QT_MESSAGELOGCONTEXT

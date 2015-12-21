@@ -233,6 +233,7 @@ void MenuController::handleOpen(QString appKey){
         if (ret){
             dbusController->getLauncherInterface()->MarkLaunched(appKey);
 //            dbusController->getLauncherInterface()->RecordFrequency(appKey);
+            emit signalManager->newinstalllindicatorHided(appKey);
         }
     } else {
         qCritical() << reply.error().message();

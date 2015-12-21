@@ -41,6 +41,8 @@ class DBusController : public QObject
 public:
     explicit DBusController(QObject *parent = 0);
     ~DBusController();
+
+    static QSet<QString> PreInstallAppKeys;
     void initConnect();
 
     void getCategoryInfoList();
@@ -60,6 +62,11 @@ public:
     void sortedByInstallTime(QList<ItemInfo> infos);
     void sortedByFrequency(QList<ItemInfo> infos);
     QList<QList<ItemInfo>> sortPingyinEnglish(QList<ItemInfo> infos);
+
+    void savePreInstallApps();
+    void loadPreInstallApps();
+    QString getPreInstallAppsPath();
+    bool isPreInsallAppsPathExists();
 
 signals:
 

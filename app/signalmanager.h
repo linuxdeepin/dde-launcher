@@ -98,6 +98,10 @@ signals:
 
     /*gtk theme changed*/
     void gtkIconThemeChanged();
+
+    /*hide newinstalllindicator*/
+    void newinstalllindicatorHided(QString appKey);
+    void newinstalllindicatorShowed(QString appKey);
 };
 
 #endif // SIGNALMANAGER_H

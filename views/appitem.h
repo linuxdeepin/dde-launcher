@@ -38,6 +38,9 @@ public slots:
     void showMenu(QPoint pos);
     void showAutoStartLabel();
     void hideAutoStartLabel();
+    void showNewInstallIndicatorLabel();
+    void hideNewInstallIndicatorLabel();
+    void setNewInstalled(bool flag);
 
     void handleRightMouseReleased(QString url);
     void addTextShadow();
@@ -49,6 +52,7 @@ protected:
 private:
     QLabel* m_iconLabel;
     QLabel* m_autoStartLabel;
+    QLabel* m_newInstallIndicatorLabel;
     BorderButton* m_borderButton;
     ElidedLabel* m_nameLabel;
     QPixmap m_appIcon = QPixmap();
@@ -56,6 +60,7 @@ private:
     QString m_url = "";
     QString m_appKey = "";
     bool m_isAutoStart = false;
+    bool m_isNewInstalled = false;
 };
 
 #endif // APPITEM_H

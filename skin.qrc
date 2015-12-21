@@ -54,6 +54,7 @@
         <file>skin/images/industry_50.svg</file>
         <file>skin/images/industry_100.svg</file>
         <file>skin/images/application-default-icon.svg</file>
+        <file>skin/img/new_install_indicator.png</file>
     </qresource>
     <qresource prefix="/qss">
         <file>skin/qss/Tablewidget.qss</file>

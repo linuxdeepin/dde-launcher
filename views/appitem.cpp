@@ -35,6 +35,10 @@ void AppItem::initUI(){
     m_nameLabel->setObjectName("Name");
     m_nameLabel->setAlignment(Qt::AlignTop| Qt::AlignHCenter);
 
+    m_newInstallIndicatorLabel = new QLabel(m_nameLabel);
+    m_newInstallIndicatorLabel->setFixedSize(10, 10);
+    m_newInstallIndicatorLabel->setPixmap(QPixmap(":/images/skin/img/new_install_indicator.png"));
+
     m_iconLabel->setFixedSize(LauncherFrame::IconSize, LauncherFrame::IconSize);
     m_nameLabel->setFixedSize(LauncherFrame::BorderWidth - 4, LauncherFrame::TextHeight);
 
@@ -140,6 +144,31 @@ void AppItem::showAutoStartLabel(){
 void AppItem::hideAutoStartLabel(){
     m_autoStartLabel->hide();
     m_isAutoStart = false;
+}
+
+void AppItem::showNewInstallIndicatorLabel()
+{
+    if (!dbusController->PreInstallAppKeys.contains(m_appKey)){
+        m_newInstallIndicatorLabel->show();
+    }
+}
+
+void AppItem::hideNewInstallIndicatorLabel()
+{
+    m_newInstallIndicatorLabel->hide();
+}
+
+void AppItem::setNewInstalled(bool flag)
+{
+    if (flag == m_isNewInstalled){
+        return;
+    }
+    m_isNewInstalled = flag;
+    if (m_isNewInstalled){
+        showNewInstallIndicatorLabel();
+    }else{
+        hideNewInstallIndicatorLabel();
+    }
 }
 
 void AppItem::mouseMoveEvent(QMouseEvent *event){

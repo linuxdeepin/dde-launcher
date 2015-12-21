@@ -235,7 +235,7 @@ void LauncherFrame::toggleDisableNavgationBar(bool flag){
 }
 
 void LauncherFrame::showSortedMode(int mode){
-    qDebug() << mode;
+//    qDebug() << mode;
     if (mode == 1){
         showNavigationBarByMode();
         showCategoryTable();
@@ -245,7 +245,7 @@ void LauncherFrame::showSortedMode(int mode){
 }
 
 void LauncherFrame::showCategoryMode(int mode){
-   qDebug() << mode;
+//   qDebug() << mode;
    m_categoryFrame->getNavigationBar()->setCurrentIndex(mode);
    showCategoryTable();
 }

@@ -44,6 +44,8 @@ public slots:
     void setInstallTimeInfoList(const QList<ItemInfo>& infos);
     void setUseFrequencyInfoList(const QList<ItemInfo>& infos);
     void setCategoryInfoList(const CategoryInfoList& categoryInfoList);
+    void hideNewInstallIndicator(QString appKey);
+    void showNewInstallIndicator(QString appKey);
 
 private:
     QMap<QString, ItemInfo> m_itemInfos;

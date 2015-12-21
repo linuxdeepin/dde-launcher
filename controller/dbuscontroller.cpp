@@ -6,6 +6,7 @@
 #include "dbusinterface/displayinterface.h"
 #include "dbusinterface/dock_interface.h"
 #include "app/global.h"
+#include "widgets/util.h"
 #include "controller/menucontroller.h"
 #include "dbusinterface/dbusclientmanager.h"
 #include "dbusinterface/pinyin_interface.h"
@@ -35,6 +36,8 @@ bool useFrequencyMoreThan(const ItemInfo &info1, const ItemInfo &info2){
     if (info1.count < info2.count) return false;
     return compareByName(info1.lowerPinyinName, info2.lowerPinyinName);
 }
+
+QSet<QString> DBusController::PreInstallAppKeys = {};
 
 DBusController::DBusController(QObject *parent) : QObject(parent)
 {
@@ -104,12 +107,13 @@ void DBusController::handleItemChanged(const QString &action, ItemInfo itemInfo,
                                        qlonglong categoryInfoId){
     Q_UNUSED(itemInfo)
     qDebug() << action << categoryInfoId;
+    emit signalManager->launcheRefreshed();
     if (action == "created"){
     }else if (action == "updated"){
+        emit signalManager->newinstalllindicatorShowed(itemInfo.key);
     }else if (action == "deleted"){
     }else{
     }
-    emit signalManager->launcheRefreshed();
 }
 
 LauncherInterface* DBusController::getLauncherInterface(){
@@ -165,12 +169,21 @@ void DBusController::getCategoryInfoList(){
         convertNameToPinyin();
 
         sortedByAppName(m_itemInfos.values());
+
+        bool isPreIsntallExists = isPreInsallAppsPathExists();
+        qDebug() << getPreInstallAppsPath() << isPreIsntallExists;
+        if (isPreIsntallExists){
+            loadPreInstallApps();
+        }
         foreach (CategoryInfo item, m_categoryInfoList) {
             if (item.key != "all" && item.id != -1){
                 QStringList appKeys;
                 foreach (ItemInfo itemInfo, m_appNameSortedList) {
                     if (item.items.contains(itemInfo.key)){
                         appKeys.append(itemInfo.key);
+                        if (itemInfo.count == 0 && !isPreIsntallExists){
+                            PreInstallAppKeys.insert(itemInfo.key);
+                        }
                     }
                 }
                 item.items = appKeys;
@@ -181,6 +194,9 @@ void DBusController::getCategoryInfoList(){
         }
         qDebug() << "m_categoryAppNameSortedInfoList"<< m_categoryAppNameSortedInfoList.length();
         emit signalManager->categoryInfosChanged(m_categoryAppNameSortedInfoList);
+        if (!isPreIsntallExists){
+            savePreInstallApps();
+        }
     }else{
         qCritical() << reply.error().message();
     }
@@ -260,6 +276,51 @@ QList<QList<ItemInfo>>  DBusController::sortPingyinEnglish(QList<ItemInfo> infos
     return result;
 }
 
+void DBusController::savePreInstallApps()
+{
+    QStringList keys;
+    foreach (QString key, PreInstallAppKeys) {
+        keys.append(key);
+    }
+    QString path = getPreInstallAppsPath();
+    qDebug() << path;
+    QString appKeysString = QString(QJsonDocument(QJsonArray::fromStringList(keys)).toJson());
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        return;
+    file.write(appKeysString.toLocal8Bit());
+    file.close();
+}
+
+void DBusController::loadPreInstallApps()
+{
+    QString path = getPreInstallAppsPath();
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+
+    QJsonParseError* error = new QJsonParseError();
+    QStringList preInstalledAppKeys = QJsonDocument::fromJson(QString(file.readAll()).toStdString().c_str(), error).toVariant().toStringList();
+    PreInstallAppKeys = preInstalledAppKeys.toSet();
+    file.close();
+}
+
+QString DBusController::getPreInstallAppsPath()
+{
+    QString configPath = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).at(0);
+    configPath = QString("%1/%2/%3").arg(configPath, qApp->organizationName(), qApp->applicationName());
+    if (!QDir(configPath).exists()){
+        QDir(configPath).mkdir(configPath);
+    }
+    QString path = joinPath(configPath, "preInstallApps.json");
+    return path;
+}
+
+bool DBusController::isPreInsallAppsPathExists()
+{
+    return QFile(getPreInstallAppsPath()).exists();
+}
+
 void DBusController::getAllFrequencyItems(){
     m_useFrequencySortedList.clear();
     QDBusPendingReply<AppFrequencyInfoList> reply = m_launcherInterface->GetAllFrequency();
@@ -273,6 +334,7 @@ void DBusController::getAllFrequencyItems(){
                 m_itemInfos[key].count = m_appFrequencyInfoList[i].count;
             }
         }
+        emit signalManager->itemInfosChanged(m_itemInfos);
         sortedByFrequency(m_itemInfos.values());
     }else{
         qCritical() << reply.error().message();

@@ -30,6 +30,10 @@ void AppItemManager::initConnect(){
             this, SLOT(setUseFrequencyInfoList(QList<ItemInfo>)));
     connect(signalManager, SIGNAL(categoryInfosChanged(CategoryInfoList)),
             this, SLOT(setCategoryInfoList(CategoryInfoList)));
+    connect(signalManager, SIGNAL(newinstalllindicatorHided(QString)),
+            this, SLOT(hideNewInstallIndicator(QString)));
+    connect(signalManager, SIGNAL(newinstalllindicatorShowed(QString)),
+            this, SLOT(showNewInstallIndicator(QString)));
 }
 
 QMap<QString, ItemInfo>& AppItemManager::getItemInfos(){
@@ -101,12 +105,23 @@ void AppItemManager::addCategoryItem(const QString &key)
 
 void AppItemManager::addItem(const ItemInfo &itemInfo){
     if (m_appItems.contains(itemInfo.key)){
-
+        AppItem* appItem = m_appItems.value(itemInfo.key);
+        if (itemInfo.count == 0){
+            appItem->setNewInstalled(true);
+        }else{
+            appItem->setNewInstalled(false);
+        }
     }else{
         AppItem* appItem = new AppItem(itemInfo.isAutoStart);
         appItem->setAppKey(itemInfo.key);
         appItem->setUrl(itemInfo.url);
         appItem->setAppName(itemInfo.name);
+//        qDebug() << itemInfo.count;
+        if (itemInfo.count == 0){
+            appItem->setNewInstalled(true);
+        }else{
+            appItem->setNewInstalled(false);
+        }
 
         int size = appItem->getIconSize();
         appItem->setAppIcon(ThemeAppIcon::getIconPixmap(itemInfo.iconKey, size, size));
@@ -169,5 +184,21 @@ void AppItemManager::setCategoryInfoList(const CategoryInfoList &categoryInfoLis
         if(info.items.count() > 0){
             addCategoryItem(info.key);
         }
+    }
+}
+
+void AppItemManager::hideNewInstallIndicator(QString appKey)
+{
+    if (m_appItems.contains(appKey)){
+        AppItem* appItem = m_appItems.value(appKey);
+        appItem->setNewInstalled(false);
+    }
+}
+
+void AppItemManager::showNewInstallIndicator(QString appKey)
+{
+    if (m_appItems.contains(appKey)){
+        AppItem* appItem = m_appItems.value(appKey);
+        appItem->setNewInstalled(true);
     }
 }

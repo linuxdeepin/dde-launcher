@@ -40,6 +40,7 @@ void MenuController::initConnect(){
             this, SLOT(showMenuByAppItem(QString,QPoint)));
     connect(signalManager, SIGNAL(appOpened(QString)), this, SLOT(handleOpen(QString)));
     connect(signalManager, SIGNAL(uninstallActionChanged(QString,int)), this, SLOT(handleUninstallAction(QString,int)));
+    connect(signalManager, SIGNAL(contextMenuHided(QString)), this, SLOT(hideMenuByAppKey(QString)));
 }
 
 MenuController::~MenuController()
@@ -54,6 +55,8 @@ void MenuController::showMenuByAppItem(QString appKey, QPoint pos){
     QString menuDBusObjectpath = registerMenu();
     if (menuDBusObjectpath.length() > 0){
         showMenu(menuDBusObjectpath, menuJsonContent);
+        m_currentMenuObjectPath = menuDBusObjectpath;
+        m_menuObjectPaths.insert(appKey, menuDBusObjectpath);
     }else{
         qCritical() << "register menu fail!";
     }
@@ -188,11 +191,24 @@ QString MenuController::registerMenu() {
 }
 
 void MenuController::showMenu(QString menuDBusObjectPath, QString menuContent) {
+    qDebug() << menuDBusObjectPath;
     m_menuInterface = new MenuInterface(MenuManager_service, menuDBusObjectPath, QDBusConnection::sessionBus(), this);
     m_menuInterface->ShowMenu(menuContent);
     connect(m_menuInterface, SIGNAL(ItemInvoked(QString, bool)),this, SLOT(menuItemInvoked(QString,bool)));
     connect(m_menuInterface, SIGNAL(MenuUnregistered()), this, SLOT(handleMenuClosed()));
     connect(m_menuInterface, SIGNAL(MenuUnregistered()), m_menuInterface, SLOT(deleteLater()));
+}
+
+void MenuController::hideMenu(const QString &menuDBusObjectPath)
+{
+    m_menuManagerInterface->UnregisterMenu(menuDBusObjectPath);
+}
+
+void MenuController::hideMenuByAppKey(const QString &appKey)
+{
+    if (m_menuObjectPaths.contains(appKey)){
+        hideMenu(m_menuObjectPaths.value(appKey));
+    }
 }
 
 void MenuController::menuItemInvoked(QString itemId, bool flag){

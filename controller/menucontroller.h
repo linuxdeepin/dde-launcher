@@ -35,13 +35,15 @@ public:
     QString registerMenu();
     QString JsonToQString(QPoint pos, QString menucontent);
 
-    void showMenu(QString menuDBusObjectPath, QString menuContent);
-
 signals:
 
 public slots:
     void showMenuByAppItem(QString appKey, QPoint pos);
     void menuItemInvoked(QString itemId, bool flag);
+
+    void showMenu(QString menuDBusObjectPath, QString menuContent);
+    void hideMenu(const QString& menuDBusObjectPath);
+    void hideMenuByAppKey(const QString& appKey);
 
     void handleOpen(QString appKey);
     void handleToDesktop(QString appkey);
@@ -62,6 +64,8 @@ private:
     NotificationInterface* m_notifcationInterface;
 
     QString m_appKeyRightClicked;
+    QString m_currentMenuObjectPath;
+    QMap<QString, QString> m_menuObjectPaths;
     bool m_isItemOnDesktop;
     bool m_isItemOnDock;
     bool m_isItemStartup;

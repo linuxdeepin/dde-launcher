@@ -69,6 +69,7 @@ void BorderButton::mousePressEvent(QMouseEvent *event){
 }
 
 void BorderButton::mouseMoveEvent(QMouseEvent *event){
+    emit signalManager->contextMenuHided(dynamic_cast<AppItem*>(parent())->getAppKey());
     setCuted(true);
     startDrag(event);
     setCuted(false);

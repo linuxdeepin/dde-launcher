@@ -22,6 +22,7 @@ public:
 
 signals:
     void showed();
+    void contentScrolled(int value);
 
 public slots:
     void addItem(ItemInfo itemInfo, int index);

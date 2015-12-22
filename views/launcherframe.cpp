@@ -221,8 +221,9 @@ void LauncherFrame::initConnect(){
     connect(signalManager, SIGNAL(appItemDragStateChanged(bool)), this, SLOT(setDragging(bool)));
     connect(qApp, SIGNAL(aboutToQuit()), this, SIGNAL(Closed()));
     connect(m_categoryFrame, SIGNAL(showed()), this, SLOT(showGradients()));
-    connect(m_categoryFrame, SIGNAL(contentScrolled(int)), this, SLOT(handleCategoryFrameContentScrolled(int)));
+    connect(m_categoryFrame, SIGNAL(contentScrolled(int)), this, SLOT(handleContentScrolled(int)));
     connect(m_appTableWidget, SIGNAL(showed()), this, SLOT(showGradients()));
+    connect(m_appTableWidget, SIGNAL(contentScrolled(int)), this, SLOT(handleContentScrolled(int)));
     connect(m_backgroundLabel, SIGNAL(changed(QPixmap)), this, SLOT(updateGradients(QPixmap)));
 }
 
@@ -317,7 +318,7 @@ void LauncherFrame::handleScreenGeometryChanged(){
     qApp->quit();
 }
 
-void LauncherFrame::handleCategoryFrameContentScrolled(int value)
+void LauncherFrame::handleContentScrolled(int value)
 {
     if (value == 0) {
         m_topGradient->setVisible(false);

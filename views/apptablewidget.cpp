@@ -33,6 +33,8 @@ void AppTableWidget::initConnect(){
             this, SLOT(showAutoStartLabel(QString)));
     connect(signalManager, SIGNAL(hideAutoStartLabel(QString)),
             this, SLOT(hideAutoStartLabel(QString)));
+    connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
+            this, SIGNAL(contentScrolled(int)));
 }
 
 void AppTableWidget::setGridParameter(int column, int girdWidth, int gridHeight, int itemWidth){
@@ -159,6 +161,8 @@ void AppTableWidget::wheelEvent(QWheelEvent *event){
 void AppTableWidget::showEvent(QShowEvent * event)
 {
     emit showed();
+    emit contentScrolled(verticalScrollBar()->value());
+
     BaseTableWidget::showEvent(event);
 }
 

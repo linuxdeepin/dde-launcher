@@ -35,12 +35,21 @@ void AppItem::initUI(){
     m_nameLabel->setObjectName("Name");
     m_nameLabel->setAlignment(Qt::AlignTop| Qt::AlignHCenter);
 
+    m_iconLabel->setFixedSize(LauncherFrame::IconSize, LauncherFrame::IconSize);
+//    m_nameLabel->setFixedHeight(LauncherFrame::TextHeight);
+
+
+
+    QHBoxLayout* textLayout = new QHBoxLayout;
+    textLayout->addStretch();
+    textLayout->addWidget(m_nameLabel, 0, Qt::AlignCenter);
+    textLayout->addStretch();
+    textLayout->setContentsMargins(0, 0, 0, 0);
+
     m_newInstallIndicatorLabel = new QLabel(m_nameLabel);
     m_newInstallIndicatorLabel->setFixedSize(10, 10);
     m_newInstallIndicatorLabel->setPixmap(QPixmap(":/images/skin/img/new_install_indicator.png"));
-
-    m_iconLabel->setFixedSize(LauncherFrame::IconSize, LauncherFrame::IconSize);
-    m_nameLabel->setFixedSize(LauncherFrame::BorderWidth - 4, LauncherFrame::TextHeight);
+    m_newInstallIndicatorLabel->move(0, 6);
 
     int margin = LauncherFrame::AppItemMargin;
     m_borderButton = new BorderButton(this);
@@ -49,7 +58,7 @@ void AppItem::initUI(){
     mainLayout->addSpacing(LauncherFrame::AppItemTopSpacing);
     mainLayout->addWidget(m_iconLabel, 0, Qt::AlignHCenter);
     mainLayout->addSpacing(LauncherFrame::AppItemIconNameSpacing);
-    mainLayout->addWidget(m_nameLabel, 0, Qt::AlignHCenter);
+    mainLayout->addLayout(textLayout);
     mainLayout->setSpacing(0);
     mainLayout->setContentsMargins(margin, margin, margin, margin);
     m_borderButton->setLayout(mainLayout);
@@ -149,6 +158,7 @@ void AppItem::hideAutoStartLabel(){
 void AppItem::showNewInstallIndicatorLabel()
 {
     if (!dbusController->PreInstallAppKeys.contains(m_appKey)){
+        m_newInstallIndicatorLabel->move(0, 6);
         m_newInstallIndicatorLabel->show();
     }
 }

@@ -13,7 +13,7 @@ BaseTableWidget::BaseTableWidget(QWidget *parent) : QTableWidget(parent)
 {
     setSelectionBehavior(SelectItems);
     setSelectionMode(NoSelection);
-    setDragDropMode(NoDragDrop);
+    setDragDropMode(DragDrop);
     setVerticalScrollMode(ScrollPerPixel);
     setEditTriggers(NoEditTriggers);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -69,6 +69,18 @@ void BaseTableWidget::mouseReleaseEvent(QMouseEvent *event){
 void BaseTableWidget::hideEvent(QHideEvent *event){
     clearHighlight();
     QTableWidget::hideEvent(event);
+}
+
+void BaseTableWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+    event->setDropAction(Qt::MoveAction);
+    event->accept();
+}
+
+void BaseTableWidget::dragMoveEvent(QDragMoveEvent *event)
+{
+    event->setDropAction(Qt::MoveAction);
+    event->accept();
 }
 
 void BaseTableWidget::clearHighlight(){

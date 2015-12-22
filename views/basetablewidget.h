@@ -34,6 +34,8 @@ public slots:
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void hideEvent(QHideEvent* event);
+    void dragEnterEvent(QDragEnterEvent* event);
+    void dragMoveEvent(QDragMoveEvent* event);
 
 private:
     int m_highlightRow = -1;

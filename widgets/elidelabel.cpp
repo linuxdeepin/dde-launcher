@@ -21,14 +21,14 @@ ElidedLabel::ElidedLabel(const QString &text, QWidget *parent, Qt::WindowFlags f
 void ElidedLabel::setFullText(const QString &text)
 {
 //    qDebug() << "setFullText" << text;
-    m_fullText = text;
-//    this->setText(text);
-    elideText();
-    if (m_simpleWrapMode){
-        showSimpleWrapText();
-    }else{
-        showFullWrapText();
-    }
+//    m_fullText = text;
+    this->setText(text);
+//    elideText();
+//    if (m_simpleWrapMode){
+//        showSimpleWrapText();
+//    }else{
+//        showFullWrapText();
+//    }
 }
 
 void ElidedLabel::setTextLimitShrink(const QString &text, int width)

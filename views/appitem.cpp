@@ -23,7 +23,12 @@ AppItem::AppItem(bool isAutoStart, QWidget* parent): QFrame(parent),
 }
 
 void AppItem::initUI(){
-    m_iconLabel = new QLabel(this);
+
+    int margin = LauncherFrame::AppItemMargin;
+    m_borderButton = new BorderButton(this);
+    m_borderButton->setFixedSize(LauncherFrame::BorderWidth + margin * 2, LauncherFrame::BorderHeight + margin * 2);
+
+    m_iconLabel = new QLabel(m_borderButton);
     m_iconLabel->setObjectName("Icon");
     m_iconLabel->setScaledContents(true);
 
@@ -31,12 +36,12 @@ void AppItem::initUI(){
     m_autoStartLabel->setFixedSize(16, 16);
     m_autoStartLabel->setPixmap(QPixmap(":/images/skin/images/emblem-autostart.png"));
 
-    m_nameLabel = new ElidedLabel(this);
+    m_nameLabel = new ElidedLabel(m_borderButton);
     m_nameLabel->setObjectName("Name");
     m_nameLabel->setAlignment(Qt::AlignTop| Qt::AlignHCenter);
 
     m_iconLabel->setFixedSize(LauncherFrame::IconSize, LauncherFrame::IconSize);
-//    m_nameLabel->setFixedHeight(LauncherFrame::TextHeight);
+    m_nameLabel->setFixedHeight(LauncherFrame::TextHeight);
 
 
 
@@ -46,14 +51,11 @@ void AppItem::initUI(){
     textLayout->addStretch();
     textLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_newInstallIndicatorLabel = new QLabel(m_nameLabel);
+    m_newInstallIndicatorLabel = new QLabel(m_borderButton);
     m_newInstallIndicatorLabel->setFixedSize(10, 10);
     m_newInstallIndicatorLabel->setPixmap(QPixmap(":/images/skin/img/new_install_indicator.png"));
-    m_newInstallIndicatorLabel->move(0, 6);
 
-    int margin = LauncherFrame::AppItemMargin;
-    m_borderButton = new BorderButton(this);
-    m_borderButton->setFixedSize(LauncherFrame::BorderWidth + margin * 2, LauncherFrame::BorderHeight + margin * 2);
+
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addSpacing(LauncherFrame::AppItemTopSpacing);
     mainLayout->addWidget(m_iconLabel, 0, Qt::AlignHCenter);
@@ -158,7 +160,7 @@ void AppItem::hideAutoStartLabel(){
 void AppItem::showNewInstallIndicatorLabel()
 {
     if (!dbusController->PreInstallAppKeys.contains(m_appKey)){
-        m_newInstallIndicatorLabel->move(0, 6);
+//        m_newInstallIndicatorLabel->move(0, 4);
         m_newInstallIndicatorLabel->show();
     }
 }
@@ -189,6 +191,14 @@ void AppItem::mouseMoveEvent(QMouseEvent *event){
     }
     QFrame::mouseMoveEvent(event);
 }
+
+void AppItem::showEvent(QShowEvent *event)
+{
+    m_newInstallIndicatorLabel->move(m_nameLabel->pos().x(), m_nameLabel->pos().y() + 5);
+    QFrame::showEvent(event);
+}
+
+
 
 bool AppItem::eventFilter(QObject *obj, QEvent *event)
 {

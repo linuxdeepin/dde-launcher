@@ -79,8 +79,8 @@ void DBusController::refreshUI()
 void DBusController::initConnect(){
     connect(m_launcherInterface, SIGNAL(ItemChanged(QString,ItemInfo,qlonglong)),
             this, SLOT(handleItemChanged(QString,ItemInfo,qlonglong)));
-    connect(m_launcherInterface, SIGNAL(UninstallSuccess(QString)),
-            m_menuController, SLOT(handleUninstallSuccess(QString)));
+//    connect(m_launcherInterface, SIGNAL(UninstallSuccess(QString)),
+//            m_menuController, SLOT(handleUninstallSuccess(QString)));
     connect(m_launcherInterface, SIGNAL(UninstallFailed(QString,QString)),
             m_menuController, SLOT(handleUninstallFail(QString,QString)));
     connect(m_launcherInterface, SIGNAL(SearchDone(QStringList)),

@@ -103,6 +103,9 @@ signals:
     /*hide newinstalllindicator*/
     void newinstalllindicatorHided(QString appKey);
     void newinstalllindicatorShowed(QString appKey);
+
+    /*item created update icon*/
+    void iconRefreshed(const ItemInfo& info);
 };
 
 #endif // SIGNALMANAGER_H

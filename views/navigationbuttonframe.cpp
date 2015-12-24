@@ -70,6 +70,9 @@ void NavigationButtonFrame::hideButtons(const QStringList &keys){
         if (!keys.contains(key)){
             int index = CategroyKeys.indexOf(key);
             m_buttonGroup->button(index)->show();
+        }else{
+            int index = CategroyKeys.indexOf(key);
+            m_buttonGroup->button(index)->hide();
         }
     }
 }

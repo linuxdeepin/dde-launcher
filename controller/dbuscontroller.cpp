@@ -79,8 +79,8 @@ void DBusController::refreshUI()
 void DBusController::initConnect(){
     connect(m_launcherInterface, SIGNAL(ItemChanged(QString,ItemInfo,qlonglong)),
             this, SLOT(handleItemChanged(QString,ItemInfo,qlonglong)));
-//    connect(m_launcherInterface, SIGNAL(UninstallSuccess(QString)),
-//            m_menuController, SLOT(handleUninstallSuccess(QString)));
+    connect(m_launcherInterface, SIGNAL(UninstallSuccess(QString)),
+            m_menuController, SLOT(handleUninstallSuccess(QString)));
     connect(m_launcherInterface, SIGNAL(UninstallFailed(QString,QString)),
             m_menuController, SLOT(handleUninstallFail(QString,QString)));
     connect(m_launcherInterface, SIGNAL(SearchDone(QStringList)),
@@ -109,8 +109,9 @@ void DBusController::handleItemChanged(const QString &action, ItemInfo itemInfo,
     qDebug() << action << categoryInfoId;
     emit signalManager->launcheRefreshed();
     if (action == "created"){
+        emit signalManager->iconRefreshed(itemInfo);
     }else if (action == "updated"){
-//        emit signalManager->newinstalllindicatorShowed(itemInfo.key);
+        emit signalManager->newinstalllindicatorShowed(itemInfo.key);
     }else if (action == "deleted"){
     }else{
     }

@@ -65,6 +65,7 @@ void CategoryTableWidget::setGridParameter(int column, int girdWidth, int gridHe
 
 void CategoryTableWidget::setCategoryInfoList(const CategoryInfoList &categoryInfoList){
     qDebug() << "setCategoryInfoList" << categoryInfoList.length();
+    qDebug() << appItemManager->getHideKeys();
     emit signalManager->hideNavigationButtonByKeys(appItemManager->getHideKeys());
     addItems(appItemManager->getSortedCategoryInfoList());
     setItemUnChecked();

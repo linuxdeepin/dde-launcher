@@ -34,6 +34,8 @@ void AppItemManager::initConnect(){
             this, SLOT(hideNewInstallIndicator(QString)));
     connect(signalManager, SIGNAL(newinstalllindicatorShowed(QString)),
             this, SLOT(showNewInstallIndicator(QString)));
+    connect(signalManager, SIGNAL(iconRefreshed(ItemInfo)),
+            this, SLOT(refreshIcon(ItemInfo)));
 }
 
 QMap<QString, ItemInfo>& AppItemManager::getItemInfos(){
@@ -200,5 +202,14 @@ void AppItemManager::showNewInstallIndicator(QString appKey)
     if (m_appItems.contains(appKey)){
         AppItem* appItem = m_appItems.value(appKey);
         appItem->setNewInstalled(true);
+    }
+}
+
+void AppItemManager::refreshIcon(const ItemInfo& itemInfo)
+{
+    if (m_appItems.contains(itemInfo.key)){
+        AppItem* appItem = m_appItems.value(itemInfo.key);
+        int size = appItem->getIconSize();
+        appItem->setAppIcon(ThemeAppIcon::getIconPixmap(itemInfo.iconKey, size, size));
     }
 }

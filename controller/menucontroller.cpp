@@ -365,25 +365,6 @@ void MenuController::startUnistall(QString appKey){
 }
 
 void MenuController::handleUninstallSuccess(const QString &appKey){
-    QString cachePath = joinPath(getThumbnailsPath(), QString("%1_%2.png").arg(appKey, QString::number(LauncherFrame::IconSize)));
-    QString appName(appKey);
-    if (LauncherApp::UnistallAppNames.contains(appKey)){
-        appName = LauncherApp::UnistallAppNames.value(appKey);
-        LauncherApp::UnistallAppNames.remove(appKey);
-    }
-    QString message = tr("Uninstall %1 successfully!").arg(appName);
-//    m_notifcationInterface->Notify("dde-launcher",
-//                                   0,
-//                                   cachePath,
-//                                   summary,
-//                                   message,
-//                                    QStringList(),
-//                                    QVariantMap(),
-//                                   0);
-    QString command = QString("notify-send \"%1\" -a %2 -t 5 -i \"%3\"").arg(message , appKey, cachePath);
-
-    QProcess::execute(command);
-    qDebug() << "handleUninstallSuccess" << appKey << cachePath << command;
     emit signalManager->itemDeleted(appKey);
 }
 

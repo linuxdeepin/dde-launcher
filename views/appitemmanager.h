@@ -46,6 +46,7 @@ public slots:
     void setCategoryInfoList(const CategoryInfoList& categoryInfoList);
     void hideNewInstallIndicator(QString appKey);
     void showNewInstallIndicator(QString appKey);
+    void refreshIcon(const ItemInfo& itemInfo);
 
 private:
     QMap<QString, ItemInfo> m_itemInfos;

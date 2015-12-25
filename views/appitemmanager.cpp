@@ -156,6 +156,7 @@ void AppItemManager::setInstallTimeInfoList(const QList<ItemInfo> &infos){
 void AppItemManager::setUseFrequencyInfoList(const QList<ItemInfo> &infos){
     qDebug() << "setUseFrequencyInfoList";
     m_useFrequencyItemInfoList = infos;
+    addItems(infos);
 }
 
 void AppItemManager::setCategoryInfoList(const CategoryInfoList &categoryInfoList)

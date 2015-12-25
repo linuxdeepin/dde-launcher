@@ -399,9 +399,8 @@ void DBusController::refreshInstallTimeFrequency(){
     qDebug() << "refreshInstallTimeFrequency" << mode;
     if (mode == 2){
         emit signalManager->installTimeRefreshed();
-    }else if (mode == 3){
-        emit signalManager->frequencyRefreshed();
     }
+    emit signalManager->frequencyRefreshed();
     refreshUI();
 }
 

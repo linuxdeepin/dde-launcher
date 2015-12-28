@@ -107,7 +107,8 @@ HEADERS += \
     dbusinterface/dock_interface.h \
     views/appitemmanager.h
 
-TRANSLATIONS += translations/dde-launcher.ts
+# Automating generation .qm files from .ts files
+system($$PWD/translate_generation.sh)
 
 RESOURCES += \
     skin.qrc \

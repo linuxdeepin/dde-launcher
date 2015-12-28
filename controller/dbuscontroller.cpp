@@ -171,20 +171,16 @@ void DBusController::getCategoryInfoList(){
 
         sortedByAppName(m_itemInfos.values());
 
-        bool isPreIsntallExists = isPreInsallAppsPathExists();
-        qDebug() << getPreInstallAppsPath() << isPreIsntallExists;
-        if (isPreIsntallExists){
-            loadPreInstallApps();
-        }
+        loadPreInstallApps();
+
+        qDebug() << PreInstallAppKeys;
+
         foreach (CategoryInfo item, m_categoryInfoList) {
             if (item.key != "all" && item.id != -1){
                 QStringList appKeys;
                 foreach (ItemInfo itemInfo, m_appNameSortedList) {
                     if (item.items.contains(itemInfo.key)){
                         appKeys.append(itemInfo.key);
-                        if (itemInfo.count == 0 && !isPreIsntallExists){
-                            PreInstallAppKeys.insert(itemInfo.key);
-                        }
                     }
                 }
                 item.items = appKeys;
@@ -195,9 +191,6 @@ void DBusController::getCategoryInfoList(){
         }
         qDebug() << "m_categoryAppNameSortedInfoList"<< m_categoryAppNameSortedInfoList.length();
         emit signalManager->categoryInfosChanged(m_categoryAppNameSortedInfoList);
-        if (!isPreIsntallExists){
-            savePreInstallApps();
-        }
     }else{
         qCritical() << reply.error().message();
     }
@@ -277,33 +270,18 @@ QList<QList<ItemInfo>>  DBusController::sortPingyinEnglish(QList<ItemInfo> infos
     return result;
 }
 
-void DBusController::savePreInstallApps()
-{
-    QStringList keys;
-    foreach (QString key, PreInstallAppKeys) {
-        keys.append(key);
-    }
-    QString path = getPreInstallAppsPath();
-    qDebug() << path;
-    QString appKeysString = QString(QJsonDocument(QJsonArray::fromStringList(keys)).toJson());
-    QFile file(path);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        return;
-    file.write(appKeysString.toLocal8Bit());
-    file.close();
-}
 
 void DBusController::loadPreInstallApps()
 {
-    QString path = getPreInstallAppsPath();
-    QFile file(path);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
-
-    QJsonParseError* error = new QJsonParseError();
-    QStringList preInstalledAppKeys = QJsonDocument::fromJson(QString(file.readAll()).toStdString().c_str(), error).toVariant().toStringList();
-    PreInstallAppKeys = preInstalledAppKeys.toSet();
-    file.close();
+    PreInstallAppKeys.clear();
+    QDBusPendingReply<QStringList> reply = m_launcherInterface->GetAllNewInstalledApps();
+    reply.waitForFinished();
+    if (!reply.isError()){
+        PreInstallAppKeys = reply.argumentAt(0).toStringList().toSet();
+        qDebug() << PreInstallAppKeys;
+    }else{
+        qCritical() << reply.error().message();
+    }
 }
 
 QString DBusController::getPreInstallAppsPath()

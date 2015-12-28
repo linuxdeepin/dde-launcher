@@ -53,6 +53,7 @@ private:
     int m_itemWidth;
 
     QPropertyAnimation* m_scrollAnimation;
+    QStringList m_keyused;
 };
 
 #endif // SECTIONTABLEWIDGET_H

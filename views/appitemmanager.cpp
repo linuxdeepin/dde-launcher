@@ -108,7 +108,8 @@ void AppItemManager::addCategoryItem(const QString &key)
 void AppItemManager::addItem(const ItemInfo &itemInfo){
     if (m_appItems.contains(itemInfo.key)){
         AppItem* appItem = m_appItems.value(itemInfo.key);
-        if (itemInfo.count == 0){
+        qDebug() << DBusController::PreInstallAppKeys << DBusController::PreInstallAppKeys.contains(itemInfo.key);
+        if (DBusController::PreInstallAppKeys.contains(itemInfo.key)){
             appItem->setNewInstalled(true);
         }else{
             appItem->setNewInstalled(false);
@@ -118,13 +119,12 @@ void AppItemManager::addItem(const ItemInfo &itemInfo){
         appItem->setAppKey(itemInfo.key);
         appItem->setUrl(itemInfo.url);
         appItem->setAppName(itemInfo.name);
-//        qDebug() << itemInfo.count;
-        if (itemInfo.count == 0){
-            appItem->setNewInstalled(true);
-        }else{
-            appItem->setNewInstalled(false);
-        }
-
+//        qDebug() << itemInfo.count << itemInfo.key << DBusController::PreInstallAppKeys.contains(itemInfo.key) ;
+//        if (itemInfo.count == 0){
+//            appItem->setNewInstalled(true);
+//        }else{
+//            appItem->setNewInstalled(false);
+//        }
         int size = appItem->getIconSize();
         appItem->setAppIcon(ThemeAppIcon::getIconPixmap(itemInfo.iconKey, size, size));
         m_appItems.insert(itemInfo.key, appItem);

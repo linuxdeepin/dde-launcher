@@ -97,6 +97,13 @@ void CategoryTableWidget::addCategoryItem(int row, QString key){
 void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList appKeys){
     int startRow = row;
     int endRow;
+
+    foreach (QString key, m_keyused) {
+        if (appKeys.contains(key)){
+            appKeys.removeAll(key);
+        }
+    }
+
     if (appKeys.count() % m_column == 0){
         endRow = appKeys.count() / m_column + row;
     }else{
@@ -107,15 +114,18 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
        setRowHeight(i, m_gridHeight);
     }
     foreach (QString appKey, appKeys) {
+
        int _row = startRow + appKeys.indexOf(appKey) / m_column;
        int column = appKeys.indexOf(appKey) % m_column;
 
        AppItem* appItem = appItemManager->getAppItemByKey(appKey);
+//       qDebug() << appKey << appItem;
        if (appItem){
            appItem->setParent(this);
            appItem->setFixedSize(m_gridWidth, m_gridHeight);
            setCellWidget(_row, column, appItem);
            appItem->show();
+           m_keyused.append(appKey);
        }else{
            qDebug() << appKey;
        }
@@ -133,6 +143,7 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
 }
 
 void CategoryTableWidget::addItems(const CategoryInfoList &categoryInfoList){
+    m_keyused.clear();
     clearContents();
 
     int rc = rowCount();
@@ -147,6 +158,7 @@ void CategoryTableWidget::addItems(const CategoryInfoList &categoryInfoList){
             insertRow(rowCount());
             row = rowCount() - 1;
             addCategoryItem(row, info.key);
+//            qDebug() << row << info.key << info.items;
             addItems(rowCount(), info.key,  info.items);
         }
     }

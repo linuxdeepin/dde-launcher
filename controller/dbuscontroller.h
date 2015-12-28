@@ -63,7 +63,6 @@ public:
     void sortedByFrequency(QList<ItemInfo> infos);
     QList<QList<ItemInfo>> sortPingyinEnglish(QList<ItemInfo> infos);
 
-    void savePreInstallApps();
     void loadPreInstallApps();
     QString getPreInstallAppsPath();
     bool isPreInsallAppsPathExists();

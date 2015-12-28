@@ -54,6 +54,7 @@ void AppItem::initUI(){
     m_newInstallIndicatorLabel = new QLabel(m_borderButton);
     m_newInstallIndicatorLabel->setFixedSize(10, 10);
     m_newInstallIndicatorLabel->setPixmap(QPixmap(":/images/skin/img/new_install_indicator.png"));
+    m_newInstallIndicatorLabel->hide();
 
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -159,6 +160,7 @@ void AppItem::hideAutoStartLabel(){
 
 void AppItem::showNewInstallIndicatorLabel()
 {
+    return;
     if (!dbusController->PreInstallAppKeys.contains(m_appKey)){
 //        m_newInstallIndicatorLabel->move(0, 4);
         m_newInstallIndicatorLabel->show();

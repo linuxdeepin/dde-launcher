@@ -1,20 +1,20 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ja" version="2.1">
 <context>
     <name>ConfirmUninstallDialog</name>
     <message>
         <location filename="../dialogs/confirmuninstalldialog.cpp" line="11"/>
         <source>All dependencies will be removed together</source>
-        <translation>所有依赖也会被一起移除 </translation>
+        <translation>依存関係にあるものは全て一緒に削除されます</translation>
     </message>
     <message>
         <location filename="../dialogs/confirmuninstalldialog.cpp" line="14"/>
         <source>Cancel</source>
-        <translation>取消</translation>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <location filename="../dialogs/confirmuninstalldialog.cpp" line="14"/>
         <source>Confirm</source>
-        <translation>卸载</translation>
+        <translation>確認する</translation>
     </message>
 </context>
 <context>
@@ -22,27 +22,27 @@
     <message>
         <location filename="../views/displaymodeframe.cpp" line="34"/>
         <source>By name</source>
-        <translation>按名称</translation>
+        <translation>名前ごと</translation>
     </message>
     <message>
         <location filename="../views/displaymodeframe.cpp" line="36"/>
         <source>By category (icon)</source>
-        <translation>按分类(图标)</translation>
+        <translation>カテゴリー (アイコン) 順</translation>
     </message>
     <message>
         <location filename="../views/displaymodeframe.cpp" line="38"/>
         <source>By category (text)</source>
-        <translation>按分类(文字)</translation>
+        <translation>カテゴリーごと (テキスト)</translation>
     </message>
     <message>
         <location filename="../views/displaymodeframe.cpp" line="40"/>
         <source>By time installed</source>
-        <translation>按安装时间</translation>
+        <translation>時間に従ってインストールされます</translation>
     </message>
     <message>
         <location filename="../views/displaymodeframe.cpp" line="42"/>
         <source>By frequency</source>
-        <translation>按使用频率</translation>
+        <translation>周波数による</translation>
     </message>
 </context>
 <context>
@@ -50,7 +50,8 @@
     <message>
         <location filename="../app/launcherapp.cpp" line="36"/>
         <source>Are you sure to uninstall %1</source>
-        <translation>您确定要卸载%1</translation>
+        <translation>
+本当に%1をアンインストールしますか?</translation>
     </message>
 </context>
 <context>
@@ -58,47 +59,47 @@
     <message>
         <location filename="../controller/menucontroller.cpp" line="63"/>
         <source>Open(_O)</source>
-        <translation>打开(_O)</translation>
+        <translation>(_O)を開いてください</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="67"/>
         <source>Remove from desktop</source>
-        <translation>从桌面上移除</translation>
+        <translation>デスクトップから移動する</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="69"/>
         <source>Send to desktop(_E)</source>
-        <translation>发送到桌面(_E)</translation>
+        <translation>デスクトップ(_E)に送る</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="73"/>
         <source>Remove from dock</source>
-        <translation>从任务栏上移除</translation>
+        <translation>ドックから削除</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="75"/>
         <source>Send to dock(_C)</source>
-        <translation>发送到任务栏(_C)</translation>
+        <translation>ドックの送信(_C)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="80"/>
         <source>remove from startup(_R)</source>
-        <translation>从开机启动项删除(_R)</translation>
+        <translation>スタートアップから削除(_R)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="82"/>
         <source>Add to startup(_A)</source>
-        <translation>添加至开机启动项(_A)</translation>
+        <translation>スタートアップに追加(_A)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="84"/>
         <source>Uninstall</source>
-        <translation>卸载</translation>
+        <translation>アンインストール</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="345"/>
         <source>Uninstall %1 successfully!</source>
-        <translation>卸载 %1 成功!</translation>
+        <translation>%1 を無事にアンインストールしました!</translation>
     </message>
 </context>
 <context>
@@ -106,57 +107,57 @@
     <message>
         <location filename="../app/global.h" line="32"/>
         <source>internet</source>
-        <translation>网络应用</translation>
+        <translation>インターネット</translation>
     </message>
     <message>
         <location filename="../app/global.h" line="33"/>
         <source>multimedia</source>
-        <translation>影音播放</translation>
+        <translation>マルチメディア</translation>
     </message>
     <message>
         <location filename="../app/global.h" line="34"/>
         <source>games</source>
-        <translation>游戏娱乐</translation>
+        <translation>ゲーム</translation>
     </message>
     <message>
         <location filename="../app/global.h" line="35"/>
         <source>graphics</source>
-        <translation>图形图像</translation>
+        <translation>グラフィクス </translation>
     </message>
     <message>
         <location filename="../app/global.h" line="36"/>
         <source>productivity</source>
-        <translation>办公软件</translation>
+        <translation>生産性</translation>
     </message>
     <message>
         <location filename="../app/global.h" line="37"/>
         <source>industry</source>
-        <translation>行业软件</translation>
+        <translation>インダストリー</translation>
     </message>
     <message>
         <location filename="../app/global.h" line="38"/>
         <source>education</source>
-        <translation>科学教育</translation>
+        <translation>教育</translation>
     </message>
     <message>
         <location filename="../app/global.h" line="39"/>
         <source>development</source>
-        <translation>编程开发</translation>
+        <translation>開発</translation>
     </message>
     <message>
         <location filename="../app/global.h" line="40"/>
         <source>system</source>
-        <translation>系统管理</translation>
+        <translation>システム</translation>
     </message>
     <message>
         <location filename="../app/global.h" line="41"/>
         <source>utilities</source>
-        <translation>实用工具</translation>
+        <translation>ユーティリティ</translation>
     </message>
     <message>
         <location filename="../app/global.h" line="42"/>
         <source>others</source>
-        <translation>其他</translation>
+        <translation>その他</translation>
     </message>
 </context>
 </TS>

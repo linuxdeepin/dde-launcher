@@ -84,7 +84,7 @@ QString MenuController::createMenuContent(QString appKey){
     QJsonObject seperatorObj2 = createSeperator();
     QJsonObject startupObj;
     if (m_isItemStartup){
-        startupObj = createMenuItem(3, tr("Remove from startup(_R)"));
+        startupObj = createMenuItem(3, tr("remove from startup(_R)"));
     }else{
         startupObj = createMenuItem(3, tr("Add to startup(_A)"));
     }

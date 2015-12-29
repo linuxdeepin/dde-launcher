@@ -7,6 +7,7 @@
 #include "views/appitemmanager.h"
 #include <QString>
 #include <QStringList>
+#include <libintl.h>
 #include <QObject>
 
 #define signalManager  Singleton<SignalManager>::instance()
@@ -32,17 +33,8 @@ const QStringList CategroyKeys{
     "Others"
 };
 
-const QStringList CategoryNames{ QObject::tr("Internet"),
-                                 QObject::tr("Office"),
-                                 QObject::tr("Development"),
-                                 QObject::tr("Reading"),
-                                 QObject::tr("Graphics"),
-                                 QObject::tr("Game"),
-                                 QObject::tr("Music"),
-                                 QObject::tr("System"),
-                                 QObject::tr("Video"),
-                                 QObject::tr("Chat"),
-                                 QObject::tr("Others")
-                               };
+inline char* getCategoryNames(QString text){
+    return dgettext("application_categories",text.toStdString().data());
+}
 
 #endif // GLOBAL

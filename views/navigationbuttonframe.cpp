@@ -40,8 +40,7 @@ void NavigationButtonFrame::initByMode(int mode){
             m_buttonGroup->addButton(button, CategroyKeys.indexOf(key));
             button->hide();
         }else{
-            int index = CategroyKeys.indexOf(key);
-            QString name = QCoreApplication::translate("QObject", CategoryNames.at(index).toLatin1());
+            QString name = getCategoryNames(key);
             BaseCheckedButton* button = new BaseCheckedButton(name, this);
             button->setObjectName("CategoryTextButton");
             button->setFixedSize(160 - NavgationBarLeftMargin, 24);

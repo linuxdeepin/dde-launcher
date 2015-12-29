@@ -5,6 +5,7 @@
 #include "dbusinterface/dde_launcher_interface.h"
 #include "dbusinterface/launcher_interface.h"
 #include "widgets/commandlinemanager.h"
+#include "libintl.h"
 
 #include <QApplication>
 #include <QTranslator>
@@ -22,6 +23,8 @@ int main(int argc, char *argv[])
         qApp->setOrganizationName("deepin");
         qApp->setApplicationName("dde-launcher");
         qApp->setApplicationVersion("2015-1.0");
+
+        setlocale(LC_ALL, "");
 
 		QTranslator translator;
 		translator.load("/usr/share/dde-launcher/translations/dde-launcher_" + QLocale::system().name() + ".qm");

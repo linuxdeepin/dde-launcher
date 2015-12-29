@@ -13,8 +13,7 @@ CategoryItem::CategoryItem(QString text, QWidget *parent) : QFrame(parent)
 }
 
 void CategoryItem::initUI(QString text){
-    int index = CategroyKeys.indexOf(text);
-    m_titleLabel = new QLabel(QCoreApplication::translate("QObject", CategoryNames.at(index).toLatin1()), this);
+    m_titleLabel = new QLabel(getCategoryNames(text), this);
     m_titleLabel->setStyleSheet("color: white");
     QFont font;
     font.setPixelSize(20);

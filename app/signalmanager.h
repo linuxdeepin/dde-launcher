@@ -106,6 +106,9 @@ signals:
 
     /*item created update icon*/
     void iconRefreshed(const ItemInfo& info);
+
+    /*hightlight navigationbar button*/
+    void hightlightButtonByIndex(int index);
 };
 
 #endif // SIGNALMANAGER_H

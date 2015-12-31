@@ -108,7 +108,7 @@ void AppItemManager::addCategoryItem(const QString &key)
 void AppItemManager::addItem(const ItemInfo &itemInfo){
     if (m_appItems.contains(itemInfo.key)){
         AppItem* appItem = m_appItems.value(itemInfo.key);
-        qDebug() << DBusController::PreInstallAppKeys << DBusController::PreInstallAppKeys.contains(itemInfo.key);
+//        qDebug() << DBusController::PreInstallAppKeys.contains(itemInfo.key);
         if (DBusController::PreInstallAppKeys.contains(itemInfo.key)){
             appItem->setNewInstalled(true);
         }else{
@@ -194,6 +194,7 @@ void AppItemManager::hideNewInstallIndicator(QString appKey)
 {
     if (m_appItems.contains(appKey)){
         AppItem* appItem = m_appItems.value(appKey);
+        qDebug() << "hideNewInstallIndicator" << appKey;
         appItem->setNewInstalled(false);
     }
 }

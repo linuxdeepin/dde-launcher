@@ -159,21 +159,20 @@ void AppItem::hideAutoStartLabel(){
 
 void AppItem::showNewInstallIndicatorLabel()
 {
-
     m_newInstallIndicatorLabel->show();
-
+//    qDebug() << "m_newInstallIndicatorLabel" << m_newInstallIndicatorLabel->isVisible();
 }
 
 void AppItem::hideNewInstallIndicatorLabel()
 {
+
     m_newInstallIndicatorLabel->hide();
+//    qDebug() << "m_newInstallIndicatorLabel" << m_newInstallIndicatorLabel->isVisible();
 }
 
 void AppItem::setNewInstalled(bool flag)
 {
-    if (flag == m_isNewInstalled){
-        return;
-    }
+    qDebug() << m_appKey << flag << "m_isNewInstalled" << m_isNewInstalled;
     m_isNewInstalled = flag;
     if (m_isNewInstalled){
         showNewInstallIndicatorLabel();

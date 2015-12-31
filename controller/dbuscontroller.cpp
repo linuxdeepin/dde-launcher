@@ -396,6 +396,7 @@ void DBusController::setSortMethod(int mode){
 
 void DBusController::refreshInstallTimeFrequency(){
     int mode = getSortMethod();
+    loadPreInstallApps();
     qDebug() << "refreshInstallTimeFrequency" << mode;
     if (mode == 2){
         emit signalManager->installTimeRefreshed();

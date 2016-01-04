@@ -344,6 +344,7 @@ void LauncherFrame::Hide(){
 void LauncherFrame::Show(){
     move(m_primaryPos);
     m_rightclicked = false;
+    emit signalManager->hightlightButtonByIndex(0);
     show();
     m_searchLineEdit->setSearchFocus();
     raise();

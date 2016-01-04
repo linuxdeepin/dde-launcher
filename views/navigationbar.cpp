@@ -1,6 +1,7 @@
 #include "navigationbar.h"
 #include "navigationbuttonframe.h"
 #include "widgets/util.h"
+#include "app/global.h"
 #include <QStackedLayout>
 #include <QApplication>
 #include <QDesktopWidget>
@@ -27,6 +28,8 @@ void NavigationBar::initUI(int width){
 void NavigationBar::initConnect(){
     connect(m_iconFrame, SIGNAL(currentIndexChanged(int)), m_textFrame, SLOT(setCurrentIndex(int)));
     connect(m_textFrame, SIGNAL(currentIndexChanged(int)), m_iconFrame, SLOT(setCurrentIndex(int)));
+    connect(signalManager, SIGNAL(hightlightButtonByIndex(int)), m_textFrame, SLOT(setCurrentIndex(int)));
+    connect(signalManager, SIGNAL(hightlightButtonByIndex(int)), m_iconFrame, SLOT(setCurrentIndex(int)));
 }
 
 NavigationButtonFrame* NavigationBar::getIconFrame(){

@@ -21,15 +21,15 @@ const QString LauncherPathName="/com/deepin/dde/Launcher";
 
 const QStringList CategroyKeys{
     "Internet",
-    "Office",
-    "Development",
-    "Reading",
+    "Chat",
+    "Music",
+    "Video",
     "Graphics",
     "Game",
-    "Music",
+    "Office",
+    "Reading",
+    "Development",
     "System",
-    "Video",
-    "Chat",
     "Others"
 };
 

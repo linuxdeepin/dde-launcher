@@ -172,7 +172,7 @@ void AppItem::hideNewInstallIndicatorLabel()
 
 void AppItem::setNewInstalled(bool flag)
 {
-    qDebug() << m_appKey << flag << "m_isNewInstalled" << m_isNewInstalled;
+//    qDebug() << m_appKey << flag << "m_isNewInstalled" << m_isNewInstalled;
     m_isNewInstalled = flag;
     if (m_isNewInstalled){
         showNewInstallIndicatorLabel();

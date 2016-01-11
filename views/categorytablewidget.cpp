@@ -153,13 +153,15 @@ void CategoryTableWidget::addItems(const CategoryInfoList &categoryInfoList){
     verticalScrollBar()->setValue(0);
 
     int row = 0;
-    foreach (CategoryInfo info, categoryInfoList) {
-        if(info.items.count() > 0){
-            insertRow(rowCount());
-            row = rowCount() - 1;
-            addCategoryItem(row, info.key);
-//            qDebug() << row << info.key << info.items;
-            addItems(rowCount(), info.key,  info.items);
+    foreach(QString key, CategroyKeys){
+        foreach (CategoryInfo info, categoryInfoList) {
+            if(info.items.count() > 0 && key == info.key){
+                insertRow(rowCount());
+                row = rowCount() - 1;
+                addCategoryItem(row, info.key);
+    //            qDebug() << row << info.key << info.items;
+                addItems(rowCount(), info.key,  info.items);
+            }
         }
     }
 }

@@ -194,7 +194,7 @@ void AppItemManager::hideNewInstallIndicator(QString appKey)
 {
     if (m_appItems.contains(appKey)){
         AppItem* appItem = m_appItems.value(appKey);
-        qDebug() << "hideNewInstallIndicator" << appKey;
+//        qDebug() << "hideNewInstallIndicator" << appKey;
         appItem->setNewInstalled(false);
     }
 }

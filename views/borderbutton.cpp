@@ -29,6 +29,7 @@ void BorderButton::startDrag(QMouseEvent *event){
     QMimeData* mimeData = new QMimeData;
     QJsonObject obj;
     obj.insert("appKey", dynamic_cast<AppItem*>(parent())->getAppKey());
+    obj.insert("appIcon", dynamic_cast<AppItem*>(parent())->getAppIconKey());
     obj.insert("appName", dynamic_cast<AppItem*>(parent())->getAppName());
     mimeData->setData("RequestDock", QJsonDocument(obj).toJson());
 

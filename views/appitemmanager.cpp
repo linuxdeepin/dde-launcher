@@ -117,6 +117,7 @@ void AppItemManager::addItem(const ItemInfo &itemInfo){
     }else{
         AppItem* appItem = new AppItem(itemInfo.isAutoStart);
         appItem->setAppKey(itemInfo.key);
+        appItem->setAppIconKey(itemInfo.iconKey);
         appItem->setUrl(itemInfo.url);
         appItem->setAppName(itemInfo.name);
 //        qDebug() << itemInfo.count << itemInfo.key << DBusController::PreInstallAppKeys.contains(itemInfo.key) ;

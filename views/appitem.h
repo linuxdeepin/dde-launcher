@@ -24,6 +24,7 @@ public:
     QString getAppName();
     QString getUrl();
     QString getAppKey();
+    QString getAppIconKey();
     BorderButton* getBorderButton();
     int getIconSize();
 
@@ -34,6 +35,7 @@ public slots:
     void setAppIcon(QPixmap icon);
     void setAppName(QString name);
     void setAppKey(QString key);
+    void setAppIconKey(QString key);
     void setUrl(QString url);
     void showMenu(QPoint pos);
     void showAutoStartLabel();
@@ -60,6 +62,7 @@ private:
     QString m_appName = "";
     QString m_url = "";
     QString m_appKey = "";
+    QString m_appIconKey = "";
     bool m_isAutoStart = false;
     bool m_isNewInstalled = false;
 };

@@ -109,6 +109,7 @@ void LauncherFrame::initUI(){
 }
 
 void LauncherFrame::computerGrid(int minimumLeftMargin, int minimumTopMargin, int miniSpacing, int itemWidth){
+    Q_UNUSED(itemWidth)
     int desktopWidth = width();
     int desktopHeight = height();
 

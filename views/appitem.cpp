@@ -130,8 +130,18 @@ QString AppItem::getAppKey(){
     return m_appKey;
 }
 
+QString AppItem::getAppIconKey()
+{
+    return m_appIconKey;
+}
+
 void AppItem::setAppKey(QString key){
     m_appKey = key;
+}
+
+void AppItem::setAppIconKey(QString key)
+{
+    m_appIconKey = key;
 }
 
 QString AppItem::getUrl(){

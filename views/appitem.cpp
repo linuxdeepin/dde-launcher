@@ -89,7 +89,7 @@ void AppItem::initConnect(){
 }
 
 void AppItem::showMenu(QPoint pos){
-    qDebug() << m_appKey;
+    qDebug() << m_appKey << pos;
     emit signalManager->contextMenuShowed(m_appKey, pos);
 }
 

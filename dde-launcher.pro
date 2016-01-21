@@ -60,7 +60,8 @@ SOURCES += main.cpp \
     dbusinterface/dbusclientmanager.cpp \
     dbusinterface/pinyin_interface.cpp \
     dbusinterface/dock_interface.cpp \
-    views/appitemmanager.cpp
+    views/appitemmanager.cpp \
+    dbusinterface/dbuscontrolcenter.cpp
 
 HEADERS += \
     views/launcherframe.h \
@@ -105,7 +106,8 @@ HEADERS += \
     dbusinterface/dbusclientmanager.h \
     dbusinterface/pinyin_interface.h \
     dbusinterface/dock_interface.h \
-    views/appitemmanager.h
+    views/appitemmanager.h \
+    dbusinterface/dbuscontrolcenter.h
 
 # Automating generation .qm files from .ts files
 system($$PWD/translate_generation.sh)

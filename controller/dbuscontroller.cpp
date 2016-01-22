@@ -50,6 +50,10 @@ DBusController::DBusController(QObject *parent) : QObject(parent)
     m_dockClientManagerInterface = new DBusClientManager(this);
     m_pinyinInterface = new PinyinInterface(Pinyin_service, Pinyin_path, QDBusConnection::sessionBus(), this);
     m_menuController = new MenuController(this);
+
+    m_getAllCategoryInfosTimer = new QTimer(this);
+    m_getAllCategoryInfosTimer->setInterval(500);
+
     initConnect();
 }
 
@@ -96,6 +100,7 @@ void DBusController::initConnect(){
     connect(m_displayInterface, SIGNAL(PrimaryRectChanged()), signalManager, SIGNAL(screenGeometryChanged()));
     connect(m_displayInterface, SIGNAL(PrimaryChanged()), signalManager, SIGNAL(screenGeometryChanged()));
     connect(m_dockClientManagerInterface, SIGNAL(ActiveWindowChanged(uint)), signalManager, SIGNAL(activeWindowChanged(uint)));
+    connect(m_getAllCategoryInfosTimer, SIGNAL(timeout()), this, SLOT(getCategoryInfoList()));
 }
 
 void DBusController::updateAppTable(QString appKey){
@@ -143,7 +148,7 @@ void DBusController::getAutoStartList(){
             m_autoStartList.append(QFileInfo(url).fileName());
         }
     }else{
-        qCritical() << reply.error().message();
+        qCritical() << reply.error().name() << reply.error().message();
     }
 }
 
@@ -153,6 +158,7 @@ void DBusController::getCategoryInfoList(){
     QDBusPendingReply<CategoryInfoList> reply = m_launcherInterface->GetAllCategoryInfos();
     reply.waitForFinished();
     if (!reply.isError()){
+        m_getAllCategoryInfosTimer->stop();
         m_categoryInfoList = qdbus_cast<CategoryInfoList>(reply.argumentAt(0));
         foreach (CategoryInfo item, m_categoryInfoList) {
             if (item.key == "all" && item.id == -1){
@@ -173,7 +179,7 @@ void DBusController::getCategoryInfoList(){
 
         loadPreInstallApps();
 
-        qDebug() << PreInstallAppKeys;
+        qDebug() << m_itemInfos.keys();
 
         foreach (CategoryInfo item, m_categoryInfoList) {
             if (item.key != "all" && item.id != -1){
@@ -184,15 +190,14 @@ void DBusController::getCategoryInfoList(){
                     }
                 }
                 item.items = appKeys;
-
-//                qDebug() << appKeys;
             }
             m_categoryAppNameSortedInfoList.append(item);
         }
         qDebug() << "m_categoryAppNameSortedInfoList"<< m_categoryAppNameSortedInfoList.length();
         emit signalManager->categoryInfosChanged(m_categoryAppNameSortedInfoList);
     }else{
-        qCritical() << reply.error().message();
+        qCritical() << reply.error().name() << reply.error().message();
+        m_getAllCategoryInfosTimer->start();
     }
 }
 
@@ -219,7 +224,7 @@ void DBusController::convertNameToPinyin(){
         }
         m_pinyinEnglishInfos = sortPingyinEnglish(m_itemInfos.values());
     }else{
-        qCritical() << reply.error().message();
+        qCritical() << reply.error().name() << reply.error().message();
     }
 }
 
@@ -280,7 +285,7 @@ void DBusController::loadPreInstallApps()
         PreInstallAppKeys = reply.argumentAt(0).toStringList().toSet();
         qDebug() << PreInstallAppKeys;
     }else{
-        qCritical() << reply.error().message();
+        qCritical() << reply.error().name() << reply.error().message();
     }
 }
 
@@ -316,7 +321,7 @@ void DBusController::getAllFrequencyItems(){
         emit signalManager->itemInfosChanged(m_itemInfos);
         sortedByFrequency(m_itemInfos.values());
     }else{
-        qCritical() << reply.error().message();
+        qCritical() << reply.error().name() << reply.error().message();
     }
 
 
@@ -336,7 +341,7 @@ void DBusController::getInstalledTimeItems(){
         }
         sortedByInstallTime(m_itemInfos.values());
     }else{
-        qCritical() << reply.error().message();
+        qCritical() << reply.error().name() << reply.error().message();
     }
 }
 
@@ -349,7 +354,7 @@ ItemInfo DBusController::getItemInfo(QString appKey){
         itemInfo = qdbus_cast<ItemInfo>(reply.argumentAt(0));
         return itemInfo;
     }else{
-        qCritical() << reply.error().message();
+        qCritical() << reply.error().name() << reply.error().message();
         return itemInfo;
     }
 }
@@ -368,7 +373,7 @@ int DBusController::getCategoryDisplayMode(){
         qlonglong mode = reply.argumentAt(0).toLongLong();
         return mode;
     }else{
-        qCritical() << reply.error().message();
+        qCritical() << reply.error().name() << reply.error().message();
         return 0;
     }
 }
@@ -385,7 +390,7 @@ int DBusController::getSortMethod(){
         qlonglong mode = reply.argumentAt(0).toLongLong();
         return mode;
     }else{
-        qCritical() << reply.error().message();
+        qCritical() << reply.error().name() << reply.error().message();
         return 0;
     }
 }

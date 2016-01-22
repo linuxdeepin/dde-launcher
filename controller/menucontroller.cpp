@@ -139,7 +139,7 @@ bool MenuController::isItemOnDesktop(QString appKey){
     if (!reply.isError()){
         flag = reply.argumentAt(0).toBool();
     } else {
-        qCritical() << reply.error().message();
+        qCritical() << reply.error().name() << reply.error().message();
     }
     qDebug() << appKey << flag;
     return flag;
@@ -152,7 +152,7 @@ bool MenuController::isItemOnDock(QString appKey){
     if (!reply.isError()){
         flag = reply.argumentAt(0).toBool();
     } else {
-        qCritical() << reply.error().message();
+        qCritical() << reply.error().name() << reply.error().message();
     }
     return flag;
 }
@@ -165,7 +165,7 @@ bool MenuController::isItemStartup(QString appKey){
     if (!reply.isError()){
         flag = reply.argumentAt(0).toBool();
     } else {
-        qCritical() << reply.error().message();
+        qCritical() << reply.error().name() << reply.error().message();
     }
     return flag;
 }
@@ -252,7 +252,7 @@ void MenuController::handleOpen(QString appKey){
             emit signalManager->newinstalllindicatorHided(appKey);
         }
     } else {
-        qCritical() << reply.error().message();
+        qCritical() << reply.error().name() << reply.error().message();
     }
 }
 
@@ -269,7 +269,7 @@ void MenuController::handleToDesktop(QString appKey){
             bool ret = reply.argumentAt(0).toBool();
             qDebug() << "remove from desktop:" << ret;
         } else {
-            qCritical() << reply.error().message();
+            qCritical() << reply.error().name() << reply.error().message();
         }
     }else{
         QDBusPendingReply<bool> reply = dbusController->getLauncherInterface()->RequestSendToDesktop(appKey);
@@ -278,7 +278,7 @@ void MenuController::handleToDesktop(QString appKey){
             bool ret = reply.argumentAt(0).toBool();
             qDebug() << "send to desktop:" << ret;
         } else {
-            qCritical() << reply.error().message();
+            qCritical() << reply.error().name() << reply.error().message();
         }
     }
 }
@@ -292,7 +292,7 @@ void MenuController::handleToDock(QString appKey){
             bool ret = reply.argumentAt(0).toBool();
             qDebug() << "remove from dock:" << ret;
         } else {
-            qCritical() << reply.error().message();
+            qCritical() << reply.error().name() << reply.error().message();
         }
     }else{
         QDBusPendingReply<bool> reply =  m_dockAppManagerInterface->ReqeustDock(appKey, "", "", "");
@@ -301,7 +301,7 @@ void MenuController::handleToDock(QString appKey){
             bool ret = reply.argumentAt(0).toBool();
             qDebug() << "send to dock:" << ret;
         } else {
-            qCritical() << reply.error().message();
+            qCritical() << reply.error().name() << reply.error().message();
         }
     }
 }
@@ -320,7 +320,7 @@ void MenuController::handleToStartup(QString appKey){
                 emit signalManager->hideAutoStartLabel(appKey);
             }
         } else {
-            qCritical() << reply.error().message();
+            qCritical() << reply.error().name() << reply.error().message();
         }
     }else{
         QDBusPendingReply<bool> reply =  dbusController->getStartManagerInterface()->AddAutostart(url);
@@ -332,7 +332,7 @@ void MenuController::handleToStartup(QString appKey){
                 emit signalManager->showAutoStartLabel(appKey);
             }
         } else {
-            qCritical() << reply.error().message();
+            qCritical() << reply.error().name() << reply.error().message();
         }
     }
 }

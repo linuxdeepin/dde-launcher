@@ -45,7 +45,6 @@ public:
     static QSet<QString> PreInstallAppKeys;
     void initConnect();
 
-    void getCategoryInfoList();
     void getAutoStartList();
     int getSortMethod();
     int getCategoryDisplayMode();
@@ -71,6 +70,7 @@ signals:
 
 public slots:
     void init();
+    void getCategoryInfoList();
     void refreshUI();
     void getInstalledTimeItems();
     void getAllFrequencyItems();
@@ -105,6 +105,8 @@ private:
     QList<ItemInfo> m_useFrequencySortedList;
     QList<ItemInfo> m_searchList;
     QList<QList<ItemInfo>> m_pinyinEnglishInfos;
+
+    QTimer* m_getAllCategoryInfosTimer;
 };
 
 #endif // DBUSCONTROLLER_H

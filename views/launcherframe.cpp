@@ -496,7 +496,7 @@ void LauncherFrame::handleActiveWindowChanged(uint windowId){
             emit signalManager->highlightChanged(false);
         }
     }else{
-        qCritical() << reply.error().message();
+        qCritical() << reply.error().name() << reply.error().message();
     }
 }
 

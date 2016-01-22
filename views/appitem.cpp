@@ -13,6 +13,9 @@ AppItem::AppItem(bool isAutoStart, QWidget* parent): QFrame(parent),
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setObjectName("AppItem");
+    m_delaySaveIconTimer = new QTimer;
+    m_delaySaveIconTimer->setSingleShot(true);
+    m_delaySaveIconTimer->setInterval(5000);
     initUI();
     initConnect();
     setAppIcon(m_appIcon);
@@ -20,6 +23,7 @@ AppItem::AppItem(bool isAutoStart, QWidget* parent): QFrame(parent),
     setMouseTracking(true);
     addTextShadow();
     installEventFilter(this);
+
 }
 
 void AppItem::initUI(){
@@ -86,6 +90,8 @@ void AppItem::initConnect(){
 
     connect(m_borderButton, SIGNAL(graphicsEffectOn()), this, SLOT(disalbelTextShadow()));
     connect(m_borderButton, SIGNAL(graphicsEffectOff()), this, SLOT(addTextShadow()));
+    connect(m_delaySaveIconTimer, SIGNAL(timeout()), this, SLOT(delaySaveIconInCache()));
+    connect(m_delaySaveIconTimer, SIGNAL(timeout()), m_delaySaveIconTimer, SLOT(deleteLater()));
 }
 
 void AppItem::showMenu(QPoint pos){
@@ -113,12 +119,8 @@ void AppItem::setAppIcon(QString icon){
 void AppItem::setAppIcon(QPixmap icon){
      m_appIcon = icon;
      if (!icon.isNull()){
-//        m_iconLabel->setPixmap(m_appIcon.scaled(m_iconLabel->size()));
          m_iconLabel->setPixmap(m_appIcon);
-         QString cachePath = joinPath(getThumbnailsPath(), QString("%1_%2.png").arg(m_appKey, QString::number(LauncherFrame::IconSize)));
-//         qDebug() << m_appIcon.size() << cachePath << QFileInfo(cachePath).exists();
-         if (!QFileInfo(cachePath).exists())
-            m_appIcon.save(cachePath);
+         m_delaySaveIconTimer->start();
      }
 }
 
@@ -244,6 +246,17 @@ void AppItem::addTextShadow(){
 void AppItem::disalbelTextShadow(){
     if (m_nameLabel->graphicsEffect()){
         m_nameLabel->graphicsEffect()->setEnabled(false);
+    }
+}
+
+void AppItem::delaySaveIconInCache()
+{
+    QString cachePath = joinPath(getThumbnailsPath(), QString("%1_%2.png").arg(m_appKey, QString::number(LauncherFrame::IconSize)));
+//         qDebug() << m_appIcon.size() << cachePath << QFileInfo(cachePath).exists();
+    if (!QFileInfo(cachePath).exists()){
+        if (!m_appIcon.isNull()){
+            m_appIcon.save(cachePath);
+        }
     }
 }
 

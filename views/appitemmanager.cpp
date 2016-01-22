@@ -3,6 +3,7 @@
 #include "categoryitem.h"
 #include "widgets/themeappicon.h"
 #include "app/global.h"
+#include "launcherframe.h"
 
 AppItemManager::AppItemManager(QObject *parent) : QObject(parent)
 {
@@ -16,10 +17,22 @@ AppItemManager::~AppItemManager()
 
 void AppItemManager::init()
 {
+
+    m_delayCreateItemsTimer = new QTimer;
+    m_delayCreateItemsTimer->setSingleShot(true);
+    m_delayCreateItemsTimer->setInterval(500);
     initConnect();
 }
 
 void AppItemManager::initConnect(){
+    connect(signalManager, SIGNAL(firstLoadSortedMode(int)),
+            this, SLOT(setFirstLoadSortedMode(int)));
+    connect(signalManager, SIGNAL(firstLoadCategoryMode(int)),
+            this, SLOT(setCategoryInfoList(CategoryInfoList)));
+    connect(signalManager, SIGNAL(showFirstShowApps()),
+            this, SLOT(createFirstShowAppItems()));
+    connect(m_delayCreateItemsTimer, SIGNAL(timeout()),
+            this, SLOT(delayCreateOtherItems()));
     connect(signalManager, SIGNAL(itemInfosChanged(QMap<QString,ItemInfo>)),
             this, SLOT(setItemInfos(QMap<QString,ItemInfo>)));
     connect(signalManager, SIGNAL(appNameItemInfoListChanged(QList<ItemInfo>)),
@@ -93,6 +106,52 @@ CategoryItem* AppItemManager::getCategoryItemByKey(const qlonglong key)
     return NULL;
 }
 
+void AppItemManager::setFirstLoadSortedMode(int mode)
+{
+    m_sortMode = mode;
+}
+
+void AppItemManager::setFirstLoadCategoryMode(int mode)
+{
+    m_categoryMode = mode;
+}
+
+void AppItemManager::createFirstShowAppItems()
+{
+    qDebug() << m_sortMode;
+    for(int i=0; i< LauncherFrame::ColumnCount * LauncherFrame::RowCount; i++){
+        if (m_sortMode == 0){
+            addItem(m_appNameItemInfoList[i]);
+        }else if (m_sortMode == 2){
+            addItem(m_installtimeItemInfoList[i]);
+        }else if (m_sortMode == 3){
+            addItem(m_useFrequencyItemInfoList[i]);
+        }
+    }
+    for(int i=0; i< 4; i++){
+        for (int j=0; j < m_categoryInfoList.count(); j++){
+            if (m_categoryInfoList.at(j).id == i){
+                foreach (QString key, m_categoryInfoList.at(j).items) {
+                    addItem(m_itemInfos.value(key));
+                }
+            }
+        }
+    }
+    m_delayCreateItemsTimer->start();
+}
+
+void AppItemManager::delayCreateOtherItems()
+{
+    addItems(m_itemInfos.values());
+    if (m_sortMode == 0){
+        emit signalManager->viewModeChanged(0);
+    }else if (m_sortMode == 1){
+        emit signalManager->viewModeChanged(m_categoryMode + 1);
+    }else if (m_sortMode == 2 || m_sortMode == 3){
+        emit signalManager->viewModeChanged(m_sortMode + 1);
+    }
+}
+
 void AppItemManager::addCategoryItem(const CategoryInfo &info)
 {
     int categoryID = int(info.id);
@@ -122,12 +181,6 @@ void AppItemManager::addItem(const ItemInfo &itemInfo){
         appItem->setAppIconKey(itemInfo.iconKey);
         appItem->setUrl(itemInfo.url);
         appItem->setAppName(itemInfo.name);
-//        qDebug() << itemInfo.count << itemInfo.key << DBusController::PreInstallAppKeys.contains(itemInfo.key) ;
-//        if (itemInfo.count == 0){
-//            appItem->setNewInstalled(true);
-//        }else{
-//            appItem->setNewInstalled(false);
-//        }
         int size = appItem->getIconSize();
         appItem->setAppIcon(ThemeAppIcon::getIconPixmap(itemInfo.iconKey, size, size));
         m_appItems.insert(itemInfo.key, appItem);
@@ -143,7 +196,7 @@ void AppItemManager::addItems(const QList<ItemInfo> &itemInfos){
 void AppItemManager::setItemInfos(const QMap<QString, ItemInfo> &infos){
     qDebug() << __func__<< infos.count();
     m_itemInfos = infos;
-    addItems(infos.values());
+//    addItems(infos.values());
 }
 
 void AppItemManager::setAppNameInfoList(const QList<ItemInfo> &infos){
@@ -159,7 +212,7 @@ void AppItemManager::setInstallTimeInfoList(const QList<ItemInfo> &infos){
 void AppItemManager::setUseFrequencyInfoList(const QList<ItemInfo> &infos){
     qDebug() << "setUseFrequencyInfoList";
     m_useFrequencyItemInfoList = infos;
-    addItems(infos);
+//    addItems(infos);
 }
 
 void AppItemManager::setCategoryInfoList(const CategoryInfoList &categoryInfoList)

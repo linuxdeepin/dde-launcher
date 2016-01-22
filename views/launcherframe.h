@@ -34,6 +34,8 @@ public:
     static int BorderSize;
     static int BorderWidth;
     static int BorderHeight;
+    static int ColumnCount;
+    static int RowCount;
 
     void initUI();
     void initConnect();

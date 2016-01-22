@@ -38,6 +38,8 @@ int LauncherFrame::GridSize = 160;
 int LauncherFrame::BorderSize = 144;
 int LauncherFrame::BorderWidth = 100;
 int LauncherFrame::BorderHeight = 100;
+int LauncherFrame::ColumnCount = 7;
+int LauncherFrame::RowCount = 4;
 
 
 LauncherFrame::LauncherFrame(QWidget *parent) : QFrame(parent)
@@ -129,6 +131,9 @@ void LauncherFrame::computerGrid(int minimumLeftMargin, int minimumTopMargin, in
     }else{
         m_row = 4;
     }
+
+    LauncherFrame::ColumnCount = m_column;
+    LauncherFrame::RowCount = m_row;
 
     m_spacing = miniSpacing;
 

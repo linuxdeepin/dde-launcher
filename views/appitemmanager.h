@@ -37,6 +37,10 @@ signals:
 
 public slots:
     void addCategoryItem(const CategoryInfo& key);
+    void setFirstLoadSortedMode(int mode);
+    void setFirstLoadCategoryMode(int mode);
+    void createFirstShowAppItems();
+    void delayCreateOtherItems();
     void addItem(const ItemInfo& itemInfo);
     void addItems(const QList<ItemInfo>& itemInfos);
     void setItemInfos(const QMap<QString, ItemInfo>& infos);
@@ -48,7 +52,11 @@ public slots:
     void showNewInstallIndicator(QString appKey);
     void refreshIcon(const ItemInfo& itemInfo);
 
+
 private:
+    int m_sortMode;
+    int m_categoryMode;
+    QTimer* m_delayCreateItemsTimer;
     QMap<QString, ItemInfo> m_itemInfos;
     QList<ItemInfo> m_appNameItemInfoList;
     QList<ItemInfo> m_installtimeItemInfoList;

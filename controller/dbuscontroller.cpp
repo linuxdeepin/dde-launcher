@@ -59,11 +59,17 @@ DBusController::DBusController(QObject *parent) : QObject(parent)
 
 void DBusController::init(){
     qDebug() << "get Launcher data";
+    int sortedMode= getSortMethod();
+    int categoryMode = getCategoryDisplayMode();
+    emit signalManager->firstLoadSortedMode(sortedMode);
+    emit signalManager->firstLoadCategoryMode(categoryMode);
     getAutoStartList();
     getCategoryInfoList();
     getInstalledTimeItems();
     getAllFrequencyItems();
+    emit signalManager->showFirstShowApps();
     refreshUI();
+
 }
 
 void DBusController::refreshUI()

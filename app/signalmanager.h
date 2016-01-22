@@ -30,6 +30,10 @@ signals:
 
     void viewModeChanged(int mode);
 
+    void firstLoadSortedMode(int mode);
+    void firstLoadCategoryMode(int mode);
+    void showFirstShowApps();
+
     void sortedModeChanged(int mode);
     void categoryModeChanged(int mode);
 

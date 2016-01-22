@@ -47,6 +47,7 @@ public slots:
     void handleRightMouseReleased(QString url);
     void addTextShadow();
     void disalbelTextShadow();
+    void delaySaveIconInCache();
 protected:
     void mouseReleaseEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -63,6 +64,7 @@ private:
     QString m_url = "";
     QString m_appKey = "";
     QString m_appIconKey = "";
+    QTimer* m_delaySaveIconTimer;
     bool m_isAutoStart = false;
     bool m_isNewInstalled = false;
 };

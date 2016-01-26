@@ -50,7 +50,7 @@
     <message>
         <location filename="../app/launcherapp.cpp" line="47"/>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Estás seguro de desinstalar %1 ?</translation>
     </message>
 </context>
 <context>
@@ -83,12 +83,12 @@
     <message>
         <location filename="../controller/menucontroller.cpp" line="87"/>
         <source>Remove from startup(_R)</source>
-        <translation type="unfinished"/>
+        <translation>Eliminar do inicio(_R)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="89"/>
         <source>Add to startup(_A)</source>
-        <translation>Angadir ao inicio (_G)</translation>
+        <translation>Engadir ao inicio (_G)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="91"/>

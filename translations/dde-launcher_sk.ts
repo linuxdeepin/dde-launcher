@@ -50,7 +50,7 @@
     <message>
         <location filename="../app/launcherapp.cpp" line="47"/>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Naozaj chcete odinštalovať %1 ?</translation>
     </message>
 </context>
 <context>
@@ -83,7 +83,7 @@
     <message>
         <location filename="../controller/menucontroller.cpp" line="87"/>
         <source>Remove from startup(_R)</source>
-        <translation type="unfinished"/>
+        <translation>Odobrať zo štartu(_R)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="89"/>

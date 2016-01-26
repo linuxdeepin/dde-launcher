@@ -1,20 +1,20 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="gl_ES" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sr" version="2.1">
 <context>
     <name>ConfirmUninstallDialog</name>
     <message>
         <location filename="../dialogs/confirmuninstalldialog.cpp" line="12"/>
         <source>All dependencies will be removed together</source>
-        <translation>Eliminaranse todas as dependencias xuntas</translation>
+        <translation>Све зависности биђе избрисане заједно</translation>
     </message>
     <message>
         <location filename="../dialogs/confirmuninstalldialog.cpp" line="15"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Откажи</translation>
     </message>
     <message>
         <location filename="../dialogs/confirmuninstalldialog.cpp" line="15"/>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>Потврди</translation>
     </message>
 </context>
 <context>
@@ -22,27 +22,27 @@
     <message>
         <location filename="../views/displaymodeframe.cpp" line="38"/>
         <source>By name</source>
-        <translation>Por nome</translation>
+        <translation>По имену</translation>
     </message>
     <message>
         <location filename="../views/displaymodeframe.cpp" line="40"/>
         <source>By category (icon)</source>
-        <translation>Por categoría (icona)</translation>
+        <translation>По категорије (иконе)</translation>
     </message>
     <message>
         <location filename="../views/displaymodeframe.cpp" line="42"/>
         <source>By category (text)</source>
-        <translation>Por categoría (texto)</translation>
+        <translation>По категорије (текст)</translation>
     </message>
     <message>
         <location filename="../views/displaymodeframe.cpp" line="44"/>
         <source>By time installed</source>
-        <translation>Por tempo instalado</translation>
+        <translation>По броја уградње</translation>
     </message>
     <message>
         <location filename="../views/displaymodeframe.cpp" line="46"/>
         <source>By frequency</source>
-        <translation>Por frecuencia</translation>
+        <translation>По фреквенцији</translation>
     </message>
 </context>
 <context>
@@ -50,7 +50,7 @@
     <message>
         <location filename="../app/launcherapp.cpp" line="47"/>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Tes a certeza de querer desinstalar %1?</translation>
+        <translation>Заиста уклонити %1 ?</translation>
     </message>
 </context>
 <context>
@@ -58,42 +58,42 @@
     <message>
         <location filename="../controller/menucontroller.cpp" line="70"/>
         <source>Open(_O)</source>
-        <translation>Abrir (_A)</translation>
+        <translation>Отворити(_O)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="74"/>
         <source>Remove from desktop</source>
-        <translation>Eliminar do escritorio</translation>
+        <translation>Уклонити са радне површине</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="76"/>
         <source>Send to desktop(_E)</source>
-        <translation>Enviar ao escritorio (_T)</translation>
+        <translation>Послати на радну површину(_E)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="80"/>
         <source>Remove from dock</source>
-        <translation>Eliminar da doca</translation>
+        <translation>Уклонити са базне станице</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="82"/>
         <source>Send to dock(_C)</source>
-        <translation>Enviar á doca (_C)</translation>
+        <translation>Послати на базну станицу(_C)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="87"/>
         <source>Remove from startup(_R)</source>
-        <translation>Eliminar do inicio (_R)</translation>
+        <translation>Уклонити са покретања(_R)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="89"/>
         <source>Add to startup(_A)</source>
-        <translation>Angadir ao inicio (_G)</translation>
+        <translation>Додати на покретања(_A)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="91"/>
         <source>Uninstall</source>
-        <translation>Desinstalar</translation>
+        <translation>Уклони програм</translation>
     </message>
 </context>
 </TS>

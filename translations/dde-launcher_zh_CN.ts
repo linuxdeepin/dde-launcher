@@ -83,12 +83,12 @@
     <message>
         <location filename="../controller/menucontroller.cpp" line="87"/>
         <source>Remove from startup(_R)</source>
-        <translation>从开机启动项删除(_R)</translation>
+        <translation>取消开机自动启动(_R)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="89"/>
         <source>Add to startup(_A)</source>
-        <translation>添加至开机启动项(_A)</translation>
+        <translation>开机自动启动(_A)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="91"/>

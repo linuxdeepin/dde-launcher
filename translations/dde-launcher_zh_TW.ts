@@ -32,7 +32,7 @@
     <message>
         <location filename="../views/displaymodeframe.cpp" line="42"/>
         <source>By category (text)</source>
-        <translation>依分類 (文字列表 )</translation>
+        <translation>依分類（文字列表）</translation>
     </message>
     <message>
         <location filename="../views/displaymodeframe.cpp" line="44"/>
@@ -50,7 +50,7 @@
     <message>
         <location filename="../app/launcherapp.cpp" line="47"/>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>你確定要解除安裝 %1 ?</translation>
     </message>
 </context>
 <context>
@@ -73,17 +73,17 @@
     <message>
         <location filename="../controller/menucontroller.cpp" line="80"/>
         <source>Remove from dock</source>
-        <translation>從工具列移除</translation>
+        <translation>從停駐區移除</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="82"/>
         <source>Send to dock(_C)</source>
-        <translation>傳送到工具列 (_C)</translation>
+        <translation>傳送到停駐區(_C)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="87"/>
         <source>Remove from startup(_R)</source>
-        <translation type="unfinished"/>
+        <translation>從開機啟動中移除 (_R)</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="89"/>

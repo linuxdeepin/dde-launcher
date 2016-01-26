@@ -73,7 +73,7 @@
     <message>
         <location filename="../controller/menucontroller.cpp" line="80"/>
         <source>Remove from dock</source>
-        <translation>Eliminar del panel</translation>
+        <translation>Quitar del panel</translation>
     </message>
     <message>
         <location filename="../controller/menucontroller.cpp" line="82"/>

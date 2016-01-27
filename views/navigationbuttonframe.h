@@ -20,9 +20,9 @@ public:
 signals:
     void currentIndexChanged(int index);
 public slots:
-    void hideButtons(const QStringList& keys);
+    void hideButtons(const QList<qlonglong>& keys);
     void handleButtonClicked(int id);
-    void checkButtonByKey(QString key);
+    void checkButtonByKey(qlonglong key);
     void setCurrentIndex(int currentIndex);
     void addTextShadow();
 

@@ -7,7 +7,7 @@ class  CategoryInfo
 {
 
 public:
-    QString key;
+    QString name;
     qlonglong id;
     QStringList items;
 

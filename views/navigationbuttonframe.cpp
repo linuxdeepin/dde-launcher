@@ -15,8 +15,8 @@ NavigationButtonFrame::NavigationButtonFrame(int mode, QWidget *parent) : QFrame
 }
 
 void NavigationButtonFrame::initConnect(){
-    connect(signalManager, SIGNAL(hideNavigationButtonByKeys(QStringList)), this, SLOT(hideButtons(QStringList)));
-    connect(signalManager, SIGNAL(checkNavigationButtonByKey(QString)), this, SLOT(checkButtonByKey(QString)));
+    connect(signalManager, SIGNAL(hideNavigationButtonByKeys(QList<qlonglong>)), this, SLOT(hideButtons(QList<qlonglong>)));
+    connect(signalManager, SIGNAL(checkNavigationButtonByKey(qlonglong)), this, SLOT(checkButtonByKey(qlonglong)));
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(handleButtonClicked(int)));
     connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentIndex(int)));
     connect(signalManager, SIGNAL(firstButtonChecked()), this, SLOT(checkFirstButton()));
@@ -31,21 +31,22 @@ void NavigationButtonFrame::initByMode(int mode){
     QFrame* buttonFrame = new QFrame;
     buttonFrame->setAttribute(Qt::WA_NoMousePropagation);
     QVBoxLayout* buttonLayout = new QVBoxLayout;
-    foreach (QString key, CategroyKeys) {
+     foreach (QString key, CategoryKeys) {
         if (mode == 0){
             BaseCheckedButton* button = new BaseCheckedButton(this);
             button->setFixedSize(32, 32);
             button->setObjectName(key.toLower());
             buttonLayout->addWidget(button);
-            m_buttonGroup->addButton(button, CategroyKeys.indexOf(key));
+            m_buttonGroup->addButton(button, CategoryKeys.indexOf(key));
             button->hide();
         }else{
+            qDebug() << "navigation button frame" << key;
             QString name = getCategoryNames(key);
             BaseCheckedButton* button = new BaseCheckedButton(name, this);
             button->setObjectName("CategoryTextButton");
             button->setFixedSize(160 - NavgationBarLeftMargin, 24);
             buttonLayout->addWidget(button);
-            m_buttonGroup->addButton(button, CategroyKeys.indexOf(key));
+            m_buttonGroup->addButton(button, CategoryKeys.indexOf(key));
             button->hide();
         }
     }
@@ -64,13 +65,13 @@ void NavigationButtonFrame::initByMode(int mode){
     }
 }
 
-void NavigationButtonFrame::hideButtons(const QStringList &keys){
-    foreach (QString key, CategroyKeys) {
+void NavigationButtonFrame::hideButtons(const QList<qlonglong> &keys){
+    for (int key = 0, len = CategoryKeys.size(); key < len; ++key) {
         if (!keys.contains(key)){
-            int index = CategroyKeys.indexOf(key);
+            int index = key;
             m_buttonGroup->button(index)->show();
         }else{
-            int index = CategroyKeys.indexOf(key);
+            int index = key;
             m_buttonGroup->button(index)->hide();
         }
     }
@@ -78,12 +79,12 @@ void NavigationButtonFrame::hideButtons(const QStringList &keys){
 
 
 void NavigationButtonFrame::handleButtonClicked(int id){
-    emit signalManager->navigationButtonClicked(CategroyKeys.at(id));
+    emit signalManager->navigationButtonClicked(id);
     emit currentIndexChanged(id);
 }
 
-void NavigationButtonFrame::checkButtonByKey(QString key){
-    int index = CategroyKeys.indexOf(key);
+void NavigationButtonFrame::checkButtonByKey(qlonglong key){
+    int index = key;
     emit currentIndexChanged(index);
 //    qDebug() << "currentIndexChanged" << index;
 }

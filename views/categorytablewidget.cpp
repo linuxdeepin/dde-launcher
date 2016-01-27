@@ -30,8 +30,8 @@ void CategoryTableWidget::initConnect(){
     connect(signalManager, SIGNAL(keyDirectionPressed(Qt::Key)),
             this, SLOT(handleDirectionKeyPressed(Qt::Key)));
 
-    connect(signalManager, SIGNAL(navigationButtonClicked(QString)),
-            this, SLOT(scrollToCategory(QString)));
+    connect(signalManager, SIGNAL(navigationButtonClicked(qlonglong)),
+            this, SLOT(scrollToCategory(qlonglong)));
     connect(signalManager, SIGNAL(appOpenedInCategoryMode()),
             this, SLOT(openCheckedApp()));
     connect(signalManager, SIGNAL(showAutoStartLabel(QString)),
@@ -78,7 +78,7 @@ void CategoryTableWidget::showAppItems()
     setItemUnChecked();
 }
 
-void CategoryTableWidget::addCategoryItem(int row, QString key){
+void CategoryTableWidget::addCategoryItem(int row, qlonglong key){
      QTableWidgetItem* item = new QTableWidgetItem();
      item->setFlags(Qt::NoItemFlags);
      setSpan(row, 0, 1, m_column);
@@ -94,7 +94,7 @@ void CategoryTableWidget::addCategoryItem(int row, QString key){
      }
 }
 
-void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList appKeys){
+void CategoryTableWidget::addItems(int row, qlonglong categoryKey, QStringList appKeys){
     int startRow = row;
     int endRow;
 
@@ -131,7 +131,7 @@ void CategoryTableWidget::addItems(int row, QString categoryKey, QStringList app
        }
    }
 
-   if (categoryKey == "others"){
+   if (CategoryID(categoryKey) == CategoryID::Others){
        int desktopHeight =  qApp->desktop()->screenGeometry().height();
        int bottomMargin = qApp->desktop()->screenGeometry().height() - qApp->desktop()->availableGeometry().height();
        int othersCategoryHeight = categoryItemHeight + m_gridWidth * (endRow - startRow);
@@ -153,14 +153,16 @@ void CategoryTableWidget::addItems(const CategoryInfoList &categoryInfoList){
     verticalScrollBar()->setValue(0);
 
     int row = 0;
-    foreach(QString key, CategroyKeys){
+
+    foreach(QString key, CategoryKeys){
         foreach (CategoryInfo info, categoryInfoList) {
-            if(info.items.count() > 0 && key == info.key){
+            if(info.items.count() > 0 && key == info.name) {
                 insertRow(rowCount());
                 row = rowCount() - 1;
-                addCategoryItem(row, info.key);
-    //            qDebug() << row << info.key << info.items;
-                addItems(rowCount(), info.key,  info.items);
+                addCategoryItem(row, info.id);
+//                qDebug() << row << info.name << info.items;
+                addItems(rowCount(), info.id,  info.items);
+                break;
             }
         }
     }
@@ -172,14 +174,14 @@ void CategoryTableWidget::removeItem(QString appKey){
 
 void CategoryTableWidget::handleCurrentAppItemChanged(QString appKey){
     foreach (CategoryInfo info, appItemManager->getCategoryInfoList()) {
-        if (info.key != "all" && info.items.contains(appKey)){
-            emit signalManager->checkNavigationButtonByKey(info.key);
+        if (CategoryID(info.id) != CategoryID::All && info.items.contains(appKey)){
+            emit signalManager->checkNavigationButtonByKey(info.id);
             break;
         }
     }
 }
 
-void CategoryTableWidget::scrollToCategory(QString key){
+void CategoryTableWidget::scrollToCategory(qlonglong key){
     int start = verticalScrollBar()->value();
     int end = 0;
     if (appItemManager->getCategoryItems().contains(key)){
@@ -206,7 +208,7 @@ void CategoryTableWidget::handleScrollBarValueChanged(int value){
     // TODO: 50 is not very precise here, the value should be the real height of
     // the others category.
     if (qAbs(value - verticalScrollBar()->maximum()) < 50) {
-        emit signalManager->checkNavigationButtonByKey("Others");
+        emit signalManager->checkNavigationButtonByKey(qlonglong(CategoryID::Others));
         return;
     } else {
         for (int i=0; i< rowCount() ; i++){
@@ -219,7 +221,7 @@ void CategoryTableWidget::handleScrollBarValueChanged(int value){
         }
     }
 
-    foreach (QString key, appItemManager->getCategoryItems().keys()) {
+    foreach (qlonglong key, appItemManager->getCategoryItems().keys()) {
         if (appItemManager->getCategoryItems().value(key)  == cellWidget(targetRow, 0)){
             emit signalManager->checkNavigationButtonByKey(key);
         }

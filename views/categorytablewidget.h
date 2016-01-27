@@ -26,12 +26,12 @@ public slots:
     void setCategoryInfoList(const CategoryInfoList& categoryInfoList);
     void showAppItems();
 
-    void addCategoryItem(int row,  QString key);
-    void addItems(int row, QString categoryKey, QStringList appKeys);
+    void addCategoryItem(int row,  qlonglong key);
+    void addItems(int row, qlonglong categoryKey, QStringList appKeys);
     void addItems(const CategoryInfoList& categoryInfoList);
 
     void handleScrollBarValueChanged(int value);
-    void scrollToCategory(QString key);
+    void scrollToCategory(qlonglong key);
 
     void openCheckedApp();
     void showAutoStartLabel(QString appKey);

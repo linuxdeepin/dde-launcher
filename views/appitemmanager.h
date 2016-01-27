@@ -23,20 +23,20 @@ public:
     QList<ItemInfo>& getInstallTimeItemInfos();
     QList<ItemInfo>& getUseFrequencyItemInfos();
 
-    QStringList& getHideKeys();
+    QList<qlonglong>& getHideKeys();
     CategoryInfoList& getCategoryInfoList();
     CategoryInfoList& getSortedCategoryInfoList();
 
     QMap<QString, AppItem *> &getAppItems();
     AppItem *getAppItemByKey(const QString& key);
 
-    QMap<QString, CategoryItem *> &getCategoryItems();
-    CategoryItem *getCategoryItemByKey(const QString& key);
+    QMap<qlonglong, CategoryItem *> &getCategoryItems();
+    CategoryItem *getCategoryItemByKey(const qlonglong key);
 
 signals:
 
 public slots:
-    void addCategoryItem(const QString& key);
+    void addCategoryItem(const CategoryInfo& key);
     void addItem(const ItemInfo& itemInfo);
     void addItems(const QList<ItemInfo>& itemInfos);
     void setItemInfos(const QMap<QString, ItemInfo>& infos);
@@ -54,10 +54,10 @@ private:
     QList<ItemInfo> m_installtimeItemInfoList;
     QList<ItemInfo> m_useFrequencyItemInfoList;
 
-    QStringList m_hideKeys;
+    QList<qlonglong> m_hideKeys;
     CategoryInfoList m_categoryInfoList;
     CategoryInfoList m_sortedCategoryInfoList;
-    QMap<QString, CategoryItem*> m_categoryItems;
+    QMap<qlonglong, CategoryItem*> m_categoryItems;
     QMap<QString, AppItem*> m_appItems;
 };
 

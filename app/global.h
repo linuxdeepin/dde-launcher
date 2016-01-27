@@ -19,22 +19,36 @@ const int TopBottomGradientHeight = 60;
 const QString LauncherServiceName="com.deepin.dde.Launcher";
 const QString LauncherPathName="/com/deepin/dde/Launcher";
 
-const QStringList CategroyKeys{
-    "Internet",
-    "Chat",
-    "Music",
-    "Video",
-    "Graphics",
-    "Game",
-    "Office",
-    "Reading",
-    "Development",
-    "System",
-    "Others"
-};
+#define CATEGORY_LIST(V) \
+    V(Internet)\
+    V(Chat)\
+    V(Music)\
+    V(Video)\
+    V(Graphics)\
+    V(Game)\
+    V(Office)\
+    V(Reading)\
+    V(Development)\
+    V(System)\
+    V(Others)
 
-inline char* getCategoryNames(QString text){
-    return dgettext("application_categories",text.toStdString().data());
+#define ENUM(V) V,
+enum class CategoryID {
+    All = -1,
+    CATEGORY_LIST(ENUM)
+};
+#undef ENUM
+
+#define STR(V) #V ,
+const QStringList CategoryKeys{
+    CATEGORY_LIST(STR)
+};
+#undef STR
+
+inline QString getCategoryNames(QString text){
+    char* translatedText = dgettext("application_categories",text.toStdString().c_str());
+    QString str{translatedText};
+    return str;
 }
 
 #endif // GLOBAL

@@ -489,7 +489,7 @@ void LauncherFrame::handleActiveWindowChanged(uint windowId){
     QDBusPendingReply<qulonglong> reply = dbusController->getDockInterface()->Xid();
     reply.waitForFinished();
     if (!reply.isError()){
-        int dockwinId = reply.argumentAt(0).toLongLong();
+        WId dockwinId = reply.argumentAt(0).toLongLong();
         if (windowId != window()->winId() && windowId!= dockwinId && !m_isDraging){
                 Hide();
         }else{

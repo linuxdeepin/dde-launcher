@@ -161,7 +161,7 @@ void DBusController::getCategoryInfoList(){
         m_getAllCategoryInfosTimer->stop();
         m_categoryInfoList = qdbus_cast<CategoryInfoList>(reply.argumentAt(0));
         foreach (CategoryInfo item, m_categoryInfoList) {
-            if (item.key == "all" && item.id == -1){
+            if (CategoryID(item.id) == CategoryID::All){
                 foreach (QString appKey, item.items){
                     ItemInfo itemInfo= getItemInfo(appKey);
                     if (m_autoStartList.contains(QFileInfo(itemInfo.url).fileName())){
@@ -182,7 +182,7 @@ void DBusController::getCategoryInfoList(){
         qDebug() << m_itemInfos.keys();
 
         foreach (CategoryInfo item, m_categoryInfoList) {
-            if (item.key != "all" && item.id != -1){
+            if (CategoryID(item.id) != CategoryID::All){
                 QStringList appKeys;
                 foreach (ItemInfo itemInfo, m_appNameSortedList) {
                     if (item.items.contains(itemInfo.key)){

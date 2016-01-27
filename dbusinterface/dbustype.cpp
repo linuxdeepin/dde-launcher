@@ -18,7 +18,7 @@ void CategoryInfo::registerMetaType()
 QDBusArgument &operator<<(QDBusArgument &argument, const CategoryInfo &obj)
 {
     argument.beginStructure();
-    argument << obj.key << obj.id << obj.items;
+    argument << obj.name << obj.id << obj.items;
     argument.endStructure();
     return argument;
 }
@@ -27,7 +27,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const CategoryInfo &obj)
 const QDBusArgument &operator>>(const QDBusArgument &argument, CategoryInfo &obj)
 {
     argument.beginStructure();
-    argument >> obj.key >> obj.id >> obj.items;
+    argument >> obj.name >> obj.id >> obj.items;
     argument.endStructure();
     return argument;
 }

@@ -54,7 +54,7 @@ QList<ItemInfo>& AppItemManager::getUseFrequencyItemInfos(){
     return m_useFrequencyItemInfoList;
 }
 
-QStringList& AppItemManager::getHideKeys(){
+QList<qlonglong>& AppItemManager::getHideKeys(){
     return m_hideKeys;
 }
 
@@ -80,12 +80,12 @@ AppItem* AppItemManager::getAppItemByKey(const QString &key)
     return NULL;
 }
 
-QMap<QString, CategoryItem *> &AppItemManager::getCategoryItems()
+QMap<qlonglong, CategoryItem *> &AppItemManager::getCategoryItems()
 {
     return m_categoryItems;
 }
 
-CategoryItem* AppItemManager::getCategoryItemByKey(const QString &key)
+CategoryItem* AppItemManager::getCategoryItemByKey(const qlonglong key)
 {
     if (m_categoryItems.contains(key)){
         return m_categoryItems.value(key);
@@ -93,14 +93,16 @@ CategoryItem* AppItemManager::getCategoryItemByKey(const QString &key)
     return NULL;
 }
 
-void AppItemManager::addCategoryItem(const QString &key)
+void AppItemManager::addCategoryItem(const CategoryInfo &info)
 {
-    if (m_categoryItems.contains(key)){
+    int categoryID = int(info.id);
+    if (m_categoryItems.contains(categoryID)){
         return;
     }else{
-        if (key != "all"){
-        CategoryItem* categoryItem = new CategoryItem(key);
-            m_categoryItems.insert(key, categoryItem);
+        if (CategoryID(categoryID) != CategoryID::All){
+            qDebug() << "add category item" << info.name << info.id;
+        CategoryItem* categoryItem = new CategoryItem(info.name);
+            m_categoryItems.insert(categoryID, categoryItem);
         }
     }
 }
@@ -165,7 +167,7 @@ void AppItemManager::setCategoryInfoList(const CategoryInfoList &categoryInfoLis
     m_categoryInfoList = categoryInfoList;
     m_sortedCategoryInfoList.clear();
     m_hideKeys.clear();
-    for(int i = 0; i<= 9; i++ ) {
+    for(int i = 0; i< CategoryKeys.size(); i++ ) {
         foreach (CategoryInfo info, categoryInfoList) {
             if (info.id == i){
                 m_sortedCategoryInfoList.append(info);
@@ -180,13 +182,14 @@ void AppItemManager::setCategoryInfoList(const CategoryInfoList &categoryInfoLis
 
     foreach (CategoryInfo info, m_sortedCategoryInfoList) {
         if (info.items.count() == 0){
-            m_hideKeys.append(info.key);
+            m_hideKeys.append(info.id);
+            qDebug() << "hide" << info.name;
         }
     }
 
     foreach (CategoryInfo info, categoryInfoList) {
         if(info.items.count() > 0){
-            addCategoryItem(info.key);
+            addCategoryItem(info);
         }
     }
 }

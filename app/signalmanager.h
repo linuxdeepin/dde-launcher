@@ -36,11 +36,11 @@ signals:
     void itemInfosChanged(const QMap<QString, ItemInfo>& itemInfos);
     void categoryInfosChanged(const CategoryInfoList& categoryInfoList);
 
-    void hideNavigationButtonByKeys(const QStringList& buttonKeys);
+    void hideNavigationButtonByKeys(const QList<qlonglong>& buttonKeys);
 
     void viewRowChanged(int row);
-    void navigationButtonClicked(QString key);
-    void checkNavigationButtonByKey(QString key);
+    void navigationButtonClicked(qlonglong key);
+    void checkNavigationButtonByKey(qlonglong key);
 
     /*context menu*/
     void contextMenuShowed(QString url, QPoint pos);

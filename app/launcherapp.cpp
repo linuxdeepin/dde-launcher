@@ -42,6 +42,10 @@ void LauncherApp::handleUninstall(QString appKey){
     LauncherApp::UnistallAppNames.insert(appKey, appName);
     QString iconKey = dbusController->getLocalItemInfo(appKey).iconKey;
     ConfirmUninstallDialog d(m_launcherFrame);
+    d.setWindowFlags(Qt::Dialog | d.windowFlags());
+    d.setWindowModality(Qt::WindowModal);
+    setUninstallWindowId(d.winId());
+
     d.setAppKey(appKey);
     d.setIcon(ThemeAppIcon::getIconPixmap(iconKey, LauncherFrame::IconSize, LauncherFrame::IconSize));
     QString message = tr("Are you sure to uninstall %1 ?").arg(appName);

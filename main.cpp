@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
 {
 //    debug_daemon_off();
     QApplication a(argc, argv);
+    a.setQuitOnLastWindowClosed(false);
 
     QDBusConnection conn = QDBusConnection::sessionBus();
     if(conn.registerService(LauncherServiceName)){

@@ -80,7 +80,7 @@ public slots:
     void setCategoryDisplayMode(int mode);
     void setSortMethod(int mode);
     void refreshInstallTimeFrequency();
-
+    void filterWindowId(uint wId);
 private:
     LauncherInterface* m_launcherInterface;
     LauncherSettingsInterface* m_launcherSettingsInterface;

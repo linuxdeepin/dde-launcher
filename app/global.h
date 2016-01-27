@@ -18,6 +18,7 @@ const int NavgationBarLeftMargin = 50;
 const int TopBottomGradientHeight = 60;
 const QString LauncherServiceName="com.deepin.dde.Launcher";
 const QString LauncherPathName="/com/deepin/dde/Launcher";
+static uint unInstallConfirmDialogWid=0;
 
 #define CATEGORY_LIST(V) \
     V(Internet)\
@@ -51,4 +52,10 @@ inline QString getCategoryNames(QString text){
     return str;
 }
 
+inline void setUninstallWindowId(uint xWid) {
+    unInstallConfirmDialogWid = xWid;
+}
+inline uint getUninstallWindowId() {
+    return unInstallConfirmDialogWid;
+}
 #endif // GLOBAL

@@ -99,8 +99,17 @@ void DBusController::initConnect(){
     connect(signalManager, SIGNAL(refreshInstallTimeFrequency()), this, SLOT(refreshInstallTimeFrequency()));
     connect(m_displayInterface, SIGNAL(PrimaryRectChanged()), signalManager, SIGNAL(screenGeometryChanged()));
     connect(m_displayInterface, SIGNAL(PrimaryChanged()), signalManager, SIGNAL(screenGeometryChanged()));
-    connect(m_dockClientManagerInterface, SIGNAL(ActiveWindowChanged(uint)), signalManager, SIGNAL(activeWindowChanged(uint)));
+
+//        connect(m_dockClientManagerInterface, SIGNAL(ActiveWindowChanged(uint)), signalManager, SIGNAL(activeWindowChanged(uint)));
     connect(m_getAllCategoryInfosTimer, SIGNAL(timeout()), this, SLOT(getCategoryInfoList()));
+}
+
+void DBusController::filterWindowId(uint wId) {
+    if (wId == getUninstallWindowId()) {
+        return;
+    } else {
+        emit signalManager->activeWindowChanged(wId);
+    }
 }
 
 void DBusController::updateAppTable(QString appKey){

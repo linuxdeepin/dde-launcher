@@ -285,8 +285,7 @@ void LauncherFrame::showNavigationBarByMode(){
 void LauncherFrame::mouseReleaseEvent(QMouseEvent *event){
     qDebug() << event;
     if (event->button() == Qt::LeftButton){
-        bool flag = LauncherApp::UnistallAppNames.count() == 0;
-        if (!m_displayModeFrame->getButtonFrame()->isVisible() && flag){
+        if (!m_displayModeFrame->getButtonFrame()->isVisible()){
             emit signalManager->mouseReleased();
             Hide();
         }
@@ -304,6 +303,7 @@ void LauncherFrame::closeEvent(QCloseEvent *event){
     conn.unregisterObject("/com/deepin/dde/Launcher");
     conn.unregisterService("com.deepin.dde.Launcher");
     QFrame::closeEvent(event);
+    qDebug() << "close event from launcherframe!";
 }
 
 

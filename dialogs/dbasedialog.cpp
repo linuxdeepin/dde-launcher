@@ -200,7 +200,6 @@ void DBaseDialog::closeEvent(QCloseEvent *event){
     emit closed();
 }
 
-
 void DBaseDialog::resizeEvent(QResizeEvent *event){
     DMovabelDialog::resizeEvent(event);
 }
@@ -209,4 +208,3 @@ DBaseDialog::~DBaseDialog()
 {
 
 }
-

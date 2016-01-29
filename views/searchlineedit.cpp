@@ -92,37 +92,39 @@ void SearchLineEdit::resizeEvent(QResizeEvent *event){
 }
 
 
-void SearchLineEdit::keyPressEvent(QKeyEvent *event){
+void SearchLineEdit::keyPressEvent(QKeyEvent *event) {
     qDebug() << event;
-    if (event->key() == Qt::Key_Escape){
-        if (m_lineEdit->text().length() > 0){
+    if (event->key() == Qt::Key_Escape) {
+        if (m_lineEdit->text().length() > 0) {
             m_lineEdit->setText("");
-        }else{
+        } else {
             emit signalManager->Hide();
         }
-    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Up){
+    } else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Up) {
         emit signalManager->keyDirectionPressed(Qt::Key_Up);
-    }else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_P){
+    } else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_P){
         emit signalManager->keyDirectionPressed(Qt::Key_Up);
-    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Down) {
+    } else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Down) {
         emit signalManager->keyDirectionPressed(Qt::Key_Down);
-    }else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_N){
+    } else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_N) {
         emit signalManager->keyDirectionPressed(Qt::Key_Down);
-    }else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_B){
+    } else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_B) {
         emit signalManager->keyDirectionPressed(Qt::Key_Left);
-    }else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_F){
+    } else if (event->modifiers() == Qt::CTRL && event->key() == Qt::Key_F) {
         emit signalManager->keyDirectionPressed(Qt::Key_Right);
-    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Return){
+    } else if ((event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Return) ||
+              (event->modifiers() == Qt::KeypadModifier && event->key() == Qt::Key_Enter)) {
         int index = static_cast<LauncherFrame*>(parent())->currentMode();
-        if ( index == 0){
+        if ( index == 0) {
             emit signalManager->appOpenedInCategoryMode();
-        }else{
+        } else {
             emit signalManager->appOpenedInAppMode();
         }
-    }else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Tab) {
+    } else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Tab) {
         emit signalManager->keyDirectionPressed(Qt::Key_Right);
     } else if ((event->modifiers() & Qt::ShiftModifier) && event->key() == Qt::Key_Backtab) {
         emit signalManager->keyDirectionPressed(Qt::Key_Left);
     }
+
     QFrame::keyPressEvent(event);
 }

@@ -77,6 +77,8 @@ void DBusController::refreshUI()
     int sortedMode= getSortMethod();
     int categoryMode = getCategoryDisplayMode();
 
+    emit signalManager->initNavigationBarIndex();
+
     if (sortedMode == 0){
         emit signalManager->viewModeChanged(0);
     }else if (sortedMode == 1){
@@ -84,6 +86,7 @@ void DBusController::refreshUI()
     }else if (sortedMode == 2 || sortedMode == 3){
         emit signalManager->viewModeChanged(sortedMode + 1);
     }
+
 }
 
 void DBusController::initConnect(){

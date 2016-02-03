@@ -33,6 +33,7 @@ signals:
     void firstLoadSortedMode(int mode);
     void firstLoadCategoryMode(int mode);
     void showFirstShowApps();
+    void initNavigationBarIndex(int index=0);
 
     void sortedModeChanged(int mode);
     void categoryModeChanged(int mode);

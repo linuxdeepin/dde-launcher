@@ -20,6 +20,7 @@ void NavigationButtonFrame::initConnect(){
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(handleButtonClicked(int)));
     connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentIndex(int)));
     connect(signalManager, SIGNAL(firstButtonChecked()), this, SLOT(checkFirstButton()));
+    connect(signalManager, SIGNAL(initNavigationBarIndex(int)), this, SLOT(setCurrentIndex(int)));
 }
 
 void NavigationButtonFrame::initByMode(int mode){
@@ -90,7 +91,8 @@ void NavigationButtonFrame::checkButtonByKey(qlonglong key){
 }
 
 void NavigationButtonFrame::setCurrentIndex(int currentIndex){
-//    qDebug() << this << m_currentIndex << currentIndex;
+    qDebug() << "NavigationButtonFrame$$$";
+    qDebug() << this << m_currentIndex << currentIndex;
     if (m_currentIndex == currentIndex)
         return;
     m_currentIndex = currentIndex;

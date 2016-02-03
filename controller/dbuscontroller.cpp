@@ -108,8 +108,8 @@ void DBusController::initConnect(){
     connect(signalManager, SIGNAL(refreshInstallTimeFrequency()), this, SLOT(refreshInstallTimeFrequency()));
     connect(m_displayInterface, SIGNAL(PrimaryRectChanged()), signalManager, SIGNAL(screenGeometryChanged()));
     connect(m_displayInterface, SIGNAL(PrimaryChanged()), signalManager, SIGNAL(screenGeometryChanged()));
-
 //        connect(m_dockClientManagerInterface, SIGNAL(ActiveWindowChanged(uint)), signalManager, SIGNAL(activeWindowChanged(uint)));
+    connect(m_dockClientManagerInterface, SIGNAL(ActiveWindowChanged(uint)), this, SLOT(filterWindowId(uint)));
     connect(m_getAllCategoryInfosTimer, SIGNAL(timeout()), this, SLOT(getCategoryInfoList()));
 }
 

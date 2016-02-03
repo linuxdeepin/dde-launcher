@@ -28,7 +28,7 @@ void AppItemManager::initConnect(){
     connect(signalManager, SIGNAL(firstLoadSortedMode(int)),
             this, SLOT(setFirstLoadSortedMode(int)));
     connect(signalManager, SIGNAL(firstLoadCategoryMode(int)),
-            this, SLOT(setCategoryInfoList(CategoryInfoList)));
+            this, SLOT(setFirstLoadCategoryMode(int)));
     connect(signalManager, SIGNAL(showFirstShowApps()),
             this, SLOT(createFirstShowAppItems()));
     connect(m_delayCreateItemsTimer, SIGNAL(timeout()),
@@ -109,6 +109,7 @@ CategoryItem* AppItemManager::getCategoryItemByKey(const qlonglong key)
 void AppItemManager::setFirstLoadSortedMode(int mode)
 {
     m_sortMode = mode;
+    qDebug() << "appManager sortMode:" << mode;
 }
 
 void AppItemManager::setFirstLoadCategoryMode(int mode)
@@ -118,7 +119,6 @@ void AppItemManager::setFirstLoadCategoryMode(int mode)
 
 void AppItemManager::createFirstShowAppItems()
 {
-    qDebug() << m_sortMode;
     for(int i=0; i< LauncherFrame::ColumnCount * LauncherFrame::RowCount; i++){
         if (m_sortMode == 0){
             addItem(m_appNameItemInfoList[i]);
@@ -138,6 +138,7 @@ void AppItemManager::createFirstShowAppItems()
         }
     }
     m_delayCreateItemsTimer->start();
+    qDebug() << "appitemManager sortMode:" << m_sortMode;
 }
 
 void AppItemManager::delayCreateOtherItems()
@@ -146,6 +147,7 @@ void AppItemManager::delayCreateOtherItems()
     if (m_sortMode == 0){
         emit signalManager->viewModeChanged(0);
     }else if (m_sortMode == 1){
+        qDebug() << "AppItemManager categoryMode:" << m_categoryMode;
         emit signalManager->viewModeChanged(m_categoryMode + 1);
     }else if (m_sortMode == 2 || m_sortMode == 3){
         emit signalManager->viewModeChanged(m_sortMode + 1);

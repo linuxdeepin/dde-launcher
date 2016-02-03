@@ -253,7 +253,7 @@ void LauncherFrame::showSortedMode(int mode){
 }
 
 void LauncherFrame::showCategoryMode(int mode){
-//   qDebug() << mode;
+   qDebug() << "Launcher Frame MODE$$$:" << mode;
    m_categoryFrame->getNavigationBar()->setCurrentIndex(mode);
    showCategoryTable();
 }
@@ -383,6 +383,7 @@ void LauncherFrame::Show(){
 
 void LauncherFrame::ShowByMode(qlonglong mode)
 {
+    qDebug() << "LauncherFrameShowByMode:" << mode;
     emit signalManager->viewModeChanged(mode);
     Show();
 }

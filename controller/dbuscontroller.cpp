@@ -61,8 +61,10 @@ void DBusController::init(){
     qDebug() << "get Launcher data";
     int sortedMode= getSortMethod();
     int categoryMode = getCategoryDisplayMode();
+
     emit signalManager->firstLoadSortedMode(sortedMode);
     emit signalManager->firstLoadCategoryMode(categoryMode);
+
     getAutoStartList();
     getCategoryInfoList();
     getInstalledTimeItems();
@@ -83,6 +85,7 @@ void DBusController::refreshUI()
         emit signalManager->viewModeChanged(0);
     }else if (sortedMode == 1){
         emit signalManager->viewModeChanged(categoryMode + 1);
+        qDebug() << "DBusController refreshUI categoryMode:" << categoryMode +1;
     }else if (sortedMode == 2 || sortedMode == 3){
         emit signalManager->viewModeChanged(sortedMode + 1);
     }
@@ -387,11 +390,14 @@ ItemInfo DBusController::getLocalItemInfo(QString appKey){
 int DBusController::getCategoryDisplayMode(){
     QDBusPendingReply<qlonglong> reply = m_launcherSettingsInterface->GetCategoryDisplayMode();
     reply.waitForFinished();
+    qDebug() << "get categoryDisplayMode replay" << reply;
     if (!reply.isError()){
         qlonglong mode = reply.argumentAt(0).toLongLong();
+        qDebug() << "rightly: " << mode;
         return mode;
     }else{
         qCritical() << reply.error().name() << reply.error().message();
+        qDebug() << "wrongly:" << reply.error().name();
         return 0;
     }
 }

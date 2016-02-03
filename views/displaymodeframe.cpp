@@ -139,6 +139,7 @@ int DisplayModeFrame::getCategoryDisplayMode(){
 }
 
 void DisplayModeFrame::setCategoryDisplayMode(int mode){
+    qDebug() << "setCategoryDisplayMode: !!!" << mode;
     m_categoryDisplayMode = mode;
     emit categoryModeChanged(mode);
     emit signalManager->categoryModeChanged(mode);
@@ -155,6 +156,7 @@ void DisplayModeFrame::setSortMode(int mode){
 }
 
 void DisplayModeFrame::checkButton(int mode){
+    qDebug() << "checkout Buttonx:" << mode;
    m_buttonGroup->button(mode)->click();
 }
 

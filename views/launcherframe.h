@@ -100,6 +100,8 @@ private:
     int m_gridHeight;
     bool m_rightclicked = false;
     bool m_isDraging = false;
+    //record the initial times of categoryframe
+    int count=0;
     QPoint m_primaryPos;
     QString m_searchText;
     QStackedLayout* m_layout;

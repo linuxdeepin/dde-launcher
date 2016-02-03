@@ -36,6 +36,7 @@ signals:
 
     void sortedModeChanged(int mode);
     void categoryModeChanged(int mode);
+    void categoryFlag(bool xflag);
 
     void itemInfosChanged(const QMap<QString, ItemInfo>& itemInfos);
     void categoryInfosChanged(const CategoryInfoList& categoryInfoList);

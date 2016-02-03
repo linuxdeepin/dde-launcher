@@ -39,8 +39,14 @@ void CategoryFrame::initUI(int leftMargin, int rightMargin, int column, int item
 
     m_categoryTableWidget->setFocusPolicy(Qt::NoFocus);
 
+    initConnect();
+
+}
+
+void CategoryFrame::initConnect() {
     connect(m_categoryTableWidget, SIGNAL(verticalPositionChanged(int)),
             this, SIGNAL(contentScrolled(int)));
+    connect(signalManager, SIGNAL(categoryFlag(bool)), this, SLOT(setCategoryFlag(bool)));
 }
 
 NavigationBar* CategoryFrame::getNavigationBar(){
@@ -81,4 +87,13 @@ QRect CategoryFrame::bottomGradientRect() const
     QPoint topLeft(bottomLeft.x(), bottomLeft.y() + 1 - size.height());
 
     return QRect(topLeft, size);
+}
+
+void  CategoryFrame::setCategoryFlag(bool xflag) {
+    if (xflag) {
+       changeCategoryTableViewModeFlag = false;
+    } else {
+        changeCategoryTableViewModeFlag = true;
+        emit signalManager->hightlightButtonByIndex(0);
+    }
 }

@@ -36,6 +36,7 @@ public slots:
     void setSortMode(int mode);
     void checkButton(int mode);
     void setViewMode(int mode);
+    int getViewMode();
 
     void toggleButtonFrameByViewButton(bool flag);
     void toggleButtonFrameBySelf(bool flag);

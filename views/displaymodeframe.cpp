@@ -158,7 +158,18 @@ void DisplayModeFrame::checkButton(int mode){
    m_buttonGroup->button(mode)->click();
 }
 
+int DisplayModeFrame::getViewMode() {
+    return m_viewMode;
+}
+
 void DisplayModeFrame::setViewMode(int mode){
+    int lastViewMode = getViewMode();
+    if ((mode==1||mode==2) &&(lastViewMode==1||lastViewMode==2)) {
+        emit signalManager->categoryFlag(true);
+    } else {
+        emit signalManager->categoryFlag(false);
+    }
+
     m_viewMode = mode;
     m_viewModeButton->setNormalIconByMode(m_viewMode);
     if (mode == 0){

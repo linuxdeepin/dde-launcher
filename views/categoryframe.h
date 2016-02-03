@@ -20,15 +20,18 @@ public:
 
     QRect topGradientRect() const;
     QRect bottomGradientRect() const;
-
+    bool changeCategoryTableViewModeFlag=true;
+    bool firstInit=true;
 signals:
     void showed();
     void contentScrolled(int value);
-
+public slots:
+    void setCategoryFlag(bool xflag);
 protected:
     void showEvent(QShowEvent *);
 
 private:
+    void initConnect();
     NavigationBar* m_navigationBar;
     CategoryTableWidget* m_categoryTableWidget;
 };

@@ -266,7 +266,15 @@ void LauncherFrame::showAppTableWidget(){
 
 void LauncherFrame::showCategoryTable()
 {
-    m_categoryFrame->getCategoryTabelWidget()->setCategoryInfoList(appItemManager->getSortedCategoryInfoList());
+    if (m_categoryFrame->changeCategoryTableViewModeFlag||m_categoryFrame->firstInit) {
+          m_categoryFrame->getCategoryTabelWidget()->setCategoryInfoList(appItemManager->getSortedCategoryInfoList());
+          count++;
+          if (count==3) {
+              m_categoryFrame->firstInit = false;
+          }
+      } else {
+          return;
+      }
 }
 
 void LauncherFrame::showSearchResult(const QList<ItemInfo> &infoList){

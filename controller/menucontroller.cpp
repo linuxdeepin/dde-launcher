@@ -29,6 +29,7 @@
 #include <QDBusPendingReply>
 #include <QVariant>
 #include <QProcess>
+#include <QDateTime>
 
 MenuController::MenuController(QObject *parent) : QObject(parent)
 {
@@ -250,7 +251,8 @@ void MenuController::handleOpen(QString appKey){
     emit signalManager->Hide();
     QString url = dbusController->getItemInfo(appKey).url;
     qDebug() << "handleOpen" << appKey << url;
-    QDBusPendingReply<bool> reply = dbusController->getStartManagerInterface()->Launch(url);
+    uint timestamp = QDateTime::currentDateTime().toTime_t();
+    QDBusPendingReply<bool> reply = dbusController->getStartManagerInterface()->LaunchWithTimestamp(url, timestamp);
     reply.waitForFinished();
     if (!reply.isError()) {
         bool ret = reply.argumentAt(0).toBool();

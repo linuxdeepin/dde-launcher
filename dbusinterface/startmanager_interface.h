@@ -63,6 +63,13 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("Launch"), argumentList);
     }
 
+    inline QDBusPendingReply<bool> LaunchWithTimestamp(const QString &in0, uint in1)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0) << QVariant::fromValue(in1);
+        return asyncCallWithArgumentList(QStringLiteral("LaunchWithTimestamp"), argumentList);
+    }
+
     inline QDBusPendingReply<bool> RemoveAutostart(const QString &in0)
     {
         QList<QVariant> argumentList;

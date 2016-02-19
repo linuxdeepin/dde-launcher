@@ -96,3 +96,33 @@ void XcbMisc::setLauncher(xcb_window_t winId){
     xcb_ewmh_set_wm_window_type(&m_ewmh_connection, winId, 1, atoms_type);
     xcb_ewmh_set_wm_state(&m_ewmh_connection, winId, 2, atoms_state);
 }
+
+void XcbMisc::set_deepin_override(xcb_window_t winId)
+{
+    QString deepinOverride("_DEEPIN_OVERRIDE");
+
+    xcb_connection_t * connection = QX11Info::connection();
+    xcb_intern_atom_cookie_t cookie = xcb_intern_atom(connection,
+                                                      0,
+                                                      deepinOverride.length(),
+                                                      deepinOverride.toLatin1());
+
+    xcb_intern_atom_reply_t *reply = xcb_intern_atom_reply(connection,
+                                                           cookie,
+                                                           NULL);
+    if (reply) {
+        xcb_atom_t atom = reply->atom;
+        free (reply);
+
+        int value = 1;
+        xcb_change_property(connection,
+                            XCB_PROP_MODE_REPLACE,
+                            winId,
+                            atom,
+                            XCB_ATOM_CARDINAL,
+                            32,
+                            1,
+                            &value);
+        xcb_flush(connection);
+    }
+}

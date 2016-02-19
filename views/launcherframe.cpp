@@ -518,6 +518,11 @@ bool LauncherFrame::eventFilter(QObject *obj, QEvent *event){
     return QFrame::eventFilter(obj, event);
 }
 
+void LauncherFrame::showEvent(QShowEvent *)
+{
+    XcbMisc::instance()->set_deepin_override(winId());
+}
+
 void LauncherFrame::handleActiveWindowChanged(uint windowId){
     if (!isVisible() || windowId == window()->winId()){
         return;

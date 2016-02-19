@@ -16,7 +16,6 @@
 BackgroundLabel::BackgroundLabel(bool isBlur, QWidget* parent)
     : QLabel(parent)
 {
-    setWindowFlags(Qt::FramelessWindowHint);
     if (parent){
         setFixedSize(parent->size());
         m_systemBackground = new SystemBackground(parent->size(), isBlur, this);

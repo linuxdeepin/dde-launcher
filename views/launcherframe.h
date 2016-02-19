@@ -94,6 +94,7 @@ protected:
     void inputMethodEvent(QInputMethodEvent *event);
     void wheelEvent(QWheelEvent * event);
     bool eventFilter(QObject *obj, QEvent *event);
+    void showEvent(QShowEvent *);
 
 
 private:

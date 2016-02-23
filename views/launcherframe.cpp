@@ -271,6 +271,7 @@ void LauncherFrame::showAppTableWidget(){
     m_currentIndex = currentMode();
     m_layout->setCurrentIndex(1);
     m_displayModeFrame->hide();
+    m_categoryFrame->changeCategoryTableViewModeFlag = true;
 }
 
 void LauncherFrame::showCategoryTable()

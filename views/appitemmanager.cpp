@@ -130,11 +130,14 @@ void AppItemManager::createFirstShowAppItems()
 {
     for(int i=0; i< LauncherFrame::ColumnCount * LauncherFrame::RowCount; i++){
         if (m_sortMode == 0){
-            addItem(m_appNameItemInfoList[i]);
+            if (m_appNameItemInfoList.size() > i)
+                addItem(m_appNameItemInfoList[i]);
         }else if (m_sortMode == 2){
-            addItem(m_installtimeItemInfoList[i]);
+            if (m_installtimeItemInfoList.size() > i)
+                addItem(m_installtimeItemInfoList[i]);
         }else if (m_sortMode == 3){
-            addItem(m_useFrequencyItemInfoList[i]);
+            if (m_useFrequencyItemInfoList.size() > i)
+                addItem(m_useFrequencyItemInfoList[i]);
         }
     }
     for(int i=0; i< 4; i++){

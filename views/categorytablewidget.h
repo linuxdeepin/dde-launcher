@@ -63,6 +63,7 @@ private:
 
     QPropertyAnimation* m_scrollAnimation;
     QStringList m_keyused;
+    qlonglong m_lastHideButtonKey;
 };
 
 #endif // SECTIONTABLEWIDGET_H

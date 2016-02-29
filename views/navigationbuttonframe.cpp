@@ -29,7 +29,7 @@ void NavigationButtonFrame::initConnect(){
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(handleButtonClicked(int)));
     connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentIndex(int)));
     connect(signalManager, SIGNAL(firstButtonChecked()), this, SLOT(checkFirstButton()));
-    connect(signalManager, SIGNAL(initNavigationBarIndex(int)), this, SLOT(setCurrentIndex(int)));
+//    connect(signalManager, SIGNAL(initNavigationBarIndex(int)), this, SLOT(setCurrentIndex(int)));
 }
 
 void NavigationButtonFrame::initByMode(int mode){
@@ -91,12 +91,15 @@ void NavigationButtonFrame::hideButtons(const QList<qlonglong> &keys){
 void NavigationButtonFrame::handleButtonClicked(int id){
     emit signalManager->navigationButtonClicked(id);
     emit currentIndexChanged(id);
+    qDebug() << "handleButtonClicked*********" << id;
 }
-
+/*
+    check the currentButton in navigationBar, when scroll the categoryTable
+*/
 void NavigationButtonFrame::checkButtonByKey(qlonglong key){
     int index = key;
     emit currentIndexChanged(index);
-//    qDebug() << "currentIndexChanged" << index;
+    qDebug() << "scroll to currentIndex***** :" << index;
 }
 
 void NavigationButtonFrame::setCurrentIndex(int currentIndex){
@@ -106,12 +109,15 @@ void NavigationButtonFrame::setCurrentIndex(int currentIndex){
         return;
     m_currentIndex = currentIndex;
     m_buttonGroup->button(currentIndex)->setChecked(true);
+
 }
 
 void NavigationButtonFrame::checkFirstButton(){
+//    qDebug() << "checkFirstButton***";
     for(int i=0; i<m_buttonGroup->buttons().length(); i++){
         if (m_buttonGroup->button(i)->isVisible()){
             m_buttonGroup->button(i)->click();
+            emit currentIndexChanged(i);
             break;
         }
     }

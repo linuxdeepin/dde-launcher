@@ -75,6 +75,9 @@ void CategoryTableWidget::setGridParameter(int column, int girdWidth, int gridHe
 void CategoryTableWidget::setCategoryInfoList(const CategoryInfoList &categoryInfoList){
     qDebug() << "setCategoryInfoList" << categoryInfoList.length();
     qDebug() << appItemManager->getHideKeys();
+
+    //get the last hide keys in navigationbar
+    m_lastHideButtonKey = appItemManager->getHideKeys().at(appItemManager->getHideKeys().length() - 1);
     emit signalManager->hideNavigationButtonByKeys(appItemManager->getHideKeys());
     addItems(appItemManager->getSortedCategoryInfoList());
     setItemUnChecked();
@@ -217,7 +220,12 @@ void CategoryTableWidget::handleScrollBarValueChanged(int value){
     // TODO: 50 is not very precise here, the value should be the real height of
     // the others category.
     if (qAbs(value - verticalScrollBar()->maximum()) < 50) {
-        emit signalManager->checkNavigationButtonByKey(qlonglong(CategoryID::Others));
+        if (m_lastHideButtonKey < 10) {
+           emit signalManager->checkNavigationButtonByKey(qlonglong(CategoryID::Others));
+        } else {
+            emit signalManager->checkNavigationButtonByKey(qlonglong(CategoryID::System));
+        }
+
         return;
     } else {
         for (int i=0; i< rowCount() ; i++){
@@ -231,8 +239,14 @@ void CategoryTableWidget::handleScrollBarValueChanged(int value){
     }
 
     foreach (qlonglong key, appItemManager->getCategoryItems().keys()) {
-        if (appItemManager->getCategoryItems().value(key)  == cellWidget(targetRow, 0)){
-            emit signalManager->checkNavigationButtonByKey(key);
+        if (targetRow > 0) {
+            if (appItemManager->getCategoryItems().value(key)  == cellWidget(targetRow+1, 0)){
+                emit signalManager->checkNavigationButtonByKey(key);
+            }
+        } else {
+            if (appItemManager->getCategoryItems().value(key) == cellWidget(targetRow, 0)) {
+                emit signalManager->checkNavigationButtonByKey(key);
+            }
         }
     }
 }

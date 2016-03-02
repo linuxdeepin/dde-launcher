@@ -53,7 +53,9 @@ void LauncherApp::handleUninstall(QString appKey){
     ConfirmUninstallDialog d(m_launcherFrame);
     d.setWindowFlags(Qt::Dialog | d.windowFlags());
     d.setWindowModality(Qt::WindowModal);
+
     setUninstallWindowId(d.winId());
+    getUninstallWindowId();
 
     d.setAppKey(appKey);
     d.setIcon(ThemeAppIcon::getIconPixmap(iconKey, LauncherFrame::IconSize, LauncherFrame::IconSize));

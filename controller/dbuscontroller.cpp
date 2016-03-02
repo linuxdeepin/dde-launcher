@@ -51,13 +51,19 @@ QSet<QString> DBusController::PreInstallAppKeys = {};
 DBusController::DBusController(QObject *parent) : QObject(parent)
 {
     m_launcherInterface = new LauncherInterface(Launcher_service, Launcher_path, QDBusConnection::sessionBus(), this);
+    qDebug() << "m_launcherInterface:" << m_launcherInterface->isValid();
     m_launcherSettingsInterface = new LauncherSettingsInterface(Launcher_service, Launcher_path, QDBusConnection::sessionBus(), this);
     m_fileInfoInterface = new FileInfoInterface(FileInfo_service, FileInfo_path, QDBusConnection::sessionBus(), this);
+    qDebug() << "m_fileInfoInterface:" << m_fileInfoInterface->isValid();
     m_startManagerInterface = new StartManagerInterface(StartManager_service, StartManager_path, QDBusConnection::sessionBus(), this);
+    qDebug() << "m_startManagerInterface:" << m_startManagerInterface->isValid();
     m_displayInterface = new DisplayInterface(this);
+    qDebug() << "m_displayInterface:" << m_displayInterface->isValid();
     m_dockInterface = new DockInterface(Dock_service, Dock_path, QDBusConnection::sessionBus(), this);
+    qDebug() << "m_dockInterface:" << m_dockInterface->isValid();
     m_dockClientManagerInterface = new DBusClientManager(this);
     m_pinyinInterface = new PinyinInterface(Pinyin_service, Pinyin_path, QDBusConnection::sessionBus(), this);
+    qDebug() << "m_pinyinInterface:" << m_pinyinInterface->isValid();
     m_menuController = new MenuController(this);
 
     m_getAllCategoryInfosTimer = new QTimer(this);
@@ -126,7 +132,9 @@ void DBusController::initConnect(){
 }
 
 void DBusController::filterWindowId(uint wId) {
-    if (wId == getUninstallWindowId()) {
+
+    uint tmpWindowId = getUninstallWindowId();
+    if (wId == tmpWindowId) {
         return;
     } else {
         emit signalManager->activeWindowChanged(wId);
@@ -241,6 +249,8 @@ void DBusController::convertNameToPinyin(){
     reply.waitForFinished();
     if (!reply.isError()){
         QString result = reply.argumentAt(0).toString();
+        qDebug() << "m_pinyinInterface result:" << result
+                 << m_pinyinInterface->isValid();
         QJsonObject obj = QJsonObject::fromVariantMap(QJsonDocument::fromJson(result.toLocal8Bit()).toVariant().toMap());
         foreach(QString appKey, m_itemInfos.keys()){
             QString name = m_itemInfos.value(appKey).name;
@@ -254,7 +264,7 @@ void DBusController::convertNameToPinyin(){
         }
         m_pinyinEnglishInfos = sortPingyinEnglish(m_itemInfos.values());
     }else{
-        qCritical() << reply.error().name() << reply.error().message();
+        qCritical() << "m_pinyinInterface:" << reply.error().name() << reply.error().message();
     }
 }
 

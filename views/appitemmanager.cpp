@@ -155,6 +155,7 @@ void AppItemManager::createFirstShowAppItems()
 
 void AppItemManager::delayCreateOtherItems()
 {
+    qDebug() << "delayCreateOtherItem";
     addItems(m_itemInfos.values());
     if (m_sortMode == 0){
         emit signalManager->viewModeChanged(0);

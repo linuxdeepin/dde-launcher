@@ -74,10 +74,14 @@ void CategoryTableWidget::setGridParameter(int column, int girdWidth, int gridHe
 
 void CategoryTableWidget::setCategoryInfoList(const CategoryInfoList &categoryInfoList){
     qDebug() << "setCategoryInfoList" << categoryInfoList.length();
-    qDebug() << appItemManager->getHideKeys();
+    int tmpHideKeyNum = appItemManager->getHideKeys().length();
+    qDebug() <<  "get hide keys:" << tmpHideKeyNum;
 
     //get the last hide keys in navigationbar
-    m_lastHideButtonKey = appItemManager->getHideKeys().at(appItemManager->getHideKeys().length() - 1);
+    if(tmpHideKeyNum >= 1) {
+        m_lastHideButtonKey = appItemManager->getHideKeys().at(tmpHideKeyNum - 1);
+    }
+
     emit signalManager->hideNavigationButtonByKeys(appItemManager->getHideKeys());
     addItems(appItemManager->getSortedCategoryInfoList());
     setItemUnChecked();

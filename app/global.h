@@ -64,6 +64,7 @@ inline QString getCategoryNames(QString text){
 inline void setUninstallWindowId(uint xWid) {
     unInstallConfirmDialogWid = xWid;
 }
+
 inline uint getUninstallWindowId() {
     return unInstallConfirmDialogWid;
 }

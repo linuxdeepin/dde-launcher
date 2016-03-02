@@ -1,18 +1,9 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2015-07-24T19:22:07
-#
-#-------------------------------------------------
-
-QT       += core gui dbus x11extras svg
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT      += core gui dbus widgets
 
 TARGET = dde-launcher
 TEMPLATE = app
-
-PKGCONFIG += x11 gtk+-2.0 xcb xcb-ewmh gsettings-qt gio-unix-2.0
 CONFIG += c++11 link_pkgconfig
+<<<<<<< 1c301c7a53dd948b5c5fa1c81718826a55b6d514
 
 DEFINES += QT_MESSAGELOGCONTEXT
 
@@ -123,3 +114,29 @@ services.path = /usr/share/dbus-1/services
 services.files = dbusservices/com.deepin.dde.Launcher.service
 
 INSTALLS += target qm_files services
+=======
+PKGCONFIG += dtkbase dtkwidget
+
+SOURCES += \
+    mian.cpp \
+    mainframe.cpp \
+    applistview.cpp \
+    dbus/dbuslauncher.cpp \
+    dbus/categoryinfo.cpp \
+    dbus/frequencyinfo.cpp \
+    dbus/iteminfo.cpp \
+    dbus/installedtimeinfo.cpp \
+    model/appslistmodel.cpp \
+    model/appsmanager.cpp
+
+HEADERS += \
+    mainframe.h \
+    applistview.h \
+    dbus/dbuslauncher.h \
+    dbus/categoryinfo.h \
+    dbus/frequencyinfo.h \
+    dbus/iteminfo.h \
+    dbus/installedtimeinfo.h \
+    model/appslistmodel.h \
+    model/appsmanager.h
+>>>>>>> write new launcher, remove all old files

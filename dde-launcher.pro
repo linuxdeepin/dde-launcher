@@ -3,6 +3,7 @@ QT      += core gui dbus widgets
 TARGET = dde-launcher
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
+<<<<<<< 7a39e0d3c3ca3ab83dd188d5e7018fbd62688ac9
 <<<<<<< 1c301c7a53dd948b5c5fa1c81718826a55b6d514
 
 DEFINES += QT_MESSAGELOGCONTEXT
@@ -116,6 +117,9 @@ services.files = dbusservices/com.deepin.dde.Launcher.service
 INSTALLS += target qm_files services
 =======
 PKGCONFIG += dtkbase dtkwidget
+=======
+PKGCONFIG += dtkbase dtkwidget dtkbase
+>>>>>>> test widgets list auto-resize
 
 SOURCES += \
     mian.cpp \

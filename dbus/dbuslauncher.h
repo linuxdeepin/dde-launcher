@@ -56,7 +56,7 @@ public:
     { return "com.deepin.dde.daemon.Launcher"; }
 
 public:
-    DBusLauncher(QObject *parent = 0);
+    explicit DBusLauncher(QObject *parent = 0);
 
     ~DBusLauncher();
 

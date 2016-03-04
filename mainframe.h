@@ -2,6 +2,7 @@
 #define MAINFRAME_H
 
 #include "applistview.h"
+#include "appitemdelegate.h"
 #include "model/appslistmodel.h"
 
 #include <QFrame>
@@ -30,6 +31,7 @@ private:
     AppListView *m_customAppsView;
     AppListView *m_testView;
     AppsListModel *m_customAppsModel;
+    AppItemDelegate *m_appItemDelegate;
 };
 
 #endif // MAINFRAME_H

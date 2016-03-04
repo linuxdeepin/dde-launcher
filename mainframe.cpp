@@ -12,13 +12,16 @@ MainFrame::MainFrame(QWidget *parent) :
     m_appsVbox(new DVBoxWidget),
     m_customAppsView(new AppListView),
     m_testView(new AppListView),
-    m_customAppsModel(new AppsListModel)
+    m_customAppsModel(new AppsListModel),
+    m_appItemDelegate(new AppItemDelegate)
 {
     m_appsVbox->installEventFilter(this);
     m_appsArea->setFrameStyle(QFrame::NoFrame);
     m_customAppsView->setModel(m_customAppsModel);
+    m_customAppsView->setItemDelegate(m_appItemDelegate);
     m_customAppsView->setStyleSheet("background-color:cyan;");
     m_testView->setModel(m_customAppsModel);
+    m_testView->setItemDelegate(m_appItemDelegate);
     m_testView->setStyleSheet("background-color:orange;");
 
     QFrame *frame = new QFrame;

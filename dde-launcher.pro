@@ -131,7 +131,8 @@ SOURCES += \
     dbus/iteminfo.cpp \
     dbus/installedtimeinfo.cpp \
     model/appslistmodel.cpp \
-    model/appsmanager.cpp
+    model/appsmanager.cpp \
+    appitemdelegate.cpp
 
 HEADERS += \
     mainframe.h \
@@ -142,5 +143,10 @@ HEADERS += \
     dbus/iteminfo.h \
     dbus/installedtimeinfo.h \
     model/appslistmodel.h \
+<<<<<<< 8d5b28b6906b7624eebe3dacb3297fa0bca63884
     model/appsmanager.h
 >>>>>>> write new launcher, remove all old files
+=======
+    model/appsmanager.h \
+    appitemdelegate.h
+>>>>>>> add item delegate to draw cell

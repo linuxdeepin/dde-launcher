@@ -22,7 +22,6 @@
 #include "baseframe.h"
 #include "dbusinterface/displayinterface.h"
 #include "dbusinterface/dock_interface.h"
-#include "dbusinterface/dbuscontrolcenter.h"
 #include "app/launcherapp.h"
 #include <QApplication>
 #include <QDesktopWidget>
@@ -367,17 +366,6 @@ void LauncherFrame::Hide(){
 }
 
 void LauncherFrame::Show(){
-    qDebug() << "launcher frame show or not:" << this->isHidden();
-
-    DBusControlCenter* controlCenterInterface = new DBusControlCenter(this);
-    if (controlCenterInterface->isValid()) {
-        controlCenterInterface->Hide();
-        qDebug() << "dcc Inter:" << controlCenterInterface->isValid();
-    } else {
-        qDebug() << "dcc Inter is inValid!";
-    }
-
-
     move(m_primaryPos);
     m_rightclicked = false;
 //    emit signalManager->hightlightButtonByIndex(0);
@@ -387,8 +375,6 @@ void LauncherFrame::Show(){
     activateWindow();
     emit Shown();
     qDebug() << geometry();
-    controlCenterInterface->deleteLater();
-
 }
 
 void LauncherFrame::ShowByMode(qlonglong mode)

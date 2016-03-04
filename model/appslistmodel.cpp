@@ -35,9 +35,9 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
 
     switch (role)
     {
-    case Qt::DisplayRole:
+    case AppNameRole:
         return m_appsManager->appsInfoList()[index.row()].m_name;
-    case Qt::SizeHintRole:
+    case ItemSizeHintRole:
         return QSize(150, 150);
     default:
         return QVariant();

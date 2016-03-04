@@ -8,6 +8,16 @@
 class AppsListModel : public QAbstractListModel
 {
     Q_OBJECT
+
+public:
+    enum AppItemRole {
+        ItemSizeHintRole = Qt::SizeHintRole,
+        AppNameRole = Qt::DisplayRole,
+        AppReserveRole = Qt::UserRole,
+        AppIconRole,
+        AppCategoryRole,
+    };
+
 public:
     explicit AppsListModel(QObject *parent = 0);
 

@@ -17,6 +17,8 @@ MainFrame::MainFrame(QWidget *parent) :
 {
     m_appsVbox->installEventFilter(this);
     m_appsArea->setFrameStyle(QFrame::NoFrame);
+    m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_customAppsView->setModel(m_customAppsModel);
     m_customAppsView->setItemDelegate(m_appItemDelegate);
     m_customAppsView->setStyleSheet("background-color:cyan;");

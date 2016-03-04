@@ -1,4 +1,5 @@
 #include "appitemdelegate.h"
+#include "model/appslistmodel.h"
 
 #include <QDebug>
 
@@ -13,12 +14,12 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setPen(Qt::black);
     painter->setBrush(QBrush(QColor(238, 23, 238)));
     painter->drawRect(option.rect);
-    painter->drawText(option.rect, index.data(Qt::DisplayRole).toString());
+    painter->drawText(option.rect, index.data(AppsListModel::AppNameRole).toString());
 }
 
 QSize AppItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(option)
 
-    return index.data(Qt::SizeHintRole).toSize();
+    return index.data(AppsListModel::ItemSizeHintRole).toSize();
 }

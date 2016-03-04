@@ -20,6 +20,9 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *e);
+    bool eventFilter(QObject *o, QEvent *e);
+
+private slots:
 
 private:
     QScrollArea *m_appsArea;

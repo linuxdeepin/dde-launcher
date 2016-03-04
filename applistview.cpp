@@ -2,10 +2,13 @@
 
 #include <QDebug>
 #include <QWheelEvent>
+#include <QTimer>
 
 AppListView::AppListView(QWidget *parent) :
     QListView(parent)
 {
+    viewport()->installEventFilter(this);
+
     setFlow(QListView::LeftToRight);
     setLayoutMode(QListView::Batched);
     setResizeMode(QListView::Adjust);
@@ -17,45 +20,32 @@ AppListView::AppListView(QWidget *parent) :
 
 QSize AppListView::sizeHint() const
 {
-    QSize hint = QListView::sizeHint();
-
-//    if (!model())
-//        return hint;
-
-//    const int extraHeight = height() - viewport()->height();
-//    const QModelIndex lastIndex = model()->index(model()->rowCount() - 1, 0);
-//    const QRect rect = visualRect(lastIndex);
-
-//    qDebug() << rect;
-////    hint.setHeight(rect.y() + rect.height()/* + extraHeight*/);
-//    hint = QSize(rect.x() + rect.width(), rect.y() + rect.height());
-
-//    qDebug() << "hint = " << hint;
-
-    return hint;
-}
-
-void AppListView::updatea()
-{
-    qDebug() << viewport()->size();
-    qDebug() << contentsSize() << contentsRect();
-//    setFixedSize(contentsSize();
-    setFixedWidth(contentsRect().width());
-    setFixedHeight(contentsSize().height());
+    return QListView::sizeHint();
 }
 
 void AppListView::resizeEvent(QResizeEvent *e)
 {
     QListView::resizeEvent(e);
-
-    qDebug() << viewport()->size();
-    qDebug() << contentsSize() << contentsRect();
-//    setFixedSize(contentsSize();
-    setFixedWidth(contentsRect().width());
-    setFixedHeight(contentsSize().height());
 }
 
 void AppListView::wheelEvent(QWheelEvent *e)
 {
     e->ignore();
+}
+
+bool AppListView::eventFilter(QObject *o, QEvent *e)
+{
+    if (o == viewport() && e->type() == QEvent::Paint)
+        fitToContent();
+
+    return false;
+}
+
+void AppListView::fitToContent()
+{
+    if (width() == contentsRect().width() && height() == contentsSize().height())
+        return;
+
+    setFixedWidth(contentsRect().width());
+    setFixedHeight(contentsSize().height());
 }

@@ -14,13 +14,12 @@ MainFrame::MainFrame(QWidget *parent) :
     m_testView(new AppListView),
     m_customAppsModel(new AppsListModel)
 {
+    m_appsVbox->installEventFilter(this);
     m_appsArea->setFrameStyle(QFrame::NoFrame);
     m_customAppsView->setModel(m_customAppsModel);
+    m_customAppsView->setStyleSheet("background-color:cyan;");
     m_testView->setModel(m_customAppsModel);
-//    m_customAppsView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-
-//    QVBoxLayout *rightSideLayout = new QVBoxLayout;
-//    rightSideLayout->addWidget(m_customAppsView);
+    m_testView->setStyleSheet("background-color:orange;");
 
     QFrame *frame = new QFrame;
     frame->setFixedSize(200, 20);
@@ -31,10 +30,6 @@ MainFrame::MainFrame(QWidget *parent) :
     m_appsVbox->layout()->addWidget(m_testView);
     m_appsVbox->layout()->setSpacing(0);
     m_appsVbox->layout()->setMargin(0);
-//    QVBoxLayout *la = new QVBoxLayout;
-//    la->addWidget(m_customAppsView);
-//    m_appsVbox->setLayout(la);
-//    m_appsVbox->layout()->addWidget(m_customAppsView);
     m_appsArea->setWidget(m_appsVbox);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
@@ -46,15 +41,6 @@ MainFrame::MainFrame(QWidget *parent) :
 
     connect(m_customAppsView, &AppListView::doubleClicked, [this] (const QModelIndex &index) {
         m_customAppsModel->removeRow(index.row());
-        m_customAppsView->updateGeometry();
-        m_customAppsView->adjustSize();
-        m_customAppsView->updatea();
-
-//        qDebug() << viewport()->size();
-//        qDebug() << contentsSize() << contentsRect();
-    //    setFixedSize(contentsSize();
-//        m_customAppsView->setFixedWidth(m_customAppsView->contentsRect().width());
-//       m_customAppsView-> setFixedHeight(m_customAppsView->contentsSize().height());
     });
 }
 
@@ -62,10 +48,17 @@ void MainFrame::resizeEvent(QResizeEvent *e)
 {
     QFrame::resizeEvent(e);
 
-    m_customAppsView->setFixedWidth(m_appsArea->width());
-    m_testView->setFixedWidth(m_appsArea->width());
-    m_appsVbox->setFixedWidth(m_appsArea->width());
-//    m_customAppsView->adjustSize();
-//    m_testView->adjustSize()
-    m_appsVbox->adjustSize();
+    const int appsContentWidth = m_appsArea->width();
+
+    m_appsVbox->setFixedWidth(appsContentWidth);
+    m_customAppsView->setFixedWidth(appsContentWidth);
+    m_testView->setFixedWidth(appsContentWidth);
+}
+
+bool MainFrame::eventFilter(QObject *o, QEvent *e)
+{
+    Q_UNUSED(o);
+    Q_UNUSED(e);
+
+    return false;
 }

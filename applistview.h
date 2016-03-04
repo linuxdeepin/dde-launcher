@@ -12,11 +12,14 @@ public:
     explicit AppListView(QWidget *parent = 0);
 
     QSize sizeHint() const;
-    void updatea();
 
 protected:
     void resizeEvent(QResizeEvent *e);
     void wheelEvent(QWheelEvent *e);
+    bool eventFilter(QObject *o, QEvent *e);
+
+private slots:
+    void fitToContent();
 };
 
 #endif // APPLISTVIEW_H

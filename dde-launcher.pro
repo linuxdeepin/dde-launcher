@@ -154,5 +154,20 @@ HEADERS += \
 =======
     appitemdelegate.h \
     view/applistview.h \
+<<<<<<< 34aabf291ea7539f96db0b0a9c2cd0864740c06b
     widget/categorytitlewidget.h
 >>>>>>> adjust directory structure
+=======
+    widget/categorytitlewidget.h \
+    constants.h
+
+target.path = /usr/bin
+
+qm_files.files = translations/*.qm
+qm_files.path = /usr/share/dde-launcher/translations
+
+service.path = /usr/share/dbus-1/services
+service.files = dbusservices/com.deepin.dde.Launcher.service
+
+INSTALLS += target qm_files services
+>>>>>>> add dnd support

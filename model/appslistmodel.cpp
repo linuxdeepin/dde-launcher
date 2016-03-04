@@ -10,9 +10,19 @@ AppsListModel::AppsListModel(QObject *parent) :
 
 }
 
-bool AppsListModel::removeRow(int row, const QModelIndex &parent)
+int AppsListModel::rowCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent);
+    Q_UNUSED(parent)
+
+    return m_appsManager->appsInfoList().size();
+}
+
+bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    Q_UNUSED(parent)
+
+    // TODO: not support remove multiple rows
+    Q_ASSERT(count == 1);
 
     beginRemoveRows(parent, row, row);
     m_appsManager->removeRow(row);
@@ -21,11 +31,15 @@ bool AppsListModel::removeRow(int row, const QModelIndex &parent)
     return true;
 }
 
-int AppsListModel::rowCount(const QModelIndex &parent) const
+bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const
 {
+    Q_UNUSED(data)
+    Q_UNUSED(action)
+    Q_UNUSED(row)
+    Q_UNUSED(column)
     Q_UNUSED(parent)
 
-    return m_appsManager->appsInfoList().size();
+    return true;
 }
 
 QVariant AppsListModel::data(const QModelIndex &index, int role) const
@@ -44,4 +58,14 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     }
 
     return QVariant();
+}
+
+Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const
+{
+//    if (!index.isValid() || index.row() >= m_appsManager->appsInfoList().size())
+//        return Qt::NoItemFlags;
+
+    const Qt::ItemFlags defaultFlags = QAbstractListModel::flags(index);
+
+    return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }

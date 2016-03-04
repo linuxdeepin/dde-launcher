@@ -21,11 +21,12 @@ public:
 public:
     explicit AppsListModel(QObject *parent = 0);
 
-    bool removeRow(int row, const QModelIndex &parent = QModelIndex());
-
 protected:
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
+    bool removeRows(int row, int count, const QModelIndex &parent);
+    bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
 private:
     AppsManager *m_appsManager;

@@ -1,8 +1,8 @@
 #ifndef MAINFRAME_H
 #define MAINFRAME_H
 
-#include "applistview.h"
 #include "appitemdelegate.h"
+#include "view/applistview.h"
 #include "model/appslistmodel.h"
 
 #include <QFrame>

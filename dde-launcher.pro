@@ -124,7 +124,6 @@ PKGCONFIG += dtkbase dtkwidget dtkbase
 SOURCES += \
     mian.cpp \
     mainframe.cpp \
-    applistview.cpp \
     dbus/dbuslauncher.cpp \
     dbus/categoryinfo.cpp \
     dbus/frequencyinfo.cpp \
@@ -132,11 +131,12 @@ SOURCES += \
     dbus/installedtimeinfo.cpp \
     model/appslistmodel.cpp \
     model/appsmanager.cpp \
-    appitemdelegate.cpp
+    appitemdelegate.cpp \
+    view/applistview.cpp \
+    widget/categorytitlewidget.cpp
 
 HEADERS += \
     mainframe.h \
-    applistview.h \
     dbus/dbuslauncher.h \
     dbus/categoryinfo.h \
     dbus/frequencyinfo.h \
@@ -148,5 +148,11 @@ HEADERS += \
 >>>>>>> write new launcher, remove all old files
 =======
     model/appsmanager.h \
+<<<<<<< 98e7ec7e4e49fa874938262caabaad1f85e8c038
     appitemdelegate.h
 >>>>>>> add item delegate to draw cell
+=======
+    appitemdelegate.h \
+    view/applistview.h \
+    widget/categorytitlewidget.h
+>>>>>>> adjust directory structure

@@ -81,6 +81,11 @@ void AppListView::wheelEvent(QWheelEvent *e)
     e->ignore();
 }
 
+void AppListView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    QListView::currentChanged(current, previous);
+}
+
 bool AppListView::eventFilter(QObject *o, QEvent *e)
 {
     if (o == viewport() && e->type() == QEvent::Paint)

@@ -54,6 +54,7 @@ MainFrame::MainFrame(QWidget *parent) :
     setLayout(mainLayout);
     move(qApp->primaryScreen()->geometry().center() - rect().center());
 
+    connect(m_customAppsView, &AppListView::pressed, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_customAppsView, &AppListView::doubleClicked, [this] (const QModelIndex &index) {
         m_customAppsModel->removeRow(index.row());
     });

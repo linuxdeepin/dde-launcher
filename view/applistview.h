@@ -22,6 +22,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *e);
     void resizeEvent(QResizeEvent *e);
     void wheelEvent(QWheelEvent *e);
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous);
     bool eventFilter(QObject *o, QEvent *e);
 
 private slots:

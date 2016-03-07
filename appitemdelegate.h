@@ -13,9 +13,14 @@ class AppItemDelegate : public QAbstractItemDelegate
 public:
     explicit AppItemDelegate(QObject *parent = 0);
 
+    static void setCurrentIndex(const QModelIndex &index);
+
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+private:
+    static QModelIndex CurrentIndex;
 };
 
 #endif // APPITEMDELEGATE_H

@@ -50,10 +50,20 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
 
     switch (role)
     {
+
     case AppNameRole:
+    {
+        qDebug() << "&&&&&&&&&" << m_appsManager->appsInfoList()[index.row()].m_name;
         return m_appsManager->appsInfoList()[index.row()].m_name;
+    }
+    case AppIconRole:
+    {
+        qDebug() << "###" << m_appsManager->appsInfoList()[index.row()].m_url;
+        return m_appsManager->appsInfoList()[index.row()].m_url;
+    }
     case ItemSizeHintRole:
         return QSize(150, 150);
+
     default:
         return QVariant();
     }

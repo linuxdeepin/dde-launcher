@@ -2,10 +2,11 @@
 #define MAINFRAME_H
 
 #include "appitemdelegate.h"
+#include "global_util/util.h"
 #include "model/appslistmodel.h"
 #include "view/applistview.h"
 #include "widget/categorytitlewidget.h"
-#include "widget/categorylistwidget.h"
+#include "widget/navigationlistwidget.h"
 #include "widget/searchwidget.h"
 
 #include <QFrame>
@@ -33,7 +34,8 @@ protected:
 private slots:
 
 private:
-    CategoryListWidget *m_categoryListWidget;
+
+    NavigationListWidget *m_navigationListWidget;
     SearchWidget *m_searchWidget;
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsVbox;

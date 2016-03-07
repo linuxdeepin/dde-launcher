@@ -13,7 +13,7 @@ public:
         ItemSizeHintRole = Qt::SizeHintRole,
         AppNameRole = Qt::DisplayRole,
         AppReserveRole = Qt::UserRole,
-        AppIconRole,
+        AppIconRole = Qt::DecorationRole,
         AppCategoryRole,
         AppAutoStartRole,
         AppNewInstallRole,

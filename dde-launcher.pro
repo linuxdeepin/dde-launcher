@@ -134,8 +134,11 @@ SOURCES += \
     appitemdelegate.cpp \
     view/applistview.cpp \
     widget/categorytitlewidget.cpp \
-    widget/categorylistwidget.cpp \
-    widget/searchwidget.cpp
+    widget/searchwidget.cpp \
+    widget/navigationlistwidget.cpp \
+    widget/navigationbuttonframe.cpp \
+    widget/basecheckedbutton.cpp \
+    global_util/util.cpp
 
 HEADERS += \
     mainframe.h \
@@ -161,9 +164,14 @@ HEADERS += \
 >>>>>>> adjust directory structure
 =======
     widget/categorytitlewidget.h \
-    constants.h \
-    widget/categorylistwidget.h \
-    widget/searchwidget.h
+    widget/searchwidget.h \
+    global_util/constants.h \
+    widget/navigationlistwidget.h \
+    widget/navigationbuttonframe.h \
+    widget/basecheckedbutton.h \
+    global_util/global.h \
+    global_util/calcuate_util.h \
+    global_util/util.h
 
 target.path = /usr/bin
 
@@ -174,4 +182,10 @@ service.path = /usr/share/dbus-1/services
 service.files = dbusservices/com.deepin.dde.Launcher.service
 
 INSTALLS += target qm_files services
+<<<<<<< 41d93f3d414f7c9f67c107a1883ab90353669dfd
 >>>>>>> add dnd support
+=======
+
+RESOURCES += \
+    skin.qrc
+>>>>>>> add the left navigationbar

@@ -11,7 +11,7 @@
 
 MainFrame::MainFrame(QWidget *parent) :
     QFrame(parent),
-    m_categoryListWidget(new CategoryListWidget),
+    m_navigationListWidget(new NavigationListWidget),
     m_searchWidget(new SearchWidget),
     m_appsArea(new QScrollArea),
     m_appsVbox(new DVBoxWidget),
@@ -22,12 +22,15 @@ MainFrame::MainFrame(QWidget *parent) :
     m_internetTitle(new CategoryTitleWidget(tr("Internet"))),
     m_musicTitle(new CategoryTitleWidget(tr("Music")))
 {
+    setObjectName("LauncherFrame");
     m_appsArea->setFrameStyle(QFrame::NoFrame);
     m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
     m_customAppsView->setModel(m_customAppsModel);
     m_customAppsView->setItemDelegate(m_appItemDelegate);
-    m_customAppsView->setStyleSheet("background-color:cyan;");
+//    m_customAppsView->setStyleSheet("background-color:cyan;");
+
     m_testView->setModel(m_customAppsModel);
     m_testView->setItemDelegate(m_appItemDelegate);
     m_testView->setStyleSheet("background-color:orange;");
@@ -36,6 +39,7 @@ MainFrame::MainFrame(QWidget *parent) :
     m_appsVbox->layout()->addWidget(m_internetTitle);
     m_appsVbox->layout()->addWidget(m_testView);
     m_appsVbox->layout()->addWidget(m_musicTitle);
+
     m_appsVbox->layout()->setSpacing(0);
     m_appsVbox->layout()->setMargin(0);
     m_appsArea->setWidget(m_appsVbox);
@@ -45,7 +49,7 @@ MainFrame::MainFrame(QWidget *parent) :
     rightSideLayout->addWidget(m_appsArea);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addWidget(m_categoryListWidget);
+    mainLayout->addWidget(m_navigationListWidget);
     mainLayout->addLayout(rightSideLayout);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
@@ -54,7 +58,11 @@ MainFrame::MainFrame(QWidget *parent) :
     setLayout(mainLayout);
     move(qApp->primaryScreen()->geometry().center() - rect().center());
 
+
     connect(m_customAppsView, &AppListView::pressed, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+
+    setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
+
     connect(m_customAppsView, &AppListView::doubleClicked, [this] (const QModelIndex &index) {
         m_customAppsModel->removeRow(index.row());
     });

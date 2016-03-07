@@ -1,5 +1,5 @@
 #include "applistview.h"
-#include "constants.h"
+#include "global_util/constants.h"
 #include "model/appslistmodel.h"
 
 #include <QDebug>

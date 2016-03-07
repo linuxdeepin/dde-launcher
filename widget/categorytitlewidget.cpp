@@ -1,5 +1,5 @@
 #include "categorytitlewidget.h"
-#include "constants.h"
+#include "global_util/constants.h"
 
 #include <QHBoxLayout>
 

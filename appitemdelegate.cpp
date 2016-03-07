@@ -18,13 +18,21 @@ void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
 
 void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    QRect itemRect = option.rect;
     painter->setPen(Qt::black);
-    if (index == CurrentIndex)
-        painter->setBrush(QBrush(QColor(23, 238, 238)));
-    else
-        painter->setBrush(QBrush(QColor(238, 23, 238)));
-    painter->drawRect(option.rect);
-    painter->drawText(option.rect, index.data(AppsListModel::AppNameRole).toString());
+
+    painter->setBrush(QBrush(QColor(238, 23, 238)));
+    qDebug() << "option" << option.rect
+             << option.icon << index.data(AppsListModel::AppIconRole).toString();
+//    painter->drawPixmap(itemRect.x(), itemRect.y(), itemRect.width(), itemRect.height(), QIcon(option.icon));
+    painter->drawRect(itemRect);
+    QRect textRect = QRect(itemRect.x(), itemRect.y() + 110, itemRect.width(), itemRect.height());
+    painter->drawText(textRect, index.data(AppsListModel::AppNameRole).toString());
+//    qDebug() << "%%%%%%%%%%%" << index.data(AppsListModel::AppIconRole).toString();
+//    QPixmap itemMap = QPixmap(index.data(AppsListModel::AppIconRole).toString());
+//    QPixmap itemMap = QPixmap(":/skin/images/googleChrome.png");
+//    painter->drawPixmap(itemRect, itemMap);
+
 }
 
 QSize AppItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const

@@ -1,10 +1,9 @@
 #ifndef APPSLISTMODEL_H
 #define APPSLISTMODEL_H
 
-#include "appsmanager.h"
-
 #include <QAbstractListModel>
 
+class AppsManager;
 class AppsListModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -16,6 +15,22 @@ public:
         AppReserveRole = Qt::UserRole,
         AppIconRole,
         AppCategoryRole,
+        AppAutoStartRole,
+        AppNewInstallRole,
+    };
+
+    enum AppCategory {
+        All,
+        Internet,
+        Music,
+        Video,
+        Graphics,
+        Game,
+        Office,
+        Reading,
+        Development,
+        System,
+        Others,
     };
 
 public:

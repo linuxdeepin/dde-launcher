@@ -2,8 +2,11 @@
 #define MAINFRAME_H
 
 #include "appitemdelegate.h"
-#include "view/applistview.h"
 #include "model/appslistmodel.h"
+#include "view/applistview.h"
+#include "widget/categorytitlewidget.h"
+#include "widget/categorylistwidget.h"
+#include "widget/searchwidget.h"
 
 #include <QFrame>
 #include <QScrollArea>
@@ -19,19 +22,27 @@ class MainFrame : public QFrame
 public:
     explicit MainFrame(QWidget *parent = 0);
 
+public slots:
+    void scrollToCategory(const AppsListModel::AppCategory &category);
+
 protected:
     void resizeEvent(QResizeEvent *e);
+    void keyPressEvent(QKeyEvent *e);
     bool eventFilter(QObject *o, QEvent *e);
 
 private slots:
 
 private:
+    CategoryListWidget *m_categoryListWidget;
+    SearchWidget *m_searchWidget;
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsVbox;
     AppListView *m_customAppsView;
     AppListView *m_testView;
     AppsListModel *m_customAppsModel;
     AppItemDelegate *m_appItemDelegate;
+    CategoryTitleWidget *m_internetTitle;
+    CategoryTitleWidget *m_musicTitle;
 };
 
 #endif // MAINFRAME_H

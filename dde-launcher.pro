@@ -133,7 +133,9 @@ SOURCES += \
     model/appsmanager.cpp \
     appitemdelegate.cpp \
     view/applistview.cpp \
-    widget/categorytitlewidget.cpp
+    widget/categorytitlewidget.cpp \
+    widget/categorylistwidget.cpp \
+    widget/searchwidget.cpp
 
 HEADERS += \
     mainframe.h \
@@ -159,7 +161,9 @@ HEADERS += \
 >>>>>>> adjust directory structure
 =======
     widget/categorytitlewidget.h \
-    constants.h
+    constants.h \
+    widget/categorylistwidget.h \
+    widget/searchwidget.h
 
 target.path = /usr/bin
 

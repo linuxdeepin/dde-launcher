@@ -2,13 +2,17 @@
 #define CATEGORYTITLEWIDGET_H
 
 #include <QWidget>
+#include <QLabel>
 
 class CategoryTitleWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit CategoryTitleWidget(QWidget *parent = 0);
+    explicit CategoryTitleWidget(const QString &title, QWidget *parent = 0);
+
+private:
+    QLabel *m_title;
 };
 
 #endif // CATEGORYTITLEWIDGET_H

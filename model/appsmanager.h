@@ -1,6 +1,7 @@
 #ifndef APPSMANAGER_H
 #define APPSMANAGER_H
 
+#include "appslistmodel.h"
 #include "../dbus/dbuslauncher.h"
 
 class AppsManager : public QObject

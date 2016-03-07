@@ -1,4 +1,5 @@
 #include "appslistmodel.h"
+#include "appsmanager.h"
 
 #include <QSize>
 #include <QDebug>

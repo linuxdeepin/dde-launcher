@@ -40,11 +40,20 @@ private:
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsVbox;
     AppListView *m_customAppsView;
-    AppListView *m_testView;
+    AppListView *m_InternetView;
     AppsListModel *m_customAppsModel;
+    AppsListModel *m_internetAppsModel;
     AppItemDelegate *m_appItemDelegate;
     CategoryTitleWidget *m_internetTitle;
     CategoryTitleWidget *m_musicTitle;
+    CategoryTitleWidget *m_videoTitle;
+    CategoryTitleWidget *m_graphicsTitle;
+    CategoryTitleWidget *m_gameTitle;
+    CategoryTitleWidget *m_officeTitle;
+    CategoryTitleWidget *m_readingTitle;
+    CategoryTitleWidget *m_developmentTitle;
+    CategoryTitleWidget *m_systemTitle;
+    CategoryTitleWidget *m_othersTitle;
 };
 
 #endif // MAINFRAME_H

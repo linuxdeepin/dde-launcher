@@ -16,13 +16,15 @@ MainFrame::MainFrame(QWidget *parent) :
     m_appsArea(new QScrollArea),
     m_appsVbox(new DVBoxWidget),
     m_customAppsView(new AppListView),
-    m_testView(new AppListView),
-    m_customAppsModel(new AppsListModel),
+    m_InternetView(new AppListView),
+    m_customAppsModel(new AppsListModel(AppsListModel::Custom)),
+    m_internetAppsModel(new AppsListModel(AppsListModel::Internet)),
     m_appItemDelegate(new AppItemDelegate),
     m_internetTitle(new CategoryTitleWidget(tr("Internet"))),
     m_musicTitle(new CategoryTitleWidget(tr("Music")))
 {
     setObjectName("LauncherFrame");
+
     m_appsArea->setFrameStyle(QFrame::NoFrame);
     m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -31,13 +33,13 @@ MainFrame::MainFrame(QWidget *parent) :
     m_customAppsView->setItemDelegate(m_appItemDelegate);
 //    m_customAppsView->setStyleSheet("background-color:cyan;");
 
-    m_testView->setModel(m_customAppsModel);
-    m_testView->setItemDelegate(m_appItemDelegate);
-    m_testView->setStyleSheet("background-color:orange;");
+    m_InternetView->setModel(m_internetAppsModel);
+    m_InternetView->setItemDelegate(m_appItemDelegate);
+    m_InternetView->setStyleSheet("background-color:orange;");
 
     m_appsVbox->layout()->addWidget(m_customAppsView);
     m_appsVbox->layout()->addWidget(m_internetTitle);
-    m_appsVbox->layout()->addWidget(m_testView);
+    m_appsVbox->layout()->addWidget(m_InternetView);
     m_appsVbox->layout()->addWidget(m_musicTitle);
 
     m_appsVbox->layout()->setSpacing(0);
@@ -91,7 +93,7 @@ void MainFrame::resizeEvent(QResizeEvent *e)
 
     m_appsVbox->setFixedWidth(appsContentWidth);
     m_customAppsView->setFixedWidth(appsContentWidth);
-    m_testView->setFixedWidth(appsContentWidth);
+    m_InternetView->setFixedWidth(appsContentWidth);
 }
 
 void MainFrame::keyPressEvent(QKeyEvent *e)

@@ -21,6 +21,11 @@ public:
 
     enum AppCategory {
         All,
+        Custom,
+        Search,
+
+        // apps category
+        Chat,
         Internet,
         Music,
         Video,
@@ -34,7 +39,7 @@ public:
     };
 
 public:
-    explicit AppsListModel(QObject *parent = 0);
+    explicit AppsListModel(const AppCategory& category, QObject *parent = 0);
 
 protected:
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
@@ -44,8 +49,9 @@ protected:
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
 private:
+    static AppsManager *m_appsManager;
+
     AppCategory m_category = All;
-    AppsManager *m_appsManager;
 };
 
 #endif // APPSLISTMODEL_H

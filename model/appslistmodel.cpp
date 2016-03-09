@@ -4,18 +4,21 @@
 #include <QSize>
 #include <QDebug>
 
-AppsListModel::AppsListModel(QObject *parent) :
-    QAbstractListModel(parent),
-    m_appsManager(new AppsManager(this))
-{
+AppsManager *AppsListModel::m_appsManager = nullptr;
 
+AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
+    QAbstractListModel(parent),
+    m_category(category)
+{
+    if (!m_appsManager)
+        m_appsManager = new AppsManager(this);
 }
 
 int AppsListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
 
-    return m_appsManager->appsInfoList().size();
+    return m_appsManager->appsInfoList(m_category).size();
 }
 
 bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
@@ -45,7 +48,7 @@ bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action
 
 QVariant AppsListModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || index.row() >= m_appsManager->appsInfoList().size())
+    if (!index.isValid() || index.row() >= m_appsManager->appsInfoList(m_category).size())
         return QVariant();
 
     switch (role)
@@ -53,13 +56,13 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
 
     case AppNameRole:
     {
-        qDebug() << "&&&&&&&&&" << m_appsManager->appsInfoList()[index.row()].m_name;
-        return m_appsManager->appsInfoList()[index.row()].m_name;
+        qDebug() << "&&&&&&&&&" << m_appsManager->appsInfoList(m_category)[index.row()].m_name;
+        return m_appsManager->appsInfoList(m_category)[index.row()].m_name;
     }
     case AppIconRole:
     {
-        qDebug() << "###" << m_appsManager->appsInfoList()[index.row()].m_url;
-        return m_appsManager->appsInfoList()[index.row()].m_url;
+        qDebug() << "###" << m_appsManager->appsInfoList(m_category)[index.row()].m_url;
+        return m_appsManager->appsInfoList(m_category)[index.row()].m_url;
     }
     case ItemSizeHintRole:
         return QSize(150, 150);

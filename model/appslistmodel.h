@@ -44,6 +44,7 @@ protected:
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
 private:
+    AppCategory m_category = All;
     AppsManager *m_appsManager;
 };
 

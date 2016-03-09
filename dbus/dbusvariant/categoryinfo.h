@@ -1,6 +1,5 @@
 #ifndef CATEGORYINFO_H
 #define CATEGORYINFO_H
-
 #include <QtDBus>
 #include <QDebug>
 #include <QDataStream>

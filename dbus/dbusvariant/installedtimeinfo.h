@@ -1,6 +1,5 @@
 #ifndef INSTALLEDTIMEINFO_H
 #define INSTALLEDTIMEINFO_H
-
 #include <QtDBus>
 
 class InstalledTimeInfo

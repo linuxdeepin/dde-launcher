@@ -1,6 +1,5 @@
 #ifndef ITEMINFO_H
 #define ITEMINFO_H
-
 #include <QtDBus>
 
 class ItemInfo

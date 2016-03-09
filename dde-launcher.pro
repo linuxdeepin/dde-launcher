@@ -1,8 +1,9 @@
-QT      += core gui dbus widgets
+QT      += core gui dbus widgets x11extras svg
 
 TARGET = dde-launcher
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
+<<<<<<< 90f7166dcf66c2ab57efac31c6fec82a4ab5147f
 <<<<<<< 7a39e0d3c3ca3ab83dd188d5e7018fbd62688ac9
 <<<<<<< 1c301c7a53dd948b5c5fa1c81718826a55b6d514
 
@@ -120,39 +121,37 @@ PKGCONFIG += dtkbase dtkwidget
 =======
 PKGCONFIG += dtkbase dtkwidget dtkbase
 >>>>>>> test widgets list auto-resize
+=======
+PKGCONFIG += dtkbase dtkwidget dtkbase gtk+-2.0 gio-unix-2.0
+
+include(./widgets/widgets.pri)
+>>>>>>> adjust ui
 
 SOURCES += \
     mian.cpp \
-    mainframe.cpp \
     dbus/dbuslauncher.cpp \
-    dbus/categoryinfo.cpp \
-    dbus/frequencyinfo.cpp \
-    dbus/iteminfo.cpp \
-    dbus/installedtimeinfo.cpp \
     model/appslistmodel.cpp \
     model/appsmanager.cpp \
-    appitemdelegate.cpp \
     view/applistview.cpp \
-    widget/categorytitlewidget.cpp \
-    widget/searchwidget.cpp \
-    widget/navigationlistwidget.cpp \
-    widget/navigationbuttonframe.cpp \
-    widget/basecheckedbutton.cpp \
-    global_util/util.cpp
+    global_util/util.cpp \
+    dbus/dbusvariant/categoryinfo.cpp \
+    dbus/dbusvariant/frequencyinfo.cpp \
+    dbus/dbusvariant/installedtimeinfo.cpp \
+    dbus/dbusvariant/iteminfo.cpp \
+    dbus/fileInfo_interface.cpp \
+    global_util/themeappicon.cpp \
+    app/mainframe.cpp \
+    delegate/appitemdelegate.cpp
 
 HEADERS += \
-    mainframe.h \
     dbus/dbuslauncher.h \
-    dbus/categoryinfo.h \
-    dbus/frequencyinfo.h \
-    dbus/iteminfo.h \
-    dbus/installedtimeinfo.h \
     model/appslistmodel.h \
 <<<<<<< 8d5b28b6906b7624eebe3dacb3297fa0bca63884
     model/appsmanager.h
 >>>>>>> write new launcher, remove all old files
 =======
     model/appsmanager.h \
+<<<<<<< 90f7166dcf66c2ab57efac31c6fec82a4ab5147f
 <<<<<<< 98e7ec7e4e49fa874938262caabaad1f85e8c038
     appitemdelegate.h
 >>>>>>> add item delegate to draw cell
@@ -165,21 +164,29 @@ HEADERS += \
 =======
     widget/categorytitlewidget.h \
     widget/searchwidget.h \
+=======
+    view/applistview.h \
+>>>>>>> adjust ui
     global_util/constants.h \
-    widget/navigationlistwidget.h \
-    widget/navigationbuttonframe.h \
-    widget/basecheckedbutton.h \
     global_util/global.h \
     global_util/calcuate_util.h \
-    global_util/util.h
+    global_util/util.h \
+    dbus/dbusvariant/categoryinfo.h \
+    dbus/dbusvariant/frequencyinfo.h \
+    dbus/dbusvariant/installedtimeinfo.h \
+    dbus/dbusvariant/iteminfo.h \
+    dbus/fileInfo_interface.h \
+    global_util/themeappicon.h \
+    app/mainframe.h \
+    delegate/appitemdelegate.h
 
-target.path = /usr/bin
+target.path = /usr/bin/
 
 qm_files.files = translations/*.qm
 qm_files.path = /usr/share/dde-launcher/translations
 
-service.path = /usr/share/dbus-1/services
-service.files = dbusservices/com.deepin.dde.Launcher.service
+services.path = /usr/share/dbus-1/services
+services.files = dbusservices/com.deepin.dde.Launcher.service
 
 INSTALLS += target qm_files services
 <<<<<<< 41d93f3d414f7c9f67c107a1883ab90353669dfd

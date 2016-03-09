@@ -20,10 +20,10 @@
 #include <QtCore/QVariant>
 #include <QtDBus/QtDBus>
 
-#include "categoryinfo.h"
-#include "frequencyinfo.h"
-#include "iteminfo.h"
-#include "installedtimeinfo.h"
+#include "dbusvariant/categoryinfo.h"
+#include "dbusvariant/frequencyinfo.h"
+#include "dbusvariant/iteminfo.h"
+#include "dbusvariant/installedtimeinfo.h"
 
 /*
  * Proxy class for interface com.deepin.dde.daemon.Launcher
@@ -91,8 +91,87 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("GetAllTimeInstalled"), argumentList);
     }
 
-Q_SIGNALS: // SIGNALS
-// begin property changed signals
+    inline QDBusPendingReply<CategoryInfo> GetCategoryInfo(qlonglong in0)
+       {
+           QList<QVariant> argumentList;
+           argumentList << QVariant::fromValue(in0);
+           return asyncCallWithArgumentList(QStringLiteral("GetCategoryInfo"), argumentList);
+       }
+
+       inline QDBusPendingReply<ItemInfo> GetItemInfo(const QString &in0)
+       {
+           QList<QVariant> argumentList;
+           argumentList << QVariant::fromValue(in0);
+           return asyncCallWithArgumentList(QStringLiteral("GetItemInfo"), argumentList);
+       }
+
+       inline QDBusPendingReply<bool> IsItemOnDesktop(const QString &in0)
+       {
+           QList<QVariant> argumentList;
+           argumentList << QVariant::fromValue(in0);
+           return asyncCallWithArgumentList(QStringLiteral("IsItemOnDesktop"), argumentList);
+       }
+
+       inline QDBusPendingReply<> MarkLaunched(const QString &in0)
+       {
+           QList<QVariant> argumentList;
+           argumentList << QVariant::fromValue(in0);
+           return asyncCallWithArgumentList(QStringLiteral("MarkLaunched"), argumentList);
+       }
+
+       inline QDBusPendingReply<> RecordFrequency(const QString &in0)
+       {
+           QList<QVariant> argumentList;
+           argumentList << QVariant::fromValue(in0);
+           return asyncCallWithArgumentList(QStringLiteral("RecordFrequency"), argumentList);
+       }
+
+       inline QDBusPendingReply<> RecordRate(const QString &in0)
+       {
+           QList<QVariant> argumentList;
+           argumentList << QVariant::fromValue(in0);
+           return asyncCallWithArgumentList(QStringLiteral("RecordRate"), argumentList);
+       }
+
+       inline QDBusPendingReply<bool> RequestRemoveFromDesktop(const QString &in0)
+       {
+           QList<QVariant> argumentList;
+           argumentList << QVariant::fromValue(in0);
+           return asyncCallWithArgumentList(QStringLiteral("RequestRemoveFromDesktop"), argumentList);
+       }
+
+       inline QDBusPendingReply<bool> RequestSendToDesktop(const QString &in0)
+       {
+           QList<QVariant> argumentList;
+           argumentList << QVariant::fromValue(in0);
+           return asyncCallWithArgumentList(QStringLiteral("RequestSendToDesktop"), argumentList);
+       }
+
+       inline QDBusPendingReply<> RequestUninstall(const QString &in0, bool in1)
+       {
+           QList<QVariant> argumentList;
+           argumentList << QVariant::fromValue(in0) << QVariant::fromValue(in1);
+           return asyncCallWithArgumentList(QStringLiteral("RequestUninstall"), argumentList);
+       }
+
+       inline QDBusPendingReply<> Search(const QString &in0)
+       {
+           QList<QVariant> argumentList;
+           argumentList << QVariant::fromValue(in0);
+           return asyncCallWithArgumentList(QStringLiteral("Search"), argumentList);
+       }
+
+   Q_SIGNALS: // SIGNALS
+       void ItemChanged(const QString &in0, ItemInfo in1, qlonglong in2);
+       void NewAppLaunched(const QString &in0);
+       void NewAppMarkedAsLaunched(const QString &in0);
+       void RemoveFromDesktopFailed(const QString &in0, const QString &in1);
+       void RemoveFromDesktopSuccess(const QString &in0);
+       void SearchDone(const QStringList &in0);
+       void SendToDesktopFailed(const QString &in0, const QString &in1);
+       void SendToDesktopSuccess(const QString &in0);
+       void UninstallFailed(const QString &in0, const QString &in1);
+       void UninstallSuccess(const QString &in0);
 };
 
 namespace com {

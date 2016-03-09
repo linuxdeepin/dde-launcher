@@ -2,6 +2,8 @@
 #define APPSLISTMODEL_H
 
 #include <QAbstractListModel>
+#include "dbus/fileInfo_interface.h"
+#include "global_util/global.h"
 
 class AppsManager;
 class AppsListModel : public QAbstractListModel
@@ -19,13 +21,8 @@ public:
         AppNewInstallRole,
     };
 
-    enum AppCategory {
+    /*enum AppCategory {
         All,
-        Custom,
-        Search,
-
-        // apps category
-        Chat,
         Internet,
         Music,
         Video,
@@ -36,22 +33,23 @@ public:
         Development,
         System,
         Others,
-    };
+    };*/
 
 public:
-    explicit AppsListModel(const AppCategory& category, QObject *parent = 0);
-
+    explicit AppsListModel(CategoryID id, QObject *parent = 0);
+    void setListModelData(CategoryID cate);
+//    CategoryID getListModeData();
 protected:
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
     bool removeRows(int row, int count, const QModelIndex &parent);
     bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
 
 private:
-    static AppsManager *m_appsManager;
-
-    AppCategory m_category = All;
+    CategoryID m_appCategory = CategoryID::All;
+    AppsManager *m_appsManager;
+    FileInfoInterface* m_fileInfoInterface;
 };
 
 #endif // APPSLISTMODEL_H

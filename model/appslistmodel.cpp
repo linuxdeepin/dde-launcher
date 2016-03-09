@@ -1,24 +1,36 @@
 #include "appslistmodel.h"
+#include "global_util/themeappicon.h"
 #include "appsmanager.h"
 
 #include <QSize>
 #include <QDebug>
 
-AppsManager *AppsListModel::m_appsManager = nullptr;
-
-AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
+AppsListModel::AppsListModel(CategoryID id, QObject *parent) :
     QAbstractListModel(parent),
-    m_category(category)
+    m_appsManager(new AppsManager(this))
 {
-    if (!m_appsManager)
-        m_appsManager = new AppsManager(this);
+    m_fileInfoInterface = new FileInfoInterface(this);
+    m_appCategory = id;
+
 }
 
 int AppsListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
+    if (m_appCategory == CategoryID::All) {
+    return m_appsManager->appsInfoList().size();
+    } else {
+        for(int i(0); i < 11; i++) {
+            if (m_appCategory == CategoryID(i)) {
 
-    return m_appsManager->appsInfoList(m_category).size();
+        ItemInfoList tmpCateItemInfoList = m_appsManager->getCategoryItemInfo(i);
+                return tmpCateItemInfoList.length();
+            } else {
+                continue;
+            }
+        }
+        return 0;
+    }
 }
 
 bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
@@ -48,30 +60,79 @@ bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action
 
 QVariant AppsListModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || index.row() >= m_appsManager->appsInfoList(m_category).size())
+
+    if (m_appCategory == CategoryID::All) {
+        if (!index.isValid() || index.row() >= m_appsManager->appsInfoList().size())
+            return QVariant();
+        switch (role)
+        {
+        case AppNameRole:
+        {
+            qDebug() << "all appNameRole:" << m_appsManager->appsInfoList()[index.row()].m_name;
+            return m_appsManager->appsInfoList()[index.row()].m_name;
+        }
+        case AppIconRole:
+        {
+            QString appName =  m_appsManager->appsInfoList()[index.row()].m_iconKey;
+            appName = m_fileInfoInterface->GetThemeIcon(m_appsManager->appsInfoList()[index.row()].m_url,
+                    64);
+            qDebug() << "all iconRole:" << appName;
+            return appName;
+        }
+        case ItemSizeHintRole:
+            return QSize(150, 150);
+
+        default:
+            return QVariant();
+        }
+    } else {
+        for(int i(0); i < 11; i++) {
+            if (m_appCategory == CategoryID(i)) {
+                ItemInfoList tmpCateItemInfoList = m_appsManager->getCategoryItemInfo(i);
+                qDebug() << "List model:" << i << tmpCateItemInfoList.length();
+
+                if (!index.isValid() || index.row() >= tmpCateItemInfoList.size())
+                    return QVariant();
+                else
+                    qDebug() << "kdkdkdkdkdkd";
+                switch (role) {
+                case AppNameRole:
+                {
+                    qDebug() << "appNameRole:" <<  tmpCateItemInfoList.at(index.row()).m_name;
+                    qDebug() << tmpCateItemInfoList.at(index.row()).m_name;
+                    return  tmpCateItemInfoList.at(index.row()).m_name;
+                }
+                case AppIconRole:
+                {
+                    QString appUrl = tmpCateItemInfoList.at(index.row()).m_url;
+                    appUrl = m_fileInfoInterface->GetThemeIcon(tmpCateItemInfoList.at(index.row()).m_url,
+                            64);
+                    qDebug() << "appIconRole:" << appUrl;
+                    return appUrl;
+                }
+                case ItemSizeHintRole:
+                    return QSize(150, 150);
+                default:
+                {
+                    qDebug() << "default role";
+                    return QVariant();
+                }
+                }
+
+            } else {
+                continue;
+            }
+        }
         return QVariant();
 
-    switch (role)
-    {
-
-    case AppNameRole:
-    {
-        qDebug() << "&&&&&&&&&" << m_appsManager->appsInfoList(m_category)[index.row()].m_name;
-        return m_appsManager->appsInfoList(m_category)[index.row()].m_name;
-    }
-    case AppIconRole:
-    {
-        qDebug() << "###" << m_appsManager->appsInfoList(m_category)[index.row()].m_url;
-        return m_appsManager->appsInfoList(m_category)[index.row()].m_url;
-    }
-    case ItemSizeHintRole:
-        return QSize(150, 150);
-
-    default:
-        return QVariant();
     }
 
     return QVariant();
+}
+
+void AppsListModel::setListModelData(CategoryID cate) {
+    m_appCategory = cate;
+
 }
 
 Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const

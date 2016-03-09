@@ -9,7 +9,7 @@ class CategoryTitleWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit CategoryTitleWidget(const QString &title, QWidget *parent = 0);
+    CategoryTitleWidget(const QString &title, QWidget *parent = 0);
 
 private:
     QLabel *m_title;

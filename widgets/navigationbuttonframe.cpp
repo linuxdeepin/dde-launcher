@@ -8,7 +8,7 @@
  **/
 
 #include "navigationbuttonframe.h"
-#include "widget/basecheckedbutton.h"
+#include "basecheckedbutton.h"
 //#include "Logger.h"
 #include "global_util/global.h"
 #include "model/appslistmodel.h"

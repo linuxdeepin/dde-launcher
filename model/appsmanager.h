@@ -4,8 +4,6 @@
 #include "appslistmodel.h"
 #include "../dbus/dbuslauncher.h"
 
-#include <QMap>
-
 class AppsManager : public QObject
 {
     Q_OBJECT
@@ -14,18 +12,21 @@ public:
     explicit AppsManager(QObject *parent = 0);
 
     void removeRow(const int row);
-    const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
 
+    void allItemInfo();
+    //get the ItemInfoList of categoryInfo("Internet, chat,...")
+    void categoryInfo();
+
+    ItemInfoList getCategoryInfo(qlonglong id);
+    ItemInfoList &appsInfoList()  { return m_allAppInfoList;}
+    CategoryInfoList &categoryInfoList() { return m_categoryInfoList;}
+    ItemInfoList getCategoryItemInfo(int category_index);
 private:
-    void refreshCategoryInfoList();
-    inline const ItemInfoList appsInfoList() const {return m_appInfoList;}
+    DBusLauncher *m_launterInter;
 
-private:
-    DBusLauncher *m_launcherInter;
-
-//    QMap<QString, int> m_categoryMap;
-
-    ItemInfoList m_appInfoList;
+    ItemInfoList m_allAppInfoList;
+    QList<ItemInfo*> m_catagoryInfos;
+    CategoryInfoList m_categoryInfoList;
 };
 
 #endif // APPSMANAGER_H

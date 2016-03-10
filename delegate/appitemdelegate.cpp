@@ -23,8 +23,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     painter->setBrush(QBrush(QColor(169, 169, 169, 50)));
     painter->setRenderHints(QPainter::Antialiasing|QPainter::SmoothPixmapTransform);
-    qDebug() << "option" << option.rect
-             << option.icon << index.data(AppsListModel::AppIconRole).toString();
+    qDebug() << "option" << option.rect;
     painter->drawRect(itemRect);
     int margins = 15;
     QRect textRect = QRect(itemRect.x() + margins, itemRect.y() + margins, itemRect.width() - margins*2,

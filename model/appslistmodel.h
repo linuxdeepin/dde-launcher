@@ -49,7 +49,7 @@ protected:
 private:
     CategoryID m_appCategory = CategoryID::All;
     AppsManager *m_appsManager;
-    FileInfoInterface* m_fileInfoInterface;
+
 };
 
 #endif // APPSLISTMODEL_H

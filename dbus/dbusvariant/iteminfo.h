@@ -23,6 +23,14 @@ public:
     QString m_iconKey;
     qlonglong m_id;
     qlonglong m_installedTime;
+
+    /*add url*/
+    bool isAutoStart=false;
+    QString iconUrl;
+    /*if the app has been opened or not*/
+    qulonglong count = 0;
+    QString pinyinName;
+    QString lowerPinyinName;
 };
 
 typedef QList<ItemInfo> ItemInfoList;

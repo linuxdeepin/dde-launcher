@@ -21,24 +21,9 @@ public:
         AppNewInstallRole,
     };
 
-    /*enum AppCategory {
-        All,
-        Internet,
-        Music,
-        Video,
-        Graphics,
-        Game,
-        Office,
-        Reading,
-        Development,
-        System,
-        Others,
-    };*/
-
 public:
     explicit AppsListModel(CategoryID id, QObject *parent = 0);
     void setListModelData(CategoryID cate);
-//    CategoryID getListModeData();
 protected:
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
     bool removeRows(int row, int count, const QModelIndex &parent);
@@ -48,8 +33,6 @@ protected:
 
 private:
     CategoryID m_appCategory = CategoryID::All;
-    AppsManager *m_appsManager;
-
 };
 
 #endif // APPSLISTMODEL_H

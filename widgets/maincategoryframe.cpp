@@ -29,6 +29,20 @@ MainCategoryFrame::MainCategoryFrame(QFrame *parent)
     m_layout->addStretch();
 
     setLayout(m_layout);
+    setStyleSheet("background-color: rgba(255, 222, 173,255);");
+
+    updateUI();
+}
+
+void MainCategoryFrame::updateUI() {
+    QList<int> appNumList = appsManager->getCategoryAppNumsList();
+    for(int i(0); i< appNumList.size();i++) {
+        if (appNumList[i]==0) {
+            m_cateTitleWidgetList[i]->hide();
+            m_listViewList[i]->hide();
+
+        }
+    }
 }
 
 MainCategoryFrame::~MainCategoryFrame(){

@@ -20,7 +20,6 @@ MainFrame::MainFrame(QWidget *parent) :
     m_mainCategoryFrame(new MainCategoryFrame(this))
 {
 
-
     setObjectName("LauncherFrame");
     m_appsArea->setFrameStyle(QFrame::NoFrame);
     m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -30,7 +29,7 @@ MainFrame::MainFrame(QWidget *parent) :
     m_customAppsView->setModel(m_customAppsModel);
     m_customAppsView->setItemDelegate(m_appItemDelegate);
     m_customAppsView->setStyleSheet("background-color:cyan;");
-
+    m_customAppsView->hide();
     m_appsVbox->layout()->addWidget(m_customAppsView);
     m_appsVbox->layout()->addWidget(m_mainCategoryFrame);
 
@@ -93,6 +92,8 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
     {
 #ifdef QT_DEBUG
     case Qt::Key_Escape:        qApp->quit();       break;
+    case Qt::Key_F1: { m_customAppsView->show(); m_mainCategoryFrame->hide();break;}
+    case Qt::Key_F2: { m_customAppsView->hide(); m_mainCategoryFrame->show();break;}
 //    case Qt::Key_Control:       scrollToCategory(CategoryID::Internet);       break;
 #endif
     default:;

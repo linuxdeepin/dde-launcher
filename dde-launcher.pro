@@ -178,7 +178,8 @@ HEADERS += \
     dbus/fileInfo_interface.h \
     global_util/themeappicon.h \
     app/mainframe.h \
-    delegate/appitemdelegate.h
+    delegate/appitemdelegate.h \
+    global_util/singleton.h
 
 target.path = /usr/bin/
 

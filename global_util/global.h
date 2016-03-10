@@ -10,7 +10,8 @@
 #ifndef GLOBAL
 #define GLOBAL
 
-//#include "widgets/singleton.h"
+#include "singleton.h"
+#include "model/appsmanager.h"
 //#include "signalmanager.h"
 //#include "controller/dbuscontroller.h"
 //#include "views/appitemmanager.h"
@@ -21,7 +22,7 @@
 
 //#define signalManager  Singleton<SignalManager>::instance()
 //#define dbusController Singleton<DBusController>::instance()
-//#define appItemManager Singleton<AppItemManager>::instance()
+#define appsManager Singleton<AppsManager>::instance()
 
 const int NavgationBarLeftMargin = 50;
 const int TopBottomGradientHeight = 60;

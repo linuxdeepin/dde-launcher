@@ -6,8 +6,8 @@
 #include <QDebug>
 
 AppsListModel::AppsListModel(CategoryID id, QObject *parent) :
-    QAbstractListModel(parent),
-    m_appsManager(new AppsManager(this))
+    QAbstractListModel(parent)
+
 {
     m_appCategory = id;
 
@@ -17,12 +17,12 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     if (m_appCategory == CategoryID::All) {
-    return m_appsManager->appsInfoList().size();
+    return appsManager->appsInfoList().size();
     } else {
         for(int i(0); i < 11; i++) {
             if (m_appCategory == CategoryID(i)) {
 
-        ItemInfoList tmpCateItemInfoList = m_appsManager->getCategoryItemInfo(i);
+        ItemInfoList tmpCateItemInfoList = appsManager->getCategoryItemInfo(i);
                 return tmpCateItemInfoList.length();
             } else {
                 continue;
@@ -40,7 +40,7 @@ bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
     Q_ASSERT(count == 1);
 
     beginRemoveRows(parent, row, row);
-    m_appsManager->removeRow(row);
+    appsManager->removeRow(row);
     endRemoveRows();
 
     return true;
@@ -61,7 +61,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
 {
     for(int i(-1); i < 11; i++) {
         if (m_appCategory == CategoryID(i)) {
-            ItemInfoList tmpCateItemInfoList = m_appsManager->getCategoryItemInfo(i);
+            ItemInfoList tmpCateItemInfoList = appsManager->getCategoryItemInfo(i);
             qDebug() << "List model:" << i << tmpCateItemInfoList.length();
 
             if (!index.isValid() || index.row() >= tmpCateItemInfoList.size())
@@ -103,7 +103,7 @@ void AppsListModel::setListModelData(CategoryID cate) {
 
 Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const
 {
-//    if (!index.isValid() || index.row() >= m_appsManager->appsInfoList().size())
+//    if (!index.isValid() || index.row() >= appsManager->appsInfoList().size())
 //        return Qt::NoItemFlags;
 
     const Qt::ItemFlags defaultFlags = QAbstractListModel::flags(index);

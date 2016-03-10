@@ -16,6 +16,7 @@ public:
     MainCategoryFrame(QFrame* parent=0);
     ~MainCategoryFrame();
 
+    void updateUI();
 private:
     QVBoxLayout* m_layout;
     QList<AppListView*> m_listViewList;

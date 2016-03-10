@@ -22,6 +22,7 @@ public:
     ItemInfoList &appsInfoList()  { return m_allAppInfoList;}
     CategoryInfoList &categoryInfoList() { return m_categoryInfoList;}
     ItemInfoList getCategoryItemInfo(int category_index);
+    QList<int> getCategoryAppNumsList();
 private:
     FileInfoInterface* m_fileInfoInterface;
     DBusLauncher *m_launterInter;
@@ -42,6 +43,7 @@ private:
     ItemInfoList m_otherInfos;
 
     QList<ItemInfo*> m_catagoryInfos;
+    QList<int> m_categoryAppNums;
     CategoryInfoList m_categoryInfoList;
 };
 

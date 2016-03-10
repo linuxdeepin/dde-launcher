@@ -12,6 +12,7 @@
 
 #include <QStringList>
 #include <QFrame>
+#include "model/appsmanager.h"
 
 class BaseCheckedButton;
 class QButtonGroup;
@@ -25,11 +26,11 @@ public:
 
     void initConnect();
     void initByMode(int mode);
-
+    void updateUI();
 signals:
     void currentIndexChanged(int index);
 public slots:
-    void hideButtons(const QList<qlonglong>& keys);
+    void hideButtons();
     void handleButtonClicked(int id);
     void checkButtonByKey(qlonglong key);
     void setCurrentIndex(int currentIndex);

@@ -13,4 +13,5 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
 
     setLayout(mainLayout);
     setFixedHeight(DLauncher::CATEGORY_TITLE_WIDGET_HEIGHT);
+    setStyleSheet("background-color: rgba(118, 238, 198, 255)");
 }

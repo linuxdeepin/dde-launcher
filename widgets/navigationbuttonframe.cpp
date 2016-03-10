@@ -23,6 +23,7 @@ NavigationButtonFrame::NavigationButtonFrame(int mode, QWidget *parent) : QFrame
     m_buttonGroup->setExclusive(true);
     initByMode(mode);
     initConnect();
+    updateUI();
 }
 
 void NavigationButtonFrame::initConnect(){
@@ -71,15 +72,17 @@ void NavigationButtonFrame::initByMode(int mode){
     }
 }
 
-void NavigationButtonFrame::hideButtons(const QList<qlonglong> &keys){
-    for (int key = 0, len = CategoryKeys.size(); key < len; ++key) {
-        if (!keys.contains(key)){
-            int index = key;
-            m_buttonGroup->button(index)->show();
-        }else{
-            int index = key;
-            m_buttonGroup->button(index)->hide();
-            qDebug() << "hideButtons^^^^^^^^^^^^^^^***:" << index;
+void NavigationButtonFrame::updateUI() {
+    hideButtons();
+}
+
+void NavigationButtonFrame::hideButtons(){
+    QList<int> appNumList = appsManager->getCategoryAppNumsList();
+    for(int i(0); i< appNumList.size();i++) {
+        if (appNumList[i]==0) {
+            qDebug() << "i is the button need to be hided:" << i;
+            m_buttonGroup->button(i)->hide();
+
         }
     }
 }

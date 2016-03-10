@@ -81,6 +81,23 @@ ItemInfoList AppsManager::getCategoryItemInfo(int category_index) {
     return ItemInfoList();
 }
 
+QList<int> AppsManager::getCategoryAppNumsList() {
+    m_categoryAppNums.clear();
+    m_categoryAppNums.append(m_internetInfos.size());
+    m_categoryAppNums.append(m_chatInfos.size());
+    m_categoryAppNums.append(m_musicInfos.size());
+    m_categoryAppNums.append(m_videoInfos.size());
+    m_categoryAppNums.append(m_graphicsInfos.size());
+    m_categoryAppNums.append(m_gamesInfos.size());
+    m_categoryAppNums.append(m_officeInfos.size());
+    m_categoryAppNums.append(m_readingInfos.size());
+    m_categoryAppNums.append(m_developmentInfos.size());
+    m_categoryAppNums.append(m_systemInfos.size());
+    m_categoryAppNums.append(m_otherInfos.size());
+
+    return m_categoryAppNums;
+}
+
 void AppsManager::removeRow(const int row)
 {
     m_allAppInfoList.removeAt(row);

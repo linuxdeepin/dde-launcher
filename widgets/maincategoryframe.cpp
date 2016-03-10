@@ -4,18 +4,18 @@
 
 MainCategoryFrame::MainCategoryFrame(QFrame *parent)
     : QFrame(parent) {
-//    AppItemDelegate* itemDelegate = new AppItemDelegate(this);
+    AppItemDelegate* itemDelegate = new AppItemDelegate(this);
     for(int i = 0; i < 11; i++) {
         CategoryTitleWidget* tmpCategoryTitleWidget = new CategoryTitleWidget(CategoryKeys.at(i),this);
         m_cateTitleWidgetList.append(tmpCategoryTitleWidget);
         AppListView* tmpListView = new AppListView(this);
         m_listViewList.append(tmpListView);
-        AppsListModel* tmpListModel = new AppsListModel(CategoryID::All, this);
+        AppsListModel* tmpListModel = new AppsListModel(CategoryID(i), this);
         tmpListModel->setListModelData(CategoryID(i));
         m_listModelList.append(tmpListModel);
 
         tmpListView->setModel(tmpListModel);
-//        tmpListView->setItemDelegate(itemDelegate);
+        tmpListView->setItemDelegate(itemDelegate);
         qDebug() << "CategoryKeys.at(i)" << i << CategoryKeys.at(i);
     }
 

@@ -16,10 +16,7 @@ MainFrame::MainFrame(QWidget *parent) :
     m_appsArea(new QScrollArea),
     m_appsVbox(new DVBoxWidget),
     m_customAppsView(new AppListView),
-//    m_testView(new AppListView),
     m_appItemDelegate(new AppItemDelegate),
-    m_internetTitle(new CategoryTitleWidget(tr("Internet"))),
-    m_musicTitle(new CategoryTitleWidget(tr("Music"))),
     m_mainCategoryFrame(new MainCategoryFrame(this))
 {
 
@@ -32,19 +29,10 @@ MainFrame::MainFrame(QWidget *parent) :
     m_customAppsModel = new AppsListModel(CategoryID::All);
     m_customAppsView->setModel(m_customAppsModel);
     m_customAppsView->setItemDelegate(m_appItemDelegate);
-//    m_customAppsView->setStyleSheet("background-color:cyan;");
-//    AppsListModel* testView = new AppsListModel(this);
-
-
-//    m_testView->setModel(m_customAppsModel);
-//    m_testView->setItemDelegate(m_appItemDelegate);
-//    m_testView->setStyleSheet("background-color:rgba(180, 238, 180, 255);");
+    m_customAppsView->setStyleSheet("background-color:cyan;");
 
     m_appsVbox->layout()->addWidget(m_customAppsView);
     m_appsVbox->layout()->addWidget(m_mainCategoryFrame);
-//    m_appsVbox->layout()->addWidget(m_internetTitle);
-//    m_appsVbox->layout()->addWidget(m_testView);
-//    m_appsVbox->layout()->addWidget(m_musicTitle);
 
     m_appsVbox->layout()->setSpacing(0);
     m_appsVbox->layout()->setMargin(0);

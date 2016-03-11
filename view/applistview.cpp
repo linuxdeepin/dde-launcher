@@ -42,7 +42,10 @@ void AppListView::dropEvent(QDropEvent *e)
 void AppListView::mousePressEvent(QMouseEvent *e)
 {
     m_dragStartPos = e->pos();
-
+    qDebug() << "mousePressing!";
+    if (e->button() == Qt::RightButton) {
+        qDebug() << "AppListView mousePressEvent:" << e->pos();
+    }
     QListView::mousePressEvent(e);
 }
 

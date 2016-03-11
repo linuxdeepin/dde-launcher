@@ -51,6 +51,10 @@ void MainCategoryFrame::scrollToCategory(int index) {
 
 void MainCategoryFrame::initConnect() {
     connect(signalManager, &SignalManager::scrollToCategory, this, &MainCategoryFrame::scrollToCategory);
+
+    foreach (AppListView* appListView, m_listViewList) {
+        connect(appListView, &AppListView::clicked, this, &MainCategoryFrame::clickItemIndex);
+    }
 }
 
 void MainCategoryFrame::updateUI() {
@@ -86,6 +90,11 @@ void MainCategoryFrame::addAnEmptyFrameInBottom() {
         m_bottonFrame->setFixedHeight(800 -160 - rowNum*150);
         m_layout->addWidget(m_bottonFrame);
     }
+}
+
+void MainCategoryFrame::clickItemIndex(QModelIndex index) {
+    qDebug() << "QModelIndex:" << index.data(AppsListModel::AppIconRole).toString()
+             << index.data(AppsListModel::AppNameRole).toString();
 }
 
 MainCategoryFrame::~MainCategoryFrame(){

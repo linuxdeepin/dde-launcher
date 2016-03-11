@@ -24,6 +24,7 @@ public:
 public slots:
     void scrollToCategory(int index);
     void addAnEmptyFrameInBottom();
+    void clickItemIndex(QModelIndex index);
 private:
     QVBoxLayout* m_layout;
     QFrame* m_bottonFrame;

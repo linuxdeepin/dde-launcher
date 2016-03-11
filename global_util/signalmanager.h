@@ -16,8 +16,11 @@ public:
     };
 
 signals:
+    //control the scroll of the main scrollArea
     void scrollToCategory(int index);
     void scrollToValue(int scrollValue);
+    //control the checked status of left navigationbar
+    void scrolledToNavigation(int value);
     /*
     void requestData();
     void launcheRefreshed();

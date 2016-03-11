@@ -31,7 +31,7 @@ MainCategoryFrame::MainCategoryFrame(QFrame *parent)
     setStyleSheet("background-color: rgba(255, 222, 173,255);");
 
     m_bottonFrame = new QFrame(this);
-    m_bottonFrame->setStyleSheet("background-color:green;");
+    m_bottonFrame->setStyleSheet("background-color:transparent;");
     updateUI();
     initConnect();
     addAnEmptyFrameInBottom();

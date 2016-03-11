@@ -64,12 +64,15 @@ void MainFrame::initConnect() {
     });
 
     connect(signalManager, &SignalManager::scrollToValue, this, &MainFrame::scrollToCategory);
+    connect(m_appsArea->verticalScrollBar(), &QScrollBar::valueChanged, signalManager, &SignalManager::scrolledToNavigation);
 }
 
 void MainFrame::scrollToCategory(int value)
 {
     m_appsArea->verticalScrollBar()->setValue(value);
 }
+
+
 
 void MainFrame::resizeEvent(QResizeEvent *e)
 {

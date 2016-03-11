@@ -29,13 +29,9 @@ NavigationButtonFrame::NavigationButtonFrame(int mode, QWidget *parent) : QFrame
 void NavigationButtonFrame::initConnect(){
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(handleButtonClicked(int)));
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), signalManager, SIGNAL(scrollToCategory(int)));
-    connect(signalManager, SIGNAL(scrollToCategory(int)), this, SLOT(testing(int)));
+    connect(signalManager, &SignalManager::scrolledToNavigation, this, &NavigationButtonFrame::setNavigationButtonChecked);
     connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentIndex(int)));
 
-}
-
-void NavigationButtonFrame::testing(int index) {
-    qDebug() << "111111111111111111 index" << index;
 }
 
 void NavigationButtonFrame::initByMode(int mode){
@@ -84,12 +80,19 @@ void NavigationButtonFrame::updateUI() {
 }
 
 void NavigationButtonFrame::hideButtons(){
+    m_rangeScrollValue.clear();
+    m_visibleButtonIndexList.clear();
+    int beginValue = 0;
     QList<int> appNumList = appsManager->getCategoryAppNumsList();
     for(int i(0); i< appNumList.size();i++) {
         if (appNumList[i]==0) {
             qDebug() << "i is the button need to be hided:" << i;
             m_buttonGroup->button(i)->hide();
 
+        } else {
+            m_visibleButtonIndexList.append(i);
+            beginValue += 60 + getRowCount(appNumList[i], 8)*150;
+            m_rangeScrollValue.append(beginValue);
         }
     }
 }
@@ -116,7 +119,6 @@ void NavigationButtonFrame::setCurrentIndex(int currentIndex){
         return;
     m_currentIndex = currentIndex;
     m_buttonGroup->button(currentIndex)->setChecked(true);
-    qDebug() << "###########m_buttonGroup:" << currentIndex;
 }
 
 void NavigationButtonFrame::checkFirstButton(){
@@ -126,6 +128,19 @@ void NavigationButtonFrame::checkFirstButton(){
             m_buttonGroup->button(i)->click();
             emit currentIndexChanged(i);
             break;
+        }
+    }
+}
+
+void NavigationButtonFrame::setNavigationButtonChecked(int val) {
+
+    if (val >= 0 && val <= m_rangeScrollValue[0]) {
+        m_buttonGroup->button(m_visibleButtonIndexList[0])->setChecked(true);
+    } else {
+        for(int i = 0; i< m_rangeScrollValue.length() - 1;i++) {
+            if (val > m_rangeScrollValue[i] && val < m_rangeScrollValue[i+1]) {
+                m_buttonGroup->button(m_visibleButtonIndexList[i+1])->setChecked(true);
+            }
         }
     }
 }

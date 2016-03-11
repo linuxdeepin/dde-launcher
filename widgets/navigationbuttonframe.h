@@ -38,9 +38,12 @@ public slots:
     void addTextShadow();
 
     void checkFirstButton();
-     void testing(int index);
+
+    void setNavigationButtonChecked(int val);
 private:
     QButtonGroup* m_buttonGroup;
+    QList<int> m_rangeScrollValue;
+    QList<int> m_visibleButtonIndexList;
     int m_currentIndex = 0;
 };
 

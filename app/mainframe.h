@@ -26,7 +26,6 @@ public:
 public slots:
     void initConnect();
     void scrollToCategory(int value);
-
 protected:
     void resizeEvent(QResizeEvent *e);
     void keyPressEvent(QKeyEvent *e);

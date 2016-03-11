@@ -50,31 +50,26 @@ MainFrame::MainFrame(QWidget *parent) :
     setMinimumSize(1366, 768);
     setLayout(mainLayout);
     move(qApp->primaryScreen()->geometry().center() - rect().center());
+    setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
 
-
+    initConnect();
+}
+void MainFrame::initConnect() {
     connect(m_customAppsView, &AppListView::pressed, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
 
-    setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
+
 
     connect(m_customAppsView, &AppListView::doubleClicked, [this] (const QModelIndex &index) {
         m_customAppsModel->removeRow(index.row());
     });
+
+    connect(signalManager, &SignalManager::scrollToValue, this, &MainFrame::scrollToCategory);
 }
-/*
-void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
+
+void MainFrame::scrollToCategory(int value)
 {
-    QWidget *dest = nullptr;
-
-    switch (category)
-    {
-    case AppsListModel::Internet:   dest = m_internetTitle;     break;
-    default:;
-    }
-
-    // scroll to destination
-    if (dest)
-        m_appsArea->verticalScrollBar()->setValue(dest->pos().y());
-}*/
+    m_appsArea->verticalScrollBar()->setValue(value);
+}
 
 void MainFrame::resizeEvent(QResizeEvent *e)
 {

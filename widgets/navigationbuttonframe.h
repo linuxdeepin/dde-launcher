@@ -29,6 +29,7 @@ public:
     void updateUI();
 signals:
     void currentIndexChanged(int index);
+
 public slots:
     void hideButtons();
     void handleButtonClicked(int id);
@@ -37,7 +38,7 @@ public slots:
     void addTextShadow();
 
     void checkFirstButton();
-
+     void testing(int index);
 private:
     QButtonGroup* m_buttonGroup;
     int m_currentIndex = 0;

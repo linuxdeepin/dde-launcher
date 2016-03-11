@@ -141,7 +141,8 @@ SOURCES += \
     dbus/fileInfo_interface.cpp \
     global_util/themeappicon.cpp \
     app/mainframe.cpp \
-    delegate/appitemdelegate.cpp
+    delegate/appitemdelegate.cpp \
+    global_util/calculateutil.cpp
 
 HEADERS += \
     dbus/dbuslauncher.h \
@@ -169,7 +170,6 @@ HEADERS += \
 >>>>>>> adjust ui
     global_util/constants.h \
     global_util/global.h \
-    global_util/calcuate_util.h \
     global_util/util.h \
     dbus/dbusvariant/categoryinfo.h \
     dbus/dbusvariant/frequencyinfo.h \
@@ -179,7 +179,9 @@ HEADERS += \
     global_util/themeappicon.h \
     app/mainframe.h \
     delegate/appitemdelegate.h \
-    global_util/singleton.h
+    global_util/singleton.h \
+    global_util/signalmanager.h \
+    global_util/calcuateutil.h
 
 target.path = /usr/bin/
 

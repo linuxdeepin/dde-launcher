@@ -12,6 +12,8 @@
 
 #include "singleton.h"
 #include "model/appsmanager.h"
+#include "signalmanager.h"
+#include "calcuateutil.h"
 //#include "signalmanager.h"
 //#include "controller/dbuscontroller.h"
 //#include "views/appitemmanager.h"
@@ -20,9 +22,10 @@
 #include <libintl.h>
 #include <QObject>
 
-//#define signalManager  Singleton<SignalManager>::instance()
+#define signalManager  Singleton<SignalManager>::instance()
 //#define dbusController Singleton<DBusController>::instance()
 #define appsManager Singleton<AppsManager>::instance()
+#define calculateUtil Singleton<CalculateUtil>::instance()
 
 const int NavgationBarLeftMargin = 50;
 const int TopBottomGradientHeight = 60;

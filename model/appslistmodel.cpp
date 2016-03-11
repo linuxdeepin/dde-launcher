@@ -63,7 +63,6 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         if (m_appCategory == CategoryID(i)) {
             ItemInfoList tmpCateItemInfoList = appsManager->getCategoryItemInfo(i);
             qDebug() << "List model:" << i << tmpCateItemInfoList.length();
-
             if (!index.isValid() || index.row() >= tmpCateItemInfoList.size())
                 return QVariant();
             switch (role) {

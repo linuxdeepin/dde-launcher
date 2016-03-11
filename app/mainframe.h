@@ -24,7 +24,8 @@ public:
     explicit MainFrame(QWidget *parent = 0);
 
 public slots:
-//    void scrollToCategory(const AppsListModel::AppCategory &category);
+    void initConnect();
+    void scrollToCategory(int value);
 
 protected:
     void resizeEvent(QResizeEvent *e);

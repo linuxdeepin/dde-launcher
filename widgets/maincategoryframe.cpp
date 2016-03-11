@@ -1,5 +1,4 @@
 #include "maincategoryframe.h"
-#include "global_util/global.h"
 
 
 MainCategoryFrame::MainCategoryFrame(QFrame *parent)
@@ -31,7 +30,27 @@ MainCategoryFrame::MainCategoryFrame(QFrame *parent)
     setLayout(m_layout);
     setStyleSheet("background-color: rgba(255, 222, 173,255);");
 
+    m_bottonFrame = new QFrame(this);
+    m_bottonFrame->setStyleSheet("background-color:green;");
     updateUI();
+    initConnect();
+    addAnEmptyFrameInBottom();
+
+}
+
+void MainCategoryFrame::scrollToCategory(int index) {
+    QWidget *scrollDestinationWidget = nullptr;
+    scrollDestinationWidget = m_cateTitleWidgetList[index];
+    qDebug() << "m_cateTitleWidgetList" << index;
+    // scroll to destination
+    if (scrollDestinationWidget) {
+        emit signalManager->scrollToValue(scrollDestinationWidget->pos().y());
+    }
+
+}
+
+void MainCategoryFrame::initConnect() {
+    connect(signalManager, &SignalManager::scrollToCategory, this, &MainCategoryFrame::scrollToCategory);
 }
 
 void MainCategoryFrame::updateUI() {
@@ -42,6 +61,30 @@ void MainCategoryFrame::updateUI() {
             m_listViewList[i]->hide();
 
         }
+    }
+}
+
+void MainCategoryFrame::addAnEmptyFrameInBottom() {
+    QList<int> appNums = appsManager->getCategoryAppNumsList();
+    qDebug() << "+++++++++" << appNums << "*" << appNums[appNums.length()-1] ;
+    if (appNums[appNums.length()-1]) {
+        int rowNum = getRowCount(appNums[appNums.length()-1], 8);
+
+        qDebug() << "appNums others" <<  rowNum;
+        //800 is the height　of the category frame's total height
+        m_bottonFrame->setFixedHeight(800 - 160 - rowNum*150);
+        m_layout->addWidget(m_bottonFrame);
+    } else {
+        int rowNum = getRowCount(appNums[appNums.length()-2], 8);
+
+        qDebug() << "xappNums others" <<  rowNum;
+        for(int i = 0; i< m_listViewList.length();i++) {
+            qDebug() << "****#x" << m_listViewList[i]->height();
+        }
+
+        //800 is the height　of the category frame's total height
+        m_bottonFrame->setFixedHeight(800 -160 - rowNum*150);
+        m_layout->addWidget(m_bottonFrame);
     }
 }
 

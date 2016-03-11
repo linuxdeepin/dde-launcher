@@ -28,7 +28,14 @@ NavigationButtonFrame::NavigationButtonFrame(int mode, QWidget *parent) : QFrame
 
 void NavigationButtonFrame::initConnect(){
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(handleButtonClicked(int)));
+    connect(m_buttonGroup, SIGNAL(buttonClicked(int)), signalManager, SIGNAL(scrollToCategory(int)));
+    connect(signalManager, SIGNAL(scrollToCategory(int)), this, SLOT(testing(int)));
     connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentIndex(int)));
+
+}
+
+void NavigationButtonFrame::testing(int index) {
+    qDebug() << "111111111111111111 index" << index;
 }
 
 void NavigationButtonFrame::initByMode(int mode){

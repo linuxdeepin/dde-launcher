@@ -9,6 +9,9 @@
 #include "view/applistview.h"
 #include "delegate/appitemdelegate.h"
 #include "categorytitlewidget.h"
+#include "global_util/global.h"
+#include "global_util/signalmanager.h"
+#include "global_util/calcuateutil.h"
 
 class MainCategoryFrame:public QFrame {
     Q_OBJECT
@@ -17,8 +20,13 @@ public:
     ~MainCategoryFrame();
 
     void updateUI();
+    void initConnect();
+public slots:
+    void scrollToCategory(int index);
+    void addAnEmptyFrameInBottom();
 private:
     QVBoxLayout* m_layout;
+    QFrame* m_bottonFrame;
     QList<AppListView*> m_listViewList;
     QList<AppsListModel*> m_listModelList;
     QList<CategoryTitleWidget*> m_cateTitleWidgetList;

@@ -16,6 +16,20 @@
 class BaseCheckedButton;
 class QButtonGroup;
 
+const QStringList CategoryKeys {
+    "Internet",
+    "Chat",
+    "Music",
+    "Video",
+    "Graphics",
+    "Game",
+    "Office",
+    "Reading",
+    "Development",
+    "System",
+    "Others"
+};
+
 class NavigationButtonFrame : public QFrame
 {
     Q_OBJECT

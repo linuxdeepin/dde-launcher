@@ -29,7 +29,7 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     default:;
     }
 
-    Q_ASSERT(m_appInfos.contains(category));
+    //Q_ASSERT(m_appInfos.contains(category));
 
     return m_appInfos[category];
 }

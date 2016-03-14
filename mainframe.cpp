@@ -140,6 +140,7 @@ MainFrame::MainFrame(QWidget *parent) :
     });
 
     updateDisplayMode(AllApps);
+    updateDisplayMode(GroupByCategory);
 }
 
 void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)

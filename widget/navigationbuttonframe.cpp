@@ -30,57 +30,59 @@ void NavigationButtonFrame::initConnect(){
 }
 
 void NavigationButtonFrame::initByMode(int mode){
-//    setObjectName("NavigationButtonFrame");
-//    QVBoxLayout* layout = new QVBoxLayout(this);
-//    layout->addStretch();
-//    QFrame* buttonFrame = new QFrame;
-//    buttonFrame->setAttribute(Qt::WA_NoMousePropagation);
-//    QVBoxLayout* buttonLayout = new QVBoxLayout;
-//    qDebug() << "CategoryKeys***:" << CategoryKeys;
-//     foreach (QString key, CategoryKeys) {
-//        if (mode == 0){
-//            BaseCheckedButton* button = new BaseCheckedButton(this);
-//            button->setFixedSize(32, 32);
-//            qDebug() << "key.toLower" << key.toLower();
-//            button->setObjectName(key.toLower());
-//            buttonLayout->addWidget(button);
-//            m_buttonGroup->addButton(button, CategoryKeys.indexOf(key));
-//        } else {
-//            qDebug() << "navigation button frame" << key;
+    setObjectName("NavigationButtonFrame");
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->addStretch();
+    QFrame* buttonFrame = new QFrame;
+    buttonFrame->setAttribute(Qt::WA_NoMousePropagation);
+    QVBoxLayout* buttonLayout = new QVBoxLayout;
+    qDebug() << "CategoryKeys***:" << CategoryKeys;
+     foreach (QString key, CategoryKeys) {
+        if (mode == 0){
+            BaseCheckedButton* button = new BaseCheckedButton(this);
+            button->setFixedSize(32, 32);
+            qDebug() << "key.toLower" << key.toLower();
+            button->setObjectName(key.toLower());
+            buttonLayout->addWidget(button);
+            m_buttonGroup->addButton(button, CategoryKeys.indexOf(key));
+        } else {
+            qDebug() << "navigation button frame" << key;
 //            QString name = getCategoryNames(key);
-//            BaseCheckedButton* button = new BaseCheckedButton(name, this);
-//            button->setObjectName("CategoryTextButton");
-//            button->setFixedSize(160 - NavgationBarLeftMargin, 24);
-//            buttonLayout->addWidget(button);
-//            m_buttonGroup->addButton(button, CategoryKeys.indexOf(key));
-//        }
-//    }
-//    buttonLayout->setSpacing(24);
-//    buttonLayout->setContentsMargins(0, 0, 0, 0);
-//    buttonFrame->setLayout(buttonLayout);
+            BaseCheckedButton* button = new BaseCheckedButton(key, this);
+            button->setObjectName("CategoryTextButton");
+            //NavgationBarLeftMargin = 50;
+            button->setFixedSize(160 - 50, 24);
+            buttonLayout->addWidget(button);
+            m_buttonGroup->addButton(button, CategoryKeys.indexOf(key));
+        }
+    }
+    buttonLayout->setSpacing(24);
+    buttonLayout->setContentsMargins(0, 0, 0, 0);
+    buttonFrame->setLayout(buttonLayout);
 
-//    layout->addWidget(buttonFrame);
-//    m_buttonGroup->buttons().at(0)->click();
-//    layout->setContentsMargins(NavgationBarLeftMargin, 0, 0, 0);
-//    layout->addStretch();
-//    setLayout(layout);
+    layout->addWidget(buttonFrame);
+    m_buttonGroup->buttons().at(0)->click();
+    //NavgationBarLeftMargin = 50;
+    layout->setContentsMargins(50, 0, 0, 0);
+    layout->addStretch();
+    setLayout(layout);
 
-//    if (mode == 1){
-//        addTextShadow();
-//    }
+    if (mode == 1){
+        addTextShadow();
+    }
 }
 
 void NavigationButtonFrame::hideButtons(const QList<qlonglong> &keys){
-//    for (int key = 0, len = CategoryKeys.size(); key < len; ++key) {
-//        if (!keys.contains(key)){
-//            int index = key;
-//            m_buttonGroup->button(index)->show();
-//        }else{
-//            int index = key;
-//            m_buttonGroup->button(index)->hide();
-//            qDebug() << "hideButtons^^^^^^^^^^^^^^^***:" << index;
-//        }
-//    }
+    for (int key = 0, len = CategoryKeys.size(); key < len; ++key) {
+        if (!keys.contains(key)){
+            int index = key;
+            m_buttonGroup->button(index)->show();
+        }else{
+            int index = key;
+            m_buttonGroup->button(index)->hide();
+            qDebug() << "hideButtons^^^^^^^^^^^^^^^***:" << index;
+        }
+    }
 }
 
 

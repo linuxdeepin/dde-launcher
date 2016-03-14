@@ -26,26 +26,32 @@ void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
 
 void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    painter->setRenderHints(QPainter::Antialiasing|QPainter::SmoothPixmapTransform);
+    painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
 
+    // draw focus background
     if (CurrentIndex == index)
-        painter->setBrush(QBrush(QColor(23, 238, 238)));
-    else
-        painter->setBrush(QBrush(QColor(238, 23, 238)));
-//    qDebug() << "option" << option.rect
-//             << option.icon << index.data(AppsListModel::AppIconRole).toString();
-//    painter->drawPixmap(itemRect.x(), itemRect.y(), itemRect.width(), itemRect.height(), QIcon(option.icon));
-    painter->drawRect(option.rect);
-//    QRect textRect = QRect(itemRect.x(), itemRect.y() + 110, itemRect.width(), itemRect.height());
-//    painter->drawText(textRect, index.data(AppsListModel::AppNameRole).toString());
-//    qDebug() << "%%%%%%%%%%%" << index.data(AppsListModel::AppIconRole).toString();
-//    QPixmap itemMap = QPixmap(index.data(AppsListModel::AppIconRole).toString());
-//    QPixmap itemMap = QPixmap(":/skin/images/googleChrome.png");
-//    painter->drawPixmap(itemRect, itemMap);
+    {
+        const QColor borderColor(255, 255, 255, 51);
+        const QColor brushColor(0, 0, 0, 76);
+
+        QPen pen;
+        pen.setColor(borderColor);
+        pen.setWidth(2);
+        QPainterPath border;
+        border.addRoundedRect(1, 1, 148, 148, 4, 4);
+        painter->strokePath(border, pen);
+
+        painter->setBrush(brushColor);
+        painter->drawRoundedRect(option.rect.marginsRemoved(QMargins(2, 2, 2, 2)), 4, 4);
+    }
 
     // draw app icon
     painter->drawPixmap(option.rect.marginsRemoved(QMargins(30, 20, 30, 40)),
                         index.data(AppsListModel::AppIconRole).value<QPixmap>());
+
+    // draw icon if app is auto startup
+    if (index.data(AppsListModel::AppAutoStartRole).toBool())
+        painter->drawPixmap(option.rect.x(), option.rect.y(), 16, 16, QPixmap(":/skin/images/emblem-autostart.png"));
 
     // draw app name
     painter->setPen(Qt::black);

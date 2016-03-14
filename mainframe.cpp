@@ -55,7 +55,7 @@ MainFrame::MainFrame(QWidget *parent) :
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setAttribute(Qt::WA_InputMethodEnabled);
-    setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen | Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
 
     setObjectName("LauncherFrame");
 

@@ -12,8 +12,10 @@ public:
     enum AppItemRole {
         ItemSizeHintRole = Qt::SizeHintRole,
         AppNameRole = Qt::DisplayRole,
-        AppReserveRole = Qt::UserRole,
         AppIconRole = Qt::DecorationRole,
+        AppReserveRole = Qt::UserRole,
+
+        // custom role start
         AppCategoryRole,
         AppAutoStartRole,
         AppNewInstallRole,

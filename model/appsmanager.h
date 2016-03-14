@@ -4,6 +4,7 @@
 #include "appslistmodel.h"
 #include "../dbus/dbuslauncher.h"
 #include "../dbus/dbusfileinfo.h"
+#include "../dbus/dbustartmanager.h"
 
 #include <QMap>
 #include <QSettings>
@@ -18,17 +19,22 @@ public:
     void removeRow(const int row);
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
 
+    bool appIsAutoStart(const QString &desktop);
     const QPixmap appIcon(const QString &desktop, const int size);
 
 private:
     explicit AppsManager(QObject *parent = 0);
 
+    void initConnection();
+
     void refreshCategoryInfoList();
     void refreshAppIconCache();
+    void refreshAppAutoStartCache();
 
 private:
     DBusLauncher *m_launcherInter;
     DBusFileInfo *m_fileInfoInter;
+    DBusStartManager *m_startManagerInter;
 
     ItemInfoList m_appInfoList;
     ItemInfoList m_appSearchResultList;
@@ -36,6 +42,7 @@ private:
 
     static AppsManager *INSTANCE;
     static QSettings APP_ICON_CACHE;
+    static QSettings APP_AUTOSTART_CACHE;
 //    static QSettings AppInfoCache;
 };
 

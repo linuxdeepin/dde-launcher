@@ -6,15 +6,24 @@
 AppsManager *AppsManager::INSTANCE = nullptr;
 
 QSettings AppsManager::APP_ICON_CACHE("deepin", "dde-launcher-app-icon", nullptr);
+QSettings AppsManager::APP_AUTOSTART_CACHE("deepin", "dde-launcher-app-autostart", nullptr);
 //QSettings AppsManager::AppInfoCache("deepin", "dde-launcher-app-info", nullptr);
 
 AppsManager::AppsManager(QObject *parent) :
     QObject(parent),
     m_launcherInter(new DBusLauncher(this)),
-    m_fileInfoInter(new DBusFileInfo(this))
+    m_fileInfoInter(new DBusFileInfo(this)),
+    m_startManagerInter(new DBusStartManager(this))
 {
+//    refreshAppIconCache();
+//    refreshAppAutoStartCache();
+
     m_appInfoList = m_launcherInter->GetAllItemInfos().value();
     refreshCategoryInfoList();
+}
+
+void AppsManager::initConnection()
+{
 }
 
 AppsManager *AppsManager::instance(QObject *parent)
@@ -44,6 +53,18 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     //Q_ASSERT(m_appInfos.contains(category));
 
     return m_appInfos[category];
+}
+
+bool AppsManager::appIsAutoStart(const QString &desktop)
+{
+    if (APP_AUTOSTART_CACHE.contains(desktop))
+        return APP_AUTOSTART_CACHE.value(desktop).toBool();
+
+    const bool isAutoStart = m_startManagerInter->IsAutostart(desktop).value();
+
+    APP_AUTOSTART_CACHE.setValue(desktop, isAutoStart);
+
+    return isAutoStart;
 }
 
 const QPixmap AppsManager::appIcon(const QString &desktop, const int size)
@@ -85,4 +106,10 @@ void AppsManager::refreshAppIconCache()
 {
     APP_ICON_CACHE.sync();
     APP_ICON_CACHE.clear();
+}
+
+void AppsManager::refreshAppAutoStartCache()
+{
+    APP_AUTOSTART_CACHE.sync();
+    APP_AUTOSTART_CACHE.clear();
 }

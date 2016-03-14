@@ -36,7 +36,8 @@ class DBusStartManager: public QDBusAbstractInterface
         if (interfaceName !="com.deepin.StartManager")
             return;
         QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
-        foreach(const QString &prop, changedProps.keys()) {
+        auto keys = changedProps.keys();
+        foreach(const QString &prop, keys) {
         const QMetaObject* self = metaObject();
             for (int i=self->propertyOffset(); i < self->propertyCount(); ++i) {
                 QMetaProperty p = self->property(i);
@@ -51,7 +52,7 @@ public:
     { return "com.deepin.StartManager"; }
 
 public:
-    DBusStartManager(const QString &service, const QString &path, const QDBusConnection &connection, QObject *parent = 0);
+    DBusStartManager(QObject *parent = 0);
 
     ~DBusStartManager();
 

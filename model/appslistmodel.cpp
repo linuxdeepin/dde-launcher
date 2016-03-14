@@ -61,7 +61,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return itemInfo.m_name;
     case AppCategoryRole:
         return itemInfo.category();
-//    case AppAutoStartRole:
+    case AppAutoStartRole:
+        return m_appsManager->appIsAutoStart(itemInfo.m_desktop);
 //    case AppNewInstallRole:
     case AppIconRole:
         return m_appsManager->appIcon(itemInfo.m_desktop, 256);

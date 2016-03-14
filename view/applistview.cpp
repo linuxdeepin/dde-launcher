@@ -31,11 +31,6 @@ AppListView::AppListView(QWidget *parent) :
     setWrapping(true);
 }
 
-QSize AppListView::sizeHint() const
-{
-    return QListView::sizeHint();
-}
-
 void AppListView::enterEvent(QEvent *e)
 {
     QListView::enterEvent(e);

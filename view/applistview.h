@@ -4,14 +4,13 @@
 #include <QListView>
 #include <QSize>
 
+class AppsListModel;
 class AppListView : public QListView
 {
     Q_OBJECT
 
 public:
     explicit AppListView(QWidget *parent = 0);
-
-    QSize sizeHint() const;
 
 protected:
     void enterEvent(QEvent *e);

@@ -29,7 +29,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
 
     // draw focus background
-    if (CurrentIndex == index)
+   if (CurrentIndex == index)
     {
         const QColor borderColor(255, 255, 255, 51);
         const QColor brushColor(0, 0, 0, 76);
@@ -54,10 +54,13 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         painter->drawPixmap(option.rect.x(), option.rect.y(), 16, 16, QPixmap(":/skin/images/emblem-autostart.png"));
 
     // draw app name
-    painter->setPen(Qt::black);
-    painter->setBrush(QBrush(Qt::blue));
-    painter->boundingRect(option.rect,
-                          index.data(AppsListModel::AppNameRole).toString());
+    painter->setPen(Qt::white);
+    painter->setBrush(QBrush(Qt::transparent));
+
+    QRect textRect = QRect(option.rect.x() + 20, option.rect.y() + 115, option.rect.width() - 20, option.rect.height() - 20);
+    painter->drawText(textRect, index.data(AppsListModel::AppNameRole).toString());
+
+
 }
 
 QSize AppItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const

@@ -12,7 +12,7 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
     m_category(category)
 {
     if (!m_appsManager)
-        m_appsManager = new AppsManager(this);
+        m_appsManager = AppsManager::instance(this);
 }
 
 int AppsListModel::rowCount(const QModelIndex &parent) const
@@ -59,8 +59,12 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
 
     case AppNameRole:
         return itemInfo.m_name;
+    case AppCategoryRole:
+        return itemInfo.category();
+//    case AppAutoStartRole:
+//    case AppNewInstallRole:
     case AppIconRole:
-        return m_appsManager->appIcon(itemInfo.m_url, 256);
+        return m_appsManager->appIcon(itemInfo.m_desktop, 256);
     case ItemSizeHintRole:
         return QSize(150, 150);
 

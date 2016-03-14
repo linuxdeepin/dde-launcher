@@ -43,7 +43,7 @@ AppsListModel::AppCategory ItemInfo::category() const
 QDebug operator<<(QDebug argument, const ItemInfo &info)
 {
     argument << info.m_categoryId << info.m_installedTime;
-    argument << info.m_url << info.m_name << info.m_key << info.m_iconKey;
+    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
 
     return argument;
 }
@@ -51,7 +51,7 @@ QDebug operator<<(QDebug argument, const ItemInfo &info)
 QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo &info)
 {
     argument.beginStructure();
-    argument << info.m_url << info.m_name << info.m_key << info.m_iconKey;
+    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
     argument << info.m_categoryId << info.m_installedTime;
     argument.endStructure();
 
@@ -60,7 +60,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo &info)
 
 QDataStream &operator<<(QDataStream &argument, const ItemInfo &info)
 {
-    argument << info.m_url << info.m_name << info.m_key << info.m_iconKey;
+    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
     argument << info.m_categoryId << info.m_installedTime;
 
     return argument;
@@ -69,7 +69,7 @@ QDataStream &operator<<(QDataStream &argument, const ItemInfo &info)
 const QDBusArgument &operator>>(const QDBusArgument &argument, ItemInfo &info)
 {
     argument.beginStructure();
-    argument >> info.m_url >> info.m_name >> info.m_key >> info.m_iconKey;
+    argument >> info.m_desktop >> info.m_name >> info.m_key >> info.m_iconKey;
     argument >> info.m_categoryId >> info.m_installedTime;
     argument.endStructure();
 

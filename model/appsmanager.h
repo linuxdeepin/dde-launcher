@@ -13,7 +13,7 @@ class AppsManager : public QObject
     Q_OBJECT
 
 public:
-    explicit AppsManager(QObject *parent = 0);
+    static AppsManager *instance(QObject *parent = nullptr);
 
     void removeRow(const int row);
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
@@ -21,6 +21,8 @@ public:
     const QPixmap appIcon(const QString &desktop, const int size);
 
 private:
+    explicit AppsManager(QObject *parent = 0);
+
     void refreshCategoryInfoList();
     void refreshAppIconCache();
 
@@ -32,8 +34,8 @@ private:
     ItemInfoList m_appSearchResultList;
     QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfos;
 
-    // cache
-    static QSettings AppIconCache;
+    static AppsManager *INSTANCE;
+    static QSettings APP_ICON_CACHE;
 //    static QSettings AppInfoCache;
 };
 

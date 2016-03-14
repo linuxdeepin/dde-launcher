@@ -22,7 +22,7 @@ public:
     friend const QDataStream &operator>>(QDataStream &argument, ItemInfo &info);
 
 public:
-    QString m_url;
+    QString m_desktop;
     QString m_name;
     QString m_key;
     QString m_iconKey;

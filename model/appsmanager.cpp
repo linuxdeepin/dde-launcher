@@ -3,7 +3,9 @@
 #include <QDebug>
 #include <QPixmap>
 
-QSettings AppsManager::AppIconCache("deepin", "dde-launcher-app-icon", nullptr);
+AppsManager *AppsManager::INSTANCE = nullptr;
+
+QSettings AppsManager::APP_ICON_CACHE("deepin", "dde-launcher-app-icon", nullptr);
 //QSettings AppsManager::AppInfoCache("deepin", "dde-launcher-app-info", nullptr);
 
 AppsManager::AppsManager(QObject *parent) :
@@ -13,6 +15,15 @@ AppsManager::AppsManager(QObject *parent) :
 {
     m_appInfoList = m_launcherInter->GetAllItemInfos().value();
     refreshCategoryInfoList();
+}
+
+AppsManager *AppsManager::instance(QObject *parent)
+{
+    if (INSTANCE)
+        return INSTANCE;
+
+    INSTANCE = new AppsManager(parent);
+    return INSTANCE;
 }
 
 void AppsManager::removeRow(const int row)
@@ -40,7 +51,7 @@ const QPixmap AppsManager::appIcon(const QString &desktop, const int size)
     const QString cacheKey = QString("%1-%2").arg(desktop)
                                              .arg(size);
 
-    const QPixmap cachePixmap = AppIconCache.value(cacheKey).value<QPixmap>();
+    const QPixmap cachePixmap = APP_ICON_CACHE.value(cacheKey).value<QPixmap>();
     if (!cachePixmap.isNull())
         return cachePixmap;
 
@@ -51,7 +62,7 @@ const QPixmap AppsManager::appIcon(const QString &desktop, const int size)
     if (iconPixmap.isNull())
         iconPixmap = QPixmap(":/skin/images/application-default-icon.svg");
 
-    AppIconCache.setValue(cacheKey, iconPixmap);
+    APP_ICON_CACHE.setValue(cacheKey, iconPixmap);
 
     return iconPixmap;
 }
@@ -72,6 +83,6 @@ void AppsManager::refreshCategoryInfoList()
 
 void AppsManager::refreshAppIconCache()
 {
-    AppIconCache.sync();
-    AppIconCache.clear();
+    APP_ICON_CACHE.sync();
+    APP_ICON_CACHE.clear();
 }

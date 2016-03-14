@@ -38,7 +38,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         pen.setColor(borderColor);
         pen.setWidth(2);
         QPainterPath border;
-        border.addRoundedRect(1, 1, 148, 148, 4, 4);
+        border.addRoundedRect(option.rect.marginsRemoved(QMargins(2, 2, 2, 2)), 4, 4);
         painter->strokePath(border, pen);
 
         painter->setBrush(brushColor);

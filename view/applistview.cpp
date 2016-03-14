@@ -20,6 +20,7 @@ AppListView::AppListView(QWidget *parent) :
     setMouseTracking(true);
     setAcceptDrops(true);
     setDragEnabled(true);
+    setWrapping(true);
     setDragDropMode(QAbstractItemView::DragDrop);
     setMovement(QListView::Free);
     setFlow(QListView::LeftToRight);
@@ -28,7 +29,8 @@ AppListView::AppListView(QWidget *parent) :
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(QFrame::NoFrame);
-    setWrapping(true);
+//    setAttribute(Qt::WA_TranslucentBackground);
+    setStyleSheet("background-color:transparent;");
 }
 
 void AppListView::enterEvent(QEvent *e)

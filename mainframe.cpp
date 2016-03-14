@@ -139,6 +139,7 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
 
 void MainFrame::initUI()
 {
+    m_appsArea->setObjectName("AppBox");
     m_appsArea->setFrameStyle(QFrame::NoFrame);
     m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

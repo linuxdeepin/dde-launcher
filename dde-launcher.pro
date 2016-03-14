@@ -1,8 +1,9 @@
-QT      += core gui dbus widgets
+QT      += core gui dbus widgets x11extras
 
 TARGET = dde-launcher
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
+<<<<<<< 16a3f3c2de91333e65d6f2a07c226cd9aa1f94e1
 <<<<<<< 54ba9a743079cb32f72588bef99b663ccf0ea760
 <<<<<<< 90f7166dcf66c2ab57efac31c6fec82a4ab5147f
 <<<<<<< 7a39e0d3c3ca3ab83dd188d5e7018fbd62688ac9
@@ -130,6 +131,9 @@ include(./widgets/widgets.pri)
 =======
 PKGCONFIG += dtkbase dtkwidget dtkbase
 >>>>>>> Change main frame layout
+=======
+PKGCONFIG += dtkbase dtkwidget dtkbase xcb xcb-ewmh
+>>>>>>> Add StartManager dbus interface
 
 SOURCES += \
     mian.cpp \
@@ -148,7 +152,9 @@ SOURCES += \
     dbus/dbusvariant/frequencyinfo.cpp \
     dbus/dbusvariant/installedtimeinfo.cpp \
     dbus/dbusvariant/iteminfo.cpp \
-    delegate/appitemdelegate.cpp
+    delegate/appitemdelegate.cpp \
+    dbus/dbustartmanager.cpp \
+    global_util/xcb_misc.cpp
 
 HEADERS += \
     mainframe.h \
@@ -189,7 +195,9 @@ HEADERS += \
     dbus/dbusvariant/frequencyinfo.h \
     dbus/dbusvariant/installedtimeinfo.h \
     dbus/dbusvariant/iteminfo.h \
-    delegate/appitemdelegate.h
+    delegate/appitemdelegate.h \
+    dbus/dbustartmanager.h \
+    global_util/xcb_misc.h
 
 target.path = /usr/bin
 

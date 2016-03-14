@@ -1,5 +1,6 @@
 
 #include "mainframe.h"
+#include "global_util/xcb_misc.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -52,12 +53,15 @@ MainFrame::MainFrame(QWidget *parent) :
     m_systemTitle(new CategoryTitleWidget(tr("System"))),
     m_othersTitle(new CategoryTitleWidget(tr("Others")))
 {
+    setAttribute(Qt::WA_DeleteOnClose);
+    setAttribute(Qt::WA_InputMethodEnabled);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen | Qt::WindowStaysOnTopHint);
+
     setObjectName("LauncherFrame");
 
     initUI();
 
-    setMinimumSize(800, 600);
-    move(qApp->primaryScreen()->geometry().center() - rect().center());
+    setFixedSize(qApp->primaryScreen()->geometry().size());
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
     initConnection();
 
@@ -116,6 +120,13 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
 #endif
     default:;
     }
+}
+
+void MainFrame::showEvent(QShowEvent *e)
+{
+    XcbMisc::instance()->set_deepin_override(winId());
+
+    QFrame::showEvent(e);
 }
 
 bool MainFrame::eventFilter(QObject *o, QEvent *e)

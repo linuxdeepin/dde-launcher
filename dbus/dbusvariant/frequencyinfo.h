@@ -1,5 +1,6 @@
 #ifndef FREQUENCYINFO_H
 #define FREQUENCYINFO_H
+
 #include <QtDBus>
 #include <QDebug>
 

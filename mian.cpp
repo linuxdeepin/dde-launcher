@@ -1,7 +1,7 @@
 
 #include <dapplication.h>
 
-#include "app/mainframe.h"
+#include "mainframe.h"
 
 #include <QLoggingCategory>
 

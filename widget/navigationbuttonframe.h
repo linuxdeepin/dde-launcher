@@ -12,7 +12,6 @@
 
 #include <QStringList>
 #include <QFrame>
-#include "model/appsmanager.h"
 
 class BaseCheckedButton;
 class QButtonGroup;
@@ -26,12 +25,11 @@ public:
 
     void initConnect();
     void initByMode(int mode);
-    void updateUI();
+
 signals:
     void currentIndexChanged(int index);
-
 public slots:
-    void hideButtons();
+    void hideButtons(const QList<qlonglong>& keys);
     void handleButtonClicked(int id);
     void checkButtonByKey(qlonglong key);
     void setCurrentIndex(int currentIndex);
@@ -39,11 +37,8 @@ public slots:
 
     void checkFirstButton();
 
-    void setNavigationButtonChecked(int val);
 private:
     QButtonGroup* m_buttonGroup;
-    QList<int> m_rangeScrollValue;
-    QList<int> m_visibleButtonIndexList;
     int m_currentIndex = 0;
 };
 

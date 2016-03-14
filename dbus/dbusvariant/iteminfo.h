@@ -1,5 +1,8 @@
 #ifndef ITEMINFO_H
 #define ITEMINFO_H
+
+#include "../../model/appslistmodel.h"
+
 #include <QtDBus>
 
 class ItemInfo
@@ -9,6 +12,8 @@ public:
     ~ItemInfo();
 
     static void registerMetaType();
+
+    AppsListModel::AppCategory category() const;
 
     friend QDebug operator<<(QDebug argument, const ItemInfo &info);
     friend QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo &info);
@@ -21,16 +26,8 @@ public:
     QString m_name;
     QString m_key;
     QString m_iconKey;
-    qlonglong m_id;
+    qlonglong m_categoryId;
     qlonglong m_installedTime;
-
-    /*add url*/
-    bool isAutoStart=false;
-    QString iconUrl;
-    /*if the app has been opened or not*/
-    qulonglong count = 0;
-    QString pinyinName;
-    QString lowerPinyinName;
 };
 
 typedef QList<ItemInfo> ItemInfoList;

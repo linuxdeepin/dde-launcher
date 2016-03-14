@@ -6,6 +6,7 @@
 #include "../dbus/dbusfileinfo.h"
 
 #include <QMap>
+#include <QSettings>
 
 class AppsManager : public QObject
 {
@@ -17,7 +18,7 @@ public:
     void removeRow(const int row);
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
 
-    QPixmap appIcon(const QString &desktop, const int size);
+    const QPixmap appIcon(const QString &desktop, const int size);
 
 private:
     void refreshCategoryInfoList();
@@ -29,6 +30,9 @@ private:
     ItemInfoList m_appInfoList;
     ItemInfoList m_appSearchResultList;
     QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfos;
+
+    // cache
+    static QSettings m_appIconCache;
 };
 
 #endif // APPSMANAGER_H

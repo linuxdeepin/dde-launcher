@@ -3,6 +3,8 @@
 #include <QDebug>
 #include <QPixmap>
 
+QSettings AppsManager::m_appIconCache("deepin", "dde-launcher-app-icon", nullptr);
+
 AppsManager::AppsManager(QObject *parent) :
     QObject(parent),
     m_launcherInter(new DBusLauncher(this)),
@@ -32,11 +34,25 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     return m_appInfos[category];
 }
 
-QPixmap AppsManager::appIcon(const QString &desktop, const int size)
+const QPixmap AppsManager::appIcon(const QString &desktop, const int size)
 {
-    const QString pixmap = m_fileInfoInter->GetThemeIcon(desktop, size).value();
+    const QString cacheKey = QString("%1-%2").arg(desktop)
+                                             .arg(size);
 
-    return QPixmap(pixmap);
+    const QPixmap cachePixmap = m_appIconCache.value(cacheKey).value<QPixmap>();
+    if (!cachePixmap.isNull())
+        return cachePixmap;
+
+    // cache fail
+    const QString iconFile = m_fileInfoInter->GetThemeIcon(desktop, size).value();
+    QPixmap iconPixmap = QPixmap(iconFile);
+
+    if (iconPixmap.isNull())
+        iconPixmap = QPixmap(":/skin/images/application-default-icon.svg");
+
+    m_appIconCache.setValue(cacheKey, iconPixmap);
+
+    return iconPixmap;
 }
 
 void AppsManager::refreshCategoryInfoList()

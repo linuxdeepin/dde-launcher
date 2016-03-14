@@ -65,11 +65,10 @@ MainFrame::MainFrame(QWidget *parent) :
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
     initConnection();
 
-    connect(m_allAppsView, &AppListView::doubleClicked, [this] (const QModelIndex &index) {
-        m_allAppsModel->removeRow(index.row());
-    });
+//    connect(m_allAppsView, &AppListView::doubleClicked, [this] (const QModelIndex &index) {
+//        m_allAppsModel->removeRow(index.row());
+//    });
 
-    updateDisplayMode(AllApps);
     updateDisplayMode(GroupByCategory);
 }
 
@@ -207,6 +206,18 @@ void MainFrame::initUI()
 
 void MainFrame::initConnection()
 {
+    connect(m_allAppsView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
+    connect(m_internetView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
+    connect(m_musicView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
+    connect(m_videoView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
+    connect(m_graphicsView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
+    connect(m_gameView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
+    connect(m_officeView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
+    connect(m_readingView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
+    connect(m_developmentView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
+    connect(m_systemView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
+    connect(m_othersView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
+
     connect(m_allAppsView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_internetView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_musicView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
@@ -230,6 +241,11 @@ void MainFrame::initConnection()
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_developmentView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_systemView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_othersView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
+}
+
+void MainFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
+{
+    qDebug() << "show menu" << pos << context << context.data(AppsListModel::AppNameRole);
 }
 
 void MainFrame::updateDisplayMode(const DisplayMode mode)

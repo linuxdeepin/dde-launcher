@@ -19,6 +19,8 @@ public:
         AppCategoryRole,
         AppAutoStartRole,
         AppNewInstallRole,
+        AppIsOnDesktopRole,
+        AppIsOnDockRole,
     };
 
     enum AppCategory {

@@ -12,6 +12,9 @@ class AppListView : public QListView
 public:
     explicit AppListView(QWidget *parent = 0);
 
+signals:
+    void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
+
 protected:
     void enterEvent(QEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);

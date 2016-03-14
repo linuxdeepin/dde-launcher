@@ -44,10 +44,11 @@ protected:
 private:
     void initUI();
     void initConnection();
+    void showPopupMenu(const QPoint &pos, const QModelIndex &context);
     void updateDisplayMode(const DisplayMode mode);
 
 private:
-    DisplayMode m_displayMode = GroupByCategory;
+    DisplayMode m_displayMode = AllApps;
 
     NavigationButtonFrame *m_navigationBar;
     SearchWidget *m_searchWidget;

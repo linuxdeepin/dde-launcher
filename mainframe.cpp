@@ -12,7 +12,7 @@
 
 MainFrame::MainFrame(QWidget *parent) :
     QFrame(parent),
-    m_navigationBar(new NavigationButtonFrame),
+    m_navigationBar(new NavigationWidget),
     m_searchWidget(new SearchWidget),
     m_appsArea(new QScrollArea),
     m_appsVbox(new DVBoxWidget),
@@ -78,13 +78,28 @@ void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
 
     switch (category)
     {
-    case AppsListModel::Internet:   dest = m_internetTitle;     break;
+    case AppsListModel::Internet:       dest = m_internetTitle;         break;
+    case AppsListModel::Music:          dest = m_musicTitle;            break;
+    case AppsListModel::Video:          dest = m_videoTitle;            break;
+    case AppsListModel::Graphics:       dest = m_graphicsTitle;         break;
+    case AppsListModel::Game:           dest = m_gameTitle;             break;
+    case AppsListModel::Office:         dest = m_officeTitle;           break;
+    case AppsListModel::Reading:        dest = m_readingTitle;          break;
+    case AppsListModel::Development:    dest = m_developmentTitle;      break;
+    case AppsListModel::System:         dest = m_systemTitle;           break;
+    case AppsListModel::Others:         dest = m_othersTitle;           break;
     default:;
     }
 
+    if (!dest)
+        return;
+
     // scroll to destination
-    if (dest)
-        m_appsArea->verticalScrollBar()->setValue(dest->pos().y());
+//    m_appsArea->verticalScrollBar()->setValue(dest->pos().y());
+    m_scrollAnimation->stop();
+    m_scrollAnimation->setStartValue(m_appsArea->verticalScrollBar()->value());
+    m_scrollAnimation->setEndValue(dest->pos().y());
+    m_scrollAnimation->start();
 }
 
 void MainFrame::resizeEvent(QResizeEvent *e)
@@ -123,6 +138,7 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
 
 void MainFrame::showEvent(QShowEvent *e)
 {
+    updateCurrentVisibleCategory();
     XcbMisc::instance()->set_deepin_override(winId());
 
     QFrame::showEvent(e);
@@ -130,8 +146,8 @@ void MainFrame::showEvent(QShowEvent *e)
 
 bool MainFrame::eventFilter(QObject *o, QEvent *e)
 {
-    Q_UNUSED(o);
-    Q_UNUSED(e);
+    if (o == m_appsArea->viewport() && e->type() == QEvent::Wheel)
+        updateCurrentVisibleCategory();
 
     return false;
 }
@@ -142,6 +158,7 @@ void MainFrame::initUI()
     m_appsArea->setFrameStyle(QFrame::NoFrame);
     m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_appsArea->viewport()->installEventFilter(this);
 
     m_allAppsView->setModel(m_allAppsModel);
     m_allAppsView->setItemDelegate(m_appItemDelegate);
@@ -202,10 +219,17 @@ void MainFrame::initUI()
     mainLayout->setSpacing(0);
 
     setLayout(mainLayout);
+
+    // animation
+    m_scrollAnimation = new QPropertyAnimation(m_appsArea->verticalScrollBar(), "value");
+    m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
 }
 
 void MainFrame::initConnection()
 {
+    connect(m_navigationBar, &NavigationWidget::scrollToCategory, this, &MainFrame::scrollToCategory);
+    connect(this, &MainFrame::currentVisibleCategoryChanged, m_navigationBar, &NavigationWidget::setCurrentCategory);
+
     connect(m_allAppsView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
     connect(m_internetView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
     connect(m_musicView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
@@ -280,4 +304,36 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
     m_othersView->setVisible(isCategoryMode);
 
     emit displayModeChanged(m_displayMode);
+}
+
+void MainFrame::updateCurrentVisibleCategory()
+{
+    AppsListModel::AppCategory currentVisibleCategory;
+
+    if (!m_internetView->visibleRegion().isEmpty())
+        currentVisibleCategory = AppsListModel::Internet;
+    else if (!m_musicView->visibleRegion().isEmpty())
+        currentVisibleCategory = AppsListModel::Music;
+    else if (!m_videoView->visibleRegion().isEmpty())
+        currentVisibleCategory = AppsListModel::Video;
+    else if (!m_graphicsView->visibleRegion().isEmpty())
+        currentVisibleCategory = AppsListModel::Graphics;
+    else if (!m_gameView->visibleRegion().isEmpty())
+        currentVisibleCategory = AppsListModel::Game;
+    else if (!m_officeView->visibleRegion().isEmpty())
+        currentVisibleCategory = AppsListModel::Office;
+    else if (!m_readingView->visibleRegion().isEmpty())
+        currentVisibleCategory = AppsListModel::Reading;
+    else if (!m_developmentView->visibleRegion().isEmpty())
+        currentVisibleCategory = AppsListModel::Development;
+    else if (!m_systemView->visibleRegion().isEmpty())
+        currentVisibleCategory = AppsListModel::System;
+    else
+        currentVisibleCategory = AppsListModel::Others;
+
+    if (m_currentCategory == currentVisibleCategory)
+        return;
+
+    m_currentCategory = currentVisibleCategory;
+    emit currentVisibleCategoryChanged(m_currentCategory);
 }

@@ -7,10 +7,11 @@
 #include "view/applistview.h"
 #include "widget/categorytitlewidget.h"
 #include "widget/searchwidget.h"
-#include "widget/navigationbuttonframe.h"
+#include "widget/navigationwidget.h"
 
 #include <QFrame>
 #include <QScrollArea>
+#include <QPropertyAnimation>
 
 #include <dboxwidget.h>
 
@@ -31,6 +32,7 @@ public:
 
 signals:
     void displayModeChanged(const DisplayMode mode);
+    void currentVisibleCategoryChanged(const AppsListModel::AppCategory currentVisibleCategory) const;
 
 public slots:
     void scrollToCategory(const AppsListModel::AppCategory &category);
@@ -44,13 +46,18 @@ protected:
 private:
     void initUI();
     void initConnection();
+    void initTimer();
     void showPopupMenu(const QPoint &pos, const QModelIndex &context);
     void updateDisplayMode(const DisplayMode mode);
+    void updateCurrentVisibleCategory();
 
 private:
     DisplayMode m_displayMode = AllApps;
+    AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
 
-    NavigationButtonFrame *m_navigationBar;
+    QPropertyAnimation *m_scrollAnimation;
+
+    NavigationWidget *m_navigationBar;
     SearchWidget *m_searchWidget;
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsVbox;

@@ -42,6 +42,7 @@ public:
 
 signals:
     void currentIndexChanged(int index);
+
 public slots:
     void hideButtons(const QList<qlonglong>& keys);
     void handleButtonClicked(int id);

@@ -1,5 +1,6 @@
 #include "appslistmodel.h"
 #include "appsmanager.h"
+#include "dbus/dbusvariant/iteminfo.h"
 
 #include <QSize>
 #include <QDebug>
@@ -56,7 +57,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
 
     switch (role)
     {
-
+    case AppRawItemInfoRole:
+        return QVariant::fromValue(itemInfo);
     case AppNameRole:
         return itemInfo.m_name;
     case AppCategoryRole:

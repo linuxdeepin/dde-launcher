@@ -19,7 +19,7 @@
 
 NavigationButtonFrame::NavigationButtonFrame(QWidget *parent) : QFrame(parent)
 {
-    setFixedWidth(140);
+    setFixedWidth(180);
     m_buttonGroup = new QButtonGroup(this);
     m_buttonGroup->setExclusive(true);
     int m_mode = 0;

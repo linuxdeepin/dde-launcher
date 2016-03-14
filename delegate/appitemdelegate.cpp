@@ -1,5 +1,6 @@
 #include "appitemdelegate.h"
 #include "model/appslistmodel.h"
+#include "dbus/dbusvariant/iteminfo.h"
 
 #include <QDebug>
 #include <QPixmap>
@@ -27,6 +28,10 @@ void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
 void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
+    painter->setPen(Qt::white);
+    painter->setBrush(QBrush(Qt::transparent));
+
+    const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
 
     // draw focus background
    if (CurrentIndex == index)
@@ -58,7 +63,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setBrush(QBrush(Qt::transparent));
 
     QRect textRect = QRect(option.rect.x() + 20, option.rect.y() + 115, option.rect.width() - 20, option.rect.height() - 20);
-    painter->drawText(textRect, index.data(AppsListModel::AppNameRole).toString());
+    painter->drawText(textRect, itemInfo.m_name);
 
 
 }

@@ -11,7 +11,7 @@
 
 MainFrame::MainFrame(QWidget *parent) :
     QFrame(parent),
-    m_navigationListWidget(new NavigationListWidget),
+    m_navigationBar(new NavigationButtonFrame),
     m_searchWidget(new SearchWidget),
     m_appsArea(new QScrollArea),
     m_appsVbox(new DVBoxWidget),
@@ -185,7 +185,7 @@ void MainFrame::initUI()
     rightSideLayout->addWidget(m_appsArea);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addWidget(m_navigationListWidget);
+    mainLayout->addWidget(m_navigationBar);
     mainLayout->addLayout(rightSideLayout);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);

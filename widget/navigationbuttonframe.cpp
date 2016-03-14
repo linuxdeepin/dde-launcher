@@ -10,17 +10,20 @@
 #include "navigationbuttonframe.h"
 #include "widget/basecheckedbutton.h"
 //#include "Logger.h"
+#include "global_util/util.h"
 #include "model/appslistmodel.h"
 #include <QVBoxLayout>
 #include <QButtonGroup>
 #include <QGraphicsDropShadowEffect>
 #include <QDebug>
 
-NavigationButtonFrame::NavigationButtonFrame(int mode, QWidget *parent) : QFrame(parent)
+NavigationButtonFrame::NavigationButtonFrame(QWidget *parent) : QFrame(parent)
 {
+    setFixedWidth(140);
     m_buttonGroup = new QButtonGroup(this);
     m_buttonGroup->setExclusive(true);
-    initByMode(mode);
+    int m_mode = 0;
+    initByMode(m_mode);
     initConnect();
 }
 
@@ -70,6 +73,8 @@ void NavigationButtonFrame::initByMode(int mode){
     if (mode == 1){
         addTextShadow();
     }
+
+     setStyleSheet(getQssFromFile(":/skin/qss/buttons.qss"));
 }
 
 void NavigationButtonFrame::hideButtons(const QList<qlonglong> &keys){

@@ -140,7 +140,6 @@ SOURCES += \
     view/applistview.cpp \
     widget/categorytitlewidget.cpp \
     widget/searchwidget.cpp \
-    widget/navigationlistwidget.cpp \
     widget/navigationbuttonframe.cpp \
     widget/basecheckedbutton.cpp \
     global_util/util.cpp \
@@ -182,7 +181,6 @@ HEADERS += \
     widget/searchwidget.h \
 >>>>>>> Change main frame layout
     global_util/constants.h \
-    widget/navigationlistwidget.h \
     widget/navigationbuttonframe.h \
     widget/basecheckedbutton.h \
     global_util/util.h \

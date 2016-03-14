@@ -6,8 +6,8 @@
 #include "model/appslistmodel.h"
 #include "view/applistview.h"
 #include "widget/categorytitlewidget.h"
-#include "widget/navigationlistwidget.h"
 #include "widget/searchwidget.h"
+#include "widget/navigationbuttonframe.h"
 
 #include <QFrame>
 #include <QScrollArea>
@@ -48,7 +48,7 @@ private:
 private:
     DisplayMode m_displayMode = GroupByCategory;
 
-    NavigationListWidget *m_navigationListWidget;
+    NavigationButtonFrame *m_navigationBar;
     SearchWidget *m_searchWidget;
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsVbox;

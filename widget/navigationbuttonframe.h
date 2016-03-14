@@ -34,7 +34,7 @@ class NavigationButtonFrame : public QFrame
 {
     Q_OBJECT
 public:
-    explicit NavigationButtonFrame(int mode, QWidget *parent = 0);
+    explicit NavigationButtonFrame(QWidget *parent = 0);
     ~NavigationButtonFrame();
 
     void initConnect();

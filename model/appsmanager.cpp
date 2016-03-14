@@ -3,7 +3,8 @@
 #include <QDebug>
 #include <QPixmap>
 
-QSettings AppsManager::m_appIconCache("deepin", "dde-launcher-app-icon", nullptr);
+QSettings AppsManager::AppIconCache("deepin", "dde-launcher-app-icon", nullptr);
+//QSettings AppsManager::AppInfoCache("deepin", "dde-launcher-app-info", nullptr);
 
 AppsManager::AppsManager(QObject *parent) :
     QObject(parent),
@@ -39,7 +40,7 @@ const QPixmap AppsManager::appIcon(const QString &desktop, const int size)
     const QString cacheKey = QString("%1-%2").arg(desktop)
                                              .arg(size);
 
-    const QPixmap cachePixmap = m_appIconCache.value(cacheKey).value<QPixmap>();
+    const QPixmap cachePixmap = AppIconCache.value(cacheKey).value<QPixmap>();
     if (!cachePixmap.isNull())
         return cachePixmap;
 
@@ -50,7 +51,7 @@ const QPixmap AppsManager::appIcon(const QString &desktop, const int size)
     if (iconPixmap.isNull())
         iconPixmap = QPixmap(":/skin/images/application-default-icon.svg");
 
-    m_appIconCache.setValue(cacheKey, iconPixmap);
+    AppIconCache.setValue(cacheKey, iconPixmap);
 
     return iconPixmap;
 }
@@ -67,4 +68,10 @@ void AppsManager::refreshCategoryInfoList()
 
         m_appInfos[category].append(info);
     }
+}
+
+void AppsManager::refreshAppIconCache()
+{
+    AppIconCache.sync();
+    AppIconCache.clear();
 }

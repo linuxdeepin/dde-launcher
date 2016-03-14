@@ -13,7 +13,10 @@ class AppItemDelegate : public QAbstractItemDelegate
 public:
     explicit AppItemDelegate(QObject *parent = 0);
 
-    static void setCurrentIndex(const QModelIndex &index);
+    void setCurrentIndex(const QModelIndex &index);
+
+signals:
+    void currentChanged(const QModelIndex previousIndex, const QModelIndex &currentIndex) const;
 
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;

@@ -22,6 +22,7 @@ public:
 
 private:
     void refreshCategoryInfoList();
+    void refreshAppIconCache();
 
 private:
     DBusLauncher *m_launcherInter;
@@ -32,7 +33,8 @@ private:
     QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfos;
 
     // cache
-    static QSettings m_appIconCache;
+    static QSettings AppIconCache;
+//    static QSettings AppInfoCache;
 };
 
 #endif // APPSMANAGER_H

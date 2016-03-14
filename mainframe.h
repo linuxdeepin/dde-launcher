@@ -41,6 +41,8 @@ protected:
     bool eventFilter(QObject *o, QEvent *e);
 
 private:
+    void initUI();
+    void initConnection();
     void updateDisplayMode(const DisplayMode mode);
 
 private:

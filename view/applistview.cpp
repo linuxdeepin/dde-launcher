@@ -13,7 +13,11 @@ AppListView::AppListView(QWidget *parent) :
 {
     viewport()->installEventFilter(this);
     viewport()->setAcceptDrops(true);
+    viewport()->setMouseTracking(true);
+    viewport()->setAttribute(Qt::WA_Hover, true);
 
+    setFocusPolicy(Qt::StrongFocus);
+    setMouseTracking(true);
     setAcceptDrops(true);
     setDragEnabled(true);
     setDragDropMode(QAbstractItemView::DragDrop);
@@ -30,6 +34,11 @@ AppListView::AppListView(QWidget *parent) :
 QSize AppListView::sizeHint() const
 {
     return QListView::sizeHint();
+}
+
+void AppListView::enterEvent(QEvent *e)
+{
+    QListView::enterEvent(e);
 }
 
 void AppListView::dropEvent(QDropEvent *e)
@@ -63,6 +72,8 @@ void AppListView::dragLeaveEvent(QDragLeaveEvent *e)
 
 void AppListView::mouseMoveEvent(QMouseEvent *e)
 {
+    QListView::mouseMoveEvent(e);
+
     if (e->buttons() != Qt::LeftButton)
         return;
 

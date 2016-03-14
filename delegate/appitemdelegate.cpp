@@ -15,7 +15,13 @@ AppItemDelegate::AppItemDelegate(QObject *parent) :
 
 void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
 {
+    if (CurrentIndex == index)
+        return;
+
+    const QModelIndex previousIndex = CurrentIndex;
     CurrentIndex = index;
+
+    emit currentChanged(previousIndex, CurrentIndex);
 }
 
 void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const

@@ -54,86 +54,12 @@ MainFrame::MainFrame(QWidget *parent) :
 {
     setObjectName("LauncherFrame");
 
-    m_appsArea->setFrameStyle(QFrame::NoFrame);
-    m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    m_allAppsView->setModel(m_allAppsModel);
-    m_allAppsView->setItemDelegate(m_appItemDelegate);
-    m_internetView->setModel(m_internetModel);
-    m_internetView->setItemDelegate(m_appItemDelegate);
-    m_musicView->setModel(m_musicModel);
-    m_musicView->setItemDelegate(m_appItemDelegate);
-    m_videoView->setModel(m_videoModel);
-    m_videoView->setItemDelegate(m_appItemDelegate);
-    m_graphicsView->setModel(m_graphicsModel);
-    m_graphicsView->setItemDelegate(m_appItemDelegate);
-    m_gameView->setModel(m_gameModel);
-    m_gameView->setItemDelegate(m_appItemDelegate);
-    m_officeView->setModel(m_officeModel);
-    m_officeView->setItemDelegate(m_appItemDelegate);
-    m_readingView->setModel(m_readingModel);
-    m_readingView->setItemDelegate(m_appItemDelegate);
-    m_developmentView->setModel(m_developmentModel);
-    m_developmentView->setItemDelegate(m_appItemDelegate);
-    m_systemView->setModel(m_systemModel);
-    m_systemView->setItemDelegate(m_appItemDelegate);
-    m_othersView->setModel(m_othersModel);
-    m_othersView->setItemDelegate(m_appItemDelegate);
-
-    m_appsVbox->layout()->addWidget(m_allAppsView);
-    m_appsVbox->layout()->addWidget(m_internetTitle);
-    m_appsVbox->layout()->addWidget(m_internetView);
-    m_appsVbox->layout()->addWidget(m_musicTitle);
-    m_appsVbox->layout()->addWidget(m_musicView);
-    m_appsVbox->layout()->addWidget(m_videoTitle);
-    m_appsVbox->layout()->addWidget(m_videoView);
-    m_appsVbox->layout()->addWidget(m_graphicsTitle);
-    m_appsVbox->layout()->addWidget(m_graphicsView);
-    m_appsVbox->layout()->addWidget(m_gameTitle);
-    m_appsVbox->layout()->addWidget(m_gameView);
-    m_appsVbox->layout()->addWidget(m_officeTitle);
-    m_appsVbox->layout()->addWidget(m_officeView);
-    m_appsVbox->layout()->addWidget(m_readingTitle);
-    m_appsVbox->layout()->addWidget(m_readingView);
-    m_appsVbox->layout()->addWidget(m_developmentTitle);
-    m_appsVbox->layout()->addWidget(m_developmentView);
-    m_appsVbox->layout()->addWidget(m_systemTitle);
-    m_appsVbox->layout()->addWidget(m_systemView);
-    m_appsVbox->layout()->addWidget(m_othersTitle);
-    m_appsVbox->layout()->addWidget(m_othersView);
-    m_appsVbox->layout()->setSpacing(0);
-    m_appsVbox->layout()->setMargin(0);
-    m_appsArea->setWidget(m_appsVbox);
-
-    QVBoxLayout *rightSideLayout = new QVBoxLayout;
-    rightSideLayout->addWidget(m_searchWidget);
-    rightSideLayout->addWidget(m_appsArea);
-
-    QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addWidget(m_navigationListWidget);
-    mainLayout->addLayout(rightSideLayout);
-    mainLayout->setMargin(0);
-    mainLayout->setSpacing(0);
+    initUI();
 
     setMinimumSize(800, 600);
-    setLayout(mainLayout);
     move(qApp->primaryScreen()->geometry().center() - rect().center());
-
-
-    connect(m_allAppsView, &AppListView::pressed, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_internetView, &AppListView::pressed, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_musicView, &AppListView::pressed, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_videoView, &AppListView::pressed, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_graphicsView, &AppListView::pressed, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_gameView, &AppListView::pressed, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_officeView, &AppListView::pressed, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_readingView, &AppListView::pressed, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_developmentView, &AppListView::pressed, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_systemView, &AppListView::pressed, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_othersView, &AppListView::pressed, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
+    initConnection();
 
     connect(m_allAppsView, &AppListView::doubleClicked, [this] (const QModelIndex &index) {
         m_allAppsModel->removeRow(index.row());
@@ -198,6 +124,100 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
     Q_UNUSED(e);
 
     return false;
+}
+
+void MainFrame::initUI()
+{
+    m_appsArea->setFrameStyle(QFrame::NoFrame);
+    m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    m_allAppsView->setModel(m_allAppsModel);
+    m_allAppsView->setItemDelegate(m_appItemDelegate);
+    m_internetView->setModel(m_internetModel);
+    m_internetView->setItemDelegate(m_appItemDelegate);
+    m_musicView->setModel(m_musicModel);
+    m_musicView->setItemDelegate(m_appItemDelegate);
+    m_videoView->setModel(m_videoModel);
+    m_videoView->setItemDelegate(m_appItemDelegate);
+    m_graphicsView->setModel(m_graphicsModel);
+    m_graphicsView->setItemDelegate(m_appItemDelegate);
+    m_gameView->setModel(m_gameModel);
+    m_gameView->setItemDelegate(m_appItemDelegate);
+    m_officeView->setModel(m_officeModel);
+    m_officeView->setItemDelegate(m_appItemDelegate);
+    m_readingView->setModel(m_readingModel);
+    m_readingView->setItemDelegate(m_appItemDelegate);
+    m_developmentView->setModel(m_developmentModel);
+    m_developmentView->setItemDelegate(m_appItemDelegate);
+    m_systemView->setModel(m_systemModel);
+    m_systemView->setItemDelegate(m_appItemDelegate);
+    m_othersView->setModel(m_othersModel);
+    m_othersView->setItemDelegate(m_appItemDelegate);
+
+    m_appsVbox->layout()->addWidget(m_allAppsView);
+    m_appsVbox->layout()->addWidget(m_internetTitle);
+    m_appsVbox->layout()->addWidget(m_internetView);
+    m_appsVbox->layout()->addWidget(m_musicTitle);
+    m_appsVbox->layout()->addWidget(m_musicView);
+    m_appsVbox->layout()->addWidget(m_videoTitle);
+    m_appsVbox->layout()->addWidget(m_videoView);
+    m_appsVbox->layout()->addWidget(m_graphicsTitle);
+    m_appsVbox->layout()->addWidget(m_graphicsView);
+    m_appsVbox->layout()->addWidget(m_gameTitle);
+    m_appsVbox->layout()->addWidget(m_gameView);
+    m_appsVbox->layout()->addWidget(m_officeTitle);
+    m_appsVbox->layout()->addWidget(m_officeView);
+    m_appsVbox->layout()->addWidget(m_readingTitle);
+    m_appsVbox->layout()->addWidget(m_readingView);
+    m_appsVbox->layout()->addWidget(m_developmentTitle);
+    m_appsVbox->layout()->addWidget(m_developmentView);
+    m_appsVbox->layout()->addWidget(m_systemTitle);
+    m_appsVbox->layout()->addWidget(m_systemView);
+    m_appsVbox->layout()->addWidget(m_othersTitle);
+    m_appsVbox->layout()->addWidget(m_othersView);
+    m_appsVbox->layout()->setSpacing(0);
+    m_appsVbox->layout()->setMargin(0);
+    m_appsArea->setWidget(m_appsVbox);
+
+    QVBoxLayout *rightSideLayout = new QVBoxLayout;
+    rightSideLayout->addWidget(m_searchWidget);
+    rightSideLayout->addWidget(m_appsArea);
+
+    QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout->addWidget(m_navigationListWidget);
+    mainLayout->addLayout(rightSideLayout);
+    mainLayout->setMargin(0);
+    mainLayout->setSpacing(0);
+
+    setLayout(mainLayout);
+}
+
+void MainFrame::initConnection()
+{
+    connect(m_allAppsView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_internetView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_musicView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_videoView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_graphicsView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_gameView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_officeView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_readingView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_developmentView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_systemView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_othersView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_allAppsView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_internetView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_musicView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_videoView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_graphicsView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_gameView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_officeView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_readingView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_developmentView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_systemView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_othersView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
 }
 
 void MainFrame::updateDisplayMode(const DisplayMode mode)

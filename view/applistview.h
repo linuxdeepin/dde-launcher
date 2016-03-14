@@ -14,6 +14,7 @@ public:
     QSize sizeHint() const;
 
 protected:
+    void enterEvent(QEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
     void dragMoveEvent(QDragMoveEvent *e);
     void dragLeaveEvent(QDragLeaveEvent *e);

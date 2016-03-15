@@ -43,8 +43,11 @@ void AppListView::dropEvent(QDropEvent *e)
 
 void AppListView::mousePressEvent(QMouseEvent *e)
 {
-    if (e->buttons() == Qt::RightButton)
-        emit popupMenuRequested(e->pos(), indexAt(e->pos()));
+    if (e->buttons() == Qt::RightButton) {
+        QPoint rightClickPoint = this->mapToGlobal(e->pos());
+        qDebug() << e->pos() << rightClickPoint;
+        emit popupMenuRequested(rightClickPoint, indexAt(e->pos()));
+    }
 
     if (e->buttons() == Qt::LeftButton)
         m_dragStartPos = e->pos();

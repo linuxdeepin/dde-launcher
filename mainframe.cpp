@@ -298,9 +298,8 @@ void MainFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
 {
     qDebug() << "show menu" << pos << context << context.data(AppsListModel::AppNameRole).toString()
              << "app key:" << context.data(AppsListModel::AppKeyRole).toString();
-    QString appItem = context.data(AppsListModel::AppKeyRole).toString();
 
-    m_menuWorker->showMenuByAppItem(appItem, pos);
+    m_menuWorker->showMenuByAppItem(context, pos);
 }
 
 void MainFrame::ensureScrollToDest(const QVariant &value)

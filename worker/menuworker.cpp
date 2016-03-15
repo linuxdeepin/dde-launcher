@@ -48,17 +48,19 @@ MenuWorker::~MenuWorker()
 }
 
 
-void MenuWorker::showMenuByAppItem(QString appKey, QPoint pos){
-    m_appKeyRightClicked = appKey;
-    qDebug() << "appKey" << appKey;
-    QString menuContent = createMenuContent(appKey);
+void MenuWorker::showMenuByAppItem(const QModelIndex &index, QPoint pos){
+    setCurrentModelIndex(index);
+    m_appKey = m_currentModelIndex.data(AppsListModel::AppKeyRole).toString();
+
+    qDebug() << "appKey" << m_appKey;
+    QString menuContent = createMenuContent(m_appKey);
     QString menuJsonContent = JsonToQString(pos, menuContent);
     QString menuDBusObjectpath = registerMenu();
     qDebug() << "dbus objectpath:" << menuDBusObjectpath;
     if (menuDBusObjectpath.length() > 0){
         showMenu(menuDBusObjectpath, menuJsonContent);
         m_currentMenuObjectPath = menuDBusObjectpath;
-        m_menuObjectPaths.insert(appKey, menuDBusObjectpath);
+        m_menuObjectPaths.insert(m_appKey, menuDBusObjectpath);
     }else{
         qCritical() << "register menu fail!";
     }
@@ -213,19 +215,19 @@ void MenuWorker::menuItemInvoked(QString itemId, bool flag){
     qDebug() << "menuItemInvoked" << itemId;
     switch (id) {
     case 0:
-        handleOpen(m_appKeyRightClicked);
+        handleOpen();
         break;
     case 1:
-        handleToDesktop(m_appKeyRightClicked);
+        handleToDesktop();
         break;
     case 2:
-        handleToDock(m_appKeyRightClicked);
+        handleToDock();
         break;
     case 3:
-        handleToStartup(m_appKeyRightClicked);
+        handleToStartup();
         break;
     case 4:
-        emit  unInstallApp(m_appKeyRightClicked);
+        emit  unInstallApp(m_appKey);
         break;
     default:
         break;
@@ -233,19 +235,17 @@ void MenuWorker::menuItemInvoked(QString itemId, bool flag){
 }
 
 
-void MenuWorker::handleOpen(QString appKey){
-
-    QString url = m_appManager->getItemInfo(appKey).m_desktop;
-    qDebug() << "handleOpen" << appKey << url;
+void MenuWorker::handleOpen(){
     uint timestamp = QX11Info::getTimestamp();
-    QDBusPendingReply<bool> reply = m_startManagerInterface->LaunchWithTimestamp(url, timestamp);
+    QString desktopUrl = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
+    QDBusPendingReply<bool> reply = m_startManagerInterface->LaunchWithTimestamp(desktopUrl, timestamp);
     reply.waitForFinished();
     if (!reply.isError()) {
         bool ret = reply.argumentAt(0).toBool();
         qDebug() << "Launch app:" << ret;
         if (ret){
-            m_launcherInterface->MarkLaunched(appKey);
-            m_launcherInterface->RecordFrequency(appKey);
+            m_launcherInterface->MarkLaunched(m_appKey);
+            m_launcherInterface->RecordFrequency(m_appKey);
             // emit signalManager->newinstalllindicatorHided(appKey);
         }
     } else {
@@ -258,10 +258,14 @@ void MenuWorker::handleMenuClosed(){
 //    emit signalManager->rightClickedChanged(false);
 }
 
-void MenuWorker::handleToDesktop(QString appKey){
-    qDebug() << "handleToDesktop" << appKey;
+void MenuWorker::setCurrentModelIndex(const QModelIndex &index) {
+    m_currentModelIndex = index;
+}
+
+void MenuWorker::handleToDesktop(){
+    qDebug() << "handleToDesktop" << m_appKey;
     if (m_isItemOnDesktop){
-        QDBusPendingReply<bool> reply = m_launcherInterface->RequestRemoveFromDesktop(appKey);
+        QDBusPendingReply<bool> reply = m_launcherInterface->RequestRemoveFromDesktop(m_appKey);
         reply.waitForFinished();
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();
@@ -270,7 +274,7 @@ void MenuWorker::handleToDesktop(QString appKey){
             qCritical() << reply.error().name() << reply.error().message();
         }
     }else{
-        QDBusPendingReply<bool> reply = m_launcherInterface->RequestSendToDesktop(appKey);
+        QDBusPendingReply<bool> reply = m_launcherInterface->RequestSendToDesktop(m_appKey);
         reply.waitForFinished();
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();
@@ -281,10 +285,10 @@ void MenuWorker::handleToDesktop(QString appKey){
     }
 }
 
-void MenuWorker::handleToDock(QString appKey){
-    qDebug() << "handleToDock" << appKey;
+void MenuWorker::handleToDock(){
+    qDebug() << "handleToDock" << m_appKey;
     if (m_isItemOnDock){
-        QDBusPendingReply<bool> reply = m_dockAppManagerInterface->RequestUndock(appKey);
+        QDBusPendingReply<bool> reply = m_dockAppManagerInterface->RequestUndock(m_appKey);
         reply.waitForFinished();
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();
@@ -293,7 +297,7 @@ void MenuWorker::handleToDock(QString appKey){
             qCritical() << reply.error().name() << reply.error().message();
         }
     }else{
-        QDBusPendingReply<bool> reply =  m_dockAppManagerInterface->ReqeustDock(appKey, "", "", "");
+        QDBusPendingReply<bool> reply =  m_dockAppManagerInterface->ReqeustDock(m_appKey, "", "", "");
         reply.waitForFinished();
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();
@@ -304,11 +308,11 @@ void MenuWorker::handleToDock(QString appKey){
     }
 }
 
-void MenuWorker::handleToStartup(QString appKey){
-   QString url = m_appManager->getItemInfo(appKey).m_desktop;
-    qDebug() << "handleToStartup" << appKey << url;
+void MenuWorker::handleToStartup(){
+    qDebug() << "handleToStartup" << m_appKey;
+    QString desktopUrl = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
     if (m_isItemStartup){
-        QDBusPendingReply<bool> reply = m_startManagerInterface->RemoveAutostart(url);
+        QDBusPendingReply<bool> reply = m_startManagerInterface->RemoveAutostart(desktopUrl);
         reply.waitForFinished();
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();
@@ -320,7 +324,7 @@ void MenuWorker::handleToStartup(QString appKey){
             qCritical() << reply.error().name() << reply.error().message();
         }
     }else{
-        QDBusPendingReply<bool> reply =  m_startManagerInterface->AddAutostart(url);
+        QDBusPendingReply<bool> reply =  m_startManagerInterface->AddAutostart(desktopUrl);
         reply.waitForFinished();
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();

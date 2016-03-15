@@ -11,15 +11,17 @@
 #define MENUWORKER_H
 
 
-#include <QtCore>
+
+#include <QVariant>
+#include <QProcess>
+#include <QX11Info>
 #include <QDBusObjectPath>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QDBusPendingReply>
-#include <QVariant>
-#include <QProcess>
-#include <QX11Info>
+#include <QtCore>
+#include <QModelIndex>
 
 #include "dbus/dbusmenu.h"
 #include "dbus/dbusmenumanager.h"
@@ -60,17 +62,17 @@ signals:
     void quitLauncher();
     void unInstallApp(QString appKey);
 public slots:
-    void showMenuByAppItem(QString appKey, QPoint pos);
+    void showMenuByAppItem(const QModelIndex &index, QPoint pos);
     void menuItemInvoked(QString itemId, bool flag);
 
     void showMenu(QString menuDBusObjectPath, QString menuContent);
     void hideMenu(const QString& menuDBusObjectPath);
     void hideMenuByAppKey(const QString& appKey);
 
-    void handleOpen(QString appKey);
-    void handleToDesktop(QString appkey);
-    void handleToDock(QString appKey);
-    void handleToStartup(QString appKey);
+    void handleOpen();
+    void handleToDesktop();
+    void handleToDock();
+    void handleToStartup();
 
     void handleUninstallAction(QString appKey, int id);
     void startUnistall(QString appKey);
@@ -78,7 +80,7 @@ public slots:
     void handleUninstallFail(const QString& appKey, const QString& message);
 
     void handleMenuClosed();
-
+    void setCurrentModelIndex(const QModelIndex &index);
 private:
     DBusMenuManager* m_menuManagerInterface;
     DBusMenu* m_menuInterface;
@@ -86,8 +88,10 @@ private:
     DBusLauncher* m_launcherInterface;
     DBusStartManager* m_startManagerInterface;
 //    NotificationInterface* m_notifcationInterface;
-     static AppsManager *m_appManager;
-    QString m_appKeyRightClicked;
+
+    QModelIndex m_currentModelIndex=QModelIndex();
+    static AppsManager *m_appManager;
+    QString m_appKey;
     QString m_currentMenuObjectPath;
     QMap<QString, QString> m_menuObjectPaths;
     bool m_isItemOnDesktop;

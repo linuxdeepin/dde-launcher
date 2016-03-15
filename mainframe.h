@@ -52,17 +52,23 @@ private:
     void updateDisplayMode(const DisplayMode mode);
     void updateCurrentVisibleCategory();
 
+private slots:
+    void ensureScrollToDest(const QVariant &value);
+
 private:
     DisplayMode m_displayMode = AllApps;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
 
     QPropertyAnimation *m_scrollAnimation;
+    QWidget *m_scrollDest;
 
     NavigationWidget *m_navigationBar;
     SearchWidget *m_searchWidget;
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsVbox;
     MenuWorker* m_menuWorker;
+
+    QWidget *m_viewListPlaceholder;
 
     AppItemDelegate *m_appItemDelegate;
     AppListView *m_allAppsView;

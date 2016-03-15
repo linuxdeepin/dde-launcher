@@ -17,6 +17,8 @@ MainFrame::MainFrame(QWidget *parent) :
     m_appsArea(new QScrollArea),
     m_appsVbox(new DVBoxWidget),
     m_menuWorker(new MenuWorker),
+
+    m_viewListPlaceholder(new QWidget),
     m_appItemDelegate(new AppItemDelegate),
 
 
@@ -62,9 +64,6 @@ MainFrame::MainFrame(QWidget *parent) :
     setObjectName("LauncherFrame");
 
     initUI();
-
-    setFixedSize(qApp->primaryScreen()->geometry().size());
-    setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
     initConnection();
 
 //    connect(m_allAppsView, &AppListView::doubleClicked, [this] (const QModelIndex &index) {
@@ -72,6 +71,9 @@ MainFrame::MainFrame(QWidget *parent) :
 //    });
 
     updateDisplayMode(GroupByCategory);
+
+    setFixedSize(qApp->primaryScreen()->geometry().size());
+    setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
 }
 
 void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
@@ -98,9 +100,10 @@ void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
 
     // scroll to destination
 //    m_appsArea->verticalScrollBar()->setValue(dest->pos().y());
+    m_scrollDest = dest;
     m_scrollAnimation->stop();
     m_scrollAnimation->setStartValue(m_appsArea->verticalScrollBar()->value());
-    m_scrollAnimation->setEndValue(dest->pos().y());
+    m_scrollAnimation->setEndValue(dest->y());
     m_scrollAnimation->start();
 }
 
@@ -150,6 +153,8 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
 {
     if (o == m_appsArea->viewport() && e->type() == QEvent::Wheel)
         updateCurrentVisibleCategory();
+    else if (o == m_othersView && e->type() == QEvent::Resize)
+        m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - m_othersView->height());
 
     return false;
 }
@@ -157,10 +162,13 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
 void MainFrame::initUI()
 {
     m_appsArea->setObjectName("AppBox");
+    m_appsArea->setWidgetResizable(true);
     m_appsArea->setFrameStyle(QFrame::NoFrame);
     m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->viewport()->installEventFilter(this);
+
+    m_othersView->installEventFilter(this);
 
     m_allAppsView->setModel(m_allAppsModel);
     m_allAppsView->setItemDelegate(m_appItemDelegate);
@@ -206,6 +214,7 @@ void MainFrame::initUI()
     m_appsVbox->layout()->addWidget(m_systemView);
     m_appsVbox->layout()->addWidget(m_othersTitle);
     m_appsVbox->layout()->addWidget(m_othersView);
+    m_appsVbox->layout()->addWidget(m_viewListPlaceholder);
     m_appsVbox->layout()->setSpacing(0);
     m_appsVbox->layout()->setMargin(0);
     m_appsArea->setWidget(m_appsVbox);
@@ -229,6 +238,7 @@ void MainFrame::initUI()
 
 void MainFrame::initConnection()
 {
+    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &MainFrame::ensureScrollToDest);
     connect(m_navigationBar, &NavigationWidget::scrollToCategory, this, &MainFrame::scrollToCategory);
     connect(this, &MainFrame::currentVisibleCategoryChanged, m_navigationBar, &NavigationWidget::setCurrentCategory);
 
@@ -278,6 +288,19 @@ void MainFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
     m_menuWorker->showMenuByAppItem(appItem, pos);
 }
 
+void MainFrame::ensureScrollToDest(const QVariant &value)
+{
+    Q_UNUSED(value);
+
+    if (sender() != m_scrollAnimation)
+        return;
+
+    QPropertyAnimation *ani = qobject_cast<QPropertyAnimation *>(sender());
+
+    if (m_scrollDest->y() != ani->endValue())
+        ani->setEndValue(m_scrollDest->y());
+}
+
 void MainFrame::updateDisplayMode(const DisplayMode mode)
 {
     if (m_displayMode == mode)
@@ -308,6 +331,8 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
     m_systemView->setVisible(isCategoryMode);
     m_othersTitle->setVisible(isCategoryMode);
     m_othersView->setVisible(isCategoryMode);
+
+    m_viewListPlaceholder->setVisible(isCategoryMode);
 
     emit displayModeChanged(m_displayMode);
 }

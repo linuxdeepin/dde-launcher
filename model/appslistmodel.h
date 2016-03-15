@@ -17,6 +17,7 @@ public:
 
         // custom role start
         AppKeyRole,
+        AppDesktopRole,
         AppRawItemInfoRole,
         AppCategoryRole,
         AppAutoStartRole,

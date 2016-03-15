@@ -19,11 +19,13 @@ public:
 
 public slots:
     void removeRow(const int row);
+    void launchApp(const QModelIndex &index);
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
 
     bool appIsAutoStart(const QString &desktop);
     const QPixmap appIcon(const QString &desktop, const int size);
     ItemInfo getItemInfo(QString appKey);
+
 private:
     explicit AppsManager(QObject *parent = 0);
 

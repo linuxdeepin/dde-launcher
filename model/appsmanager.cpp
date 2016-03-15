@@ -1,7 +1,7 @@
 #include "appsmanager.h"
 
 #include <QDebug>
-
+#include <QX11Info>
 
 AppsManager *AppsManager::INSTANCE = nullptr;
 
@@ -38,6 +38,11 @@ AppsManager *AppsManager::instance(QObject *parent)
 void AppsManager::removeRow(const int row)
 {
     m_appInfoList.removeAt(row);
+}
+
+void AppsManager::launchApp(const QModelIndex &index)
+{
+    m_startManagerInter->LaunchWithTimestamp(index.data(AppsListModel::AppDesktopRole).toString(), QX11Info::getTimestamp());
 }
 
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const

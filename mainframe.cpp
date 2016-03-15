@@ -12,6 +12,8 @@
 
 MainFrame::MainFrame(QWidget *parent) :
     QFrame(parent),
+    m_appsManager(AppsManager::instance(this)),
+
     m_navigationBar(new NavigationWidget),
     m_searchWidget(new SearchWidget),
     m_appsArea(new QScrollArea),
@@ -20,7 +22,6 @@ MainFrame::MainFrame(QWidget *parent) :
 
     m_viewListPlaceholder(new QWidget),
     m_appItemDelegate(new AppItemDelegate),
-
 
     m_allAppsView(new AppListView),
     m_internetView(new AppListView),
@@ -265,6 +266,18 @@ void MainFrame::initConnection()
     connect(m_developmentView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_systemView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_othersView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+
+    connect(m_allAppsView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_internetView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_musicView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_videoView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_graphicsView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_gameView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_officeView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_readingView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_developmentView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_systemView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_othersView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
 
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_allAppsView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_internetView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));

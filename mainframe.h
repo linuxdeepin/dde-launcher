@@ -9,6 +9,7 @@
 #include "widget/searchwidget.h"
 #include "widget/navigationwidget.h"
 #include "worker/menuworker.h"
+#include "model/appsmanager.h"
 
 #include <QFrame>
 #include <QScrollArea>
@@ -59,6 +60,7 @@ private:
     DisplayMode m_displayMode = AllApps;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
 
+    AppsManager *m_appsManager;
     QPropertyAnimation *m_scrollAnimation;
     QWidget *m_scrollDest;
 

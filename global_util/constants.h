@@ -3,8 +3,8 @@
 
 namespace DLauncher {
 
-static int APP_ITEM_WIDTH = 150;
-static int APP_ITEM_HEIGHT = 150;
+static const int APP_ITEM_WIDTH = 150;
+static const int APP_ITEM_HEIGHT = 150;
 
 static const int DRAG_THRESHOLD = 15;
 

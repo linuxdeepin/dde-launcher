@@ -63,6 +63,10 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return QVariant::fromValue(itemInfo);
     case AppNameRole:
         return itemInfo.m_name;
+    case AppDesktopRole:
+        return itemInfo.m_desktop;
+    case AppKeyRole:
+        return itemInfo.m_key;
     case AppCategoryRole:
         return itemInfo.category();
     case AppAutoStartRole:
@@ -72,8 +76,6 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIcon(itemInfo.m_desktop, 256);
     case ItemSizeHintRole:
         return QSize(DLauncher::APP_ITEM_WIDTH, DLauncher::APP_ITEM_HEIGHT);
-    case AppKeyRole:
-        return itemInfo.m_key;
     default:
         return QVariant();
     }

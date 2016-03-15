@@ -20,10 +20,8 @@ AppsManager::AppsManager(QObject *parent) :
 
     m_appInfoList = m_launcherInter->GetAllItemInfos().value();
     refreshCategoryInfoList();
-}
 
-void AppsManager::initConnection()
-{
+    m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
 }
 
 AppsManager *AppsManager::instance(QObject *parent)
@@ -60,6 +58,11 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     return m_appInfos[category];
 }
 
+bool AppsManager::appIsNewInstall(const QString &desktop)
+{
+    return m_newInstalledAppsList.contains(desktop);
+}
+
 bool AppsManager::appIsAutoStart(const QString &desktop)
 {
     if (APP_AUTOSTART_CACHE.contains(desktop))
@@ -70,6 +73,16 @@ bool AppsManager::appIsAutoStart(const QString &desktop)
     APP_AUTOSTART_CACHE.setValue(desktop, isAutoStart);
 
     return isAutoStart;
+}
+
+bool AppsManager::appIsOnDock(const QString &desktop)
+{
+    return m_dockedAppInter->IsDocked(desktop).value();
+}
+
+bool AppsManager::appIsOnDesktop(const QString &desktop)
+{
+    return m_launcherInter->IsItemOnDesktop(desktop).value();
 }
 
 const QPixmap AppsManager::appIcon(const QString &desktop, const int size)

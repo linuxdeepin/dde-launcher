@@ -71,13 +71,17 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return itemInfo.category();
     case AppAutoStartRole:
         return m_appsManager->appIsAutoStart(itemInfo.m_desktop);
-//    case AppNewInstallRole:
+    case AppIsOnDesktopRole:
+        return m_appsManager->appIsOnDesktop(itemInfo.m_desktop);
+    case AppIsOnDockRole:
+        return m_appsManager->appIsOnDock(itemInfo.m_desktop);
+    case AppNewInstallRole:
+        return m_appsManager->appIsNewInstall(itemInfo.m_desktop);
     case AppIconRole:
         return m_appsManager->appIcon(itemInfo.m_desktop, 256);
     case ItemSizeHintRole:
         return QSize(DLauncher::APP_ITEM_WIDTH, DLauncher::APP_ITEM_HEIGHT);
-    default:
-        return QVariant();
+    default:;
     }
 
     return QVariant();

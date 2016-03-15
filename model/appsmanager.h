@@ -5,6 +5,7 @@
 #include "../dbus/dbuslauncher.h"
 #include "../dbus/dbusfileinfo.h"
 #include "../dbus/dbustartmanager.h"
+#include "../dbus/dbusdockedappmanager.h"
 
 #include <QMap>
 #include <QSettings>
@@ -22,14 +23,15 @@ public slots:
     void launchApp(const QModelIndex &index);
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
 
+    bool appIsNewInstall(const QString &desktop);
     bool appIsAutoStart(const QString &desktop);
+    bool appIsOnDock(const QString &desktop);
+    bool appIsOnDesktop(const QString &desktop);
     const QPixmap appIcon(const QString &desktop, const int size);
     ItemInfo getItemInfo(QString appKey);
 
 private:
     explicit AppsManager(QObject *parent = 0);
-
-    void initConnection();
 
     void refreshCategoryInfoList();
     void refreshAppIconCache();
@@ -39,7 +41,9 @@ private:
     DBusLauncher *m_launcherInter;
     DBusFileInfo *m_fileInfoInter;
     DBusStartManager *m_startManagerInter;
+    DBusDockedAppManager *m_dockedAppInter;
 
+    QStringList m_newInstalledAppsList;
     ItemInfoList m_appInfoList;
     ItemInfoList m_appSearchResultList;
     QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfos;

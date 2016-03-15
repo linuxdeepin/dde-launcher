@@ -1,7 +1,7 @@
 #include "appsmanager.h"
 
 #include <QDebug>
-#include <QPixmap>
+
 
 AppsManager *AppsManager::INSTANCE = nullptr;
 
@@ -86,6 +86,19 @@ const QPixmap AppsManager::appIcon(const QString &desktop, const int size)
     APP_ICON_CACHE.setValue(cacheKey, iconPixmap);
 
     return iconPixmap;
+}
+
+ItemInfo AppsManager::getItemInfo(QString appKey) {
+    QDBusPendingReply<ItemInfo> reply = m_launcherInter->GetItemInfo(appKey);
+    ItemInfo  itemInfo;
+    reply.waitForFinished();
+    if (!reply.isError()){
+        itemInfo = qdbus_cast<ItemInfo>(reply.argumentAt(0));
+        return itemInfo;
+    }else{
+        qCritical() << reply.error().name() << reply.error().message();
+        return itemInfo;
+    }
 }
 
 void AppsManager::refreshCategoryInfoList()

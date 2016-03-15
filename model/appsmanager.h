@@ -8,6 +8,7 @@
 
 #include <QMap>
 #include <QSettings>
+#include <QPixmap>
 
 class AppsManager : public QObject
 {
@@ -16,12 +17,13 @@ class AppsManager : public QObject
 public:
     static AppsManager *instance(QObject *parent = nullptr);
 
+public slots:
     void removeRow(const int row);
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
 
     bool appIsAutoStart(const QString &desktop);
     const QPixmap appIcon(const QString &desktop, const int size);
-
+    ItemInfo getItemInfo(QString appKey);
 private:
     explicit AppsManager(QObject *parent = 0);
 

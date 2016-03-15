@@ -8,6 +8,7 @@
 #include "widget/categorytitlewidget.h"
 #include "widget/searchwidget.h"
 #include "widget/navigationwidget.h"
+#include "worker/menuworker.h"
 
 #include <QFrame>
 #include <QScrollArea>
@@ -61,6 +62,7 @@ private:
     SearchWidget *m_searchWidget;
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsVbox;
+    MenuWorker* m_menuWorker;
 
     AppItemDelegate *m_appItemDelegate;
     AppListView *m_allAppsView;

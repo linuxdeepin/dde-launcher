@@ -16,7 +16,9 @@ MainFrame::MainFrame(QWidget *parent) :
     m_searchWidget(new SearchWidget),
     m_appsArea(new QScrollArea),
     m_appsVbox(new DVBoxWidget),
+    m_menuWorker(new MenuWorker),
     m_appItemDelegate(new AppItemDelegate),
+
 
     m_allAppsView(new AppListView),
     m_internetView(new AppListView),
@@ -269,7 +271,11 @@ void MainFrame::initConnection()
 
 void MainFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
 {
-    qDebug() << "show menu" << pos << context << context.data(AppsListModel::AppNameRole);
+    qDebug() << "show menu" << pos << context << context.data(AppsListModel::AppNameRole).toString()
+             << "app key:" << context.data(AppsListModel::AppKeyRole).toString();
+    QString appItem = context.data(AppsListModel::AppKeyRole).toString();
+
+    m_menuWorker->showMenuByAppItem(appItem, pos);
 }
 
 void MainFrame::updateDisplayMode(const DisplayMode mode)

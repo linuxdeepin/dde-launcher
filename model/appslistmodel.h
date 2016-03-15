@@ -16,6 +16,7 @@ public:
         AppReserveRole = Qt::UserRole,
 
         // custom role start
+        AppKeyRole,
         AppRawItemInfoRole,
         AppCategoryRole,
         AppAutoStartRole,

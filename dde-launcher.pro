@@ -156,7 +156,11 @@ SOURCES += \
     dbus/dbustartmanager.cpp \
     global_util/xcb_misc.cpp \
     widget/navigationwidget.cpp \
-    widget/categorybutton.cpp
+    widget/categorybutton.cpp \
+    dbus/dbusmenu.cpp \
+    dbus/dbusmenumanager.cpp \
+    worker/menuworker.cpp \
+    dbus/dbusdockedappmanager.cpp
 
 HEADERS += \
     mainframe.h \
@@ -201,7 +205,11 @@ HEADERS += \
     dbus/dbustartmanager.h \
     global_util/xcb_misc.h \
     widget/navigationwidget.h \
-    widget/categorybutton.h
+    widget/categorybutton.h \
+    dbus/dbusmenu.h \
+    dbus/dbusmenumanager.h \
+    worker/menuworker.h \
+    dbus/dbusdockedappmanager.h
 
 target.path = /usr/bin
 

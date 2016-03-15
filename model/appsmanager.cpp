@@ -53,14 +53,22 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     default:;
     }
 
-    //Q_ASSERT(m_appInfos.contains(category));
+    Q_ASSERT(m_appInfos.contains(category));
 
     return m_appInfos[category];
 }
 
 bool AppsManager::appIsNewInstall(const QString &desktop)
 {
-    return m_newInstalledAppsList.contains(desktop);
+    // 7 == QString(".desktop").size()
+    const int tail = 8;
+    const QString desktopFileName = desktop.split('/').last();
+
+    Q_ASSERT(desktopFileName.size() > tail);
+
+    const QString key = desktopFileName.left(desktopFileName.size() - tail).toLower();
+
+    return m_newInstalledAppsList.contains(key);
 }
 
 bool AppsManager::appIsAutoStart(const QString &desktop)

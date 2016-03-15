@@ -63,11 +63,16 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // draw app name
     painter->setPen(Qt::white);
     painter->setBrush(QBrush(Qt::transparent));
-
     QRect textRect = QRect(option.rect.x() + 20, option.rect.y() + 115, option.rect.width() - 20, option.rect.height() - 20);
     painter->drawText(textRect, itemInfo.m_name);
 
-
+    // draw blue dot if new install
+    if (index.data(AppsListModel::AppNewInstallRole).toBool())
+    {
+        painter->setPen(Qt::black);
+        painter->setBrush(Qt::blue);
+        painter->drawEllipse(option.rect.center(), 10, 10);
+    }
 }
 
 QSize AppItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const

@@ -74,9 +74,9 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppIsOnDesktopRole:
         return m_appsManager->appIsOnDesktop(itemInfo.m_desktop);
     case AppIsOnDockRole:
-        return m_appsManager->appIsOnDock(itemInfo.m_desktop);
+        return m_appsManager->appIsOnDock(itemInfo.m_key);
     case AppNewInstallRole:
-        return m_appsManager->appIsNewInstall(itemInfo.m_desktop);
+        return m_appsManager->appIsNewInstall(itemInfo.m_key);
     case AppIconRole:
         return m_appsManager->appIcon(itemInfo.m_desktop, 256);
     case ItemSizeHintRole:

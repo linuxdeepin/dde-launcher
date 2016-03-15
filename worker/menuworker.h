@@ -54,7 +54,7 @@ public:
     QJsonObject createMenuItem(int itemId, QString itemText);
     QJsonObject createSeperator();
 
-    QString createMenuContent(QString appKey);
+    QString createMenuContent();
     QString registerMenu();
     QString JsonToQString(QPoint pos, QString menucontent);
 
@@ -87,9 +87,8 @@ private:
     DBusDockedAppManager* m_dockAppManagerInterface;
     DBusLauncher* m_launcherInterface;
     DBusStartManager* m_startManagerInterface;
-//    NotificationInterface* m_notifcationInterface;
 
-    QModelIndex m_currentModelIndex=QModelIndex();
+    QModelIndex m_currentModelIndex = QModelIndex();
     static AppsManager *m_appManager;
     QString m_appKey;
     QString m_currentMenuObjectPath;

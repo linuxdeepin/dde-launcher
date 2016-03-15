@@ -23,9 +23,9 @@ public slots:
     void launchApp(const QModelIndex &index);
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
 
-    bool appIsNewInstall(const QString &desktop);
+    bool appIsNewInstall(const QString &key);
     bool appIsAutoStart(const QString &desktop);
-    bool appIsOnDock(const QString &desktop);
+    bool appIsOnDock(const QString &appName);
     bool appIsOnDesktop(const QString &desktop);
     const QPixmap appIcon(const QString &desktop, const int size);
     ItemInfo getItemInfo(QString appKey);

@@ -13,7 +13,8 @@ AppsManager::AppsManager(QObject *parent) :
     QObject(parent),
     m_launcherInter(new DBusLauncher(this)),
     m_fileInfoInter(new DBusFileInfo(this)),
-    m_startManagerInter(new DBusStartManager(this))
+    m_startManagerInter(new DBusStartManager(this)),
+    m_dockedAppInter(new DBusDockedAppManager(this))
 {
 //    refreshAppIconCache();
 //    refreshAppAutoStartCache();
@@ -58,16 +59,8 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     return m_appInfos[category];
 }
 
-bool AppsManager::appIsNewInstall(const QString &desktop)
+bool AppsManager::appIsNewInstall(const QString &key)
 {
-    // 7 == QString(".desktop").size()
-    const int tail = 8;
-    const QString desktopFileName = desktop.split('/').last();
-
-    Q_ASSERT(desktopFileName.size() > tail);
-
-    const QString key = desktopFileName.left(desktopFileName.size() - tail).toLower();
-
     return m_newInstalledAppsList.contains(key);
 }
 
@@ -83,9 +76,9 @@ bool AppsManager::appIsAutoStart(const QString &desktop)
     return isAutoStart;
 }
 
-bool AppsManager::appIsOnDock(const QString &desktop)
+bool AppsManager::appIsOnDock(const QString &appName)
 {
-    return m_dockedAppInter->IsDocked(desktop).value();
+    return m_dockedAppInter->IsDocked(appName).value();
 }
 
 bool AppsManager::appIsOnDesktop(const QString &desktop)

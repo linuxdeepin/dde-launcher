@@ -17,10 +17,7 @@ AppsManager *MenuWorker::m_appManager = nullptr;
 MenuWorker::MenuWorker(QObject *parent) : QObject(parent)
 {
     qDebug() << "MenuWorker";
-    m_launcherInterface = new DBusLauncher(this);
     m_menuManagerInterface = new DBusMenuManager(this);
-    m_dockAppManagerInterface = new DBusDockedAppManager(this);
-    m_startManagerInterface = new DBusStartManager(this);
 //    m_notifcationInterface = new NotificationInterface(NotificationInterface::staticServiceName(),
 //                                                       NotificationInterface::staticObjectPathName(),
 //                                                       QDBusConnection::sessionBus(),
@@ -53,7 +50,7 @@ void MenuWorker::showMenuByAppItem(const QModelIndex &index, QPoint pos){
     m_appKey = m_currentModelIndex.data(AppsListModel::AppKeyRole).toString();
 
     qDebug() << "appKey" << m_appKey;
-    QString menuContent = createMenuContent(m_appKey);
+    QString menuContent = createMenuContent(/*m_appKey*/);
     QString menuJsonContent = JsonToQString(pos, menuContent);
     QString menuDBusObjectpath = registerMenu();
     qDebug() << "dbus objectpath:" << menuDBusObjectpath;
@@ -66,10 +63,10 @@ void MenuWorker::showMenuByAppItem(const QModelIndex &index, QPoint pos){
     }
 }
 
-QString MenuWorker::createMenuContent(QString appKey){
-    m_isItemOnDesktop = isItemOnDesktop(appKey);
-    m_isItemOnDock = isItemOnDock(appKey);
-    m_isItemStartup = isItemStartup(appKey);
+QString MenuWorker::createMenuContent(/*QString appKey*/){
+    m_isItemOnDesktop = m_currentModelIndex.data(AppsListModel::AppIsOnDesktopRole).toBool();
+    m_isItemOnDock = m_currentModelIndex.data(AppsListModel::AppIsOnDockRole).toBool();
+    m_isItemStartup = m_currentModelIndex.data(AppsListModel::AppAutoStartRole).toBool();
 
     QJsonObject openObj = createMenuItem(0, tr("Open(_O)"));
     QJsonObject seperatorObj1 = createSeperator();
@@ -130,43 +127,9 @@ QJsonObject MenuWorker::createMenuItem(int itemId, QString itemText){
     return itemObj;
 }
 
-
 QJsonObject MenuWorker::createSeperator(){
     return createMenuItem(-100, "");
 }
-
-
-bool MenuWorker::isItemOnDesktop(QString appKey){
-    bool flag = false;
-    QDBusPendingReply<bool> reply = m_launcherInterface->IsItemOnDesktop(appKey);
-    reply.waitForFinished();
-    if (!reply.isError()){
-        flag = reply.argumentAt(0).toBool();
-    } else {
-        qCritical() << reply.error().name() << reply.error().message();
-    }
-    qDebug() << appKey << flag;
-    return flag;
-}
-
-bool MenuWorker::isItemOnDock(QString appKey){
-    bool flag = false;
-    QDBusPendingReply<bool> reply = m_dockAppManagerInterface->IsDocked(appKey);
-    reply.waitForFinished();
-    if (!reply.isError()){
-        flag = reply.argumentAt(0).toBool();
-    } else {
-        qCritical() << reply.error().name() << reply.error().message();
-    }
-    return flag;
-}
-
-bool MenuWorker::isItemStartup(QString appKey){
-    QString desktopUrl= m_appManager->getItemInfo(appKey).m_desktop;
-    bool flag = m_appManager->appIsAutoStart(desktopUrl);
-    return flag;
-}
-
 
 QString MenuWorker::JsonToQString(QPoint pos, QString menucontent) {
     QJsonObject menuObj;
@@ -236,21 +199,8 @@ void MenuWorker::menuItemInvoked(QString itemId, bool flag){
 
 
 void MenuWorker::handleOpen(){
-    uint timestamp = QX11Info::getTimestamp();
-    QString desktopUrl = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
-    QDBusPendingReply<bool> reply = m_startManagerInterface->LaunchWithTimestamp(desktopUrl, timestamp);
-    reply.waitForFinished();
-    if (!reply.isError()) {
-        bool ret = reply.argumentAt(0).toBool();
-        qDebug() << "Launch app:" << ret;
-        if (ret){
-            m_launcherInterface->MarkLaunched(m_appKey);
-            m_launcherInterface->RecordFrequency(m_appKey);
-            // emit signalManager->newinstalllindicatorHided(appKey);
-        }
-    } else {
-        qCritical() << reply.error().name() << reply.error().message();
-    }
+    m_appManager->launchApp(m_currentModelIndex);
+
     emit quitLauncher();
 }
 
@@ -366,6 +316,7 @@ void MenuWorker::startUnistall(QString appKey){
 }
 
 void MenuWorker::handleUninstallSuccess(const QString &appKey){
+    Q_UNUSED(appKey);
 //    emit signalManager->itemDeleted(appKey);
 }
 

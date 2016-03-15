@@ -27,6 +27,8 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent *e);
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
 
 private:
     void setInfoByCategory();

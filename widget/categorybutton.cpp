@@ -43,6 +43,22 @@ void CategoryButton::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 }
 
+void CategoryButton::enterEvent(QEvent *e)
+{
+    if (!isChecked())
+        updateState(Hover);
+
+    QAbstractButton::enterEvent(e);
+}
+
+void CategoryButton::leaveEvent(QEvent *e)
+{
+    if (!isChecked())
+        updateState(Normal);
+
+    QAbstractButton::leaveEvent(e);
+}
+
 void CategoryButton::setChecked(bool isChecked)
 {
     if (isChecked)
@@ -65,6 +81,8 @@ void CategoryButton::setInfoByCategory()
                                         m_iconName = "video";                       break;
     case AppsListModel::Graphics:       m_textLabel->setText(tr("Graphics"));
                                         m_iconName = "graphics";                    break;
+    case AppsListModel::Game:           m_textLabel->setText(tr("Game"));
+                                        m_iconName = "game";                        break;
     case AppsListModel::Office:         m_textLabel->setText(tr("Office"));
                                         m_iconName = "office";                      break;
     case AppsListModel::Reading:        m_textLabel->setText(tr("Reading"));

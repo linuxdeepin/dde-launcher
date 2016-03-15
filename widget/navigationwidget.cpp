@@ -12,6 +12,7 @@ NavigationWidget::NavigationWidget(QWidget *parent) :
     m_musicBtn(new CategoryButton(AppsListModel::Music, this)),
     m_videoBtn(new CategoryButton(AppsListModel::Video, this)),
     m_graphicsBtn(new CategoryButton(AppsListModel::Graphics, this)),
+    m_gameBtn(new CategoryButton(AppsListModel::Game, this)),
     m_officeBtn(new CategoryButton(AppsListModel::Office, this)),
     m_readingBtn(new CategoryButton(AppsListModel::Reading, this)),
     m_developmentBtn(new CategoryButton(AppsListModel::Development, this)),
@@ -39,6 +40,7 @@ void NavigationWidget::initUI()
     m_categoryGroup->addButton(m_musicBtn);
     m_categoryGroup->addButton(m_videoBtn);
     m_categoryGroup->addButton(m_graphicsBtn);
+    m_categoryGroup->addButton(m_gameBtn);
     m_categoryGroup->addButton(m_officeBtn);
     m_categoryGroup->addButton(m_readingBtn);
     m_categoryGroup->addButton(m_developmentBtn);
@@ -53,6 +55,7 @@ void NavigationWidget::initUI()
     mainLayout->addWidget(m_musicBtn);
     mainLayout->addWidget(m_videoBtn);
     mainLayout->addWidget(m_graphicsBtn);
+    mainLayout->addWidget(m_gameBtn);
     mainLayout->addWidget(m_officeBtn);
     mainLayout->addWidget(m_readingBtn);
     mainLayout->addWidget(m_developmentBtn);
@@ -71,6 +74,7 @@ void NavigationWidget::initConnection()
     connect(m_musicBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_videoBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_graphicsBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
+    connect(m_gameBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_officeBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_readingBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_developmentBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
@@ -95,6 +99,7 @@ CategoryButton *NavigationWidget::button(const AppsListModel::AppCategory catego
     case AppsListModel::Music:          return m_musicBtn;
     case AppsListModel::Video:          return m_videoBtn;
     case AppsListModel::Graphics:       return m_graphicsBtn;
+    case AppsListModel::Game:           return m_gameBtn;
     case AppsListModel::Office:         return m_officeBtn;
     case AppsListModel::Reading:        return m_readingBtn;
     case AppsListModel::Development:    return m_developmentBtn;

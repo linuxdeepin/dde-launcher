@@ -225,7 +225,7 @@ void MenuWorker::menuItemInvoked(QString itemId, bool flag){
         handleToStartup(m_appKeyRightClicked);
         break;
     case 4:
-//        emit signalManager->appUninstalled(m_appKeyRightClicked);
+        emit  unInstallApp(m_appKeyRightClicked);
         break;
     default:
         break;
@@ -234,8 +234,8 @@ void MenuWorker::menuItemInvoked(QString itemId, bool flag){
 
 
 void MenuWorker::handleOpen(QString appKey){
-//    emit signalManager->Hide();
-  QString url = m_appManager->getItemInfo(appKey).m_desktop;
+
+    QString url = m_appManager->getItemInfo(appKey).m_desktop;
     qDebug() << "handleOpen" << appKey << url;
     uint timestamp = QX11Info::getTimestamp();
     QDBusPendingReply<bool> reply = m_startManagerInterface->LaunchWithTimestamp(url, timestamp);
@@ -244,13 +244,14 @@ void MenuWorker::handleOpen(QString appKey){
         bool ret = reply.argumentAt(0).toBool();
         qDebug() << "Launch app:" << ret;
         if (ret){
-             m_launcherInterface->MarkLaunched(appKey);
-//            dbusController->getLauncherInterface()->RecordFrequency(appKey);
-//            emit signalManager->newinstalllindicatorHided(appKey);
+            m_launcherInterface->MarkLaunched(appKey);
+            m_launcherInterface->RecordFrequency(appKey);
+            // emit signalManager->newinstalllindicatorHided(appKey);
         }
     } else {
         qCritical() << reply.error().name() << reply.error().message();
     }
+    emit quitLauncher();
 }
 
 void MenuWorker::handleMenuClosed(){
@@ -304,9 +305,8 @@ void MenuWorker::handleToDock(QString appKey){
 }
 
 void MenuWorker::handleToStartup(QString appKey){
-   QString url = "";// dbusController->getItemInfo(appKey).url;
+   QString url = m_appManager->getItemInfo(appKey).m_desktop;
     qDebug() << "handleToStartup" << appKey << url;
-
     if (m_isItemStartup){
         QDBusPendingReply<bool> reply = m_startManagerInterface->RemoveAutostart(url);
         reply.waitForFinished();

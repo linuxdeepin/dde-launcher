@@ -277,6 +277,8 @@ void MainFrame::initConnection()
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_developmentView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_systemView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_othersView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
+
+    connect(m_menuWorker, &MenuWorker::quitLauncher, qApp, &QApplication::quit);
 }
 
 void MainFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)

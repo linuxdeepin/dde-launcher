@@ -22,15 +22,20 @@ public:
 
     AppsListModel::AppCategory category() const;
 
+public slots:
+    void setChecked(bool isChecked);
+
 protected:
     void paintEvent(QPaintEvent *e);
 
 private:
-    void setTextByCategory();
+    void setInfoByCategory();
+    void updateState(const State state);
 
 private:
-    State m_state = Normal;
+    State m_state = Checked;
     AppsListModel::AppCategory m_category;
+    QString m_iconName;
 
     QLabel *m_iconLabel;
     QLabel *m_textLabel;

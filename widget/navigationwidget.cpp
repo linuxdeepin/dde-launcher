@@ -7,6 +7,7 @@
 
 NavigationWidget::NavigationWidget(QWidget *parent) :
     QWidget(parent),
+    m_categoryGroup(new QButtonGroup(this)),
     m_internetBtn(new CategoryButton(AppsListModel::Internet, this)),
     m_musicBtn(new CategoryButton(AppsListModel::Music, this)),
     m_videoBtn(new CategoryButton(AppsListModel::Video, this)),
@@ -26,11 +27,26 @@ NavigationWidget::NavigationWidget(QWidget *parent) :
 
 void NavigationWidget::setCurrentCategory(const AppsListModel::AppCategory category)
 {
-    qDebug() << "set to " << category;
+    CategoryButton *btn = button(category);
+
+    if (btn)
+        btn->setChecked(true);
 }
 
 void NavigationWidget::initUI()
 {
+    m_categoryGroup->addButton(m_internetBtn);
+    m_categoryGroup->addButton(m_musicBtn);
+    m_categoryGroup->addButton(m_videoBtn);
+    m_categoryGroup->addButton(m_graphicsBtn);
+    m_categoryGroup->addButton(m_officeBtn);
+    m_categoryGroup->addButton(m_readingBtn);
+    m_categoryGroup->addButton(m_developmentBtn);
+    m_categoryGroup->addButton(m_systemBtn);
+    m_categoryGroup->addButton(m_othersBtn);
+
+    m_internetBtn->setChecked(true);
+
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addStretch();
     mainLayout->addWidget(m_internetBtn);
@@ -69,4 +85,23 @@ void NavigationWidget::buttonClicked()
         return;
 
     emit scrollToCategory(btn->category());
+}
+
+CategoryButton *NavigationWidget::button(const AppsListModel::AppCategory category)
+{
+    switch (category)
+    {
+    case AppsListModel::Internet:       return m_internetBtn;
+    case AppsListModel::Music:          return m_musicBtn;
+    case AppsListModel::Video:          return m_videoBtn;
+    case AppsListModel::Graphics:       return m_graphicsBtn;
+    case AppsListModel::Office:         return m_officeBtn;
+    case AppsListModel::Reading:        return m_readingBtn;
+    case AppsListModel::Development:    return m_developmentBtn;
+    case AppsListModel::System:         return m_systemBtn;
+    case AppsListModel::Others:         return m_othersBtn;
+    default:;
+    }
+
+    return nullptr;
 }

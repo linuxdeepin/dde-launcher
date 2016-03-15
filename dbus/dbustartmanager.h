@@ -52,7 +52,7 @@ public:
     { return "com.deepin.StartManager"; }
 
 public:
-    DBusStartManager(QObject *parent = 0);
+    explicit DBusStartManager(QObject *parent = 0);
 
     ~DBusStartManager();
 

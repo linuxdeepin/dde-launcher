@@ -119,3 +119,7 @@ QLineEdit#SearchLineEdit{
     border: none;
     font-size: 16px;
 }
+
+QAbstractButton#CategoryButton {
+    color:red;
+}

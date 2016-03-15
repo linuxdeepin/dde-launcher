@@ -35,7 +35,7 @@ public:
     void set_window_type(xcb_window_t winId, WindowType winType);
     void set_strut_partial(xcb_window_t winId, Orientation orientation, uint strut, uint start, uint end);
     void setLauncher(xcb_window_t winId);
-    void set_deepin_override(xcb_window_t winId);
+    static void set_deepin_override(xcb_window_t winId);
 
 private:
     XcbMisc();

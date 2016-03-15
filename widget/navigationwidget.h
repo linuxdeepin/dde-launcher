@@ -4,6 +4,7 @@
 #include "categorybutton.h"
 
 #include <QWidget>
+#include <QButtonGroup>
 
 class NavigationWidget : public QWidget
 {
@@ -23,8 +24,11 @@ private:
     void initConnection();
 
     void buttonClicked();
+    CategoryButton *button(const AppsListModel::AppCategory category);
 
 private:
+    QButtonGroup *m_categoryGroup;
+
     CategoryButton *m_internetBtn;
     CategoryButton *m_musicBtn;
     CategoryButton *m_videoBtn;

@@ -1,4 +1,6 @@
+
 #include "appitemdelegate.h"
+#include "global_util/constants.h"
 #include "model/appslistmodel.h"
 #include "dbus/dbusvariant/iteminfo.h"
 

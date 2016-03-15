@@ -1,6 +1,6 @@
 
-#include "constants.h"
 #include "navigationwidget.h"
+#include "global_util/constants.h"
 
 #include <QVBoxLayout>
 #include <QDebug>

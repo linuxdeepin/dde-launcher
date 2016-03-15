@@ -50,7 +50,7 @@ public:
     { return "com.deepin.menu.Manager"; }
 
 public:
-    DBusMenuManager(QObject *parent = 0);
+    explicit DBusMenuManager(QObject *parent = 0);
 
     ~DBusMenuManager();
 

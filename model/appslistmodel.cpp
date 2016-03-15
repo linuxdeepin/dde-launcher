@@ -1,5 +1,7 @@
+
 #include "appslistmodel.h"
 #include "appsmanager.h"
+#include "global_util/constants.h"
 #include "dbus/dbusvariant/iteminfo.h"
 
 #include <QSize>
@@ -69,7 +71,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppIconRole:
         return m_appsManager->appIcon(itemInfo.m_desktop, 256);
     case ItemSizeHintRole:
-        return QSize(150, 150);
+        return QSize(DLauncher::APP_ITEM_WIDTH, DLauncher::APP_ITEM_HEIGHT);
     case AppKeyRole:
         return itemInfo.m_key;
     default:

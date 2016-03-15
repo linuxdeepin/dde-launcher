@@ -35,7 +35,7 @@ public:
     { return "dde.dock.DockedAppManager"; }
 
 public:
-    DBusDockedAppManager(QObject *parent = 0);
+    explicit DBusDockedAppManager(QObject *parent = 0);
 
     ~DBusDockedAppManager();
 

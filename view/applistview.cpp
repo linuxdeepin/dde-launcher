@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QDrag>
 #include <QMimeData>
+#include <QtGlobal>
 
 AppListView::AppListView(QWidget *parent) :
     QListView(parent)
@@ -109,7 +110,8 @@ void AppListView::fitToContent()
 {
     if (width() == contentsRect().width() && height() == contentsSize().height())
         return;
-
+    int tmpHeight = qMax(contentsSize().height(), 1);
+//    qDebug() << "contentsRect:" << contentsRect().width() << contentsSize().height();
     setFixedWidth(contentsRect().width());
-    setFixedHeight(contentsSize().height());
+    setFixedHeight(tmpHeight);
 }

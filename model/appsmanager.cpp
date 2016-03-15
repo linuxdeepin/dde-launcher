@@ -23,6 +23,7 @@ AppsManager::AppsManager(QObject *parent) :
     refreshCategoryInfoList();
 
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
+    categoryAppNums();
 }
 
 AppsManager *AppsManager::instance(QObject *parent)
@@ -54,7 +55,7 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     default:;
     }
 
-    Q_ASSERT(m_appInfos.contains(category));
+    //Q_ASSERT(m_appInfos.contains(category));
 
     return m_appInfos[category];
 }
@@ -132,6 +133,65 @@ void AppsManager::refreshCategoryInfoList()
 
         m_appInfos[category].append(info);
     }
+}
+
+void AppsManager::categoryAppNums() {
+    int appNums = 0;
+    foreach (QString key,  this->CategoryKeys) {
+        if (key == "Internet") {
+            appNums = appsInfoList(AppsListModel::Internet).length();
+            m_categoryAppNumsMap.insert(AppsListModel::Internet, appNums);
+        }
+        if (key == "Chat") {
+                 appNums = appsInfoList(AppsListModel::Chat).length();
+                 m_categoryAppNumsMap.insert(AppsListModel::Chat, appNums);
+                qDebug() << "Chat:" << appNums;
+        }
+        if (key == "Music") {
+                appNums = appsInfoList(AppsListModel::Music).length();
+                m_categoryAppNumsMap.insert(AppsListModel::Music, appNums);
+                qDebug() << "Music:" << appNums;
+        }
+        if (key == "Video") {
+                 appNums = appsInfoList(AppsListModel::Video).length();
+                 m_categoryAppNumsMap.insert(AppsListModel::Video, appNums);
+                qDebug() << "Video:" << appNums;
+        }
+        if (key == "Game") {
+               appNums = appsInfoList(AppsListModel::Game).length();
+               m_categoryAppNumsMap.insert(AppsListModel::Game, appNums);
+                qDebug() << "Game:" << appNums;
+        }
+        if (key == "Office") {
+              appNums =appsInfoList(AppsListModel::Office).length();
+              m_categoryAppNumsMap.insert(AppsListModel::Office, appNums);
+                qDebug() << "Office:" << appNums;
+        }
+        if (key == "Reading") {
+             appNums = appsInfoList(AppsListModel::Reading).length();
+             m_categoryAppNumsMap.insert(AppsListModel::Reading, appNums);
+                qDebug() << "Reading:" << appNums;
+        }
+        if (key == "Development") {
+            appNums =  appsInfoList(AppsListModel::Development).length();
+            m_categoryAppNumsMap.insert(AppsListModel::Development, appNums);
+                qDebug() << "Development:" << appNums;
+        }
+        if (key == "System") {
+            appNums = appsInfoList(AppsListModel::System).length();
+            m_categoryAppNumsMap.insert(AppsListModel::System, appNums);
+                qDebug() << "System:" << appNums;
+        }
+        if (key == "Others") {
+            appNums = appsInfoList(AppsListModel::Others).length();
+            m_categoryAppNumsMap.insert(AppsListModel::Others, appNums);
+                qDebug() << "Others:" << appNums;
+        }
+    }
+}
+
+int AppsManager::getCategoryAppNums(const AppsListModel::AppCategory &category) {
+    return m_categoryAppNumsMap.value(category);
 }
 
 void AppsManager::refreshAppIconCache()

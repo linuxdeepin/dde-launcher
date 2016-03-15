@@ -9,6 +9,7 @@ NavigationWidget::NavigationWidget(QWidget *parent) :
     QWidget(parent),
     m_categoryGroup(new QButtonGroup(this)),
     m_internetBtn(new CategoryButton(AppsListModel::Internet, this)),
+    m_chatBtn(new CategoryButton(AppsListModel::Chat, this)),
     m_musicBtn(new CategoryButton(AppsListModel::Music, this)),
     m_videoBtn(new CategoryButton(AppsListModel::Video, this)),
     m_graphicsBtn(new CategoryButton(AppsListModel::Graphics, this)),
@@ -24,6 +25,7 @@ NavigationWidget::NavigationWidget(QWidget *parent) :
 
     initUI();
     initConnection();
+    setStyleSheet("background-color: yellow;");
 }
 
 void NavigationWidget::setCurrentCategory(const AppsListModel::AppCategory category)
@@ -37,6 +39,7 @@ void NavigationWidget::setCurrentCategory(const AppsListModel::AppCategory categ
 void NavigationWidget::initUI()
 {
     m_categoryGroup->addButton(m_internetBtn);
+    m_categoryGroup->addButton(m_chatBtn);
     m_categoryGroup->addButton(m_musicBtn);
     m_categoryGroup->addButton(m_videoBtn);
     m_categoryGroup->addButton(m_graphicsBtn);
@@ -52,6 +55,7 @@ void NavigationWidget::initUI()
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addStretch();
     mainLayout->addWidget(m_internetBtn);
+    mainLayout->addWidget(m_chatBtn);
     mainLayout->addWidget(m_musicBtn);
     mainLayout->addWidget(m_videoBtn);
     mainLayout->addWidget(m_graphicsBtn);
@@ -72,6 +76,7 @@ void NavigationWidget::initConnection()
 {
     connect(m_internetBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_musicBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
+    connect(m_chatBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_videoBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_graphicsBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_gameBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
@@ -91,11 +96,26 @@ void NavigationWidget::buttonClicked()
     emit scrollToCategory(btn->category());
 }
 
+void NavigationWidget::setHideButtons(QList<AppsListModel::AppCategory> categoryList) {
+    if (categoryList.contains(AppsListModel::Internet)) { m_internetBtn->hide();}
+    if (categoryList.contains(AppsListModel::Chat)) { m_chatBtn->hide();}
+    if (categoryList.contains(AppsListModel::Music)) { m_musicBtn->hide();}
+    if (categoryList.contains(AppsListModel::Video)) { m_videoBtn->hide(); }
+    if (categoryList.contains(AppsListModel::Graphics)) { m_graphicsBtn->hide();}
+    if (categoryList.contains(AppsListModel::Game)) { m_gameBtn->hide();}
+    if (categoryList.contains(AppsListModel::Office)) { m_officeBtn->hide();}
+    if (categoryList.contains(AppsListModel::Reading)) { m_readingBtn->hide();}
+    if (categoryList.contains(AppsListModel::Development)) { m_developmentBtn->hide();}
+    if (categoryList.contains(AppsListModel::System)) { m_systemBtn->hide();}
+    if (categoryList.contains(AppsListModel::Others)) { m_othersBtn->hide();}
+}
+
 CategoryButton *NavigationWidget::button(const AppsListModel::AppCategory category)
 {
     switch (category)
     {
     case AppsListModel::Internet:       return m_internetBtn;
+    case AppsListModel::Chat:           return m_chatBtn;
     case AppsListModel::Music:          return m_musicBtn;
     case AppsListModel::Video:          return m_videoBtn;
     case AppsListModel::Graphics:       return m_graphicsBtn;

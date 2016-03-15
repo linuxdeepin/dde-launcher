@@ -20,11 +20,11 @@ public:
 public:
     explicit CategoryButton(const AppsListModel::AppCategory category, QWidget *parent = 0);
 
-    AppsListModel::AppCategory category() const;
+
 
 public slots:
     void setChecked(bool isChecked);
-
+    AppsListModel::AppCategory category() const;
 protected:
     void paintEvent(QPaintEvent *e);
     void enterEvent(QEvent *e);

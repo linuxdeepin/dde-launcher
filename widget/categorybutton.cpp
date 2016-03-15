@@ -12,22 +12,24 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
 {
     setObjectName("CategoryButton");
 
-    QWidget *textWidget = new QWidget;
-    m_textLabel->setParent(textWidget);
-    m_textLabel->setFixedHeight(DLauncher::NAVIGATION_ICON_HEIGHT);
+    m_iconLabel->setFixedSize(32, 32);
+    m_textLabel->setFixedHeight(32);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addWidget(m_iconLabel);
-    mainLayout->addWidget(textWidget);
     mainLayout->setSpacing(0);
     mainLayout->setMargin(0);
+    mainLayout->addSpacing(30);
+    mainLayout->addWidget(m_iconLabel);
+    mainLayout->addSpacing(15);
+    mainLayout->addWidget(m_textLabel);
+    mainLayout->addStretch(3);
 
     setLayout(mainLayout);
     setCheckable(true);
     setAutoExclusive(true);
     setFixedHeight(DLauncher::NAVIGATION_ICON_HEIGHT);
     setInfoByCategory();
-    setStyleSheet("background-color:gray;");
+    setStyleSheet("background-color:transparent;");
     updateState(Normal);
 
     connect(this, &CategoryButton::toggled, this, &CategoryButton::setChecked);

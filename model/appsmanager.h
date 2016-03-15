@@ -11,13 +11,26 @@
 #include <QSettings>
 #include <QPixmap>
 
+
 class AppsManager : public QObject
 {
     Q_OBJECT
 
 public:
     static AppsManager *instance(QObject *parent = nullptr);
-
+    const QStringList CategoryKeys {
+        "Internet",
+        "Chat",
+        "Music",
+        "Video",
+        "Graphics",
+        "Game",
+        "Office",
+        "Reading",
+        "Development",
+        "System",
+        "Others",
+    };
 public slots:
     void removeRow(const int row);
     void launchApp(const QModelIndex &index);
@@ -29,7 +42,8 @@ public slots:
     bool appIsOnDesktop(const QString &desktop);
     const QPixmap appIcon(const QString &desktop, const int size);
     ItemInfo getItemInfo(QString appKey);
-
+    void categoryAppNums();
+    int getCategoryAppNums(const AppsListModel::AppCategory &category);
 private:
     explicit AppsManager(QObject *parent = 0);
 
@@ -47,6 +61,8 @@ private:
     ItemInfoList m_appInfoList;
     ItemInfoList m_appSearchResultList;
     QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfos;
+public:
+    QMap<AppsListModel::AppCategory, int> m_categoryAppNumsMap;
 
     static AppsManager *INSTANCE;
     static QSettings APP_ICON_CACHE;

@@ -38,7 +38,7 @@ signals:
 
 public slots:
     void scrollToCategory(const AppsListModel::AppCategory &category);
-
+    void hideTitle();
 protected:
     void resizeEvent(QResizeEvent *e);
     void keyPressEvent(QKeyEvent *e);
@@ -75,6 +75,7 @@ private:
     AppItemDelegate *m_appItemDelegate;
     AppListView *m_allAppsView;
     AppListView *m_internetView;
+    AppListView * m_chatView;
     AppListView *m_musicView;
     AppListView *m_videoView;
     AppListView *m_graphicsView;
@@ -86,6 +87,7 @@ private:
     AppListView *m_othersView;
     AppsListModel *m_allAppsModel;
     AppsListModel *m_internetModel;
+    AppsListModel *m_chatModel;
     AppsListModel *m_musicModel;
     AppsListModel *m_videoModel;
     AppsListModel *m_graphicsModel;
@@ -96,6 +98,7 @@ private:
     AppsListModel *m_systemModel;
     AppsListModel *m_othersModel;
     CategoryTitleWidget *m_internetTitle;
+    CategoryTitleWidget* m_chatTitle;
     CategoryTitleWidget *m_musicTitle;
     CategoryTitleWidget *m_videoTitle;
     CategoryTitleWidget *m_graphicsTitle;

@@ -18,7 +18,7 @@ signals:
 
 public slots:
     void setCurrentCategory(const AppsListModel::AppCategory category);
-
+    void setHideButtons(QList<AppsListModel::AppCategory> categoryList);
 private:
     void initUI();
     void initConnection();
@@ -30,6 +30,7 @@ private:
     QButtonGroup *m_categoryGroup;
 
     CategoryButton *m_internetBtn;
+    CategoryButton* m_chatBtn;
     CategoryButton *m_musicBtn;
     CategoryButton *m_videoBtn;
     CategoryButton *m_graphicsBtn;

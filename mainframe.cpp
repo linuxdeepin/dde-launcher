@@ -25,6 +25,7 @@ MainFrame::MainFrame(QWidget *parent) :
 
     m_allAppsView(new AppListView),
     m_internetView(new AppListView),
+    m_chatView(new AppListView),
     m_musicView(new AppListView),
     m_videoView(new AppListView),
     m_graphicsView(new AppListView),
@@ -37,6 +38,7 @@ MainFrame::MainFrame(QWidget *parent) :
 
     m_allAppsModel(new AppsListModel(AppsListModel::All)),
     m_internetModel(new AppsListModel(AppsListModel::Internet)),
+    m_chatModel(new AppsListModel(AppsListModel::Chat)),
     m_musicModel(new AppsListModel(AppsListModel::Music)),
     m_videoModel(new AppsListModel(AppsListModel::Video)),
     m_graphicsModel(new AppsListModel(AppsListModel::Graphics)),
@@ -48,6 +50,7 @@ MainFrame::MainFrame(QWidget *parent) :
     m_othersModel(new AppsListModel(AppsListModel::Others)),
 
     m_internetTitle(new CategoryTitleWidget(tr("Internet"))),
+    m_chatTitle(new CategoryTitleWidget(tr("Chat"))),
     m_musicTitle(new CategoryTitleWidget(tr("Music"))),
     m_videoTitle(new CategoryTitleWidget(tr("Video"))),
     m_graphicsTitle(new CategoryTitleWidget(tr("Graphics"))),
@@ -75,6 +78,7 @@ MainFrame::MainFrame(QWidget *parent) :
 
     setFixedSize(qApp->primaryScreen()->geometry().size());
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
+    hideTitle();
 }
 
 void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
@@ -84,6 +88,7 @@ void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
     switch (category)
     {
     case AppsListModel::Internet:       dest = m_internetTitle;         break;
+    case AppsListModel::Chat:           dest = m_chatTitle;             break;
     case AppsListModel::Music:          dest = m_musicTitle;            break;
     case AppsListModel::Video:          dest = m_videoTitle;            break;
     case AppsListModel::Graphics:       dest = m_graphicsTitle;         break;
@@ -106,6 +111,79 @@ void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
     m_scrollAnimation->setStartValue(m_appsArea->verticalScrollBar()->value());
     m_scrollAnimation->setEndValue(dest->y());
     m_scrollAnimation->start();
+}
+
+void MainFrame::hideTitle() {
+    QList<AppsListModel::AppCategory> hideCategoryList;
+
+    if (m_appsManager->getCategoryAppNums(AppsListModel::Internet)==0) {
+        qDebug() << "internet title:" << m_appsManager->getCategoryAppNums(AppsListModel::Internet);
+        m_internetTitle->setVisible(false);
+        m_internetView->setVisible(false);
+        hideCategoryList.append(AppsListModel::Internet);
+    }
+    if (m_appsManager->getCategoryAppNums(AppsListModel::Chat)==0) {
+        qDebug() << "Chat title:" << m_appsManager->getCategoryAppNums(AppsListModel::Chat);
+        m_chatTitle->setVisible(false);
+        m_chatView->setVisible(false);
+        hideCategoryList.append(AppsListModel::Chat);
+    }
+    if (m_appsManager->getCategoryAppNums(AppsListModel::Music)==0) {
+        qDebug() << "Music title:" << m_appsManager->getCategoryAppNums(AppsListModel::Music);
+        m_musicTitle->setVisible(false);
+        m_musicView->setVisible(false);
+        hideCategoryList.append(AppsListModel::Music);
+    }
+    if (m_appsManager->getCategoryAppNums(AppsListModel::Video)==0) {
+        qDebug() << "Video title:" << m_appsManager->getCategoryAppNums(AppsListModel::Video);
+        m_videoTitle->setVisible(false);
+        m_videoView->setVisible(false);
+        hideCategoryList.append(AppsListModel::Video);
+    }
+    if (m_appsManager->getCategoryAppNums(AppsListModel::Graphics)==0) {
+        qDebug() << "Graphics title:" << m_appsManager->getCategoryAppNums(AppsListModel::Graphics);
+        m_graphicsTitle->setVisible(false);
+        m_graphicsView->setVisible(false);
+        hideCategoryList.append(AppsListModel::Graphics);
+    }
+    if (m_appsManager->getCategoryAppNums(AppsListModel::Game)==0) {
+        qDebug() << "Game title:" << m_appsManager->getCategoryAppNums(AppsListModel::Game);
+        m_gameTitle->setVisible(false);
+        m_gameView->setVisible(false);
+        hideCategoryList.append(AppsListModel::Game);
+    }
+    if (m_appsManager->getCategoryAppNums(AppsListModel::Office)==0) {
+        qDebug() << "Office title:" << m_appsManager->getCategoryAppNums(AppsListModel::Office);
+        m_officeTitle->setVisible(false);
+        m_officeView->setVisible(false);
+        hideCategoryList.append(AppsListModel::Office);
+    }
+    if (m_appsManager->getCategoryAppNums(AppsListModel::Reading)==0) {
+        qDebug() << "Reading title:" << m_appsManager->getCategoryAppNums(AppsListModel::Reading);
+        m_readingTitle->setVisible(false);
+        m_readingView->setVisible(false);
+        hideCategoryList.append(AppsListModel::Reading);
+    }
+    if (m_appsManager->getCategoryAppNums(AppsListModel::Development)==0) {
+        qDebug() << "Development title:" << m_appsManager->getCategoryAppNums(AppsListModel::Development);
+        m_developmentTitle->setVisible(false);
+        m_developmentView->setVisible(false);
+        hideCategoryList.append(AppsListModel::Development);
+    }
+    if (m_appsManager->getCategoryAppNums(AppsListModel::System)==0) {
+        qDebug() << "System title:" << m_appsManager->getCategoryAppNums(AppsListModel::System);
+        m_systemTitle->setVisible(false);
+        m_systemView->setVisible(false);
+        hideCategoryList.append(AppsListModel::System);
+    }
+    if (m_appsManager->getCategoryAppNums(AppsListModel::Others)==0) {
+        qDebug() << "others title:" << m_appsManager->getCategoryAppNums(AppsListModel::Others);
+        m_othersTitle->setVisible(false);
+        m_othersView->setVisible(false);
+        hideCategoryList.append(AppsListModel::Others);
+    }
+
+    m_navigationBar->setHideButtons(hideCategoryList);
 }
 
 void MainFrame::resizeEvent(QResizeEvent *e)

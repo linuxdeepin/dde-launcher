@@ -6,6 +6,10 @@
 #include <QWidget>
 #include <QButtonGroup>
 
+#include <dimagebutton.h>
+
+DWIDGET_USE_NAMESPACE
+
 class NavigationWidget : public QWidget
 {
     Q_OBJECT
@@ -17,6 +21,7 @@ public:
 
 signals:
     void scrollToCategory(const AppsListModel::AppCategory category) const;
+    void toggleModeClicked() const;
 
 public slots:
     void setCurrentCategory(const AppsListModel::AppCategory category);
@@ -30,8 +35,8 @@ private:
     CategoryButton *button(const AppsListModel::AppCategory category);
 
 private:
+    DImageButton *m_toggleModeBtn;
     QButtonGroup *m_categoryGroup;
-
     CategoryButton *m_internetBtn;
     CategoryButton* m_chatBtn;
     CategoryButton *m_musicBtn;

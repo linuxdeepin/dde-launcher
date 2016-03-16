@@ -14,6 +14,7 @@
 #include <QFrame>
 #include <QScrollArea>
 #include <QPropertyAnimation>
+#include <QSettings>
 
 #include <dboxwidget.h>
 
@@ -24,6 +25,7 @@ class MainFrame : public QFrame
 {
     Q_OBJECT
 
+public:
     enum DisplayMode {
         AllApps,
         GroupByCategory,
@@ -68,8 +70,9 @@ private slots:
     void handleUninstallResult(int result, QString content);
 
 private:
-    DisplayMode m_displayMode = AllApps;
+    DisplayMode m_displayMode = Search;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
+    QSettings m_settings;
 
     AppsManager *m_appsManager;
     QPropertyAnimation *m_scrollAnimation;
@@ -121,5 +124,7 @@ private:
     CategoryTitleWidget *m_systemTitle;
     CategoryTitleWidget *m_othersTitle;
 };
+
+Q_DECLARE_METATYPE(MainFrame::DisplayMode);
 
 #endif // MAINFRAME_H

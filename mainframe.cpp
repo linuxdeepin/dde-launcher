@@ -12,8 +12,11 @@
 
 #include <ddialog.h>
 
+const QString DEFAULT_DISPLAY_MODE = "defaultDisplayMode";
+
 MainFrame::MainFrame(QWidget *parent) :
     QFrame(parent),
+    m_settings("deepin", "dde-launcher", this),
     m_appsManager(AppsManager::instance(this)),
 
     m_navigationBar(new NavigationWidget),
@@ -73,7 +76,7 @@ MainFrame::MainFrame(QWidget *parent) :
     initUI();
     initConnection();
 
-    updateDisplayMode(GroupByCategory);
+    updateDisplayMode(DisplayMode(m_settings.value(DEFAULT_DISPLAY_MODE, AllApps).toInt()));
 
     setFixedSize(qApp->primaryScreen()->geometry().size());
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
@@ -334,6 +337,11 @@ void MainFrame::initConnection()
 
     connect(m_menuWorker, &MenuWorker::quitLauncher, this, &MainFrame::hide);
     connect(m_menuWorker, &MenuWorker::unInstallApp, this, &MainFrame::showPopupUninstallDialog);
+    connect(m_navigationBar, &NavigationWidget::toggleModeClicked, [this] {
+        if (m_displayMode == Search)
+            return;
+        updateDisplayMode(m_displayMode == GroupByCategory ? AllApps : GroupByCategory);
+    });
 }
 
 void MainFrame::launchCurrentApp()
@@ -509,6 +517,10 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
 
     m_allAppsView->setModel(m_displayMode == Search ? m_searchResultModel : m_allAppsModel);
 
+    if (m_displayMode != Search)
+        m_settings.setValue(DEFAULT_DISPLAY_MODE, m_displayMode);
+
+    scrollToCategory(m_currentCategory);
     emit displayModeChanged(m_displayMode);
 }
 
@@ -551,7 +563,7 @@ void MainFrame::searchTextChanged(const QString &keywords)
     m_appsManager->searchApp(keywords);
 
     if (keywords.isEmpty())
-        updateDisplayMode(GroupByCategory);
+        updateDisplayMode(DisplayMode(m_settings.value(DEFAULT_DISPLAY_MODE, AllApps).toInt()));
     else
         updateDisplayMode(Search);
 }

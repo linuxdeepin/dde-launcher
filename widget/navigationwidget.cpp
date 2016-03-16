@@ -5,8 +5,11 @@
 #include <QVBoxLayout>
 #include <QDebug>
 
+DWIDGET_USE_NAMESPACE
+
 NavigationWidget::NavigationWidget(QWidget *parent) :
     QWidget(parent),
+    m_toggleModeBtn(new DImageButton(this)),
     m_categoryGroup(new QButtonGroup(this)),
     m_internetBtn(new CategoryButton(AppsListModel::Internet, this)),
     m_chatBtn(new CategoryButton(AppsListModel::Chat, this)),
@@ -60,6 +63,11 @@ void NavigationWidget::refershCategoryVisible(const AppsListModel::AppCategory c
 
 void NavigationWidget::initUI()
 {
+    m_toggleModeBtn->setNormalPic(":/skin/images/category_10.svg");
+    m_toggleModeBtn->setHoverPic(":/skin/images/category_50.svg");
+    m_toggleModeBtn->setPressPic(":/skin/images/category_100.svg");
+    m_toggleModeBtn->setStyleSheet("margin:50 0 0 30px;");
+
     m_categoryGroup->addButton(m_internetBtn);
     m_categoryGroup->addButton(m_chatBtn);
     m_categoryGroup->addButton(m_musicBtn);
@@ -75,6 +83,7 @@ void NavigationWidget::initUI()
     m_internetBtn->setChecked(true);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(m_toggleModeBtn);
     mainLayout->addStretch();
     mainLayout->addWidget(m_internetBtn);
     mainLayout->addWidget(m_chatBtn);
@@ -107,6 +116,8 @@ void NavigationWidget::initConnection()
     connect(m_developmentBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_systemBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_othersBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
+
+    connect(m_toggleModeBtn, &DImageButton::clicked, this, &NavigationWidget::toggleModeClicked);
 }
 
 void NavigationWidget::buttonClicked()

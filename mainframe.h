@@ -50,6 +50,7 @@ protected:
     void resizeEvent(QResizeEvent *e);
     void keyPressEvent(QKeyEvent *e);
     void showEvent(QShowEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
     bool event(QEvent *e);
     bool eventFilter(QObject *o, QEvent *e);
 

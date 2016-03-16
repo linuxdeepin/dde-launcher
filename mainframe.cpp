@@ -169,6 +169,13 @@ void MainFrame::showEvent(QShowEvent *e)
     QFrame::showEvent(e);
 }
 
+void MainFrame::mouseReleaseEvent(QMouseEvent *e)
+{
+    QFrame::mouseReleaseEvent(e);
+
+//    hide();
+}
+
 bool MainFrame::event(QEvent *e)
 {
     if (e->type() == QEvent::WindowDeactivate)
@@ -364,13 +371,16 @@ void MainFrame::launchCurrentApp()
             (category == AppsListModel::Search && m_displayMode == Search) ||
             (m_displayMode == GroupByCategory && category != AppsListModel::All && category != AppsListModel::Search))
             m_appsManager->launchApp(index);
-    } else {
-        switch (m_displayMode)
-        {
-        case Search:
-        case AllApps:           m_appsManager->launchApp(m_allAppsView->indexAt(QPoint(0, 0)));     break;
-        case GroupByCategory:   m_appsManager->launchApp(m_internetView->indexAt(QPoint(0, 0)));    break;
-        }
+
+        hide();
+        return;
+    }
+
+    switch (m_displayMode)
+    {
+    case Search:
+    case AllApps:           m_appsManager->launchApp(m_allAppsView->indexAt(QPoint(0, 0)));     break;
+    case GroupByCategory:   m_appsManager->launchApp(m_internetView->indexAt(QPoint(0, 0)));    break;
     }
 
     hide();

@@ -31,7 +31,6 @@
 #include "model/appsmanager.h"
 #include "model/appslistmodel.h"
 
-//class NotificationInterface;
 
 #define MenuManager_service "com.deepin.menu"
 #define MenuManager_path "/com/deepin/menu"

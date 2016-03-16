@@ -15,11 +15,9 @@ MenuWorker::MenuWorker(QObject *parent) : QObject(parent)
 {
     qDebug() << "MenuWorker";
     m_menuManagerInterface = new DBusMenuManager(this);
-//    m_notifcationInterface = new NotificationInterface(NotificationInterface::staticServiceName(),
-//                                                       NotificationInterface::staticObjectPathName(),
-//                                                       QDBusConnection::sessionBus(),
-//                                                       this);
+
     m_dockAppManagerInterface = new DBusDockedAppManager(this);
+    m_startManagerInterface = new DBusStartManager(this);
     m_launcherInterface = new DBusLauncher(this);
     m_menuInterface = NULL;
     if (!m_appManager)
@@ -258,7 +256,6 @@ void MenuWorker::handleToDock(){
 }
 
 void MenuWorker::handleToStartup(){
-    qDebug() << "handleToStartup" << m_appKey;
     QString desktopUrl = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
     if (m_isItemStartup){
         QDBusPendingReply<bool> reply = m_startManagerInterface->RemoveAutostart(desktopUrl);

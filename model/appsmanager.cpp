@@ -20,6 +20,7 @@ AppsManager::AppsManager(QObject *parent) :
 //    refreshAppAutoStartCache();
 
     m_appInfoList = m_launcherInter->GetAllItemInfos().value();
+    sortCategory(AppsListModel::All);
     refreshCategoryInfoList();
 
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
@@ -33,6 +34,23 @@ void AppsManager::appendSearchResult(const QString &appKey)
     for (const ItemInfo &info : m_appInfoList)
         if (info.m_key == appKey)
             return m_appSearchResultList.append(info);
+}
+
+void AppsManager::sortCategory(const AppsListModel::AppCategory category)
+{
+    switch (category)
+    {
+    case AppsListModel::Search:     sortByName(m_appSearchResultList);      break;
+    case AppsListModel::All:        sortByName(m_appInfoList);              break;
+    default:;
+    }
+}
+
+void AppsManager::sortByName(ItemInfoList &processList)
+{
+    qSort(processList.begin(), processList.end(), [] (const ItemInfo &i1, const ItemInfo &i2) {
+        return i1.m_name < i2.m_name;
+    });
 }
 
 AppsManager *AppsManager::instance(QObject *parent)
@@ -169,5 +187,6 @@ void AppsManager::searchDone(const QStringList &resultList)
     for (const QString &key : resultList)
         appendSearchResult(key);
 
+//    sortCategory(AppsListModel::Search);
     emit dataChanged(AppsListModel::Search);
 }

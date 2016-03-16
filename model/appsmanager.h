@@ -52,6 +52,8 @@ private:
     explicit AppsManager(QObject *parent = 0);
 
     void appendSearchResult(const QString &appKey);
+    void sortCategory(const AppsListModel::AppCategory category);
+    void sortByName(ItemInfoList &processList);
     void refreshCategoryInfoList();
     void refreshAppIconCache();
     void refreshAppAutoStartCache();

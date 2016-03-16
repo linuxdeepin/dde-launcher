@@ -11,9 +11,6 @@
 
 AppsManager *MenuWorker::m_appManager = nullptr;
 
-
-
-
 MenuWorker::MenuWorker(QObject *parent) : QObject(parent)
 {
     qDebug() << "MenuWorker";
@@ -22,6 +19,8 @@ MenuWorker::MenuWorker(QObject *parent) : QObject(parent)
 //                                                       NotificationInterface::staticObjectPathName(),
 //                                                       QDBusConnection::sessionBus(),
 //                                                       this);
+    m_dockAppManagerInterface = new DBusDockedAppManager(this);
+    m_launcherInterface = new DBusLauncher(this);
     m_menuInterface = NULL;
     if (!m_appManager)
         m_appManager = AppsManager::instance(this);

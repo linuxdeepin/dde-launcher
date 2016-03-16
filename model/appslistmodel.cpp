@@ -102,7 +102,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppAutoStartRole:
         return m_appsManager->appIsAutoStart(itemInfo.m_desktop);
     case AppIsOnDesktopRole:
-        return m_appsManager->appIsOnDesktop(itemInfo.m_desktop);
+        return m_appsManager->appIsOnDesktop(itemInfo.m_key);
     case AppIsOnDockRole:
         return m_appsManager->appIsOnDock(itemInfo.m_key);
     case AppNewInstallRole:

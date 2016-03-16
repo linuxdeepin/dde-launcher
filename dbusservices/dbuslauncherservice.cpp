@@ -67,8 +67,8 @@ void DBusLauncherService::Toggle()
     // handle method call com.deepin.dde.Launcher.Toggle
 //    parent()->Toggle();
     if (parent()->isVisible())
-        parent()->hide();
+        QMetaObject::invokeMethod(parent(), "hide", Qt::QueuedConnection);
     else
-        parent()->show();
+        QMetaObject::invokeMethod(parent(), "show", Qt::QueuedConnection);
 }
 

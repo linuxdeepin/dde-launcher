@@ -178,8 +178,8 @@ void MainFrame::mouseReleaseEvent(QMouseEvent *e)
 
 bool MainFrame::event(QEvent *e)
 {
-    if (e->type() == QEvent::WindowDeactivate)
-        hide();
+    if (e->type() == QEvent::WindowDeactivate && isVisible())
+        QMetaObject::invokeMethod(this, "hide", Qt::QueuedConnection);
 
     return QFrame::event(e);
 }

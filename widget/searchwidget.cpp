@@ -14,4 +14,8 @@ SearchWidget::SearchWidget(QWidget *parent) :
 
     setFocusPolicy(Qt::StrongFocus);
     setLayout(mainLayout);
+
+    connect(m_searchEdit, &DSearchEdit::textChanged, [this] {
+        emit searchTextChanged(m_searchEdit->text());
+    });
 }

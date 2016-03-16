@@ -56,6 +56,7 @@ private:
     void updateCurrentVisibleCategory();
 
 private slots:
+    void searchTextChanged(const QString &keywords);
     void ensureScrollToDest(const QVariant &value);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
 
@@ -89,6 +90,7 @@ private:
     AppListView *m_systemView;
     AppListView *m_othersView;
     AppsListModel *m_allAppsModel;
+    AppsListModel *m_searchResultModel;
     AppsListModel *m_internetModel;
     AppsListModel *m_chatModel;
     AppsListModel *m_musicModel;

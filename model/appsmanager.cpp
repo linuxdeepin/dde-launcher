@@ -23,6 +23,15 @@ AppsManager::AppsManager(QObject *parent) :
     refreshCategoryInfoList();
 
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
+
+    connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
+}
+
+void AppsManager::appendSearchResult(const QString &appKey)
+{
+    for (const ItemInfo &info : m_appInfoList)
+        if (info.m_key == appKey)
+            return m_appSearchResultList.append(info);
 }
 
 AppsManager *AppsManager::instance(QObject *parent)
@@ -37,6 +46,11 @@ AppsManager *AppsManager::instance(QObject *parent)
 void AppsManager::removeRow(const int row)
 {
     m_appInfoList.removeAt(row);
+}
+
+void AppsManager::searchApp(const QString &keywords)
+{
+    m_launcherInter->Search(keywords);
 }
 
 void AppsManager::launchApp(const QModelIndex &index)
@@ -134,4 +148,14 @@ void AppsManager::refreshAppAutoStartCache()
 {
     APP_AUTOSTART_CACHE.sync();
     APP_AUTOSTART_CACHE.clear();
+}
+
+void AppsManager::searchDone(const QStringList &resultList)
+{
+    m_appSearchResultList.clear();
+
+    for (const QString &key : resultList)
+        appendSearchResult(key);
+
+    emit dataChanged(AppsListModel::Search);
 }

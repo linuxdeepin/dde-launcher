@@ -10,8 +10,12 @@ DWIDGET_USE_NAMESPACE
 class SearchWidget : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit SearchWidget(QWidget *parent = 0);
+
+signals:
+    void searchTextChanged(const QString &text) const;
 
 private:
     DSearchEdit *m_searchEdit;

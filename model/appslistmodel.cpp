@@ -16,6 +16,8 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
 {
     if (!m_appsManager)
         m_appsManager = AppsManager::instance(this);
+
+    connect(m_appsManager, &AppsManager::dataChanged, this, &AppsListModel::dataChanged);
 }
 
 int AppsListModel::rowCount(const QModelIndex &parent) const
@@ -95,4 +97,10 @@ Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const
     const Qt::ItemFlags defaultFlags = QAbstractListModel::flags(index);
 
     return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+}
+
+void AppsListModel::dataChanged(const AppCategory category)
+{
+    if (category == m_category)
+        emit QAbstractItemModel::dataChanged(index(0), index(rowCount(QModelIndex())));
 }

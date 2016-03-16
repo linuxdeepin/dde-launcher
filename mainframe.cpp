@@ -37,6 +37,7 @@ MainFrame::MainFrame(QWidget *parent) :
     m_othersView(new AppListView),
 
     m_allAppsModel(new AppsListModel(AppsListModel::All)),
+    m_searchResultModel(new AppsListModel(AppsListModel::Search)),
     m_internetModel(new AppsListModel(AppsListModel::Internet)),
     m_chatModel(new AppsListModel(AppsListModel::Chat)),
     m_musicModel(new AppsListModel(AppsListModel::Music)),
@@ -252,6 +253,7 @@ void MainFrame::initConnection()
     connect(this, &MainFrame::categoryAppNumsChanged, m_navigationBar, &NavigationWidget::refershCategoryVisible);
     connect(this, &MainFrame::categoryAppNumsChanged, this, &MainFrame::refershCategoryVisible);
     connect(this, &MainFrame::displayModeChanged, this, &MainFrame::checkCategoryVisible);
+    connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &MainFrame::searchTextChanged);
 
     connect(m_allAppsView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
     connect(m_internetView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
@@ -424,6 +426,8 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
 
     m_navigationBar->setButtonsVisible(m_displayMode == GroupByCategory);
 
+    m_allAppsView->setModel(m_displayMode == Search ? m_searchResultModel : m_allAppsModel);
+
     emit displayModeChanged(m_displayMode);
 }
 
@@ -459,4 +463,14 @@ void MainFrame::updateCurrentVisibleCategory()
 
     m_currentCategory = currentVisibleCategory;
     emit currentVisibleCategoryChanged(m_currentCategory);
+}
+
+void MainFrame::searchTextChanged(const QString &keywords)
+{
+    m_appsManager->searchApp(keywords);
+
+    if (keywords.isEmpty())
+        updateDisplayMode(GroupByCategory);
+    else
+        updateDisplayMode(Search);
 }

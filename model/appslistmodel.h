@@ -56,6 +56,9 @@ protected:
     Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
 
 private:
+    void dataChanged(const AppsListModel::AppCategory category);
+
+private:
     static AppsManager *m_appsManager;
 
     AppCategory m_category = All;

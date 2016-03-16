@@ -25,7 +25,6 @@ NavigationWidget::NavigationWidget(QWidget *parent) :
 
     initUI();
     initConnection();
-    setStyleSheet("background-color: yellow;");
 }
 
 void NavigationWidget::setButtonsVisible(const bool visible)

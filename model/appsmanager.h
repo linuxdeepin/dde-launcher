@@ -19,8 +19,12 @@ class AppsManager : public QObject
 public:
     static AppsManager *instance(QObject *parent = nullptr);
 
+signals:
+    void dataChanged(const AppsListModel::AppCategory category) const;
+
 public slots:
     void removeRow(const int row);
+    void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
 
@@ -30,12 +34,17 @@ public slots:
     bool appIsOnDesktop(const QString &desktop);
     const QPixmap appIcon(const QString &desktop, const int size);
     int appNums(const AppsListModel::AppCategory &category) const;
+
 private:
     explicit AppsManager(QObject *parent = 0);
 
+    void appendSearchResult(const QString &appKey);
     void refreshCategoryInfoList();
     void refreshAppIconCache();
     void refreshAppAutoStartCache();
+
+private slots:
+    void searchDone(const QStringList &resultList);
 
 private:
     DBusLauncher *m_launcherInter;

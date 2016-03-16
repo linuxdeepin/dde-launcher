@@ -12,13 +12,6 @@ QTableWidget#CategoryTableWidget{
    selection-background-color:transparent;
 }
 
-QLabel#CategoryItemBlackLine{
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0,0,0,0.3), stop:1 rgba(0,0,0,0))
-}
-
-QLabel#CategoryItemWhiteLine{
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255,255,255,0.3), stop:1 rgba(255,255,255,0))
-}
 
 /*******************QScrollBar*****************************/
 QScrollBar:vertical {

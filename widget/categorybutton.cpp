@@ -29,7 +29,7 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     setAutoExclusive(true);
     setFixedHeight(DLauncher::NAVIGATION_ICON_HEIGHT);
     setInfoByCategory();
-    setStyleSheet("background-color:transparent;");
+    setStyleSheet("background-color:transparent; color: white; font-size: 15px;");
     updateState(Normal);
 
     connect(this, &CategoryButton::toggled, this, &CategoryButton::setChecked);

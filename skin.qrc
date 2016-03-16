@@ -58,5 +58,6 @@
         <file>skin/images/others_10.svg</file>
         <file>skin/images/others_50.svg</file>
         <file>skin/images/googleChrome.png</file>
+        <file>skin/qss/categorytitlewidget.qss</file>
     </qresource>
 </RCC>

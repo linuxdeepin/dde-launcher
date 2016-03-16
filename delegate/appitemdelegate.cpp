@@ -58,7 +58,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     // draw icon if app is auto startup
     if (index.data(AppsListModel::AppAutoStartRole).toBool())
-        painter->drawPixmap(option.rect.x(), option.rect.y(), 16, 16, QPixmap(":/skin/images/emblem-autostart.png"));
+        painter->drawPixmap(option.rect.x() + 35, option.rect.y() + 90, 16, 16, QPixmap(":/skin/images/emblem-autostart.png"));
 
     // draw app name
     painter->setPen(Qt::white);

@@ -526,6 +526,9 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
 
 void MainFrame::updateCurrentVisibleCategory()
 {
+    if (m_displayMode != GroupByCategory)
+        return;
+
     AppsListModel::AppCategory currentVisibleCategory;
 
     if (!m_internetView->visibleRegion().isEmpty())

@@ -135,6 +135,10 @@ PKGCONFIG += dtkbase dtkwidget dtkbase
 PKGCONFIG += dtkbase dtkwidget dtkbase xcb xcb-ewmh
 >>>>>>> Add StartManager dbus interface
 
+
+include(./widget/widget.pri)
+include(./dialogs/dialogs.pri)
+
 SOURCES += \
     mian.cpp \
     mainframe.cpp \
@@ -142,8 +146,6 @@ SOURCES += \
     model/appslistmodel.cpp \
     model/appsmanager.cpp \
     view/applistview.cpp \
-    widget/categorytitlewidget.cpp \
-    widget/searchwidget.cpp \
     global_util/util.cpp \
     dbus/dbusfileinfo.cpp \
     dbus/dbusvariant/categoryinfo.cpp \
@@ -153,8 +155,6 @@ SOURCES += \
     delegate/appitemdelegate.cpp \
     dbus/dbustartmanager.cpp \
     global_util/xcb_misc.cpp \
-    widget/navigationwidget.cpp \
-    widget/categorybutton.cpp \
     dbus/dbusmenu.cpp \
     dbus/dbusmenumanager.cpp \
     worker/menuworker.cpp \
@@ -184,12 +184,15 @@ HEADERS += \
     widget/searchwidget.h \
 =======
     view/applistview.h \
+<<<<<<< ebd7187b2c6be142255ade7c2a93789be2365937
 <<<<<<< 54ba9a743079cb32f72588bef99b663ccf0ea760
 >>>>>>> adjust ui
 =======
     widget/categorytitlewidget.h \
     widget/searchwidget.h \
 >>>>>>> Change main frame layout
+=======
+>>>>>>> Add the confirmUninstallAppDialog
     global_util/constants.h \
     global_util/util.h \
     dbus/dbusfileinfo.h \
@@ -200,8 +203,6 @@ HEADERS += \
     delegate/appitemdelegate.h \
     dbus/dbustartmanager.h \
     global_util/xcb_misc.h \
-    widget/navigationwidget.h \
-    widget/categorybutton.h \
     dbus/dbusmenu.h \
     dbus/dbusmenumanager.h \
     worker/menuworker.h \

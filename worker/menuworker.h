@@ -60,7 +60,7 @@ public:
 
 signals:
     void quitLauncher();
-    void unInstallApp(QString appKey);
+    void unInstallApp(const QModelIndex &index);
 public slots:
     void showMenuByAppItem(const QModelIndex &index, QPoint pos);
     void menuItemInvoked(QString itemId, bool flag);
@@ -74,13 +74,9 @@ public slots:
     void handleToDock();
     void handleToStartup();
 
-    void handleUninstallAction(QString appKey, int id);
-    void startUnistall(QString appKey);
-    void handleUninstallSuccess(const QString& appKey);
-    void handleUninstallFail(const QString& appKey, const QString& message);
-
     void handleMenuClosed();
     void setCurrentModelIndex(const QModelIndex &index);
+    const QModelIndex getCurrentModelIndex();
 private:
     DBusMenuManager* m_menuManagerInterface;
     DBusMenu* m_menuInterface;

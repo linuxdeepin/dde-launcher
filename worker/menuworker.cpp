@@ -33,11 +33,7 @@ MenuWorker::MenuWorker(QObject *parent) : QObject(parent)
 
 
 void MenuWorker::initConnect(){
-//    connect(signalManager, SIGNAL(contextMenuShowed(QString,QPoint)),
-//            this, SLOT(showMenuByAppItem(QString,QPoint)));
-//    connect(signalManager, SIGNAL(appOpened(QString)), this, SLOT(handleOpen(QString)));
-//    connect(signalManager, SIGNAL(uninstallActionChanged(QString,int)), this, SLOT(handleUninstallAction(QString,int)));
-//    connect(signalManager, SIGNAL(contextMenuHided(QString)), this, SLOT(hideMenuByAppKey(QString)));
+
 }
 
 MenuWorker::~MenuWorker()
@@ -190,7 +186,7 @@ void MenuWorker::menuItemInvoked(QString itemId, bool flag){
         handleToStartup();
         break;
     case 4:
-        emit  unInstallApp(m_appKey);
+        emit  unInstallApp(m_currentModelIndex);
         break;
     default:
         break;
@@ -210,6 +206,10 @@ void MenuWorker::handleMenuClosed(){
 
 void MenuWorker::setCurrentModelIndex(const QModelIndex &index) {
     m_currentModelIndex = index;
+}
+
+const QModelIndex MenuWorker::getCurrentModelIndex() {
+    return m_currentModelIndex;
 }
 
 void MenuWorker::handleToDesktop(){
@@ -288,38 +288,3 @@ void MenuWorker::handleToStartup(){
     }
 }
 
-void MenuWorker::handleUninstallAction(QString appKey, int id){
-    qDebug() << sender() << "handleUninstallAction" << appKey << id;
-    switch (id) {
-    case 0:
-//        if (LauncherApp::UnistallAppNames.contains(appKey)){
-//            LauncherApp::UnistallAppNames.remove(appKey);
-//        }
-        break;
-    case 1:
-        startUnistall(appKey);
-        break;
-    default:
-        break;
-    }
-
-}
-
-void MenuWorker::startUnistall(QString appKey){
-    QDBusPendingReply<> reply = m_launcherInterface->RequestUninstall(appKey, false);
-    reply.waitForFinished();
-    if (!reply.isError()) {
-        qDebug() << "unistall function excute finished!";
-    } else {
-        qDebug() << "unistall action fail";
-    }
-}
-
-void MenuWorker::handleUninstallSuccess(const QString &appKey){
-    Q_UNUSED(appKey);
-//    emit signalManager->itemDeleted(appKey);
-}
-
-void MenuWorker::handleUninstallFail(const QString &appKey, const QString &message){
-    qDebug() << "handleUninstallFail" << appKey << message;
-}

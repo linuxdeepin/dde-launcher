@@ -305,6 +305,7 @@ void MainFrame::initConnection()
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_othersView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
 
     connect(m_menuWorker, &MenuWorker::quitLauncher, qApp, &QApplication::quit);
+    connect(m_menuWorker, &MenuWorker::unInstallApp, this, &MainFrame::showPopupUninstallDialog);
 }
 
 void MainFrame::checkCategoryVisible()
@@ -331,6 +332,29 @@ void MainFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
              << "app key:" << context.data(AppsListModel::AppKeyRole).toString();
 
     m_menuWorker->showMenuByAppItem(context, pos);
+}
+
+void MainFrame::showPopupUninstallDialog(const QModelIndex &context) {
+    ConfirmUninstallDialog unInstallDialog(this);
+    unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
+    unInstallDialog.setWindowModality(Qt::WindowModal);
+
+    QString appName = context.data(AppsListModel::AppNameRole).toString();
+    unInstallDialog.setAppKey(appName);
+    unInstallDialog.setIcon(m_appsManager->appIcon(context.data(AppsListModel::AppDesktopRole).toString(), 64));
+    QString message = tr("Are you sure to uninstall %1 ?").arg(appName);
+    unInstallDialog.setMessage(message);
+    connect(&unInstallDialog, SIGNAL(buttonClicked(int)), this, SLOT(handleUninstallResult(int)));
+
+    unInstallDialog.exec();
+    unInstallDialog.deleteLater();
+}
+
+void MainFrame::handleUninstallResult(int result) {
+    const QModelIndex unInstallIndex = m_menuWorker->getCurrentModelIndex();
+    qDebug() << "unInstallAppName:" << unInstallIndex.data(AppsListModel::AppNameRole).toString()
+             << result;
+    emit m_appsManager->handleUninstallApp(unInstallIndex, result);
 }
 
 void MainFrame::ensureScrollToDest(const QVariant &value)

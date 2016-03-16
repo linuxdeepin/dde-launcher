@@ -5,12 +5,12 @@
 #include "global_util/util.h"
 #include "model/appslistmodel.h"
 #include "view/applistview.h"
-#include "widget/categorytitlewidget.h"
-#include "widget/searchwidget.h"
-#include "widget/navigationwidget.h"
+#include "categorytitlewidget.h"
+#include "searchwidget.h"
+#include "navigationwidget.h"
 #include "worker/menuworker.h"
 #include "model/appsmanager.h"
-
+#include "confirmuninstalldialog.h"
 #include <QFrame>
 #include <QScrollArea>
 #include <QPropertyAnimation>
@@ -52,6 +52,7 @@ private:
     void initTimer();
     void checkCategoryVisible();
     void showPopupMenu(const QPoint &pos, const QModelIndex &context);
+    void showPopupUninstallDialog(const QModelIndex &context);
     void updateDisplayMode(const DisplayMode mode);
     void updateCurrentVisibleCategory();
 
@@ -59,6 +60,7 @@ private slots:
     void searchTextChanged(const QString &keywords);
     void ensureScrollToDest(const QVariant &value);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
+    void handleUninstallResult(int result);
 
 private:
     DisplayMode m_displayMode = AllApps;

@@ -25,6 +25,7 @@ AppsManager::AppsManager(QObject *parent) :
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
 
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
+    connect(this, &AppsManager::handleUninstallApp, this, &AppsManager::unInstallApp);
 }
 
 void AppsManager::appendSearchResult(const QString &appKey)
@@ -131,6 +132,22 @@ void AppsManager::refreshCategoryInfoList()
 int AppsManager::appNums(const AppsListModel::AppCategory &category) const
 {
     return appsInfoList(category).size();
+}
+
+void AppsManager::unInstallApp(const QModelIndex &index, int value) {
+    QString appKey = index.data(AppsListModel::AppKeyRole).toString();
+    if (value==1) {
+        // begin to unInstall app;
+        QDBusPendingReply<> reply = m_launcherInter->RequestUninstall(appKey, false);
+        if (!reply.isError()) {
+               qDebug() << "unistall function excute finished!";
+           } else {
+               qDebug() << "unistall action fail, and the error reason:" << reply.error().message();
+           }
+    } else {
+        //cancle to unInstall app;
+        qDebug() << "cancle to unInstall app" << appKey;
+    }
 }
 
 void AppsManager::refreshAppIconCache()

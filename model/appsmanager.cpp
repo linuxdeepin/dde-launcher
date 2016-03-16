@@ -18,16 +18,10 @@ AppsManager::AppsManager(QObject *parent) :
     m_dockedAppInter(new DBusDockedAppManager(this))
 {
     if (APP_ICON_CACHE.value("version").toString() != qApp->applicationVersion())
-    {
         refreshAppIconCache();
-        APP_ICON_CACHE.setValue("version", qApp->applicationVersion());
-    }
 
     if (APP_AUTOSTART_CACHE.value("version").toString() != qApp->applicationVersion())
-    {
         refreshAppAutoStartCache();
-        APP_AUTOSTART_CACHE.setValue("version", qApp->applicationVersion());
-    }
 
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
     m_appInfoList = m_launcherInter->GetAllItemInfos().value();
@@ -185,11 +179,13 @@ void AppsManager::unInstallApp(const QModelIndex &index, int value) {
 void AppsManager::refreshAppIconCache()
 {
     APP_ICON_CACHE.clear();
+    APP_ICON_CACHE.setValue("version", qApp->applicationVersion());
 }
 
 void AppsManager::refreshAppAutoStartCache()
 {
     APP_AUTOSTART_CACHE.clear();
+    APP_AUTOSTART_CACHE.setValue("version", qApp->applicationVersion());
 }
 
 const QPixmap AppsManager::loadSvg(const QString &fileName, const int size)

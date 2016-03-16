@@ -10,7 +10,9 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_searchEdit->setFocus();
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout->addStretch();
     mainLayout->addWidget(m_searchEdit);
+    mainLayout->addStretch();
 
     setFocusPolicy(Qt::StrongFocus);
     setLayout(mainLayout);

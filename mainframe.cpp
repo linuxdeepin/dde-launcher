@@ -68,8 +68,6 @@ MainFrame::MainFrame(QWidget *parent) :
     m_systemTitle(new CategoryTitleWidget(tr("System"))),
     m_othersTitle(new CategoryTitleWidget(tr("Others")))
 {
-    setAttribute(Qt::WA_DeleteOnClose);
-    setAttribute(Qt::WA_InputMethodEnabled);
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
 
     setObjectName("LauncherFrame");
@@ -169,6 +167,9 @@ void MainFrame::showEvent(QShowEvent *e)
     XcbMisc::instance()->set_deepin_override(winId());
 
     QFrame::showEvent(e);
+
+    raise();
+    activateWindow();
 }
 
 void MainFrame::mouseReleaseEvent(QMouseEvent *e)
@@ -263,13 +264,13 @@ void MainFrame::initUI()
     m_appsVbox->layout()->setMargin(0);
     m_appsArea->setWidget(m_appsVbox);
 
-    QVBoxLayout *rightSideLayout = new QVBoxLayout;
-    rightSideLayout->addWidget(m_searchWidget);
-    rightSideLayout->addWidget(m_appsArea);
+    QHBoxLayout *contentLayout = new QHBoxLayout;
+    contentLayout->addWidget(m_navigationBar);
+    contentLayout->addWidget(m_appsArea);
 
-    QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addWidget(m_navigationBar);
-    mainLayout->addLayout(rightSideLayout);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(m_searchWidget);
+    mainLayout->addLayout(contentLayout);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
 

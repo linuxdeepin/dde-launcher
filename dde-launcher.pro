@@ -1,4 +1,4 @@
-QT      += core gui dbus widgets x11extras
+QT      += core gui dbus widgets x11extras svg
 
 TARGET = dde-launcher
 TEMPLATE = app

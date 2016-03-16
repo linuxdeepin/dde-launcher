@@ -32,7 +32,7 @@ int main(int argv, char *args[])
     {
         DBusLauncherFrame launcherFrame;
         if (launcherFrame.isValid())
-            launcherFrame.Show();
+            launcherFrame.Toggle();
 
         return 0;
     }

@@ -70,9 +70,6 @@ MainFrame::MainFrame(QWidget *parent) :
 
     initUI();
     initConnection();
-//    connect(m_allAppsView, &AppListView::doubleClicked, [this] (const QModelIndex &index) {
-//        m_allAppsModel->removeRow(index.row());
-//    });
 
     updateDisplayMode(GroupByCategory);
 

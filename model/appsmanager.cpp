@@ -43,11 +43,6 @@ AppsManager *AppsManager::instance(QObject *parent)
     return INSTANCE;
 }
 
-void AppsManager::removeRow(const int row)
-{
-    m_appInfoList.removeAt(row);
-}
-
 void AppsManager::searchApp(const QString &keywords)
 {
     m_launcherInter->Search(keywords);

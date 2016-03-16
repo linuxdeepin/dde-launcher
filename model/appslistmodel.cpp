@@ -29,14 +29,19 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
 
 bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
 {
+    Q_UNUSED(row)
+    Q_UNUSED(count)
     Q_UNUSED(parent)
 
-    // TODO: not support remove multiple rows
-    Q_ASSERT(count == 1);
+    // do not allow remove items.
+    Q_ASSERT(false);
 
-    beginRemoveRows(parent, row, row);
-    m_appsManager->removeRow(row);
-    endRemoveRows();
+//    // TODO: not support remove multiple rows
+//    Q_ASSERT(count == 1);
+
+//    beginRemoveRows(parent, row, row);
+//    m_appsManager->removeRow(row);
+//    endRemoveRows();
 
     return true;
 }
@@ -50,6 +55,25 @@ bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action
     Q_UNUSED(parent)
 
     return true;
+}
+
+QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
+{
+    // only allow drag 1 item
+    Q_ASSERT(indexes.size() == 1);
+
+    const QModelIndex index = indexes.first();
+
+    QJsonObject json;
+    json.insert("appKey", index.data(AppKeyRole).toString());
+    json.insert("appIcon", index.data(AppIconKeyRole).toString());
+    json.insert("appName", index.data(AppNameRole).toString());
+
+    QMimeData *mime = new QMimeData;
+    mime->setData("RequestDock", QJsonDocument(json).toJson());
+
+    // this object will be delete in drag event finished.
+    return mime;
 }
 
 QVariant AppsListModel::data(const QModelIndex &index, int role) const
@@ -69,6 +93,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return itemInfo.m_desktop;
     case AppKeyRole:
         return itemInfo.m_key;
+    case AppIconKeyRole:
+        return itemInfo.m_iconKey;
     case AppCategoryRole:
         return itemInfo.category();
     case AppAutoStartRole:

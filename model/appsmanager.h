@@ -23,7 +23,6 @@ signals:
     void dataChanged(const AppsListModel::AppCategory category) const;
 
 public slots:
-    void removeRow(const int row);
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;

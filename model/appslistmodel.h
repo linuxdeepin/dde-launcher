@@ -17,6 +17,7 @@ public:
 
         // custom role start
         AppKeyRole,
+        AppIconKeyRole,
         AppDesktopRole,
         AppRawItemInfoRole,
         AppCategoryRole,
@@ -52,6 +53,7 @@ protected:
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
     bool removeRows(int row, int count, const QModelIndex &parent) Q_DECL_OVERRIDE;
     bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const Q_DECL_OVERRIDE;
+    QMimeData *mimeData(const QModelIndexList &indexes) const Q_DECL_OVERRIDE;
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
     Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
 

@@ -338,12 +338,26 @@ void MainFrame::initConnection()
 
 void MainFrame::launchCurrentApp()
 {
-    if (m_displayMode == Search)
+    const QModelIndex &index = m_appItemDelegate->currentIndex();
+
+    if (index.isValid())
     {
-        m_appsManager->launchApp(m_allAppsView->indexAt(QPoint(0, 0)));
-        hide();
-        return;
+        const AppsListModel::AppCategory category = index.data(AppsListModel::AppGroupRole).value<AppsListModel::AppCategory>();
+
+        if ((category == AppsListModel::All && m_displayMode == AllApps) ||
+            (category == AppsListModel::Search && m_displayMode == Search) ||
+            (m_displayMode == GroupByCategory && category != AppsListModel::All && category != AppsListModel::Search))
+            m_appsManager->launchApp(index);
+    } else {
+        switch (m_displayMode)
+        {
+        case Search:
+        case AllApps:           m_appsManager->launchApp(m_allAppsView->indexAt(QPoint(0, 0)));     break;
+        case GroupByCategory:   m_appsManager->launchApp(m_internetView->indexAt(QPoint(0, 0)));    break;
+        }
     }
+
+    hide();
 }
 
 void MainFrame::checkCategoryVisible()

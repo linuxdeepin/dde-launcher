@@ -14,6 +14,7 @@ public:
     explicit AppItemDelegate(QObject *parent = 0);
 
     void setCurrentIndex(const QModelIndex &index);
+    const QModelIndex &currentIndex() const {return CurrentIndex;}
 
 signals:
     void currentChanged(const QModelIndex previousIndex, const QModelIndex &currentIndex) const;

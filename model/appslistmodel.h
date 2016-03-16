@@ -16,11 +16,12 @@ public:
         AppReserveRole = Qt::UserRole,
 
         // custom role start
+        AppRawItemInfoRole,
         AppKeyRole,
         AppIconKeyRole,
         AppDesktopRole,
-        AppRawItemInfoRole,
         AppCategoryRole,
+        AppGroupRole,
         AppAutoStartRole,
         AppNewInstallRole,
         AppIsOnDesktopRole,
@@ -65,5 +66,7 @@ private:
 
     AppCategory m_category = All;
 };
+
+Q_DECLARE_METATYPE(AppsListModel::AppCategory)
 
 #endif // APPSLISTMODEL_H

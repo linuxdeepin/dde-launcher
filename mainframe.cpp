@@ -77,6 +77,16 @@ MainFrame::MainFrame(QWidget *parent) :
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
 }
 
+void MainFrame::exit()
+{
+    qApp->quit();
+}
+
+void MainFrame::showByMode(const qlonglong mode)
+{
+    qDebug() << mode;
+}
+
 void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
 {
     QWidget *dest = nullptr;
@@ -145,6 +155,7 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
 
 void MainFrame::showEvent(QShowEvent *e)
 {
+    m_searchWidget->clearSearchContent();
     updateCurrentVisibleCategory();
     XcbMisc::instance()->set_deepin_override(winId());
 
@@ -291,6 +302,19 @@ void MainFrame::initConnection()
     connect(m_systemView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
     connect(m_othersView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
 
+    connect(m_allAppsView, &AppListView::clicked, this, &MainFrame::hide);
+    connect(m_internetView, &AppListView::clicked, this, &MainFrame::hide);
+    connect(m_chatView, &AppListView::clicked, this, &MainFrame::hide);
+    connect(m_musicView, &AppListView::clicked, this, &MainFrame::hide);
+    connect(m_videoView, &AppListView::clicked, this, &MainFrame::hide);
+    connect(m_graphicsView, &AppListView::clicked, this, &MainFrame::hide);
+    connect(m_gameView, &AppListView::clicked, this, &MainFrame::hide);
+    connect(m_officeView, &AppListView::clicked, this, &MainFrame::hide);
+    connect(m_readingView, &AppListView::clicked, this, &MainFrame::hide);
+    connect(m_developmentView, &AppListView::clicked, this, &MainFrame::hide);
+    connect(m_systemView, &AppListView::clicked, this, &MainFrame::hide);
+    connect(m_othersView, &AppListView::clicked, this, &MainFrame::hide);
+
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_allAppsView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_internetView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_chatView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
@@ -304,7 +328,7 @@ void MainFrame::initConnection()
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_systemView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_othersView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
 
-    connect(m_menuWorker, &MenuWorker::quitLauncher, qApp, &QApplication::quit);
+    connect(m_menuWorker, &MenuWorker::quitLauncher, this, &MainFrame::hide);
     connect(m_menuWorker, &MenuWorker::unInstallApp, this, &MainFrame::showPopupUninstallDialog);
 }
 

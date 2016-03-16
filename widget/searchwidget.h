@@ -14,6 +14,9 @@ class SearchWidget : public QWidget
 public:
     explicit SearchWidget(QWidget *parent = 0);
 
+public slots:
+    void clearSearchContent();
+
 signals:
     void searchTextChanged(const QString &text) const;
 

@@ -11,6 +11,7 @@
 #include "worker/menuworker.h"
 #include "model/appsmanager.h"
 #include "confirmuninstalldialog.h"
+
 #include <QFrame>
 #include <QScrollArea>
 #include <QPropertyAnimation>
@@ -19,6 +20,7 @@
 
 DWIDGET_USE_NAMESPACE
 
+class DBusLauncherService;
 class MainFrame : public QFrame
 {
     Q_OBJECT
@@ -31,6 +33,9 @@ class MainFrame : public QFrame
 
 public:
     explicit MainFrame(QWidget *parent = 0);
+
+    void exit();
+    void showByMode(const qlonglong mode);
 
 signals:
     void categoryAppNumsChanged(const AppsListModel::AppCategory category, const int appNums);

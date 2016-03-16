@@ -19,3 +19,8 @@ SearchWidget::SearchWidget(QWidget *parent) :
         emit searchTextChanged(m_searchEdit->text());
     });
 }
+
+void SearchWidget::clearSearchContent()
+{
+    m_searchEdit->clear();
+}

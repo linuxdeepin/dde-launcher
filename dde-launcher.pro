@@ -158,7 +158,9 @@ SOURCES += \
     dbus/dbusmenu.cpp \
     dbus/dbusmenumanager.cpp \
     worker/menuworker.cpp \
-    dbus/dbusdockedappmanager.cpp
+    dbus/dbusdockedappmanager.cpp \
+    dbusservices/dbuslauncherservice.cpp \
+    dbus/dbuslauncherframe.cpp
 
 HEADERS += \
     mainframe.h \
@@ -206,7 +208,9 @@ HEADERS += \
     dbus/dbusmenu.h \
     dbus/dbusmenumanager.h \
     worker/menuworker.h \
-    dbus/dbusdockedappmanager.h
+    dbus/dbusdockedappmanager.h \
+    dbusservices/dbuslauncherservice.h \
+    dbus/dbuslauncherframe.h
 
 target.path = /usr/bin
 

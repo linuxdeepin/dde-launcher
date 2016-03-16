@@ -69,7 +69,6 @@ MainFrame::MainFrame(QWidget *parent) :
 
     initUI();
     initConnection();
-
 //    connect(m_allAppsView, &AppListView::doubleClicked, [this] (const QModelIndex &index) {
 //        m_allAppsModel->removeRow(index.row());
 //    });
@@ -78,7 +77,6 @@ MainFrame::MainFrame(QWidget *parent) :
 
     setFixedSize(qApp->primaryScreen()->geometry().size());
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
-    hideTitle();
 }
 
 void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
@@ -111,79 +109,6 @@ void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
     m_scrollAnimation->setStartValue(m_appsArea->verticalScrollBar()->value());
     m_scrollAnimation->setEndValue(dest->y());
     m_scrollAnimation->start();
-}
-
-void MainFrame::hideTitle() {
-    QList<AppsListModel::AppCategory> hideCategoryList;
-
-    if (m_appsManager->getCategoryAppNums(AppsListModel::Internet)==0) {
-        qDebug() << "internet title:" << m_appsManager->getCategoryAppNums(AppsListModel::Internet);
-        m_internetTitle->setVisible(false);
-        m_internetView->setVisible(false);
-        hideCategoryList.append(AppsListModel::Internet);
-    }
-    if (m_appsManager->getCategoryAppNums(AppsListModel::Chat)==0) {
-        qDebug() << "Chat title:" << m_appsManager->getCategoryAppNums(AppsListModel::Chat);
-        m_chatTitle->setVisible(false);
-        m_chatView->setVisible(false);
-        hideCategoryList.append(AppsListModel::Chat);
-    }
-    if (m_appsManager->getCategoryAppNums(AppsListModel::Music)==0) {
-        qDebug() << "Music title:" << m_appsManager->getCategoryAppNums(AppsListModel::Music);
-        m_musicTitle->setVisible(false);
-        m_musicView->setVisible(false);
-        hideCategoryList.append(AppsListModel::Music);
-    }
-    if (m_appsManager->getCategoryAppNums(AppsListModel::Video)==0) {
-        qDebug() << "Video title:" << m_appsManager->getCategoryAppNums(AppsListModel::Video);
-        m_videoTitle->setVisible(false);
-        m_videoView->setVisible(false);
-        hideCategoryList.append(AppsListModel::Video);
-    }
-    if (m_appsManager->getCategoryAppNums(AppsListModel::Graphics)==0) {
-        qDebug() << "Graphics title:" << m_appsManager->getCategoryAppNums(AppsListModel::Graphics);
-        m_graphicsTitle->setVisible(false);
-        m_graphicsView->setVisible(false);
-        hideCategoryList.append(AppsListModel::Graphics);
-    }
-    if (m_appsManager->getCategoryAppNums(AppsListModel::Game)==0) {
-        qDebug() << "Game title:" << m_appsManager->getCategoryAppNums(AppsListModel::Game);
-        m_gameTitle->setVisible(false);
-        m_gameView->setVisible(false);
-        hideCategoryList.append(AppsListModel::Game);
-    }
-    if (m_appsManager->getCategoryAppNums(AppsListModel::Office)==0) {
-        qDebug() << "Office title:" << m_appsManager->getCategoryAppNums(AppsListModel::Office);
-        m_officeTitle->setVisible(false);
-        m_officeView->setVisible(false);
-        hideCategoryList.append(AppsListModel::Office);
-    }
-    if (m_appsManager->getCategoryAppNums(AppsListModel::Reading)==0) {
-        qDebug() << "Reading title:" << m_appsManager->getCategoryAppNums(AppsListModel::Reading);
-        m_readingTitle->setVisible(false);
-        m_readingView->setVisible(false);
-        hideCategoryList.append(AppsListModel::Reading);
-    }
-    if (m_appsManager->getCategoryAppNums(AppsListModel::Development)==0) {
-        qDebug() << "Development title:" << m_appsManager->getCategoryAppNums(AppsListModel::Development);
-        m_developmentTitle->setVisible(false);
-        m_developmentView->setVisible(false);
-        hideCategoryList.append(AppsListModel::Development);
-    }
-    if (m_appsManager->getCategoryAppNums(AppsListModel::System)==0) {
-        qDebug() << "System title:" << m_appsManager->getCategoryAppNums(AppsListModel::System);
-        m_systemTitle->setVisible(false);
-        m_systemView->setVisible(false);
-        hideCategoryList.append(AppsListModel::System);
-    }
-    if (m_appsManager->getCategoryAppNums(AppsListModel::Others)==0) {
-        qDebug() << "others title:" << m_appsManager->getCategoryAppNums(AppsListModel::Others);
-        m_othersTitle->setVisible(false);
-        m_othersView->setVisible(false);
-        hideCategoryList.append(AppsListModel::Others);
-    }
-
-    m_navigationBar->setHideButtons(hideCategoryList);
 }
 
 void MainFrame::resizeEvent(QResizeEvent *e)
@@ -253,6 +178,8 @@ void MainFrame::initUI()
     m_allAppsView->setItemDelegate(m_appItemDelegate);
     m_internetView->setModel(m_internetModel);
     m_internetView->setItemDelegate(m_appItemDelegate);
+    m_chatView->setModel(m_chatModel);
+    m_chatView->setItemDelegate(m_appItemDelegate);
     m_musicView->setModel(m_musicModel);
     m_musicView->setItemDelegate(m_appItemDelegate);
     m_videoView->setModel(m_videoModel);
@@ -275,6 +202,8 @@ void MainFrame::initUI()
     m_appsVbox->layout()->addWidget(m_allAppsView);
     m_appsVbox->layout()->addWidget(m_internetTitle);
     m_appsVbox->layout()->addWidget(m_internetView);
+    m_appsVbox->layout()->addWidget(m_chatTitle);
+    m_appsVbox->layout()->addWidget(m_chatView);
     m_appsVbox->layout()->addWidget(m_musicTitle);
     m_appsVbox->layout()->addWidget(m_musicView);
     m_appsVbox->layout()->addWidget(m_videoTitle);
@@ -320,9 +249,13 @@ void MainFrame::initConnection()
     connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &MainFrame::ensureScrollToDest);
     connect(m_navigationBar, &NavigationWidget::scrollToCategory, this, &MainFrame::scrollToCategory);
     connect(this, &MainFrame::currentVisibleCategoryChanged, m_navigationBar, &NavigationWidget::setCurrentCategory);
+    connect(this, &MainFrame::categoryAppNumsChanged, m_navigationBar, &NavigationWidget::refershCategoryVisible);
+    connect(this, &MainFrame::categoryAppNumsChanged, this, &MainFrame::refershCategoryVisible);
+    connect(this, &MainFrame::displayModeChanged, this, &MainFrame::checkCategoryVisible);
 
     connect(m_allAppsView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
     connect(m_internetView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
+    connect(m_chatView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
     connect(m_musicView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
     connect(m_videoView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
     connect(m_graphicsView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
@@ -335,6 +268,7 @@ void MainFrame::initConnection()
 
     connect(m_allAppsView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_internetView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_chatView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_musicView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_videoView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_graphicsView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
@@ -347,6 +281,7 @@ void MainFrame::initConnection()
 
     connect(m_allAppsView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
     connect(m_internetView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_chatView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
     connect(m_musicView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
     connect(m_videoView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
     connect(m_graphicsView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
@@ -359,6 +294,7 @@ void MainFrame::initConnection()
 
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_allAppsView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_internetView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_chatView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_musicView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_videoView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_graphicsView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
@@ -370,6 +306,24 @@ void MainFrame::initConnection()
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_othersView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
 
     connect(m_menuWorker, &MenuWorker::quitLauncher, qApp, &QApplication::quit);
+}
+
+void MainFrame::checkCategoryVisible()
+{
+    if (m_displayMode != GroupByCategory)
+        return;
+
+    emit categoryAppNumsChanged(AppsListModel::Internet, m_appsManager->appNums(AppsListModel::Internet));
+    emit categoryAppNumsChanged(AppsListModel::Chat, m_appsManager->appNums(AppsListModel::Chat));
+    emit categoryAppNumsChanged(AppsListModel::Music, m_appsManager->appNums(AppsListModel::Music));
+    emit categoryAppNumsChanged(AppsListModel::Video, m_appsManager->appNums(AppsListModel::Video));
+    emit categoryAppNumsChanged(AppsListModel::Graphics, m_appsManager->appNums(AppsListModel::Graphics));
+    emit categoryAppNumsChanged(AppsListModel::Game, m_appsManager->appNums(AppsListModel::Game));
+    emit categoryAppNumsChanged(AppsListModel::Office, m_appsManager->appNums(AppsListModel::Office));
+    emit categoryAppNumsChanged(AppsListModel::Reading, m_appsManager->appNums(AppsListModel::Reading));
+    emit categoryAppNumsChanged(AppsListModel::Development, m_appsManager->appNums(AppsListModel::Development));
+    emit categoryAppNumsChanged(AppsListModel::System, m_appsManager->appNums(AppsListModel::System));
+    emit categoryAppNumsChanged(AppsListModel::Others, m_appsManager->appNums(AppsListModel::Others));
 }
 
 void MainFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
@@ -393,6 +347,46 @@ void MainFrame::ensureScrollToDest(const QVariant &value)
         ani->setEndValue(m_scrollDest->y());
 }
 
+void MainFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
+{
+    if (m_displayMode != GroupByCategory)
+        return;
+
+    QWidget *categoryTitle = nullptr;
+    QWidget *categoryView = nullptr;
+
+    switch (category) {
+    case AppsListModel::Internet:       categoryTitle = m_internetTitle;
+                                        categoryView = m_internetView;          break;
+    case AppsListModel::Chat:           categoryTitle = m_chatTitle;
+                                        categoryView = m_chatView;              break;
+    case AppsListModel::Music:          categoryTitle = m_musicTitle;
+                                        categoryView = m_musicView;             break;
+    case AppsListModel::Video:          categoryTitle = m_videoTitle;
+                                        categoryView = m_videoView;             break;
+    case AppsListModel::Graphics:       categoryTitle = m_graphicsTitle;
+                                        categoryView = m_graphicsView;          break;
+    case AppsListModel::Game:           categoryTitle = m_gameTitle;
+                                        categoryView = m_gameView;              break;
+    case AppsListModel::Office:         categoryTitle = m_officeTitle;
+                                        categoryView = m_officeView;            break;
+    case AppsListModel::Reading:        categoryTitle = m_readingTitle;
+                                        categoryView = m_readingView;           break;
+    case AppsListModel::Development:    categoryTitle = m_developmentTitle;
+                                        categoryView = m_developmentView;       break;
+    case AppsListModel::System:         categoryTitle = m_systemTitle;
+                                        categoryView = m_systemView;            break;
+    case AppsListModel::Others:         categoryTitle = m_othersTitle;
+                                        categoryView = m_othersView;            break;
+    default:;
+    }
+
+    if (categoryTitle)
+        categoryTitle->setVisible(appNums);
+    if (categoryView)
+        categoryView->setVisible(appNums);
+}
+
 void MainFrame::updateDisplayMode(const DisplayMode mode)
 {
     if (m_displayMode == mode)
@@ -405,6 +399,8 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
     m_allAppsView->setVisible(!isCategoryMode);
     m_internetTitle->setVisible(isCategoryMode);
     m_internetView->setVisible(isCategoryMode);
+    m_chatTitle->setVisible(isCategoryMode);
+    m_chatView->setVisible(isCategoryMode);
     m_musicTitle->setVisible(isCategoryMode);
     m_musicView->setVisible(isCategoryMode);
     m_videoTitle->setVisible(isCategoryMode);
@@ -426,6 +422,8 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
 
     m_viewListPlaceholder->setVisible(isCategoryMode);
 
+    m_navigationBar->setButtonsVisible(m_displayMode == GroupByCategory);
+
     emit displayModeChanged(m_displayMode);
 }
 
@@ -435,6 +433,8 @@ void MainFrame::updateCurrentVisibleCategory()
 
     if (!m_internetView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Internet;
+    else if (!m_chatView->visibleRegion().isEmpty())
+        currentVisibleCategory = AppsListModel::Chat;
     else if (!m_musicView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Music;
     else if (!m_videoView->visibleRegion().isEmpty())

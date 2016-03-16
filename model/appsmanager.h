@@ -18,19 +18,7 @@ class AppsManager : public QObject
 
 public:
     static AppsManager *instance(QObject *parent = nullptr);
-    const QStringList CategoryKeys {
-        "Internet",
-        "Chat",
-        "Music",
-        "Video",
-        "Graphics",
-        "Game",
-        "Office",
-        "Reading",
-        "Development",
-        "System",
-        "Others",
-    };
+
 public slots:
     void removeRow(const int row);
     void launchApp(const QModelIndex &index);
@@ -41,9 +29,7 @@ public slots:
     bool appIsOnDock(const QString &appName);
     bool appIsOnDesktop(const QString &desktop);
     const QPixmap appIcon(const QString &desktop, const int size);
-    ItemInfo getItemInfo(QString appKey);
-    void categoryAppNums();
-    int getCategoryAppNums(const AppsListModel::AppCategory &category);
+    int appNums(const AppsListModel::AppCategory &category) const;
 private:
     explicit AppsManager(QObject *parent = 0);
 

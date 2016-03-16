@@ -28,12 +28,35 @@ NavigationWidget::NavigationWidget(QWidget *parent) :
     setStyleSheet("background-color: yellow;");
 }
 
+void NavigationWidget::setButtonsVisible(const bool visible)
+{
+    m_internetBtn->setVisible(visible);
+    m_chatBtn->setVisible(visible);
+    m_musicBtn->setVisible(visible);
+    m_videoBtn->setVisible(visible);
+    m_graphicsBtn->setVisible(visible);
+    m_gameBtn->setVisible(visible);
+    m_officeBtn->setVisible(visible);
+    m_readingBtn->setVisible(visible);
+    m_developmentBtn->setVisible(visible);
+    m_systemBtn->setVisible(visible);
+    m_othersBtn->setVisible(visible);
+}
+
 void NavigationWidget::setCurrentCategory(const AppsListModel::AppCategory category)
 {
     CategoryButton *btn = button(category);
 
     if (btn)
         btn->setChecked(true);
+}
+
+void NavigationWidget::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
+{
+    QAbstractButton *btn = button(category);
+
+    if (btn)
+        btn->setVisible(appNums);
 }
 
 void NavigationWidget::initUI()
@@ -94,20 +117,6 @@ void NavigationWidget::buttonClicked()
         return;
 
     emit scrollToCategory(btn->category());
-}
-
-void NavigationWidget::setHideButtons(QList<AppsListModel::AppCategory> categoryList) {
-    if (categoryList.contains(AppsListModel::Internet)) { m_internetBtn->hide();}
-    if (categoryList.contains(AppsListModel::Chat)) { m_chatBtn->hide();}
-    if (categoryList.contains(AppsListModel::Music)) { m_musicBtn->hide();}
-    if (categoryList.contains(AppsListModel::Video)) { m_videoBtn->hide(); }
-    if (categoryList.contains(AppsListModel::Graphics)) { m_graphicsBtn->hide();}
-    if (categoryList.contains(AppsListModel::Game)) { m_gameBtn->hide();}
-    if (categoryList.contains(AppsListModel::Office)) { m_officeBtn->hide();}
-    if (categoryList.contains(AppsListModel::Reading)) { m_readingBtn->hide();}
-    if (categoryList.contains(AppsListModel::Development)) { m_developmentBtn->hide();}
-    if (categoryList.contains(AppsListModel::System)) { m_systemBtn->hide();}
-    if (categoryList.contains(AppsListModel::Others)) { m_othersBtn->hide();}
 }
 
 CategoryButton *NavigationWidget::button(const AppsListModel::AppCategory category)

@@ -77,6 +77,8 @@ void CategoryButton::setInfoByCategory()
     {
     case AppsListModel::Internet:       m_textLabel->setText(tr("Internet"));
                                         m_iconName = "internet";                    break;
+    case AppsListModel::Chat:           m_textLabel->setText(tr("Chat"));
+                                        m_iconName = "chat";                        break;
     case AppsListModel::Music:          m_textLabel->setText(tr("Music"));
                                         m_iconName = "music";                       break;
     case AppsListModel::Video:          m_textLabel->setText(tr("Video"));

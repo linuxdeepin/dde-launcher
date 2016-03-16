@@ -33,12 +33,13 @@ public:
     explicit MainFrame(QWidget *parent = 0);
 
 signals:
+    void categoryAppNumsChanged(const AppsListModel::AppCategory category, const int appNums);
     void displayModeChanged(const DisplayMode mode);
     void currentVisibleCategoryChanged(const AppsListModel::AppCategory currentVisibleCategory) const;
 
 public slots:
     void scrollToCategory(const AppsListModel::AppCategory &category);
-    void hideTitle();
+
 protected:
     void resizeEvent(QResizeEvent *e);
     void keyPressEvent(QKeyEvent *e);
@@ -49,12 +50,14 @@ private:
     void initUI();
     void initConnection();
     void initTimer();
+    void checkCategoryVisible();
     void showPopupMenu(const QPoint &pos, const QModelIndex &context);
     void updateDisplayMode(const DisplayMode mode);
     void updateCurrentVisibleCategory();
 
 private slots:
     void ensureScrollToDest(const QVariant &value);
+    void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
 
 private:
     DisplayMode m_displayMode = AllApps;

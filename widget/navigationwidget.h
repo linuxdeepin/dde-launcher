@@ -13,12 +13,15 @@ class NavigationWidget : public QWidget
 public:
     explicit NavigationWidget(QWidget *parent = 0);
 
+    void setButtonsVisible(const bool visible);
+
 signals:
     void scrollToCategory(const AppsListModel::AppCategory category) const;
 
 public slots:
     void setCurrentCategory(const AppsListModel::AppCategory category);
-    void setHideButtons(QList<AppsListModel::AppCategory> categoryList);
+    void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
+
 private:
     void initUI();
     void initConnection();

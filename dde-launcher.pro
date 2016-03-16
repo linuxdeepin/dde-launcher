@@ -137,7 +137,6 @@ PKGCONFIG += dtkbase dtkwidget dtkbase xcb xcb-ewmh
 
 
 include(./widget/widget.pri)
-include(./dialogs/dialogs.pri)
 
 SOURCES += \
     mian.cpp \

@@ -10,7 +10,6 @@
 #include "navigationwidget.h"
 #include "worker/menuworker.h"
 #include "model/appsmanager.h"
-#include "confirmuninstalldialog.h"
 
 #include <QFrame>
 #include <QScrollArea>
@@ -66,7 +65,7 @@ private slots:
     void searchTextChanged(const QString &keywords);
     void ensureScrollToDest(const QVariant &value);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
-    void handleUninstallResult(int result);
+    void handleUninstallResult(int result, QString content);
 
 private:
     DisplayMode m_displayMode = AllApps;

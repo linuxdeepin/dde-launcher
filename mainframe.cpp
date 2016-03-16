@@ -149,6 +149,8 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
     case Qt::Key_F1:            updateDisplayMode(AllApps);                     break;
     case Qt::Key_F2:            updateDisplayMode(GroupByCategory);             break;
 #endif
+    case Qt::Key_Enter:
+    case Qt::Key_Return:        launchCurrentApp();                             break;
     default:;
     }
 }
@@ -330,6 +332,16 @@ void MainFrame::initConnection()
 
     connect(m_menuWorker, &MenuWorker::quitLauncher, this, &MainFrame::hide);
     connect(m_menuWorker, &MenuWorker::unInstallApp, this, &MainFrame::showPopupUninstallDialog);
+}
+
+void MainFrame::launchCurrentApp()
+{
+    if (m_displayMode == Search)
+    {
+        m_appsManager->launchApp(m_allAppsView->indexAt(QPoint(0, 0)));
+        hide();
+        return;
+    }
 }
 
 void MainFrame::checkCategoryVisible()

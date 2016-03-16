@@ -55,6 +55,7 @@ private:
     void initUI();
     void initConnection();
     void initTimer();
+    void launchCurrentApp();
     void checkCategoryVisible();
     void showPopupMenu(const QPoint &pos, const QModelIndex &context);
     void showPopupUninstallDialog(const QModelIndex &context);

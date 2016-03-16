@@ -2,12 +2,13 @@
 
 #include <QDebug>
 #include <QX11Info>
+#include <QSvgRenderer>
+#include <QPainter>
 
 AppsManager *AppsManager::INSTANCE = nullptr;
 
 QSettings AppsManager::APP_ICON_CACHE("deepin", "dde-launcher-app-icon", nullptr);
 QSettings AppsManager::APP_AUTOSTART_CACHE("deepin", "dde-launcher-app-autostart", nullptr);
-//QSettings AppsManager::AppInfoCache("deepin", "dde-launcher-app-info", nullptr);
 
 AppsManager::AppsManager(QObject *parent) :
     QObject(parent),
@@ -16,14 +17,22 @@ AppsManager::AppsManager(QObject *parent) :
     m_startManagerInter(new DBusStartManager(this)),
     m_dockedAppInter(new DBusDockedAppManager(this))
 {
-//    refreshAppIconCache();
-//    refreshAppAutoStartCache();
+    if (APP_ICON_CACHE.value("version").toString() != qApp->applicationVersion())
+    {
+        refreshAppIconCache();
+        APP_ICON_CACHE.setValue("version", qApp->applicationVersion());
+    }
 
+    if (APP_AUTOSTART_CACHE.value("version").toString() != qApp->applicationVersion())
+    {
+        refreshAppAutoStartCache();
+        APP_AUTOSTART_CACHE.setValue("version", qApp->applicationVersion());
+    }
+
+    m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
     m_appInfoList = m_launcherInter->GetAllItemInfos().value();
     sortCategory(AppsListModel::All);
     refreshCategoryInfoList();
-
-    m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
 
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
     connect(this, &AppsManager::handleUninstallApp, this, &AppsManager::unInstallApp);
@@ -123,10 +132,15 @@ const QPixmap AppsManager::appIcon(const QString &desktop, const int size)
 
     // cache fail
     const QString iconFile = m_fileInfoInter->GetThemeIcon(desktop, size).value();
-    QPixmap iconPixmap = QPixmap(iconFile);
+    QPixmap iconPixmap;
+
+    if (iconFile.endsWith(".svg", Qt::CaseInsensitive))
+        iconPixmap = loadSvg(iconFile, size);
+    else
+        iconPixmap = QPixmap(iconFile);
 
     if (iconPixmap.isNull())
-        iconPixmap = QPixmap(":/skin/images/application-default-icon.svg");
+        iconPixmap = loadSvg(":/skin/images/application-default-icon.svg", size);
 
     APP_ICON_CACHE.setValue(cacheKey, iconPixmap);
 
@@ -170,14 +184,24 @@ void AppsManager::unInstallApp(const QModelIndex &index, int value) {
 
 void AppsManager::refreshAppIconCache()
 {
-    APP_ICON_CACHE.sync();
     APP_ICON_CACHE.clear();
 }
 
 void AppsManager::refreshAppAutoStartCache()
 {
-    APP_AUTOSTART_CACHE.sync();
     APP_AUTOSTART_CACHE.clear();
+}
+
+const QPixmap AppsManager::loadSvg(const QString &fileName, const int size)
+{
+    QPixmap image(size, size);
+    image.fill(Qt::transparent);
+    QSvgRenderer renderer(fileName);
+    QPainter painter(&image);
+
+    renderer.render(&painter);
+
+    return image;
 }
 
 void AppsManager::searchDone(const QStringList &resultList)
@@ -187,6 +211,5 @@ void AppsManager::searchDone(const QStringList &resultList)
     for (const QString &key : resultList)
         appendSearchResult(key);
 
-//    sortCategory(AppsListModel::Search);
     emit dataChanged(AppsListModel::Search);
 }

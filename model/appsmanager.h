@@ -57,6 +57,7 @@ private:
     void refreshCategoryInfoList();
     void refreshAppIconCache();
     void refreshAppAutoStartCache();
+    const QPixmap loadSvg(const QString &fileName, const int size);
 
 private slots:
     void searchDone(const QStringList &resultList);
@@ -77,7 +78,6 @@ public:
     static AppsManager *INSTANCE;
     static QSettings APP_ICON_CACHE;
     static QSettings APP_AUTOSTART_CACHE;
-//    static QSettings AppInfoCache;
 };
 
 #endif // APPSMANAGER_H

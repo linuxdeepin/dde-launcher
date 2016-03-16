@@ -149,13 +149,13 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
     switch (e->key())
     {
 #ifdef QT_DEBUG
-    case Qt::Key_Escape:        qApp->quit();       break;
     case Qt::Key_Control:       scrollToCategory(AppsListModel::Internet);      break;
     case Qt::Key_F1:            updateDisplayMode(AllApps);                     break;
     case Qt::Key_F2:            updateDisplayMode(GroupByCategory);             break;
 #endif
     case Qt::Key_Enter:
     case Qt::Key_Return:        launchCurrentApp();                             break;
+    case Qt::Key_Escape:        hide();                                         break;
     default:;
     }
 }
@@ -167,6 +167,14 @@ void MainFrame::showEvent(QShowEvent *e)
     XcbMisc::instance()->set_deepin_override(winId());
 
     QFrame::showEvent(e);
+}
+
+bool MainFrame::event(QEvent *e)
+{
+    if (e->type() == QEvent::WindowDeactivate)
+        hide();
+
+    return QFrame::event(e);
 }
 
 bool MainFrame::eventFilter(QObject *o, QEvent *e)

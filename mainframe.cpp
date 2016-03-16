@@ -18,6 +18,7 @@ MainFrame::MainFrame(QWidget *parent) :
     QFrame(parent),
     m_settings("deepin", "dde-launcher", this),
     m_appsManager(AppsManager::instance(this)),
+    m_delayHideTimer(new QTimer(this)),
 
     m_navigationBar(new NavigationWidget),
     m_searchWidget(new SearchWidget),
@@ -162,6 +163,7 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
 
 void MainFrame::showEvent(QShowEvent *e)
 {
+    m_delayHideTimer->stop();
     m_searchWidget->clearSearchContent();
     updateCurrentVisibleCategory();
     XcbMisc::instance()->set_deepin_override(winId());
@@ -179,7 +181,7 @@ void MainFrame::mouseReleaseEvent(QMouseEvent *e)
 bool MainFrame::event(QEvent *e)
 {
     if (e->type() == QEvent::WindowDeactivate && isVisible())
-        QMetaObject::invokeMethod(this, "hide", Qt::QueuedConnection);
+        m_delayHideTimer->start();
 
     return QFrame::event(e);
 }
@@ -196,6 +198,9 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
 
 void MainFrame::initUI()
 {
+    m_delayHideTimer->setInterval(100);
+    m_delayHideTimer->setSingleShot(true);
+
     m_appsArea->setObjectName("AppBox");
     m_appsArea->setWidgetResizable(true);
     m_appsArea->setFrameStyle(QFrame::NoFrame);
@@ -284,6 +289,7 @@ void MainFrame::initConnection()
     connect(this, &MainFrame::categoryAppNumsChanged, this, &MainFrame::refershCategoryVisible);
     connect(this, &MainFrame::displayModeChanged, this, &MainFrame::checkCategoryVisible);
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &MainFrame::searchTextChanged);
+    connect(m_delayHideTimer, &QTimer::timeout, this, &MainFrame::hide);
 
     connect(m_allAppsView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
     connect(m_internetView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);

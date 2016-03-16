@@ -15,6 +15,7 @@
 #include <QScrollArea>
 #include <QPropertyAnimation>
 #include <QSettings>
+#include <QTimer>
 
 #include <dboxwidget.h>
 
@@ -79,6 +80,7 @@ private:
     AppsManager *m_appsManager;
     QPropertyAnimation *m_scrollAnimation;
     QWidget *m_scrollDest;
+    QTimer *m_delayHideTimer;
 
     NavigationWidget *m_navigationBar;
     SearchWidget *m_searchWidget;

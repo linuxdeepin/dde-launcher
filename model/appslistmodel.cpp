@@ -108,7 +108,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppNewInstallRole:
         return m_appsManager->appIsNewInstall(itemInfo.m_key);
     case AppIconRole:
-        return m_appsManager->appIcon(itemInfo.m_desktop, 256);
+        return m_appsManager->appIcon(itemInfo.m_desktop);
     case ItemSizeHintRole:
         return QSize(DLauncher::APP_ITEM_WIDTH, DLauncher::APP_ITEM_HEIGHT);
     default:;
@@ -129,6 +129,6 @@ Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const
 
 void AppsListModel::dataChanged(const AppCategory category)
 {
-    if (category == m_category)
+    if (category == All || category == m_category)
         emit QAbstractItemModel::dataChanged(index(0), index(rowCount(QModelIndex())));
 }

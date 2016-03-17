@@ -432,7 +432,7 @@ void MainFrame::showPopupUninstallDialog(const QModelIndex &context) {
 
     QString appName = context.data(AppsListModel::AppNameRole).toString();
     unInstallDialog.setTitle(QString(tr("Are you sure to unInstall %1")).arg(appName));
-    QPixmap appIcon = m_appsManager->appIcon(context.data(AppsListModel::AppDesktopRole).toString(), 64);
+    QPixmap appIcon = context.data(AppsListModel::AppIconRole).value<QPixmap>();
     appIcon = appIcon.scaled(64, 64, Qt::IgnoreAspectRatio);
     unInstallDialog.setIconPixmap(appIcon);
 

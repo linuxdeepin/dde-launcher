@@ -9,7 +9,6 @@ PKGCONFIG += dtkbase dtkwidget dtkbase xcb xcb-ewmh
 include(./widget/widget.pri)
 
 SOURCES += \
-    mian.cpp \
     mainframe.cpp \
     dbus/dbuslauncher.cpp \
     model/appslistmodel.cpp \
@@ -29,7 +28,8 @@ SOURCES += \
     worker/menuworker.cpp \
     dbus/dbusdockedappmanager.cpp \
     dbusservices/dbuslauncherservice.cpp \
-    dbus/dbuslauncherframe.cpp
+    dbus/dbuslauncherframe.cpp \
+    main.cpp
 
 HEADERS += \
     mainframe.h \

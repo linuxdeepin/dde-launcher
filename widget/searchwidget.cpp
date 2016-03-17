@@ -1,6 +1,8 @@
 #include "searchwidget.h"
 
 #include <QHBoxLayout>
+#include <QEvent>
+#include <QDebug>
 
 SearchWidget::SearchWidget(QWidget *parent) :
     QWidget(parent),
@@ -25,4 +27,12 @@ SearchWidget::SearchWidget(QWidget *parent) :
 void SearchWidget::clearSearchContent()
 {
     m_searchEdit->clear();
+}
+
+bool SearchWidget::event(QEvent *e)
+{
+    if (e->type() == QEvent::FocusIn)
+        m_searchEdit->setFocus();
+
+    return QWidget::event(e);
 }

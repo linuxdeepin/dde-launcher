@@ -72,7 +72,11 @@ void AppsManager::searchApp(const QString &keywords)
 
 void AppsManager::launchApp(const QModelIndex &index)
 {
-    m_startManagerInter->LaunchWithTimestamp(index.data(AppsListModel::AppDesktopRole).toString(), QX11Info::getTimestamp());
+    const QString appDesktop = index.data(AppsListModel::AppDesktopRole).toString();
+
+    qDebug() << "Launch app:" << appDesktop;
+
+    m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
 }
 
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const

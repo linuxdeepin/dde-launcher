@@ -1,5 +1,6 @@
 
 #include "mainframe.h"
+#include "global_util/constants.h"
 #include "global_util/xcb_misc.h"
 
 #include <QApplication>
@@ -161,6 +162,7 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
 
 void MainFrame::showEvent(QShowEvent *e)
 {
+    m_searchWidget->setFocus();
     m_delayHideTimer->stop();
     m_searchWidget->clearSearchContent();
     updateCurrentVisibleCategory();
@@ -267,6 +269,7 @@ void MainFrame::initUI()
     QHBoxLayout *contentLayout = new QHBoxLayout;
     contentLayout->addWidget(m_navigationBar);
     contentLayout->addWidget(m_appsArea);
+    contentLayout->addSpacing(DLauncher::VIEWLIST_RIGHT_MARGIN);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(m_searchWidget);
@@ -377,10 +380,12 @@ void MainFrame::launchCurrentApp()
         if ((category == AppsListModel::All && m_displayMode == AllApps) ||
             (category == AppsListModel::Search && m_displayMode == Search) ||
             (m_displayMode == GroupByCategory && category != AppsListModel::All && category != AppsListModel::Search))
+        {
             m_appsManager->launchApp(index);
 
-        hide();
-        return;
+            hide();
+            return;
+        }
     }
 
     switch (m_displayMode)

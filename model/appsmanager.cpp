@@ -15,7 +15,9 @@ AppsManager::AppsManager(QObject *parent) :
     m_launcherInter(new DBusLauncher(this)),
     m_fileInfoInter(new DBusFileInfo(this)),
     m_startManagerInter(new DBusStartManager(this)),
-    m_dockedAppInter(new DBusDockedAppManager(this))
+    m_dockedAppInter(new DBusDockedAppManager(this)),
+
+    m_searchTimer(new QTimer(this))
 {
     if (APP_ICON_CACHE.value("version").toString() != qApp->applicationVersion())
         refreshAppIconCache();
@@ -28,8 +30,12 @@ AppsManager::AppsManager(QObject *parent) :
     sortCategory(AppsListModel::All);
     refreshCategoryInfoList();
 
+    m_searchTimer->setSingleShot(true);
+    m_searchTimer->setInterval(150);
+
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
     connect(this, &AppsManager::handleUninstallApp, this, &AppsManager::unInstallApp);
+    connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
 }
 
 void AppsManager::appendSearchResult(const QString &appKey)
@@ -67,7 +73,8 @@ AppsManager *AppsManager::instance(QObject *parent)
 
 void AppsManager::searchApp(const QString &keywords)
 {
-    m_launcherInter->Search(keywords);
+    m_searchTimer->start();
+    m_searchText = keywords;
 }
 
 void AppsManager::launchApp(const QModelIndex &index)

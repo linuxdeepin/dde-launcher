@@ -6,6 +6,7 @@
 #include "../dbus/dbusfileinfo.h"
 #include "../dbus/dbustartmanager.h"
 #include "../dbus/dbusdockedappmanager.h"
+#include "dbus/dbusdisplay.h"
 
 #include <QMap>
 #include <QSettings>
@@ -22,7 +23,7 @@ public:
 signals:
     void dataChanged(const AppsListModel::AppCategory category) const;
     void handleUninstallApp(const QModelIndex &index, int result);
-
+    void primaryChanged();
 public slots:
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
@@ -32,10 +33,11 @@ public slots:
     bool appIsAutoStart(const QString &desktop);
     bool appIsOnDock(const QString &appName);
     bool appIsOnDesktop(const QString &desktop);
-    const QPixmap appIcon(const QString &desktop);
+    const QPixmap appIcon(const QString &desktop, const int size = 130);
     int appNums(const AppsListModel::AppCategory &category) const;
 
     void unInstallApp(const QModelIndex &index, int value);
+    QRect getPrimayRect();
 
 private:
     explicit AppsManager(QObject *parent = 0);
@@ -56,6 +58,7 @@ private:
     DBusFileInfo *m_fileInfoInter;
     DBusStartManager *m_startManagerInter;
     DBusDockedAppManager *m_dockedAppInter;
+    DBusDisplay* m_displayInterface;
 
     QTimer *m_searchTimer;
 

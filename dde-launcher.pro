@@ -3,10 +3,11 @@ QT      += core gui dbus widgets x11extras svg
 TARGET = dde-launcher
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG += dtkbase dtkwidget dtkbase xcb xcb-ewmh
+PKGCONFIG += dtkbase dtkwidget dtkbase xcb xcb-ewmh gsettings-qt
 
 
 include(./widget/widget.pri)
+include(./background/background.pri)
 
 SOURCES += \
     mainframe.cpp \
@@ -29,7 +30,8 @@ SOURCES += \
     dbus/dbusdockedappmanager.cpp \
     dbusservices/dbuslauncherservice.cpp \
     dbus/dbuslauncherframe.cpp \
-    main.cpp
+    main.cpp \
+    dbus/dbusdisplay.cpp
 
 HEADERS += \
     mainframe.h \
@@ -52,7 +54,8 @@ HEADERS += \
     worker/menuworker.h \
     dbus/dbusdockedappmanager.h \
     dbusservices/dbuslauncherservice.h \
-    dbus/dbuslauncherframe.h
+    dbus/dbuslauncherframe.h \
+    dbus/dbusdisplay.h
 
 target.path = /usr/bin
 

@@ -1,5 +1,4 @@
 #include "appsmanager.h"
-#include "global_util/constants.h"
 
 #include <QDebug>
 #include <QX11Info>
@@ -17,27 +16,30 @@ AppsManager::AppsManager(QObject *parent) :
     m_fileInfoInter(new DBusFileInfo(this)),
     m_startManagerInter(new DBusStartManager(this)),
     m_dockedAppInter(new DBusDockedAppManager(this)),
-
+    m_displayInterface(new DBusDisplay(this)),
     m_searchTimer(new QTimer(this))
 {
-    m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
-    m_appInfoList = m_launcherInter->GetAllItemInfos().value();
-    sortCategory(AppsListModel::All);
-    refreshCategoryInfoList();
-
     if (APP_ICON_CACHE.value("version").toString() != qApp->applicationVersion())
         refreshAppIconCache();
 
     if (APP_AUTOSTART_CACHE.value("version").toString() != qApp->applicationVersion())
         refreshAppAutoStartCache();
 
+    m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
+    m_appInfoList = m_launcherInter->GetAllItemInfos().value();
+    sortCategory(AppsListModel::All);
+    refreshCategoryInfoList();
+
     m_searchTimer->setSingleShot(true);
     m_searchTimer->setInterval(150);
 
-    connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
+    getPrimayRect();
+
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
     connect(this, &AppsManager::handleUninstallApp, this, &AppsManager::unInstallApp);
     connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
+    connect(m_displayInterface, &DBusDisplay::PrimaryChanged, this,  &AppsManager::primaryChanged);
+    connect(m_displayInterface, &DBusDisplay::PrimaryRectChanged, this, &AppsManager::primaryChanged);
 }
 
 void AppsManager::appendSearchResult(const QString &appKey)
@@ -128,25 +130,28 @@ bool AppsManager::appIsOnDesktop(const QString &desktop)
     return m_launcherInter->IsItemOnDesktop(desktop).value();
 }
 
-const QPixmap AppsManager::appIcon(const QString &desktop)
+const QPixmap AppsManager::appIcon(const QString &desktop, const int size)
 {
-    const QPixmap cachePixmap = APP_ICON_CACHE.value(desktop).value<QPixmap>();
+    const QString cacheKey = QString("%1-%2").arg(desktop)
+                                             .arg(size);
+
+    const QPixmap cachePixmap = APP_ICON_CACHE.value(cacheKey).value<QPixmap>();
     if (!cachePixmap.isNull())
         return cachePixmap;
 
     // cache fail
-    const QString iconFile = m_fileInfoInter->GetThemeIcon(desktop, DLauncher::APP_ICON_SIZE).value();
+    const QString iconFile = m_fileInfoInter->GetThemeIcon(desktop, size).value();
     QPixmap iconPixmap;
 
     if (iconFile.endsWith(".svg", Qt::CaseInsensitive))
-        iconPixmap = loadSvg(iconFile, DLauncher::APP_ICON_SIZE);
+        iconPixmap = loadSvg(iconFile, size);
     else
         iconPixmap = QPixmap(iconFile);
 
     if (iconPixmap.isNull())
-        iconPixmap = loadSvg(":/skin/images/application-default-icon.svg", DLauncher::APP_ICON_SIZE);
+        iconPixmap = loadSvg(":/skin/images/application-default-icon.svg", size);
 
-    APP_ICON_CACHE.setValue(desktop, iconPixmap);
+    APP_ICON_CACHE.setValue(cacheKey, iconPixmap);
 
     return iconPixmap;
 }
@@ -188,39 +193,14 @@ void AppsManager::unInstallApp(const QModelIndex &index, int value) {
 
 void AppsManager::refreshAppIconCache()
 {
+    APP_ICON_CACHE.clear();
     APP_ICON_CACHE.setValue("version", qApp->applicationVersion());
-
-    // generate cache
-    for (const ItemInfo &info : m_appInfoList)
-    {
-        const QString iconFile = m_fileInfoInter->GetThemeIcon(info.m_desktop, DLauncher::APP_ICON_SIZE).value();
-        QPixmap iconPixmap;
-
-        if (iconFile.endsWith(".svg", Qt::CaseInsensitive))
-            iconPixmap = loadSvg(iconFile, DLauncher::APP_ICON_SIZE);
-        else
-            iconPixmap = QPixmap(iconFile);
-
-        if (iconPixmap.isNull())
-            iconPixmap = loadSvg(":/skin/images/application-default-icon.svg", DLauncher::APP_ICON_SIZE);
-
-        APP_ICON_CACHE.setValue(info.m_desktop, iconPixmap);
-    }
-
-    emit dataChanged(AppsListModel::All);
 }
 
 void AppsManager::refreshAppAutoStartCache()
 {
+    APP_AUTOSTART_CACHE.clear();
     APP_AUTOSTART_CACHE.setValue("version", qApp->applicationVersion());
-
-    for (const ItemInfo &info : m_appInfoList)
-    {
-        const bool isAutoStart = m_startManagerInter->IsAutostart(info.m_desktop).value();
-        APP_AUTOSTART_CACHE.setValue(info.m_desktop, isAutoStart);
-    }
-
-    emit dataChanged(AppsListModel::All);
 }
 
 const QPixmap AppsManager::loadSvg(const QString &fileName, const int size)
@@ -243,4 +223,10 @@ void AppsManager::searchDone(const QStringList &resultList)
         appendSearchResult(key);
 
     emit dataChanged(AppsListModel::Search);
+}
+
+QRect AppsManager::getPrimayRect() {
+    QRect primaryRect = QRect(m_displayInterface->primaryRect());
+    qDebug() << "primaryRect: " << primaryRect;
+    return primaryRect;
 }

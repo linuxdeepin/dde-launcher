@@ -70,6 +70,9 @@ MainFrame::MainFrame(QWidget *parent) :
     m_othersTitle(new CategoryTitleWidget(tr("Others")))
 {
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
+    setFixedSize(qApp->primaryScreen()->geometry().size());
+    QRect adjustRect = m_appsManager->getPrimayRect();
+    this->move(adjustRect.x(), adjustRect.y());
 
     setObjectName("LauncherFrame");
 
@@ -78,7 +81,7 @@ MainFrame::MainFrame(QWidget *parent) :
 
     updateDisplayMode(DisplayMode(m_settings.value(DEFAULT_DISPLAY_MODE, AllApps).toInt()));
 
-    setFixedSize(qApp->primaryScreen()->geometry().size());
+
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
 }
 
@@ -204,6 +207,7 @@ void MainFrame::initUI()
     m_delayHideTimer->setInterval(100);
     m_delayHideTimer->setSingleShot(true);
 
+    BackgroundLabel* background = new BackgroundLabel(true, this);
     m_appsArea->setObjectName("AppBox");
     m_appsArea->setWidgetResizable(true);
     m_appsArea->setFocusPolicy(Qt::NoFocus);
@@ -267,22 +271,37 @@ void MainFrame::initUI()
     m_appsVbox->layout()->setMargin(0);
     m_appsArea->setWidget(m_appsVbox);
 
-    QHBoxLayout *contentLayout = new QHBoxLayout;
-    contentLayout->addWidget(m_navigationBar);
-    contentLayout->addWidget(m_appsArea);
-    contentLayout->addSpacing(DLauncher::VIEWLIST_RIGHT_MARGIN);
+    m_contentLayout = new QHBoxLayout;
+    m_contentLayout->addWidget(m_navigationBar);
+    m_contentLayout->addWidget(m_appsArea);
+    m_contentLayout->addSpacing(DLauncher::VIEWLIST_RIGHT_MARGIN);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(m_searchWidget);
-    mainLayout->addLayout(contentLayout);
-    mainLayout->setMargin(0);
-    mainLayout->setSpacing(0);
+    m_mainLayout = new QVBoxLayout;
+    m_mainLayout->addWidget(m_searchWidget);
+    m_mainLayout->addLayout(m_contentLayout);
+    m_mainLayout->setMargin(0);
+    m_mainLayout->setSpacing(0);
 
-    setLayout(mainLayout);
+    setLayout(m_mainLayout);
 
     // animation
     m_scrollAnimation = new QPropertyAnimation(m_appsArea->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
+}
+
+void MainFrame::updateUI() {
+    QRect updateRect = m_appsManager->getPrimayRect();
+    this->move(updateRect.x(), updateRect.y());
+    m_contentLayout->addWidget(m_navigationBar);
+    m_contentLayout->addWidget(m_appsArea);
+    m_contentLayout->addSpacing(DLauncher::VIEWLIST_RIGHT_MARGIN);
+
+    m_mainLayout->addWidget(m_searchWidget);
+    m_mainLayout->addLayout(m_contentLayout);
+    m_mainLayout->setMargin(0);
+    m_mainLayout->setSpacing(0);
+
+    setLayout(m_mainLayout);
 }
 
 void MainFrame::initConnection()
@@ -368,6 +387,7 @@ void MainFrame::initConnection()
             return;
         updateDisplayMode(m_displayMode == GroupByCategory ? AllApps : GroupByCategory);
     });
+    connect(m_appsManager, &AppsManager::primaryChanged, this, &MainFrame::updateUI);
 }
 
 void MainFrame::launchCurrentApp()
@@ -432,7 +452,7 @@ void MainFrame::showPopupUninstallDialog(const QModelIndex &context) {
 
     QString appName = context.data(AppsListModel::AppNameRole).toString();
     unInstallDialog.setTitle(QString(tr("Are you sure to unInstall %1")).arg(appName));
-    QPixmap appIcon = context.data(AppsListModel::AppIconRole).value<QPixmap>();
+    QPixmap appIcon = m_appsManager->appIcon(context.data(AppsListModel::AppDesktopRole).toString(), 64);
     appIcon = appIcon.scaled(64, 64, Qt::IgnoreAspectRatio);
     unInstallDialog.setIconPixmap(appIcon);
 

@@ -10,6 +10,7 @@
 #include "navigationwidget.h"
 #include "worker/menuworker.h"
 #include "model/appsmanager.h"
+#include "background/backgroundlabel.h"
 
 #include <QFrame>
 #include <QScrollArea>
@@ -71,7 +72,7 @@ private slots:
     void ensureScrollToDest(const QVariant &value);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
     void handleUninstallResult(int result, QString content);
-
+    void updateUI();
 private:
     DisplayMode m_displayMode = Search;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
@@ -112,6 +113,7 @@ private:
     AppsListModel *m_graphicsModel;
     AppsListModel *m_gameModel;
     AppsListModel *m_officeModel;
+
     AppsListModel *m_readingModel;
     AppsListModel *m_developmentModel;
     AppsListModel *m_systemModel;
@@ -127,6 +129,9 @@ private:
     CategoryTitleWidget *m_developmentTitle;
     CategoryTitleWidget *m_systemTitle;
     CategoryTitleWidget *m_othersTitle;
+
+    QHBoxLayout *m_contentLayout;
+    QVBoxLayout *m_mainLayout;
 };
 
 Q_DECLARE_METATYPE(MainFrame::DisplayMode);

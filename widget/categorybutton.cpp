@@ -27,6 +27,7 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     setLayout(mainLayout);
     setCheckable(true);
     setAutoExclusive(true);
+    setFocusPolicy(Qt::NoFocus);
     setFixedHeight(DLauncher::NAVIGATION_ICON_HEIGHT);
     setInfoByCategory();
     setStyleSheet("background-color:transparent; color: white; font-size: 15px;");

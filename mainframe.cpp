@@ -206,6 +206,7 @@ void MainFrame::initUI()
 
     m_appsArea->setObjectName("AppBox");
     m_appsArea->setWidgetResizable(true);
+    m_appsArea->setFocusPolicy(Qt::NoFocus);
     m_appsArea->setFrameStyle(QFrame::NoFrame);
     m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

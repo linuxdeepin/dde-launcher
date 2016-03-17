@@ -19,6 +19,7 @@ AppListView::AppListView(QWidget *parent) :
     setAcceptDrops(true);
     setDragEnabled(true);
     setWrapping(true);
+    setFocusPolicy(Qt::NoFocus);
     setDragDropMode(QAbstractItemView::DragDrop);
     setMovement(QListView::Free);
     setFlow(QListView::LeftToRight);

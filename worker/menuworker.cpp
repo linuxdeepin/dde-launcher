@@ -151,6 +151,8 @@ void MenuWorker::showMenu(QString menuDBusObjectPath, QString menuContent) {
     connect(m_menuInterface, SIGNAL(ItemInvoked(QString, bool)),this, SLOT(menuItemInvoked(QString,bool)));
     connect(m_menuInterface, SIGNAL(MenuUnregistered()), this, SLOT(handleMenuClosed()));
     connect(m_menuInterface, SIGNAL(MenuUnregistered()), m_menuInterface, SLOT(deleteLater()));
+
+    m_menuIsShown = true;
 }
 
 void MenuWorker::hideMenu(const QString &menuDBusObjectPath)
@@ -199,6 +201,7 @@ void MenuWorker::handleOpen(){
 
 void MenuWorker::handleMenuClosed(){
 //    emit signalManager->rightClickedChanged(false);
+    m_menuIsShown = false;
 }
 
 void MenuWorker::setCurrentModelIndex(const QModelIndex &index) {

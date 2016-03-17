@@ -181,7 +181,7 @@ void MainFrame::mouseReleaseEvent(QMouseEvent *e)
 
 bool MainFrame::event(QEvent *e)
 {
-    if (e->type() == QEvent::WindowDeactivate && isVisible())
+    if (e->type() == QEvent::WindowDeactivate && isVisible() && !m_menuWorker->isMenuShown())
         m_delayHideTimer->start();
 
     return QFrame::event(e);

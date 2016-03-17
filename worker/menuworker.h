@@ -46,6 +46,7 @@ public:
     ~MenuWorker();
 
     void initConnect();
+    bool isMenuShown() const {return m_menuIsShown;}
     bool isItemOnDock(QString appKey);
     bool isItemOnDesktop(QString appKey);
     bool isItemStartup(QString appKey);
@@ -91,6 +92,8 @@ private:
     bool m_isItemOnDesktop;
     bool m_isItemOnDock;
     bool m_isItemStartup;
+
+    bool m_menuIsShown = false;
 };
 
 #endif // MENUWORKER_H

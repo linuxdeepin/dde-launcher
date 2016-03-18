@@ -49,5 +49,5 @@ void CategoryTitleWidget::addTextShadow() {
     textDropShadow->setBlurRadius(4);
     textDropShadow->setColor(QColor(0, 0, 0, 128));
     textDropShadow->setOffset(0, 2);
-    setGraphicsEffect(textDropShadow);
+    m_title->setGraphicsEffect(textDropShadow);
 }

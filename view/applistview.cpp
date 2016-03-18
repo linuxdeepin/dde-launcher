@@ -10,7 +10,6 @@
 #include <QtGlobal>
 
 #include <QDrag>
-#include <QGraphicsDropShadowEffect>
 
 AppListView::AppListView(QWidget *parent) :
     QListView(parent)
@@ -33,8 +32,6 @@ AppListView::AppListView(QWidget *parent) :
     setFrameStyle(QFrame::NoFrame);
     setSpacing(DLauncher::APP_ITEM_SPACING);
     setStyleSheet("background-color:transparent;");
-
-    addTextShadow();
 }
 
 const QModelIndex AppListView::indexAt(const int index) const
@@ -155,13 +152,4 @@ void AppListView::fitToContent()
 //    qDebug() << "contentsRect:" << contentsRect().width() << contentsSize().height();
     setFixedWidth(contentsRect().width());
     setFixedHeight(tmpHeight);
-}
-
-void AppListView::addTextShadow() {
-
-    QGraphicsDropShadowEffect* textDropShadow = new QGraphicsDropShadowEffect;
-    textDropShadow->setBlurRadius(4);
-    textDropShadow->setColor(QColor(0, 0, 0, 128));
-    textDropShadow->setOffset(0, 2);
-    setGraphicsEffect(textDropShadow);
 }

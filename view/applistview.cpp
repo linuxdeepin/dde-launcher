@@ -32,6 +32,11 @@ AppListView::AppListView(QWidget *parent) :
     setStyleSheet("background-color:transparent;");
 }
 
+const QModelIndex AppListView::indexAt(const int index) const
+{
+    return model()->index(index, 0, QModelIndex());
+}
+
 void AppListView::enterEvent(QEvent *e)
 {
     QListView::enterEvent(e);
@@ -47,9 +52,11 @@ void AppListView::dropEvent(QDropEvent *e)
 void AppListView::mousePressEvent(QMouseEvent *e)
 {
     if (e->buttons() == Qt::RightButton) {
-        QPoint rightClickPoint = this->mapToGlobal(e->pos());
-        qDebug() << e->pos() << rightClickPoint;
-        emit popupMenuRequested(rightClickPoint, indexAt(e->pos()));
+        QPoint rightClickPoint = mapToGlobal(e->pos());
+
+        const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
+        if (clickedIndex.isValid())
+            emit popupMenuRequested(rightClickPoint, clickedIndex);
     }
 
     if (e->buttons() == Qt::LeftButton)

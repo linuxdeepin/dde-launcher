@@ -413,7 +413,7 @@ void MainFrame::launchCurrentApp()
 {
     const QModelIndex &index = m_appItemDelegate->currentIndex();
 
-    if (index.isValid())
+    if (index.isValid() && !index.data(AppsListModel::AppDesktopRole).toString().isEmpty())
     {
         const AppsListModel::AppCategory category = index.data(AppsListModel::AppGroupRole).value<AppsListModel::AppCategory>();
 
@@ -431,8 +431,8 @@ void MainFrame::launchCurrentApp()
     switch (m_displayMode)
     {
     case Search:
-    case AllApps:           m_appsManager->launchApp(m_allAppsView->indexAt(QPoint(0, 0)));     break;
-    case GroupByCategory:   m_appsManager->launchApp(m_internetView->indexAt(QPoint(0, 0)));    break;
+    case AllApps:           m_appsManager->launchApp(m_allAppsView->indexAt(0));     break;
+    case GroupByCategory:   m_appsManager->launchApp(m_internetView->indexAt(0));    break;
     }
 
     hide();

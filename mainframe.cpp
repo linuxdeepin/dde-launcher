@@ -222,7 +222,7 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
 
 void MainFrame::initUI()
 {
-    m_delayHideTimer->setInterval(100);
+    m_delayHideTimer->setInterval(500);
     m_delayHideTimer->setSingleShot(true);
 
     m_appsArea->setObjectName("AppBox");

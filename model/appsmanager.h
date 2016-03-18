@@ -33,7 +33,7 @@ public slots:
     bool appIsAutoStart(const QString &desktop);
     bool appIsOnDock(const QString &appName);
     bool appIsOnDesktop(const QString &desktop);
-    const QPixmap appIcon(const QString &desktop, const int size = 130);
+    const QPixmap appIcon(const QString &desktop);
     int appNums(const AppsListModel::AppCategory &category) const;
 
     void unInstallApp(const QModelIndex &index, int value);

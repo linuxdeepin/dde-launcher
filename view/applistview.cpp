@@ -8,6 +8,7 @@
 #include <QDrag>
 #include <QMimeData>
 #include <QtGlobal>
+#include <QDrag>
 
 AppListView::AppListView(QWidget *parent) :
     QListView(parent)
@@ -82,14 +83,17 @@ void AppListView::dragLeaveEvent(QDragLeaveEvent *e)
 
 void AppListView::mouseMoveEvent(QMouseEvent *e)
 {
+    // disable default drag
+    setState(NoState);
+
     QListView::mouseMoveEvent(e);
 
-    if (e->button() != Qt::LeftButton)
+    if (e->buttons() != Qt::LeftButton)
         return;
 
     if (qAbs(e->pos().x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
         qAbs(e->pos().y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD)
-        startDrag(Qt::MoveAction);
+        startDrag(QListView::indexAt(e->pos()));
 }
 
 void AppListView::mouseReleaseEvent(QMouseEvent *e)
@@ -118,6 +122,17 @@ void AppListView::wheelEvent(QWheelEvent *e)
 void AppListView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     QListView::currentChanged(current, previous);
+}
+
+void AppListView::startDrag(const QModelIndex &index)
+{
+    const QPixmap pixmap = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(model()->mimeData(QModelIndexList() << index));
+    drag->setPixmap(pixmap.scaled(DLauncher::APP_DRAG_ICON_SIZE, DLauncher::APP_DRAG_ICON_SIZE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    drag->setHotSpot(QPoint(DLauncher::APP_DRAG_ICON_SIZE / 2, DLauncher::APP_DRAG_ICON_SIZE / 2));
+    drag->exec(Qt::MoveAction);
 }
 
 bool AppListView::eventFilter(QObject *o, QEvent *e)

@@ -18,6 +18,7 @@ signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
 
 protected:
+    void startDrag(const QModelIndex &index);
     void enterEvent(QEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
     void dragMoveEvent(QDragMoveEvent *e);

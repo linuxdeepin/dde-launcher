@@ -7,6 +7,7 @@ static const int APP_ITEM_WIDTH = 150;
 static const int APP_ITEM_HEIGHT = 150;
 static const int APP_ITEM_SPACING = 20;
 static const int APP_ICON_SIZE = 256;
+static const int APP_DRAG_ICON_SIZE = 48;
 
 static const int DRAG_THRESHOLD = 15;
 

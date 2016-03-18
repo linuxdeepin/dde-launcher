@@ -84,12 +84,25 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
 {
     QListView::mouseMoveEvent(e);
 
-    if (e->buttons() != Qt::LeftButton)
+    if (e->button() != Qt::LeftButton)
         return;
 
     if (qAbs(e->pos().x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
         qAbs(e->pos().y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD)
         startDrag(Qt::MoveAction);
+}
+
+void AppListView::mouseReleaseEvent(QMouseEvent *e)
+{
+    // request main frame hide when click invalid area
+    if (e->button() != Qt::LeftButton)
+        return;
+
+    const QModelIndex index = QListView::indexAt(e->pos());
+    if (!index.isValid())
+        emit clicked(index);
+
+    QListView::mouseReleaseEvent(e);
 }
 
 void AppListView::resizeEvent(QResizeEvent *e)

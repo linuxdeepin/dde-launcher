@@ -184,7 +184,7 @@ void MainFrame::mouseReleaseEvent(QMouseEvent *e)
 {
     QFrame::mouseReleaseEvent(e);
 
-    //    hide();
+    hide();
 }
 
 void MainFrame::paintEvent(QPaintEvent *e)

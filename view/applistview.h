@@ -25,6 +25,7 @@ protected:
     void dropEvent(QDropEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
     void resizeEvent(QResizeEvent *e);
     void wheelEvent(QWheelEvent *e);
     void currentChanged(const QModelIndex &current, const QModelIndex &previous);

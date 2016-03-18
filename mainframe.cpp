@@ -197,7 +197,7 @@ void MainFrame::paintEvent(QPaintEvent *e)
 
 bool MainFrame::event(QEvent *e)
 {
-    if (e->type() == QEvent::WindowDeactivate && isVisible() && !m_menuWorker->isMenuShown())
+    if (e->type() == QEvent::WindowDeactivate && isVisible() && !m_menuWorker->isMenuShown() && !m_isConfirmDialogShown)
         m_delayHideTimer->start();
 
     return QFrame::event(e);
@@ -464,7 +464,10 @@ void MainFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
     m_menuWorker->showMenuByAppItem(context, pos);
 }
 
-void MainFrame::showPopupUninstallDialog(const QModelIndex &context) {
+void MainFrame::showPopupUninstallDialog(const QModelIndex &context)
+{
+    m_isConfirmDialogShown = true;
+
     DTK_WIDGET_NAMESPACE::DDialog unInstallDialog(this);
     unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
     unInstallDialog.setWindowModality(Qt::WindowModal);
@@ -485,6 +488,7 @@ void MainFrame::showPopupUninstallDialog(const QModelIndex &context) {
 
     unInstallDialog.exec();
     unInstallDialog.deleteLater();
+    m_isConfirmDialogShown = false;
 }
 
 void MainFrame::handleUninstallResult(int result, QString content) {

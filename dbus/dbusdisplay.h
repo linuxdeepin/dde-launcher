@@ -78,7 +78,7 @@ public:
     { return "/com/deepin/daemon/Display"; }
 
 public:
-    DBusDisplay(QObject *parent = 0);
+    explicit DBusDisplay(QObject *parent = 0);
 
     ~DBusDisplay();
 

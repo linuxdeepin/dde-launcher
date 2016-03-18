@@ -582,7 +582,12 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
     if (m_displayMode != Search)
         m_settings.setValue(DEFAULT_DISPLAY_MODE, m_displayMode);
 
-    scrollToCategory(m_currentCategory);
+    if (m_displayMode == GroupByCategory)
+        scrollToCategory(m_currentCategory);
+    else
+        // scroll to top on group mode
+        m_appsArea->verticalScrollBar()->setValue(0);
+
     emit displayModeChanged(m_displayMode);
 }
 

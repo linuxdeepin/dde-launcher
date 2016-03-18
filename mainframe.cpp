@@ -20,6 +20,7 @@ MainFrame::MainFrame(QWidget *parent) :
     m_settings("deepin", "dde-launcher", this),
     m_appsManager(AppsManager::instance(this)),
     m_delayHideTimer(new QTimer(this)),
+    m_backgroundInter(new SystemBackground(qApp->primaryScreen()->geometry().size(), true, this)),
 
     m_navigationBar(new NavigationWidget),
     m_searchWidget(new SearchWidget),
@@ -131,6 +132,8 @@ void MainFrame::resizeEvent(QResizeEvent *e)
 {
     QFrame::resizeEvent(e);
 
+    m_backgroundInter->setBackgroundSize(size());
+
     const int appsContentWidth = m_appsArea->width();
 
     m_appsVbox->setFixedWidth(appsContentWidth);
@@ -181,7 +184,15 @@ void MainFrame::mouseReleaseEvent(QMouseEvent *e)
 {
     QFrame::mouseReleaseEvent(e);
 
-//    hide();
+    //    hide();
+}
+
+void MainFrame::paintEvent(QPaintEvent *e)
+{
+    QFrame::paintEvent(e);
+
+    QPainter painter(this);
+    painter.drawPixmap(e->rect(), m_backgroundInter->getBackground(), e->rect());
 }
 
 bool MainFrame::event(QEvent *e)
@@ -207,7 +218,6 @@ void MainFrame::initUI()
     m_delayHideTimer->setInterval(100);
     m_delayHideTimer->setSingleShot(true);
 
-    BackgroundLabel* background = new BackgroundLabel(true, this);
     m_appsArea->setObjectName("AppBox");
     m_appsArea->setWidgetResizable(true);
     m_appsArea->setFocusPolicy(Qt::NoFocus);

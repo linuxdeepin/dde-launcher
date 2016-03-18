@@ -10,7 +10,7 @@
 #include "navigationwidget.h"
 #include "worker/menuworker.h"
 #include "model/appsmanager.h"
-#include "background/backgroundlabel.h"
+#include "background/systembackground.h"
 
 #include <QFrame>
 #include <QScrollArea>
@@ -53,6 +53,7 @@ protected:
     void keyPressEvent(QKeyEvent *e);
     void showEvent(QShowEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
+    void paintEvent(QPaintEvent *e);
     bool event(QEvent *e);
     bool eventFilter(QObject *o, QEvent *e);
 
@@ -82,6 +83,7 @@ private:
     QPropertyAnimation *m_scrollAnimation;
     QWidget *m_scrollDest;
     QTimer *m_delayHideTimer;
+    SystemBackground *m_backgroundInter;
 
     NavigationWidget *m_navigationBar;
     SearchWidget *m_searchWidget;

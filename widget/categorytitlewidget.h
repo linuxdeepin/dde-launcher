@@ -13,6 +13,7 @@ public:
 
 private:
     QLabel *m_title;
+    void addTextShadow();
 };
 
 #endif // CATEGORYTITLEWIDGET_H

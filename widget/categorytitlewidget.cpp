@@ -3,6 +3,7 @@
 #include "global_util/util.h"
 
 #include <QHBoxLayout>
+#include <QGraphicsDropShadowEffect>
 
 CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) :
     QWidget(parent),
@@ -39,5 +40,14 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     setLayout(mainLayout);
     setFixedHeight(DLauncher::CATEGORY_TITLE_WIDGET_HEIGHT);
 
+    addTextShadow();
     setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));
+}
+
+void CategoryTitleWidget::addTextShadow() {
+    QGraphicsDropShadowEffect* textDropShadow = new QGraphicsDropShadowEffect;
+    textDropShadow->setBlurRadius(4);
+    textDropShadow->setColor(QColor(0, 0, 0, 128));
+    textDropShadow->setOffset(0, 2);
+    setGraphicsEffect(textDropShadow);
 }

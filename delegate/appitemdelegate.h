@@ -25,8 +25,6 @@ protected:
     const QRect getSquareRect(const QRect &itemRect) const;
 private:
     static QModelIndex CurrentIndex;
-
-
 };
 
 #endif // APPITEMDELEGATE_H

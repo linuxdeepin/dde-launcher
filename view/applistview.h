@@ -34,7 +34,7 @@ protected:
 
 private slots:
     void fitToContent();
-
+    void addTextShadow();
 private:
     QPoint m_dragStartPos;
 };

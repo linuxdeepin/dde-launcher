@@ -3,6 +3,7 @@
 
 #include <QHBoxLayout>
 #include <QDebug>
+#include <QGraphicsDropShadowEffect>
 
 CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidget *parent) :
     QAbstractButton(parent),
@@ -32,6 +33,7 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     setInfoByCategory();
     setStyleSheet("background-color:transparent; color: white; font-size: 15px;");
     updateState(Normal);
+    addTextShadow();
 
     connect(this, &CategoryButton::toggled, this, &CategoryButton::setChecked);
 }
@@ -117,4 +119,12 @@ void CategoryButton::updateState(const CategoryButton::State state)
     }
 
     m_iconLabel->setPixmap(QString(":/skin/images/%1_%2.svg").arg(m_iconName).arg(picState));
+}
+
+void CategoryButton::addTextShadow() {
+    QGraphicsDropShadowEffect* textDropShadow = new QGraphicsDropShadowEffect;
+    textDropShadow->setBlurRadius(4);
+    textDropShadow->setColor(QColor(0, 0, 0, 128));
+    textDropShadow->setOffset(0, 2);
+    setGraphicsEffect(textDropShadow);
 }

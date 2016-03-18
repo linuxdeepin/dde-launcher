@@ -77,6 +77,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         painter->setBrush(QColor(0, 127, 244));
         painter->drawEllipse(QPoint(squaredRect.x() + squaredRect.width()*8/150, squaredRect.y() + squaredRect.width()*118/150), 4, 4);
     }
+
 }
 
 QSize AppItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const

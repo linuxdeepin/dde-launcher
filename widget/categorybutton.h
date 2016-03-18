@@ -33,7 +33,7 @@ protected:
 private:
     void setInfoByCategory();
     void updateState(const State state);
-
+    void addTextShadow();
 private:
     State m_state = Checked;
     AppsListModel::AppCategory m_category;

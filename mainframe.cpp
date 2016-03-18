@@ -310,16 +310,6 @@ void MainFrame::initUI()
 void MainFrame::updateUI() {
     QRect updateRect = m_appsManager->getPrimayRect();
     this->move(updateRect.x(), updateRect.y());
-    m_contentLayout->addWidget(m_navigationBar);
-    m_contentLayout->addWidget(m_appsArea);
-    m_contentLayout->addSpacing(DLauncher::VIEWLIST_RIGHT_MARGIN);
-
-    m_mainLayout->addWidget(m_searchWidget);
-    m_mainLayout->addLayout(m_contentLayout);
-    m_mainLayout->setMargin(0);
-    m_mainLayout->setSpacing(0);
-
-    setLayout(m_mainLayout);
 }
 
 void MainFrame::initConnection()

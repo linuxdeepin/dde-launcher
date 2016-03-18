@@ -205,7 +205,14 @@ bool MainFrame::event(QEvent *e)
 
 bool MainFrame::eventFilter(QObject *o, QEvent *e)
 {
-    if (o == m_appsArea->viewport() && e->type() == QEvent::Wheel)
+    if (o == m_navigationBar && e->type() == QEvent::Wheel)
+    {
+        QWheelEvent *wheel = static_cast<QWheelEvent *>(e);
+        QWheelEvent *event = new QWheelEvent(wheel->pos(), wheel->delta(), wheel->buttons(), wheel->modifiers());
+
+        qApp->postEvent(m_appsArea->viewport(), event);
+        return true;
+    } else if (o == m_appsArea->viewport() && e->type() == QEvent::Wheel)
         updateCurrentVisibleCategory();
     else if (o == m_othersView && e->type() == QEvent::Resize)
         m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - m_othersView->height());
@@ -227,6 +234,7 @@ void MainFrame::initUI()
     m_appsArea->viewport()->installEventFilter(this);
 
     m_othersView->installEventFilter(this);
+    m_navigationBar->installEventFilter(this);
 
     m_allAppsView->setModel(m_allAppsModel);
     m_allAppsView->setItemDelegate(m_appItemDelegate);

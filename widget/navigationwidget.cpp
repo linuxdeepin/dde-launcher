@@ -63,10 +63,12 @@ void NavigationWidget::refershCategoryVisible(const AppsListModel::AppCategory c
 
 void NavigationWidget::initUI()
 {
+    // 62 == icon with 32 + margin size 30
+    m_toggleModeBtn->setFixedWidth(62);
     m_toggleModeBtn->setNormalPic(":/skin/images/category_10.svg");
     m_toggleModeBtn->setHoverPic(":/skin/images/category_50.svg");
     m_toggleModeBtn->setPressPic(":/skin/images/category_100.svg");
-    m_toggleModeBtn->setStyleSheet("margin:50 0 0 30px;");
+    m_toggleModeBtn->setStyleSheet("margin:25px 0 0 30px;");
 
     m_categoryGroup->addButton(m_internetBtn);
     m_categoryGroup->addButton(m_chatBtn);

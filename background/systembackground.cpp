@@ -81,7 +81,7 @@ void SystemBackground::updateBackgroud(){
         }
         m_backgroundPixmap = QPixmap(m_backgroundUrl);
         int sideEffectInnerGlowRadius = 100;
-        int blurRadius = 100;
+        const int blurRadius = 100;
         int refWidth = m_backgroundSize.width();
         int refHeight = m_backgroundSize.height();
         int imgWidth = m_backgroundPixmap.size().width();

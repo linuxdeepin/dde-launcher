@@ -10,6 +10,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
 {
     m_searchEdit->setFixedWidth(200);
     m_searchEdit->setFocus();
+    m_searchEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addStretch();

@@ -74,7 +74,9 @@ private slots:
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
     void handleUninstallResult(int result, QString content);
     void updateUI();
+
 private:
+    bool m_isConfirmDialogShown = false;
     DisplayMode m_displayMode = Search;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
     QSettings m_settings;

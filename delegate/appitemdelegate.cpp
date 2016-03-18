@@ -63,13 +63,14 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         painter->drawPixmap(squaredRect.x() + squaredRect.width()*0.2+5, squaredRect.y() + squaredRect.width()*80/150, 16, 16, QPixmap(":/skin/images/emblem-autostart.png"));
 
     // draw app name
-    painter->setPen(Qt::white);
     painter->setBrush(QBrush(Qt::transparent));
 
     int leftMargin = 10;
     QRect textRect = QRect(squaredRect.x() + leftMargin, option.rect.y() + squaredRect.width()*110/150, option.rect.width() - leftMargin*2, option.rect.height() - leftMargin);
+    painter->setPen(QColor(0, 0, 0, 170));
+    painter->drawText(QRectF(textRect.x(), textRect.y() + 0.5, textRect.width(), textRect.height()), Qt::TextWordWrap|Qt::AlignHCenter, itemInfo.m_name);
+    painter->setPen(Qt::white);
     painter->drawText(textRect, Qt::TextWordWrap|Qt::AlignHCenter, itemInfo.m_name);
-
     // draw blue dot if new install
     if (index.data(AppsListModel::AppNewInstallRole).toBool())
     {

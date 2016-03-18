@@ -324,6 +324,7 @@ void MainFrame::initConnection()
     connect(this, &MainFrame::displayModeChanged, this, &MainFrame::checkCategoryVisible);
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &MainFrame::searchTextChanged);
     connect(m_delayHideTimer, &QTimer::timeout, this, &MainFrame::hide);
+    connect(m_backgroundInter, &SystemBackground::backgroundChanged, this, static_cast<void (MainFrame::*)()>(&MainFrame::update));
 
     connect(m_allAppsView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
     connect(m_internetView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);

@@ -28,6 +28,7 @@ AppListView::AppListView(QWidget *parent) :
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(QFrame::NoFrame);
+    setSpacing(DLauncher::APP_ITEM_SPACING);
     setStyleSheet("background-color:transparent;");
 }
 

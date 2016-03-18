@@ -22,9 +22,11 @@ signals:
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
+    const QRect getSquareRect(const QRect &itemRect) const;
 private:
     static QModelIndex CurrentIndex;
+
+
 };
 
 #endif // APPITEMDELEGATE_H

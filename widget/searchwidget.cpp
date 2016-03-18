@@ -3,6 +3,7 @@
 #include <QHBoxLayout>
 #include <QEvent>
 #include <QDebug>
+#include <QKeyEvent>
 
 SearchWidget::SearchWidget(QWidget *parent) :
     QWidget(parent),
@@ -17,12 +18,18 @@ SearchWidget::SearchWidget(QWidget *parent) :
     mainLayout->addWidget(m_searchEdit);
     mainLayout->addStretch();
 
-    setFocusPolicy(Qt::StrongFocus);
+    setFocusPolicy(Qt::NoFocus);
+    setFocusProxy(m_searchEdit);
     setLayout(mainLayout);
 
     connect(m_searchEdit, &DSearchEdit::textChanged, [this] {
         emit searchTextChanged(m_searchEdit->text());
     });
+}
+
+DSearchEdit *SearchWidget::edit()
+{
+    return m_searchEdit;
 }
 
 void SearchWidget::clearSearchContent()

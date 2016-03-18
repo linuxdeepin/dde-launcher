@@ -70,6 +70,7 @@ MainFrame::MainFrame(QWidget *parent) :
     m_systemTitle(new CategoryTitleWidget(tr("System"))),
     m_othersTitle(new CategoryTitleWidget(tr("Others")))
 {
+    setFocusPolicy(Qt::StrongFocus);
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
     setFixedSize(qApp->primaryScreen()->geometry().size());
     QRect adjustRect = m_appsManager->getPrimayRect();
@@ -152,6 +153,17 @@ void MainFrame::resizeEvent(QResizeEvent *e)
 
 void MainFrame::keyPressEvent(QKeyEvent *e)
 {
+    if ((e->key() <= Qt::Key_Z && e->key() >= Qt::Key_A) ||
+        (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_0))
+    {
+        e->accept();
+
+        m_searchWidget->edit()->setFocus(Qt::MouseFocusReason);
+        m_searchWidget->edit()->setText(m_searchWidget->edit()->text() + char(e->key() | 0x20));
+
+        return;
+    }
+
     switch (e->key())
     {
 #ifdef QT_DEBUG
@@ -168,7 +180,6 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
 
 void MainFrame::showEvent(QShowEvent *e)
 {
-    m_searchWidget->setFocus();
     m_delayHideTimer->stop();
     m_searchWidget->clearSearchContent();
     updateCurrentVisibleCategory();
@@ -178,6 +189,7 @@ void MainFrame::showEvent(QShowEvent *e)
 
     raise();
     activateWindow();
+    setFocus();
 }
 
 void MainFrame::mouseReleaseEvent(QMouseEvent *e)

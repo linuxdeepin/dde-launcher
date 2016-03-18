@@ -14,6 +14,8 @@ class SearchWidget : public QWidget
 public:
     explicit SearchWidget(QWidget *parent = 0);
 
+    DSearchEdit *edit();
+
 public slots:
     void clearSearchContent();
 

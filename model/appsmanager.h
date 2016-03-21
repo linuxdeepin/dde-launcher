@@ -7,11 +7,15 @@
 #include "../dbus/dbustartmanager.h"
 #include "../dbus/dbusdockedappmanager.h"
 #include "dbus/dbusdisplay.h"
+#include "global_util/calculate_util.h"
 
 #include <QMap>
 #include <QSettings>
 #include <QPixmap>
 #include <QTimer>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QScreen>
 
 class AppsManager : public QObject
 {
@@ -19,7 +23,7 @@ class AppsManager : public QObject
 
 public:
     static AppsManager *instance(QObject *parent = nullptr);
-
+    CalculateUtil* calUtil;
 signals:
     void dataChanged(const AppsListModel::AppCategory category) const;
     void handleUninstallApp(const QModelIndex &index, int result);
@@ -71,6 +75,7 @@ private:
     static AppsManager *INSTANCE;
     static QSettings APP_ICON_CACHE;
     static QSettings APP_AUTOSTART_CACHE;
+
 };
 
 #endif // APPSMANAGER_H

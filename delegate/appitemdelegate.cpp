@@ -65,11 +65,16 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // draw app name
     painter->setBrush(QBrush(Qt::transparent));
 
+    QFont font = painter->font();
+    font.setPixelSize(index.data(AppsListModel::AppFontSizeRole).value<int>());
+    painter->setFont(font);
+
     int leftMargin = 10;
     QRect textRect = QRect(squaredRect.x() + leftMargin, option.rect.y() + squaredRect.width()*110/150, option.rect.width() - leftMargin*2, option.rect.height() - leftMargin);
     painter->setPen(QColor(0, 0, 0, 170));
     painter->drawText(QRectF(textRect.x(), textRect.y() + 0.5, textRect.width(), textRect.height()), Qt::TextWordWrap|Qt::AlignHCenter, itemInfo.m_name);
     painter->setPen(Qt::white);
+
     painter->drawText(textRect, Qt::TextWordWrap|Qt::AlignHCenter, itemInfo.m_name);
     // draw blue dot if new install
     if (index.data(AppsListModel::AppNewInstallRole).toBool())

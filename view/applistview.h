@@ -4,6 +4,8 @@
 #include <QListView>
 #include <QSize>
 
+#include "model/appsmanager.h"
+
 class AppsListModel;
 class AppListView : public QListView
 {
@@ -36,6 +38,7 @@ private slots:
     void fitToContent();
 private:
     QPoint m_dragStartPos;
+    static AppsManager *m_appManager;
 };
 
 #endif // APPLISTVIEW_H

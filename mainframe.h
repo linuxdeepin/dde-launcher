@@ -11,6 +11,7 @@
 #include "worker/menuworker.h"
 #include "model/appsmanager.h"
 #include "background/systembackground.h"
+#include "global_util/calculate_util.h"
 
 #include <QFrame>
 #include <QScrollArea>

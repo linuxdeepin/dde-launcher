@@ -31,7 +31,8 @@ SOURCES += \
     dbusservices/dbuslauncherservice.cpp \
     dbus/dbuslauncherframe.cpp \
     main.cpp \
-    dbus/dbusdisplay.cpp
+    dbus/dbusdisplay.cpp \
+    global_util/calculate_util.cpp
 
 HEADERS += \
     mainframe.h \
@@ -55,7 +56,8 @@ HEADERS += \
     dbus/dbusdockedappmanager.h \
     dbusservices/dbuslauncherservice.h \
     dbus/dbuslauncherframe.h \
-    dbus/dbusdisplay.h
+    dbus/dbusdisplay.h \
+    global_util/calculate_util.h
 
 target.path = /usr/bin
 

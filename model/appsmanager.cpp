@@ -1,6 +1,7 @@
 #include "appsmanager.h"
 #include "global_util/constants.h"
 
+
 #include <QDebug>
 #include <QX11Info>
 #include <QSvgRenderer>
@@ -34,7 +35,9 @@ AppsManager::AppsManager(QObject *parent) :
     m_searchTimer->setSingleShot(true);
     m_searchTimer->setInterval(150);
 
-    getPrimayRect();
+    QSize screenSize = getPrimayRect().size();
+
+    calUtil = new CalculateUtil(QSize(screenSize.width() - 160*2, screenSize.height()));
 
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);

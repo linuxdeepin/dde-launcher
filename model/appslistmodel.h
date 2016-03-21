@@ -2,6 +2,8 @@
 #define APPSLISTMODEL_H
 
 #include <QAbstractListModel>
+#include "global_util/calculate_util.h"
+
 
 class AppsManager;
 class AppsListModel : public QAbstractListModel
@@ -26,6 +28,7 @@ public:
         AppNewInstallRole,
         AppIsOnDesktopRole,
         AppIsOnDockRole,
+        AppFontSizeRole,
     };
 
     enum AppCategory {

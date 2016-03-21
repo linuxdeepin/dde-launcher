@@ -27,7 +27,6 @@ MainFrame::MainFrame(QWidget *parent) :
     m_appsArea(new QScrollArea),
     m_appsVbox(new DVBoxWidget),
     m_menuWorker(new MenuWorker),
-
     m_viewListPlaceholder(new QWidget),
     m_appItemDelegate(new AppItemDelegate),
 
@@ -302,15 +301,19 @@ void MainFrame::initUI()
     m_appsArea->setWidget(m_appsVbox);
 
     m_contentLayout = new QHBoxLayout;
+    m_contentLayout->setMargin(0);
+    m_contentLayout->addSpacing(0);
     m_contentLayout->addWidget(m_navigationBar);
     m_contentLayout->addWidget(m_appsArea);
     m_contentLayout->addSpacing(DLauncher::VIEWLIST_RIGHT_MARGIN);
 
+
     m_mainLayout = new QVBoxLayout;
-    m_mainLayout->addWidget(m_searchWidget);
-    m_mainLayout->addLayout(m_contentLayout);
     m_mainLayout->setMargin(0);
     m_mainLayout->setSpacing(0);
+    m_mainLayout->addWidget(m_searchWidget);
+    m_mainLayout->addLayout(m_contentLayout);
+
 
     setLayout(m_mainLayout);
 

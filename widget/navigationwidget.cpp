@@ -64,6 +64,7 @@ void NavigationWidget::refershCategoryVisible(const AppsListModel::AppCategory c
 void NavigationWidget::initUI()
 {
     // 62 == icon with 32 + margin size 30
+    this->setFixedWidth(DLauncher::NAVIGATION_WIDGET_WIDTH);
     m_toggleModeBtn->setFixedWidth(62);
     m_toggleModeBtn->setNormalPic(":/skin/images/category_10.svg");
     m_toggleModeBtn->setHoverPic(":/skin/images/category_50.svg");
@@ -101,7 +102,7 @@ void NavigationWidget::initUI()
     mainLayout->addStretch();
     mainLayout->setSpacing(0);
     mainLayout->setMargin(0);
-
+    setStyleSheet("background: transparent;");
     setLayout(mainLayout);
 }
 

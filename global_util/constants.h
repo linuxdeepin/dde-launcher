@@ -3,9 +3,9 @@
 
 namespace DLauncher {
 
-static const int APP_ITEM_WIDTH = 150;
-static const int APP_ITEM_HEIGHT = 150;
-static const int APP_ITEM_SPACING = 20;
+static const int APP_ITEM_WIDTH = 130;
+static const int APP_ITEM_HEIGHT = 130;
+static const int APP_ITEM_SPACING = 22;
 static const int APP_ICON_SIZE = 256;
 static const int APP_DRAG_ICON_SIZE = 48;
 
@@ -15,7 +15,7 @@ static const int CATEGORY_TITLE_WIDGET_HEIGHT = 80;
 
 static const int VIEWLIST_RIGHT_MARGIN = 100;
 
-static const int NAVIGATION_WIDGET_WIDTH = 240;
+static const int NAVIGATION_WIDGET_WIDTH = 180;
 
 static const int NAVIGATION_ICON_HEIGHT = 50;
 

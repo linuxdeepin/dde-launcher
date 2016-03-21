@@ -142,20 +142,19 @@ const QPixmap AppsManager::appIcon(const QString &desktop)
         return cachePixmap;
 
     // cache fail
-    const QString iconFile = m_fileInfoInter->GetThemeIcon(desktop, calUtil->app_icon_size).value();
+    const QString iconFile = m_fileInfoInter->GetThemeIcon(desktop, DLauncher::APP_ICON_SIZE).value();
     QPixmap iconPixmap;
 
     if (iconFile.endsWith(".svg", Qt::CaseInsensitive))
-        iconPixmap = loadSvg(iconFile, calUtil->app_icon_size);
+        iconPixmap = loadSvg(iconFile, DLauncher::APP_ICON_SIZE);
     else
         iconPixmap = QPixmap(iconFile);
 
     if (iconPixmap.isNull())
-        iconPixmap = loadSvg(":/skin/images/application-default-icon.svg", calUtil->app_icon_size);
+        iconPixmap = loadSvg(":/skin/images/application-default-icon.svg", DLauncher::APP_ICON_SIZE);
 
     APP_ICON_CACHE.setValue(desktop, iconPixmap);
-    iconPixmap = iconPixmap.scaled(QSize(calUtil->app_icon_size, calUtil->app_icon_size), Qt::IgnoreAspectRatio);
-    qDebug() << "yyyyyyyyyyy size:" << iconPixmap.size();
+
     return iconPixmap;
 }
 

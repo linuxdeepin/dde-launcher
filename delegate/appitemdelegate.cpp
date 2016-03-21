@@ -54,7 +54,9 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     }
 
     // draw app icon
+    QPixmap appIcon = index.data(AppsListModel::AppIconRole).value<QPixmap>();
 
+    qDebug() << "appIcon:" << appIcon.size();
     painter->drawPixmap(squaredRect.marginsRemoved(QMargins(0.2*squaredRect.width(), squaredRect.width()*1/15, 0.2*squaredRect.width(), squaredRect.width()*5/15)),
                         index.data(AppsListModel::AppIconRole).value<QPixmap>());
 
@@ -79,9 +81,8 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // draw blue dot if new install
     if (index.data(AppsListModel::AppNewInstallRole).toBool())
     {
-        painter->setPen(Qt::transparent);
-        painter->setBrush(QColor(0, 127, 244));
-        painter->drawEllipse(QPoint(squaredRect.x() + squaredRect.width()*8/150, squaredRect.y() + squaredRect.width()*118/150), 4, 4);
+        QRect bluePointRect = QRect(squaredRect.x() + squaredRect.width()*2/150, squaredRect.y() + squaredRect.width()*112/150, 10, 10);
+        painter->drawPixmap(bluePointRect,  QPixmap(":/skin/images/new_install_indicator.png"));
     }
 
 }

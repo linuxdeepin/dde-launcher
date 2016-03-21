@@ -4,7 +4,6 @@
         <file>skin/qss/main.qss</file>
         <file>skin/qss/Tablewidget.qss</file>
         <file>skin/images/application-default-icon.svg</file>
-        <file>skin/images/background.png</file>
         <file>skin/images/category_10.svg</file>
         <file>skin/images/category_50.svg</file>
         <file>skin/images/category_100.svg</file>
@@ -57,7 +56,7 @@
         <file>skin/images/office_100.svg</file>
         <file>skin/images/others_10.svg</file>
         <file>skin/images/others_50.svg</file>
-        <file>skin/images/googleChrome.png</file>
         <file>skin/qss/categorytitlewidget.qss</file>
+        <file>skin/images/new_install_indicator.png</file>
     </qresource>
 </RCC>

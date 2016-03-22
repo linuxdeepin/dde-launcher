@@ -6,7 +6,7 @@ CONFIG += c++11 link_pkgconfig
 PKGCONFIG += dtkbase dtkwidget dtkbase xcb xcb-ewmh gsettings-qt
 
 
-include(./widget/widget.pri)
+include(./widgets/widgets.pri)
 include(./background/background.pri)
 
 SOURCES += \

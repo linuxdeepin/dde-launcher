@@ -8,6 +8,7 @@
 #include "categorytitlewidget.h"
 #include "searchwidget.h"
 #include "navigationwidget.h"
+#include "gradientlabel.h"
 #include "worker/menuworker.h"
 #include "model/appsmanager.h"
 #include "background/systembackground.h"
@@ -75,7 +76,7 @@ private slots:
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
     void handleUninstallResult(int result, QString content);
     void updateUI();
-
+    void showGradient();
 private:
     bool m_isConfirmDialogShown = false;
     DisplayMode m_displayMode = Search;
@@ -86,7 +87,7 @@ private:
     QPropertyAnimation *m_scrollAnimation;
     QWidget *m_scrollDest;
     QTimer *m_delayHideTimer;
-    SystemBackground *m_backgroundInter;
+    SystemBackground *m_backgroundLabel;
 
     NavigationWidget *m_navigationBar;
     SearchWidget *m_searchWidget;
@@ -135,8 +136,11 @@ private:
     CategoryTitleWidget *m_systemTitle;
     CategoryTitleWidget *m_othersTitle;
 
+    GradientLabel* m_topGradient;
+    GradientLabel* m_bottomGradient;
     QHBoxLayout *m_contentLayout;
     QVBoxLayout *m_mainLayout;
+
 };
 
 Q_DECLARE_METATYPE(MainFrame::DisplayMode);

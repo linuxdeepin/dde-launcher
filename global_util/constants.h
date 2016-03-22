@@ -19,6 +19,8 @@ static const int NAVIGATION_WIDGET_WIDTH = 180;
 
 static const int NAVIGATION_ICON_HEIGHT = 50;
 
+const int TOP_BOTTOM_GRADIENT_HEIGHT = 60;
+
 }
 
 #endif // CONSTANTS_H

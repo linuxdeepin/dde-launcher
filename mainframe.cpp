@@ -20,7 +20,7 @@ MainFrame::MainFrame(QWidget *parent) :
     m_settings("deepin", "dde-launcher", this),
     m_appsManager(AppsManager::instance(this)),
     m_delayHideTimer(new QTimer(this)),
-    m_backgroundInter(new SystemBackground(qApp->primaryScreen()->geometry().size(), true, this)),
+    m_backgroundLabel(new SystemBackground(qApp->primaryScreen()->geometry().size(), true, this)),
 
     m_navigationBar(new NavigationWidget),
     m_searchWidget(new SearchWidget),
@@ -29,6 +29,8 @@ MainFrame::MainFrame(QWidget *parent) :
     m_menuWorker(new MenuWorker),
     m_viewListPlaceholder(new QWidget),
     m_appItemDelegate(new AppItemDelegate),
+    m_topGradient(new GradientLabel(this)),
+    m_bottomGradient(new GradientLabel(this)),
 
     m_allAppsView(new AppListView),
     m_internetView(new AppListView),
@@ -132,7 +134,7 @@ void MainFrame::resizeEvent(QResizeEvent *e)
 {
     QFrame::resizeEvent(e);
 
-    m_backgroundInter->setBackgroundSize(size());
+    m_backgroundLabel->setBackgroundSize(size());
 
     const int appsContentWidth = m_appsArea->width();
 
@@ -185,7 +187,7 @@ void MainFrame::showEvent(QShowEvent *e)
     XcbMisc::instance()->set_deepin_override(winId());
 
     QFrame::showEvent(e);
-
+    showGradient();
     raise();
     activateWindow();
     setFocus();
@@ -203,7 +205,7 @@ void MainFrame::paintEvent(QPaintEvent *e)
     QFrame::paintEvent(e);
 
     QPainter painter(this);
-    painter.drawPixmap(e->rect(), m_backgroundInter->getBackground(), e->rect());
+    painter.drawPixmap(e->rect(), m_backgroundLabel->getBackground(), e->rect());
 }
 
 bool MainFrame::event(QEvent *e)
@@ -307,6 +309,7 @@ void MainFrame::initUI()
     m_contentLayout->addWidget(m_appsArea);
     m_contentLayout->addSpacing(DLauncher::VIEWLIST_RIGHT_MARGIN);
 
+    m_bottomGradient->setDirection(GradientLabel::BottomToTop);
 
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
@@ -327,6 +330,35 @@ void MainFrame::updateUI() {
     this->move(updateRect.x(), updateRect.y());
 }
 
+void MainFrame::showGradient() {
+        QPoint topLeft = m_appsArea->mapTo(this,
+                                           QPoint(0, 0));
+        QSize topSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
+        QRect topRect(topLeft, topSize);
+        m_topGradient->setPixmap(m_backgroundLabel->getBackground().copy(topRect));
+        m_topGradient->resize(topRect.size());
+        qDebug() << "topleft point:" << topRect.topLeft() << topRect.size();
+        m_topGradient->move(topRect.topLeft());
+        m_topGradient->show();
+        m_topGradient->raise();
+
+        QPoint bottomPoint = m_appsArea->mapTo(this,
+                                             m_appsArea->rect().bottomLeft());
+        QSize bottomSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
+
+        QPoint bottomLeft(bottomPoint.x(), bottomPoint.y() + 1 - bottomSize.height());
+
+        QRect bottomRect(bottomLeft, bottomSize);
+        m_bottomGradient->setPixmap(m_backgroundLabel->getBackground().copy(bottomRect));
+        qDebug() << "m_backgroundLabel->getBackground().copy(bottomRect):" <<
+                    m_backgroundLabel->getBackground().copy(bottomRect).size();
+        qDebug() << "bottomleft point:" << bottomRect.topLeft() << bottomRect.size();
+        m_bottomGradient->resize(bottomRect.size());
+        m_bottomGradient->move(bottomRect.topLeft());
+        m_bottomGradient->show();
+        m_bottomGradient->raise();
+}
+
 void MainFrame::initConnection()
 {
     connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &MainFrame::ensureScrollToDest);
@@ -337,7 +369,7 @@ void MainFrame::initConnection()
     connect(this, &MainFrame::displayModeChanged, this, &MainFrame::checkCategoryVisible);
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &MainFrame::searchTextChanged);
     connect(m_delayHideTimer, &QTimer::timeout, this, &MainFrame::hide);
-    connect(m_backgroundInter, &SystemBackground::backgroundChanged, this, static_cast<void (MainFrame::*)()>(&MainFrame::update));
+    connect(m_backgroundLabel, &SystemBackground::backgroundChanged, this, static_cast<void (MainFrame::*)()>(&MainFrame::update));
 
     connect(m_allAppsView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
     connect(m_internetView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);

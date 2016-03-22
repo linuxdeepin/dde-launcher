@@ -1,4 +1,5 @@
 #include "searchwidget.h"
+#include "global_util/util.h"
 
 #include <QHBoxLayout>
 #include <QEvent>
@@ -6,10 +7,12 @@
 #include <QKeyEvent>
 
 SearchWidget::SearchWidget(QWidget *parent) :
-    QWidget(parent),
+    QFrame(parent),
     m_searchEdit(new DSearchEdit)
 {
-    m_searchEdit->setFixedWidth(200);
+    setObjectName("SearchFrame");
+    m_searchEdit->setFixedSize(290, 30);
+
     m_searchEdit->setFocus();
     m_searchEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
@@ -21,6 +24,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     setFocusPolicy(Qt::NoFocus);
     setFocusProxy(m_searchEdit);
     setLayout(mainLayout);
+    m_searchEdit->setStyleSheet(getQssFromFile(":/skin/qss/searchwidget.qss"));
 
     connect(m_searchEdit, &DSearchEdit::textChanged, [this] {
         emit searchTextChanged(m_searchEdit->text());

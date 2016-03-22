@@ -7,7 +7,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class SearchWidget : public QWidget
+class SearchWidget : public QFrame
 {
     Q_OBJECT
 

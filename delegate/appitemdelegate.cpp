@@ -66,7 +66,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setBrush(QBrush(Qt::transparent));
 
     QFont font = painter->font();
-    font.setPixelSize(index.data(AppsListModel::AppFontSizeRole).value<int>());
+    font.setPixelSize(qMax(index.data(AppsListModel::AppFontSizeRole).value<int>(), 4));
     painter->setFont(font);
 
     int leftMargin = 10;
@@ -77,12 +77,13 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     painter->drawText(textRect, Qt::TextWordWrap|Qt::AlignHCenter, itemInfo.m_name);
     // draw blue dot if new install
+
     if (index.data(AppsListModel::AppNewInstallRole).toBool())
     {
-        painter->setPen(Qt::transparent);
-        painter->setBrush(QColor(0, 127, 244));
-        painter->drawEllipse(QPoint(squaredRect.x() + squaredRect.width()*8/150, squaredRect.y() + squaredRect.width()*118/150), 4, 4);
+        QRect bluePointRect = QRect(squaredRect.x() + 1, squaredRect.y() + squaredRect.width()*112/150, 10, 10);
+        painter->drawPixmap(bluePointRect,  QPixmap(":/skin/images/new_install_indicator.png"));
     }
+
 
 }
 

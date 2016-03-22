@@ -41,6 +41,7 @@ AppsManager::AppsManager(QObject *parent) :
 
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
+    connect(m_launcherInter, &DBusLauncher::UninstallFailed, this, &AppsManager::reStoreItem);
     connect(this, &AppsManager::handleUninstallApp, this, &AppsManager::unInstallApp);
     connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
     connect(m_displayInterface, &DBusDisplay::PrimaryChanged, this,  &AppsManager::primaryChanged);
@@ -180,17 +181,34 @@ int AppsManager::appNums(const AppsListModel::AppCategory &category) const
 void AppsManager::unInstallApp(const QModelIndex &index, int value) {
     QString appKey = index.data(AppsListModel::AppKeyRole).toString();
     if (value==1) {
-        // begin to unInstall app;
-        QDBusPendingReply<> reply = m_launcherInter->RequestUninstall(appKey, false);
-        if (!reply.isError()) {
-               qDebug() << "unistall function excute finished!";
-           } else {
-               qDebug() << "unistall action fail, and the error reason:" << reply.error().message();
-           }
+        // begin to unInstall app, remove icon firstly;
+        QDBusPendingReply<ItemInfo> reply = m_launcherInter->GetItemInfo(appKey);
+        reply.waitForFinished();
+        if (reply.isValid() && !reply.isError()) {
+            m_unInstallItem = qdbus_cast<ItemInfo>(reply.argumentAt(0));
+            m_appInfoList.removeOne(m_unInstallItem);
+
+            emit dataChanged(AppsListModel::All);
+            refreshAppIconCache();
+            refreshCategoryInfoList();
+            //Uninstall app from backend;
+            QDBusPendingReply<> reply = m_launcherInter->RequestUninstall(appKey, false);
+            if (!reply.isError()) {
+                qDebug() << "unistall function excute finished!";
+            } else {
+                qDebug() << "unistall action fail, and the error reason:" << reply.error().message();
+            }
+        } else {
+            qDebug() << "get unInstall app itemInfo failed!";
+        }
     } else {
         //cancle to unInstall app;
         qDebug() << "cancle to unInstall app" << appKey;
     }
+}
+
+void AppsManager::reStoreItem() {
+    m_appInfoList.append(m_unInstallItem);
 }
 
 void AppsManager::refreshAppIconCache()

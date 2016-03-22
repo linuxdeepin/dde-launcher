@@ -75,3 +75,15 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, ItemInfo &info)
 
     return argument;
 }
+
+bool ItemInfo::operator==(const ItemInfo &other) {
+    if (this->m_key == other.m_key && this->m_name == other.m_name &&
+            this->m_categoryId == other.m_categoryId &&this->m_installedTime == other.m_installedTime &&
+            this->m_iconKey == other.m_iconKey &&this->m_desktop == other.m_desktop) {
+        return true;
+    } else {
+        return false;
+    }
+
+
+}

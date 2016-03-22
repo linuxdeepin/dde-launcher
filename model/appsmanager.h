@@ -16,6 +16,8 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QScreen>
+#include <QDBusArgument>
+#include <QList>
 
 class AppsManager : public QObject
 {
@@ -27,6 +29,7 @@ public:
 signals:
     void dataChanged(const AppsListModel::AppCategory category) const;
     void handleUninstallApp(const QModelIndex &index, int result);
+
     void primaryChanged();
 public slots:
     void searchApp(const QString &keywords);
@@ -40,7 +43,11 @@ public slots:
     const QPixmap appIcon(const QString &desktop);
     int appNums(const AppsListModel::AppCategory &category) const;
 
+    //remove the item icon firstly, when unInstalling apps
     void unInstallApp(const QModelIndex &index, int value);
+    //restore the itemInfo, if unInstall failed!
+    void reStoreItem();
+
     QRect getPrimayRect();
 
 private:
@@ -75,7 +82,7 @@ private:
     static AppsManager *INSTANCE;
     static QSettings APP_ICON_CACHE;
     static QSettings APP_AUTOSTART_CACHE;
-
+    ItemInfo m_unInstallItem = ItemInfo();
 };
 
 #endif // APPSMANAGER_H

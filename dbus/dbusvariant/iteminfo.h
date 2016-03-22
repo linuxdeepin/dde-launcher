@@ -21,6 +21,7 @@ public:
     friend const QDBusArgument &operator>>(const QDBusArgument &argument, ItemInfo &info);
     friend const QDataStream &operator>>(QDataStream &argument, ItemInfo &info);
 
+
 public:
     QString m_desktop;
     QString m_name;
@@ -28,6 +29,8 @@ public:
     QString m_iconKey;
     qlonglong m_categoryId;
     qlonglong m_installedTime;
+
+    bool operator==(const ItemInfo &other);
 };
 
 typedef QList<ItemInfo> ItemInfoList;

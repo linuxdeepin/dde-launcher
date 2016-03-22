@@ -16,7 +16,7 @@ public:
     int app_item_height = 130;
     int app_item_spacing = 10;
     int app_item_minspacing = 20;
-    int app_icon_size = 48;
+    int app_icon_size = 64;
     int app_item_font_size = 12;
 
 public slots:

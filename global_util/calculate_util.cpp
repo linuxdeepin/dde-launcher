@@ -23,11 +23,18 @@ void CalculateUtil::calAppSize(QSize desktopSize) {
     }
 
     app_item_width = (desktopSize.width() - app_item_minspacing*column)/column;
-    app_item_width = qMin(app_item_width, 130);
+    app_item_width = qMin(app_item_width, 140);
+
     app_item_spacing = (desktopSize.width() - app_item_width*column)/column - 8;
     app_item_spacing = qMax(app_item_spacing, 10);
 
     app_item_height = app_item_width;
+
+    if (app_item_width > 2*64) {
+        app_icon_size = 64;
+    } else {
+        app_icon_size = 48;
+    }
 
     if (app_item_width >= 130) {
         app_item_font_size = 12;

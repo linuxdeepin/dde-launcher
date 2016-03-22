@@ -34,33 +34,42 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setBrush(QBrush(Qt::transparent));
 
     const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
+    int leftMargin = 2;
+    const QRect itemRect = getSquareRect(option.rect);
+    const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).toSize();
 
-    const QRect squaredRect = getSquareRect(option.rect);
+//    qDebug() << "iconRect:" << iconRect << iconSize;
     // draw focus background
    if (CurrentIndex == index)
     {
-        const QColor borderColor(255, 255, 255, 51);
-        const QColor brushColor(0, 0, 0, 76);
+        const QColor borderColor(255, 255, 255, 26);
+        const QColor brushColor(0, 0, 0, 100);
 
         QPen pen;
         pen.setColor(borderColor);
         pen.setWidth(2);
         QPainterPath border;
-        border.addRoundedRect(squaredRect.marginsRemoved(QMargins(2, 2, 2, 2)), 4, 4);
+        border.addRoundedRect(itemRect.marginsRemoved(QMargins(leftMargin, leftMargin, leftMargin, leftMargin)),
+                              leftMargin*2, leftMargin*2);
         painter->strokePath(border, pen);
 
         painter->setBrush(brushColor);
-        painter->drawRoundedRect(squaredRect.marginsRemoved(QMargins(2, 2, 2, 2)), 4, 4);
+        painter->drawRoundedRect(itemRect.marginsRemoved(QMargins(leftMargin, leftMargin, leftMargin, leftMargin)),
+                                 leftMargin*2, leftMargin*2);
     }
 
     // draw app icon
-
-    painter->drawPixmap(squaredRect.marginsRemoved(QMargins(0.2*squaredRect.width(), squaredRect.width()*1/15, 0.2*squaredRect.width(), squaredRect.width()*5/15)),
-                        index.data(AppsListModel::AppIconRole).value<QPixmap>());
+    const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+    int iconLeftMargins = (itemRect.width() - iconSize.width())/2;
+    int iconTopMargin = itemRect.height()*0.1;
+    painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
+    painter->drawPixmap(QPoint(itemRect.x() + iconLeftMargins, itemRect.y()+iconTopMargin),
+                        iconPix.scaled(iconSize, Qt::IgnoreAspectRatio));
 
     // draw icon if app is auto startup
     if (index.data(AppsListModel::AppAutoStartRole).toBool())
-        painter->drawPixmap(squaredRect.x() + squaredRect.width()*0.2+5, squaredRect.y() + squaredRect.width()*80/150, 16, 16, QPixmap(":/skin/images/emblem-autostart.png"));
+        painter->drawPixmap(itemRect.x() + iconLeftMargins, itemRect.y() + iconTopMargin + iconSize.height()-16,
+                            16, 16, QPixmap(":/skin/images/emblem-autostart.png"));
 
     // draw app name
     painter->setBrush(QBrush(Qt::transparent));
@@ -69,8 +78,9 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     font.setPixelSize(qMax(index.data(AppsListModel::AppFontSizeRole).value<int>(), 4));
     painter->setFont(font);
 
-    int leftMargin = 10;
-    QRect textRect = QRect(squaredRect.x() + leftMargin, option.rect.y() + squaredRect.width()*110/150, option.rect.width() - leftMargin*2, option.rect.height() - leftMargin);
+    int textTopMargin = itemRect.width()*0.73;
+    QRect textRect = QRect(itemRect.x() + leftMargin, itemRect.y() + textTopMargin, itemRect.width() - leftMargin*2, itemRect.height() - leftMargin*2);
+
     painter->setPen(QColor(0, 0, 0, 170));
     painter->drawText(QRectF(textRect.x(), textRect.y() + 0.5, textRect.width(), textRect.height()), Qt::TextWordWrap|Qt::AlignHCenter, itemInfo.m_name);
     painter->setPen(Qt::white);
@@ -80,7 +90,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     if (index.data(AppsListModel::AppNewInstallRole).toBool())
     {
-        QRect bluePointRect = QRect(squaredRect.x() + 1, squaredRect.y() + squaredRect.width()*112/150, 10, 10);
+        QRect bluePointRect = QRect(itemRect.x() + 1, itemRect.y() + itemRect.width()*112/150, 10, 10);
         painter->drawPixmap(bluePointRect,  QPixmap(":/skin/images/new_install_indicator.png"));
     }
 

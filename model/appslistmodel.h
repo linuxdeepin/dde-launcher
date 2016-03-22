@@ -28,6 +28,7 @@ public:
         AppNewInstallRole,
         AppIsOnDesktopRole,
         AppIsOnDockRole,
+        AppIconSizeRole,
         AppFontSizeRole,
     };
 

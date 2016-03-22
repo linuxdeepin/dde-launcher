@@ -143,7 +143,7 @@ const QPixmap AppsManager::appIcon(const QString &desktop)
         return cachePixmap;
 
     // cache fail
-    const QString iconFile = m_fileInfoInter->GetThemeIcon(desktop, DLauncher::APP_ICON_SIZE).value();
+    const QString iconFile = m_fileInfoInter->GetThemeIcon(desktop, this->calUtil->app_icon_size).value();
     QPixmap iconPixmap;
 
     if (iconFile.endsWith(".svg", Qt::CaseInsensitive))
@@ -152,7 +152,7 @@ const QPixmap AppsManager::appIcon(const QString &desktop)
         iconPixmap = QPixmap(iconFile);
 
     if (iconPixmap.isNull())
-        iconPixmap = loadSvg(":/skin/images/application-default-icon.svg", DLauncher::APP_ICON_SIZE);
+        iconPixmap = loadSvg(":/skin/images/application-default-icon.svg", this->calUtil->app_icon_size);
 
     APP_ICON_CACHE.setValue(desktop, iconPixmap);
 
@@ -218,16 +218,16 @@ void AppsManager::refreshAppIconCache()
     // generate cache
     for (const ItemInfo &info : m_appInfoList)
     {
-        const QString iconFile = m_fileInfoInter->GetThemeIcon(info.m_desktop, DLauncher::APP_ICON_SIZE).value();
+        const QString iconFile = m_fileInfoInter->GetThemeIcon(info.m_desktop, this->calUtil->app_icon_size).value();
         QPixmap iconPixmap;
 
         if (iconFile.endsWith(".svg", Qt::CaseInsensitive))
-            iconPixmap = loadSvg(iconFile, DLauncher::APP_ICON_SIZE);
+            iconPixmap = loadSvg(iconFile, this->calUtil->app_icon_size);
         else
             iconPixmap = QPixmap(iconFile);
 
         if (iconPixmap.isNull())
-            iconPixmap = loadSvg(":/skin/images/application-default-icon.svg", DLauncher::APP_ICON_SIZE);
+            iconPixmap = loadSvg(":/skin/images/application-default-icon.svg", this->calUtil->app_icon_size);
 
         APP_ICON_CACHE.setValue(info.m_desktop, iconPixmap);
     }

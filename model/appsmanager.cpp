@@ -144,9 +144,17 @@ const QPixmap AppsManager::appIcon(const QString &desktop)
 
     // cache fail
     const QString iconFile = m_fileInfoInter->GetThemeIcon(desktop, this->calUtil->app_icon_size).value();
-    QPixmap iconPixmap;
 
-    if (iconFile.endsWith(".svg", Qt::CaseInsensitive))
+    QPixmap iconPixmap;
+    if (iconFile.startsWith("data:image/")) {
+        //This icon file is an inline image
+        QStringList strs = iconFile.split("base64,");
+        if (strs.length() == 2) {
+            QByteArray data = QByteArray::fromBase64(strs.at(1).toLatin1());
+            iconPixmap.loadFromData(data);
+        }
+    }
+    else if (iconFile.endsWith(".svg", Qt::CaseInsensitive))
         iconPixmap = loadSvg(iconFile, DLauncher::APP_ICON_SIZE);
     else
         iconPixmap = QPixmap(iconFile);
@@ -250,13 +258,16 @@ void AppsManager::refreshAppAutoStartCache()
 
 const QPixmap AppsManager::loadSvg(const QString &fileName, const int size)
 {
-    QPixmap image(size, size);
-    image.fill(Qt::transparent);
+    QPixmap image(fileName);
     QSvgRenderer renderer(fileName);
-    QPainter painter(&image);
+    image.fill(Qt::transparent);
+    image.scaled(size, size);
+
+    QPainter painter;
+    painter.begin(&image);
 
     renderer.render(&painter);
-
+    painter.end();
     return image;
 }
 

@@ -38,7 +38,6 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const QRect itemRect = getSquareRect(option.rect);
     const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).toSize();
 
-//    qDebug() << "iconRect:" << iconRect << iconSize;
     // draw focus background
    if (CurrentIndex == index)
     {
@@ -62,9 +61,14 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
     int iconLeftMargins = (itemRect.width() - iconSize.width())/2;
     int iconTopMargin = itemRect.height()*0.1;
-    painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
-    painter->drawPixmap(QPoint(itemRect.x() + iconLeftMargins, itemRect.y()+iconTopMargin),
-                        iconPix.scaled(iconSize, Qt::IgnoreAspectRatio));
+
+    if (iconPix.size().width() < iconSize.width() && iconPix.size().height() < iconSize.height()) {
+        painter->drawPixmap(itemRect.x() + iconLeftMargins, itemRect.y()+iconTopMargin, iconPix.size().width(),
+                        iconPix.size().height(), iconPix);
+    } else {
+        painter->drawPixmap(itemRect.x() + iconLeftMargins, itemRect.y()+iconTopMargin, iconSize.width(), iconSize.height(),
+                        iconPix);
+    }
 
     // draw icon if app is auto startup
     if (index.data(AppsListModel::AppAutoStartRole).toBool())

@@ -15,6 +15,7 @@ public:
 
     AppsListModel::AppCategory category() const;
 
+    bool operator==(const ItemInfo &other) const;
     friend QDebug operator<<(QDebug argument, const ItemInfo &info);
     friend QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo &info);
     friend QDataStream &operator<<(QDataStream &argument, const ItemInfo &info);
@@ -29,8 +30,6 @@ public:
     QString m_iconKey;
     qlonglong m_categoryId;
     qlonglong m_installedTime;
-
-    bool operator==(const ItemInfo &other);
 };
 
 typedef QList<ItemInfo> ItemInfoList;

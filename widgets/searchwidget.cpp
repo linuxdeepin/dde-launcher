@@ -8,13 +8,17 @@
 
 SearchWidget::SearchWidget(QWidget *parent) :
     QFrame(parent),
-    m_searchEdit(new DSearchEdit)
+    m_searchEdit(new QLineEdit)
 {
     setObjectName("SearchFrame");
     m_searchEdit->setFixedSize(290, 30);
 
     m_searchEdit->setFocus();
     m_searchEdit->setContextMenuPolicy(Qt::NoContextMenu);
+    m_searchEdit->setStyleSheet("background-color:transparent;"
+                                "border:2px solid #666;"
+                                "border-radius:5px;"
+                                "color:white;");
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addStretch();
@@ -26,12 +30,12 @@ SearchWidget::SearchWidget(QWidget *parent) :
     setLayout(mainLayout);
     m_searchEdit->setStyleSheet(getQssFromFile(":/skin/qss/searchwidget.qss"));
 
-    connect(m_searchEdit, &DSearchEdit::textChanged, [this] {
+    connect(m_searchEdit, &QLineEdit::textChanged, [this] {
         emit searchTextChanged(m_searchEdit->text());
     });
 }
 
-DSearchEdit *SearchWidget::edit()
+QLineEdit *SearchWidget::edit()
 {
     return m_searchEdit;
 }

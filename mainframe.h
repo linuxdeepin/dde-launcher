@@ -63,6 +63,7 @@ private:
     void initUI();
     void initConnection();
     void initTimer();
+    void moveCurrentSelectApp(const int key);
     void launchCurrentApp();
     void checkCategoryVisible();
     void showPopupMenu(const QPoint &pos, const QModelIndex &context);

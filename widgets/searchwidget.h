@@ -14,7 +14,7 @@ class SearchWidget : public QFrame
 public:
     explicit SearchWidget(QWidget *parent = 0);
 
-    DSearchEdit *edit();
+    QLineEdit *edit();
 
 public slots:
     void clearSearchContent();
@@ -26,7 +26,8 @@ signals:
     void searchTextChanged(const QString &text) const;
 
 private:
-    DSearchEdit *m_searchEdit;
+    QLineEdit *m_searchEdit;
+//    DSearchEdit *m_searchEdit;
 };
 
 #endif // SEARCHWIDGET_H

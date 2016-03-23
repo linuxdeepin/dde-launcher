@@ -1,11 +1,14 @@
+
+QFrame#AppBox{
+    background-color: transparent;
+}
+
+/*
 QLabel#MaskLabel{
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 1));;
     border: 1px solid rgba(255, 255, 255, 255);
 }
 
-QFrame#AppBox{
-    background-color: transparent;
-}
 
 QFrame#DisplayModeFrame{
     background-color: transparent;
@@ -13,17 +16,14 @@ QFrame#DisplayModeFrame{
 
 QFrame#AppItem {
     background-color: rgba(0, 0, 0, 0);
-    /*border: 1px solid rgba(255, 255, 255, 255);*/
     color:white
 }
 QLabel#Icon {
     background-color: rgba(0, 0, 0, 0);
-    /*border: 1px solid rgba(255, 255, 255, 255);*/
     color:white
 }
 QLabel#Name {
     background-color: rgba(0, 0, 0, 0);
-    /*border: 1px solid rgba(255, 255, 255, 255);*/
     color:white;
     padding-left:16px;
     padding-right:16px;
@@ -79,12 +79,6 @@ QFrame#DragChecked{
     color:white
 }
 
-QLineEdit {
-    background-color: rgba(0, 0, 0, 0);
-    color:white;
-    border: None
-}
-
 
 QPushButton#BorderButton[state="normal"]{
     background-color:transparent;
@@ -109,11 +103,7 @@ QPushButton#BorderButton:checked{
     border-radius: 4px;
 }
 
-QLineEdit#SearchLineEdit{
-    border: none;
-    font-size: 16px;
-}
-
 QAbstractButton#CategoryButton {
     color:red;
 }
+ */

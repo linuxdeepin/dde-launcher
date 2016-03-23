@@ -84,7 +84,6 @@ MainFrame::MainFrame(QWidget *parent) :
 
     updateDisplayMode(DisplayMode(m_settings.value(DEFAULT_DISPLAY_MODE, AllApps).toInt()));
 
-
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
 }
 
@@ -175,6 +174,10 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Enter:
     case Qt::Key_Return:        launchCurrentApp();                             break;
     case Qt::Key_Escape:        hide();                                         break;
+    case Qt::Key_Up:
+    case Qt::Key_Down:
+    case Qt::Key_Left:
+    case Qt::Key_Right:         moveCurrentSelectApp(e->key());                 break;
     default:;
     }
 }
@@ -218,8 +221,17 @@ bool MainFrame::event(QEvent *e)
 
 bool MainFrame::eventFilter(QObject *o, QEvent *e)
 {
-    if (o == m_navigationBar && e->type() == QEvent::Wheel)
+    if (o == m_searchWidget->edit() && e->type() == QEvent::KeyPress)
     {
+        QKeyEvent *keyPress = static_cast<QKeyEvent *>(e);
+        if (keyPress->key() == Qt::Key_Left || keyPress->key() == Qt::Key_Right)
+        {
+            QKeyEvent *event = new QKeyEvent(keyPress->type(), keyPress->key(), keyPress->modifiers());
+
+            qApp->postEvent(this, event);
+            return true;
+        }
+    } else if (o == m_navigationBar && e->type() == QEvent::Wheel) {
         QWheelEvent *wheel = static_cast<QWheelEvent *>(e);
         QWheelEvent *event = new QWheelEvent(wheel->pos(), wheel->delta(), wheel->buttons(), wheel->modifiers());
 
@@ -248,6 +260,8 @@ void MainFrame::initUI()
 
     m_othersView->installEventFilter(this);
     m_navigationBar->installEventFilter(this);
+    m_searchWidget->edit()->installEventFilter(this);
+//    qApp->installEventFilter(this);
 
     m_allAppsView->setModel(m_allAppsModel);
     m_allAppsView->setItemDelegate(m_appItemDelegate);
@@ -452,6 +466,31 @@ void MainFrame::initConnection()
     connect(m_appsManager, &AppsManager::updateCategoryView, this, &MainFrame::checkCategoryVisible);
 }
 
+void MainFrame::moveCurrentSelectApp(const int key)
+{
+    const QModelIndex currentIndex = m_appItemDelegate->currentIndex();
+//    const AppsListModel::AppCategory indexMode = currentIndex.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
+
+    if (!currentIndex.isValid())
+    {
+        m_appItemDelegate->setCurrentIndex(m_displayMode == GroupByCategory ? m_internetView->indexAt(0) : m_allAppsView->indexAt(0));
+        update();
+        return;
+    }
+
+    QModelIndex index;
+
+    switch (key)
+    {
+    case Qt::Key_Left:      index = currentIndex.sibling(currentIndex.row() - 1, 0);        break;
+    case Qt::Key_Right:     index = currentIndex.sibling(currentIndex.row() + 1, 0);        break;
+    default:;
+    }
+
+    m_appItemDelegate->setCurrentIndex(index);
+    update();
+}
+
 void MainFrame::launchCurrentApp()
 {
     const QModelIndex &index = m_appItemDelegate->currentIndex();
@@ -633,6 +672,8 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
     m_navigationBar->setButtonsVisible(m_displayMode == GroupByCategory);
 
     m_allAppsView->setModel(m_displayMode == Search ? m_searchResultModel : m_allAppsModel);
+    // choose nothing
+    m_appItemDelegate->setCurrentIndex(QModelIndex());
 
     if (m_displayMode != Search)
         m_settings.setValue(DEFAULT_DISPLAY_MODE, m_displayMode);

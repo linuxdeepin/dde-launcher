@@ -1,8 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>skin/qss/buttons.qss</file>
         <file>skin/qss/main.qss</file>
-        <file>skin/qss/Tablewidget.qss</file>
         <file>skin/images/application-default-icon.svg</file>
         <file>skin/images/category_10.svg</file>
         <file>skin/images/category_50.svg</file>

@@ -40,6 +40,17 @@ AppsListModel::AppCategory ItemInfo::category() const
     return AppsListModel::All;
 }
 
+bool ItemInfo::operator==(const ItemInfo &other) const
+{
+    if (this->m_key == other.m_key && this->m_name == other.m_name &&
+            this->m_categoryId == other.m_categoryId &&this->m_installedTime == other.m_installedTime &&
+            this->m_iconKey == other.m_iconKey &&this->m_desktop == other.m_desktop) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 QDebug operator<<(QDebug argument, const ItemInfo &info)
 {
     argument << info.m_categoryId << info.m_installedTime;
@@ -74,16 +85,4 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, ItemInfo &info)
     argument.endStructure();
 
     return argument;
-}
-
-bool ItemInfo::operator==(const ItemInfo &other) {
-    if (this->m_key == other.m_key && this->m_name == other.m_name &&
-            this->m_categoryId == other.m_categoryId &&this->m_installedTime == other.m_installedTime &&
-            this->m_iconKey == other.m_iconKey &&this->m_desktop == other.m_desktop) {
-        return true;
-    } else {
-        return false;
-    }
-
-
 }

@@ -98,6 +98,9 @@ private:
     QWidget *m_viewListPlaceholder;
 
     AppItemDelegate *m_appItemDelegate;
+    GradientLabel* m_topGradient;
+    GradientLabel* m_bottomGradient;
+
     AppListView *m_allAppsView;
     AppListView *m_internetView;
     AppListView * m_chatView;
@@ -136,8 +139,6 @@ private:
     CategoryTitleWidget *m_systemTitle;
     CategoryTitleWidget *m_othersTitle;
 
-    GradientLabel* m_topGradient;
-    GradientLabel* m_bottomGradient;
     QHBoxLayout *m_contentLayout;
     QVBoxLayout *m_mainLayout;
 

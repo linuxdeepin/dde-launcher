@@ -8,55 +8,32 @@ PKGCONFIG += dtkbase dtkwidget dtkbase xcb xcb-ewmh gsettings-qt
 
 include(./widgets/widgets.pri)
 include(./background/background.pri)
+include(./dbusinterface/dbusinterface.pri)
 
 SOURCES += \
     mainframe.cpp \
-    dbus/dbuslauncher.cpp \
     model/appslistmodel.cpp \
     model/appsmanager.cpp \
     view/applistview.cpp \
     global_util/util.cpp \
-    dbus/dbusfileinfo.cpp \
-    dbus/dbusvariant/categoryinfo.cpp \
-    dbus/dbusvariant/frequencyinfo.cpp \
-    dbus/dbusvariant/installedtimeinfo.cpp \
-    dbus/dbusvariant/iteminfo.cpp \
     delegate/appitemdelegate.cpp \
-    dbus/dbustartmanager.cpp \
     global_util/xcb_misc.cpp \
-    dbus/dbusmenu.cpp \
-    dbus/dbusmenumanager.cpp \
     worker/menuworker.cpp \
-    dbus/dbusdockedappmanager.cpp \
     dbusservices/dbuslauncherservice.cpp \
-    dbus/dbuslauncherframe.cpp \
     main.cpp \
-    dbus/dbusdisplay.cpp \
     global_util/calculate_util.cpp
 
 HEADERS += \
     mainframe.h \
-    dbus/dbuslauncher.h \
     model/appslistmodel.h \
     model/appsmanager.h \
     view/applistview.h \
     global_util/constants.h \
     global_util/util.h \
-    dbus/dbusfileinfo.h \
-    dbus/dbusvariant/categoryinfo.h \
-    dbus/dbusvariant/frequencyinfo.h \
-    dbus/dbusvariant/installedtimeinfo.h \
-    dbus/dbusvariant/iteminfo.h \
     delegate/appitemdelegate.h \
-    dbus/dbustartmanager.h \
     global_util/xcb_misc.h \
-    dbus/dbusmenu.h \
-    dbus/dbusmenumanager.h \
     worker/menuworker.h \
-    dbus/dbusdockedappmanager.h \
     dbusservices/dbuslauncherservice.h \
-    dbus/dbuslauncherframe.h \
-    dbus/dbusdisplay.h \
     global_util/calculate_util.h
 
 target.path = /usr/bin

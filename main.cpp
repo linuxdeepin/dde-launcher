@@ -1,7 +1,7 @@
 
 
 #include "mainframe.h"
-#include "dbus/dbuslauncherframe.h"
+#include "dbuslauncherframe.h"
 #include "dbusservices/dbuslauncherservice.h"
 
 #include <QCommandLineParser>

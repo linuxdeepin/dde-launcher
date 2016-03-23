@@ -14,12 +14,14 @@ class AppListView : public QListView
 public:
     explicit AppListView(QWidget *parent = 0);
 
+    using QListView::indexAt;
     const QModelIndex indexAt(const int index) const;
 
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
 
 protected:
+    using QListView::startDrag;
     void startDrag(const QModelIndex &index);
     void enterEvent(QEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);

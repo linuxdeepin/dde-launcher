@@ -23,11 +23,11 @@
 #include <QtCore>
 #include <QModelIndex>
 
-#include "dbus/dbusmenu.h"
-#include "dbus/dbusmenumanager.h"
-#include "dbus/dbusdockedappmanager.h"
-#include "dbus/dbuslauncher.h"
-#include "dbus/dbustartmanager.h"
+#include "dbusmenu.h"
+#include "dbusmenumanager.h"
+#include "dbusdockedappmanager.h"
+#include "dbuslauncher.h"
+#include "dbustartmanager.h"
 #include "model/appsmanager.h"
 #include "model/appslistmodel.h"
 

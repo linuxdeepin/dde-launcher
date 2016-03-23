@@ -2,11 +2,11 @@
 #define APPSMANAGER_H
 
 #include "appslistmodel.h"
-#include "../dbus/dbuslauncher.h"
-#include "../dbus/dbusfileinfo.h"
-#include "../dbus/dbustartmanager.h"
-#include "../dbus/dbusdockedappmanager.h"
-#include "dbus/dbusdisplay.h"
+#include "dbuslauncher.h"
+#include "dbusfileinfo.h"
+#include "dbustartmanager.h"
+#include "dbusdockedappmanager.h"
+#include "dbusdisplay.h"
 #include "global_util/calculate_util.h"
 
 #include <QMap>

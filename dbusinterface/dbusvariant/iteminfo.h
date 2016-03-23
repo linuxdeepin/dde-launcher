@@ -1,7 +1,7 @@
 #ifndef ITEMINFO_H
 #define ITEMINFO_H
 
-#include "../../model/appslistmodel.h"
+#include "model/appslistmodel.h"
 
 #include <QtDBus>
 

@@ -1,8 +1,8 @@
-
 #include "appslistmodel.h"
 #include "appsmanager.h"
 #include "global_util/constants.h"
-#include "dbus/dbusvariant/iteminfo.h"
+#include "dbusinterface/dbusvariant/iteminfo.h"
+
 
 #include <QSize>
 #include <QDebug>

@@ -302,11 +302,17 @@ void MainFrame::initUI()
     m_appsVbox->layout()->setMargin(0);
     m_appsArea->setWidget(m_appsVbox);
 
+    m_scrollAreaLayout = new QVBoxLayout;
+    m_scrollAreaLayout->setMargin(0);
+    m_scrollAreaLayout->setSpacing(0);
+    m_scrollAreaLayout->addWidget(m_appsArea);
+    m_scrollAreaLayout->addSpacing(DLauncher::VIEWLIST_BOTTOM_MARGIN);
+
     m_contentLayout = new QHBoxLayout;
     m_contentLayout->setMargin(0);
     m_contentLayout->addSpacing(0);
     m_contentLayout->addWidget(m_navigationBar);
-    m_contentLayout->addWidget(m_appsArea);
+    m_contentLayout->addLayout(m_scrollAreaLayout);
     m_contentLayout->addSpacing(DLauncher::VIEWLIST_RIGHT_MARGIN);
 
     m_bottomGradient->setDirection(GradientLabel::BottomToTop);
@@ -316,7 +322,6 @@ void MainFrame::initUI()
     m_mainLayout->setSpacing(0);
     m_mainLayout->addWidget(m_searchWidget);
     m_mainLayout->addLayout(m_contentLayout);
-
 
     setLayout(m_mainLayout);
 

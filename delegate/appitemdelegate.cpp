@@ -63,7 +63,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     int iconTopMargin = itemRect.height()*0.1;
 
     if (iconPix.size().width() < iconSize.width() && iconPix.size().height() < iconSize.height()) {
-        painter->drawPixmap(itemRect.x() + iconLeftMargins, itemRect.y()+iconTopMargin, iconPix.size().width(),
+        painter->drawPixmap(itemRect.x() + (itemRect.width() - iconPix.width())/2, itemRect.y()+iconTopMargin, iconPix.size().width(),
                         iconPix.size().height(), iconPix);
     } else {
         painter->drawPixmap(itemRect.x() + iconLeftMargins, itemRect.y()+iconTopMargin, iconSize.width(), iconSize.height(),

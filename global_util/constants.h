@@ -15,6 +15,8 @@ static const int CATEGORY_TITLE_WIDGET_HEIGHT = 80;
 
 static const int VIEWLIST_RIGHT_MARGIN = 100;
 
+static const int VIEWLIST_BOTTOM_MARGIN = 60;
+
 static const int NAVIGATION_WIDGET_WIDTH = 180;
 
 static const int NAVIGATION_ICON_HEIGHT = 50;

@@ -139,6 +139,7 @@ private:
     CategoryTitleWidget *m_systemTitle;
     CategoryTitleWidget *m_othersTitle;
 
+    QVBoxLayout* m_scrollAreaLayout;
     QHBoxLayout *m_contentLayout;
     QVBoxLayout *m_mainLayout;
 

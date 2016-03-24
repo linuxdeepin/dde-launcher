@@ -449,6 +449,7 @@ void MainFrame::initConnection()
         updateDisplayMode(m_displayMode == GroupByCategory ? AllApps : GroupByCategory);
     });
     connect(m_appsManager, &AppsManager::primaryChanged, this, &MainFrame::updateUI);
+    connect(m_appsManager, &AppsManager::updateCategoryView, this, &MainFrame::checkCategoryVisible);
 }
 
 void MainFrame::launchCurrentApp()

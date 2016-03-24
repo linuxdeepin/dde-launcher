@@ -199,6 +199,13 @@ void AppsManager::unInstallApp(const QModelIndex &index, int value) {
             emit dataChanged(AppsListModel::All);
             refreshAppIconCache();
             refreshCategoryInfoList();
+            //if after the app be unInstalled, it's category's app number is zero, update the view
+            if (appsInfoList(m_unInstallItem.category()).size()==0) {
+                emit updateCategoryView(m_unInstallItem.category());
+            }
+
+            emit dataChanged(m_unInstallItem.category());
+
             //Uninstall app from backend;
             QDBusPendingReply<> reply = m_launcherInter->RequestUninstall(appKey, false);
             if (!reply.isError()) {
@@ -216,7 +223,17 @@ void AppsManager::unInstallApp(const QModelIndex &index, int value) {
 }
 
 void AppsManager::reStoreItem() {
+    bool updateViewFlag = false;
+    if (appsInfoList(m_unInstallItem.category()).length() == 0) {
+        updateViewFlag = true;
+    }
     m_appInfoList.append(m_unInstallItem);
+    emit dataChanged(AppsListModel::All);
+    emit dataChanged(m_unInstallItem.category());
+    refreshCategoryInfoList();
+    if (updateViewFlag) {
+        emit updateCategoryView(m_unInstallItem.category());
+    }
 }
 
 void AppsManager::refreshAppIconCache()

@@ -27,9 +27,10 @@ public:
     static AppsManager *instance(QObject *parent = nullptr);
     CalculateUtil* calUtil;
 signals:
+
     void dataChanged(const AppsListModel::AppCategory category) const;
     void handleUninstallApp(const QModelIndex &index, int result);
-
+    void updateCategoryView(const AppsListModel::AppCategory categoryInfo) const;
     void primaryChanged();
 public slots:
     void searchApp(const QString &keywords);

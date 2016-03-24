@@ -34,27 +34,27 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setBrush(QBrush(Qt::transparent));
 
     const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
-    int leftMargin = 2;
+    int leftMargin = 2, radius = 3;
     const QRect itemRect = getSquareRect(option.rect);
     const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).toSize();
 
     // draw focus background
    if (CurrentIndex == index)
     {
-        const QColor borderColor(255, 255, 255, 26);
-        const QColor brushColor(0, 0, 0, 100);
+        const QColor borderColor(255, 255, 255, 52);
+        const QColor brushColor(0, 0, 0, 76);
 
         QPen pen;
         pen.setColor(borderColor);
         pen.setWidth(2);
         QPainterPath border;
-        border.addRoundedRect(itemRect.marginsRemoved(QMargins(leftMargin, leftMargin, leftMargin, leftMargin)),
-                              leftMargin*2, leftMargin*2);
+        border.addRoundedRect(itemRect.marginsRemoved(QMargins(leftMargin/2, leftMargin/2, leftMargin*2/3, leftMargin*2/3)),
+                              radius, radius);
         painter->strokePath(border, pen);
-
+        painter->setPen(Qt::transparent);
         painter->setBrush(brushColor);
-        painter->drawRoundedRect(itemRect.marginsRemoved(QMargins(leftMargin, leftMargin, leftMargin, leftMargin)),
-                                 leftMargin*2, leftMargin*2);
+        painter->drawRoundedRect(itemRect.marginsRemoved(QMargins(leftMargin, leftMargin, leftMargin*4/3, leftMargin*4/3)),
+                                 radius, radius);
     }
 
     // draw app icon

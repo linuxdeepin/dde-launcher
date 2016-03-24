@@ -23,7 +23,7 @@ void CalculateUtil::calAppSize(QSize desktopSize) {
     }
 
     app_item_width = (desktopSize.width() - app_item_minspacing*column)/column;
-    app_item_width = qMin(app_item_width, 140);
+    app_item_width = qMin(app_item_width, 130);
 
     app_item_spacing = (desktopSize.width() - app_item_width*column)/column - 8;
     app_item_spacing = qMax(app_item_spacing, 10);

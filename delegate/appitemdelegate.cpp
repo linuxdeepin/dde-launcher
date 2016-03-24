@@ -42,7 +42,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
    if (CurrentIndex == index)
     {
         const QColor borderColor(255, 255, 255, 52);
-        const QColor brushColor(0, 0, 0, 76);
+        const QColor brushColor(0, 0, 0, 105);
 
         QPen pen;
         pen.setColor(borderColor);

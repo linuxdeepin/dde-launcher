@@ -138,12 +138,13 @@ bool AppsManager::appIsOnDesktop(const QString &desktop)
 
 const QPixmap AppsManager::appIcon(const QString &desktop)
 {
-    const QPixmap cachePixmap = APP_ICON_CACHE.value(desktop).value<QPixmap>();
+    int iconSize = this->calUtil->app_icon_size;
+    const QPixmap cachePixmap = APP_ICON_CACHE.value(QString("%1").arg(desktop)).value<QPixmap>();
     if (!cachePixmap.isNull())
         return cachePixmap;
 
     // cache fail
-    const QString iconFile = m_fileInfoInter->GetThemeIcon(desktop, this->calUtil->app_icon_size).value();
+    const QString iconFile = m_fileInfoInter->GetThemeIcon(desktop, iconSize).value();
 
     QPixmap iconPixmap;
     if (iconFile.startsWith("data:image/")) {
@@ -158,11 +159,10 @@ const QPixmap AppsManager::appIcon(const QString &desktop)
         iconPixmap = loadSvg(iconFile, DLauncher::APP_ICON_SIZE);
     else
         iconPixmap = QPixmap(iconFile);
-
     if (iconPixmap.isNull())
-        iconPixmap = loadSvg(":/skin/images/application-default-icon.svg", this->calUtil->app_icon_size);
-
-    APP_ICON_CACHE.setValue(desktop, iconPixmap);
+        iconPixmap = loadSvg(":/skin/images/application-default-icon.svg", iconSize);
+    else
+          APP_ICON_CACHE.setValue(QString("%1").arg(desktop), iconPixmap);
 
     return iconPixmap;
 }
@@ -275,17 +275,17 @@ void AppsManager::refreshAppAutoStartCache()
 
 const QPixmap AppsManager::loadSvg(const QString &fileName, const int size)
 {
-    QPixmap image(fileName);
+    QPixmap pixmap(fileName);
     QSvgRenderer renderer(fileName);
-    image.fill(Qt::transparent);
-    image.scaled(size, size);
+    pixmap.fill(Qt::transparent);
+//    pixmap = pixmap.scaled(size, size);
 
     QPainter painter;
-    painter.begin(&image);
+    painter.begin(&pixmap);
 
     renderer.render(&painter);
     painter.end();
-    return image;
+    return pixmap;
 }
 
 void AppsManager::searchDone(const QStringList &resultList)

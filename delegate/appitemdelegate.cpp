@@ -58,17 +58,12 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     }
 
     // draw app icon
-    const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
-    int iconLeftMargins = (itemRect.width() - iconSize.width())/2;
-    int iconTopMargin = itemRect.height()*0.1;
+   const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+   int iconLeftMargins = (itemRect.width() - iconSize.width())/2;
+   int iconTopMargin = itemRect.height()*0.1;
 
-    if (iconPix.size().width() < iconSize.width() && iconPix.size().height() < iconSize.height()) {
-        painter->drawPixmap(itemRect.x() + (itemRect.width() - iconPix.width())/2, itemRect.y()+iconTopMargin, iconPix.size().width(),
-                        iconPix.size().height(), iconPix);
-    } else {
-        painter->drawPixmap(itemRect.x() + iconLeftMargins, itemRect.y()+iconTopMargin, iconSize.width(), iconSize.height(),
-                        iconPix);
-    }
+   painter->drawPixmap(itemRect.x() + iconLeftMargins, itemRect.y()+iconTopMargin, iconSize.width(), iconSize.height(),
+                       iconPix);
 
     // draw icon if app is auto startup
     if (index.data(AppsListModel::AppAutoStartRole).toBool())

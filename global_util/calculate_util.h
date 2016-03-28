@@ -18,6 +18,13 @@ public:
     inline int appItemSpacing() const {return m_appItemSpacing;}
     inline QSize appItemSize() const {return QSize(m_appItemWidth, m_appItemHeight);}
 
+#ifdef QT_DEBUG
+    inline void increaseIconSize() {m_appIconSize += 16;}
+    inline void decreaseIconSize() {m_appIconSize -= 16;}
+    inline void increaseItemSize() {m_appItemWidth += 16; m_appItemHeight += 16;}
+    inline void decreaseItemSize() {m_appItemWidth -= 16; m_appItemHeight -= 16;}
+#endif
+
 private:
     explicit CalculateUtil(QObject *parent);
 

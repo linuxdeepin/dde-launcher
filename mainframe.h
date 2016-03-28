@@ -84,6 +84,7 @@ private:
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
     QSettings m_settings;
 
+    CalculateUtil *m_calcUtil;
     AppsManager *m_appsManager;
     QPropertyAnimation *m_scrollAnimation;
     QWidget *m_scrollDest;

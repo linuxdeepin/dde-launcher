@@ -15,6 +15,7 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
     m_category(category)
 {
     connect(m_appsManager, &AppsManager::dataChanged, this, &AppsListModel::dataChanged);
+    connect(m_appsManager, &AppsManager::layoutChanged, this, &AppsListModel::layoutChanged);
 }
 
 int AppsListModel::rowCount(const QModelIndex &parent) const
@@ -132,5 +133,10 @@ void AppsListModel::dataChanged(const AppCategory category)
 {
     if (category == All || category == m_category)
         emit QAbstractItemModel::dataChanged(index(0), index(rowCount(QModelIndex())));
-//        emit layoutChanged();
+}
+
+void AppsListModel::layoutChanged(const AppsListModel::AppCategory category)
+{
+    if (category == All || category == m_category)
+        emit QAbstractItemModel::layoutChanged();
 }

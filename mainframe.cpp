@@ -18,6 +18,7 @@ const QString DEFAULT_DISPLAY_MODE_KEY = "defaultDisplayMode";
 MainFrame::MainFrame(QWidget *parent) :
     QFrame(parent),
     m_settings("deepin", "dde-launcher", this),
+    m_calcUtil(CalculateUtil::instance(this)),
     m_appsManager(AppsManager::instance(this)),
     m_delayHideTimer(new QTimer(this)),
     m_backgroundLabel(new SystemBackground(qApp->primaryScreen()->geometry().size(), true, this)),
@@ -170,6 +171,18 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Control:       scrollToCategory(AppsListModel::Internet);      break;
     case Qt::Key_F1:            updateDisplayMode(AllApps);                     break;
     case Qt::Key_F2:            updateDisplayMode(GroupByCategory);             break;
+    case Qt::Key_Plus:          m_calcUtil->increaseIconSize();
+                                emit m_appsManager->layoutChanged(AppsListModel::All);
+                                                                                break;
+    case Qt::Key_Minus:         m_calcUtil->decreaseIconSize();
+                                emit m_appsManager->layoutChanged(AppsListModel::All);
+                                                                                break;
+    case Qt::Key_Slash:         m_calcUtil->increaseItemSize();
+                                emit m_appsManager->layoutChanged(AppsListModel::All);
+                                                                                break;
+    case Qt::Key_Asterisk:      m_calcUtil->decreaseItemSize();
+                                emit m_appsManager->layoutChanged(AppsListModel::All);
+                                                                                break;
 #endif
     case Qt::Key_Enter:
     case Qt::Key_Return:        launchCurrentApp();                             break;

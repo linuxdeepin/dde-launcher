@@ -63,6 +63,7 @@ protected:
 
 private:
     void dataChanged(const AppsListModel::AppCategory category);
+    void layoutChanged(const AppsListModel::AppCategory category);
 
 private:
     AppsManager *m_appsManager;

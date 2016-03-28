@@ -25,12 +25,14 @@ class AppsManager : public QObject
 
 public:
     static AppsManager *instance(QObject *parent = nullptr);
-signals:
 
+signals:
     void dataChanged(const AppsListModel::AppCategory category) const;
+    void layoutChanged(const AppsListModel::AppCategory category) const;
     void handleUninstallApp(const QModelIndex &index, int result);
     void updateCategoryView(const AppsListModel::AppCategory categoryInfo) const;
-    void primaryChanged();
+    void primaryChanged() QT_DEPRECATED;
+
 public slots:
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
@@ -48,9 +50,10 @@ public slots:
     //restore the itemInfo, if unInstall failed!
     void reStoreItem();
 
-    QRect getPrimayRect();
+    QRect getPrimayRect() QT_DEPRECATED;
     void handleDragedApp(const QModelIndex &index);
     void handleDropedApp(const QModelIndex &index);
+
 private:
     explicit AppsManager(QObject *parent = 0);
 

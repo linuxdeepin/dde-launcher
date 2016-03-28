@@ -240,7 +240,8 @@ void AppsManager::reStoreItem() {
 
 void AppsManager::refreshAppIconCache()
 {
-    APP_ICON_CACHE.clear();
+    // TODO: FIXME: clear cache
+//    APP_ICON_CACHE.clear();
     APP_ICON_CACHE.setValue("version", qApp->applicationVersion());
 
     const int appIconSize = m_calcUtil->appIconSize();

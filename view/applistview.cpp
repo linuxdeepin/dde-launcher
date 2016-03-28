@@ -163,7 +163,7 @@ void AppListView::startDrag(const QModelIndex &index)
     drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
     drag->setPixmap(pixmap.scaled(DLauncher::APP_DRAG_ICON_SIZE, DLauncher::APP_DRAG_ICON_SIZE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     drag->setHotSpot(QPoint(DLauncher::APP_DRAG_ICON_SIZE / 2, DLauncher::APP_DRAG_ICON_SIZE / 2));
-    qDebug() << "drag:" << pixmap.isNull();
+
     // TODO: 参考 dock 的 drag 代码，分别处理内部 drop 和外部 drop
     // Qt 在这里会作处理，用线程等待 drag->exec 的执行结果，根据返回值可以判断 drop 在哪个位置
     drag->exec(Qt::MoveAction);

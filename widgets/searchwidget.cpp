@@ -15,8 +15,9 @@ SearchWidget::SearchWidget(QWidget *parent) :
 
     m_searchEdit->setFocus();
     m_searchEdit->setContextMenuPolicy(Qt::NoContextMenu);
-    m_searchEdit->setStyleSheet("background-color:transparent;"
-                                "border:2px solid #666;"
+    m_searchEdit->setStyleSheet("background-color:rgba(255, 255, 255, .3);"
+                                "padding:0px 5px;"
+                                "border:none;"
                                 "border-radius:5px;"
                                 "color:white;");
 
@@ -28,7 +29,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     setFocusPolicy(Qt::NoFocus);
     setFocusProxy(m_searchEdit);
     setLayout(mainLayout);
-    m_searchEdit->setStyleSheet(getQssFromFile(":/skin/qss/searchwidget.qss"));
+//    m_searchEdit->setStyleSheet(getQssFromFile(":/skin/qss/searchwidget.qss"));
 
     connect(m_searchEdit, &QLineEdit::textChanged, [this] {
         emit searchTextChanged(m_searchEdit->text());

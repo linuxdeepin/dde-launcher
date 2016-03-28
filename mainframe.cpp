@@ -13,7 +13,7 @@
 
 #include <ddialog.h>
 
-const QString DEFAULT_DISPLAY_MODE = "defaultDisplayMode";
+const QString DEFAULT_DISPLAY_MODE_KEY = "defaultDisplayMode";
 
 MainFrame::MainFrame(QWidget *parent) :
     QFrame(parent),
@@ -82,7 +82,7 @@ MainFrame::MainFrame(QWidget *parent) :
     initUI();
     initConnection();
 
-    updateDisplayMode(DisplayMode(m_settings.value(DEFAULT_DISPLAY_MODE, AllApps).toInt()));
+    updateDisplayMode(DisplayMode(m_settings.value(DEFAULT_DISPLAY_MODE_KEY, AllApps).toInt()));
 
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
 }
@@ -313,7 +313,8 @@ void MainFrame::initUI()
     m_appsVbox->layout()->addWidget(m_othersView);
     m_appsVbox->layout()->addWidget(m_viewListPlaceholder);
     m_appsVbox->layout()->setSpacing(0);
-    m_appsVbox->layout()->setMargin(0);
+    m_appsVbox->layout()->setContentsMargins(0, DLauncher::APPS_AREA_TOP_BOTTOM_MARGIN,
+                                             0, DLauncher::APPS_AREA_TOP_BOTTOM_MARGIN);
     m_appsArea->setWidget(m_appsVbox);
 
     m_scrollAreaLayout = new QVBoxLayout;
@@ -344,11 +345,13 @@ void MainFrame::initUI()
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
 }
 
+// FIXME:
 void MainFrame::updateUI() {
     QRect updateRect = m_appsManager->getPrimayRect();
     this->move(updateRect.x(), updateRect.y());
 }
 
+// FIXME:
 void MainFrame::showGradient() {
         QPoint topLeft = m_appsArea->mapTo(this,
                                            QPoint(0, 0));
@@ -462,6 +465,7 @@ void MainFrame::initConnection()
             return;
         updateDisplayMode(m_displayMode == GroupByCategory ? AllApps : GroupByCategory);
     });
+    // FIXME:
     connect(m_appsManager, &AppsManager::primaryChanged, this, &MainFrame::updateUI);
     connect(m_appsManager, &AppsManager::updateCategoryView, this, &MainFrame::checkCategoryVisible);
 }
@@ -550,7 +554,7 @@ void MainFrame::showPopupUninstallDialog(const QModelIndex &context)
 {
     m_isConfirmDialogShown = true;
 
-    DTK_WIDGET_NAMESPACE::DDialog unInstallDialog(this);
+    DTK_WIDGET_NAMESPACE::DDialog unInstallDialog;
     unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
     unInstallDialog.setWindowModality(Qt::WindowModal);
 
@@ -676,7 +680,7 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
     if (m_displayMode != Search)
-        m_settings.setValue(DEFAULT_DISPLAY_MODE, m_displayMode);
+        m_settings.setValue(DEFAULT_DISPLAY_MODE_KEY, m_displayMode);
 
     if (m_displayMode == GroupByCategory)
         scrollToCategory(m_currentCategory);
@@ -729,7 +733,7 @@ void MainFrame::searchTextChanged(const QString &keywords)
     m_appsManager->searchApp(keywords);
 
     if (keywords.isEmpty())
-        updateDisplayMode(DisplayMode(m_settings.value(DEFAULT_DISPLAY_MODE, AllApps).toInt()));
+        updateDisplayMode(DisplayMode(m_settings.value(DEFAULT_DISPLAY_MODE_KEY, AllApps).toInt()));
     else
         updateDisplayMode(Search);
 }

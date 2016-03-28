@@ -29,7 +29,7 @@ AppListView::AppListView(QWidget *parent) :
     setWrapping(true);
     setFocusPolicy(Qt::NoFocus);
     setDragDropMode(QAbstractItemView::DragDrop);
-    setViewMode(QListView::IconMode);
+//    setViewMode(QListView::IconMode);
     setMovement(QListView::Free);
     setFlow(QListView::LeftToRight);
     setLayoutMode(QListView::Batched);
@@ -37,7 +37,7 @@ AppListView::AppListView(QWidget *parent) :
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(QFrame::NoFrame);
-    setSpacing(m_appManager->calUtil->app_item_spacing);
+//    setSpacing(m_appManager->calUtil->app_item_spacing);
 
     setStyleSheet("background-color:transparent;");
 }

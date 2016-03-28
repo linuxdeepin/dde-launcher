@@ -17,7 +17,7 @@ public:
     static CalculateUtil *instance(QObject *parent = nullptr);
 
     inline int appItemFontSize() const {return m_appItemFontSize;}
-    inline int appIconSize() const {return m_appIconSize;}
+    inline QSize appIconSize() const { return QSize(m_appIconSize, m_appIconSize);}
     inline int appItemSpacing() const {return m_appItemSpacing;}
     inline QSize appItemSize() const {return QSize(m_appItemWidth, m_appItemHeight);}
 

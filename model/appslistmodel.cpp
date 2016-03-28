@@ -106,11 +106,12 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppNewInstallRole:
         return m_appsManager->appIsNewInstall(itemInfo.m_key);
     case AppIconRole:
-        return m_appsManager->appIcon(itemInfo.m_desktop, m_calcUtil->appIconSize());
+        return m_appsManager->appIcon(itemInfo.m_desktop, m_calcUtil->appIconSize().width());
     case ItemSizeHintRole:
         return m_calcUtil->appItemSize();
-    case AppIconSizeRole:
+    case AppIconSizeRole: {
         return m_calcUtil->appIconSize();
+    }
     case AppFontSizeRole:
         return m_calcUtil->appItemFontSize();
     default:;

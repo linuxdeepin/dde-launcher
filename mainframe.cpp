@@ -150,6 +150,8 @@ void MainFrame::resizeEvent(QResizeEvent *e)
     m_developmentView->setFixedWidth(appsContentWidth);
     m_systemView->setFixedWidth(appsContentWidth);
     m_othersView->setFixedWidth(appsContentWidth);
+
+    m_calcUtil->calculateAppLayout(m_appsArea->size());
 }
 
 void MainFrame::keyPressEvent(QKeyEvent *e)

@@ -1,52 +1,10 @@
 #include "calculate_util.h"
 
 #include <QDebug>
+#include <QApplication>
+#include <QScreen>
 
 CalculateUtil *CalculateUtil::INSTANCE = nullptr;
-
-//void CalculateUtil::calAppSize(QSize desktopSize) {
-//    qDebug() << "desktopSize:" << desktopSize;
-//    int column = 7;
-
-//    int minWidth =qMin(desktopSize.width(), desktopSize.height());
-//    if (minWidth >= 768) {
-//        column = 7;
-//    } else if (minWidth < 768 && minWidth >= 600) {
-//        column = 5;
-//    } else {
-//        column = 4;
-//    }
-
-//    app_item_width = (desktopSize.width() - app_item_minspacing*column)/column;
-//    app_item_width = qMin(app_item_width, 130);
-
-//    app_item_spacing = (desktopSize.width() - app_item_width*column)/column - 8;
-//    app_item_spacing = qMax(app_item_spacing, 10);
-
-//    app_item_height = app_item_width;
-
-//    if (app_item_width > 2*64) {
-//        app_icon_size = 64;
-//    } else {
-//        app_icon_size = 48;
-//    }
-
-//    if (app_item_width >= 130) {
-//        app_item_font_size = 12;
-//    } else if (app_item_width < 130 && app_item_width >=100) {
-//        app_item_font_size = 10;
-//    } else if (app_item_width > 80 && app_item_width < 100) {
-//        app_item_font_size = 8;
-//    } else {
-//        app_item_font_size = 4;
-//    }
-
-//    qDebug() << "app_item_width: " << app_item_width << "column:" << column;
-//    qDebug() << "app_spacing:" << app_item_spacing;
-//    qDebug() << "app_item_font_size:" << app_item_font_size;
-
-
-//}
 
 CalculateUtil *CalculateUtil::instance(QObject *parent)
 {
@@ -54,6 +12,33 @@ CalculateUtil *CalculateUtil::instance(QObject *parent)
         INSTANCE = new CalculateUtil(parent);
 
     return INSTANCE;
+}
+
+void CalculateUtil::calculateAppLayout(const QSize &containerSize)
+{
+    const int screenWidth = qApp->primaryScreen()->geometry().width();
+    const int column = screenWidth == 800 ? 5 : screenWidth > 800 ? 7 : 4;
+
+    // calculate item size;
+    int spacing = 20;
+    int itemWidth = 140;
+
+    int itemCalcWidth = int((double(containerSize.width()) - spacing * column * 2) / column + 0.5);
+    if (itemCalcWidth < itemWidth)
+        itemWidth = itemCalcWidth;
+
+    spacing = (containerSize.width() - itemWidth * column) / (column * 2);
+
+    m_appItemSpacing = spacing;
+    m_appItemWidth = itemWidth;
+
+    // calculate icon size;
+    m_appIconSize = int(m_appItemWidth * 0.5 / 16) * 16;
+
+    // calculate font size;
+    m_appItemFontSize = m_appItemWidth >= 130 ? 12 : m_appItemWidth <= 80 ? 4 : 8;
+
+    emit layoutChanged();
 }
 
 CalculateUtil::CalculateUtil(QObject *parent) : QObject(parent)

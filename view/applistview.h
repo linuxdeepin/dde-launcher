@@ -6,6 +6,7 @@
 
 #include "model/appsmanager.h"
 
+class CalculateUtil;
 class AppsListModel;
 class AppListView : public QListView
 {
@@ -39,11 +40,13 @@ protected:
 
 private slots:
     void fitToContent();
-private:
 
+private:
     bool m_isDragging;
     QPoint m_dragStartPos;
+
     static AppsManager *m_appManager;
+    static CalculateUtil *m_calcUtil;
 };
 
 #endif // APPLISTVIEW_H

@@ -1,5 +1,6 @@
 #include "applistview.h"
 #include "global_util/constants.h"
+#include "global_util/calculate_util.h"
 #include "model/appslistmodel.h"
 
 #include <QDebug>
@@ -12,12 +13,15 @@
 #include <QDrag>
 
 AppsManager *AppListView::m_appManager = nullptr;
+CalculateUtil *AppListView::m_calcUtil = nullptr;
 
 AppListView::AppListView(QWidget *parent) :
     QListView(parent)
 {
     if (!m_appManager)
         m_appManager = AppsManager::instance(this);
+    if (!m_calcUtil)
+        m_calcUtil = CalculateUtil::instance(this);
 
     viewport()->installEventFilter(this);
     viewport()->setAcceptDrops(true);
@@ -29,7 +33,6 @@ AppListView::AppListView(QWidget *parent) :
     setWrapping(true);
     setFocusPolicy(Qt::NoFocus);
     setDragDropMode(QAbstractItemView::DragDrop);
-//    setViewMode(QListView::IconMode);
     setMovement(QListView::Free);
     setFlow(QListView::LeftToRight);
     setLayoutMode(QListView::Batched);
@@ -37,9 +40,11 @@ AppListView::AppListView(QWidget *parent) :
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(QFrame::NoFrame);
-//    setSpacing(m_appManager->calUtil->app_item_spacing);
 
     setStyleSheet("background-color:transparent;");
+
+    // update item spacing
+    connect(m_calcUtil, &CalculateUtil::layoutChanged, [this] {setSpacing(m_calcUtil->appItemSpacing());});
 }
 
 const QModelIndex AppListView::indexAt(const int index) const

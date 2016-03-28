@@ -19,7 +19,8 @@ public:
 
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
-
+    void appBeDraged(const QModelIndex &index) const;
+    void appDropedIn(const QModelIndex &index) const;
 protected:
     using QListView::startDrag;
     void startDrag(const QModelIndex &index);
@@ -39,6 +40,8 @@ protected:
 private slots:
     void fitToContent();
 private:
+
+    bool m_isDragging;
     QPoint m_dragStartPos;
     static AppsManager *m_appManager;
 };

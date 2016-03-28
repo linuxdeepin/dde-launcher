@@ -50,7 +50,8 @@ public slots:
     void reStoreItem();
 
     QRect getPrimayRect();
-
+    void handleDragedApp(const QModelIndex &index);
+    void handleDropedApp(const QModelIndex &index);
 private:
     explicit AppsManager(QObject *parent = 0);
 
@@ -84,6 +85,7 @@ private:
     static QSettings APP_ICON_CACHE;
     static QSettings APP_AUTOSTART_CACHE;
     ItemInfo m_unInstallItem = ItemInfo();
+    ItemInfo m_beDragedItem = ItemInfo();
 };
 
 #endif // APPSMANAGER_H

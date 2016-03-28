@@ -29,6 +29,7 @@ void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
 
 void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+
     painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
     painter->setPen(Qt::white);
     painter->setBrush(QBrush(Qt::transparent));

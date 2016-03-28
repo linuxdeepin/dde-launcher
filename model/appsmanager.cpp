@@ -303,3 +303,35 @@ QRect AppsManager::getPrimayRect() {
     qDebug() << "primaryRect: " << primaryRect;
     return primaryRect;
 }
+
+void AppsManager::handleDragedApp(const QModelIndex &index) {
+    qDebug() << "draged app";
+    QString appKey = index.data(AppsListModel::AppKeyRole).toString();
+    // begin to unInstall app, remove icon firstly;
+    QDBusPendingReply<ItemInfo> reply = m_launcherInter->GetItemInfo(appKey);
+    reply.waitForFinished();
+    if (reply.isValid() && !reply.isError()) {
+        ItemInfo dragedAppItemInfo = qdbus_cast<ItemInfo>(reply.argumentAt(0));
+        m_beDragedItem = dragedAppItemInfo;
+        m_appInfoList.removeOne(dragedAppItemInfo);
+        qDebug() << "remove one";
+        emit dataChanged(AppsListModel::All);
+        refreshAppIconCache();
+        refreshCategoryInfoList();
+    }
+}
+
+void AppsManager::handleDropedApp(const QModelIndex &index) {
+    QString appKey = index.data(AppsListModel::AppKeyRole).toString();
+    QDBusPendingReply<ItemInfo> reply = m_launcherInter->GetItemInfo(appKey);
+    reply.waitForFinished();
+    if (reply.isValid() && !reply.isError()) {
+        ItemInfo insertAppItemInfo = qdbus_cast<ItemInfo>(reply.argumentAt(0));
+        int i = m_appInfoList.indexOf(insertAppItemInfo);
+
+        m_appInfoList.insert(i, m_beDragedItem);
+        emit dataChanged(AppsListModel::All);
+        refreshAppIconCache();
+        m_beDragedItem = ItemInfo();
+    }
+}

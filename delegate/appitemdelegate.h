@@ -6,6 +6,7 @@
 #include <QStyleOptionViewItem>
 #include <QPainter>
 
+class CalculateUtil;
 class AppItemDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
@@ -23,7 +24,10 @@ protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
     const QRect getSquareRect(const QRect &itemRect) const;
+
 private:
+    CalculateUtil *m_calcUtil;
+    QPixmap m_blueDotPixmap;
     static QModelIndex CurrentIndex;
 };
 

@@ -7,7 +7,6 @@
 #include "dbustartmanager.h"
 #include "dbusdockedappmanager.h"
 #include "dbusdisplay.h"
-#include "global_util/calculate_util.h"
 
 #include <QMap>
 #include <QSettings>
@@ -19,13 +18,13 @@
 #include <QDBusArgument>
 #include <QList>
 
+class CalculateUtil;
 class AppsManager : public QObject
 {
     Q_OBJECT
 
 public:
     static AppsManager *instance(QObject *parent = nullptr);
-    CalculateUtil* calUtil;
 signals:
 
     void dataChanged(const AppsListModel::AppCategory category) const;
@@ -41,7 +40,7 @@ public slots:
     bool appIsAutoStart(const QString &desktop);
     bool appIsOnDock(const QString &appName);
     bool appIsOnDesktop(const QString &desktop);
-    const QPixmap appIcon(const QString &desktop);
+    const QPixmap appIcon(const QString &desktop, const int size);
     int appNums(const AppsListModel::AppCategory &category) const;
 
     //remove the item icon firstly, when unInstalling apps
@@ -67,6 +66,8 @@ private slots:
     void searchDone(const QStringList &resultList);
 
 private:
+    CalculateUtil *m_calcUtil;
+
     DBusLauncher *m_launcherInter;
     DBusFileInfo *m_fileInfoInter;
     DBusStartManager *m_startManagerInter;

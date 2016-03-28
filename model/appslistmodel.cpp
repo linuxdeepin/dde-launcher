@@ -1,22 +1,19 @@
 #include "appslistmodel.h"
 #include "appsmanager.h"
+#include "global_util/calculate_util.h"
 #include "global_util/constants.h"
 #include "dbusinterface/dbusvariant/iteminfo.h"
-
 
 #include <QSize>
 #include <QDebug>
 #include <QPixmap>
 
-AppsManager *AppsListModel::m_appsManager = nullptr;
-
 AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
     QAbstractListModel(parent),
+    m_appsManager(AppsManager::instance(this)),
+    m_calcUtil(CalculateUtil::instance(this)),
     m_category(category)
 {
-    if (!m_appsManager)
-        m_appsManager = AppsManager::instance(this);
-
     connect(m_appsManager, &AppsManager::dataChanged, this, &AppsListModel::dataChanged);
 }
 
@@ -108,13 +105,13 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppNewInstallRole:
         return m_appsManager->appIsNewInstall(itemInfo.m_key);
     case AppIconRole:
-        return m_appsManager->appIcon(itemInfo.m_desktop);
+        return m_appsManager->appIcon(itemInfo.m_desktop, m_calcUtil->appIconSize());
     case ItemSizeHintRole:
-        return QSize(m_appsManager->calUtil->app_item_width, m_appsManager->calUtil->app_item_height);
+        return m_calcUtil->appItemSize();
     case AppIconSizeRole:
-        return QSize(m_appsManager->calUtil->app_icon_size, m_appsManager->calUtil->app_icon_size);
+        return m_calcUtil->appIconSize();
     case AppFontSizeRole:
-        return m_appsManager->calUtil->app_item_font_size;
+        return m_calcUtil->appItemFontSize();
     default:;
     }
 

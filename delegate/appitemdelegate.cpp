@@ -1,6 +1,7 @@
 
 #include "appitemdelegate.h"
 #include "global_util/constants.h"
+#include "global_util/calculate_util.h"
 #include "model/appslistmodel.h"
 #include "dbusinterface/dbusvariant/iteminfo.h"
 
@@ -11,7 +12,9 @@
 QModelIndex AppItemDelegate::CurrentIndex = QModelIndex();
 
 AppItemDelegate::AppItemDelegate(QObject *parent) :
-    QAbstractItemDelegate(parent)
+    QAbstractItemDelegate(parent),
+    m_calcUtil(CalculateUtil::instance(this)),
+    m_blueDotPixmap(":/skin/images/new_install_indicator.png")
 {
 
 }
@@ -59,12 +62,11 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     }
 
     // draw app icon
-   const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
-   int iconLeftMargins = (itemRect.width() - iconSize.width())/2;
-   int iconTopMargin = itemRect.height()*0.1;
-
-   painter->drawPixmap(itemRect.x() + iconLeftMargins, itemRect.y()+iconTopMargin, iconSize.width(), iconSize.height(),
-                       iconPix);
+    const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+    int iconLeftMargins = (itemRect.width() - iconSize.width())/2;
+    int iconTopMargin = itemRect.height()*0.1;
+    painter->drawPixmap(itemRect.x() + iconLeftMargins, itemRect.y()+iconTopMargin, iconSize.width(), iconSize.height(),
+                        iconPix);
 
     // draw icon if app is auto startup
     if (index.data(AppsListModel::AppAutoStartRole).toBool())
@@ -82,19 +84,17 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QRect textRect = QRect(itemRect.x() + leftMargin, itemRect.y() + textTopMargin, itemRect.width() - leftMargin*2, itemRect.height() - leftMargin*2);
 
     painter->setPen(QColor(0, 0, 0, 170));
-    painter->drawText(QRectF(textRect.x(), textRect.y() + 0.5, textRect.width(), textRect.height()), Qt::TextWordWrap|Qt::AlignHCenter, itemInfo.m_name);
+    painter->drawText(QRectF(textRect.x(), textRect.y() + 0.5, textRect.width(), textRect.height()), Qt::TextWordWrap | Qt::AlignHCenter, itemInfo.m_name);
     painter->setPen(Qt::white);
 
-    painter->drawText(textRect, Qt::TextWordWrap|Qt::AlignHCenter, itemInfo.m_name);
-    // draw blue dot if new install
+    painter->drawText(textRect, Qt::TextWordWrap | Qt::AlignHCenter, itemInfo.m_name);
 
+    // draw blue dot if new install
     if (index.data(AppsListModel::AppNewInstallRole).toBool())
     {
         QRect bluePointRect = QRect(itemRect.x() + 1, itemRect.y() + itemRect.width()*112/150, 10, 10);
-        painter->drawPixmap(bluePointRect,  QPixmap(":/skin/images/new_install_indicator.png"));
+        painter->drawPixmap(bluePointRect,  m_blueDotPixmap);
     }
-
-
 }
 
 QSize AppItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const

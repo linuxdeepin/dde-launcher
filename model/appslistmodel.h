@@ -2,10 +2,9 @@
 #define APPSLISTMODEL_H
 
 #include <QAbstractListModel>
-#include "global_util/calculate_util.h"
-
 
 class AppsManager;
+class CalculateUtil;
 class AppsListModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -66,7 +65,8 @@ private:
     void dataChanged(const AppsListModel::AppCategory category);
 
 private:
-    static AppsManager *m_appsManager;
+    AppsManager *m_appsManager;
+    CalculateUtil *m_calcUtil;
 
     AppCategory m_category = All;
 };

@@ -123,11 +123,11 @@ private:
     AppsListModel *m_graphicsModel;
     AppsListModel *m_gameModel;
     AppsListModel *m_officeModel;
-
     AppsListModel *m_readingModel;
     AppsListModel *m_developmentModel;
     AppsListModel *m_systemModel;
     AppsListModel *m_othersModel;
+
     CategoryTitleWidget *m_internetTitle;
     CategoryTitleWidget* m_chatTitle;
     CategoryTitleWidget *m_musicTitle;

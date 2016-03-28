@@ -34,7 +34,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setBrush(QBrush(Qt::transparent));
 
     const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
-    int leftMargin = 2, radius = 3;
+    const int leftMargin = 2, radius = 3;
     const QRect itemRect = getSquareRect(option.rect);
     const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).toSize();
 

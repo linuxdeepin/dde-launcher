@@ -275,16 +275,16 @@ void AppsManager::refreshAppAutoStartCache()
 
 const QPixmap AppsManager::loadSvg(const QString &fileName, const int size)
 {
-    QPixmap pixmap(fileName);
+    QPixmap pixmap(size, size);
     QSvgRenderer renderer(fileName);
     pixmap.fill(Qt::transparent);
 //    pixmap = pixmap.scaled(size, size);
 
     QPainter painter;
     painter.begin(&pixmap);
-
     renderer.render(&painter);
     painter.end();
+
     return pixmap;
 }
 

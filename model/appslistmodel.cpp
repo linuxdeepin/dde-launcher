@@ -135,4 +135,5 @@ void AppsListModel::dataChanged(const AppCategory category)
 {
     if (category == All || category == m_category)
         emit QAbstractItemModel::dataChanged(index(0), index(rowCount(QModelIndex())));
+//        emit layoutChanged();
 }

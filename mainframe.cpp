@@ -512,7 +512,7 @@ void MainFrame::moveCurrentSelectApp(const int key)
     default:;
     }
 
-    m_appItemDelegate->setCurrentIndex(index);
+    m_appItemDelegate->setCurrentIndex(index.isValid() ? index : currentIndex);
     update();
 }
 

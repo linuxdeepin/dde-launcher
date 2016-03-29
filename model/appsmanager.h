@@ -7,6 +7,8 @@
 #include "dbustartmanager.h"
 #include "dbusdockedappmanager.h"
 #include "dbusdisplay.h"
+#include "global_util/calculate_util.h"
+#include "global_util/themeappicon.h"
 
 #include <QMap>
 #include <QSettings>
@@ -45,7 +47,7 @@ public slots:
     bool appIsAutoStart(const QString &desktop);
     bool appIsOnDock(const QString &appName);
     bool appIsOnDesktop(const QString &desktop);
-    const QPixmap appIcon(const QString &desktop, const int size);
+    const QPixmap appIcon(const QString &iconKey, const int size);
     int appNums(const AppsListModel::AppCategory &category) const;
 
     //remove the item icon firstly, when unInstalling apps
@@ -66,7 +68,6 @@ private:
     void refreshCategoryInfoList();
     void refreshAppIconCache();
     void refreshAppAutoStartCache();
-    const QPixmap loadSvg(const QString &fileName, const int size);
 
 private slots:
     void searchDone(const QStringList &resultList);
@@ -75,12 +76,9 @@ private:
     CalculateUtil *m_calcUtil;
 
     DBusLauncher *m_launcherInter;
-    DBusFileInfo *m_fileInfoInter;
     DBusStartManager *m_startManagerInter;
     DBusDockedAppManager *m_dockedAppInter;
     DBusDisplay* m_displayInterface;
-
-    QTimer *m_searchTimer;
 
     QString m_searchText;
     QStringList m_newInstalledAppsList;
@@ -94,6 +92,10 @@ private:
     static QSettings APP_AUTOSTART_CACHE;
     ItemInfo m_unInstallItem = ItemInfo();
     ItemInfo m_beDragedItem = ItemInfo();
+
+    ThemeAppIcon* m_themeAppIcon;
+    CalculateUtil *m_calUtil;
+    QTimer *m_searchTimer;
 };
 
 #endif // APPSMANAGER_H

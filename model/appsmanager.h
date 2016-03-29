@@ -62,6 +62,8 @@ public slots:
 private:
     explicit AppsManager(QObject *parent = 0);
 
+    const QPixmap loadSvg(const QString &fileName, const int size);
+    const QPixmap loadIconFile(const QString &fileName, const int size);
     void appendSearchResult(const QString &appKey);
     void sortCategory(const AppsListModel::AppCategory category);
     void sortByName(ItemInfoList &processList);
@@ -80,6 +82,7 @@ private:
     DBusDockedAppManager *m_dockedAppInter;
     DBusDisplay* m_displayInterface;
 
+    QPixmap m_defaultIconPixmap;
     QString m_searchText;
     QStringList m_newInstalledAppsList;
     ItemInfoList m_appInfoList;

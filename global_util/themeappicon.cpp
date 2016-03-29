@@ -6,6 +6,14 @@
 #include <QDir>
 #include <QDebug>
 
+#undef signals
+extern "C" {
+    #include <string.h>
+    #include <gtk/gtk.h>
+    #include <gio/gdesktopappinfo.h>
+}
+#define signals public
+
 
 static GtkIconTheme* them = NULL;
 
@@ -28,9 +36,10 @@ void ThemeAppIcon::gtkInit(){
 }
 
 QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
-//    if (iconPath.length() == 0){
-//        iconPath = "application-x-desktop";
-//    }
+    Q_ASSERT(false);
+    if (iconPath.length() == 0){
+        iconPath = "application-x-desktop";
+    }
     QPixmap pixmap(width, height);
     // iconPath is an absolute path of the system
     if (QFile::exists(iconPath) && iconPath.contains(QDir::separator())) {
@@ -79,7 +88,7 @@ QString ThemeAppIcon::getThemeIconPath(QString iconName, int size)
         if (ext != NULL) {
             if (g_ascii_strcasecmp(ext+1, "png") == 0 || g_ascii_strcasecmp(ext+1, "svg") == 0 || g_ascii_strcasecmp(ext+1, "jpg") == 0) {
                 pic_name_len = ext - name;
-                qDebug() << "desktop's Icon name should an absoulte path or an basename without extension";
+//                qDebug() << "desktop's Icon name should an absoulte path or an basename without extension";
             }
         }
 
@@ -96,7 +105,7 @@ QString ThemeAppIcon::getThemeIconPath(QString iconName, int size)
         if (info == NULL) {
             info = gtk_icon_theme_lookup_icon(gtk_icon_theme_get_default(), pic_name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
             if (info == NULL) {
-                qWarning() << "get gtk icon theme info failed for" << pic_name;
+//                qWarning() << "get gtk icon theme info failed for" << pic_name;
                 g_free(pic_name);
                 return "";
             }

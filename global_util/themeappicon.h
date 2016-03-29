@@ -3,14 +3,6 @@
 
 #include <QObject>
 
-#undef signals
-extern "C" {
-    #include <string.h>
-    #include <gtk/gtk.h>
-    #include <gio/gdesktopappinfo.h>
-}
-#define signals public
-
 class ThemeAppIcon : public QObject
 {
     Q_OBJECT

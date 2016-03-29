@@ -23,8 +23,6 @@ AppsManager::AppsManager(QObject *parent) :
     m_searchTimer(new QTimer(this))
 {
     m_themeAppIcon->gtkInit();
-
-    gtk_init(NULL, NULL);
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
     m_appInfoList = m_launcherInter->GetAllItemInfos().value();
     sortCategory(AppsListModel::All);
@@ -39,11 +37,6 @@ AppsManager::AppsManager(QObject *parent) :
     m_searchTimer->setSingleShot(true);
     m_searchTimer->setInterval(150);
 
-//    QSize screenSize = getPrimayRect().size();
-
-
-//    calUtil = new CalculateUtil(QSize(screenSize.width() - 160*2, screenSize.height()));
-
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
     connect(m_launcherInter, &DBusLauncher::UninstallFailed, this, &AppsManager::reStoreItem);
@@ -53,6 +46,42 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_displayInterface, &DBusDisplay::PrimaryChanged, this,  &AppsManager::primaryChanged);
     connect(m_displayInterface, &DBusDisplay::PrimaryRectChanged, this, &AppsManager::primaryChanged);
 
+}
+
+const QPixmap AppsManager::loadSvg(const QString &fileName, const int size)
+{
+    QPixmap pixmap(size, size);
+    QSvgRenderer renderer(fileName);
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter;
+    painter.begin(&pixmap);
+    renderer.render(&painter);
+    painter.end();
+
+    return pixmap;
+}
+
+const QPixmap AppsManager::loadIconFile(const QString &fileName, const int size)
+{
+    QPixmap pixmap;
+    if (fileName.startsWith("data:image/")) {
+        //This icon file is an inline image
+        QStringList strs = fileName.split("base64,");
+        if (strs.length() == 2) {
+            QByteArray data = QByteArray::fromBase64(strs.at(1).toLatin1());
+            pixmap.loadFromData(data);
+        }
+
+    } else if (fileName.endsWith(".svg", Qt::CaseInsensitive))
+        pixmap = loadSvg(fileName, size);
+    else
+        pixmap = QPixmap(fileName);
+
+    if (pixmap.isNull())
+        return pixmap;
+
+    return pixmap.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
 void AppsManager::appendSearchResult(const QString &appKey)
@@ -173,20 +202,23 @@ bool AppsManager::appIsOnDesktop(const QString &desktop)
 
 const QPixmap AppsManager::appIcon(const QString &iconKey, const int size)
 {
-    //iconKey is empty when some app didn't has iconKey property?
-    if (!iconKey.isEmpty()) {
-        const QPixmap cachePixmap = APP_ICON_CACHE.value(iconKey).value<QPixmap>();
-        if (!cachePixmap.isNull())
-            return cachePixmap;
-    }
-    // cache fail
-    QPixmap iconPixmap;
-    iconPixmap = m_themeAppIcon->getIconPixmap(iconKey,  size,  size);
+    const QPixmap cachePixmap = APP_ICON_CACHE.value(QString("%1-%2").arg(iconKey).arg(size)).value<QPixmap>();
+    if (!cachePixmap.isNull())
+        return cachePixmap;
 
-    if (!iconPixmap.isNull() && !iconKey.isEmpty())
+    const QString iconPath = m_themeAppIcon->getThemeIconPath(iconKey, size);
+    const QPixmap iconPixmap = loadIconFile(iconPath, size);
+
+    if (!iconPixmap.isNull())
+    {
         APP_ICON_CACHE.setValue(QString("%1-%2").arg(iconKey).arg(size), iconPixmap);
+        return iconPixmap;
+    }
 
-    return iconPixmap;
+    if (m_defaultIconPixmap.isNull() || m_defaultIconPixmap.width() != size)
+        m_defaultIconPixmap = loadSvg(":/skin/images/application-default-icon.svg", size);
+
+    return m_defaultIconPixmap;
 }
 
 void AppsManager::refreshCategoryInfoList()
@@ -234,16 +266,16 @@ void AppsManager::unInstallApp(const QModelIndex &index, int value) {
             //Uninstall app from backend;
             QDBusPendingReply<> reply = m_launcherInter->RequestUninstall(appKey, false);
             if (!reply.isError()) {
-                qDebug() << "unistall function excute finished!";
+//                qDebug() << "unistall function excute finished!";
             } else {
-                qDebug() << "unistall action fail, and the error reason:" << reply.error().message();
+//                qDebug() << "unistall action fail, and the error reason:" << reply.error().message();
             }
         } else {
-            qDebug() << "get unInstall app itemInfo failed!";
+//            qDebug() << "get unInstall app itemInfo failed!";
         }
     } else {
         //cancle to unInstall app;
-        qDebug() << "cancle to unInstall app" << appKey;
+//        qDebug() << "cancle to unInstall app" << appKey;
     }
 }
 
@@ -263,23 +295,27 @@ void AppsManager::reStoreItem() {
 
 void AppsManager::refreshAppIconCache()
 {
-    // TODO: FIXME: clear cache
-//    APP_ICON_CACHE.clear();
+    APP_ICON_CACHE.clear();
     APP_ICON_CACHE.setValue("version", qApp->applicationVersion());
+//    return;
 
-    const int appIconSize = m_calcUtil->appIconSize().width();
+//    const int appIconSize = m_calcUtil->appIconSize().width();
 
+//    // generate cache
+//    for (const ItemInfo &info : m_appInfoList)
+//    {
+//        const QPixmap cachePixmap = APP_ICON_CACHE.value(QString("%1-%2").arg(info.m_iconKey).arg(appIconSize)).value<QPixmap>();
+//        if (!cachePixmap.isNull())
+//            continue;
 
-    // generate cache
-    for (const ItemInfo &info : m_appInfoList)
-    {
-        QPixmap iconPixmap;
-        iconPixmap = m_themeAppIcon->getIconPixmap(info.m_iconKey,  appIconSize,  appIconSize);
+//        const QString iconPath = m_themeAppIcon->getThemeIconPath(info.m_iconKey, appIconSize);
+//        const QPixmap iconPixmap = loadIconFile(iconPath, appIconSize);
 
-        APP_ICON_CACHE.setValue(QString("%1-%2").arg(info.m_iconKey).arg(appIconSize), iconPixmap);
-    }
+//        if (!iconPixmap.isNull())
+//            APP_ICON_CACHE.setValue(QString("%1-%2").arg(info.m_iconKey).arg(appIconSize), iconPixmap);
+//    }
 
-    emit dataChanged(AppsListModel::All);
+//    emit dataChanged(AppsListModel::All);
 }
 
 void AppsManager::refreshAppAutoStartCache()

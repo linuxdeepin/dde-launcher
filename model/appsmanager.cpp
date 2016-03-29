@@ -88,7 +88,7 @@ void AppsManager::stashItem(const QModelIndex &index)
         {
             m_stashList.append(m_appInfoList[i]);
             m_appInfoList.removeAt(i);
-            return;
+            return refreshCategoryInfoList();
         }
     }
 }
@@ -101,7 +101,7 @@ void AppsManager::restoreItem(const QString &appKey, const int pos)
         {
             m_appInfoList.insert(pos, m_stashList[i]);
             m_stashList.removeAt(i);
-            return;
+            return refreshCategoryInfoList();
         }
     }
 }
@@ -197,7 +197,10 @@ void AppsManager::refreshCategoryInfoList()
 {
     m_appInfos.clear();
 
-    for (const ItemInfo &info : m_appInfoList)
+    ItemInfoList sortedList = m_appInfoList;
+    sortByName(sortedList);
+
+    for (const ItemInfo &info : sortedList)
     {
         const AppsListModel::AppCategory category = info.category();
         if (!m_appInfos.contains(category))

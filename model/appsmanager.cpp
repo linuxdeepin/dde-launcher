@@ -171,24 +171,19 @@ bool AppsManager::appIsOnDesktop(const QString &desktop)
 
 const QPixmap AppsManager::appIcon(const QString &iconKey, const int size)
 {
-    //Don't know why iconKey is empty?
-    if (iconKey.isEmpty()) {
-        return QPixmap();
+    //iconKey is empty when some app didn't has iconKey property?
+    if (!iconKey.isEmpty()) {
+        const QPixmap cachePixmap = APP_ICON_CACHE.value(iconKey).value<QPixmap>();
+        if (!cachePixmap.isNull())
+            return cachePixmap;
     }
-
-    const QPixmap cachePixmap = APP_ICON_CACHE.value(iconKey).value<QPixmap>();
-    if (!cachePixmap.isNull())
-        return cachePixmap;
-
     // cache fail
     QPixmap iconPixmap;
     iconPixmap = m_themeAppIcon->getIconPixmap(iconKey,  size,  size);
-    qDebug() << "appIcon size:" << iconPixmap.size() << iconKey;
 
-    if (!iconPixmap.isNull())
-        APP_ICON_CACHE.setValue(iconKey, iconPixmap);
-    else
-        iconPixmap = QPixmap(":/skin/images/new_install_indicator.png");
+    if (!iconPixmap.isNull() && !iconKey.isEmpty())
+        APP_ICON_CACHE.setValue(QString("%1-%2").arg(iconKey).arg(size), iconPixmap);
+
     return iconPixmap;
 }
 
@@ -279,7 +274,7 @@ void AppsManager::refreshAppIconCache()
         QPixmap iconPixmap;
         iconPixmap = m_themeAppIcon->getIconPixmap(info.m_iconKey,  appIconSize,  appIconSize);
 
-        APP_ICON_CACHE.setValue(QString("%1-%2").arg(info.m_desktop).arg(appIconSize), iconPixmap);
+        APP_ICON_CACHE.setValue(QString("%1-%2").arg(info.m_iconKey).arg(appIconSize), iconPixmap);
     }
 
     emit dataChanged(AppsListModel::All);

@@ -47,10 +47,12 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
     connect(m_launcherInter, &DBusLauncher::UninstallFailed, this, &AppsManager::reStoreItem);
+    connect(m_launcherInter, &DBusLauncher::ItemChanged, this, &AppsManager::handleItemChanged);
     connect(this, &AppsManager::handleUninstallApp, this, &AppsManager::unInstallApp);
     connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
     connect(m_displayInterface, &DBusDisplay::PrimaryChanged, this,  &AppsManager::primaryChanged);
     connect(m_displayInterface, &DBusDisplay::PrimaryRectChanged, this, &AppsManager::primaryChanged);
+
 }
 
 void AppsManager::appendSearchResult(const QString &appKey)
@@ -339,4 +341,20 @@ void AppsManager::handleDropedApp(const QModelIndex &index) {
         refreshAppIconCache();
         m_beDragedItem = ItemInfo();
     }
+}
+
+void AppsManager::handleItemChanged(const QString &in0, ItemInfo in1, qlonglong in2) {
+    qDebug() << "in0" << in0 << in1.m_name << "in2" << in2;
+    if (in0 == "created") {
+        m_appInfoList.append(in1);
+        emit dataChanged(AppsListModel::All);
+        refreshCategoryInfoList();
+        refreshAppIconCache();
+    } else if (in0 == "updated") {
+        m_newInstalledAppsList.append(in1.m_key);
+    }
+    if (in0 == "deleted") {
+        m_newInstalledAppsList.removeOne(in1.m_key);
+    }
+
 }

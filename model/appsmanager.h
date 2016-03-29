@@ -58,7 +58,7 @@ public slots:
     QRect getPrimayRect() QT_DEPRECATED;
     void handleDragedApp(const QModelIndex &index);
     void handleDropedApp(const QModelIndex &index);
-
+    void handleItemChanged(const QString &in0, ItemInfo in1, qlonglong in2);
 private:
     explicit AppsManager(QObject *parent = 0);
 

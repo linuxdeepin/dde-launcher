@@ -28,9 +28,9 @@ void ThemeAppIcon::gtkInit(){
 }
 
 QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
-    if (iconPath.length() == 0){
-        iconPath = "application-x-desktop";
-    }
+//    if (iconPath.length() == 0){
+//        iconPath = "application-x-desktop";
+//    }
     QPixmap pixmap(width, height);
     // iconPath is an absolute path of the system
     if (QFile::exists(iconPath) && iconPath.contains(QDir::separator())) {
@@ -51,13 +51,11 @@ QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
         if (path.endsWith(".svg")) {
             QSvgRenderer renderer(path);
             pixmap.fill(Qt::transparent);
-            pixmap.scaled(width, height);
             QPainter painter;
             painter.begin(&pixmap);
-
             renderer.render(&painter);
-
             painter.end();
+            qDebug() << "path svg:" << path;
         } else {
             pixmap.load(path);
         }

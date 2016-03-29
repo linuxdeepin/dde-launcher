@@ -14,7 +14,8 @@ QModelIndex AppItemDelegate::CurrentIndex = QModelIndex();
 AppItemDelegate::AppItemDelegate(QObject *parent) :
     QAbstractItemDelegate(parent),
     m_calcUtil(CalculateUtil::instance(this)),
-    m_blueDotPixmap(":/skin/images/new_install_indicator.png")
+    m_blueDotPixmap(":/skin/images/new_install_indicator.png"),
+    m_autoStartPixmap(":/skin/images/emblem-autostart.png")
 {
 
 }
@@ -32,7 +33,6 @@ void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
 
 void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-
     painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
     painter->setPen(Qt::white);
     painter->setBrush(QBrush(Qt::transparent));
@@ -71,7 +71,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // draw icon if app is auto startup
     if (index.data(AppsListModel::AppAutoStartRole).toBool())
         painter->drawPixmap(itemRect.x() + iconLeftMargins, itemRect.y() + iconTopMargin + iconSize.height()-16,
-                            16, 16, QPixmap(":/skin/images/emblem-autostart.png"));
+                            16, 16, m_autoStartPixmap);
 
     // draw app name
     painter->setBrush(QBrush(Qt::transparent));
@@ -108,14 +108,16 @@ QSize AppItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
     return index.data(AppsListModel::ItemSizeHintRole).toSize();
 }
 
-const QRect AppItemDelegate::getSquareRect(const QRect &itemRect) const {
-    if (itemRect.width() == itemRect.height()) {
+const QRect AppItemDelegate::getSquareRect(const QRect &itemRect) const
+{
+    const int w = itemRect.width();
+    const int h = itemRect.height();
+    const int sub = qAbs((w - h) / 2);
+
+    if (w == h)
         return itemRect;
-    } else if (itemRect.width() > itemRect.height()) {
-        int tmpX = itemRect.x() + (itemRect.width() - itemRect.height())/2;
-        return QRect(tmpX, itemRect.y(), itemRect.height(), itemRect.height());
-    } else {
-        int tmpY = itemRect.y() + (itemRect.height() - itemRect.width())/2;
-        return QRect(itemRect.x(), tmpY, itemRect.width(), itemRect.width());
-    }
+    else if (w > h)
+        return itemRect - QMargins(sub, 0, sub, 0);
+    else
+        return itemRect - QMargins(0, sub, 0, sub);
 }

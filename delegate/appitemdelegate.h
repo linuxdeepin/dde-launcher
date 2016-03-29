@@ -28,6 +28,7 @@ protected:
 private:
     CalculateUtil *m_calcUtil;
     QPixmap m_blueDotPixmap;
+    QPixmap m_autoStartPixmap;
     static QModelIndex CurrentIndex;
 };
 

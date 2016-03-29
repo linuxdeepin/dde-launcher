@@ -31,6 +31,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize)
 
     m_appItemSpacing = spacing;
     m_appItemWidth = itemWidth;
+    m_appItemHeight = m_appItemWidth;
     m_appColumnCount = column;
 
 //    m_appItemWidth = 80;

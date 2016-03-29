@@ -16,6 +16,7 @@ signals:
 public:
     static CalculateUtil *instance(QObject *parent = nullptr);
 
+    inline int appColumnCount() const {return m_appColumnCount;}
     inline int appItemFontSize() const {return m_appItemFontSize;}
     inline QSize appIconSize() const { return QSize(m_appIconSize, m_appIconSize);}
     inline int appItemSpacing() const {return m_appItemSpacing;}
@@ -42,6 +43,7 @@ private:
     int m_appItemSpacing = 10;
     int m_appItemWidth = 130;
     int m_appItemHeight = 130;
+    int m_appColumnCount = 7;
 };
 
 #endif // CALCULATE_UTIL_H

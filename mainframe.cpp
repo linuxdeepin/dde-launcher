@@ -500,12 +500,15 @@ void MainFrame::moveCurrentSelectApp(const int key)
         return;
     }
 
+    const int column = m_calcUtil->appColumnCount();
     QModelIndex index;
 
     switch (key)
     {
     case Qt::Key_Left:      index = currentIndex.sibling(currentIndex.row() - 1, 0);        break;
     case Qt::Key_Right:     index = currentIndex.sibling(currentIndex.row() + 1, 0);        break;
+    case Qt::Key_Up:        index = currentIndex.sibling(currentIndex.row() - column, 0);   break;
+    case Qt::Key_Down:      index = currentIndex.sibling(currentIndex.row() + column, 0);   break;
     default:;
     }
 

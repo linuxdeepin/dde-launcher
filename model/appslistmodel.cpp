@@ -18,6 +18,13 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
     connect(m_appsManager, &AppsManager::layoutChanged, this, &AppsListModel::layoutChanged);
 }
 
+void AppsListModel::dropInsert(const QString &appKey, const int pos)
+{
+    beginInsertRows(QModelIndex(), pos, pos);
+    m_appsManager->restoreItem(appKey, pos);
+    endInsertRows();
+}
+
 int AppsListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
@@ -31,15 +38,12 @@ bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
     Q_UNUSED(count)
     Q_UNUSED(parent)
 
-    // do not allow remove items.
-    Q_ASSERT(false);
+    // TODO: not support remove multiple rows
+    Q_ASSERT(count == 1);
 
-//    // TODO: not support remove multiple rows
-//    Q_ASSERT(count == 1);
-
-//    beginRemoveRows(parent, row, row);
-//    m_appsManager->removeRow(row);
-//    endRemoveRows();
+    beginRemoveRows(parent, row, row);
+    m_appsManager->stashItem(index(row));
+    endRemoveRows();
 
     return true;
 }

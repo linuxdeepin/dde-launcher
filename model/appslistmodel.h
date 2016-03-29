@@ -53,6 +53,9 @@ public:
 public:
     explicit AppsListModel(const AppCategory& category, QObject *parent = 0);
 
+    inline AppCategory category() const {return m_category;}
+    void dropInsert(const QString &appKey, const int pos);
+
 protected:
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
     bool removeRows(int row, int count, const QModelIndex &parent) Q_DECL_OVERRIDE;

@@ -78,6 +78,34 @@ AppsManager *AppsManager::instance(QObject *parent)
     return INSTANCE;
 }
 
+void AppsManager::stashItem(const QModelIndex &index)
+{
+    const QString key = index.data(AppsListModel::AppKeyRole).toString();
+
+    for (int i(0); i != m_appInfoList.size(); ++i)
+    {
+        if (m_appInfoList[i].m_key == key)
+        {
+            m_stashList.append(m_appInfoList[i]);
+            m_appInfoList.removeAt(i);
+            return;
+        }
+    }
+}
+
+void AppsManager::restoreItem(const QString &appKey, const int pos)
+{
+    for (int i(0); i != m_stashList.size(); ++i)
+    {
+        if (m_stashList[i].m_key == appKey)
+        {
+            m_appInfoList.insert(pos, m_stashList[i]);
+            m_stashList.removeAt(i);
+            return;
+        }
+    }
+}
+
 void AppsManager::searchApp(const QString &keywords)
 {
     m_searchTimer->start();

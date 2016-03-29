@@ -59,13 +59,10 @@ void AppListView::enterEvent(QEvent *e)
 
 void AppListView::dropEvent(QDropEvent *e)
 {
-//    for (QModelIndex &index : selectedIndexes()) {
-//        model()->removeRow(index.row());
-//        qDebug() << "drop: " << e->dropAction() << e->mimeData();
-//    }
-    const QModelIndex dropIndex = QListView::indexAt(e->pos());
-    qDebug() << "drop index:" << dropIndex.data(AppsListModel::AppKeyRole).toString();
-    emit appDropedIn(dropIndex);
+    Q_UNUSED(e)
+//    const QModelIndex dropIndex = QListView::indexAt(e->pos());
+//    qDebug() << "drop index:" << dropIndex.data(AppsListModel::AppKeyRole).toString();
+//    emit appDropedIn(dropIndex);
 }
 
 void AppListView::mousePressEvent(QMouseEvent *e)
@@ -91,21 +88,24 @@ void AppListView::dragEnterEvent(QDragEnterEvent *e)
 
 void AppListView::dragMoveEvent(QDragMoveEvent *e)
 {
-    if (!m_isDragging) {
-        const QModelIndex &beDragedIndex = QListView::indexAt(e->pos());
-        qDebug() << "beDragedIndex name:"
-                 << beDragedIndex.data(AppsListModel::AppKeyRole).toString();
+//    if (!m_isDragging) {
+//        const QModelIndex &beDragedIndex = QListView::indexAt(e->pos());
+//        qDebug() << "beDragedIndex name:"
+//                 << beDragedIndex.data(AppsListModel::AppKeyRole).toString();
 
-        emit appBeDraged(beDragedIndex);
-        m_isDragging = true;
-    } else {
-        return;
-    }
+//        emit appBeDraged(beDragedIndex);
+//        m_isDragging = true;
+//    } else {
+//        return;
+//    }
+    const QModelIndex dropIndex = QListView::indexAt(e->pos());
+    if (dropIndex.isValid())
+        m_dropToPos = dropIndex.row();
 }
 
 void AppListView::dragLeaveEvent(QDragLeaveEvent *e)
 {
-    m_isDragging = false;
+//    m_isDragging = false;
     Q_UNUSED(e);
 }
 
@@ -120,10 +120,8 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
         return;
 
     if (qAbs(e->pos().x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
-        qAbs(e->pos().y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
-        m_isDragging = false;
+        qAbs(e->pos().y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD)
         startDrag(QListView::indexAt(e->pos()));
-    }
 }
 
 void AppListView::mouseReleaseEvent(QMouseEvent *e)
@@ -156,7 +154,15 @@ void AppListView::currentChanged(const QModelIndex &current, const QModelIndex &
 
 void AppListView::startDrag(const QModelIndex &index)
 {
+    if (!index.isValid())
+        return;
+
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel)
+        return;
+
     const QModelIndex &dragIndex = index;
+    const QString appKey = index.data(AppsListModel::AppKeyRole).toString();
     const QPixmap pixmap = index.data(AppsListModel::AppIconRole).value<QPixmap>();
 
     QDrag *drag = new QDrag(this);
@@ -164,10 +170,17 @@ void AppListView::startDrag(const QModelIndex &index)
     drag->setPixmap(pixmap.scaled(DLauncher::APP_DRAG_ICON_SIZE, DLauncher::APP_DRAG_ICON_SIZE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     drag->setHotSpot(QPoint(DLauncher::APP_DRAG_ICON_SIZE / 2, DLauncher::APP_DRAG_ICON_SIZE / 2));
 
-    // TODO: 参考 dock 的 drag 代码，分别处理内部 drop 和外部 drop
-    // Qt 在这里会作处理，用线程等待 drag->exec 的执行结果，根据返回值可以判断 drop 在哪个位置
+    // request remove current item.
+    if (listModel->category() == AppsListModel::All)
+    {
+        m_dropToPos = index.row();
+        listModel->removeRow(index.row());
+    }
+
     drag->exec(Qt::MoveAction);
 
+    if (listModel->category() == AppsListModel::All)
+        listModel->dropInsert(appKey, m_dropToPos);
 }
 
 bool AppListView::eventFilter(QObject *o, QEvent *e)

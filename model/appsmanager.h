@@ -26,6 +26,9 @@ class AppsManager : public QObject
 public:
     static AppsManager *instance(QObject *parent = nullptr);
 
+    void stashItem(const QModelIndex &index);
+    void restoreItem(const QString &appKey, const int pos);
+
 signals:
     void dataChanged(const AppsListModel::AppCategory category) const;
     void layoutChanged(const AppsListModel::AppCategory category) const;
@@ -83,6 +86,7 @@ private:
     QStringList m_newInstalledAppsList;
     ItemInfoList m_appInfoList;
     ItemInfoList m_appSearchResultList;
+    ItemInfoList m_stashList;
     QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfos;
 
     static AppsManager *INSTANCE;

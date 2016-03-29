@@ -421,8 +421,8 @@ void MainFrame::initConnection()
     connect(m_systemView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
     connect(m_othersView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
 
-    connect(m_allAppsView, &AppListView::appBeDraged, m_appsManager, &AppsManager::handleDragedApp);
-    connect(m_allAppsView, &AppListView::appDropedIn, m_appsManager, &AppsManager::handleDropedApp);
+//    connect(m_allAppsView, &AppListView::appBeDraged, m_appsManager, &AppsManager::handleDragedApp);
+//    connect(m_allAppsView, &AppListView::appDropedIn, m_appsManager, &AppsManager::handleDropedApp);
 
     connect(m_allAppsView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_internetView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);

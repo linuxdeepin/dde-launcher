@@ -25,6 +25,8 @@ SearchWidget::SearchWidget(QWidget *parent) :
     mainLayout->addStretch();
     mainLayout->addWidget(m_searchEdit);
     mainLayout->addStretch();
+    mainLayout->setSpacing(0);
+    mainLayout->setContentsMargins(0, 33, 0, 0);
 
     setFocusPolicy(Qt::NoFocus);
     setFocusProxy(m_searchEdit);

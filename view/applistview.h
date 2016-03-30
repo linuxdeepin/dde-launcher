@@ -17,6 +17,7 @@ public:
 
     using QListView::indexAt;
     const QModelIndex indexAt(const int index) const;
+    int indexYOffset(const QModelIndex &index) const;
 
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;

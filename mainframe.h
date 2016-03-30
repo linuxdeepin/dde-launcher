@@ -73,14 +73,17 @@ private:
 
     AppsListModel *nextCategoryModel(const AppsListModel *currentModel);
     AppsListModel *prevCategoryModel(const AppsListModel *currentModel);
+    AppListView *categoryView(const AppsListModel::AppCategory category) const;
 
 private slots:
     void searchTextChanged(const QString &keywords);
     void ensureScrollToDest(const QVariant &value);
+    void ensureItemVisible(const QModelIndex &index);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
     void handleUninstallResult(int result, QString content);
     void updateUI();
     void showGradient();
+
 private:
     bool m_isConfirmDialogShown = false;
     DisplayMode m_displayMode = Search;

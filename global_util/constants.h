@@ -20,6 +20,7 @@ static const int NAVIGATION_ICON_HEIGHT = 50;
 static const int TOP_BOTTOM_GRADIENT_HEIGHT = 60;
 
 static const int APPS_AREA_TOP_BOTTOM_MARGIN = 20;
+static const int APPS_AREA_ENSURE_VISIBLE_MARGIN_Y = 200;
 
 }
 

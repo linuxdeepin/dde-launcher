@@ -546,7 +546,10 @@ void MainFrame::moveCurrentSelectApp(const int key)
         }
     }
 
-    m_appItemDelegate->setCurrentIndex(index.isValid() ? index : currentIndex);
+    const QModelIndex selectedIndex = index.isValid() ? index : currentIndex;
+    ensureItemVisible(selectedIndex);
+    m_appItemDelegate->setCurrentIndex(selectedIndex);
+
     update();
 }
 
@@ -651,6 +654,13 @@ void MainFrame::ensureScrollToDest(const QVariant &value)
 
     if (m_scrollDest->y() != ani->endValue())
         ani->setEndValue(m_scrollDest->y());
+}
+
+void MainFrame::ensureItemVisible(const QModelIndex &index)
+{
+    const AppListView *view = categoryView(index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>());
+
+    m_appsArea->ensureVisible(0, view->indexYOffset(index) + view->pos().y(), 0, DLauncher::APPS_AREA_ENSURE_VISIBLE_MARGIN_Y);
 }
 
 void MainFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
@@ -834,6 +844,29 @@ AppsListModel *MainFrame::prevCategoryModel(const AppsListModel *currentModel)
         return m_developmentModel;
     if (currentModel == m_othersModel)
         return m_systemModel;
+
+    return nullptr;
+}
+
+AppListView *MainFrame::categoryView(const AppsListModel::AppCategory category) const
+{
+    switch (category)
+    {
+    case AppsListModel::Search:
+    case AppsListModel::All:            return m_allAppsView;
+    case AppsListModel::Internet:       return m_internetView;
+    case AppsListModel::Chat:           return m_chatView;
+    case AppsListModel::Music:          return m_musicView;
+    case AppsListModel::Video:          return m_videoView;
+    case AppsListModel::Graphics:       return m_graphicsView;
+    case AppsListModel::Game:           return m_gameView;
+    case AppsListModel::Office:         return m_officeView;
+    case AppsListModel::Reading:        return m_readingView;
+    case AppsListModel::Development:    return m_developmentView;
+    case AppsListModel::System:         return m_systemView;
+    case AppsListModel::Others:         return m_othersView;
+    default:;
+    }
 
     return nullptr;
 }

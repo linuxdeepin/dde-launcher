@@ -57,6 +57,11 @@ const QModelIndex AppListView::indexAt(const int index) const
     return model()->index(index, 0, QModelIndex());
 }
 
+int AppListView::indexYOffset(const QModelIndex &index) const
+{
+    return rectForIndex(index).top();
+}
+
 void AppListView::enterEvent(QEvent *e)
 {
     QListView::enterEvent(e);

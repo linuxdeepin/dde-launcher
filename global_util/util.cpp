@@ -6,10 +6,11 @@
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  **/
-
 #include "util.h"
+
 #include <QStandardPaths>
 #include <QDir>
+#include <libintl.h>
 
 QString getQssFromFile(QString filename)
 {
@@ -35,4 +36,10 @@ QString getThumbnailsPath(){
         QDir(thumbnailPath).mkpath(thumbnailPath);
     }
     return thumbnailPath;
+}
+
+QString getCategoryNames(QString text){
+    char* translatedText = dgettext("application_categories",text.toStdString().c_str());
+    QString str{translatedText};
+    return str;
 }

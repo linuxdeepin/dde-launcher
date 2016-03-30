@@ -60,17 +60,17 @@ MainFrame::MainFrame(QWidget *parent) :
     m_systemModel(new AppsListModel(AppsListModel::System)),
     m_othersModel(new AppsListModel(AppsListModel::Others)),
 
-    m_internetTitle(new CategoryTitleWidget(tr("Internet"))),
-    m_chatTitle(new CategoryTitleWidget(tr("Chat"))),
-    m_musicTitle(new CategoryTitleWidget(tr("Music"))),
-    m_videoTitle(new CategoryTitleWidget(tr("Video"))),
-    m_graphicsTitle(new CategoryTitleWidget(tr("Graphics"))),
-    m_gameTitle(new CategoryTitleWidget(tr("Game"))),
-    m_officeTitle(new CategoryTitleWidget(tr("Office"))),
-    m_readingTitle(new CategoryTitleWidget(tr("Reading"))),
-    m_developmentTitle(new CategoryTitleWidget(tr("Development"))),
-    m_systemTitle(new CategoryTitleWidget(tr("System"))),
-    m_othersTitle(new CategoryTitleWidget(tr("Others")))
+    m_internetTitle(new CategoryTitleWidget("Internet")),
+    m_chatTitle(new CategoryTitleWidget("Chat")),
+    m_musicTitle(new CategoryTitleWidget("Music")),
+    m_videoTitle(new CategoryTitleWidget("Video")),
+    m_graphicsTitle(new CategoryTitleWidget("Graphics")),
+    m_gameTitle(new CategoryTitleWidget("Game")),
+    m_officeTitle(new CategoryTitleWidget("Office")),
+    m_readingTitle(new CategoryTitleWidget("Reading")),
+    m_developmentTitle(new CategoryTitleWidget("Development")),
+    m_systemTitle(new CategoryTitleWidget("System")),
+    m_othersTitle(new CategoryTitleWidget("Others"))
 {
     setFocusPolicy(Qt::StrongFocus);
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
@@ -583,7 +583,7 @@ void MainFrame::showPopupUninstallDialog(const QModelIndex &context)
     unInstallDialog.setWindowModality(Qt::WindowModal);
 
     QString appName = context.data(AppsListModel::AppNameRole).toString();
-    unInstallDialog.setTitle(QString(tr("Are you sure to unInstall %1")).arg(appName));
+    unInstallDialog.setTitle(QString(tr("Are you sure to unInstall %1 ?")).arg(appName));
     QPixmap appIcon = context.data(AppsListModel::AppIconRole).value<QPixmap>();
     appIcon = appIcon.scaled(64, 64, Qt::IgnoreAspectRatio);
     unInstallDialog.setIconPixmap(appIcon);

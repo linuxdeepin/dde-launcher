@@ -15,5 +15,6 @@
 QString getQssFromFile(QString filename);
 QString joinPath(const QString& path, const QString& fileName);
 QString getThumbnailsPath();
+QString getCategoryNames(QString text);
 #endif // UTIL_H
 

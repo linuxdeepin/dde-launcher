@@ -3,7 +3,7 @@ QT      += core gui dbus widgets x11extras svg
 TARGET = dde-launcher
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG += dtkbase dtkwidget dtkbase xcb xcb-ewmh\
+PKGCONFIG += dtkbase dtkwidget xcb xcb-ewmh\
           gsettings-qt gtk+-2.0 gio-unix-2.0
 
 
@@ -38,6 +38,9 @@ HEADERS += \
     dbusservices/dbuslauncherservice.h \
     global_util/calculate_util.h \
     global_util/themeappicon.h
+
+#Automating generation .qm files from .ts files
+system($$PWD/translate_generation.sh)
 
 target.path = /usr/bin
 

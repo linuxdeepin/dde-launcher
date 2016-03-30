@@ -1,5 +1,6 @@
 #include "categorybutton.h"
 #include "global_util/constants.h"
+#include "global_util/util.h"
 
 #include <QHBoxLayout>
 #include <QDebug>
@@ -78,28 +79,28 @@ void CategoryButton::setInfoByCategory()
 {
     switch (m_category)
     {
-    case AppsListModel::Internet:       m_textLabel->setText(tr("Internet"));
+    case AppsListModel::Internet:       m_textLabel->setText(getCategoryNames("Internet"));
                                         m_iconName = "internet";                    break;
-    case AppsListModel::Chat:           m_textLabel->setText(tr("Chat"));
+    case AppsListModel::Chat:           m_textLabel->setText(getCategoryNames("Chat"));
                                         m_iconName = "chat";                        break;
-    case AppsListModel::Music:          m_textLabel->setText(tr("Music"));
+    case AppsListModel::Music:          m_textLabel->setText(getCategoryNames("Music"));
                                         m_iconName = "music";                       break;
-    case AppsListModel::Video:          m_textLabel->setText(tr("Video"));
+    case AppsListModel::Video:          m_textLabel->setText(getCategoryNames("Video"));
                                         m_iconName = "video";                       break;
-    case AppsListModel::Graphics:       m_textLabel->setText(tr("Graphics"));
+    case AppsListModel::Graphics:       m_textLabel->setText(getCategoryNames("Graphics"));
                                         m_iconName = "graphics";                    break;
-    case AppsListModel::Game:           m_textLabel->setText(tr("Game"));
+    case AppsListModel::Game:           m_textLabel->setText(getCategoryNames("Game"));
                                         m_iconName = "game";                        break;
-    case AppsListModel::Office:         m_textLabel->setText(tr("Office"));
+    case AppsListModel::Office:         m_textLabel->setText(getCategoryNames("Office"));
                                         m_iconName = "office";                      break;
-    case AppsListModel::Reading:        m_textLabel->setText(tr("Reading"));
+    case AppsListModel::Reading:        m_textLabel->setText(getCategoryNames("Reading"));
                                         m_iconName = "reading";                     break;
-    case AppsListModel::Development:    m_textLabel->setText(tr("Development"));
+    case AppsListModel::Development:    m_textLabel->setText(getCategoryNames("Development"));
                                         m_iconName = "development";                 break;
-    case AppsListModel::System:         m_textLabel->setText(tr("System"));
+    case AppsListModel::System:         m_textLabel->setText(getCategoryNames("System"));
                                         m_iconName = "system";                      break;
 //    case AppsListModel::Others:         m_textLabel->setText(tr("Others"));       break;
-    default:                            m_textLabel->setText(tr("Others"));
+    default:                            m_textLabel->setText(getCategoryNames("Others"));
                                         m_iconName = "others";                      break;
     }
 }

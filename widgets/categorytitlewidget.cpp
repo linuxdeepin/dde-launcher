@@ -6,8 +6,7 @@
 #include <QGraphicsDropShadowEffect>
 
 CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) :
-    QWidget(parent),
-    m_title(new QLabel(title))
+    QWidget(parent)
 {
     QLabel* blackLine = new QLabel(this);
     blackLine->setObjectName("CategoryBlackLine");
@@ -24,12 +23,16 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     lineLayout->addWidget(whiteLine);
     lineLayout->addStretch();
 
+    m_title = new QLabel(this);
+
+    QString titleContent = getCategoryNames(title);
+    m_title->setText(titleContent);
+
     QFont titleFont;
     titleFont.setPixelSize(20);
     m_title->setFont(titleFont);
-
     QFontMetrics fontMetric(titleFont);
-    int width=fontMetric.width(title);
+    int width=fontMetric.width(titleContent);
     m_title->setFixedWidth(width + 10);
     m_title->setStyleSheet("color: white;");
 

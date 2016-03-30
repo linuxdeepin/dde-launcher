@@ -25,7 +25,6 @@ MenuWorker::MenuWorker(QObject *parent) : QObject(parent)
 
     initConnect();
 
-
 }
 
 

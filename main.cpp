@@ -5,7 +5,7 @@
 #include "dbusservices/dbuslauncherservice.h"
 
 #include <QCommandLineParser>
-
+#include <QTranslator>
 #include <unistd.h>
 #include <dapplication.h>
 
@@ -37,6 +37,11 @@ int main(int argv, char *args[])
         return 0;
     }
 
+    setlocale(LC_ALL, "");
+    QTranslator translator;
+    translator.load("/usr/share/dde-launcher/translations/dde-launcher_" +
+                    QLocale::system().name() + ".qm");
+    app.installTranslator(&translator);
     MainFrame launcher;
     DBusLauncherService service(&launcher);
     QDBusConnection connection = QDBusConnection::sessionBus();

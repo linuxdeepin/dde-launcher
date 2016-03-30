@@ -147,6 +147,6 @@ private:
 
 };
 
-Q_DECLARE_METATYPE(MainFrame::DisplayMode);
+Q_DECLARE_METATYPE(MainFrame::DisplayMode)
 
 #endif // MAINFRAME_H

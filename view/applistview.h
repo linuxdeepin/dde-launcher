@@ -41,10 +41,13 @@ protected:
 
 private slots:
     void fitToContent();
+    void dropSwap();
 
 private:
     int m_dropToPos;
     QPoint m_dragStartPos;
+
+    QTimer *m_dropThresholdTimer;
 
     static AppsManager *m_appManager;
     static CalculateUtil *m_calcUtil;

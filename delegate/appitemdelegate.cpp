@@ -33,6 +33,9 @@ void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
 
 void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    if (index.data(AppsListModel::AppItemIsDragingRole).value<bool>())
+        return;
+
     painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
     painter->setPen(Qt::white);
     painter->setBrush(QBrush(Qt::transparent));

@@ -18,11 +18,40 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
     connect(m_appsManager, &AppsManager::layoutChanged, this, &AppsListModel::layoutChanged);
 }
 
+void AppsListModel::setDragingIndex(const QModelIndex &index)
+{
+    m_dragingIndex = index;
+
+    emit QAbstractListModel::dataChanged(index, index);
+}
+
 void AppsListModel::dropInsert(const QString &appKey, const int pos)
 {
     beginInsertRows(QModelIndex(), pos, pos);
     m_appsManager->restoreItem(appKey, pos);
     endInsertRows();
+}
+
+void AppsListModel::dropSwap(const int nextPos)
+{
+    if (!m_dragingIndex.isValid())
+        return;
+
+    const QString appKey = m_dragingIndex.data(AppsListModel::AppKeyRole).toString();
+
+    removeRows(m_dragingIndex.row(), 1, QModelIndex());
+    dropInsert(appKey, nextPos);
+
+    m_dragingIndex = index(nextPos);
+}
+
+void AppsListModel::clearDragingIndex()
+{
+    const QModelIndex index = m_dragingIndex;
+
+    m_dragingIndex = QModelIndex();
+
+    emit QAbstractItemModel::dataChanged(index, index);
 }
 
 int AppsListModel::rowCount(const QModelIndex &parent) const
@@ -113,11 +142,12 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIcon(itemInfo.m_iconKey, m_calcUtil->appIconSize().width());
     case ItemSizeHintRole:
         return m_calcUtil->appItemSize();
-    case AppIconSizeRole: {
+    case AppIconSizeRole:
         return m_calcUtil->appIconSize();
-    }
     case AppFontSizeRole:
         return m_calcUtil->appItemFontSize();
+    case AppItemIsDragingRole:
+        return m_dragingIndex.isValid() && index == m_dragingIndex;
     default:;
     }
 

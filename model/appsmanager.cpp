@@ -155,9 +155,8 @@ void AppsManager::launchApp(const QModelIndex &index)
 {
     const QString appDesktop = index.data(AppsListModel::AppDesktopRole).toString();
 
-    qDebug() << "Launch app:" << appDesktop;
-
-    m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
+    if (!appDesktop.isEmpty())
+        m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
 }
 
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const

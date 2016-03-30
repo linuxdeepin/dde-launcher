@@ -29,6 +29,7 @@ public:
         AppIsOnDockRole,
         AppIconSizeRole,
         AppFontSizeRole,
+        AppItemIsDragingRole,
     };
 
     enum AppCategory {
@@ -54,7 +55,12 @@ public:
     explicit AppsListModel(const AppCategory& category, QObject *parent = 0);
 
     inline AppCategory category() const {return m_category;}
+    void setDragingIndex(const QModelIndex &index);
     void dropInsert(const QString &appKey, const int pos);
+    void dropSwap(const int nextPos);
+
+public slots:
+    void clearDragingIndex();
 
 protected:
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
@@ -72,6 +78,7 @@ private:
     AppsManager *m_appsManager;
     CalculateUtil *m_calcUtil;
 
+    QModelIndex m_dragingIndex = QModelIndex();
     AppCategory m_category = All;
 };
 

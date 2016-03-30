@@ -16,12 +16,16 @@ AppsManager *AppListView::m_appManager = nullptr;
 CalculateUtil *AppListView::m_calcUtil = nullptr;
 
 AppListView::AppListView(QWidget *parent) :
-    QListView(parent)
+    QListView(parent),
+    m_dropThresholdTimer(new QTimer(this))
 {
     if (!m_appManager)
         m_appManager = AppsManager::instance(this);
     if (!m_calcUtil)
         m_calcUtil = CalculateUtil::instance(this);
+
+    m_dropThresholdTimer->setInterval(100);
+    m_dropThresholdTimer->setSingleShot(true);
 
     viewport()->installEventFilter(this);
     viewport()->setAcceptDrops(true);
@@ -45,6 +49,7 @@ AppListView::AppListView(QWidget *parent) :
 
     // update item spacing
     connect(m_calcUtil, &CalculateUtil::layoutChanged, [this] {setSpacing(m_calcUtil->appItemSpacing());});
+    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::dropSwap);
 }
 
 const QModelIndex AppListView::indexAt(const int index) const
@@ -101,6 +106,8 @@ void AppListView::dragMoveEvent(QDragMoveEvent *e)
     const QModelIndex dropIndex = QListView::indexAt(e->pos());
     if (dropIndex.isValid())
         m_dropToPos = dropIndex.row();
+
+    m_dropThresholdTimer->start();
 }
 
 void AppListView::dragLeaveEvent(QDragLeaveEvent *e)
@@ -174,13 +181,16 @@ void AppListView::startDrag(const QModelIndex &index)
     if (listModel->category() == AppsListModel::All)
     {
         m_dropToPos = index.row();
-        listModel->removeRow(index.row());
+        listModel->setDragingIndex(index);
     }
 
     drag->exec(Qt::MoveAction);
 
     if (listModel->category() == AppsListModel::All)
-        listModel->dropInsert(appKey, m_dropToPos);
+    {
+        listModel->dropSwap(m_dropToPos);
+        listModel->clearDragingIndex();
+    }
 }
 
 bool AppListView::eventFilter(QObject *o, QEvent *e)
@@ -199,4 +209,13 @@ void AppListView::fitToContent()
 //    qDebug() << "contentsRect:" << contentsRect().width() << contentsSize().height();
     setFixedWidth(contentsRect().width());
     setFixedHeight(tmpHeight);
+}
+
+void AppListView::dropSwap()
+{
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel)
+        return;
+
+    listModel->dropSwap(m_dropToPos);
 }

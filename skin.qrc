@@ -57,5 +57,8 @@
         <file>skin/qss/categorytitlewidget.qss</file>
         <file>skin/images/new_install_indicator.png</file>
         <file>skin/qss/searchwidget.qss</file>
+        <file>skin/images/search_hover.png</file>
+        <file>skin/images/search_normal.png</file>
+        <file>skin/images/search_press.png</file>
     </qresource>
 </RCC>

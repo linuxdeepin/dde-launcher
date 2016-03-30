@@ -1,6 +1,7 @@
 #ifndef SEARCHWIDGET_H
 #define SEARCHWIDGET_H
 
+#include "searchinputwidget.h"
 #include <QWidget>
 
 #include <dsearchedit.h>
@@ -26,8 +27,7 @@ signals:
     void searchTextChanged(const QString &text) const;
 
 private:
-    QLineEdit *m_searchEdit;
-//    DSearchEdit *m_searchEdit;
+    SearchInputWidget* m_searchInputWidget;
 };
 
 #endif // SEARCHWIDGET_H

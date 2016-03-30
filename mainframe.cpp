@@ -680,8 +680,11 @@ void MainFrame::ensureItemVisible(const QModelIndex &index)
         default:;
         }
 
-    if (view)
-        m_appsArea->ensureVisible(0, view->indexYOffset(index) + view->pos().y(), 0, DLauncher::APPS_AREA_ENSURE_VISIBLE_MARGIN_Y);
+    if (!view)
+        return;
+
+    m_appsArea->ensureVisible(0, view->indexYOffset(index) + view->pos().y(), 0, DLauncher::APPS_AREA_ENSURE_VISIBLE_MARGIN_Y);
+    updateCurrentVisibleCategory();
 }
 
 void MainFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)

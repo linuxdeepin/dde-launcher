@@ -59,11 +59,12 @@ public:
     void dropInsert(const QString &appKey, const int pos);
     void dropSwap(const int nextPos);
 
+    int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
+
 public slots:
     void clearDragingIndex();
 
 protected:
-    int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
     bool removeRows(int row, int count, const QModelIndex &parent) Q_DECL_OVERRIDE;
     bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const Q_DECL_OVERRIDE;
     QMimeData *mimeData(const QModelIndexList &indexes) const Q_DECL_OVERRIDE;

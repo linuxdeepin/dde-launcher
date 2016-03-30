@@ -207,6 +207,7 @@ void MainFrame::showEvent(QShowEvent *e)
     XcbMisc::instance()->set_deepin_override(winId());
 
     QFrame::showEvent(e);
+
     showGradient();
     raise();
     activateWindow();
@@ -515,6 +516,36 @@ void MainFrame::moveCurrentSelectApp(const int key)
     default:;
     }
 
+    if (!index.isValid() && (key == Qt::Key_Up || key == Qt::Key_Down))
+    {
+        const int realColumn = currentIndex.row() % column;
+        const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
+        if (key == Qt::Key_Down)
+            model = nextCategoryModel(model);
+        else
+            model = prevCategoryModel(model);
+
+        while (model && model->rowCount(QModelIndex()) <= realColumn)
+            if (key == Qt::Key_Down)
+                model = nextCategoryModel(model);
+            else
+                model = prevCategoryModel(model);
+
+        if (model)
+        {
+            if (key == Qt::Key_Down)
+                index = model->index(realColumn);
+            else {
+                const int count = model->rowCount(QModelIndex()) - 1;
+                int realIndex = count;
+                while (realIndex && realIndex % column != realColumn)
+                    --realIndex;
+
+                index = model->index(realIndex);
+            }
+        }
+    }
+
     m_appItemDelegate->setCurrentIndex(index.isValid() ? index : currentIndex);
     update();
 }
@@ -749,6 +780,62 @@ void MainFrame::updateCurrentVisibleCategory()
 
     m_currentCategory = currentVisibleCategory;
     emit currentVisibleCategoryChanged(m_currentCategory);
+}
+
+AppsListModel *MainFrame::nextCategoryModel(const AppsListModel *currentModel)
+{
+    if (currentModel == m_internetModel)
+        return m_chatModel;
+    if (currentModel == m_chatModel)
+        return m_musicModel;
+    if (currentModel == m_musicModel)
+        return m_videoModel;
+    if (currentModel == m_videoModel)
+        return m_graphicsModel;
+    if (currentModel == m_graphicsModel)
+        return m_gameModel;
+    if (currentModel == m_gameModel)
+        return m_officeModel;
+    if (currentModel == m_officeModel)
+        return m_readingModel;
+    if (currentModel == m_readingModel)
+        return m_developmentModel;
+    if (currentModel == m_developmentModel)
+        return m_systemModel;
+    if (currentModel == m_systemModel)
+        return m_othersModel;
+    if (currentModel == m_othersModel)
+        return nullptr;
+
+    return nullptr;
+}
+
+AppsListModel *MainFrame::prevCategoryModel(const AppsListModel *currentModel)
+{
+    if (currentModel == m_internetModel)
+        return nullptr;
+    if (currentModel == m_chatModel)
+        return m_internetModel;
+    if (currentModel == m_musicModel)
+        return m_chatModel;
+    if (currentModel == m_videoModel)
+        return m_musicModel;
+    if (currentModel == m_graphicsModel)
+        return m_videoModel;
+    if (currentModel == m_gameModel)
+        return m_graphicsModel;
+    if (currentModel == m_officeModel)
+        return m_gameModel;
+    if (currentModel == m_readingModel)
+        return m_officeModel;
+    if (currentModel == m_developmentModel)
+        return m_readingModel;
+    if (currentModel == m_systemModel)
+        return m_developmentModel;
+    if (currentModel == m_othersModel)
+        return m_systemModel;
+
+    return nullptr;
 }
 
 void MainFrame::searchTextChanged(const QString &keywords)

@@ -71,6 +71,9 @@ private:
     void updateDisplayMode(const DisplayMode mode);
     void updateCurrentVisibleCategory();
 
+    AppsListModel *nextCategoryModel(const AppsListModel *currentModel);
+    AppsListModel *prevCategoryModel(const AppsListModel *currentModel);
+
 private slots:
     void searchTextChanged(const QString &keywords);
     void ensureScrollToDest(const QVariant &value);

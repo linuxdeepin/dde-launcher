@@ -73,7 +73,6 @@ private:
 
     AppsListModel *nextCategoryModel(const AppsListModel *currentModel);
     AppsListModel *prevCategoryModel(const AppsListModel *currentModel);
-    AppListView *categoryView(const AppsListModel::AppCategory category) const;
 
 private slots:
     void searchTextChanged(const QString &keywords);

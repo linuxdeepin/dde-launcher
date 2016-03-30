@@ -658,9 +658,30 @@ void MainFrame::ensureScrollToDest(const QVariant &value)
 
 void MainFrame::ensureItemVisible(const QModelIndex &index)
 {
-    const AppListView *view = categoryView(index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>());
+    AppListView *view = nullptr;
+    const AppsListModel::AppCategory category = index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 
-    m_appsArea->ensureVisible(0, view->indexYOffset(index) + view->pos().y(), 0, DLauncher::APPS_AREA_ENSURE_VISIBLE_MARGIN_Y);
+    if (m_displayMode == Search || m_displayMode == AllApps)
+        view = m_allAppsView;
+    else
+        switch (category)
+        {
+        case AppsListModel::Internet:       view = m_internetView;      break;
+        case AppsListModel::Chat:           view = m_chatView;          break;
+        case AppsListModel::Music:          view = m_musicView;         break;
+        case AppsListModel::Video:          view = m_videoView;         break;
+        case AppsListModel::Graphics:       view = m_graphicsView;      break;
+        case AppsListModel::Game:           view = m_gameView;          break;
+        case AppsListModel::Office:         view = m_officeView;        break;
+        case AppsListModel::Reading:        view = m_readingView;       break;
+        case AppsListModel::Development:    view = m_developmentView;   break;
+        case AppsListModel::System:         view = m_systemView;        break;
+        case AppsListModel::Others:         view = m_othersView;        break;
+        default:;
+        }
+
+    if (view)
+        m_appsArea->ensureVisible(0, view->indexYOffset(index) + view->pos().y(), 0, DLauncher::APPS_AREA_ENSURE_VISIBLE_MARGIN_Y);
 }
 
 void MainFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
@@ -844,29 +865,6 @@ AppsListModel *MainFrame::prevCategoryModel(const AppsListModel *currentModel)
         return m_developmentModel;
     if (currentModel == m_othersModel)
         return m_systemModel;
-
-    return nullptr;
-}
-
-AppListView *MainFrame::categoryView(const AppsListModel::AppCategory category) const
-{
-    switch (category)
-    {
-    case AppsListModel::Search:
-    case AppsListModel::All:            return m_allAppsView;
-    case AppsListModel::Internet:       return m_internetView;
-    case AppsListModel::Chat:           return m_chatView;
-    case AppsListModel::Music:          return m_musicView;
-    case AppsListModel::Video:          return m_videoView;
-    case AppsListModel::Graphics:       return m_graphicsView;
-    case AppsListModel::Game:           return m_gameView;
-    case AppsListModel::Office:         return m_officeView;
-    case AppsListModel::Reading:        return m_readingView;
-    case AppsListModel::Development:    return m_developmentView;
-    case AppsListModel::System:         return m_systemView;
-    case AppsListModel::Others:         return m_othersView;
-    default:;
-    }
 
     return nullptr;
 }

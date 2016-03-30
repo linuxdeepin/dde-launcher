@@ -121,6 +121,8 @@ void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
     if (!dest)
         return;
 
+    m_currentCategory = category;
+
     // scroll to destination
 //    m_appsArea->verticalScrollBar()->setValue(dest->pos().y());
     m_scrollDest = dest;
@@ -399,6 +401,7 @@ void MainFrame::showGradient() {
 void MainFrame::initConnection()
 {
     connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &MainFrame::ensureScrollToDest);
+//    connect(m_scrollAnimation, &QPropertyAnimation::finished, [this] {m_navigationBar->setCurrentCategory(m_currentCategory);});
     connect(m_navigationBar, &NavigationWidget::scrollToCategory, this, &MainFrame::scrollToCategory);
     connect(this, &MainFrame::currentVisibleCategoryChanged, m_navigationBar, &NavigationWidget::setCurrentCategory);
     connect(this, &MainFrame::categoryAppNumsChanged, m_navigationBar, &NavigationWidget::refershCategoryVisible);
@@ -693,8 +696,7 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
     m_othersView->setVisible(isCategoryMode);
 
     m_viewListPlaceholder->setVisible(isCategoryMode);
-
-    m_navigationBar->setButtonsVisible(m_displayMode == GroupByCategory);
+    m_navigationBar->setButtonsVisible(isCategoryMode);
 
     m_allAppsView->setModel(m_displayMode == Search ? m_searchResultModel : m_allAppsModel);
     // choose nothing

@@ -13,6 +13,7 @@
 #include "model/appsmanager.h"
 #include "background/systembackground.h"
 #include "global_util/calculate_util.h"
+#include "dbusinterface/dbusdisplay.h"
 
 #include <QFrame>
 #include <QScrollArea>
@@ -63,6 +64,7 @@ private:
     void initUI();
     void initConnection();
     void initTimer();
+    void updateGeometry();
     void moveCurrentSelectApp(const int key);
     void launchCurrentApp();
     void checkCategoryVisible();
@@ -80,7 +82,6 @@ private slots:
     void ensureItemVisible(const QModelIndex &index);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
     void handleUninstallResult(int result, QString content);
-    void updateUI();
     void showGradient();
 
 private:
@@ -88,6 +89,8 @@ private:
     DisplayMode m_displayMode = Search;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
     QSettings m_settings;
+
+    DBusDisplay *m_displayInter;
 
     CalculateUtil *m_calcUtil;
     AppsManager *m_appsManager;

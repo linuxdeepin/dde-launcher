@@ -17,7 +17,6 @@ AppsManager::AppsManager(QObject *parent) :
     m_launcherInter(new DBusLauncher(this)),
     m_startManagerInter(new DBusStartManager(this)),
     m_dockedAppInter(new DBusDockedAppManager(this)),
-    m_displayInterface(new DBusDisplay(this)),
     m_themeAppIcon(new ThemeAppIcon(this)),
     m_calUtil(CalculateUtil::instance(this)),
     m_searchTimer(new QTimer(this))
@@ -43,9 +42,6 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_launcherInter, &DBusLauncher::ItemChanged, this, &AppsManager::handleItemChanged);
     connect(this, &AppsManager::handleUninstallApp, this, &AppsManager::unInstallApp);
     connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
-    connect(m_displayInterface, &DBusDisplay::PrimaryChanged, this,  &AppsManager::primaryChanged);
-    connect(m_displayInterface, &DBusDisplay::PrimaryRectChanged, this, &AppsManager::primaryChanged);
-
 }
 
 const QPixmap AppsManager::loadSvg(const QString &fileName, const int size)
@@ -338,12 +334,6 @@ void AppsManager::searchDone(const QStringList &resultList)
         appendSearchResult(key);
 
     emit dataChanged(AppsListModel::Search);
-}
-
-QRect AppsManager::getPrimayRect() {
-    QRect primaryRect = QRect(m_displayInterface->primaryRect());
-    qDebug() << "primaryRect: " << primaryRect;
-    return primaryRect;
 }
 
 void AppsManager::handleDragedApp(const QModelIndex &index) {

@@ -18,6 +18,9 @@ const QString DEFAULT_DISPLAY_MODE_KEY = "defaultDisplayMode";
 MainFrame::MainFrame(QWidget *parent) :
     QFrame(parent),
     m_settings("deepin", "dde-launcher", this),
+
+    m_displayInter(new DBusDisplay(this)),
+
     m_calcUtil(CalculateUtil::instance(this)),
     m_appsManager(AppsManager::instance(this)),
     m_delayHideTimer(new QTimer(this)),
@@ -75,8 +78,6 @@ MainFrame::MainFrame(QWidget *parent) :
     setFocusPolicy(Qt::ClickFocus);
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
     setFixedSize(qApp->primaryScreen()->geometry().size());
-    QRect adjustRect = m_appsManager->getPrimayRect();
-    this->move(adjustRect.x(), adjustRect.y());
 
     setObjectName("LauncherFrame");
 
@@ -366,12 +367,6 @@ void MainFrame::initUI()
 }
 
 // FIXME:
-void MainFrame::updateUI() {
-    QRect updateRect = m_appsManager->getPrimayRect();
-    this->move(updateRect.x(), updateRect.y());
-}
-
-// FIXME:
 void MainFrame::showGradient() {
         QPoint topLeft = m_appsArea->mapTo(this,
                                            QPoint(0, 0));
@@ -379,7 +374,7 @@ void MainFrame::showGradient() {
         QRect topRect(topLeft, topSize);
         m_topGradient->setPixmap(m_backgroundLabel->getBackground().copy(topRect));
         m_topGradient->resize(topRect.size());
-        qDebug() << "topleft point:" << topRect.topLeft() << topRect.size();
+//        qDebug() << "topleft point:" << topRect.topLeft() << topRect.size();
         m_topGradient->move(topRect.topLeft());
         m_topGradient->show();
         m_topGradient->raise();
@@ -392,9 +387,9 @@ void MainFrame::showGradient() {
 
         QRect bottomRect(bottomLeft, bottomSize);
         m_bottomGradient->setPixmap(m_backgroundLabel->getBackground().copy(bottomRect));
-        qDebug() << "m_backgroundLabel->getBackground().copy(bottomRect):" <<
-                    m_backgroundLabel->getBackground().copy(bottomRect).size();
-        qDebug() << "bottomleft point:" << bottomRect.topLeft() << bottomRect.size();
+//        qDebug() << "m_backgroundLabel->getBackground().copy(bottomRect):" <<
+//                    m_backgroundLabel->getBackground().copy(bottomRect).size();
+//        qDebug() << "bottomleft point:" << bottomRect.topLeft() << bottomRect.size();
         m_bottomGradient->resize(bottomRect.size());
         m_bottomGradient->move(bottomRect.topLeft());
         m_bottomGradient->show();
@@ -403,6 +398,9 @@ void MainFrame::showGradient() {
 
 void MainFrame::initConnection()
 {
+    connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &MainFrame::updateGeometry);
+    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &MainFrame::updateGeometry);
+
     connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &MainFrame::ensureScrollToDest);
 //    connect(m_scrollAnimation, &QPropertyAnimation::finished, [this] {m_navigationBar->setCurrentCategory(m_currentCategory);});
     connect(m_navigationBar, &NavigationWidget::scrollToCategory, this, &MainFrame::scrollToCategory);
@@ -489,9 +487,14 @@ void MainFrame::initConnection()
             return;
         updateDisplayMode(m_displayMode == GroupByCategory ? AllApps : GroupByCategory);
     });
-    // FIXME:
-    connect(m_appsManager, &AppsManager::primaryChanged, this, &MainFrame::updateUI);
     connect(m_appsManager, &AppsManager::updateCategoryView, this, &MainFrame::checkCategoryVisible);
+}
+
+void MainFrame::updateGeometry()
+{
+    setFixedSize(QRect(m_displayInter->primaryRect()).size());
+
+    QFrame::updateGeometry();
 }
 
 void MainFrame::moveCurrentSelectApp(const int key)

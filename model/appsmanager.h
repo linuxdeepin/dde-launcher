@@ -36,7 +36,6 @@ signals:
     void layoutChanged(const AppsListModel::AppCategory category) const;
     void handleUninstallApp(const QModelIndex &index, int result);
     void updateCategoryView(const AppsListModel::AppCategory categoryInfo) const;
-    void primaryChanged() QT_DEPRECATED;
 
 public slots:
     void searchApp(const QString &keywords);
@@ -55,7 +54,6 @@ public slots:
     //restore the itemInfo, if unInstall failed!
     void reStoreItem();
 
-    QRect getPrimayRect() QT_DEPRECATED;
     void handleDragedApp(const QModelIndex &index);
     void handleDropedApp(const QModelIndex &index);
     void handleItemChanged(const QString &in0, ItemInfo in1, qlonglong in2);
@@ -80,7 +78,6 @@ private:
     DBusLauncher *m_launcherInter;
     DBusStartManager *m_startManagerInter;
     DBusDockedAppManager *m_dockedAppInter;
-    DBusDisplay* m_displayInterface;
 
     QPixmap m_defaultIconPixmap;
     QString m_searchText;

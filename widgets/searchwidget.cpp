@@ -9,31 +9,31 @@
 SearchWidget::SearchWidget(QWidget *parent) :
     QFrame(parent)
 {
-    setObjectName("SearchFrame");
+//    setObjectName("SearchFrame");
 
-    m_searchInputWidget = new SearchInputWidget(this);
+    m_searchEdit = new SearchLineEdit(this);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addStretch();
-    mainLayout->addWidget(m_searchInputWidget);
+    mainLayout->addWidget(m_searchEdit);
     mainLayout->addStretch();
     mainLayout->setSpacing(0);
     mainLayout->setContentsMargins(0, 33, 0, 0);
     setLayout(mainLayout);
 
-    connect(m_searchInputWidget, &SearchInputWidget::textChanged, [this] {
-        emit searchTextChanged(m_searchInputWidget->text());
+    connect(m_searchEdit, &SearchLineEdit::textChanged, [this] {
+        emit searchTextChanged(m_searchEdit->text());
     });
 }
 
 QLineEdit *SearchWidget::edit()
 {
-    return m_searchInputWidget->lineEdit();
+    return m_searchEdit;
 }
 
 void SearchWidget::clearSearchContent()
 {
-    m_searchInputWidget->clear();
+    m_searchEdit->clear();
 }
 
 bool SearchWidget::event(QEvent *e)

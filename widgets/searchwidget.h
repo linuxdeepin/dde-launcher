@@ -1,12 +1,9 @@
 #ifndef SEARCHWIDGET_H
 #define SEARCHWIDGET_H
 
-#include "searchinputwidget.h"
+#include "searchlineedit.h"
+
 #include <QWidget>
-
-#include <dsearchedit.h>
-
-DWIDGET_USE_NAMESPACE
 
 class SearchWidget : public QFrame
 {
@@ -27,7 +24,7 @@ signals:
     void searchTextChanged(const QString &text) const;
 
 private:
-    SearchInputWidget* m_searchInputWidget;
+    SearchLineEdit* m_searchEdit;
 };
 
 #endif // SEARCHWIDGET_H

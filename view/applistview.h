@@ -46,6 +46,7 @@ private slots:
 
 private:
     int m_dropToPos;
+    bool m_enableDropInside = false;
     QPoint m_dragStartPos;
 
     QTimer *m_dropThresholdTimer;

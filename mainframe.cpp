@@ -72,7 +72,7 @@ MainFrame::MainFrame(QWidget *parent) :
     m_systemTitle(new CategoryTitleWidget("System")),
     m_othersTitle(new CategoryTitleWidget("Others"))
 {
-    setFocusPolicy(Qt::StrongFocus);
+    setFocusPolicy(Qt::ClickFocus);
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
     setFixedSize(qApp->primaryScreen()->geometry().size());
     QRect adjustRect = m_appsManager->getPrimayRect();
@@ -191,6 +191,8 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Enter:
     case Qt::Key_Return:        launchCurrentApp();                             break;
     case Qt::Key_Escape:        hide();                                         break;
+    case Qt::Key_Tab:
+    case Qt::Key_Backtab:
     case Qt::Key_Up:
     case Qt::Key_Down:
     case Qt::Key_Left:
@@ -509,7 +511,9 @@ void MainFrame::moveCurrentSelectApp(const int key)
 
     switch (key)
     {
+    case Qt::Key_Backtab:
     case Qt::Key_Left:      index = currentIndex.sibling(currentIndex.row() - 1, 0);        break;
+    case Qt::Key_Tab:
     case Qt::Key_Right:     index = currentIndex.sibling(currentIndex.row() + 1, 0);        break;
     case Qt::Key_Up:        index = currentIndex.sibling(currentIndex.row() - column, 0);   break;
     case Qt::Key_Down:      index = currentIndex.sibling(currentIndex.row() + column, 0);   break;

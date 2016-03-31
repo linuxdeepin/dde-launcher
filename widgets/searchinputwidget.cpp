@@ -15,7 +15,7 @@ SearchLineEdit::~SearchLineEdit()
 
 void SearchLineEdit::focusInEvent(QFocusEvent *e) {
     qDebug() << "focusInEvent";
-    this->setFocusPolicy(Qt::StrongFocus);
+    this->setFocusPolicy(Qt::ClickFocus);
     emit focusChanged(true);
     Q_UNUSED(e);
 }

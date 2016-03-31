@@ -617,7 +617,7 @@ void MainFrame::showPopupUninstallDialog(const QModelIndex &context)
     unInstallDialog.setWindowModality(Qt::WindowModal);
 
     QString appName = context.data(AppsListModel::AppNameRole).toString();
-    unInstallDialog.setTitle(QString(tr("Are you sure to unInstall %1 ?")).arg(appName));
+    unInstallDialog.setTitle(QString(tr("Are you sure to uninstall %1 ?")).arg(appName));
     QPixmap appIcon = context.data(AppsListModel::AppIconRole).value<QPixmap>();
     appIcon = appIcon.scaled(64, 64, Qt::IgnoreAspectRatio);
     unInstallDialog.setIconPixmap(appIcon);
@@ -625,7 +625,7 @@ void MainFrame::showPopupUninstallDialog(const QModelIndex &context)
     QString message = tr("All dependencies will be removed together");
     unInstallDialog.setMessage(message);
     QStringList buttons;
-    buttons << tr("cancel") << tr("confirm");
+    buttons << tr("Cancel") << tr("Confirm");
     unInstallDialog.addButtons(buttons);
 
     connect(&unInstallDialog, SIGNAL(buttonClicked(int, QString)), this, SLOT(handleUninstallResult(int, QString)));

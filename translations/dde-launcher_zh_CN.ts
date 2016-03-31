@@ -4,24 +4,20 @@
 <context>
     <name>MainFrame</name>
     <message>
-        <source>Are you sure to unInstall %1</source>
-        <translation type="vanished"> 你确定要卸载 %1 吗？</translation>
-    </message>
-    <message>
         <source>All dependencies will be removed together</source>
         <translation>所有的依赖也会被一起移除</translation>
     </message>
     <message>
-        <source>cancel</source>
+        <source>Are you sure to unInstall %1 ?</source>
+        <translation>您确定要卸载 %1吗？</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <source>confirm</source>
+        <source>Confirm</source>
         <translation>卸载</translation>
-    </message>
-    <message>
-        <source>Are you sure to unInstall %1 ?</source>
-        <translation>您确定要卸载 %1吗？</translation>
     </message>
 </context>
 <context>

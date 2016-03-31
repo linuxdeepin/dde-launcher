@@ -8,15 +8,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>cancel</source>
+        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>confirm</source>
+        <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Are you sure to unInstall %1 ?</source>
+        <source>Are you sure to uninstall %1 ?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

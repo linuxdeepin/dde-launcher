@@ -492,7 +492,9 @@ void MainFrame::initConnection()
 
 void MainFrame::updateGeometry()
 {
-    setFixedSize(QRect(m_displayInter->primaryRect()).size());
+    const QRect rect = m_displayInter->primaryRect();
+    setFixedSize(rect.size());
+    move(rect.topLeft());
 
     QFrame::updateGeometry();
 }

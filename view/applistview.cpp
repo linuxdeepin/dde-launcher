@@ -70,9 +70,8 @@ void AppListView::enterEvent(QEvent *e)
 void AppListView::dropEvent(QDropEvent *e)
 {
     Q_UNUSED(e)
-//    const QModelIndex dropIndex = QListView::indexAt(e->pos());
-//    qDebug() << "drop index:" << dropIndex.data(AppsListModel::AppKeyRole).toString();
-//    emit appDropedIn(dropIndex);
+
+    m_enableDropInside = true;
 }
 
 void AppListView::mousePressEvent(QMouseEvent *e)
@@ -119,6 +118,8 @@ void AppListView::dragLeaveEvent(QDragLeaveEvent *e)
 {
 //    m_isDragging = false;
     Q_UNUSED(e);
+
+    m_dropThresholdTimer->stop();
 }
 
 void AppListView::mouseMoveEvent(QMouseEvent *e)
@@ -191,11 +192,15 @@ void AppListView::startDrag(const QModelIndex &index)
 
     drag->exec(Qt::MoveAction);
 
-    if (listModel->category() == AppsListModel::All)
-    {
+    if (listModel->category() != AppsListModel::All)
+        return;
+
+    if (m_enableDropInside)
         listModel->dropSwap(m_dropToPos);
-        listModel->clearDragingIndex();
-    }
+    else
+        listModel->dropSwap(indexAt(m_dragStartPos).row());
+    listModel->clearDragingIndex();
+    m_enableDropInside = false;
 }
 
 bool AppListView::eventFilter(QObject *o, QEvent *e)

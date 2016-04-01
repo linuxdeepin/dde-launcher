@@ -86,7 +86,7 @@ void CategoryButton::setInfoByCategory()
     case AppsListModel::Music:          m_textLabel->setText(getCategoryNames("Music"));
                                         m_iconName = "music";                       break;
     case AppsListModel::Video:          m_textLabel->setText(getCategoryNames("Video"));
-                                        m_iconName = "video";                       break;
+                                        m_iconName = "multimedia";                  break;
     case AppsListModel::Graphics:       m_textLabel->setText(getCategoryNames("Graphics"));
                                         m_iconName = "graphics";                    break;
     case AppsListModel::Game:           m_textLabel->setText(getCategoryNames("Game"));
@@ -111,15 +111,15 @@ void CategoryButton::updateState(const CategoryButton::State state)
         return;
     m_state = state;
 
-    int picState;
+    QString picState;
     switch (state)
     {
-    case Checked:   picState = 100;    break;
-    case Hover:     picState = 50;     break;
-    default:        picState = 10;     break;
+    case Checked:   picState = "active";    break;
+    case Hover:     picState = "hover";     break;
+    default:        picState = "normal";    break;
     }
 
-    m_iconLabel->setPixmap(QString(":/skin/images/%1_%2.svg").arg(m_iconName).arg(picState));
+    m_iconLabel->setPixmap(QString(":/icons/skin/icons/%1_%2_22px.svg").arg(m_iconName).arg(picState));
 }
 
 void CategoryButton::addTextShadow() {

@@ -52,7 +52,7 @@ bool SearchLineEdit::event(QEvent *e)
     switch (e->type())
     {
     case QEvent::FocusIn:       editMode();         break;
-    case QEvent::FocusOut:      normalMode();       break;
+//    case QEvent::FocusOut:      normalMode();       break;
     default:;
     }
 

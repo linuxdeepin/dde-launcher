@@ -18,6 +18,10 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
     connect(m_appsManager, &AppsManager::layoutChanged, this, &AppsListModel::layoutChanged);
 }
 
+///
+/// \brief AppsListModel::setDragingIndex mark current item as draging item
+/// \param index item index
+///
 void AppsListModel::setDragingIndex(const QModelIndex &index)
 {
     m_dragingIndex = index;
@@ -25,6 +29,11 @@ void AppsListModel::setDragingIndex(const QModelIndex &index)
     emit QAbstractListModel::dataChanged(index, index);
 }
 
+///
+/// \brief AppsListModel::dropInsert restore item from appsManager stash list
+/// \param appKey item token in stash list
+/// \param pos insert position, if pos is negitive, insert into front
+///
 void AppsListModel::dropInsert(const QString &appKey, const int pos)
 {
     beginInsertRows(QModelIndex(), pos, pos);
@@ -32,6 +41,10 @@ void AppsListModel::dropInsert(const QString &appKey, const int pos)
     endInsertRows();
 }
 
+///
+/// \brief AppsListModel::dropSwap drop m_draingIndex to nextPos
+/// \param nextPos m_dragingIndex insert position
+///
 void AppsListModel::dropSwap(const int nextPos)
 {
     if (!m_dragingIndex.isValid())
@@ -45,6 +58,9 @@ void AppsListModel::dropSwap(const int nextPos)
     m_dragingIndex = index(nextPos);
 }
 
+///
+/// \brief AppsListModel::clearDragingIndex reset draging item record
+///
 void AppsListModel::clearDragingIndex()
 {
     const QModelIndex index = m_dragingIndex;
@@ -84,6 +100,9 @@ bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action
     Q_UNUSED(row)
     Q_UNUSED(column)
     Q_UNUSED(parent)
+
+    if (m_category != All)
+        return false;
 
     return true;
 }
@@ -161,15 +180,26 @@ Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const
 
     const Qt::ItemFlags defaultFlags = QAbstractListModel::flags(index);
 
-    return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+    if (m_category == All)
+        return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+    else
+        return defaultFlags;
 }
 
+///
+/// \brief AppsListModel::dataChanged tell view the appManager data is changed
+/// \param category data category
+///
 void AppsListModel::dataChanged(const AppCategory category)
 {
     if (category == All || category == m_category)
         emit QAbstractItemModel::dataChanged(index(0), index(rowCount(QModelIndex())));
 }
 
+///
+/// \brief AppsListModel::layoutChanged tell view the app layout is changed, such as appItem size, icon size, etc.
+/// \param category data category
+///
 void AppsListModel::layoutChanged(const AppsListModel::AppCategory category)
 {
     if (category == All || category == m_category)

@@ -21,13 +21,10 @@ public:
 
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
-//    void appBeDraged(const QModelIndex &index) const;
-//    void appDropedIn(const QModelIndex &index) const;
 
 protected:
     using QListView::startDrag;
     void startDrag(const QModelIndex &index);
-    void enterEvent(QEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
     void dragMoveEvent(QDragMoveEvent *e);
     void dragLeaveEvent(QDragLeaveEvent *e);
@@ -35,9 +32,7 @@ protected:
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
-    void resizeEvent(QResizeEvent *e);
     void wheelEvent(QWheelEvent *e);
-    void currentChanged(const QModelIndex &current, const QModelIndex &previous);
     bool eventFilter(QObject *o, QEvent *e);
 
 private slots:

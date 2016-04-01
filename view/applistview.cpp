@@ -24,13 +24,13 @@ AppListView::AppListView(QWidget *parent) :
     if (!m_calcUtil)
         m_calcUtil = CalculateUtil::instance(this);
 
-    m_dropThresholdTimer->setInterval(100);
+    m_dropThresholdTimer->setInterval(DLauncher::APP_DRAG_SWAP_THRESHOLD);
     m_dropThresholdTimer->setSingleShot(true);
 
     viewport()->installEventFilter(this);
     viewport()->setAcceptDrops(true);
-    setUniformItemSizes(true);
 
+    setUniformItemSizes(true);
     setMouseTracking(true);
     setAcceptDrops(true);
     setDragEnabled(true);
@@ -57,19 +57,19 @@ const QModelIndex AppListView::indexAt(const int index) const
     return model()->index(index, 0, QModelIndex());
 }
 
+///
+/// \brief AppListView::indexYOffset return item Y offset of current view
+/// \param index item index
+/// \return pixel of Y offset
+///
 int AppListView::indexYOffset(const QModelIndex &index) const
 {
     return rectForIndex(index).top();
 }
 
-void AppListView::enterEvent(QEvent *e)
-{
-    QListView::enterEvent(e);
-}
-
 void AppListView::dropEvent(QDropEvent *e)
 {
-    Q_UNUSED(e)
+    e->accept();
 
     m_enableDropInside = true;
 }
@@ -92,21 +92,14 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 
 void AppListView::dragEnterEvent(QDragEnterEvent *e)
 {
-    e->accept();
+    const QModelIndex index = indexAt(e->pos());
+
+    if (model()->canDropMimeData(e->mimeData(), e->dropAction(), index.row(), index.column(), QModelIndex()))
+        return e->accept();
 }
 
 void AppListView::dragMoveEvent(QDragMoveEvent *e)
 {
-//    if (!m_isDragging) {
-//        const QModelIndex &beDragedIndex = QListView::indexAt(e->pos());
-//        qDebug() << "beDragedIndex name:"
-//                 << beDragedIndex.data(AppsListModel::AppKeyRole).toString();
-
-//        emit appBeDraged(beDragedIndex);
-//        m_isDragging = true;
-//    } else {
-//        return;
-//    }
     const QModelIndex dropIndex = QListView::indexAt(e->pos());
     if (dropIndex.isValid())
         m_dropToPos = dropIndex.row();
@@ -116,15 +109,14 @@ void AppListView::dragMoveEvent(QDragMoveEvent *e)
 
 void AppListView::dragLeaveEvent(QDragLeaveEvent *e)
 {
-//    m_isDragging = false;
-    Q_UNUSED(e);
+    e->accept();
 
     m_dropThresholdTimer->stop();
 }
 
 void AppListView::mouseMoveEvent(QMouseEvent *e)
 {
-    // disable default drag
+    // disable qlistview default drag
     setState(NoState);
 
     QListView::mouseMoveEvent(e);
@@ -150,19 +142,9 @@ void AppListView::mouseReleaseEvent(QMouseEvent *e)
     QListView::mouseReleaseEvent(e);
 }
 
-void AppListView::resizeEvent(QResizeEvent *e)
-{
-    QListView::resizeEvent(e);
-}
-
 void AppListView::wheelEvent(QWheelEvent *e)
 {
     e->ignore();
-}
-
-void AppListView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
-{
-    QListView::currentChanged(current, previous);
 }
 
 void AppListView::startDrag(const QModelIndex &index)
@@ -181,7 +163,7 @@ void AppListView::startDrag(const QModelIndex &index)
     QDrag *drag = new QDrag(this);
     drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
     drag->setPixmap(pixmap.scaled(DLauncher::APP_DRAG_ICON_SIZE, DLauncher::APP_DRAG_ICON_SIZE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-    drag->setHotSpot(QPoint(DLauncher::APP_DRAG_ICON_SIZE / 2, DLauncher::APP_DRAG_ICON_SIZE / 2));
+    drag->setHotSpot(QPoint(DLauncher::APP_DRAG_ICON_SIZE, DLauncher::APP_DRAG_ICON_SIZE) / 2);
 
     // request remove current item.
     if (listModel->category() == AppsListModel::All)
@@ -211,16 +193,23 @@ bool AppListView::eventFilter(QObject *o, QEvent *e)
     return false;
 }
 
+///
+/// \brief AppListView::fitToContent change view size to fit viewport content
+///
 void AppListView::fitToContent()
 {
     if (width() == contentsRect().width() && height() == contentsSize().height())
         return;
-    int tmpHeight = qMax(contentsSize().height(), 1);
-//    qDebug() << "contentsRect:" << contentsRect().width() << contentsSize().height();
+
+    const int h = contentsSize().height();
+
+    setFixedHeight(h < 0 ? 0 : h);
     setFixedWidth(contentsRect().width());
-    setFixedHeight(tmpHeight);
 }
 
+///
+/// \brief AppListView::dropSwap swap current item and drag out item
+///
 void AppListView::dropSwap()
 {
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());

@@ -150,6 +150,11 @@ void AppsManager::searchApp(const QString &keywords)
 void AppsManager::launchApp(const QModelIndex &index)
 {
     const QString appDesktop = index.data(AppsListModel::AppDesktopRole).toString();
+    QString appKey = index.data(AppsListModel::AppKeyRole).toString();
+    if (m_newInstalledAppsList.contains(appKey)) {
+        m_newInstalledAppsList.removeOne(appKey);
+        m_launcherInter->MarkLaunched(appKey);
+    }
 
     if (!appDesktop.isEmpty())
         m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());

@@ -54,8 +54,8 @@ public slots:
     //restore the itemInfo, if unInstall failed!
     void reStoreItem();
 
-    void handleDragedApp(const QModelIndex &index);
-    void handleDropedApp(const QModelIndex &index);
+    void handleDragedApp(const QModelIndex &index, int nextNode);
+//    void handleDropedApp(const QModelIndex &index);
     void handleItemChanged(const QString &in0, ItemInfo in1, qlonglong in2);
 private:
     explicit AppsManager(QObject *parent = 0);
@@ -73,8 +73,6 @@ private slots:
     void searchDone(const QStringList &resultList);
 
 private:
-    CalculateUtil *m_calcUtil;
-
     DBusLauncher *m_launcherInter;
     DBusStartManager *m_startManagerInter;
     DBusDockedAppManager *m_dockedAppInter;

@@ -176,11 +176,13 @@ void AppListView::startDrag(const QModelIndex &index)
 
     if (listModel->category() != AppsListModel::All)
         return;
-
-    if (m_enableDropInside)
-        listModel->dropSwap(m_dropToPos);
+    if (m_enableDropInside) {
+        emit handleDragItems(index, m_dropToPos);
+    }
     else
+    {
         listModel->dropSwap(indexAt(m_dragStartPos).row());
+    }
     listModel->clearDragingIndex();
     m_enableDropInside = false;
 }

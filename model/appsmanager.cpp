@@ -40,6 +40,10 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
     connect(m_launcherInter, &DBusLauncher::UninstallFailed, this, &AppsManager::reStoreItem);
     connect(m_launcherInter, &DBusLauncher::ItemChanged, this, &AppsManager::handleItemChanged);
+    //Maybe the signals newAppLaunched will be replaced by newAppMarkedAsLaunched
+    //newAppLaunched is the old one.
+    connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
+
     connect(this, &AppsManager::handleUninstallApp, this, &AppsManager::unInstallApp);
     connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
 }
@@ -151,13 +155,17 @@ void AppsManager::launchApp(const QModelIndex &index)
 {
     const QString appDesktop = index.data(AppsListModel::AppDesktopRole).toString();
     QString appKey = index.data(AppsListModel::AppKeyRole).toString();
+    markLaunched(appKey);
+
+    if (!appDesktop.isEmpty())
+        m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
+}
+
+void AppsManager::markLaunched(QString appKey) {
     if (m_newInstalledAppsList.contains(appKey)) {
         m_newInstalledAppsList.removeOne(appKey);
         m_launcherInter->MarkLaunched(appKey);
     }
-
-    if (!appDesktop.isEmpty())
-        m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
 }
 
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const

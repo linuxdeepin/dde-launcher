@@ -8,9 +8,6 @@
 CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) :
     QWidget(parent)
 {
-    QLabel* blackLine = new QLabel(this);
-    blackLine->setObjectName("CategoryBlackLine");
-    blackLine->setFixedHeight(1);
     QLabel* whiteLine = new QLabel(this);
     whiteLine->setObjectName("CategoryWhiteLine");
     whiteLine->setFixedHeight(1);
@@ -19,7 +16,6 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     lineLayout->setMargin(0);
     lineLayout->setSpacing(0);
     lineLayout->addStretch();
-    lineLayout->addWidget(blackLine);
     lineLayout->addWidget(whiteLine);
     lineLayout->addStretch();
 

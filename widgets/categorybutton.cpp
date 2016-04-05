@@ -13,10 +13,9 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     m_textLabel(new QLabel)
 {
     setObjectName("CategoryButton");
-
-    m_iconLabel->setFixedSize(32, 32);
-    m_textLabel->setFixedHeight(32);
-
+    m_iconLabel->setFixedSize(22, 22);
+    m_textLabel->setFixedHeight(22);
+    m_textLabel->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->setSpacing(0);
     mainLayout->setMargin(0);

@@ -71,7 +71,7 @@ private:
 
 private slots:
     void searchDone(const QStringList &resultList);
-
+    void markLaunched(QString appKey);
 private:
     DBusLauncher *m_launcherInter;
     DBusStartManager *m_startManagerInter;

@@ -6,7 +6,7 @@
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="system_active_16px">
-            <rect id="Rectangle-1-Copy-26" opacity="0" x="0" y="0" width="16" height="16"></rect>
+            <rect id="Rectangle-1-Copy-26" fill="#747568" opacity="0" x="0" y="0" width="16" height="16"></rect>
             <g id="Page-1" transform="translate(1.000000, 1.000000)" fill="#FFFFFF">
                 <path d="M1.1,13 C1.04514237,13 1,12.9548576 1,12.9 L1,1.1 C1,1.04514237 1.04514237,1 1.1,1 L12.9,1 C12.9548576,1 13,1.04514237 13,1.1 L13,12.9 C13,12.9548576 12.9548576,13 12.9,13 L1.1,13 L1.1,13 Z M1.1,14 L12.9,14 C13.5071424,14 14,13.5071424 14,12.9 L14,1.1 C14,0.492857625 13.5071424,0 12.9,0 L1.1,0 C0.492857625,0 0,0.492857625 0,1.1 L0,12.9 C0,13.5071424 0.492857625,14 1.1,14 L1.1,14 Z" id="Stroke-1"></path>
                 <path d="M1,5 L13,5 L13,4 L1,4 L1,5 L1,5 Z" id="Stroke-3"></path>

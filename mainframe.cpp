@@ -207,7 +207,10 @@ void MainFrame::showEvent(QShowEvent *e)
     m_delayHideTimer->stop();
     m_searchWidget->clearSearchContent();
     updateCurrentVisibleCategory();
+    // TODO: Do we need this in showEvent ???
     XcbMisc::instance()->set_deepin_override(winId());
+    // To make sure the window is placed at the right position.
+    updateGeometry();
 
     QFrame::showEvent(e);
 

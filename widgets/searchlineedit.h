@@ -17,12 +17,12 @@ class SearchLineEdit : public QLineEdit
 public:
     explicit SearchLineEdit(QWidget *parent = nullptr);
 
-    bool event(QEvent *e);
-
-private:
+public slots:
     void normalMode();
+private slots:
     void editMode();
-
+protected:
+    bool event(QEvent *e);
 private:
     DImageButton *m_icon;
     QLabel *m_placeholderText;

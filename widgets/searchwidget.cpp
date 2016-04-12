@@ -33,7 +33,7 @@ QLineEdit *SearchWidget::edit()
 
 void SearchWidget::clearSearchContent()
 {
-    m_searchEdit->clear();
+    m_searchEdit->normalMode();
 }
 
 bool SearchWidget::event(QEvent *e)

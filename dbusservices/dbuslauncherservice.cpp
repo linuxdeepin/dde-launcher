@@ -69,8 +69,14 @@ void DBusLauncherService::Toggle()
     // handle method call com.deepin.dde.Launcher.Toggle
 //    parent()->Toggle();
     if (parent()->isVisible())
+    {
         parent()->hide();
+        emit Closed();
+    }
     else
+    {
         parent()->show();
+        emit Shown();
+    }
 }
 

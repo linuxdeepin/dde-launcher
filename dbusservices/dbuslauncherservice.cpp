@@ -46,6 +46,7 @@ void DBusLauncherService::Hide()
     // handle method call com.deepin.dde.Launcher.Hide
 //    parent()->Hide();
     parent()->hide();
+    emit Closed();
 }
 
 void DBusLauncherService::Show()
@@ -53,6 +54,7 @@ void DBusLauncherService::Show()
     // handle method call com.deepin.dde.Launcher.Show
 //    parent()->Show();
     parent()->show();
+    emit Shown();
 }
 
 void DBusLauncherService::ShowByMode(qlonglong in0)

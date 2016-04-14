@@ -21,18 +21,26 @@ int main(int argv, char *args[])
 
     const bool quit = !app.setSingleInstance(QString("dde-launcher_%1").arg(getuid()));
 
+    QCommandLineOption showOption(QStringList() << "s" << "show", "show launcher(hide for default.)");
+    QCommandLineOption toggleOption(QStringList() << "t" << "toggle", "toggle launcher visible.");
+
     QCommandLineParser cmdParser;
     cmdParser.setApplicationDescription("DDE Launcher");
     cmdParser.addHelpOption();
     cmdParser.addVersionOption();
+    cmdParser.addOption(showOption);
+    cmdParser.addOption(toggleOption);
     cmdParser.addPositionalArgument("mode", "show and toogle to <mode>");
     cmdParser.process(app);
 
+    QStringList positionArgs = cmdParser.positionalArguments();
     if (quit)
     {
         DBusLauncherFrame launcherFrame;
-        if (launcherFrame.isValid())
-            launcherFrame.Toggle();
+        if (!positionArgs.isEmpty()) {
+            if (launcherFrame.isValid() && cmdParser.isSet(toggleOption))
+                launcherFrame.Toggle();
+        }
 
         return 0;
     }
@@ -48,8 +56,10 @@ int main(int argv, char *args[])
     if (!connection.registerService("com.deepin.dde.Launcher") ||
         !connection.registerObject("/com/deepin/dde/Launcher", &launcher))
         qWarning() << "register dbus service failed";
-
-    launcher.show();
-
+    if (!positionArgs.isEmpty() && cmdParser.isSet(showOption)) {
+        launcher.show();
+    } else if (!positionArgs.isEmpty() && cmdParser.isSet("mode")) {
+//        launcher.showByMode(positionArgs.at(0));
+    }
     return app.exec();
 }

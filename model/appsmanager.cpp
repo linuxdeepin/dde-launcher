@@ -264,6 +264,11 @@ void AppsManager::refreshCategoryInfoList()
         m_appInfos[category].append(info);
     }
 
+    // remove uninstalled app item
+    for (const ItemInfo &info : m_userSortedList)
+        if (!m_allAppInfoList.contains(info))
+            m_userSortedList.removeOne(info);
+
     saveUserSortedList();
 }
 

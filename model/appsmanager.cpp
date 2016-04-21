@@ -307,22 +307,22 @@ void AppsManager::refreshAppIconCache()
     APP_ICON_CACHE.setValue("version", qApp->applicationVersion());
 //    return;
 
-    int appIconSize = m_calUtil->appIconSize().width();
+//    int appIconSize = m_calUtil->appIconSize().width();
 
-    qDebug() << "get icon size:" << appIconSize;
+//    qDebug() << "get icon size:" << appIconSize;
 //    // generate cache
-    for (const ItemInfo &info : m_appInfoList)
-    {
-        const QPixmap cachePixmap = APP_ICON_CACHE.value(QString("%1-%2").arg(info.m_iconKey).arg(appIconSize)).value<QPixmap>();
-        if (!cachePixmap.isNull())
-            continue;
+//    for (const ItemInfo &info : m_appInfoList)
+//    {
+//        const QPixmap cachePixmap = APP_ICON_CACHE.value(QString("%1-%2").arg(info.m_iconKey).arg(appIconSize)).value<QPixmap>();
+//        if (!cachePixmap.isNull())
+//            continue;
 
-        const QString iconPath = m_themeAppIcon->getThemeIconPath(info.m_iconKey, appIconSize);
-        const QPixmap iconPixmap = loadIconFile(iconPath, appIconSize);
+//        const QString iconPath = m_themeAppIcon->getThemeIconPath(info.m_iconKey, appIconSize);
+//        const QPixmap iconPixmap = loadIconFile(iconPath, appIconSize);
 
-        if (!iconPixmap.isNull())
-            APP_ICON_CACHE.setValue(QString("%1-%2").arg(info.m_iconKey).arg(appIconSize), iconPixmap);
-    }
+//        if (!iconPixmap.isNull())
+//            APP_ICON_CACHE.setValue(QString("%1-%2").arg(info.m_iconKey).arg(appIconSize), iconPixmap);
+//    }
 
 //    emit dataChanged(AppsListModel::All);
 }
@@ -350,23 +350,23 @@ void AppsManager::searchDone(const QStringList &resultList)
     emit dataChanged(AppsListModel::Search);
 }
 
-void AppsManager::handleDragedApp(const QModelIndex &index, int nextNode) {
-    qDebug() << "draged app";
-    QString appKey = index.data(AppsListModel::AppKeyRole).toString();
-    // begin to unInstall app, remove icon firstly;
-    QDBusPendingReply<ItemInfo> reply = m_launcherInter->GetItemInfo(appKey);
-    reply.waitForFinished();
-    if (reply.isValid() && !reply.isError()) {
-        ItemInfo dragedAppItemInfo = qdbus_cast<ItemInfo>(reply.argumentAt(0));
-        m_beDragedItem = dragedAppItemInfo;
+//void AppsManager::handleDragedApp(const QModelIndex &index, int nextNode) {
+//    qDebug() << "draged app";
+//    QString appKey = index.data(AppsListModel::AppKeyRole).toString();
+//    // begin to unInstall app, remove icon firstly;
+//    QDBusPendingReply<ItemInfo> reply = m_launcherInter->GetItemInfo(appKey);
+//    reply.waitForFinished();
+//    if (reply.isValid() && !reply.isError()) {
+//        ItemInfo dragedAppItemInfo = qdbus_cast<ItemInfo>(reply.argumentAt(0));
+//        m_beDragedItem = dragedAppItemInfo;
 
-        restoreItem(appKey, nextNode);
-        qDebug() << "remove one" << nextNode;
-        emit dataChanged(AppsListModel::All);
-        refreshAppIconCache();
-        refreshCategoryInfoList();
-    }
-}
+//        restoreItem(appKey, nextNode);
+//        qDebug() << "remove one" << nextNode;
+//        emit dataChanged(AppsListModel::All);
+//        refreshAppIconCache();
+//        refreshCategoryInfoList();
+//    }
+//}
 
 //void AppsManager::handleDropedApp(const QModelIndex &index) {
 //    QString appKey = index.data(AppsListModel::AppKeyRole).toString();

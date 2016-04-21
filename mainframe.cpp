@@ -574,7 +574,7 @@ void MainFrame::initConnection()
 
 //    connect(m_allAppsView, &AppListView::appBeDraged, m_appsManager, &AppsManager::handleDragedApp);
 //    connect(m_allAppsView, &AppListView::appDropedIn, m_appsManager, &AppsManager::handleDropedApp);
-    connect(m_allAppsView, &AppListView::handleDragItems, m_appsManager, &AppsManager::handleDragedApp);
+//    connect(m_allAppsView, &AppListView::handleDragItems, m_appsManager, &AppsManager::handleDragedApp);
 
     connect(m_allAppsView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_internetView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);

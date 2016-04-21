@@ -54,7 +54,7 @@ public slots:
     //restore the itemInfo, if unInstall failed!
     void reStoreItem();
 
-    void handleDragedApp(const QModelIndex &index, int nextNode);
+//    void handleDragedApp(const QModelIndex &index, int nextNode);
 //    void handleDropedApp(const QModelIndex &index);
     void handleItemChanged(const QString &in0, ItemInfo in1, qlonglong in2);
 private:

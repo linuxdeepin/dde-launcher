@@ -21,7 +21,8 @@ public:
 
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
-    void handleDragItems(const QModelIndex &index, int insertI);
+//    void handleDragItems(const QModelIndex &index, int insertI);
+
 protected:
     using QListView::startDrag;
     void startDrag(const QModelIndex &index);

@@ -676,32 +676,43 @@ void MainFrame::moveCurrentSelectApp(const int key)
     default:;
     }
 
-    if (!index.isValid() && (key == Qt::Key_Up || key == Qt::Key_Down))
+    if (!index.isValid() && (key == Qt::Key_Up || key == Qt::Key_Down || key == Qt::Key_Left || key == Qt::Key_Right))
     {
         const int realColumn = currentIndex.row() % column;
         const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
-        if (key == Qt::Key_Down)
+        if (key == Qt::Key_Down || key == Qt::Key_Right)
             model = nextCategoryModel(model);
         else
             model = prevCategoryModel(model);
 
-        while (model && model->rowCount(QModelIndex()) <= realColumn)
-            if (key == Qt::Key_Down)
-                model = nextCategoryModel(model);
-            else
-                model = prevCategoryModel(model);
-
+        if (key == Qt::Key_Up || key == Qt::Key_Down) {
+            while (model && model->rowCount(QModelIndex()) <= realColumn)
+                if (key == Qt::Key_Down)
+                    model = nextCategoryModel(model);
+                else
+                    model = prevCategoryModel(model);
+        } else {
+            while (model && model->rowCount(QModelIndex()) <= realColumn && realColumn!=1)
+                if (key == Qt::Key_Right)
+                    model = nextCategoryModel(model);
+                else
+                    model = prevCategoryModel(model);
+        }
         if (model)
         {
             if (key == Qt::Key_Down)
                 index = model->index(realColumn);
-            else {
+            else if (key == Qt::Key_Up){
                 const int count = model->rowCount(QModelIndex()) - 1;
                 int realIndex = count;
                 while (realIndex && realIndex % column != realColumn)
                     --realIndex;
-
                 index = model->index(realIndex);
+            } else if (key == Qt::Key_Left) {
+                const int count = model->rowCount(QModelIndex()) - 1;
+                index = model->index(count);
+            } else {
+                index = model->index(0);
             }
         }
     }

@@ -30,7 +30,7 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     QFontMetrics fontMetric(titleFont);
     int width=fontMetric.width(titleContent);
     m_title->setFixedWidth(width + 10);
-    m_title->setStyleSheet("color: white;");
+    m_title->setStyleSheet("color: white; background-color:transparent;");
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
 
@@ -43,10 +43,21 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));
 }
 
-void CategoryTitleWidget::addTextShadow() {
+void CategoryTitleWidget::setTextVisible(const bool visible)
+{
+    m_title->setVisible(visible);
+}
+
+void CategoryTitleWidget::addTextShadow()
+{
     QGraphicsDropShadowEffect* textDropShadow = new QGraphicsDropShadowEffect;
     textDropShadow->setBlurRadius(4);
     textDropShadow->setColor(QColor(0, 0, 0, 128));
     textDropShadow->setOffset(0, 2);
     m_title->setGraphicsEffect(textDropShadow);
+}
+
+QLabel *CategoryTitleWidget::textLabel()
+{
+    return m_title;
 }

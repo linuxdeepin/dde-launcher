@@ -11,6 +11,11 @@ class CategoryTitleWidget : public QWidget
 public:
     explicit CategoryTitleWidget(const QString &title, QWidget *parent = 0);
 
+    QLabel *textLabel();
+
+public slots:
+    void setTextVisible(const bool visible);
+
 private:
     QLabel *m_title;
     void addTextShadow();

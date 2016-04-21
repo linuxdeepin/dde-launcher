@@ -20,11 +20,13 @@ public:
 public:
     explicit CategoryButton(const AppsListModel::AppCategory category, QWidget *parent = 0);
 
-
+    QLabel *textLabel();
 
 public slots:
     void setChecked(bool isChecked);
+    void setTextVisible(bool visible);
     AppsListModel::AppCategory category() const;
+
 protected:
     void paintEvent(QPaintEvent *e);
     void enterEvent(QEvent *e);
@@ -34,6 +36,7 @@ private:
     void setInfoByCategory();
     void updateState(const State state);
     void addTextShadow();
+
 private:
     State m_state = Checked;
     AppsListModel::AppCategory m_category;

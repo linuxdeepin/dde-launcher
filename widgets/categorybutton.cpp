@@ -74,6 +74,11 @@ void CategoryButton::setChecked(bool isChecked)
     QAbstractButton::setChecked(isChecked);
 }
 
+void CategoryButton::setTextVisible(bool visible)
+{
+    m_textLabel->setVisible(visible);
+}
+
 void CategoryButton::setInfoByCategory()
 {
     switch (m_category)
@@ -127,4 +132,9 @@ void CategoryButton::addTextShadow() {
     textDropShadow->setColor(QColor(0, 0, 0, 128));
     textDropShadow->setOffset(0, 2);
     m_textLabel->setGraphicsEffect(textDropShadow);
+}
+
+QLabel *CategoryButton::textLabel()
+{
+    return m_textLabel;
 }

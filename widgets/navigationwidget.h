@@ -18,21 +18,27 @@ public:
     explicit NavigationWidget(QWidget *parent = 0);
 
     void setButtonsVisible(const bool visible);
+    void setCategoryTextVisible(const bool visible);
+    QLabel *categoryTextLabel(const AppsListModel::AppCategory category) const;
 
 signals:
     void scrollToCategory(const AppsListModel::AppCategory category) const;
     void toggleModeClicked() const;
+    void mouseEntered();
 
 public slots:
     void setCurrentCategory(const AppsListModel::AppCategory category);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
+
+protected:
+    void enterEvent(QEvent *e);
 
 private:
     void initUI();
     void initConnection();
 
     void buttonClicked();
-    CategoryButton *button(const AppsListModel::AppCategory category);
+    CategoryButton *button(const AppsListModel::AppCategory category) const;
 
 private:
     DImageButton *m_toggleModeBtn;

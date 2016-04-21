@@ -45,6 +45,28 @@ void NavigationWidget::setButtonsVisible(const bool visible)
     m_othersBtn->setVisible(visible);
 }
 
+void NavigationWidget::setCategoryTextVisible(const bool visible)
+{
+    m_internetBtn->setTextVisible(visible);
+    m_chatBtn->setTextVisible(visible);
+    m_musicBtn->setTextVisible(visible);
+    m_videoBtn->setTextVisible(visible);
+    m_graphicsBtn->setTextVisible(visible);
+    m_gameBtn->setTextVisible(visible);
+    m_officeBtn->setTextVisible(visible);
+    m_readingBtn->setTextVisible(visible);
+    m_developmentBtn->setTextVisible(visible);
+    m_systemBtn->setTextVisible(visible);
+    m_othersBtn->setTextVisible(visible);
+}
+
+QLabel *NavigationWidget::categoryTextLabel(const AppsListModel::AppCategory category) const
+{
+    CategoryButton *btn = button(category);
+
+    return btn ? btn->textLabel() : nullptr;
+}
+
 void NavigationWidget::setCurrentCategory(const AppsListModel::AppCategory category)
 {
     CategoryButton *btn = button(category);
@@ -132,7 +154,7 @@ void NavigationWidget::buttonClicked()
     emit scrollToCategory(btn->category());
 }
 
-CategoryButton *NavigationWidget::button(const AppsListModel::AppCategory category)
+CategoryButton *NavigationWidget::button(const AppsListModel::AppCategory category) const
 {
     switch (category)
     {
@@ -151,4 +173,11 @@ CategoryButton *NavigationWidget::button(const AppsListModel::AppCategory catego
     }
 
     return nullptr;
+}
+
+void NavigationWidget::enterEvent(QEvent *e)
+{
+    QWidget::enterEvent(e);
+
+    emit mouseEntered();
 }

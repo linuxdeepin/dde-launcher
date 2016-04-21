@@ -45,7 +45,9 @@ int main(int argv, char *args[])
         return 0;
     }
 
+    // INFO: what's this?
     setlocale(LC_ALL, "");
+
     QTranslator translator;
     translator.load("/usr/share/dde-launcher/translations/dde-launcher_" +
                     QLocale::system().name() + ".qm");
@@ -56,10 +58,11 @@ int main(int argv, char *args[])
     if (!connection.registerService("com.deepin.dde.Launcher") ||
         !connection.registerObject("/com/deepin/dde/Launcher", &launcher))
         qWarning() << "register dbus service failed";
-    if (!positionArgs.isEmpty() && cmdParser.isSet(showOption)) {
+
+#ifndef QT_DEBUG
+    if (!positionArgs.isEmpty() && cmdParser.isSet(showOption))
+#endif
         launcher.show();
-    } else if (!positionArgs.isEmpty() && cmdParser.isSet("mode")) {
-//        launcher.showByMode(positionArgs.at(0));
-    }
+
     return app.exec();
 }

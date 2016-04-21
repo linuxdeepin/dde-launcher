@@ -6,7 +6,8 @@ HEADERS += \
     $$PWD/searchwidget.h \
     $$PWD/categorytitlewidget.h \
     $$PWD/gradientlabel.h \
-    $$PWD/searchlineedit.h
+    $$PWD/searchlineedit.h \
+    $$PWD/applistarea.h
 
 SOURCES += \
     $$PWD/categorybutton.cpp \
@@ -14,4 +15,5 @@ SOURCES += \
     $$PWD/searchwidget.cpp \
     $$PWD/categorytitlewidget.cpp \
     $$PWD/gradientlabel.cpp \
-    $$PWD/searchlineedit.cpp
+    $$PWD/searchlineedit.cpp \
+    $$PWD/applistarea.cpp

@@ -14,6 +14,7 @@
 #include "background/systembackground.h"
 #include "global_util/calculate_util.h"
 #include "dbusinterface/dbusdisplay.h"
+#include "widgets/applistarea.h"
 
 #include <QFrame>
 #include <QScrollArea>
@@ -83,6 +84,9 @@ private slots:
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
     void handleUninstallResult(int result, QString content);
     void showGradient();
+    void showCategoryMoveAnimation();
+    void fakeLabelMoveAni(QLabel *source, QLabel *dest);
+    void refershCategoryTextVisible();
 
 private:
     bool m_isConfirmDialogShown = false;
@@ -101,7 +105,7 @@ private:
 
     NavigationWidget *m_navigationBar;
     SearchWidget *m_searchWidget;
-    QScrollArea *m_appsArea;
+    AppListArea *m_appsArea;
     DVBoxWidget *m_appsVbox;
     MenuWorker* m_menuWorker;
 
@@ -138,7 +142,7 @@ private:
     AppsListModel *m_othersModel;
 
     CategoryTitleWidget *m_internetTitle;
-    CategoryTitleWidget* m_chatTitle;
+    CategoryTitleWidget *m_chatTitle;
     CategoryTitleWidget *m_musicTitle;
     CategoryTitleWidget *m_videoTitle;
     CategoryTitleWidget *m_graphicsTitle;
@@ -149,7 +153,7 @@ private:
     CategoryTitleWidget *m_systemTitle;
     CategoryTitleWidget *m_othersTitle;
 
-    QVBoxLayout* m_scrollAreaLayout;
+    QVBoxLayout *m_scrollAreaLayout;
     QHBoxLayout *m_contentLayout;
     QVBoxLayout *m_mainLayout;
 

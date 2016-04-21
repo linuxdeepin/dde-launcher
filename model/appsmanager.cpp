@@ -6,11 +6,14 @@
 #include <QX11Info>
 #include <QSvgRenderer>
 #include <QPainter>
+#include <QDataStream>
+#include <QIODevice>
 
 AppsManager *AppsManager::INSTANCE = nullptr;
 
 QSettings AppsManager::APP_ICON_CACHE("deepin", "dde-launcher-app-icon", nullptr);
 QSettings AppsManager::APP_AUTOSTART_CACHE("deepin", "dde-launcher-app-autostart", nullptr);
+QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
 
 AppsManager::AppsManager(QObject *parent) :
     QObject(parent),
@@ -23,8 +26,6 @@ AppsManager::AppsManager(QObject *parent) :
 {
     m_themeAppIcon->gtkInit();
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
-    m_appInfoList = m_launcherInter->GetAllItemInfos().value();
-    sortCategory(AppsListModel::All);
     refreshCategoryInfoList();
 
     if (APP_ICON_CACHE.value("version").toString() != qApp->applicationVersion())
@@ -86,7 +87,7 @@ const QPixmap AppsManager::loadIconFile(const QString &fileName, const int size)
 
 void AppsManager::appendSearchResult(const QString &appKey)
 {
-    for (const ItemInfo &info : m_appInfoList)
+    for (const ItemInfo &info : m_allAppInfoList)
         if (info.m_key == appKey)
             return m_appSearchResultList.append(info);
 }
@@ -96,8 +97,9 @@ void AppsManager::sortCategory(const AppsListModel::AppCategory category)
     switch (category)
     {
     case AppsListModel::Search:     sortByName(m_appSearchResultList);      break;
-    case AppsListModel::All:        sortByName(m_appInfoList);              break;
-    default:;
+//    case AppsListModel::All:        sortByName(m_appInfoList);              break;
+    // disable sort other category
+    default: Q_ASSERT(false) ;
     }
 }
 
@@ -121,13 +123,13 @@ void AppsManager::stashItem(const QModelIndex &index)
 {
     const QString key = index.data(AppsListModel::AppKeyRole).toString();
 
-    for (int i(0); i != m_appInfoList.size(); ++i)
+    for (int i(0); i != m_userSortedList.size(); ++i)
     {
-        if (m_appInfoList[i].m_key == key)
+        if (m_userSortedList[i].m_key == key)
         {
-            m_stashList.append(m_appInfoList[i]);
-            m_appInfoList.removeAt(i);
-            return refreshCategoryInfoList();
+            m_stashList.append(m_userSortedList[i]);
+            m_userSortedList.removeAt(i);
+            return;
         }
     }
 }
@@ -138,11 +140,20 @@ void AppsManager::restoreItem(const QString &appKey, const int pos)
     {
         if (m_stashList[i].m_key == appKey)
         {
-            m_appInfoList.insert(pos, m_stashList[i]);
+            m_userSortedList.insert(pos, m_stashList[i]);
             m_stashList.removeAt(i);
-            return refreshCategoryInfoList();
+            return saveUserSortedList();
         }
     }
+}
+
+void AppsManager::saveUserSortedList()
+{
+    // save cache
+    QByteArray writeBuf;
+    QDataStream out(&writeBuf, QIODevice::WriteOnly);
+    out << m_userSortedList;
+    APP_USER_SORTED_LIST.setValue("list", writeBuf);
 }
 
 void AppsManager::searchApp(const QString &keywords)
@@ -173,7 +184,7 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     switch (category)
     {
     case AppsListModel::Custom:
-    case AppsListModel::All:        return m_appInfoList;           break;
+    case AppsListModel::All:        return m_userSortedList;        break;
     case AppsListModel::Search:     return m_appSearchResultList;   break;
     default:;
     }
@@ -233,17 +244,27 @@ void AppsManager::refreshCategoryInfoList()
 {
     m_appInfos.clear();
 
-    ItemInfoList sortedList = m_appInfoList;
-    sortByName(sortedList);
+    QByteArray readBuf = APP_USER_SORTED_LIST.value("list").toByteArray();
+    QDataStream in(&readBuf, QIODevice::ReadOnly);
+    in >> m_userSortedList;
 
-    for (const ItemInfo &info : sortedList)
+    m_allAppInfoList = m_launcherInter->GetAllItemInfos().value();
+    sortByName(m_allAppInfoList);
+
+    for (const ItemInfo &info : m_allAppInfoList)
     {
+        // append new installed app to user sorted list
+        if (!m_userSortedList.contains(info))
+            m_userSortedList.append(info);
+
         const AppsListModel::AppCategory category = info.category();
         if (!m_appInfos.contains(category))
             m_appInfos.insert(category, ItemInfoList());
 
         m_appInfos[category].append(info);
     }
+
+    saveUserSortedList();
 }
 
 int AppsManager::appNums(const AppsListModel::AppCategory &category) const
@@ -259,7 +280,7 @@ void AppsManager::unInstallApp(const QModelIndex &index, int value) {
         reply.waitForFinished();
         if (reply.isValid() && !reply.isError()) {
             m_unInstallItem = qdbus_cast<ItemInfo>(reply.argumentAt(0));
-            m_appInfoList.removeOne(m_unInstallItem);
+            m_allAppInfoList.removeOne(m_unInstallItem);
 
             emit dataChanged(AppsListModel::All);
             refreshAppIconCache();
@@ -292,7 +313,7 @@ void AppsManager::reStoreItem() {
     if (appsInfoList(m_unInstallItem.category()).length() == 0) {
         updateViewFlag = true;
     }
-    m_appInfoList.append(m_unInstallItem);
+    m_allAppInfoList.append(m_unInstallItem);
     emit dataChanged(AppsListModel::All);
     emit dataChanged(m_unInstallItem.category());
     refreshCategoryInfoList();
@@ -331,7 +352,7 @@ void AppsManager::refreshAppAutoStartCache()
 {
     APP_AUTOSTART_CACHE.setValue("version", qApp->applicationVersion());
 
-    for (const ItemInfo &info : m_appInfoList)
+    for (const ItemInfo &info : m_allAppInfoList)
     {
         const bool isAutoStart = m_startManagerInter->IsAutostart(info.m_desktop).value();
         APP_AUTOSTART_CACHE.setValue(info.m_desktop, isAutoStart);
@@ -386,7 +407,7 @@ void AppsManager::searchDone(const QStringList &resultList)
 void AppsManager::handleItemChanged(const QString &in0, ItemInfo in1, qlonglong in2) {
     qDebug() << "in0" << in0 << in1.m_name << "in2" << in2;
     if (in0 == "created") {
-        m_appInfoList.append(in1);
+        m_allAppInfoList.append(in1);
         emit dataChanged(AppsListModel::All);
         refreshCategoryInfoList();
         refreshAppIconCache();

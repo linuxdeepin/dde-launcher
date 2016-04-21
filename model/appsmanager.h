@@ -38,6 +38,7 @@ signals:
     void updateCategoryView(const AppsListModel::AppCategory categoryInfo) const;
 
 public slots:
+    void saveUserSortedList();
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
@@ -57,6 +58,7 @@ public slots:
 //    void handleDragedApp(const QModelIndex &index, int nextNode);
 //    void handleDropedApp(const QModelIndex &index);
     void handleItemChanged(const QString &in0, ItemInfo in1, qlonglong in2);
+
 private:
     explicit AppsManager(QObject *parent = 0);
 
@@ -72,6 +74,7 @@ private:
 private slots:
     void searchDone(const QStringList &resultList);
     void markLaunched(QString appKey);
+
 private:
     DBusLauncher *m_launcherInter;
     DBusStartManager *m_startManagerInter;
@@ -80,20 +83,23 @@ private:
     QPixmap m_defaultIconPixmap;
     QString m_searchText;
     QStringList m_newInstalledAppsList;
-    ItemInfoList m_appInfoList;
+    ItemInfoList m_allAppInfoList;
+    ItemInfoList m_userSortedList;
     ItemInfoList m_appSearchResultList;
     ItemInfoList m_stashList;
     QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfos;
 
-    static AppsManager *INSTANCE;
-    static QSettings APP_ICON_CACHE;
-    static QSettings APP_AUTOSTART_CACHE;
     ItemInfo m_unInstallItem = ItemInfo();
     ItemInfo m_beDragedItem = ItemInfo();
 
     ThemeAppIcon* m_themeAppIcon;
     CalculateUtil *m_calUtil;
     QTimer *m_searchTimer;
+
+    static AppsManager *INSTANCE;
+    static QSettings APP_ICON_CACHE;
+    static QSettings APP_AUTOSTART_CACHE;
+    static QSettings APP_USER_SORTED_LIST;
 };
 
 #endif // APPSMANAGER_H

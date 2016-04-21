@@ -77,6 +77,14 @@ QDataStream &operator<<(QDataStream &argument, const ItemInfo &info)
     return argument;
 }
 
+const QDataStream &operator>>(QDataStream &argument, ItemInfo &info)
+{
+    argument >> info.m_desktop >> info.m_name >> info.m_key >> info.m_iconKey;
+    argument >> info.m_categoryId >> info.m_installedTime;
+
+    return argument;
+}
+
 const QDBusArgument &operator>>(const QDBusArgument &argument, ItemInfo &info)
 {
     argument.beginStructure();

@@ -634,8 +634,8 @@ void MainFrame::initConnection()
     connect(m_menuWorker, &MenuWorker::quitLauncher, this, &MainFrame::hide);
     connect(m_menuWorker, &MenuWorker::unInstallApp, this, &MainFrame::showPopupUninstallDialog);
     connect(m_navigationBar, &NavigationWidget::toggleModeClicked, [this] {
-        if (m_displayMode == Search)
-            return;
+        m_searchWidget->clearFocus();
+        m_searchWidget->clearSearchContent();
         updateDisplayMode(m_displayMode == GroupByCategory ? AllApps : GroupByCategory);
     });
     connect(m_appsManager, &AppsManager::updateCategoryView, this, &MainFrame::checkCategoryVisible);

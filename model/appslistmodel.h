@@ -56,6 +56,7 @@ public:
 
     inline AppCategory category() const {return m_category;}
     void setDragingIndex(const QModelIndex &index);
+    void setDragDropIndex(const QModelIndex &index);
     void dropInsert(const QString &appKey, const int pos);
     void dropSwap(const int nextPos);
 
@@ -74,12 +75,14 @@ protected:
 private:
     void dataChanged(const AppsListModel::AppCategory category);
     void layoutChanged(const AppsListModel::AppCategory category);
+    bool indexDraging(const QModelIndex &index) const;
 
 private:
     AppsManager *m_appsManager;
     CalculateUtil *m_calcUtil;
 
-    QModelIndex m_dragingIndex = QModelIndex();
+    QModelIndex m_dragStartIndex = QModelIndex();
+    QModelIndex m_dragDropIndex = QModelIndex();
     AppCategory m_category = All;
 };
 

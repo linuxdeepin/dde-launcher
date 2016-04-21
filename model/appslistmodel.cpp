@@ -24,9 +24,22 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
 ///
 void AppsListModel::setDragingIndex(const QModelIndex &index)
 {
-    m_dragingIndex = index;
+    m_dragStartIndex = index;
+    m_dragDropIndex = index;
 
     emit QAbstractListModel::dataChanged(index, index);
+}
+
+void AppsListModel::setDragDropIndex(const QModelIndex &index)
+{
+    if (m_dragDropIndex == index)
+        return;
+//    if (m_dragDropIndex == m_dragStartIndex)
+//        return;
+
+    m_dragDropIndex = index;
+
+    emit QAbstractListModel::dataChanged(m_dragStartIndex, index);
 }
 
 ///
@@ -47,15 +60,17 @@ void AppsListModel::dropInsert(const QString &appKey, const int pos)
 ///
 void AppsListModel::dropSwap(const int nextPos)
 {
-    if (!m_dragingIndex.isValid())
+    if (!m_dragStartIndex.isValid())
         return;
 
-    const QString appKey = m_dragingIndex.data(AppsListModel::AppKeyRole).toString();
+    const QString appKey = m_dragStartIndex.data(AppsListModel::AppKeyRole).toString();
 
-    removeRows(m_dragingIndex.row(), 1, QModelIndex());
+    removeRows(m_dragStartIndex.row(), 1, QModelIndex());
     dropInsert(appKey, nextPos);
 
-    m_dragingIndex = index(nextPos);
+    emit QAbstractItemModel::dataChanged(m_dragStartIndex, m_dragDropIndex);
+
+    m_dragStartIndex = m_dragDropIndex = index(nextPos);
 }
 
 ///
@@ -63,11 +78,12 @@ void AppsListModel::dropSwap(const int nextPos)
 ///
 void AppsListModel::clearDragingIndex()
 {
-    const QModelIndex index = m_dragingIndex;
+    const QModelIndex startIndex = m_dragStartIndex;
+    const QModelIndex endIndex = m_dragDropIndex;
 
-    m_dragingIndex = QModelIndex();
+    m_dragStartIndex = m_dragDropIndex = QModelIndex();
 
-    emit QAbstractItemModel::dataChanged(index, index);
+    emit QAbstractItemModel::dataChanged(startIndex, endIndex);
 }
 
 int AppsListModel::rowCount(const QModelIndex &parent) const
@@ -166,7 +182,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppFontSizeRole:
         return m_calcUtil->appItemFontSize();
     case AppItemIsDragingRole:
-        return m_dragingIndex.isValid() && index == m_dragingIndex;
+        return indexDraging(index);
     default:;
     }
 
@@ -204,4 +220,17 @@ void AppsListModel::layoutChanged(const AppsListModel::AppCategory category)
 {
     if (category == All || category == m_category)
         emit QAbstractItemModel::layoutChanged();
+}
+
+bool AppsListModel::indexDraging(const QModelIndex &index) const
+{
+    if (!m_dragStartIndex.isValid() || !m_dragDropIndex.isValid())
+        return false;
+
+    const int start = m_dragStartIndex.row();
+    const int end = m_dragDropIndex.row();
+    const int current = index.row();
+
+    return (start <= end && current >= start && current <= end) ||
+           (start >= end && current <= start && current >= end);
 }

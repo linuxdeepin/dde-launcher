@@ -517,11 +517,12 @@ void MainFrame::fakeLabelMoveAni(QLabel *source, QLabel *dest)
     ani->setDuration(300);
 
     connect(ani, &QPropertyAnimation::finished, floatLabel, &QLabel::deleteLater);
+    // TODO: ignore repeat signals
     connect(ani, &QPropertyAnimation::finished, this, &MainFrame::refershCategoryTextVisible);
 
     source->hide();
     dest->hide();
-    ani->start(QPauseAnimation::DeleteWhenStopped);
+    ani->start(QPropertyAnimation::DeleteWhenStopped);
 }
 
 void MainFrame::refershCategoryTextVisible()

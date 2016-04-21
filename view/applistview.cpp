@@ -9,8 +9,10 @@
 #include <QDrag>
 #include <QMimeData>
 #include <QtGlobal>
-
 #include <QDrag>
+#include <QPropertyAnimation>
+#include <QLabel>
+#include <QPainter>
 
 AppsManager *AppListView::m_appManager = nullptr;
 CalculateUtil *AppListView::m_calcUtil = nullptr;
@@ -49,7 +51,7 @@ AppListView::AppListView(QWidget *parent) :
 
     // update item spacing
     connect(m_calcUtil, &CalculateUtil::layoutChanged, [this] {setSpacing(m_calcUtil->appItemSpacing());});
-    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::dropSwap);
+    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::prepareDropSwap);
 }
 
 const QModelIndex AppListView::indexAt(const int index) const
@@ -64,7 +66,7 @@ const QModelIndex AppListView::indexAt(const int index) const
 ///
 int AppListView::indexYOffset(const QModelIndex &index) const
 {
-    return rectForIndex(index).top();
+    return indexOffset(index).y();
 }
 
 void AppListView::dropEvent(QDropEvent *e)
@@ -104,6 +106,7 @@ void AppListView::dragMoveEvent(QDragMoveEvent *e)
     if (dropIndex.isValid())
         m_dropToPos = dropIndex.row();
 
+    m_dropThresholdTimer->stop();
     m_dropThresholdTimer->start();
 }
 
@@ -174,6 +177,9 @@ void AppListView::startDrag(const QModelIndex &index)
 
     drag->exec(Qt::MoveAction);
 
+    // disable animation when finally dropped
+    m_dropThresholdTimer->stop();
+
     if (listModel->category() != AppsListModel::All)
         return;
 
@@ -208,6 +214,60 @@ void AppListView::fitToContent()
     setFixedWidth(contentsRect().width());
 }
 
+void AppListView::prepareDropSwap()
+{
+    const QModelIndex dropIndex = indexAt(m_dropToPos);
+    if (!dropIndex.isValid())
+        return;
+    const QModelIndex dragStartIndex = indexAt(m_dragStartPos);
+    if (dragStartIndex == dropIndex)
+        return;
+
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel)
+        return;
+
+    listModel->setDragDropIndex(dropIndex);
+
+    const int startIndex = dragStartIndex.row();
+    const bool moveToNext = startIndex <= m_dropToPos;
+    const int start = moveToNext ? startIndex : m_dropToPos;
+    const int end = !moveToNext ? startIndex : m_dropToPos;
+
+    if (start == end)
+        return;
+
+    bool first = true;
+
+    for (int i(start + moveToNext); i <= end - !moveToNext; ++i)
+    {
+        QLabel *lastLabel = new QLabel(this);
+        QPropertyAnimation *lastAni = new QPropertyAnimation(lastLabel, "pos", this);
+
+        lastLabel->setFixedSize(model()->data(dropIndex, AppsListModel::AppIconSizeRole).toSize());
+        lastLabel->setPixmap(model()->data(indexAt(i), AppsListModel::AppIconRole).value<QPixmap>());
+//        lastLabel->setStyleSheet("background-color:red;");
+        lastLabel->show();
+
+        const QPoint offset = QPoint(50, 50);
+
+        lastAni->setStartValue(indexOffset(indexAt(i)) + offset);
+        lastAni->setEndValue(indexOffset(indexAt(moveToNext ? i - 1 : i + 1)) + offset);
+
+        connect(lastAni, &QPropertyAnimation::finished, lastLabel, &QLabel::deleteLater);
+        if (first)
+        {
+            first = false;
+            connect(lastAni, &QPropertyAnimation::finished, this, &AppListView::dropSwap);
+            connect(lastAni, &QPropertyAnimation::valueChanged, m_dropThresholdTimer, &QTimer::stop);
+        }
+
+        lastAni->start(QPropertyAnimation::DeleteWhenStopped);
+    }
+
+    m_dragStartPos = indexOffset(dropIndex);
+}
+
 ///
 /// \brief AppListView::dropSwap swap current item and drag out item
 ///
@@ -218,4 +278,9 @@ void AppListView::dropSwap()
         return;
 
     listModel->dropSwap(m_dropToPos);
+}
+
+QPoint AppListView::indexOffset(const QModelIndex &index) const
+{
+    return rectForIndex(index).topLeft();
 }

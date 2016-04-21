@@ -172,11 +172,13 @@ void AppsManager::launchApp(const QModelIndex &index)
         m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
 }
 
-void AppsManager::markLaunched(QString appKey) {
-    if (m_newInstalledAppsList.contains(appKey)) {
-        m_newInstalledAppsList.removeOne(appKey);
-        m_launcherInter->MarkLaunched(appKey);
-    }
+void AppsManager::markLaunched(QString appKey)
+{
+    if (appKey.isEmpty() || !m_newInstalledAppsList.contains(appKey))
+        return;
+
+    m_newInstalledAppsList.removeOne(appKey);
+    m_launcherInter->MarkLaunched(appKey);
 }
 
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const

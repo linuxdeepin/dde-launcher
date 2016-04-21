@@ -38,7 +38,11 @@ protected:
 
 private slots:
     void fitToContent();
+    void prepareDropSwap();
     void dropSwap();
+
+private:
+    QPoint indexOffset(const QModelIndex &index) const;
 
 private:
     int m_dropToPos;

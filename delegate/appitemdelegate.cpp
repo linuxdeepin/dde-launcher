@@ -33,7 +33,7 @@ void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
 
 void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (index.data(AppsListModel::AppItemIsDragingRole).value<bool>())
+    if (index.data(AppsListModel::AppItemIsDragingRole).value<bool>() && !(option.features & QStyleOptionViewItem::HasDisplay))
         return;
 
     painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
@@ -46,7 +46,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).toSize();
 
     // draw focus background
-   if (CurrentIndex == index)
+   if (CurrentIndex == index && !(option.features & QStyleOptionViewItem::HasDisplay))
     {
         const QColor borderColor(255, 255, 255, 52);
         const QColor brushColor(0, 0, 0, 105);

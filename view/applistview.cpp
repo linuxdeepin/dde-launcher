@@ -247,20 +247,33 @@ void AppListView::prepareDropSwap()
 
     for (int i(start + moveToNext); i <= end - !moveToNext; ++i)
     {
+        const QModelIndex index(indexAt(i));
+
         QLabel *lastLabel = new QLabel(this);
         QPropertyAnimation *lastAni = new QPropertyAnimation(lastLabel, "pos", this);
 
-        lastLabel->setFixedSize(model()->data(dropIndex, AppsListModel::AppIconSizeRole).toSize());
-        lastLabel->setPixmap(model()->data(indexAt(i), AppsListModel::AppIconRole).value<QPixmap>());
+        const QSize rectSize = index.data(AppsListModel::ItemSizeHintRole).toSize();
+        const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+
+        QStyleOptionViewItem item;
+        item.rect = QRect(QPoint(0, 0), rectSize);
+        item.features |= QStyleOptionViewItem::HasDisplay;
+
+        QPixmap pixmap(rectSize);
+        pixmap.fill(Qt::transparent);
+
+        QPainter painter(&pixmap);
+        itemDelegate()->paint(&painter, item, index);
+
+        lastLabel->setFixedSize(rectSize);
+        lastLabel->setPixmap(pixmap);
 //        lastLabel->setStyleSheet("background-color:red;");
         lastLabel->show();
 
-        const QPoint offset = QPoint(50, 50);
-
-        lastAni->setStartValue(indexOffset(indexAt(i)) + offset);
-        lastAni->setEndValue(indexOffset(indexAt(moveToNext ? i - 1 : i + 1)) + offset);
+        lastAni->setStartValue(indexOffset(index));
+        lastAni->setEndValue(indexOffset(indexAt(moveToNext ? i - 1 : i + 1)));
         lastAni->setEasingCurve(QEasingCurve::OutQuad);
-        lastAni->setDuration(500);
+        lastAni->setDuration(300);
 
         connect(lastAni, &QPropertyAnimation::finished, lastLabel, &QLabel::deleteLater);
         if (first)

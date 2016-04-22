@@ -420,6 +420,8 @@ void MainFrame::showCategoryMoveAnimation()
 
     const bool shownListArea = widget == m_appsArea;
 
+    m_refershCategoryTextVisible = true;
+
     // NOTE: fake item move animation
     if (shownListArea)
     {
@@ -471,6 +473,8 @@ void MainFrame::showCategoryMoveAnimation()
         if (m_othersTitle->isVisible())
             fakeLabelMoveAni(m_othersTitle->textLabel(), m_navigationBar->categoryTextLabel(AppsListModel::Others));
     }
+
+    m_refershCategoryTextVisible = false;
 }
 
 void MainFrame::fakeLabelMoveAni(QLabel *source, QLabel *dest)
@@ -517,8 +521,12 @@ void MainFrame::fakeLabelMoveAni(QLabel *source, QLabel *dest)
     ani->setDuration(300);
 
     connect(ani, &QPropertyAnimation::finished, floatLabel, &QLabel::deleteLater);
-    // TODO: ignore repeat signals
-    connect(ani, &QPropertyAnimation::finished, this, &MainFrame::refershCategoryTextVisible);
+    // ignore repeat connections
+    if (m_refershCategoryTextVisible)
+    {
+        m_refershCategoryTextVisible = false;
+        connect(ani, &QPropertyAnimation::finished, this, &MainFrame::refershCategoryTextVisible);
+    }
 
     source->hide();
     dest->hide();

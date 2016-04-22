@@ -51,7 +51,12 @@ AppListView::AppListView(QWidget *parent) :
 
     // update item spacing
     connect(m_calcUtil, &CalculateUtil::layoutChanged, [this] {setSpacing(m_calcUtil->appItemSpacing());});
+
+#ifndef DISABLE_DRAG_ANIMATION
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::prepareDropSwap);
+#else
+    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::dropSwap);
+#endif
 }
 
 const QModelIndex AppListView::indexAt(const int index) const
@@ -189,6 +194,7 @@ void AppListView::startDrag(const QModelIndex &index)
         listModel->dropSwap(indexAt(m_dragStartPos).row());
 
     listModel->clearDragingIndex();
+
     m_enableDropInside = false;
 }
 
@@ -253,12 +259,15 @@ void AppListView::prepareDropSwap()
 
         lastAni->setStartValue(indexOffset(indexAt(i)) + offset);
         lastAni->setEndValue(indexOffset(indexAt(moveToNext ? i - 1 : i + 1)) + offset);
+        lastAni->setEasingCurve(QEasingCurve::OutQuad);
+        lastAni->setDuration(500);
 
         connect(lastAni, &QPropertyAnimation::finished, lastLabel, &QLabel::deleteLater);
         if (first)
         {
             first = false;
             connect(lastAni, &QPropertyAnimation::finished, this, &AppListView::dropSwap);
+//            connect(lastAni, &QPropertyAnimation::finished, listModel, &AppsListModel::clearDragingIndex, Qt::QueuedConnection);
             connect(lastAni, &QPropertyAnimation::valueChanged, m_dropThresholdTimer, &QTimer::stop);
         }
 

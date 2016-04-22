@@ -90,6 +90,7 @@ private slots:
 
 private:
     bool m_isConfirmDialogShown = false;
+    bool m_refershCategoryTextVisible = false;
     DisplayMode m_displayMode = Search;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
     QSettings m_settings;

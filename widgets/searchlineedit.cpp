@@ -37,7 +37,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
 
     setFixedSize(290, 30);
     setStyleSheet("QLineEdit {"
-                  "background-color:rgba(255, 255, 255, .3);"
+                  "background-color:rgba(255, 255, 255, .2);"
                   "padding:0px 0 0 25px;"
                   "border:none;"
                   "border-radius:5px;"

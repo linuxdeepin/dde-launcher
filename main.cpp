@@ -59,10 +59,12 @@ int main(int argv, char *args[])
         !connection.registerObject("/com/deepin/dde/Launcher", &launcher))
         qWarning() << "register dbus service failed";
 
-#ifndef QT_DEBUG
+
     if (!positionArgs.isEmpty() && cmdParser.isSet(showOption))
-#endif
         launcher.show();
+#ifdef QT_DEBUG
+    launcher.show();
+#endif
 
     return app.exec();
 }

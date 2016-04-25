@@ -86,21 +86,25 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     int textTopMargin = itemRect.width()*0.73;
     QRect textRect = QRect(itemRect.x() + leftMargin * 3, itemRect.y() + textTopMargin, itemRect.width() - leftMargin * 6, 36);
 
-    painter->setPen(QColor(0, 0, 0, 80));
-    painter->drawText(QRectF(textRect.x() + 0.8, textRect.y() + 1, textRect.width(), textRect.height()), Qt::TextWordWrap | Qt::AlignHCenter, itemInfo.m_name);
-    painter->drawText(QRectF(textRect.x() - 0.8, textRect.y() + 1, textRect.width(), textRect.height()), Qt::TextWordWrap | Qt::AlignHCenter, itemInfo.m_name);
-
-    painter->setPen(Qt::white);
-    painter->drawText(textRect, Qt::TextWordWrap | Qt::AlignHCenter, itemInfo.m_name);
 
     // draw blue dot if new install
     if (index.data(AppsListModel::AppNewInstallRole).toBool())
     {
+        painter->setPen(QColor(0, 0, 0, 80));
+        QString itemText = "   " + itemInfo.m_name;
         QFontMetrics fm(painter->font());
-        const QRect boundingRect = fm.boundingRect(textRect, Qt::TextWordWrap | Qt::AlignHCenter, itemInfo.m_name);
-
-        QRect bluePointRect = QRect(itemRect.x() + (textRect.width() - boundingRect.width()) / 2 - 8, itemRect.y() + itemRect.width() * 111 / 150, 10, 10);
+        const QRect boundingRect = fm.boundingRect(textRect, Qt::TextWordWrap | Qt::AlignHCenter, itemText);
+        painter->drawText(QRectF(textRect.x() + 0.8, textRect.y() + 1, textRect.width(), textRect.height()), Qt::TextWordWrap | Qt::AlignHCenter, itemText);
+        painter->setPen(Qt::white);
+        painter->drawText(QRectF(textRect.x() - 0.8, textRect.y(), textRect.width(), textRect.height()), Qt::TextWordWrap | Qt::AlignHCenter, itemText);
+        QRect bluePointRect = QRect(boundingRect.x() - 6, itemRect.y() + itemRect.width() * 111 / 150, 10, 10);
         painter->drawPixmap(bluePointRect,  m_blueDotPixmap);
+    } else {
+        painter->setPen(QColor(0, 0, 0, 80));
+        painter->drawText(textRect, Qt::TextWordWrap | Qt::AlignHCenter, itemInfo.m_name);
+        painter->drawText(QRectF(textRect.x() + 0.8, textRect.y() + 1, textRect.width(), textRect.height()), Qt::TextWordWrap | Qt::AlignHCenter, itemInfo.m_name);
+        painter->setPen(Qt::white);
+        painter->drawText(QRectF(textRect.x() - 0.8, textRect.y() + 1, textRect.width(), textRect.height()), Qt::TextWordWrap | Qt::AlignHCenter, itemInfo.m_name);
     }
 }
 

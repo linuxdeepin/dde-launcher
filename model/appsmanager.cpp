@@ -39,13 +39,15 @@ AppsManager::AppsManager(QObject *parent) :
 
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
-    connect(m_launcherInter, &DBusLauncher::UninstallFailed, this, &AppsManager::reStoreItem);
+    connect(m_launcherInter, &DBusLauncher::UninstallSuccess, this, &AppsManager::abandonStashedItem);
+    connect(m_launcherInter, &DBusLauncher::UninstallFailed, [this] (const QString &appKey) {restoreItem(appKey); emit dataChanged(AppsListModel::All);});
+//    connect(m_launcherInter, &DBusLauncher::UninstallFailed, this, &AppsManager::reStoreItem);
     connect(m_launcherInter, &DBusLauncher::ItemChanged, this, &AppsManager::handleItemChanged);
     //Maybe the signals newAppLaunched will be replaced by newAppMarkedAsLaunched
     //newAppLaunched is the old one.
     connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
 
-    connect(this, &AppsManager::handleUninstallApp, this, &AppsManager::unInstallApp);
+//    connect(this, &AppsManager::handleUninstallApp, this, &AppsManager::unInstallApp);
     connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
 }
 
@@ -123,15 +125,30 @@ void AppsManager::stashItem(const QModelIndex &index)
 {
     const QString key = index.data(AppsListModel::AppKeyRole).toString();
 
-    for (int i(0); i != m_userSortedList.size(); ++i)
+    return stashItem(key);
+}
+
+void AppsManager::stashItem(const QString &appKey)
+{
+    for (int i(0); i != m_allAppInfoList.size(); ++i)
     {
-        if (m_userSortedList[i].m_key == key)
+        if (m_allAppInfoList[i].m_key == appKey)
         {
-            m_stashList.append(m_userSortedList[i]);
-            m_userSortedList.removeAt(i);
+            m_stashList.append(m_allAppInfoList[i]);
+            m_allAppInfoList.removeAt(i);
+            generateCategoryMap();
+
             return;
         }
     }
+}
+
+void AppsManager::abandonStashedItem(const QString &appKey)
+{
+    qDebug() << "bana" << appKey;
+    for (int i(0); i != m_stashList.size(); ++i)
+        if (m_stashList[i].m_key == appKey)
+            return m_stashList.removeAt(i);
 }
 
 void AppsManager::restoreItem(const QString &appKey, const int pos)
@@ -140,8 +157,14 @@ void AppsManager::restoreItem(const QString &appKey, const int pos)
     {
         if (m_stashList[i].m_key == appKey)
         {
-            m_userSortedList.insert(pos, m_stashList[i]);
+            // if pos is valid
+            if (pos != -1)
+                m_userSortedList.insert(pos, m_stashList[i]);
+            m_allAppInfoList.append(m_stashList[i]);
             m_stashList.removeAt(i);
+
+            generateCategoryMap();
+
             return saveUserSortedList();
         }
     }
@@ -170,6 +193,17 @@ void AppsManager::launchApp(const QModelIndex &index)
 
     if (!appDesktop.isEmpty())
         m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
+}
+
+void AppsManager::uninstallApp(const QString &appKey)
+{
+    // begin uninstall, remove icon first.
+    stashItem(appKey);
+
+    // request backend
+    m_launcherInter->RequestUninstall(appKey, false);
+
+    emit dataChanged(AppsListModel::All);
 }
 
 void AppsManager::markLaunched(QString appKey)
@@ -244,13 +278,19 @@ const QPixmap AppsManager::appIcon(const QString &iconKey, const int size)
 
 void AppsManager::refreshCategoryInfoList()
 {
-    m_appInfos.clear();
-
     QByteArray readBuf = APP_USER_SORTED_LIST.value("list").toByteArray();
     QDataStream in(&readBuf, QIODevice::ReadOnly);
     in >> m_userSortedList;
 
     m_allAppInfoList = m_launcherInter->GetAllItemInfos().value();
+
+    generateCategoryMap();
+    saveUserSortedList();
+}
+
+void AppsManager::generateCategoryMap()
+{
+    m_appInfos.clear();
     sortByName(m_allAppInfoList);
 
     for (const ItemInfo &info : m_allAppInfoList)
@@ -270,8 +310,6 @@ void AppsManager::refreshCategoryInfoList()
     for (const ItemInfo &info : m_userSortedList)
         if (!m_allAppInfoList.contains(info))
             m_userSortedList.removeOne(info);
-
-    saveUserSortedList();
 }
 
 int AppsManager::appNums(const AppsListModel::AppCategory &category) const
@@ -279,55 +317,55 @@ int AppsManager::appNums(const AppsListModel::AppCategory &category) const
     return appsInfoList(category).size();
 }
 
-void AppsManager::unInstallApp(const QModelIndex &index, int value) {
-    QString appKey = index.data(AppsListModel::AppKeyRole).toString();
-    if (value==1) {
-        // begin to unInstall app, remove icon firstly;
-        QDBusPendingReply<ItemInfo> reply = m_launcherInter->GetItemInfo(appKey);
-        reply.waitForFinished();
-        if (reply.isValid() && !reply.isError()) {
-            m_unInstallItem = qdbus_cast<ItemInfo>(reply.argumentAt(0));
-            m_allAppInfoList.removeOne(m_unInstallItem);
+//void AppsManager::unInstallApp(const QModelIndex &index, int value) {
+//    QString appKey = index.data(AppsListModel::AppKeyRole).toString();
+//    if (value==1) {
+//        // begin to unInstall app, remove icon firstly;
+//        QDBusPendingReply<ItemInfo> reply = m_launcherInter->GetItemInfo(appKey);
+//        reply.waitForFinished();
+//        if (reply.isValid() && !reply.isError()) {
+//            m_unInstallItem = qdbus_cast<ItemInfo>(reply.argumentAt(0));
+//            m_allAppInfoList.removeOne(m_unInstallItem);
 
-            emit dataChanged(AppsListModel::All);
-            refreshAppIconCache();
-            refreshCategoryInfoList();
-            //if after the app be unInstalled, it's category's app number is zero, update the view
-            if (appsInfoList(m_unInstallItem.category()).size()==0) {
-                emit updateCategoryView(m_unInstallItem.category());
-            }
+//            emit dataChanged(AppsListModel::All);
+//            refreshAppIconCache();
+//            refreshCategoryInfoList();
+//            //if after the app be unInstalled, it's category's app number is zero, update the view
+//            if (appsInfoList(m_unInstallItem.category()).size()==0) {
+//                emit updateCategoryView(m_unInstallItem.category());
+//            }
 
-            emit dataChanged(m_unInstallItem.category());
+//            emit dataChanged(m_unInstallItem.category());
 
-            //Uninstall app from backend;
-            QDBusPendingReply<> reply = m_launcherInter->RequestUninstall(appKey, false);
-            if (!reply.isError()) {
-//                qDebug() << "unistall function excute finished!";
-            } else {
-//                qDebug() << "unistall action fail, and the error reason:" << reply.error().message();
-            }
-        } else {
-//            qDebug() << "get unInstall app itemInfo failed!";
-        }
-    } else {
-        //cancle to unInstall app;
-//        qDebug() << "cancle to unInstall app" << appKey;
-    }
-}
+//            //Uninstall app from backend;
+//            QDBusPendingReply<> reply = m_launcherInter->RequestUninstall(appKey, false);
+//            if (!reply.isError()) {
+////                qDebug() << "unistall function excute finished!";
+//            } else {
+////                qDebug() << "unistall action fail, and the error reason:" << reply.error().message();
+//            }
+//        } else {
+////            qDebug() << "get unInstall app itemInfo failed!";
+//        }
+//    } else {
+//        //cancle to unInstall app;
+////        qDebug() << "cancle to unInstall app" << appKey;
+//    }
+//}
 
-void AppsManager::reStoreItem() {
-    bool updateViewFlag = false;
-    if (appsInfoList(m_unInstallItem.category()).length() == 0) {
-        updateViewFlag = true;
-    }
-    m_allAppInfoList.append(m_unInstallItem);
-    emit dataChanged(AppsListModel::All);
-    emit dataChanged(m_unInstallItem.category());
-    refreshCategoryInfoList();
-    if (updateViewFlag) {
-        emit updateCategoryView(m_unInstallItem.category());
-    }
-}
+//void AppsManager::reStoreItem() {
+//    bool updateViewFlag = false;
+//    if (appsInfoList(m_unInstallItem.category()).length() == 0) {
+//        updateViewFlag = true;
+//    }
+//    m_allAppInfoList.append(m_unInstallItem);
+//    emit dataChanged(AppsListModel::All);
+//    emit dataChanged(m_unInstallItem.category());
+//    refreshCategoryInfoList();
+//    if (updateViewFlag) {
+//        emit updateCategoryView(m_unInstallItem.category());
+//    }
+//}
 
 void AppsManager::refreshAppIconCache()
 {
@@ -411,6 +449,7 @@ void AppsManager::searchDone(const QStringList &resultList)
 //    }
 //}
 
+// TODO: optimize
 void AppsManager::handleItemChanged(const QString &in0, ItemInfo in1, qlonglong in2) {
     qDebug() << "in0" << in0 << in1.m_name << "in2" << in2;
     if (in0 == "created") {

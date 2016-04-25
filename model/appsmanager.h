@@ -29,18 +29,21 @@ public:
     static AppsManager *instance(QObject *parent = nullptr);
 
     void stashItem(const QModelIndex &index);
-    void restoreItem(const QString &appKey, const int pos);
+    void stashItem(const QString &appKey);
+    void abandonStashedItem(const QString &appKey);
+    void restoreItem(const QString &appKey, const int pos = -1);
 
 signals:
     void dataChanged(const AppsListModel::AppCategory category) const;
     void layoutChanged(const AppsListModel::AppCategory category) const;
-    void handleUninstallApp(const QModelIndex &index, int result);
+//    void handleUninstallApp(const QModelIndex &index, int result);
     void updateCategoryView(const AppsListModel::AppCategory categoryInfo) const;
 
 public slots:
     void saveUserSortedList();
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
+    void uninstallApp(const QString &appKey);
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
 
     bool appIsNewInstall(const QString &key);
@@ -51,12 +54,14 @@ public slots:
     int appNums(const AppsListModel::AppCategory &category) const;
 
     //remove the item icon firstly, when unInstalling apps
-    void unInstallApp(const QModelIndex &index, int value);
+//    void unInstallApp(const QModelIndex &index, int value);
     //restore the itemInfo, if unInstall failed!
-    void reStoreItem();
+//    void reStoreItem();
 
 //    void handleDragedApp(const QModelIndex &index, int nextNode);
 //    void handleDropedApp(const QModelIndex &index);
+
+    // TODO: optimize
     void handleItemChanged(const QString &in0, ItemInfo in1, qlonglong in2);
 
 private:
@@ -68,6 +73,7 @@ private:
     void sortCategory(const AppsListModel::AppCategory category);
     void sortByName(ItemInfoList &processList);
     void refreshCategoryInfoList();
+    void generateCategoryMap();
     void refreshAppIconCache();
     void refreshAppAutoStartCache();
 

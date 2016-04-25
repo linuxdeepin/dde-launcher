@@ -82,7 +82,6 @@ private slots:
     void ensureScrollToDest(const QVariant &value);
     void ensureItemVisible(const QModelIndex &index);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
-    void handleUninstallResult(int result, QString content);
     void showGradient();
     void showCategoryMoveAnimation();
     void fakeLabelMoveAni(QLabel *source, QLabel *dest);

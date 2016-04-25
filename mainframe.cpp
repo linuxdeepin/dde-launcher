@@ -808,6 +808,7 @@ void MainFrame::showPopupUninstallDialog(const QModelIndex &context)
     unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
     unInstallDialog.setWindowModality(Qt::WindowModal);
 
+    const QString appKey = context.data(AppsListModel::AppKeyRole).toString();
     QString appName = context.data(AppsListModel::AppNameRole).toString();
     unInstallDialog.setTitle(QString(tr("Are you sure to uninstall %1 ?")).arg(appName));
     QPixmap appIcon = context.data(AppsListModel::AppIconRole).value<QPixmap>();
@@ -820,19 +821,18 @@ void MainFrame::showPopupUninstallDialog(const QModelIndex &context)
     buttons << tr("Cancel") << tr("Confirm");
     unInstallDialog.addButtons(buttons);
 
-    connect(&unInstallDialog, SIGNAL(buttonClicked(int, QString)), this, SLOT(handleUninstallResult(int, QString)));
+//    connect(&unInstallDialog, SIGNAL(buttonClicked(int, QString)), this, SLOT(handleUninstallResult(int, QString)));
+    connect(&unInstallDialog, &DTK_WIDGET_NAMESPACE::DDialog::buttonClicked, [&] (int clickedResult) {
+        // 0 means "cancel" button clicked
+        if (clickedResult == 0)
+            return;
+
+        m_appsManager->uninstallApp(appKey);
+    });
 
     unInstallDialog.exec();
     unInstallDialog.deleteLater();
     m_isConfirmDialogShown = false;
-}
-
-void MainFrame::handleUninstallResult(int result, QString content) {
-    Q_UNUSED(content);
-    const QModelIndex unInstallIndex = m_menuWorker->getCurrentModelIndex();
-    qDebug() << "unInstallAppName:" << unInstallIndex.data(AppsListModel::AppNameRole).toString()
-             << result;
-    emit m_appsManager->handleUninstallApp(unInstallIndex, result);
 }
 
 void MainFrame::ensureScrollToDest(const QVariant &value)

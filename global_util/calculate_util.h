@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QSize>
-
 #include <QtCore>
 
 class CalculateUtil : public QObject
@@ -15,13 +14,13 @@ signals:
 
 public:
     static CalculateUtil *instance(QObject *parent = nullptr);
-
+    ~CalculateUtil();
     inline int appColumnCount() const {return m_appColumnCount;}
     inline int appItemFontSize() const {return m_appItemFontSize;}
     inline QSize appIconSize() const { return QSize(m_appIconSize, m_appIconSize);}
     inline int appItemSpacing() const {return m_appItemSpacing;}
     inline QSize appItemSize() const {return QSize(m_appItemWidth, m_appItemHeight);}
-
+    double viewMarginRation();
 #ifdef QT_DEBUG
     inline void increaseIconSize() {m_appIconSize += 16;}
     inline void decreaseIconSize() {m_appIconSize -= 16;}
@@ -44,6 +43,8 @@ private:
     int m_appItemWidth = 130;
     int m_appItemHeight = 130;
     int m_appColumnCount = 7;
+    float m_viewMarginRation = 1.00;
+    QSize bestSize = QSize(1440, 900);
 };
 
 #endif // CALCULATE_UTIL_H

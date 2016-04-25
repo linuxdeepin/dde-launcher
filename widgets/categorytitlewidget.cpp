@@ -6,6 +6,7 @@
 #include <QGraphicsDropShadowEffect>
 
 CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) :
+     m_calcUtil(CalculateUtil::instance(this)),
     QWidget(parent)
 {
     QLabel* whiteLine = new QLabel(this);
@@ -25,7 +26,7 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     m_title->setText(titleContent);
 
     QFont titleFont;
-    titleFont.setPixelSize(20);
+    titleFont.setPixelSize(int(20*m_calcUtil->viewMarginRation()));
     m_title->setFont(titleFont);
     QFontMetrics fontMetric(titleFont);
     int width=fontMetric.width(titleContent);

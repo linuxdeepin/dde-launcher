@@ -9,6 +9,7 @@ DWIDGET_USE_NAMESPACE
 
 NavigationWidget::NavigationWidget(QWidget *parent) :
     QWidget(parent),
+    m_calcUtil(CalculateUtil::instance(this)),
     m_categoryGroup(new QButtonGroup(this)),
     m_internetBtn(new CategoryButton(AppsListModel::Internet, this)),
     m_chatBtn(new CategoryButton(AppsListModel::Chat, this)),
@@ -23,7 +24,7 @@ NavigationWidget::NavigationWidget(QWidget *parent) :
     m_othersBtn(new CategoryButton(AppsListModel::Others, this))
 
 {
-    setFixedWidth(DLauncher::NAVIGATION_WIDGET_WIDTH);
+    setFixedWidth(int(DLauncher::NAVIGATION_WIDGET_WIDTH*m_calcUtil->viewMarginRation()));
 
     initUI();
     initConnection();
@@ -84,7 +85,9 @@ void NavigationWidget::refershCategoryVisible(const AppsListModel::AppCategory c
 
 void NavigationWidget::initUI()
 {
-    this->setFixedWidth(DLauncher::NAVIGATION_WIDGET_WIDTH);
+    qDebug() << DLauncher::NAVIGATION_WIDGET_WIDTH*m_calcUtil->viewMarginRation()
+             << DLauncher::NAVIGATION_WIDGET_WIDTH << m_calcUtil->viewMarginRation();
+    this->setFixedWidth(int(DLauncher::NAVIGATION_WIDGET_WIDTH*m_calcUtil->viewMarginRation()));
 
     m_categoryGroup->addButton(m_internetBtn);
     m_categoryGroup->addButton(m_chatBtn);

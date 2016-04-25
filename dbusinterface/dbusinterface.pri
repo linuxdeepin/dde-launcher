@@ -12,7 +12,8 @@ HEADERS += \
     $$PWD/dbuslauncherframe.h \
     $$PWD/dbusmenu.h \
     $$PWD/dbusmenumanager.h \
-    $$PWD/dbustartmanager.h
+    $$PWD/dbustartmanager.h \
+    $$PWD/monitorinterface.h
 
 SOURCES += \
     $$PWD/dbusvariant/categoryinfo.cpp \
@@ -26,4 +27,5 @@ SOURCES += \
     $$PWD/dbuslauncherframe.cpp \
     $$PWD/dbusmenu.cpp \
     $$PWD/dbusmenumanager.cpp \
-    $$PWD/dbustartmanager.cpp
+    $$PWD/dbustartmanager.cpp \
+    $$PWD/monitorinterface.cpp

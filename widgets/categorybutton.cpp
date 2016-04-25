@@ -9,12 +9,13 @@
 CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidget *parent) :
     QAbstractButton(parent),
     m_category(category),
+    m_calcUtil(CalculateUtil::instance(this)),
     m_iconLabel(new QLabel),
     m_textLabel(new QLabel)
 {
     setObjectName("CategoryButton");
-    m_iconLabel->setFixedSize(22, 22);
-    m_textLabel->setFixedHeight(22);
+    m_iconLabel->setFixedSize(22*m_calcUtil->viewMarginRation(), 22*m_calcUtil->viewMarginRation());
+    m_textLabel->setFixedHeight(22*m_calcUtil->viewMarginRation());
     m_textLabel->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->setSpacing(0);
@@ -31,7 +32,7 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     setFocusPolicy(Qt::NoFocus);
     setFixedHeight(DLauncher::NAVIGATION_ICON_HEIGHT);
     setInfoByCategory();
-    setStyleSheet("background-color:transparent; color: white; font-size: 15px;");
+    setStyleSheet(QString("background-color:transparent; color: white; font-size: %1px;").arg(int(15*m_calcUtil->viewMarginRation())));
     updateState(Normal);
     addTextShadow();
 
@@ -123,7 +124,9 @@ void CategoryButton::updateState(const CategoryButton::State state)
     default:        picState = "normal";    break;
     }
 
-    m_iconLabel->setPixmap(QString(":/icons/skin/icons/%1_%2_22px.svg").arg(m_iconName).arg(picState));
+    QPixmap tmpCategoryMap;
+    tmpCategoryMap.load(QString(":/icons/skin/icons/%1_%2_22px.svg").arg(m_iconName).arg(picState));
+    m_iconLabel->setPixmap(tmpCategoryMap.scaled(QSize(22*m_calcUtil->viewMarginRation(), 22*m_calcUtil->viewMarginRation()), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 }
 
 void CategoryButton::addTextShadow() {

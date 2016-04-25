@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QMouseEvent>
+#include "global_util/calculate_util.h"
 
 class CategoryTitleWidget : public QWidget
 {
@@ -19,6 +20,7 @@ public slots:
 protected:
     void mouseReleaseEvent(QMouseEvent *e);
 private:
+    CalculateUtil *m_calcUtil;
     QLabel *m_title;
     void addTextShadow();
 };

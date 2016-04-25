@@ -2,6 +2,7 @@
 #define CATEGORYBUTTON_H
 
 #include "../model/appslistmodel.h"
+#include "global_util/calculate_util.h"
 
 #include <QAbstractButton>
 #include <QLabel>
@@ -38,6 +39,7 @@ private:
     void addTextShadow();
 
 private:
+    CalculateUtil *m_calcUtil;
     State m_state = Checked;
     AppsListModel::AppCategory m_category;
     QString m_iconName;

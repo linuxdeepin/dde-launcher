@@ -156,6 +156,7 @@ void MainFrame::resizeEvent(QResizeEvent *e)
     m_systemView->setFixedWidth(appsContentWidth);
     m_othersView->setFixedWidth(appsContentWidth);
 
+    qDebug() << "m_appsArea:" << m_appsArea->size();
     m_calcUtil->calculateAppLayout(m_appsArea->size());
 }
 
@@ -368,7 +369,7 @@ void MainFrame::initUI()
     m_contentLayout->addSpacing(0);
     m_contentLayout->addWidget(m_navigationBar);
     m_contentLayout->addLayout(m_scrollAreaLayout);
-    m_contentLayout->addSpacing(DLauncher::VIEWLIST_RIGHT_MARGIN);
+    m_contentLayout->addSpacing(int(DLauncher::VIEWLIST_RIGHT_MARGIN*m_calcUtil->viewMarginRation()));
 
     m_bottomGradient->setDirection(GradientLabel::BottomToTop);
 
@@ -380,7 +381,7 @@ void MainFrame::initUI()
 
     setLayout(m_mainLayout);
 
-    m_searchWidget->move(this->rect().center().x(), 10);
+    m_searchWidget->move(qApp->desktop()->screenGeometry().width()/2 - m_searchWidget->width()/2, 10);
 
     m_toggleModeBtn->setFixedSize(22, 22);
     m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");

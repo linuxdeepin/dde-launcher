@@ -2,6 +2,7 @@
 #define NAVIGATIONWIDGET_H
 
 #include "categorybutton.h"
+#include "global_util/calculate_util.h"
 
 #include <QWidget>
 #include <QButtonGroup>
@@ -40,6 +41,7 @@ private:
     CategoryButton *button(const AppsListModel::AppCategory category) const;
 
 private:
+    CalculateUtil *m_calcUtil;
     QButtonGroup *m_categoryGroup;
     CategoryButton *m_internetBtn;
     CategoryButton* m_chatBtn;

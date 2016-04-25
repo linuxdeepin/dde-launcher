@@ -57,6 +57,12 @@ void CategoryTitleWidget::addTextShadow()
     m_title->setGraphicsEffect(textDropShadow);
 }
 
+void CategoryTitleWidget::mouseReleaseEvent(QMouseEvent *e) {
+    if (e->button() == Qt::RightButton) {
+        return;
+    }
+}
+
 QLabel *CategoryTitleWidget::textLabel()
 {
     return m_title;

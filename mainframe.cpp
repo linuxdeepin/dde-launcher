@@ -225,7 +225,9 @@ void MainFrame::showEvent(QShowEvent *e)
 void MainFrame::mouseReleaseEvent(QMouseEvent *e)
 {
     QFrame::mouseReleaseEvent(e);
-
+    if (e->button() == Qt::RightButton) {
+        return;
+    }
     hide();
 }
 

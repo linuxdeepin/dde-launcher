@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <QMouseEvent>
 
 class CategoryTitleWidget : public QWidget
 {
@@ -15,7 +16,8 @@ public:
 
 public slots:
     void setTextVisible(const bool visible);
-
+protected:
+    void mouseReleaseEvent(QMouseEvent *e);
 private:
     QLabel *m_title;
     void addTextShadow();

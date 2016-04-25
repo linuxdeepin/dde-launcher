@@ -23,7 +23,6 @@ public:
 
 signals:
     void scrollToCategory(const AppsListModel::AppCategory category) const;
-    void toggleModeClicked() const;
     void mouseEntered();
 
 public slots:
@@ -41,7 +40,6 @@ private:
     CategoryButton *button(const AppsListModel::AppCategory category) const;
 
 private:
-    DImageButton *m_toggleModeBtn;
     QButtonGroup *m_categoryGroup;
     CategoryButton *m_internetBtn;
     CategoryButton* m_chatBtn;

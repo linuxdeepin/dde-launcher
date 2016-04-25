@@ -104,6 +104,7 @@ private:
     QTimer *m_delayHideTimer;
     SystemBackground *m_backgroundLabel;
 
+    DImageButton *m_toggleModeBtn;
     NavigationWidget *m_navigationBar;
     SearchWidget *m_searchWidget;
     AppListArea *m_appsArea;

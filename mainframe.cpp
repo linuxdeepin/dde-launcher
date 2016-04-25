@@ -27,8 +27,9 @@ MainFrame::MainFrame(QWidget *parent) :
     m_delayHideTimer(new QTimer(this)),
     m_backgroundLabel(new SystemBackground(qApp->primaryScreen()->geometry().size(), true, this)),
 
+    m_toggleModeBtn(new DImageButton(this)),
     m_navigationBar(new NavigationWidget),
-    m_searchWidget(new SearchWidget),
+    m_searchWidget(new SearchWidget(this)),
     m_appsArea(new AppListArea),
     m_appsVbox(new DVBoxWidget),
     m_menuWorker(new MenuWorker),
@@ -372,11 +373,18 @@ void MainFrame::initUI()
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
     m_mainLayout->setSpacing(0);
-    m_mainLayout->addWidget(m_searchWidget);
+    m_mainLayout->addSpacing(60);
     m_mainLayout->addLayout(m_contentLayout);
 
     setLayout(m_mainLayout);
 
+    m_searchWidget->move(this->rect().center().x(), 10);
+
+    m_toggleModeBtn->setFixedSize(22, 22);
+    m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
+    m_toggleModeBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
+    m_toggleModeBtn->setPressPic(":/icons/skin/icons/category_active_22px.svg");
+    m_toggleModeBtn->move(QPoint(30, 30));
     // animation
     m_scrollAnimation = new QPropertyAnimation(m_appsArea->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
@@ -390,6 +398,7 @@ void MainFrame::showGradient() {
         QRect topRect(topLeft, topSize);
         m_topGradient->setPixmap(m_backgroundLabel->getBackground().copy(topRect));
         m_topGradient->resize(topRect.size());
+
 //        qDebug() << "topleft point:" << topRect.topLeft() << topRect.size();
         m_topGradient->move(topRect.topLeft());
         m_topGradient->show();
@@ -403,9 +412,8 @@ void MainFrame::showGradient() {
 
         QRect bottomRect(bottomLeft, bottomSize);
         m_bottomGradient->setPixmap(m_backgroundLabel->getBackground().copy(bottomRect));
-//        qDebug() << "m_backgroundLabel->getBackground().copy(bottomRect):" <<
-//                    m_backgroundLabel->getBackground().copy(bottomRect).size();
-//        qDebug() << "bottomleft point:" << bottomRect.topLeft() << bottomRect.size();
+
+
         m_bottomGradient->resize(bottomRect.size());
         m_bottomGradient->move(bottomRect.topLeft());
         m_bottomGradient->show();
@@ -642,11 +650,12 @@ void MainFrame::initConnection()
 
     connect(m_menuWorker, &MenuWorker::quitLauncher, this, &MainFrame::hide);
     connect(m_menuWorker, &MenuWorker::unInstallApp, this, &MainFrame::showPopupUninstallDialog);
-    connect(m_navigationBar, &NavigationWidget::toggleModeClicked, [this] {
+    connect(m_toggleModeBtn, &DImageButton::clicked, [this]{
         m_searchWidget->clearFocus();
         m_searchWidget->clearSearchContent();
         updateDisplayMode(m_displayMode == GroupByCategory ? AllApps : GroupByCategory);
     });
+
     connect(m_appsManager, &AppsManager::updateCategoryView, this, &MainFrame::checkCategoryVisible);
 }
 

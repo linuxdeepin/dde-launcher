@@ -9,7 +9,6 @@ DWIDGET_USE_NAMESPACE
 
 NavigationWidget::NavigationWidget(QWidget *parent) :
     QWidget(parent),
-    m_toggleModeBtn(new DImageButton(this)),
     m_categoryGroup(new QButtonGroup(this)),
     m_internetBtn(new CategoryButton(AppsListModel::Internet, this)),
     m_chatBtn(new CategoryButton(AppsListModel::Chat, this)),
@@ -85,13 +84,7 @@ void NavigationWidget::refershCategoryVisible(const AppsListModel::AppCategory c
 
 void NavigationWidget::initUI()
 {
-    // 62 == icon with 32 + margin size 30
     this->setFixedWidth(DLauncher::NAVIGATION_WIDGET_WIDTH);
-    m_toggleModeBtn->setFixedWidth(62);
-    m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
-    m_toggleModeBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
-    m_toggleModeBtn->setPressPic(":/icons/skin/icons/category_active_22px.svg");
-    m_toggleModeBtn->setStyleSheet("margin:25px 0 0 30px;");
 
     m_categoryGroup->addButton(m_internetBtn);
     m_categoryGroup->addButton(m_chatBtn);
@@ -108,7 +101,6 @@ void NavigationWidget::initUI()
     m_internetBtn->setChecked(true);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(m_toggleModeBtn);
     mainLayout->addStretch();
     mainLayout->addWidget(m_internetBtn);
     mainLayout->addWidget(m_chatBtn);
@@ -124,7 +116,7 @@ void NavigationWidget::initUI()
     mainLayout->addStretch();
     mainLayout->setSpacing(0);
     mainLayout->setMargin(0);
-    setStyleSheet("background: transparent;");
+
     setLayout(mainLayout);
 }
 
@@ -141,8 +133,6 @@ void NavigationWidget::initConnection()
     connect(m_developmentBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_systemBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_othersBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
-
-    connect(m_toggleModeBtn, &DImageButton::clicked, this, &NavigationWidget::toggleModeClicked);
 }
 
 void NavigationWidget::buttonClicked()

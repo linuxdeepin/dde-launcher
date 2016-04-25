@@ -10,7 +10,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     QFrame(parent)
 {
 //    setObjectName("SearchFrame");
-
+    this->setFixedWidth(300);
     m_searchEdit = new SearchLineEdit(this);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
@@ -18,7 +18,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     mainLayout->addWidget(m_searchEdit);
     mainLayout->addStretch();
     mainLayout->setSpacing(0);
-    mainLayout->setContentsMargins(0, 33, 0, 0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(mainLayout);
 
     connect(m_searchEdit, &SearchLineEdit::textChanged, [this] {

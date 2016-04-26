@@ -6,7 +6,7 @@
 #include <QGraphicsDropShadowEffect>
 
 CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) :
-    QWidget(parent),
+    QFrame(parent),
     m_calcUtil(CalculateUtil::instance(this))
 {
     QLabel* whiteLine = new QLabel(this);
@@ -21,9 +21,26 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     lineLayout->addStretch();
 
     m_title = new QLabel(this);
+    setText(title);
+    QHBoxLayout *mainLayout = new QHBoxLayout;
 
+    mainLayout->addWidget(m_title);
+    mainLayout->addLayout(lineLayout);
+    setLayout(mainLayout);
+    setFixedHeight(DLauncher::CATEGORY_TITLE_WIDGET_HEIGHT);
+
+    addTextShadow();
+
+    setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));
+}
+
+void CategoryTitleWidget::setTextVisible(const bool visible)
+{
+    m_title->setVisible(visible);
+}
+
+void CategoryTitleWidget::setText(const QString &title) {
     QString titleContent = getCategoryNames(title);
-    m_title->setText(titleContent);
 
     QFont titleFont;
     titleFont.setPixelSize(int(20*m_calcUtil->viewMarginRation()));
@@ -33,20 +50,7 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     m_title->setFixedWidth(width + 10);
     m_title->setStyleSheet("color: white; background-color:transparent;");
 
-    QHBoxLayout *mainLayout = new QHBoxLayout;
-
-    mainLayout->addWidget(m_title);
-    mainLayout->addLayout(lineLayout);
-    setLayout(mainLayout);
-    setFixedHeight(DLauncher::CATEGORY_TITLE_WIDGET_HEIGHT);
-
-    addTextShadow();
-    setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));
-}
-
-void CategoryTitleWidget::setTextVisible(const bool visible)
-{
-    m_title->setVisible(visible);
+    m_title->setText(titleContent);
 }
 
 void CategoryTitleWidget::addTextShadow()

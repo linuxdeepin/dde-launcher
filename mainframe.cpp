@@ -65,6 +65,7 @@ MainFrame::MainFrame(QWidget *parent) :
     m_systemModel(new AppsListModel(AppsListModel::System)),
     m_othersModel(new AppsListModel(AppsListModel::Others)),
 
+
     m_internetTitle(new CategoryTitleWidget("Internet")),
     m_chatTitle(new CategoryTitleWidget("Chat")),
     m_musicTitle(new CategoryTitleWidget("Music")),
@@ -103,23 +104,7 @@ void MainFrame::showByMode(const qlonglong mode)
 
 void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
 {
-    QWidget *dest = nullptr;
-
-    switch (category)
-    {
-    case AppsListModel::Internet:       dest = m_internetTitle;         break;
-    case AppsListModel::Chat:           dest = m_chatTitle;             break;
-    case AppsListModel::Music:          dest = m_musicTitle;            break;
-    case AppsListModel::Video:          dest = m_videoTitle;            break;
-    case AppsListModel::Graphics:       dest = m_graphicsTitle;         break;
-    case AppsListModel::Game:           dest = m_gameTitle;             break;
-    case AppsListModel::Office:         dest = m_officeTitle;           break;
-    case AppsListModel::Reading:        dest = m_readingTitle;          break;
-    case AppsListModel::Development:    dest = m_developmentTitle;      break;
-    case AppsListModel::System:         dest = m_systemTitle;           break;
-    case AppsListModel::Others:         dest = m_othersTitle;           break;
-    default:;
-    }
+    QWidget *dest = categoryView(category);
 
     if (!dest)
         return;
@@ -266,8 +251,15 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
 
         qApp->postEvent(m_appsArea->viewport(), event);
         return true;
-    } else if (o == m_appsArea->viewport() && e->type() == QEvent::Wheel)
+    } else if (o == m_appsArea->viewport() && e->type() == QEvent::Wheel) {
+        QWheelEvent *event = static_cast<QWheelEvent *>(e);
+        if (event->angleDelta().y() > 0) {
+            m_upScrollFlag = false;
+        } else {
+            m_upScrollFlag = true;
+        }
         updateCurrentVisibleCategory();
+    }
     else if (o == m_othersView && e->type() == QEvent::Resize)
         m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - m_othersView->height());
 
@@ -376,13 +368,16 @@ void MainFrame::initUI()
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
     m_mainLayout->setSpacing(0);
-    m_mainLayout->addSpacing(60);
+    m_mainLayout->addSpacing(120);
     m_mainLayout->addLayout(m_contentLayout);
 
     setLayout(m_mainLayout);
 
     m_searchWidget->move(qApp->desktop()->screenGeometry().width()/2 - m_searchWidget->width()/2, 10);
-
+    m_floatTitle = new CategoryTitleWidget("Internet", this),
+    m_floatTitle->setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));;
+    m_floatTitle->move(180, 50);
+    m_floatTitle->setFixedWidth(1920 - 180*2);
     m_toggleModeBtn->setFixedSize(22, 22);
     m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
     m_toggleModeBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
@@ -563,13 +558,72 @@ void MainFrame::refershCategoryTextVisible()
     m_othersTitle->setTextVisible(shownAppList);
 }
 
+void MainFrame::refershCurrentFloatTitle(const AppsListModel::AppCategory category)
+{
+    if (m_displayMode != GroupByCategory)
+        return;
+
+    CategoryTitleWidget *sourceTitle = categoryTitle(category);
+    if (!sourceTitle)
+        return;
+
+    m_floatTitle->setText(sourceTitle->textLabel()->text());
+    m_floatTitle->setVisible(m_appsArea->verticalScrollBar()->value() > m_internetTitle->height() + 10);
+}
+
+CategoryTitleWidget *MainFrame::categoryTitle(const AppsListModel::AppCategory category) const
+{
+    CategoryTitleWidget *dest = nullptr;
+
+    switch (category)
+    {
+    case AppsListModel::Internet:       dest = m_internetTitle;         break;
+    case AppsListModel::Chat:           dest = m_chatTitle;             break;
+    case AppsListModel::Music:          dest = m_musicTitle;            break;
+    case AppsListModel::Video:          dest = m_videoTitle;            break;
+    case AppsListModel::Graphics:       dest = m_graphicsTitle;         break;
+    case AppsListModel::Game:           dest = m_gameTitle;             break;
+    case AppsListModel::Office:         dest = m_officeTitle;           break;
+    case AppsListModel::Reading:        dest = m_readingTitle;          break;
+    case AppsListModel::Development:    dest = m_developmentTitle;      break;
+    case AppsListModel::System:         dest = m_systemTitle;           break;
+    case AppsListModel::Others:         dest = m_othersTitle;           break;
+    default:;
+    }
+
+    return dest;
+}
+
+AppListView *MainFrame::categoryView(const AppsListModel::AppCategory category) const
+{
+    AppListView *view = nullptr;
+
+    switch (category)
+    {
+    case AppsListModel::Internet:       view = m_internetView;      break;
+    case AppsListModel::Chat:           view = m_chatView;          break;
+    case AppsListModel::Music:          view = m_musicView;         break;
+    case AppsListModel::Video:          view = m_videoView;         break;
+    case AppsListModel::Graphics:       view = m_graphicsView;      break;
+    case AppsListModel::Game:           view = m_gameView;          break;
+    case AppsListModel::Office:         view = m_officeView;        break;
+    case AppsListModel::Reading:        view = m_readingView;       break;
+    case AppsListModel::Development:    view = m_developmentView;   break;
+    case AppsListModel::System:         view = m_systemView;        break;
+    case AppsListModel::Others:         view = m_othersView;        break;
+    default:;
+    }
+
+    return view;
+}
+
 void MainFrame::initConnection()
 {
     connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &MainFrame::updateGeometry);
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &MainFrame::updateGeometry);
 
     connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &MainFrame::ensureScrollToDest);
-//    connect(m_scrollAnimation, &QPropertyAnimation::finished, [this] {m_navigationBar->setCurrentCategory(m_currentCategory);});
+    connect(m_scrollAnimation, &QPropertyAnimation::finished, [this] {refershCurrentFloatTitle(m_currentCategory);});
     connect(m_navigationBar, &NavigationWidget::scrollToCategory, this, &MainFrame::scrollToCategory);
     connect(this, &MainFrame::currentVisibleCategoryChanged, m_navigationBar, &NavigationWidget::setCurrentCategory);
     connect(this, &MainFrame::categoryAppNumsChanged, m_navigationBar, &NavigationWidget::refershCategoryVisible);
@@ -856,21 +910,7 @@ void MainFrame::ensureItemVisible(const QModelIndex &index)
     if (m_displayMode == Search || m_displayMode == AllApps)
         view = m_allAppsView;
     else
-        switch (category)
-        {
-        case AppsListModel::Internet:       view = m_internetView;      break;
-        case AppsListModel::Chat:           view = m_chatView;          break;
-        case AppsListModel::Music:          view = m_musicView;         break;
-        case AppsListModel::Video:          view = m_videoView;         break;
-        case AppsListModel::Graphics:       view = m_graphicsView;      break;
-        case AppsListModel::Game:           view = m_gameView;          break;
-        case AppsListModel::Office:         view = m_officeView;        break;
-        case AppsListModel::Reading:        view = m_readingView;       break;
-        case AppsListModel::Development:    view = m_developmentView;   break;
-        case AppsListModel::System:         view = m_systemView;        break;
-        case AppsListModel::Others:         view = m_othersView;        break;
-        default:;
-        }
+        view = categoryView(category);
 
     if (!view)
         return;
@@ -884,39 +924,13 @@ void MainFrame::refershCategoryVisible(const AppsListModel::AppCategory category
     if (m_displayMode != GroupByCategory)
         return;
 
-    QWidget *categoryTitle = nullptr;
-    QWidget *categoryView = nullptr;
+    QWidget *categoryTitle = this->categoryTitle(category);
+    QWidget *categoryView = this->categoryView(category);
 
-    switch (category) {
-    case AppsListModel::Internet:       categoryTitle = m_internetTitle;
-                                        categoryView = m_internetView;          break;
-    case AppsListModel::Chat:           categoryTitle = m_chatTitle;
-                                        categoryView = m_chatView;              break;
-    case AppsListModel::Music:          categoryTitle = m_musicTitle;
-                                        categoryView = m_musicView;             break;
-    case AppsListModel::Video:          categoryTitle = m_videoTitle;
-                                        categoryView = m_videoView;             break;
-    case AppsListModel::Graphics:       categoryTitle = m_graphicsTitle;
-                                        categoryView = m_graphicsView;          break;
-    case AppsListModel::Game:           categoryTitle = m_gameTitle;
-                                        categoryView = m_gameView;              break;
-    case AppsListModel::Office:         categoryTitle = m_officeTitle;
-                                        categoryView = m_officeView;            break;
-    case AppsListModel::Reading:        categoryTitle = m_readingTitle;
-                                        categoryView = m_readingView;           break;
-    case AppsListModel::Development:    categoryTitle = m_developmentTitle;
-                                        categoryView = m_developmentView;       break;
-    case AppsListModel::System:         categoryTitle = m_systemTitle;
-                                        categoryView = m_systemView;            break;
-    case AppsListModel::Others:         categoryTitle = m_othersTitle;
-                                        categoryView = m_othersView;            break;
-    default:;
-    }
-
-    if (categoryTitle)
-        categoryTitle->setVisible(appNums);
     if (categoryView)
         categoryView->setVisible(appNums);
+    if (categoryTitle)
+        categoryTitle->setVisible(appNums);
 }
 
 void MainFrame::updateDisplayMode(const DisplayMode mode)
@@ -927,6 +941,8 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
     m_displayMode = mode;
 
     bool isCategoryMode = m_displayMode == GroupByCategory;
+    //Float title
+    m_floatTitle->setVisible(isCategoryMode);
 
     m_allAppsView->setVisible(!isCategoryMode);
     m_internetTitle->setVisible(isCategoryMode);
@@ -1001,15 +1017,19 @@ void MainFrame::updateCurrentVisibleCategory()
     else
         currentVisibleCategory = AppsListModel::Others;
 
+    refershCurrentFloatTitle(currentVisibleCategory);
     if (m_currentCategory == currentVisibleCategory)
         return;
 
     m_currentCategory = currentVisibleCategory;
+
     emit currentVisibleCategoryChanged(m_currentCategory);
 }
 
 AppsListModel *MainFrame::nextCategoryModel(const AppsListModel *currentModel)
 {
+    if (currentModel == nullptr)
+        return m_internetModel;
     if (currentModel == m_internetModel)
         return m_chatModel;
     if (currentModel == m_chatModel)

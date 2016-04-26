@@ -6,7 +6,7 @@
 #include <QMouseEvent>
 #include "global_util/calculate_util.h"
 
-class CategoryTitleWidget : public QWidget
+class CategoryTitleWidget : public QFrame
 {
     Q_OBJECT
 
@@ -17,6 +17,7 @@ public:
 
 public slots:
     void setTextVisible(const bool visible);
+    void setText(const QString &title);
 protected:
     void mouseReleaseEvent(QMouseEvent *e);
 private:

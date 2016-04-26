@@ -86,10 +86,16 @@ private slots:
     void showCategoryMoveAnimation();
     void fakeLabelMoveAni(QLabel *source, QLabel *dest);
     void refershCategoryTextVisible();
+    void refershCurrentFloatTitle(const AppsListModel::AppCategory category);
+
+private:
+    CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
+    AppListView *categoryView(const AppsListModel::AppCategory category) const;
 
 private:
     bool m_isConfirmDialogShown = false;
     bool m_refershCategoryTextVisible = false;
+    bool m_upScrollFlag = true;
     double rightMarginRation = 1;
     DisplayMode m_displayMode = Search;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
@@ -143,6 +149,7 @@ private:
     AppsListModel *m_systemModel;
     AppsListModel *m_othersModel;
 
+    CategoryTitleWidget* m_floatTitle;
     CategoryTitleWidget *m_internetTitle;
     CategoryTitleWidget *m_chatTitle;
     CategoryTitleWidget *m_musicTitle;

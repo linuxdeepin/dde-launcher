@@ -14,7 +14,7 @@ signals:
 
 public:
     static CalculateUtil *instance(QObject *parent = nullptr);
-    ~CalculateUtil();
+
     inline int appColumnCount() const {return m_appColumnCount;}
     inline int appItemFontSize() const {return m_appItemFontSize;}
     inline QSize appIconSize() const { return QSize(m_appIconSize, m_appIconSize);}

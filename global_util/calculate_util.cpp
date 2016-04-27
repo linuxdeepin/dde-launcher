@@ -54,13 +54,13 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize)
 }
 
 double CalculateUtil::viewMarginRation() {
-    DBusDisplay* m_dbusDisplay = new DBusDisplay(this);
-    QList<QDBusObjectPath> pathList = m_dbusDisplay->monitors();
+    DBusDisplay m_dbusDisplay;
+    QList<QDBusObjectPath> pathList = m_dbusDisplay.monitors();
     if (pathList.length()!=0) {
-        MonitorInterface* m_displayMoniterface = new MonitorInterface(pathList[0].path(), this);
-        MonitorMode bestMode = m_displayMoniterface->bestMode();
+        MonitorInterface m_displayMoniterface(pathList[0].path());
+        MonitorMode bestMode = m_displayMoniterface.bestMode();
 
-        MonitorMode currentMode = m_displayMoniterface->currentMode();
+        MonitorMode currentMode = m_displayMoniterface.currentMode();
         bestSize.setWidth(currentMode.width);
 
         if (bestMode.width == currentMode.width && bestMode.height == currentMode.height) {
@@ -76,7 +76,7 @@ double CalculateUtil::viewMarginRation() {
 
     return m_viewMarginRation;
 }
-CalculateUtil::~CalculateUtil(){}
+
 CalculateUtil::CalculateUtil(QObject *parent) : QObject(parent)
 {
 

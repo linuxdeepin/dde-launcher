@@ -387,7 +387,7 @@ void MainFrame::initUI()
     m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
     m_toggleModeBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
     m_toggleModeBtn->setPressPic(":/icons/skin/icons/category_active_22px.svg");
-    m_toggleModeBtn->move(QPoint(30, 30));
+    m_toggleModeBtn->move(QPoint(30, 20));
     // animation
     m_scrollAnimation = new QPropertyAnimation(m_appsArea->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);

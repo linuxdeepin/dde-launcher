@@ -10,9 +10,9 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
 {
     m_icon = new DImageButton;
     m_icon->setFixedSize(16, 16);
-    m_icon->setNormalPic(":/skin/images/search_normal.png");
-    m_icon->setHoverPic(":/skin/images/search_hover.png");
-    m_icon->setPressPic(":/skin/images/search_press.png");
+    m_icon->setNormalPic(":/skin/images/search.svg");
+//    m_icon->setHoverPic(":/skin/images/search.svg");
+//    m_icon->setPressPic(":/skin/images/search.svg");
     m_placeholderText = new QLabel(tr("Search"));
     QFontMetrics fm(m_placeholderText->font());
     m_placeholderText->setFixedWidth(fm.width(m_placeholderText->text()) + 10);

@@ -373,16 +373,18 @@ void MainFrame::initUI()
 
     setLayout(m_mainLayout);
 
-    m_searchWidget->move(qApp->desktop()->screenGeometry().width()/2 - m_searchWidget->width()/2, 10);
     m_floatTitle = new CategoryTitleWidget("Internet", this),
     m_floatTitle->setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));;
-    m_floatTitle->move(180, 50);
-    m_floatTitle->setFixedWidth(1920 - 180*2);
+    m_floatTitle->move(180*m_calcUtil->viewMarginRation(), 50);
+    m_floatTitle->setFixedWidth(qApp->desktop()->screenGeometry().width() - 180*2*m_calcUtil->viewMarginRation());
+
+    m_searchWidget->move(qApp->desktop()->screenGeometry().width()/2 - m_searchWidget->width()/2, 30);
+
     m_toggleModeBtn->setFixedSize(22, 22);
     m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
     m_toggleModeBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
     m_toggleModeBtn->setPressPic(":/icons/skin/icons/category_active_22px.svg");
-    m_toggleModeBtn->move(QPoint(30, 20));
+    m_toggleModeBtn->move(QPoint(30, 44));
     // animation
     m_scrollAnimation = new QPropertyAnimation(m_appsArea->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);

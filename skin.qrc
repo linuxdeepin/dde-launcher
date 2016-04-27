@@ -60,6 +60,7 @@
         <file>skin/images/search_hover.png</file>
         <file>skin/images/search_normal.png</file>
         <file>skin/images/search_press.png</file>
+        <file>skin/images/search.svg</file>
     </qresource>
     <qresource prefix="/icons">
         <file>skin/icons/category_active_16px.svg</file>

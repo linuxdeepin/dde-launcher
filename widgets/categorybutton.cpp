@@ -8,8 +8,8 @@
 
 CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidget *parent) :
     QAbstractButton(parent),
-    m_category(category),
     m_calcUtil(CalculateUtil::instance(this)),
+    m_category(category),
     m_iconLabel(new QLabel),
     m_textLabel(new QLabel)
 {

@@ -831,7 +831,7 @@ void MainFrame::showPopupUninstallDialog(const QModelIndex &context)
     });
 
     unInstallDialog.exec();
-    unInstallDialog.deleteLater();
+//    unInstallDialog.deleteLater();
     m_isConfirmDialogShown = false;
 }
 

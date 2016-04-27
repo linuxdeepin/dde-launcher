@@ -65,8 +65,8 @@ double CalculateUtil::viewMarginRation() {
 
         if (bestMode.width == currentMode.width && bestMode.height == currentMode.height) {
             m_viewMarginRation = 1.00;
-        } else if (bestMode.width == 600) {
-            m_viewMarginRation = double(currentMode.width)/double(bestMode.width);
+//        } else if (bestMode.width == 600) {
+//            m_viewMarginRation = double(currentMode.width)/double(bestMode.width);
         } else {
             m_viewMarginRation = double(currentMode.width)/double(bestMode.width);
         }

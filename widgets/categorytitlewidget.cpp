@@ -6,8 +6,8 @@
 #include <QGraphicsDropShadowEffect>
 
 CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) :
-     m_calcUtil(CalculateUtil::instance(this)),
-    QWidget(parent)
+    QWidget(parent),
+    m_calcUtil(CalculateUtil::instance(this))
 {
     QLabel* whiteLine = new QLabel(this);
     whiteLine->setObjectName("CategoryWhiteLine");

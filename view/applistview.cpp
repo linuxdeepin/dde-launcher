@@ -188,12 +188,19 @@ void AppListView::startDrag(const QModelIndex &index)
     if (listModel->category() != AppsListModel::All)
         return;
 
-    if (m_enableDropInside)
-        listModel->dropSwap(m_dropToPos);
-    else
-        listModel->dropSwap(indexAt(m_dragStartPos).row());
+    if (!m_lastFakeAni)
+    {
+        if (m_enableDropInside)
+            listModel->dropSwap(m_dropToPos);
+        else
+            listModel->dropSwap(indexAt(m_dragStartPos).row());
 
-    listModel->clearDragingIndex();
+        listModel->clearDragingIndex();
+    }
+    else
+    {
+        connect(m_lastFakeAni, &QPropertyAnimation::finished, listModel, &AppsListModel::clearDragingIndex);
+    }
 
     m_enableDropInside = false;
 }
@@ -243,51 +250,55 @@ void AppListView::prepareDropSwap()
     if (start == end)
         return;
 
-    bool first = true;
-
-    for (int i(start + moveToNext); i <= end - !moveToNext; ++i)
+    for (int i(start + moveToNext); i != end - !moveToNext; ++i)
     {
-        const QModelIndex index(indexAt(i));
-
-        QLabel *lastLabel = new QLabel(this);
-        QPropertyAnimation *lastAni = new QPropertyAnimation(lastLabel, "pos", this);
-
-        const QSize rectSize = index.data(AppsListModel::ItemSizeHintRole).toSize();
-        const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
-
-        QStyleOptionViewItem item;
-        item.rect = QRect(QPoint(0, 0), rectSize);
-        item.features |= QStyleOptionViewItem::HasDisplay;
-
-        QPixmap pixmap(rectSize);
-        pixmap.fill(Qt::transparent);
-
-        QPainter painter(&pixmap);
-        itemDelegate()->paint(&painter, item, index);
-
-        lastLabel->setFixedSize(rectSize);
-        lastLabel->setPixmap(pixmap);
-//        lastLabel->setStyleSheet("background-color:red;");
-        lastLabel->show();
-
-        lastAni->setStartValue(indexOffset(index));
-        lastAni->setEndValue(indexOffset(indexAt(moveToNext ? i - 1 : i + 1)));
-        lastAni->setEasingCurve(QEasingCurve::OutQuad);
-        lastAni->setDuration(300);
-
-        connect(lastAni, &QPropertyAnimation::finished, lastLabel, &QLabel::deleteLater);
-        if (first)
-        {
-            first = false;
-            connect(lastAni, &QPropertyAnimation::finished, this, &AppListView::dropSwap);
-//            connect(lastAni, &QPropertyAnimation::finished, listModel, &AppsListModel::clearDragingIndex, Qt::QueuedConnection);
-            connect(lastAni, &QPropertyAnimation::valueChanged, m_dropThresholdTimer, &QTimer::stop);
-        }
-
-        lastAni->start(QPropertyAnimation::DeleteWhenStopped);
+        createFakeAnimation(i, moveToNext);
     }
+    // last animation
+    createFakeAnimation(end - !moveToNext, moveToNext, true);
 
     m_dragStartPos = indexOffset(dropIndex);
+}
+
+void AppListView::createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni)
+{
+    const QModelIndex index(indexAt(pos));
+
+    QLabel *floatLabel = new QLabel(this);
+    QPropertyAnimation *ani = new QPropertyAnimation(floatLabel, "pos", this);
+
+    const QSize rectSize = index.data(AppsListModel::ItemSizeHintRole).toSize();
+    const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+
+    QStyleOptionViewItem item;
+    item.rect = QRect(QPoint(0, 0), rectSize);
+    item.features |= QStyleOptionViewItem::HasDisplay;
+
+    QPixmap pixmap(rectSize);
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter(&pixmap);
+    itemDelegate()->paint(&painter, item, index);
+
+    floatLabel->setFixedSize(rectSize);
+    floatLabel->setPixmap(pixmap);
+//  lastLabel->setStyleSheet("background-color:red;");
+    floatLabel->show();
+
+    ani->setStartValue(indexOffset(index));
+    ani->setEndValue(indexOffset(indexAt(moveNext ? pos - 1 : pos + 1)));
+    ani->setEasingCurve(QEasingCurve::OutQuad);
+    ani->setDuration(300);
+
+    connect(ani, &QPropertyAnimation::finished, floatLabel, &QLabel::deleteLater);
+    if (isLastAni)
+    {
+        m_lastFakeAni = ani;
+        connect(ani, &QPropertyAnimation::finished, [this] {m_lastFakeAni = nullptr; dropSwap();});
+        connect(ani, &QPropertyAnimation::valueChanged, m_dropThresholdTimer, &QTimer::stop);
+    }
+
+    ani->start(QPropertyAnimation::DeleteWhenStopped);
 }
 
 ///

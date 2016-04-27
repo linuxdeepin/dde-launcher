@@ -3,6 +3,7 @@
 
 #include <QListView>
 #include <QSize>
+#include <QLabel>
 
 #include "model/appsmanager.h"
 
@@ -39,6 +40,7 @@ protected:
 private slots:
     void fitToContent();
     void prepareDropSwap();
+    void createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni = false);
     void dropSwap();
 
 private:
@@ -50,6 +52,7 @@ private:
     QPoint m_dragStartPos;
 
     QTimer *m_dropThresholdTimer;
+    QPropertyAnimation *m_lastFakeAni = nullptr;
 
     static AppsManager *m_appManager;
     static CalculateUtil *m_calcUtil;

@@ -10,6 +10,7 @@
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QDebug>
+#include <QRgb>
 
 QT_BEGIN_NAMESPACE
 extern Q_GUI_EXPORT void qt_blurImage( QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0 );
@@ -125,6 +126,10 @@ void SystemBackground::updateBackgroud(){
         m_backgroundPixmap = blurPixmap.scaled(m_backgroundSize);
         m_backgroundPixmap.save(m_cacheUrl);
     }
+    QPainter p(&m_backgroundPixmap);
+    p.setBrush(QColor(0, 0, 0, 0.2 * 255));
+    p.drawRect(m_backgroundPixmap.rect());
+
     emit backgroundChanged(m_backgroundPixmap);
 }
 

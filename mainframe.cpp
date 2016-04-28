@@ -225,6 +225,8 @@ void MainFrame::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
     painter.drawPixmap(e->rect(), m_backgroundLabel->getBackground(), e->rect());
+//    painter.setBrush(QColor(255, 0, 0, 0.2 * 255));
+//    painter.drawRect(rect());
 }
 
 bool MainFrame::event(QEvent *e)

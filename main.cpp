@@ -30,17 +30,24 @@ int main(int argv, char *args[])
     cmdParser.addVersionOption();
     cmdParser.addOption(showOption);
     cmdParser.addOption(toggleOption);
-    cmdParser.addPositionalArgument("mode", "show and toogle to <mode>");
+//    cmdParser.addPositionalArgument("mode", "show and toogle to <mode>");
     cmdParser.process(app);
 
-    QStringList positionArgs = cmdParser.positionalArguments();
+//    QStringList positionArgs = cmdParser.positionalArguments();
     if (quit)
     {
         DBusLauncherFrame launcherFrame;
-        if (!positionArgs.isEmpty()) {
-            if (launcherFrame.isValid() && cmdParser.isSet(toggleOption))
+
+        do {
+            if (!launcherFrame.isValid())
+                break;
+
+            if (cmdParser.isSet(toggleOption))
                 launcherFrame.Toggle();
-        }
+            else if (cmdParser.isSet(showOption))
+                launcherFrame.Show();
+
+        } while (false);
 
         return 0;
     }
@@ -60,11 +67,10 @@ int main(int argv, char *args[])
         qWarning() << "register dbus service failed";
 
 
-    if (!positionArgs.isEmpty() && cmdParser.isSet(showOption))
-        launcher.show();
-#ifdef QT_DEBUG
-    launcher.show();
+#ifndef QT_DEBUG
+    if (/*!positionArgs.isEmpty() && */cmdParser.isSet(showOption))
 #endif
+        launcher.show();
 
     return app.exec();
 }

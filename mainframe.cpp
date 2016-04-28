@@ -370,7 +370,9 @@ void MainFrame::initUI()
 
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
-    m_mainLayout->setSpacing(0);
+    m_mainLayout->addSpacing(30);
+    m_mainLayout->addWidget(m_searchWidget);
+    m_mainLayout->setAlignment(m_searchWidget, Qt::AlignCenter);
     m_mainLayout->addSpacing(120);
     m_mainLayout->addLayout(m_contentLayout);
 
@@ -379,7 +381,6 @@ void MainFrame::initUI()
     m_floatTitle->setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));;
     m_floatTitle->move(180*m_calcUtil->viewMarginRation(), 100);
     m_floatTitle->setFixedWidth(qApp->desktop()->screenGeometry().width() - 180*2*m_calcUtil->viewMarginRation());
-    m_searchWidget->move(qApp->desktop()->screenGeometry().width()/2 - m_searchWidget->width()/2, 30);
     m_toggleModeBtn->setFixedSize(22, 22);
     m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
     m_toggleModeBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");

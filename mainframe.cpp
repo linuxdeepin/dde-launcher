@@ -66,6 +66,7 @@ MainFrame::MainFrame(QWidget *parent) :
     m_othersModel(new AppsListModel(AppsListModel::Others)),
 
 
+    m_floatTitle(new CategoryTitleWidget("Internet", this)),
     m_internetTitle(new CategoryTitleWidget("Internet")),
     m_chatTitle(new CategoryTitleWidget("Chat")),
     m_musicTitle(new CategoryTitleWidget("Music")),
@@ -206,6 +207,7 @@ void MainFrame::showEvent(QShowEvent *e)
     raise();
     activateWindow();
     setFocus();
+    m_floatTitle->raise();
 }
 
 void MainFrame::mouseReleaseEvent(QMouseEvent *e)
@@ -245,20 +247,19 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
             qApp->postEvent(this, event);
             return true;
         }
-    } else if (o == m_navigationBar && e->type() == QEvent::Wheel) {
+    }
+    else if (o == m_navigationBar && e->type() == QEvent::Wheel)
+    {
         QWheelEvent *wheel = static_cast<QWheelEvent *>(e);
         QWheelEvent *event = new QWheelEvent(wheel->pos(), wheel->delta(), wheel->buttons(), wheel->modifiers());
 
         qApp->postEvent(m_appsArea->viewport(), event);
         return true;
-    } else if (o == m_appsArea->viewport() && e->type() == QEvent::Wheel) {
-        QWheelEvent *event = static_cast<QWheelEvent *>(e);
-        if (event->angleDelta().y() > 0) {
-            m_upScrollFlag = false;
-        } else {
-            m_upScrollFlag = true;
-        }
+    }
+    else if (o == m_appsArea->viewport() && e->type() == QEvent::Wheel)
+    {
         updateCurrentVisibleCategory();
+        refershCurrentFloatTitle();
     }
     else if (o == m_othersView && e->type() == QEvent::Resize)
         m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - m_othersView->height());
@@ -346,8 +347,8 @@ void MainFrame::initUI()
     m_appsVbox->layout()->addWidget(m_othersView);
     m_appsVbox->layout()->addWidget(m_viewListPlaceholder);
     m_appsVbox->layout()->setSpacing(0);
-    m_appsVbox->layout()->setContentsMargins(0, DLauncher::APPS_AREA_TOP_BOTTOM_MARGIN,
-                                             0, DLauncher::APPS_AREA_TOP_BOTTOM_MARGIN);
+    m_appsVbox->layout()->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN,
+                                             0, DLauncher::APPS_AREA_BOTTOM_MARGIN);
     m_appsArea->setWidget(m_appsVbox);
 
     m_scrollAreaLayout = new QVBoxLayout;
@@ -373,13 +374,10 @@ void MainFrame::initUI()
 
     setLayout(m_mainLayout);
 
-    m_floatTitle = new CategoryTitleWidget("Internet", this),
     m_floatTitle->setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));;
-    m_floatTitle->move(180*m_calcUtil->viewMarginRation(), 50);
+    m_floatTitle->move(180*m_calcUtil->viewMarginRation(), 100);
     m_floatTitle->setFixedWidth(qApp->desktop()->screenGeometry().width() - 180*2*m_calcUtil->viewMarginRation());
-
     m_searchWidget->move(qApp->desktop()->screenGeometry().width()/2 - m_searchWidget->width()/2, 30);
-
     m_toggleModeBtn->setFixedSize(22, 22);
     m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
     m_toggleModeBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
@@ -413,7 +411,6 @@ void MainFrame::showGradient() {
         QRect bottomRect(bottomLeft, bottomSize);
         m_bottomGradient->setPixmap(m_backgroundLabel->getBackground().copy(bottomRect));
 
-
         m_bottomGradient->resize(bottomRect.size());
         m_bottomGradient->move(bottomRect.topLeft());
         m_bottomGradient->show();
@@ -426,7 +423,10 @@ void MainFrame::showCategoryMoveAnimation()
     if (!widget)
         return;
 
+    checkCategoryVisible();
+
     const bool shownListArea = widget == m_appsArea;
+    m_floatTitle->setTextVisible(shownListArea);
 
     m_refershCategoryTextVisible = true;
 
@@ -534,6 +534,7 @@ void MainFrame::fakeLabelMoveAni(QLabel *source, QLabel *dest)
     {
         m_refershCategoryTextVisible = false;
         connect(ani, &QPropertyAnimation::finished, this, &MainFrame::refershCategoryTextVisible);
+        connect(ani, &QPropertyAnimation::finished, this, &MainFrame::refershCurrentFloatTitle);
     }
 
     source->hide();
@@ -560,17 +561,17 @@ void MainFrame::refershCategoryTextVisible()
     m_othersTitle->setTextVisible(shownAppList);
 }
 
-void MainFrame::refershCurrentFloatTitle(const AppsListModel::AppCategory category)
+void MainFrame::refershCurrentFloatTitle()
 {
     if (m_displayMode != GroupByCategory)
         return;
 
-    CategoryTitleWidget *sourceTitle = categoryTitle(category);
+    CategoryTitleWidget *sourceTitle = categoryTitle(m_currentCategory);
     if (!sourceTitle)
         return;
 
     m_floatTitle->setText(sourceTitle->textLabel()->text());
-    m_floatTitle->setVisible(m_appsArea->verticalScrollBar()->value() > m_internetTitle->height() + 10);
+    m_floatTitle->setVisible(sourceTitle->visibleRegion().isEmpty());
 }
 
 CategoryTitleWidget *MainFrame::categoryTitle(const AppsListModel::AppCategory category) const
@@ -625,7 +626,7 @@ void MainFrame::initConnection()
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &MainFrame::updateGeometry);
 
     connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &MainFrame::ensureScrollToDest);
-    connect(m_scrollAnimation, &QPropertyAnimation::finished, [this] {refershCurrentFloatTitle(m_currentCategory);});
+    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &MainFrame::refershCurrentFloatTitle);
     connect(m_navigationBar, &NavigationWidget::scrollToCategory, this, &MainFrame::scrollToCategory);
     connect(this, &MainFrame::currentVisibleCategoryChanged, m_navigationBar, &NavigationWidget::setCurrentCategory);
     connect(this, &MainFrame::categoryAppNumsChanged, m_navigationBar, &NavigationWidget::refershCategoryVisible);
@@ -1019,7 +1020,6 @@ void MainFrame::updateCurrentVisibleCategory()
     else
         currentVisibleCategory = AppsListModel::Others;
 
-    refershCurrentFloatTitle(currentVisibleCategory);
     if (m_currentCategory == currentVisibleCategory)
         return;
 

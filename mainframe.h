@@ -86,7 +86,7 @@ private slots:
     void showCategoryMoveAnimation();
     void fakeLabelMoveAni(QLabel *source, QLabel *dest);
     void refershCategoryTextVisible();
-    void refershCurrentFloatTitle(const AppsListModel::AppCategory category);
+    void refershCurrentFloatTitle();
 
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
@@ -95,7 +95,6 @@ private:
 private:
     bool m_isConfirmDialogShown = false;
     bool m_refershCategoryTextVisible = false;
-    bool m_upScrollFlag = true;
     double rightMarginRation = 1;
     DisplayMode m_displayMode = Search;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;

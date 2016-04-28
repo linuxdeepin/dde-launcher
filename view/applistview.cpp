@@ -229,6 +229,8 @@ void AppListView::fitToContent()
 
 void AppListView::prepareDropSwap()
 {
+    if (m_lastFakeAni || m_dropThresholdTimer->isActive())
+        return;
     const QModelIndex dropIndex = indexAt(m_dropToPos);
     if (!dropIndex.isValid())
         return;
@@ -240,6 +242,8 @@ void AppListView::prepareDropSwap()
     if (!listModel)
         return;
 
+    listModel->clearDragingIndex();
+    listModel->setDragingIndex(dragStartIndex);
     listModel->setDragDropIndex(dropIndex);
 
     const int startIndex = dragStartIndex.row();
@@ -251,9 +255,7 @@ void AppListView::prepareDropSwap()
         return;
 
     for (int i(start + moveToNext); i != end - !moveToNext; ++i)
-    {
         createFakeAnimation(i, moveToNext);
-    }
     // last animation
     createFakeAnimation(end - !moveToNext, moveToNext, true);
 

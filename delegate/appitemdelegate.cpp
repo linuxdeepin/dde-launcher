@@ -40,9 +40,11 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setPen(Qt::white);
     painter->setBrush(QBrush(Qt::transparent));
 
-    const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
     const int leftMargin = 2, radius = 3;
-    const QRect itemRect = getSquareRect(option.rect);
+    const int fontPixelSize = index.data(AppsListModel::AppFontSizeRole).value<int>();
+    const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();
+    const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
+    const QRect boundingRect = itemBoundingRect(option.rect);
     const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).toSize();
 
     // draw focus background
@@ -55,56 +57,57 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         pen.setColor(borderColor);
         pen.setWidth(2);
         QPainterPath border;
-        border.addRoundedRect(itemRect.marginsRemoved(QMargins(leftMargin/2, leftMargin/2, leftMargin*2/3, leftMargin*2/3)),
+        border.addRoundedRect(boundingRect.marginsRemoved(QMargins(leftMargin/2, leftMargin/2, leftMargin*2/3, leftMargin*2/3)),
                               radius, radius);
         painter->strokePath(border, pen);
         painter->setPen(Qt::transparent);
         painter->setBrush(brushColor);
-        painter->drawRoundedRect(itemRect.marginsRemoved(QMargins(leftMargin, leftMargin, leftMargin*4/3, leftMargin*4/3)),
+        painter->drawRoundedRect(boundingRect.marginsRemoved(QMargins(leftMargin, leftMargin, leftMargin*4/3, leftMargin*4/3)),
                                  radius, radius);
     }
 
     // draw app icon
-    const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
-    int iconLeftMargins = (itemRect.width() - iconSize.width())/2;
-    int iconTopMargin = itemRect.height()*0.1;
-    painter->drawPixmap(itemRect.x() + iconLeftMargins, itemRect.y()+iconTopMargin, iconSize.width(), iconSize.height(),
-                        iconPix);
+    const int iconLeftMargins = (boundingRect.width() - iconSize.width()) / 2;
+    const int iconTopMargin = qMin(10, int(boundingRect.height() * 0.1));
+    const QRect iconRect = QRect(boundingRect.topLeft() + QPoint(iconLeftMargins, iconTopMargin), iconSize);
+    painter->drawPixmap(iconRect, index.data(AppsListModel::AppIconRole).value<QPixmap>());
 
     // draw icon if app is auto startup
+    const QPoint autoStartIconPos = iconRect.bottomLeft() - QPoint(0, m_autoStartPixmap.height());
     if (index.data(AppsListModel::AppAutoStartRole).toBool())
-        painter->drawPixmap(itemRect.x() + iconLeftMargins, itemRect.y() + iconTopMargin + iconSize.height()-16,
-                            16, 16, m_autoStartPixmap);
+        painter->drawPixmap(autoStartIconPos, m_autoStartPixmap);
 
     // draw app name
+    QTextOption appNameOption;
+    appNameOption.setAlignment(Qt::AlignCenter);
+    appNameOption.setWrapMode(QTextOption::WordWrap);
+    QFont appNamefont(painter->font());
+    appNamefont.setPixelSize(fontPixelSize);
+
+    const QFontMetrics fm(appNamefont);
+    const QRectF appNameRect = itemTextRect(boundingRect, iconRect, drawBlueDot);
+    const QRectF appNameBoundingRect = fm.boundingRect(appNameRect.toRect(), Qt::AlignCenter | Qt::TextWordWrap, itemInfo.m_name);
+    const QString appText = appNameBoundingRect.width() > appNameRect.width() || appNameBoundingRect.height() > appNameRect.height()
+                                ? fm.elidedText(itemInfo.m_name, Qt::ElideRight, appNameRect.width(), Qt::AlignCenter | Qt::TextWordWrap)
+                                : itemInfo.m_name;
+
+
+    painter->setFont(appNamefont);
     painter->setBrush(QBrush(Qt::transparent));
+    painter->setPen(QColor(0, 0, 0, 80));
+    painter->drawText(appNameRect.adjusted(0.8, 1, 0.8, 1), appText, appNameOption);
+    painter->drawText(appNameRect.adjusted(-0.8, 1, -0.8, 1), appText, appNameOption);
+    painter->setPen(Qt::white);
+    painter->drawText(appNameRect, appText, appNameOption);
 
-    QFont font = painter->font();
-    font.setPixelSize(index.data(AppsListModel::AppFontSizeRole).value<int>());
-    painter->setFont(font);
-
-    int textTopMargin = itemRect.width()*0.73;
-    QRect textRect = QRect(itemRect.x() + leftMargin * 3, itemRect.y() + textTopMargin, itemRect.width() - leftMargin * 6, 36);
-
-
-    // draw blue dot if new install
-    if (index.data(AppsListModel::AppNewInstallRole).toBool())
+    // draw blue dot if needed
+    if (drawBlueDot)
     {
-        painter->setPen(QColor(0, 0, 0, 80));
-        QString itemText = "   " + itemInfo.m_name;
-        QFontMetrics fm(painter->font());
-        const QRect boundingRect = fm.boundingRect(textRect, Qt::TextWordWrap | Qt::AlignHCenter, itemText);
-        painter->drawText(QRectF(textRect.x() + 0.8, textRect.y() + 1, textRect.width(), textRect.height()), Qt::TextWordWrap | Qt::AlignHCenter, itemText);
-        painter->setPen(Qt::white);
-        painter->drawText(QRectF(textRect.x() - 0.8, textRect.y(), textRect.width(), textRect.height()), Qt::TextWordWrap | Qt::AlignHCenter, itemText);
-        QRect bluePointRect = QRect(boundingRect.x() - 6, itemRect.y() + itemRect.width() * 111 / 150, 10, 10);
-        painter->drawPixmap(bluePointRect,  m_blueDotPixmap);
-    } else {
-        painter->setPen(QColor(0, 0, 0, 80));
-        painter->drawText(textRect, Qt::TextWordWrap | Qt::AlignHCenter, itemInfo.m_name);
-        painter->drawText(QRectF(textRect.x() + 0.8, textRect.y() + 1, textRect.width(), textRect.height()), Qt::TextWordWrap | Qt::AlignHCenter, itemInfo.m_name);
-        painter->setPen(Qt::white);
-        painter->drawText(QRectF(textRect.x() - 0.8, textRect.y() + 1, textRect.width(), textRect.height()), Qt::TextWordWrap | Qt::AlignHCenter, itemInfo.m_name);
+        const int marginRight = 2;
+        const QRectF textRect = fm.boundingRect(appNameRect.toRect(), Qt::AlignCenter | Qt::TextWordWrap, appText);
+
+        const QPointF blueDotPos = textRect.topLeft() + QPoint(-m_blueDotPixmap.width() - marginRight, (fm.height() - m_blueDotPixmap.height()) / 2);
+        painter->drawPixmap(blueDotPos, m_blueDotPixmap);
     }
 }
 
@@ -115,7 +118,12 @@ QSize AppItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
     return index.data(AppsListModel::ItemSizeHintRole).toSize();
 }
 
-const QRect AppItemDelegate::getSquareRect(const QRect &itemRect) const
+///
+/// \brief calculate item background bounding rect, this rect contains all item like icon, text, blue dot, ...
+/// \param itemRect the real item rect
+/// \return item bounding rect
+///
+const QRect AppItemDelegate::itemBoundingRect(const QRect &itemRect) const
 {
     const int w = itemRect.width();
     const int h = itemRect.height();
@@ -127,4 +135,23 @@ const QRect AppItemDelegate::getSquareRect(const QRect &itemRect) const
         return itemRect - QMargins(sub, 0, sub, 0);
     else
         return itemRect - QMargins(0, sub, 0, sub);
+}
+
+///
+/// \brief calculate app item text area rect
+/// \param boundingRect item bounding rect
+/// \param iconRect item icon rect
+/// \param extraWidthMargin remove extra margin if need draw blue dot
+/// \return app name text bounding rect
+///
+const QRectF AppItemDelegate::itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool extraWidthMargin) const
+{
+    const int widthMargin = extraWidthMargin ? 16 : 2;
+    const int heightMargin = 2;
+
+    QRectF result = boundingRect;
+
+    result.setTop(iconRect.bottom());
+
+    return result.marginsRemoved(QMargins(widthMargin, heightMargin, widthMargin, heightMargin));
 }

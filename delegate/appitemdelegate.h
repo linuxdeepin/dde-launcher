@@ -23,7 +23,8 @@ signals:
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    const QRect getSquareRect(const QRect &itemRect) const;
+    const QRect itemBoundingRect(const QRect &itemRect) const;
+    const QRectF itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool extraWidthMargin) const;
 
 private:
     CalculateUtil *m_calcUtil;

@@ -261,7 +261,7 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
     else if (o == m_appsArea->viewport() && e->type() == QEvent::Wheel)
     {
         updateCurrentVisibleCategory();
-        refershCurrentFloatTitle();
+        QMetaObject::invokeMethod(this, "refershCurrentFloatTitle", Qt::QueuedConnection);
     }
     else if (o == m_othersView && e->type() == QEvent::Resize)
         m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - m_othersView->height());
@@ -370,16 +370,17 @@ void MainFrame::initUI()
 
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
+    m_mainLayout->setSpacing(0);
     m_mainLayout->addSpacing(30);
     m_mainLayout->addWidget(m_searchWidget);
     m_mainLayout->setAlignment(m_searchWidget, Qt::AlignCenter);
-    m_mainLayout->addSpacing(120);
+    m_mainLayout->addSpacing(30);
     m_mainLayout->addLayout(m_contentLayout);
 
     setLayout(m_mainLayout);
 
     m_floatTitle->setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));;
-    m_floatTitle->move(180*m_calcUtil->viewMarginRation(), 100);
+    m_floatTitle->move(180*m_calcUtil->viewMarginRation(), 60);
     m_floatTitle->setFixedWidth(qApp->desktop()->screenGeometry().width() - 180*2*m_calcUtil->viewMarginRation());
     m_toggleModeBtn->setFixedSize(22, 22);
     m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
@@ -537,7 +538,7 @@ void MainFrame::fakeLabelMoveAni(QLabel *source, QLabel *dest)
     {
         m_refershCategoryTextVisible = false;
         connect(ani, &QPropertyAnimation::finished, this, &MainFrame::refershCategoryTextVisible);
-        connect(ani, &QPropertyAnimation::finished, this, &MainFrame::refershCurrentFloatTitle);
+        connect(ani, &QPropertyAnimation::finished, this, &MainFrame::refershCurrentFloatTitle, Qt::QueuedConnection);
     }
 
     source->hide();
@@ -629,7 +630,7 @@ void MainFrame::initConnection()
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &MainFrame::updateGeometry);
 
     connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &MainFrame::ensureScrollToDest);
-    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &MainFrame::refershCurrentFloatTitle);
+    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &MainFrame::refershCurrentFloatTitle, Qt::QueuedConnection);
     connect(m_navigationBar, &NavigationWidget::scrollToCategory, this, &MainFrame::scrollToCategory);
     connect(this, &MainFrame::currentVisibleCategoryChanged, m_navigationBar, &NavigationWidget::setCurrentCategory);
     connect(this, &MainFrame::categoryAppNumsChanged, m_navigationBar, &NavigationWidget::refershCategoryVisible);

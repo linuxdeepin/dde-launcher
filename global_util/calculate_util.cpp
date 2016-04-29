@@ -31,7 +31,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize)
         itemWidth = itemCalcWidth;
 
 
-    spacing = (containerSize.width() - itemWidth * column) / (column * 2);
+    spacing = (containerSize.width() - itemWidth * column) / (column * 2) - 1;
 
     m_appItemSpacing = spacing;
     m_appItemWidth = itemWidth;
@@ -40,15 +40,17 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize)
 
 //    m_appItemWidth = 80;
     // calculate icon size;
-//    m_appIconSize = int(m_appItemWidth * 0.5 / 16) * 16;
-    m_appIconSize = m_appItemWidth > 64 * 2 ? 64 : 48;
+    m_appIconSize = qMin(64, int(m_appItemWidth * 0.65 / 16) * 16);
+//    m_appIconSize = m_appItemWidth > 64 * 2 ? 64 : 48;
     viewMarginRation();
     //scale the icon when the resolution is 800*600
-    if (bestSize.width()<=800) {
-        m_appIconSize = 48*2/3;
-    }
+//    if (bestSize.width()<=800) {
+//        m_appIconSize = 48*2/3;
+//    }
     // calculate font size;
     m_appItemFontSize = m_appItemWidth >= 130 ? 13 : m_appItemWidth <= 80 ? 9 : 11;
+
+//    m_appItemHeight = qMax(m_appItemHeight, int(m_appIconSize + m_appItemHeight * 0.2 + m_appItemFontSize * 1.1 + 5));
 
     emit layoutChanged();
 }

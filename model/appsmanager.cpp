@@ -197,6 +197,16 @@ void AppsManager::launchApp(const QModelIndex &index)
 
 void AppsManager::uninstallApp(const QString &appKey)
 {
+    // refersh auto start cache
+    for (const ItemInfo &info : m_allAppInfoList)
+    {
+        if (info.m_key == appKey)
+        {
+            APP_AUTOSTART_CACHE.setValue(info.m_desktop, false);
+            break;
+        }
+    }
+
     // begin uninstall, remove icon first.
     stashItem(appKey);
 
@@ -204,6 +214,9 @@ void AppsManager::uninstallApp(const QString &appKey)
     m_launcherInter->RequestUninstall(appKey, false);
 
     emit dataChanged(AppsListModel::All);
+
+    // refersh search result
+    m_searchTimer->start();
 }
 
 void AppsManager::markLaunched(QString appKey)

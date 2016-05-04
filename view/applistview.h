@@ -44,7 +44,7 @@ private slots:
     void dropSwap();
 
 private:
-    QPoint indexOffset(const QModelIndex &index) const;
+    const QRect indexRect(const QModelIndex &index) const;
 
 private:
     int m_dropToPos;

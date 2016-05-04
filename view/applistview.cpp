@@ -53,7 +53,7 @@ AppListView::AppListView(QWidget *parent) :
     connect(m_calcUtil, &CalculateUtil::layoutChanged, [this] {setSpacing(m_calcUtil->appItemSpacing());});
 
 #ifndef DISABLE_DRAG_ANIMATION
-    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::prepareDropSwap);
+    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::prepareDropSwap, Qt::QueuedConnection);
 #else
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::dropSwap);
 #endif
@@ -71,7 +71,7 @@ const QModelIndex AppListView::indexAt(const int index) const
 ///
 int AppListView::indexYOffset(const QModelIndex &index) const
 {
-    return indexOffset(index).y();
+    return indexRect(index).y();
 }
 
 void AppListView::dropEvent(QDropEvent *e)
@@ -91,7 +91,7 @@ void AppListView::mousePressEvent(QMouseEvent *e)
             emit popupMenuRequested(rightClickPoint, clickedIndex);
     }
 
-    if (e->buttons() == Qt::LeftButton)
+    if (e->buttons() == Qt::LeftButton && !m_lastFakeAni)
         m_dragStartPos = e->pos();
 
     QListView::mousePressEvent(e);
@@ -107,6 +107,9 @@ void AppListView::dragEnterEvent(QDragEnterEvent *e)
 
 void AppListView::dragMoveEvent(QDragMoveEvent *e)
 {
+    if (m_lastFakeAni)
+        return;
+
     const QModelIndex dropIndex = QListView::indexAt(e->pos());
     if (dropIndex.isValid())
         m_dropToPos = dropIndex.row();
@@ -259,7 +262,7 @@ void AppListView::prepareDropSwap()
     // last animation
     createFakeAnimation(end - !moveToNext, moveToNext, true);
 
-    m_dragStartPos = indexOffset(dropIndex);
+    m_dragStartPos = indexRect(dropIndex).center();
 }
 
 void AppListView::createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni)
@@ -287,8 +290,8 @@ void AppListView::createFakeAnimation(const int pos, const bool moveNext, const 
 //  lastLabel->setStyleSheet("background-color:red;");
     floatLabel->show();
 
-    ani->setStartValue(indexOffset(index));
-    ani->setEndValue(indexOffset(indexAt(moveNext ? pos - 1 : pos + 1)));
+    ani->setStartValue(indexRect(index).topLeft());
+    ani->setEndValue(indexRect(indexAt(moveNext ? pos - 1 : pos + 1)).topLeft());
     ani->setEasingCurve(QEasingCurve::OutQuad);
     ani->setDuration(300);
 
@@ -296,7 +299,8 @@ void AppListView::createFakeAnimation(const int pos, const bool moveNext, const 
     if (isLastAni)
     {
         m_lastFakeAni = ani;
-        connect(ani, &QPropertyAnimation::finished, [this] {m_lastFakeAni = nullptr; dropSwap();});
+        connect(ani, &QPropertyAnimation::finished, this, &AppListView::dropSwap, Qt::QueuedConnection);
+//        connect(ani, &QPropertyAnimation::finished, [this] {dropSwap(); m_lastFakeAni = nullptr;});
         connect(ani, &QPropertyAnimation::valueChanged, m_dropThresholdTimer, &QTimer::stop);
     }
 
@@ -313,9 +317,10 @@ void AppListView::dropSwap()
         return;
 
     listModel->dropSwap(m_dropToPos);
+    m_lastFakeAni = nullptr;
 }
 
-QPoint AppListView::indexOffset(const QModelIndex &index) const
+const QRect AppListView::indexRect(const QModelIndex &index) const
 {
-    return rectForIndex(index).topLeft();
+    return rectForIndex(index);
 }

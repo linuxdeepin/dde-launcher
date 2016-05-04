@@ -1,5 +1,4 @@
 
-
 #include "mainframe.h"
 #include "dbuslauncherframe.h"
 #include "dbusservices/dbuslauncherservice.h"
@@ -8,8 +7,10 @@
 #include <QTranslator>
 #include <unistd.h>
 #include <dapplication.h>
+#include <DLog>
 
 DWIDGET_USE_NAMESPACE
+DUTIL_USE_NAMESPACE
 
 int main(int argv, char *args[])
 {
@@ -18,6 +19,12 @@ int main(int argv, char *args[])
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-launcher");
     app.setApplicationVersion("3.0");
+
+#ifdef QT_DEBUG
+    DLogManager::registerConsoleAppender();
+#else
+    DLogManager::registerFileAppender();
+#endif
 
     const bool quit = !app.setSingleInstance(QString("dde-launcher_%1").arg(getuid()));
 

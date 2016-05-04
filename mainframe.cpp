@@ -729,6 +729,8 @@ void MainFrame::updateGeometry()
     setFixedSize(rect.size());
     move(rect.topLeft());
 
+    qDebug() << "update geometry: " << rect;
+
     QFrame::updateGeometry();
 }
 

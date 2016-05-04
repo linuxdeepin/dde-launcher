@@ -14,13 +14,13 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     m_textLabel(new QLabel)
 {
     setObjectName("CategoryButton");
-    m_iconLabel->setFixedSize(22*m_calcUtil->viewMarginRation(), 22*m_calcUtil->viewMarginRation());
-    m_textLabel->setFixedHeight(22*m_calcUtil->viewMarginRation());
-    m_textLabel->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
+    m_iconLabel->setFixedSize(22, 22);
+    m_textLabel->setFixedHeight(22);
+    m_textLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->setSpacing(0);
     mainLayout->setMargin(0);
-    mainLayout->addSpacing(30);
+    mainLayout->addSpacing(20);
     mainLayout->addWidget(m_iconLabel);
     mainLayout->addSpacing(15);
     mainLayout->addWidget(m_textLabel);
@@ -32,11 +32,11 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     setFocusPolicy(Qt::NoFocus);
     setFixedHeight(DLauncher::NAVIGATION_ICON_HEIGHT);
     setInfoByCategory();
-    setStyleSheet(QString("background-color:transparent; color: white; font-size: %1px;").arg(int(15*m_calcUtil->viewMarginRation())));
     updateState(Normal);
     addTextShadow();
 
     connect(this, &CategoryButton::toggled, this, &CategoryButton::setChecked);
+    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &CategoryButton::relayout);
 }
 
 AppsListModel::AppCategory CategoryButton::category() const
@@ -126,7 +126,7 @@ void CategoryButton::updateState(const CategoryButton::State state)
 
     QPixmap tmpCategoryMap;
     tmpCategoryMap.load(QString(":/icons/skin/icons/%1_%2_22px.svg").arg(m_iconName).arg(picState));
-    m_iconLabel->setPixmap(tmpCategoryMap.scaled(QSize(22*m_calcUtil->viewMarginRation(), 22*m_calcUtil->viewMarginRation()), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    m_iconLabel->setPixmap(tmpCategoryMap.scaled(QSize(22, 22), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 }
 
 void CategoryButton::addTextShadow() {
@@ -135,6 +135,12 @@ void CategoryButton::addTextShadow() {
     textDropShadow->setColor(QColor(0, 0, 0, 128));
     textDropShadow->setOffset(0, 2);
     m_textLabel->setGraphicsEffect(textDropShadow);
+}
+
+void CategoryButton::relayout()
+{
+    setStyleSheet(QString("background-color:transparent; color: white; font-size: %1px;")
+                  .arg(m_calcUtil->navgationTextSize()));
 }
 
 QLabel *CategoryButton::textLabel()

@@ -78,6 +78,7 @@ private:
     AppsListModel *prevCategoryModel(const AppsListModel *currentModel);
 
 private slots:
+    void layoutChanged();
     void searchTextChanged(const QString &keywords);
     void ensureScrollToDest(const QVariant &value);
     void ensureItemVisible(const QModelIndex &index);
@@ -110,7 +111,8 @@ private:
     SystemBackground *m_backgroundLabel;
 
     DImageButton *m_toggleModeBtn;
-    NavigationWidget *m_navigationBar;
+    NavigationWidget *m_navigationWidget;
+    QWidget *m_rightSpacing;
     SearchWidget *m_searchWidget;
     AppListArea *m_appsArea;
     DVBoxWidget *m_appsVbox;

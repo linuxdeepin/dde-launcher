@@ -18,12 +18,16 @@ public:
 public slots:
     void setTextVisible(const bool visible);
     void setText(const QString &title);
-protected:
-    void mouseReleaseEvent(QMouseEvent *e);
+
+private:
+    void addTextShadow();
+
+private slots:
+    void relayout();
+
 private:
     CalculateUtil *m_calcUtil;
     QLabel *m_title;
-    void addTextShadow();
 };
 
 #endif // CATEGORYTITLEWIDGET_H

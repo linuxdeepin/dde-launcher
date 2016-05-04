@@ -38,6 +38,9 @@ private:
     void updateState(const State state);
     void addTextShadow();
 
+private slots:
+    void relayout();
+
 private:
     CalculateUtil *m_calcUtil;
     State m_state = Checked;

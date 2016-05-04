@@ -17,69 +17,78 @@ CalculateUtil *CalculateUtil::instance(QObject *parent)
     return INSTANCE;
 }
 
+int CalculateUtil::calculateBesidePadding(const int screenWidth)
+{
+    // static const int NAVIGATION_WIDGET_WIDTH = 180;
+    if (screenWidth > 1366)
+        return 180;
+    return 130;
+}
+
 void CalculateUtil::calculateAppLayout(const QSize &containerSize)
 {
     const int screenWidth = qApp->primaryScreen()->geometry().width();
-    const int column = screenWidth < 800 ? 5 : 7;
+    const int column = screenWidth <= 800 ? 5 : 7;
+
+    calculateTextSize(screenWidth);
 
     // calculate item size;
-    int spacing = 20;
+    int spacing = itemSpacing(containerSize.width());
     int itemWidth = 140;
 
-    int itemCalcWidth = int((double(containerSize.width()) - spacing * column * 2) / column + 0.5);
-    if (itemCalcWidth < itemWidth)
-        itemWidth = itemCalcWidth;
+    const int itemCalcWidth = (double(containerSize.width()) - spacing * column * 2) / column + 0.5;
+    itemWidth = qMin(itemWidth, itemCalcWidth);
 
-
-    spacing = (containerSize.width() - itemWidth * column) / (column * 2) - 1;
+    spacing = (double(containerSize.width()) - itemWidth * column) / (column * 2) - 1;
 
     m_appItemSpacing = spacing;
     m_appItemWidth = itemWidth;
     m_appItemHeight = m_appItemWidth;
     m_appColumnCount = column;
 
-//    m_appItemWidth = 80;
     // calculate icon size;
-    m_appIconSize = qMin(64, int(m_appItemWidth * 0.65 / 16) * 16);
-//    m_appIconSize = m_appItemWidth > 64 * 2 ? 64 : 48;
-    viewMarginRation();
-    //scale the icon when the resolution is 800*600
-//    if (bestSize.width()<=800) {
-//        m_appIconSize = 48*2/3;
-//    }
+    m_appIconSize = itemIconWidth(m_appItemWidth);
+
     // calculate font size;
     m_appItemFontSize = m_appItemWidth >= 130 ? 13 : m_appItemWidth <= 80 ? 9 : 11;
 
-//    m_appItemHeight = qMax(m_appItemHeight, int(m_appIconSize + m_appItemHeight * 0.2 + m_appItemFontSize * 1.1 + 5));
-
     emit layoutChanged();
-}
-
-double CalculateUtil::viewMarginRation() {
-    DBusDisplay m_dbusDisplay;
-    QList<QDBusObjectPath> pathList = m_dbusDisplay.monitors();
-    if (pathList.length()!=0) {
-        MonitorInterface m_displayMoniterface(pathList[0].path());
-        MonitorMode bestMode = m_displayMoniterface.bestMode();
-
-        MonitorMode currentMode = m_displayMoniterface.currentMode();
-        bestSize.setWidth(currentMode.width);
-
-        if (bestMode.width == currentMode.width && bestMode.height == currentMode.height) {
-            m_viewMarginRation = 1.00;
-//        } else if (bestMode.width == 600) {
-//            m_viewMarginRation = double(currentMode.width)/double(bestMode.width);
-        } else {
-            m_viewMarginRation = double(currentMode.width)/double(bestMode.width);
-        }
-    } else {
-        m_viewMarginRation = 1.00;
-    }
-
-    return m_viewMarginRation;
 }
 
 CalculateUtil::CalculateUtil(QObject *parent) : QObject(parent)
 {
 
+}
+
+int CalculateUtil::itemSpacing(const int containerWidth) const
+{
+    if (containerWidth <= 500)
+        return 6;
+    if (containerWidth <= 1000)
+        return 15;
+    return 20;
+}
+
+int CalculateUtil::itemIconWidth(const int itemWidth) const
+{
+    //    m_appIconSize = qMin(64, int(m_appItemWidth * 0.65 / 16) * 16);
+    //    m_appIconSize = m_appItemWidth > 64 * 2 ? 64 : 48;
+
+    if (itemWidth > 64 * 2)
+        return 64;
+    if (itemWidth > 80)
+        return 48;
+    return 24;
+}
+
+void CalculateUtil::calculateTextSize(const int screenWidth)
+{
+    if (screenWidth >= 1366)
+    {
+        m_navgationTextSize = 14;
+        m_titleTextSize = 15;
+    } else {
+        m_navgationTextSize = 11;
+        m_titleTextSize = 13;
+    }
 }

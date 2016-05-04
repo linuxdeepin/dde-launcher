@@ -31,7 +31,11 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
 
     addTextShadow();
 
-    setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));
+    setStyleSheet("QLabel#CategoryWhiteLine {"
+                  "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255,255,255,0.3), stop:1 rgba(255,255,255,0))"
+                  "}");
+
+    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &CategoryTitleWidget::relayout);
 }
 
 void CategoryTitleWidget::setTextVisible(const bool visible)
@@ -39,15 +43,13 @@ void CategoryTitleWidget::setTextVisible(const bool visible)
     m_title->setVisible(visible);
 }
 
-void CategoryTitleWidget::setText(const QString &title) {
+void CategoryTitleWidget::setText(const QString &title)
+{
     QString titleContent = getCategoryNames(title);
-
-    QFont titleFont;
-    titleFont.setPixelSize(int(20*m_calcUtil->viewMarginRation()));
-    m_title->setFont(titleFont);
-    QFontMetrics fontMetric(titleFont);
-    int width=fontMetric.width(titleContent);
+    QFontMetrics fontMetric(m_title->font());
+    const int width = fontMetric.width(titleContent);
     m_title->setFixedWidth(width + 10);
+
     m_title->setStyleSheet("color: white; background-color:transparent;");
 
     m_title->setText(titleContent);
@@ -62,10 +64,14 @@ void CategoryTitleWidget::addTextShadow()
     m_title->setGraphicsEffect(textDropShadow);
 }
 
-void CategoryTitleWidget::mouseReleaseEvent(QMouseEvent *e) {
-    if (e->button() == Qt::RightButton) {
-        return;
-    }
+void CategoryTitleWidget::relayout()
+{
+    QFont titleFont(m_title->font());
+    titleFont.setPixelSize(m_calcUtil->titleTextSize());
+    m_title->setFont(titleFont);
+    QFontMetrics fontMetric(titleFont);
+    const int width = fontMetric.width(m_title->text());
+    m_title->setFixedWidth(width + 10);
 }
 
 QLabel *CategoryTitleWidget::textLabel()

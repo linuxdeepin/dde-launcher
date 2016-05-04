@@ -24,8 +24,6 @@ NavigationWidget::NavigationWidget(QWidget *parent) :
     m_othersBtn(new CategoryButton(AppsListModel::Others, this))
 
 {
-    setFixedWidth(int(DLauncher::NAVIGATION_WIDGET_WIDTH*m_calcUtil->viewMarginRation()));
-
     initUI();
     initConnection();
 }
@@ -85,10 +83,6 @@ void NavigationWidget::refershCategoryVisible(const AppsListModel::AppCategory c
 
 void NavigationWidget::initUI()
 {
-    qDebug() << DLauncher::NAVIGATION_WIDGET_WIDTH*m_calcUtil->viewMarginRation()
-             << DLauncher::NAVIGATION_WIDGET_WIDTH << m_calcUtil->viewMarginRation();
-    this->setFixedWidth(int(DLauncher::NAVIGATION_WIDGET_WIDTH*m_calcUtil->viewMarginRation()));
-
     m_categoryGroup->addButton(m_internetBtn);
     m_categoryGroup->addButton(m_chatBtn);
     m_categoryGroup->addButton(m_musicBtn);

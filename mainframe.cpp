@@ -28,7 +28,8 @@ MainFrame::MainFrame(QWidget *parent) :
     m_backgroundLabel(new SystemBackground(qApp->primaryScreen()->geometry().size(), true, this)),
 
     m_toggleModeBtn(new DImageButton(this)),
-    m_navigationBar(new NavigationWidget),
+    m_navigationWidget(new NavigationWidget),
+    m_rightSpacing(new QWidget),
     m_searchWidget(new SearchWidget(this)),
     m_appsArea(new AppListArea),
     m_appsVbox(new DVBoxWidget),
@@ -81,7 +82,6 @@ MainFrame::MainFrame(QWidget *parent) :
 {
     setFocusPolicy(Qt::ClickFocus);
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
-    setFixedSize(qApp->primaryScreen()->geometry().size());
 
     setObjectName("LauncherFrame");
 
@@ -123,27 +123,16 @@ void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
 
 void MainFrame::resizeEvent(QResizeEvent *e)
 {
+    m_backgroundLabel->setBackgroundSize(e->size());
+
+    const int screenWidth = e->size().width();
+
+    // reset widgets size
+    const int besidePadding = m_calcUtil->calculateBesidePadding(screenWidth);
+    m_navigationWidget->setFixedWidth(besidePadding);
+    m_rightSpacing->setFixedWidth(besidePadding);
+
     QFrame::resizeEvent(e);
-
-    m_backgroundLabel->setBackgroundSize(size());
-
-    const int appsContentWidth = m_appsArea->width();
-
-    m_appsVbox->setFixedWidth(appsContentWidth);
-    m_allAppsView->setFixedWidth(appsContentWidth);
-    m_internetView->setFixedWidth(appsContentWidth);
-    m_musicView->setFixedWidth(appsContentWidth);
-    m_videoView->setFixedWidth(appsContentWidth);
-    m_graphicsView->setFixedWidth(appsContentWidth);
-    m_gameView->setFixedWidth(appsContentWidth);
-    m_officeView->setFixedWidth(appsContentWidth);
-    m_readingView->setFixedWidth(appsContentWidth);
-    m_developmentView->setFixedWidth(appsContentWidth);
-    m_systemView->setFixedWidth(appsContentWidth);
-    m_othersView->setFixedWidth(appsContentWidth);
-
-    qDebug() << "m_appsArea:" << m_appsArea->size();
-    m_calcUtil->calculateAppLayout(m_appsArea->size());
 }
 
 void MainFrame::keyPressEvent(QKeyEvent *e)
@@ -250,7 +239,7 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
             return true;
         }
     }
-    else if (o == m_navigationBar && e->type() == QEvent::Wheel)
+    else if (o == m_navigationWidget && e->type() == QEvent::Wheel)
     {
         QWheelEvent *wheel = static_cast<QWheelEvent *>(e);
         QWheelEvent *event = new QWheelEvent(wheel->pos(), wheel->delta(), wheel->buttons(), wheel->modifiers());
@@ -263,6 +252,8 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
         updateCurrentVisibleCategory();
         QMetaObject::invokeMethod(this, "refershCurrentFloatTitle", Qt::QueuedConnection);
     }
+    else if (o == m_appsArea->viewport() && e->type() == QEvent::Resize)
+        m_calcUtil->calculateAppLayout(static_cast<QResizeEvent *>(e)->size());
     else if (o == m_othersView && e->type() == QEvent::Resize)
         m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - m_othersView->height());
 
@@ -278,12 +269,13 @@ void MainFrame::initUI()
     m_appsArea->setWidgetResizable(true);
     m_appsArea->setFocusPolicy(Qt::NoFocus);
     m_appsArea->setFrameStyle(QFrame::NoFrame);
+    m_appsArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->viewport()->installEventFilter(this);
 
     m_othersView->installEventFilter(this);
-    m_navigationBar->installEventFilter(this);
+    m_navigationWidget->installEventFilter(this);
     m_searchWidget->edit()->installEventFilter(this);
 //    qApp->installEventFilter(this);
 
@@ -362,9 +354,9 @@ void MainFrame::initUI()
     m_contentLayout = new QHBoxLayout;
     m_contentLayout->setMargin(0);
     m_contentLayout->addSpacing(0);
-    m_contentLayout->addWidget(m_navigationBar);
+    m_contentLayout->addWidget(m_navigationWidget);
     m_contentLayout->addLayout(m_scrollAreaLayout);
-    m_contentLayout->addSpacing(int(DLauncher::VIEWLIST_RIGHT_MARGIN*m_calcUtil->viewMarginRation()));
+    m_contentLayout->addWidget(m_rightSpacing);
 
     m_bottomGradient->setDirection(GradientLabel::BottomToTop);
 
@@ -380,13 +372,11 @@ void MainFrame::initUI()
     setLayout(m_mainLayout);
 
     m_floatTitle->setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));;
-    m_floatTitle->move(180*m_calcUtil->viewMarginRation(), 60);
-    m_floatTitle->setFixedWidth(qApp->desktop()->screenGeometry().width() - 180*2*m_calcUtil->viewMarginRation());
     m_toggleModeBtn->setFixedSize(22, 22);
     m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
     m_toggleModeBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
     m_toggleModeBtn->setPressPic(":/icons/skin/icons/category_active_22px.svg");
-    m_toggleModeBtn->move(QPoint(30, 44));
+    m_toggleModeBtn->move(QPoint(20, 44));
     // animation
     m_scrollAnimation = new QPropertyAnimation(m_appsArea->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
@@ -439,51 +429,51 @@ void MainFrame::showCategoryMoveAnimation()
     {
         // from left side to right side
         if (m_internetTitle->isVisible())
-            fakeLabelMoveAni(m_navigationBar->categoryTextLabel(AppsListModel::Internet), m_internetTitle->textLabel());
+            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Internet), m_internetTitle->textLabel());
         if (m_chatTitle->isVisible())
-            fakeLabelMoveAni(m_navigationBar->categoryTextLabel(AppsListModel::Chat), m_chatTitle->textLabel());
+            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Chat), m_chatTitle->textLabel());
         if (m_musicTitle->isVisible())
-            fakeLabelMoveAni(m_navigationBar->categoryTextLabel(AppsListModel::Music), m_musicTitle->textLabel());
+            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Music), m_musicTitle->textLabel());
         if (m_videoTitle->isVisible())
-            fakeLabelMoveAni(m_navigationBar->categoryTextLabel(AppsListModel::Video), m_videoTitle->textLabel());
+            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Video), m_videoTitle->textLabel());
         if (m_graphicsTitle->isVisible())
-            fakeLabelMoveAni(m_navigationBar->categoryTextLabel(AppsListModel::Graphics), m_graphicsTitle->textLabel());
+            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Graphics), m_graphicsTitle->textLabel());
         if (m_gameTitle->isVisible())
-            fakeLabelMoveAni(m_navigationBar->categoryTextLabel(AppsListModel::Game), m_gameTitle->textLabel());
+            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Game), m_gameTitle->textLabel());
         if (m_officeTitle->isVisible())
-            fakeLabelMoveAni(m_navigationBar->categoryTextLabel(AppsListModel::Office), m_officeTitle->textLabel());
+            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Office), m_officeTitle->textLabel());
         if (m_readingTitle->isVisible())
-            fakeLabelMoveAni(m_navigationBar->categoryTextLabel(AppsListModel::Reading), m_readingTitle->textLabel());
+            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Reading), m_readingTitle->textLabel());
         if (m_developmentTitle->isVisible())
-            fakeLabelMoveAni(m_navigationBar->categoryTextLabel(AppsListModel::Development), m_developmentTitle->textLabel());
+            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Development), m_developmentTitle->textLabel());
         if (m_systemTitle->isVisible())
-            fakeLabelMoveAni(m_navigationBar->categoryTextLabel(AppsListModel::System), m_systemTitle->textLabel());
+            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::System), m_systemTitle->textLabel());
         if (m_othersTitle->isVisible())
-            fakeLabelMoveAni(m_navigationBar->categoryTextLabel(AppsListModel::Others), m_othersTitle->textLabel());
+            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Others), m_othersTitle->textLabel());
     } else {
         // from right side to left side
         if (m_internetTitle->isVisible())
-            fakeLabelMoveAni(m_internetTitle->textLabel(), m_navigationBar->categoryTextLabel(AppsListModel::Internet));
+            fakeLabelMoveAni(m_internetTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Internet));
         if (m_chatTitle->isVisible())
-            fakeLabelMoveAni(m_chatTitle->textLabel(), m_navigationBar->categoryTextLabel(AppsListModel::Chat));
+            fakeLabelMoveAni(m_chatTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Chat));
         if (m_musicTitle->isVisible())
-            fakeLabelMoveAni(m_musicTitle->textLabel(), m_navigationBar->categoryTextLabel(AppsListModel::Music));
+            fakeLabelMoveAni(m_musicTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Music));
         if (m_videoTitle->isVisible())
-            fakeLabelMoveAni(m_videoTitle->textLabel(), m_navigationBar->categoryTextLabel(AppsListModel::Video));
+            fakeLabelMoveAni(m_videoTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Video));
         if (m_graphicsTitle->isVisible())
-            fakeLabelMoveAni(m_graphicsTitle->textLabel(), m_navigationBar->categoryTextLabel(AppsListModel::Graphics));
+            fakeLabelMoveAni(m_graphicsTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Graphics));
         if (m_gameTitle->isVisible())
-            fakeLabelMoveAni(m_gameTitle->textLabel(), m_navigationBar->categoryTextLabel(AppsListModel::Game));
+            fakeLabelMoveAni(m_gameTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Game));
         if (m_officeTitle->isVisible())
-            fakeLabelMoveAni(m_officeTitle->textLabel(), m_navigationBar->categoryTextLabel(AppsListModel::Office));
+            fakeLabelMoveAni(m_officeTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Office));
         if (m_readingTitle->isVisible())
-            fakeLabelMoveAni(m_readingTitle->textLabel(), m_navigationBar->categoryTextLabel(AppsListModel::Reading));
+            fakeLabelMoveAni(m_readingTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Reading));
         if (m_developmentTitle->isVisible())
-            fakeLabelMoveAni(m_developmentTitle->textLabel(), m_navigationBar->categoryTextLabel(AppsListModel::Development));
+            fakeLabelMoveAni(m_developmentTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Development));
         if (m_systemTitle->isVisible())
-            fakeLabelMoveAni(m_systemTitle->textLabel(), m_navigationBar->categoryTextLabel(AppsListModel::System));
+            fakeLabelMoveAni(m_systemTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::System));
         if (m_othersTitle->isVisible())
-            fakeLabelMoveAni(m_othersTitle->textLabel(), m_navigationBar->categoryTextLabel(AppsListModel::Others));
+            fakeLabelMoveAni(m_othersTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Others));
     }
 
     m_refershCategoryTextVisible = false;
@@ -549,9 +539,9 @@ void MainFrame::fakeLabelMoveAni(QLabel *source, QLabel *dest)
 void MainFrame::refershCategoryTextVisible()
 {
     const QPoint pos = QCursor::pos();
-    const bool shownAppList = !m_navigationBar->rect().contains(pos);
+    const bool shownAppList = !m_navigationWidget->rect().contains(pos);
 
-    m_navigationBar->setCategoryTextVisible(!shownAppList);
+    m_navigationWidget->setCategoryTextVisible(!shownAppList);
     m_internetTitle->setTextVisible(shownAppList);
     m_chatTitle->setTextVisible(shownAppList);
     m_musicTitle->setTextVisible(shownAppList);
@@ -574,6 +564,7 @@ void MainFrame::refershCurrentFloatTitle()
     if (!sourceTitle)
         return;
 
+    m_floatTitle->setFixedSize(sourceTitle->size());
     m_floatTitle->setText(sourceTitle->textLabel()->text());
     m_floatTitle->setVisible(sourceTitle->visibleRegion().isEmpty());
 }
@@ -629,11 +620,13 @@ void MainFrame::initConnection()
     connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &MainFrame::updateGeometry);
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &MainFrame::updateGeometry);
 
+    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &MainFrame::layoutChanged, Qt::QueuedConnection);
+
     connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &MainFrame::ensureScrollToDest);
     connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &MainFrame::refershCurrentFloatTitle, Qt::QueuedConnection);
-    connect(m_navigationBar, &NavigationWidget::scrollToCategory, this, &MainFrame::scrollToCategory);
-    connect(this, &MainFrame::currentVisibleCategoryChanged, m_navigationBar, &NavigationWidget::setCurrentCategory);
-    connect(this, &MainFrame::categoryAppNumsChanged, m_navigationBar, &NavigationWidget::refershCategoryVisible);
+    connect(m_navigationWidget, &NavigationWidget::scrollToCategory, this, &MainFrame::scrollToCategory);
+    connect(this, &MainFrame::currentVisibleCategoryChanged, m_navigationWidget, &NavigationWidget::setCurrentCategory);
+    connect(this, &MainFrame::categoryAppNumsChanged, m_navigationWidget, &NavigationWidget::refershCategoryVisible);
     connect(this, &MainFrame::categoryAppNumsChanged, this, &MainFrame::refershCategoryVisible);
     connect(this, &MainFrame::displayModeChanged, this, &MainFrame::checkCategoryVisible);
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &MainFrame::searchTextChanged);
@@ -710,7 +703,7 @@ void MainFrame::initConnection()
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_othersView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
 
     connect(m_appsArea, &AppListArea::mouseEntered, this, &MainFrame::showCategoryMoveAnimation);
-    connect(m_navigationBar, &NavigationWidget::mouseEntered, this, &MainFrame::showCategoryMoveAnimation);
+    connect(m_navigationWidget, &NavigationWidget::mouseEntered, this, &MainFrame::showCategoryMoveAnimation);
 
     connect(m_menuWorker, &MenuWorker::quitLauncher, this, &MainFrame::hide);
     connect(m_menuWorker, &MenuWorker::unInstallApp, this, &MainFrame::showPopupUninstallDialog);
@@ -978,7 +971,7 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
     m_othersView->setVisible(isCategoryMode);
 
     m_viewListPlaceholder->setVisible(isCategoryMode);
-    m_navigationBar->setButtonsVisible(isCategoryMode);
+    m_navigationWidget->setButtonsVisible(isCategoryMode);
 
     m_allAppsView->setModel(m_displayMode == Search ? m_searchResultModel : m_allAppsModel);
     // choose nothing
@@ -1090,6 +1083,26 @@ AppsListModel *MainFrame::prevCategoryModel(const AppsListModel *currentModel)
         return m_systemModel;
 
     return nullptr;
+}
+
+void MainFrame::layoutChanged()
+{
+    const int appsContentWidth = m_appsArea->width();
+
+    m_appsVbox->setFixedWidth(appsContentWidth);
+    m_allAppsView->setFixedWidth(appsContentWidth);
+    m_internetView->setFixedWidth(appsContentWidth);
+    m_musicView->setFixedWidth(appsContentWidth);
+    m_videoView->setFixedWidth(appsContentWidth);
+    m_graphicsView->setFixedWidth(appsContentWidth);
+    m_gameView->setFixedWidth(appsContentWidth);
+    m_officeView->setFixedWidth(appsContentWidth);
+    m_readingView->setFixedWidth(appsContentWidth);
+    m_developmentView->setFixedWidth(appsContentWidth);
+    m_systemView->setFixedWidth(appsContentWidth);
+    m_othersView->setFixedWidth(appsContentWidth);
+
+    m_floatTitle->move(m_appsArea->pos().x(), 60);
 }
 
 void MainFrame::searchTextChanged(const QString &keywords)

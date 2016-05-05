@@ -50,7 +50,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize)
     m_appIconSize = itemIconWidth(m_appItemWidth);
 
     // calculate font size;
-    m_appItemFontSize = m_appItemWidth >= 130 ? 13 : m_appItemWidth <= 80 ? 9 : 11;
+    m_appItemFontSize = m_appItemWidth >= 130 ? 13 : m_appItemWidth <= 80 ? 11 : 13;
 
     emit layoutChanged();
 }

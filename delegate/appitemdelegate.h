@@ -23,13 +23,17 @@ signals:
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+private:
     const QRect itemBoundingRect(const QRect &itemRect) const;
-    const QRectF itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool extraWidthMargin) const;
+    const QRect itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool extraWidthMargin) const;
+    const QString holdTextInRect(const QFontMetrics &fm, const QString &text, const QRect &rect) const;
 
 private:
     CalculateUtil *m_calcUtil;
     QPixmap m_blueDotPixmap;
     QPixmap m_autoStartPixmap;
+
     static QModelIndex CurrentIndex;
 };
 

@@ -55,4 +55,11 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>SearchLineEdit</name>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

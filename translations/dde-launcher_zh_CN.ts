@@ -1,15 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>MainFrame</name>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>所有的依赖也会被一起移除</translation>
-    </message>
-    <message>
-        <source>Are you sure to unInstall %1 ?</source>
-        <translation>您确定要卸载 %1吗？</translation>
+        <translation>所有依赖也会被一起移除 </translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -17,7 +11,11 @@
     </message>
     <message>
         <source>Confirm</source>
-        <translation>卸载</translation>
+        <translation>确定</translation>
+    </message>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>您确定要卸载 %1 吗？</translation>
     </message>
 </context>
 <context>
@@ -44,7 +42,7 @@
     </message>
     <message>
         <source>Remove from startup(_R)</source>
-        <translation>取消开机自启动(_R)</translation>
+        <translation>取消开机自动启动(_R)</translation>
     </message>
     <message>
         <source>Add to startup(_A)</source>
@@ -53,6 +51,13 @@
     <message>
         <source>Uninstall</source>
         <translation>卸载</translation>
+    </message>
+</context>
+<context>
+    <name>SearchLineEdit</name>
+    <message>
+        <source>Search</source>
+        <translation>搜索</translation>
     </message>
 </context>
 </TS>

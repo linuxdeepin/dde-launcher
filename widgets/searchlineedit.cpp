@@ -33,7 +33,6 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     m_floatWidget->setLayout(floatLayout);
 //    m_floatWidget->setStyleSheet("border:1px solid red;");
 
-    m_floatAni = new QPropertyAnimation(m_floatWidget, "pos", this);
 
     setFixedSize(290, 30);
     setStyleSheet("QLineEdit {"
@@ -45,12 +44,18 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
                   "}");
 
     m_floatWidget->move(rect().center() - m_floatWidget->rect().center());
+
+#ifndef ARCH_MIPSEL
+    m_floatAni = new QPropertyAnimation(m_floatWidget, "pos", this);
+    connect(m_floatAni, &QPropertyAnimation::finished, this, static_cast<void (SearchLineEdit::*)()>(&SearchLineEdit::update), Qt::QueuedConnection);
+#endif
 }
 
 bool SearchLineEdit::event(QEvent *e)
 {
     switch (e->type())
     {
+    case QEvent::InputMethodQuery: // for loongson, there's no FocusIn event when the widget gets focus.
     case QEvent::FocusIn:       editMode();         break;
 //    case QEvent::FocusOut:      normalMode();       break;
     default:;
@@ -66,18 +71,26 @@ void SearchLineEdit::normalMode()
 
     m_placeholderText->show();
 
+#ifndef ARCH_MIPSEL
     m_floatAni->stop();
     m_floatAni->setStartValue(m_floatWidget->pos());
     m_floatAni->setEndValue(rect().center() - m_floatWidget->rect().center());
     m_floatAni->start();
+#else
+    m_floatWidget->move(rect().center() - m_floatWidget->rect().center());
+#endif
 }
 
 void SearchLineEdit::editMode()
 {
     m_placeholderText->hide();
 
+#ifndef ARCH_MIPSEL
     m_floatAni->stop();
     m_floatAni->setStartValue(m_floatWidget->pos());
     m_floatAni->setEndValue(QPoint(5, 0));
     m_floatAni->start();
+#else
+    m_floatWidget->move(QPoint(5, 0));
+#endif
 }

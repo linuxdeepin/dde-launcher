@@ -11,6 +11,11 @@ include(./widgets/widgets.pri)
 include(./background/background.pri)
 include(./dbusinterface/dbusinterface.pri)
 
+ARCH = $$QMAKE_HOST.arch
+isEqual(ARCH, mips64) | isEqual(ARCH, mips32) {
+    DEFINES += ARCH_MIPSEL
+}
+
 SOURCES += \
     mainframe.cpp \
     model/appslistmodel.cpp \

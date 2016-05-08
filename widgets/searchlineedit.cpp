@@ -47,6 +47,9 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
 
 #ifndef ARCH_MIPSEL
     m_floatAni = new QPropertyAnimation(m_floatWidget, "pos", this);
+    m_floatAni->setDuration(260);
+    m_floatAni->setEasingCurve(QEasingCurve::OutQuad);
+
     connect(m_floatAni, &QPropertyAnimation::finished, this, static_cast<void (SearchLineEdit::*)()>(&SearchLineEdit::update), Qt::QueuedConnection);
 #endif
 }
@@ -66,6 +69,10 @@ bool SearchLineEdit::event(QEvent *e)
 
 void SearchLineEdit::normalMode()
 {
+    if (m_mode == EchoMode)
+        return;
+    m_mode = EchoMode;
+
     // clear text when back to normal mode
     clear();
 
@@ -83,6 +90,10 @@ void SearchLineEdit::normalMode()
 
 void SearchLineEdit::editMode()
 {
+    if (m_mode == EditMode)
+        return;
+    m_mode = EditMode;
+
     m_placeholderText->hide();
 
 #ifndef ARCH_MIPSEL

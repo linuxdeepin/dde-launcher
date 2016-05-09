@@ -20,7 +20,7 @@ static const QString BlurredImageDir = "/var/cache/image-blur/";
 
 static QString GetBlurredImagePath(QString path) {
     QString ext = path.split(".").last();
-    QString md5 = QString(QCryptographicHash::hash(path.toLatin1(), QCryptographicHash::Md5).toHex());
+    QString md5 = QString(QCryptographicHash::hash(path.toUtf8(), QCryptographicHash::Md5).toHex());
     return BlurredImageDir + QString("%1.%2").arg(md5).arg(ext);
 }
 

@@ -8,7 +8,7 @@ PKGCONFIG += dtkbase dtkwidget dtkutil xcb xcb-ewmh\
 
 
 include(./widgets/widgets.pri)
-include(./background/background.pri)
+include(./boxframe/boxframe.pri)
 include(./dbusinterface/dbusinterface.pri)
 
 ARCH = $$QMAKE_HOST.arch

@@ -14,19 +14,19 @@
 
 #include <ddialog.h>
 
+const QString WallpaperKey = "pictureUri";
 const QString DEFAULT_DISPLAY_MODE_KEY = "defaultDisplayMode";
 
 MainFrame::MainFrame(QWidget *parent) :
-    QFrame(parent),
+    BoxFrame(parent),
     m_settings("deepin", "dde-launcher", this),
-
+    m_gsettings(new QGSettings("com.deepin.wrap.gnome.desktop.background",
+                               "/com/deepin/wrap/gnome/desktop/background/")),
     m_displayInter(new DBusDisplay(this)),
 
     m_calcUtil(CalculateUtil::instance(this)),
     m_appsManager(AppsManager::instance(this)),
     m_delayHideTimer(new QTimer(this)),
-    m_backgroundLabel(new SystemBackground(qApp->primaryScreen()->geometry().size(), true, this)),
-
     m_toggleModeBtn(new DImageButton(this)),
     m_navigationWidget(new NavigationWidget),
     m_rightSpacing(new QWidget),
@@ -123,8 +123,6 @@ void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
 
 void MainFrame::resizeEvent(QResizeEvent *e)
 {
-    m_backgroundLabel->setBackgroundSize(e->size());
-
     const int screenWidth = e->size().width();
 
     // reset widgets size
@@ -213,7 +211,7 @@ void MainFrame::paintEvent(QPaintEvent *e)
     QFrame::paintEvent(e);
 
     QPainter painter(this);
-    painter.drawPixmap(e->rect(), m_backgroundLabel->getBackground(), e->rect());
+    painter.drawPixmap(e->rect(), getBackground(), e->rect());
 //    painter.setBrush(QColor(255, 0, 0, 0.2 * 255));
 //    painter.drawRect(rect());
 }
@@ -380,6 +378,15 @@ void MainFrame::initUI()
     // animation
     m_scrollAnimation = new QPropertyAnimation(m_appsArea->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
+
+    // setup background.
+    auto callback = [this] {
+        const QString background = QUrl(m_gsettings->get(WallpaperKey).toString()).toLocalFile();
+        setBackground(background);
+    };
+
+    callback();
+    connect(m_gsettings, &QGSettings::changed, callback);
 }
 
 // FIXME:
@@ -388,7 +395,7 @@ void MainFrame::showGradient() {
                                            QPoint(0, 0));
         QSize topSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
         QRect topRect(topLeft, topSize);
-        m_topGradient->setPixmap(m_backgroundLabel->getBackground().copy(topRect));
+        m_topGradient->setPixmap(getBackground().copy(topRect));
         m_topGradient->resize(topRect.size());
 
 //        qDebug() << "topleft point:" << topRect.topLeft() << topRect.size();
@@ -403,7 +410,7 @@ void MainFrame::showGradient() {
         QPoint bottomLeft(bottomPoint.x(), bottomPoint.y() + 1 - bottomSize.height());
 
         QRect bottomRect(bottomLeft, bottomSize);
-        m_bottomGradient->setPixmap(m_backgroundLabel->getBackground().copy(bottomRect));
+        m_bottomGradient->setPixmap(getBackground().copy(bottomRect));
 
         m_bottomGradient->resize(bottomRect.size());
         m_bottomGradient->move(bottomRect.topLeft());
@@ -631,7 +638,7 @@ void MainFrame::initConnection()
     connect(this, &MainFrame::displayModeChanged, this, &MainFrame::checkCategoryVisible);
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &MainFrame::searchTextChanged);
     connect(m_delayHideTimer, &QTimer::timeout, this, &MainFrame::hide);
-    connect(m_backgroundLabel, &SystemBackground::backgroundChanged, this, static_cast<void (MainFrame::*)()>(&MainFrame::update));
+    connect(this, &MainFrame::backgroundChanged, this, static_cast<void (MainFrame::*)()>(&MainFrame::update));
 
     connect(m_allAppsView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
     connect(m_internetView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);

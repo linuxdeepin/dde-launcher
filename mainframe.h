@@ -11,23 +11,24 @@
 #include "gradientlabel.h"
 #include "worker/menuworker.h"
 #include "model/appsmanager.h"
-#include "background/systembackground.h"
 #include "global_util/calculate_util.h"
 #include "dbusinterface/dbusdisplay.h"
 #include "widgets/applistarea.h"
+#include "boxframe/boxframe.h"
 
 #include <QFrame>
 #include <QScrollArea>
 #include <QPropertyAnimation>
 #include <QSettings>
 #include <QTimer>
+#include <QGSettings>
 
 #include <dboxwidget.h>
 
 DWIDGET_USE_NAMESPACE
 
 class DBusLauncherService;
-class MainFrame : public QFrame
+class MainFrame : public BoxFrame
 {
     Q_OBJECT
 
@@ -100,6 +101,7 @@ private:
     DisplayMode m_displayMode = Search;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
     QSettings m_settings;
+    QGSettings *m_gsettings;
 
     DBusDisplay *m_displayInter;
 
@@ -108,7 +110,6 @@ private:
     QPropertyAnimation *m_scrollAnimation;
     QWidget *m_scrollDest;
     QTimer *m_delayHideTimer;
-    SystemBackground *m_backgroundLabel;
 
     DImageButton *m_toggleModeBtn;
     NavigationWidget *m_navigationWidget;

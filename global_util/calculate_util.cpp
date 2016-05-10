@@ -76,8 +76,10 @@ int CalculateUtil::itemIconWidth(const int itemWidth) const
 
     if (itemWidth > 64 * 2)
         return 64;
-    if (itemWidth > 80)
+    if (itemWidth > 85)
         return 48;
+    if (itemWidth > 60)
+        return 32;
     return 24;
 }
 

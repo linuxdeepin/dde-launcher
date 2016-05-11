@@ -15,13 +15,6 @@ class SearchLineEdit : public QLineEdit
     Q_OBJECT
 
 public:
-    enum DisplayMode
-    {
-        EditMode,
-        EchoMode,
-    };
-
-public:
     explicit SearchLineEdit(QWidget *parent = nullptr);
 
 public slots:
@@ -34,7 +27,6 @@ protected:
     bool event(QEvent *e);
 
 private:
-    DisplayMode m_mode = EchoMode;
     DImageButton *m_icon;
     QLabel *m_placeholderText;
     QWidget *m_floatWidget;

@@ -58,7 +58,9 @@ bool SearchLineEdit::event(QEvent *e)
 {
     switch (e->type())
     {
+#ifdef ARCH_MIPSEL
     case QEvent::InputMethodQuery: // for loongson, there's no FocusIn event when the widget gets focus.
+#endif
     case QEvent::FocusIn:       editMode();         break;
 //    case QEvent::FocusOut:      normalMode();       break;
     default:;
@@ -69,10 +71,6 @@ bool SearchLineEdit::event(QEvent *e)
 
 void SearchLineEdit::normalMode()
 {
-    if (m_mode == EchoMode)
-        return;
-    m_mode = EchoMode;
-
     // clear text when back to normal mode
     clear();
 
@@ -90,10 +88,6 @@ void SearchLineEdit::normalMode()
 
 void SearchLineEdit::editMode()
 {
-    if (m_mode == EditMode)
-        return;
-    m_mode = EditMode;
-
     m_placeholderText->hide();
 
 #ifndef ARCH_MIPSEL

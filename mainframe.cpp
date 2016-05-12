@@ -169,6 +169,7 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Return:        launchCurrentApp();                             break;
     case Qt::Key_Escape:        hide();                                         break;
     case Qt::Key_Tab:
+                                e->accept();
     case Qt::Key_Backtab:
     case Qt::Key_Up:
     case Qt::Key_Down:
@@ -251,9 +252,10 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
         QMetaObject::invokeMethod(this, "refershCurrentFloatTitle", Qt::QueuedConnection);
     }
     else if (o == m_appsArea->viewport() && e->type() == QEvent::Resize)
+    {
         m_calcUtil->calculateAppLayout(static_cast<QResizeEvent *>(e)->size());
-    else if (o == m_othersView && e->type() == QEvent::Resize)
-        m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - m_othersView->height());
+        updatePlaceholderSize();
+    }
 
     return false;
 }
@@ -272,7 +274,7 @@ void MainFrame::initUI()
     m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->viewport()->installEventFilter(this);
 
-    m_othersView->installEventFilter(this);
+//    m_othersView->installEventFilter(this);
     m_navigationWidget->installEventFilter(this);
     m_searchWidget->edit()->installEventFilter(this);
 //    qApp->installEventFilter(this);
@@ -547,7 +549,7 @@ void MainFrame::fakeLabelMoveAni(QLabel *source, QLabel *dest)
 void MainFrame::refershCategoryTextVisible()
 {
     const QPoint pos = QCursor::pos() - this->pos();
-    const bool shownAppList = !m_navigationWidget->rect().contains(pos);
+    const bool shownAppList = m_navigationWidget->rect().right() < pos.x();
 
     m_navigationWidget->setCategoryTextVisible(!shownAppList);
     m_internetTitle->setTextVisible(shownAppList);
@@ -622,6 +624,34 @@ AppListView *MainFrame::categoryView(const AppsListModel::AppCategory category) 
     }
 
     return view;
+}
+
+AppListView *MainFrame::lastVisibleView() const
+{
+    if (!m_appsManager->appsInfoList(AppsListModel::Others).isEmpty())
+        return m_othersView;
+    if (!m_appsManager->appsInfoList(AppsListModel::System).isEmpty())
+        return m_systemView;
+    if (!m_appsManager->appsInfoList(AppsListModel::Development).isEmpty())
+        return m_developmentView;
+    if (!m_appsManager->appsInfoList(AppsListModel::Reading).isEmpty())
+        return m_readingView;
+    if (!m_appsManager->appsInfoList(AppsListModel::Office).isEmpty())
+        return m_officeView;
+    if (!m_appsManager->appsInfoList(AppsListModel::Game).isEmpty())
+        return m_gameView;
+    if (!m_appsManager->appsInfoList(AppsListModel::Graphics).isEmpty())
+        return m_graphicsView;
+    if (!m_appsManager->appsInfoList(AppsListModel::Video).isEmpty())
+        return m_videoView;
+    if (!m_appsManager->appsInfoList(AppsListModel::Music).isEmpty())
+        return m_musicView;
+    if (!m_appsManager->appsInfoList(AppsListModel::Chat).isEmpty())
+        return m_chatView;
+    if (!m_appsManager->appsInfoList(AppsListModel::Internet).isEmpty())
+        return m_internetView;
+
+    return nullptr;
 }
 
 void MainFrame::initConnection()
@@ -762,50 +792,63 @@ void MainFrame::moveCurrentSelectApp(const int key)
     default:;
     }
 
-    if (!index.isValid() && (key == Qt::Key_Up || key == Qt::Key_Down || key == Qt::Key_Left || key == Qt::Key_Right))
-    {
+    do {
+        if (index.isValid())
+            break;
+
         const int realColumn = currentIndex.row() % column;
         const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
-        if (key == Qt::Key_Down || key == Qt::Key_Right)
+        if (key == Qt::Key_Down || key == Qt::Key_Right || key == Qt::Key_Tab)
             model = nextCategoryModel(model);
         else
             model = prevCategoryModel(model);
 
-        if (key == Qt::Key_Up || key == Qt::Key_Down) {
+        // need to keep column
+        if (key == Qt::Key_Up || key == Qt::Key_Down)
             while (model && model->rowCount(QModelIndex()) <= realColumn)
                 if (key == Qt::Key_Down)
                     model = nextCategoryModel(model);
                 else
                     model = prevCategoryModel(model);
-        } else {
-            while (model && model->rowCount(QModelIndex()) <= realColumn && realColumn!=1)
-                if (key == Qt::Key_Right)
+        else
+            while (model && !model->rowCount(QModelIndex()))
+                if (key == Qt::Key_Right || key == Qt::Key_Tab)
                     model = nextCategoryModel(model);
                 else
                     model = prevCategoryModel(model);
-        }
-        if (model)
+
+        if (!model)
+            break;
+
+        const int count = model->rowCount(QModelIndex()) - 1;
+        int realIndex = count;
+
+        switch (key)
         {
-            if (key == Qt::Key_Down)
-                index = model->index(realColumn);
-            else if (key == Qt::Key_Up){
-                const int count = model->rowCount(QModelIndex()) - 1;
-                int realIndex = count;
-                while (realIndex && realIndex % column != realColumn)
-                    --realIndex;
-                index = model->index(realIndex);
-            } else if (key == Qt::Key_Left) {
-                const int count = model->rowCount(QModelIndex()) - 1;
-                index = model->index(count);
-            } else {
-                index = model->index(0);
-            }
+        case Qt::Key_Down:
+            index = model->index(realColumn);
+            break;
+        case Qt::Key_Up:
+            while (realIndex && realIndex % column != realColumn)
+                --realIndex;
+            index = model->index(realIndex);
+            break;
+        case Qt::Key_Left:
+        case Qt::Key_Backtab:
+            index = model->index(count);
+            break;
+        case Qt::Key_Right:
+        case Qt::Key_Tab:
+            index = model->index(0);
+            break;
+        default:;
         }
-    }
+
+    } while (false);
 
     const QModelIndex selectedIndex = index.isValid() ? index : currentIndex;
-    ensureItemVisible(selectedIndex);
     m_appItemDelegate->setCurrentIndex(selectedIndex);
+    ensureItemVisible(selectedIndex);
 
     update();
 }
@@ -928,6 +971,7 @@ void MainFrame::ensureItemVisible(const QModelIndex &index)
 
     m_appsArea->ensureVisible(0, view->indexYOffset(index) + view->pos().y(), 0, DLauncher::APPS_AREA_ENSURE_VISIBLE_MARGIN_Y);
     updateCurrentVisibleCategory();
+    refershCurrentFloatTitle();
 }
 
 void MainFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
@@ -1023,8 +1067,10 @@ void MainFrame::updateCurrentVisibleCategory()
         currentVisibleCategory = AppsListModel::Development;
     else if (!m_systemView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::System;
-    else
+    else if (!m_othersView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Others;
+    else
+        Q_ASSERT(false);
 
     if (m_currentCategory == currentVisibleCategory)
         return;
@@ -1032,6 +1078,14 @@ void MainFrame::updateCurrentVisibleCategory()
     m_currentCategory = currentVisibleCategory;
 
     emit currentVisibleCategoryChanged(m_currentCategory);
+}
+
+void MainFrame::updatePlaceholderSize()
+{
+    const AppListView *view = lastVisibleView();
+    Q_ASSERT(view);
+
+    m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - view->height() - DLauncher::CATEGORY_TITLE_WIDGET_HEIGHT);
 }
 
 AppsListModel *MainFrame::nextCategoryModel(const AppsListModel *currentModel)

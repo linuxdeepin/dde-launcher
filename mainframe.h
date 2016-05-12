@@ -74,6 +74,7 @@ private:
     void showPopupUninstallDialog(const QModelIndex &context);
     void updateDisplayMode(const DisplayMode mode);
     void updateCurrentVisibleCategory();
+    void updatePlaceholderSize();
 
     AppsListModel *nextCategoryModel(const AppsListModel *currentModel);
     AppsListModel *prevCategoryModel(const AppsListModel *currentModel);
@@ -93,6 +94,7 @@ private slots:
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
     AppListView *categoryView(const AppsListModel::AppCategory category) const;
+    AppListView *lastVisibleView() const;
 
 private:
     bool m_isConfirmDialogShown = false;

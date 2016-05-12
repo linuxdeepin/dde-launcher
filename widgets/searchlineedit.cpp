@@ -34,6 +34,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
 //    m_floatWidget->setStyleSheet("border:1px solid red;");
 
 
+    setFocusPolicy(Qt::ClickFocus);
     setFixedSize(290, 30);
     setStyleSheet("QLineEdit {"
                   "background-color:rgba(255, 255, 255, .2);"

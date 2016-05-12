@@ -302,6 +302,7 @@ void MainFrame::initUI()
     m_othersView->setModel(m_othersModel);
     m_othersView->setItemDelegate(m_appItemDelegate);
 
+    m_floatTitle->setVisible(false);
     m_internetTitle->setTextVisible(false);
     m_chatTitle->setTextVisible(false);
     m_musicTitle->setTextVisible(false);
@@ -369,7 +370,7 @@ void MainFrame::initUI()
 
     setLayout(m_mainLayout);
 
-    m_floatTitle->setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));;
+//    m_floatTitle->setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));;
     m_toggleModeBtn->setFixedSize(22, 22);
     m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
     m_toggleModeBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
@@ -573,7 +574,8 @@ void MainFrame::refershCurrentFloatTitle()
 
     m_floatTitle->setFixedSize(sourceTitle->size());
     m_floatTitle->setText(sourceTitle->textLabel()->text());
-    m_floatTitle->setVisible(sourceTitle->visibleRegion().isEmpty());
+    m_floatTitle->setVisible(sourceTitle->visibleRegion().isEmpty() ||
+                             sourceTitle->visibleRegion().boundingRect().height() < 20);
 }
 
 CategoryTitleWidget *MainFrame::categoryTitle(const AppsListModel::AppCategory category) const
@@ -950,8 +952,6 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
     m_displayMode = mode;
 
     bool isCategoryMode = m_displayMode == GroupByCategory;
-    //Float title
-    m_floatTitle->setVisible(isCategoryMode);
 
     m_allAppsView->setVisible(!isCategoryMode);
     m_internetTitle->setVisible(isCategoryMode);

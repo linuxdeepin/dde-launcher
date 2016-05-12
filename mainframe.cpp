@@ -502,7 +502,7 @@ void MainFrame::fakeLabelMoveAni(QLabel *source, QLabel *dest)
 
     QPoint sourcePos;
     QWidget *widget = source;
-    while (widget)
+    while (widget != this)
     {
         sourcePos += widget->pos();
         widget = qobject_cast<QWidget *>(widget->parent());
@@ -510,7 +510,7 @@ void MainFrame::fakeLabelMoveAni(QLabel *source, QLabel *dest)
 
     QPoint destPos;
     widget = dest;
-    while (widget)
+    while (widget != this)
     {
         destPos += widget->pos();
         widget = qobject_cast<QWidget *>(widget->parent());
@@ -545,7 +545,7 @@ void MainFrame::fakeLabelMoveAni(QLabel *source, QLabel *dest)
 
 void MainFrame::refershCategoryTextVisible()
 {
-    const QPoint pos = QCursor::pos();
+    const QPoint pos = QCursor::pos() - this->pos();
     const bool shownAppList = !m_navigationWidget->rect().contains(pos);
 
     m_navigationWidget->setCategoryTextVisible(!shownAppList);

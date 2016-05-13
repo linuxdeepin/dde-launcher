@@ -113,9 +113,11 @@ bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action
 {
     Q_UNUSED(data)
     Q_UNUSED(action)
-    Q_UNUSED(row)
-    Q_UNUSED(column)
     Q_UNUSED(parent)
+
+    // disable invaild drop
+    if (row < 0 || column < 0)
+        return false;
 
     if (m_category != All)
         return false;

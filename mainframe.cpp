@@ -568,7 +568,7 @@ void MainFrame::refershCategoryTextVisible()
 void MainFrame::refershCurrentFloatTitle()
 {
     if (m_displayMode != GroupByCategory)
-        return;
+        return m_floatTitle->setVisible(false);
 
     CategoryTitleWidget *sourceTitle = categoryTitle(m_currentCategory);
     if (!sourceTitle)
@@ -885,7 +885,7 @@ void MainFrame::launchCurrentApp()
 void MainFrame::checkCategoryVisible()
 {
     if (m_displayMode != GroupByCategory)
-        return;
+        return m_floatTitle->setVisible(false);
 
     emit categoryAppNumsChanged(AppsListModel::Internet, m_appsManager->appNums(AppsListModel::Internet));
     emit categoryAppNumsChanged(AppsListModel::Chat, m_appsManager->appNums(AppsListModel::Chat));

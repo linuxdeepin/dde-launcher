@@ -346,6 +346,8 @@ void MainFrame::initUI()
                                              0, DLauncher::APPS_AREA_BOTTOM_MARGIN);
     m_appsArea->setWidget(m_appsVbox);
 
+//    m_viewListPlaceholder->setStyleSheet("background-color:red;");
+
     m_scrollAreaLayout = new QVBoxLayout;
     m_scrollAreaLayout->setMargin(0);
     m_scrollAreaLayout->setSpacing(0);
@@ -1085,7 +1087,7 @@ void MainFrame::updatePlaceholderSize()
     const AppListView *view = lastVisibleView();
     Q_ASSERT(view);
 
-    m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - view->height() - DLauncher::CATEGORY_TITLE_WIDGET_HEIGHT);
+    m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - view->height() - DLauncher::APPS_AREA_BOTTOM_MARGIN);
 }
 
 AppsListModel *MainFrame::nextCategoryModel(const AppsListModel *currentModel)

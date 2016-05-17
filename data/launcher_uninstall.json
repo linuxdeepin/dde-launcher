@@ -1,0 +1,7 @@
+{
+	"blacklist": [
+		"dde-control-center.desktop",
+		"dde-computer.desktop",
+		"dde-trash.desktop"
+	]
+}

@@ -8,6 +8,8 @@
 #include <QDebug>
 #include <QPixmap>
 
+static const QString UninstallFilterFile = "/usr/share/dde-launcher/data/launcher_uninstall.json";
+
 AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
     QAbstractListModel(parent),
     m_appsManager(AppsManager::instance(this)),
@@ -173,6 +175,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIsOnDesktop(itemInfo.m_key);
     case AppIsOnDockRole:
         return m_appsManager->appIsOnDock(itemInfo.m_key);
+    case AppIsRemovableRole:
+        return itemIsRemovable(itemInfo.m_desktop);
     case AppNewInstallRole:
         return m_appsManager->appIsNewInstall(itemInfo.m_key);
     case AppIconRole:
@@ -234,5 +238,30 @@ bool AppsListModel::indexDraging(const QModelIndex &index) const
     const int current = index.row();
 
     return (start <= end && current >= start && current <= end) ||
-           (start >= end && current <= start && current >= end);
+            (start >= end && current <= start && current >= end);
+}
+
+bool AppsListModel::itemIsRemovable(const QString &desktop) const
+{
+    static QStringList blacklist;
+    if (blacklist.isEmpty()) {
+        QFile file(UninstallFilterFile);
+        if (file.open(QFile::ReadOnly)) {
+            QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+            QJsonObject obj = doc.object();
+            QJsonArray arr = obj["blacklist"].toArray();
+            foreach (QJsonValue val, arr) {
+                blacklist << val.toString();
+            }
+            file.close();
+        }
+    }
+
+    foreach (QString val, blacklist) {
+        if (desktop.endsWith(val)) {
+            return false;
+        }
+    }
+
+    return true;
 }

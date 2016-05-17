@@ -59,6 +59,7 @@ QString MenuWorker::createMenuContent(/*QString appKey*/){
     m_isItemOnDesktop = m_currentModelIndex.data(AppsListModel::AppIsOnDesktopRole).toBool();
     m_isItemOnDock = m_currentModelIndex.data(AppsListModel::AppIsOnDockRole).toBool();
     m_isItemStartup = m_currentModelIndex.data(AppsListModel::AppAutoStartRole).toBool();
+    m_isRemovable = m_currentModelIndex.data(AppsListModel::AppIsRemovableRole).toBool();
 
     QJsonObject openObj = createMenuItem(0, tr("Open(_O)"));
     QJsonObject seperatorObj1 = createSeperator();
@@ -81,7 +82,7 @@ QString MenuWorker::createMenuContent(/*QString appKey*/){
     }else{
         startupObj = createMenuItem(3, tr("Add to startup(_A)"));
     }
-    QJsonObject uninstallObj = createMenuItem(4, tr("Uninstall"));
+    QJsonObject uninstallObj = createMenuItem(4, tr("Uninstall"), m_isRemovable);
 
     QJsonArray items;
     items.append(openObj);
@@ -100,11 +101,11 @@ QString MenuWorker::createMenuContent(/*QString appKey*/){
     return QString(QJsonDocument(menuObj).toJson());
 }
 
-QJsonObject MenuWorker::createMenuItem(int itemId, QString itemText){
+QJsonObject MenuWorker::createMenuItem(int itemId, QString itemText, bool isActive){
     QJsonObject itemObj;
     itemObj["itemId"] = QString::number(itemId);
     itemObj["itemText"] = itemText;
-    itemObj["isActive"] = true;
+    itemObj["isActive"] = isActive;
     itemObj["isCheckable"] = false;
     itemObj["checked"] = false;
     itemObj["itemIcon"] = "";

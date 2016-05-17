@@ -27,6 +27,7 @@ public:
         AppNewInstallRole,
         AppIsOnDesktopRole,
         AppIsOnDockRole,
+        AppIsRemovableRole,
         AppIconSizeRole,
         AppFontSizeRole,
         AppItemIsDragingRole,
@@ -76,6 +77,7 @@ private:
     void dataChanged(const AppsListModel::AppCategory category);
     void layoutChanged(const AppsListModel::AppCategory category);
     bool indexDraging(const QModelIndex &index) const;
+    bool itemIsRemovable(const QString &desktop) const;
 
 private:
     AppsManager *m_appsManager;

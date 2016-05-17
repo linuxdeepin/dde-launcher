@@ -48,7 +48,7 @@ public:
     bool isItemOnDesktop(QString appKey);
     bool isItemStartup(QString appKey);
 
-    QJsonObject createMenuItem(int itemId, QString itemText);
+    QJsonObject createMenuItem(int itemId, QString itemText, bool isActive = true);
     QJsonObject createSeperator();
 
     QString createMenuContent();
@@ -89,6 +89,7 @@ private:
     bool m_isItemOnDesktop;
     bool m_isItemOnDock;
     bool m_isItemStartup;
+    bool m_isRemovable;
 
     bool m_menuIsShown = false;
 };

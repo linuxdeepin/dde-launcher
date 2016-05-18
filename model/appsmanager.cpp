@@ -467,14 +467,15 @@ void AppsManager::handleItemChanged(const QString &in0, ItemInfo in1, qlonglong 
     qDebug() << "in0" << in0 << in1.m_name << "in2" << in2;
     if (in0 == "created") {
         m_allAppInfoList.append(in1);
-        emit dataChanged(AppsListModel::All);
-        refreshCategoryInfoList();
-        refreshAppIconCache();
     } else if (in0 == "updated") {
         m_newInstalledAppsList.append(in1.m_key);
     }
     if (in0 == "deleted") {
-        m_newInstalledAppsList.removeOne(in1.m_key);
+        m_allAppInfoList.removeOne(in1);
     }
 
+    refreshCategoryInfoList();
+    refreshAppIconCache();
+
+    emit dataChanged(AppsListModel::All);
 }

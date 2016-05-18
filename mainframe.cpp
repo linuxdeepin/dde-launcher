@@ -27,6 +27,7 @@ MainFrame::MainFrame(QWidget *parent) :
     m_calcUtil(CalculateUtil::instance(this)),
     m_appsManager(AppsManager::instance(this)),
     m_delayHideTimer(new QTimer(this)),
+    m_autoScrollTimer(new QTimer(this)),
     m_toggleModeBtn(new DImageButton(this)),
     m_navigationWidget(new NavigationWidget),
     m_rightSpacing(new QWidget),
@@ -265,6 +266,9 @@ void MainFrame::initUI()
     m_delayHideTimer->setInterval(500);
     m_delayHideTimer->setSingleShot(true);
 
+    m_autoScrollTimer->setInterval(DLauncher::APPS_AREA_AUTO_SCROLL_TIMER);
+    m_autoScrollTimer->setSingleShot(false);
+
     m_appsArea->setObjectName("AppBox");
     m_appsArea->setWidgetResizable(true);
     m_appsArea->setFocusPolicy(Qt::NoFocus);
@@ -281,6 +285,7 @@ void MainFrame::initUI()
 
     m_allAppsView->setModel(m_allAppsModel);
     m_allAppsView->setItemDelegate(m_appItemDelegate);
+    m_allAppsView->setContainerBox(m_appsArea);
     m_internetView->setModel(m_internetModel);
     m_internetView->setItemDelegate(m_appItemDelegate);
     m_chatView->setModel(m_chatModel);
@@ -673,6 +678,22 @@ void MainFrame::initConnection()
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &MainFrame::searchTextChanged);
     connect(m_delayHideTimer, &QTimer::timeout, this, &MainFrame::hide);
     connect(this, &MainFrame::backgroundChanged, this, static_cast<void (MainFrame::*)()>(&MainFrame::update));
+
+    // auto scroll when drag to app list box border
+    connect(m_allAppsView, &AppListView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
+    connect(m_autoScrollTimer, &QTimer::timeout, [this] {
+        m_appsArea->verticalScrollBar()->setValue(m_appsArea->verticalScrollBar()->value() + m_autoScrollStep);
+    });
+    connect(m_allAppsView, &AppListView::requestScrollUp, [this] {
+        m_autoScrollStep = -std::abs(m_autoScrollStep);
+        if (!m_autoScrollTimer->isActive())
+            m_autoScrollTimer->start();
+    });
+    connect(m_allAppsView, &AppListView::requestScrollDown, [this] {
+        m_autoScrollStep = std::abs(m_autoScrollStep);
+        if (!m_autoScrollTimer->isActive())
+            m_autoScrollTimer->start();
+    });
 
     connect(m_allAppsView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
     connect(m_internetView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);

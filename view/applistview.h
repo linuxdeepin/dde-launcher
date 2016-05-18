@@ -19,10 +19,13 @@ public:
     using QListView::indexAt;
     const QModelIndex indexAt(const int index) const;
     int indexYOffset(const QModelIndex &index) const;
+    void setContainerBox(const QWidget *container);
 
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
-//    void handleDragItems(const QModelIndex &index, int insertI);
+    void requestScrollUp() const;
+    void requestScrollDown() const;
+    void requestScrollStop() const;
 
 protected:
     using QListView::startDrag;
@@ -51,6 +54,7 @@ private:
     bool m_enableDropInside = false;
     QPoint m_dragStartPos;
 
+    const QWidget *m_containerBox = nullptr;
     QTimer *m_dropThresholdTimer;
     QPropertyAnimation *m_lastFakeAni = nullptr;
 

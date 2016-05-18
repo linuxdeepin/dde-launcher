@@ -5,6 +5,7 @@
 #include "global_util/util.h"
 #include "model/appslistmodel.h"
 #include "view/applistview.h"
+#include "global_util/constants.h"
 #include "categorytitlewidget.h"
 #include "searchwidget.h"
 #include "navigationwidget.h"
@@ -99,6 +100,7 @@ private:
 private:
     bool m_isConfirmDialogShown = false;
     bool m_refershCategoryTextVisible = false;
+    int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
     double rightMarginRation = 1;
     DisplayMode m_displayMode = Search;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
@@ -112,6 +114,7 @@ private:
     QPropertyAnimation *m_scrollAnimation;
     QWidget *m_scrollDest;
     QTimer *m_delayHideTimer;
+    QTimer *m_autoScrollTimer;
 
     DImageButton *m_toggleModeBtn;
     NavigationWidget *m_navigationWidget;

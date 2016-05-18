@@ -74,6 +74,11 @@ int AppListView::indexYOffset(const QModelIndex &index) const
     return indexRect(index).y();
 }
 
+void AppListView::setContainerBox(const QWidget *container)
+{
+    m_containerBox = container;
+}
+
 void AppListView::dropEvent(QDropEvent *e)
 {
     e->accept();
@@ -107,6 +112,8 @@ void AppListView::dragEnterEvent(QDragEnterEvent *e)
 
 void AppListView::dragMoveEvent(QDragMoveEvent *e)
 {
+    Q_ASSERT(m_containerBox);
+
     if (m_lastFakeAni)
         return;
 
@@ -114,8 +121,22 @@ void AppListView::dragMoveEvent(QDragMoveEvent *e)
     if (dropIndex.isValid())
         m_dropToPos = dropIndex.row();
 
+
     m_dropThresholdTimer->stop();
-    m_dropThresholdTimer->start();
+
+    const QPoint pos = mapToGlobal(e->pos());
+    const QRect containerRect = m_containerBox->geometry().marginsRemoved(QMargins(0, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
+                                                                                   0, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
+
+    /*if (containerRect.contains(pos))
+        return */m_dropThresholdTimer->start();
+
+    if (pos.y() < containerRect.top())
+        emit requestScrollUp();
+    else if (pos.y() > containerRect.bottom())
+        emit requestScrollDown();
+    else
+        emit requestScrollStop();
 }
 
 void AppListView::dragLeaveEvent(QDragLeaveEvent *e)
@@ -123,6 +144,7 @@ void AppListView::dragLeaveEvent(QDragLeaveEvent *e)
     e->accept();
 
     m_dropThresholdTimer->stop();
+    emit requestScrollStop();
 }
 
 void AppListView::mouseMoveEvent(QMouseEvent *e)

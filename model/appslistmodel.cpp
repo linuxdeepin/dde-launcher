@@ -118,7 +118,7 @@ bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action
     Q_UNUSED(parent)
 
     // disable invaild drop
-    if (row < 0 || column < 0)
+    if (data->data("RequestDock").isEmpty())
         return false;
 
     if (m_category != All)

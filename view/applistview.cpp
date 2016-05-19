@@ -210,6 +210,9 @@ void AppListView::startDrag(const QModelIndex &index)
     // disable animation when finally dropped
     m_dropThresholdTimer->stop();
 
+    // disable auto scroll
+    emit requestScrollStop();
+
     if (listModel->category() != AppsListModel::All)
         return;
 

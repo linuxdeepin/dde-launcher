@@ -463,16 +463,12 @@ void AppsManager::searchDone(const QStringList &resultList)
 //}
 
 // TODO: optimize
-void AppsManager::handleItemChanged(const QString &in0, ItemInfo in1, qlonglong in2) {
-    qDebug() << "in0" << in0 << in1.m_name << "in2" << in2;
-    if (in0 == "created") {
-        m_allAppInfoList.append(in1);
-    } else if (in0 == "updated") {
-        m_newInstalledAppsList.append(in1.m_key);
-    }
-    if (in0 == "deleted") {
-        m_allAppInfoList.removeOne(in1);
-    }
+void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber)
+{
+    qDebug() << "in0" << operation << appInfo.m_name << "in2" << categoryNumber;
+
+    if (operation == "created")
+        m_newInstalledAppsList.append(appInfo.m_key);
 
     refreshCategoryInfoList();
     refreshAppIconCache();

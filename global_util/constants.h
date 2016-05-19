@@ -21,7 +21,7 @@ static const int APPS_AREA_TOP_MARGIN = 20;
 static const int APPS_AREA_BOTTOM_MARGIN = 20;
 static const int APPS_AREA_ENSURE_VISIBLE_MARGIN_Y = 200;
 static const int APPS_AREA_AUTO_SCROLL_STEP = 5;
-static const int APPS_AREA_AUTO_SCROLL_TIMER = 10;
+static const int APPS_AREA_AUTO_SCROLL_TIMER = 15;
 
 }
 

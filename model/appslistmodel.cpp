@@ -113,8 +113,9 @@ bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
 
 bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const
 {
-    Q_UNUSED(data)
     Q_UNUSED(action)
+    Q_UNUSED(row)
+    Q_UNUSED(column)
     Q_UNUSED(parent)
 
     // disable invaild drop

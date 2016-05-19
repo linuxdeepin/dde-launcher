@@ -685,12 +685,12 @@ void MainFrame::initConnection()
         m_appsArea->verticalScrollBar()->setValue(m_appsArea->verticalScrollBar()->value() + m_autoScrollStep);
     });
     connect(m_allAppsView, &AppListView::requestScrollUp, [this] {
-        m_autoScrollStep = -std::abs(m_autoScrollStep);
+        m_autoScrollStep = -DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
         if (!m_autoScrollTimer->isActive())
             m_autoScrollTimer->start();
     });
     connect(m_allAppsView, &AppListView::requestScrollDown, [this] {
-        m_autoScrollStep = std::abs(m_autoScrollStep);
+        m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
         if (!m_autoScrollTimer->isActive())
             m_autoScrollTimer->start();
     });

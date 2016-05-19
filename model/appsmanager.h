@@ -62,7 +62,7 @@ public slots:
 //    void handleDropedApp(const QModelIndex &index);
 
     // TODO: optimize
-    void handleItemChanged(const QString &in0, ItemInfo in1, qlonglong in2);
+    void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
 
 private:
     explicit AppsManager(QObject *parent = 0);

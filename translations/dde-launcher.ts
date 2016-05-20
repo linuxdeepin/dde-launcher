@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>AppsManager</name>
+    <message>
+        <source>No search results</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainFrame</name>
     <message>
         <source>All dependencies will be removed together</source>

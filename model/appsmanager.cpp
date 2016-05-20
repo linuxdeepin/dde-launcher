@@ -427,6 +427,11 @@ void AppsManager::searchDone(const QStringList &resultList)
         appendSearchResult(key);
 
     emit dataChanged(AppsListModel::Search);
+
+    if (m_appSearchResultList.isEmpty())
+        emit requestTips(tr("No search results"));
+    else
+        emit requestHideTips();
 }
 
 //void AppsManager::handleDragedApp(const QModelIndex &index, int nextNode) {

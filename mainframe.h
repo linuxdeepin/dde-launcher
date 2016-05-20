@@ -53,6 +53,8 @@ signals:
 
 public slots:
     void scrollToCategory(const AppsListModel::AppCategory &category);
+    void showTips(const QString &tips);
+    void hideTips();
 
 protected:
     void resizeEvent(QResizeEvent *e);
@@ -125,6 +127,7 @@ private:
     MenuWorker* m_menuWorker;
 
     QWidget *m_viewListPlaceholder;
+    QLabel *m_tipsLabel;
 
     AppItemDelegate *m_appItemDelegate;
     GradientLabel* m_topGradient;
@@ -172,7 +175,6 @@ private:
     QVBoxLayout *m_scrollAreaLayout;
     QHBoxLayout *m_contentLayout;
     QVBoxLayout *m_mainLayout;
-
 };
 
 Q_DECLARE_METATYPE(MainFrame::DisplayMode)

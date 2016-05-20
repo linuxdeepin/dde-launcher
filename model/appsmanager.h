@@ -38,6 +38,8 @@ signals:
     void layoutChanged(const AppsListModel::AppCategory category) const;
 //    void handleUninstallApp(const QModelIndex &index, int result);
     void updateCategoryView(const AppsListModel::AppCategory categoryInfo) const;
+    void requestTips(const QString &tips) const;
+    void requestHideTips() const;
 
 public slots:
     void saveUserSortedList();

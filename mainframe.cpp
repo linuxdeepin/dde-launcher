@@ -36,6 +36,7 @@ MainFrame::MainFrame(QWidget *parent) :
     m_appsVbox(new DVBoxWidget),
     m_menuWorker(new MenuWorker),
     m_viewListPlaceholder(new QWidget),
+    m_tipsLabel(new QLabel(this)),
     m_appItemDelegate(new AppItemDelegate),
     m_topGradient(new GradientLabel(this)),
     m_bottomGradient(new GradientLabel(this)),
@@ -122,6 +123,24 @@ void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
     m_scrollAnimation->start();
 }
 
+void MainFrame::showTips(const QString &tips)
+{
+    if (m_displayMode != Search)
+        return;
+
+    m_tipsLabel->setText(tips);
+
+    const QPoint center = rect().center() - m_tipsLabel->rect().center();
+    m_tipsLabel->move(center);
+    m_tipsLabel->setVisible(true);
+    m_tipsLabel->raise();
+}
+
+void MainFrame::hideTips()
+{
+    m_tipsLabel->setVisible(false);
+}
+
 void MainFrame::resizeEvent(QResizeEvent *e)
 {
     const int screenWidth = e->size().width();
@@ -137,7 +156,8 @@ void MainFrame::resizeEvent(QResizeEvent *e)
 void MainFrame::keyPressEvent(QKeyEvent *e)
 {
     if ((e->key() <= Qt::Key_Z && e->key() >= Qt::Key_A) ||
-        (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_0))
+        (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_0) ||
+        (e->key() == Qt::Key_Space))
     {
         e->accept();
 
@@ -263,6 +283,13 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
 
 void MainFrame::initUI()
 {
+    m_tipsLabel->setAlignment(Qt::AlignCenter);
+    m_tipsLabel->setFixedSize(200, 50);
+    m_tipsLabel->setVisible(false);
+    m_tipsLabel->setStyleSheet("color:rgba(238, 238, 238, .6);"
+//                               "background-color:red;"
+                               "font-size:22px;");
+
     m_delayHideTimer->setInterval(500);
     m_delayHideTimer->setSingleShot(true);
 
@@ -776,6 +803,8 @@ void MainFrame::initConnection()
     });
 
     connect(m_appsManager, &AppsManager::updateCategoryView, this, &MainFrame::checkCategoryVisible);
+    connect(m_appsManager, &AppsManager::requestTips, this, &MainFrame::showTips);
+    connect(m_appsManager, &AppsManager::requestHideTips, this, &MainFrame::hideTips);
 }
 
 void MainFrame::updateGeometry()
@@ -1059,6 +1088,8 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
     else
         // scroll to top on group mode
         m_appsArea->verticalScrollBar()->setValue(0);
+
+    hideTips();
 
     emit displayModeChanged(m_displayMode);
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="gl" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ar" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
@@ -10,61 +10,61 @@
     <name>MainFrame</name>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Eliminaranse todas as dependencias xuntas</translation>
+        <translation>كل التبعيات ستحذف معا</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>إلغاء</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>تأكيد</translation>
     </message>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Estás seguro de desinstalar %1 ?</translation>
+        <translation>هل أنت متأكد من إلغاء تثبيت %1 ?</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Open(_O)</source>
-        <translation>Abrir (_A)</translation>
+        <translation>فتح (_O)</translation>
     </message>
     <message>
         <source>Remove from desktop</source>
-        <translation>Eliminar do escritorio</translation>
+        <translation>إزالة من سطح المكتب</translation>
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation>Enviar ao escritorio (_T)</translation>
+        <translation>إرسال إلى سطح المكنب (_E)</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Eliminar da doca</translation>
+        <translation>حذف من شريط المهام</translation>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>Enviar á doca (_C)</translation>
+        <translation>إرسال إلى شريط المهام (_C)</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
-        <translation>Eliminar do inicio(_R)</translation>
+        <translation>(_R) إزالة من بدء التشغيل</translation>
     </message>
     <message>
         <source>Add to startup(_A)</source>
-        <translation>Engadir ao inicio (_G)</translation>
+        <translation> (_A) إضافة إلى بدء التشغيل</translation>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>Desinstalar</translation>
+        <translation>إلغاء التثبيت</translation>
     </message>
 </context>
 <context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation>Buscar</translation>
+        <translation>بحث </translation>
     </message>
 </context>
 </TS>

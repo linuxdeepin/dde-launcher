@@ -62,3 +62,5 @@ INSTALLS += target qm_files services data_files
 
 RESOURCES += \
     skin.qrc
+
+DISTFILES += data/*

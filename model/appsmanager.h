@@ -73,7 +73,7 @@ private:
     const QPixmap loadIconFile(const QString &fileName, const int size);
     void appendSearchResult(const QString &appKey);
     void sortCategory(const AppsListModel::AppCategory category);
-    void sortByName(ItemInfoList &processList);
+    void sortByPresetOrder(ItemInfoList &processList);
     void refreshCategoryInfoList();
     void generateCategoryMap();
     void refreshAppIconCache();
@@ -107,6 +107,7 @@ private:
     static AppsManager *INSTANCE;
     static QSettings APP_ICON_CACHE;
     static QSettings APP_AUTOSTART_CACHE;
+    static QSettings APP_PRESET_SORTED_LIST;
     static QSettings APP_USER_SORTED_LIST;
 };
 

@@ -11,6 +11,8 @@
 
 AppsManager *AppsManager::INSTANCE = nullptr;
 
+QSettings AppsManager::APP_PRESET_SORTED_LIST("/usr/share/dde-launcher/data/preset-order.conf", QSettings::IniFormat);
+
 QSettings AppsManager::APP_ICON_CACHE("deepin", "dde-launcher-app-icon", nullptr);
 QSettings AppsManager::APP_AUTOSTART_CACHE("deepin", "dde-launcher-app-autostart", nullptr);
 QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
@@ -98,17 +100,40 @@ void AppsManager::sortCategory(const AppsListModel::AppCategory category)
 {
     switch (category)
     {
-    case AppsListModel::Search:     sortByName(m_appSearchResultList);      break;
+    case AppsListModel::Search:     sortByPresetOrder(m_appSearchResultList);      break;
 //    case AppsListModel::All:        sortByName(m_appInfoList);              break;
     // disable sort other category
     default: Q_ASSERT(false) ;
     }
 }
 
-void AppsManager::sortByName(ItemInfoList &processList)
+void AppsManager::sortByPresetOrder(ItemInfoList &processList)
 {
-    qSort(processList.begin(), processList.end(), [] (const ItemInfo &i1, const ItemInfo &i2) {
-        return i1.m_name < i2.m_name;
+    QVariant presetFallback = APP_PRESET_SORTED_LIST.value("list");
+    QString key = QString("list[%1]").arg(QLocale::system().name());
+    QStringList preset = APP_PRESET_SORTED_LIST.value(key, presetFallback).toStringList();
+
+    qSort(processList.begin(), processList.end(), [&preset] (const ItemInfo &i1, const ItemInfo &i2) {
+        int index1 = preset.indexOf(i1.m_key);
+        int index2 = preset.indexOf(i2.m_key);
+
+        if (index1 == index2) {
+            // If both of them don't exist in the preset list,
+            // fallback to comparing their name.
+            return i1.m_name < i2.m_name;
+        }
+
+        // If one of them doesn't exist in the preset list,
+        // the one exists go first.
+        if (index1 == -1) {
+            return false;
+        }
+        if (index2 == -1) {
+            return true;
+        }
+
+        // If both of them exist, then obey the preset order.
+        return index1 < index2;
     });
 }
 
@@ -304,7 +329,7 @@ void AppsManager::refreshCategoryInfoList()
 void AppsManager::generateCategoryMap()
 {
     m_appInfos.clear();
-    sortByName(m_allAppInfoList);
+    sortByPresetOrder(m_allAppInfoList);
 
     for (const ItemInfo &info : m_allAppInfoList)
     {

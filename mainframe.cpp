@@ -236,14 +236,33 @@ void MainFrame::mouseReleaseEvent(QMouseEvent *e)
     hide();
 }
 
+void MainFrame::wheelEvent(QWheelEvent *e)
+{
+    auto shouldPostWheelEvent = [this, e]() -> bool {
+        bool inAppArea = m_appsArea->geometry().contains(e->pos());
+        bool topMost = m_appsArea->verticalScrollBar()->value() == m_appsArea->verticalScrollBar()->minimum();
+        bool bottomMost = m_appsArea->verticalScrollBar()->value() == m_appsArea->verticalScrollBar()->maximum();
+        bool exceedingLimits = (e->delta() > 0 && topMost) || (e->delta() < 0 && bottomMost);
+
+        return !inAppArea && !exceedingLimits;
+    };
+
+    if (shouldPostWheelEvent()) {
+        QWheelEvent *event = new QWheelEvent(e->pos(), e->delta(), e->buttons(), e->modifiers());
+        qApp->postEvent(m_appsArea->viewport(), event);
+
+        e->accept();
+    }
+}
+
 void MainFrame::paintEvent(QPaintEvent *e)
 {
     QFrame::paintEvent(e);
 
     QPainter painter(this);
     painter.drawPixmap(e->rect(), getBackground(), e->rect());
-//    painter.setBrush(QColor(255, 0, 0, 0.2 * 255));
-//    painter.drawRect(rect());
+    //    painter.setBrush(QColor(255, 0, 0, 0.2 * 255));
+    //    painter.drawRect(rect());
 }
 
 bool MainFrame::event(QEvent *e)
@@ -266,14 +285,6 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
             qApp->postEvent(this, event);
             return true;
         }
-    }
-    else if (o == m_navigationWidget && e->type() == QEvent::Wheel)
-    {
-        QWheelEvent *wheel = static_cast<QWheelEvent *>(e);
-        QWheelEvent *event = new QWheelEvent(wheel->pos(), wheel->delta(), wheel->buttons(), wheel->modifiers());
-
-        qApp->postEvent(m_appsArea->viewport(), event);
-        return true;
     }
     else if (o == m_appsArea->viewport() && e->type() == QEvent::Wheel)
     {
@@ -314,7 +325,7 @@ void MainFrame::initUI()
     m_appsArea->viewport()->installEventFilter(this);
 
 //    m_othersView->installEventFilter(this);
-    m_navigationWidget->installEventFilter(this);
+//    m_navigationWidget->installEventFilter(this);
     m_searchWidget->edit()->installEventFilter(this);
 //    qApp->installEventFilter(this);
 

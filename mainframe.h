@@ -63,6 +63,7 @@ protected:
     void keyPressEvent(QKeyEvent *e);
     void showEvent(QShowEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
+    void wheelEvent(QWheelEvent *e);
     void paintEvent(QPaintEvent *e);
     bool event(QEvent *e);
     bool eventFilter(QObject *o, QEvent *e);

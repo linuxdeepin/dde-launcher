@@ -11,7 +11,13 @@
 
 AppsManager *AppsManager::INSTANCE = nullptr;
 
-QSettings AppsManager::APP_PRESET_SORTED_LIST("/usr/share/dde-launcher/data/preset-order.conf", QSettings::IniFormat);
+QSettings AppsManager::APP_PRESET_SORTED_LIST(
+#ifdef ARCH_MIPSEL
+    "/usr/share/dde-launcher/data/preset-order-mips.conf",
+#else
+    "/usr/share/dde-launcher/data/preset-order.conf",
+#endif
+    QSettings::IniFormat);
 
 QSettings AppsManager::APP_ICON_CACHE("deepin", "dde-launcher-app-icon", nullptr);
 QSettings AppsManager::APP_AUTOSTART_CACHE("deepin", "dde-launcher-app-autostart", nullptr);

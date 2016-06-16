@@ -27,7 +27,7 @@ class BoxFrame : public QFrame
 
 public:
     explicit BoxFrame(QWidget* parent = 0);
-    explicit BoxFrame(const QString url, QWidget *parent = 0);
+    explicit BoxFrame(const QString &url, QWidget *parent = 0);
     ~BoxFrame();
 
     void setBackground(const QString &url, bool force = false);
@@ -35,6 +35,9 @@ public:
 
 signals:
     void backgroundChanged();
+
+private slots:
+    void resetBackground();
 
 private:
     QString m_lastUrl;

@@ -15,13 +15,14 @@
 #include <ddialog.h>
 
 const QString WallpaperKey = "pictureUri";
-const QString DEFAULT_DISPLAY_MODE_KEY = "defaultDisplayMode";
+const QString DisplayModeKey = "display-mode";
 
 MainFrame::MainFrame(QWidget *parent) :
     BoxFrame(parent),
-    m_settings("deepin", "dde-launcher", this),
     m_gsettings(new QGSettings("com.deepin.wrap.gnome.desktop.background",
-                               "/com/deepin/wrap/gnome/desktop/background/")),
+                               "/com/deepin/wrap/gnome/desktop/background/", this)),
+    m_launcherGsettings(new QGSettings("com.deepin.dde.launcher",
+                                       "/com/deepin/dde/launcher/", this)),
     m_displayInter(new DBusDisplay(this)),
 
     m_calcUtil(CalculateUtil::instance(this)),
@@ -90,7 +91,7 @@ MainFrame::MainFrame(QWidget *parent) :
     initUI();
     initConnection();
 
-    updateDisplayMode(DisplayMode(m_settings.value(DEFAULT_DISPLAY_MODE_KEY, AllApps).toInt()));
+    updateDisplayMode(getDisplayMode());
 
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
 }
@@ -1081,7 +1082,7 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
     if (m_displayMode != Search)
-        m_settings.setValue(DEFAULT_DISPLAY_MODE_KEY, m_displayMode);
+        m_launcherGsettings->set(DisplayModeKey, m_displayMode);
 
     if (m_displayMode == GroupByCategory)
         scrollToCategory(m_currentCategory);
@@ -1140,6 +1141,11 @@ void MainFrame::updatePlaceholderSize()
     Q_ASSERT(view);
 
     m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - view->height() - DLauncher::APPS_AREA_BOTTOM_MARGIN);
+}
+
+MainFrame::DisplayMode MainFrame::getDisplayMode()
+{
+    return DisplayMode(m_launcherGsettings->get(DisplayModeKey).toInt());
 }
 
 AppsListModel *MainFrame::nextCategoryModel(const AppsListModel *currentModel)
@@ -1225,7 +1231,7 @@ void MainFrame::searchTextChanged(const QString &keywords)
     m_appsManager->searchApp(keywords);
 
     if (keywords.isEmpty())
-        updateDisplayMode(DisplayMode(m_settings.value(DEFAULT_DISPLAY_MODE_KEY, AllApps).toInt()));
+        updateDisplayMode(getDisplayMode());
     else
         updateDisplayMode(Search);
 }

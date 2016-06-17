@@ -78,6 +78,7 @@ private:
     void updateDisplayMode(const DisplayMode mode);
     void updateCurrentVisibleCategory();
     void updatePlaceholderSize();
+    DisplayMode getDisplayMode();
 
     AppsListModel *nextCategoryModel(const AppsListModel *currentModel);
     AppsListModel *prevCategoryModel(const AppsListModel *currentModel);
@@ -106,8 +107,8 @@ private:
     double rightMarginRation = 1;
     DisplayMode m_displayMode = Search;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
-    QSettings m_settings;
     QGSettings *m_gsettings;
+    QGSettings *m_launcherGsettings;
 
     DBusDisplay *m_displayInter;
 

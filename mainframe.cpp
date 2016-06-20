@@ -213,11 +213,12 @@ void MainFrame::showEvent(QShowEvent *e)
 
     QFrame::showEvent(e);
 
-    showGradient();
-    raise();
-    activateWindow();
-    setFocus();
-    m_floatTitle->raise();
+    QTimer::singleShot(0, this, [this] () { 
+        showGradient();
+        raise();
+        activateWindow();
+        m_floatTitle->raise();
+    });
 }
 
 void MainFrame::mouseReleaseEvent(QMouseEvent *e)

@@ -14,8 +14,10 @@
 
 #include <ddialog.h>
 
-const QString WallpaperKey = "pictureUri";
-const QString DisplayModeKey = "display-mode";
+static const QString WallpaperKey = "pictureUri";
+static const QString DisplayModeKey = "display-mode";
+static const QString DisplayModeFree = "free";
+static const QString DisplayModeCategory = "category";
 
 MainFrame::MainFrame(QWidget *parent) :
     BoxFrame(parent),
@@ -1082,8 +1084,16 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
     // choose nothing
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
-    if (m_displayMode != Search)
-        m_launcherGsettings->set(DisplayModeKey, m_displayMode);
+    switch (m_displayMode) {
+    case AllApps:
+        m_launcherGsettings->set(DisplayModeKey, DisplayModeFree);
+        break;
+    case GroupByCategory:
+        m_launcherGsettings->set(DisplayModeKey, DisplayModeCategory);
+        break;
+    default:
+        break;
+    }
 
     if (m_displayMode == GroupByCategory)
         scrollToCategory(m_currentCategory);
@@ -1146,7 +1156,13 @@ void MainFrame::updatePlaceholderSize()
 
 MainFrame::DisplayMode MainFrame::getDisplayMode()
 {
-    return DisplayMode(m_launcherGsettings->get(DisplayModeKey).toInt());
+    QString displayMode = m_launcherGsettings->get(DisplayModeKey).toString();
+
+    if (displayMode == DisplayModeCategory) {
+        return GroupByCategory;
+    }
+
+    return AllApps;
 }
 
 AppsListModel *MainFrame::nextCategoryModel(const AppsListModel *currentModel)

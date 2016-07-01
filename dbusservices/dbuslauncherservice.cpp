@@ -17,6 +17,7 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
+#include <QX11Info>
 
 /*
  * Implementation of adaptor class DBusLauncherService
@@ -53,6 +54,8 @@ void DBusLauncherService::Show()
 {
     // handle method call com.deepin.dde.Launcher.Show
 //    parent()->Show();
+    QX11Info::setAppTime(QX11Info::getTimestamp());
+    QX11Info::setAppUserTime(QX11Info::getTimestamp());
     parent()->show();
     emit Shown();
 }
@@ -75,6 +78,8 @@ void DBusLauncherService::Toggle()
     }
     else
     {
+        QX11Info::setAppTime(QX11Info::getTimestamp());
+        QX11Info::setAppUserTime(QX11Info::getTimestamp());
         parent()->show();
         emit Shown();
     }

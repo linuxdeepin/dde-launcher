@@ -31,13 +31,13 @@ BoxFrame::BoxFrame(QWidget *parent)
     connect(&m_blurredImageWatcher, &QFileSystemWatcher::directoryChanged, [this](const QString &){
         // NOTE: the direcotryChanged signal is triggered when the blurred background
         // is about being written to the disk. It's not completed yet.
-        QTimer::singleShot(500, [this] { setBackground(m_lastUrl, true); });
+        QTimer::singleShot(500, this, SLOT(resetBackground()));
 
         emit backgroundChanged();
     });
 }
 
-BoxFrame::BoxFrame(const QString url, QWidget *parent)
+BoxFrame::BoxFrame(const QString &url, QWidget *parent)
     : BoxFrame(parent)
 {
     this->setBackground(url);
@@ -87,4 +87,9 @@ QPixmap BoxFrame:: getBackground()
     }
 
     return m_cache;
+}
+
+void BoxFrame::resetBackground()
+{
+    setBackground(m_lastUrl, true);
 }

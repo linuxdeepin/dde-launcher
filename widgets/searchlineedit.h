@@ -30,7 +30,9 @@ private:
     DImageButton *m_icon;
     QLabel *m_placeholderText;
     QWidget *m_floatWidget;
+#ifndef ARCH_MIPSEL
     QPropertyAnimation *m_floatAni;
+#endif
 };
 
 #endif // SEARCHLINEEDIT_H

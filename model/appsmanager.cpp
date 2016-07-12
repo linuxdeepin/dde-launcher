@@ -27,13 +27,14 @@ AppsManager::AppsManager(QObject *parent) :
     QObject(parent),
     m_launcherInter(new DBusLauncher(this)),
     m_startManagerInter(new DBusStartManager(this)),
-    m_dockedAppInter(new DBusDockedAppManager(this)),
+    m_dockedAppInter(new DBusDock(this)),
     m_themeAppIcon(new ThemeAppIcon(this)),
     m_calUtil(CalculateUtil::instance(this)),
     m_searchTimer(new QTimer(this))
 {
     m_themeAppIcon->gtkInit();
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
+    m_dockedAppsList = m_dockedAppInter->dockedApps();
     refreshCategoryInfoList();
 
     if (APP_ICON_CACHE.value("version").toString() != qApp->applicationVersion())
@@ -54,6 +55,8 @@ AppsManager::AppsManager(QObject *parent) :
     //Maybe the signals newAppLaunched will be replaced by newAppMarkedAsLaunched
     //newAppLaunched is the old one.
     connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
+
+    connect(m_dockedAppInter, &DBusDock::DockedAppsChanged, this, &AppsManager::dockedAppsChanged);
 
 //    connect(this, &AppsManager::handleUninstallApp, this, &AppsManager::unInstallApp);
     connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
@@ -176,7 +179,7 @@ void AppsManager::stashItem(const QString &appKey)
 
 void AppsManager::abandonStashedItem(const QString &appKey)
 {
-    qDebug() << "bana" << appKey;
+    //qDebug() << "bana" << appKey;
     for (int i(0); i != m_stashList.size(); ++i)
         if (m_stashList[i].m_key == appKey)
             return m_stashList.removeAt(i);
@@ -259,6 +262,11 @@ void AppsManager::markLaunched(QString appKey)
     m_launcherInter->MarkLaunched(appKey);
 }
 
+void AppsManager::dockedAppsChanged()
+{
+    m_dockedAppsList = m_dockedAppInter->dockedApps();
+}
+
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const
 {
     switch (category)
@@ -291,7 +299,8 @@ bool AppsManager::appIsAutoStart(const QString &desktop)
 
 bool AppsManager::appIsOnDock(const QString &appName)
 {
-    return m_dockedAppInter->IsDocked(appName).value();
+    //qDebug() << m_dockedAppsList;
+    return m_dockedAppsList.contains(appName);
 }
 
 bool AppsManager::appIsOnDesktop(const QString &desktop)

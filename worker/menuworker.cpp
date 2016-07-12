@@ -16,7 +16,7 @@ MenuWorker::MenuWorker(QObject *parent) : QObject(parent)
     qDebug() << "MenuWorker";
     m_menuManagerInterface = new DBusMenuManager(this);
 
-    m_dockAppManagerInterface = new DBusDockedAppManager(this);
+    m_dockAppManagerInterface = new DBusDock(this);
     m_startManagerInterface = new DBusStartManager(this);
     m_launcherInterface = new DBusLauncher(this);
     m_menuInterface = NULL;
@@ -40,7 +40,7 @@ MenuWorker::~MenuWorker()
 void MenuWorker::showMenuByAppItem(const QModelIndex &index, QPoint pos){
     setCurrentModelIndex(index);
     m_appKey = m_currentModelIndex.data(AppsListModel::AppKeyRole).toString();
-
+    m_appDesktop = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
     qDebug() << "appKey" << m_appKey;
     QString menuContent = createMenuContent(/*m_appKey*/);
     QString menuJsonContent = JsonToQString(pos, menuContent);
@@ -238,7 +238,7 @@ void MenuWorker::handleToDesktop(){
 void MenuWorker::handleToDock(){
     qDebug() << "handleToDock" << m_appKey;
     if (m_isItemOnDock){
-        QDBusPendingReply<bool> reply = m_dockAppManagerInterface->RequestUndock(m_appKey);
+        QDBusPendingReply<bool> reply = m_dockAppManagerInterface->RequestUndock(m_appDesktop);
         reply.waitForFinished();
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();
@@ -247,7 +247,7 @@ void MenuWorker::handleToDock(){
             qCritical() << reply.error().name() << reply.error().message();
         }
     }else{
-        QDBusPendingReply<bool> reply =  m_dockAppManagerInterface->ReqeustDock(m_appKey, "", "", "");
+        QDBusPendingReply<bool> reply =  m_dockAppManagerInterface->RequestDock(m_appDesktop, -1);
         reply.waitForFinished();
         if (!reply.isError()) {
             bool ret = reply.argumentAt(0).toBool();

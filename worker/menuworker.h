@@ -22,7 +22,7 @@
 
 #include "dbusmenu.h"
 #include "dbusmenumanager.h"
-#include "dbusdockedappmanager.h"
+#include "dbusdock.h"
 #include "dbuslauncher.h"
 #include "dbustartmanager.h"
 #include "model/appsmanager.h"
@@ -77,13 +77,14 @@ public slots:
 private:
     DBusMenuManager* m_menuManagerInterface;
     DBusMenu* m_menuInterface;
-    DBusDockedAppManager* m_dockAppManagerInterface;
+    DBusDock* m_dockAppManagerInterface;
     DBusLauncher* m_launcherInterface;
     DBusStartManager* m_startManagerInterface;
 
     QModelIndex m_currentModelIndex = QModelIndex();
     static AppsManager *m_appManager;
     QString m_appKey;
+    QString m_appDesktop;
     QString m_currentMenuObjectPath;
     QMap<QString, QString> m_menuObjectPaths;
     bool m_isItemOnDesktop;

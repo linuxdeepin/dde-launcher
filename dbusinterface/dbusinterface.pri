@@ -6,14 +6,14 @@ HEADERS += \
     $$PWD/dbusvariant/installedtimeinfo.h \
     $$PWD/dbusvariant/iteminfo.h \
     $$PWD/dbusdisplay.h \
-    $$PWD/dbusdockedappmanager.h \
     $$PWD/dbusfileinfo.h \
     $$PWD/dbuslauncher.h \
     $$PWD/dbuslauncherframe.h \
     $$PWD/dbusmenu.h \
     $$PWD/dbusmenumanager.h \
     $$PWD/dbustartmanager.h \
-    $$PWD/monitorinterface.h
+    $$PWD/monitorinterface.h \
+    $$PWD/dbusdock.h
 
 SOURCES += \
     $$PWD/dbusvariant/categoryinfo.cpp \
@@ -21,11 +21,11 @@ SOURCES += \
     $$PWD/dbusvariant/installedtimeinfo.cpp \
     $$PWD/dbusvariant/iteminfo.cpp \
     $$PWD/dbusdisplay.cpp \
-    $$PWD/dbusdockedappmanager.cpp \
     $$PWD/dbusfileinfo.cpp \
     $$PWD/dbuslauncher.cpp \
     $$PWD/dbuslauncherframe.cpp \
     $$PWD/dbusmenu.cpp \
     $$PWD/dbusmenumanager.cpp \
     $$PWD/dbustartmanager.cpp \
-    $$PWD/monitorinterface.cpp
+    $$PWD/monitorinterface.cpp \
+    $$PWD/dbusdock.cpp

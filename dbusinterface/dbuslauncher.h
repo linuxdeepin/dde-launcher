@@ -178,7 +178,7 @@ namespace com {
   namespace deepin {
     namespace dde {
       namespace daemon {
-        typedef ::DBusLauncher Launcher;
+        typedef ::DBusLauncher DBusLauncher;
       }
     }
   }

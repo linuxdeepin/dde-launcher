@@ -5,7 +5,7 @@
 #include "dbuslauncher.h"
 #include "dbusfileinfo.h"
 #include "dbustartmanager.h"
-#include "dbusdockedappmanager.h"
+#include "dbusdock.h"
 #include "dbusdisplay.h"
 #include "global_util/calculate_util.h"
 #include "global_util/themeappicon.h"
@@ -82,15 +82,17 @@ private:
 private slots:
     void searchDone(const QStringList &resultList);
     void markLaunched(QString appKey);
+    void dockedAppsChanged();
 
 private:
     DBusLauncher *m_launcherInter;
     DBusStartManager *m_startManagerInter;
-    DBusDockedAppManager *m_dockedAppInter;
+    DBusDock *m_dockedAppInter;
 
     QPixmap m_defaultIconPixmap;
     QString m_searchText;
     QStringList m_newInstalledAppsList;
+    QStringList m_dockedAppsList;
     ItemInfoList m_allAppInfoList;
     ItemInfoList m_userSortedList;
     ItemInfoList m_appSearchResultList;

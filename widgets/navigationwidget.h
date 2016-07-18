@@ -25,6 +25,7 @@ public:
 signals:
     void scrollToCategory(const AppsListModel::AppCategory category) const;
     void mouseEntered();
+    void toggleMode();
 
 public slots:
     void setCurrentCategory(const AppsListModel::AppCategory category);
@@ -54,6 +55,8 @@ private:
     CategoryButton *m_developmentBtn;
     CategoryButton *m_systemBtn;
     CategoryButton *m_othersBtn;
+
+    DImageButton *m_toggleModeBtn;
 };
 
 #endif // NAVIGATIONWIDGET_H

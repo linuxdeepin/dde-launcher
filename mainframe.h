@@ -122,7 +122,6 @@ private:
     QTimer *m_delayHideTimer;
     QTimer *m_autoScrollTimer;
 
-    DImageButton *m_toggleModeBtn;
     NavigationWidget *m_navigationWidget;
     QWidget *m_rightSpacing;
     SearchWidget *m_searchWidget;

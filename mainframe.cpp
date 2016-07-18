@@ -31,7 +31,6 @@ MainFrame::MainFrame(QWidget *parent) :
     m_appsManager(AppsManager::instance(this)),
     m_delayHideTimer(new QTimer(this)),
     m_autoScrollTimer(new QTimer(this)),
-    m_toggleModeBtn(new DImageButton(this)),
     m_navigationWidget(new NavigationWidget),
     m_rightSpacing(new QWidget),
     m_searchWidget(new SearchWidget(this)),
@@ -416,11 +415,6 @@ void MainFrame::initUI()
     setLayout(m_mainLayout);
 
 //    m_floatTitle->setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));;
-    m_toggleModeBtn->setFixedSize(22, 22);
-    m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
-    m_toggleModeBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
-    m_toggleModeBtn->setPressPic(":/icons/skin/icons/category_active_22px.svg");
-    m_toggleModeBtn->move(QPoint(20, 44));
     // animation
     m_scrollAnimation = new QPropertyAnimation(m_appsArea->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
@@ -805,7 +799,7 @@ void MainFrame::initConnection()
 
     connect(m_menuWorker, &MenuWorker::quitLauncher, this, &MainFrame::hide);
     connect(m_menuWorker, &MenuWorker::unInstallApp, this, &MainFrame::showPopupUninstallDialog);
-    connect(m_toggleModeBtn, &DImageButton::clicked, [this]{
+    connect(m_navigationWidget, &NavigationWidget::toggleMode, [this]{
         m_searchWidget->clearFocus();
         m_searchWidget->clearSearchContent();
         updateDisplayMode(m_displayMode == GroupByCategory ? AllApps : GroupByCategory);

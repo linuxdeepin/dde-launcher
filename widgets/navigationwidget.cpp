@@ -21,7 +21,9 @@ NavigationWidget::NavigationWidget(QWidget *parent) :
     m_readingBtn(new CategoryButton(AppsListModel::Reading, this)),
     m_developmentBtn(new CategoryButton(AppsListModel::Development, this)),
     m_systemBtn(new CategoryButton(AppsListModel::System, this)),
-    m_othersBtn(new CategoryButton(AppsListModel::Others, this))
+    m_othersBtn(new CategoryButton(AppsListModel::Others, this)),
+
+    m_toggleModeBtn(new DImageButton(this))
 
 {
     initUI();
@@ -83,6 +85,11 @@ void NavigationWidget::refershCategoryVisible(const AppsListModel::AppCategory c
 
 void NavigationWidget::initUI()
 {
+    m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
+    m_toggleModeBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
+    m_toggleModeBtn->setPressPic(":/icons/skin/icons/category_active_22px.svg");
+    m_toggleModeBtn->setStyleSheet("margin:0 0 0 20px;");
+
     m_categoryGroup->addButton(m_internetBtn);
     m_categoryGroup->addButton(m_chatBtn);
     m_categoryGroup->addButton(m_musicBtn);
@@ -98,6 +105,8 @@ void NavigationWidget::initUI()
     m_internetBtn->setChecked(true);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addSpacing(0);
+    mainLayout->addWidget(m_toggleModeBtn);
     mainLayout->addStretch();
     mainLayout->addWidget(m_internetBtn);
     mainLayout->addWidget(m_chatBtn);
@@ -130,6 +139,8 @@ void NavigationWidget::initConnection()
     connect(m_developmentBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_systemBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_othersBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
+
+    connect(m_toggleModeBtn, &DImageButton::clicked, this, &NavigationWidget::toggleMode);
 }
 
 void NavigationWidget::buttonClicked()

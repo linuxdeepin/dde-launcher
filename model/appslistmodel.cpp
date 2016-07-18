@@ -135,13 +135,8 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
 
     const QModelIndex index = indexes.first();
 
-    QJsonObject json;
-    json.insert("appKey", index.data(AppKeyRole).toString());
-    json.insert("appIcon", index.data(AppIconKeyRole).toString());
-    json.insert("appName", index.data(AppNameRole).toString());
-
     QMimeData *mime = new QMimeData;
-    mime->setData("RequestDock", QJsonDocument(json).toJson());
+    mime->setData("RequestDock", index.data(AppDesktopRole).toByteArray());
 
     // this object will be delete in drag event finished.
     return mime;

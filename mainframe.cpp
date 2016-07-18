@@ -108,6 +108,11 @@ void MainFrame::showByMode(const qlonglong mode)
     qDebug() << mode;
 }
 
+int MainFrame::dockPosition()
+{
+    return m_appsManager->dockPosition();
+}
+
 void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
 {
     QWidget *dest = categoryView(category);
@@ -809,6 +814,7 @@ void MainFrame::initConnection()
     connect(m_appsManager, &AppsManager::updateCategoryView, this, &MainFrame::checkCategoryVisible);
     connect(m_appsManager, &AppsManager::requestTips, this, &MainFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &MainFrame::hideTips);
+    connect(m_appsManager, &AppsManager::dockPositionChanged, this, &MainFrame::updateDockPosition);
 }
 
 void MainFrame::updateGeometry()
@@ -1152,6 +1158,11 @@ void MainFrame::updatePlaceholderSize()
     Q_ASSERT(view);
 
     m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - view->height() - DLauncher::APPS_AREA_BOTTOM_MARGIN);
+}
+
+void MainFrame::updateDockPosition()
+{
+    setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
 }
 
 MainFrame::DisplayMode MainFrame::getDisplayMode()

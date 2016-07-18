@@ -32,6 +32,7 @@ class DBusLauncherService;
 class MainFrame : public BoxFrame
 {
     Q_OBJECT
+    Q_PROPERTY(int dockPosition READ dockPosition DESIGNABLE true)
 
 public:
     enum DisplayMode {
@@ -45,6 +46,7 @@ public:
 
     void exit();
     void showByMode(const qlonglong mode);
+    int dockPosition();
 
 signals:
     void categoryAppNumsChanged(const AppsListModel::AppCategory category, const int appNums);
@@ -78,6 +80,7 @@ private:
     void updateDisplayMode(const DisplayMode mode);
     void updateCurrentVisibleCategory();
     void updatePlaceholderSize();
+    void updateDockPosition();
     DisplayMode getDisplayMode();
 
     AppsListModel *nextCategoryModel(const AppsListModel *currentModel);

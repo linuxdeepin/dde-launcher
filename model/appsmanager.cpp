@@ -35,6 +35,7 @@ AppsManager::AppsManager(QObject *parent) :
     m_themeAppIcon->gtkInit();
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
     m_dockedAppsList = m_dockedAppInter->dockedApps();
+
     refreshCategoryInfoList();
 
     if (APP_ICON_CACHE.value("version").toString() != qApp->applicationVersion())
@@ -57,6 +58,7 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
 
     connect(m_dockedAppInter, &DBusDock::DockedAppsChanged, this, &AppsManager::dockedAppsChanged);
+    connect(m_dockedAppInter, &DBusDock::PositionChanged, this, &AppsManager::dockPositionChanged);
 
 //    connect(this, &AppsManager::handleUninstallApp, this, &AppsManager::unInstallApp);
     connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
@@ -204,6 +206,11 @@ void AppsManager::restoreItem(const QString &appKey, const int pos)
     }
 }
 
+int AppsManager::dockPosition() const
+{
+    return m_dockedAppInter->position();
+}
+
 void AppsManager::saveUserSortedList()
 {
     // save cache
@@ -299,7 +306,7 @@ bool AppsManager::appIsAutoStart(const QString &desktop)
 
 bool AppsManager::appIsOnDock(const QString &appName)
 {
-    //qDebug() << m_dockedAppsList;
+//    qDebug() << m_dockedAppsList;
     return m_dockedAppsList.contains(appName);
 }
 

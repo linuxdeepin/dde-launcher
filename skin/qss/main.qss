@@ -3,107 +3,15 @@ QFrame#AppBox{
     background-color: transparent;
 }
 
-/*
-QLabel#MaskLabel{
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 1));;
-    border: 1px solid rgba(255, 255, 255, 255);
+QFrame#LauncherFrame[dockPosition='0'] {
+    padding:50px 0 0 0;
 }
-
-
-QFrame#DisplayModeFrame{
-    background-color: transparent;
+QFrame#LauncherFrame[dockPosition='1'] {
+    padding:0 0 0 0;
 }
-
-QFrame#AppItem {
-    background-color: rgba(0, 0, 0, 0);
-    color:white
+QFrame#LauncherFrame[dockPosition='2'] {
+    padding:0 0 0 0;
 }
-QLabel#Icon {
-    background-color: rgba(0, 0, 0, 0);
-    color:white
+QFrame#LauncherFrame[dockPosition='3'] {
+    padding:0 0 0 80px;
 }
-QLabel#Name {
-    background-color: rgba(0, 0, 0, 0);
-    color:white;
-    padding-left:16px;
-    padding-right:16px;
-    font-size: 12px;
-}
-
-QFrame#Border{
-    background-color: transparent;
-    border: 2px solid rgba(0, 0, 0, 0);
-    border-radius: 4px;
-    color:white
-}
-
-QFrame#Normal{
-    background-color: rgba(0, 0, 0, 0);
-    border: 2px solid rgba(0, 0, 0, 0);
-    border-radius: 4px;
-    color:white
-}
-
-QFrame#Hover{
-    background-color: rgba(0, 0, 0, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    border-radius: 4px;
-    color:white
-}
-
-QFrame#AppGroupHover{
-    background-color: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 4px;
-    color:white
-}
-
-QFrame#Checked{
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-radius: 4px;
-    color:white
-}
-
-QFrame#Cut{
-    background-color: rgba(0, 0, 0, 0.35);
-    border: none;
-    color:white
-}
-
-
-QFrame#DragChecked{
-    background-color: rgba(0, 0, 0, 0);
-    border: 2px solid rgba(0, 0, 0, 0);
-    border-radius: 4px;
-    color:white
-}
-
-
-QPushButton#BorderButton[state="normal"]{
-    background-color:transparent;
-    border: 2px solid rgba(0, 0, 0, 0);
-}
-
-QPushButton#BorderButton[state="Highlight"]{
-    background-color:rgba(0, 0, 0, 0.8);
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    border-radius: 4px;
-}
-
-QPushButton#BorderButton[state="Highlight"]:checked{
-    background-color:rgba(0, 0, 0, 0.8);
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    border-radius: 4px;
-}
-
-QPushButton#BorderButton:checked{
-    background-color:rgba(0, 0, 0, 0.3);
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    border-radius: 4px;
-}
-
-QAbstractButton#CategoryButton {
-    color:red;
-}
- */

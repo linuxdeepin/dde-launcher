@@ -32,6 +32,7 @@ public:
     void stashItem(const QString &appKey);
     void abandonStashedItem(const QString &appKey);
     void restoreItem(const QString &appKey, const int pos = -1);
+    int dockPosition() const;
 
 signals:
     void dataChanged(const AppsListModel::AppCategory category) const;
@@ -40,6 +41,7 @@ signals:
     void updateCategoryView(const AppsListModel::AppCategory categoryInfo) const;
     void requestTips(const QString &tips) const;
     void requestHideTips() const;
+    void dockPositionChanged() const;
 
 public slots:
     void saveUserSortedList();

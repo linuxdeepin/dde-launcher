@@ -124,18 +124,26 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("MoveEntry"), args);
     }
 
-    inline QDBusPendingReply<bool> RequestDock(const QString &desktop, const int index)
+    inline QDBusPendingReply<bool> RequestDock(const QString &appDesktop, const int index = -1)
     {
         QList<QVariant> args;
-        args << desktop << index;
+        args << appDesktop << index;
 
         return asyncCallWithArgumentList(QStringLiteral("RequestDock"), args);
     }
 
-    inline QDBusPendingReply<bool> RequestUndock(const QString &desktop)
+    inline QDBusPendingReply<bool> IsDocked(const QString &appDesktop)
     {
         QList<QVariant> args;
-        args << desktop;
+        args << appDesktop;
+
+        return asyncCallWithArgumentList(QStringLiteral("IsDocked"), args);
+    }
+
+    inline QDBusPendingReply<bool> RequestUndock(const QString &appDesktop)
+    {
+        QList<QVariant> args;
+        args << appDesktop;
 
         return asyncCallWithArgumentList(QStringLiteral("RequestUndock"), args);
     }
@@ -155,11 +163,11 @@ Q_SIGNALS: // SIGNALS
 void ActiveWindowChanged();
 void DisplayModeChanged();
 void EntriesChanged();
-void DockedAppsChanged();
 void HideModeChanged();
 void HideStateChanged();
 void PositionChanged();
 void IconSizeChanged();
+void DockedAppsChanged();
 };
 
 namespace com {

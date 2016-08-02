@@ -4,10 +4,13 @@
 
 #include <QHBoxLayout>
 #include <QGraphicsDropShadowEffect>
+#include <QGraphicsOpacityEffect>
 
 CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) :
     QFrame(parent),
-    m_calcUtil(CalculateUtil::instance(this))
+    m_calcUtil(CalculateUtil::instance(this)),
+    m_title(new QLabel(this)),
+    m_opacityAnimation(new QPropertyAnimation(this, "titleOpacity"))
 {
     QLabel* whiteLine = new QLabel(this);
     whiteLine->setObjectName("CategoryWhiteLine");
@@ -20,10 +23,11 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     lineLayout->addWidget(whiteLine);
     lineLayout->addStretch();
 
-    m_title = new QLabel(this);
     setText(title);
-    QHBoxLayout *mainLayout = new QHBoxLayout;
+    setTitleOpacity(1);  // update the style of this widget by force.
+    m_opacityAnimation->setDuration(300);
 
+    QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addWidget(m_title);
     mainLayout->addLayout(lineLayout);
     setLayout(mainLayout);
@@ -38,9 +42,20 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &CategoryTitleWidget::relayout);
 }
 
-void CategoryTitleWidget::setTextVisible(const bool visible)
+void CategoryTitleWidget::setTextVisible(const bool visible, const bool animation)
 {
-    m_title->setVisible(visible);
+    if (!animation) {
+        setTitleOpacity(visible ? 1 : 0);
+    } else {
+        if (visible) {
+            m_opacityAnimation->setStartValue(0);
+            m_opacityAnimation->setEndValue(1);
+        } else {
+            m_opacityAnimation->setStartValue(1);
+            m_opacityAnimation->setEndValue(0);
+        }
+        m_opacityAnimation->start();
+    }
 }
 
 void CategoryTitleWidget::setText(const QString &title)
@@ -50,7 +65,11 @@ void CategoryTitleWidget::setText(const QString &title)
     const int width = fontMetric.width(titleContent);
     m_title->setFixedWidth(width + 10);
 
+    // DON'T set style sheet for m_title, otherwise we can't fake opacity
+    // animation on it.
+    /*
     m_title->setStyleSheet("color: white; background-color:transparent;");
+    */
 
     m_title->setText(titleContent);
 }
@@ -72,6 +91,23 @@ void CategoryTitleWidget::relayout()
     QFontMetrics fontMetric(titleFont);
     const int width = fontMetric.width(m_title->text());
     m_title->setFixedWidth(width + 10);
+}
+
+qreal CategoryTitleWidget::titleOpacity() const
+{
+    return m_titleOpacity;
+}
+
+void CategoryTitleWidget::setTitleOpacity(const qreal &titleOpacity)
+{
+    if (m_titleOpacity != titleOpacity) {
+        m_titleOpacity = titleOpacity;
+
+        QPalette p = m_title->palette();
+        p.setColor(m_title->foregroundRole(), QColor::fromRgbF(1, 1, 1, m_titleOpacity));
+        p.setColor(m_title->backgroundRole(), Qt::transparent);
+        m_title->setPalette(p);
+    }
 }
 
 QLabel *CategoryTitleWidget::textLabel()

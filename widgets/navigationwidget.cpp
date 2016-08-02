@@ -45,19 +45,19 @@ void NavigationWidget::setButtonsVisible(const bool visible)
     m_othersBtn->setVisible(visible);
 }
 
-void NavigationWidget::setCategoryTextVisible(const bool visible)
+void NavigationWidget::setCategoryTextVisible(const bool visible, const bool animation)
 {
-    m_internetBtn->setTextVisible(visible);
-    m_chatBtn->setTextVisible(visible);
-    m_musicBtn->setTextVisible(visible);
-    m_videoBtn->setTextVisible(visible);
-    m_graphicsBtn->setTextVisible(visible);
-    m_gameBtn->setTextVisible(visible);
-    m_officeBtn->setTextVisible(visible);
-    m_readingBtn->setTextVisible(visible);
-    m_developmentBtn->setTextVisible(visible);
-    m_systemBtn->setTextVisible(visible);
-    m_othersBtn->setTextVisible(visible);
+    m_internetBtn->setTextVisible(visible, animation);
+    m_chatBtn->setTextVisible(visible, animation);
+    m_musicBtn->setTextVisible(visible, animation);
+    m_videoBtn->setTextVisible(visible, animation);
+    m_graphicsBtn->setTextVisible(visible, animation);
+    m_gameBtn->setTextVisible(visible, animation);
+    m_officeBtn->setTextVisible(visible, animation);
+    m_readingBtn->setTextVisible(visible, animation);
+    m_developmentBtn->setTextVisible(visible, animation);
+    m_systemBtn->setTextVisible(visible, animation);
+    m_othersBtn->setTextVisible(visible, animation);
 }
 
 QLabel *NavigationWidget::categoryTextLabel(const AppsListModel::AppCategory category) const

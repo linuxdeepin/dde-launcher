@@ -7,6 +7,8 @@
 #include <QAbstractButton>
 #include <QLabel>
 
+class QPropertyAnimation;
+
 class CategoryButton : public QAbstractButton
 {
     Q_OBJECT
@@ -21,11 +23,16 @@ public:
 public:
     explicit CategoryButton(const AppsListModel::AppCategory category, QWidget *parent = 0);
 
+    Q_PROPERTY(qreal titleOpacity READ titleOpacity WRITE setTitleOpacity)
+
     QLabel *textLabel();
+
+    qreal titleOpacity() const;
+    void setTitleOpacity(const qreal &titleOpacity);
 
 public slots:
     void setChecked(bool isChecked);
-    void setTextVisible(bool visible);
+    void setTextVisible(bool visible, const bool animation = false);
     AppsListModel::AppCategory category() const;
 
 protected:
@@ -49,6 +56,9 @@ private:
 
     QLabel *m_iconLabel;
     QLabel *m_textLabel;
+
+    QPropertyAnimation *m_opacityAnimation;
+    qreal m_titleOpacity;
 };
 
 #endif // CATEGORYBUTTON_H

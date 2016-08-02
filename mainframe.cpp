@@ -458,7 +458,7 @@ void MainFrame::showGradient() {
         m_bottomGradient->raise();
 }
 
-void MainFrame::showCategoryMoveAnimation()
+void MainFrame::refreshTitleVisible()
 {
     QWidget *widget = qobject_cast<QWidget *>(sender());
     if (!widget)
@@ -469,118 +469,8 @@ void MainFrame::showCategoryMoveAnimation()
     const bool shownListArea = widget == m_appsArea;
     m_floatTitle->setTextVisible(shownListArea);
 
-    m_refershCategoryTextVisible = true;
-
-    // NOTE: fake item move animation
-    if (shownListArea)
-    {
-        // from left side to right side
-        if (m_internetTitle->isVisible())
-            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Internet), m_internetTitle->textLabel());
-        if (m_chatTitle->isVisible())
-            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Chat), m_chatTitle->textLabel());
-        if (m_musicTitle->isVisible())
-            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Music), m_musicTitle->textLabel());
-        if (m_videoTitle->isVisible())
-            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Video), m_videoTitle->textLabel());
-        if (m_graphicsTitle->isVisible())
-            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Graphics), m_graphicsTitle->textLabel());
-        if (m_gameTitle->isVisible())
-            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Game), m_gameTitle->textLabel());
-        if (m_officeTitle->isVisible())
-            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Office), m_officeTitle->textLabel());
-        if (m_readingTitle->isVisible())
-            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Reading), m_readingTitle->textLabel());
-        if (m_developmentTitle->isVisible())
-            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Development), m_developmentTitle->textLabel());
-        if (m_systemTitle->isVisible())
-            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::System), m_systemTitle->textLabel());
-        if (m_othersTitle->isVisible())
-            fakeLabelMoveAni(m_navigationWidget->categoryTextLabel(AppsListModel::Others), m_othersTitle->textLabel());
-    } else {
-        // from right side to left side
-        if (m_internetTitle->isVisible())
-            fakeLabelMoveAni(m_internetTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Internet));
-        if (m_chatTitle->isVisible())
-            fakeLabelMoveAni(m_chatTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Chat));
-        if (m_musicTitle->isVisible())
-            fakeLabelMoveAni(m_musicTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Music));
-        if (m_videoTitle->isVisible())
-            fakeLabelMoveAni(m_videoTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Video));
-        if (m_graphicsTitle->isVisible())
-            fakeLabelMoveAni(m_graphicsTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Graphics));
-        if (m_gameTitle->isVisible())
-            fakeLabelMoveAni(m_gameTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Game));
-        if (m_officeTitle->isVisible())
-            fakeLabelMoveAni(m_officeTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Office));
-        if (m_readingTitle->isVisible())
-            fakeLabelMoveAni(m_readingTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Reading));
-        if (m_developmentTitle->isVisible())
-            fakeLabelMoveAni(m_developmentTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Development));
-        if (m_systemTitle->isVisible())
-            fakeLabelMoveAni(m_systemTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::System));
-        if (m_othersTitle->isVisible())
-            fakeLabelMoveAni(m_othersTitle->textLabel(), m_navigationWidget->categoryTextLabel(AppsListModel::Others));
-    }
-
-    m_refershCategoryTextVisible = false;
-}
-
-void MainFrame::fakeLabelMoveAni(QLabel *source, QLabel *dest)
-{
-    if (!source || !dest)
-        return;
-    // ignore when animation is running
-    if (!source->isVisible() && !dest->isVisible())
-        return;
-    if (dest->isVisible())
-        return;
-
-    // free this label when ani finished
-    QLabel *floatLabel = new QLabel(this);
-    QPropertyAnimation *ani = new QPropertyAnimation(floatLabel, "geometry", this);
-
-    QPoint sourcePos;
-    QWidget *widget = source;
-    while (widget != this)
-    {
-        sourcePos += widget->pos();
-        widget = qobject_cast<QWidget *>(widget->parent());
-    }
-
-    QPoint destPos;
-    widget = dest;
-    while (widget != this)
-    {
-        destPos += widget->pos();
-        widget = qobject_cast<QWidget *>(widget->parent());
-    }
-
-    // disable graphics before grab to pixmap.
-    if (dest->graphicsEffect())
-        dest->graphicsEffect()->setEnabled(false);
-    floatLabel->setPixmap(dest->grab());
-    if (dest->graphicsEffect())
-        dest->graphicsEffect()->setEnabled(true);
-    floatLabel->show();
-
-    ani->setStartValue(QRect(sourcePos, source->size()));
-    ani->setEndValue(QRect(destPos, dest->size()));
-    ani->setEasingCurve(QEasingCurve::OutQuad);
-    ani->setDuration(300);
-
-    connect(ani, &QPropertyAnimation::finished, floatLabel, &QLabel::deleteLater);
-    // ignore repeat connections
-    if (m_refershCategoryTextVisible)
-    {
-        m_refershCategoryTextVisible = false;
-        connect(ani, &QPropertyAnimation::finished, this, &MainFrame::refershCategoryTextVisible);
-        connect(ani, &QPropertyAnimation::finished, this, &MainFrame::refershCurrentFloatTitle, Qt::QueuedConnection);
-    }
-
-    source->hide();
-    dest->hide();
-    ani->start(QPropertyAnimation::DeleteWhenStopped);
+    refershCategoryTextVisible();
+    refershCurrentFloatTitle();
 }
 
 void MainFrame::refershCategoryTextVisible()
@@ -588,18 +478,18 @@ void MainFrame::refershCategoryTextVisible()
     const QPoint pos = QCursor::pos() - this->pos();
     const bool shownAppList = m_navigationWidget->rect().right() < pos.x();
 
-    m_navigationWidget->setCategoryTextVisible(!shownAppList);
-    m_internetTitle->setTextVisible(shownAppList);
-    m_chatTitle->setTextVisible(shownAppList);
-    m_musicTitle->setTextVisible(shownAppList);
-    m_videoTitle->setTextVisible(shownAppList);
-    m_graphicsTitle->setTextVisible(shownAppList);
-    m_gameTitle->setTextVisible(shownAppList);
-    m_officeTitle->setTextVisible(shownAppList);
-    m_readingTitle->setTextVisible(shownAppList);
-    m_developmentTitle->setTextVisible(shownAppList);
-    m_systemTitle->setTextVisible(shownAppList);
-    m_othersTitle->setTextVisible(shownAppList);
+    m_navigationWidget->setCategoryTextVisible(!shownAppList, true);
+    m_internetTitle->setTextVisible(shownAppList, true);
+    m_chatTitle->setTextVisible(shownAppList, true);
+    m_musicTitle->setTextVisible(shownAppList, true);
+    m_videoTitle->setTextVisible(shownAppList, true);
+    m_graphicsTitle->setTextVisible(shownAppList, true);
+    m_gameTitle->setTextVisible(shownAppList, true);
+    m_officeTitle->setTextVisible(shownAppList, true);
+    m_readingTitle->setTextVisible(shownAppList, true);
+    m_developmentTitle->setTextVisible(shownAppList, true);
+    m_systemTitle->setTextVisible(shownAppList, true);
+    m_othersTitle->setTextVisible(shownAppList, true);
 }
 
 void MainFrame::refershCurrentFloatTitle()
@@ -794,8 +684,8 @@ void MainFrame::initConnection()
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_systemView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_othersView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
 
-    connect(m_appsArea, &AppListArea::mouseEntered, this, &MainFrame::showCategoryMoveAnimation);
-    connect(m_navigationWidget, &NavigationWidget::mouseEntered, this, &MainFrame::showCategoryMoveAnimation);
+    connect(m_appsArea, &AppListArea::mouseEntered, this, &MainFrame::refreshTitleVisible);
+    connect(m_navigationWidget, &NavigationWidget::mouseEntered, this, &MainFrame::refreshTitleVisible);
 
     connect(m_menuWorker, &MenuWorker::quitLauncher, this, &MainFrame::hide);
     connect(m_menuWorker, &MenuWorker::unInstallApp, this, &MainFrame::showPopupUninstallDialog);

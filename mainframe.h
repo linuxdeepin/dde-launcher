@@ -93,8 +93,7 @@ private slots:
     void ensureItemVisible(const QModelIndex &index);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
     void showGradient();
-    void showCategoryMoveAnimation();
-    void fakeLabelMoveAni(QLabel *source, QLabel *dest);
+    void refreshTitleVisible();
     void refershCategoryTextVisible();
     void refershCurrentFloatTitle();
 

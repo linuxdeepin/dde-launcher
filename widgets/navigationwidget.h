@@ -19,7 +19,7 @@ public:
     explicit NavigationWidget(QWidget *parent = 0);
 
     void setButtonsVisible(const bool visible);
-    void setCategoryTextVisible(const bool visible);
+    void setCategoryTextVisible(const bool visible, const bool animation = false);
     QLabel *categoryTextLabel(const AppsListModel::AppCategory category) const;
 
 signals:

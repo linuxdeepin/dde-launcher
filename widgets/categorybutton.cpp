@@ -11,7 +11,8 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     m_calcUtil(CalculateUtil::instance(this)),
     m_category(category),
     m_iconLabel(new QLabel),
-    m_textLabel(new QLabel)
+    m_textLabel(new QLabel),
+    m_opacityAnimation(new QPropertyAnimation(this, "titleOpacity"))
 {
     setObjectName("CategoryButton");
     m_iconLabel->setFixedSize(22, 22);
@@ -35,8 +36,13 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     updateState(Normal);
     addTextShadow();
 
+    m_opacityAnimation->setDuration(300);
+
     connect(this, &CategoryButton::toggled, this, &CategoryButton::setChecked);
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &CategoryButton::relayout);
+    connect(m_opacityAnimation, &QPropertyAnimation::finished, [this] {
+        m_textLabel->setVisible(m_titleOpacity != 0);
+    });
 }
 
 AppsListModel::AppCategory CategoryButton::category() const
@@ -75,9 +81,21 @@ void CategoryButton::setChecked(bool isChecked)
     QAbstractButton::setChecked(isChecked);
 }
 
-void CategoryButton::setTextVisible(bool visible)
+void CategoryButton::setTextVisible(bool visible, const bool animation)
 {
-    m_textLabel->setVisible(visible);
+    if (!animation) {
+        m_textLabel->setVisible(visible);
+    } else {
+        m_textLabel->setVisible(true);
+        if (visible) {
+            m_opacityAnimation->setStartValue(0);
+            m_opacityAnimation->setEndValue(1);
+        } else {
+            m_opacityAnimation->setStartValue(1);
+            m_opacityAnimation->setEndValue(0);
+        }
+        m_opacityAnimation->start();
+    }
 }
 
 void CategoryButton::setInfoByCategory()
@@ -139,8 +157,28 @@ void CategoryButton::addTextShadow() {
 
 void CategoryButton::relayout()
 {
-    setStyleSheet(QString("background-color:transparent; color: white; font-size: %1px;")
-                  .arg(m_calcUtil->navgationTextSize()));
+//    setStyleSheet(QString("background-color:transparent; color: white; font-size: %1px;")
+//                  .arg(m_calcUtil->navgationTextSize()));
+    QFont font = m_textLabel->font();
+    font.setPixelSize(m_calcUtil->navgationTextSize());
+    m_textLabel->setFont(font);
+}
+
+qreal CategoryButton::titleOpacity() const
+{
+    return m_titleOpacity;
+}
+
+void CategoryButton::setTitleOpacity(const qreal &titleOpacity)
+{
+    if (m_titleOpacity != titleOpacity) {
+        m_titleOpacity = titleOpacity;
+
+        QPalette p = m_textLabel->palette();
+        p.setColor(m_textLabel->foregroundRole(), QColor::fromRgbF(1, 1, 1, m_titleOpacity));
+        p.setColor(m_textLabel->backgroundRole(), Qt::transparent);
+        m_textLabel->setPalette(p);
+    }
 }
 
 QLabel *CategoryButton::textLabel()

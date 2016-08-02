@@ -18,9 +18,14 @@ class NavigationWidget : public QWidget
 public:
     explicit NavigationWidget(QWidget *parent = 0);
 
+    Q_PROPERTY(qreal zoomLevel READ zoomLevel WRITE setZoomLevel)
+
     void setButtonsVisible(const bool visible);
     void setCategoryTextVisible(const bool visible, const bool animation = false);
     QLabel *categoryTextLabel(const AppsListModel::AppCategory category) const;
+
+    qreal zoomLevel() const;
+    void setZoomLevel(const qreal &zoomLevel);
 
 signals:
     void scrollToCategory(const AppsListModel::AppCategory category) const;
@@ -33,6 +38,7 @@ public slots:
 
 protected:
     void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
 
 private:
     void initUI();
@@ -57,6 +63,8 @@ private:
     CategoryButton *m_othersBtn;
 
     DImageButton *m_toggleModeBtn;
+
+    qreal m_zoomLevel = 1;
 };
 
 #endif // NAVIGATIONWIDGET_H

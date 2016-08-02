@@ -7,8 +7,6 @@
 #include <QAbstractButton>
 #include <QLabel>
 
-class QPropertyAnimation;
-
 class CategoryButton : public QAbstractButton
 {
     Q_OBJECT
@@ -24,11 +22,15 @@ public:
     explicit CategoryButton(const AppsListModel::AppCategory category, QWidget *parent = 0);
 
     Q_PROPERTY(qreal titleOpacity READ titleOpacity WRITE setTitleOpacity)
+    Q_PROPERTY(qreal zoomLevel READ zoomLevel WRITE setZoomLevel)
 
     QLabel *textLabel();
 
     qreal titleOpacity() const;
     void setTitleOpacity(const qreal &titleOpacity);
+
+    qreal zoomLevel() const;
+    void setZoomLevel(const qreal &zoomLevel);
 
 public slots:
     void setChecked(bool isChecked);
@@ -43,6 +45,7 @@ protected:
 private:
     void setInfoByCategory();
     void updateState(const State state);
+    void updateTextColor();
     void addTextShadow();
 
 private slots:
@@ -59,6 +62,8 @@ private:
 
     QPropertyAnimation *m_opacityAnimation;
     qreal m_titleOpacity;
+
+    qreal m_zoomLevel = 1;
 };
 
 #endif // CATEGORYBUTTON_H

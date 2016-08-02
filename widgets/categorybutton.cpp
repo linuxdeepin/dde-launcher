@@ -145,6 +145,22 @@ void CategoryButton::updateState(const CategoryButton::State state)
     QPixmap tmpCategoryMap;
     tmpCategoryMap.load(QString(":/icons/skin/icons/%1_%2_22px.svg").arg(m_iconName).arg(picState));
     m_iconLabel->setPixmap(tmpCategoryMap.scaled(QSize(22, 22), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
+    updateTextColor();
+}
+
+void CategoryButton::updateTextColor()
+{
+    QPalette p = m_textLabel->palette();
+    if (m_state == Normal) {
+        p.setColor(m_textLabel->foregroundRole(), QColor::fromRgbF(1, 1, 1, m_titleOpacity * 0.6));
+    } else if (m_state == Hover) {
+        p.setColor(m_textLabel->foregroundRole(), QColor::fromRgbF(1, 1, 1, m_titleOpacity * 0.8));
+    } else {
+        p.setColor(m_textLabel->foregroundRole(), QColor::fromRgbF(1, 1, 1, m_titleOpacity));
+    }
+    p.setColor(m_textLabel->backgroundRole(), Qt::transparent);
+    m_textLabel->setPalette(p);
 }
 
 void CategoryButton::addTextShadow() {
@@ -164,6 +180,25 @@ void CategoryButton::relayout()
     m_textLabel->setFont(font);
 }
 
+qreal CategoryButton::zoomLevel() const
+{
+    return m_zoomLevel;
+}
+
+void CategoryButton::setZoomLevel(const qreal &zoomLevel)
+{
+    if (m_zoomLevel != zoomLevel) {
+        m_zoomLevel = zoomLevel;
+
+        setFixedHeight(DLauncher::NAVIGATION_ICON_HEIGHT * zoomLevel);
+        m_iconLabel->setFixedSize(22 * zoomLevel, 22 * zoomLevel);
+
+        QFont font = m_textLabel->font();
+        font.setPixelSize(m_calcUtil->navgationTextSize() * zoomLevel);
+        m_textLabel->setFont(font);
+    }
+}
+
 qreal CategoryButton::titleOpacity() const
 {
     return m_titleOpacity;
@@ -174,10 +209,7 @@ void CategoryButton::setTitleOpacity(const qreal &titleOpacity)
     if (m_titleOpacity != titleOpacity) {
         m_titleOpacity = titleOpacity;
 
-        QPalette p = m_textLabel->palette();
-        p.setColor(m_textLabel->foregroundRole(), QColor::fromRgbF(1, 1, 1, m_titleOpacity));
-        p.setColor(m_textLabel->backgroundRole(), Qt::transparent);
-        m_textLabel->setPalette(p);
+        updateTextColor();
     }
 }
 

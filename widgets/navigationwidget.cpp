@@ -173,9 +173,50 @@ CategoryButton *NavigationWidget::button(const AppsListModel::AppCategory catego
     return nullptr;
 }
 
+qreal NavigationWidget::zoomLevel() const
+{
+    return m_zoomLevel;
+}
+
+void NavigationWidget::setZoomLevel(const qreal &zoomLevel)
+{
+    if (m_zoomLevel != zoomLevel) {
+        m_zoomLevel = zoomLevel;
+
+        m_internetBtn->setZoomLevel(zoomLevel);
+        m_chatBtn->setZoomLevel(zoomLevel);
+        m_musicBtn->setZoomLevel(zoomLevel);
+        m_videoBtn->setZoomLevel(zoomLevel);
+        m_graphicsBtn->setZoomLevel(zoomLevel);
+        m_gameBtn->setZoomLevel(zoomLevel);
+        m_officeBtn->setZoomLevel(zoomLevel);
+        m_readingBtn->setZoomLevel(zoomLevel);
+        m_developmentBtn->setZoomLevel(zoomLevel);
+        m_systemBtn->setZoomLevel(zoomLevel);
+        m_othersBtn->setZoomLevel(zoomLevel);
+    }
+}
+
 void NavigationWidget::enterEvent(QEvent *e)
 {
     QWidget::enterEvent(e);
 
+    QPropertyAnimation * ani = new QPropertyAnimation(this, "zoomLevel");
+    ani->setDuration(300);
+    ani->setStartValue(zoomLevel());
+    ani->setEndValue(1.2);
+    ani->start(QPropertyAnimation::DeleteWhenStopped);
+
     emit mouseEntered();
+}
+
+void NavigationWidget::leaveEvent(QEvent *e)
+{
+    QWidget::leaveEvent(e);
+
+    QPropertyAnimation * ani = new QPropertyAnimation(this, "zoomLevel");
+    ani->setDuration(300);
+    ani->setEndValue(zoomLevel());
+    ani->setEndValue(1);
+    ani->start(QPropertyAnimation::DeleteWhenStopped);
 }

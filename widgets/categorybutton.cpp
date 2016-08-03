@@ -88,10 +88,10 @@ void CategoryButton::setTextVisible(bool visible, const bool animation)
     } else {
         m_textLabel->setVisible(true);
         if (visible) {
-            m_opacityAnimation->setStartValue(0);
+            m_opacityAnimation->setStartValue(titleOpacity());
             m_opacityAnimation->setEndValue(1);
         } else {
-            m_opacityAnimation->setStartValue(1);
+            m_opacityAnimation->setStartValue(titleOpacity());
             m_opacityAnimation->setEndValue(0);
         }
         m_opacityAnimation->start();

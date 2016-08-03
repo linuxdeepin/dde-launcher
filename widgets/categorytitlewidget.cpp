@@ -48,10 +48,10 @@ void CategoryTitleWidget::setTextVisible(const bool visible, const bool animatio
         setTitleOpacity(visible ? 1 : 0);
     } else {
         if (visible) {
-            m_opacityAnimation->setStartValue(0);
+            m_opacityAnimation->setStartValue(titleOpacity());
             m_opacityAnimation->setEndValue(1);
         } else {
-            m_opacityAnimation->setStartValue(1);
+            m_opacityAnimation->setStartValue(titleOpacity());
             m_opacityAnimation->setEndValue(0);
         }
         m_opacityAnimation->start();

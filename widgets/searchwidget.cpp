@@ -12,6 +12,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
 //    setObjectName("SearchFrame");
     this->setFixedWidth(300);
     m_searchEdit = new SearchLineEdit(this);
+    m_searchEdit->setAccessibleName("search-edit");
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addStretch();

@@ -30,6 +30,8 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addWidget(m_title);
     mainLayout->addLayout(lineLayout);
+
+    setAccessibleName(title);
     setLayout(mainLayout);
     setFixedHeight(DLauncher::CATEGORY_TITLE_WIDGET_HEIGHT);
 

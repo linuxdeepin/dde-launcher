@@ -105,7 +105,7 @@ void NavigationWidget::initUI()
     m_internetBtn->setChecked(true);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addSpacing(0);
+    mainLayout->addSpacing(30);
     mainLayout->addWidget(m_toggleModeBtn);
     mainLayout->addStretch();
     mainLayout->addWidget(m_internetBtn);

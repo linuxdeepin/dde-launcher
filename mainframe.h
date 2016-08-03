@@ -176,8 +176,8 @@ private:
     CategoryTitleWidget *m_othersTitle;
 
     QVBoxLayout *m_scrollAreaLayout;
-    QHBoxLayout *m_contentLayout;
-    QVBoxLayout *m_mainLayout;
+    QHBoxLayout *m_mainLayout;
+    QVBoxLayout *m_contentLayout;
 };
 
 Q_DECLARE_METATYPE(MainFrame::DisplayMode)

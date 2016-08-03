@@ -405,23 +405,23 @@ void MainFrame::initUI()
     m_scrollAreaLayout->addWidget(m_appsArea);
     m_scrollAreaLayout->addSpacing(DLauncher::VIEWLIST_BOTTOM_MARGIN);
 
-    m_contentLayout = new QHBoxLayout;
-    m_contentLayout->setMargin(0);
-    m_contentLayout->addSpacing(0);
-    m_contentLayout->addWidget(m_navigationWidget);
-    m_contentLayout->addLayout(m_scrollAreaLayout);
-    m_contentLayout->addWidget(m_rightSpacing);
-
     m_bottomGradient->setDirection(GradientLabel::BottomToTop);
 
-    m_mainLayout = new QVBoxLayout;
+    m_contentLayout = new QVBoxLayout;
+    m_contentLayout->setMargin(0);
+    m_contentLayout->setSpacing(0);
+    m_contentLayout->addSpacing(30);
+    m_contentLayout->addWidget(m_searchWidget);
+    m_contentLayout->setAlignment(m_searchWidget, Qt::AlignCenter);
+    m_contentLayout->addSpacing(30);
+    m_contentLayout->addLayout(m_scrollAreaLayout);
+
+    m_mainLayout = new QHBoxLayout;
     m_mainLayout->setMargin(0);
-    m_mainLayout->setSpacing(0);
-    m_mainLayout->addSpacing(30);
-    m_mainLayout->addWidget(m_searchWidget);
-    m_mainLayout->setAlignment(m_searchWidget, Qt::AlignCenter);
-    m_mainLayout->addSpacing(30);
+    m_mainLayout->addSpacing(0);
+    m_mainLayout->addWidget(m_navigationWidget);
     m_mainLayout->addLayout(m_contentLayout);
+    m_mainLayout->addWidget(m_rightSpacing);
 
     setLayout(m_mainLayout);
 

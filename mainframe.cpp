@@ -476,7 +476,7 @@ void MainFrame::refreshTitleVisible()
 void MainFrame::refershCategoryTextVisible()
 {
     const QPoint pos = QCursor::pos() - this->pos();
-    const bool shownAppList = m_navigationWidget->rect().right() < pos.x();
+    const bool shownAppList = m_navigationWidget->geometry().right() < pos.x();
 
     m_navigationWidget->setCategoryTextVisible(!shownAppList, true);
     m_internetTitle->setTextVisible(shownAppList, true);

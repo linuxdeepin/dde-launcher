@@ -46,6 +46,8 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
 
 void CategoryTitleWidget::setTextVisible(const bool visible, const bool animation)
 {
+    m_opacityAnimation->stop();
+
     if (!animation) {
         setTitleOpacity(visible ? 1 : 0);
     } else {

@@ -61,7 +61,7 @@ private:
     QLabel *m_textLabel;
 
     QPropertyAnimation *m_opacityAnimation;
-    qreal m_titleOpacity;
+    qreal m_titleOpacity = 1;
 
     qreal m_zoomLevel = 1;
 };

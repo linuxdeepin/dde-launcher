@@ -501,7 +501,9 @@ void MainFrame::refershCategoryTextVisible()
     const QPoint pos = QCursor::pos() - this->pos();
     const bool shownAppList = m_navigationWidget->geometry().right() < pos.x();
 
-    m_navigationWidget->setCategoryTextVisible(!shownAppList, true);
+    // NOTE(hualet): don't show/hide category text with animation, it'll conflicts
+    // with the zoom animation causing very strange behavior;
+    m_navigationWidget->setCategoryTextVisible(!shownAppList/*, true*/);
     m_internetTitle->setTextVisible(shownAppList, true);
     m_chatTitle->setTextVisible(shownAppList, true);
     m_musicTitle->setTextVisible(shownAppList, true);

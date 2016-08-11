@@ -62,6 +62,7 @@ public:
     void dropSwap(const int nextPos);
 
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
+    const QModelIndex indexAt(const QString &appKey) const;
 
 public slots:
     void clearDragingIndex();

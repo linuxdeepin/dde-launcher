@@ -104,7 +104,7 @@ void MainFrame::exit()
 
 void MainFrame::uninstallApp(const QString &appKey)
 {
-    m_appsManager->uninstallApp(appKey);
+    showPopupUninstallDialog(m_allAppsModel->indexAt(appKey));
 }
 
 void MainFrame::showByMode(const qlonglong mode)

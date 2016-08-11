@@ -95,6 +95,22 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
     return m_appsManager->appsInfoList(m_category).size();
 }
 
+const QModelIndex AppsListModel::indexAt(const QString &appKey) const
+{
+    Q_ASSERT(m_category == All);
+
+    int i = 0;
+    const int count = rowCount(QModelIndex());
+    while (i != count)
+    {
+        if (index(i).data(AppKeyRole).toString() == appKey)
+            return index(i);
+        ++i;
+    }
+
+    Q_UNREACHABLE();
+}
+
 bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     Q_UNUSED(row)

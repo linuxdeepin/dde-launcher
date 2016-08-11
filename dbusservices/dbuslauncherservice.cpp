@@ -67,6 +67,11 @@ void DBusLauncherService::ShowByMode(qlonglong in0)
     parent()->showByMode(in0);
 }
 
+void DBusLauncherService::UninstallApp(const QString &appKey)
+{
+    parent()->uninstallApp(appKey);
+}
+
 void DBusLauncherService::Toggle()
 {
     // handle method call com.deepin.dde.Launcher.Toggle

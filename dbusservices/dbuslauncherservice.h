@@ -41,6 +41,9 @@ class DBusLauncherService: public QDBusAbstractAdaptor
 "    <method name=\"ShowByMode\">\n"
 "      <arg direction=\"in\" type=\"x\"/>\n"
 "    </method>\n"
+"    <method name=\"UninstallApp\">\n"
+"      <arg direction=\"in\" type=\"s\"/>\n"
+"    </method>\n"
 "    <signal name=\"Closed\"/>\n"
 "    <signal name=\"Shown\"/>\n"
 "  </interface>\n"
@@ -58,6 +61,7 @@ public Q_SLOTS: // METHODS
     void Hide();
     void Show();
     void ShowByMode(qlonglong in0);
+    void UninstallApp(const QString &appKey);
     void Toggle();
 Q_SIGNALS: // SIGNALS
     void Closed();

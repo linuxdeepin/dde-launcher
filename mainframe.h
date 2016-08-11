@@ -45,6 +45,7 @@ public:
     explicit MainFrame(QWidget *parent = 0);
 
     void exit();
+    void uninstallApp(const QString &appKey);
     void showByMode(const qlonglong mode);
     int dockPosition();
 

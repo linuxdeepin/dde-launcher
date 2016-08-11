@@ -137,6 +137,7 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
 
     QMimeData *mime = new QMimeData;
     mime->setData("RequestDock", index.data(AppDesktopRole).toByteArray());
+    mime->setData("AppKey", index.data(AppKeyRole).toByteArray());
 
     // this object will be delete in drag event finished.
     return mime;

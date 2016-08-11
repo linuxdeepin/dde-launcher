@@ -102,6 +102,11 @@ void MainFrame::exit()
     qApp->quit();
 }
 
+void MainFrame::uninstallApp(const QString &appKey)
+{
+    m_appsManager->uninstallApp(appKey);
+}
+
 void MainFrame::showByMode(const qlonglong mode)
 {
     qDebug() << mode;

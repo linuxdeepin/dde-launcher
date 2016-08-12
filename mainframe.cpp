@@ -167,6 +167,46 @@ void MainFrame::resizeEvent(QResizeEvent *e)
 
 void MainFrame::keyPressEvent(QKeyEvent *e)
 {
+    bool ctrlPressed = e->modifiers() & Qt::ControlModifier;
+    switch (e->key())
+    {
+#ifdef QT_DEBUG
+    case Qt::Key_Control:       scrollToCategory(AppsListModel::Internet);      return;
+    case Qt::Key_F1:            updateDisplayMode(AllApps);                     return;
+    case Qt::Key_F2:            updateDisplayMode(GroupByCategory);             return;
+    case Qt::Key_Plus:          m_calcUtil->increaseIconSize();
+                                emit m_appsManager->layoutChanged(AppsListModel::All);
+                                                                                return;
+    case Qt::Key_Minus:         m_calcUtil->decreaseIconSize();
+                                emit m_appsManager->layoutChanged(AppsListModel::All);
+                                                                                return;
+    case Qt::Key_Slash:         m_calcUtil->increaseItemSize();
+                                emit m_appsManager->layoutChanged(AppsListModel::All);
+                                                                                return;
+    case Qt::Key_Asterisk:      m_calcUtil->decreaseItemSize();
+                                emit m_appsManager->layoutChanged(AppsListModel::All);
+                                                                                return;
+#endif
+    case Qt::Key_Enter:
+    case Qt::Key_Return:        launchCurrentApp();                             return;
+    case Qt::Key_Escape:        hide();                                         return;
+    case Qt::Key_Tab:
+                                e->accept();
+    case Qt::Key_Backtab:
+    case Qt::Key_Up:
+    case Qt::Key_Down:
+    case Qt::Key_Left:
+    case Qt::Key_Right:         moveCurrentSelectApp(e->key());                 return;
+
+
+    // handle the emacs key bindings
+    case Qt::Key_P: if (ctrlPressed) moveCurrentSelectApp(Qt::Key_Up);          return;
+    case Qt::Key_N: if (ctrlPressed) moveCurrentSelectApp(Qt::Key_Down);        return;
+    case Qt::Key_F: if (ctrlPressed) moveCurrentSelectApp(Qt::Key_Right);       return;
+    case Qt::Key_B: if (ctrlPressed) moveCurrentSelectApp(Qt::Key_Left);        return;
+    }
+
+    // handle normal keys
     if ((e->key() <= Qt::Key_Z && e->key() >= Qt::Key_A) ||
         (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_0) ||
         (e->key() == Qt::Key_Space))
@@ -175,40 +215,7 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
 
         m_searchWidget->edit()->setFocus(Qt::MouseFocusReason);
         m_searchWidget->edit()->setText(m_searchWidget->edit()->text() + char(e->key() | 0x20));
-
         return;
-    }
-
-    switch (e->key())
-    {
-#ifdef QT_DEBUG
-    case Qt::Key_Control:       scrollToCategory(AppsListModel::Internet);      break;
-    case Qt::Key_F1:            updateDisplayMode(AllApps);                     break;
-    case Qt::Key_F2:            updateDisplayMode(GroupByCategory);             break;
-    case Qt::Key_Plus:          m_calcUtil->increaseIconSize();
-                                emit m_appsManager->layoutChanged(AppsListModel::All);
-                                                                                break;
-    case Qt::Key_Minus:         m_calcUtil->decreaseIconSize();
-                                emit m_appsManager->layoutChanged(AppsListModel::All);
-                                                                                break;
-    case Qt::Key_Slash:         m_calcUtil->increaseItemSize();
-                                emit m_appsManager->layoutChanged(AppsListModel::All);
-                                                                                break;
-    case Qt::Key_Asterisk:      m_calcUtil->decreaseItemSize();
-                                emit m_appsManager->layoutChanged(AppsListModel::All);
-                                                                                break;
-#endif
-    case Qt::Key_Enter:
-    case Qt::Key_Return:        launchCurrentApp();                             break;
-    case Qt::Key_Escape:        hide();                                         break;
-    case Qt::Key_Tab:
-                                e->accept();
-    case Qt::Key_Backtab:
-    case Qt::Key_Up:
-    case Qt::Key_Down:
-    case Qt::Key_Left:
-    case Qt::Key_Right:         moveCurrentSelectApp(e->key());                 break;
-    default:;
     }
 }
 

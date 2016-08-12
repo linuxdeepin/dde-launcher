@@ -305,7 +305,7 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
     }
     else if (o == m_appsArea->viewport() && e->type() == QEvent::Resize)
     {
-        m_calcUtil->calculateAppLayout(static_cast<QResizeEvent *>(e)->size());
+        m_calcUtil->calculateAppLayout(static_cast<QResizeEvent *>(e)->size(), m_appsManager->dockPosition());
         updatePlaceholderSize();
     }
 
@@ -1083,6 +1083,7 @@ void MainFrame::updatePlaceholderSize()
 
 void MainFrame::updateDockPosition()
 {
+    m_calcUtil->calculateAppLayout(m_appsArea->size(), m_appsManager->dockPosition());
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
 }
 

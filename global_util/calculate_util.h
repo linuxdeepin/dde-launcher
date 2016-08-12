@@ -33,7 +33,7 @@ public:
 #endif
 
 public slots:
-    void calculateAppLayout(const QSize &containerSize);
+    void calculateAppLayout(const QSize &containerSize, const int dockPosition);
 
 private:
     explicit CalculateUtil(QObject *parent);

@@ -1173,7 +1173,7 @@ void MainFrame::layoutChanged()
     m_systemView->setFixedWidth(appsContentWidth);
     m_othersView->setFixedWidth(appsContentWidth);
 
-    m_floatTitle->move(m_appsArea->pos().x(), m_appsArea->y() - m_floatTitle->height());
+    m_floatTitle->move(m_appsArea->pos().x(), m_appsArea->y() - m_floatTitle->height() + 20);
 }
 
 void MainFrame::searchTextChanged(const QString &keywords)

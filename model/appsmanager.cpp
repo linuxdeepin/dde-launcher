@@ -34,7 +34,7 @@ AppsManager::AppsManager(QObject *parent) :
 {
     m_themeAppIcon->gtkInit();
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
-    m_dockedAppsList = m_dockedAppInter->dockedApps();
+//    m_dockedAppsList = m_dockedAppInter->dockedApps();
 
     refreshCategoryInfoList();
 
@@ -57,7 +57,7 @@ AppsManager::AppsManager(QObject *parent) :
     //newAppLaunched is the old one.
     connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
 
-    connect(m_dockedAppInter, &DBusDock::DockedAppsChanged, this, &AppsManager::dockedAppsChanged);
+//    connect(m_dockedAppInter, &DBusDock::DockedAppsChanged, this, &AppsManager::dockedAppsChanged);
     connect(m_dockedAppInter, &DBusDock::PositionChanged, this, &AppsManager::dockPositionChanged);
 
 //    connect(this, &AppsManager::handleUninstallApp, this, &AppsManager::unInstallApp);
@@ -269,10 +269,10 @@ void AppsManager::markLaunched(QString appKey)
     m_launcherInter->MarkLaunched(appKey);
 }
 
-void AppsManager::dockedAppsChanged()
-{
-    m_dockedAppsList = m_dockedAppInter->dockedApps();
-}
+//void AppsManager::dockedAppsChanged()
+//{
+//    m_dockedAppsList = m_dockedAppInter->dockedApps();
+//}
 
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const
 {
@@ -304,10 +304,11 @@ bool AppsManager::appIsAutoStart(const QString &desktop)
     return isAutoStart;
 }
 
-bool AppsManager::appIsOnDock(const QString &appName)
+bool AppsManager::appIsOnDock(const QString &desktop)
 {
 //    qDebug() << m_dockedAppsList;
-    return m_dockedAppsList.contains(appName);
+//    return m_dockedAppsList.contains(appName);
+    return m_dockedAppInter->IsDocked(desktop);
 }
 
 bool AppsManager::appIsOnDesktop(const QString &desktop)

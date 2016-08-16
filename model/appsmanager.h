@@ -52,7 +52,7 @@ public slots:
 
     bool appIsNewInstall(const QString &key);
     bool appIsAutoStart(const QString &desktop);
-    bool appIsOnDock(const QString &appName);
+    bool appIsOnDock(const QString &desktop);
     bool appIsOnDesktop(const QString &desktop);
     const QPixmap appIcon(const QString &iconKey, const int size);
     int appNums(const AppsListModel::AppCategory &category) const;
@@ -84,7 +84,7 @@ private:
 private slots:
     void searchDone(const QStringList &resultList);
     void markLaunched(QString appKey);
-    void dockedAppsChanged();
+//    void dockedAppsChanged();
 
 private:
     DBusLauncher *m_launcherInter;
@@ -94,7 +94,7 @@ private:
     QPixmap m_defaultIconPixmap;
     QString m_searchText;
     QStringList m_newInstalledAppsList;
-    QStringList m_dockedAppsList;
+//    QStringList m_dockedAppsList;
     ItemInfoList m_allAppInfoList;
     ItemInfoList m_userSortedList;
     ItemInfoList m_appSearchResultList;

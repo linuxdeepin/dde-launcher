@@ -63,9 +63,9 @@ public:
     inline QList<QDBusObjectPath> entries() const
     { return qvariant_cast< QList<QDBusObjectPath> >(property("Entries")); }
 
-    Q_PROPERTY(QStringList DockedApps READ dockedApps NOTIFY DockedAppsChanged)
-    inline QStringList dockedApps() const
-    { return qvariant_cast< QStringList >(property("DockedApps")); }
+//    Q_PROPERTY(QStringList DockedApps READ dockedApps NOTIFY DockedAppsChanged)
+//    inline QStringList dockedApps() const
+//    { return qvariant_cast< QStringList >(property("DockedApps")); }
 
     Q_PROPERTY(int DisplayMode READ displayMode WRITE setDisplayMode NOTIFY DisplayModeChanged)
     inline int displayMode() const

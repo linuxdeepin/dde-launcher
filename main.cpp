@@ -1,6 +1,9 @@
 
+#include <gtk/gtk.h>
+
 #include "mainframe.h"
 #include "dbuslauncherframe.h"
+#include "model/appsmanager.h"
 #include "dbusservices/dbuslauncherservice.h"
 
 #include <QCommandLineParser>
@@ -11,6 +14,17 @@
 
 DWIDGET_USE_NAMESPACE
 DUTIL_USE_NAMESPACE
+
+#define PROP_GTK_ICON_THEME_NAME     "gtk-icon-theme-name"
+
+void iconThemeChanged(GtkSettings *gsettings, GParamSpec *pspec, gpointer udata)
+{
+    Q_UNUSED(gsettings)
+    Q_UNUSED(udata)
+    Q_ASSERT(!strcmp(g_param_spec_get_name(pspec), PROP_GTK_ICON_THEME_NAME));
+
+    AppsManager::instance()->refreshAppIconCache();
+}
 
 int main(int argv, char *args[])
 {
@@ -68,16 +82,20 @@ int main(int argv, char *args[])
     app.installTranslator(&translator);
     MainFrame launcher;
     DBusLauncherService service(&launcher);
+    Q_UNUSED(service);
     QDBusConnection connection = QDBusConnection::sessionBus();
     if (!connection.registerService("com.deepin.dde.Launcher") ||
         !connection.registerObject("/com/deepin/dde/Launcher", &launcher))
         qWarning() << "register dbus service failed";
 
-
 #ifndef QT_DEBUG
     if (/*!positionArgs.isEmpty() && */cmdParser.isSet(showOption))
 #endif
         launcher.show();
+
+    // monitor gtk icon theme changed
+    GtkSettings *gs = gtk_settings_get_default();
+    g_signal_connect(gs, "notify::" PROP_GTK_ICON_THEME_NAME, G_CALLBACK(iconThemeChanged), NULL);
 
     return app.exec();
 }

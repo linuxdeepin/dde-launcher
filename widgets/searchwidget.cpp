@@ -23,7 +23,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     setLayout(mainLayout);
 
     connect(m_searchEdit, &SearchLineEdit::textChanged, [this] {
-        emit searchTextChanged(m_searchEdit->text());
+        emit searchTextChanged(m_searchEdit->text().trimmed());
     });
 }
 

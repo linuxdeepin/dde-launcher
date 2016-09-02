@@ -13,7 +13,7 @@ static const int CATEGORY_TITLE_WIDGET_HEIGHT = 50;
 
 static const int VIEWLIST_BOTTOM_MARGIN = 60;
 
-static const int NAVIGATION_ICON_HEIGHT = 50;
+static const int NAVIGATION_ICON_HEIGHT = 50 / 1.2;
 
 static const int TOP_BOTTOM_GRADIENT_HEIGHT = 60;
 

@@ -18,7 +18,8 @@ public:
     static int calculateBesidePadding(const int screenWidth);
 
     inline int titleTextSize() const {return m_titleTextSize;}
-    inline int navgationTextSize() const {return m_navgationTextSize;}
+    // NOTE: navgation text size animation max zoom scale is 1.2
+    inline int navgationTextSize() const {return double(m_navgationTextSize) / 1.2;}
     inline int appColumnCount() const {return m_appColumnCount;}
     inline int appItemFontSize() const {return m_appItemFontSize;}
     inline QSize appIconSize() const { return QSize(m_appIconSize, m_appIconSize);}

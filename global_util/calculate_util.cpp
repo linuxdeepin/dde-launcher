@@ -85,7 +85,7 @@ int CalculateUtil::itemIconWidth(const int itemWidth) const
 
 void CalculateUtil::calculateTextSize(const int screenWidth)
 {
-    if (screenWidth >= 1366)
+    if (screenWidth > 1366)
     {
         m_navgationTextSize = 14;
         m_titleTextSize = 15;

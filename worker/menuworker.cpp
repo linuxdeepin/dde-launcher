@@ -91,7 +91,9 @@ QString MenuWorker::createMenuContent(/*QString appKey*/){
     items.append(dockObj);
     items.append(seperatorObj2);
     items.append(startupObj);
+#ifndef WITHOUT_UNINSTALL_APP
     items.append(uninstallObj);
+#endif
 
     QJsonObject menuObj;
     menuObj["checkableMenu"] = false;

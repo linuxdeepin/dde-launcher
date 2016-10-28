@@ -67,10 +67,12 @@ void DBusLauncherService::ShowByMode(qlonglong in0)
     parent()->showByMode(in0);
 }
 
+#ifndef WITHOUT_UNINSTALL_APP
 void DBusLauncherService::UninstallApp(const QString &appKey)
 {
     parent()->uninstallApp(appKey);
 }
+#endif
 
 void DBusLauncherService::Toggle()
 {

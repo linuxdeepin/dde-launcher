@@ -6,7 +6,7 @@ CONFIG += c++11 link_pkgconfig
 PKGCONFIG += dtkbase dtkwidget dtkutil xcb xcb-ewmh\
           gsettings-qt gtk+-2.0 gio-unix-2.0
 
-
+include(./feature-macros.pri)
 include(./widgets/widgets.pri)
 include(./boxframe/boxframe.pri)
 include(./dbusinterface/dbusinterface.pri)

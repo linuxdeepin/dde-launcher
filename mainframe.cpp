@@ -197,13 +197,6 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Down:
     case Qt::Key_Left:
     case Qt::Key_Right:         moveCurrentSelectApp(e->key());                 return;
-
-
-    // handle the emacs key bindings
-    case Qt::Key_P: if (ctrlPressed) moveCurrentSelectApp(Qt::Key_Up);          return;
-    case Qt::Key_N: if (ctrlPressed) moveCurrentSelectApp(Qt::Key_Down);        return;
-    case Qt::Key_F: if (ctrlPressed) moveCurrentSelectApp(Qt::Key_Right);       return;
-    case Qt::Key_B: if (ctrlPressed) moveCurrentSelectApp(Qt::Key_Left);        return;
     }
 
     // handle normal keys
@@ -212,6 +205,25 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
         (e->key() == Qt::Key_Space))
     {
         e->accept();
+        // handle the emacs key bindings
+        if(ctrlPressed) {
+            switch (e->key()) {
+            case Qt::Key_P:
+                moveCurrentSelectApp(Qt::Key_Up);
+                return;
+            case Qt::Key_N:
+                moveCurrentSelectApp(Qt::Key_Down);
+                return;
+            case Qt::Key_F:
+                moveCurrentSelectApp(Qt::Key_Right);
+                return;
+            case Qt::Key_B:
+                moveCurrentSelectApp(Qt::Key_Left);
+            default:
+                return;
+            }
+        }
+
 
         m_searchWidget->edit()->setFocus(Qt::MouseFocusReason);
         m_searchWidget->edit()->setText(m_searchWidget->edit()->text() + char(e->key() | 0x20));
@@ -231,7 +243,7 @@ void MainFrame::showEvent(QShowEvent *e)
 
     QFrame::showEvent(e);
 
-    QTimer::singleShot(0, this, [this] () { 
+    QTimer::singleShot(0, this, [this] () {
         showGradient();
         raise();
         activateWindow();

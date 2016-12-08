@@ -21,8 +21,7 @@ static const QString DisplayModeCategory = "category";
 
 MainFrame::MainFrame(QWidget *parent) :
     BoxFrame(parent),
-    m_gsettings(new QGSettings("com.deepin.wrap.gnome.desktop.background",
-                               "/com/deepin/wrap/gnome/desktop/background/", this)),
+    m_wmInter(new com::deepin::wm("com.deepin.wm", "/com/deepin/wm", QDBusConnection::sessionBus(), this)),
     m_launcherGsettings(new QGSettings("com.deepin.dde.launcher",
                                        "/com/deepin/dde/launcher/", this)),
     m_displayInter(new DBusDisplay(this)),
@@ -467,13 +466,23 @@ void MainFrame::initUI()
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
 
     // setup background.
-    auto callback = [this] {
-        const QString background = QUrl(m_gsettings->get(WallpaperKey).toString()).toLocalFile();
-        setBackground(background);
+    auto callback = [this] (int, int) {
+        QDBusPendingCall call = m_wmInter->GetCurrentWorkspaceBackground();
+        QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
+        connect(watcher, &QDBusPendingCallWatcher::finished, [this, call] {
+            if (!call. isError()) {
+                QDBusReply<QString> reply = call.reply();
+                const QString uri = reply.value();
+                const QString background = QUrl(uri).toLocalFile();
+                setBackground(background);
+            } else {
+                qWarning() << "get current workspace background error: " << call.error().message();
+            }
+        });
     };
 
-    callback();
-    connect(m_gsettings, &QGSettings::changed, callback);
+    callback(0, 0);
+    connect(m_wmInter, &__wm::WorkspaceSwitched, callback);
 }
 
 // FIXME:

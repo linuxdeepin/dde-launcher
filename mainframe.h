@@ -26,6 +26,8 @@
 
 #include <dboxwidget.h>
 
+#include <com_deepin_wm.h>
+
 DWIDGET_USE_NAMESPACE
 
 class DBusLauncherService;
@@ -111,7 +113,7 @@ private:
     double rightMarginRation = 1;
     DisplayMode m_displayMode = Search;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
-    QGSettings *m_gsettings;
+    com::deepin::wm *m_wmInter;
     QGSettings *m_launcherGsettings;
 
     DBusDisplay *m_displayInter;

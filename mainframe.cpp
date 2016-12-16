@@ -2,6 +2,7 @@
 #include "mainframe.h"
 #include "global_util/constants.h"
 #include "global_util/xcb_misc.h"
+#include "backgroundmanager.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -21,9 +22,9 @@ static const QString DisplayModeCategory = "category";
 
 MainFrame::MainFrame(QWidget *parent) :
     BoxFrame(parent),
-    m_wmInter(new com::deepin::wm("com.deepin.wm", "/com/deepin/wm", QDBusConnection::sessionBus(), this)),
     m_launcherGsettings(new QGSettings("com.deepin.dde.launcher",
                                        "/com/deepin/dde/launcher/", this)),
+    m_backgroundManager(new BackgroundManager(this)),
     m_displayInter(new DBusDisplay(this)),
 
     m_calcUtil(CalculateUtil::instance(this)),
@@ -466,23 +467,13 @@ void MainFrame::initUI()
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
 
     // setup background.
-    auto callback = [this] (int, int) {
-        QDBusPendingCall call = m_wmInter->GetCurrentWorkspaceBackground();
-        QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
-        connect(watcher, &QDBusPendingCallWatcher::finished, [this, call] {
-            if (!call. isError()) {
-                QDBusReply<QString> reply = call.reply();
-                const QString uri = reply.value();
-                const QString background = QUrl(uri).toLocalFile();
-                setBackground(background);
-            } else {
-                qWarning() << "get current workspace background error: " << call.error().message();
-            }
-        });
+    auto updateBackground = [this] (const QString &uri) {
+        const QString background = QUrl(uri).toLocalFile();
+        setBackground(background);
     };
 
-    callback(0, 0);
-    connect(m_wmInter, &__wm::WorkspaceSwitched, callback);
+    connect(m_backgroundManager, &BackgroundManager::currentWorkspaceBackgroundChanged, updateBackground);
+    updateBackground(m_backgroundManager->currentWorkspaceBackground());
 }
 
 // FIXME:

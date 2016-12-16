@@ -26,10 +26,9 @@
 
 #include <dboxwidget.h>
 
-#include <com_deepin_wm.h>
-
 DWIDGET_USE_NAMESPACE
 
+class BackgroundManager;
 class DBusLauncherService;
 class MainFrame : public BoxFrame
 {
@@ -113,8 +112,8 @@ private:
     double rightMarginRation = 1;
     DisplayMode m_displayMode = Search;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
-    com::deepin::wm *m_wmInter;
     QGSettings *m_launcherGsettings;
+    BackgroundManager *m_backgroundManager;
 
     DBusDisplay *m_displayInter;
 

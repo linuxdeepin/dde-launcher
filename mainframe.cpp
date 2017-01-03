@@ -467,12 +467,9 @@ void MainFrame::initUI()
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
 
     // setup background.
-    auto updateBackground = [this] (const QString &uri) {
-        const QString background = QUrl(uri).toLocalFile();
-        setBackground(background);
-    };
+    auto updateBackground = [this] (const QString &uri) { setBackground(uri); };
 
-    connect(m_backgroundManager, &BackgroundManager::currentWorkspaceBackgroundChanged, updateBackground);
+    connect(m_backgroundManager, &BackgroundManager::currentWorkspaceBackgroundChanged, this, updateBackground);
     updateBackground(m_backgroundManager->currentWorkspaceBackground());
 }
 

@@ -28,6 +28,7 @@ void iconThemeChanged(GtkSettings *gsettings, GParamSpec *pspec, gpointer udata)
 
 int main(int argv, char *args[])
 {
+    DApplication::loadDXcbPlugin();
     DApplication app(argv, args);
     app.setQuitOnLastWindowClosed(false);
     app.setOrganizationName("deepin");

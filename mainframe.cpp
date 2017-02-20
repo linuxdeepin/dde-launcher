@@ -12,6 +12,7 @@
 #include <QScrollBar>
 #include <QKeyEvent>
 #include <QGraphicsEffect>
+#include <QProcess>
 
 #include <ddialog.h>
 
@@ -172,7 +173,6 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
     {
 #ifdef QT_DEBUG
     case Qt::Key_Control:       scrollToCategory(AppsListModel::Internet);      return;
-    case Qt::Key_F1:            updateDisplayMode(AllApps);                     return;
     case Qt::Key_F2:            updateDisplayMode(GroupByCategory);             return;
     case Qt::Key_Plus:          m_calcUtil->increaseIconSize();
                                 emit m_appsManager->layoutChanged(AppsListModel::All);
@@ -187,6 +187,7 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
                                 emit m_appsManager->layoutChanged(AppsListModel::All);
                                                                                 return;
 #endif
+    case Qt::Key_F1: QProcess::startDetached("dman dde");                       return;
     case Qt::Key_Enter:
     case Qt::Key_Return:        launchCurrentApp();                             return;
     case Qt::Key_Escape:        hide();                                         return;

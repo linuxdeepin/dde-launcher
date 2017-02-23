@@ -40,7 +40,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setPen(Qt::white);
     painter->setBrush(QBrush(Qt::transparent));
 
-    const int leftMargin = 2, radius = 3;
+    const int leftMargin = 2, radius = 10;
     const int fontPixelSize = index.data(AppsListModel::AppFontSizeRole).value<int>();
     const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();
     const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
@@ -50,7 +50,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // draw focus background
    if (CurrentIndex == index && !(option.features & QStyleOptionViewItem::HasDisplay))
     {
-        const QColor borderColor(255, 255, 255, 52);
+        const QColor borderColor(245, 245, 245, 0.01 * 255);
         const QColor brushColor(0, 0, 0, 105);
 
         QPen pen;

@@ -27,6 +27,11 @@ int CalculateUtil::calculateBesidePadding(const int screenWidth)
 
 void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int dockPosition)
 {
+    // NOTE(hualet): DPI default to 96.
+    static auto PtToPx = [] (float pt) -> int {
+        return pt * 96 / 72.0;
+    };
+
     const int screenWidth = qApp->primaryScreen()->geometry().width();
     const int column = screenWidth <= 800 ? 5 : screenWidth <= 1024 && dockPosition == 3 ? 6 : 7;
 
@@ -50,7 +55,8 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     m_appIconSize = itemIconWidth(m_appItemWidth);
 
     // calculate font size;
-    m_appItemFontSize = m_appItemWidth >= 130 ? 13 : m_appItemWidth <= 80 ? 11 : 13;
+    QFont systemFont;
+    m_appItemFontSize = m_appItemWidth <= 80 ? 11 : PtToPx(systemFont.pointSizeF());
 
     emit layoutChanged();
 }

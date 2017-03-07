@@ -28,13 +28,13 @@ int CalculateUtil::calculateBesidePadding(const int screenWidth)
 void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int dockPosition)
 {
     const int screenWidth = qApp->primaryScreen()->geometry().width();
-    const int column = screenWidth <= 800 ? 5 : screenWidth <= 1024 && dockPosition == 3 ? 6 : 7;
+    const int column = screenWidth <= 1100 ? 4 : screenWidth <= 1500 ? 5 : screenWidth <= 1700 ? 6 : 7;
 
     calculateTextSize(screenWidth);
 
     // calculate item size;
     int spacing = itemSpacing(containerSize.width());
-    int itemWidth = 140;
+    int itemWidth = screenWidth <= 1600 ? 150 : 153;
 
     const int itemCalcWidth = (double(containerSize.width()) - spacing * column * 2) / column + 0.5;
     itemWidth = qMin(itemWidth, itemCalcWidth);
@@ -50,7 +50,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     m_appIconSize = itemIconWidth(m_appItemWidth);
 
     // calculate font size;
-    m_appItemFontSize = m_appItemWidth >= 130 ? 13 : m_appItemWidth <= 80 ? 11 : 13;
+    m_appItemFontSize = m_appItemWidth >= 130 ? 16 : m_appItemWidth <= 80 ? 13 : 14;
 
     emit layoutChanged();
 }

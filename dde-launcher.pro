@@ -49,7 +49,7 @@ system($$PWD/translate_generation.sh)
 
 target.path = /usr/bin
 
-data_files.files = data/*
+data_files.files = data/*.json data/*.conf
 data_files.path = /usr/share/dde-launcher/data
 
 qm_files.files = translations/*.qm
@@ -58,7 +58,10 @@ qm_files.path = /usr/share/dde-launcher/translations
 services.path = /usr/share/dbus-1/services
 services.files = dbusservices/com.deepin.dde.Launcher.service
 
-INSTALLS += target qm_files services data_files
+icons.path = /usr/share/icons/hicolor/scalable/apps
+icons.files = data/*.svg
+
+INSTALLS += target qm_files services data_files icons
 
 RESOURCES += \
     skin.qrc

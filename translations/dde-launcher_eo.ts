@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>Neniu serĉrezulton</translation>
     </message>
 </context>
 <context>
@@ -64,7 +64,7 @@
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Serĉi</translation>
     </message>
 </context>
 </TS>

@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>No se encontraron resultados</translation>
     </message>
 </context>
 <context>

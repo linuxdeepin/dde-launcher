@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>Keine Suchergebnisse</translation>
     </message>
 </context>
 <context>
@@ -22,7 +22,7 @@
     </message>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Sind Sie sicher, dass Sie &quot;%1&quot; deinstallieren möchten?</translation>
+        <translation>Sind Sie sicher, dass Sie %1 deinstallieren möchten?</translation>
     </message>
 </context>
 <context>

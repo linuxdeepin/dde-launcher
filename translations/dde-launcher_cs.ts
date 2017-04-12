@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>Žádné výsledky hledání</translation>
     </message>
 </context>
 <context>

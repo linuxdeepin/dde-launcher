@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>Sen resultados</translation>
     </message>
 </context>
 <context>
@@ -53,7 +53,7 @@
     </message>
     <message>
         <source>Add to startup(_A)</source>
-        <translation>Angadir ao inicio (_G)</translation>
+        <translation>Engadir ao inicio (_G)</translation>
     </message>
     <message>
         <source>Uninstall</source>

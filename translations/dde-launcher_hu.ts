@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>Nincs találat</translation>
     </message>
 </context>
 <context>
@@ -18,11 +18,11 @@
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Konfirmálás</translation>
+        <translation>Megerősítés</translation>
     </message>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Biztos a %1 eltávolításában?</translation>
+        <translation>%1 biztos eltávolítjuk?</translation>
     </message>
 </context>
 <context>
@@ -33,23 +33,23 @@
     </message>
     <message>
         <source>Remove from desktop</source>
-        <translation>Eltávolítás a desktop-ról</translation>
+        <translation>Eltávolítás az asztalról</translation>
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation>Küldés az asztalra (_E)</translation>
+        <translation>Küldés az asztalra(_E)</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Dokkból való eltávolítás</translation>
+        <translation>Eltávolítás a dokkról</translation>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>Dokkra küldve(_C)</translation>
+        <translation>Küldés a dokkra(_C)</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
-        <translation>Eltávolítás az indítópultról (_R)</translation>
+        <translation>Eltávolítás az indítópultról(_R)</translation>
     </message>
     <message>
         <source>Add to startup(_A)</source>

@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>Ingen søgeresultater</translation>
     </message>
 </context>
 <context>
@@ -22,7 +22,7 @@
     </message>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Er du sikker på at du vil afinstallere %1 ?</translation>
+        <translation>Er du sikker på, at du vil afinstallere %1?</translation>
     </message>
 </context>
 <context>
@@ -37,15 +37,15 @@
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation>Gem på skrivebordet(_E)</translation>
+        <translation>Send på skrivebordet(_E)</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Fjern fra Dock</translation>
+        <translation>Fjern fra dok</translation>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>Send til dock(_C)</translation>
+        <translation>Send til dok(_C)</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>

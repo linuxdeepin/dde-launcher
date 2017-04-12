@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>Tiada keputusan gelintar</translation>
     </message>
 </context>
 <context>

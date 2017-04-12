@@ -1,5 +1,12 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="hr" version="2.1">
 <context>
+    <name>AppsManager</name>
+    <message>
+        <source>No search results</source>
+        <translation>Nema rezultata pretrage</translation>
+    </message>
+</context>
+<context>
     <name>MainFrame</name>
     <message>
         <source>All dependencies will be removed together</source>
@@ -15,7 +22,7 @@
     </message>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Jeste li sigurni da želite deinstalirati %1 ?</translation>
     </message>
 </context>
 <context>
@@ -42,7 +49,7 @@
     </message>
     <message>
         <source>Remove from startup(_R)</source>
-        <translation type="unfinished"/>
+        <translation>Makni iz startup(_R)</translation>
     </message>
     <message>
         <source>Add to startup(_A)</source>

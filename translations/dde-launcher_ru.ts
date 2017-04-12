@@ -3,14 +3,14 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>Ничего не найдено</translation>
     </message>
 </context>
 <context>
     <name>MainFrame</name>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Все зависимости будут удалены одновременно</translation>
+        <translation>Все зависимости будут также удалены</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -22,14 +22,14 @@
     </message>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Уверены что хотите удалить %1 ?</translation>
+        <translation>Уверены, что хотите удалить %1 ?</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Open(_O)</source>
-        <translation>Открыть(_O)</translation>
+        <translation>Открыть</translation>
     </message>
     <message>
         <source>Remove from desktop</source>

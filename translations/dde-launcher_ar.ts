@@ -3,14 +3,14 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>لا توجد نتائج للبحث</translation>
     </message>
 </context>
 <context>
     <name>MainFrame</name>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>كل التبعيات ستحذف معا</translation>
+        <translation>كل الاعتماديات سيتم إزالتها معاً</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -22,38 +22,38 @@
     </message>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>هل أنت متأكد من إلغاء تثبيت %1 ?</translation>
+        <translation>هل أنت متأكد من إلغاء تثبيت %1 ؟</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Open(_O)</source>
-        <translation>فتح (_O)</translation>
+        <translation>فتح</translation>
     </message>
     <message>
         <source>Remove from desktop</source>
-        <translation>إزالة من سطح المكتب</translation>
+        <translation>حذف من سطح المكتب</translation>
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation>إرسال إلى سطح المكنب (_E)</translation>
+        <translation>إرسال إلى سطح المكتب</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>حذف من شريط المهام</translation>
+        <translation>حذف من شريط الإرساء</translation>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>إرسال إلى شريط المهام (_C)</translation>
+        <translation>إرسال إلى شريط الإرساء</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
-        <translation>(_R) إزالة من بدء التشغيل</translation>
+        <translation>حذف من بدء التشغيل</translation>
     </message>
     <message>
         <source>Add to startup(_A)</source>
-        <translation> (_A) إضافة إلى بدء التشغيل</translation>
+        <translation> إضافة إلى بدء التشغيل</translation>
     </message>
     <message>
         <source>Uninstall</source>

@@ -3,14 +3,14 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>Nessun risultato</translation>
     </message>
 </context>
 <context>
     <name>MainFrame</name>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Tutte le dipendenze saranno eliminate contemporaneamente</translation>
+        <translation>Tutte le dipendenze saranno eliminate</translation>
     </message>
     <message>
         <source>Cancel</source>

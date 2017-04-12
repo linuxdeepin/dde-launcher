@@ -1,9 +1,16 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="ja" version="2.1">
 <context>
+    <name>AppsManager</name>
+    <message>
+        <source>No search results</source>
+        <translation>検索結果なし</translation>
+    </message>
+</context>
+<context>
     <name>MainFrame</name>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>依存関係にあるものは全て一緒に削除されます</translation>
+        <translation>依存関係にあるものすべてが一緒に削除されます</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -15,38 +22,38 @@
     </message>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>%1 を削除してよろしいですか？</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Open(_O)</source>
-        <translation>(_O)を開いてください</translation>
+        <translation>開く(_O)</translation>
     </message>
     <message>
         <source>Remove from desktop</source>
-        <translation>デスクトップから移動する</translation>
+        <translation>デスクトップから移動</translation>
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation>デスクトップ(_E)に送る</translation>
+        <translation>デスクトップへ送る(_E)</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>ドックから削除</translation>
+        <translation>Dock から削除</translation>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>ドックの送信(_C)</translation>
+        <translation>Dock へ送信(_C)</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
-        <translation type="unfinished"/>
+        <translation>自動起動から削除(_R)</translation>
     </message>
     <message>
         <source>Add to startup(_A)</source>
-        <translation>スタートアップに追加(_A)</translation>
+        <translation>自動起動へ追加(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>

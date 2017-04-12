@@ -3,14 +3,14 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>Нема резултата претраге</translation>
     </message>
 </context>
 <context>
     <name>MainFrame</name>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Све зависности биђе избрисане заједно</translation>
+        <translation>Све зависности биће уклоњене заједно</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -22,42 +22,42 @@
     </message>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Заиста уклонити %1 ?</translation>
+        <translation>Заиста желите да уклоните %1 ?</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Open(_O)</source>
-        <translation>Отворити(_O)</translation>
+        <translation>Отвори(_O)</translation>
     </message>
     <message>
         <source>Remove from desktop</source>
-        <translation>Уклонити са радне површине</translation>
+        <translation>Уклони са радне површине</translation>
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation>Послати на радну површину(_E)</translation>
+        <translation>Пошаљи на радну површ(_E)</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Уклонити са базне станице</translation>
+        <translation>Уклони са дока</translation>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>Послати на базну станицу(_C)</translation>
+        <translation>Пошаљи на док(_C)</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
-        <translation>Уклонити са покретања(_R)</translation>
+        <translation>Уклони из покретања(_R)</translation>
     </message>
     <message>
         <source>Add to startup(_A)</source>
-        <translation>Додати на покретања(_A)</translation>
+        <translation>Додај на покретање(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>Уклони програм</translation>
+        <translation>Деинсталирај</translation>
     </message>
 </context>
 <context>

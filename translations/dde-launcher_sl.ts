@@ -1,70 +1,70 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sl" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>Nenhum resultado de pesquisa</translation>
+        <translation>Ni rezultatov iskanja</translation>
     </message>
 </context>
 <context>
     <name>MainFrame</name>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Todas as dependências serão removidas em conjunto</translation>
+        <translation>Vse odvisnosti bodo odstranjene ob tem</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Prekliči</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>Potrdi</translation>
     </message>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Tem a certeza que quer desinstalar %1 ?</translation>
+        <translation>Res želite odstraniti %1 ?</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Open(_O)</source>
-        <translation>Abrir(_O)</translation>
+        <translation>Odpri(_O)</translation>
     </message>
     <message>
         <source>Remove from desktop</source>
-        <translation>Remover do ambiente de trabalho</translation>
+        <translation>Odstrani z namizja</translation>
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation>Enviar para ambiente de trabalho(_E)</translation>
+        <translation>Pošlji na namizje(_E)</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Remover do dock</translation>
+        <translation>Odsidraj</translation>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>Enviar para o dock(_C)</translation>
+        <translation>Zasidraj(_C)</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
-        <translation>Remover do arranque(_R)</translation>
+        <translation>Odstrani z zagona(_R)</translation>
     </message>
     <message>
         <source>Add to startup(_A)</source>
-        <translation>Adicionar ao arranque(_A)</translation>
+        <translation>Dodaj v zagon(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>Desinstalar</translation>
+        <translation>Odstrani</translation>
     </message>
 </context>
 <context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation>Procurar</translation>
+        <translation>Išči</translation>
     </message>
 </context>
 </TS>

@@ -1,20 +1,20 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ast" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>Nenhum resultado de pesquisa</translation>
+        <translation>Nun hai resultaos de gueta</translation>
     </message>
 </context>
 <context>
     <name>MainFrame</name>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Todas as dependências serão removidas em conjunto</translation>
+        <translation>Toles dependencies desaniciaránse xuntes</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Encaboxar</translation>
     </message>
     <message>
         <source>Confirm</source>
@@ -22,7 +22,7 @@
     </message>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Tem a certeza que quer desinstalar %1 ?</translation>
+        <translation>¿De xuru que quies desinstalar %1?</translation>
     </message>
 </context>
 <context>
@@ -33,27 +33,27 @@
     </message>
     <message>
         <source>Remove from desktop</source>
-        <translation>Remover do ambiente de trabalho</translation>
+        <translation>Desaniciar del escritoriu</translation>
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation>Enviar para ambiente de trabalho(_E)</translation>
+        <translation>Unviar al escritoriu(_E)</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Remover do dock</translation>
+        <translation>Desaniciar de la barra d&apos;anclaxe</translation>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>Enviar para o dock(_C)</translation>
+        <translation>Unviar a la barra d&apos;anclaxe(_C)</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
-        <translation>Remover do arranque(_R)</translation>
+        <translation>Desaniciar del aniciu(_R)</translation>
     </message>
     <message>
         <source>Add to startup(_A)</source>
-        <translation>Adicionar ao arranque(_A)</translation>
+        <translation>Amestar al aniciu(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -64,7 +64,7 @@
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation>Procurar</translation>
+        <translation>Guetar</translation>
     </message>
 </context>
 </TS>

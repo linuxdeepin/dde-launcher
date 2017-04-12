@@ -3,14 +3,14 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>找不到結果</translation>
     </message>
 </context>
 <context>
     <name>MainFrame</name>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>所有相關內容將會一併刪除</translation>
+        <translation>所有依賴的程式也會解除安裝</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -18,42 +18,42 @@
     </message>
     <message>
         <source>Confirm</source>
-        <translation>確定</translation>
+        <translation>解除安裝</translation>
     </message>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>你確定要解除安裝 %1 ?</translation>
+        <translation>確定解除安裝 %1？</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Open(_O)</source>
-        <translation>開啟 (_O)</translation>
+        <translation>開啟</translation>
     </message>
     <message>
         <source>Remove from desktop</source>
-        <translation>從桌面移除</translation>
+        <translation>移除桌面捷徑</translation>
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation>傳送到桌面 (_E)</translation>
+        <translation>建立桌面捷徑</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>從停駐區移除</translation>
+        <translation>移除 Dock 捷徑</translation>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>傳送到停駐區(_C)</translation>
+        <translation>建立 Dock 捷徑</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
-        <translation>從開機啟動中移除 (_R)</translation>
+        <translation>移除開機啟動</translation>
     </message>
     <message>
         <source>Add to startup(_A)</source>
-        <translation>加入開機啟動清單 (_A)</translation>
+        <translation>開機啟動</translation>
     </message>
     <message>
         <source>Uninstall</source>

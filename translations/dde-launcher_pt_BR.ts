@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>Não há resultados de pesquisa</translation>
     </message>
 </context>
 <context>
@@ -22,7 +22,7 @@
     </message>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Você realmente deseja remover %1 ?</translation>
+        <translation>Você realmente deseja excluir %1 ?</translation>
     </message>
 </context>
 <context>
@@ -41,11 +41,11 @@
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Remover do dock</translation>
+        <translation>Remover da dock</translation>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>Enviar para barra</translation>
+        <translation>Enviar para dock</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
@@ -64,7 +64,7 @@
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation>Procurar</translation>
+        <translation>Pesquisar</translation>
     </message>
 </context>
 </TS>

@@ -1,5 +1,12 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="uk" version="2.1">
 <context>
+    <name>AppsManager</name>
+    <message>
+        <source>No search results</source>
+        <translation>Немає результатів пошуку</translation>
+    </message>
+</context>
+<context>
     <name>MainFrame</name>
     <message>
         <source>All dependencies will be removed together</source>

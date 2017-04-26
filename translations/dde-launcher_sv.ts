@@ -7,7 +7,11 @@
     </message>
 </context>
 <context>
-    <name>MainFrame</name>
+    <name>FullScreenFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Är du säker på att avinstallera %1?</translation>
+    </message>
     <message>
         <source>All dependencies will be removed together</source>
         <translation>Alla beroenden kommer att tas bort tillsammans</translation>
@@ -19,10 +23,6 @@
     <message>
         <source>Confirm</source>
         <translation>Bekräfta</translation>
-    </message>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Är du säker på att avinstallera %1?</translation>
     </message>
 </context>
 <context>
@@ -58,6 +58,104 @@
     <message>
         <source>Uninstall</source>
         <translation>Avinstallera</translation>
+    </message>
+</context>
+<context>
+    <name>MiniCategoryWidget</name>
+    <message>
+        <source>All Apps</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Internet</source>
+        <translation>Internet</translation>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation>Chatta</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Musik</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Video</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>Grafik</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>Spel</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>Kontor</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>Läser</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Utveckling</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Systemverktyg</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameNavigation</name>
+    <message>
+        <source>Computer</source>
+        <translation>Dator</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Musik</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Stäng av</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Lås</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Logga ut</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Vänteläge</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Hämtningar</translation>
     </message>
 </context>
 <context>

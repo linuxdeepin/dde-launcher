@@ -7,7 +7,11 @@
     </message>
 </context>
 <context>
-    <name>MainFrame</name>
+    <name>FullScreenFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Désinstaller %1 ?</translation>
+    </message>
     <message>
         <source>All dependencies will be removed together</source>
         <translation>Toutes les dépendances seront supprimées</translation>
@@ -19,10 +23,6 @@
     <message>
         <source>Confirm</source>
         <translation>Confirmer</translation>
-    </message>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Désinstaller %1 ?</translation>
     </message>
 </context>
 <context>
@@ -58,6 +58,104 @@
     <message>
         <source>Uninstall</source>
         <translation>Désinstaller</translation>
+    </message>
+</context>
+<context>
+    <name>MiniCategoryWidget</name>
+    <message>
+        <source>All Apps</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Internet</source>
+        <translation>Internet</translation>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation>Chat</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Musique</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Vidéo</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>Graphisme</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>Jeux</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>Bureautique</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>Lecture</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Développement</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Système</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameNavigation</name>
+    <message>
+        <source>Computer</source>
+        <translation>Ordinateur </translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Musique</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Arrêter</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Verrouiller</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Déconnexion</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Mettre en veille </translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Précédent </translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Téléchargements</translation>
     </message>
 </context>
 <context>

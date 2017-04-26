@@ -7,7 +7,11 @@
     </message>
 </context>
 <context>
-    <name>MainFrame</name>
+    <name>FullScreenFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>%1 -ыг системээс устгахдаа итгэлтэй байна уу?</translation>
+    </message>
     <message>
         <source>All dependencies will be removed together</source>
         <translation>Харьяалагдах сангууд бүгд устана</translation>
@@ -19,10 +23,6 @@
     <message>
         <source>Confirm</source>
         <translation>Батлах</translation>
-    </message>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>%1 -ыг системээс устгахдаа итгэлтэй байна уу?</translation>
     </message>
 </context>
 <context>
@@ -58,6 +58,104 @@
     <message>
         <source>Uninstall</source>
         <translation>Устгах</translation>
+    </message>
+</context>
+<context>
+    <name>MiniCategoryWidget</name>
+    <message>
+        <source>All Apps</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Internet</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Хөгжим</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Видео</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Систем</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameNavigation</name>
+    <message>
+        <source>Computer</source>
+        <translation>Компьютер</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Хөгжим</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Унтраах</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Цоожлох</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Гарах</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Түр зогсоох</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

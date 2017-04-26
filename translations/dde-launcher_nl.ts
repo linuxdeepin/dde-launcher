@@ -7,7 +7,11 @@
     </message>
 </context>
 <context>
-    <name>MainFrame</name>
+    <name>FullScreenFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Weet u zeker dat u %1 wilt deïnstalleren?</translation>
+    </message>
     <message>
         <source>All dependencies will be removed together</source>
         <translation>Alle afhankelijkheden zullen tegelijk worden verwijderd</translation>
@@ -19,10 +23,6 @@
     <message>
         <source>Confirm</source>
         <translation>Bevestigen</translation>
-    </message>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Weet u zeker dat u %1 wilt deïnstalleren?</translation>
     </message>
 </context>
 <context>
@@ -58,6 +58,104 @@
     <message>
         <source>Uninstall</source>
         <translation>Deïnstalleren</translation>
+    </message>
+</context>
+<context>
+    <name>MiniCategoryWidget</name>
+    <message>
+        <source>All Apps</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Internet</source>
+        <translation>Internet</translation>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation>Chat</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Muziek</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Video</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>Grafisch</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>Spellen</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>Kantoor</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>Lezen</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Ontwikkeling</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Systeem</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameNavigation</name>
+    <message>
+        <source>Computer</source>
+        <translation>Computer</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Muziek</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Afsluiten</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Vergrendelen</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Uitloggen</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Herstarten</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Onderbreken</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Terug</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Downloads</translation>
     </message>
 </context>
 <context>

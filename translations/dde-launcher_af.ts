@@ -1,63 +1,63 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ast" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="af" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>Nun hai resultaos de gueta</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>¿De xuru que quies desinstalar %1?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Toles dependencies desaniciaránse xuntes</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Encaboxar</translation>
+        <translation>Kanselleer</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>Bevestig</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Open(_O)</source>
-        <translation>Abrir(_O)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Remove from desktop</source>
-        <translation>Desaniciar del escritoriu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation>Unviar al escritoriu(_E)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Desaniciar de la barra d&apos;anclaxe</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>Unviar a la barra d&apos;anclaxe(_C)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
-        <translation>Desaniciar del aniciu(_R)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Add to startup(_A)</source>
-        <translation>Amestar al aniciu(_A)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>Desinstalar</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -68,74 +68,74 @@
     </message>
     <message>
         <source>Internet</source>
-        <translation>Internet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chat</source>
-        <translation>Charra</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Música</translation>
+        <translation>Musiek</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation>Videu</translation>
+        <translation>Video</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Gráficos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Game</source>
-        <translation>Xuegos</translation>
+        <translation>Speletjies</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation>Oficina</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reading</source>
-        <translation>Llectura</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Development</source>
-        <translation>Desendolcu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System</source>
-        <translation>Sistema</translation>
+        <translation>Stelsel</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
         <source>Computer</source>
-        <translation>Ordenador</translation>
+        <translation>Rekenaar</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Música</translation>
+        <translation>Musiek</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Apagar</translation>
+        <translation>Afskakel</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Bloquiar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Zarrar sesión</translation>
+        <translation>Uitteken</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Reaniciar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspender</translation>
+        <translation>Opskort</translation>
     </message>
     <message>
         <source>Back</source>
@@ -155,14 +155,14 @@
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Descargues</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation>Guetar</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

@@ -7,7 +7,11 @@
     </message>
 </context>
 <context>
-    <name>MainFrame</name>
+    <name>FullScreenFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Jeste li sigurni da želite deinstalirati %1 ?</translation>
+    </message>
     <message>
         <source>All dependencies will be removed together</source>
         <translation>Sve će zavisnosti biti uklonjene zajedno</translation>
@@ -19,10 +23,6 @@
     <message>
         <source>Confirm</source>
         <translation>Potvrdi</translation>
-    </message>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Jeste li sigurni da želite deinstalirati %1 ?</translation>
     </message>
 </context>
 <context>
@@ -58,6 +58,104 @@
     <message>
         <source>Uninstall</source>
         <translation>Deinstaliraj</translation>
+    </message>
+</context>
+<context>
+    <name>MiniCategoryWidget</name>
+    <message>
+        <source>All Apps</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Internet</source>
+        <translation>Internet</translation>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation>Razgovor</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Glazba</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Video</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>Grafika</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>Igra</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>Ured</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>Čitanje</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Razvojni alati</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Sustav</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameNavigation</name>
+    <message>
+        <source>Computer</source>
+        <translation>Računalo</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Glazba</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Isključi</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Zaključaj</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Odjava</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Suspendiraj</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Natrag</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Preuzimanja</translation>
     </message>
 </context>
 <context>

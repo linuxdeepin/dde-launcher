@@ -7,7 +7,11 @@
     </message>
 </context>
 <context>
-    <name>MainFrame</name>
+    <name>FullScreenFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>%1 നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?</translation>
+    </message>
     <message>
         <source>All dependencies will be removed together</source>
         <translation type="unfinished"/>
@@ -19,10 +23,6 @@
     <message>
         <source>Confirm</source>
         <translation>ഉറപ്പാക്കുക</translation>
-    </message>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>%1 നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?</translation>
     </message>
 </context>
 <context>
@@ -58,6 +58,104 @@
     <message>
         <source>Uninstall</source>
         <translation>നീക്കം ചെയ്യുക</translation>
+    </message>
+</context>
+<context>
+    <name>MiniCategoryWidget</name>
+    <message>
+        <source>All Apps</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Internet</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>സംഗീതം</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>ചലച്ചിത്രം</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>സിസ്റ്റം</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameNavigation</name>
+    <message>
+        <source>Computer</source>
+        <translation>കമ്പ്യൂട്ടർ</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>സംഗീതം</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>ഷട്ട്ഡൗൺ</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

@@ -7,7 +7,11 @@
     </message>
 </context>
 <context>
-    <name>MainFrame</name>
+    <name>FullScreenFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>በ እርግጥ ማጥፋት ይፈልጋሉ %1 ?</translation>
+    </message>
     <message>
         <source>All dependencies will be removed together</source>
         <translation>ሁሉም ጥገኞች ይወገዳሉ</translation>
@@ -19,10 +23,6 @@
     <message>
         <source>Confirm</source>
         <translation>ማረጋገጫ</translation>
-    </message>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>በ እርግጥ ማጥፋት ይፈልጋሉ %1 ?</translation>
     </message>
 </context>
 <context>
@@ -58,6 +58,104 @@
     <message>
         <source>Uninstall</source>
         <translation>ማጥፊያ</translation>
+    </message>
+</context>
+<context>
+    <name>MiniCategoryWidget</name>
+    <message>
+        <source>All Apps</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Internet</source>
+        <translation>ኢንተርኔት</translation>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation>ውይይት</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>ሙዚቃ</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>ቪዲዮ</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>ንድፎች</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>ጨዋታ</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>ቢሮ</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>ማንበቢያ</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>አበልጻጊ</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>ስርአት</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameNavigation</name>
+    <message>
+        <source>Computer</source>
+        <translation>ኮምፒዩተር</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>ሙዚቃ</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>ማጥፊያ</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>መቆለፊያ</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>መውጫ</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>ማገጃ</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>የወረዱ</translation>
     </message>
 </context>
 <context>

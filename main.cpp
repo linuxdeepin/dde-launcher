@@ -1,7 +1,7 @@
 
 #include <gtk/gtk.h>
 
-#include "mainframe.h"
+#include "fullscreenframe.h"
 #include "dbuslauncherframe.h"
 #include "model/appsmanager.h"
 #include "dbusservices/dbuslauncherservice.h"
@@ -81,7 +81,7 @@ int main(int argv, char *args[])
     translator.load("/usr/share/dde-launcher/translations/dde-launcher_" +
                     QLocale::system().name() + ".qm");
     app.installTranslator(&translator);
-    MainFrame launcher;
+    FullScreenFrame launcher;
     DBusLauncherService service(&launcher);
     Q_UNUSED(service);
     QDBusConnection connection = QDBusConnection::sessionBus();

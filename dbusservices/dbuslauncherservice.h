@@ -12,7 +12,7 @@
 #ifndef DBUSLAUNCHERSERVICE_H_1458107102
 #define DBUSLAUNCHERSERVICE_H_1458107102
 
-#include "../mainframe.h"
+#include "../fullscreenframe.h"
 
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
@@ -51,11 +51,11 @@ class DBusLauncherService: public QDBusAbstractAdaptor
 "  </interface>\n"
         "")
 public:
-    explicit DBusLauncherService(MainFrame *parent);
+    explicit DBusLauncherService(FullScreenFrame *parent);
     virtual ~DBusLauncherService();
 
-    inline MainFrame *parent() const
-    { return static_cast<MainFrame *>(QObject::parent()); }
+    inline FullScreenFrame *parent() const
+    { return static_cast<FullScreenFrame *>(QObject::parent()); }
 
 public: // PROPERTIES
 public Q_SLOTS: // METHODS

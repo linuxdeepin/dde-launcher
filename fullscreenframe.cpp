@@ -1,5 +1,5 @@
 
-#include "mainframe.h"
+#include "fullscreenframe.h"
 #include "global_util/constants.h"
 #include "global_util/xcb_misc.h"
 #include "backgroundmanager.h"
@@ -21,7 +21,7 @@ static const QString DisplayModeKey = "display-mode";
 static const QString DisplayModeFree = "free";
 static const QString DisplayModeCategory = "category";
 
-MainFrame::MainFrame(QWidget *parent) :
+FullScreenFrame::FullScreenFrame(QWidget *parent) :
     BoxFrame(parent),
     m_launcherGsettings(new QGSettings("com.deepin.dde.launcher",
                                        "/com/deepin/dde/launcher/", this)),
@@ -98,27 +98,27 @@ MainFrame::MainFrame(QWidget *parent) :
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
 }
 
-void MainFrame::exit()
+void FullScreenFrame::exit()
 {
     qApp->quit();
 }
 
-void MainFrame::uninstallApp(const QString &appKey)
+void FullScreenFrame::uninstallApp(const QString &appKey)
 {
     showPopupUninstallDialog(m_allAppsModel->indexAt(appKey));
 }
 
-void MainFrame::showByMode(const qlonglong mode)
+void FullScreenFrame::showByMode(const qlonglong mode)
 {
     qDebug() << mode;
 }
 
-int MainFrame::dockPosition()
+int FullScreenFrame::dockPosition()
 {
     return m_appsManager->dockPosition();
 }
 
-void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
+void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &category)
 {
     QWidget *dest = categoryView(category);
 
@@ -136,7 +136,7 @@ void MainFrame::scrollToCategory(const AppsListModel::AppCategory &category)
     m_scrollAnimation->start();
 }
 
-void MainFrame::showTips(const QString &tips)
+void FullScreenFrame::showTips(const QString &tips)
 {
     if (m_displayMode != Search)
         return;
@@ -149,12 +149,12 @@ void MainFrame::showTips(const QString &tips)
     m_tipsLabel->raise();
 }
 
-void MainFrame::hideTips()
+void FullScreenFrame::hideTips()
 {
     m_tipsLabel->setVisible(false);
 }
 
-void MainFrame::resizeEvent(QResizeEvent *e)
+void FullScreenFrame::resizeEvent(QResizeEvent *e)
 {
     const int screenWidth = e->size().width();
 
@@ -166,7 +166,7 @@ void MainFrame::resizeEvent(QResizeEvent *e)
     QFrame::resizeEvent(e);
 }
 
-void MainFrame::keyPressEvent(QKeyEvent *e)
+void FullScreenFrame::keyPressEvent(QKeyEvent *e)
 {
     bool ctrlPressed = e->modifiers() & Qt::ControlModifier;
     switch (e->key())
@@ -232,7 +232,7 @@ void MainFrame::keyPressEvent(QKeyEvent *e)
     }
 }
 
-void MainFrame::showEvent(QShowEvent *e)
+void FullScreenFrame::showEvent(QShowEvent *e)
 {
     m_delayHideTimer->stop();
     m_searchWidget->clearSearchContent();
@@ -252,7 +252,7 @@ void MainFrame::showEvent(QShowEvent *e)
     });
 }
 
-void MainFrame::mouseReleaseEvent(QMouseEvent *e)
+void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
 {
     QFrame::mouseReleaseEvent(e);
     if (e->button() == Qt::RightButton) {
@@ -261,7 +261,7 @@ void MainFrame::mouseReleaseEvent(QMouseEvent *e)
     hide();
 }
 
-void MainFrame::wheelEvent(QWheelEvent *e)
+void FullScreenFrame::wheelEvent(QWheelEvent *e)
 {
     auto shouldPostWheelEvent = [this, e]() -> bool {
         bool inAppArea = m_appsArea->geometry().contains(e->pos());
@@ -280,7 +280,7 @@ void MainFrame::wheelEvent(QWheelEvent *e)
     }
 }
 
-void MainFrame::paintEvent(QPaintEvent *e)
+void FullScreenFrame::paintEvent(QPaintEvent *e)
 {
     QFrame::paintEvent(e);
 
@@ -290,7 +290,7 @@ void MainFrame::paintEvent(QPaintEvent *e)
     //    painter.drawRect(rect());
 }
 
-bool MainFrame::event(QEvent *e)
+bool FullScreenFrame::event(QEvent *e)
 {
     if (e->type() == QEvent::WindowDeactivate && isVisible() && !m_menuWorker->isMenuShown() && !m_isConfirmDialogShown)
         m_delayHideTimer->start();
@@ -298,7 +298,7 @@ bool MainFrame::event(QEvent *e)
     return QFrame::event(e);
 }
 
-bool MainFrame::eventFilter(QObject *o, QEvent *e)
+bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
 {
     if (o == m_searchWidget->edit() && e->type() == QEvent::KeyPress)
     {
@@ -325,7 +325,7 @@ bool MainFrame::eventFilter(QObject *o, QEvent *e)
     return false;
 }
 
-void MainFrame::initUI()
+void FullScreenFrame::initUI()
 {
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setFixedSize(200, 50);
@@ -475,7 +475,7 @@ void MainFrame::initUI()
 }
 
 // FIXME:
-void MainFrame::showGradient() {
+void FullScreenFrame::showGradient() {
         QPoint topLeft = m_appsArea->mapTo(this,
                                            QPoint(0, 0));
         QSize topSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
@@ -503,7 +503,7 @@ void MainFrame::showGradient() {
         m_bottomGradient->raise();
 }
 
-void MainFrame::refreshTitleVisible()
+void FullScreenFrame::refreshTitleVisible()
 {
     QWidget *widget = qobject_cast<QWidget *>(sender());
     if (!widget)
@@ -518,7 +518,7 @@ void MainFrame::refreshTitleVisible()
     refershCurrentFloatTitle();
 }
 
-void MainFrame::refershCategoryTextVisible()
+void FullScreenFrame::refershCategoryTextVisible()
 {
     const QPoint pos = QCursor::pos() - this->pos();
     const bool shownAppList = m_navigationWidget->geometry().right() < pos.x();
@@ -539,7 +539,7 @@ void MainFrame::refershCategoryTextVisible()
     m_othersTitle->setTextVisible(shownAppList, true);
 }
 
-void MainFrame::refershCurrentFloatTitle()
+void FullScreenFrame::refershCurrentFloatTitle()
 {
     if (m_displayMode != GroupByCategory)
         return m_floatTitle->setVisible(false);
@@ -554,7 +554,7 @@ void MainFrame::refershCurrentFloatTitle()
                              sourceTitle->visibleRegion().boundingRect().height() < 20);
 }
 
-CategoryTitleWidget *MainFrame::categoryTitle(const AppsListModel::AppCategory category) const
+CategoryTitleWidget *FullScreenFrame::categoryTitle(const AppsListModel::AppCategory category) const
 {
     CategoryTitleWidget *dest = nullptr;
 
@@ -577,7 +577,7 @@ CategoryTitleWidget *MainFrame::categoryTitle(const AppsListModel::AppCategory c
     return dest;
 }
 
-AppListView *MainFrame::categoryView(const AppsListModel::AppCategory category) const
+AppListView *FullScreenFrame::categoryView(const AppsListModel::AppCategory category) const
 {
     AppListView *view = nullptr;
 
@@ -600,7 +600,7 @@ AppListView *MainFrame::categoryView(const AppsListModel::AppCategory category) 
     return view;
 }
 
-AppListView *MainFrame::lastVisibleView() const
+AppListView *FullScreenFrame::lastVisibleView() const
 {
     if (!m_appsManager->appsInfoList(AppsListModel::Others).isEmpty())
         return m_othersView;
@@ -628,23 +628,23 @@ AppListView *MainFrame::lastVisibleView() const
     return nullptr;
 }
 
-void MainFrame::initConnection()
+void FullScreenFrame::initConnection()
 {
-    connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &MainFrame::updateGeometry);
-    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &MainFrame::updateGeometry);
+    connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &FullScreenFrame::updateGeometry);
+    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &FullScreenFrame::updateGeometry);
 
-    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &MainFrame::layoutChanged, Qt::QueuedConnection);
+    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
 
-    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &MainFrame::ensureScrollToDest);
-    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &MainFrame::refershCurrentFloatTitle, Qt::QueuedConnection);
-    connect(m_navigationWidget, &NavigationWidget::scrollToCategory, this, &MainFrame::scrollToCategory);
-    connect(this, &MainFrame::currentVisibleCategoryChanged, m_navigationWidget, &NavigationWidget::setCurrentCategory);
-    connect(this, &MainFrame::categoryAppNumsChanged, m_navigationWidget, &NavigationWidget::refershCategoryVisible);
-    connect(this, &MainFrame::categoryAppNumsChanged, this, &MainFrame::refershCategoryVisible);
-    connect(this, &MainFrame::displayModeChanged, this, &MainFrame::checkCategoryVisible);
-    connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &MainFrame::searchTextChanged);
-    connect(m_delayHideTimer, &QTimer::timeout, this, &MainFrame::hide);
-    connect(this, &MainFrame::backgroundChanged, this, static_cast<void (MainFrame::*)()>(&MainFrame::update));
+    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullScreenFrame::ensureScrollToDest);
+    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &FullScreenFrame::refershCurrentFloatTitle, Qt::QueuedConnection);
+    connect(m_navigationWidget, &NavigationWidget::scrollToCategory, this, &FullScreenFrame::scrollToCategory);
+    connect(this, &FullScreenFrame::currentVisibleCategoryChanged, m_navigationWidget, &NavigationWidget::setCurrentCategory);
+    connect(this, &FullScreenFrame::categoryAppNumsChanged, m_navigationWidget, &NavigationWidget::refershCategoryVisible);
+    connect(this, &FullScreenFrame::categoryAppNumsChanged, this, &FullScreenFrame::refershCategoryVisible);
+    connect(this, &FullScreenFrame::displayModeChanged, this, &FullScreenFrame::checkCategoryVisible);
+    connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
+    connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hide);
+    connect(this, &FullScreenFrame::backgroundChanged, this, static_cast<void (FullScreenFrame::*)()>(&FullScreenFrame::update));
 
     // auto scroll when drag to app list box border
     connect(m_allAppsView, &AppListView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
@@ -662,18 +662,18 @@ void MainFrame::initConnection()
             m_autoScrollTimer->start();
     });
 
-    connect(m_allAppsView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
-    connect(m_internetView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
-    connect(m_chatView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
-    connect(m_musicView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
-    connect(m_videoView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
-    connect(m_graphicsView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
-    connect(m_gameView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
-    connect(m_officeView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
-    connect(m_readingView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
-    connect(m_developmentView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
-    connect(m_systemView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
-    connect(m_othersView, &AppListView::popupMenuRequested, this, &MainFrame::showPopupMenu);
+    connect(m_allAppsView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_internetView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_chatView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_musicView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_videoView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_graphicsView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_gameView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_officeView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_readingView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_developmentView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_systemView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_othersView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
 
 //    connect(m_allAppsView, &AppListView::appBeDraged, m_appsManager, &AppsManager::handleDragedApp);
 //    connect(m_allAppsView, &AppListView::appDropedIn, m_appsManager, &AppsManager::handleDropedApp);
@@ -705,18 +705,18 @@ void MainFrame::initConnection()
     connect(m_systemView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
     connect(m_othersView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
 
-    connect(m_allAppsView, &AppListView::clicked, this, &MainFrame::hide);
-    connect(m_internetView, &AppListView::clicked, this, &MainFrame::hide);
-    connect(m_chatView, &AppListView::clicked, this, &MainFrame::hide);
-    connect(m_musicView, &AppListView::clicked, this, &MainFrame::hide);
-    connect(m_videoView, &AppListView::clicked, this, &MainFrame::hide);
-    connect(m_graphicsView, &AppListView::clicked, this, &MainFrame::hide);
-    connect(m_gameView, &AppListView::clicked, this, &MainFrame::hide);
-    connect(m_officeView, &AppListView::clicked, this, &MainFrame::hide);
-    connect(m_readingView, &AppListView::clicked, this, &MainFrame::hide);
-    connect(m_developmentView, &AppListView::clicked, this, &MainFrame::hide);
-    connect(m_systemView, &AppListView::clicked, this, &MainFrame::hide);
-    connect(m_othersView, &AppListView::clicked, this, &MainFrame::hide);
+    connect(m_allAppsView, &AppListView::clicked, this, &FullScreenFrame::hide);
+    connect(m_internetView, &AppListView::clicked, this, &FullScreenFrame::hide);
+    connect(m_chatView, &AppListView::clicked, this, &FullScreenFrame::hide);
+    connect(m_musicView, &AppListView::clicked, this, &FullScreenFrame::hide);
+    connect(m_videoView, &AppListView::clicked, this, &FullScreenFrame::hide);
+    connect(m_graphicsView, &AppListView::clicked, this, &FullScreenFrame::hide);
+    connect(m_gameView, &AppListView::clicked, this, &FullScreenFrame::hide);
+    connect(m_officeView, &AppListView::clicked, this, &FullScreenFrame::hide);
+    connect(m_readingView, &AppListView::clicked, this, &FullScreenFrame::hide);
+    connect(m_developmentView, &AppListView::clicked, this, &FullScreenFrame::hide);
+    connect(m_systemView, &AppListView::clicked, this, &FullScreenFrame::hide);
+    connect(m_othersView, &AppListView::clicked, this, &FullScreenFrame::hide);
 
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_allAppsView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_internetView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
@@ -731,24 +731,34 @@ void MainFrame::initConnection()
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_systemView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
     connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_othersView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
 
-    connect(m_appsArea, &AppListArea::mouseEntered, this, &MainFrame::refreshTitleVisible);
-    connect(m_navigationWidget, &NavigationWidget::mouseEntered, this, &MainFrame::refreshTitleVisible);
+    connect(m_appsArea, &AppListArea::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
+    connect(m_navigationWidget, &NavigationWidget::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
 
-    connect(m_menuWorker, &MenuWorker::quitLauncher, this, &MainFrame::hide);
-    connect(m_menuWorker, &MenuWorker::unInstallApp, this, &MainFrame::showPopupUninstallDialog);
+    connect(m_menuWorker, &MenuWorker::quitLauncher, this, &FullScreenFrame::hide);
+    connect(m_menuWorker, &MenuWorker::unInstallApp, this, &FullScreenFrame::showPopupUninstallDialog);
     connect(m_navigationWidget, &NavigationWidget::toggleMode, [this]{
         m_searchWidget->clearFocus();
         m_searchWidget->clearSearchContent();
         updateDisplayMode(m_displayMode == GroupByCategory ? AllApps : GroupByCategory);
     });
 
-    connect(m_appsManager, &AppsManager::updateCategoryView, this, &MainFrame::checkCategoryVisible);
-    connect(m_appsManager, &AppsManager::requestTips, this, &MainFrame::showTips);
-    connect(m_appsManager, &AppsManager::requestHideTips, this, &MainFrame::hideTips);
-    connect(m_appsManager, &AppsManager::dockPositionChanged, this, &MainFrame::updateDockPosition);
+    connect(m_appsManager, &AppsManager::updateCategoryView, this, &FullScreenFrame::checkCategoryVisible);
+    connect(m_appsManager, &AppsManager::requestTips, this, &FullScreenFrame::showTips);
+    connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
+    connect(m_appsManager, &AppsManager::dockPositionChanged, this, &FullScreenFrame::updateDockPosition);
 }
 
-void MainFrame::updateGeometry()
+void FullScreenFrame::showLauncher()
+{
+
+}
+
+void FullScreenFrame::hideLauncher()
+{
+
+}
+
+void FullScreenFrame::updateGeometry()
 {
     const QRect rect = m_displayInter->primaryRect();
     setFixedSize(rect.size());
@@ -759,7 +769,7 @@ void MainFrame::updateGeometry()
     QFrame::updateGeometry();
 }
 
-void MainFrame::moveCurrentSelectApp(const int key)
+void FullScreenFrame::moveCurrentSelectApp(const int key)
 {
     const QModelIndex currentIndex = m_appItemDelegate->currentIndex();
 //    const AppsListModel::AppCategory indexMode = currentIndex.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
@@ -846,7 +856,7 @@ void MainFrame::moveCurrentSelectApp(const int key)
     update();
 }
 
-void MainFrame::launchCurrentApp()
+void FullScreenFrame::launchCurrentApp()
 {
     const QModelIndex &index = m_appItemDelegate->currentIndex();
 
@@ -875,7 +885,7 @@ void MainFrame::launchCurrentApp()
     hide();
 }
 
-void MainFrame::checkCategoryVisible()
+void FullScreenFrame::checkCategoryVisible()
 {
     if (m_displayMode != GroupByCategory)
         return m_floatTitle->setVisible(false);
@@ -893,7 +903,7 @@ void MainFrame::checkCategoryVisible()
     emit categoryAppNumsChanged(AppsListModel::Others, m_appsManager->appNums(AppsListModel::Others));
 }
 
-void MainFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
+void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
 {
     qDebug() << "show menu" << pos << context << context.data(AppsListModel::AppNameRole).toString()
              << "app key:" << context.data(AppsListModel::AppKeyRole).toString();
@@ -901,7 +911,7 @@ void MainFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
     m_menuWorker->showMenuByAppItem(context, pos);
 }
 
-void MainFrame::showPopupUninstallDialog(const QModelIndex &context)
+void FullScreenFrame::showPopupUninstallDialog(const QModelIndex &context)
 {
     m_isConfirmDialogShown = true;
 
@@ -936,7 +946,7 @@ void MainFrame::showPopupUninstallDialog(const QModelIndex &context)
     m_isConfirmDialogShown = false;
 }
 
-void MainFrame::ensureScrollToDest(const QVariant &value)
+void FullScreenFrame::ensureScrollToDest(const QVariant &value)
 {
     Q_UNUSED(value);
 
@@ -949,7 +959,7 @@ void MainFrame::ensureScrollToDest(const QVariant &value)
         ani->setEndValue(m_scrollDest->y());
 }
 
-void MainFrame::ensureItemVisible(const QModelIndex &index)
+void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
 {
     AppListView *view = nullptr;
     const AppsListModel::AppCategory category = index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
@@ -967,7 +977,7 @@ void MainFrame::ensureItemVisible(const QModelIndex &index)
     refershCurrentFloatTitle();
 }
 
-void MainFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
+void FullScreenFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
 {
     if (m_displayMode != GroupByCategory)
         return;
@@ -981,7 +991,7 @@ void MainFrame::refershCategoryVisible(const AppsListModel::AppCategory category
         categoryTitle->setVisible(appNums);
 }
 
-void MainFrame::updateDisplayMode(const DisplayMode mode)
+void FullScreenFrame::updateDisplayMode(const DisplayMode mode)
 {
     if (m_displayMode == mode)
         return;
@@ -1043,7 +1053,7 @@ void MainFrame::updateDisplayMode(const DisplayMode mode)
     emit displayModeChanged(m_displayMode);
 }
 
-void MainFrame::updateCurrentVisibleCategory()
+void FullScreenFrame::updateCurrentVisibleCategory()
 {
     if (m_displayMode != GroupByCategory)
         return;
@@ -1083,7 +1093,7 @@ void MainFrame::updateCurrentVisibleCategory()
     emit currentVisibleCategoryChanged(m_currentCategory);
 }
 
-void MainFrame::updatePlaceholderSize()
+void FullScreenFrame::updatePlaceholderSize()
 {
     const AppListView *view = lastVisibleView();
     Q_ASSERT(view);
@@ -1091,13 +1101,13 @@ void MainFrame::updatePlaceholderSize()
     m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - view->height() - DLauncher::APPS_AREA_BOTTOM_MARGIN);
 }
 
-void MainFrame::updateDockPosition()
+void FullScreenFrame::updateDockPosition()
 {
     m_calcUtil->calculateAppLayout(m_appsArea->size(), m_appsManager->dockPosition());
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
 }
 
-MainFrame::DisplayMode MainFrame::getDisplayMode()
+FullScreenFrame::DisplayMode FullScreenFrame::getDisplayMode()
 {
     QString displayMode = m_launcherGsettings->get(DisplayModeKey).toString();
 
@@ -1108,7 +1118,7 @@ MainFrame::DisplayMode MainFrame::getDisplayMode()
     return AllApps;
 }
 
-AppsListModel *MainFrame::nextCategoryModel(const AppsListModel *currentModel)
+AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentModel)
 {
     if (currentModel == nullptr)
         return m_internetModel;
@@ -1138,7 +1148,7 @@ AppsListModel *MainFrame::nextCategoryModel(const AppsListModel *currentModel)
     return nullptr;
 }
 
-AppsListModel *MainFrame::prevCategoryModel(const AppsListModel *currentModel)
+AppsListModel *FullScreenFrame::prevCategoryModel(const AppsListModel *currentModel)
 {
     if (currentModel == m_internetModel)
         return nullptr;
@@ -1166,7 +1176,7 @@ AppsListModel *MainFrame::prevCategoryModel(const AppsListModel *currentModel)
     return nullptr;
 }
 
-void MainFrame::layoutChanged()
+void FullScreenFrame::layoutChanged()
 {
     const int appsContentWidth = m_appsArea->width();
 
@@ -1186,7 +1196,7 @@ void MainFrame::layoutChanged()
     m_floatTitle->move(m_appsArea->pos().x(), m_appsArea->y() - m_floatTitle->height() + 20);
 }
 
-void MainFrame::searchTextChanged(const QString &keywords)
+void FullScreenFrame::searchTextChanged(const QString &keywords)
 {
     m_appsManager->searchApp(keywords);
 

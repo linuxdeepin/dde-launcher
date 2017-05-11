@@ -23,7 +23,7 @@
  * Implementation of adaptor class DBusLauncherService
  */
 
-DBusLauncherService::DBusLauncherService(MainFrame *parent)
+DBusLauncherService::DBusLauncherService(FullScreenFrame *parent)
     : QDBusAbstractAdaptor(parent)
 {
     // constructor

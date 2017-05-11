@@ -5,6 +5,7 @@
 #include "searchwidget.h"
 #include "navigationwidget.h"
 #include "categorytitlewidget.h"
+#include "launcherinterface.h"
 #include "delegate/appitemdelegate.h"
 #include "global_util/util.h"
 #include "global_util/calculate_util.h"
@@ -30,7 +31,7 @@ DWIDGET_USE_NAMESPACE
 
 class BackgroundManager;
 class DBusLauncherService;
-class MainFrame : public BoxFrame
+class FullScreenFrame : public BoxFrame, public LauncherInterface
 {
     Q_OBJECT
     Q_PROPERTY(int dockPosition READ dockPosition DESIGNABLE true)
@@ -43,7 +44,7 @@ public:
     };
 
 public:
-    explicit MainFrame(QWidget *parent = 0);
+    explicit FullScreenFrame(QWidget *parent = 0);
 
     void exit();
     void uninstallApp(const QString &appKey);
@@ -74,6 +75,8 @@ private:
     void initUI();
     void initConnection();
     void initTimer();
+    void showLauncher();
+    void hideLauncher();
     void updateGeometry();
     void moveCurrentSelectApp(const int key);
     void launchCurrentApp();
@@ -182,6 +185,6 @@ private:
     QVBoxLayout *m_contentLayout;
 };
 
-Q_DECLARE_METATYPE(MainFrame::DisplayMode)
+Q_DECLARE_METATYPE(FullScreenFrame::DisplayMode)
 
 #endif // MAINFRAME_H

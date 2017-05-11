@@ -17,7 +17,6 @@ isEqual(ARCH, mips64) | isEqual(ARCH, mips32) {
 }
 
 SOURCES += \
-    mainframe.cpp \
     model/appslistmodel.cpp \
     model/appsmanager.cpp \
     view/applistview.cpp \
@@ -28,10 +27,11 @@ SOURCES += \
     dbusservices/dbuslauncherservice.cpp \
     main.cpp \
     global_util/calculate_util.cpp \
-    global_util/themeappicon.cpp
+    global_util/themeappicon.cpp \
+    launchersys.cpp \
+    fullscreenframe.cpp
 
 HEADERS += \
-    mainframe.h \
     model/appslistmodel.h \
     model/appsmanager.h \
     view/applistview.h \
@@ -42,7 +42,10 @@ HEADERS += \
     worker/menuworker.h \
     dbusservices/dbuslauncherservice.h \
     global_util/calculate_util.h \
-    global_util/themeappicon.h
+    global_util/themeappicon.h \
+    launchersys.h \
+    launcherinterface.h \
+    fullscreenframe.h
 
 #Automating generation .qm files from .ts files
 system($$PWD/translate_generation.sh)

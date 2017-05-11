@@ -75,8 +75,11 @@ private:
     void initUI();
     void initConnection();
     void initTimer();
+
     void showLauncher();
     void hideLauncher();
+    bool visible();
+
     void updateGeometry();
     void moveCurrentSelectApp(const int key);
     void launchCurrentApp();

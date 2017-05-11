@@ -81,7 +81,7 @@ int main(int argv, char *args[])
     translator.load("/usr/share/dde-launcher/translations/dde-launcher_" +
                     QLocale::system().name() + ".qm");
     app.installTranslator(&translator);
-    FullScreenFrame launcher;
+    LauncherSys launcher;
     DBusLauncherService service(&launcher);
     Q_UNUSED(service);
     QDBusConnection connection = QDBusConnection::sessionBus();
@@ -92,7 +92,7 @@ int main(int argv, char *args[])
 #ifndef QT_DEBUG
     if (/*!positionArgs.isEmpty() && */cmdParser.isSet(showOption))
 #endif
-        launcher.show();
+        launcher.showLauncher();
 
     // monitor gtk icon theme changed
     GtkSettings *gs = gtk_settings_get_default();

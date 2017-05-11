@@ -7,7 +7,6 @@ LauncherSys::LauncherSys(QObject *parent)
 
       m_launcherInter(new FullScreenFrame)
 {
-
 }
 
 void LauncherSys::showLauncher()
@@ -18,4 +17,9 @@ void LauncherSys::showLauncher()
 void LauncherSys::hideLauncher()
 {
     m_launcherInter->hideLauncher();
+}
+
+bool LauncherSys::visible()
+{
+    return m_launcherInter->visible();
 }

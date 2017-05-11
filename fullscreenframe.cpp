@@ -750,12 +750,17 @@ void FullScreenFrame::initConnection()
 
 void FullScreenFrame::showLauncher()
 {
-
+    show();
 }
 
 void FullScreenFrame::hideLauncher()
 {
+    hide();
+}
 
+bool FullScreenFrame::visible()
+{
+    return isVisible();
 }
 
 void FullScreenFrame::updateGeometry()

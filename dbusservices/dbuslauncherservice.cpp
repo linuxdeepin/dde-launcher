@@ -23,7 +23,7 @@
  * Implementation of adaptor class DBusLauncherService
  */
 
-DBusLauncherService::DBusLauncherService(FullScreenFrame *parent)
+DBusLauncherService::DBusLauncherService(LauncherSys *parent)
     : QDBusAbstractAdaptor(parent)
 {
     // constructor
@@ -39,55 +39,46 @@ void DBusLauncherService::Exit()
 {
     // handle method call com.deepin.dde.Launcher.Exit
 //    parent()->Exit();
-    parent()->exit();
+//    parent()->exit();
 }
 
 void DBusLauncherService::Hide()
 {
     // handle method call com.deepin.dde.Launcher.Hide
-//    parent()->Hide();
-    parent()->hide();
+    parent()->hideLauncher();
     emit Closed();
 }
 
 void DBusLauncherService::Show()
 {
     // handle method call com.deepin.dde.Launcher.Show
-//    parent()->Show();
-    QX11Info::setAppTime(QX11Info::getTimestamp());
-    QX11Info::setAppUserTime(QX11Info::getTimestamp());
-    parent()->show();
+    parent()->showLauncher();
     emit Shown();
 }
 
 void DBusLauncherService::ShowByMode(qlonglong in0)
 {
     // handle method call com.deepin.dde.Launcher.ShowByMode
-//    parent()->ShowByMode(in0);
-    parent()->showByMode(in0);
+    qDebug() << in0;
 }
 
 #ifndef WITHOUT_UNINSTALL_APP
 void DBusLauncherService::UninstallApp(const QString &appKey)
 {
-    parent()->uninstallApp(appKey);
+//    parent()->uninstallApp(appKey);
+    qDebug() << appKey;
 }
 #endif
 
 void DBusLauncherService::Toggle()
 {
     // handle method call com.deepin.dde.Launcher.Toggle
-//    parent()->Toggle();
-    if (parent()->isVisible())
+    if (parent()->visible())
     {
-        parent()->hide();
+        parent()->hideLauncher();
         emit Closed();
-    }
-    else
-    {
-        QX11Info::setAppTime(QX11Info::getTimestamp());
-        QX11Info::setAppUserTime(QX11Info::getTimestamp());
-        parent()->show();
+    } else {
+        parent()->showLauncher();
         emit Shown();
     }
 }

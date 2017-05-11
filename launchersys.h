@@ -13,6 +13,7 @@ public:
 
     void showLauncher();
     void hideLauncher();
+    bool visible();
 
 private:
     LauncherInterface *m_launcherInter;

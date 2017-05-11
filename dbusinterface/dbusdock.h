@@ -20,6 +20,9 @@
 #include <QtCore/QVariant>
 #include <QtDBus/QtDBus>
 
+#include "dbusvariant/dockrect.h"
+#include <QDebug>
+
 /*
  * Proxy class for interface com.deepin.dde.daemon.Dock
  */
@@ -95,9 +98,9 @@ public:
     inline void setIconSize(quint32 value)
     { setProperty("IconSize", QVariant::fromValue(value)); }
 
-    Q_PROPERTY(QRect FrontendRect READ frontendRect NOTIFY FrontendRectChanged)
-    inline QRect frontendRect() const
-    { return qvariant_cast< QRect >(property("FrontendWindowRect")); }
+    Q_PROPERTY(DockRect FrontendWindowRect READ frontendRect NOTIFY FrontendRectChanged)
+    inline DockRect frontendRect() const
+    { return qvariant_cast< DockRect >(property("FrontendWindowRect")); }
 
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> ActivateWindow(uint in0)

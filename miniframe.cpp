@@ -5,6 +5,11 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 
+#define DOCK_TOP        0
+#define DOCK_RIGHT      1
+#define DOCK_BOTTOM     2
+#define DOCK_LEFT       3
+
 MiniFrame::MiniFrame(QWidget *parent)
     : DBlurEffectWidget(parent),
 
@@ -68,6 +73,29 @@ void MiniFrame::showEvent(QShowEvent *e)
 
 void MiniFrame::adjustPosition()
 {
+    const int dockPos = m_dockInter->position();
     const QRect dockRect = m_dockInter->frontendRect();
-    qDebug() << dockRect;
+
+    const int spacing = 10;
+    const QSize s = size();
+    QPoint p;
+
+    switch (dockPos)
+    {
+    case DOCK_TOP:
+        p = QPoint(dockRect.left(), dockRect.bottom() + spacing);
+        break;
+    case DOCK_BOTTOM:
+        p = QPoint(dockRect.left(), dockRect.top() - s.height() - spacing);
+        break;
+    case DOCK_LEFT:
+        p = QPoint(dockRect.right() + spacing, dockRect.top());
+        break;
+    case DOCK_RIGHT:
+        p = QPoint(dockRect.left() - s.width() - spacing, dockRect.top());
+        break;
+    default: Q_UNREACHABLE_IMPL();
+    }
+
+    move(p);
 }

@@ -95,6 +95,10 @@ public:
     inline void setIconSize(quint32 value)
     { setProperty("IconSize", QVariant::fromValue(value)); }
 
+    Q_PROPERTY(QRect FrontendRect READ frontendRect NOTIFY FrontendRectChanged)
+    inline QRect frontendRect() const
+    { return qvariant_cast< QRect >(property("FrontendWindowRect")); }
+
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> ActivateWindow(uint in0)
     {
@@ -168,6 +172,7 @@ void HideStateChanged();
 void PositionChanged();
 void IconSizeChanged();
 void DockedAppsChanged();
+void FrontendRectChanged();
 };
 
 namespace com {

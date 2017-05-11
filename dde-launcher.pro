@@ -29,7 +29,8 @@ SOURCES += \
     global_util/calculate_util.cpp \
     global_util/themeappicon.cpp \
     launchersys.cpp \
-    fullscreenframe.cpp
+    fullscreenframe.cpp \
+    miniframe.cpp
 
 HEADERS += \
     model/appslistmodel.h \
@@ -45,7 +46,8 @@ HEADERS += \
     global_util/themeappicon.h \
     launchersys.h \
     launcherinterface.h \
-    fullscreenframe.h
+    fullscreenframe.h \
+    miniframe.h
 
 #Automating generation .qm files from .ts files
 system($$PWD/translate_generation.sh)

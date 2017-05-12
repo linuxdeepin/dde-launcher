@@ -5,11 +5,13 @@
 
 #include <QWidget>
 #include <DBlurEffectWidget>
+#include <dimagebutton.h>
 
 DWIDGET_USE_NAMESPACE
 
 class DBusDock;
 class MiniFrameNavigation;
+class SearchLineEdit;
 class MiniFrame : public DBlurEffectWidget, public LauncherInterface
 {
     Q_OBJECT
@@ -32,7 +34,12 @@ private slots:
 private:
     DBusDock *m_dockInter;
 
+    DImageButton *m_viewToggle;
+    DImageButton *m_modeToggle;
+    SearchLineEdit *m_searchEdit;
+
     MiniFrameNavigation *m_navigation;
+    QWidget *m_viewWrapper;
 };
 
 #endif // MINIFRAME_H

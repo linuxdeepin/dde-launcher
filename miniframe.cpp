@@ -1,6 +1,7 @@
 #include "miniframe.h"
 #include "dbusdock.h"
 #include "widgets/miniframenavigation.h"
+#include "widgets/searchlineedit.h"
 
 #include <QRect>
 #include <QKeyEvent>
@@ -21,9 +22,32 @@ MiniFrame::MiniFrame(QWidget *parent)
 {
     m_navigation->setFixedWidth(140);
 
+    m_viewToggle = new DImageButton;
+    m_modeToggle = new DImageButton;
+    m_searchEdit = new SearchLineEdit;
+
+    QHBoxLayout *viewHeaderLayout = new QHBoxLayout;
+    viewHeaderLayout->addWidget(m_viewToggle);
+    viewHeaderLayout->addStretch();
+    viewHeaderLayout->addWidget(m_searchEdit);
+    viewHeaderLayout->addStretch();
+    viewHeaderLayout->addWidget(m_modeToggle);
+    viewHeaderLayout->setSpacing(0);
+    viewHeaderLayout->setMargin(0);
+
+    QVBoxLayout *viewLayout = new QVBoxLayout;
+    viewLayout->addLayout(viewHeaderLayout);
+    viewLayout->addStretch();
+    viewLayout->setSpacing(0);
+    viewLayout->setMargin(0);
+
+    m_viewWrapper = new QWidget;
+    m_viewWrapper->setLayout(viewLayout);
+    m_viewWrapper->setStyleSheet("background-color: rgba(255, 255, 255, .1); border-radius: 8px;");
+
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_navigation);
-    centralLayout->addStretch();
+    centralLayout->addWidget(m_viewWrapper);
     centralLayout->setSpacing(0);
     centralLayout->setContentsMargins(0, 10, 10, 10);
 
@@ -76,7 +100,7 @@ void MiniFrame::keyPressEvent(QKeyEvent *e)
 
     switch (e->key())
     {
-    case Qt::Key_Escape:    hide();     break;
+    case Qt::Key_Escape:    hideLauncher();     break;
     default:;
     }
 }

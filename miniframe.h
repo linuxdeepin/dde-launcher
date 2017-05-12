@@ -23,9 +23,9 @@ class MiniFrame : public DBlurEffectWidget, public LauncherInterface
 
 public:
     explicit MiniFrame(QWidget *parent = 0);
+    ~MiniFrame();
 
 private:
-    void _destructor();
     void showLauncher();
     void hideLauncher();
     bool visible();

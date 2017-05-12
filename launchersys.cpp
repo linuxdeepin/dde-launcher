@@ -39,10 +39,7 @@ void LauncherSys::displayModeChanged()
 {
     const bool visible = m_launcherInter && m_launcherInter->visible();
 
-    if (m_launcherInter)
-        m_launcherInter->_destructor();
-
-    qApp->processEvents();
+    delete m_launcherInter;
 
     if (m_dbusLauncherInter->displayMode() == MINI_FRAME)
         m_launcherInter = new MiniFrame;

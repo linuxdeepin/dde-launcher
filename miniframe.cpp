@@ -91,9 +91,9 @@ MiniFrame::MiniFrame(QWidget *parent)
     QTimer::singleShot(1, this, &MiniFrame::toggleAppsView);
 }
 
-void MiniFrame::_destructor()
+MiniFrame::~MiniFrame()
 {
-    deleteLater();
+
 }
 
 void MiniFrame::showLauncher()

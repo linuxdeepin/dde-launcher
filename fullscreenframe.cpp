@@ -98,6 +98,11 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
 }
 
+FullScreenFrame::~FullScreenFrame()
+{
+
+}
+
 void FullScreenFrame::exit()
 {
     qApp->quit();
@@ -773,11 +778,6 @@ void FullScreenFrame::initConnection()
     connect(m_appsManager, &AppsManager::requestTips, this, &FullScreenFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
     connect(m_appsManager, &AppsManager::dockPositionChanged, this, &FullScreenFrame::updateDockPosition);
-}
-
-void FullScreenFrame::_destructor()
-{
-    deleteLater();
 }
 
 void FullScreenFrame::showLauncher()

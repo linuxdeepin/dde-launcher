@@ -45,6 +45,7 @@ public:
 
 public:
     explicit FullScreenFrame(QWidget *parent = 0);
+    ~FullScreenFrame();
 
     void exit();
     void uninstallApp(const QString &appKey);
@@ -76,7 +77,6 @@ private:
     void initConnection();
     void initTimer();
 
-    void _destructor();
     void showLauncher();
     void hideLauncher();
     bool visible();

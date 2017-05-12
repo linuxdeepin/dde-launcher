@@ -22,8 +22,6 @@ void iconThemeChanged(GtkSettings *gsettings, GParamSpec *pspec, gpointer udata)
     Q_UNUSED(gsettings)
     Q_UNUSED(udata)
     Q_ASSERT(!strcmp(g_param_spec_get_name(pspec), PROP_GTK_ICON_THEME_NAME));
-
-    AppsManager::instance()->refreshAppIconCache();
 }
 
 int main(int argv, char *args[])

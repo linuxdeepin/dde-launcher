@@ -8,6 +8,7 @@
 #include <QPainter>
 #include <QDataStream>
 #include <QIODevice>
+#include <QIcon>
 
 AppsManager *AppsManager::INSTANCE = nullptr;
 
@@ -19,7 +20,6 @@ QSettings AppsManager::APP_PRESET_SORTED_LIST(
 #endif
     QSettings::IniFormat);
 
-QSettings AppsManager::APP_ICON_CACHE("deepin", "dde-launcher-app-icon", nullptr);
 QSettings AppsManager::APP_AUTOSTART_CACHE("deepin", "dde-launcher-app-autostart", nullptr);
 QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
 
@@ -34,12 +34,8 @@ AppsManager::AppsManager(QObject *parent) :
 {
     m_themeAppIcon->gtkInit();
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
-//    m_dockedAppsList = m_dockedAppInter->dockedApps();
 
     refreshCategoryInfoList();
-
-    if (APP_ICON_CACHE.value("version").toString() != qApp->applicationVersion())
-        refreshAppIconCache();
 
     if (APP_AUTOSTART_CACHE.value("version").toString() != qApp->applicationVersion())
         refreshAppAutoStartCache();
@@ -47,20 +43,15 @@ AppsManager::AppsManager(QObject *parent) :
     m_searchTimer->setSingleShot(true);
     m_searchTimer->setInterval(150);
 
-    connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
-    connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
-    connect(m_launcherInter, &DBusLauncher::UninstallSuccess, this, &AppsManager::abandonStashedItem);
-    connect(m_launcherInter, &DBusLauncher::UninstallFailed, [this] (const QString &appKey) {restoreItem(appKey); emit dataChanged(AppsListModel::All);});
-//    connect(m_launcherInter, &DBusLauncher::UninstallFailed, this, &AppsManager::reStoreItem);
-    connect(m_launcherInter, &DBusLauncher::ItemChanged, this, &AppsManager::handleItemChanged);
     //Maybe the signals newAppLaunched will be replaced by newAppMarkedAsLaunched
     //newAppLaunched is the old one.
     connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
-
-//    connect(m_dockedAppInter, &DBusDock::DockedAppsChanged, this, &AppsManager::dockedAppsChanged);
+    connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
+    connect(m_launcherInter, &DBusLauncher::UninstallSuccess, this, &AppsManager::abandonStashedItem);
+    connect(m_launcherInter, &DBusLauncher::UninstallFailed, [this] (const QString &appKey) {restoreItem(appKey); emit dataChanged(AppsListModel::All);});
+    connect(m_launcherInter, &DBusLauncher::ItemChanged, this, &AppsManager::handleItemChanged);
     connect(m_dockedAppInter, &DBusDock::PositionChanged, this, &AppsManager::dockPositionChanged);
-
-//    connect(this, &AppsManager::handleUninstallApp, this, &AppsManager::unInstallApp);
+    connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
 }
 
@@ -269,11 +260,6 @@ void AppsManager::markLaunched(QString appKey)
     m_launcherInter->MarkLaunched(appKey);
 }
 
-//void AppsManager::dockedAppsChanged()
-//{
-//    m_dockedAppsList = m_dockedAppInter->dockedApps();
-//}
-
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const
 {
     switch (category)
@@ -306,8 +292,6 @@ bool AppsManager::appIsAutoStart(const QString &desktop)
 
 bool AppsManager::appIsOnDock(const QString &desktop)
 {
-//    qDebug() << m_dockedAppsList;
-//    return m_dockedAppsList.contains(appName);
     return m_dockedAppInter->IsDocked(desktop);
 }
 
@@ -318,18 +302,9 @@ bool AppsManager::appIsOnDesktop(const QString &desktop)
 
 const QPixmap AppsManager::appIcon(const QString &iconKey, const int size)
 {
-    const QPixmap cachePixmap = APP_ICON_CACHE.value(QString("%1-%2").arg(iconKey).arg(size)).value<QPixmap>();
-    if (!cachePixmap.isNull())
-        return cachePixmap;
-
-    const QString iconPath = m_themeAppIcon->getThemeIconPath(iconKey, size);
-    const QPixmap iconPixmap = loadIconFile(iconPath, size);
-
-    if (!iconPixmap.isNull())
-    {
-        APP_ICON_CACHE.setValue(QString("%1-%2").arg(iconKey).arg(size), iconPixmap);
-        return iconPixmap;
-    }
+    const QPixmap pixmap =  QIcon::fromTheme(iconKey).pixmap(size, size);
+    if (!pixmap.isNull())
+        return pixmap;
 
     if (m_defaultIconPixmap.isNull() || m_defaultIconPixmap.width() != size)
         m_defaultIconPixmap = loadSvg(":/skin/images/application-default-icon.svg", size);
@@ -378,82 +353,6 @@ int AppsManager::appNums(const AppsListModel::AppCategory &category) const
     return appsInfoList(category).size();
 }
 
-//void AppsManager::unInstallApp(const QModelIndex &index, int value) {
-//    QString appKey = index.data(AppsListModel::AppKeyRole).toString();
-//    if (value==1) {
-//        // begin to unInstall app, remove icon firstly;
-//        QDBusPendingReply<ItemInfo> reply = m_launcherInter->GetItemInfo(appKey);
-//        reply.waitForFinished();
-//        if (reply.isValid() && !reply.isError()) {
-//            m_unInstallItem = qdbus_cast<ItemInfo>(reply.argumentAt(0));
-//            m_allAppInfoList.removeOne(m_unInstallItem);
-
-//            emit dataChanged(AppsListModel::All);
-//            refreshAppIconCache();
-//            refreshCategoryInfoList();
-//            //if after the app be unInstalled, it's category's app number is zero, update the view
-//            if (appsInfoList(m_unInstallItem.category()).size()==0) {
-//                emit updateCategoryView(m_unInstallItem.category());
-//            }
-
-//            emit dataChanged(m_unInstallItem.category());
-
-//            //Uninstall app from backend;
-//            QDBusPendingReply<> reply = m_launcherInter->RequestUninstall(appKey, false);
-//            if (!reply.isError()) {
-////                qDebug() << "unistall function excute finished!";
-//            } else {
-////                qDebug() << "unistall action fail, and the error reason:" << reply.error().message();
-//            }
-//        } else {
-////            qDebug() << "get unInstall app itemInfo failed!";
-//        }
-//    } else {
-//        //cancle to unInstall app;
-////        qDebug() << "cancle to unInstall app" << appKey;
-//    }
-//}
-
-//void AppsManager::reStoreItem() {
-//    bool updateViewFlag = false;
-//    if (appsInfoList(m_unInstallItem.category()).length() == 0) {
-//        updateViewFlag = true;
-//    }
-//    m_allAppInfoList.append(m_unInstallItem);
-//    emit dataChanged(AppsListModel::All);
-//    emit dataChanged(m_unInstallItem.category());
-//    refreshCategoryInfoList();
-//    if (updateViewFlag) {
-//        emit updateCategoryView(m_unInstallItem.category());
-//    }
-//}
-
-void AppsManager::refreshAppIconCache()
-{
-    APP_ICON_CACHE.clear();
-    APP_ICON_CACHE.setValue("version", qApp->applicationVersion());
-//    return;
-
-//    int appIconSize = m_calUtil->appIconSize().width();
-
-//    qDebug() << "get icon size:" << appIconSize;
-//    // generate cache
-//    for (const ItemInfo &info : m_appInfoList)
-//    {
-//        const QPixmap cachePixmap = APP_ICON_CACHE.value(QString("%1-%2").arg(info.m_iconKey).arg(appIconSize)).value<QPixmap>();
-//        if (!cachePixmap.isNull())
-//            continue;
-
-//        const QString iconPath = m_themeAppIcon->getThemeIconPath(info.m_iconKey, appIconSize);
-//        const QPixmap iconPixmap = loadIconFile(iconPath, appIconSize);
-
-//        if (!iconPixmap.isNull())
-//            APP_ICON_CACHE.setValue(QString("%1-%2").arg(info.m_iconKey).arg(appIconSize), iconPixmap);
-//    }
-
-//    emit dataChanged(AppsListModel::All);
-}
-
 void AppsManager::refreshAppAutoStartCache()
 {
     APP_AUTOSTART_CACHE.setValue("version", qApp->applicationVersion());
@@ -482,39 +381,6 @@ void AppsManager::searchDone(const QStringList &resultList)
         emit requestHideTips();
 }
 
-//void AppsManager::handleDragedApp(const QModelIndex &index, int nextNode) {
-//    qDebug() << "draged app";
-//    QString appKey = index.data(AppsListModel::AppKeyRole).toString();
-//    // begin to unInstall app, remove icon firstly;
-//    QDBusPendingReply<ItemInfo> reply = m_launcherInter->GetItemInfo(appKey);
-//    reply.waitForFinished();
-//    if (reply.isValid() && !reply.isError()) {
-//        ItemInfo dragedAppItemInfo = qdbus_cast<ItemInfo>(reply.argumentAt(0));
-//        m_beDragedItem = dragedAppItemInfo;
-
-//        restoreItem(appKey, nextNode);
-//        qDebug() << "remove one" << nextNode;
-//        emit dataChanged(AppsListModel::All);
-//        refreshAppIconCache();
-//        refreshCategoryInfoList();
-//    }
-//}
-
-//void AppsManager::handleDropedApp(const QModelIndex &index) {
-//    QString appKey = index.data(AppsListModel::AppKeyRole).toString();
-//    QDBusPendingReply<ItemInfo> reply = m_launcherInter->GetItemInfo(appKey);
-//    reply.waitForFinished();
-//    if (reply.isValid() && !reply.isError()) {
-//        ItemInfo insertAppItemInfo = qdbus_cast<ItemInfo>(reply.argumentAt(0));
-//        int i = m_appInfoList.indexOf(insertAppItemInfo);
-
-//        m_appInfoList.insert(i, m_beDragedItem);
-//        emit dataChanged(AppsListModel::All);
-//        refreshAppIconCache();
-//        m_beDragedItem = ItemInfo();
-//    }
-//}
-
 // TODO: optimize
 void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber)
 {
@@ -524,7 +390,6 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
         m_newInstalledAppsList.append(appInfo.m_key);
 
     refreshCategoryInfoList();
-    refreshAppIconCache();
 
     emit dataChanged(AppsListModel::All);
 }

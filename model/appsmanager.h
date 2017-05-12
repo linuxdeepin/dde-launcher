@@ -37,14 +37,12 @@ public:
 signals:
     void dataChanged(const AppsListModel::AppCategory category) const;
     void layoutChanged(const AppsListModel::AppCategory category) const;
-//    void handleUninstallApp(const QModelIndex &index, int result);
     void updateCategoryView(const AppsListModel::AppCategory categoryInfo) const;
     void requestTips(const QString &tips) const;
     void requestHideTips() const;
     void dockPositionChanged() const;
 
 public slots:
-    void refreshAppIconCache();
     void saveUserSortedList();
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
@@ -57,14 +55,6 @@ public slots:
     bool appIsOnDesktop(const QString &desktop);
     const QPixmap appIcon(const QString &iconKey, const int size);
     int appNums(const AppsListModel::AppCategory &category) const;
-
-    //remove the item icon firstly, when unInstalling apps
-//    void unInstallApp(const QModelIndex &index, int value);
-    //restore the itemInfo, if unInstall failed!
-//    void reStoreItem();
-
-//    void handleDragedApp(const QModelIndex &index, int nextNode);
-//    void handleDropedApp(const QModelIndex &index);
 
     // TODO: optimize
     void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
@@ -84,7 +74,6 @@ private:
 private slots:
     void searchDone(const QStringList &resultList);
     void markLaunched(QString appKey);
-//    void dockedAppsChanged();
 
 private:
     DBusLauncher *m_launcherInter;
@@ -94,7 +83,6 @@ private:
     QPixmap m_defaultIconPixmap;
     QString m_searchText;
     QStringList m_newInstalledAppsList;
-//    QStringList m_dockedAppsList;
     ItemInfoList m_allAppInfoList;
     ItemInfoList m_userSortedList;
     ItemInfoList m_appSearchResultList;
@@ -109,7 +97,6 @@ private:
     QTimer *m_searchTimer;
 
     static AppsManager *INSTANCE;
-    static QSettings APP_ICON_CACHE;
     static QSettings APP_AUTOSTART_CACHE;
     static QSettings APP_PRESET_SORTED_LIST;
     static QSettings APP_USER_SORTED_LIST;

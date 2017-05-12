@@ -28,8 +28,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_backgroundManager(new BackgroundManager(this)),
     m_displayInter(new DBusDisplay(this)),
 
-    m_calcUtil(CalculateUtil::instance(this)),
-    m_appsManager(AppsManager::instance(this)),
+    m_calcUtil(CalculateUtil::instance()),
+    m_appsManager(AppsManager::instance()),
     m_delayHideTimer(new QTimer(this)),
     m_autoScrollTimer(new QTimer(this)),
     m_navigationWidget(new NavigationWidget),
@@ -318,7 +318,8 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
     }
     else if (o == m_appsArea->viewport() && e->type() == QEvent::Resize)
     {
-        m_calcUtil->calculateAppLayout(static_cast<QResizeEvent *>(e)->size(), m_appsManager->dockPosition());
+        const int pos = m_appsManager->dockPosition();
+        m_calcUtil->calculateAppLayout(static_cast<QResizeEvent *>(e)->size(), pos);
         updatePlaceholderSize();
     }
 
@@ -746,6 +747,11 @@ void FullScreenFrame::initConnection()
     connect(m_appsManager, &AppsManager::requestTips, this, &FullScreenFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
     connect(m_appsManager, &AppsManager::dockPositionChanged, this, &FullScreenFrame::updateDockPosition);
+}
+
+void FullScreenFrame::_destructor()
+{
+    deleteLater();
 }
 
 void FullScreenFrame::showLauncher()

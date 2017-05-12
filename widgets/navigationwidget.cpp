@@ -9,7 +9,7 @@ DWIDGET_USE_NAMESPACE
 
 NavigationWidget::NavigationWidget(QWidget *parent) :
     QWidget(parent),
-    m_calcUtil(CalculateUtil::instance(this)),
+    m_calcUtil(CalculateUtil::instance()),
     m_categoryGroup(new QButtonGroup(this)),
     m_internetBtn(new CategoryButton(AppsListModel::Internet, this)),
     m_chatBtn(new CategoryButton(AppsListModel::Chat, this)),

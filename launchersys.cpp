@@ -2,16 +2,22 @@
 #include "launcherinterface.h"
 #include "fullscreenframe.h"
 #include "miniframe.h"
+#include "model/appsmanager.h"
+
+#define FULL_SCREEN     0
+#define MINI_FRAME      1
 
 LauncherSys::LauncherSys(QObject *parent)
     : QObject(parent),
 
-#ifdef QT_DEBUG
-      m_launcherInter(new MiniFrame)
-#else
-      m_launcherInter(new FullScreenFrame)
-#endif
+      m_launcherInter(nullptr),
+      m_dbusLauncherInter(new DBusLauncher(this))
 {
+    displayModeChanged();
+
+    AppsManager::instance();
+
+    connect(m_dbusLauncherInter, &DBusLauncher::DisplayModeChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
 }
 
 void LauncherSys::showLauncher()
@@ -27,4 +33,24 @@ void LauncherSys::hideLauncher()
 bool LauncherSys::visible()
 {
     return m_launcherInter->visible();
+}
+
+void LauncherSys::displayModeChanged()
+{
+    const bool visible = m_launcherInter && m_launcherInter->visible();
+
+    if (m_launcherInter)
+        m_launcherInter->_destructor();
+
+    qApp->processEvents();
+
+    if (m_dbusLauncherInter->displayMode() == MINI_FRAME)
+        m_launcherInter = new MiniFrame;
+    else
+        m_launcherInter = new FullScreenFrame;
+
+    if (visible)
+        m_launcherInter->showLauncher();
+    else
+        m_launcherInter->hideLauncher();
 }

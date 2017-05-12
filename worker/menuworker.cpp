@@ -21,7 +21,7 @@ MenuWorker::MenuWorker(QObject *parent) : QObject(parent)
     m_launcherInterface = new DBusLauncher(this);
     m_menuInterface = NULL;
     if (!m_appManager)
-        m_appManager = AppsManager::instance(this);
+        m_appManager = AppsManager::instance();
 
     initConnect();
 

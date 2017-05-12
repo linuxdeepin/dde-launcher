@@ -12,8 +12,8 @@ static const QString UninstallFilterFile = "/usr/share/dde-launcher/data/launche
 
 AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
     QAbstractListModel(parent),
-    m_appsManager(AppsManager::instance(this)),
-    m_calcUtil(CalculateUtil::instance(this)),
+    m_appsManager(AppsManager::instance()),
+    m_calcUtil(CalculateUtil::instance()),
     m_category(category)
 {
     connect(m_appsManager, &AppsManager::dataChanged, this, &AppsListModel::dataChanged);

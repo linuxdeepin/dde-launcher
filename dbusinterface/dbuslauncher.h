@@ -60,6 +60,10 @@ public:
 
     ~DBusLauncher();
 
+    Q_PROPERTY(qint32 DisplayMode READ displayMode NOTIFY DisplayModeChanged)
+    inline qint32 displayMode() const
+    { return qvariant_cast< qint32 >(property("DisplayMode")); }
+
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<CategoryInfoList> GetAllCategoryInfos()
     {
@@ -92,74 +96,74 @@ public Q_SLOTS: // METHODS
     }
 
     inline QDBusPendingReply<CategoryInfo> GetCategoryInfo(qlonglong in0)
-       {
-           QList<QVariant> argumentList;
-           argumentList << QVariant::fromValue(in0);
-           return asyncCallWithArgumentList(QStringLiteral("GetCategoryInfo"), argumentList);
-       }
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("GetCategoryInfo"), argumentList);
+    }
 
-       inline QDBusPendingReply<ItemInfo> GetItemInfo(const QString &in0)
-       {
-           QList<QVariant> argumentList;
-           argumentList << QVariant::fromValue(in0);
-           return asyncCallWithArgumentList(QStringLiteral("GetItemInfo"), argumentList);
-       }
+    inline QDBusPendingReply<ItemInfo> GetItemInfo(const QString &in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("GetItemInfo"), argumentList);
+    }
 
-       inline QDBusPendingReply<bool> IsItemOnDesktop(const QString &in0)
-       {
-           QList<QVariant> argumentList;
-           argumentList << QVariant::fromValue(in0);
-           return asyncCallWithArgumentList(QStringLiteral("IsItemOnDesktop"), argumentList);
-       }
+    inline QDBusPendingReply<bool> IsItemOnDesktop(const QString &in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("IsItemOnDesktop"), argumentList);
+    }
 
-       inline QDBusPendingReply<> MarkLaunched(const QString &in0)
-       {
-           QList<QVariant> argumentList;
-           argumentList << QVariant::fromValue(in0);
-           return asyncCallWithArgumentList(QStringLiteral("MarkLaunched"), argumentList);
-       }
+    inline QDBusPendingReply<> MarkLaunched(const QString &in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("MarkLaunched"), argumentList);
+    }
 
-       inline QDBusPendingReply<> RecordFrequency(const QString &in0)
-       {
-           QList<QVariant> argumentList;
-           argumentList << QVariant::fromValue(in0);
-           return asyncCallWithArgumentList(QStringLiteral("RecordFrequency"), argumentList);
-       }
+    inline QDBusPendingReply<> RecordFrequency(const QString &in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("RecordFrequency"), argumentList);
+    }
 
-       inline QDBusPendingReply<> RecordRate(const QString &in0)
-       {
-           QList<QVariant> argumentList;
-           argumentList << QVariant::fromValue(in0);
-           return asyncCallWithArgumentList(QStringLiteral("RecordRate"), argumentList);
-       }
+    inline QDBusPendingReply<> RecordRate(const QString &in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("RecordRate"), argumentList);
+    }
 
-       inline QDBusPendingReply<bool> RequestRemoveFromDesktop(const QString &in0)
-       {
-           QList<QVariant> argumentList;
-           argumentList << QVariant::fromValue(in0);
-           return asyncCallWithArgumentList(QStringLiteral("RequestRemoveFromDesktop"), argumentList);
-       }
+    inline QDBusPendingReply<bool> RequestRemoveFromDesktop(const QString &in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("RequestRemoveFromDesktop"), argumentList);
+    }
 
-       inline QDBusPendingReply<bool> RequestSendToDesktop(const QString &in0)
-       {
-           QList<QVariant> argumentList;
-           argumentList << QVariant::fromValue(in0);
-           return asyncCallWithArgumentList(QStringLiteral("RequestSendToDesktop"), argumentList);
-       }
+    inline QDBusPendingReply<bool> RequestSendToDesktop(const QString &in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("RequestSendToDesktop"), argumentList);
+    }
 
-       inline QDBusPendingReply<> RequestUninstall(const QString &in0, bool in1)
-       {
-           QList<QVariant> argumentList;
-           argumentList << QVariant::fromValue(in0) << QVariant::fromValue(in1);
-           return asyncCallWithArgumentList(QStringLiteral("RequestUninstall"), argumentList);
-       }
+    inline QDBusPendingReply<> RequestUninstall(const QString &in0, bool in1)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0) << QVariant::fromValue(in1);
+        return asyncCallWithArgumentList(QStringLiteral("RequestUninstall"), argumentList);
+    }
 
-       inline QDBusPendingReply<> Search(const QString &in0)
-       {
-           QList<QVariant> argumentList;
-           argumentList << QVariant::fromValue(in0);
-           return asyncCallWithArgumentList(QStringLiteral("Search"), argumentList);
-       }
+    inline QDBusPendingReply<> Search(const QString &in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("Search"), argumentList);
+    }
 
    Q_SIGNALS: // SIGNALS
        void ItemChanged(const QString &in0, ItemInfo in1, qlonglong in2);
@@ -172,6 +176,8 @@ public Q_SLOTS: // METHODS
        void SendToDesktopSuccess(const QString &in0);
        void UninstallFailed(const QString &in0, const QString &in1);
        void UninstallSuccess(const QString &in0);
+
+       void DisplayModeChanged();
 };
 
 namespace com {

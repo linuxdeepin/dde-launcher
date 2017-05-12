@@ -13,7 +13,7 @@ QModelIndex AppItemDelegate::CurrentIndex = QModelIndex();
 
 AppItemDelegate::AppItemDelegate(QObject *parent) :
     QAbstractItemDelegate(parent),
-    m_calcUtil(CalculateUtil::instance(this)),
+    m_calcUtil(CalculateUtil::instance()),
     m_blueDotPixmap(":/skin/images/new_install_indicator.png"),
     m_autoStartPixmap(":/skin/images/emblem-autostart.png")
 {

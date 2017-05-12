@@ -7,12 +7,12 @@
 #include <QDesktopWidget>
 #include <QApplication>
 
-CalculateUtil *CalculateUtil::INSTANCE = nullptr;
+QPointer<CalculateUtil> CalculateUtil::INSTANCE = nullptr;
 
-CalculateUtil *CalculateUtil::instance(QObject *parent)
+CalculateUtil *CalculateUtil::instance()
 {
-    if (!INSTANCE)
-        INSTANCE = new CalculateUtil(parent);
+    if (INSTANCE.isNull())
+        INSTANCE = new CalculateUtil(nullptr);
 
     return INSTANCE;
 }

@@ -14,17 +14,17 @@
 #include <QLabel>
 #include <QPainter>
 
-AppsManager *AppListView::m_appManager = nullptr;
-CalculateUtil *AppListView::m_calcUtil = nullptr;
+QPointer<AppsManager> AppListView::m_appManager = nullptr;
+QPointer<CalculateUtil> AppListView::m_calcUtil = nullptr;
 
 AppListView::AppListView(QWidget *parent) :
     QListView(parent),
     m_dropThresholdTimer(new QTimer(this))
 {
     if (!m_appManager)
-        m_appManager = AppsManager::instance(this);
+        m_appManager = AppsManager::instance();
     if (!m_calcUtil)
-        m_calcUtil = CalculateUtil::instance(this);
+        m_calcUtil = CalculateUtil::instance();
 
     m_dropThresholdTimer->setInterval(DLauncher::APP_DRAG_SWAP_THRESHOLD);
     m_dropThresholdTimer->setSingleShot(true);
@@ -50,7 +50,7 @@ AppListView::AppListView(QWidget *parent) :
     setStyleSheet("background-color:transparent;");
 
     // update item spacing
-    connect(m_calcUtil, &CalculateUtil::layoutChanged, [this] {setSpacing(m_calcUtil->appItemSpacing());});
+    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] { setSpacing(m_calcUtil->appItemSpacing()); });
 
 #ifndef DISABLE_DRAG_ANIMATION
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::prepareDropSwap, Qt::QueuedConnection);

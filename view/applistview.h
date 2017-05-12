@@ -58,8 +58,8 @@ private:
     QTimer *m_dropThresholdTimer;
     QPropertyAnimation *m_lastFakeAni = nullptr;
 
-    static AppsManager *m_appManager;
-    static CalculateUtil *m_calcUtil;
+    static QPointer<AppsManager> m_appManager;
+    static QPointer<CalculateUtil> m_calcUtil;
 };
 
 #endif // APPLISTVIEW_H

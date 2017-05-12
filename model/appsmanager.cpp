@@ -10,7 +10,7 @@
 #include <QIODevice>
 #include <QIcon>
 
-AppsManager *AppsManager::INSTANCE = nullptr;
+QPointer<AppsManager> AppsManager::INSTANCE = nullptr;
 
 QSettings AppsManager::APP_PRESET_SORTED_LIST(
 #ifdef ARCH_MIPSEL
@@ -29,7 +29,7 @@ AppsManager::AppsManager(QObject *parent) :
     m_startManagerInter(new DBusStartManager(this)),
     m_dockedAppInter(new DBusDock(this)),
     m_themeAppIcon(new ThemeAppIcon(this)),
-    m_calUtil(CalculateUtil::instance(this)),
+    m_calUtil(CalculateUtil::instance()),
     m_searchTimer(new QTimer(this))
 {
     m_themeAppIcon->gtkInit();
@@ -139,12 +139,11 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
     });
 }
 
-AppsManager *AppsManager::instance(QObject *parent)
+AppsManager *AppsManager::instance()
 {
-    if (INSTANCE)
-        return INSTANCE;
+    if (INSTANCE.isNull())
+        INSTANCE = new AppsManager;
 
-    INSTANCE = new AppsManager(parent);
     return INSTANCE;
 }
 

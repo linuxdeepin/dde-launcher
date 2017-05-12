@@ -8,7 +8,7 @@
 
 CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) :
     QFrame(parent),
-    m_calcUtil(CalculateUtil::instance(this)),
+    m_calcUtil(CalculateUtil::instance()),
     m_title(new QLabel(this)),
     m_opacityAnimation(new QPropertyAnimation(this, "titleOpacity"))
 {

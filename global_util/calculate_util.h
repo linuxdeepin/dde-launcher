@@ -13,7 +13,7 @@ signals:
     void layoutChanged() const;
 
 public:
-    static CalculateUtil *instance(QObject *parent = nullptr);
+    static CalculateUtil *instance();
 
     static int calculateBesidePadding(const int screenWidth);
 
@@ -43,7 +43,7 @@ private:
     void calculateTextSize(const int screenWidth);
 
 private:
-    static CalculateUtil *INSTANCE;
+    static QPointer<CalculateUtil> INSTANCE;
 
     int m_appItemFontSize = 12;
     int m_appIconSize = 64;

@@ -26,7 +26,7 @@ class AppsManager : public QObject
     Q_OBJECT
 
 public:
-    static AppsManager *instance(QObject *parent = nullptr);
+    static AppsManager *instance();
 
     void stashItem(const QModelIndex &index);
     void stashItem(const QString &appKey);
@@ -96,7 +96,7 @@ private:
     CalculateUtil *m_calUtil;
     QTimer *m_searchTimer;
 
-    static AppsManager *INSTANCE;
+    static QPointer<AppsManager> INSTANCE;
     static QSettings APP_AUTOSTART_CACHE;
     static QSettings APP_PRESET_SORTED_LIST;
     static QSettings APP_USER_SORTED_LIST;

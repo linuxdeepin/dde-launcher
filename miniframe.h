@@ -25,6 +25,7 @@ public:
     explicit MiniFrame(QWidget *parent = 0);
 
 private:
+    void _destructor();
     void showLauncher();
     void hideLauncher();
     bool visible();
@@ -36,6 +37,7 @@ private:
 private slots:
     void adjustPosition();
     void toggleAppsView();
+    void toggleFullScreen();
     void searchText(const QString &text);
 
 private:

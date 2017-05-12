@@ -76,6 +76,7 @@ private:
     void initConnection();
     void initTimer();
 
+    void _destructor();
     void showLauncher();
     void hideLauncher();
     bool visible();

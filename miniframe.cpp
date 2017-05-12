@@ -21,7 +21,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     : DBlurEffectWidget(parent),
 
       m_dockInter(new DBusDock(this)),
-      m_appsManager(AppsManager::instance(this)),
+      m_appsManager(AppsManager::instance()),
 
       m_navigation(new MiniFrameNavigation),
 
@@ -86,8 +86,14 @@ MiniFrame::MiniFrame(QWidget *parent)
     setLayout(centralLayout);
 
     connect(m_searchEdit, &SearchLineEdit::textChanged, this, &MiniFrame::searchText, Qt::QueuedConnection);
+    connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::toggleFullScreen, Qt::QueuedConnection);
 
     QTimer::singleShot(1, this, &MiniFrame::toggleAppsView);
+}
+
+void MiniFrame::_destructor()
+{
+    deleteLater();
 }
 
 void MiniFrame::showLauncher()
@@ -186,6 +192,21 @@ void MiniFrame::toggleAppsView()
 
     m_appsBox->layout()->addWidget(appsView);
     m_appsView = appsView;
+}
+
+void MiniFrame::toggleFullScreen()
+{
+    const QStringList args {
+        "--print-reply",
+        "--dest=com.deepin.dde.daemon.Launcher",
+        "/com/deepin/dde/daemon/Launcher",
+        "org.freedesktop.DBus.Properties.Set",
+        "string:com.deepin.dde.daemon.Launcher",
+        "string:DisplayMode",
+        "variant:int32:0"
+    };
+
+    QProcess::startDetached("dbus-send", args);
 }
 
 void MiniFrame::searchText(const QString &text)

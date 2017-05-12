@@ -6,9 +6,11 @@
 #include <QWidget>
 #include <DBlurEffectWidget>
 #include <dimagebutton.h>
+#include <dboxwidget.h>
 
 DWIDGET_USE_NAMESPACE
 
+class QScrollArea;
 class DBusDock;
 class MiniFrameNavigation;
 class SearchLineEdit;
@@ -30,6 +32,7 @@ private:
 
 private slots:
     void adjustPosition();
+    void toggleAppsView();
 
 private:
     DBusDock *m_dockInter;
@@ -40,6 +43,8 @@ private:
 
     MiniFrameNavigation *m_navigation;
     QWidget *m_viewWrapper;
+    QScrollArea *m_appsArea;
+    DVBoxWidget *m_appsBox;
 };
 
 #endif // MINIFRAME_H

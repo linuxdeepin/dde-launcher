@@ -2,11 +2,15 @@
 #include "dbusdock.h"
 #include "widgets/miniframenavigation.h"
 #include "widgets/searchlineedit.h"
+#include "view/applistview.h"
+#include "model/appslistmodel.h"
+#include "delegate/appitemdelegate.h"
 
 #include <QRect>
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QHBoxLayout>
+#include <QScrollArea>
 
 #define DOCK_TOP        0
 #define DOCK_RIGHT      1
@@ -35,15 +39,31 @@ MiniFrame::MiniFrame(QWidget *parent)
     viewHeaderLayout->setSpacing(0);
     viewHeaderLayout->setMargin(0);
 
+    m_appsBox = new DVBoxWidget;
+
+    m_appsArea = new QScrollArea;
+    m_appsArea->setWidget(m_appsBox);
+    m_appsArea->setWidgetResizable(true);
+    m_appsArea->setFocusPolicy(Qt::NoFocus);
+    m_appsArea->setFrameStyle(QFrame::NoFrame);
+    m_appsArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_appsArea->setStyleSheet("background-color: transparent;");
+
     QVBoxLayout *viewLayout = new QVBoxLayout;
     viewLayout->addLayout(viewHeaderLayout);
-    viewLayout->addStretch();
+    viewLayout->addWidget(m_appsArea);
     viewLayout->setSpacing(0);
     viewLayout->setMargin(0);
 
     m_viewWrapper = new QWidget;
     m_viewWrapper->setLayout(viewLayout);
-    m_viewWrapper->setStyleSheet("background-color: rgba(255, 255, 255, .1); border-radius: 8px;");
+    m_viewWrapper->setObjectName("ViewWrapper");
+    m_viewWrapper->setStyleSheet("QWidget #ViewWrapper {"
+                                 "background-color: rgba(255, 255, 255, .1);"
+                                 "border-radius: 8px;"
+                                 "}");
 
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_navigation);
@@ -58,6 +78,8 @@ MiniFrame::MiniFrame(QWidget *parent)
     setBlurRectXRadius(5);
     setBlurRectYRadius(5);
     setLayout(centralLayout);
+
+    QTimer::singleShot(1, this, &MiniFrame::toggleAppsView);
 }
 
 void MiniFrame::showLauncher()
@@ -142,4 +164,14 @@ void MiniFrame::adjustPosition()
     }
 
     move(p);
+}
+
+void MiniFrame::toggleAppsView()
+{
+    AppListView *v = new AppListView;
+    v->setModel(new AppsListModel(AppsListModel::All));
+    v->setItemDelegate(new AppItemDelegate);
+    v->setContainerBox(m_appsArea);
+
+    m_appsBox->addWidget(v);
 }

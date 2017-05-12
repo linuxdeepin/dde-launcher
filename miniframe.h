@@ -9,6 +9,7 @@
 DWIDGET_USE_NAMESPACE
 
 class DBusDock;
+class MiniFrameNavigation;
 class MiniFrame : public DBlurEffectWidget, public LauncherInterface
 {
     Q_OBJECT
@@ -30,6 +31,8 @@ private slots:
 
 private:
     DBusDock *m_dockInter;
+
+    MiniFrameNavigation *m_navigation;
 };
 
 #endif // MINIFRAME_H

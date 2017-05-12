@@ -1,9 +1,11 @@
 #include "miniframe.h"
 #include "dbusdock.h"
+#include "widgets/miniframenavigation.h"
 
 #include <QRect>
 #include <QKeyEvent>
 #include <QMouseEvent>
+#include <QHBoxLayout>
 
 #define DOCK_TOP        0
 #define DOCK_RIGHT      1
@@ -13,27 +15,45 @@
 MiniFrame::MiniFrame(QWidget *parent)
     : DBlurEffectWidget(parent),
 
-      m_dockInter(new DBusDock(this))
+      m_dockInter(new DBusDock(this)),
+
+      m_navigation(new MiniFrameNavigation)
 {
+    m_navigation->setFixedWidth(140);
+
+    QHBoxLayout *centralLayout = new QHBoxLayout;
+    centralLayout->addWidget(m_navigation);
+    centralLayout->addStretch();
+    centralLayout->setSpacing(0);
+    centralLayout->setContentsMargins(0, 10, 10, 10);
+
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground);
     setMaskColor(DBlurEffectWidget::DarkColor);
     setFixedSize(640, 480);
     setBlurRectXRadius(5);
     setBlurRectYRadius(5);
-
-    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &MiniFrame::adjustPosition, Qt::QueuedConnection);
-
-    QTimer::singleShot(1, this, &MiniFrame::adjustPosition);
+    setLayout(centralLayout);
 }
 
 void MiniFrame::showLauncher()
 {
+    if (visible())
+        return;
+
+    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &MiniFrame::adjustPosition, Qt::QueuedConnection);
+    QTimer::singleShot(1, this, &MiniFrame::adjustPosition);
+
     show();
 }
 
 void MiniFrame::hideLauncher()
 {
+    if (!visible())
+        return;
+
+    disconnect(m_dockInter, &DBusDock::FrontendRectChanged, this, &MiniFrame::adjustPosition);
+
     hide();
 }
 

@@ -31,7 +31,9 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_navigation->setFixedWidth(140);
 
     m_viewToggle = new DImageButton;
+    m_viewToggle->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
     m_modeToggle = new DImageButton;
+    m_modeToggle->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
     m_searchEdit = new SearchLineEdit;
 
     QHBoxLayout *viewHeaderLayout = new QHBoxLayout;

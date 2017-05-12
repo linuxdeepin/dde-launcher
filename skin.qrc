@@ -153,5 +153,23 @@
         <file>skin/icons/utilities_hover_22px.svg</file>
         <file>skin/icons/utilities_normal_16px.svg</file>
         <file>skin/icons/utilities_normal_22px.svg</file>
+        <file>skin/icons/fullscreen_hover.png</file>
+        <file>skin/icons/fullscreen_normal.png</file>
+        <file>skin/icons/fullscreen_press.png</file>
+        <file>skin/icons/lock_hover.png</file>
+        <file>skin/icons/lock_normal.png</file>
+        <file>skin/icons/lock_press.png</file>
+        <file>skin/icons/poweroff_hover.png</file>
+        <file>skin/icons/poweroff_normal.png</file>
+        <file>skin/icons/poweroff_press.png</file>
+        <file>skin/icons/reboot_hover.png</file>
+        <file>skin/icons/reboot_normal.png</file>
+        <file>skin/icons/reboot_press.png</file>
+        <file>skin/icons/suspend_hover.png</file>
+        <file>skin/icons/suspend_normal.png</file>
+        <file>skin/icons/suspend_press.png</file>
+        <file>skin/icons/unfullscreen_hover.png</file>
+        <file>skin/icons/unfullscreen_normal.png</file>
+        <file>skin/icons/unfullscreen_press.png</file>
     </qresource>
 </RCC>

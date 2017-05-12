@@ -21,8 +21,12 @@ MiniFrame::MiniFrame(QWidget *parent)
     : DBlurEffectWidget(parent),
 
       m_dockInter(new DBusDock(this)),
+      m_appsManager(AppsManager::instance(this)),
 
-      m_navigation(new MiniFrameNavigation)
+      m_navigation(new MiniFrameNavigation),
+
+      m_appsModel(new AppsListModel(AppsListModel::All)),
+      m_searchModel(new AppsListModel(AppsListModel::Search))
 {
     m_navigation->setFixedWidth(140);
 
@@ -78,6 +82,8 @@ MiniFrame::MiniFrame(QWidget *parent)
     setBlurRectXRadius(5);
     setBlurRectYRadius(5);
     setLayout(centralLayout);
+
+    connect(m_searchEdit, &SearchLineEdit::textChanged, this, &MiniFrame::searchText, Qt::QueuedConnection);
 
     QTimer::singleShot(1, this, &MiniFrame::toggleAppsView);
 }
@@ -168,10 +174,25 @@ void MiniFrame::adjustPosition()
 
 void MiniFrame::toggleAppsView()
 {
-    AppListView *v = new AppListView;
-    v->setModel(new AppsListModel(AppsListModel::All));
-    v->setItemDelegate(new AppItemDelegate);
-    v->setContainerBox(m_appsArea);
+    AppListView *appsView = new AppListView;
+    appsView->setModel(m_appsModel);
+    appsView->setItemDelegate(new AppItemDelegate);
+    appsView->setContainerBox(m_appsArea);
 
-    m_appsBox->addWidget(v);
+    connect(appsView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
+    connect(appsView, &AppListView::clicked, this, &MiniFrame::hideLauncher, Qt::QueuedConnection);
+
+    m_appsBox->layout()->addWidget(appsView);
+    m_appsView = appsView;
+}
+
+void MiniFrame::searchText(const QString &text)
+{
+    if (text.isEmpty())
+    {
+        m_appsView->setModel(m_appsModel);
+    } else {
+        m_appsManager->searchApp(text.trimmed());
+        m_appsView->setModel(m_searchModel);
+    }
 }

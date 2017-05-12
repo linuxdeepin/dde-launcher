@@ -228,7 +228,8 @@ Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const
 void AppsListModel::dataChanged(const AppCategory category)
 {
     if (category == All || category == m_category)
-        emit QAbstractItemModel::dataChanged(index(0), index(rowCount(QModelIndex())));
+        emit QAbstractItemModel::layoutChanged();
+//        emit QAbstractItemModel::dataChanged(index(0), index(rowCount(QModelIndex())));
 }
 
 ///

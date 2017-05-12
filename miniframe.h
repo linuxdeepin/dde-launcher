@@ -11,9 +11,12 @@
 DWIDGET_USE_NAMESPACE
 
 class QScrollArea;
+class QListView;
 class DBusDock;
 class MiniFrameNavigation;
 class SearchLineEdit;
+class AppsListModel;
+class AppsManager;
 class MiniFrame : public DBlurEffectWidget, public LauncherInterface
 {
     Q_OBJECT
@@ -33,9 +36,11 @@ private:
 private slots:
     void adjustPosition();
     void toggleAppsView();
+    void searchText(const QString &text);
 
 private:
     DBusDock *m_dockInter;
+    AppsManager *m_appsManager;
 
     DImageButton *m_viewToggle;
     DImageButton *m_modeToggle;
@@ -45,6 +50,10 @@ private:
     QWidget *m_viewWrapper;
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsBox;
+
+    QListView *m_appsView;
+    AppsListModel *m_appsModel;
+    AppsListModel *m_searchModel;
 };
 
 #endif // MINIFRAME_H

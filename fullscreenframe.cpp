@@ -454,6 +454,15 @@ void FullScreenFrame::initUI()
     m_contentLayout->addSpacing(30);
     m_contentLayout->addLayout(m_scrollAreaLayout);
 
+    m_miniMode = new DImageButton;
+    m_miniMode->setNormalPic(":/icons/skin/icons/unfullscreen_normal.png");
+
+    QVBoxLayout *rightLayout = new QVBoxLayout;
+    rightLayout->addWidget(m_miniMode);
+    rightLayout->setAlignment(m_miniMode, Qt::AlignTop | Qt::AlignRight);
+
+    m_rightSpacing->setLayout(rightLayout);
+
     m_mainLayout = new QHBoxLayout;
     m_mainLayout->setMargin(0);
     m_mainLayout->addSpacing(0);
@@ -502,6 +511,21 @@ void FullScreenFrame::showGradient() {
         m_bottomGradient->move(bottomRect.topLeft());
         m_bottomGradient->show();
         m_bottomGradient->raise();
+}
+
+void FullScreenFrame::toMiniMode()
+{
+    const QStringList args {
+        "--print-reply",
+        "--dest=com.deepin.dde.daemon.Launcher",
+        "/com/deepin/dde/daemon/Launcher",
+        "org.freedesktop.DBus.Properties.Set",
+        "string:com.deepin.dde.daemon.Launcher",
+        "string:DisplayMode",
+        "variant:int32:1"
+    };
+
+    QProcess::startDetached("dbus-send", args);
 }
 
 void FullScreenFrame::refreshTitleVisible()
@@ -631,6 +655,8 @@ AppListView *FullScreenFrame::lastVisibleView() const
 
 void FullScreenFrame::initConnection()
 {
+    connect(m_miniMode, &DImageButton::clicked, this, &FullScreenFrame::toMiniMode, Qt::QueuedConnection);
+
     connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &FullScreenFrame::updateGeometry);
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &FullScreenFrame::updateGeometry);
 

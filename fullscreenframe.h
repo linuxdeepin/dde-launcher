@@ -23,7 +23,6 @@
 #include <QPropertyAnimation>
 #include <QSettings>
 #include <QTimer>
-#include <QGSettings>
 
 #include <dboxwidget.h>
 
@@ -37,13 +36,6 @@ class FullScreenFrame : public BoxFrame, public LauncherInterface
     Q_PROPERTY(int dockPosition READ dockPosition DESIGNABLE true)
 
 public:
-    enum DisplayMode {
-        AllApps,
-        GroupByCategory,
-        Search,
-    };
-
-public:
     explicit FullScreenFrame(QWidget *parent = 0);
     ~FullScreenFrame();
 
@@ -54,7 +46,7 @@ public:
 
 signals:
     void categoryAppNumsChanged(const AppsListModel::AppCategory category, const int appNums);
-    void displayModeChanged(const DisplayMode mode);
+    void displayModeChanged(const int mode);
     void currentVisibleCategoryChanged(const AppsListModel::AppCategory currentVisibleCategory) const;
 
 public slots:
@@ -87,11 +79,10 @@ private:
     void checkCategoryVisible();
     void showPopupMenu(const QPoint &pos, const QModelIndex &context);
     void showPopupUninstallDialog(const QModelIndex &context);
-    void updateDisplayMode(const DisplayMode mode);
+    void updateDisplayMode(const int mode);
     void updateCurrentVisibleCategory();
     void updatePlaceholderSize();
     void updateDockPosition();
-    DisplayMode getDisplayMode();
 
     AppsListModel *nextCategoryModel(const AppsListModel *currentModel);
     AppsListModel *prevCategoryModel(const AppsListModel *currentModel);
@@ -117,10 +108,9 @@ private:
     bool m_isConfirmDialogShown = false;
     bool m_refershCategoryTextVisible = false;
     int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
+    int m_displayMode = SEARCH;
     double rightMarginRation = 1;
-    DisplayMode m_displayMode = Search;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
-    QGSettings *m_launcherGsettings;
     BackgroundManager *m_backgroundManager;
 
     DBusDisplay *m_displayInter;
@@ -190,7 +180,5 @@ private:
     QHBoxLayout *m_mainLayout;
     QVBoxLayout *m_contentLayout;
 };
-
-Q_DECLARE_METATYPE(FullScreenFrame::DisplayMode)
 
 #endif // MAINFRAME_H

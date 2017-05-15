@@ -7,6 +7,10 @@
 #include <QDesktopWidget>
 #include <QApplication>
 
+static const QString DisplayModeKey = "display-mode";
+static const QString DisplayModeFree = "free";
+static const QString DisplayModeCategory = "category";
+
 QPointer<CalculateUtil> CalculateUtil::INSTANCE = nullptr;
 
 CalculateUtil *CalculateUtil::instance()
@@ -23,6 +27,22 @@ int CalculateUtil::calculateBesidePadding(const int screenWidth)
     if (screenWidth > 1366)
         return 180;
     return 130;
+}
+
+void CalculateUtil::setDisplayMode(const int mode)
+{
+    m_launcherGsettings->set(DisplayModeKey, mode);
+}
+
+int CalculateUtil::displayMode()
+{
+    const QString displayMode = m_launcherGsettings->get(DisplayModeKey).toString();
+
+    if (displayMode == DisplayModeCategory) {
+        return GROUP_BY_CATEGORY;
+    }
+
+    return ALL_APPS;
 }
 
 void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int dockPosition)
@@ -75,7 +95,9 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 }
 
 CalculateUtil::CalculateUtil(QObject *parent)
-    : QObject(parent)
+    : QObject(parent),
+      m_launcherGsettings(new QGSettings("com.deepin.dde.launcher",
+                                         "/com/deepin/dde/launcher/", this))
 {
     m_launcherInter = new DBusLauncher(this);
 }

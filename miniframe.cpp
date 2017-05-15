@@ -3,8 +3,10 @@
 #include "widgets/miniframenavigation.h"
 #include "widgets/searchlineedit.h"
 #include "view/appgridview.h"
+#include "view/applistview.h"
 #include "model/appslistmodel.h"
 #include "delegate/appitemdelegate.h"
+#include "delegate/applistdelegate.h"
 
 #include <QRect>
 #include <QKeyEvent>
@@ -182,14 +184,20 @@ void MiniFrame::adjustPosition()
 
 void MiniFrame::toggleAppsView()
 {
+#ifdef QT_DEBUG
+    AppListView *appsView = new AppListView;
+    appsView->setModel(m_appsModel);
+    appsView->setItemDelegate(new AppListDelegate);
+#else
     AppGridView *appsView = new AppGridView;
     appsView->setModel(m_appsModel);
     appsView->setItemDelegate(new AppItemDelegate);
     appsView->setContainerBox(m_appsArea);
     appsView->setSpacing(0);
+#endif
 
-    connect(appsView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
-    connect(appsView, &AppGridView::clicked, this, &MiniFrame::hideLauncher, Qt::QueuedConnection);
+    connect(appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
+    connect(appsView, &QListView::clicked, this, &MiniFrame::hideLauncher, Qt::QueuedConnection);
 
     m_appsBox->layout()->addWidget(appsView);
     m_appsView = appsView;

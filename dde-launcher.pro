@@ -30,7 +30,9 @@ SOURCES += \
     launchersys.cpp \
     fullscreenframe.cpp \
     miniframe.cpp \
-    view/appgridview.cpp
+    view/appgridview.cpp \
+    view/applistview.cpp \
+    delegate/applistdelegate.cpp
 
 HEADERS += \
     model/appslistmodel.h \
@@ -47,7 +49,9 @@ HEADERS += \
     launcherinterface.h \
     fullscreenframe.h \
     miniframe.h \
-    view/appgridview.h
+    view/appgridview.h \
+    view/applistview.h \
+    delegate/applistdelegate.h
 
 #Automating generation .qm files from .ts files
 system($$PWD/translate_generation.sh)

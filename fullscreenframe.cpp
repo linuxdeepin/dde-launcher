@@ -23,8 +23,6 @@ static const QString DisplayModeCategory = "category";
 
 FullScreenFrame::FullScreenFrame(QWidget *parent) :
     BoxFrame(parent),
-    m_launcherGsettings(new QGSettings("com.deepin.dde.launcher",
-                                       "/com/deepin/dde/launcher/", this)),
     m_backgroundManager(new BackgroundManager(this)),
     m_displayInter(new DBusDisplay(this)),
 
@@ -93,7 +91,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     initUI();
     initConnection();
 
-    updateDisplayMode(getDisplayMode());
+    updateDisplayMode(m_calcUtil->displayMode());
 
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
 }
@@ -143,7 +141,7 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
 
 void FullScreenFrame::showTips(const QString &tips)
 {
-    if (m_displayMode != Search)
+    if (m_displayMode != SEARCH)
         return;
 
     m_tipsLabel->setText(tips);
@@ -178,7 +176,7 @@ void FullScreenFrame::keyPressEvent(QKeyEvent *e)
     {
 #ifdef QT_DEBUG
     case Qt::Key_Control:       scrollToCategory(AppsListModel::Internet);      return;
-    case Qt::Key_F2:            updateDisplayMode(GroupByCategory);             return;
+//    case Qt::Key_F2:            updateDisplayMode(GroupByCategory);             return;
     case Qt::Key_Plus:          m_calcUtil->increaseIconSize();
                                 emit m_appsManager->layoutChanged(AppsListModel::All);
                                                                                 return;
@@ -571,7 +569,7 @@ void FullScreenFrame::refershCategoryTextVisible()
 
 void FullScreenFrame::refershCurrentFloatTitle()
 {
-    if (m_displayMode != GroupByCategory)
+    if (m_displayMode != GROUP_BY_CATEGORY)
         return m_floatTitle->setVisible(false);
 
     CategoryTitleWidget *sourceTitle = categoryTitle(m_currentCategory);
@@ -771,7 +769,7 @@ void FullScreenFrame::initConnection()
     connect(m_navigationWidget, &NavigationWidget::toggleMode, [this]{
         m_searchWidget->clearFocus();
         m_searchWidget->clearSearchContent();
-        updateDisplayMode(m_displayMode == GroupByCategory ? AllApps : GroupByCategory);
+        updateDisplayMode(m_displayMode == GROUP_BY_CATEGORY ? ALL_APPS : GROUP_BY_CATEGORY);
     });
 
     connect(m_appsManager, &AppsManager::updateCategoryView, this, &FullScreenFrame::checkCategoryVisible);
@@ -813,7 +811,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
 
     if (!currentIndex.isValid())
     {
-        m_appItemDelegate->setCurrentIndex(m_displayMode == GroupByCategory ? m_internetView->indexAt(0) : m_allAppsView->indexAt(0));
+        m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? m_internetView->indexAt(0) : m_allAppsView->indexAt(0));
         update();
         return;
     }
@@ -901,9 +899,9 @@ void FullScreenFrame::launchCurrentApp()
     {
         const AppsListModel::AppCategory category = index.data(AppsListModel::AppGroupRole).value<AppsListModel::AppCategory>();
 
-        if ((category == AppsListModel::All && m_displayMode == AllApps) ||
-            (category == AppsListModel::Search && m_displayMode == Search) ||
-            (m_displayMode == GroupByCategory && category != AppsListModel::All && category != AppsListModel::Search))
+        if ((category == AppsListModel::All && m_displayMode == ALL_APPS) ||
+            (category == AppsListModel::Search && m_displayMode == SEARCH) ||
+            (m_displayMode == GROUP_BY_CATEGORY && category != AppsListModel::All && category != AppsListModel::Search))
         {
             m_appsManager->launchApp(index);
 
@@ -914,9 +912,9 @@ void FullScreenFrame::launchCurrentApp()
 
     switch (m_displayMode)
     {
-    case Search:
-    case AllApps:           m_appsManager->launchApp(m_allAppsView->indexAt(0));     break;
-    case GroupByCategory:   m_appsManager->launchApp(m_internetView->indexAt(0));    break;
+    case SEARCH:
+    case ALL_APPS:            m_appsManager->launchApp(m_allAppsView->indexAt(0));     break;
+    case GROUP_BY_CATEGORY:   m_appsManager->launchApp(m_internetView->indexAt(0));    break;
     }
 
     hide();
@@ -924,7 +922,7 @@ void FullScreenFrame::launchCurrentApp()
 
 void FullScreenFrame::checkCategoryVisible()
 {
-    if (m_displayMode != GroupByCategory)
+    if (m_displayMode != GROUP_BY_CATEGORY)
         return m_floatTitle->setVisible(false);
 
     emit categoryAppNumsChanged(AppsListModel::Internet, m_appsManager->appNums(AppsListModel::Internet));
@@ -1001,7 +999,7 @@ void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
     AppGridView *view = nullptr;
     const AppsListModel::AppCategory category = index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 
-    if (m_displayMode == Search || m_displayMode == AllApps)
+    if (m_displayMode == SEARCH || m_displayMode == ALL_APPS)
         view = m_allAppsView;
     else
         view = categoryView(category);
@@ -1016,7 +1014,7 @@ void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
 
 void FullScreenFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
 {
-    if (m_displayMode != GroupByCategory)
+    if (m_displayMode != GROUP_BY_CATEGORY)
         return;
 
     QWidget *categoryTitle = this->categoryTitle(category);
@@ -1028,14 +1026,14 @@ void FullScreenFrame::refershCategoryVisible(const AppsListModel::AppCategory ca
         categoryTitle->setVisible(appNums);
 }
 
-void FullScreenFrame::updateDisplayMode(const DisplayMode mode)
+void FullScreenFrame::updateDisplayMode(const int mode)
 {
     if (m_displayMode == mode)
         return;
 
     m_displayMode = mode;
 
-    bool isCategoryMode = m_displayMode == GroupByCategory;
+    bool isCategoryMode = m_displayMode == GROUP_BY_CATEGORY;
 
     m_allAppsView->setVisible(!isCategoryMode);
     m_internetTitle->setVisible(isCategoryMode);
@@ -1064,22 +1062,22 @@ void FullScreenFrame::updateDisplayMode(const DisplayMode mode)
     m_viewListPlaceholder->setVisible(isCategoryMode);
     m_navigationWidget->setButtonsVisible(isCategoryMode);
 
-    m_allAppsView->setModel(m_displayMode == Search ? m_searchResultModel : m_allAppsModel);
+    m_allAppsView->setModel(m_displayMode == SEARCH ? m_searchResultModel : m_allAppsModel);
     // choose nothing
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
     switch (m_displayMode) {
-    case AllApps:
-        m_launcherGsettings->set(DisplayModeKey, DisplayModeFree);
+    case ALL_APPS:
+        m_calcUtil->setDisplayMode(ALL_APPS);
         break;
-    case GroupByCategory:
-        m_launcherGsettings->set(DisplayModeKey, DisplayModeCategory);
+    case GROUP_BY_CATEGORY:
+        m_calcUtil->setDisplayMode(GROUP_BY_CATEGORY);
         break;
     default:
         break;
     }
 
-    if (m_displayMode == GroupByCategory)
+    if (m_displayMode == GROUP_BY_CATEGORY)
         scrollToCategory(m_currentCategory);
     else
         // scroll to top on group mode
@@ -1092,7 +1090,7 @@ void FullScreenFrame::updateDisplayMode(const DisplayMode mode)
 
 void FullScreenFrame::updateCurrentVisibleCategory()
 {
-    if (m_displayMode != GroupByCategory)
+    if (m_displayMode != GROUP_BY_CATEGORY)
         return;
 
     AppsListModel::AppCategory currentVisibleCategory;
@@ -1142,17 +1140,6 @@ void FullScreenFrame::updateDockPosition()
 {
     m_calcUtil->calculateAppLayout(m_appsArea->size(), m_appsManager->dockPosition());
     setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
-}
-
-FullScreenFrame::DisplayMode FullScreenFrame::getDisplayMode()
-{
-    QString displayMode = m_launcherGsettings->get(DisplayModeKey).toString();
-
-    if (displayMode == DisplayModeCategory) {
-        return GroupByCategory;
-    }
-
-    return AllApps;
 }
 
 AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentModel)
@@ -1238,7 +1225,7 @@ void FullScreenFrame::searchTextChanged(const QString &keywords)
     m_appsManager->searchApp(keywords);
 
     if (keywords.isEmpty())
-        updateDisplayMode(getDisplayMode());
+        updateDisplayMode(m_calcUtil->displayMode());
     else
-        updateDisplayMode(Search);
+        updateDisplayMode(SEARCH);
 }

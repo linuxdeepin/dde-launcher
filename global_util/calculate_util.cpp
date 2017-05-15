@@ -27,6 +27,19 @@ int CalculateUtil::calculateBesidePadding(const int screenWidth)
 
 void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int dockPosition)
 {
+    // mini mode
+    if (m_launcherInter->displayMode() == MINI)
+    {
+        m_appItemSpacing = 0;
+        m_appItemWidth = 120;
+        m_appItemHeight = 120;
+        m_appIconSize = 48;
+        m_appItemFontSize = 10;
+
+        emit layoutChanged();
+        return;
+    }
+
     // NOTE(hualet): DPI default to 96.
     static auto PtToPx = [] (float pt) -> int {
         return pt * 96 / 72.0;
@@ -64,6 +77,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 CalculateUtil::CalculateUtil(QObject *parent)
     : QObject(parent)
 {
+    m_launcherInter = new DBusLauncher(this);
 }
 
 int CalculateUtil::itemSpacing(const int containerWidth) const

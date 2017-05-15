@@ -5,6 +5,11 @@
 #include <QSize>
 #include <QtCore>
 
+#include "dbusinterface/dbuslauncher.h"
+
+#define FULLSCREEN  0
+#define MINI        1
+
 class CalculateUtil : public QObject
 {
     Q_OBJECT
@@ -54,6 +59,8 @@ private:
 
     int m_navgationTextSize = 14;
     int m_titleTextSize = 15;
+
+    DBusLauncher *m_launcherInter;
 };
 
 #endif // CALCULATE_UTIL_H

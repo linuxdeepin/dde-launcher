@@ -44,18 +44,18 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_topGradient(new GradientLabel(this)),
     m_bottomGradient(new GradientLabel(this)),
 
-    m_allAppsView(new AppListView),
-    m_internetView(new AppListView),
-    m_chatView(new AppListView),
-    m_musicView(new AppListView),
-    m_videoView(new AppListView),
-    m_graphicsView(new AppListView),
-    m_gameView(new AppListView),
-    m_officeView(new AppListView),
-    m_readingView(new AppListView),
-    m_developmentView(new AppListView),
-    m_systemView(new AppListView),
-    m_othersView(new AppListView),
+    m_allAppsView(new AppGridView),
+    m_internetView(new AppGridView),
+    m_chatView(new AppGridView),
+    m_musicView(new AppGridView),
+    m_videoView(new AppGridView),
+    m_graphicsView(new AppGridView),
+    m_gameView(new AppGridView),
+    m_officeView(new AppGridView),
+    m_readingView(new AppGridView),
+    m_developmentView(new AppGridView),
+    m_systemView(new AppGridView),
+    m_othersView(new AppGridView),
 
     m_allAppsModel(new AppsListModel(AppsListModel::All)),
     m_searchResultModel(new AppsListModel(AppsListModel::Search)),
@@ -607,9 +607,9 @@ CategoryTitleWidget *FullScreenFrame::categoryTitle(const AppsListModel::AppCate
     return dest;
 }
 
-AppListView *FullScreenFrame::categoryView(const AppsListModel::AppCategory category) const
+AppGridView *FullScreenFrame::categoryView(const AppsListModel::AppCategory category) const
 {
-    AppListView *view = nullptr;
+    AppGridView *view = nullptr;
 
     switch (category)
     {
@@ -630,7 +630,7 @@ AppListView *FullScreenFrame::categoryView(const AppsListModel::AppCategory cate
     return view;
 }
 
-AppListView *FullScreenFrame::lastVisibleView() const
+AppGridView *FullScreenFrame::lastVisibleView() const
 {
     if (!m_appsManager->appsInfoList(AppsListModel::Others).isEmpty())
         return m_othersView;
@@ -679,89 +679,89 @@ void FullScreenFrame::initConnection()
     connect(this, &FullScreenFrame::backgroundChanged, this, static_cast<void (FullScreenFrame::*)()>(&FullScreenFrame::update));
 
     // auto scroll when drag to app list box border
-    connect(m_allAppsView, &AppListView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
+    connect(m_allAppsView, &AppGridView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
     connect(m_autoScrollTimer, &QTimer::timeout, [this] {
         m_appsArea->verticalScrollBar()->setValue(m_appsArea->verticalScrollBar()->value() + m_autoScrollStep);
     });
-    connect(m_allAppsView, &AppListView::requestScrollUp, [this] {
+    connect(m_allAppsView, &AppGridView::requestScrollUp, [this] {
         m_autoScrollStep = -DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
         if (!m_autoScrollTimer->isActive())
             m_autoScrollTimer->start();
     });
-    connect(m_allAppsView, &AppListView::requestScrollDown, [this] {
+    connect(m_allAppsView, &AppGridView::requestScrollDown, [this] {
         m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
         if (!m_autoScrollTimer->isActive())
             m_autoScrollTimer->start();
     });
 
-    connect(m_allAppsView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_internetView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_chatView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_musicView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_videoView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_graphicsView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_gameView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_officeView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_readingView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_developmentView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_systemView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_othersView, &AppListView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_allAppsView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_internetView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_chatView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_musicView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_videoView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_graphicsView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_gameView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_officeView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_readingView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_developmentView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_systemView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(m_othersView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
 
 //    connect(m_allAppsView, &AppListView::appBeDraged, m_appsManager, &AppsManager::handleDragedApp);
 //    connect(m_allAppsView, &AppListView::appDropedIn, m_appsManager, &AppsManager::handleDropedApp);
 //    connect(m_allAppsView, &AppListView::handleDragItems, m_appsManager, &AppsManager::handleDragedApp);
 
-    connect(m_allAppsView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_internetView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_chatView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_musicView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_videoView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_graphicsView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_gameView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_officeView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_readingView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_developmentView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_systemView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_othersView, &AppListView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_allAppsView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_internetView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_chatView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_musicView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_videoView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_graphicsView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_gameView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_officeView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_readingView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_developmentView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_systemView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_othersView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
 
-    connect(m_allAppsView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_internetView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_chatView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_musicView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_videoView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_graphicsView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_gameView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_officeView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_readingView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_developmentView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_systemView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_othersView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_allAppsView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_internetView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_chatView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_musicView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_videoView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_graphicsView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_gameView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_officeView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_readingView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_developmentView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_systemView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(m_othersView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
 
-    connect(m_allAppsView, &AppListView::clicked, this, &FullScreenFrame::hide);
-    connect(m_internetView, &AppListView::clicked, this, &FullScreenFrame::hide);
-    connect(m_chatView, &AppListView::clicked, this, &FullScreenFrame::hide);
-    connect(m_musicView, &AppListView::clicked, this, &FullScreenFrame::hide);
-    connect(m_videoView, &AppListView::clicked, this, &FullScreenFrame::hide);
-    connect(m_graphicsView, &AppListView::clicked, this, &FullScreenFrame::hide);
-    connect(m_gameView, &AppListView::clicked, this, &FullScreenFrame::hide);
-    connect(m_officeView, &AppListView::clicked, this, &FullScreenFrame::hide);
-    connect(m_readingView, &AppListView::clicked, this, &FullScreenFrame::hide);
-    connect(m_developmentView, &AppListView::clicked, this, &FullScreenFrame::hide);
-    connect(m_systemView, &AppListView::clicked, this, &FullScreenFrame::hide);
-    connect(m_othersView, &AppListView::clicked, this, &FullScreenFrame::hide);
+    connect(m_allAppsView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(m_internetView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(m_chatView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(m_musicView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(m_videoView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(m_graphicsView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(m_gameView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(m_officeView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(m_readingView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(m_developmentView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(m_systemView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(m_othersView, &AppGridView::clicked, this, &FullScreenFrame::hide);
 
-    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_allAppsView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_internetView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_chatView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_musicView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_videoView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_graphicsView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_gameView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_officeView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_readingView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_developmentView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_systemView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_othersView, static_cast<void (AppListView::*)(const QModelIndex&)>(&AppListView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_allAppsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_internetView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_chatView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_musicView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_videoView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_graphicsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_gameView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_officeView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_readingView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_developmentView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_systemView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::currentChanged, m_othersView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
 
     connect(m_appsArea, &AppListArea::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
     connect(m_navigationWidget, &NavigationWidget::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
@@ -998,7 +998,7 @@ void FullScreenFrame::ensureScrollToDest(const QVariant &value)
 
 void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
 {
-    AppListView *view = nullptr;
+    AppGridView *view = nullptr;
     const AppsListModel::AppCategory category = index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 
     if (m_displayMode == Search || m_displayMode == AllApps)
@@ -1132,7 +1132,7 @@ void FullScreenFrame::updateCurrentVisibleCategory()
 
 void FullScreenFrame::updatePlaceholderSize()
 {
-    const AppListView *view = lastVisibleView();
+    const AppGridView *view = lastVisibleView();
     Q_ASSERT(view);
 
     m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - view->height() - DLauncher::APPS_AREA_BOTTOM_MARGIN);

@@ -1,5 +1,5 @@
-#ifndef APPLISTVIEW_H
-#define APPLISTVIEW_H
+#ifndef APPGRIDVIEW_H
+#define APPGRIDVIEW_H
 
 #include <QListView>
 #include <QSize>
@@ -9,12 +9,12 @@
 
 class CalculateUtil;
 class AppsListModel;
-class AppListView : public QListView
+class AppGridView : public QListView
 {
     Q_OBJECT
 
 public:
-    explicit AppListView(QWidget *parent = 0);
+    explicit AppGridView(QWidget *parent = 0);
 
     using QListView::indexAt;
     const QModelIndex indexAt(const int index) const;
@@ -62,4 +62,4 @@ private:
     static QPointer<CalculateUtil> m_calcUtil;
 };
 
-#endif // APPLISTVIEW_H
+#endif // APPGRIDVIEW_H

@@ -19,7 +19,6 @@ isEqual(ARCH, mips64) | isEqual(ARCH, mips32) {
 SOURCES += \
     model/appslistmodel.cpp \
     model/appsmanager.cpp \
-    view/applistview.cpp \
     global_util/util.cpp \
     delegate/appitemdelegate.cpp \
     global_util/xcb_misc.cpp \
@@ -30,12 +29,12 @@ SOURCES += \
     global_util/themeappicon.cpp \
     launchersys.cpp \
     fullscreenframe.cpp \
-    miniframe.cpp
+    miniframe.cpp \
+    view/appgridview.cpp
 
 HEADERS += \
     model/appslistmodel.h \
     model/appsmanager.h \
-    view/applistview.h \
     global_util/constants.h \
     global_util/util.h \
     delegate/appitemdelegate.h \
@@ -47,7 +46,8 @@ HEADERS += \
     launchersys.h \
     launcherinterface.h \
     fullscreenframe.h \
-    miniframe.h
+    miniframe.h \
+    view/appgridview.h
 
 #Automating generation .qm files from .ts files
 system($$PWD/translate_generation.sh)

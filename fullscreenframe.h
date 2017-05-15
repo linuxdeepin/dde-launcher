@@ -12,7 +12,7 @@
 #include "global_util/constants.h"
 #include "model/appsmanager.h"
 #include "model/appslistmodel.h"
-#include "view/applistview.h"
+#include "view/appgridview.h"
 #include "worker/menuworker.h"
 #include "dbusinterface/dbusdisplay.h"
 #include "widgets/applistarea.h"
@@ -110,8 +110,8 @@ private slots:
 
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
-    AppListView *categoryView(const AppsListModel::AppCategory category) const;
-    AppListView *lastVisibleView() const;
+    AppGridView *categoryView(const AppsListModel::AppCategory category) const;
+    AppGridView *lastVisibleView() const;
 
 private:
     bool m_isConfirmDialogShown = false;
@@ -147,18 +147,18 @@ private:
     GradientLabel* m_topGradient;
     GradientLabel* m_bottomGradient;
 
-    AppListView *m_allAppsView;
-    AppListView *m_internetView;
-    AppListView * m_chatView;
-    AppListView *m_musicView;
-    AppListView *m_videoView;
-    AppListView *m_graphicsView;
-    AppListView *m_gameView;
-    AppListView *m_officeView;
-    AppListView *m_readingView;
-    AppListView *m_developmentView;
-    AppListView *m_systemView;
-    AppListView *m_othersView;
+    AppGridView *m_allAppsView;
+    AppGridView *m_internetView;
+    AppGridView * m_chatView;
+    AppGridView *m_musicView;
+    AppGridView *m_videoView;
+    AppGridView *m_graphicsView;
+    AppGridView *m_gameView;
+    AppGridView *m_officeView;
+    AppGridView *m_readingView;
+    AppGridView *m_developmentView;
+    AppGridView *m_systemView;
+    AppGridView *m_othersView;
     AppsListModel *m_allAppsModel;
     AppsListModel *m_searchResultModel;
     AppsListModel *m_internetModel;

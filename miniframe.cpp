@@ -2,7 +2,7 @@
 #include "dbusdock.h"
 #include "widgets/miniframenavigation.h"
 #include "widgets/searchlineedit.h"
-#include "view/applistview.h"
+#include "view/appgridview.h"
 #include "model/appslistmodel.h"
 #include "delegate/appitemdelegate.h"
 
@@ -182,14 +182,14 @@ void MiniFrame::adjustPosition()
 
 void MiniFrame::toggleAppsView()
 {
-    AppListView *appsView = new AppListView;
+    AppGridView *appsView = new AppGridView;
     appsView->setModel(m_appsModel);
     appsView->setItemDelegate(new AppItemDelegate);
     appsView->setContainerBox(m_appsArea);
     appsView->setSpacing(0);
 
-    connect(appsView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
-    connect(appsView, &AppListView::clicked, this, &MiniFrame::hideLauncher, Qt::QueuedConnection);
+    connect(appsView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
+    connect(appsView, &AppGridView::clicked, this, &MiniFrame::hideLauncher, Qt::QueuedConnection);
 
     m_appsBox->layout()->addWidget(appsView);
     m_appsView = appsView;

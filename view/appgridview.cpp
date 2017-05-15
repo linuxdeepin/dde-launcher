@@ -1,4 +1,4 @@
-#include "applistview.h"
+#include "appgridview.h"
 #include "global_util/constants.h"
 #include "global_util/calculate_util.h"
 #include "model/appslistmodel.h"
@@ -14,10 +14,10 @@
 #include <QLabel>
 #include <QPainter>
 
-QPointer<AppsManager> AppListView::m_appManager = nullptr;
-QPointer<CalculateUtil> AppListView::m_calcUtil = nullptr;
+QPointer<AppsManager> AppGridView::m_appManager = nullptr;
+QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
 
-AppListView::AppListView(QWidget *parent) :
+AppGridView::AppGridView(QWidget *parent) :
     QListView(parent),
     m_dropThresholdTimer(new QTimer(this))
 {
@@ -53,13 +53,13 @@ AppListView::AppListView(QWidget *parent) :
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] { setSpacing(m_calcUtil->appItemSpacing()); });
 
 #ifndef DISABLE_DRAG_ANIMATION
-    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::prepareDropSwap, Qt::QueuedConnection);
+    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::prepareDropSwap, Qt::QueuedConnection);
 #else
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::dropSwap);
 #endif
 }
 
-const QModelIndex AppListView::indexAt(const int index) const
+const QModelIndex AppGridView::indexAt(const int index) const
 {
     return model()->index(index, 0, QModelIndex());
 }
@@ -69,24 +69,24 @@ const QModelIndex AppListView::indexAt(const int index) const
 /// \param index item index
 /// \return pixel of Y offset
 ///
-int AppListView::indexYOffset(const QModelIndex &index) const
+int AppGridView::indexYOffset(const QModelIndex &index) const
 {
     return indexRect(index).y();
 }
 
-void AppListView::setContainerBox(const QWidget *container)
+void AppGridView::setContainerBox(const QWidget *container)
 {
     m_containerBox = container;
 }
 
-void AppListView::dropEvent(QDropEvent *e)
+void AppGridView::dropEvent(QDropEvent *e)
 {
     e->accept();
 
     m_enableDropInside = true;
 }
 
-void AppListView::mousePressEvent(QMouseEvent *e)
+void AppGridView::mousePressEvent(QMouseEvent *e)
 {
     if (e->buttons() == Qt::RightButton) {
         QPoint rightClickPoint = mapToGlobal(e->pos());
@@ -102,7 +102,7 @@ void AppListView::mousePressEvent(QMouseEvent *e)
     QListView::mousePressEvent(e);
 }
 
-void AppListView::dragEnterEvent(QDragEnterEvent *e)
+void AppGridView::dragEnterEvent(QDragEnterEvent *e)
 {
     const QModelIndex index = indexAt(e->pos());
 
@@ -110,7 +110,7 @@ void AppListView::dragEnterEvent(QDragEnterEvent *e)
         return e->accept();
 }
 
-void AppListView::dragMoveEvent(QDragMoveEvent *e)
+void AppGridView::dragMoveEvent(QDragMoveEvent *e)
 {
     Q_ASSERT(m_containerBox);
 
@@ -139,7 +139,7 @@ void AppListView::dragMoveEvent(QDragMoveEvent *e)
         emit requestScrollStop();
 }
 
-void AppListView::dragLeaveEvent(QDragLeaveEvent *e)
+void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 {
     e->accept();
 
@@ -147,7 +147,7 @@ void AppListView::dragLeaveEvent(QDragLeaveEvent *e)
     emit requestScrollStop();
 }
 
-void AppListView::mouseMoveEvent(QMouseEvent *e)
+void AppGridView::mouseMoveEvent(QMouseEvent *e)
 {
     // disable qlistview default drag
     setState(NoState);
@@ -162,7 +162,7 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
         startDrag(QListView::indexAt(e->pos()));
 }
 
-void AppListView::mouseReleaseEvent(QMouseEvent *e)
+void AppGridView::mouseReleaseEvent(QMouseEvent *e)
 {
     // request main frame hide when click invalid area
     if (e->button() != Qt::LeftButton)
@@ -175,12 +175,12 @@ void AppListView::mouseReleaseEvent(QMouseEvent *e)
     QListView::mouseReleaseEvent(e);
 }
 
-void AppListView::wheelEvent(QWheelEvent *e)
+void AppGridView::wheelEvent(QWheelEvent *e)
 {
     e->ignore();
 }
 
-void AppListView::startDrag(const QModelIndex &index)
+void AppGridView::startDrag(const QModelIndex &index)
 {
     if (!index.isValid())
         return;
@@ -233,7 +233,7 @@ void AppListView::startDrag(const QModelIndex &index)
     m_enableDropInside = false;
 }
 
-bool AppListView::eventFilter(QObject *o, QEvent *e)
+bool AppGridView::eventFilter(QObject *o, QEvent *e)
 {
     if (o == viewport() && e->type() == QEvent::Paint)
         fitToContent();
@@ -244,7 +244,7 @@ bool AppListView::eventFilter(QObject *o, QEvent *e)
 ///
 /// \brief AppListView::fitToContent change view size to fit viewport content
 ///
-void AppListView::fitToContent()
+void AppGridView::fitToContent()
 {
     if (width() == contentsRect().width() && height() == contentsSize().height())
         return;
@@ -255,7 +255,7 @@ void AppListView::fitToContent()
     setFixedWidth(contentsRect().width());
 }
 
-void AppListView::prepareDropSwap()
+void AppGridView::prepareDropSwap()
 {
     if (m_lastFakeAni || m_dropThresholdTimer->isActive())
         return;
@@ -290,7 +290,7 @@ void AppListView::prepareDropSwap()
     m_dragStartPos = indexRect(dropIndex).center();
 }
 
-void AppListView::createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni)
+void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni)
 {
     const QModelIndex index(indexAt(pos));
 
@@ -324,7 +324,7 @@ void AppListView::createFakeAnimation(const int pos, const bool moveNext, const 
     if (isLastAni)
     {
         m_lastFakeAni = ani;
-        connect(ani, &QPropertyAnimation::finished, this, &AppListView::dropSwap, Qt::QueuedConnection);
+        connect(ani, &QPropertyAnimation::finished, this, &AppGridView::dropSwap, Qt::QueuedConnection);
 //        connect(ani, &QPropertyAnimation::finished, [this] {dropSwap(); m_lastFakeAni = nullptr;});
         connect(ani, &QPropertyAnimation::valueChanged, m_dropThresholdTimer, &QTimer::stop);
     }
@@ -335,7 +335,7 @@ void AppListView::createFakeAnimation(const int pos, const bool moveNext, const 
 ///
 /// \brief AppListView::dropSwap swap current item and drag out item
 ///
-void AppListView::dropSwap()
+void AppGridView::dropSwap()
 {
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     if (!listModel)
@@ -345,7 +345,7 @@ void AppListView::dropSwap()
     m_lastFakeAni = nullptr;
 }
 
-const QRect AppListView::indexRect(const QModelIndex &index) const
+const QRect AppGridView::indexRect(const QModelIndex &index) const
 {
     return rectForIndex(index);
 }

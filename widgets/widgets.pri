@@ -8,7 +8,8 @@ HEADERS += \
     $$PWD/gradientlabel.h \
     $$PWD/searchlineedit.h \
     $$PWD/applistarea.h \
-    $$PWD/miniframenavigation.h
+    $$PWD/miniframenavigation.h \
+    $$PWD/minicategorywidget.h
 
 SOURCES += \
     $$PWD/categorybutton.cpp \
@@ -18,4 +19,5 @@ SOURCES += \
     $$PWD/gradientlabel.cpp \
     $$PWD/searchlineedit.cpp \
     $$PWD/applistarea.cpp \
-    $$PWD/miniframenavigation.cpp
+    $$PWD/miniframenavigation.cpp \
+    $$PWD/minicategorywidget.cpp

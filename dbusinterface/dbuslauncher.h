@@ -60,9 +60,9 @@ public:
 
     ~DBusLauncher();
 
-    Q_PROPERTY(qint32 DisplayMode READ displayMode NOTIFY DisplayModeChanged)
-    inline qint32 displayMode() const
-    { return qvariant_cast< qint32 >(property("DisplayMode")); }
+    Q_PROPERTY(bool Fullscreen READ fullscreen NOTIFY FullscreenChanged)
+    inline bool fullscreen() const
+    { return qvariant_cast< bool >(property("Fullscreen")); }
 
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<CategoryInfoList> GetAllCategoryInfos()
@@ -177,7 +177,7 @@ public Q_SLOTS: // METHODS
        void UninstallFailed(const QString &in0, const QString &in1);
        void UninstallSuccess(const QString &in0);
 
-       void DisplayModeChanged();
+       void FullscreenChanged();
 };
 
 namespace com {

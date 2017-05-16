@@ -8,9 +8,6 @@
 
 #include "dbusinterface/dbuslauncher.h"
 
-#define FULLSCREEN  0
-#define MINI        1
-
 #define ALL_APPS            0
 #define GROUP_BY_CATEGORY   1
 #define SEARCH              2
@@ -35,7 +32,7 @@ public:
     inline QSize appIconSize() const { return QSize(m_appIconSize, m_appIconSize);}
     inline int appItemSpacing() const {return m_appItemSpacing;}
     inline QSize appItemSize() const {return QSize(m_appItemWidth, m_appItemHeight);}
-    int displayMode();
+    int displayMode() const;
     void setDisplayMode(const int mode);
 
 #ifdef QT_DEBUG

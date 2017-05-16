@@ -31,10 +31,10 @@ int CalculateUtil::calculateBesidePadding(const int screenWidth)
 
 void CalculateUtil::setDisplayMode(const int mode)
 {
-    m_launcherGsettings->set(DisplayModeKey, mode);
+    m_launcherGsettings->set(DisplayModeKey, mode == ALL_APPS ? DisplayModeFree : DisplayModeCategory);
 }
 
-int CalculateUtil::displayMode()
+int CalculateUtil::displayMode() const
 {
     const QString displayMode = m_launcherGsettings->get(DisplayModeKey).toString();
 
@@ -48,12 +48,12 @@ int CalculateUtil::displayMode()
 void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int dockPosition)
 {
     // mini mode
-    if (m_launcherInter->displayMode() == MINI)
+    if (!m_launcherInter->fullscreen())
     {
         m_appItemSpacing = 0;
         m_appItemWidth = 120;
         m_appItemHeight = 120;
-        m_appIconSize = 48;
+        m_appIconSize = displayMode() == ALL_APPS ? 48 : 32;
         m_appItemFontSize = 10;
 
         emit layoutChanged();

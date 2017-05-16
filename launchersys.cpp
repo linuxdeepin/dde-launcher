@@ -17,7 +17,7 @@ LauncherSys::LauncherSys(QObject *parent)
 
     AppsManager::instance();
 
-    connect(m_dbusLauncherInter, &DBusLauncher::DisplayModeChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
+    connect(m_dbusLauncherInter, &DBusLauncher::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
 }
 
 void LauncherSys::showLauncher()
@@ -41,7 +41,7 @@ void LauncherSys::displayModeChanged()
 
     delete m_launcherInter;
 
-    if (m_dbusLauncherInter->displayMode() == MINI_FRAME)
+    if (!m_dbusLauncherInter->fullscreen())
         m_launcherInter = new MiniFrame;
     else
         m_launcherInter = new FullScreenFrame;

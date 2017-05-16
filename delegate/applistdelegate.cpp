@@ -16,8 +16,8 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     const QPixmap icon = index.data(AppsListModel::AppIconRole).value<QPixmap>();
 
-    painter->setPen(Qt::red);
-    painter->fillRect(r, Qt::cyan);
+//    painter->setPen(Qt::red);
+//    painter->fillRect(r, Qt::cyan);
     painter->drawPixmap(r.x() + 10, r.y() + (r.height() - icon.height()) / 2, icon);
     painter->drawText(r.marginsRemoved(QMargins(50, 0, 0, 0)), Qt::AlignVCenter | Qt::AlignLeft, index.data(AppsListModel::AppNameRole).toString());
 }

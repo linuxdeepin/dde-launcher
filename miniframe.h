@@ -17,6 +17,7 @@ class MiniFrameNavigation;
 class SearchLineEdit;
 class AppsListModel;
 class AppsManager;
+class MiniCategoryWidget;
 class MiniFrame : public DBlurEffectWidget, public LauncherInterface
 {
     Q_OBJECT
@@ -38,6 +39,7 @@ private slots:
     void adjustPosition();
     void toggleAppsView();
     void toggleFullScreen();
+    void onToggleViewClicked();
     void searchText(const QString &text);
 
 private:
@@ -49,6 +51,7 @@ private:
     SearchLineEdit *m_searchEdit;
 
     MiniFrameNavigation *m_navigation;
+    MiniCategoryWidget *m_categoryWidget;
     QWidget *m_viewWrapper;
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsBox;

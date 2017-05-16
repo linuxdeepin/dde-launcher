@@ -2,6 +2,7 @@
 #include "dbusdock.h"
 #include "widgets/miniframenavigation.h"
 #include "widgets/searchlineedit.h"
+#include "widgets/minicategorywidget.h"
 #include "view/appgridview.h"
 #include "view/applistview.h"
 #include "model/appslistmodel.h"
@@ -26,11 +27,15 @@ MiniFrame::MiniFrame(QWidget *parent)
       m_appsManager(AppsManager::instance()),
 
       m_navigation(new MiniFrameNavigation),
+      m_categoryWidget(new MiniCategoryWidget),
 
+      m_appsView(nullptr),
       m_appsModel(new AppsListModel(AppsListModel::All)),
       m_searchModel(new AppsListModel(AppsListModel::Search))
 {
     m_navigation->setFixedWidth(140);
+    m_categoryWidget->setFixedWidth(140);
+    m_categoryWidget->setVisible(false);
 
     m_viewToggle = new DImageButton;
     m_viewToggle->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
@@ -59,9 +64,15 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->setStyleSheet("background-color: transparent;");
 
+    QHBoxLayout *appsAreaLayout = new QHBoxLayout;
+    appsAreaLayout->addWidget(m_categoryWidget);
+    appsAreaLayout->addWidget(m_appsArea);
+    appsAreaLayout->setSpacing(0);
+    appsAreaLayout->setMargin(0);
+
     QVBoxLayout *viewLayout = new QVBoxLayout;
     viewLayout->addLayout(viewHeaderLayout);
-    viewLayout->addWidget(m_appsArea);
+    viewLayout->addLayout(appsAreaLayout);
     viewLayout->setSpacing(0);
     viewLayout->setMargin(0);
 
@@ -89,6 +100,7 @@ MiniFrame::MiniFrame(QWidget *parent)
 
     connect(m_searchEdit, &SearchLineEdit::textChanged, this, &MiniFrame::searchText, Qt::QueuedConnection);
     connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::toggleFullScreen, Qt::QueuedConnection);
+    connect(m_viewToggle, &DImageButton::clicked, this, &MiniFrame::onToggleViewClicked, Qt::QueuedConnection);
 
     QTimer::singleShot(1, this, &MiniFrame::toggleAppsView);
 }
@@ -184,23 +196,34 @@ void MiniFrame::adjustPosition()
 
 void MiniFrame::toggleAppsView()
 {
-#ifdef QT_DEBUG
-    AppListView *appsView = new AppListView;
-    appsView->setModel(m_appsModel);
-    appsView->setItemDelegate(new AppListDelegate);
-#else
-    AppGridView *appsView = new AppGridView;
-    appsView->setModel(m_appsModel);
-    appsView->setItemDelegate(new AppItemDelegate);
-    appsView->setContainerBox(m_appsArea);
-    appsView->setSpacing(0);
-#endif
+    delete m_appsView;
+    m_appsView = nullptr;
 
-    connect(appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
-    connect(appsView, &QListView::clicked, this, &MiniFrame::hideLauncher, Qt::QueuedConnection);
+    CalculateUtil *calc = CalculateUtil::instance();
 
-    m_appsBox->layout()->addWidget(appsView);
-    m_appsView = appsView;
+    if (calc->displayMode() == ALL_APPS)
+    {
+        AppGridView *appsView = new AppGridView;
+        appsView->setModel(m_appsModel);
+        appsView->setItemDelegate(new AppItemDelegate);
+        appsView->setContainerBox(m_appsArea);
+        appsView->setSpacing(0);
+        m_appsView = appsView;
+
+        m_categoryWidget->setVisible(false);
+    } else {
+        AppListView *appsView = new AppListView;
+        appsView->setModel(m_appsModel);
+        appsView->setItemDelegate(new AppListDelegate);
+        m_appsView = appsView;
+
+        m_categoryWidget->setVisible(true);
+    }
+
+    connect(m_appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
+    connect(m_appsView, &QListView::clicked, this, &MiniFrame::hideLauncher, Qt::QueuedConnection);
+
+    m_appsBox->layout()->addWidget(m_appsView);
 
     CalculateUtil::instance()->calculateAppLayout(QSize(), 0);
 }
@@ -213,11 +236,21 @@ void MiniFrame::toggleFullScreen()
         "/com/deepin/dde/daemon/Launcher",
         "org.freedesktop.DBus.Properties.Set",
         "string:com.deepin.dde.daemon.Launcher",
-        "string:DisplayMode",
-        "variant:int32:0"
+        "string:Fullscreen",
+        "variant:boolean:true"
     };
 
     QProcess::startDetached("dbus-send", args);
+}
+
+void MiniFrame::onToggleViewClicked()
+{
+    CalculateUtil *calc = CalculateUtil::instance();
+    const int mode = calc->displayMode();
+
+    calc->setDisplayMode(mode == ALL_APPS ? GROUP_BY_CATEGORY : ALL_APPS);
+
+    QTimer::singleShot(1, this, &MiniFrame::toggleAppsView);
 }
 
 void MiniFrame::searchText(const QString &text)

@@ -524,8 +524,8 @@ void FullScreenFrame::toMiniMode()
         "/com/deepin/dde/daemon/Launcher",
         "org.freedesktop.DBus.Properties.Set",
         "string:com.deepin.dde.daemon.Launcher",
-        "string:DisplayMode",
-        "variant:int32:1"
+        "string:Fullscreen",
+        "variant:boolean:false"
     };
 
     QProcess::startDetached("dbus-send", args);
@@ -798,8 +798,6 @@ void FullScreenFrame::updateGeometry()
     const QRect rect = m_displayInter->primaryRect();
     setFixedSize(rect.size());
     move(rect.topLeft());
-
-    qDebug() << "update geometry: " << rect;
 
     QFrame::updateGeometry();
 }

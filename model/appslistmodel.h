@@ -66,6 +66,7 @@ public:
 
 public slots:
     void clearDragingIndex();
+    void setCategory(const AppCategory category);
 
 protected:
     bool removeRows(int row, int count, const QModelIndex &parent) Q_DECL_OVERRIDE;

@@ -101,6 +101,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     connect(m_searchEdit, &SearchLineEdit::textChanged, this, &MiniFrame::searchText, Qt::QueuedConnection);
     connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::toggleFullScreen, Qt::QueuedConnection);
     connect(m_viewToggle, &DImageButton::clicked, this, &MiniFrame::onToggleViewClicked, Qt::QueuedConnection);
+    connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, m_appsModel, &AppsListModel::setCategory, Qt::QueuedConnection);
 
     QTimer::singleShot(1, this, &MiniFrame::toggleAppsView);
 }
@@ -211,6 +212,7 @@ void MiniFrame::toggleAppsView()
         m_appsView = appsView;
 
         m_categoryWidget->setVisible(false);
+        m_appsModel->setCategory(AppsListModel::All);
     } else {
         AppListView *appsView = new AppListView;
         appsView->setModel(m_appsModel);
@@ -218,6 +220,7 @@ void MiniFrame::toggleAppsView()
         m_appsView = appsView;
 
         m_categoryWidget->setVisible(true);
+        m_appsModel->setCategory(AppsListModel::All);
     }
 
     connect(m_appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);

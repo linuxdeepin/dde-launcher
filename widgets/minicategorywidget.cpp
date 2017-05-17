@@ -34,4 +34,16 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     centralLayout->setMargin(0);
 
     setLayout(centralLayout);
+
+    connect(m_allApps, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::All); });
+    connect(m_internet, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Internet); });
+    connect(m_chat, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Chat); });
+    connect(m_music, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Music); });
+    connect(m_video, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Video); });
+    connect(m_graphics, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Graphics); });
+    connect(m_game, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Game); });
+    connect(m_office, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Office); });
+    connect(m_reading, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Reading); });
+    connect(m_development, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Development); });
+    connect(m_system, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::System); });
 }

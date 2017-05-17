@@ -20,6 +20,13 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
     connect(m_appsManager, &AppsManager::layoutChanged, this, &AppsListModel::layoutChanged);
 }
 
+void AppsListModel::setCategory(const AppsListModel::AppCategory category)
+{
+    m_category = category;
+
+    emit QAbstractListModel::layoutChanged();
+}
+
 ///
 /// \brief AppsListModel::setDragingIndex mark current item as draging item
 /// \param index item index

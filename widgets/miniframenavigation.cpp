@@ -11,11 +11,11 @@ MiniFrameNavigation::MiniFrameNavigation(QWidget *parent)
     m_avatar->setNormalPic("/var/lib/AccountsService/icons/7.png");
 
     m_computer = new QPushButton(tr("Computer"));
-    m_document = new QPushButton(tr("Document"));
-    m_video = new QPushButton(tr("Video"));
+    m_document = new QPushButton(tr("Documents"));
+    m_video = new QPushButton(tr("Videos"));
     m_music = new QPushButton(tr("Music"));
-    m_picture = new QPushButton(tr("Picture"));
-    m_download = new QPushButton(tr("Download"));
+    m_picture = new QPushButton(tr("Pictures"));
+    m_download = new QPushButton(tr("Downloads"));
     m_toShutdown = new QPushButton(tr("Shutdown"));
 
     QVBoxLayout *navigationLayout = new QVBoxLayout;

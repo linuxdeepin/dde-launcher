@@ -2,6 +2,7 @@
 
 #include <QVBoxLayout>
 #include <QProcess>
+#include <QSignalMapper>
 
 #include <DDesktopServices>
 
@@ -83,6 +84,19 @@ MiniFrameNavigation::MiniFrameNavigation(QWidget *parent)
 
     connect(m_toShutdown, &QPushButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_shutdownPanel); });
     connect(m_toNavigation, &QPushButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_navigationPanel); });
+
+    QSignalMapper *signalMapper = new QSignalMapper(this);
+    signalMapper->setMapping(m_logout, "Logout");
+    signalMapper->setMapping(m_suspend, "Suspend");
+    signalMapper->setMapping(m_shutdown, "Shutdown");
+    signalMapper->setMapping(m_reboot, "Restart");
+    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(handleShutdownAction(QString)));
+
+    connect(m_logout, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(m_suspend, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(m_shutdown, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(m_reboot, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(m_lock, SIGNAL(clicked()), this, SLOT(handleLockAction()));
 }
 
 void MiniFrameNavigation::openDirectory(const QString &dir)
@@ -95,4 +109,22 @@ void MiniFrameNavigation::openStandardDirectory(const QStandardPaths::StandardLo
     const QString dir = QStandardPaths::writableLocation(location);
     if (!dir.isEmpty())
         openDirectory(dir);
+}
+
+void MiniFrameNavigation::handleShutdownAction(const QString &action)
+{
+    const QString command = QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront " \
+                                    "/com/deepin/dde/shutdownFront " \
+                                    "com.deepin.dde.shutdownFront.%1").arg(action);
+
+    QProcess::startDetached(command);
+}
+
+void MiniFrameNavigation::handleLockAction()
+{
+    const QString command = QString("dbus-send --print-reply --dest=com.deepin.dde.lockFront " \
+                                    "/com/deepin/dde/lockFront " \
+                                    "com.deepin.dde.lockFront");
+
+    QProcess::startDetached(command);
 }

@@ -28,6 +28,8 @@ public:
 private slots:
     void openDirectory(const QString &dir);
     void openStandardDirectory(const QStandardPaths::StandardLocation &location);
+    void handleShutdownAction(const QString &action);
+    void handleLockAction();
 
 private:
     DImageButton *m_avatar;

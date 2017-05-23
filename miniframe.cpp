@@ -166,6 +166,14 @@ void MiniFrame::showEvent(QShowEvent *e)
     });
 }
 
+bool MiniFrame::event(QEvent *event)
+{
+    if (event->type() == QEvent::WindowDeactivate && isVisible())
+        hideLauncher();
+
+    return QWidget::event(event);
+}
+
 void MiniFrame::adjustPosition()
 {
     const int dockPos = m_dockInter->position();

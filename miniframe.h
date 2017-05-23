@@ -27,13 +27,15 @@ public:
     ~MiniFrame();
 
 private:
-    void showLauncher();
-    void hideLauncher();
-    bool visible();
+    void showLauncher() Q_DECL_OVERRIDE;
+    void hideLauncher() Q_DECL_OVERRIDE;
+    bool visible() Q_DECL_OVERRIDE;
 
-    void mousePressEvent(QMouseEvent *e);
-    void keyPressEvent(QKeyEvent *e);
-    void showEvent(QShowEvent *e);
+    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
+
+    bool event(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void adjustPosition();

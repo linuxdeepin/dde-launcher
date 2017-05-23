@@ -1,0 +1,22 @@
+NavigationButton {
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    padding: 4px;
+    background: transparent;
+}
+
+NavigationButton:hover {
+    border: none;
+    radius: 4px;
+    padding: 4px;
+    color: rgba(255, 255, 255, 1);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+NavigationButton:pressed {
+    border: none;
+    radius: 4px;
+    padding: 4px;
+    color: #2ca7f8;
+    background: rgba(255, 255, 255, 0.1);
+}

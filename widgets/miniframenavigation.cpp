@@ -3,6 +3,15 @@
 #include <QVBoxLayout>
 #include <QProcess>
 
+#include "global_util/util.h"
+
+NavigationButton::NavigationButton(const QString &title, QWidget *parent) :
+    QPushButton(title, parent)
+{
+
+}
+
+
 MiniFrameNavigation::MiniFrameNavigation(QWidget *parent)
     : QWidget(parent)
 {
@@ -10,13 +19,13 @@ MiniFrameNavigation::MiniFrameNavigation(QWidget *parent)
     m_avatar->setFixedSize(60, 60);
     m_avatar->setNormalPic("/var/lib/AccountsService/icons/7.png");
 
-    m_computer = new QPushButton(tr("Computer"));
-    m_document = new QPushButton(tr("Documents"));
-    m_video = new QPushButton(tr("Videos"));
-    m_music = new QPushButton(tr("Music"));
-    m_picture = new QPushButton(tr("Pictures"));
-    m_download = new QPushButton(tr("Downloads"));
-    m_toShutdown = new QPushButton(tr("Shutdown"));
+    m_computer = new NavigationButton(tr("Computer"));
+    m_document = new NavigationButton(tr("Documents"));
+    m_video = new NavigationButton(tr("Videos"));
+    m_music = new NavigationButton(tr("Music"));
+    m_picture = new NavigationButton(tr("Pictures"));
+    m_download = new NavigationButton(tr("Downloads"));
+    m_toShutdown = new NavigationButton(tr("Shutdown"));
 
     QVBoxLayout *navigationLayout = new QVBoxLayout;
     navigationLayout->addWidget(m_computer);
@@ -31,12 +40,12 @@ MiniFrameNavigation::MiniFrameNavigation(QWidget *parent)
     m_navigationPanel = new QWidget;
     m_navigationPanel->setLayout(navigationLayout);
 
-    m_lock = new QPushButton(tr("Lock"));
-    m_logout = new QPushButton(tr("Logout"));
-    m_reboot = new QPushButton(tr("Reboot"));
-    m_suspend = new QPushButton(tr("Suspend"));
-    m_shutdown = new QPushButton(tr("Shutdown"));
-    m_toNavigation = new QPushButton(tr("Back"));
+    m_lock = new NavigationButton(tr("Lock"));
+    m_logout = new NavigationButton(tr("Logout"));
+    m_reboot = new NavigationButton(tr("Reboot"));
+    m_suspend = new NavigationButton(tr("Suspend"));
+    m_shutdown = new NavigationButton(tr("Shutdown"));
+    m_toNavigation = new NavigationButton(tr("Back"));
 
     QVBoxLayout *shutdownLayout = new QVBoxLayout;
     shutdownLayout->addWidget(m_lock);
@@ -72,6 +81,8 @@ MiniFrameNavigation::MiniFrameNavigation(QWidget *parent)
 
     connect(m_toShutdown, &QPushButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_shutdownPanel); });
     connect(m_toNavigation, &QPushButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_navigationPanel); });
+
+    setStyleSheet(getQssFromFile(":/skin/qss/miniframe.qss"));
 }
 
 void MiniFrameNavigation::openDirectory(const QString &dir)

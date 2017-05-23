@@ -9,6 +9,14 @@
 
 DWIDGET_USE_NAMESPACE
 
+class NavigationButton : public QPushButton
+{
+    Q_OBJECT
+
+public:
+    explicit NavigationButton(const QString &title, QWidget *parent = Q_NULLPTR);
+};
+
 class MiniFrameNavigation : public QWidget
 {
     Q_OBJECT
@@ -22,20 +30,20 @@ private slots:
 private:
     DImageButton *m_avatar;
 
-    QPushButton *m_computer;
-    QPushButton *m_document;
-    QPushButton *m_video;
-    QPushButton *m_music;
-    QPushButton *m_picture;
-    QPushButton *m_download;
-    QPushButton *m_toShutdown;
+    NavigationButton *m_computer;
+    NavigationButton *m_document;
+    NavigationButton *m_video;
+    NavigationButton *m_music;
+    NavigationButton *m_picture;
+    NavigationButton *m_download;
+    NavigationButton *m_toShutdown;
 
-    QPushButton *m_lock;
-    QPushButton *m_logout;
-    QPushButton *m_reboot;
-    QPushButton *m_suspend;
-    QPushButton *m_shutdown;
-    QPushButton *m_toNavigation;
+    NavigationButton *m_lock;
+    NavigationButton *m_logout;
+    NavigationButton *m_reboot;
+    NavigationButton *m_suspend;
+    NavigationButton *m_shutdown;
+    NavigationButton *m_toNavigation;
 
     QWidget *m_navigationPanel;
     QWidget *m_shutdownPanel;

@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>skin/qss/main.qss</file>
+        <file>skin/qss/fullscreenframe.qss</file>
+        <file>skin/qss/miniframe.qss</file>
         <file>skin/images/application-default-icon.svg</file>
         <file>skin/images/category_10.svg</file>
         <file>skin/images/category_50.svg</file>

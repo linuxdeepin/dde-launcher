@@ -93,7 +93,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     updateDisplayMode(m_calcUtil->displayMode());
 
-    setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
+    setStyleSheet(getQssFromFile(":/skin/qss/fullscreenframe.qss"));
 }
 
 FullScreenFrame::~FullScreenFrame()
@@ -1137,7 +1137,7 @@ void FullScreenFrame::updatePlaceholderSize()
 void FullScreenFrame::updateDockPosition()
 {
     m_calcUtil->calculateAppLayout(m_appsArea->size(), m_appsManager->dockPosition());
-    setStyleSheet(getQssFromFile(":/skin/qss/main.qss"));
+    setStyleSheet(getQssFromFile(":/skin/qss/fullscreenframe.qss"));
 }
 
 AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentModel)

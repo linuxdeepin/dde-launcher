@@ -10,14 +10,14 @@ QScrollArea#AppsArea {
 NavigationButton {
     border: none;
     color: rgba(255, 255, 255, 0.6);
-    padding: 4px;
+    padding: 6px;
     background: transparent;
 }
 
 NavigationButton:hover {
     border: none;
     border-radius: 4px;
-    padding: 4px;
+    padding: 6px;
     color: rgba(255, 255, 255, 1);
     background: rgba(255, 255, 255, 0.1);
 }
@@ -25,7 +25,7 @@ NavigationButton:hover {
 NavigationButton:pressed {
     border: none;
     border-radius: 4px;
-    padding: 4px;
+    padding: 6px;
     color: #2ca7f8;
     background: rgba(255, 255, 255, 0.1);
 }
@@ -35,14 +35,14 @@ MiniCategoryItem {
     border: none;
     border-radius: 0px;
     color: rgba(255, 255, 255, 0.6);
-    padding: 4px;
+    padding: 6px;
     background: transparent;
 }
 
 MiniCategoryItem:hover {
     border: none;
     border-radius: 0px;
-    padding: 4px;
+    padding: 6px;
     color: rgba(255, 255, 255, 1);
     background: rgba(255, 255, 255, 0.1);
 }
@@ -51,7 +51,7 @@ MiniCategoryItem:pressed {
     border: none;
     border-radius: 0px;
     border-right: 1px solid rgb(44, 167, 248);
-    padding: 4px;
+    padding: 6px;
     color: #2ca7f8;
     background: rgba(44, 167, 248, 0.2);
 }
@@ -60,7 +60,7 @@ MiniCategoryItem:checked {
     border: none;
     border-radius: 0px;
     border-right: 1px solid rgb(44, 167, 248);
-    padding: 4px;
+    padding: 6px;
     color: #2ca7f8;
     background: rgba(44, 167, 248, 0.2);
 }

@@ -3,6 +3,10 @@
 #include <QVBoxLayout>
 #include <QProcess>
 
+#include <DDesktopServices>
+
+DUTIL_USE_NAMESPACE
+
 NavigationButton::NavigationButton(const QString &title, QWidget *parent) :
     QPushButton(title, parent)
 {
@@ -71,11 +75,11 @@ MiniFrameNavigation::MiniFrameNavigation(QWidget *parent)
     setLayout(centralLayout);
 
     connect(m_computer, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
-    connect(m_document, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
-    connect(m_video, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
-    connect(m_music, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
-    connect(m_picture, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
-    connect(m_download, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
+    connect(m_document, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DocumentsLocation); });
+    connect(m_video, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::MoviesLocation); });
+    connect(m_music, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::MusicLocation); });
+    connect(m_picture, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::PicturesLocation); });
+    connect(m_download, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DownloadLocation); });
 
     connect(m_toShutdown, &QPushButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_shutdownPanel); });
     connect(m_toNavigation, &QPushButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_navigationPanel); });
@@ -83,5 +87,12 @@ MiniFrameNavigation::MiniFrameNavigation(QWidget *parent)
 
 void MiniFrameNavigation::openDirectory(const QString &dir)
 {
-    QProcess::startDetached("gio", QStringList() << "open" << dir);
+    DDesktopServices::showFolder(dir);
+}
+
+void MiniFrameNavigation::openStandardDirectory(const QStandardPaths::StandardLocation &location)
+{
+    const QString dir = QStandardPaths::writableLocation(location);
+    if (!dir.isEmpty())
+        openDirectory(dir);
 }

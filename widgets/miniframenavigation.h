@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QStackedLayout>
+#include <QStandardPaths>
 
 #include <dimagebutton.h>
 
@@ -26,6 +27,7 @@ public:
 
 private slots:
     void openDirectory(const QString &dir);
+    void openStandardDirectory(const QStandardPaths::StandardLocation &location);
 
 private:
     DImageButton *m_avatar;

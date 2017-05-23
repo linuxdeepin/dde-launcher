@@ -1,21 +1,41 @@
 #include "minicategorywidget.h"
 
 #include <QVBoxLayout>
+#include <QButtonGroup>
+
+MiniCategoryItem::MiniCategoryItem(const QString &title, QWidget *parent) :
+    QPushButton(title, parent)
+{
+    setCheckable(true);
+}
 
 MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+      m_buttonGroup(new QButtonGroup(this))
 {
-    m_allApps = new QPushButton(tr("All Apps"));
-    m_internet = new QPushButton(tr("Internet"));
-    m_chat = new QPushButton(tr("Chat"));
-    m_music = new QPushButton(tr("Music"));
-    m_video = new QPushButton(tr("Video"));
-    m_graphics = new QPushButton(tr("Graphics"));
-    m_game = new QPushButton(tr("Game"));
-    m_office = new QPushButton(tr("Office"));
-    m_reading = new QPushButton(tr("Reading"));
-    m_development = new QPushButton(tr("Development"));
-    m_system = new QPushButton(tr("System"));
+    m_allApps = new MiniCategoryItem(tr("All Apps"));
+    m_internet = new MiniCategoryItem(tr("Internet"));
+    m_chat = new MiniCategoryItem(tr("Chat"));
+    m_music = new MiniCategoryItem(tr("Music"));
+    m_video = new MiniCategoryItem(tr("Video"));
+    m_graphics = new MiniCategoryItem(tr("Graphics"));
+    m_game = new MiniCategoryItem(tr("Game"));
+    m_office = new MiniCategoryItem(tr("Office"));
+    m_reading = new MiniCategoryItem(tr("Reading"));
+    m_development = new MiniCategoryItem(tr("Development"));
+    m_system = new MiniCategoryItem(tr("System"));
+
+    m_buttonGroup->addButton(m_allApps);
+    m_buttonGroup->addButton(m_internet);
+    m_buttonGroup->addButton(m_chat);
+    m_buttonGroup->addButton(m_music);
+    m_buttonGroup->addButton(m_video);
+    m_buttonGroup->addButton(m_graphics);
+    m_buttonGroup->addButton(m_game);
+    m_buttonGroup->addButton(m_office);
+    m_buttonGroup->addButton(m_reading);
+    m_buttonGroup->addButton(m_development);
+    m_buttonGroup->addButton(m_system);
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
 

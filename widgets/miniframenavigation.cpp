@@ -3,8 +3,6 @@
 #include <QVBoxLayout>
 #include <QProcess>
 
-#include "global_util/util.h"
-
 NavigationButton::NavigationButton(const QString &title, QWidget *parent) :
     QPushButton(title, parent)
 {
@@ -81,8 +79,6 @@ MiniFrameNavigation::MiniFrameNavigation(QWidget *parent)
 
     connect(m_toShutdown, &QPushButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_shutdownPanel); });
     connect(m_toNavigation, &QPushButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_navigationPanel); });
-
-    setStyleSheet(getQssFromFile(":/skin/qss/miniframe.qss"));
 }
 
 void MiniFrameNavigation::openDirectory(const QString &dir)

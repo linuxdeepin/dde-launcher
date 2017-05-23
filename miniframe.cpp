@@ -8,6 +8,7 @@
 #include "model/appslistmodel.h"
 #include "delegate/appitemdelegate.h"
 #include "delegate/applistdelegate.h"
+#include "global_util/util.h"
 
 #include <QRect>
 #include <QKeyEvent>
@@ -55,6 +56,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_appsBox = new DVBoxWidget;
 
     m_appsArea = new QScrollArea;
+    m_appsArea->setObjectName("AppsArea");
     m_appsArea->setWidget(m_appsBox);
     m_appsArea->setWidgetResizable(true);
     m_appsArea->setFocusPolicy(Qt::NoFocus);
@@ -62,7 +64,6 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_appsArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_appsArea->setStyleSheet("background-color: transparent;");
 
     QHBoxLayout *appsAreaLayout = new QHBoxLayout;
     appsAreaLayout->addWidget(m_categoryWidget);
@@ -79,10 +80,6 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_viewWrapper = new QWidget;
     m_viewWrapper->setLayout(viewLayout);
     m_viewWrapper->setObjectName("ViewWrapper");
-    m_viewWrapper->setStyleSheet("QWidget #ViewWrapper {"
-                                 "background-color: rgba(255, 255, 255, .1);"
-                                 "border-radius: 8px;"
-                                 "}");
 
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_navigation);
@@ -97,6 +94,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     setBlurRectXRadius(5);
     setBlurRectYRadius(5);
     setLayout(centralLayout);
+    setStyleSheet(getQssFromFile(":/skin/qss/miniframe.qss"));
 
     connect(m_searchEdit, &SearchLineEdit::textChanged, this, &MiniFrame::searchText, Qt::QueuedConnection);
     connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::toggleFullScreen, Qt::QueuedConnection);

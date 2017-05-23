@@ -6,6 +6,14 @@
 
 #include "model/appslistmodel.h"
 
+class MiniCategoryItem : public QPushButton
+{
+    Q_OBJECT
+
+public:
+    explicit MiniCategoryItem(const QString &title, QWidget *parent = Q_NULLPTR);
+};
+
 class MiniCategoryWidget : public QWidget
 {
     Q_OBJECT
@@ -17,17 +25,19 @@ signals:
     void requestCategory(const AppsListModel::AppCategory &category) const;
 
 private:
-    QPushButton *m_allApps;
-    QPushButton *m_internet;
-    QPushButton *m_chat;
-    QPushButton *m_music;
-    QPushButton *m_video;
-    QPushButton *m_graphics;
-    QPushButton *m_game;
-    QPushButton *m_office;
-    QPushButton *m_reading;
-    QPushButton *m_development;
-    QPushButton *m_system;
+    QButtonGroup *m_buttonGroup;
+
+    MiniCategoryItem *m_allApps;
+    MiniCategoryItem *m_internet;
+    MiniCategoryItem *m_chat;
+    MiniCategoryItem *m_music;
+    MiniCategoryItem *m_video;
+    MiniCategoryItem *m_graphics;
+    MiniCategoryItem *m_game;
+    MiniCategoryItem *m_office;
+    MiniCategoryItem *m_reading;
+    MiniCategoryItem *m_development;
+    MiniCategoryItem *m_system;
 };
 
 #endif // MINICATEGORYWIDGET_H

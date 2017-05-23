@@ -7,7 +7,7 @@ NavigationButton {
 
 NavigationButton:hover {
     border: none;
-    radius: 4px;
+    border-radius: 4px;
     padding: 4px;
     color: rgba(255, 255, 255, 1);
     background: rgba(255, 255, 255, 0.1);
@@ -15,7 +15,7 @@ NavigationButton:hover {
 
 NavigationButton:pressed {
     border: none;
-    radius: 4px;
+    border-radius: 4px;
     padding: 4px;
     color: #2ca7f8;
     background: rgba(255, 255, 255, 0.1);

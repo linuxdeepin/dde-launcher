@@ -1,7 +1,7 @@
 #include "miniframe.h"
 #include "dbusdock.h"
 #include "widgets/miniframenavigation.h"
-#include "widgets/searchlineedit.h"
+#include "widgets/searchwidget.h"
 #include "widgets/minicategorywidget.h"
 #include "view/appgridview.h"
 #include "view/applistview.h"
@@ -9,6 +9,8 @@
 #include "delegate/appitemdelegate.h"
 #include "delegate/applistdelegate.h"
 #include "global_util/util.h"
+
+#include "sharedeventfilter.h"
 
 #include <QRect>
 #include <QKeyEvent>
@@ -42,12 +44,14 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_viewToggle->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
     m_modeToggle = new DImageButton;
     m_modeToggle->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
-    m_searchEdit = new SearchLineEdit;
+
+    m_searchWidget = new SearchWidget;
+    m_searchWidget->installEventFilter(this);
 
     QHBoxLayout *viewHeaderLayout = new QHBoxLayout;
     viewHeaderLayout->addWidget(m_viewToggle);
     viewHeaderLayout->addStretch();
-    viewHeaderLayout->addWidget(m_searchEdit);
+    viewHeaderLayout->addWidget(m_searchWidget);
     viewHeaderLayout->addStretch();
     viewHeaderLayout->addWidget(m_modeToggle);
     viewHeaderLayout->setSpacing(0);
@@ -90,13 +94,16 @@ MiniFrame::MiniFrame(QWidget *parent)
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground);
     setMaskColor(DBlurEffectWidget::DarkColor);
+    setFocusPolicy(Qt::ClickFocus);
     setFixedSize(640, 480);
     setBlurRectXRadius(5);
     setBlurRectYRadius(5);
     setLayout(centralLayout);
     setStyleSheet(getQssFromFile(":/skin/qss/miniframe.qss"));
 
-    connect(m_searchEdit, &SearchLineEdit::textChanged, this, &MiniFrame::searchText, Qt::QueuedConnection);
+    installEventFilter(new SharedEventFilter(this));
+
+    connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &MiniFrame::searchText, Qt::QueuedConnection);
     connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::toggleFullScreen, Qt::QueuedConnection);
     connect(m_viewToggle, &DImageButton::clicked, this, &MiniFrame::onToggleViewClicked, Qt::QueuedConnection);
     connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, m_appsModel, &AppsListModel::setCategory, Qt::QueuedConnection);
@@ -135,6 +142,69 @@ bool MiniFrame::visible()
     return isVisible();
 }
 
+void MiniFrame::moveCurrentSelectApp(const int key)
+{
+    CalculateUtil *calc = CalculateUtil::instance();
+
+    if (calc->displayMode() == ALL_APPS) {
+        AppGridView *view = qobject_cast<AppGridView*>(m_appsView);
+        AppItemDelegate *delegate = qobject_cast<AppItemDelegate*>(view->itemDelegate());
+        const QModelIndex index = delegate->currentIndex();
+
+        if (!index.isValid()) {
+            delegate->setCurrentIndex(view->indexAt(0));
+            view->update();
+            return;
+        }
+
+        int row = index.row();
+        const int columnCount = calc->appColumnCount();
+
+        switch (key) {
+        case Qt::Key_Left:
+            row--;
+            break;
+        case Qt::Key_Right:
+            row++;
+            break;
+        case Qt::Key_Up:
+            row -= columnCount;
+            break;
+        case Qt::Key_Down:
+            row += columnCount;
+            break;
+        default:
+            break;
+        }
+
+        QModelIndex targetIndex = index.sibling(row, index.column());
+        if (targetIndex.isValid())
+            delegate->setCurrentIndex(targetIndex);
+    }
+
+
+    // TODO(hualet): left to sbw.
+}
+
+void MiniFrame::appendToSearchEdit(const char ch)
+{
+    m_searchWidget->edit()->setFocus(Qt::MouseFocusReason);
+    m_searchWidget->edit()->setText(m_searchWidget->edit()->text() + ch);
+}
+
+void MiniFrame::launchCurrentApp()
+{
+    // TODO(hualet): left to sbw.
+}
+
+bool MiniFrame::windowDeactiveEvent()
+{
+    if (isVisible())
+        hideLauncher();
+
+    return true;
+}
+
 void MiniFrame::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
@@ -164,12 +234,21 @@ void MiniFrame::showEvent(QShowEvent *e)
     });
 }
 
-bool MiniFrame::event(QEvent *event)
+bool MiniFrame::eventFilter(QObject *o, QEvent *e)
 {
-    if (event->type() == QEvent::WindowDeactivate && isVisible())
-        hideLauncher();
+    if (o == m_searchWidget && e->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *keyPress = static_cast<QKeyEvent *>(e);
+        if (keyPress->key() == Qt::Key_Left || keyPress->key() == Qt::Key_Right)
+        {
+            QKeyEvent *event = new QKeyEvent(keyPress->type(), keyPress->key(), keyPress->modifiers());
+            qApp->postEvent(this, event);
 
-    return QWidget::event(event);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void MiniFrame::adjustPosition()
@@ -210,15 +289,20 @@ void MiniFrame::toggleAppsView()
 
     if (calc->displayMode() == ALL_APPS)
     {
+        AppItemDelegate *delegate = new AppItemDelegate;
+
         AppGridView *appsView = new AppGridView;
         appsView->setModel(m_appsModel);
-        appsView->setItemDelegate(new AppItemDelegate);
+        appsView->setItemDelegate(delegate);
         appsView->setContainerBox(m_appsArea);
         appsView->setSpacing(0);
         m_appsView = appsView;
 
         m_categoryWidget->setVisible(false);
         m_appsModel->setCategory(AppsListModel::All);
+
+        connect(delegate, &AppItemDelegate::currentChanged,
+                appsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
     } else {
         AppListView *appsView = new AppListView;
         appsView->setModel(m_appsModel);

@@ -28,7 +28,9 @@ void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
     const QModelIndex previousIndex = CurrentIndex;
     CurrentIndex = index;
 
-    emit currentChanged(previousIndex, CurrentIndex);
+//    emit currentChanged(previousIndex, CurrentIndex);
+    emit currentChanged(previousIndex, previousIndex);
+    emit currentChanged(CurrentIndex, CurrentIndex);
 }
 
 void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const

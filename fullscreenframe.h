@@ -55,27 +55,28 @@ public slots:
     void hideTips();
 
 protected:
-    void resizeEvent(QResizeEvent *e);
-    void keyPressEvent(QKeyEvent *e);
-    void showEvent(QShowEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    void wheelEvent(QWheelEvent *e);
-    void paintEvent(QPaintEvent *e);
-    bool event(QEvent *e);
-    bool eventFilter(QObject *o, QEvent *e);
+    void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void initUI();
     void initConnection();
     void initTimer();
 
-    void showLauncher();
-    void hideLauncher();
-    bool visible();
+    void showLauncher() Q_DECL_OVERRIDE;
+    void hideLauncher() Q_DECL_OVERRIDE;
+    bool visible() Q_DECL_OVERRIDE;
+    void moveCurrentSelectApp(const int key) Q_DECL_OVERRIDE;
+    void appendToSearchEdit(const char ch) Q_DECL_OVERRIDE;
+    void launchCurrentApp() Q_DECL_OVERRIDE;
+    bool windowDeactiveEvent() Q_DECL_OVERRIDE;
 
     void updateGeometry();
-    void moveCurrentSelectApp(const int key);
-    void launchCurrentApp();
     void checkCategoryVisible();
     void showPopupMenu(const QPoint &pos, const QModelIndex &context);
     void showPopupUninstallDialog(const QModelIndex &context);
@@ -83,6 +84,7 @@ private:
     void updateCurrentVisibleCategory();
     void updatePlaceholderSize();
     void updateDockPosition();
+
 
     AppsListModel *nextCategoryModel(const AppsListModel *currentModel);
     AppsListModel *prevCategoryModel(const AppsListModel *currentModel);

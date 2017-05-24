@@ -32,7 +32,8 @@ SOURCES += \
     miniframe.cpp \
     view/appgridview.cpp \
     view/applistview.cpp \
-    delegate/applistdelegate.cpp
+    delegate/applistdelegate.cpp \
+    sharedeventfilter.cpp
 
 HEADERS += \
     model/appslistmodel.h \
@@ -51,7 +52,8 @@ HEADERS += \
     miniframe.h \
     view/appgridview.h \
     view/applistview.h \
-    delegate/applistdelegate.h
+    delegate/applistdelegate.h \
+    sharedeventfilter.h
 
 #Automating generation .qm files from .ts files
 system($$PWD/translate_generation.sh)

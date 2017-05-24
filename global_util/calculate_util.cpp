@@ -55,6 +55,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
         m_appItemHeight = 120;
         m_appIconSize = displayMode() == ALL_APPS ? 48 : 32;
         m_appItemFontSize = 10;
+        m_appColumnCount = displayMode() == ALL_APPS ? 4 : 1;
 
         emit layoutChanged();
         return;

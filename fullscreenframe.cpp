@@ -16,6 +16,8 @@
 
 #include <ddialog.h>
 
+#include "sharedeventfilter.h"
+
 static const QString WallpaperKey = "pictureUri";
 static const QString DisplayModeKey = "display-mode";
 static const QString DisplayModeFree = "free";
@@ -87,6 +89,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
 
     setObjectName("LauncherFrame");
+
+    installEventFilter(new SharedEventFilter(this));
 
     initUI();
     initConnection();
@@ -171,10 +175,9 @@ void FullScreenFrame::resizeEvent(QResizeEvent *e)
 
 void FullScreenFrame::keyPressEvent(QKeyEvent *e)
 {
-    bool ctrlPressed = e->modifiers() & Qt::ControlModifier;
+#ifdef QT_DEBUG
     switch (e->key())
     {
-#ifdef QT_DEBUG
     case Qt::Key_Control:       scrollToCategory(AppsListModel::Internet);      return;
 //    case Qt::Key_F2:            updateDisplayMode(GroupByCategory);             return;
     case Qt::Key_Plus:          m_calcUtil->increaseIconSize();
@@ -189,50 +192,8 @@ void FullScreenFrame::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Asterisk:      m_calcUtil->decreaseItemSize();
                                 emit m_appsManager->layoutChanged(AppsListModel::All);
                                                                                 return;
+    }
 #endif
-    case Qt::Key_F1: QProcess::startDetached("dman dde");                       return;
-    case Qt::Key_Enter:
-    case Qt::Key_Return:        launchCurrentApp();                             return;
-    case Qt::Key_Escape:        hide();                                         return;
-    case Qt::Key_Tab:
-                                e->accept();
-    case Qt::Key_Backtab:
-    case Qt::Key_Up:
-    case Qt::Key_Down:
-    case Qt::Key_Left:
-    case Qt::Key_Right:         moveCurrentSelectApp(e->key());                 return;
-    }
-
-    // handle normal keys
-    if ((e->key() <= Qt::Key_Z && e->key() >= Qt::Key_A) ||
-        (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_0) ||
-        (e->key() == Qt::Key_Space))
-    {
-        e->accept();
-        // handle the emacs key bindings
-        if(ctrlPressed) {
-            switch (e->key()) {
-            case Qt::Key_P:
-                moveCurrentSelectApp(Qt::Key_Up);
-                return;
-            case Qt::Key_N:
-                moveCurrentSelectApp(Qt::Key_Down);
-                return;
-            case Qt::Key_F:
-                moveCurrentSelectApp(Qt::Key_Right);
-                return;
-            case Qt::Key_B:
-                moveCurrentSelectApp(Qt::Key_Left);
-            default:
-                return;
-            }
-        }
-
-
-        m_searchWidget->edit()->setFocus(Qt::MouseFocusReason);
-        m_searchWidget->edit()->setText(m_searchWidget->edit()->text() + char(e->key() | 0x20));
-        return;
-    }
 }
 
 void FullScreenFrame::showEvent(QShowEvent *e)
@@ -291,14 +252,6 @@ void FullScreenFrame::paintEvent(QPaintEvent *e)
     painter.drawPixmap(e->rect(), getBackground(), e->rect());
     //    painter.setBrush(QColor(255, 0, 0, 0.2 * 255));
     //    painter.drawRect(rect());
-}
-
-bool FullScreenFrame::event(QEvent *e)
-{
-    if (e->type() == QEvent::WindowDeactivate && isVisible() && !m_menuWorker->isMenuShown() && !m_isConfirmDialogShown)
-        m_delayHideTimer->start();
-
-    return QFrame::event(e);
 }
 
 bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
@@ -889,6 +842,12 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     update();
 }
 
+void FullScreenFrame::appendToSearchEdit(const char ch)
+{
+    m_searchWidget->edit()->setFocus(Qt::MouseFocusReason);
+    m_searchWidget->edit()->setText(m_searchWidget->edit()->text() + ch);
+}
+
 void FullScreenFrame::launchCurrentApp()
 {
     const QModelIndex &index = m_appItemDelegate->currentIndex();
@@ -916,6 +875,14 @@ void FullScreenFrame::launchCurrentApp()
     }
 
     hide();
+}
+
+bool FullScreenFrame::windowDeactiveEvent()
+{
+    if (isVisible() && !m_menuWorker->isMenuShown() && !m_isConfirmDialogShown)
+        m_delayHideTimer->start();
+
+    return true;
 }
 
 void FullScreenFrame::checkCategoryVisible()

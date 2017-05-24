@@ -14,7 +14,7 @@ class QScrollArea;
 class QListView;
 class DBusDock;
 class MiniFrameNavigation;
-class SearchLineEdit;
+class SearchWidget;
 class AppsListModel;
 class AppsManager;
 class MiniCategoryWidget;
@@ -31,11 +31,17 @@ private:
     void hideLauncher() Q_DECL_OVERRIDE;
     bool visible() Q_DECL_OVERRIDE;
 
+    void moveCurrentSelectApp(const int key) Q_DECL_OVERRIDE;
+    void appendToSearchEdit(const char ch) Q_DECL_OVERRIDE;
+    void launchCurrentApp() Q_DECL_OVERRIDE;
+
+    bool windowDeactiveEvent() Q_DECL_OVERRIDE;
+
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
 
-    bool event(QEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void adjustPosition();
@@ -50,7 +56,7 @@ private:
 
     DImageButton *m_viewToggle;
     DImageButton *m_modeToggle;
-    SearchLineEdit *m_searchEdit;
+    SearchWidget *m_searchWidget;
 
     MiniFrameNavigation *m_navigation;
     MiniCategoryWidget *m_categoryWidget;

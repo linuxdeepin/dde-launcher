@@ -162,6 +162,9 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
     mime->setData("RequestDock", index.data(AppDesktopRole).toByteArray());
     mime->setData("AppKey", index.data(AppKeyRole).toByteArray());
 
+    if (index.data(AppIsRemovableRole).toBool())
+        mime->setData("Removable", "");
+
     // this object will be delete in drag event finished.
     return mime;
 }

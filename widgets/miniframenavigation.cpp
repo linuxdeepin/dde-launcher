@@ -3,10 +3,66 @@
 #include <QVBoxLayout>
 #include <QProcess>
 #include <QSignalMapper>
+#include <QPainter>
 
 #include <DDesktopServices>
 
+#include <unistd.h>
+
 DUTIL_USE_NAMESPACE
+
+UserButton::UserButton(QWidget *parent) :
+    DImageButton(parent),
+    m_accounts(new com::deepin::daemon::Accounts("com.deepin.daemon.Accounts",
+                                                 "/com/deepin/daemon/Accounts",
+                                                 QDBusConnection::systemBus(), this)),
+    m_user(Q_NULLPTR)
+{
+    setFixedSize(60, 60);
+
+    initUser();
+}
+
+void UserButton::paintEvent(QPaintEvent *e)
+{
+    Q_UNUSED(e);
+
+    QPainterPath path;
+    path.addRoundedRect(0, 0, 60, 60, 30, 30);
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setClipPath(path);
+    painter.drawPixmap(0, 0, *pixmap());
+}
+
+void UserButton::initUser()
+{
+    setUserPath(QString("/com/deepin/daemon/Accounts/User%1").arg(getuid()));
+}
+
+void UserButton::setUserPath(const QString &path)
+{
+    if (m_user)
+        m_user->deleteLater();
+
+    m_user = new com::deepin::daemon::accounts::User("com.deepin.daemon.Accounts",
+                                                     path,
+                                                     QDBusConnection::systemBus(), this);
+    m_user->setSync(false);
+    setUserIconURL(m_user->iconFile());
+    connect(m_user, &__User::IconFileChanged, this, &UserButton::setUserIconURL);
+}
+
+void UserButton::setUserIconURL(const QString &iconUrl)
+{
+    if (iconUrl.isEmpty())
+        return;
+
+    const QString path = QUrl(iconUrl).toLocalFile();
+
+    setNormalPic(path);
+}
 
 NavigationButton::NavigationButton(const QString &title, QWidget *parent) :
     QPushButton(title, parent)
@@ -18,9 +74,8 @@ NavigationButton::NavigationButton(const QString &title, QWidget *parent) :
 MiniFrameNavigation::MiniFrameNavigation(QWidget *parent)
     : QWidget(parent)
 {
-    m_avatar = new DImageButton;
+    m_avatar = new UserButton;
     m_avatar->setFixedSize(60, 60);
-    m_avatar->setNormalPic("/var/lib/AccountsService/icons/7.png");
 
     m_computer = new NavigationButton(tr("Computer"));
     m_document = new NavigationButton(tr("Documents"));

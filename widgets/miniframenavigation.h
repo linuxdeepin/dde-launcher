@@ -8,7 +8,29 @@
 
 #include <dimagebutton.h>
 
+#include <com_deepin_daemon_accounts.h>
+#include <com_deepin_daemon_accounts_user.h>
+
 DWIDGET_USE_NAMESPACE
+
+class UserButton : public DImageButton
+{
+    Q_OBJECT
+
+public:
+    explicit UserButton(QWidget *parent = Q_NULLPTR);
+
+private:
+    void paintEvent(QPaintEvent *e);
+
+private:
+    com::deepin::daemon::Accounts *m_accounts;
+    com::deepin::daemon::accounts::User *m_user;
+
+    void initUser();
+    void setUserPath(const QString &path);
+    void setUserIconURL(const QString &iconUrl);
+};
 
 class NavigationButton : public QPushButton
 {
@@ -32,7 +54,7 @@ private slots:
     void handleLockAction();
 
 private:
-    DImageButton *m_avatar;
+    UserButton *m_avatar;
 
     NavigationButton *m_computer;
     NavigationButton *m_document;

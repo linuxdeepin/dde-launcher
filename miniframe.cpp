@@ -27,6 +27,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     : DBlurEffectWidget(parent),
 
       m_dockInter(new DBusDock(this)),
+      m_eventFilter(new SharedEventFilter(this)),
       m_appsManager(AppsManager::instance()),
 
       m_navigation(new MiniFrameNavigation),
@@ -101,7 +102,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     setLayout(centralLayout);
     setStyleSheet(getQssFromFile(":/skin/qss/miniframe.qss"));
 
-    installEventFilter(new SharedEventFilter(this));
+    installEventFilter(m_eventFilter);
 
     connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &MiniFrame::searchText, Qt::QueuedConnection);
     connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::toggleFullScreen, Qt::QueuedConnection);
@@ -323,6 +324,8 @@ void MiniFrame::toggleAppsView()
 
 void MiniFrame::toggleFullScreen()
 {
+    removeEventFilter(m_eventFilter);
+
     const QStringList args {
         "--print-reply",
         "--dest=com.deepin.dde.daemon.Launcher",

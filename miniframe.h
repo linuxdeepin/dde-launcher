@@ -18,6 +18,7 @@ class SearchWidget;
 class AppsListModel;
 class AppsManager;
 class MiniCategoryWidget;
+class SharedEventFilter;
 class MiniFrame : public DBlurEffectWidget, public LauncherInterface
 {
     Q_OBJECT
@@ -52,6 +53,7 @@ private slots:
 
 private:
     DBusDock *m_dockInter;
+    SharedEventFilter *m_eventFilter;
     AppsManager *m_appsManager;
 
     DImageButton *m_viewToggle;

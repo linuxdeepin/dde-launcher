@@ -145,8 +145,12 @@ bool MiniFrame::visible()
 
 void MiniFrame::moveCurrentSelectApp(const int key)
 {
-    AppItemDelegate *itemDelegate = static_cast<AppItemDelegate *>(m_appsView->itemDelegate());
-    const QModelIndex currentIndex = itemDelegate->currentIndex();
+    CalculateUtil *calc = CalculateUtil::instance();
+    const int mode = calc->displayMode();
+    const QModelIndex currentIndex =
+            mode == ALL_APPS ?
+                static_cast<AppItemDelegate *>(m_appsView->itemDelegate())->currentIndex()
+                : m_appsView->currentIndex();
 
     QModelIndex targetIndex;
 
@@ -159,7 +163,7 @@ void MiniFrame::moveCurrentSelectApp(const int key)
 
         const int c = 0;
         const int r = currentIndex.row();
-        const int column_per_line = CalculateUtil::instance()->appColumnCount();
+        const int column_per_line = calc->appColumnCount();
 
         switch (key)
         {
@@ -183,9 +187,16 @@ void MiniFrame::moveCurrentSelectApp(const int key)
     if (!targetIndex.isValid())
         return;
 
-    itemDelegate->setCurrentIndex(targetIndex);
+    int y_offset = 0;
+    if (calc->displayMode() == ALL_APPS)
+    {
+        static_cast<AppItemDelegate *>(m_appsView->itemDelegate())->setCurrentIndex(targetIndex);
+        y_offset = static_cast<AppGridView *>(m_appsView)->indexYOffset(targetIndex);
+    } else {
+        m_appsView->setCurrentIndex(targetIndex);
+    }
 
-    // TODO: ensure current index visible
+    m_appsArea->ensureVisible(0, y_offset, 0, 150);
 }
 
 void MiniFrame::appendToSearchEdit(const char ch)

@@ -145,46 +145,47 @@ bool MiniFrame::visible()
 
 void MiniFrame::moveCurrentSelectApp(const int key)
 {
-    CalculateUtil *calc = CalculateUtil::instance();
+    AppItemDelegate *itemDelegate = static_cast<AppItemDelegate *>(m_appsView->itemDelegate());
+    const QModelIndex currentIndex = itemDelegate->currentIndex();
 
-    if (calc->displayMode() == ALL_APPS) {
-        AppGridView *view = qobject_cast<AppGridView*>(m_appsView);
-        AppItemDelegate *delegate = qobject_cast<AppItemDelegate*>(view->itemDelegate());
-        const QModelIndex index = delegate->currentIndex();
+    QModelIndex targetIndex;
 
-        if (!index.isValid()) {
-            delegate->setCurrentIndex(view->indexAt(0));
-            view->update();
-            return;
+    do {
+        if (!currentIndex.isValid())
+        {
+            targetIndex = m_appsView->model()->index(0, 0, QModelIndex());
+            break;
         }
 
-        int row = index.row();
-        const int columnCount = calc->appColumnCount();
+        const int c = 0;
+        const int r = currentIndex.row();
+        const int column_per_line = CalculateUtil::instance()->appColumnCount();
 
-        switch (key) {
+        switch (key)
+        {
         case Qt::Key_Left:
-            row--;
+            targetIndex = currentIndex.sibling(r - 1, c);
             break;
         case Qt::Key_Right:
-            row++;
-            break;
-        case Qt::Key_Up:
-            row -= columnCount;
+            targetIndex = currentIndex.sibling(r + 1, c);
             break;
         case Qt::Key_Down:
-            row += columnCount;
+            targetIndex = currentIndex.sibling(r + column_per_line, c);
             break;
-        default:
+        case Qt::Key_Up:
+            targetIndex = currentIndex.sibling(r - column_per_line, c);
             break;
+        default:;
         }
 
-        QModelIndex targetIndex = index.sibling(row, index.column());
-        if (targetIndex.isValid())
-            delegate->setCurrentIndex(targetIndex);
-    }
+    } while (false);
 
+    if (!targetIndex.isValid())
+        return;
 
-    // TODO(hualet): left to sbw.
+    itemDelegate->setCurrentIndex(targetIndex);
+
+    // TODO: ensure current index visible
 }
 
 void MiniFrame::appendToSearchEdit(const char ch)
@@ -232,6 +233,7 @@ void MiniFrame::showEvent(QShowEvent *e)
     QTimer::singleShot(1, this, [this] () {
         raise();
         activateWindow();
+        setFocus();
     });
 }
 

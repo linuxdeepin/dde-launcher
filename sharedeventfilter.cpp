@@ -20,13 +20,14 @@ SharedEventFilter::SharedEventFilter(QObject *parent)
 
 bool SharedEventFilter::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == parent()) {
-        if (event->type() == QEvent::KeyPress) {
-            return handleKeyEvent((QKeyEvent*)event);
-        }
+    if (watched != parent())
+        return false;
 
-        if (event->type() == QEvent::WindowDeactivate)
-            return m_frame->windowDeactiveEvent();
+    if (event->type() == QEvent::WindowDeactivate)
+        return m_frame->windowDeactiveEvent();
+
+    if (event->type() == QEvent::KeyPress) {
+        return handleKeyEvent((QKeyEvent*)event);
     }
 
     return false;

@@ -55,6 +55,8 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
 
     setLayout(centralLayout);
 
+    m_allApps->setChecked(true);
+
     connect(m_allApps, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::All); });
     connect(m_internet, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Internet); });
     connect(m_chat, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Chat); });

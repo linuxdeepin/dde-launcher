@@ -52,6 +52,9 @@ private slots:
     void searchText(const QString &text);
 
 private:
+    const QModelIndex currentIndex() const;
+
+private:
     DBusDock *m_dockInter;
     SharedEventFilter *m_eventFilter;
     AppsManager *m_appsManager;

@@ -146,38 +146,35 @@ bool MiniFrame::visible()
 void MiniFrame::moveCurrentSelectApp(const int key)
 {
     CalculateUtil *calc = CalculateUtil::instance();
-    const int mode = calc->displayMode();
-    const QModelIndex currentIndex =
-            mode == ALL_APPS ?
-                static_cast<AppItemDelegate *>(m_appsView->itemDelegate())->currentIndex()
-                : m_appsView->currentIndex();
+
+    const QModelIndex currentIdx = currentIndex();
 
     QModelIndex targetIndex;
 
     do {
-        if (!currentIndex.isValid())
+        if (!currentIdx.isValid())
         {
             targetIndex = m_appsView->model()->index(0, 0, QModelIndex());
             break;
         }
 
         const int c = 0;
-        const int r = currentIndex.row();
+        const int r = currentIdx.row();
         const int column_per_line = calc->appColumnCount();
 
         switch (key)
         {
         case Qt::Key_Left:
-            targetIndex = currentIndex.sibling(r - 1, c);
+            targetIndex = currentIdx.sibling(r - 1, c);
             break;
         case Qt::Key_Right:
-            targetIndex = currentIndex.sibling(r + 1, c);
+            targetIndex = currentIdx.sibling(r + 1, c);
             break;
         case Qt::Key_Down:
-            targetIndex = currentIndex.sibling(r + column_per_line, c);
+            targetIndex = currentIdx.sibling(r + column_per_line, c);
             break;
         case Qt::Key_Up:
-            targetIndex = currentIndex.sibling(r - column_per_line, c);
+            targetIndex = currentIdx.sibling(r - column_per_line, c);
             break;
         default:;
         }
@@ -207,7 +204,9 @@ void MiniFrame::appendToSearchEdit(const char ch)
 
 void MiniFrame::launchCurrentApp()
 {
-    // TODO(hualet): left to sbw.
+    const QModelIndex currentIdx = currentIndex();
+
+    m_appsManager->launchApp(currentIdx);
 }
 
 bool MiniFrame::windowDeactiveEvent()
@@ -371,4 +370,20 @@ void MiniFrame::searchText(const QString &text)
         m_appsManager->searchApp(text.trimmed());
         m_appsView->setModel(m_searchModel);
     }
+}
+
+const QModelIndex MiniFrame::currentIndex() const
+{
+    CalculateUtil *calc = CalculateUtil::instance();
+    const int mode = calc->displayMode();
+
+    const QModelIndex currentIndex =
+            mode == ALL_APPS
+                ? static_cast<AppItemDelegate *>(m_appsView->itemDelegate())->currentIndex()
+                : m_appsView->currentIndex();
+
+    if (currentIndex.isValid())
+        return currentIndex;
+
+    return m_appsView->model()->index(0, 0);
 }

@@ -122,6 +122,9 @@ void MiniFrame::showLauncher()
     if (visible())
         return;
 
+    // reset search
+    m_searchWidget->clearSearchContent();
+
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &MiniFrame::adjustPosition, Qt::QueuedConnection);
     QTimer::singleShot(1, this, &MiniFrame::adjustPosition);
 

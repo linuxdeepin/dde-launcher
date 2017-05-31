@@ -53,6 +53,7 @@ private slots:
     void toggleAppsView();
     void toggleFullScreen();
     void onToggleViewClicked();
+    void prepareHideLauncher();
     void searchText(const QString &text);
 
 private:
@@ -63,6 +64,8 @@ private:
     DBusDock *m_dockInter;
     SharedEventFilter *m_eventFilter;
     AppsManager *m_appsManager;
+
+    QTimer *m_delayHideTimer;
 
     DImageButton *m_viewToggle;
     DImageButton *m_modeToggle;

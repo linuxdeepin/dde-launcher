@@ -32,6 +32,8 @@ MiniFrame::MiniFrame(QWidget *parent)
       m_eventFilter(new SharedEventFilter(this)),
       m_appsManager(AppsManager::instance()),
 
+      m_delayHideTimer(new QTimer(this)),
+
       m_navigation(new MiniFrameNavigation),
       m_categoryWidget(new MiniCategoryWidget),
 
@@ -50,6 +52,9 @@ MiniFrame::MiniFrame(QWidget *parent)
 
     m_searchWidget = new SearchWidget;
     m_searchWidget->installEventFilter(this);
+
+    m_delayHideTimer->setInterval(100);
+    m_delayHideTimer->setSingleShot(true);
 
     QHBoxLayout *viewHeaderLayout = new QHBoxLayout;
     viewHeaderLayout->addWidget(m_viewToggle);
@@ -106,6 +111,7 @@ MiniFrame::MiniFrame(QWidget *parent)
 
     installEventFilter(m_eventFilter);
 
+    connect(m_delayHideTimer, &QTimer::timeout, this, &MiniFrame::prepareHideLauncher);
     connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &MiniFrame::searchText, Qt::QueuedConnection);
     connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::toggleFullScreen, Qt::QueuedConnection);
     connect(m_viewToggle, &DImageButton::clicked, this, &MiniFrame::onToggleViewClicked, Qt::QueuedConnection);
@@ -222,7 +228,7 @@ void MiniFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
 bool MiniFrame::windowDeactiveEvent()
 {
     if (isVisible())
-        hideLauncher();
+        m_delayHideTimer->start();
 
     return true;
 }
@@ -370,6 +376,14 @@ void MiniFrame::onToggleViewClicked()
     calc->setDisplayMode(mode == ALL_APPS ? GROUP_BY_CATEGORY : ALL_APPS);
 
     QTimer::singleShot(1, this, &MiniFrame::toggleAppsView);
+}
+
+void MiniFrame::prepareHideLauncher()
+{
+    if (!visible() || underMouse())
+        return;
+
+    hideLauncher();
 }
 
 void MiniFrame::searchText(const QString &text)

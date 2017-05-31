@@ -64,7 +64,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     viewHeaderLayout->addStretch();
     viewHeaderLayout->addWidget(m_modeToggle);
     viewHeaderLayout->setSpacing(0);
-    viewHeaderLayout->setMargin(0);
+    viewHeaderLayout->setContentsMargins(5, 8, 5, 8);
 
     m_appsBox = new DVBoxWidget;
 

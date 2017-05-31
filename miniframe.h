@@ -8,6 +8,8 @@
 #include <dimagebutton.h>
 #include <dboxwidget.h>
 
+#include <memory>
+
 DWIDGET_USE_NAMESPACE
 
 class QScrollArea;
@@ -19,6 +21,7 @@ class AppsListModel;
 class AppsManager;
 class MiniCategoryWidget;
 class SharedEventFilter;
+class MenuWorker;
 class MiniFrame : public DBlurEffectWidget, public LauncherInterface
 {
     Q_OBJECT
@@ -35,6 +38,7 @@ private:
     void moveCurrentSelectApp(const int key) Q_DECL_OVERRIDE;
     void appendToSearchEdit(const char ch) Q_DECL_OVERRIDE;
     void launchCurrentApp() Q_DECL_OVERRIDE;
+    void showPopupMenu(const QPoint &pos, const QModelIndex &context);
 
     bool windowDeactiveEvent() Q_DECL_OVERRIDE;
 
@@ -55,6 +59,7 @@ private:
     const QModelIndex currentIndex() const;
 
 private:
+    std::unique_ptr<MenuWorker> m_menuWorker;
     DBusDock *m_dockInter;
     SharedEventFilter *m_eventFilter;
     AppsManager *m_appsManager;

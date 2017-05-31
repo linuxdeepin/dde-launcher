@@ -9,19 +9,14 @@
 
 #include "menuworker.h"
 
-AppsManager *MenuWorker::m_appManager = nullptr;
-
 MenuWorker::MenuWorker(QObject *parent) : QObject(parent)
 {
-    qDebug() << "MenuWorker";
     m_menuManagerInterface = new DBusMenuManager(this);
-
     m_dockAppManagerInterface = new DBusDock(this);
     m_startManagerInterface = new DBusStartManager(this);
     m_launcherInterface = new DBusLauncher(this);
     m_menuInterface = NULL;
-    if (!m_appManager)
-        m_appManager = AppsManager::instance();
+    m_appManager = AppsManager::instance();
 
     initConnect();
 

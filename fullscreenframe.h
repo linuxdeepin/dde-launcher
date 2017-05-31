@@ -18,6 +18,8 @@
 #include "widgets/applistarea.h"
 #include "boxframe/boxframe.h"
 
+#include <memory>
+
 #include <QFrame>
 #include <QScrollArea>
 #include <QPropertyAnimation>
@@ -130,7 +132,7 @@ private:
     SearchWidget *m_searchWidget;
     AppListArea *m_appsArea;
     DVBoxWidget *m_appsVbox;
-    MenuWorker* m_menuWorker;
+    std::unique_ptr<MenuWorker> m_menuWorker;
 
     QWidget *m_viewListPlaceholder;
     QLabel *m_tipsLabel;

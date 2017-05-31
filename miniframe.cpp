@@ -1,5 +1,6 @@
 #include "miniframe.h"
 #include "dbusdock.h"
+#include "worker/menuworker.h"
 #include "widgets/miniframenavigation.h"
 #include "widgets/searchwidget.h"
 #include "widgets/minicategorywidget.h"
@@ -26,6 +27,7 @@
 MiniFrame::MiniFrame(QWidget *parent)
     : DBlurEffectWidget(parent),
 
+      m_menuWorker(new MenuWorker),
       m_dockInter(new DBusDock(this)),
       m_eventFilter(new SharedEventFilter(this)),
       m_appsManager(AppsManager::instance()),
@@ -212,6 +214,11 @@ void MiniFrame::launchCurrentApp()
     m_appsManager->launchApp(currentIdx);
 }
 
+void MiniFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
+{
+    m_menuWorker->showMenuByAppItem(context, pos);
+}
+
 bool MiniFrame::windowDeactiveEvent()
 {
     if (isVisible())
@@ -317,6 +324,7 @@ void MiniFrame::toggleAppsView()
         m_categoryWidget->setVisible(false);
         m_appsModel->setCategory(AppsListModel::All);
 
+        connect(appsView, &AppGridView::popupMenuRequested, this, &MiniFrame::showPopupMenu);
         connect(delegate, &AppItemDelegate::currentChanged,
                 appsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
     } else {

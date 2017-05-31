@@ -717,8 +717,8 @@ void FullScreenFrame::initConnection()
     connect(m_appsArea, &AppListArea::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
     connect(m_navigationWidget, &NavigationWidget::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
 
-    connect(m_menuWorker, &MenuWorker::quitLauncher, this, &FullScreenFrame::hide);
-    connect(m_menuWorker, &MenuWorker::unInstallApp, this, &FullScreenFrame::showPopupUninstallDialog);
+    connect(m_menuWorker.get(), &MenuWorker::quitLauncher, this, &FullScreenFrame::hide);
+    connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, &FullScreenFrame::showPopupUninstallDialog);
     connect(m_navigationWidget, &NavigationWidget::toggleMode, [this]{
         m_searchWidget->clearFocus();
         m_searchWidget->clearSearchContent();

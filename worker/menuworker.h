@@ -81,8 +81,9 @@ private:
     DBusLauncher* m_launcherInterface;
     DBusStartManager* m_startManagerInterface;
 
+    AppsManager *m_appManager;
+
     QModelIndex m_currentModelIndex = QModelIndex();
-    static AppsManager *m_appManager;
     QString m_appKey;
     QString m_appDesktop;
     QString m_currentMenuObjectPath;

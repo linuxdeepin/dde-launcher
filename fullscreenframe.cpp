@@ -25,6 +25,9 @@ static const QString DisplayModeCategory = "category";
 
 FullScreenFrame::FullScreenFrame(QWidget *parent) :
     BoxFrame(parent),
+    m_menuWorker(new MenuWorker),
+    m_eventFilter(new SharedEventFilter(this)),
+
     m_backgroundManager(new BackgroundManager(this)),
     m_displayInter(new DBusDisplay(this)),
 
@@ -37,7 +40,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_searchWidget(new SearchWidget(this)),
     m_appsArea(new AppListArea),
     m_appsVbox(new DVBoxWidget),
-    m_menuWorker(new MenuWorker),
     m_viewListPlaceholder(new QWidget),
     m_tipsLabel(new QLabel(this)),
     m_appItemDelegate(new AppItemDelegate),
@@ -90,7 +92,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     setObjectName("LauncherFrame");
 
-    installEventFilter(new SharedEventFilter(this));
+    installEventFilter(m_eventFilter.get());
 
     initUI();
     initConnection();
@@ -471,6 +473,8 @@ void FullScreenFrame::showGradient() {
 
 void FullScreenFrame::toMiniMode()
 {
+    removeEventFilter(m_eventFilter.get());
+
     const QStringList args {
         "--print-reply",
         "--dest=com.deepin.dde.daemon.Launcher",

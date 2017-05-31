@@ -32,6 +32,7 @@ DWIDGET_USE_NAMESPACE
 
 class BackgroundManager;
 class DBusLauncherService;
+class SharedEventFilter;
 class FullScreenFrame : public BoxFrame, public LauncherInterface
 {
     Q_OBJECT
@@ -115,6 +116,9 @@ private:
     int m_displayMode = SEARCH;
     double rightMarginRation = 1;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
+    std::unique_ptr<MenuWorker> m_menuWorker;
+    std::unique_ptr<SharedEventFilter> m_eventFilter;
+
     BackgroundManager *m_backgroundManager;
 
     DBusDisplay *m_displayInter;
@@ -132,7 +136,6 @@ private:
     SearchWidget *m_searchWidget;
     AppListArea *m_appsArea;
     DVBoxWidget *m_appsVbox;
-    std::unique_ptr<MenuWorker> m_menuWorker;
 
     QWidget *m_viewListPlaceholder;
     QLabel *m_tipsLabel;

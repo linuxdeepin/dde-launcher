@@ -54,7 +54,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_searchWidget = new SearchWidget;
     m_searchWidget->installEventFilter(this);
 
-    m_delayHideTimer->setInterval(100);
+    m_delayHideTimer->setInterval(200);
     m_delayHideTimer->setSingleShot(true);
 
     QHBoxLayout *viewHeaderLayout = new QHBoxLayout;
@@ -262,6 +262,24 @@ void MiniFrame::showEvent(QShowEvent *e)
         activateWindow();
         setFocus();
     });
+}
+
+void MiniFrame::enterEvent(QEvent *e)
+{
+    DBlurEffectWidget::enterEvent(e);
+
+    m_delayHideTimer->stop();
+
+    raise();
+    activateWindow();
+    setFocus();
+}
+
+void MiniFrame::leaveEvent(QEvent *e)
+{
+    DBlurEffectWidget::leaveEvent(e);
+
+    m_delayHideTimer->start();
 }
 
 bool MiniFrame::eventFilter(QObject *o, QEvent *e)

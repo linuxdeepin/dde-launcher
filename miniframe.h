@@ -22,6 +22,7 @@ class AppsManager;
 class MiniCategoryWidget;
 class SharedEventFilter;
 class MenuWorker;
+class CalculateUtil;
 class MiniFrame : public DBlurEffectWidget, public LauncherInterface
 {
     Q_OBJECT
@@ -54,6 +55,7 @@ private slots:
     void toggleFullScreen();
     void onToggleViewClicked();
     void prepareHideLauncher();
+    void setCurrentIndex(const QModelIndex &index);
     void searchText(const QString &text);
 
 private:
@@ -64,6 +66,7 @@ private:
     DBusDock *m_dockInter;
     SharedEventFilter *m_eventFilter;
     AppsManager *m_appsManager;
+    CalculateUtil *m_calcUtil;
 
     QTimer *m_delayHideTimer;
 

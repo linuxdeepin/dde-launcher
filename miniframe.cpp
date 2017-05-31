@@ -31,6 +31,7 @@ MiniFrame::MiniFrame(QWidget *parent)
       m_dockInter(new DBusDock(this)),
       m_eventFilter(new SharedEventFilter(this)),
       m_appsManager(AppsManager::instance()),
+      m_calcUtil(CalculateUtil::instance()),
 
       m_delayHideTimer(new QTimer(this)),
 
@@ -156,8 +157,6 @@ bool MiniFrame::visible()
 
 void MiniFrame::moveCurrentSelectApp(const int key)
 {
-    CalculateUtil *calc = CalculateUtil::instance();
-
     const QModelIndex currentIdx = currentIndex();
 
     QModelIndex targetIndex;
@@ -171,7 +170,7 @@ void MiniFrame::moveCurrentSelectApp(const int key)
 
         const int c = 0;
         const int r = currentIdx.row();
-        const int column_per_line = calc->appColumnCount();
+        const int column_per_line = m_calcUtil->appColumnCount();
 
         switch (key)
         {
@@ -196,7 +195,7 @@ void MiniFrame::moveCurrentSelectApp(const int key)
         return;
 
     int y_offset = 0;
-    if (calc->displayMode() == ALL_APPS)
+    if (m_calcUtil->displayMode() == ALL_APPS)
     {
         static_cast<AppItemDelegate *>(m_appsView->itemDelegate())->setCurrentIndex(targetIndex);
         y_offset = static_cast<AppGridView *>(m_appsView)->indexYOffset(targetIndex);
@@ -218,6 +217,8 @@ void MiniFrame::launchCurrentApp()
     const QModelIndex currentIdx = currentIndex();
 
     m_appsManager->launchApp(currentIdx);
+
+    hideLauncher();
 }
 
 void MiniFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
@@ -345,6 +346,7 @@ void MiniFrame::toggleAppsView()
 
     connect(m_appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
     connect(m_appsView, &QListView::clicked, this, &MiniFrame::hideLauncher, Qt::QueuedConnection);
+    connect(m_appsView, &QListView::entered, this, &MiniFrame::setCurrentIndex);
 
     m_appsBox->layout()->addWidget(m_appsView);
 
@@ -370,20 +372,30 @@ void MiniFrame::toggleFullScreen()
 
 void MiniFrame::onToggleViewClicked()
 {
-    CalculateUtil *calc = CalculateUtil::instance();
-    const int mode = calc->displayMode();
+    const int mode = m_calcUtil->displayMode();
 
-    calc->setDisplayMode(mode == ALL_APPS ? GROUP_BY_CATEGORY : ALL_APPS);
+    m_calcUtil->setDisplayMode(mode == ALL_APPS ? GROUP_BY_CATEGORY : ALL_APPS);
 
     QTimer::singleShot(1, this, &MiniFrame::toggleAppsView);
 }
 
 void MiniFrame::prepareHideLauncher()
 {
-    if (!visible() || underMouse())
+    if (!visible())
+        return;
+
+    if (geometry().contains(QCursor::pos()))
         return;
 
     hideLauncher();
+}
+
+void MiniFrame::setCurrentIndex(const QModelIndex &index)
+{
+    if (m_calcUtil->displayMode() == ALL_APPS)
+        static_cast<AppItemDelegate *>(m_appsView->itemDelegate())->setCurrentIndex(index);
+    else
+        m_appsView->setCurrentIndex(index);
 }
 
 void MiniFrame::searchText(const QString &text)
@@ -399,8 +411,7 @@ void MiniFrame::searchText(const QString &text)
 
 const QModelIndex MiniFrame::currentIndex() const
 {
-    CalculateUtil *calc = CalculateUtil::instance();
-    const int mode = calc->displayMode();
+    const int mode = m_calcUtil->displayMode();
 
     const QModelIndex currentIndex =
             mode == ALL_APPS

@@ -8,8 +8,9 @@ AppListView::AppListView(QWidget *parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(NoFrame);
     setVerticalScrollMode(ScrollPerPixel);
-    setSelectionMode(NoSelection);
-    setFixedSize(480, 430);
+    setSelectionMode(SingleSelection);
+    setFixedSize(480, 410);
     setSpacing(0);
     setContentsMargins(0, 0, 0, 0);
+    setMouseTracking(true);
 }

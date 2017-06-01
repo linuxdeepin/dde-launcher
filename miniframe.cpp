@@ -364,7 +364,6 @@ void MiniFrame::toggleAppsView()
     if (calc->displayMode() == ALL_APPS)
     {
         AppItemDelegate *delegate = new AppItemDelegate;
-
         AppGridView *appsView = new AppGridView;
         appsView->setModel(m_appsModel);
         appsView->setItemDelegate(delegate);

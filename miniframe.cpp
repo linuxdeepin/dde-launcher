@@ -24,6 +24,9 @@
 #define DOCK_BOTTOM     2
 #define DOCK_LEFT       3
 
+#define DOCK_FASHION    0
+#define DOCK_EFFICIENT  1
+
 MiniFrame::MiniFrame(QWidget *parent)
     : DBlurEffectWidget(parent),
 
@@ -308,21 +311,44 @@ void MiniFrame::adjustPosition()
     const QSize s = size();
     QPoint p;
 
-    switch (dockPos)
+    // extra spacing for efficient mode
+    if (m_dockInter->displayMode() == DOCK_EFFICIENT)
     {
-    case DOCK_TOP:
-        p = QPoint(dockRect.left(), dockRect.bottom() + spacing);
-        break;
-    case DOCK_BOTTOM:
-        p = QPoint(dockRect.left(), dockRect.top() - s.height() - spacing);
-        break;
-    case DOCK_LEFT:
-        p = QPoint(dockRect.right() + spacing, dockRect.top());
-        break;
-    case DOCK_RIGHT:
-        p = QPoint(dockRect.left() - s.width() - spacing, dockRect.top());
-        break;
-    default: Q_UNREACHABLE_IMPL();
+        const QRect primaryRect = qApp->primaryScreen()->geometry();
+
+        switch (dockPos)
+        {
+        case DOCK_TOP:
+            p = QPoint(primaryRect.left() + spacing, dockRect.bottom() + spacing);
+            break;
+        case DOCK_BOTTOM:
+            p = QPoint(primaryRect.left() + spacing, dockRect.top() - s.height() - spacing);
+            break;
+        case DOCK_LEFT:
+            p = QPoint(dockRect.right() + spacing, primaryRect.top() + spacing);
+            break;
+        case DOCK_RIGHT:
+            p = QPoint(dockRect.left() - s.width() - spacing, primaryRect.top() + spacing);
+            break;
+        default: Q_UNREACHABLE_IMPL();
+        }
+    } else {
+        switch (dockPos)
+        {
+        case DOCK_TOP:
+            p = QPoint(dockRect.left(), dockRect.bottom() + spacing);
+            break;
+        case DOCK_BOTTOM:
+            p = QPoint(dockRect.left(), dockRect.top() - s.height() - spacing);
+            break;
+        case DOCK_LEFT:
+            p = QPoint(dockRect.right() + spacing, dockRect.top());
+            break;
+        case DOCK_RIGHT:
+            p = QPoint(dockRect.left() - s.width() - spacing, dockRect.top());
+            break;
+        default: Q_UNREACHABLE_IMPL();
+        }
     }
 
     move(p);

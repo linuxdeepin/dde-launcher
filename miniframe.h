@@ -41,7 +41,8 @@ private:
     void launchCurrentApp() Q_DECL_OVERRIDE;
     void showPopupMenu(const QPoint &pos, const QModelIndex &context);
 
-    void uninstallApp(const QModelIndex &context) Q_DECL_OVERRIDE;
+    void uninstallApp(const QString &appKey) Q_DECL_OVERRIDE;
+    void uninstallApp(const QModelIndex &context);
 
     bool windowDeactiveEvent() Q_DECL_OVERRIDE;
 

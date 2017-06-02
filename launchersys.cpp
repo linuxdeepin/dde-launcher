@@ -32,7 +32,7 @@ void LauncherSys::hideLauncher()
 
 void LauncherSys::uninstallApp(const QString &appKey)
 {
-    qDebug() << appKey;
+    m_launcherInter->uninstallApp(appKey);
 }
 
 bool LauncherSys::visible()

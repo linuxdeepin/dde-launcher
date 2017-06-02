@@ -717,7 +717,7 @@ void FullScreenFrame::initConnection()
     connect(m_navigationWidget, &NavigationWidget::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
 
     connect(m_menuWorker.get(), &MenuWorker::quitLauncher, this, &FullScreenFrame::hide);
-    connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, &FullScreenFrame::uninstallApp);
+    connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
     connect(m_navigationWidget, &NavigationWidget::toggleMode, [this]{
         m_searchWidget->clearFocus();
         m_searchWidget->clearSearchContent();
@@ -908,6 +908,11 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
              << "app key:" << context.data(AppsListModel::AppKeyRole).toString();
 
     m_menuWorker->showMenuByAppItem(context, pos);
+}
+
+void FullScreenFrame::uninstallApp(const QString &appKey)
+{
+    uninstallApp(m_allAppsModel->indexAt(appKey));
 }
 
 void FullScreenFrame::uninstallApp(const QModelIndex &context)

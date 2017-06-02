@@ -117,6 +117,7 @@ MiniFrame::MiniFrame(QWidget *parent)
 
     installEventFilter(m_eventFilter);
 
+    connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (MiniFrame::*)(const QModelIndex &)>(&MiniFrame::uninstallApp));
     connect(m_delayHideTimer, &QTimer::timeout, this, &MiniFrame::prepareHideLauncher);
     connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &MiniFrame::searchText, Qt::QueuedConnection);
     connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::toggleFullScreen, Qt::QueuedConnection);
@@ -229,6 +230,11 @@ void MiniFrame::launchCurrentApp()
 void MiniFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
 {
     m_menuWorker->showMenuByAppItem(context, pos);
+}
+
+void MiniFrame::uninstallApp(const QString &appKey)
+{
+    uninstallApp(m_appsModel->indexAt(appKey));
 }
 
 void MiniFrame::uninstallApp(const QModelIndex &context)

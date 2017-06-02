@@ -70,7 +70,8 @@ private:
     void initConnection();
     void initTimer();
 
-    void uninstallApp(const QModelIndex &context) Q_DECL_OVERRIDE;
+    void uninstallApp(const QString &appKey) Q_DECL_OVERRIDE;
+    void uninstallApp(const QModelIndex &context);
     void showLauncher() Q_DECL_OVERRIDE;
     void hideLauncher() Q_DECL_OVERRIDE;
     bool visible() Q_DECL_OVERRIDE;

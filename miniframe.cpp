@@ -19,6 +19,8 @@
 #include <QHBoxLayout>
 #include <QScrollArea>
 
+#include <ddialog.h>
+
 #define DOCK_TOP        0
 #define DOCK_RIGHT      1
 #define DOCK_BOTTOM     2
@@ -227,6 +229,37 @@ void MiniFrame::launchCurrentApp()
 void MiniFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
 {
     m_menuWorker->showMenuByAppItem(context, pos);
+}
+
+void MiniFrame::uninstallApp(const QModelIndex &context)
+{
+    DTK_WIDGET_NAMESPACE::DDialog unInstallDialog;
+    unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
+    unInstallDialog.setWindowModality(Qt::WindowModal);
+
+    const QString appKey = context.data(AppsListModel::AppKeyRole).toString();
+    QString appName = context.data(AppsListModel::AppNameRole).toString();
+    unInstallDialog.setTitle(QString(tr("Are you sure to uninstall %1 ?")).arg(appName));
+    QPixmap appIcon = context.data(AppsListModel::AppIconRole).value<QPixmap>();
+    appIcon = appIcon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    unInstallDialog.setIconPixmap(appIcon);
+
+    QString message = tr("All dependencies will be removed together");
+    unInstallDialog.setMessage(message);
+    QStringList buttons;
+    buttons << tr("Cancel") << tr("Confirm");
+    unInstallDialog.addButtons(buttons);
+
+//    connect(&unInstallDialog, SIGNAL(buttonClicked(int, QString)), this, SLOT(handleUninstallResult(int, QString)));
+    connect(&unInstallDialog, &DTK_WIDGET_NAMESPACE::DDialog::buttonClicked, [&] (int clickedResult) {
+        // 0 means "cancel" button clicked
+        if (clickedResult == 0)
+            return;
+
+        m_appsManager->uninstallApp(appKey);
+    });
+
+    unInstallDialog.exec();
 }
 
 bool MiniFrame::windowDeactiveEvent()

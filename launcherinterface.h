@@ -1,6 +1,7 @@
 #ifndef LAUNCHERINTERFACE_H
 #define LAUNCHERINTERFACE_H
 
+class QModelIndex;
 class LauncherInterface
 {
 public:
@@ -14,6 +15,9 @@ public:
     virtual void moveCurrentSelectApp(const int key) = 0;
 
     virtual bool windowDeactiveEvent() = 0;
+
+    virtual void uninstallApp(const QModelIndex &context) = 0;
 };
+
 
 #endif // LAUNCHERINTERFACE_H

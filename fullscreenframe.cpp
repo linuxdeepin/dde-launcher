@@ -112,11 +112,6 @@ void FullScreenFrame::exit()
     qApp->quit();
 }
 
-void FullScreenFrame::uninstallApp(const QString &appKey)
-{
-    showPopupUninstallDialog(m_allAppsModel->indexAt(appKey));
-}
-
 void FullScreenFrame::showByMode(const qlonglong mode)
 {
     qDebug() << mode;
@@ -722,7 +717,7 @@ void FullScreenFrame::initConnection()
     connect(m_navigationWidget, &NavigationWidget::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
 
     connect(m_menuWorker.get(), &MenuWorker::quitLauncher, this, &FullScreenFrame::hide);
-    connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, &FullScreenFrame::showPopupUninstallDialog);
+    connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, &FullScreenFrame::uninstallApp);
     connect(m_navigationWidget, &NavigationWidget::toggleMode, [this]{
         m_searchWidget->clearFocus();
         m_searchWidget->clearSearchContent();
@@ -915,7 +910,7 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
     m_menuWorker->showMenuByAppItem(context, pos);
 }
 
-void FullScreenFrame::showPopupUninstallDialog(const QModelIndex &context)
+void FullScreenFrame::uninstallApp(const QModelIndex &context)
 {
     m_isConfirmDialogShown = true;
 

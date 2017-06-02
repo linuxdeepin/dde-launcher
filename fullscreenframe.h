@@ -43,7 +43,6 @@ public:
     ~FullScreenFrame();
 
     void exit();
-    void uninstallApp(const QString &appKey);
     void showByMode(const qlonglong mode);
     int dockPosition();
 
@@ -71,6 +70,7 @@ private:
     void initConnection();
     void initTimer();
 
+    void uninstallApp(const QModelIndex &context) Q_DECL_OVERRIDE;
     void showLauncher() Q_DECL_OVERRIDE;
     void hideLauncher() Q_DECL_OVERRIDE;
     bool visible() Q_DECL_OVERRIDE;
@@ -82,7 +82,6 @@ private:
     void updateGeometry();
     void checkCategoryVisible();
     void showPopupMenu(const QPoint &pos, const QModelIndex &context);
-    void showPopupUninstallDialog(const QModelIndex &context);
     void updateDisplayMode(const int mode);
     void updateCurrentVisibleCategory();
     void updatePlaceholderSize();

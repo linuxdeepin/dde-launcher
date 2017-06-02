@@ -13,9 +13,10 @@ class LauncherSys : public QObject
 public:
     explicit LauncherSys(QObject *parent = 0);
 
+    bool visible();
     void showLauncher();
     void hideLauncher();
-    bool visible();
+    void uninstallApp(const QString &appKey);
 
 private slots:
     void displayModeChanged();

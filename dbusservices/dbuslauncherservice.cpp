@@ -38,8 +38,7 @@ DBusLauncherService::~DBusLauncherService()
 void DBusLauncherService::Exit()
 {
     // handle method call com.deepin.dde.Launcher.Exit
-//    parent()->Exit();
-//    parent()->exit();
+    qApp->quit();
 }
 
 void DBusLauncherService::Hide()
@@ -65,8 +64,7 @@ void DBusLauncherService::ShowByMode(qlonglong in0)
 #ifndef WITHOUT_UNINSTALL_APP
 void DBusLauncherService::UninstallApp(const QString &appKey)
 {
-//    parent()->uninstallApp(appKey);
-    qDebug() << appKey;
+    parent()->uninstallApp(appKey);
 }
 #endif
 

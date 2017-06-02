@@ -9,6 +9,12 @@ class AppListView : public QListView
 
 public:
     explicit AppListView(QWidget *parent = 0);
+
+signals:
+    void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
+
+protected:
+    void mousePressEvent(QMouseEvent *e);
 };
 
 #endif // APPLISTVIEW_H

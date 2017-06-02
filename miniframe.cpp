@@ -385,6 +385,8 @@ void MiniFrame::toggleAppsView()
 
         m_categoryWidget->setVisible(true);
         m_appsModel->setCategory(AppsListModel::All);
+
+        connect(appsView, &AppListView::popupMenuRequested, this, &MiniFrame::showPopupMenu);
     }
 
     connect(m_appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);

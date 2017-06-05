@@ -222,10 +222,10 @@ void MiniFrame::launchCurrentApp()
 {
     const QModelIndex currentIdx = currentIndex();
 
-    if (currentIdx.isValid() && currentIdx.model() == m_searchModel)
+    if (currentIdx.isValid() && currentIdx.model() == m_appsView->model())
         m_appsManager->launchApp(currentIdx);
     else
-        m_appsManager->launchApp(m_searchModel->index(0, 0));
+        m_appsManager->launchApp(m_appsView->model()->index(0, 0));
 
     hideLauncher();
 }

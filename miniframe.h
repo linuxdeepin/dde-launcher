@@ -52,8 +52,6 @@ private:
     void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent *e) Q_DECL_OVERRIDE;
 
-    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
-
 private slots:
     void adjustPosition();
     void toggleAppsView();

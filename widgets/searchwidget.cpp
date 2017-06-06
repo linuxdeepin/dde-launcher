@@ -37,10 +37,10 @@ void SearchWidget::clearSearchContent()
     m_searchEdit->normalMode();
 }
 
-bool SearchWidget::event(QEvent *e)
-{
+//bool SearchWidget::event(QEvent *e)
+//{
 //    if (e->type() == QEvent::FocusIn)
 //        m_searchEdit->setFocus();
 
-    return QWidget::event(e);
-}
+//    return QWidget::event(e);
+//}

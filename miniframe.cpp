@@ -57,7 +57,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_modeToggle->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
 
     m_searchWidget = new SearchWidget;
-    m_searchWidget->installEventFilter(this);
+    m_searchWidget->edit()->installEventFilter(m_eventFilter);
 
     m_delayHideTimer->setInterval(200);
     m_delayHideTimer->setSingleShot(true);
@@ -168,9 +168,9 @@ void MiniFrame::moveCurrentSelectApp(const int key)
     QModelIndex targetIndex;
 
     do {
-        if (!currentIdx.isValid())
+        if (!currentIdx.isValid() || currentIdx.model() != m_appsView->model())
         {
-            targetIndex = m_appsView->model()->index(0, 0, QModelIndex());
+            targetIndex = m_appsView->model()->index(0, 0);
             break;
         }
 
@@ -325,23 +325,6 @@ void MiniFrame::leaveEvent(QEvent *e)
     DBlurEffectWidget::leaveEvent(e);
 
     m_delayHideTimer->start();
-}
-
-bool MiniFrame::eventFilter(QObject *o, QEvent *e)
-{
-    if (o == m_searchWidget && e->type() == QEvent::KeyPress)
-    {
-        QKeyEvent *keyPress = static_cast<QKeyEvent *>(e);
-        if (keyPress->key() == Qt::Key_Left || keyPress->key() == Qt::Key_Right)
-        {
-            QKeyEvent *event = new QKeyEvent(keyPress->type(), keyPress->key(), keyPress->modifiers());
-            qApp->postEvent(this, event);
-
-            return true;
-        }
-    }
-
-    return false;
 }
 
 void MiniFrame::adjustPosition()
@@ -505,8 +488,5 @@ const QModelIndex MiniFrame::currentIndex() const
                 ? static_cast<AppItemDelegate *>(m_appsView->itemDelegate())->currentIndex()
                 : m_appsView->currentIndex();
 
-    if (currentIndex.isValid())
-        return currentIndex;
-
-    return m_appsView->model()->index(0, 0);
+    return currentIndex;
 }

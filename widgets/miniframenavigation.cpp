@@ -123,10 +123,11 @@ MiniFrameNavigation::MiniFrameNavigation(QWidget *parent)
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_avatar);
+    centralLayout->addSpacing(35);
     centralLayout->setAlignment(m_avatar, Qt::AlignHCenter);
     centralLayout->addLayout(m_panelStack);
     centralLayout->setSpacing(0);
-    centralLayout->setMargin(0);
+    centralLayout->setContentsMargins(0, 50, 0, 0);
 
     setLayout(centralLayout);
 

@@ -9,7 +9,8 @@ HEADERS += \
     $$PWD/searchlineedit.h \
     $$PWD/applistarea.h \
     $$PWD/miniframenavigation.h \
-    $$PWD/minicategorywidget.h
+    $$PWD/minicategorywidget.h \
+    $$PWD/miniframebottombar.h
 
 SOURCES += \
     $$PWD/categorybutton.cpp \
@@ -20,4 +21,5 @@ SOURCES += \
     $$PWD/searchlineedit.cpp \
     $$PWD/applistarea.cpp \
     $$PWD/miniframenavigation.cpp \
-    $$PWD/minicategorywidget.cpp
+    $$PWD/minicategorywidget.cpp \
+    $$PWD/miniframebottombar.cpp

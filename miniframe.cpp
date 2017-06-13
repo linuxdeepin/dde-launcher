@@ -1,9 +1,9 @@
 #include "miniframe.h"
 #include "dbusdock.h"
 #include "worker/menuworker.h"
-#include "widgets/miniframenavigation.h"
 #include "widgets/searchwidget.h"
 #include "widgets/minicategorywidget.h"
+#include "widgets/miniframebottombar.h"
 #include "view/appgridview.h"
 #include "view/applistview.h"
 #include "model/appslistmodel.h"
@@ -40,14 +40,14 @@ MiniFrame::MiniFrame(QWidget *parent)
 
       m_delayHideTimer(new QTimer(this)),
 
-      m_navigation(new MiniFrameNavigation),
       m_categoryWidget(new MiniCategoryWidget),
+      m_bottomBar(new MiniFrameBottomBar),
 
       m_appsView(nullptr),
       m_appsModel(new AppsListModel(AppsListModel::All)),
       m_searchModel(new AppsListModel(AppsListModel::Search))
 {
-    m_navigation->setFixedWidth(140);
+    m_bottomBar->setFixedHeight(40);
     m_categoryWidget->setFixedWidth(140);
     m_categoryWidget->setVisible(false);
 
@@ -99,17 +99,17 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_viewWrapper->setLayout(viewLayout);
     m_viewWrapper->setObjectName("ViewWrapper");
 
-    QHBoxLayout *centralLayout = new QHBoxLayout;
-    centralLayout->addWidget(m_navigation);
+    QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_viewWrapper);
+    centralLayout->addWidget(m_bottomBar);
     centralLayout->setSpacing(0);
-    centralLayout->setContentsMargins(0, 10, 10, 10);
+    centralLayout->setContentsMargins(10, 10, 10, 0);
 
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground);
     setMaskColor(DBlurEffectWidget::DarkColor);
     setFocusPolicy(Qt::ClickFocus);
-    setFixedSize(640, 480);
+    setFixedSize(510, 460);
     setBlurRectXRadius(5);
     setBlurRectYRadius(5);
     setLayout(centralLayout);

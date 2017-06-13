@@ -15,11 +15,11 @@ DWIDGET_USE_NAMESPACE
 class QScrollArea;
 class QListView;
 class DBusDock;
-class MiniFrameNavigation;
 class SearchWidget;
 class AppsListModel;
 class AppsManager;
 class MiniCategoryWidget;
+class MiniFrameBottomBar;
 class SharedEventFilter;
 class MenuWorker;
 class CalculateUtil;
@@ -77,8 +77,8 @@ private:
     DImageButton *m_modeToggle;
     SearchWidget *m_searchWidget;
 
-    MiniFrameNavigation *m_navigation;
     MiniCategoryWidget *m_categoryWidget;
+    MiniFrameBottomBar *m_bottomBar;
     QWidget *m_viewWrapper;
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsBox;

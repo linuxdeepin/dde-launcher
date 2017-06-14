@@ -53,8 +53,12 @@ MiniFrame::MiniFrame(QWidget *parent)
 
     m_viewToggle = new DImageButton;
     m_viewToggle->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
+    m_viewToggle->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
+    m_viewToggle->setPressPic(":/icons/skin/icons/category_active_22px.svg");
     m_modeToggle = new DImageButton;
     m_modeToggle->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
+    m_modeToggle->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
+    m_modeToggle->setPressPic(":/icons/skin/icons/fullscreen_press.png");
 
     m_searchWidget = new SearchWidget;
     m_searchWidget->edit()->installEventFilter(m_eventFilter);
@@ -69,7 +73,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     viewHeaderLayout->addStretch();
     viewHeaderLayout->addWidget(m_modeToggle);
     viewHeaderLayout->setSpacing(0);
-    viewHeaderLayout->setContentsMargins(5, 8, 5, 8);
+    viewHeaderLayout->setContentsMargins(8, 5, 8, 5);
 
     m_appsBox = new DVBoxWidget;
 
@@ -109,7 +113,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     setAttribute(Qt::WA_TranslucentBackground);
     setMaskColor(DBlurEffectWidget::DarkColor);
     setFocusPolicy(Qt::ClickFocus);
-    setFixedSize(510, 460);
+    setFixedSize(550, 485);
     setBlurRectXRadius(5);
     setBlurRectYRadius(5);
     setLayout(centralLayout);

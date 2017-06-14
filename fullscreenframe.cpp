@@ -409,10 +409,14 @@ void FullScreenFrame::initUI()
 
     m_miniMode = new DImageButton;
     m_miniMode->setNormalPic(":/icons/skin/icons/unfullscreen_normal.png");
+    m_miniMode->setHoverPic(":/icons/skin/icons/unfullscreen_hover.png");
+    m_miniMode->setPressPic(":/icons/skin/icons/unfullscreen_press.png");
 
     QVBoxLayout *rightLayout = new QVBoxLayout;
     rightLayout->addWidget(m_miniMode);
     rightLayout->setAlignment(m_miniMode, Qt::AlignTop | Qt::AlignRight);
+    rightLayout->setSpacing(0);
+    rightLayout->setContentsMargins(0, 30, 20, 0);
 
     m_rightSpacing->setLayout(rightLayout);
 

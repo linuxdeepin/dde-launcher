@@ -51,10 +51,10 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     if (!m_launcherInter->fullscreen())
     {
         m_appItemSpacing = 6;
-        m_appItemWidth = 110;
-        m_appItemHeight = 110;
+        m_appItemWidth = 120;
+        m_appItemHeight = 120;
         m_appIconSize = displayMode() == ALL_APPS ? 48 : 32;
-        m_appItemFontSize = 10;
+        m_appItemFontSize = 11;
         m_appColumnCount = displayMode() == ALL_APPS ? 4 : 1;
 
         emit layoutChanged();

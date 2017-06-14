@@ -16,6 +16,7 @@ MiniFrameBottomBar::MiniFrameBottomBar(QWidget *parent)
     m_toShutdown = new NavigationButton(tr("Shutdown"));
 
     QHBoxLayout *navigationLayout = new QHBoxLayout;
+    navigationLayout->addStretch();
     navigationLayout->addWidget(m_computer);
     navigationLayout->addWidget(m_document);
     navigationLayout->addWidget(m_video);
@@ -24,6 +25,7 @@ MiniFrameBottomBar::MiniFrameBottomBar(QWidget *parent)
     navigationLayout->addWidget(m_download);
     navigationLayout->addStretch();
     navigationLayout->addWidget(m_toShutdown);
+    navigationLayout->setMargin(0);
 
     m_navigationPanel = new QWidget;
     m_navigationPanel->setLayout(navigationLayout);
@@ -36,6 +38,7 @@ MiniFrameBottomBar::MiniFrameBottomBar(QWidget *parent)
     m_toNavigation = new NavigationButton(tr("Back"));
 
     QHBoxLayout *shutdownLayout = new QHBoxLayout;
+    shutdownLayout->addStretch();
     shutdownLayout->addWidget(m_lock);
     shutdownLayout->addWidget(m_logout);
     shutdownLayout->addWidget(m_reboot);
@@ -43,6 +46,7 @@ MiniFrameBottomBar::MiniFrameBottomBar(QWidget *parent)
     shutdownLayout->addWidget(m_shutdown);
     shutdownLayout->addStretch();
     shutdownLayout->addWidget(m_toNavigation);
+    shutdownLayout->setMargin(0);
 
     m_shutdownPanel = new QWidget;
     m_shutdownPanel->setLayout(shutdownLayout);

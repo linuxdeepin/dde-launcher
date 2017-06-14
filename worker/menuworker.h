@@ -56,8 +56,10 @@ public:
     QString JsonToQString(QPoint pos, QString menucontent);
 
 signals:
+    void menuAccepted();
     void quitLauncher();
     void unInstallApp(const QModelIndex &index);
+
 public slots:
     void showMenuByAppItem(const QModelIndex &index, QPoint pos);
     void menuItemInvoked(QString itemId, bool flag);

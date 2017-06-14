@@ -122,6 +122,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     installEventFilter(m_eventFilter);
 
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (MiniFrame::*)(const QModelIndex &)>(&MiniFrame::uninstallApp));
+    connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_delayHideTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_delayHideTimer, &QTimer::timeout, this, &MiniFrame::prepareHideLauncher);
     connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &MiniFrame::searchText, Qt::QueuedConnection);
     connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::toggleFullScreen, Qt::QueuedConnection);
@@ -277,10 +278,10 @@ void MiniFrame::uninstallApp(const QModelIndex &context)
 
 bool MiniFrame::windowDeactiveEvent()
 {
-    if (isVisible())
+    if (isVisible() && !m_menuWorker->isMenuShown())
         m_delayHideTimer->start();
 
-    return true;
+    return false;
 }
 
 void MiniFrame::mousePressEvent(QMouseEvent *e)
@@ -322,13 +323,6 @@ void MiniFrame::enterEvent(QEvent *e)
     raise();
     activateWindow();
     setFocus();
-}
-
-void MiniFrame::leaveEvent(QEvent *e)
-{
-    DBlurEffectWidget::leaveEvent(e);
-
-    m_delayHideTimer->start();
 }
 
 void MiniFrame::adjustPosition()

@@ -198,6 +198,7 @@ void MenuWorker::handleOpen(){
 
 void MenuWorker::handleMenuClosed(){
 //    emit signalManager->rightClickedChanged(false);
+    emit menuAccepted();
     m_menuIsShown = false;
 }
 

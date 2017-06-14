@@ -3,6 +3,11 @@ QWidget#ViewWrapper {
     border-radius: 8px;
 }
 
+QWidget#MiniTips {
+    color:rgba(238, 238, 238, .6);
+    font-size:22px;
+}
+
 QScrollArea#AppsArea {
     background: transparent;
 }

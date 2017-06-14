@@ -59,6 +59,7 @@ private slots:
     void prepareHideLauncher();
     void setCurrentIndex(const QModelIndex &index);
     void searchText(const QString &text);
+    void showTips(const QString &tips);
 
 private:
     const QModelIndex currentIndex() const;
@@ -79,6 +80,7 @@ private:
     MiniCategoryWidget *m_categoryWidget;
     MiniFrameBottomBar *m_bottomBar;
     QWidget *m_viewWrapper;
+    QLabel *m_tipsLabel;
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsBox;
 

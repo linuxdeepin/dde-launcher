@@ -2,6 +2,8 @@
 
 #include <QVBoxLayout>
 #include <QButtonGroup>
+#include <QMouseEvent>
+#include <QDebug>
 
 MiniCategoryItem::MiniCategoryItem(const QString &title, QWidget *parent) :
     QPushButton(title, parent)
@@ -68,4 +70,10 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     connect(m_reading, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Reading); });
     connect(m_development, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Development); });
     connect(m_system, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::System); });
+}
+
+void MiniCategoryWidget::mousePressEvent(QMouseEvent *e)
+{
+    // ignore this event to prohibit launcher auto-hide
+    Q_UNUSED(e);
 }

@@ -24,6 +24,9 @@ public:
 signals:
     void requestCategory(const AppsListModel::AppCategory &category) const;
 
+protected:
+    void mousePressEvent(QMouseEvent *e);
+
 private:
     QButtonGroup *m_buttonGroup;
 

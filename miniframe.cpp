@@ -97,13 +97,8 @@ MiniFrame::MiniFrame(QWidget *parent)
     appsAreaLayout->setSpacing(0);
     appsAreaLayout->setMargin(0);
 
-    QVBoxLayout *viewLayout = new QVBoxLayout;
-    viewLayout->addLayout(appsAreaLayout);
-    viewLayout->setSpacing(0);
-    viewLayout->setMargin(0);
-
     m_viewWrapper = new QWidget;
-    m_viewWrapper->setLayout(viewLayout);
+    m_viewWrapper->setLayout(appsAreaLayout);
     m_viewWrapper->setObjectName("ViewWrapper");
 
     QVBoxLayout *centralLayout = new QVBoxLayout;

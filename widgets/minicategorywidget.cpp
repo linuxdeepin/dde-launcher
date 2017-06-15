@@ -43,19 +43,25 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     m_buttonGroup->addButton(m_development);
     m_buttonGroup->addButton(m_system);
 
-    QVBoxLayout *centralLayout = new QVBoxLayout;
+    QVBoxLayout *buttonLayout = new QVBoxLayout;
+    buttonLayout->addWidget(m_allApps);
+    buttonLayout->addWidget(m_internet);
+    buttonLayout->addWidget(m_chat);
+    buttonLayout->addWidget(m_music);
+    buttonLayout->addWidget(m_video);
+    buttonLayout->addWidget(m_graphics);
+    buttonLayout->addWidget(m_game);
+    buttonLayout->addWidget(m_office);
+    buttonLayout->addWidget(m_reading);
+    buttonLayout->addWidget(m_development);
+    buttonLayout->addWidget(m_system);
+    buttonLayout->setSpacing(0);
+    buttonLayout->setMargin(0);
 
-    centralLayout->addWidget(m_allApps);
-    centralLayout->addWidget(m_internet);
-    centralLayout->addWidget(m_chat);
-    centralLayout->addWidget(m_music);
-    centralLayout->addWidget(m_video);
-    centralLayout->addWidget(m_graphics);
-    centralLayout->addWidget(m_game);
-    centralLayout->addWidget(m_office);
-    centralLayout->addWidget(m_reading);
-    centralLayout->addWidget(m_development);
-    centralLayout->addWidget(m_system);
+    QHBoxLayout *centralLayout = new QHBoxLayout;
+    centralLayout->addStretch();
+    centralLayout->addLayout(buttonLayout);
+    centralLayout->addStretch();
     centralLayout->setSpacing(0);
     centralLayout->setMargin(0);
 

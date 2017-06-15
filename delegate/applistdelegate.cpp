@@ -15,11 +15,16 @@ AppListDelegate::AppListDelegate(QObject *parent)
 void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     const QRect r = option.rect;
-
     const QPixmap icon = index.data(AppsListModel::AppIconRole).value<QPixmap>();
 
+    painter->setRenderHint(QPainter::Antialiasing);
+
     if (option.state.testFlag(QStyle::State_Selected))
-        painter->fillRect(option.rect, QColor(255, 255, 255, 255 * .1));
+    {
+        painter->setBrush(QColor(0, 0, 0, 255 * .2));
+        painter->setPen(Qt::NoPen);
+        painter->drawRoundedRect(option.rect, 4, 4);
+    }
 
     painter->drawPixmap(r.x() + 10, r.y() + (r.height() - icon.height()) / 2, icon);
 
@@ -27,6 +32,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     if (index.data(AppsListModel::AppAutoStartRole).toBool())
         painter->drawPixmap(r.x() + 10, r.y() + (r.height() - icon.height()) / 2 + m_autoStartPixmap.height(), m_autoStartPixmap);
 
+    painter->setPen(Qt::white);
     painter->drawText(r.marginsRemoved(QMargins(50, 0, 0, 0)), Qt::AlignVCenter | Qt::AlignLeft, index.data(AppsListModel::AppNameRole).toString());
 }
 

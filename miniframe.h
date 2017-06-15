@@ -5,6 +5,7 @@
 
 #include <QWidget>
 #include <DBlurEffectWidget>
+#include <DPlatformWindowHandle>
 #include <dimagebutton.h>
 #include <dboxwidget.h>
 
@@ -59,13 +60,13 @@ private slots:
     void prepareHideLauncher();
     void setCurrentIndex(const QModelIndex &index);
     void searchText(const QString &text);
-    void showTips(const QString &tips);
 
 private:
     const QModelIndex currentIndex() const;
 
 private:
     std::unique_ptr<MenuWorker> m_menuWorker;
+    DPlatformWindowHandle m_windowHandle;
     DBusDock *m_dockInter;
     SharedEventFilter *m_eventFilter;
     AppsManager *m_appsManager;
@@ -80,7 +81,6 @@ private:
     MiniCategoryWidget *m_categoryWidget;
     MiniFrameBottomBar *m_bottomBar;
     QWidget *m_viewWrapper;
-    QLabel *m_tipsLabel;
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsBox;
 

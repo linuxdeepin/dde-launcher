@@ -67,7 +67,6 @@ void UserButton::setUserIconURL(const QString &iconUrl)
 NavigationButton::NavigationButton(const QString &title, QWidget *parent) :
     QPushButton(title, parent)
 {
-
 }
 
 

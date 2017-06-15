@@ -4,6 +4,7 @@
 #include "miniframenavigation.h"
 
 #include <QWidget>
+#include <dimagebutton.h>
 
 class MiniFrameBottomBar : public QWidget
 {
@@ -25,7 +26,7 @@ private:
     NavigationButton *m_music;
     NavigationButton *m_picture;
     NavigationButton *m_download;
-    NavigationButton *m_toShutdown;
+    DImageButton *m_shutdownBtn;
 
     NavigationButton *m_lock;
     NavigationButton *m_logout;

@@ -33,6 +33,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     : DBlurEffectWidget(parent),
 
       m_menuWorker(new MenuWorker),
+      m_windowHandle(this, this),
       m_dockInter(new DBusDock(this)),
       m_eventFilter(new SharedEventFilter(this)),
       m_appsManager(AppsManager::instance()),
@@ -42,20 +43,17 @@ MiniFrame::MiniFrame(QWidget *parent)
 
       m_categoryWidget(new MiniCategoryWidget),
       m_bottomBar(new MiniFrameBottomBar),
-      m_tipsLabel(new QLabel(this)),
 
       m_appsView(nullptr),
       m_appsModel(new AppsListModel(AppsListModel::All)),
       m_searchModel(new AppsListModel(AppsListModel::Search))
 {
+    m_windowHandle.setShadowRadius(60);
+    m_windowHandle.setShadowOffset(QPoint(0, 0));
+
     m_bottomBar->setFixedHeight(40);
     m_categoryWidget->setFixedWidth(140);
     m_categoryWidget->setVisible(false);
-
-    m_tipsLabel->setAlignment(Qt::AlignCenter);
-    m_tipsLabel->setFixedSize(200, 50);
-    m_tipsLabel->setVisible(false);
-    m_tipsLabel->setObjectName("MiniTips");
 
     m_viewToggle = new DImageButton;
     m_viewToggle->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
@@ -100,7 +98,6 @@ MiniFrame::MiniFrame(QWidget *parent)
     appsAreaLayout->setMargin(0);
 
     QVBoxLayout *viewLayout = new QVBoxLayout;
-    viewLayout->addLayout(viewHeaderLayout);
     viewLayout->addLayout(appsAreaLayout);
     viewLayout->setSpacing(0);
     viewLayout->setMargin(0);
@@ -110,10 +107,11 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_viewWrapper->setObjectName("ViewWrapper");
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
+    centralLayout->addLayout(viewHeaderLayout);
     centralLayout->addWidget(m_viewWrapper);
     centralLayout->addWidget(m_bottomBar);
     centralLayout->setSpacing(0);
-    centralLayout->setContentsMargins(10, 10, 10, 0);
+    centralLayout->setContentsMargins(10, 0, 10, 0);
 
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground);
@@ -134,8 +132,6 @@ MiniFrame::MiniFrame(QWidget *parent)
     connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::toggleFullScreen, Qt::QueuedConnection);
     connect(m_viewToggle, &DImageButton::clicked, this, &MiniFrame::onToggleViewClicked, Qt::QueuedConnection);
     connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, m_appsModel, &AppsListModel::setCategory, Qt::QueuedConnection);
-    connect(m_appsManager, &AppsManager::requestTips, this, &MiniFrame::showTips);
-    connect(m_appsManager, &AppsManager::requestHideTips, m_tipsLabel, &QLabel::hide);
 
     QTimer::singleShot(1, this, &MiniFrame::toggleAppsView);
 }
@@ -151,7 +147,6 @@ void MiniFrame::showLauncher()
         return;
 
     // reset env
-    m_tipsLabel->hide();
     m_searchWidget->clearSearchContent();
 
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &MiniFrame::adjustPosition, Qt::QueuedConnection);
@@ -389,7 +384,6 @@ void MiniFrame::adjustPosition()
 void MiniFrame::toggleAppsView()
 {
     // reset env
-    m_tipsLabel->hide();
     m_searchWidget->clearSearchContent();
 
     delete m_appsView;
@@ -488,13 +482,6 @@ void MiniFrame::searchText(const QString &text)
         m_appsManager->searchApp(text.trimmed());
         m_appsView->setModel(m_searchModel);
     }
-}
-
-void MiniFrame::showTips(const QString &tips)
-{
-    m_tipsLabel->setText(tips);
-    m_tipsLabel->move(m_appsArea->geometry().center() - m_tipsLabel->rect().center());
-    m_tipsLabel->setVisible(true);
 }
 
 const QModelIndex MiniFrame::currentIndex() const

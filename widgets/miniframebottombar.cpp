@@ -13,7 +13,10 @@ MiniFrameBottomBar::MiniFrameBottomBar(QWidget *parent)
     m_music = new NavigationButton(tr("Music"));
     m_picture = new NavigationButton(tr("Pictures"));
     m_download = new NavigationButton(tr("Downloads"));
-    m_toShutdown = new NavigationButton(tr("Shutdown"));
+    m_shutdownBtn = new DImageButton;
+    m_shutdownBtn->setNormalPic(":/icons/skin/icons/poweroff_normal.png");
+    m_shutdownBtn->setHoverPic(":/icons/skin/icons/poweroff_hover.png");
+    m_shutdownBtn->setPressPic(":/icons/skin/icons/poweroff_press.png");
 
     QHBoxLayout *navigationLayout = new QHBoxLayout;
     navigationLayout->addStretch();
@@ -24,7 +27,7 @@ MiniFrameBottomBar::MiniFrameBottomBar(QWidget *parent)
     navigationLayout->addWidget(m_picture);
     navigationLayout->addWidget(m_download);
     navigationLayout->addStretch();
-    navigationLayout->addWidget(m_toShutdown);
+    navigationLayout->addWidget(m_shutdownBtn);
     navigationLayout->setMargin(0);
 
     m_navigationPanel = new QWidget;
@@ -64,7 +67,7 @@ MiniFrameBottomBar::MiniFrameBottomBar(QWidget *parent)
     connect(m_picture, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::PicturesLocation); });
     connect(m_download, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DownloadLocation); });
 
-    connect(m_toShutdown, &QPushButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_shutdownPanel); });
+    connect(m_shutdownBtn, &DImageButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_shutdownPanel); });
     connect(m_toNavigation, &QPushButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_navigationPanel); });
 
     QSignalMapper *signalMapper = new QSignalMapper(this);

@@ -26,6 +26,12 @@ signals:
 
 protected:
     void mousePressEvent(QMouseEvent *e);
+    void keyPressEvent(QKeyEvent *e);
+    void enterEvent(QEvent *e);
+
+private slots:
+    void selectNext();
+    void selectPrev();
 
 private:
     QButtonGroup *m_buttonGroup;
@@ -41,6 +47,8 @@ private:
     MiniCategoryItem *m_reading;
     MiniCategoryItem *m_development;
     MiniCategoryItem *m_system;
+
+    QList<MiniCategoryItem *> m_items;
 };
 
 #endif // MINICATEGORYWIDGET_H

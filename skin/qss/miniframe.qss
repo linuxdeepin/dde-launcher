@@ -44,28 +44,11 @@ MiniCategoryItem {
     background: transparent;
 }
 
-MiniCategoryItem:hover {
-    border: none;
-    border-radius: 0px;
-    padding: 6px;
-    color: rgba(255, 255, 255, 1);
-    background: rgba(255, 255, 255, 0.1);
-}
-
-MiniCategoryItem:pressed {
-    border: none;
-    border-radius: 0px;
-    border-right: 1px solid rgb(44, 167, 248);
-    padding: 6px;
-    color: #2ca7f8;
-    background: rgba(44, 167, 248, 0.2);
-}
-
 MiniCategoryItem:checked {
     border: none;
-    border-radius: 0px;
-    border-right: 1px solid rgb(44, 167, 248);
+    border-radius: 8px;
     padding: 6px;
     color: #2ca7f8;
-    background: rgba(44, 167, 248, 0.2);
+    margin:0 10px;
+    background: rgba(21, 21, 21, 0.4);
 }

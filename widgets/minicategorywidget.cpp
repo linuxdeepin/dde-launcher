@@ -27,6 +27,10 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     m_development = new MiniCategoryItem(tr("Development"));
     m_system = new MiniCategoryItem(tr("System"));
 
+    m_items << m_allApps << m_internet << m_chat << m_music << m_video;
+    m_items << m_graphics << m_game << m_office << m_reading << m_development;
+    m_items << m_system;
+
     m_buttonGroup->addButton(m_allApps);
     m_buttonGroup->addButton(m_internet);
     m_buttonGroup->addButton(m_chat);
@@ -76,4 +80,53 @@ void MiniCategoryWidget::mousePressEvent(QMouseEvent *e)
 {
     // ignore this event to prohibit launcher auto-hide
     Q_UNUSED(e);
+}
+
+void MiniCategoryWidget::keyPressEvent(QKeyEvent *e)
+{
+    switch (e->key())
+    {
+    case Qt::Key_Down:      selectNext();       break;
+    case Qt::Key_Up:        selectPrev();       break;
+    default:;
+    }
+}
+
+void MiniCategoryWidget::enterEvent(QEvent *e)
+{
+    QWidget::enterEvent(e);
+
+    setFocus();
+}
+
+void MiniCategoryWidget::selectNext()
+{
+    int idx = 0;
+    for (int i(0); i != m_items.size(); ++i)
+    {
+        if (m_items[i]->isChecked())
+        {
+            idx = i;
+            break;
+        }
+    }
+
+    const int next = (idx + 1) % m_items.size();
+    m_items[next]->click();
+}
+
+void MiniCategoryWidget::selectPrev()
+{
+    int idx = 0;
+    for (int i(0); i != m_items.size(); ++i)
+    {
+        if (m_items[i]->isChecked())
+        {
+            idx = i;
+            break;
+        }
+    }
+
+    const int prev = (idx - 1 + m_items.size()) % m_items.size();
+    m_items[prev]->click();
 }

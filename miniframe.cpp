@@ -128,7 +128,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     connect(m_viewToggle, &DImageButton::clicked, this, &MiniFrame::onToggleViewClicked, Qt::QueuedConnection);
     connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, m_appsModel, &AppsListModel::setCategory, Qt::QueuedConnection);
 
-    QTimer::singleShot(1, this, &MiniFrame::toggleAppsView);
+    QTimer::singleShot(1, this, &MiniFrame::reloadAppsView);
 }
 
 MiniFrame::~MiniFrame()
@@ -376,11 +376,8 @@ void MiniFrame::adjustPosition()
     move(p);
 }
 
-void MiniFrame::toggleAppsView()
+void MiniFrame::reloadAppsView()
 {
-    // reset env
-    m_searchWidget->clearSearchContent();
-
     delete m_appsView;
     m_appsView = nullptr;
 
@@ -446,7 +443,10 @@ void MiniFrame::onToggleViewClicked()
 
     m_calcUtil->setDisplayMode(mode == ALL_APPS ? GROUP_BY_CATEGORY : ALL_APPS);
 
-    QTimer::singleShot(1, this, &MiniFrame::toggleAppsView);
+    // reset env
+    m_searchWidget->clearSearchContent();
+
+    QTimer::singleShot(1, this, &MiniFrame::reloadAppsView);
 }
 
 void MiniFrame::prepareHideLauncher()
@@ -470,12 +470,31 @@ void MiniFrame::setCurrentIndex(const QModelIndex &index)
 
 void MiniFrame::searchText(const QString &text)
 {
+    static int last_mode;
+
     if (text.isEmpty())
     {
+        if (last_mode != m_calcUtil->displayMode())
+        {
+            m_calcUtil->setDisplayMode(last_mode);
+            reloadAppsView();
+        }
+
         m_appsView->setModel(m_appsModel);
     } else {
+        if (m_appsView->model() != m_searchModel)
+        {
+            last_mode = m_calcUtil->displayMode();
+            if (last_mode == GROUP_BY_CATEGORY)
+            {
+                m_calcUtil->setDisplayMode(ALL_APPS);
+                reloadAppsView();
+            }
+
+            m_appsView->setModel(m_searchModel);
+        }
+
         m_appsManager->searchApp(text.trimmed());
-        m_appsView->setModel(m_searchModel);
     }
 }
 

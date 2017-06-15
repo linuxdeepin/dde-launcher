@@ -54,7 +54,7 @@ private:
 
 private slots:
     void adjustPosition();
-    void toggleAppsView();
+    void reloadAppsView();
     void toggleFullScreen();
     void onToggleViewClicked();
     void prepareHideLauncher();

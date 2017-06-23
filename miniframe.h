@@ -4,7 +4,6 @@
 #include "launcherinterface.h"
 
 #include <QWidget>
-#include <DBlurEffectWidget>
 #include <DPlatformWindowHandle>
 #include <dimagebutton.h>
 #include <dboxwidget.h>
@@ -24,7 +23,7 @@ class MiniFrameBottomBar;
 class SharedEventFilter;
 class MenuWorker;
 class CalculateUtil;
-class MiniFrame : public DBlurEffectWidget, public LauncherInterface
+class MiniFrame : public QFrame, public LauncherInterface
 {
     Q_OBJECT
 

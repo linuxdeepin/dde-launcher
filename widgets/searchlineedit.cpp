@@ -33,17 +33,10 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     m_floatWidget->setLayout(floatLayout);
 //    m_floatWidget->setStyleSheet("border:1px solid red;");
 
-
     setContextMenuPolicy(Qt::NoContextMenu);
     setFocusPolicy(Qt::ClickFocus);
     setFixedSize(290, 30);
-    setStyleSheet("QLineEdit {"
-                  "background-color:rgba(255, 255, 255, .2);"
-                  "padding:0px 0 0 25px;"
-                  "border:none;"
-                  "border-radius:5px;"
-                  "color:white;"
-                  "}");
+    setObjectName("SearchEdit");
 
     m_floatWidget->move(rect().center() - m_floatWidget->rect().center());
 

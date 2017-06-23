@@ -30,7 +30,7 @@
 #define DOCK_EFFICIENT  1
 
 MiniFrame::MiniFrame(QWidget *parent)
-    : DBlurEffectWidget(parent),
+    : QFrame(parent),
 
       m_menuWorker(new MenuWorker),
       m_windowHandle(this, this),
@@ -49,7 +49,10 @@ MiniFrame::MiniFrame(QWidget *parent)
       m_searchModel(new AppsListModel(AppsListModel::Search))
 {
     m_windowHandle.setShadowRadius(60);
-    m_windowHandle.setShadowOffset(QPoint(0, 0));
+    m_windowHandle.setShadowOffset(QPoint(0, 2));
+    m_windowHandle.setWindowRadius(5);
+    m_windowHandle.setEnableBlurWindow(true);
+    m_windowHandle.setBorderColor(QColor(255, 255, 255, .1 * 255));
 
     m_bottomBar->setFixedHeight(40);
     m_categoryWidget->setFixedWidth(140);
@@ -109,13 +112,10 @@ MiniFrame::MiniFrame(QWidget *parent)
     centralLayout->setContentsMargins(10, 0, 10, 0);
 
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
-    setAttribute(Qt::WA_TranslucentBackground);
-    setMaskColor(DBlurEffectWidget::DarkColor);
     setFocusPolicy(Qt::ClickFocus);
     setFixedSize(550, 485);
-    setBlurRectXRadius(5);
-    setBlurRectYRadius(5);
     setLayout(centralLayout);
+    setObjectName("MiniFrame");
     setStyleSheet(getQssFromFile(":/skin/qss/miniframe.qss"));
 
     installEventFilter(m_eventFilter);
@@ -304,7 +304,7 @@ void MiniFrame::keyPressEvent(QKeyEvent *e)
 
 void MiniFrame::showEvent(QShowEvent *e)
 {
-    DBlurEffectWidget::showEvent(e);
+    QWidget::showEvent(e);
 
     QTimer::singleShot(1, this, [this] () {
         raise();
@@ -315,7 +315,7 @@ void MiniFrame::showEvent(QShowEvent *e)
 
 void MiniFrame::enterEvent(QEvent *e)
 {
-    DBlurEffectWidget::enterEvent(e);
+    QWidget::enterEvent(e);
 
     m_delayHideTimer->stop();
 

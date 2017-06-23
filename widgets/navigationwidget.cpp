@@ -108,6 +108,7 @@ void NavigationWidget::initUI()
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addSpacing(30);
     mainLayout->addWidget(m_toggleModeBtn);
+    mainLayout->setAlignment(m_toggleModeBtn, Qt::AlignVCenter | Qt::AlignLeft);
     mainLayout->addStretch();
     mainLayout->addWidget(m_internetBtn);
     mainLayout->addWidget(m_chatBtn);

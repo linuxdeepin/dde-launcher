@@ -64,7 +64,7 @@
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>Tất cả Ứng dụng</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -72,7 +72,7 @@
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>Trò chuyện</translation>
     </message>
     <message>
         <source>Music</source>
@@ -88,7 +88,7 @@
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>Trò chơi</translation>
     </message>
     <message>
         <source>Office</source>
@@ -96,7 +96,7 @@
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>Đọc</translation>
     </message>
     <message>
         <source>Development</source>
@@ -131,7 +131,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Khởi động lại</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -139,19 +139,19 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Trở lại</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Tài liệu</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Phim</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Hình ảnh</translation>
     </message>
     <message>
         <source>Downloads</source>

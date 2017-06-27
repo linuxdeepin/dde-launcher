@@ -22,7 +22,7 @@
     </message>
     <message>
         <source>Confirm</source>
-        <translation>驗證</translation>
+        <translation>確定</translation>
     </message>
 </context>
 <context>
@@ -49,7 +49,7 @@
     </message>
     <message>
         <source>Remove from startup(_R)</source>
-        <translation>移除開機啟動</translation>
+        <translation>取消開機啟動</translation>
     </message>
     <message>
         <source>Add to startup(_A)</source>
@@ -64,7 +64,7 @@
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>所有程式</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -104,7 +104,7 @@
     </message>
     <message>
         <source>System</source>
-        <translation>系統快速鍵</translation>
+        <translation>系統</translation>
     </message>
 </context>
 <context>
@@ -119,7 +119,7 @@
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>電源控制</translation>
+        <translation>關機</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -131,7 +131,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>重新啟動</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -143,15 +143,15 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>文件</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>影片</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>圖片</translation>
     </message>
     <message>
         <source>Downloads</source>

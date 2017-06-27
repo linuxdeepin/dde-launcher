@@ -131,7 +131,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Reiniciar </translation>
     </message>
     <message>
         <source>Suspend</source>

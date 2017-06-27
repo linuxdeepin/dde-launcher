@@ -1,168 +1,168 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ug" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>Žádné výsledky hledání</translation>
+        <translation>ھېچقانداق ئىزدەش نەتىجىسى تىپىلمىدى</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Opravdu chcete odinstalovat %1?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Všechny závislosti budou odstraněny společně</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>بىكار قىلىش</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Potvrdit</translation>
+        <translation>جەزىملەشتۈرۈش</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Open(_O)</source>
-        <translation>Otevřít (_O)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Remove from desktop</source>
-        <translation>Odstranit z plochy</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation>Odeslat na plochu (_E)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Odebrat z panelu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>Odeslat do panelu (_C)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
-        <translation>Odstranit ze spuštění (_R)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Add to startup(_A)</source>
-        <translation>Přidat do spuštění (_A)</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>Odinstalovat</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>Všechny programy</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Internet</source>
-        <translation>Internet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chat</source>
-        <translation>Rozhovor</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Hudba</translation>
+        <translation>مۇزىكا</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation>Obraz</translation>
+        <translation>سىن</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Grafika</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Game</source>
-        <translation>Hra</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Office</source>
-        <translation>Kancelář</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reading</source>
-        <translation>Čtení</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Development</source>
-        <translation>Vývoj</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System</source>
-        <translation>Systém</translation>
+        <translation>سىستېما</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
         <source>Computer</source>
-        <translation>Počítač</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Hudba</translation>
+        <translation>مۇزىكا</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Vypnout</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Uzamknout</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Odhlásit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Restartovat</translation>
+        <translation>قايتا قوزغىتىش</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Uspat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Back</source>
-        <translation>Zpět</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumenty</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Obrazy</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Obrázky</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Stahování</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation>Hledat</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

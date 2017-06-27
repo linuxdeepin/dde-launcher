@@ -18,7 +18,7 @@ QFrame#LauncherFrame[dockPosition='3'] {
 
 #SearchEdit {
     background-color:rgba(255, 255, 255, 0.2);
-    padding:0px 0 0 25px;
+    padding:0px 20px 0 25px;
     border:none;
     border-radius:5px;
     color:white;

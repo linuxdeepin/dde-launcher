@@ -9,15 +9,11 @@
 SearchWidget::SearchWidget(QWidget *parent) :
     QFrame(parent)
 {
-//    setObjectName("SearchFrame");
-    this->setFixedWidth(300);
     m_searchEdit = new SearchLineEdit(this);
     m_searchEdit->setAccessibleName("search-edit");
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addStretch();
     mainLayout->addWidget(m_searchEdit);
-    mainLayout->addStretch();
     mainLayout->setSpacing(0);
     mainLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(mainLayout);
@@ -36,11 +32,3 @@ void SearchWidget::clearSearchContent()
 {
     m_searchEdit->normalMode();
 }
-
-//bool SearchWidget::event(QEvent *e)
-//{
-//    if (e->type() == QEvent::FocusIn)
-//        m_searchEdit->setFocus();
-
-//    return QWidget::event(e);
-//}

@@ -22,12 +22,14 @@ public slots:
 
 private slots:
     void editMode();
+    void onTextChanged();
 
 protected:
     bool event(QEvent *e);
 
 private:
     DImageButton *m_icon;
+    DImageButton *m_clear;
     QLabel *m_placeholderText;
     QWidget *m_floatWidget;
 #ifndef ARCH_MIPSEL

@@ -69,6 +69,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_modeToggle->setPressPic(":/icons/skin/icons/fullscreen_press.png");
 
     m_searchWidget = new SearchWidget;
+    m_searchWidget->setFixedWidth(180);
     m_searchWidget->edit()->installEventFilter(m_eventFilter);
 
     m_delayHideTimer->setInterval(200);

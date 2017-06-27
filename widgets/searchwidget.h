@@ -17,9 +17,6 @@ public:
 public slots:
     void clearSearchContent();
 
-//protected:
-//    bool event(QEvent *e);
-
 signals:
     void searchTextChanged(const QString &text) const;
 

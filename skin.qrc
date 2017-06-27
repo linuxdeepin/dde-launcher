@@ -172,5 +172,8 @@
         <file>skin/icons/unfullscreen_hover.png</file>
         <file>skin/icons/unfullscreen_normal.png</file>
         <file>skin/icons/unfullscreen_press.png</file>
+        <file>skin/icons/input_clear_dark_press.png</file>
+        <file>skin/icons/input_clear_dark_normal.png</file>
+        <file>skin/icons/input_clear_dark_hover.png</file>
     </qresource>
 </RCC>

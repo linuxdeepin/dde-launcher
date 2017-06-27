@@ -281,6 +281,8 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
 
 void FullScreenFrame::initUI()
 {
+    m_searchWidget->setFixedWidth(290);
+
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setFixedSize(200, 50);
     m_tipsLabel->setVisible(false);

@@ -11,8 +11,12 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     m_icon = new DImageButton;
     m_icon->setFixedSize(16, 16);
     m_icon->setNormalPic(":/skin/images/search.svg");
-//    m_icon->setHoverPic(":/skin/images/search.svg");
-//    m_icon->setPressPic(":/skin/images/search.svg");
+    m_clear = new DImageButton;
+    m_clear->setFixedSize(16, 16);
+    m_clear->setNormalPic(":/icons/skin/icons/input_clear_dark_normal.png");
+    m_clear->setHoverPic(":/icons/skin/icons/input_clear_dark_hover.png");
+    m_clear->setPressPic(":/icons/skin/icons/input_clear_dark_press.png");
+    m_clear->setVisible(false);
     m_placeholderText = new QLabel(tr("Search"));
     QFontMetrics fm(m_placeholderText->font());
     m_placeholderText->setFixedWidth(fm.width(m_placeholderText->text()) + 10);
@@ -31,14 +35,23 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     m_floatWidget->setFixedHeight(30);
     m_floatWidget->setFixedWidth(m_icon->width() + m_placeholderText->width() + 5);
     m_floatWidget->setLayout(floatLayout);
-//    m_floatWidget->setStyleSheet("border:1px solid red;");
 
+    QHBoxLayout *centralLayout = new QHBoxLayout;
+    centralLayout->addStretch();
+    centralLayout->addWidget(m_clear);
+    centralLayout->setSpacing(0);
+    centralLayout->setContentsMargins(0, 0, 5, 0);
+
+    setLayout(centralLayout);
     setContextMenuPolicy(Qt::NoContextMenu);
     setFocusPolicy(Qt::ClickFocus);
-    setFixedSize(290, 30);
+    setFixedHeight(30);
     setObjectName("SearchEdit");
 
     m_floatWidget->move(rect().center() - m_floatWidget->rect().center());
+
+    connect(this, &SearchLineEdit::textChanged, this, &SearchLineEdit::onTextChanged);
+    connect(m_clear, &DImageButton::clicked, this, &SearchLineEdit::normalMode);
 
 #ifndef ARCH_MIPSEL
     m_floatAni = new QPropertyAnimation(m_floatWidget, "pos", this);
@@ -68,6 +81,7 @@ void SearchLineEdit::normalMode()
 {
     // clear text when back to normal mode
     clear();
+    clearFocus();
 
     m_placeholderText->show();
 
@@ -93,4 +107,9 @@ void SearchLineEdit::editMode()
 #else
     m_floatWidget->move(QPoint(5, 0));
 #endif
+}
+
+void SearchLineEdit::onTextChanged()
+{
+    m_clear->setVisible(!text().isEmpty());
 }

@@ -39,7 +39,6 @@ NavigationButton:pressed {
     background: rgba(255, 255, 255, 0.1);
 }
 
-
 MiniCategoryItem {
     border: none;
     border-radius: 0px;
@@ -50,10 +49,14 @@ MiniCategoryItem {
     margin:0 10px;
 }
 
-MiniCategoryItem:checked {
+#MiniCategoryWidget > MiniCategoryItem:checked {
     border: none;
     border-radius: 4px;
     color: #2ca7f8;
+    background: rgba(21, 21, 21, 0.2);
+}
+
+#MiniCategoryWidget[active=true] > MiniCategoryItem:checked {
     background: rgba(21, 21, 21, 0.4);
 }
 

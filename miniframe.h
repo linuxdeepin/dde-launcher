@@ -52,6 +52,7 @@ private:
     void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
 
 private slots:
+    void checkIndex();
     void adjustPosition();
     void reloadAppsView();
     void toggleFullScreen();

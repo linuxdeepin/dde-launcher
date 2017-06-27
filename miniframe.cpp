@@ -18,6 +18,7 @@
 #include <QMouseEvent>
 #include <QHBoxLayout>
 #include <QScrollArea>
+#include <QStyle>
 
 #include <ddialog.h>
 
@@ -127,6 +128,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::toggleFullScreen, Qt::QueuedConnection);
     connect(m_viewToggle, &DImageButton::clicked, this, &MiniFrame::onToggleViewClicked, Qt::QueuedConnection);
     connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, m_appsModel, &AppsListModel::setCategory, Qt::QueuedConnection);
+    connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, this, &MiniFrame::checkIndex, Qt::QueuedConnection);
     connect(m_categoryWidget, &MiniCategoryWidget::requestRight, this, &MiniFrame::focusRightPanel);
 
     QTimer::singleShot(1, this, &MiniFrame::reloadAppsView);
@@ -169,15 +171,20 @@ bool MiniFrame::visible()
 void MiniFrame::moveCurrentSelectApp(const int key)
 {
     const int mode = m_calcUtil->displayMode();
-    if (key == Qt::Key_Left && mode == GROUP_BY_CATEGORY)
-        return focusLeftPanel();
+    if (mode == GROUP_BY_CATEGORY)
+    {
+        if (key == Qt::Key_Left)
+            return focusLeftPanel();
+        else if (key == Qt::Key_Right)
+            return;
+    }
 
     const QModelIndex currentIdx = currentIndex();
 
     QModelIndex targetIndex;
 
     do {
-        if (!currentIdx.isValid() || currentIdx.model() != m_appsView->model())
+        if (currentIdx.model() != m_appsView->model() || !currentIdx.isValid())
         {
             targetIndex = m_appsView->model()->index(0, 0);
             break;
@@ -329,6 +336,17 @@ void MiniFrame::enterEvent(QEvent *e)
     setFocus();
 }
 
+void MiniFrame::checkIndex()
+{
+    if (m_calcUtil->displayMode() != GROUP_BY_CATEGORY)
+        return;
+
+    const QModelIndex idx = currentIndex();
+
+    if (idx.row() >= idx.model()->rowCount(QModelIndex()))
+        m_appsView->setCurrentIndex(idx.model()->index(0, 0));
+}
+
 void MiniFrame::adjustPosition()
 {
     const int dockPos = m_dockInter->position();
@@ -414,6 +432,8 @@ void MiniFrame::reloadAppsView()
         m_appsModel->setCategory(AppsListModel::All);
 
         connect(appsView, &AppListView::popupMenuRequested, this, &MiniFrame::showPopupMenu);
+
+        QTimer::singleShot(1, this, &MiniFrame::focusRightPanel);
     }
 
     connect(m_appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
@@ -467,14 +487,32 @@ void MiniFrame::prepareHideLauncher()
 
 void MiniFrame::focusRightPanel()
 {
+    m_categoryWidget->clearFocus();
     setFocus();
+
+    AppListDelegate *delegate = qobject_cast<AppListDelegate *>(m_appsView->itemDelegate());
+    if (delegate)
+        delegate->setActived(true);
+
+    style()->unpolish(m_categoryWidget);
+    style()->polish(m_categoryWidget);
+    setStyleSheet(styleSheet());
 }
 
 void MiniFrame::focusLeftPanel()
 {
     Q_ASSERT(m_categoryWidget->isVisible());
 
+    clearFocus();
     m_categoryWidget->setFocus();
+
+    AppListDelegate *delegate = qobject_cast<AppListDelegate *>(m_appsView->itemDelegate());
+    if (delegate)
+        delegate->setActived(false);
+
+    style()->unpolish(m_categoryWidget);
+    style()->polish(m_categoryWidget);
+    setStyleSheet(styleSheet());
 }
 
 void MiniFrame::setCurrentIndex(const QModelIndex &index)

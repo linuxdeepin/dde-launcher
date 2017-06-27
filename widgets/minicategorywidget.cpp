@@ -13,6 +13,7 @@ MiniCategoryItem::MiniCategoryItem(const QString &title, QWidget *parent) :
 
 MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     : QWidget(parent),
+      m_active(false),
       m_buttonGroup(new QButtonGroup(this))
 {
     m_allApps = new MiniCategoryItem(tr("All Apps"));
@@ -66,7 +67,8 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     centralLayout->setMargin(0);
 
     setLayout(centralLayout);
-    setFocusPolicy(Qt::ClickFocus);
+    setObjectName("MiniCategoryWidget");
+    setFocusPolicy(Qt::StrongFocus);
 
     m_allApps->setChecked(true);
 
@@ -105,6 +107,24 @@ void MiniCategoryWidget::enterEvent(QEvent *e)
     QWidget::enterEvent(e);
 
     setFocus();
+}
+
+bool MiniCategoryWidget::event(QEvent *event)
+{
+    switch (event->type())
+    {
+    case QEvent::FocusIn:
+        m_active = true;
+        emit activeChanged(m_active);
+        break;
+    case QEvent::FocusOut:
+        m_active = false;
+        emit activeChanged(m_active);
+        break;
+    default:;
+    }
+
+    return QWidget::event(event);
 }
 
 void MiniCategoryWidget::selectNext()

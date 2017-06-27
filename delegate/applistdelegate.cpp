@@ -6,8 +6,10 @@
 #include <QDebug>
 
 AppListDelegate::AppListDelegate(QObject *parent)
-    : QAbstractItemDelegate(parent)
-    , m_autoStartPixmap(":/skin/images/emblem-autostart.png")
+    : QAbstractItemDelegate(parent),
+
+      m_actived(false),
+      m_autoStartPixmap(":/skin/images/emblem-autostart.png")
 {
 
 }
@@ -21,7 +23,10 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     if (option.state.testFlag(QStyle::State_Selected))
     {
-        painter->setBrush(QColor(0, 0, 0, 255 * .2));
+        if (m_actived)
+            painter->setBrush(QColor(0, 0, 0, 255 * .4));
+        else
+            painter->setBrush(QColor(0, 0, 0, 255 * .2));
         painter->setPen(Qt::NoPen);
         painter->drawRoundedRect(option.rect, 4, 4);
     }
@@ -42,4 +47,9 @@ QSize AppListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
     Q_UNUSED(index);
 
     return QSize(0, 50);
+}
+
+void AppListDelegate::setActived(bool active)
+{
+    m_actived = active;
 }

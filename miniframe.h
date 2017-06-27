@@ -57,6 +57,8 @@ private slots:
     void toggleFullScreen();
     void onToggleViewClicked();
     void prepareHideLauncher();
+    void focusRightPanel();
+    void focusLeftPanel();
     void setCurrentIndex(const QModelIndex &index);
     void searchText(const QString &text);
 

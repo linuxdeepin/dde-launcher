@@ -66,6 +66,7 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     centralLayout->setMargin(0);
 
     setLayout(centralLayout);
+    setFocusPolicy(Qt::ClickFocus);
 
     m_allApps->setChecked(true);
 
@@ -92,8 +93,9 @@ void MiniCategoryWidget::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key())
     {
-    case Qt::Key_Down:      selectNext();       break;
-    case Qt::Key_Up:        selectPrev();       break;
+    case Qt::Key_Down:      selectNext();           break;
+    case Qt::Key_Up:        selectPrev();           break;
+    case Qt::Key_Right:     emit requestRight();    break;
     default:;
     }
 }

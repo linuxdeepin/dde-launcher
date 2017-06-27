@@ -127,6 +127,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::toggleFullScreen, Qt::QueuedConnection);
     connect(m_viewToggle, &DImageButton::clicked, this, &MiniFrame::onToggleViewClicked, Qt::QueuedConnection);
     connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, m_appsModel, &AppsListModel::setCategory, Qt::QueuedConnection);
+    connect(m_categoryWidget, &MiniCategoryWidget::requestRight, this, &MiniFrame::focusRightPanel);
 
     QTimer::singleShot(1, this, &MiniFrame::reloadAppsView);
 }
@@ -167,6 +168,10 @@ bool MiniFrame::visible()
 
 void MiniFrame::moveCurrentSelectApp(const int key)
 {
+    const int mode = m_calcUtil->displayMode();
+    if (key == Qt::Key_Left && mode == GROUP_BY_CATEGORY)
+        return focusLeftPanel();
+
     const QModelIndex currentIdx = currentIndex();
 
     QModelIndex targetIndex;
@@ -205,7 +210,7 @@ void MiniFrame::moveCurrentSelectApp(const int key)
         return;
 
     int y_offset = 0;
-    if (m_calcUtil->displayMode() == ALL_APPS)
+    if (mode == ALL_APPS)
     {
         static_cast<AppItemDelegate *>(m_appsView->itemDelegate())->setCurrentIndex(targetIndex);
         y_offset = static_cast<AppGridView *>(m_appsView)->indexYOffset(targetIndex);
@@ -458,6 +463,18 @@ void MiniFrame::prepareHideLauncher()
         return;
 
     hideLauncher();
+}
+
+void MiniFrame::focusRightPanel()
+{
+    setFocus();
+}
+
+void MiniFrame::focusLeftPanel()
+{
+    Q_ASSERT(m_categoryWidget->isVisible());
+
+    m_categoryWidget->setFocus();
 }
 
 void MiniFrame::setCurrentIndex(const QModelIndex &index)

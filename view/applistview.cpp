@@ -1,6 +1,7 @@
 #include "applistview.h"
 
 #include <QMouseEvent>
+#include <QDebug>
 
 AppListView::AppListView(QWidget *parent)
     : QListView(parent)

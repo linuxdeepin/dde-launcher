@@ -22,6 +22,7 @@ public:
     explicit MiniCategoryWidget(QWidget *parent = 0);
 
 signals:
+    void requestRight() const;
     void requestCategory(const AppsListModel::AppCategory &category) const;
 
 protected:

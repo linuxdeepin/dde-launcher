@@ -22,6 +22,10 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 {
     QListView::mousePressEvent(e);
 
+    const QModelIndex &index = indexAt(e->pos());
+    if (!index.isValid())
+        e->ignore();
+
     if (e->buttons() == Qt::RightButton) {
         const QPoint rightClickPoint = mapToGlobal(e->pos());
 

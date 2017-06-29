@@ -263,6 +263,12 @@ void MiniFrame::uninstallApp(const QString &appKey)
 
 void MiniFrame::uninstallApp(const QModelIndex &context)
 {
+    static bool UNINSTALL_DIALOG_SHOWN = false;
+
+    if (UNINSTALL_DIALOG_SHOWN)
+        return;
+
+    UNINSTALL_DIALOG_SHOWN = true;
     DTK_WIDGET_NAMESPACE::DDialog unInstallDialog;
     unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
     unInstallDialog.setWindowModality(Qt::WindowModal);
@@ -290,6 +296,7 @@ void MiniFrame::uninstallApp(const QModelIndex &context)
     });
 
     unInstallDialog.exec();
+    UNINSTALL_DIALOG_SHOWN = false;
 }
 
 bool MiniFrame::windowDeactiveEvent()

@@ -923,6 +923,9 @@ void FullScreenFrame::uninstallApp(const QString &appKey)
 
 void FullScreenFrame::uninstallApp(const QModelIndex &context)
 {
+    if (m_isConfirmDialogShown)
+        return;
+
     m_isConfirmDialogShown = true;
 
     DTK_WIDGET_NAMESPACE::DDialog unInstallDialog;

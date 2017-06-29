@@ -55,6 +55,7 @@ private:
     MiniCategoryItem *m_reading;
     MiniCategoryItem *m_development;
     MiniCategoryItem *m_system;
+    MiniCategoryItem *m_others;
 
     QList<MiniCategoryItem *> m_items;
 };

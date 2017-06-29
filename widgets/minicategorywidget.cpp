@@ -27,10 +27,11 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     m_reading = new MiniCategoryItem(tr("Reading"));
     m_development = new MiniCategoryItem(tr("Development"));
     m_system = new MiniCategoryItem(tr("System"));
+    m_others = new MiniCategoryItem(tr("Others"));
 
     m_items << m_allApps << m_internet << m_chat << m_music << m_video;
     m_items << m_graphics << m_game << m_office << m_reading << m_development;
-    m_items << m_system;
+    m_items << m_system << m_others;
 
     m_buttonGroup->addButton(m_allApps);
     m_buttonGroup->addButton(m_internet);
@@ -43,6 +44,7 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     m_buttonGroup->addButton(m_reading);
     m_buttonGroup->addButton(m_development);
     m_buttonGroup->addButton(m_system);
+    m_buttonGroup->addButton(m_others);
 
     QVBoxLayout *buttonLayout = new QVBoxLayout;
     buttonLayout->addWidget(m_allApps);
@@ -56,6 +58,7 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     buttonLayout->addWidget(m_reading);
     buttonLayout->addWidget(m_development);
     buttonLayout->addWidget(m_system);
+    buttonLayout->addWidget(m_others);
     buttonLayout->setSpacing(0);
     buttonLayout->setMargin(0);
 
@@ -83,6 +86,7 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     connect(m_reading, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Reading); });
     connect(m_development, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Development); });
     connect(m_system, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::System); });
+    connect(m_others, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Others); });
 }
 
 void MiniCategoryWidget::mousePressEvent(QMouseEvent *e)

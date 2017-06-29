@@ -11,6 +11,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
 {
     m_searchEdit = new SearchLineEdit(this);
     m_searchEdit->setAccessibleName("search-edit");
+    m_searchEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addWidget(m_searchEdit);
@@ -31,4 +32,5 @@ QLineEdit *SearchWidget::edit()
 void SearchWidget::clearSearchContent()
 {
     m_searchEdit->normalMode();
+    m_searchEdit->moveFloatWidget();
 }

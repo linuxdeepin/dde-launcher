@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QEvent>
+#include <QTimer>
+#include <QResizeEvent>
 
 SearchLineEdit::SearchLineEdit(QWidget *parent) :
     QLineEdit(parent)
@@ -48,8 +50,6 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     setFixedHeight(30);
     setObjectName("SearchEdit");
 
-    m_floatWidget->move(rect().center() - m_floatWidget->rect().center());
-
     connect(this, &SearchLineEdit::textChanged, this, &SearchLineEdit::onTextChanged);
     connect(m_clear, &DImageButton::clicked, this, &SearchLineEdit::normalMode);
 
@@ -59,6 +59,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     m_floatAni->setEasingCurve(QEasingCurve::OutQuad);
 
     connect(m_floatAni, &QPropertyAnimation::finished, this, static_cast<void (SearchLineEdit::*)()>(&SearchLineEdit::update), Qt::QueuedConnection);
+    connect(m_floatAni, &QPropertyAnimation::finished, this, &SearchLineEdit::moveFloatWidget, Qt::QueuedConnection);
 #endif
 }
 
@@ -77,6 +78,13 @@ bool SearchLineEdit::event(QEvent *e)
     return QLineEdit::event(e);
 }
 
+void SearchLineEdit::resizeEvent(QResizeEvent *e)
+{
+    QLineEdit::resizeEvent(e);
+
+    QTimer::singleShot(1, this, &SearchLineEdit::moveFloatWidget);
+}
+
 void SearchLineEdit::normalMode()
 {
     // clear text when back to normal mode
@@ -86,12 +94,13 @@ void SearchLineEdit::normalMode()
     m_placeholderText->show();
 
 #ifndef ARCH_MIPSEL
-    m_floatAni->stop();
-    m_floatAni->setStartValue(m_floatWidget->pos());
     m_floatAni->setEndValue(rect().center() - m_floatWidget->rect().center());
+    if (m_floatAni->state() == QPropertyAnimation::Running)
+        return;
+    m_floatAni->setStartValue(m_floatWidget->pos());
     m_floatAni->start();
 #else
-    m_floatWidget->move(rect().center() - m_floatWidget->rect().center());
+    moveFloatWidget();
 #endif
 }
 
@@ -112,4 +121,13 @@ void SearchLineEdit::editMode()
 void SearchLineEdit::onTextChanged()
 {
     m_clear->setVisible(!text().isEmpty());
+}
+
+void SearchLineEdit::moveFloatWidget()
+{
+    if (m_floatAni->endValue().toPoint() == QPoint(5, 0))
+        return;
+
+    m_floatAni->stop();
+    m_floatWidget->move(rect().center() - m_floatWidget->rect().center());
 }

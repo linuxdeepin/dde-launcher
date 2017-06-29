@@ -19,6 +19,7 @@ public:
 
 public slots:
     void normalMode();
+    void moveFloatWidget();
 
 private slots:
     void editMode();
@@ -26,6 +27,7 @@ private slots:
 
 protected:
     bool event(QEvent *e);
+    void resizeEvent(QResizeEvent *e);
 
 private:
     DImageButton *m_icon;

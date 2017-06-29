@@ -185,7 +185,7 @@ void MiniFrame::moveCurrentSelectApp(const int key)
     QModelIndex targetIndex;
 
     do {
-        if (currentIdx.model() != m_appsView->model() || !currentIdx.isValid())
+        if (currentIdx.model() != m_appsView->model() || currentIdx.row() >= currentIdx.model()->rowCount(QModelIndex()))
         {
             targetIndex = m_appsView->model()->index(0, 0);
             break;

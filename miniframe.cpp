@@ -187,7 +187,9 @@ void MiniFrame::moveCurrentSelectApp(const int key)
     QModelIndex targetIndex;
 
     do {
-        if (currentIdx.model() != m_appsView->model() || currentIdx.row() >= currentIdx.model()->rowCount(QModelIndex()))
+        if (!currentIdx.isValid() ||
+            currentIdx.model() != m_appsView->model() ||
+            currentIdx.row() >= currentIdx.model()->rowCount(QModelIndex()))
         {
             targetIndex = m_appsView->model()->index(0, 0);
             break;
@@ -346,8 +348,8 @@ void MiniFrame::checkIndex()
 
     const QModelIndex idx = currentIndex();
 
-    if (idx.row() >= idx.model()->rowCount(QModelIndex()))
-        m_appsView->setCurrentIndex(idx.model()->index(0, 0));
+    if (!idx.isValid() || idx.row() >= idx.model()->rowCount(QModelIndex()))
+        m_appsView->setCurrentIndex(m_appsView->model()->index(0, 0));
 }
 
 void MiniFrame::adjustPosition()

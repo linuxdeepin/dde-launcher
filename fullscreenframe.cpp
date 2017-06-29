@@ -730,7 +730,7 @@ void FullScreenFrame::initConnection()
         updateDisplayMode(m_displayMode == GROUP_BY_CATEGORY ? ALL_APPS : GROUP_BY_CATEGORY);
     });
 
-    connect(m_appsManager, &AppsManager::updateCategoryView, this, &FullScreenFrame::checkCategoryVisible);
+    connect(m_appsManager, &AppsManager::categoryListChanged, this, &FullScreenFrame::checkCategoryVisible);
     connect(m_appsManager, &AppsManager::requestTips, this, &FullScreenFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
     connect(m_appsManager, &AppsManager::dockPositionChanged, this, &FullScreenFrame::updateDockPosition);

@@ -37,9 +37,9 @@ public:
 signals:
     void dataChanged(const AppsListModel::AppCategory category) const;
     void layoutChanged(const AppsListModel::AppCategory category) const;
-    void updateCategoryView(const AppsListModel::AppCategory categoryInfo) const;
     void requestTips(const QString &tips) const;
     void requestHideTips() const;
+    void categoryListChanged() const;
     void dockPositionChanged() const;
 
 public slots:

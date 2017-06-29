@@ -342,9 +342,15 @@ void AppsManager::generateCategoryMap()
     }
 
     // remove uninstalled app item
-    for (const ItemInfo &info : m_userSortedList)
-        if (!m_allAppInfoList.contains(info))
-            m_userSortedList.removeOne(info);
+    for (auto it(m_userSortedList.begin()); it != m_userSortedList.end();)
+    {
+        if (!m_allAppInfoList.contains(*it))
+            it = m_userSortedList.erase(it);
+        else
+            ++it;
+    }
+
+    emit categoryListChanged();
 }
 
 int AppsManager::appNums(const AppsListModel::AppCategory &category) const

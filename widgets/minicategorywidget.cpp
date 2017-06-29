@@ -1,4 +1,5 @@
 #include "minicategorywidget.h"
+#include "model/appsmanager.h"
 
 #include <QVBoxLayout>
 #include <QButtonGroup>
@@ -14,6 +15,8 @@ MiniCategoryItem::MiniCategoryItem(const QString &title, QWidget *parent) :
 MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     : QWidget(parent),
       m_active(false),
+
+      m_appsManager(AppsManager::instance()),
       m_buttonGroup(new QButtonGroup(this))
 {
     m_allApps = new MiniCategoryItem(tr("All Apps"));
@@ -75,6 +78,7 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
 
     m_allApps->setChecked(true);
 
+    connect(m_appsManager, &AppsManager::categoryListChanged, this, &MiniCategoryWidget::onCategoryListChanged, Qt::QueuedConnection);
     connect(m_allApps, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::All); });
     connect(m_internet, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Internet); });
     connect(m_chat, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Chat); });
@@ -87,6 +91,8 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     connect(m_development, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Development); });
     connect(m_system, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::System); });
     connect(m_others, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Others); });
+
+    QTimer::singleShot(1, this, &MiniCategoryWidget::onCategoryListChanged);
 }
 
 void MiniCategoryWidget::mousePressEvent(QMouseEvent *e)
@@ -161,4 +167,19 @@ void MiniCategoryWidget::selectPrev()
 
     const int prev = (idx - 1 + m_items.size()) % m_items.size();
     m_items[prev]->click();
+}
+
+void MiniCategoryWidget::onCategoryListChanged()
+{
+    m_internet->setVisible(m_appsManager->appNums(AppsListModel::Internet));
+    m_chat->setVisible(m_appsManager->appNums(AppsListModel::Chat));
+    m_music->setVisible(m_appsManager->appNums(AppsListModel::Music));
+    m_video->setVisible(m_appsManager->appNums(AppsListModel::Video));
+    m_graphics->setVisible(m_appsManager->appNums(AppsListModel::Graphics));
+    m_game->setVisible(m_appsManager->appNums(AppsListModel::Game));
+    m_office->setVisible(m_appsManager->appNums(AppsListModel::Office));
+    m_reading->setVisible(m_appsManager->appNums(AppsListModel::Reading));
+    m_development->setVisible(m_appsManager->appNums(AppsListModel::Development));
+    m_others->setVisible(m_appsManager->appNums(AppsListModel::System));
+    m_others->setVisible(m_appsManager->appNums(AppsListModel::Others));
 }

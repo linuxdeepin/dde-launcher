@@ -40,8 +40,12 @@ private slots:
     void selectNext();
     void selectPrev();
 
+    void onCategoryListChanged();
+
 private:
     bool m_active;
+    AppsManager *m_appsManager;
+
     QButtonGroup *m_buttonGroup;
 
     MiniCategoryItem *m_allApps;

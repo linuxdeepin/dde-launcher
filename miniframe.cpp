@@ -201,9 +201,11 @@ void MiniFrame::moveCurrentSelectApp(const int key)
 
         switch (key)
         {
+        case Qt::Key_Backtab:
         case Qt::Key_Left:
             targetIndex = currentIdx.sibling(r - 1, c);
             break;
+        case Qt::Key_Tab:
         case Qt::Key_Right:
             targetIndex = currentIdx.sibling(r + 1, c);
             break;

@@ -98,8 +98,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     initConnection();
 
     updateDisplayMode(m_calcUtil->displayMode());
-
-    setStyleSheet(getQssFromFile(":/skin/qss/fullscreenframe.qss"));
+    updateDockPosition();
 }
 
 FullScreenFrame::~FullScreenFrame()
@@ -414,13 +413,13 @@ void FullScreenFrame::initUI()
     m_miniMode->setHoverPic(":/icons/skin/icons/unfullscreen_hover.png");
     m_miniMode->setPressPic(":/icons/skin/icons/unfullscreen_press.png");
 
-    QVBoxLayout *rightLayout = new QVBoxLayout;
-    rightLayout->addWidget(m_miniMode);
-    rightLayout->setAlignment(m_miniMode, Qt::AlignTop | Qt::AlignRight);
-    rightLayout->setSpacing(0);
-    rightLayout->setContentsMargins(0, 30, 20, 0);
+    m_rightLayout = new QVBoxLayout;
+    m_rightLayout->addWidget(m_miniMode);
+    m_rightLayout->setAlignment(m_miniMode, Qt::AlignTop | Qt::AlignRight);
+    m_rightLayout->setSpacing(0);
+    m_rightLayout->setContentsMargins(0, 30, 20, 0);
 
-    m_rightSpacing->setLayout(rightLayout);
+    m_rightSpacing->setLayout(m_rightLayout);
 
     m_mainLayout = new QHBoxLayout;
     m_mainLayout->setMargin(0);
@@ -733,7 +732,7 @@ void FullScreenFrame::initConnection()
     connect(m_appsManager, &AppsManager::categoryListChanged, this, &FullScreenFrame::checkCategoryVisible);
     connect(m_appsManager, &AppsManager::requestTips, this, &FullScreenFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
-    connect(m_appsManager, &AppsManager::dockPositionChanged, this, &FullScreenFrame::updateDockPosition);
+    connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::updateDockPosition);
 }
 
 void FullScreenFrame::showLauncher()
@@ -1118,6 +1117,11 @@ void FullScreenFrame::updateDockPosition()
 {
     m_calcUtil->calculateAppLayout(m_appsArea->size(), m_appsManager->dockPosition());
     setStyleSheet(getQssFromFile(":/skin/qss/fullscreenframe.qss"));
+
+    if (m_appsManager->dockPosition() == DOCK_POS_RIGHT)
+        m_rightLayout->setContentsMargins(0, 30, 20 + m_appsManager->dockWidth(), 0);
+    else
+        m_rightLayout->setContentsMargins(0, 30, 20, 0);
 }
 
 AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentModel)

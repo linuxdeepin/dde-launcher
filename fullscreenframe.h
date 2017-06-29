@@ -186,6 +186,7 @@ private:
     QVBoxLayout *m_scrollAreaLayout;
     QHBoxLayout *m_mainLayout;
     QVBoxLayout *m_contentLayout;
+    QVBoxLayout *m_rightLayout;
 };
 
 #endif // MAINFRAME_H

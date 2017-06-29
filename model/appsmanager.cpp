@@ -27,7 +27,7 @@ AppsManager::AppsManager(QObject *parent) :
     QObject(parent),
     m_launcherInter(new DBusLauncher(this)),
     m_startManagerInter(new DBusStartManager(this)),
-    m_dockedAppInter(new DBusDock(this)),
+    m_dockInter(new DBusDock(this)),
     m_themeAppIcon(new ThemeAppIcon(this)),
     m_calUtil(CalculateUtil::instance()),
     m_searchTimer(new QTimer(this))
@@ -50,7 +50,8 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_launcherInter, &DBusLauncher::UninstallSuccess, this, &AppsManager::abandonStashedItem);
     connect(m_launcherInter, &DBusLauncher::UninstallFailed, [this] (const QString &appKey) {restoreItem(appKey); emit dataChanged(AppsListModel::All);});
     connect(m_launcherInter, &DBusLauncher::ItemChanged, this, &AppsManager::handleItemChanged);
-    connect(m_dockedAppInter, &DBusDock::PositionChanged, this, &AppsManager::dockPositionChanged);
+    connect(m_dockInter, &DBusDock::PositionChanged, this, &AppsManager::dockGeometryChanged);
+    connect(m_dockInter, &DBusDock::IconSizeChanged, this, &AppsManager::dockGeometryChanged);
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
 }
@@ -198,7 +199,12 @@ void AppsManager::restoreItem(const QString &appKey, const int pos)
 
 int AppsManager::dockPosition() const
 {
-    return m_dockedAppInter->position();
+    return m_dockInter->position();
+}
+
+int AppsManager::dockWidth() const
+{
+    return QRect(m_dockInter->frontendRect()).width();
 }
 
 void AppsManager::saveUserSortedList()
@@ -291,7 +297,7 @@ bool AppsManager::appIsAutoStart(const QString &desktop)
 
 bool AppsManager::appIsOnDock(const QString &desktop)
 {
-    return m_dockedAppInter->IsDocked(desktop);
+    return m_dockInter->IsDocked(desktop);
 }
 
 bool AppsManager::appIsOnDesktop(const QString &desktop)

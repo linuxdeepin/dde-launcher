@@ -20,6 +20,8 @@
 #include <QDBusArgument>
 #include <QList>
 
+#define DOCK_POS_RIGHT  1
+
 class CalculateUtil;
 class AppsManager : public QObject
 {
@@ -33,6 +35,7 @@ public:
     void abandonStashedItem(const QString &appKey);
     void restoreItem(const QString &appKey, const int pos = -1);
     int dockPosition() const;
+    int dockWidth() const;
 
 signals:
     void dataChanged(const AppsListModel::AppCategory category) const;
@@ -40,7 +43,7 @@ signals:
     void requestTips(const QString &tips) const;
     void requestHideTips() const;
     void categoryListChanged() const;
-    void dockPositionChanged() const;
+    void dockGeometryChanged() const;
 
 public slots:
     void saveUserSortedList();
@@ -78,7 +81,7 @@ private slots:
 private:
     DBusLauncher *m_launcherInter;
     DBusStartManager *m_startManagerInter;
-    DBusDock *m_dockedAppInter;
+    DBusDock *m_dockInter;
 
     QPixmap m_defaultIconPixmap;
     QString m_searchText;

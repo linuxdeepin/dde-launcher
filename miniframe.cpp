@@ -350,6 +350,13 @@ void MiniFrame::enterEvent(QEvent *e)
     setFocus();
 }
 
+void MiniFrame::leaveEvent(QEvent *e)
+{
+    DBlurEffectWidget::leaveEvent(e);
+
+    m_delayHideTimer->start();
+}
+
 void MiniFrame::checkIndex()
 {
     if (m_calcUtil->displayMode() != GROUP_BY_CATEGORY)

@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Система</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Други</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Наистина ли ще деинсталирате %1?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Всички зависимости ще бъдат премахнати заедно</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Отказ</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Потвърждение</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Компютър</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>Документи</translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation>Видеа</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Музика</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Картини</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Свалени</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>3аключвам</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Изход</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Рестарт</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Приспиване</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Изключване</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Върни</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

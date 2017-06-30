@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Sustav</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Ostalo</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Jeste li sigurni da želite deinstalirati %1 ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Sve će zavisnosti biti uklonjene zajedno</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Otkaži</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Potvrdi</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Računalo</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Glazba</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Preuzimanja</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Zaključaj</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Odjava</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Suspendiraj</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Isključi</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Natrag</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

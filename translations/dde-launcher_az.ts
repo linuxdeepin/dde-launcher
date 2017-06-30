@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Sistem</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>İmtina</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Təsdiqlə</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Kompüter</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Musiqi</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Gözlət</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Sistemi söndür</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

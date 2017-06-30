@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Система</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Інші</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Ви впевнені, що хочете видалити %1 ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Всі залежності будуть видалені разом</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Відмінити</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Підтвердити</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Комп&apos;ютер</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Музика</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Завантаження</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Заблокувати</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Вийти</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Призупинити</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Вимкнення</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Назад</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

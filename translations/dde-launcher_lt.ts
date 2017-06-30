@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Sistema</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Kita</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Ar tikrai norite pašalinti %1 ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Kartu bus pašalintos visos priklausomybės</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Atsisakyti</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Patvirtinti</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Kompiuteris</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>Dokumentai</translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation>Vaizdo įrašai</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Muzika</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Paveikslai</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Atsiuntimai</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Užrakinti</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Atsijungti</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Paleisti iš naujo</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Pristabdyti</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Išjungti</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Atgal</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
@@ -143,15 +217,15 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumentai</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Vaizdo įrašai</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Paveikslai</translation>
     </message>
     <message>
         <source>Downloads</source>

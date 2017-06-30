@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Σύστημα</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Άλλα</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Είστε σίγουροι ότι θέλετε να απεγκαταστήσετε το %1 ;</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Όλες οι εξαρτήσεις θα απομακρυνθούν μαζί</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Ακύρωση</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Επιβεβαίωση</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Υπολογιστής</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Μουσική</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Λήψεις</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Κλείδωμα</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Αποσύνδεση</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Αναστολή</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Τερματισμός λειτουργίας</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

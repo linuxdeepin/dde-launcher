@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>System</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Annet</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Er du sikker på at du ønsker å avinstallere %1 ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Alle avhengigheter vil bli fjernet</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Avbryt</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Bekreft</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Datamaskin</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Musikk</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Nedlastinger</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Lås</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Logg ut</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Suspendere </translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Avslutte</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Tilbake</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

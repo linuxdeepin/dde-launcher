@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Systém</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Jiné</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Opravdu chcete odinstalovat %1?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Všechny závislosti budou odstraněny společně</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Zrušit</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Potvrdit</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Počítač</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>Dokumenty</translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation>Obrazy</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Hudba</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Obrázky</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Stahování</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Uzamknout</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Odhlásit</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Restartovat</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Uspat</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Vypnout</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Zpět</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

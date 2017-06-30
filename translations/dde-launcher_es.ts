@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Sistema</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Otros</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>¿Esta seguro de desinstalar %1?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Todas las dependencias serán eliminadas juntas</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancelar</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Confirmar</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Equipo</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Música</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Descargas</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Bloquear</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Cerrar sesión</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Reiniciar </translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Suspender</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Apagar</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Atrás</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

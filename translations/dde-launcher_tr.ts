@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Sistem</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Diğerleri</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>%1&apos;i kaldırmak istediğinizden emin misiniz?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Tüm bağımlılıklar birlikte kaldırılacak</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Onayla</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Bilgisayar</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>Belgeler</translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation>Videolar</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Müzik</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Resimler</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>İndirilenler</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Kilitle</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Çıkış</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Yeniden başlat</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Askıya al</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Kapat</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Geri</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

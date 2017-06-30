@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Sistem</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Lain-lain</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Anda pasti mahu menyahpasang %1 ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Semua dependensi akan dibuang bersama-sama</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Batal</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Sahkan</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Komputer</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>Dokumen</translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation>Video</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Muzik</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Gambar</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Muat turun</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Kunci</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Daftar Keluar</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>But semula</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Tangguh</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Matikan</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Undur</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

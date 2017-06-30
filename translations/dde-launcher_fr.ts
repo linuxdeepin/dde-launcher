@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Système</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Autres</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Désinstaller %1 ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Toutes les dépendances seront supprimées</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Confirmer</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Ordinateur </translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>Documents</translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation>Vidéos</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Musique</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Images</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Téléchargements</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Verrouiller</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Déconnexion</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Redémarrer</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Mettre en veille </translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Arrêter</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Précédent </translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>प्रणाली</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>अन्य</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>सभी अनियमितता को एक साथ हटा दिया जाएगा </translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>रद्द करो</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>पुष्टि</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>कंप्यूटर</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>संगीत</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>डाउनलोड</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>अवरोधित</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>लॉग आउट करें </translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>निलंबित</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>शटडाउन </translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

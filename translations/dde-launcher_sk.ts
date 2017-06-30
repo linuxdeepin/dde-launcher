@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Systém</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Iné</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Naozaj chcete odinštalovať %1 ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Všetky závislosti budú odstránené</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Zrušiť</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Potvrdiť</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Počítač</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>Dokumenty</translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation>Videá</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Hudba</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Obrázky</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Stiahnuté</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Zamknúť</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Odhlásiť</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Reštart</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Uspať</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Vypnúť</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Späť</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

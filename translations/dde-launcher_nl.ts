@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Systeem</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Overigen</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Weet u zeker dat u %1 wilt deïnstalleren?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Alle afhankelijkheden zullen tegelijk worden verwijderd</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuleren</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Bevestigen</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Computer</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>Documenten</translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation>Video&apos;s</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Muziek</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Afbeeldingen</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Downloads</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Vergrendelen</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Uitloggen</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Herstarten</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Onderbreken</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Afsluiten</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Terug</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

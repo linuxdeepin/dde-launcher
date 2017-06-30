@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>System</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Andre</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Er du sikker på, at du vil afinstallere %1?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Alle afhængigheder vil blive fjernet samtidig</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuller</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Bekræft</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Computer</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>Dokumenter</translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation>Videoer</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Musik</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Billeder</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Downloads</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Lås</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Log ud</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Genstart</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Hvile</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Luk ned</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Tilbage</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

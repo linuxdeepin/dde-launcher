@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Sistem</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Ostalo</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Res želite odstraniti %1 ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Vse odvisnosti bodo odstranjene ob tem</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Prekliči</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Potrdi</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Računalnik</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>Dokumenti</translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation>Videi</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Glasba</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Slike</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Prenosi</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Zakleni</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Odjava</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Ponovni zagon</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>V način mirovanja</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Ugasni</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Nazaj</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

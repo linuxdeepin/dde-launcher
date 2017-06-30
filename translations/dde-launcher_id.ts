@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Sistem</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Lainnya</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Anda yakin untuk menlepas %1?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Semua dependensi akan dihapus</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Batalkan</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Konfirmasikan</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Komputer</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Musik</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Unduh</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Kunci</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Keluar</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Tangguhkan</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Matikan</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

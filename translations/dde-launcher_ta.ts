@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>கணினி</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>நிறுத்து</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>உறுதிப்படுத்து</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>கணினி</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>இசை</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>பூட்டு</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>விடு பதிகை</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>தற்காலிகமாக நிறுத்தம் செய்தல்</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>நிறுத்து   </translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

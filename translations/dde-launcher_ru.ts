@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Система</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Другое</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Уверены, что хотите удалить %1 ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Все зависимости будут также удалены</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Подтвердить</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Компьютер</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>Документы</translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation>Видео</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Музыка</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Изображения</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Загрузки</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Блокировать</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Выйти из системы</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Перезагрузить</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Приостановить</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Выключить</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Назад</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

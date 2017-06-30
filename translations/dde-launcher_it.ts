@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Sistema</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Altri</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Sicuro di voler disinstallare %1 ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Tutte le dipendenze saranno eliminate</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annulla</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Conferma</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Computer</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>Documenti</translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation>Video</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Musica</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Foto</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Download</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Blocca</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Logout</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Riavvia</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Sospendi</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Spegni</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Indietro</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

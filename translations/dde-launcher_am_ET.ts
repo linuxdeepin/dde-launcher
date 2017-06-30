@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>ስርአት</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>ሌሎች</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>በ እርግጥ ማጥፋት ይፈልጋሉ %1 ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>ሁሉም ጥገኞች ይወገዳሉ</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>መሰረዣ</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>ማረጋገጫ</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>ኮምፒዩተር</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>ሙዚቃ</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>የወረዱ</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>መቆለፊያ</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>መውጫ</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>ማገጃ</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>ማጥፊያ</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

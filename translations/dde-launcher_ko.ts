@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>시스템</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>기타</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>정말로 %1(을)를 삭제하시겠습니까?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>모든 의존성이 함께 제거됩니다</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>확인</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>컴퓨터</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>음악</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>다운로드</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>잠그기</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>로그아웃</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>일시 정지</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>전원 종료</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

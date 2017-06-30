@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Hệ thống</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Bạn có chắc là gỡ bỏ %1 không?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Tất cả phần phụ thuộc sẽ được bỏ theo cùng</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Hủy</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Xác nhận</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Máy tính</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>Tài liệu</translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation>Phim</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Âm nhạc</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Hình ảnh</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Tải xuống</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Khóa</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Đăng xuất</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Khởi động lại</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Dừng</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Tắt</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Trở lại</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

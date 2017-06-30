@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>സിസ്റ്റം</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>%1 നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>റദ്ദാക്കുക</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>ഉറപ്പാക്കുക</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>കമ്പ്യൂട്ടർ</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>സംഗീതം</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>ഷട്ട്ഡൗൺ</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

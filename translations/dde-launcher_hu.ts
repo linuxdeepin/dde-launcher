@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>Rendszer</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>Egyéb</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>%1 biztos eltávolítjuk?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Az összes függőség eltávolításra kerül.</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Mégse</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Megerősítés</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Számítógép</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Zene</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Letöltések</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>Zárolás</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>Kijelentkezés</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>Újraindítás</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>Felfüggesztés</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Leállítás</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Vissza</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

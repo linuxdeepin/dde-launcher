@@ -106,6 +106,80 @@
         <source>System</source>
         <translation>系統</translation>
     </message>
+    <message>
+        <source>Others</source>
+        <translation>其他</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>確定解除安裝 %1？</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>所有依賴的程式也會解除安裝</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>確定</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameBottomBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>電腦</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>文件</translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation>影片</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>音樂</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>圖片</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>下載</translation>
+    </message>
+    <message>
+        <source>Lock</source>
+        <translation>鎖定</translation>
+    </message>
+    <message>
+        <source>Logout</source>
+        <translation>登出</translation>
+    </message>
+    <message>
+        <source>Reboot</source>
+        <translation>重新啟動</translation>
+    </message>
+    <message>
+        <source>Suspend</source>
+        <translation>待機</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>關機</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>返回</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>

@@ -104,7 +104,7 @@
     </message>
     <message>
         <source>System</source>
-        <translation>系统</translation>
+        <translation>系统管理</translation>
     </message>
     <message>
         <source>Others</source>
@@ -146,7 +146,7 @@
     </message>
     <message>
         <source>Music</source>
-        <translation>音乐欣赏</translation>
+        <translation>音乐</translation>
     </message>
     <message>
         <source>Pictures</source>

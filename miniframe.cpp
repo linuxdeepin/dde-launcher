@@ -50,7 +50,7 @@ MiniFrame::MiniFrame(QWidget *parent)
       m_searchModel(new AppsListModel(AppsListModel::Search))
 {
     m_windowHandle.setShadowRadius(60);
-    m_windowHandle.setShadowOffset(QPoint(0, 2));
+//    m_windowHandle.setShadowOffset(QPoint(0, 2));
     m_windowHandle.setWindowRadius(5);
     m_windowHandle.setEnableBlurWindow(false);
     m_windowHandle.setTranslucentBackground(true);

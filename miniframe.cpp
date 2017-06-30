@@ -31,7 +31,7 @@
 #define DOCK_EFFICIENT  1
 
 MiniFrame::MiniFrame(QWidget *parent)
-    : QFrame(parent),
+    : DBlurEffectWidget(parent),
 
       m_menuWorker(new MenuWorker),
       m_windowHandle(this, this),
@@ -52,7 +52,8 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_windowHandle.setShadowRadius(60);
     m_windowHandle.setShadowOffset(QPoint(0, 2));
     m_windowHandle.setWindowRadius(5);
-    m_windowHandle.setEnableBlurWindow(true);
+    m_windowHandle.setEnableBlurWindow(false);
+    m_windowHandle.setTranslucentBackground(true);
     m_windowHandle.setBorderColor(QColor(255, 255, 255, .1 * 255));
 
     m_bottomBar->setFixedHeight(40);
@@ -113,6 +114,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     centralLayout->setSpacing(0);
     centralLayout->setContentsMargins(10, 0, 10, 0);
 
+    setMaskColor(DarkColor);
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setFocusPolicy(Qt::ClickFocus);
     setFixedSize(550, 485);
@@ -306,7 +308,7 @@ void MiniFrame::mousePressEvent(QMouseEvent *e)
 
 void MiniFrame::keyPressEvent(QKeyEvent *e)
 {
-    QWidget::keyPressEvent(e);
+    DBlurEffectWidget::keyPressEvent(e);
 
     switch (e->key())
     {
@@ -317,7 +319,7 @@ void MiniFrame::keyPressEvent(QKeyEvent *e)
 
 void MiniFrame::showEvent(QShowEvent *e)
 {
-    QWidget::showEvent(e);
+    DBlurEffectWidget::showEvent(e);
 
     QTimer::singleShot(1, this, [this] () {
         raise();
@@ -328,7 +330,7 @@ void MiniFrame::showEvent(QShowEvent *e)
 
 void MiniFrame::enterEvent(QEvent *e)
 {
-    QWidget::enterEvent(e);
+    DBlurEffectWidget::enterEvent(e);
 
     m_delayHideTimer->stop();
 

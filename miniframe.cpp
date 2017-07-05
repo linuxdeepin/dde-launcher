@@ -35,6 +35,7 @@ MiniFrame::MiniFrame(QWidget *parent)
 
       m_menuWorker(new MenuWorker),
       m_windowHandle(this, this),
+      m_wmHelper(DWindowManagerHelper::instance()),
       m_dockInter(new DBusDock(this)),
       m_eventFilter(new SharedEventFilter(this)),
       m_appsManager(AppsManager::instance()),
@@ -50,8 +51,6 @@ MiniFrame::MiniFrame(QWidget *parent)
       m_searchModel(new AppsListModel(AppsListModel::Search))
 {
     m_windowHandle.setShadowRadius(60);
-//    m_windowHandle.setShadowOffset(QPoint(0, 2));
-    m_windowHandle.setWindowRadius(5);
     m_windowHandle.setEnableBlurWindow(false);
     m_windowHandle.setTranslucentBackground(true);
     m_windowHandle.setBorderColor(QColor(255, 255, 255, .1 * 255));
@@ -133,8 +132,10 @@ MiniFrame::MiniFrame(QWidget *parent)
     connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, m_appsModel, &AppsListModel::setCategory, Qt::QueuedConnection);
     connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, this, &MiniFrame::checkIndex, Qt::QueuedConnection);
     connect(m_categoryWidget, &MiniCategoryWidget::requestRight, this, &MiniFrame::focusRightPanel);
+    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MiniFrame::onWMCompositeChanged);
 
     QTimer::singleShot(1, this, &MiniFrame::reloadAppsView);
+    QTimer::singleShot(1, this, &MiniFrame::onWMCompositeChanged);
 }
 
 MiniFrame::~MiniFrame()
@@ -493,6 +494,14 @@ void MiniFrame::onToggleViewClicked()
     m_searchWidget->clearSearchContent();
 
     QTimer::singleShot(1, this, &MiniFrame::reloadAppsView);
+}
+
+void MiniFrame::onWMCompositeChanged()
+{
+    if (m_wmHelper->hasComposite())
+        m_windowHandle.setWindowRadius(5);
+    else
+        m_windowHandle.setWindowRadius(0);
 }
 
 void MiniFrame::prepareHideLauncher()

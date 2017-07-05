@@ -6,6 +6,7 @@
 #include <QWidget>
 
 #include <DPlatformWindowHandle>
+#include <DWindowManagerHelper>
 #include <dblureffectwidget.h>
 #include <dimagebutton.h>
 #include <dboxwidget.h>
@@ -60,6 +61,7 @@ private slots:
     void reloadAppsView();
     void toggleFullScreen();
     void onToggleViewClicked();
+    void onWMCompositeChanged();
     void prepareHideLauncher();
     void focusRightPanel();
     void focusLeftPanel();
@@ -72,6 +74,7 @@ private:
 private:
     std::unique_ptr<MenuWorker> m_menuWorker;
     DPlatformWindowHandle m_windowHandle;
+    DWindowManagerHelper *m_wmHelper;
     DBusDock *m_dockInter;
     SharedEventFilter *m_eventFilter;
     AppsManager *m_appsManager;

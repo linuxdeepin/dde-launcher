@@ -535,7 +535,7 @@ void FullScreenFrame::refershCurrentFloatTitle()
         return;
 
     m_floatTitle->setFixedSize(sourceTitle->size());
-    m_floatTitle->setText(sourceTitle->textLabel()->text());
+    m_floatTitle->textLabel()->setText(sourceTitle->textLabel()->text());
     m_floatTitle->setVisible(sourceTitle->visibleRegion().isEmpty() ||
                              sourceTitle->visibleRegion().boundingRect().height() < 20);
 }

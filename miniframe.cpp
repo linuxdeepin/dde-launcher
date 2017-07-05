@@ -142,7 +142,7 @@ MiniFrame::MiniFrame(QWidget *parent)
 
 MiniFrame::~MiniFrame()
 {
-
+    m_eventFilter->deleteLater();
 }
 
 void MiniFrame::showLauncher()

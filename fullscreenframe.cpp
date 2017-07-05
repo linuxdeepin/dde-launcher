@@ -92,7 +92,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     setObjectName("LauncherFrame");
 
-    installEventFilter(m_eventFilter.get());
+    installEventFilter(m_eventFilter);
 
     initUI();
     initConnection();
@@ -473,7 +473,8 @@ void FullScreenFrame::showGradient() {
 
 void FullScreenFrame::toMiniMode()
 {
-    removeEventFilter(m_eventFilter.get());
+    removeEventFilter(m_eventFilter);
+    m_eventFilter->deleteLater();
 
     const QStringList args {
         "--print-reply",

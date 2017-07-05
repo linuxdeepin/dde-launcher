@@ -117,7 +117,7 @@ private:
     double rightMarginRation = 1;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
     std::unique_ptr<MenuWorker> m_menuWorker;
-    std::unique_ptr<SharedEventFilter> m_eventFilter;
+    SharedEventFilter *m_eventFilter;
 
     BackgroundManager *m_backgroundManager;
 

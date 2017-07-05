@@ -43,6 +43,7 @@ MiniFrame::MiniFrame(QWidget *parent)
       m_calcUtil(CalculateUtil::instance()),
 
       m_delayHideTimer(new QTimer(this)),
+      m_autoScrollTimer(new QTimer(this)),
 
       m_categoryWidget(new MiniCategoryWidget),
       m_bottomBar(new MiniFrameBottomBar),
@@ -75,6 +76,9 @@ MiniFrame::MiniFrame(QWidget *parent)
 
     m_delayHideTimer->setInterval(200);
     m_delayHideTimer->setSingleShot(true);
+
+    m_autoScrollTimer->setInterval(DLauncher::APPS_AREA_AUTO_SCROLL_TIMER);
+    m_autoScrollTimer->setSingleShot(false);
 
     QHBoxLayout *viewHeaderLayout = new QHBoxLayout;
     viewHeaderLayout->addWidget(m_viewToggle);
@@ -431,6 +435,22 @@ void MiniFrame::reloadAppsView()
         appsView->setItemDelegate(delegate);
         appsView->setContainerBox(m_appsArea);
         appsView->setSpacing(0);
+
+        connect(appsView, &AppGridView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
+        connect(m_autoScrollTimer, &QTimer::timeout, this, [this] {
+            m_appsArea->verticalScrollBar()->setValue(m_appsArea->verticalScrollBar()->value() + m_autoScrollStep);
+        });
+        connect(appsView, &AppGridView::requestScrollUp, this, [this] {
+            m_autoScrollStep = -DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
+            if (!m_autoScrollTimer->isActive())
+                m_autoScrollTimer->start();
+        });
+        connect(appsView, &AppGridView::requestScrollDown, this, [this] {
+            m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
+            if (!m_autoScrollTimer->isActive())
+                m_autoScrollTimer->start();
+        });
+
         m_appsView = appsView;
 
         m_categoryWidget->setVisible(false);

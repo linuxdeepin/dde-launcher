@@ -2,6 +2,7 @@
 #define MINIFRAME_H
 
 #include "launcherinterface.h"
+#include "global_util/constants.h"
 
 #include <QWidget>
 
@@ -71,6 +72,7 @@ private:
     const QModelIndex currentIndex() const;
 
 private:
+    int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
     std::unique_ptr<MenuWorker> m_menuWorker;
     DPlatformWindowHandle m_windowHandle;
     DWindowManagerHelper *m_wmHelper;
@@ -80,6 +82,7 @@ private:
     CalculateUtil *m_calcUtil;
 
     QTimer *m_delayHideTimer;
+    QTimer *m_autoScrollTimer;
 
     DImageButton *m_viewToggle;
     DImageButton *m_modeToggle;

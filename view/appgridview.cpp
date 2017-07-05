@@ -124,7 +124,7 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
 
     m_dropThresholdTimer->stop();
 
-    const QPoint pos = mapToGlobal(e->pos());
+    const QPoint pos = mapTo(m_containerBox, e->pos());
     const QRect containerRect = m_containerBox->geometry().marginsRemoved(QMargins(0, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
                                                                                    0, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
 

@@ -2,10 +2,12 @@
 
 #include <QMouseEvent>
 #include <QDebug>
+#include <QScrollBar>
 
 AppListView::AppListView(QWidget *parent)
     : QListView(parent)
 {
+    horizontalScrollBar()->setEnabled(false);
     setFocusPolicy(Qt::NoFocus);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

@@ -19,6 +19,7 @@
 #include <QHBoxLayout>
 #include <QScrollArea>
 #include <QStyle>
+#include <QScrollBar>
 
 #include <ddialog.h>
 
@@ -95,6 +96,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_appsArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_appsArea->horizontalScrollBar()->setEnabled(false);
 
     QHBoxLayout *appsAreaLayout = new QHBoxLayout;
     appsAreaLayout->addWidget(m_categoryWidget);

@@ -12,7 +12,7 @@ Homepage: http://www.deepin.org/
 
 Package: dde-launcher
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libnotify-bin, lastore-daemon,
+Depends: ${shlibs:Depends}, ${misc:Depends}, libnotify-bin, lastore-daemon, deepin-desktop-schemas (>= 3.1.11)
 Conflicts: dde-workspace (<< 2.90.5)
 Description: deepin desktop-environment - launcher module
  Deepin desktop environment 2015 - launcher module.

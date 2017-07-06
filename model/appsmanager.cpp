@@ -10,16 +10,11 @@
 #include <QIODevice>
 #include <QIcon>
 
+#include <QGSettings>
+
 QPointer<AppsManager> AppsManager::INSTANCE = nullptr;
 
-QSettings AppsManager::APP_PRESET_SORTED_LIST(
-#ifdef ARCH_MIPSEL
-    "/usr/share/dde-launcher/data/preset-order-mips.conf",
-#else
-    "/usr/share/dde-launcher/data/preset-order.conf",
-#endif
-    QSettings::IniFormat);
-
+QGSettings AppsManager::APP_PRESET_SORTED_LIST("com.deepin.dde.launcher", "", nullptr);
 QSettings AppsManager::APP_AUTOSTART_CACHE("deepin", "dde-launcher-app-autostart", nullptr);
 QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
 
@@ -112,9 +107,12 @@ void AppsManager::sortCategory(const AppsListModel::AppCategory category)
 
 void AppsManager::sortByPresetOrder(ItemInfoList &processList)
 {
-    QVariant presetFallback = APP_PRESET_SORTED_LIST.value("list");
-    QString key = QString("list[%1]").arg(QLocale::system().name());
-    QStringList preset = APP_PRESET_SORTED_LIST.value(key, presetFallback).toStringList();
+    const QString key = QString("apps-order-%1").arg(QLocale::system().name().replace("_", "-").toLower());
+    QStringList preset;
+    if (APP_PRESET_SORTED_LIST.keys().contains(key))
+        preset = APP_PRESET_SORTED_LIST.get(key).toStringList();
+    if (preset.isEmpty())
+        preset = APP_PRESET_SORTED_LIST.get("apps-order").toStringList();
 
     qSort(processList.begin(), processList.end(), [&preset] (const ItemInfo &i1, const ItemInfo &i2) {
         int index1 = preset.indexOf(i1.m_key.toLower());

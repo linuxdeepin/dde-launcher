@@ -90,7 +90,7 @@ int main(int argv, char *args[])
 #ifndef QT_DEBUG
     if (/*!positionArgs.isEmpty() && */cmdParser.isSet(showOption))
 #endif
-        launcher.showLauncher();
+        QTimer::singleShot(1, &launcher, &LauncherSys::showLauncher);
 
     // monitor gtk icon theme changed
     GtkSettings *gs = gtk_settings_get_default();

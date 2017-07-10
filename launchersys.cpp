@@ -22,6 +22,8 @@ LauncherSys::LauncherSys(QObject *parent)
 
 void LauncherSys::showLauncher()
 {
+    qApp->processEvents();
+
     m_launcherInter->showLauncher();
 }
 

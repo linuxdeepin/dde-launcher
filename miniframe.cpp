@@ -534,7 +534,7 @@ void MiniFrame::prepareHideLauncher()
         return;
 
     if (geometry().contains(QCursor::pos()))
-        return;
+        return activateWindow(); /* get focus back */
 
     hideLauncher();
 }

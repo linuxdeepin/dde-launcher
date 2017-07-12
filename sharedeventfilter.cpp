@@ -73,7 +73,7 @@ bool SharedEventFilter::handleKeyEvent(QKeyEvent *e)
             }
         }
 
-        m_frame->appendToSearchEdit(char(e->key() | 0x20));
+        m_frame->appendToSearchEdit(e->text()[0].toLatin1());
 
         return true;
     }

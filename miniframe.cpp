@@ -108,9 +108,14 @@ MiniFrame::MiniFrame(QWidget *parent)
     appsAreaLayout->setSpacing(0);
     appsAreaLayout->setMargin(0);
 
-    m_viewWrapper = new QWidget;
+    m_viewWrapper = new QLabel;
     m_viewWrapper->setLayout(appsAreaLayout);
+    m_viewWrapper->setAlignment(Qt::AlignCenter);
     m_viewWrapper->setObjectName("ViewWrapper");
+    m_viewWrapper->setStyleSheet("QLabel {"
+                                 "color: rgba(238, 238, 238, .6);"
+                                 "font-size: 22px;"
+                                 "}");
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addLayout(viewHeaderLayout);
@@ -138,6 +143,8 @@ MiniFrame::MiniFrame(QWidget *parent)
     connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, m_appsModel, &AppsListModel::setCategory, Qt::QueuedConnection);
     connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, this, &MiniFrame::checkIndex, Qt::QueuedConnection);
     connect(m_categoryWidget, &MiniCategoryWidget::requestRight, this, &MiniFrame::focusRightPanel);
+    connect(m_appsManager, &AppsManager::requestTips, m_viewWrapper, &QLabel::setText);
+    connect(m_appsManager, &AppsManager::requestHideTips, m_viewWrapper, &QLabel::clear);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MiniFrame::onWMCompositeChanged);
 
     QTimer::singleShot(1, this, &MiniFrame::reloadAppsView);
@@ -156,6 +163,7 @@ void MiniFrame::showLauncher()
 
     // reset env
     m_searchWidget->clearSearchContent();
+    m_viewWrapper->clear();
 
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &MiniFrame::adjustPosition, Qt::QueuedConnection);
     QTimer::singleShot(1, this, &MiniFrame::adjustPosition);
@@ -507,6 +515,7 @@ void MiniFrame::onToggleViewClicked()
 
     // reset env
     m_searchWidget->clearSearchContent();
+    m_viewWrapper->clear();
 
     QTimer::singleShot(1, this, &MiniFrame::reloadAppsView);
 }
@@ -574,6 +583,8 @@ void MiniFrame::searchText(const QString &text)
 
     if (text.isEmpty())
     {
+        m_viewWrapper->clear();
+
         if (last_mode != m_calcUtil->displayMode())
         {
             m_calcUtil->setDisplayMode(last_mode);

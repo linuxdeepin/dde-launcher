@@ -90,7 +90,7 @@ private:
 
     MiniCategoryWidget *m_categoryWidget;
     MiniFrameBottomBar *m_bottomBar;
-    QWidget *m_viewWrapper;
+    QLabel *m_viewWrapper;
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsBox;
 

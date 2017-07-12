@@ -18,6 +18,7 @@ public slots:
 
 private:
     bool m_actived;
+    QPixmap m_blueDotPixmap;
     QPixmap m_autoStartPixmap;
 };
 

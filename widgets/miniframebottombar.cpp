@@ -42,11 +42,11 @@ MiniFrameBottomBar::MiniFrameBottomBar(QWidget *parent)
 
     QHBoxLayout *shutdownLayout = new QHBoxLayout;
     shutdownLayout->addStretch();
-    shutdownLayout->addWidget(m_lock);
-    shutdownLayout->addWidget(m_logout);
+    shutdownLayout->addWidget(m_shutdown);
     shutdownLayout->addWidget(m_reboot);
     shutdownLayout->addWidget(m_suspend);
-    shutdownLayout->addWidget(m_shutdown);
+    shutdownLayout->addWidget(m_lock);
+    shutdownLayout->addWidget(m_logout);
     shutdownLayout->addStretch();
     shutdownLayout->addWidget(m_toNavigation);
     shutdownLayout->setMargin(0);

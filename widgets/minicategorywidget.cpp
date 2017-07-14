@@ -15,6 +15,7 @@ MiniCategoryItem::MiniCategoryItem(const QString &title, QWidget *parent) :
 MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     : QWidget(parent),
       m_active(false),
+      m_currentCategory(AppsListModel::All),
 
       m_appsManager(AppsManager::instance()),
       m_buttonGroup(new QButtonGroup(this))
@@ -79,18 +80,18 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     m_allApps->setChecked(true);
 
     connect(m_appsManager, &AppsManager::categoryListChanged, this, &MiniCategoryWidget::onCategoryListChanged, Qt::QueuedConnection);
-    connect(m_allApps, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::All); });
-    connect(m_internet, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Internet); });
-    connect(m_chat, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Chat); });
-    connect(m_music, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Music); });
-    connect(m_video, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Video); });
-    connect(m_graphics, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Graphics); });
-    connect(m_game, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Game); });
-    connect(m_office, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Office); });
-    connect(m_reading, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Reading); });
-    connect(m_development, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Development); });
-    connect(m_system, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::System); });
-    connect(m_others, &QPushButton::clicked, this, [this] { emit requestCategory(AppsListModel::Others); });
+    connect(m_allApps, &QPushButton::clicked, this, [this] { m_currentCategory = AppsListModel::All; emit requestCategory(AppsListModel::All); });
+    connect(m_internet, &QPushButton::clicked, this, [this] { m_currentCategory = AppsListModel::Internet; emit requestCategory(AppsListModel::Internet); });
+    connect(m_chat, &QPushButton::clicked, this, [this] { m_currentCategory = AppsListModel::Chat; emit requestCategory(AppsListModel::Chat); });
+    connect(m_music, &QPushButton::clicked, this, [this] { m_currentCategory = AppsListModel::Music; emit requestCategory(AppsListModel::Music); });
+    connect(m_video, &QPushButton::clicked, this, [this] { m_currentCategory = AppsListModel::Video; emit requestCategory(AppsListModel::Video); });
+    connect(m_graphics, &QPushButton::clicked, this, [this] { m_currentCategory = AppsListModel::Graphics; emit requestCategory(AppsListModel::Graphics); });
+    connect(m_game, &QPushButton::clicked, this, [this] { m_currentCategory = AppsListModel::Game; emit requestCategory(AppsListModel::Game); });
+    connect(m_office, &QPushButton::clicked, this, [this] { m_currentCategory = AppsListModel::Office; emit requestCategory(AppsListModel::Office); });
+    connect(m_reading, &QPushButton::clicked, this, [this] { m_currentCategory = AppsListModel::Reading; emit requestCategory(AppsListModel::Reading); });
+    connect(m_development, &QPushButton::clicked, this, [this] { m_currentCategory = AppsListModel::Development; emit requestCategory(AppsListModel::Development); });
+    connect(m_system, &QPushButton::clicked, this, [this] { m_currentCategory = AppsListModel::System; emit requestCategory(AppsListModel::System); });
+    connect(m_others, &QPushButton::clicked, this, [this] { m_currentCategory = AppsListModel::Others; emit requestCategory(AppsListModel::Others); });
 
     QTimer::singleShot(1, this, &MiniCategoryWidget::onCategoryListChanged);
 }

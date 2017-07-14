@@ -24,6 +24,7 @@ public:
     explicit MiniCategoryWidget(QWidget *parent = 0);
 
     inline bool active() const { return m_active; }
+    inline AppsListModel::AppCategory currentCategory() const { return m_currentCategory; }
 
 signals:
     void requestRight() const;
@@ -44,6 +45,7 @@ private slots:
 
 private:
     bool m_active;
+    AppsListModel::AppCategory m_currentCategory;
     AppsManager *m_appsManager;
 
     QButtonGroup *m_buttonGroup;

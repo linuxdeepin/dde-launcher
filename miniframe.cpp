@@ -474,7 +474,7 @@ void MiniFrame::reloadAppsView()
         m_appsView = appsView;
 
         m_categoryWidget->setVisible(true);
-        m_appsModel->setCategory(AppsListModel::All);
+        m_appsModel->setCategory(m_categoryWidget->currentCategory());
 
         connect(appsView, &AppListView::popupMenuRequested, this, &MiniFrame::showPopupMenu);
 

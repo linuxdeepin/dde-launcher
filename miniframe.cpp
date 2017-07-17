@@ -55,7 +55,6 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_windowHandle.setShadowRadius(60);
     m_windowHandle.setEnableBlurWindow(false);
     m_windowHandle.setTranslucentBackground(true);
-    m_windowHandle.setBorderColor(QColor(255, 255, 255, .1 * 255));
 
     m_bottomBar->setFixedHeight(40);
     m_categoryWidget->setFixedWidth(140);
@@ -523,9 +522,15 @@ void MiniFrame::onToggleViewClicked()
 void MiniFrame::onWMCompositeChanged()
 {
     if (m_wmHelper->hasComposite())
+    {
         m_windowHandle.setWindowRadius(5);
+        m_windowHandle.setBorderColor(QColor(255, 255, 255, .1 * 255));
+    }
     else
+    {
         m_windowHandle.setWindowRadius(0);
+        m_windowHandle.setBorderColor(QColor("#2C3238"));
+    }
 }
 
 void MiniFrame::prepareHideLauncher()

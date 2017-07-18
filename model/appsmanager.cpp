@@ -107,7 +107,20 @@ void AppsManager::sortCategory(const AppsListModel::AppCategory category)
 
 void AppsManager::sortByPresetOrder(ItemInfoList &processList)
 {
-    const QString key = QString("apps-order-%1").arg(QLocale::system().name().replace("_", "-").toLower());
+    const QString system_lang = QLocale::system().name();
+
+    QString key = "appsOrder";
+    for (const auto &item : system_lang.split('_'))
+    {
+        Q_ASSERT(!item.isEmpty());
+
+        QString k = item.toLower();
+        k[0] = k[0].toUpper();
+
+        key.append(k);
+    }
+
+    qDebug() << "preset order: " << key << APP_PRESET_SORTED_LIST.keys();
     QStringList preset;
     if (APP_PRESET_SORTED_LIST.keys().contains(key))
         preset = APP_PRESET_SORTED_LIST.get(key).toStringList();

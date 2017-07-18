@@ -125,9 +125,15 @@ void SearchLineEdit::onTextChanged()
 
 void SearchLineEdit::moveFloatWidget()
 {
+#ifndef ARCH_MIPSEL
     if (m_floatAni->endValue().toPoint() == QPoint(5, 0))
         return;
 
     m_floatAni->stop();
+#else
+    if (m_floatWidget->pos() == QPoint(5, 0))
+        return;
+#endif
+
     m_floatWidget->move(rect().center() - m_floatWidget->rect().center());
 }

@@ -79,11 +79,13 @@ private:
     void dataChanged(const AppsListModel::AppCategory category);
     void layoutChanged(const AppsListModel::AppCategory category);
     bool indexDraging(const QModelIndex &index) const;
-    bool itemIsRemovable(const QString &desktop) const;
+//    bool itemIsRemovable(const QString &desktop) const;
 
 private:
     AppsManager *m_appsManager;
     CalculateUtil *m_calcUtil;
+
+    QStringList m_holdPackages;
 
     QModelIndex m_dragStartIndex = QModelIndex();
     QModelIndex m_dragDropIndex = QModelIndex();

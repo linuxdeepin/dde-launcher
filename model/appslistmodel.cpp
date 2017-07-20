@@ -7,13 +7,21 @@
 #include <QSize>
 #include <QDebug>
 #include <QPixmap>
+#include <QSettings>
 
-static const QString UninstallFilterFile = "/usr/share/dde-launcher/data/launcher_uninstall.json";
+const QStringList sysHoldPackages()
+{
+    const QSettings settings("/etc/deepin-installer.conf", QSettings::IniFormat);
+    const auto holds_list = settings.value("dde_launcher_hold_packages").toStringList();
+
+    return holds_list;
+}
 
 AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
     QAbstractListModel(parent),
     m_appsManager(AppsManager::instance()),
     m_calcUtil(CalculateUtil::instance()),
+    m_holdPackages(sysHoldPackages()),
     m_category(category)
 {
     connect(m_appsManager, &AppsManager::dataChanged, this, &AppsListModel::dataChanged);
@@ -199,7 +207,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppIsOnDockRole:
         return m_appsManager->appIsOnDock(itemInfo.m_desktop);
     case AppIsRemovableRole:
-        return itemIsRemovable(itemInfo.m_desktop);
+        return !m_holdPackages.contains(itemInfo.m_key);
     case AppNewInstallRole:
         return m_appsManager->appIsNewInstall(itemInfo.m_key);
     case AppIconRole:
@@ -265,27 +273,28 @@ bool AppsListModel::indexDraging(const QModelIndex &index) const
             (start >= end && current <= start && current >= end);
 }
 
-bool AppsListModel::itemIsRemovable(const QString &desktop) const
-{
-    static QStringList blacklist;
-    if (blacklist.isEmpty()) {
-        QFile file(UninstallFilterFile);
-        if (file.open(QFile::ReadOnly)) {
-            QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-            QJsonObject obj = doc.object();
-            QJsonArray arr = obj["blacklist"].toArray();
-            foreach (QJsonValue val, arr) {
-                blacklist << val.toString();
-            }
-            file.close();
-        }
-    }
+//bool AppsListModel::itemIsRemovable(const QString &desktop) const
+//{
+//    return m_holdPackages.contains(desktop);
+//    static QStringList blacklist;
+//    if (blacklist.isEmpty()) {
+//        QFile file(UninstallFilterFile);
+//        if (file.open(QFile::ReadOnly)) {
+//            QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+//            QJsonObject obj = doc.object();
+//            QJsonArray arr = obj["blacklist"].toArray();
+//            foreach (QJsonValue val, arr) {
+//                blacklist << val.toString();
+//            }
+//            file.close();
+//        }
+//    }
 
-    foreach (QString val, blacklist) {
-        if (desktop.endsWith(val)) {
-            return false;
-        }
-    }
+//    foreach (QString val, blacklist) {
+//        if (desktop.endsWith(val)) {
+//            return false;
+//        }
+//    }
 
-    return true;
-}
+//    return true;
+//}

@@ -67,7 +67,8 @@ MiniFrameBottomBar::MiniFrameBottomBar(QWidget *parent)
     connect(m_picture, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::PicturesLocation); });
     connect(m_download, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DownloadLocation); });
 
-    connect(m_shutdownBtn, &DImageButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_shutdownPanel); });
+    connect(m_shutdownBtn, &DImageButton::clicked, this, &MiniFrameBottomBar::showShutdown);
+//    connect(m_shutdownBtn, &DImageButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_shutdownPanel); });
     connect(m_toNavigation, &QPushButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_navigationPanel); });
 
     QSignalMapper *signalMapper = new QSignalMapper(this);
@@ -112,4 +113,9 @@ void MiniFrameBottomBar::handleLockAction()
                                     "com.deepin.dde.lockFront");
 
     QProcess::startDetached(command);
+}
+
+void MiniFrameBottomBar::showShutdown()
+{
+    QProcess::startDetached("dde-shutdown");
 }

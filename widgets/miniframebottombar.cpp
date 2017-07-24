@@ -110,7 +110,7 @@ void MiniFrameBottomBar::handleLockAction()
 {
     const QString command = QString("dbus-send --print-reply --dest=com.deepin.dde.lockFront " \
                                     "/com/deepin/dde/lockFront " \
-                                    "com.deepin.dde.lockFront");
+                                    "com.deepin.dde.lockFront.Show");
 
     QProcess::startDetached(command);
 }

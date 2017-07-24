@@ -61,6 +61,8 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     connect(m_floatAni, &QPropertyAnimation::finished, this, static_cast<void (SearchLineEdit::*)()>(&SearchLineEdit::update), Qt::QueuedConnection);
     connect(m_floatAni, &QPropertyAnimation::finished, this, &SearchLineEdit::moveFloatWidget, Qt::QueuedConnection);
 #endif
+
+    normalMode();
 }
 
 bool SearchLineEdit::event(QEvent *e)
@@ -100,7 +102,7 @@ void SearchLineEdit::normalMode()
     m_floatAni->setStartValue(m_floatWidget->pos());
     m_floatAni->start();
 #else
-    moveFloatWidget();
+    m_floatWidget->move(rect().center() - m_floatWidget->rect().center());
 #endif
 }
 
@@ -131,7 +133,7 @@ void SearchLineEdit::moveFloatWidget()
 
     m_floatAni->stop();
 #else
-    if (m_floatWidget->pos() == QPoint(5, 0))
+    if (!m_placeholderText->isVisible() && m_floatWidget->pos() != QPoint(5, 0))
         return;
 #endif
 

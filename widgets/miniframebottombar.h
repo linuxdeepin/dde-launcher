@@ -19,6 +19,8 @@ private slots:
     void handleShutdownAction(const QString &action);
     void handleLockAction();
 
+    void showShutdown();
+
 private:
     NavigationButton *m_computer;
     NavigationButton *m_document;

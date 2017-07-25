@@ -66,7 +66,9 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
         return pt * 96 / 72.0;
     };
 
-    const int screenWidth = qApp->primaryScreen()->geometry().width();
+    const QScreen *screen = qApp->primaryScreen();
+    const qreal ratio = screen->devicePixelRatio();
+    const int screenWidth = screen->geometry().width() / ratio;
     const int column = screenWidth <= 800 ? 5 : screenWidth <= 1024 && dockPosition == 3 ? 6 : 7;
 
     calculateTextSize(screenWidth);

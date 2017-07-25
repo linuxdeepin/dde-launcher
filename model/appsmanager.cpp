@@ -318,7 +318,8 @@ bool AppsManager::appIsOnDesktop(const QString &desktop)
 
 const QPixmap AppsManager::appIcon(const QString &iconKey, const int size)
 {
-    const QPixmap pixmap =  QIcon::fromTheme(iconKey).pixmap(size, size);
+    const qreal ratio = qApp->primaryScreen()->devicePixelRatio();
+    const QPixmap pixmap =  QIcon::fromTheme(iconKey).pixmap(size * ratio, size * ratio);
     if (!pixmap.isNull())
         return pixmap;
 

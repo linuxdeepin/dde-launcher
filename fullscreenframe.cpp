@@ -754,7 +754,9 @@ bool FullScreenFrame::visible()
 void FullScreenFrame::updateGeometry()
 {
     const QRect rect = m_displayInter->primaryRect();
-    setFixedSize(rect.size());
+    const qreal ratio = qApp->primaryScreen()->devicePixelRatio();
+
+    setFixedSize(rect.width() / ratio, rect.height() / ratio);
     move(rect.topLeft());
 
     QFrame::updateGeometry();

@@ -9,7 +9,7 @@
 
 #include <unistd.h>
 
-DUTIL_USE_NAMESPACE
+DWIDGET_USE_NAMESPACE
 
 UserButton::UserButton(QWidget *parent) :
     DImageButton(parent),

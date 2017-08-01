@@ -23,11 +23,9 @@ AppsManager::AppsManager(QObject *parent) :
     m_launcherInter(new DBusLauncher(this)),
     m_startManagerInter(new DBusStartManager(this)),
     m_dockInter(new DBusDock(this)),
-    m_themeAppIcon(new ThemeAppIcon(this)),
     m_calUtil(CalculateUtil::instance()),
     m_searchTimer(new QTimer(this))
 {
-    m_themeAppIcon->gtkInit();
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
 
     refreshCategoryInfoList();

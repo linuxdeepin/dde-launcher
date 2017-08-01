@@ -8,7 +8,6 @@
 #include "dbusdock.h"
 #include "dbusdisplay.h"
 #include "global_util/calculate_util.h"
-#include "global_util/themeappicon.h"
 
 #include <QMap>
 #include <QSettings>
@@ -95,7 +94,6 @@ private:
     ItemInfo m_unInstallItem = ItemInfo();
     ItemInfo m_beDragedItem = ItemInfo();
 
-    ThemeAppIcon* m_themeAppIcon;
     CalculateUtil *m_calUtil;
     QTimer *m_searchTimer;
 

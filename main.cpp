@@ -1,6 +1,4 @@
 
-#include <gtk/gtk.h>
-
 #include "fullscreenframe.h"
 #include "dbuslauncherframe.h"
 #include "model/appsmanager.h"
@@ -14,15 +12,6 @@
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
-
-#define PROP_GTK_ICON_THEME_NAME     "gtk-icon-theme-name"
-
-void iconThemeChanged(GtkSettings *gsettings, GParamSpec *pspec, gpointer udata)
-{
-    Q_UNUSED(gsettings)
-    Q_UNUSED(udata)
-    Q_ASSERT(!strcmp(g_param_spec_get_name(pspec), PROP_GTK_ICON_THEME_NAME));
-}
 
 int main(int argv, char *args[])
 {
@@ -91,10 +80,6 @@ int main(int argv, char *args[])
     if (/*!positionArgs.isEmpty() && */cmdParser.isSet(showOption))
 #endif
         QTimer::singleShot(1, &launcher, &LauncherSys::showLauncher);
-
-    // monitor gtk icon theme changed
-    GtkSettings *gs = gtk_settings_get_default();
-    g_signal_connect(gs, "notify::" PROP_GTK_ICON_THEME_NAME, G_CALLBACK(iconThemeChanged), NULL);
 
     return app.exec();
 }

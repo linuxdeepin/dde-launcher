@@ -3,8 +3,8 @@ QT      += core gui dbus widgets x11extras svg
 TARGET = dde-launcher
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG += dtkwidget xcb xcb-ewmh\
-          gsettings-qt gtk+-2.0 gio-unix-2.0 dframeworkdbus
+PKGCONFIG += dtkwidget dtkcore xcb xcb-ewmh \
+          gsettings-qt dframeworkdbus
 
 include(./feature-macros.pri)
 include(./widgets/widgets.pri)
@@ -26,7 +26,6 @@ SOURCES += \
     dbusservices/dbuslauncherservice.cpp \
     main.cpp \
     global_util/calculate_util.cpp \
-    global_util/themeappicon.cpp \
     launchersys.cpp \
     fullscreenframe.cpp \
     miniframe.cpp \
@@ -45,7 +44,6 @@ HEADERS += \
     worker/menuworker.h \
     dbusservices/dbuslauncherservice.h \
     global_util/calculate_util.h \
-    global_util/themeappicon.h \
     launchersys.h \
     launcherinterface.h \
     fullscreenframe.h \

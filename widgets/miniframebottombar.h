@@ -20,6 +20,7 @@ private slots:
     void handleLockAction();
 
     void showShutdown();
+    void showSysInfo();
 
 private:
     NavigationButton *m_computer;
@@ -29,6 +30,7 @@ private:
     NavigationButton *m_picture;
     NavigationButton *m_download;
     DImageButton *m_shutdownBtn;
+    DImageButton *m_sysInfoBtn;
 
     NavigationButton *m_lock;
     NavigationButton *m_logout;

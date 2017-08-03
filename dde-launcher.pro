@@ -2,7 +2,7 @@ QT      += core gui dbus widgets x11extras svg
 
 TARGET = dde-launcher
 TEMPLATE = app
-CONFIG += c++11 link_pkgconfig
+CONFIG += c++14 link_pkgconfig
 PKGCONFIG += dtkwidget dtkcore xcb xcb-ewmh \
           gsettings-qt dframeworkdbus
 
@@ -32,7 +32,8 @@ SOURCES += \
     view/appgridview.cpp \
     view/applistview.cpp \
     delegate/applistdelegate.cpp \
-    sharedeventfilter.cpp
+    sharedeventfilter.cpp \
+    global_util/recentlyused.cpp
 
 HEADERS += \
     model/appslistmodel.h \
@@ -51,7 +52,8 @@ HEADERS += \
     view/appgridview.h \
     view/applistview.h \
     delegate/applistdelegate.h \
-    sharedeventfilter.h
+    sharedeventfilter.h \
+    global_util/recentlyused.h
 
 #Automating generation .qm files from .ts files
 system($$PWD/translate_generation.sh)

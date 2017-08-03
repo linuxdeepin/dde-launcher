@@ -27,6 +27,7 @@ class MiniFrameBottomBar;
 class SharedEventFilter;
 class MenuWorker;
 class CalculateUtil;
+class HistoryWidget;
 class MiniFrame : public DBlurEffectWidget, public LauncherInterface
 {
     Q_OBJECT
@@ -59,8 +60,9 @@ private slots:
     void checkIndex();
     void adjustPosition();
     void reloadAppsView();
-    void toggleFullScreen();
+    void onToggleFullScreen();
     void onToggleViewClicked();
+    void onToggleHistoryClicked();
     void onWMCompositeChanged();
     void prepareHideLauncher();
     void focusRightPanel();
@@ -85,6 +87,7 @@ private:
     QTimer *m_autoScrollTimer;
 
     DImageButton *m_viewToggle;
+    DImageButton *m_historyToggle;
     DImageButton *m_modeToggle;
     SearchWidget *m_searchWidget;
 
@@ -94,6 +97,7 @@ private:
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsBox;
 
+    HistoryWidget *m_historyWidget;
     QListView *m_appsView;
     AppsListModel *m_appsModel;
     AppsListModel *m_searchModel;

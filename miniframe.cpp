@@ -1,5 +1,6 @@
 #include "miniframe.h"
 #include "dbusdock.h"
+#include "historywidget.h"
 #include "worker/menuworker.h"
 #include "widgets/searchwidget.h"
 #include "widgets/minicategorywidget.h"
@@ -10,6 +11,7 @@
 #include "delegate/appitemdelegate.h"
 #include "delegate/applistdelegate.h"
 #include "global_util/util.h"
+#include "global_util/recentlyused.h"
 
 #include "sharedeventfilter.h"
 
@@ -48,6 +50,7 @@ MiniFrame::MiniFrame(QWidget *parent)
       m_categoryWidget(new MiniCategoryWidget),
       m_bottomBar(new MiniFrameBottomBar),
 
+      m_historyWidget(new HistoryWidget),
       m_appsView(nullptr),
       m_appsModel(new AppsListModel(AppsListModel::All)),
       m_searchModel(new AppsListModel(AppsListModel::Search))
@@ -64,6 +67,10 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_viewToggle->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
     m_viewToggle->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
     m_viewToggle->setPressPic(":/icons/skin/icons/category_active_22px.svg");
+    m_historyToggle = new DImageButton;
+    m_historyToggle->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
+    m_historyToggle->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
+    m_historyToggle->setPressPic(":/icons/skin/icons/category_active_22px.svg");
     m_modeToggle = new DImageButton;
     m_modeToggle->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
     m_modeToggle->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
@@ -81,6 +88,7 @@ MiniFrame::MiniFrame(QWidget *parent)
 
     QHBoxLayout *viewHeaderLayout = new QHBoxLayout;
     viewHeaderLayout->addWidget(m_viewToggle);
+    viewHeaderLayout->addWidget(m_historyToggle);
     viewHeaderLayout->addStretch();
     viewHeaderLayout->addWidget(m_searchWidget);
     viewHeaderLayout->addStretch();
@@ -116,9 +124,12 @@ MiniFrame::MiniFrame(QWidget *parent)
                                  "font-size: 22px;"
                                  "}");
 
+    m_historyWidget->setVisible(false);
+
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addLayout(viewHeaderLayout);
     centralLayout->addWidget(m_viewWrapper);
+    centralLayout->addWidget(m_historyWidget);
     centralLayout->addWidget(m_bottomBar);
     centralLayout->setSpacing(0);
     centralLayout->setContentsMargins(10, 0, 10, 0);
@@ -137,7 +148,8 @@ MiniFrame::MiniFrame(QWidget *parent)
     connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_delayHideTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_delayHideTimer, &QTimer::timeout, this, &MiniFrame::prepareHideLauncher);
     connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &MiniFrame::searchText, Qt::QueuedConnection);
-    connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::toggleFullScreen, Qt::QueuedConnection);
+    connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::onToggleFullScreen, Qt::QueuedConnection);
+    connect(m_historyToggle, &DImageButton::clicked, this, &MiniFrame::onToggleHistoryClicked, Qt::QueuedConnection);
     connect(m_viewToggle, &DImageButton::clicked, this, &MiniFrame::onToggleViewClicked, Qt::QueuedConnection);
     connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, m_appsModel, &AppsListModel::setCategory, Qt::QueuedConnection);
     connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, this, &MiniFrame::checkIndex, Qt::QueuedConnection);
@@ -489,7 +501,7 @@ void MiniFrame::reloadAppsView()
     CalculateUtil::instance()->calculateAppLayout(QSize(), 0);
 }
 
-void MiniFrame::toggleFullScreen()
+void MiniFrame::onToggleFullScreen()
 {
     removeEventFilter(m_eventFilter);
 
@@ -517,6 +529,18 @@ void MiniFrame::onToggleViewClicked()
     m_viewWrapper->clear();
 
     QTimer::singleShot(1, this, &MiniFrame::reloadAppsView);
+}
+
+void MiniFrame::onToggleHistoryClicked()
+{
+    if (m_viewWrapper->isVisible())
+    {
+        m_viewWrapper->setVisible(false);
+        m_historyWidget->setVisible(true);
+    } else {
+        m_viewWrapper->setVisible(true);
+        m_historyWidget->setVisible(false);
+    }
 }
 
 void MiniFrame::onWMCompositeChanged()

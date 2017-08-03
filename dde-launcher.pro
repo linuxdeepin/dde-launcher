@@ -33,7 +33,9 @@ SOURCES += \
     view/applistview.cpp \
     delegate/applistdelegate.cpp \
     sharedeventfilter.cpp \
-    global_util/recentlyused.cpp
+    global_util/recentlyused.cpp \
+    historywidget.cpp \
+    model/historymodel.cpp
 
 HEADERS += \
     model/appslistmodel.h \
@@ -53,7 +55,9 @@ HEADERS += \
     view/applistview.h \
     delegate/applistdelegate.h \
     sharedeventfilter.h \
-    global_util/recentlyused.h
+    global_util/recentlyused.h \
+    historywidget.h \
+    model/historymodel.h
 
 #Automating generation .qm files from .ts files
 system($$PWD/translate_generation.sh)

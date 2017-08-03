@@ -4,8 +4,6 @@
 #include "model/appsmanager.h"
 #include "dbusservices/dbuslauncherservice.h"
 
-#include "global_util/recentlyused.h"
-
 #include <QCommandLineParser>
 #include <QTranslator>
 #include <unistd.h>
@@ -82,8 +80,6 @@ int main(int argv, char *args[])
     if (/*!positionArgs.isEmpty() && */cmdParser.isSet(showOption))
 #endif
         QTimer::singleShot(1, &launcher, &LauncherSys::showLauncher);
-
-    new RecentlyUsed;
 
     return app.exec();
 }

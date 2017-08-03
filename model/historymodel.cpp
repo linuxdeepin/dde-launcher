@@ -21,8 +21,10 @@ QVariant HistoryModel::data(const QModelIndex &index, int role) const
 {
     switch (role)
     {
-    case Qt::DisplayRole:
+    case ItemNameRole:
         return m_data[index.row()].fileName();
+    case ItemFullPathRole:
+        return m_data[index.row()].absoluteFilePath();
     default:;
     }
 
@@ -34,5 +36,11 @@ void HistoryModel::updateHistory()
     const QStringList history = m_history.history();
 
     for (const auto &h : history)
-        m_data << QFileInfo(QUrl(h).toLocalFile());
+    {
+        const QFileInfo info(QUrl(h).toLocalFile());
+        if (!info.exists())
+            continue;
+
+        m_data << info;
+    }
 }

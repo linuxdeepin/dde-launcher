@@ -11,6 +11,14 @@ class HistoryModel : public QAbstractListModel
     Q_OBJECT
 
 public:
+
+    enum HistoryItemRole
+    {
+        ItemNameRole = Qt::DisplayRole,
+        UnusedRole = Qt::UserRole,
+        ItemFullPathRole,
+    };
+
     explicit HistoryModel(QObject *parent = 0);
 
     int rowCount(const QModelIndex &parent) const;

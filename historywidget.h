@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QListView>
+#include <QPushButton>
 
 class HistoryModel;
 class HistoryWidget : public QWidget
@@ -18,6 +19,7 @@ private slots:
 private:
     HistoryModel *m_historyModel;
     QListView *m_historyView;
+    QPushButton *m_clearBtn;
 };
 
 #endif // HISTORYWIDGET_H

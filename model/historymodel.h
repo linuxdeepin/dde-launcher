@@ -24,6 +24,9 @@ public:
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
 
+public slots:
+    void clear();
+
 private slots:
     void updateHistory();
 

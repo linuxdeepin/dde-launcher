@@ -15,6 +15,9 @@ public:
 
     const QList<QString> history() const { return m_history; }
 
+public slots:
+    void clear();
+
 private slots:
     void reload();
 

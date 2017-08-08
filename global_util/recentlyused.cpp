@@ -12,14 +12,23 @@ RecentlyUsed::RecentlyUsed(QObject *parent)
     QTimer::singleShot(1, this, &RecentlyUsed::reload);
 }
 
+void RecentlyUsed::clear()
+{
+    QFile f("/home/.local/share/recently-used.xbel");
+    f.remove();
+
+    QTimer::singleShot(1, this, &RecentlyUsed::reload);
+}
+
 void RecentlyUsed::reload()
 {
     m_history.clear();
 
-    QFile *f = new QFile("/home/.local/share/recently-used.xbel");
-    f->open(QIODevice::ReadOnly);
+    QFile f("/home/.local/share/recently-used.xbel");
+    if (!f.open(QIODevice::ReadOnly))
+        return;
 
-    m_xmlRdr->setDevice(f);
+    m_xmlRdr->setDevice(&f);
     while (!m_xmlRdr->atEnd())
     {
         if (!m_xmlRdr->readNextStartElement())
@@ -31,4 +40,6 @@ void RecentlyUsed::reload()
         if (!location.isEmpty())
             m_history.append(location.toString());
     }
+
+    f.close();
 }

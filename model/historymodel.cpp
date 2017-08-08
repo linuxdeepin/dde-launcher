@@ -31,6 +31,13 @@ QVariant HistoryModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+void HistoryModel::clear()
+{
+    m_history.clear();
+
+    QTimer::singleShot(1, this, &HistoryModel::updateHistory);
+}
+
 void HistoryModel::updateHistory()
 {
     const QStringList history = m_history.history();
@@ -43,4 +50,6 @@ void HistoryModel::updateHistory()
 
         m_data << info;
     }
+
+    emit layoutChanged();
 }

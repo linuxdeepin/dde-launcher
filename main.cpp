@@ -13,16 +13,11 @@
 #include <DLog>
 
 DWIDGET_USE_NAMESPACE
+#ifdef DCORE_NAMESPACE
+DCORE_USE_NAMESPACE
+#else
 DUTIL_USE_NAMESPACE
-
-#define PROP_GTK_ICON_THEME_NAME     "gtk-icon-theme-name"
-
-void iconThemeChanged(GtkSettings *gsettings, GParamSpec *pspec, gpointer udata)
-{
-    Q_UNUSED(gsettings)
-    Q_UNUSED(udata)
-    Q_ASSERT(!strcmp(g_param_spec_get_name(pspec), PROP_GTK_ICON_THEME_NAME));
-}
+#endif
 
 int main(int argv, char *args[])
 {

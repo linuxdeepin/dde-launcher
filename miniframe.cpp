@@ -50,7 +50,9 @@ MiniFrame::MiniFrame(QWidget *parent)
       m_categoryWidget(new MiniCategoryWidget),
       m_bottomBar(new MiniFrameBottomBar),
 
+#ifdef HISTORY_PANEL
       m_historyWidget(new HistoryWidget),
+#endif
       m_appsView(nullptr),
       m_appsModel(new AppsListModel(AppsListModel::All)),
       m_searchModel(new AppsListModel(AppsListModel::Search))
@@ -67,10 +69,9 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_viewToggle->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
     m_viewToggle->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
     m_viewToggle->setPressPic(":/icons/skin/icons/category_active_22px.svg");
-    m_historyToggle = new DImageButton;
-    m_historyToggle->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
-    m_historyToggle->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
-    m_historyToggle->setPressPic(":/icons/skin/icons/category_active_22px.svg");
+#ifdef HISTORY_PANEL
+    m_historyToggle = new QPushButton("最近打开");
+#endif
     m_modeToggle = new DImageButton;
     m_modeToggle->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
     m_modeToggle->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
@@ -88,7 +89,9 @@ MiniFrame::MiniFrame(QWidget *parent)
 
     QHBoxLayout *viewHeaderLayout = new QHBoxLayout;
     viewHeaderLayout->addWidget(m_viewToggle);
+#ifdef HISTORY_PANEL
     viewHeaderLayout->addWidget(m_historyToggle);
+#endif
     viewHeaderLayout->addStretch();
     viewHeaderLayout->addWidget(m_searchWidget);
     viewHeaderLayout->addStretch();
@@ -124,12 +127,16 @@ MiniFrame::MiniFrame(QWidget *parent)
                                  "font-size: 22px;"
                                  "}");
 
+#ifdef HISTORY_PANEL
     m_historyWidget->setVisible(false);
+#endif
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addLayout(viewHeaderLayout);
     centralLayout->addWidget(m_viewWrapper);
+#ifdef HISTORY_PANEL
     centralLayout->addWidget(m_historyWidget);
+#endif
     centralLayout->addWidget(m_bottomBar);
     centralLayout->setSpacing(0);
     centralLayout->setContentsMargins(10, 0, 10, 0);
@@ -149,7 +156,9 @@ MiniFrame::MiniFrame(QWidget *parent)
     connect(m_delayHideTimer, &QTimer::timeout, this, &MiniFrame::prepareHideLauncher);
     connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &MiniFrame::searchText, Qt::QueuedConnection);
     connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::onToggleFullScreen, Qt::QueuedConnection);
-    connect(m_historyToggle, &DImageButton::clicked, this, &MiniFrame::onToggleHistoryClicked, Qt::QueuedConnection);
+#ifdef HISTORY_PANEL
+    connect(m_historyToggle, &QPushButton::clicked, this, &MiniFrame::onToggleHistoryClicked, Qt::QueuedConnection);
+#endif
     connect(m_viewToggle, &DImageButton::clicked, this, &MiniFrame::onToggleViewClicked, Qt::QueuedConnection);
     connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, m_appsModel, &AppsListModel::setCategory, Qt::QueuedConnection);
     connect(m_categoryWidget, &MiniCategoryWidget::requestCategory, this, &MiniFrame::checkIndex, Qt::QueuedConnection);
@@ -531,6 +540,7 @@ void MiniFrame::onToggleViewClicked()
     QTimer::singleShot(1, this, &MiniFrame::reloadAppsView);
 }
 
+#ifdef HISTORY_PANEL
 void MiniFrame::onToggleHistoryClicked()
 {
     if (m_viewWrapper->isVisible())
@@ -542,6 +552,7 @@ void MiniFrame::onToggleHistoryClicked()
         m_historyWidget->setVisible(false);
     }
 }
+#endif
 
 void MiniFrame::onWMCompositeChanged()
 {

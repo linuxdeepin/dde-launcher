@@ -30,7 +30,9 @@ private:
     NavigationButton *m_picture;
     NavigationButton *m_download;
     DImageButton *m_shutdownBtn;
-    DImageButton *m_sysInfoBtn;
+#ifdef SYS_INFO_BUTTON
+    QPushButton *m_sysInfoBtn;
+#endif
 
     NavigationButton *m_lock;
     NavigationButton *m_logout;

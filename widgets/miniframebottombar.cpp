@@ -17,10 +17,9 @@ MiniFrameBottomBar::MiniFrameBottomBar(QWidget *parent)
     m_shutdownBtn->setNormalPic(":/icons/skin/icons/poweroff_normal.png");
     m_shutdownBtn->setHoverPic(":/icons/skin/icons/poweroff_hover.png");
     m_shutdownBtn->setPressPic(":/icons/skin/icons/poweroff_press.png");
-    m_sysInfoBtn = new DImageButton;
-    m_sysInfoBtn->setNormalPic(":/icons/skin/icons/poweroff_normal.png");
-    m_sysInfoBtn->setHoverPic(":/icons/skin/icons/poweroff_hover.png");
-    m_sysInfoBtn->setPressPic(":/icons/skin/icons/poweroff_press.png");
+#ifdef SYS_INFO_BUTTON
+    m_sysInfoBtn = new QPushButton("系统信息");
+#endif
 
     QHBoxLayout *navigationLayout = new QHBoxLayout;
     navigationLayout->addStretch();
@@ -31,7 +30,9 @@ MiniFrameBottomBar::MiniFrameBottomBar(QWidget *parent)
     navigationLayout->addWidget(m_picture);
     navigationLayout->addWidget(m_download);
     navigationLayout->addStretch();
+#ifdef SYS_INFO_BUTTON
     navigationLayout->addWidget(m_sysInfoBtn);
+#endif
     navigationLayout->addWidget(m_shutdownBtn);
     navigationLayout->setMargin(0);
 
@@ -73,7 +74,9 @@ MiniFrameBottomBar::MiniFrameBottomBar(QWidget *parent)
     connect(m_download, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DownloadLocation); });
 
     connect(m_shutdownBtn, &DImageButton::clicked, this, &MiniFrameBottomBar::showShutdown);
-    connect(m_sysInfoBtn, &DImageButton::clicked, this, &MiniFrameBottomBar::showSysInfo);
+#ifdef SYS_INFO_BUTTON
+    connect(m_sysInfoBtn, &QPushButton::clicked, this, &MiniFrameBottomBar::showSysInfo);
+#endif
 //    connect(m_shutdownBtn, &DImageButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_shutdownPanel); });
     connect(m_toNavigation, &QPushButton::clicked, this, [this] { m_panelStack->setCurrentWidget(m_navigationPanel); });
 

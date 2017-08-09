@@ -4,7 +4,7 @@
 #include "launcherinterface.h"
 #include "global_util/constants.h"
 
-#include <QWidget>
+#include <QPushButton>
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
@@ -62,7 +62,9 @@ private slots:
     void reloadAppsView();
     void onToggleFullScreen();
     void onToggleViewClicked();
+#ifdef HISTORY_PANEL
     void onToggleHistoryClicked();
+#endif
     void onWMCompositeChanged();
     void prepareHideLauncher();
     void focusRightPanel();
@@ -87,7 +89,9 @@ private:
     QTimer *m_autoScrollTimer;
 
     DImageButton *m_viewToggle;
-    DImageButton *m_historyToggle;
+#ifdef HISTORY_PANEL
+    QPushButton *m_historyToggle;
+#endif
     DImageButton *m_modeToggle;
     SearchWidget *m_searchWidget;
 
@@ -97,7 +101,9 @@ private:
     QScrollArea *m_appsArea;
     DVBoxWidget *m_appsBox;
 
+#ifdef HISTORY_PANEL
     HistoryWidget *m_historyWidget;
+#endif
     QListView *m_appsView;
     AppsListModel *m_appsModel;
     AppsListModel *m_searchModel;

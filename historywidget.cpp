@@ -16,7 +16,7 @@ HistoryWidget::HistoryWidget(QWidget *parent)
     m_historyView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_historyView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    m_clearBtn->setText(tr("Clear"));
+    m_clearBtn->setText("清除");
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_historyView);

@@ -65,6 +65,10 @@ protected:
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
 
+    // input method
+    void inputMethodEvent(QInputMethodEvent *e) override;
+    QVariant inputMethodQuery(Qt::InputMethodQuery prop) const override;
+
 private:
     void initUI();
     void initConnection();

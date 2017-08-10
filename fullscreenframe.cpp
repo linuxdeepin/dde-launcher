@@ -23,6 +23,18 @@ static const QString DisplayModeKey = "display-mode";
 static const QString DisplayModeFree = "free";
 static const QString DisplayModeCategory = "category";
 
+const QPoint widgetRelativeOffset(const QWidget * const self, const QWidget *w)
+{
+    QPoint offset;
+    while (w && w != self)
+    {
+        offset += w->pos();
+        w = qobject_cast<QWidget *>(w->parent());
+    }
+
+    return offset;
+}
+
 FullScreenFrame::FullScreenFrame(QWidget *parent) :
     BoxFrame(parent),
     m_menuWorker(new MenuWorker),
@@ -89,6 +101,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 {
     setFocusPolicy(Qt::ClickFocus);
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
+    setAttribute(Qt::WA_InputMethodEnabled, true);
 
     setObjectName("LauncherFrame");
 
@@ -276,6 +289,31 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
     }
 
     return false;
+}
+
+void FullScreenFrame::inputMethodEvent(QInputMethodEvent *e)
+{
+    if (!e->commitString().isEmpty())
+    {
+        m_searchWidget->edit()->setText(e->commitString());
+        m_searchWidget->edit()->setFocus();
+    }
+
+    QWidget::inputMethodEvent(e);
+}
+
+QVariant FullScreenFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
+{
+    switch (prop)
+    {
+    case Qt::ImEnabled:
+        return true;
+    case Qt::ImCursorRectangle:
+        return widgetRelativeOffset(this, m_searchWidget->edit());
+    default:;
+    }
+
+    return QWidget::inputMethodQuery(prop);
 }
 
 void FullScreenFrame::initUI()

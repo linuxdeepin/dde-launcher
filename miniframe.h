@@ -72,6 +72,10 @@ private slots:
     void setCurrentIndex(const QModelIndex &index);
     void searchText(const QString &text);
 
+protected:
+    void inputMethodEvent(QInputMethodEvent *e) override;
+    QVariant inputMethodQuery(Qt::InputMethodQuery prop) const override;
+
 private:
     const QModelIndex currentIndex() const;
 

@@ -31,6 +31,8 @@
 #define DOCK_FASHION    0
 #define DOCK_EFFICIENT  1
 
+extern const QPoint widgetRelativeOffset(const QWidget * const self, const QWidget *w);
+
 MiniFrame::MiniFrame(QWidget *parent)
     : DBlurEffectWidget(parent),
 
@@ -125,6 +127,7 @@ MiniFrame::MiniFrame(QWidget *parent)
 
     setMaskColor(DarkColor);
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
+    setAttribute(Qt::WA_InputMethodEnabled, true);
     setFocusPolicy(Qt::ClickFocus);
     setFixedSize(550, 485);
     setLayout(centralLayout);
@@ -612,6 +615,31 @@ void MiniFrame::searchText(const QString &text)
 
         m_appsManager->searchApp(text.trimmed());
     }
+}
+
+void MiniFrame::inputMethodEvent(QInputMethodEvent *e)
+{
+    if (!e->commitString().isEmpty())
+    {
+        m_searchWidget->edit()->setText(e->commitString());
+        m_searchWidget->edit()->setFocus();
+    }
+
+    QWidget::inputMethodEvent(e);
+}
+
+QVariant MiniFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
+{
+    switch (prop)
+    {
+    case Qt::ImEnabled:
+        return true;
+    case Qt::ImCursorRectangle:
+        return widgetRelativeOffset(this, m_searchWidget->edit());
+    default:;
+    }
+
+    return QWidget::inputMethodQuery(prop);
 }
 
 const QModelIndex MiniFrame::currentIndex() const

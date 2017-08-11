@@ -88,8 +88,8 @@ int main(int argv, char *args[])
         QTimer::singleShot(1, &launcher, &LauncherSys::showLauncher);
 
     // monitor gtk icon theme changed
-    GtkSettings *gs = gtk_settings_get_default();
-    g_signal_connect(gs, "notify::" PROP_GTK_ICON_THEME_NAME, G_CALLBACK(iconThemeChanged), NULL);
+//    GtkSettings *gs = gtk_settings_get_default();
+//    g_signal_connect(gs, "notify::" PROP_GTK_ICON_THEME_NAME, G_CALLBACK(iconThemeChanged), NULL);
 
     return app.exec();
 }

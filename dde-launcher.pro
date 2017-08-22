@@ -3,7 +3,7 @@ QT      += core gui dbus widgets x11extras svg
 TARGET = dde-launcher
 TEMPLATE = app
 CONFIG += c++14 link_pkgconfig
-PKGCONFIG += dtkwidget dtkcore xcb xcb-ewmh \
+PKGCONFIG += dtkwidget xcb xcb-ewmh \
           gsettings-qt dframeworkdbus
 
 include(./feature-macros.pri)
@@ -14,6 +14,9 @@ include(./dbusinterface/dbusinterface.pri)
 ARCH = $$QMAKE_HOST.arch
 isEqual(ARCH, mips64) | isEqual(ARCH, mips32) {
     DEFINES += ARCH_MIPSEL
+    PKGCONFIG += dtkutil
+} else {
+    PKGCONFIG += dtkcore
 }
 
 SOURCES += \

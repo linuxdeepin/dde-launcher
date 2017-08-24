@@ -3,6 +3,9 @@
 #include <DDesktopServices>
 
 DWIDGET_USE_NAMESPACE
+#ifdef DUTIL_NAMESPACE
+DUTIL_USE_NAMESPACE
+#endif
 
 MiniFrameBottomBar::MiniFrameBottomBar(QWidget *parent)
     : QWidget(parent)

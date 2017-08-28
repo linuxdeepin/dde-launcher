@@ -44,12 +44,10 @@ public:
     int displayMode() const;
     void setDisplayMode(const int mode);
 
-#ifdef QT_DEBUG
     inline void increaseIconSize() {m_appIconSize += 16;}
     inline void decreaseIconSize() {m_appIconSize -= 16;}
     inline void increaseItemSize() {m_appItemWidth += 16; m_appItemHeight += 16;}
     inline void decreaseItemSize() {m_appItemWidth -= 16; m_appItemHeight -= 16;}
-#endif
 
 public slots:
     void calculateAppLayout(const QSize &containerSize, const int dockPosition);

@@ -193,25 +193,34 @@ void FullScreenFrame::resizeEvent(QResizeEvent *e)
 
 void FullScreenFrame::keyPressEvent(QKeyEvent *e)
 {
-#ifdef QT_DEBUG
     switch (e->key())
     {
+#ifdef QT_DEBUG
     case Qt::Key_Control:       scrollToCategory(AppsListModel::Internet);      return;
 //    case Qt::Key_F2:            updateDisplayMode(GroupByCategory);             return;
-    case Qt::Key_Plus:          m_calcUtil->increaseIconSize();
-                                emit m_appsManager->layoutChanged(AppsListModel::All);
-                                                                                return;
-    case Qt::Key_Minus:         m_calcUtil->decreaseIconSize();
-                                emit m_appsManager->layoutChanged(AppsListModel::All);
-                                                                                return;
     case Qt::Key_Slash:         m_calcUtil->increaseItemSize();
                                 emit m_appsManager->layoutChanged(AppsListModel::All);
                                                                                 return;
     case Qt::Key_Asterisk:      m_calcUtil->decreaseItemSize();
                                 emit m_appsManager->layoutChanged(AppsListModel::All);
                                                                                 return;
-    }
 #endif
+    case Qt::Key_Minus:
+        if (!e->modifiers().testFlag(Qt::ControlModifier))
+            return;
+        e->accept();
+        m_calcUtil->decreaseIconSize();
+        emit m_appsManager->layoutChanged(AppsListModel::All);
+        break;
+    case Qt::Key_Equal:
+        if (!e->modifiers().testFlag(Qt::ControlModifier))
+            return;
+        e->accept();
+        m_calcUtil->increaseIconSize();
+        emit m_appsManager->layoutChanged(AppsListModel::All);
+        break;
+    default:;
+    }
 }
 
 void FullScreenFrame::showEvent(QShowEvent *e)

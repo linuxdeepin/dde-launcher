@@ -38,36 +38,33 @@ public:
     inline int navgationTextSize() const {return double(m_navgationTextSize) / 1.2;}
     inline int appColumnCount() const {return m_appColumnCount;}
     inline int appItemFontSize() const {return m_appItemFontSize;}
-    inline QSize appIconSize() const { return QSize(m_appIconSize, m_appIconSize);}
+    inline QSize appIconSize() const
+    { return QSize(m_appItemSize * m_appIconRadio, m_appItemSize * m_appIconRadio); }
     inline int appItemSpacing() const {return m_appItemSpacing;}
-    inline QSize appItemSize() const {return QSize(m_appItemWidth, m_appItemHeight);}
+    inline QSize appItemSize() const {return QSize(m_appItemSize, m_appItemSize);}
     int displayMode() const;
     void setDisplayMode(const int mode);
 
-    inline void increaseIconSize() {m_appIconSize += 16;}
-    inline void decreaseIconSize() {m_appIconSize -= 16;}
-    inline void increaseItemSize() {m_appItemWidth += 16; m_appItemHeight += 16;}
-    inline void decreaseItemSize() {m_appItemWidth -= 16; m_appItemHeight -= 16;}
+    void increaseIconSize();
+    void decreaseIconSize();
+    inline void increaseItemSize() {m_appItemSize += 16;}
+    inline void decreaseItemSize() {m_appItemSize -= 16;}
 
 public slots:
     void calculateAppLayout(const QSize &containerSize, const int dockPosition);
 
 private:
     explicit CalculateUtil(QObject *parent);
-    int itemSpacing(const int containerWidth) const;
-    int itemIconWidth(const int itemWidth) const;
     void calculateTextSize(const int screenWidth);
 
 private:
     static QPointer<CalculateUtil> INSTANCE;
 
+    double m_appIconRadio = 0.4;
     int m_appItemFontSize = 12;
-    int m_appIconSize = 64;
     int m_appItemSpacing = 10;
-    int m_appItemWidth = 130;
-    int m_appItemHeight = 130;
+    int m_appItemSize = 130;
     int m_appColumnCount = 7;
-
     int m_navgationTextSize = 14;
     int m_titleTextSize = 15;
 

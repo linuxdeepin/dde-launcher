@@ -35,12 +35,23 @@ int CalculateUtil::calculateBesidePadding(const int screenWidth)
     // static const int NAVIGATION_WIDGET_WIDTH = 180;
     if (screenWidth > 1366)
         return 180;
+
     return 130;
 }
 
 void CalculateUtil::setDisplayMode(const int mode)
 {
     m_launcherGsettings->set(DisplayModeKey, mode == ALL_APPS ? DisplayModeFree : DisplayModeCategory);
+}
+
+void CalculateUtil::increaseIconSize()
+{
+    m_appIconRadio = std::min(0.7, m_appIconRadio + 0.1);
+}
+
+void CalculateUtil::decreaseIconSize()
+{
+    m_appIconRadio = std::max(0.3, m_appIconRadio - 0.1);
 }
 
 int CalculateUtil::displayMode() const
@@ -54,15 +65,67 @@ int CalculateUtil::displayMode() const
     return ALL_APPS;
 }
 
+//void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int dockPosition)
+//{
+//    // mini mode
+//    if (!m_launcherInter->fullscreen())
+//    {
+//        m_appItemSpacing = 6;
+//        m_appItemWidth = 120;
+//        m_appItemHeight = 120;
+//        m_appIconSize = displayMode() == ALL_APPS ? 48 : 32;
+//        m_appItemFontSize = 11;
+//        m_appColumnCount = displayMode() == ALL_APPS ? 4 : 1;
+
+//        emit layoutChanged();
+//        return;
+//    }
+
+//    // NOTE(hualet): DPI default to 96.
+//    static auto PtToPx = [] (float pt) -> int {
+//        return pt * 96 / 72.0;
+//    };
+
+//    const QScreen *screen = qApp->primaryScreen();
+//    const qreal ratio = screen->devicePixelRatio();
+//    const int screenWidth = screen->geometry().width() / ratio;
+//    const int column = screenWidth <= 800 ? 5 : screenWidth <= 1024 && dockPosition == 3 ? 6 : 7;
+
+//    calculateTextSize(screenWidth);
+
+//    // calculate item size;
+//    int spacing = itemSpacing(containerSize.width());
+//    int itemWidth = 140;
+
+//    const int itemCalcWidth = (double(containerSize.width()) - spacing * column * 2) / column + 0.5;
+//    itemWidth = qMin(itemWidth, itemCalcWidth);
+
+//    spacing = (double(containerSize.width()) - itemWidth * column) / (column * 2) - 1;
+
+//    m_appItemSpacing = spacing;
+//    m_appItemWidth = itemWidth;
+//    m_appItemHeight = m_appItemWidth;
+//    m_appColumnCount = column;
+
+//    // calculate icon size;
+//    m_appIconSize = itemIconWidth(m_appItemWidth);
+
+//    // calculate font size;
+//    QFont systemFont;
+//    m_appItemFontSize = m_appItemWidth <= 80 ? 11 : PtToPx(systemFont.pointSizeF());
+
+//    emit layoutChanged();
+//}
+
 void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int dockPosition)
 {
     // mini mode
     if (!m_launcherInter->fullscreen())
     {
         m_appItemSpacing = 6;
-        m_appItemWidth = 120;
-        m_appItemHeight = 120;
-        m_appIconSize = displayMode() == ALL_APPS ? 48 : 32;
+        m_appItemSize = 120;
+//        m_appItemHeight = 120;
+//        m_appIconSize = displayMode() == ALL_APPS ? 48 : 32;
         m_appItemFontSize = 11;
         m_appColumnCount = displayMode() == ALL_APPS ? 4 : 1;
 
@@ -75,33 +138,28 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
         return pt * 96 / 72.0;
     };
 
-    const QScreen *screen = qApp->primaryScreen();
-    const qreal ratio = screen->devicePixelRatio();
-    const int screenWidth = screen->geometry().width() / ratio;
-    const int column = screenWidth <= 800 ? 5 : screenWidth <= 1024 && dockPosition == 3 ? 6 : 7;
+    const qreal ratio = qApp->devicePixelRatio();
+    const QRect pr = qApp->primaryScreen()->geometry();
+    const int screenWidth = pr.width() / ratio;
+    const int remain_width = screenWidth - calculateBesidePadding(screenWidth) * 2;
+
+    const int itemWidth = 210;
+    const int spacing = 15;
+    const int columns = remain_width / itemWidth;
+
+    const int calc_item_width = (double(containerSize.width()) - spacing * columns * 2) / columns + 0.5;
+    const int calc_spacing = (double(containerSize.width()) - calc_item_width * columns) / (columns * 2) - 1;
+
 
     calculateTextSize(screenWidth);
 
-    // calculate item size;
-    int spacing = itemSpacing(containerSize.width());
-    int itemWidth = 140;
-
-    const int itemCalcWidth = (double(containerSize.width()) - spacing * column * 2) / column + 0.5;
-    itemWidth = qMin(itemWidth, itemCalcWidth);
-
-    spacing = (double(containerSize.width()) - itemWidth * column) / (column * 2) - 1;
-
-    m_appItemSpacing = spacing;
-    m_appItemWidth = itemWidth;
-    m_appItemHeight = m_appItemWidth;
-    m_appColumnCount = column;
-
-    // calculate icon size;
-    m_appIconSize = itemIconWidth(m_appItemWidth);
+    m_appItemSpacing = calc_spacing;
+    m_appItemSize = calc_item_width;
+    m_appColumnCount = columns;
 
     // calculate font size;
     QFont systemFont;
-    m_appItemFontSize = m_appItemWidth <= 80 ? 11 : PtToPx(systemFont.pointSizeF());
+    m_appItemFontSize = m_appItemSize <= 80 ? 11 : PtToPx(systemFont.pointSizeF());
 
     emit layoutChanged();
 }
@@ -112,29 +170,6 @@ CalculateUtil::CalculateUtil(QObject *parent)
                                          "/com/deepin/dde/launcher/", this))
 {
     m_launcherInter = new DBusLauncher(this);
-}
-
-int CalculateUtil::itemSpacing(const int containerWidth) const
-{
-    if (containerWidth <= 500)
-        return 6;
-    if (containerWidth <= 1000)
-        return 15;
-    return 20;
-}
-
-int CalculateUtil::itemIconWidth(const int itemWidth) const
-{
-    //    m_appIconSize = qMin(64, int(m_appItemWidth * 0.65 / 16) * 16);
-    //    m_appIconSize = m_appItemWidth > 64 * 2 ? 64 : 48;
-
-    if (itemWidth > 64 * 2)
-        return 64;
-    if (itemWidth > 85)
-        return 48;
-    if (itemWidth > 60)
-        return 32;
-    return 24;
 }
 
 void CalculateUtil::calculateTextSize(const int screenWidth)

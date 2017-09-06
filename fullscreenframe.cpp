@@ -339,7 +339,7 @@ void FullScreenFrame::initUI()
     m_searchWidget->setFixedWidth(290);
 
     m_tipsLabel->setAlignment(Qt::AlignCenter);
-    m_tipsLabel->setFixedSize(200, 50);
+    m_tipsLabel->setFixedSize(500, 50);
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setStyleSheet("color:rgba(238, 238, 238, .6);"
 //                               "background-color:red;"

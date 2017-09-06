@@ -55,6 +55,7 @@ QString MenuWorker::createMenuContent(/*QString appKey*/){
     m_isItemOnDock = m_currentModelIndex.data(AppsListModel::AppIsOnDockRole).toBool();
     m_isItemStartup = m_currentModelIndex.data(AppsListModel::AppAutoStartRole).toBool();
     m_isRemovable = m_currentModelIndex.data(AppsListModel::AppIsRemovableRole).toBool();
+    m_isItemProxy = m_currentModelIndex.data(AppsListModel::AppIsProxyRole).toBool();
 
     QJsonObject openObj = createMenuItem(0, tr("Open(_O)"));
     QJsonObject seperatorObj1 = createSeperator();
@@ -77,7 +78,13 @@ QString MenuWorker::createMenuContent(/*QString appKey*/){
     }else{
         startupObj = createMenuItem(3, tr("Add to startup(_A)"));
     }
-    QJsonObject uninstallObj = createMenuItem(4, tr("Uninstall"), m_isRemovable);
+
+    QJsonObject proxyObj;
+    proxyObj = createMenuItem(4, tr("Open by proxy"));
+    proxyObj["isCheckable"] = true;
+    proxyObj["checked"] = m_isItemProxy;
+
+    QJsonObject uninstallObj = createMenuItem(5, tr("Uninstall"), m_isRemovable);
 
     QJsonArray items;
     items.append(openObj);
@@ -86,6 +93,7 @@ QString MenuWorker::createMenuContent(/*QString appKey*/){
     items.append(dockObj);
     items.append(seperatorObj2);
     items.append(startupObj);
+    items.append(proxyObj);
 #ifndef WITHOUT_UNINSTALL_APP
     items.append(uninstallObj);
 #endif
@@ -182,6 +190,9 @@ void MenuWorker::menuItemInvoked(QString itemId, bool flag){
         handleToStartup();
         break;
     case 4:
+        handleToProxy();
+        break;
+    case 5:
         emit  unInstallApp(m_currentModelIndex);
         break;
     default:
@@ -285,3 +296,7 @@ void MenuWorker::handleToStartup(){
     }
 }
 
+void MenuWorker::handleToProxy()
+{
+    m_launcherInterface->SetUseProxy(m_appKey, !m_isItemProxy);
+}

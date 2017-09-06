@@ -323,6 +323,11 @@ bool AppsManager::appIsOnDesktop(const QString &desktop)
     return m_launcherInter->IsItemOnDesktop(desktop).value();
 }
 
+bool AppsManager::appIsProxy(const QString &desktop)
+{
+    return m_launcherInter->GetUseProxy(desktop).value();
+}
+
 const QPixmap AppsManager::appIcon(const QString &iconKey, const int size)
 {
     const qreal ratio = qApp->primaryScreen()->devicePixelRatio();

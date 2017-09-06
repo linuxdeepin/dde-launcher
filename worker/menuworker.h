@@ -72,6 +72,7 @@ public slots:
     void handleToDesktop();
     void handleToDock();
     void handleToStartup();
+    void handleToProxy();
 
     void handleMenuClosed();
     void setCurrentModelIndex(const QModelIndex &index);
@@ -94,6 +95,7 @@ private:
     bool m_isItemOnDock;
     bool m_isItemStartup;
     bool m_isRemovable;
+    bool m_isItemProxy;
 
     bool m_menuIsShown = false;
 };

@@ -37,6 +37,7 @@ public:
         AppIsOnDesktopRole,
         AppIsOnDockRole,
         AppIsRemovableRole,
+        AppIsProxyRole,
         AppIconSizeRole,
         AppFontSizeRole,
         AppItemIsDragingRole,

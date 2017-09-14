@@ -62,14 +62,17 @@
         <file>skin/images/search_normal.png</file>
         <file>skin/images/search_press.png</file>
         <file>skin/images/search.svg</file>
+        <file>skin/icons/unfullscreen_press@2x.png</file>
+        <file>skin/icons/unfullscreen_normal@2x.png</file>
+        <file>skin/icons/unfullscreen_hover@2x.png</file>
     </qresource>
     <qresource prefix="/icons">
         <file>skin/icons/category_active_16px.svg</file>
-        <file>skin/icons/category_active_22px.svg</file>
+        <file>skin/icons/category_active_22px.png</file>
         <file>skin/icons/category_hover_16px.svg</file>
-        <file>skin/icons/category_hover_22px.svg</file>
+        <file>skin/icons/category_hover_22px.png</file>
         <file>skin/icons/category_normal_16px.svg</file>
-        <file>skin/icons/category_normal_22px.svg</file>
+        <file>skin/icons/category_normal_22px.png</file>
         <file>skin/icons/chat_active_16px.svg</file>
         <file>skin/icons/chat_active_22px.svg</file>
         <file>skin/icons/chat_hover_16px.svg</file>
@@ -175,5 +178,11 @@
         <file>skin/icons/input_clear_dark_press.png</file>
         <file>skin/icons/input_clear_dark_normal.png</file>
         <file>skin/icons/input_clear_dark_hover.png</file>
+        <file>skin/icons/fullscreen_normal@2x.png</file>
+        <file>skin/icons/fullscreen_press@2x.png</file>
+        <file>skin/icons/fullscreen_hover@2x.png</file>
+        <file>skin/icons/category_normal_22px@2x.png</file>
+        <file>skin/icons/category_hover_22px@2x.png</file>
+        <file>skin/icons/category_active_22px@2x.png</file>
     </qresource>
 </RCC>

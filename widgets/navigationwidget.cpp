@@ -95,9 +95,9 @@ void NavigationWidget::refershCategoryVisible(const AppsListModel::AppCategory c
 void NavigationWidget::initUI()
 {
     m_toggleModeBtn->setAccessibleName("mode-toggle-button");
-    m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
-    m_toggleModeBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
-    m_toggleModeBtn->setPressPic(":/icons/skin/icons/category_active_22px.svg");
+    m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.png");
+    m_toggleModeBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.png");
+    m_toggleModeBtn->setPressPic(":/icons/skin/icons/category_active_22px.png");
     m_toggleModeBtn->setStyleSheet("margin:0 0 0 20px;");
 
     m_categoryGroup->addButton(m_internetBtn);

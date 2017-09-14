@@ -77,9 +77,9 @@ MiniFrame::MiniFrame(QWidget *parent)
     m_categoryWidget->setVisible(false);
 
     m_viewToggle = new DImageButton;
-    m_viewToggle->setNormalPic(":/icons/skin/icons/category_normal_22px.svg");
-    m_viewToggle->setHoverPic(":/icons/skin/icons/category_hover_22px.svg");
-    m_viewToggle->setPressPic(":/icons/skin/icons/category_active_22px.svg");
+    m_viewToggle->setNormalPic(":/icons/skin/icons/category_normal_22px.png");
+    m_viewToggle->setHoverPic(":/icons/skin/icons/category_hover_22px.png");
+    m_viewToggle->setPressPic(":/icons/skin/icons/category_active_22px.png");
 #ifdef HISTORY_PANEL
     m_historyToggle = new QPushButton("最近打开");
 #endif

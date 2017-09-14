@@ -52,13 +52,13 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // draw blue dot if new installed
     const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();
     if (drawBlueDot)
-        painter->drawPixmap(50, r.y() + (r.height() - m_blueDotPixmap.height()) / 2, m_blueDotPixmap);
+        painter->drawPixmap(70, r.y() + (r.height() - m_blueDotPixmap.height()) / 2, m_blueDotPixmap);
 
     painter->setPen(Qt::white);
     if (drawBlueDot)
-        painter->drawText(r.marginsRemoved(QMargins(65, 0, 0, 0)), Qt::AlignVCenter | Qt::AlignLeft, index.data(AppsListModel::AppNameRole).toString());
+        painter->drawText(r.marginsRemoved(QMargins(85, 0, 0, 0)), Qt::AlignVCenter | Qt::AlignLeft, index.data(AppsListModel::AppNameRole).toString());
     else
-        painter->drawText(r.marginsRemoved(QMargins(50, 0, 0, 0)), Qt::AlignVCenter | Qt::AlignLeft, index.data(AppsListModel::AppNameRole).toString());
+        painter->drawText(r.marginsRemoved(QMargins(70, 0, 0, 0)), Qt::AlignVCenter | Qt::AlignLeft, index.data(AppsListModel::AppNameRole).toString());
 }
 
 QSize AppListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const

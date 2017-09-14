@@ -13,6 +13,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QDebug>
+#include <QApplication>
 
 AppListDelegate::AppListDelegate(QObject *parent)
     : QAbstractItemDelegate(parent),
@@ -26,8 +27,11 @@ AppListDelegate::AppListDelegate(QObject *parent)
 
 void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    const auto ratio = qApp->devicePixelRatio();
     const QRect r = option.rect;
-    const QPixmap icon = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+    QPixmap icon = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+    if (ratio > 1.0)
+        icon.setDevicePixelRatio(ratio);
 
     painter->setRenderHint(QPainter::Antialiasing);
 
@@ -42,7 +46,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     }
 
     const int icon_x = r.x() + 10;
-    const int icon_y = r.y() + (r.height() - icon.height()) / 2;
+    const int icon_y = r.y() + (r.height() - icon.height() / ratio) / 2;
     painter->drawPixmap(icon_x, icon_y, icon);
 
     // draw icon if app is auto startup

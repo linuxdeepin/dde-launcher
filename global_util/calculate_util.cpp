@@ -65,58 +65,6 @@ int CalculateUtil::displayMode() const
     return ALL_APPS;
 }
 
-//void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int dockPosition)
-//{
-//    // mini mode
-//    if (!m_launcherInter->fullscreen())
-//    {
-//        m_appItemSpacing = 6;
-//        m_appItemWidth = 120;
-//        m_appItemHeight = 120;
-//        m_appIconSize = displayMode() == ALL_APPS ? 48 : 32;
-//        m_appItemFontSize = 11;
-//        m_appColumnCount = displayMode() == ALL_APPS ? 4 : 1;
-
-//        emit layoutChanged();
-//        return;
-//    }
-
-//    // NOTE(hualet): DPI default to 96.
-//    static auto PtToPx = [] (float pt) -> int {
-//        return pt * 96 / 72.0;
-//    };
-
-//    const QScreen *screen = qApp->primaryScreen();
-//    const qreal ratio = screen->devicePixelRatio();
-//    const int screenWidth = screen->geometry().width() / ratio;
-//    const int column = screenWidth <= 800 ? 5 : screenWidth <= 1024 && dockPosition == 3 ? 6 : 7;
-
-//    calculateTextSize(screenWidth);
-
-//    // calculate item size;
-//    int spacing = itemSpacing(containerSize.width());
-//    int itemWidth = 140;
-
-//    const int itemCalcWidth = (double(containerSize.width()) - spacing * column * 2) / column + 0.5;
-//    itemWidth = qMin(itemWidth, itemCalcWidth);
-
-//    spacing = (double(containerSize.width()) - itemWidth * column) / (column * 2) - 1;
-
-//    m_appItemSpacing = spacing;
-//    m_appItemWidth = itemWidth;
-//    m_appItemHeight = m_appItemWidth;
-//    m_appColumnCount = column;
-
-//    // calculate icon size;
-//    m_appIconSize = itemIconWidth(m_appItemWidth);
-
-//    // calculate font size;
-//    QFont systemFont;
-//    m_appItemFontSize = m_appItemWidth <= 80 ? 11 : PtToPx(systemFont.pointSizeF());
-
-//    emit layoutChanged();
-//}
-
 void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int dockPosition)
 {
     // mini mode
@@ -138,9 +86,8 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
         return pt * 96 / 72.0;
     };
 
-    const qreal ratio = qApp->devicePixelRatio();
     const QRect pr = qApp->primaryScreen()->geometry();
-    const int screenWidth = pr.width() / ratio;
+    const int screenWidth = pr.width();
     const int remain_width = screenWidth - calculateBesidePadding(screenWidth) * 2;
 
     const int itemWidth = 210;

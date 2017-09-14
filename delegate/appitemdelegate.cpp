@@ -101,7 +101,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     appNameOption.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     appNameOption.setWrapMode(QTextOption::WordWrap);
     QFont appNamefont(painter->font());
-    appNamefont.setPixelSize(fontPixelSize);
+    appNamefont.setPointSize(fontPixelSize);
 
     const QFontMetrics fm(appNamefont);
     const QRectF appNameRect = itemTextRect(boundingRect, iconRect, drawBlueDot);

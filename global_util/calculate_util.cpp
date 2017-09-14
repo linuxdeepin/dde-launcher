@@ -67,24 +67,19 @@ int CalculateUtil::displayMode() const
 
 void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int dockPosition)
 {
+    Q_UNUSED(dockPosition);
+
     // mini mode
     if (!m_launcherInter->fullscreen())
     {
         m_appItemSpacing = 6;
         m_appItemSize = 120;
-//        m_appItemHeight = 120;
-//        m_appIconSize = displayMode() == ALL_APPS ? 48 : 32;
-        m_appItemFontSize = 11;
+        m_appItemFontSize = 8;
         m_appColumnCount = displayMode() == ALL_APPS ? 4 : 1;
 
         emit layoutChanged();
         return;
     }
-
-    // NOTE(hualet): DPI default to 96.
-    static auto PtToPx = [] (float pt) -> int {
-        return pt * 96 / 72.0;
-    };
 
     const QRect pr = qApp->primaryScreen()->geometry();
     const int screenWidth = pr.width();
@@ -105,8 +100,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     m_appColumnCount = columns;
 
     // calculate font size;
-    QFont systemFont;
-    m_appItemFontSize = m_appItemSize <= 80 ? 11 : PtToPx(systemFont.pointSizeF());
+    m_appItemFontSize = m_appItemSize <= 80 ? 8 : qApp->font().pointSize();
 
     emit layoutChanged();
 }

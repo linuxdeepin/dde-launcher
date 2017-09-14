@@ -14,6 +14,7 @@
 #include <QHBoxLayout>
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
+#include <QApplication>
 
 CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidget *parent) :
     QAbstractButton(parent),
@@ -23,9 +24,11 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     m_textLabel(new QLabel),
     m_opacityAnimation(new QPropertyAnimation(this, "titleOpacity"))
 {
+    const auto ratio = qApp->devicePixelRatio();
+
     setObjectName("CategoryButton");
-    m_iconLabel->setFixedSize(22, 22);
-    m_textLabel->setFixedHeight(22);
+    m_iconLabel->setFixedSize(22 * ratio, 22 * ratio);
+    m_textLabel->setFixedHeight(22 * ratio);
     m_textLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->setSpacing(0);
@@ -162,9 +165,11 @@ void CategoryButton::updateState(const CategoryButton::State state)
     default:        picState = "normal";    break;
     }
 
-    QPixmap tmpCategoryMap;
-    tmpCategoryMap.load(QString(":/icons/skin/icons/%1_%2_22px.svg").arg(m_iconName).arg(picState));
-    m_iconLabel->setPixmap(tmpCategoryMap.scaled(QSize(22, 22), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    QPixmap categoryPix;
+    categoryPix.load(QString(":/icons/skin/icons/%1_%2_22px.svg").arg(m_iconName).arg(picState));
+    categoryPix = categoryPix.scaled(QSize(22, 22) * qApp->devicePixelRatio(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    categoryPix.setDevicePixelRatio(qApp->devicePixelRatio());
+    m_iconLabel->setPixmap(categoryPix);
 
     updateTextColor();
 }
@@ -210,8 +215,10 @@ void CategoryButton::setZoomLevel(const qreal &zoomLevel)
     if (m_zoomLevel != zoomLevel) {
         m_zoomLevel = zoomLevel;
 
-        setFixedHeight(DLauncher::NAVIGATION_ICON_HEIGHT * zoomLevel);
-        m_iconLabel->setFixedSize(22.0 * zoomLevel, 22.0 * zoomLevel);
+        const auto ratio = qApp->devicePixelRatio();
+
+        setFixedHeight(DLauncher::NAVIGATION_ICON_HEIGHT * ratio * zoomLevel);
+        m_iconLabel->setFixedSize(22.0 * ratio * zoomLevel, 22.0 * ratio * zoomLevel);
 
         QFont font = m_textLabel->font();
         font.setPixelSize(m_calcUtil->navgationTextSize() * zoomLevel);

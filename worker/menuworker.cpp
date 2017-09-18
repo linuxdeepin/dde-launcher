@@ -23,6 +23,9 @@
 
 #include "menuworker.h"
 
+static QString ChainsProxy_path = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first()
+        + "/deepin/proxychains.conf";
+
 MenuWorker::MenuWorker(QObject *parent) : QObject(parent)
 {
     m_menuManagerInterface = new DBusMenuManager(this);
@@ -107,7 +110,10 @@ QString MenuWorker::createMenuContent(/*QString appKey*/){
     items.append(dockObj);
     items.append(seperatorObj2);
     items.append(startupObj);
-    items.append(proxyObj);
+
+    if (QFile::exists(ChainsProxy_path))
+        items.append(proxyObj);
+
 #ifndef WITHOUT_UNINSTALL_APP
     items.append(uninstallObj);
 #endif

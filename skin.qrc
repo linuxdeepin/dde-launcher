@@ -62,9 +62,6 @@
         <file>skin/images/search_normal.png</file>
         <file>skin/images/search_press.png</file>
         <file>skin/images/search.svg</file>
-        <file>skin/icons/unfullscreen_press@2x.png</file>
-        <file>skin/icons/unfullscreen_normal@2x.png</file>
-        <file>skin/icons/unfullscreen_hover@2x.png</file>
     </qresource>
     <qresource prefix="/icons">
         <file>skin/icons/category_active_16px.svg</file>
@@ -184,5 +181,11 @@
         <file>skin/icons/category_normal_22px@2x.png</file>
         <file>skin/icons/category_hover_22px@2x.png</file>
         <file>skin/icons/category_active_22px@2x.png</file>
+        <file>skin/icons/unfullscreen_normal@2x.png</file>
+        <file>skin/icons/unfullscreen_hover@2x.png</file>
+        <file>skin/icons/unfullscreen_press@2x.png</file>
+        <file>skin/icons/poweroff_normal@2x.png</file>
+        <file>skin/icons/poweroff_hover@2x.png</file>
+        <file>skin/icons/poweroff_press@2x.png</file>
     </qresource>
 </RCC>

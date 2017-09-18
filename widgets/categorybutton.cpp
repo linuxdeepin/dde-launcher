@@ -29,6 +29,22 @@
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
 #include <QApplication>
+#include <QSvgRenderer>
+#include <QPainter>
+
+const QPixmap loadSvg(const QString &file, const int size)
+{
+    QPixmap pix(size, size);
+    QSvgRenderer renderer(file);
+    pix.fill(Qt::transparent);
+
+    QPainter painter;
+    painter.begin(&pix);
+    renderer.render(&painter);
+    painter.end();
+
+    return pix;
+}
 
 CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidget *parent) :
     QAbstractButton(parent),
@@ -179,9 +195,8 @@ void CategoryButton::updateState(const CategoryButton::State state)
     default:        picState = "normal";    break;
     }
 
-    QPixmap categoryPix;
-    categoryPix.load(QString(":/icons/skin/icons/%1_%2_22px.svg").arg(m_iconName).arg(picState));
-    categoryPix = categoryPix.scaled(QSize(22, 22) * qApp->devicePixelRatio(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    const auto ratio = devicePixelRatioF();
+    QPixmap categoryPix = loadSvg(QString(":/icons/skin/icons/%1_%2_22px.svg").arg(m_iconName).arg(picState), 22 * ratio);
     categoryPix.setDevicePixelRatio(qApp->devicePixelRatio());
     m_iconLabel->setPixmap(categoryPix);
 

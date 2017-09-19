@@ -64,29 +64,55 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setPen(Qt::white);
     painter->setBrush(QBrush(Qt::transparent));
 
-    const int leftMargin = 2, radius = 10;
     const int fontPixelSize = index.data(AppsListModel::AppFontSizeRole).value<int>();
     const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();
     const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
-    const QRect boundingRect = itemBoundingRect(option.rect);
     const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).toSize();
+    const QRect br = itemBoundingRect(option.rect);
+
+    // NOTE(sbw): 多项式拟合，test case:
+    // x = [51 69 86 103 121]
+    // y = [23 20 10 3   0  ]
+//    const int x = iconSize.width();
+//    const int margin = -0.000004236988913209739*x*x*x*x+0.0016406743692943455*x*x*x-0.22885856605074573*x*x+13.187308932617098*x-243.2646393941108;
+
+    // NOTE(sbw): 最小二乘拟合，test case:
+    /*
+     * 173,51       23
+     * 173,69       20
+     * 173,86       10
+     * 173,103      3
+     * 173,121      0
+     * 202,60       35
+     * 202,80       28
+     * 202,101      18
+     * 202,121      5
+     * 202,141      0
+     * 168,50       20
+     * 168,67       15
+     * 168,84       10
+     * 168,100      2
+     * 168,117      0
+    */
+    const double x1 = 0.26418192;
+    const double x2 = -0.38890932;
+    const double result = x1 * br.width() + x2 * iconSize.width();
+    const int margin = result > 0 ? result : 0;
+
+//    const int margin = 0;
+//    qDebug() << br.width() << iconSize.width() << margin;
+    const QRect boundingRect = br.marginsRemoved(QMargins(margin, margin, margin, margin));
 
     // draw focus background
    if (CurrentIndex == index && !(option.features & QStyleOptionViewItem::HasDisplay))
     {
-        const QColor borderColor(245, 245, 245, 0.01 * 255);
+        const int radius = 10;
+        const int margin = 0;
         const QColor brushColor(0, 0, 0, 105);
 
-        QPen pen;
-        pen.setColor(borderColor);
-        pen.setWidth(2);
-        QPainterPath border;
-        border.addRoundedRect(boundingRect.marginsRemoved(QMargins(leftMargin/2, leftMargin/2, leftMargin*2/3, leftMargin*2/3)),
-                              radius, radius);
-        painter->strokePath(border, pen);
         painter->setPen(Qt::transparent);
         painter->setBrush(brushColor);
-        painter->drawRoundedRect(boundingRect.marginsRemoved(QMargins(leftMargin, leftMargin, leftMargin*4/3, leftMargin*4/3)),
+        painter->drawRoundedRect(boundingRect.marginsRemoved(QMargins(margin, margin, margin, margin)),
                                  radius, radius);
     }
 

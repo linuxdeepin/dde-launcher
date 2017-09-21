@@ -213,13 +213,13 @@ void AppGridView::startDrag(const QModelIndex &index)
         return;
 
     const QModelIndex &dragIndex = index;
-    const QString appKey = index.data(AppsListModel::AppKeyRole).toString();
     const QPixmap pixmap = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+    const QSize size = index.data(AppsListModel::AppIconSizeRole).value<QSize>();
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
-    drag->setPixmap(pixmap.scaled(DLauncher::APP_DRAG_ICON_SIZE, DLauncher::APP_DRAG_ICON_SIZE, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-    drag->setHotSpot(QPoint(DLauncher::APP_DRAG_ICON_SIZE, DLauncher::APP_DRAG_ICON_SIZE) / 2);
+    drag->setPixmap(pixmap.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    drag->setHotSpot(QPoint(size.width() / 2, size.height() / 2));
 
     // request remove current item.
     if (listModel->category() == AppsListModel::All)

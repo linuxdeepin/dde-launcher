@@ -43,7 +43,9 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 {
     const auto ratio = qApp->devicePixelRatio();
     const QRect r = option.rect;
+    const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).value<QSize>();
     QPixmap icon = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+    icon = icon.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     if (ratio > 1.0)
         icon.setDevicePixelRatio(ratio);
 

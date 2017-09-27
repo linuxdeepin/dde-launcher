@@ -213,12 +213,15 @@ void AppGridView::startDrag(const QModelIndex &index)
         return;
 
     const QModelIndex &dragIndex = index;
-    const QPixmap pixmap = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+    const auto ratio = devicePixelRatioF();
     const QSize size = index.data(AppsListModel::AppIconSizeRole).value<QSize>();
+    QPixmap pixmap = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+    pixmap = pixmap.scaled(size * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    pixmap.setDevicePixelRatio(ratio);
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
-    drag->setPixmap(pixmap.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    drag->setPixmap(pixmap);
     drag->setHotSpot(QPoint(size.width() / 2, size.height() / 2));
 
     // request remove current item.
@@ -318,24 +321,24 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     const QModelIndex index(indexAt(pos));
 
     QLabel *floatLabel = new QLabel(this);
-    QPropertyAnimation *ani = new QPropertyAnimation(floatLabel, "pos", this);
+    QPropertyAnimation *ani = new QPropertyAnimation(floatLabel, "pos", floatLabel);
 
+    const auto ratio = devicePixelRatioF();
     const QSize rectSize = index.data(AppsListModel::ItemSizeHintRole).toSize();
-    const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+
+    QPixmap pixmap(rectSize * ratio);
+    pixmap.fill(Qt::transparent);
+    pixmap.setDevicePixelRatio(ratio);
 
     QStyleOptionViewItem item;
     item.rect = QRect(QPoint(0, 0), rectSize);
     item.features |= QStyleOptionViewItem::HasDisplay;
-
-    QPixmap pixmap(rectSize);
-    pixmap.fill(Qt::transparent);
 
     QPainter painter(&pixmap);
     itemDelegate()->paint(&painter, item, index);
 
     floatLabel->setFixedSize(rectSize);
     floatLabel->setPixmap(pixmap);
-//  lastLabel->setStyleSheet("background-color:red;");
     floatLabel->show();
 
     ani->setStartValue(indexRect(index).topLeft());

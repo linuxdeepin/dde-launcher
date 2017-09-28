@@ -37,9 +37,9 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     m_icon->setNormalPic(":/skin/images/search.svg");
     m_clear = new DImageButton;
     m_clear->setFixedSize(16, 16);
-    m_clear->setNormalPic(":/icons/skin/icons/input_clear_dark_normal.png");
-    m_clear->setHoverPic(":/icons/skin/icons/input_clear_dark_hover.png");
-    m_clear->setPressPic(":/icons/skin/icons/input_clear_dark_press.png");
+    m_clear->setNormalPic(":/icons/skin/icons/input_clear_dark_normal.svg");
+    m_clear->setHoverPic(":/icons/skin/icons/input_clear_dark_hover.svg");
+    m_clear->setPressPic(":/icons/skin/icons/input_clear_dark_press.svg");
     m_clear->setVisible(false);
     m_placeholderText = new QLabel(tr("Search"));
     QFontMetrics fm(m_placeholderText->font());

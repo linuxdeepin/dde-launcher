@@ -172,9 +172,6 @@
         <file>skin/icons/unfullscreen_hover.png</file>
         <file>skin/icons/unfullscreen_normal.png</file>
         <file>skin/icons/unfullscreen_press.png</file>
-        <file>skin/icons/input_clear_dark_press.png</file>
-        <file>skin/icons/input_clear_dark_normal.png</file>
-        <file>skin/icons/input_clear_dark_hover.png</file>
         <file>skin/icons/fullscreen_normal@2x.png</file>
         <file>skin/icons/fullscreen_press@2x.png</file>
         <file>skin/icons/fullscreen_hover@2x.png</file>
@@ -187,5 +184,8 @@
         <file>skin/icons/poweroff_normal@2x.png</file>
         <file>skin/icons/poweroff_hover@2x.png</file>
         <file>skin/icons/poweroff_press@2x.png</file>
+        <file>skin/icons/input_clear_dark_normal.svg</file>
+        <file>skin/icons/input_clear_dark_hover.svg</file>
+        <file>skin/icons/input_clear_dark_press.svg</file>
     </qresource>
 </RCC>

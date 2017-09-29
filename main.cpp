@@ -47,6 +47,7 @@ int main(int argv, char *args[])
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-launcher");
     app.setApplicationVersion("3.0");
+    app.setTheme("light");
 
 #ifdef QT_DEBUG
     DLogManager::registerConsoleAppender();

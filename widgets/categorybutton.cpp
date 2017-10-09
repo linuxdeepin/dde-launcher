@@ -246,7 +246,7 @@ void CategoryButton::setZoomLevel(const qreal &zoomLevel)
 
         const auto ratio = qApp->devicePixelRatio();
 
-        setFixedHeight(DLauncher::NAVIGATION_ICON_HEIGHT * ratio * zoomLevel);
+        setFixedHeight(double(DLauncher::NAVIGATION_ICON_HEIGHT) * zoomLevel);
         m_iconLabel->setFixedSize(22.0 * ratio * zoomLevel, 22.0 * ratio * zoomLevel);
 
         QFont font = m_textLabel->font();

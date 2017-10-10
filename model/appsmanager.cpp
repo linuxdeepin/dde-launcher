@@ -141,7 +141,7 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
         key.append(k);
     }
 
-    qDebug() << "preset order: " << key << APP_PRESET_SORTED_LIST.keys();
+//    qDebug() << "preset order: " << key << APP_PRESET_SORTED_LIST.keys();
     QStringList preset;
     if (APP_PRESET_SORTED_LIST.keys().contains(key))
         preset = APP_PRESET_SORTED_LIST.get(key).toStringList();

@@ -214,8 +214,8 @@ void AppGridView::startDrag(const QModelIndex &index)
 
     const QModelIndex &dragIndex = index;
     const auto ratio = devicePixelRatioF();
-    const QSize size = index.data(AppsListModel::AppIconSizeRole).value<QSize>();
-    QPixmap pixmap = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+    const QSize size = index.data(AppsListModel::AppIconSizeRole).value<QSize>() * 1.5;
+    QPixmap pixmap = index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
     pixmap = pixmap.scaled(size * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pixmap.setDevicePixelRatio(ratio);
 

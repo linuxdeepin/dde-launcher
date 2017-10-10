@@ -55,6 +55,7 @@ public:
         AppIconSizeRole,
         AppFontSizeRole,
         AppItemIsDragingRole,
+        AppDragIconRole,
     };
 
     enum AppCategory {

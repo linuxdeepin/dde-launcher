@@ -22,6 +22,7 @@
  */
 
 #include "appsmanager.h"
+#include "global_util/util.h"
 #include "global_util/constants.h"
 #include "global_util/calculate_util.h"
 
@@ -40,6 +41,55 @@ QPointer<AppsManager> AppsManager::INSTANCE = nullptr;
 QGSettings AppsManager::APP_PRESET_SORTED_LIST("com.deepin.dde.launcher", "", nullptr);
 QSettings AppsManager::APP_AUTOSTART_CACHE("deepin", "dde-launcher-app-autostart", nullptr);
 QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
+
+const QPixmap getThemeIcon(const QString &iconName, const int size)
+{
+    const auto ratio = qApp->devicePixelRatio();
+    const int s = int(size * ratio) & ~1;
+
+    QPixmap pixmap;
+
+    do {
+
+        if (iconName.startsWith("data:image/"))
+        {
+            const QStringList strs = iconName.split("base64,");
+            if (strs.size() == 2)
+                pixmap.loadFromData(QByteArray::fromBase64(strs.at(1).toLatin1()));
+
+            if (!pixmap.isNull())
+                break;
+        }
+
+        if (QFile::exists(iconName))
+        {
+            if (iconName.endsWith(".svg"))
+                pixmap = loadSvg(iconName, s);
+            else
+                pixmap = QPixmap(iconName);
+
+            if (!pixmap.isNull())
+                break;
+        }
+
+        const QIcon icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));
+        pixmap = icon.pixmap(QSize(s, s));
+        if (!pixmap.isNull())
+            break;
+
+        pixmap = loadSvg(":/skin/images/application-default-icon.svg", s);
+        if (!pixmap.isNull())
+            break;
+
+        Q_UNREACHABLE();
+
+    } while (false);
+
+    pixmap = pixmap.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    pixmap.setDevicePixelRatio(ratio);
+
+    return pixmap;
+}
 
 AppsManager::AppsManager(QObject *parent) :
     QObject(parent),
@@ -70,20 +120,6 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &AppsManager::dockGeometryChanged);
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
-}
-
-const QPixmap AppsManager::loadSvg(const QString &fileName, const int size)
-{
-    QPixmap pixmap(size, size);
-    QSvgRenderer renderer(fileName);
-    pixmap.fill(Qt::transparent);
-
-    QPainter painter;
-    painter.begin(&pixmap);
-    renderer.render(&painter);
-    painter.end();
-
-    return pixmap;
 }
 
 const QPixmap AppsManager::loadIconFile(const QString &fileName, const int size)
@@ -344,15 +380,7 @@ bool AppsManager::appIsProxy(const QString &desktop)
 
 const QPixmap AppsManager::appIcon(const QString &iconKey, const int size)
 {
-    const qreal ratio = qApp->primaryScreen()->devicePixelRatio();
-    const QPixmap pixmap =  QIcon::fromTheme(iconKey).pixmap(size * ratio, size * ratio);
-    if (!pixmap.isNull())
-        return pixmap;
-
-    if (m_defaultIconPixmap.isNull() || m_defaultIconPixmap.width() != size)
-        m_defaultIconPixmap = loadSvg(":/skin/images/application-default-icon.svg", size);
-
-    return m_defaultIconPixmap;
+    return getThemeIcon(iconKey, size);
 }
 
 void AppsManager::refreshCategoryInfoList()

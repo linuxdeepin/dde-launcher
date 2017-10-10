@@ -32,20 +32,6 @@
 #include <QSvgRenderer>
 #include <QPainter>
 
-const QPixmap loadSvg(const QString &file, const int size)
-{
-    QPixmap pix(size, size);
-    QSvgRenderer renderer(file);
-    pix.fill(Qt::transparent);
-
-    QPainter painter;
-    painter.begin(&pix);
-    renderer.render(&painter);
-    painter.end();
-
-    return pix;
-}
-
 CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidget *parent) :
     QAbstractButton(parent),
     m_calcUtil(CalculateUtil::instance()),

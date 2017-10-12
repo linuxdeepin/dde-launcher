@@ -29,14 +29,19 @@
 #include <QDebug>
 #include <QApplication>
 
+#include <DSvgRenderer>
+
+DWIDGET_USE_NAMESPACE
+
 AppListDelegate::AppListDelegate(QObject *parent)
     : QAbstractItemDelegate(parent),
 
       m_actived(false),
-      m_blueDotPixmap(":/skin/images/new_install_indicator.png"),
-      m_autoStartPixmap(":/skin/images/emblem-autostart.png")
+      m_blueDotPixmap(":/skin/images/new_install_indicator.png")
 {
-
+    const auto ratio = qApp->devicePixelRatio();
+    m_autoStartPixmap = DSvgRenderer::render(":/skin/images/emblem-autostart.svg", QSize(16, 16) * ratio);
+    m_autoStartPixmap.setDevicePixelRatio(ratio);
 }
 
 void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -67,7 +72,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     // draw icon if app is auto startup
     if (index.data(AppsListModel::AppAutoStartRole).toBool())
-        painter->drawPixmap(icon_x, icon_y + m_autoStartPixmap.height(), m_autoStartPixmap);
+        painter->drawPixmap(icon_x, icon_y + 16, m_autoStartPixmap);
 
     // draw blue dot if new installed
     const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();

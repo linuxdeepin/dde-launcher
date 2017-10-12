@@ -30,16 +30,22 @@
 #include <QDebug>
 #include <QPixmap>
 #include <QVariant>
+#include <QApplication>
+
+#include <DSvgRenderer>
+
+DWIDGET_USE_NAMESPACE
 
 QModelIndex AppItemDelegate::CurrentIndex = QModelIndex();
 
 AppItemDelegate::AppItemDelegate(QObject *parent) :
     QAbstractItemDelegate(parent),
     m_calcUtil(CalculateUtil::instance()),
-    m_blueDotPixmap(":/skin/images/new_install_indicator.png"),
-    m_autoStartPixmap(":/skin/images/emblem-autostart.png")
+    m_blueDotPixmap(":/skin/images/new_install_indicator.png")
 {
-
+    const auto ratio = qApp->devicePixelRatio();
+    m_autoStartPixmap = DSvgRenderer::render(":/skin/images/emblem-autostart.svg", QSize(24, 24) * ratio);
+    m_autoStartPixmap.setDevicePixelRatio(ratio);
 }
 
 void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
@@ -131,7 +137,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->drawPixmap(iconRect, iconPix);
 
     // draw icon if app is auto startup
-    const QPoint autoStartIconPos = iconRect.bottomLeft() - QPoint(0, m_autoStartPixmap.height());
+    const QPoint autoStartIconPos = iconRect.bottomLeft() - QPoint(0, 24);
     if (index.data(AppsListModel::AppAutoStartRole).toBool())
         painter->drawPixmap(autoStartIconPos, m_autoStartPixmap);
 

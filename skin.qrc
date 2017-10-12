@@ -12,7 +12,6 @@
         <file>skin/images/development_10.svg</file>
         <file>skin/images/development_50.svg</file>
         <file>skin/images/development_100.svg</file>
-        <file>skin/images/emblem-autostart.png</file>
         <file>skin/images/game_10.svg</file>
         <file>skin/images/game_50.svg</file>
         <file>skin/images/game_100.svg</file>
@@ -62,6 +61,7 @@
         <file>skin/images/search_normal.png</file>
         <file>skin/images/search_press.png</file>
         <file>skin/images/search.svg</file>
+        <file>skin/images/emblem-autostart.svg</file>
     </qresource>
     <qresource prefix="/icons">
         <file>skin/icons/category_active_16px.svg</file>

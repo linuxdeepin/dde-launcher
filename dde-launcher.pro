@@ -14,10 +14,9 @@ include(./dbusinterface/dbusinterface.pri)
 ARCH = $$QMAKE_HOST.arch
 isEqual(ARCH, mips64) | isEqual(ARCH, mips32) {
     DEFINES += ARCH_MIPSEL
-    PKGCONFIG += dtkutil
-} else {
-    PKGCONFIG += dtkcore
 }
+
+PKGCONFIG += dtkcore
 
 SOURCES += \
     model/appslistmodel.cpp \

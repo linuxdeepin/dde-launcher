@@ -38,7 +38,7 @@
 
 QPointer<AppsManager> AppsManager::INSTANCE = nullptr;
 
-QGSettings AppsManager::APP_PRESET_SORTED_LIST("com.deepin.dde.launcher", "", nullptr);
+QGSettings AppsManager::LAUNCHER_SETTINGS("com.deepin.dde.launcher", "", nullptr);
 QSettings AppsManager::APP_AUTOSTART_CACHE("deepin", "dde-launcher-app-autostart", nullptr);
 QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
 
@@ -179,10 +179,10 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
 
 //    qDebug() << "preset order: " << key << APP_PRESET_SORTED_LIST.keys();
     QStringList preset;
-    if (APP_PRESET_SORTED_LIST.keys().contains(key))
-        preset = APP_PRESET_SORTED_LIST.get(key).toStringList();
+    if (LAUNCHER_SETTINGS.keys().contains(key))
+        preset = LAUNCHER_SETTINGS.get(key).toStringList();
     if (preset.isEmpty())
-        preset = APP_PRESET_SORTED_LIST.get("apps-order").toStringList();
+        preset = LAUNCHER_SETTINGS.get("apps-order").toStringList();
 
     qSort(processList.begin(), processList.end(), [&preset] (const ItemInfo &i1, const ItemInfo &i2) {
         int index1 = preset.indexOf(i1.m_key.toLower());

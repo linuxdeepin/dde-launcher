@@ -120,7 +120,7 @@ private:
     QTimer *m_searchTimer;
 
     static QPointer<AppsManager> INSTANCE;
-    static QGSettings APP_PRESET_SORTED_LIST;
+    static QGSettings LAUNCHER_SETTINGS;
     static QSettings APP_AUTOSTART_CACHE;
     static QSettings APP_USER_SORTED_LIST;
 };

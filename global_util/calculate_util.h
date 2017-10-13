@@ -52,10 +52,9 @@ public:
     inline int navgationTextSize() const {return double(m_navgationTextSize) / 1.2;}
     inline int appColumnCount() const {return m_appColumnCount;}
     inline int appItemFontSize() const {return m_appItemFontSize;}
-    inline QSize appIconSize() const
-    { return QSize(m_appItemSize * m_appIconRadio, m_appItemSize * m_appIconRadio); }
     inline int appItemSpacing() const {return m_appItemSpacing;}
     inline QSize appItemSize() const {return QSize(m_appItemSize, m_appItemSize);}
+    QSize appIconSize() const;
     int displayMode() const;
     void setDisplayMode(const int mode);
 
@@ -74,7 +73,6 @@ private:
 private:
     static QPointer<CalculateUtil> INSTANCE;
 
-    double m_appIconRadio = 0.4;
     int m_appItemFontSize = 12;
     int m_appItemSpacing = 10;
     int m_appItemSize = 130;

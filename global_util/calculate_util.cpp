@@ -58,14 +58,25 @@ void CalculateUtil::setDisplayMode(const int mode)
     m_launcherGsettings->set(DisplayModeKey, mode == ALL_APPS ? DisplayModeFree : DisplayModeCategory);
 }
 
+QSize CalculateUtil::appIconSize() const
+{
+    const double ratio = m_launcherGsettings->get("apps-icon-ratio").toDouble();
+
+    return QSize(m_appItemSize, m_appItemSize) * ratio;
+}
+
 void CalculateUtil::increaseIconSize()
 {
-    m_appIconRadio = std::min(0.7, m_appIconRadio + 0.1);
+    const double ratio = std::min(0.7, m_launcherGsettings->get("apps-icon-ratio").toDouble() + 0.1);
+
+    m_launcherGsettings->set("apps-icon-ratio", ratio);
 }
 
 void CalculateUtil::decreaseIconSize()
 {
-    m_appIconRadio = std::max(0.3, m_appIconRadio - 0.1);
+    const double ratio = std::max(0.3, m_launcherGsettings->get("apps-icon-ratio").toDouble() - 0.1);
+
+    m_launcherGsettings->set("apps-icon-ratio", ratio);
 }
 
 int CalculateUtil::displayMode() const

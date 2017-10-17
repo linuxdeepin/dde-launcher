@@ -40,12 +40,16 @@ QModelIndex AppItemDelegate::CurrentIndex = QModelIndex();
 
 AppItemDelegate::AppItemDelegate(QObject *parent) :
     QAbstractItemDelegate(parent),
+    m_showDetail(false),
     m_calcUtil(CalculateUtil::instance()),
-    m_blueDotPixmap(":/skin/images/new_install_indicator.png")
+    m_showDetailDelay(new QTimer(this)),
+    m_blueDotPixmap(":/skin/images/new_install_indicator.png"),
+    m_autoStartPixmap(":/skin/images/emblem-autostart.png")
 {
-    const auto ratio = qApp->devicePixelRatio();
-    m_autoStartPixmap = DSvgRenderer::render(":/skin/images/emblem-autostart.svg", QSize(24, 24) * ratio);
-    m_autoStartPixmap.setDevicePixelRatio(ratio);
+    m_showDetailDelay->setSingleShot(true);
+    m_showDetailDelay->setInterval(1000);
+
+    connect(m_showDetailDelay, &QTimer::timeout, this, &AppItemDelegate::showDetail);
 }
 
 void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
@@ -56,9 +60,12 @@ void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
     const QModelIndex previousIndex = CurrentIndex;
     CurrentIndex = index;
 
-//    emit currentChanged(previousIndex, CurrentIndex);
-    emit currentChanged(previousIndex, previousIndex);
-    emit currentChanged(CurrentIndex, CurrentIndex);
+    m_showDetail = false;
+    m_showDetailDelay->start();
+
+    emit currentChanged(previousIndex, CurrentIndex);
+//    emit currentChanged(previousIndex, previousIndex);
+//    emit currentChanged(CurrentIndex, CurrentIndex);
 }
 
 void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -74,7 +81,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();
     const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
     const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).toSize();
-    const QRect br = itemBoundingRect(option.rect);
+    const QRect ibr = itemBoundingRect(option.rect);
 
     // NOTE(sbw): 多项式拟合，test case:
     // x = [51 69 86 103 121]
@@ -102,38 +109,38 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     */
     const double x1 = 0.26418192;
     const double x2 = -0.38890932;
-    const double result = x1 * br.width() + x2 * iconSize.width();
+    const double result = x1 * ibr.width() + x2 * iconSize.width();
     const int margin = result > 0 ? result : 0;
 
 //    const int margin = 0;
 //    qDebug() << br.width() << iconSize.width() << margin;
-    const QRect boundingRect = br.marginsRemoved(QMargins(margin, margin, margin, margin));
+    const QRect br = ibr.marginsRemoved(QMargins(margin, margin, margin, margin));
 
     // draw focus background
    if (CurrentIndex == index && !(option.features & QStyleOptionViewItem::HasDisplay))
     {
         const int radius = 10;
-        const int margin = 0;
         const QColor brushColor(0, 0, 0, 105);
 
         painter->setPen(Qt::transparent);
         painter->setBrush(brushColor);
-        painter->drawRoundedRect(boundingRect.marginsRemoved(QMargins(margin, margin, margin, margin)),
-                                 radius, radius);
+        painter->drawRoundedRect(m_showDetail ? ibr : br, radius, radius);
     }
 
     // draw app icon
     const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
-    const int iconLeftMargins = (boundingRect.width() - iconSize.width()) / 2;
+    const int iconLeftMargins = (br.width() - iconSize.width()) / 2;
 
     int iconTopMargin;
-    if (iconSize.height() < boundingRect.height() / 2)
+    if (iconSize.height() < br.height() / 2)
 //        iconTopMargin = (boundingRect.height() / 2 - iconSize.height()) / 2;
-        iconTopMargin = ((boundingRect.height() * 2 / 3) - iconSize.height()) / 2;
+        iconTopMargin = ((br.height() * 2 / 3) - iconSize.height()) / 2;
     else
-        iconTopMargin = qMin(10, int(boundingRect.height() * 0.1));
+        iconTopMargin = qMin(10, int(br.height() * 0.1));
+    if (m_showDetail)
+        iconTopMargin = 0;
 
-    const QRect iconRect = QRect(boundingRect.topLeft() + QPoint(iconLeftMargins, iconTopMargin), iconSize);
+    const QRect iconRect = QRect(br.topLeft() + QPoint(iconLeftMargins, iconTopMargin), iconSize);
     painter->drawPixmap(iconRect, iconPix);
 
     // draw icon if app is auto startup
@@ -143,18 +150,17 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     // draw app name
     QTextOption appNameOption;
-    appNameOption.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+    if (m_showDetail)
+        appNameOption.setAlignment(Qt::AlignCenter);
+    else
+        appNameOption.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     appNameOption.setWrapMode(QTextOption::WordWrap);
     QFont appNamefont(painter->font());
     appNamefont.setPointSize(fontPixelSize);
 
     const QFontMetrics fm(appNamefont);
-    const QRectF appNameRect = itemTextRect(boundingRect, iconRect, drawBlueDot);
-//    const QRectF appNameBoundingRect = fm.boundingRect(appNameRect.toRect(), appNameOption.alignment() | wrapFlag, itemInfo.m_name);
+    const QRectF appNameRect = itemTextRect(m_showDetail ? ibr : br, iconRect, drawBlueDot);
     const QString appText = holdTextInRect(fm, itemInfo.m_name, appNameRect.toRect());
-//    const QString appText = appNameBoundingRect.width() > appNameRect.width() || appNameBoundingRect.height() > appNameRect.height()
-//                                ? fm.elidedText(itemInfo.m_name, Qt::ElideRight, appNameRect.width(), appNameOption.alignment() | wrapFlag)
-//                                : itemInfo.m_name;
 
     painter->setFont(appNamefont);
     painter->setBrush(QBrush(Qt::transparent));
@@ -168,7 +174,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     if (drawBlueDot)
     {
         const int marginRight = 2;
-        const QRectF textRect = fm.boundingRect(appNameRect.toRect(), Qt::AlignTop | Qt::AlignHCenter | Qt::TextWordWrap, appText);
+        const QRectF textRect = fm.boundingRect(appNameRect.toRect(), (m_showDetail ? Qt::AlignCenter : (Qt::AlignTop | Qt::AlignHCenter)) | Qt::TextWordWrap, appText);
 
         const QPointF blueDotPos = textRect.topLeft() + QPoint(-m_blueDotPixmap.width() - marginRight, (fm.height() - m_blueDotPixmap.height()) / 2);
         painter->drawPixmap(blueDotPos, m_blueDotPixmap);
@@ -180,6 +186,13 @@ QSize AppItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
     Q_UNUSED(option)
 
     return index.data(AppsListModel::ItemSizeHintRole).toSize();
+}
+
+void AppItemDelegate::showDetail()
+{
+    m_showDetail = true;
+
+    emit currentChanged(CurrentIndex, CurrentIndex);
 }
 
 ///
@@ -215,9 +228,9 @@ const QRect AppItemDelegate::itemTextRect(const QRect &boundingRect, const QRect
 
     QRect result = boundingRect;
 
-    result.setTop(iconRect.bottom() + 15);
+    result.setTop(iconRect.bottom() + (m_showDetail ? 0 : 15));
 
-    return result.marginsRemoved(QMargins(widthMargin, heightMargin, widthMargin, heightMargin));
+    return result.marginsRemoved(QMargins(widthMargin, heightMargin, widthMargin, m_showDetail ? 0 : heightMargin));
 }
 
 const QString AppItemDelegate::holdTextInRect(const QFontMetrics &fm, const QString &text, const QRect &rect) const

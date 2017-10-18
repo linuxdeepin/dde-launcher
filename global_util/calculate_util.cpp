@@ -110,8 +110,8 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     const int screenWidth = pr.width();
     const int remain_width = screenWidth - calculateBesidePadding(screenWidth) * 2;
 
-    const int itemWidth = 210;
-    const int spacing = 15;
+    const int itemWidth = 200;
+    const int spacing = 14;
     const int columns = remain_width / itemWidth;
 
     const int calc_item_width = (double(containerSize.width()) - spacing * columns * 2) / columns + 0.5;

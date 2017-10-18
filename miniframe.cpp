@@ -424,8 +424,10 @@ void MiniFrame::checkIndex()
 
 void MiniFrame::adjustPosition()
 {
+    const auto ratio = devicePixelRatioF();
     const int dockPos = m_dockInter->position();
-    const QRect dockRect = m_dockInter->frontendRect();
+    const QRect &r = m_dockInter->frontendRect();
+    const QRect &dockRect = QRect(r.topLeft() / ratio, r.size() / ratio);
 
     const int spacing = 10;
     const QSize s = size();

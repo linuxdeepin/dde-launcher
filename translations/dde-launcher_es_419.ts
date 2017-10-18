@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>No se encontraron resultados</translation>
+        <translation>Sin resultados</translation>
     </message>
 </context>
 <context>
@@ -58,6 +58,10 @@
     <message>
         <source>Uninstall</source>
         <translation>Desinstalar</translation>
+    </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -221,7 +225,7 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videos</translation>
+        <translation>Vídeos</translation>
     </message>
     <message>
         <source>Pictures</source>

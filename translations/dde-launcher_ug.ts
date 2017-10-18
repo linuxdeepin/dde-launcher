@@ -59,6 +59,10 @@
         <source>Uninstall</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
@@ -158,11 +162,11 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation type="unfinished"/>
+        <translation>قۇلۇپلاش</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation type="unfinished"/>
+        <translation>ھېساباتتىن چېكىنىش</translation>
     </message>
     <message>
         <source>Reboot</source>
@@ -170,7 +174,7 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation type="unfinished"/>
+        <translation>ئېسىپ قويۇش</translation>
     </message>
     <message>
         <source>Shutdown</source>
@@ -197,11 +201,11 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation type="unfinished"/>
+        <translation>قۇلۇپلاش</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation type="unfinished"/>
+        <translation>ھېساباتتىن چېكىنىش</translation>
     </message>
     <message>
         <source>Reboot</source>
@@ -209,7 +213,7 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation type="unfinished"/>
+        <translation>ئېسىپ قويۇش</translation>
     </message>
     <message>
         <source>Back</source>
@@ -236,7 +240,7 @@
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>ئىزدەش</translation>
     </message>
 </context>
 </TS>

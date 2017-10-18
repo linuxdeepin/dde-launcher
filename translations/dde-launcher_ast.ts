@@ -59,12 +59,16 @@
         <source>Uninstall</source>
         <translation>Desinstalar</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>Toles aplicaciones</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -138,11 +142,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Documentos</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Vídeos</translation>
     </message>
     <message>
         <source>Music</source>
@@ -150,7 +154,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Semeyes</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -178,7 +182,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Atrás</translation>
     </message>
 </context>
 <context>
@@ -213,19 +217,19 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Atrás</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Documentos</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Vídeos</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Semeyes</translation>
     </message>
     <message>
         <source>Downloads</source>

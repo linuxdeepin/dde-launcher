@@ -59,12 +59,16 @@
         <source>Uninstall</source>
         <translation>Deinstaliraj</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>Svi programi</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -138,11 +142,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumenti</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Video datoteke</translation>
     </message>
     <message>
         <source>Music</source>
@@ -150,7 +154,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Slike</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -166,7 +170,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Ponovno podigni sustav</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -205,7 +209,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Ponovno podigni sustav</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -217,15 +221,15 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumenti</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Video datoteke</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Slike</translation>
     </message>
     <message>
         <source>Downloads</source>

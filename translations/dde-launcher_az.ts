@@ -59,6 +59,10 @@
         <source>Uninstall</source>
         <translation>Sil</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>

@@ -14,11 +14,11 @@
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Tüm bağımlılıklar birlikte kaldırılacak</translation>
+        <translation>Tüm bağımlılıklarıyla birlikte kaldırılacak</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>İptal Et</translation>
     </message>
     <message>
         <source>Confirm</source>
@@ -45,7 +45,7 @@
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>Rıhtıma gönder(_C)</translation>
+        <translation>Rıhtım&apos;a gönder(_C)</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
@@ -58,6 +58,10 @@
     <message>
         <source>Uninstall</source>
         <translation>Kaldır</translation>
+    </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation>Vekaleten aç</translation>
     </message>
 </context>
 <context>
@@ -100,7 +104,7 @@
     </message>
     <message>
         <source>Development</source>
-        <translation>Gelişim</translation>
+        <translation>Geliştirme</translation>
     </message>
     <message>
         <source>System</source>
@@ -119,11 +123,11 @@
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Tüm bağımlılıklar birlikte kaldırılacak</translation>
+        <translation>Tüm bağımlılıklarıyla birlikte kaldırılacak</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>İptal Et</translation>
     </message>
     <message>
         <source>Confirm</source>
@@ -162,7 +166,7 @@
     </message>
     <message>
         <source>Logout</source>
-        <translation>Çıkış</translation>
+        <translation>Oturumu Kapat</translation>
     </message>
     <message>
         <source>Reboot</source>
@@ -170,7 +174,7 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Askıya al</translation>
+        <translation>Uyut</translation>
     </message>
     <message>
         <source>Shutdown</source>
@@ -201,7 +205,7 @@
     </message>
     <message>
         <source>Logout</source>
-        <translation>Çıkış</translation>
+        <translation>Oturumu Kapat</translation>
     </message>
     <message>
         <source>Reboot</source>
@@ -209,7 +213,7 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Askıya al</translation>
+        <translation>Uyut</translation>
     </message>
     <message>
         <source>Back</source>

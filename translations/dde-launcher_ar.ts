@@ -59,12 +59,16 @@
         <source>Uninstall</source>
         <translation>إلغاء التثبيت</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>كافة التطبيقات</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -138,11 +142,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>المستندات</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>الفيديوهات</translation>
     </message>
     <message>
         <source>Music</source>
@@ -150,7 +154,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>الصور</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -166,7 +170,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>إعادة التشغيل</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -205,7 +209,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>إعادة التشغيل</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -217,15 +221,15 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>المستندات</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>الفيديوهات </translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>الصور </translation>
     </message>
     <message>
         <source>Downloads</source>

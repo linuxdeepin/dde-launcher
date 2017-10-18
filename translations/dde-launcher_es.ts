@@ -3,14 +3,14 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>No se encontraron resultados</translation>
+        <translation>Sin resultados</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>¿Esta seguro de desinstalar %1?</translation>
+        <translation>¿Estás seguro de desinstalar %1?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
@@ -59,12 +59,16 @@
         <source>Uninstall</source>
         <translation>Desinstalar</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation>Abrir por proxy</translation>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>Todas las aplicaciones</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -115,7 +119,7 @@
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>¿Esta seguro de desinstalar %1?</translation>
+        <translation>¿Está seguro de desinstalar %1?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
@@ -138,11 +142,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Documentos</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Vídeos</translation>
     </message>
     <message>
         <source>Music</source>
@@ -150,7 +154,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Imágenes</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -185,7 +189,7 @@
     <name>MiniFrameNavigation</name>
     <message>
         <source>Computer</source>
-        <translation>Equipo</translation>
+        <translation>Ordenador</translation>
     </message>
     <message>
         <source>Music</source>
@@ -217,15 +221,15 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Documentos</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Vídeos</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Imágenes</translation>
     </message>
     <message>
         <source>Downloads</source>

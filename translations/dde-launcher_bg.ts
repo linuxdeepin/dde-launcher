@@ -59,6 +59,10 @@
         <source>Uninstall</source>
         <translation>Деинсталиране</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation>Отваряне чрез прокси</translation>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>

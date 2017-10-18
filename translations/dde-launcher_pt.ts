@@ -10,11 +10,11 @@
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Tem a certeza que quer desinstalar %1 ?</translation>
+        <translation>Tem a certeza que deseja desinstalar %1 ?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Todas as dependências serão removidas em conjunto</translation>
+        <translation>Serão removidas todas as dependências ao mesmo tempo</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -59,6 +59,10 @@
         <source>Uninstall</source>
         <translation>Desinstalar</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation>Abrir através de proxy</translation>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
@@ -96,7 +100,7 @@
     </message>
     <message>
         <source>Reading</source>
-        <translation>Ler</translation>
+        <translation>Leitura</translation>
     </message>
     <message>
         <source>Development</source>
@@ -115,11 +119,11 @@
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Tem a certeza que quer desinstalar %1 ?</translation>
+        <translation>Tem a certeza que deseja desinstalar %1 ?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Todas as dependências serão removidas em conjunto</translation>
+        <translation>Serão removidas todas as dependências ao mesmo tempo</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -158,7 +162,7 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>Trancar</translation>
+        <translation>Bloquear</translation>
     </message>
     <message>
         <source>Logout</source>
@@ -197,7 +201,7 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>Trancar</translation>
+        <translation>Bloquear</translation>
     </message>
     <message>
         <source>Logout</source>

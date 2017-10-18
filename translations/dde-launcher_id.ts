@@ -10,7 +10,7 @@
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Anda yakin untuk menlepas %1?</translation>
+        <translation>Anda yakin untuk melepas %1?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
@@ -18,11 +18,11 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Batalkan</translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Konfirmasikan</translation>
+        <translation>Konfirmasi</translation>
     </message>
 </context>
 <context>
@@ -37,15 +37,15 @@
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation>Kirimkan ke destop(_E)</translation>
+        <translation>Kirim ke desktop(_E)</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Lepaskan dari dok</translation>
+        <translation>Lepas dari dok</translation>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>Kirimkan ke dok(_C)</translation>
+        <translation>Kirim ke dok(_C)</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
@@ -53,18 +53,22 @@
     </message>
     <message>
         <source>Add to startup(_A)</source>
-        <translation>Tambahkan ke start(_A)</translation>
+        <translation>Tambah ke start(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>Hapus Instal</translation>
+        <translation>Hapus instal</translation>
+    </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>Semua Aplikasi</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -115,7 +119,7 @@
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Anda yakin untuk menlepas %1?</translation>
+        <translation>Anda yakin untuk melepas %1?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
@@ -123,11 +127,11 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Batalkan</translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Konfirmasikan</translation>
+        <translation>Konfirmasi</translation>
     </message>
 </context>
 <context>
@@ -138,11 +142,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumen</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Video</translation>
     </message>
     <message>
         <source>Music</source>
@@ -150,7 +154,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Gambar</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -166,7 +170,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Boot ulang</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -178,7 +182,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Kembali</translation>
     </message>
 </context>
 <context>
@@ -205,7 +209,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Boot ulang</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -213,19 +217,19 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Kembali</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumen</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Video</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Gambar</translation>
     </message>
     <message>
         <source>Downloads</source>

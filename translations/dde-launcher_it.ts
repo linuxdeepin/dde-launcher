@@ -59,6 +59,10 @@
         <source>Uninstall</source>
         <translation>Disinstalla</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation>Apri via proxy</translation>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
@@ -150,7 +154,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Foto</translation>
+        <translation>Immagini</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -225,7 +229,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Foto</translation>
+        <translation>Immagini</translation>
     </message>
     <message>
         <source>Downloads</source>

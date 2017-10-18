@@ -59,6 +59,10 @@
         <source>Uninstall</source>
         <translation>Deinstallieren</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
@@ -84,7 +88,7 @@
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Grafik</translation>
+        <translation>Grafiken</translation>
     </message>
     <message>
         <source>Game</source>
@@ -154,7 +158,7 @@
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Herunterladevorgänge</translation>
+        <translation>Downloads</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -166,7 +170,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Neu starten</translation>
+        <translation>Neustarten</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -185,7 +189,7 @@
     <name>MiniFrameNavigation</name>
     <message>
         <source>Computer</source>
-        <translation>Rechner</translation>
+        <translation>Computer</translation>
     </message>
     <message>
         <source>Music</source>
@@ -205,7 +209,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Neu starten</translation>
+        <translation>Neustarten</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -229,7 +233,7 @@
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Herunterladevorgänge</translation>
+        <translation>Downloads</translation>
     </message>
 </context>
 <context>

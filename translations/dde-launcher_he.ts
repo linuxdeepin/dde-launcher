@@ -59,6 +59,10 @@
         <source>Uninstall</source>
         <translation>הסר</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
@@ -178,7 +182,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>חזרה</translation>
     </message>
 </context>
 <context>
@@ -213,7 +217,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>חזרה</translation>
     </message>
     <message>
         <source>Documents</source>

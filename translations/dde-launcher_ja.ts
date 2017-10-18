@@ -59,6 +59,10 @@
         <source>Uninstall</source>
         <translation>アンインストール</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
@@ -178,7 +182,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>戻る</translation>
     </message>
 </context>
 <context>
@@ -213,7 +217,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>戻る</translation>
     </message>
     <message>
         <source>Documents</source>

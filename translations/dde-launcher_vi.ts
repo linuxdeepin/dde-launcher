@@ -59,6 +59,10 @@
         <source>Uninstall</source>
         <translation>Gỡ bỏ</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation>Mở bằng ủy nhiệm</translation>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
@@ -108,7 +112,7 @@
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation>Khác</translation>
     </message>
 </context>
 <context>

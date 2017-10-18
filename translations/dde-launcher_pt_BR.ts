@@ -10,7 +10,7 @@
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Você realmente deseja excluir %1 ?</translation>
+        <translation>Deseja excluir %1 ?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
@@ -58,6 +58,10 @@
     <message>
         <source>Uninstall</source>
         <translation>Desinstalar</translation>
+    </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation>Abrir por proxy</translation>
     </message>
 </context>
 <context>
@@ -115,7 +119,7 @@
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Você realmente deseja excluir %1 ?</translation>
+        <translation>Deseja excluir %1 ?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>

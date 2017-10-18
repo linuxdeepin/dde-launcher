@@ -10,11 +10,11 @@
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>確定解除安裝 %1？</translation>
+        <translation>確定移除 %1？</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>所有依賴的程式也會解除安裝</translation>
+        <translation>所有依賴的軟體也會移除</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -57,14 +57,18 @@
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>解除安裝</translation>
+        <translation>移除</translation>
+    </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>所有程式</translation>
+        <translation>全部</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -115,11 +119,11 @@
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>確定解除安裝 %1？</translation>
+        <translation>確定移除 %1？</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>所有依賴的程式也會解除安裝</translation>
+        <translation>所有依賴的軟體也會移除</translation>
     </message>
     <message>
         <source>Cancel</source>

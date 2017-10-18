@@ -59,6 +59,10 @@
         <source>Uninstall</source>
         <translation>卸载</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation>使用代理打开</translation>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>

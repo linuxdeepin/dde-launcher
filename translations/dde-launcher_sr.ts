@@ -59,12 +59,16 @@
         <source>Uninstall</source>
         <translation>Деинсталирај</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>Сви програми</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -72,7 +76,7 @@
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>Чет</translation>
     </message>
     <message>
         <source>Music</source>
@@ -84,31 +88,31 @@
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>Графика</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>Игра</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation>Канцеларија</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>Читање</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation>Развој</translation>
     </message>
     <message>
         <source>System</source>
-        <translation>Поредак</translation>
+        <translation>Систем</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation>Остало</translation>
     </message>
 </context>
 <context>
@@ -138,11 +142,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Документи</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Видео снимци</translation>
     </message>
     <message>
         <source>Music</source>
@@ -150,7 +154,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Слике</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -178,7 +182,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Назад</translation>
     </message>
 </context>
 <context>
@@ -213,19 +217,19 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Назад</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Документи</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Видео снимци</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Слике</translation>
     </message>
     <message>
         <source>Downloads</source>

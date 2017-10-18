@@ -59,12 +59,16 @@
         <source>Uninstall</source>
         <translation>Eltávolítás</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>Minden alkalmazás</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -115,11 +119,11 @@
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>%1 biztos eltávolítjuk?</translation>
+        <translation>Biztosan eltávolítja ezt: %1 ?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Az összes függőség eltávolításra kerül.</translation>
+        <translation>Az összes függőség eltávolításra kerül</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -138,11 +142,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumentumok</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Videók</translation>
     </message>
     <message>
         <source>Music</source>
@@ -150,7 +154,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Képek</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -217,15 +221,15 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumentumok</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Videók</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Képek</translation>
     </message>
     <message>
         <source>Downloads</source>

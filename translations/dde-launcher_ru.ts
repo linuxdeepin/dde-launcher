@@ -59,6 +59,10 @@
         <source>Uninstall</source>
         <translation>Удалить</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation>Открыть через прокси</translation>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>

@@ -59,6 +59,10 @@
         <source>Uninstall</source>
         <translation>Απεγκατάσταση</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
@@ -138,7 +142,7 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Έγγραφα</translation>
     </message>
     <message>
         <source>Videos</source>
@@ -217,7 +221,7 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Έγγραφα</translation>
     </message>
     <message>
         <source>Videos</source>

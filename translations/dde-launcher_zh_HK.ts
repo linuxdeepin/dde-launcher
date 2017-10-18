@@ -59,6 +59,10 @@
         <source>Uninstall</source>
         <translation>解除安裝</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>

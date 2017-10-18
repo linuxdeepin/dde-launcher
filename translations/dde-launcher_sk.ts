@@ -59,6 +59,10 @@
         <source>Uninstall</source>
         <translation>Odinštalovať</translation>
     </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation>Otvorené cez proxy</translation>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>

@@ -60,9 +60,12 @@ void CalculateUtil::setDisplayMode(const int mode)
 
 QSize CalculateUtil::appIconSize() const
 {
-    const double ratio = m_launcherGsettings->get("apps-icon-ratio").toDouble();
+    if (!m_launcherInter->fullscreen())
+        return QSize(48, 48);
 
-    return QSize(m_appItemSize, m_appItemSize) * ratio;
+    QSize s(m_appItemSize, m_appItemSize);
+    const double ratio = m_launcherGsettings->get("apps-icon-ratio").toDouble();
+    return s * ratio;
 }
 
 void CalculateUtil::increaseIconSize()

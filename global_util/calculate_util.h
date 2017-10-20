@@ -53,7 +53,7 @@ public:
     inline int appColumnCount() const {return m_appColumnCount;}
     inline int appItemFontSize() const {return m_appItemFontSize;}
     inline int appItemSpacing() const {return m_appItemSpacing;}
-    inline QSize appItemSize() const {return QSize(m_appItemSize, m_appItemSize);}
+    inline QSize appItemSize() const { return QSize(m_appItemSize, m_appItemSize); }
     QSize appIconSize() const;
     int displayMode() const;
     void setDisplayMode(const int mode);

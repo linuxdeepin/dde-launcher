@@ -307,7 +307,7 @@ void AppsManager::uninstallApp(const QString &appKey)
     {
         if (info.m_key == appKey)
         {
-            APP_AUTOSTART_CACHE.setValue(info.m_desktop, false);
+            APP_AUTOSTART_CACHE.remove(info.m_desktop);
             break;
         }
     }

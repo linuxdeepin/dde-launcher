@@ -79,6 +79,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     const int fontPixelSize = index.data(AppsListModel::AppFontSizeRole).value<int>();
     const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();
+    const bool show_detail = m_showDetail && CurrentIndex == index;
     const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
     const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).toSize();
     const QRect ibr = itemBoundingRect(option.rect);
@@ -124,7 +125,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
         painter->setPen(Qt::transparent);
         painter->setBrush(brushColor);
-        painter->drawRoundedRect(m_showDetail ? ibr : br, radius, radius);
+        painter->drawRoundedRect(show_detail ? ibr : br, radius, radius);
     }
 
     // draw app icon
@@ -137,7 +138,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         iconTopMargin = ((br.height() * 2 / 3) - iconSize.height()) / 2;
     else
         iconTopMargin = qMin(10, int(br.height() * 0.1));
-    if (m_showDetail)
+    if (show_detail)
         iconTopMargin = 0;
 
     const QRect iconRect = QRect(br.topLeft() + QPoint(iconLeftMargins, iconTopMargin), iconSize);
@@ -150,7 +151,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     // draw app name
     QTextOption appNameOption;
-    if (m_showDetail)
+    if (show_detail)
         appNameOption.setAlignment(Qt::AlignCenter);
     else
         appNameOption.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
@@ -159,7 +160,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     appNamefont.setPointSize(fontPixelSize);
 
     const QFontMetrics fm(appNamefont);
-    const QRectF appNameRect = itemTextRect(m_showDetail ? ibr : br, iconRect, drawBlueDot);
+    const QRectF appNameRect = itemTextRect(show_detail ? ibr : br, iconRect, show_detail, drawBlueDot);
     const QString appText = holdTextInRect(fm, itemInfo.m_name, appNameRect.toRect());
 
     painter->setFont(appNamefont);
@@ -174,7 +175,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     if (drawBlueDot)
     {
         const int marginRight = 2;
-        const QRectF textRect = fm.boundingRect(appNameRect.toRect(), (m_showDetail ? Qt::AlignCenter : (Qt::AlignTop | Qt::AlignHCenter)) | Qt::TextWordWrap, appText);
+        const QRectF textRect = fm.boundingRect(appNameRect.toRect(), (show_detail ? Qt::AlignCenter : (Qt::AlignTop | Qt::AlignHCenter)) | Qt::TextWordWrap, appText);
 
         const QPointF blueDotPos = textRect.topLeft() + QPoint(-m_blueDotPixmap.width() - marginRight, (fm.height() - m_blueDotPixmap.height()) / 2);
         painter->drawPixmap(blueDotPos, m_blueDotPixmap);
@@ -221,16 +222,16 @@ const QRect AppItemDelegate::itemBoundingRect(const QRect &itemRect) const
 /// \param extraWidthMargin remove extra margin if need draw blue dot
 /// \return app name text bounding rect
 ///
-const QRect AppItemDelegate::itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool extraWidthMargin) const
+const QRect AppItemDelegate::itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool show_detail, const bool extraWidthMargin) const
 {
     const int widthMargin = extraWidthMargin ? 16 : 2;
     const int heightMargin = 2;
 
     QRect result = boundingRect;
 
-    result.setTop(iconRect.bottom() + (m_showDetail ? 0 : 15));
+    result.setTop(iconRect.bottom() + (show_detail ? 0 : 15));
 
-    return result.marginsRemoved(QMargins(widthMargin, heightMargin, widthMargin, m_showDetail ? 0 : heightMargin));
+    return result.marginsRemoved(QMargins(widthMargin, heightMargin, widthMargin, show_detail ? 0 : heightMargin));
 }
 
 const QString AppItemDelegate::holdTextInRect(const QFontMetrics &fm, const QString &text, const QRect &rect) const

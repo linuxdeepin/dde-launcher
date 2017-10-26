@@ -52,7 +52,7 @@ private slots:
 
 private:
     const QRect itemBoundingRect(const QRect &itemRect) const;
-    const QRect itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool extraWidthMargin) const;
+    const QRect itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool show_detail, const bool extraWidthMargin) const;
     const QString holdTextInRect(const QFontMetrics &fm, const QString &text, const QRect &rect) const;
 
 private:

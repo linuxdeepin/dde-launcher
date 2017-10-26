@@ -43,11 +43,14 @@ AppItemDelegate::AppItemDelegate(QObject *parent) :
     m_showDetail(false),
     m_calcUtil(CalculateUtil::instance()),
     m_showDetailDelay(new QTimer(this)),
-    m_blueDotPixmap(":/skin/images/new_install_indicator.png"),
-    m_autoStartPixmap(":/skin/images/emblem-autostart.png")
+    m_blueDotPixmap(":/skin/images/new_install_indicator.png")
 {
     m_showDetailDelay->setSingleShot(true);
     m_showDetailDelay->setInterval(1000);
+
+    const auto ratio = qApp->devicePixelRatio();
+    m_autoStartPixmap = QIcon(":/skin/images/emblem-autostart.svg").pixmap(QSize(24, 24) * ratio);
+    m_autoStartPixmap.setDevicePixelRatio(ratio);
 
     connect(m_showDetailDelay, &QTimer::timeout, this, &AppItemDelegate::showDetail);
 }
@@ -145,7 +148,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->drawPixmap(iconRect, iconPix);
 
     // draw icon if app is auto startup
-    const QPoint autoStartIconPos = iconRect.bottomLeft() - QPoint(0, 24);
+    const QPoint autoStartIconPos = iconRect.bottomLeft() - QPoint(0, m_autoStartPixmap.height() / m_autoStartPixmap.devicePixelRatio());
     if (index.data(AppsListModel::AppAutoStartRole).toBool())
         painter->drawPixmap(autoStartIconPos, m_autoStartPixmap);
 

@@ -244,7 +244,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppIconRole:
         return m_appsManager->appIcon(itemInfo.m_iconKey, m_calcUtil->appIconSize().width());
     case AppDragIconRole:
-        return m_appsManager->appIcon(itemInfo.m_iconKey, m_calcUtil->appIconSize().width() * 1.5);
+        return m_appsManager->appIcon(itemInfo.m_iconKey, m_calcUtil->appIconSize().width() * 1.2);
     case ItemSizeHintRole:
         return m_calcUtil->appItemSize();
     case AppIconSizeRole:

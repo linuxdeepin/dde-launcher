@@ -42,10 +42,22 @@ QGSettings AppsManager::LAUNCHER_SETTINGS("com.deepin.dde.launcher", "", nullptr
 QSettings AppsManager::APP_AUTOSTART_CACHE("deepin", "dde-launcher-app-autostart", nullptr);
 QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
 
+int perfectIconSize(const int size)
+{
+    const int s = 8;
+    const int l[s] = { 16, 24, 32, 48, 64, 96, 128, 256 };
+
+    for (int i(0); i != s; ++i)
+        if (size < l[i])
+            return l[i];
+
+    return 256;
+}
+
 const QPixmap getThemeIcon(const QString &iconName, const int size)
 {
     const auto ratio = qApp->devicePixelRatio();
-    const int s = int(size * ratio) & ~1;
+    const int s = perfectIconSize(size * ratio);
 
     QPixmap pixmap;
 

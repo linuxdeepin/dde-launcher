@@ -685,6 +685,9 @@ AppGridView *FullScreenFrame::lastVisibleView() const
 
 void FullScreenFrame::initConnection()
 {
+    connect(m_appsArea, &AppListArea::increaseIcon, this, [=] { m_calcUtil->increaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
+    connect(m_appsArea, &AppListArea::decreaseIcon, this, [=] { m_calcUtil->decreaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
+
     connect(m_miniMode, &DImageButton::clicked, this, &FullScreenFrame::toMiniMode, Qt::QueuedConnection);
 
     connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &FullScreenFrame::updateGeometry);

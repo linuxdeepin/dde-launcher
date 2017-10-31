@@ -36,6 +36,7 @@
 #include <QPropertyAnimation>
 #include <QLabel>
 #include <QPainter>
+#include <QScrollBar>
 
 QPointer<AppsManager> AppGridView::m_appManager = nullptr;
 QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
@@ -196,11 +197,6 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
         emit clicked(index);
 
     QListView::mouseReleaseEvent(e);
-}
-
-void AppGridView::wheelEvent(QWheelEvent *e)
-{
-    e->ignore();
 }
 
 void AppGridView::startDrag(const QModelIndex &index)

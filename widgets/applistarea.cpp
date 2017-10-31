@@ -23,10 +23,28 @@
 
 #include "applistarea.h"
 
+#include <QDebug>
+#include <QWheelEvent>
+
 AppListArea::AppListArea(QWidget *parent)
     : QScrollArea(parent)
 {
 
+}
+
+void AppListArea::wheelEvent(QWheelEvent *e)
+{
+    if (e->modifiers().testFlag(Qt::ControlModifier))
+    {
+        e->accept();
+
+        if (e->delta() > 0)
+            emit increaseIcon();
+        else
+            emit decreaseIcon();
+    } else {
+        QScrollArea::wheelEvent(e);
+    }
 }
 
 void AppListArea::enterEvent(QEvent *e)

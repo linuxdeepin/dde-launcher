@@ -35,8 +35,11 @@ public:
 
 signals:
     void mouseEntered();
+    void increaseIcon();
+    void decreaseIcon();
 
 protected:
+    void wheelEvent(QWheelEvent *e);
     void enterEvent(QEvent *e);
 };
 

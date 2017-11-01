@@ -167,7 +167,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     centralLayout->setContentsMargins(10, 0, 10, 0);
 
     setMaskColor(DarkColor);
-    setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen | Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setFocusPolicy(Qt::ClickFocus);
     setFixedSize(550, 485);

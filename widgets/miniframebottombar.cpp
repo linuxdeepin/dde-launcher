@@ -123,6 +123,8 @@ MiniFrameBottomBar::MiniFrameBottomBar(QWidget *parent)
 void MiniFrameBottomBar::openDirectory(const QString &dir)
 {
     DDesktopServices::showFolder(dir);
+
+    emit requestFrameHide();
 }
 
 void MiniFrameBottomBar::openStandardDirectory(const QStandardPaths::StandardLocation &location)

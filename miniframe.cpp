@@ -192,6 +192,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     connect(m_appsManager, &AppsManager::requestTips, m_viewWrapper, &QLabel::setText);
     connect(m_appsManager, &AppsManager::requestHideTips, m_viewWrapper, &QLabel::clear);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MiniFrame::onWMCompositeChanged);
+    connect(m_bottomBar, &MiniFrameBottomBar::requestFrameHide, this, &MiniFrame::hideLauncher);
 
     QTimer::singleShot(1, this, &MiniFrame::reloadAppsView);
     QTimer::singleShot(1, this, &MiniFrame::onWMCompositeChanged);
@@ -357,6 +358,9 @@ void MiniFrame::uninstallApp(const QModelIndex &context)
 
         m_appsManager->uninstallApp(appKey);
     });
+
+    // hide frame
+    QTimer::singleShot(1, this, &MiniFrame::hideLauncher);
 
     unInstallDialog.exec();
     UNINSTALL_DIALOG_SHOWN = false;

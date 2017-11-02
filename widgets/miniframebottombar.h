@@ -36,6 +36,9 @@ class MiniFrameBottomBar : public QWidget
 public:
     explicit MiniFrameBottomBar(QWidget *parent = 0);
 
+signals:
+    void requestFrameHide() const;
+
 private slots:
     void openDirectory(const QString &dir);
     void openStandardDirectory(const QStandardPaths::StandardLocation &location);

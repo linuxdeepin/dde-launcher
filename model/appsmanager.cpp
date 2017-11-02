@@ -57,7 +57,7 @@ int perfectIconSize(const int size)
 const QPixmap getThemeIcon(const QString &iconName, const int size)
 {
     const auto ratio = qApp->devicePixelRatio();
-    const int s = perfectIconSize(size * ratio);
+    const int s = perfectIconSize(size);
 
     QPixmap pixmap;
 
@@ -76,7 +76,7 @@ const QPixmap getThemeIcon(const QString &iconName, const int size)
         if (QFile::exists(iconName))
         {
             if (iconName.endsWith(".svg"))
-                pixmap = loadSvg(iconName, s);
+                pixmap = loadSvg(iconName, s * ratio);
             else
                 pixmap = QPixmap(iconName);
 
@@ -89,16 +89,15 @@ const QPixmap getThemeIcon(const QString &iconName, const int size)
         if (!pixmap.isNull())
             break;
 
-        pixmap = loadSvg(":/skin/images/application-default-icon.svg", s);
-        if (!pixmap.isNull())
-            break;
-
-        Q_UNREACHABLE();
-
+        pixmap = loadSvg(":/skin/images/application-default-icon.svg", s * ratio);
+        Q_ASSERT(!pixmap.isNull());
     } while (false);
 
-    pixmap = pixmap.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    pixmap.setDevicePixelRatio(ratio);
+    if (!qFuzzyCompare(ratio, 1.) && qFuzzyCompare(pixmap.devicePixelRatioF(), 1.))
+    {
+        pixmap = pixmap.scaled(QSize(s, s) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        pixmap.setDevicePixelRatio(ratio);
+    }
 
     return pixmap;
 }

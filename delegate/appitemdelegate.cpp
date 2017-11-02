@@ -114,10 +114,9 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const double x1 = 0.26418192;
     const double x2 = -0.38890932;
     const double result = x1 * ibr.width() + x2 * iconSize.width();
-    const int margin = result > 0 ? result : 0;
+    const int margin = result > 0 ? result * 0.71 : 1;
 
 //    const int margin = 0;
-//    qDebug() << br.width() << iconSize.width() << margin;
     const QRect br = ibr.marginsRemoved(QMargins(margin, margin, margin, margin));
 
     // draw focus background
@@ -145,7 +144,8 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         iconTopMargin = 0;
 
     const QRect iconRect = QRect(br.topLeft() + QPoint(iconLeftMargins, iconTopMargin), iconSize);
-    painter->drawPixmap(iconRect, iconPix);
+    const QPoint f = iconRect.center() - iconPix.rect().center() / iconPix.devicePixelRatioF();
+    painter->drawPixmap(f, iconPix);
 
     // draw icon if app is auto startup
     const QPoint autoStartIconPos = iconRect.bottomLeft() - QPoint(0, m_autoStartPixmap.height() / m_autoStartPixmap.devicePixelRatio());

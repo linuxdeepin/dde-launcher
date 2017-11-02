@@ -48,6 +48,7 @@ int main(int argv, char *args[])
     app.setApplicationName("dde-launcher");
     app.setApplicationVersion("3.0");
     app.setTheme("light");
+    app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 
 #ifdef QT_DEBUG
     DLogManager::registerConsoleAppender();

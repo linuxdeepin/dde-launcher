@@ -70,14 +70,14 @@ QSize CalculateUtil::appIconSize() const
 
 void CalculateUtil::increaseIconSize()
 {
-    const double ratio = std::min(0.7, m_launcherGsettings->get("apps-icon-ratio").toDouble() + 0.1);
+    const double ratio = std::min(0.6, m_launcherGsettings->get("apps-icon-ratio").toDouble() + 0.1);
 
     m_launcherGsettings->set("apps-icon-ratio", ratio);
 }
 
 void CalculateUtil::decreaseIconSize()
 {
-    const double ratio = std::max(0.3, m_launcherGsettings->get("apps-icon-ratio").toDouble() - 0.1);
+    const double ratio = std::max(0.2, m_launcherGsettings->get("apps-icon-ratio").toDouble() - 0.1);
 
     m_launcherGsettings->set("apps-icon-ratio", ratio);
 }
@@ -113,13 +113,12 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     const int screenWidth = pr.width();
     const int remain_width = screenWidth - calculateBesidePadding(screenWidth) * 2;
 
-    const int itemWidth = 200;
-    const int spacing = 14;
+    const int itemWidth = pr.width() <= 1440 ? 170 : 200;
+    const int spacing = pr.width() <= 1440 ? 10 : 14;
     const int columns = remain_width / itemWidth;
 
     const int calc_item_width = (double(containerSize.width()) - spacing * columns * 2) / columns + 0.5;
     const int calc_spacing = (double(containerSize.width()) - calc_item_width * columns) / (columns * 2) - 1;
-
 
     calculateTextSize(screenWidth);
 

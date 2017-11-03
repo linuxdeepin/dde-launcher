@@ -41,7 +41,7 @@ public:
     const QModelIndex &currentIndex() const {return CurrentIndex;}
 
 signals:
-    void currentChanged(const QModelIndex previousIndex, const QModelIndex &currentIndex) const;
+    void requestUpdate(const QModelIndex &idx) const;
 
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;

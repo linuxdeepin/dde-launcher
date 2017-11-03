@@ -287,8 +287,8 @@ void MiniFrame::moveCurrentSelectApp(const int key)
     int y_offset = 0;
     if (mode == ALL_APPS)
     {
-        static_cast<AppItemDelegate *>(m_appsView->itemDelegate())->setCurrentIndex(targetIndex);
         y_offset = static_cast<AppGridView *>(m_appsView)->indexYOffset(targetIndex);
+        static_cast<AppItemDelegate *>(m_appsView->itemDelegate())->setCurrentIndex(targetIndex);
     } else {
         m_appsView->setCurrentIndex(targetIndex);
     }
@@ -493,6 +493,7 @@ void MiniFrame::reloadAppsView()
         appsView->setSpacing(0);
 
         connect(appsView, &AppGridView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
+        connect(appsView, &AppGridView::popupMenuRequested, this, &MiniFrame::showPopupMenu);
         connect(m_autoScrollTimer, &QTimer::timeout, this, [this] {
             m_appsArea->verticalScrollBar()->setValue(m_appsArea->verticalScrollBar()->value() + m_autoScrollStep);
         });
@@ -506,15 +507,13 @@ void MiniFrame::reloadAppsView()
             if (!m_autoScrollTimer->isActive())
                 m_autoScrollTimer->start();
         });
+        connect(delegate, &AppItemDelegate::requestUpdate,
+                appsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
 
         m_appsView = appsView;
 
         m_categoryWidget->setVisible(false);
         m_appsModel->setCategory(AppsListModel::All);
-
-        connect(appsView, &AppGridView::popupMenuRequested, this, &MiniFrame::showPopupMenu);
-        connect(delegate, &AppItemDelegate::currentChanged,
-                appsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
     } else {
         AppListView *appsView = new AppListView;
         appsView->setModel(m_appsModel);

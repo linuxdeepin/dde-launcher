@@ -66,9 +66,8 @@ void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
     m_showDetail = false;
     m_showDetailDelay->start();
 
-    emit currentChanged(previousIndex, CurrentIndex);
-//    emit currentChanged(previousIndex, previousIndex);
-//    emit currentChanged(CurrentIndex, CurrentIndex);
+    emit requestUpdate(previousIndex);
+    emit requestUpdate(CurrentIndex);
 }
 
 void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -196,7 +195,7 @@ void AppItemDelegate::showDetail()
 {
     m_showDetail = true;
 
-    emit currentChanged(CurrentIndex, CurrentIndex);
+    emit requestUpdate(CurrentIndex);
 }
 
 ///

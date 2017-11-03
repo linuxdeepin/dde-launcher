@@ -93,7 +93,7 @@ const QPixmap getThemeIcon(const QString &iconName, const int size)
         Q_ASSERT(!pixmap.isNull());
     } while (false);
 
-    if (!qFuzzyCompare(ratio, 1.) && qFuzzyCompare(pixmap.devicePixelRatioF(), 1.))
+    if (qFuzzyCompare(pixmap.devicePixelRatioF(), 1.))
     {
         pixmap = pixmap.scaled(QSize(s, s) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         pixmap.setDevicePixelRatio(ratio);

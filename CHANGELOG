@@ -1,3 +1,7 @@
+### 4.2.2
+* Feature: Hide frame when uninstall dialog popup.
+* Fix: startup mark icon placed pos error
+
 ### 4.2.1
 * Fix autostart icon disappear
 

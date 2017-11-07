@@ -201,6 +201,8 @@ void FullScreenFrame::resizeEvent(QResizeEvent *e)
     m_navigationWidget->setFixedWidth(besidePadding);
     m_rightSpacing->setFixedWidth(besidePadding);
 
+    updateGradient();
+
     QFrame::resizeEvent(e);
 }
 
@@ -249,7 +251,6 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     QFrame::showEvent(e);
 
     QTimer::singleShot(0, this, [this] () {
-        showGradient();
         raise();
         activateWindow();
         m_floatTitle->raise();
@@ -504,15 +505,12 @@ void FullScreenFrame::initUI()
     m_scrollAnimation = new QPropertyAnimation(m_appsArea->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
 
-    // setup background.
-    auto updateBackground = [this] (const QString &uri) { setBackground(uri); };
-
-    connect(m_backgroundManager, &BackgroundManager::currentWorkspaceBackgroundChanged, this, updateBackground);
+    connect(m_backgroundManager, &BackgroundManager::currentWorkspaceBackgroundChanged, this, &FullScreenFrame::updateBackground);
     updateBackground(m_backgroundManager->currentWorkspaceBackground());
 }
 
 // FIXME:
-void FullScreenFrame::showGradient() {
+void FullScreenFrame::updateGradient() {
         QPoint topLeft = m_appsArea->mapTo(this,
                                            QPoint(0, 0));
         QSize topSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
@@ -607,6 +605,12 @@ void FullScreenFrame::refershCurrentFloatTitle()
     m_floatTitle->textLabel()->setText(sourceTitle->textLabel()->text());
     m_floatTitle->setVisible(sourceTitle->visibleRegion().isEmpty() ||
                              sourceTitle->visibleRegion().boundingRect().height() < 20);
+}
+
+void FullScreenFrame::updateBackground(const QString &uri)
+{
+    setBackground(uri);
+    updateGradient();
 }
 
 CategoryTitleWidget *FullScreenFrame::categoryTitle(const AppsListModel::AppCategory category) const

@@ -125,11 +125,12 @@ private slots:
     void ensureScrollToDest(const QVariant &value);
     void ensureItemVisible(const QModelIndex &index);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
-    void showGradient();
+    void updateGradient();
     void toMiniMode();
     void refreshTitleVisible();
     void refershCategoryTextVisible();
     void refershCurrentFloatTitle();
+    void updateBackground(const QString &uri);
 
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;

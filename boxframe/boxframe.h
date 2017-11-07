@@ -33,7 +33,6 @@
 
 #include <QFrame>
 #include <QLabel>
-#include <QFileSystemWatcher>
 
 class BoxFrame : public QFrame
 {
@@ -50,14 +49,10 @@ public:
 signals:
     void backgroundChanged();
 
-private slots:
-    void resetBackground();
-
 private:
     QString m_lastUrl;
     QPixmap m_pixmap;
     QPixmap m_cache;
-    QFileSystemWatcher m_blurredImageWatcher;
 };
 
 #endif // BOXFRAME_H

@@ -30,25 +30,10 @@
 #include "boxframe.h"
 
 static const QString DefaultBackground = "/usr/share/backgrounds/default_background.jpg";
-static const QString BlurredImageDir = "/var/cache/image-blur/";
-
-static QString GetBlurredImagePath(QString path) {
-    QString ext = path.split(".").last();
-    QString md5 = QString(QCryptographicHash::hash(path.toUtf8(), QCryptographicHash::Md5).toHex());
-    return BlurredImageDir + QString("%1.%2").arg(md5).arg(ext);
-}
 
 BoxFrame::BoxFrame(QWidget *parent)
     : QFrame(parent)
 {
-    m_blurredImageWatcher.addPath(BlurredImageDir);
-    connect(&m_blurredImageWatcher, &QFileSystemWatcher::directoryChanged, [this](const QString &){
-        // NOTE: the direcotryChanged signal is triggered when the blurred background
-        // is about being written to the disk. It's not completed yet.
-        QTimer::singleShot(500, this, SLOT(resetBackground()));
-
-        emit backgroundChanged();
-    });
 }
 
 BoxFrame::BoxFrame(const QString &url, QWidget *parent)
@@ -79,10 +64,6 @@ void BoxFrame::setBackground(const QString &url, bool force)
     }
 
     QPixmap pix(path);
-    QString blurredPath = GetBlurredImagePath(path);
-    if (QFile::exists(blurredPath)) {
-        pix = QPixmap(blurredPath);
-    }
 
     if (pix.isNull()) {
         pix.load(DefaultBackground);
@@ -106,9 +87,4 @@ QPixmap BoxFrame:: getBackground()
     }
 
     return m_cache;
-}
-
-void BoxFrame::resetBackground()
-{
-    setBackground(m_lastUrl, true);
 }

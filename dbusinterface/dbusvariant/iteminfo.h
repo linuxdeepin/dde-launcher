@@ -38,7 +38,7 @@ public:
 
     AppsListModel::AppCategory category() const;
 
-    bool operator==(const ItemInfo &other) const;
+    inline bool operator==(const ItemInfo &other) const { return m_desktop == other.m_desktop; }
     friend QDebug operator<<(QDebug argument, const ItemInfo &info);
     friend QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo &info);
     friend QDataStream &operator<<(QDataStream &argument, const ItemInfo &info);

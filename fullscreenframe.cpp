@@ -1010,7 +1010,6 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
     QString appName = context.data(AppsListModel::AppNameRole).toString();
     unInstallDialog.setTitle(QString(tr("Are you sure to uninstall %1 ?")).arg(appName));
     QPixmap appIcon = context.data(AppsListModel::AppIconRole).value<QPixmap>();
-    appIcon = appIcon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     unInstallDialog.setIconPixmap(appIcon);
 
     QString message = tr("All dependencies will be removed together");

@@ -391,7 +391,7 @@ bool AppsManager::appIsProxy(const QString &desktop)
 
 const QPixmap AppsManager::appIcon(const QString &iconKey, const int size)
 {
-    return getThemeIcon(iconKey, size);
+    return getThemeIcon(iconKey, size / qApp->devicePixelRatio() * 1.1);
 }
 
 void AppsManager::refreshCategoryInfoList()

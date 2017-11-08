@@ -47,18 +47,13 @@ protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-private slots:
-    void showDetail();
-
 private:
     const QRect itemBoundingRect(const QRect &itemRect) const;
-    const QRect itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool show_detail, const bool extraWidthMargin) const;
-    const QString holdTextInRect(const QFontMetrics &fm, const QString &text, const QRect &rect) const;
+    const QRect itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool extraWidthMargin) const;
+    const QPair<QString, bool> holdTextInRect(const QFontMetrics &fm, const QString &text, const QRect &rect) const;
 
 private:
-    bool m_showDetail;
     CalculateUtil *m_calcUtil;
-    QTimer *m_showDetailDelay;
     QPixmap m_blueDotPixmap;
     QPixmap m_autoStartPixmap;
 

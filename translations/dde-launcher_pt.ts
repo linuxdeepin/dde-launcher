@@ -14,7 +14,7 @@
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Serão removidas todas as dependências ao mesmo tempo</translation>
+        <translation>Todas as dependências serão removidas em conjunto</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -123,7 +123,7 @@
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Serão removidas todas as dependências ao mesmo tempo</translation>
+        <translation>Todas as dependências serão removidas em conjunto</translation>
     </message>
     <message>
         <source>Cancel</source>

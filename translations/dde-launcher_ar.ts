@@ -61,7 +61,7 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation type="unfinished"/>
+        <translation>فُتح بواسطة بروكسي</translation>
     </message>
 </context>
 <context>

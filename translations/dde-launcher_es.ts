@@ -41,11 +41,11 @@
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Quitar del panel</translation>
+        <translation>Quitar del muelle</translation>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>Enviar al panel(_C)</translation>
+        <translation>Anclar al muelle(_C)</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
@@ -68,7 +68,7 @@
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>Todas las aplicaciones</translation>
+        <translation>Aplicaciones</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -96,7 +96,7 @@
     </message>
     <message>
         <source>Office</source>
-        <translation>Oficina</translation>
+        <translation>Ofimática</translation>
     </message>
     <message>
         <source>Reading</source>
@@ -189,7 +189,7 @@
     <name>MiniFrameNavigation</name>
     <message>
         <source>Computer</source>
-        <translation>Ordenador</translation>
+        <translation>Equipo</translation>
     </message>
     <message>
         <source>Music</source>

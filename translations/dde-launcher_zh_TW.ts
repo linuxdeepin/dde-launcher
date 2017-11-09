@@ -61,7 +61,7 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation type="unfinished"/>
+        <translation>開啟時套用 Proxy</translation>
     </message>
 </context>
 <context>

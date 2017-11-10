@@ -91,7 +91,7 @@ void AppsListModel::setDragDropIndex(const QModelIndex &index)
 ///
 /// \brief AppsListModel::dropInsert restore item from appsManager stash list
 /// \param appKey item token in stash list
-/// \param pos insert position, if pos is negitive, insert into front
+/// \param pos insert position, if pos is negetive, insert into front
 ///
 void AppsListModel::dropInsert(const QString &appKey, const int pos)
 {

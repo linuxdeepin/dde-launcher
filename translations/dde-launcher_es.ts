@@ -68,7 +68,7 @@
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>Aplicaciones</translation>
+        <translation>Totalidad</translation>
     </message>
     <message>
         <source>Internet</source>

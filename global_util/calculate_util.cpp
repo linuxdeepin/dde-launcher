@@ -68,18 +68,28 @@ QSize CalculateUtil::appIconSize() const
     return s * ratio;
 }
 
-void CalculateUtil::increaseIconSize()
+bool CalculateUtil::increaseIconSize()
 {
-    const double ratio = std::min(0.6, m_launcherGsettings->get("apps-icon-ratio").toDouble() + 0.1);
+    const double value = m_launcherGsettings->get("apps-icon-ratio").toDouble();
+    const double ratio = std::min(0.6, value + 0.1);
+
+    if (ratio == value)
+        return false;
 
     m_launcherGsettings->set("apps-icon-ratio", ratio);
+    return true;
 }
 
-void CalculateUtil::decreaseIconSize()
+bool CalculateUtil::decreaseIconSize()
 {
-    const double ratio = std::max(0.2, m_launcherGsettings->get("apps-icon-ratio").toDouble() - 0.1);
+    const double value = m_launcherGsettings->get("apps-icon-ratio").toDouble();
+    const double ratio = std::max(0.2, value - 0.1);
+
+    if (ratio == value)
+        return false;
 
     m_launcherGsettings->set("apps-icon-ratio", ratio);
+    return true;
 }
 
 int CalculateUtil::displayMode() const

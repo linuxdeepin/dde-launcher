@@ -58,10 +58,10 @@ public:
     int displayMode() const;
     void setDisplayMode(const int mode);
 
-    void increaseIconSize();
-    void decreaseIconSize();
-    inline void increaseItemSize() {m_appItemSize += 16;}
-    inline void decreaseItemSize() {m_appItemSize -= 16;}
+    bool increaseIconSize();
+    bool decreaseIconSize();
+    inline void increaseItemSize() { m_appItemSize += 16; }
+    inline void decreaseItemSize() { m_appItemSize -= 16; }
 
 public slots:
     void calculateAppLayout(const QSize &containerSize, const int dockPosition);

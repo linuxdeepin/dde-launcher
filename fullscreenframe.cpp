@@ -224,15 +224,15 @@ void FullScreenFrame::keyPressEvent(QKeyEvent *e)
         if (!e->modifiers().testFlag(Qt::ControlModifier))
             return;
         e->accept();
-        m_calcUtil->decreaseIconSize();
-        emit m_appsManager->layoutChanged(AppsListModel::All);
+        if (m_calcUtil->decreaseIconSize())
+            emit m_appsManager->layoutChanged(AppsListModel::All);
         break;
     case Qt::Key_Equal:
         if (!e->modifiers().testFlag(Qt::ControlModifier))
             return;
         e->accept();
-        m_calcUtil->increaseIconSize();
-        emit m_appsManager->layoutChanged(AppsListModel::All);
+        if (m_calcUtil->increaseIconSize())
+            emit m_appsManager->layoutChanged(AppsListModel::All);
         break;
     default:;
     }

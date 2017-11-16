@@ -108,18 +108,18 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_othersModel(new AppsListModel(AppsListModel::Others)),
 
 
-    m_floatTitle(new CategoryTitleWidget("Internet", this)),
-    m_internetTitle(new CategoryTitleWidget("Internet")),
-    m_chatTitle(new CategoryTitleWidget("Chat")),
-    m_musicTitle(new CategoryTitleWidget("Music")),
-    m_videoTitle(new CategoryTitleWidget("Video")),
-    m_graphicsTitle(new CategoryTitleWidget("Graphics")),
-    m_gameTitle(new CategoryTitleWidget("Game")),
-    m_officeTitle(new CategoryTitleWidget("Office")),
-    m_readingTitle(new CategoryTitleWidget("Reading")),
-    m_developmentTitle(new CategoryTitleWidget("Development")),
-    m_systemTitle(new CategoryTitleWidget("System")),
-    m_othersTitle(new CategoryTitleWidget("Others"))
+    m_floatTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Internet"), this)),
+    m_internetTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Internet"))),
+    m_chatTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Chat"))),
+    m_musicTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Music"))),
+    m_videoTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Video"))),
+    m_graphicsTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Graphics"))),
+    m_gameTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Game"))),
+    m_officeTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Office"))),
+    m_readingTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Reading"))),
+    m_developmentTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Development"))),
+    m_systemTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "System"))),
+    m_othersTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Others")))
 {
     setFocusPolicy(Qt::ClickFocus);
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);

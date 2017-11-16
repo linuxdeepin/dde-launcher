@@ -131,38 +131,38 @@ void CategoryButton::setInfoByCategory()
     switch (m_category)
     {
     case AppsListModel::Internet:       setAccessibleName("internet");
-                                        m_textLabel->setText(getCategoryNames("Internet"));
+                                        m_textLabel->setText(QApplication::translate("MiniCategoryWidget", "Internet"));
                                         m_iconName = "internet";                    break;
     case AppsListModel::Chat:           setAccessibleName("chat");
-                                        m_textLabel->setText(getCategoryNames("Chat"));
+                                        m_textLabel->setText(QApplication::translate("MiniCategoryWidget", "Chat"));
                                         m_iconName = "chat";                        break;
     case AppsListModel::Music:          setAccessibleName("music");
-                                        m_textLabel->setText(getCategoryNames("Music"));
+                                        m_textLabel->setText(QApplication::translate("MiniCategoryWidget", "Music"));
                                         m_iconName = "music";                       break;
     case AppsListModel::Video:          setAccessibleName("multimedia");
-                                        m_textLabel->setText(getCategoryNames("Video"));
+                                        m_textLabel->setText(QApplication::translate("MiniCategoryWidget", "Video"));
                                         m_iconName = "multimedia";                  break;
     case AppsListModel::Graphics:       setAccessibleName("graphics");
-                                        m_textLabel->setText(getCategoryNames("Graphics"));
+                                        m_textLabel->setText(QApplication::translate("MiniCategoryWidget", "Graphics"));
                                         m_iconName = "graphics";                    break;
     case AppsListModel::Game:           setAccessibleName("game");
-                                        m_textLabel->setText(getCategoryNames("Game"));
+                                        m_textLabel->setText(QApplication::translate("MiniCategoryWidget", "Game"));
                                         m_iconName = "game";                        break;
     case AppsListModel::Office:         setAccessibleName("office");
-                                        m_textLabel->setText(getCategoryNames("Office"));
+                                        m_textLabel->setText(QApplication::translate("MiniCategoryWidget", "Office"));
                                         m_iconName = "office";                      break;
     case AppsListModel::Reading:        setAccessibleName("reading");
-                                        m_textLabel->setText(getCategoryNames("Reading"));
+                                        m_textLabel->setText(QApplication::translate("MiniCategoryWidget", "Reading"));
                                         m_iconName = "reading";                     break;
     case AppsListModel::Development:    setAccessibleName("development");
-                                        m_textLabel->setText(getCategoryNames("Development"));
+                                        m_textLabel->setText(QApplication::translate("MiniCategoryWidget", "Development"));
                                         m_iconName = "development";                 break;
     case AppsListModel::System:         setAccessibleName("system");
-                                        m_textLabel->setText(getCategoryNames("System"));
+                                        m_textLabel->setText(QApplication::translate("MiniCategoryWidget", "System"));
                                         m_iconName = "system";                      break;
-//    case AppsListModel::Others:         m_textLabel->setText(tr("Others"));       break;
+//    case AppsListModel::Others:         m_textLabel->setText(QApplication::translate("MiniCategoryWidget", "Others"));       break;
     default:                            setAccessibleName("others");
-                                        m_textLabel->setText(getCategoryNames("Others"));
+                                        m_textLabel->setText(QApplication::translate("MiniCategoryWidget", "Others"));
                                         m_iconName = "others";                      break;
     }
 }

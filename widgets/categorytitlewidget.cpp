@@ -87,9 +87,8 @@ void CategoryTitleWidget::setTextVisible(const bool visible, const bool animatio
 
 void CategoryTitleWidget::setText(const QString &title)
 {
-    QString titleContent = getCategoryNames(title);
     QFontMetrics fontMetric(m_title->font());
-    const int width = fontMetric.width(titleContent);
+    const int width = fontMetric.width(title);
     m_title->setFixedWidth(width + 10);
 
     // DON'T set style sheet for m_title, otherwise we can't fake opacity
@@ -98,7 +97,7 @@ void CategoryTitleWidget::setText(const QString &title)
     m_title->setStyleSheet("color: white; background-color:transparent;");
     */
 
-    m_title->setText(titleContent);
+    m_title->setText(title);
 }
 
 void CategoryTitleWidget::addTextShadow()

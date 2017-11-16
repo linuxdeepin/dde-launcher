@@ -28,7 +28,6 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QSvgRenderer>
-#include <libintl.h>
 
 QString getQssFromFile(QString filename)
 {
@@ -54,12 +53,6 @@ QString getThumbnailsPath(){
         QDir(thumbnailPath).mkpath(thumbnailPath);
     }
     return thumbnailPath;
-}
-
-QString getCategoryNames(QString text){
-    char* translatedText = dgettext("application_categories",text.toStdString().c_str());
-    QString str{translatedText};
-    return str;
 }
 
 const QPixmap loadSvg(const QString &fileName, const int size)

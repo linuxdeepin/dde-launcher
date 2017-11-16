@@ -63,6 +63,14 @@ AppsListModel::AppCategory ItemInfo::category() const
     return AppsListModel::All;
 }
 
+void ItemInfo::updateInfo(const ItemInfo &info)
+{
+    if (info.m_key != m_key)
+        return;
+
+    *this = info;
+}
+
 QDebug operator<<(QDebug argument, const ItemInfo &info)
 {
     argument << info.m_categoryId << info.m_installedTime;

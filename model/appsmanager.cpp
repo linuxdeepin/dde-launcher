@@ -413,9 +413,12 @@ void AppsManager::generateCategoryMap()
 
     for (const ItemInfo &info : m_allAppInfoList)
     {
+        const int userIdx = m_userSortedList.indexOf(info);
         // append new installed app to user sorted list
-        if (!m_userSortedList.contains(info))
+        if (userIdx == -1)
             m_userSortedList.append(info);
+        else
+            m_userSortedList[userIdx].updateInfo(info);
 
         const AppsListModel::AppCategory category = info.category();
         if (!m_appInfos.contains(category))
@@ -427,7 +430,9 @@ void AppsManager::generateCategoryMap()
     // remove uninstalled app item
     for (auto it(m_userSortedList.begin()); it != m_userSortedList.end();)
     {
-        if (!m_allAppInfoList.contains(*it))
+        const int idx = m_allAppInfoList.indexOf(*it);
+
+        if (idx == -1)
             it = m_userSortedList.erase(it);
         else
             ++it;

@@ -45,6 +45,7 @@ public:
     friend const QDBusArgument &operator>>(const QDBusArgument &argument, ItemInfo &info);
     friend const QDataStream &operator>>(QDataStream &argument, ItemInfo &info);
 
+    void updateInfo(const ItemInfo &info);
 
 public:
     QString m_desktop;

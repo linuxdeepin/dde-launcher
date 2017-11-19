@@ -72,11 +72,11 @@
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>Internet</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>Xat</translation>
     </message>
     <message>
         <source>Music</source>
@@ -88,7 +88,7 @@
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>Gràfics</translation>
     </message>
     <message>
         <source>Game</source>
@@ -100,11 +100,11 @@
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>Lectura</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation>Desenvolupament</translation>
     </message>
     <message>
         <source>System</source>
@@ -112,7 +112,7 @@
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation>Altres</translation>
     </message>
 </context>
 <context>
@@ -158,7 +158,7 @@
     </message>
     <message>
         <source>Downloads</source>
-        <translation type="unfinished"/>
+        <translation>Baixades</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -233,7 +233,7 @@
     </message>
     <message>
         <source>Downloads</source>
-        <translation type="unfinished"/>
+        <translation>Baixades</translation>
     </message>
 </context>
 <context>

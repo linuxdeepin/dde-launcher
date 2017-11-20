@@ -40,10 +40,10 @@ QModelIndex AppItemDelegate::CurrentIndex = QModelIndex();
 
 AppItemDelegate::AppItemDelegate(QObject *parent) :
     QAbstractItemDelegate(parent),
-    m_calcUtil(CalculateUtil::instance()),
-    m_blueDotPixmap(":/skin/images/new_install_indicator.png")
+    m_calcUtil(CalculateUtil::instance())
 {
     m_autoStartPixmap = QIcon(":/skin/images/emblem-autostart.svg").pixmap(QSize(24, 24));
+    m_blueDotPixmap = QIcon(":/skin/images/new_install_indicator.svg").pixmap(QSize(10, 10));
 }
 
 void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
@@ -72,7 +72,6 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 #else
     const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
 #endif
-//    const auto ratio = qApp->devicePixelRatio();
     const int fontPixelSize = index.data(AppsListModel::AppFontSizeRole).value<int>();
     const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();
     const bool is_current = CurrentIndex == index;
@@ -102,22 +101,13 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         // adjust
         if (adjust)
             --margin;
-
         br = ibr.marginsRemoved(QMargins(margin, 0, margin, margin * 2));
 
         // calc icon rect
         const int iconLeftMargins = (br.width() - iconSize.width()) / 2;
-
         double iconTopMargin = ibr.height() * .2 - iconSize.height() * .3;
         iconTopMargin = std::max(iconTopMargin, 1.);
-//        iconTopMargin = std::max(iconTopMargin, ratio * 10);
-//        if (iconSize.height() < ibr.height() / 2)
-//            iconTopMargin = ((ibr.height() * 2 / 3) - iconSize.height()) / 2;
-//        else
-//            iconTopMargin = qMin(10, int(ibr.height() * 0.5));
-
         iconRect = QRect(br.topLeft() + QPoint(iconLeftMargins, iconTopMargin), iconSize);
-//        iconRect = QRect(br.topLeft() + QPoint(iconLeftMargins, 10 * ratio), iconSize);
 
         // calc text
         appNameRect = itemTextRect(br, iconRect, drawBlueDot);
@@ -177,8 +167,9 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     {
         const int marginRight = 2;
         const QRectF textRect = fm.boundingRect(appNameRect.toRect(), Qt::AlignTop | Qt::AlignHCenter | Qt::TextWordWrap, appNameResolved);
-
-        const QPointF blueDotPos = textRect.topLeft() + QPoint(-m_blueDotPixmap.width() - marginRight, (fm.height() - m_blueDotPixmap.height()) / 2);
+        const auto ratio = m_blueDotPixmap.devicePixelRatioF();
+        const QPointF blueDotPos = textRect.topLeft() + QPoint(-m_blueDotPixmap.width() / ratio - marginRight,
+                                                               (fm.height() - m_blueDotPixmap.height() / ratio) / 2);
         painter->drawPixmap(blueDotPos, m_blueDotPixmap);
     }
 }

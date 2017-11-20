@@ -55,13 +55,13 @@
         <file>skin/images/others_10.svg</file>
         <file>skin/images/others_50.svg</file>
         <file>skin/qss/categorytitlewidget.qss</file>
-        <file>skin/images/new_install_indicator.png</file>
         <file>skin/qss/searchwidget.qss</file>
         <file>skin/images/search_hover.png</file>
         <file>skin/images/search_normal.png</file>
         <file>skin/images/search_press.png</file>
         <file>skin/images/search.svg</file>
         <file>skin/images/emblem-autostart.svg</file>
+        <file>skin/images/new_install_indicator.svg</file>
     </qresource>
     <qresource prefix="/icons">
         <file>skin/icons/category_active_16px.svg</file>

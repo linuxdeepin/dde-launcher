@@ -47,7 +47,7 @@ int main(int argv, char *args[])
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-launcher");
     app.setApplicationVersion("3.0");
-    app.setTheme("light");
+    app.setTheme("dark");
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 
 #ifdef QT_DEBUG

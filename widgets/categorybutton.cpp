@@ -51,7 +51,7 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     mainLayout->setMargin(0);
     mainLayout->addSpacing(20);
     mainLayout->addWidget(m_iconLabel);
-    mainLayout->addSpacing(15);
+    mainLayout->addStretch();
     mainLayout->addWidget(m_textLabel);
     mainLayout->addStretch(3);
 
@@ -200,7 +200,8 @@ void CategoryButton::updateTextColor()
         p.setColor(m_textLabel->foregroundRole(), QColor::fromRgbF(1, 1, 1, m_titleOpacity));
     }
     p.setColor(m_textLabel->backgroundRole(), Qt::transparent);
-    m_textLabel->setPalette(p);
+//    m_textLabel->setPalette(p);
+//    m_textLabel->setStyleSheet("color: rgba(255, 255, 255, .5);");
 }
 
 void CategoryButton::addTextShadow() {
@@ -233,7 +234,7 @@ void CategoryButton::setZoomLevel(const qreal &zoomLevel)
         const auto ratio = qApp->devicePixelRatio();
 
         setFixedHeight(double(DLauncher::NAVIGATION_ICON_HEIGHT) * zoomLevel);
-        m_iconLabel->setFixedSize(22.0 * ratio * zoomLevel, 22.0 * ratio * zoomLevel);
+        m_iconLabel->setFixedSize(qRound(22.0 * ratio * zoomLevel) + 1, qRound(22.0 * ratio * zoomLevel) + 1);
 
         QFont font = m_textLabel->font();
         font.setPixelSize(m_calcUtil->navgationTextSize() * zoomLevel);

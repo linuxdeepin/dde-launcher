@@ -43,6 +43,7 @@ public:
     const QModelIndex indexAt(const int index) const;
     int indexYOffset(const QModelIndex &index) const;
     void setContainerBox(const QWidget *container);
+    void updateItemHiDPIFixHook(const QModelIndex &index);
 
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;

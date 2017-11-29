@@ -103,6 +103,15 @@ void AppGridView::setContainerBox(const QWidget *container)
     m_containerBox = container;
 }
 
+// FIXME(sbw):
+// some white/black lines occured in non-integer scale hidpi.
+void AppGridView::updateItemHiDPIFixHook(const QModelIndex &index)
+{
+    const QRect &r = indexRect(index);
+    update(r.marginsAdded(QMargins(-1, -1, -1, -1)));
+    QListView::update(index);
+}
+
 void AppGridView::dropEvent(QDropEvent *e)
 {
     e->accept();
@@ -145,7 +154,6 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
     if (dropIndex.isValid())
         m_dropToPos = dropIndex.row();
 
-
     m_dropThresholdTimer->stop();
 
     const QPoint pos = mapTo(m_containerBox, e->pos());
@@ -173,17 +181,21 @@ void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 
 void AppGridView::mouseMoveEvent(QMouseEvent *e)
 {
+    e->accept();
+
     // disable qlistview default drag
     setState(NoState);
 
-    QListView::mouseMoveEvent(e);
+    const QModelIndex &idx = indexAt(e->pos());
+    if (idx.isValid())
+        emit entered(idx);
 
     if (e->buttons() != Qt::LeftButton)
         return;
 
     if (qAbs(e->pos().x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
         qAbs(e->pos().y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD)
-        startDrag(QListView::indexAt(e->pos()));
+        return startDrag(QListView::indexAt(e->pos()));
 }
 
 void AppGridView::mouseReleaseEvent(QMouseEvent *e)

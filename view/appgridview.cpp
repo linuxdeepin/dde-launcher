@@ -108,8 +108,9 @@ void AppGridView::setContainerBox(const QWidget *container)
 void AppGridView::updateItemHiDPIFixHook(const QModelIndex &index)
 {
     const QRect &r = indexRect(index);
-    update(r.marginsAdded(QMargins(-1, -1, -1, -1)));
-    QListView::update(index);
+    update(r.marginsRemoved(QMargins(0, 0, 1, 1)));
+//    update(r.marginsAdded(QMargins(-1, -1, -1, -1)));
+//    QListView::update(index);
 }
 
 void AppGridView::dropEvent(QDropEvent *e)

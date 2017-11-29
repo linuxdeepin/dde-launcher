@@ -783,7 +783,7 @@ void FullScreenFrame::initConnection()
     connect(m_othersView, &AppGridView::clicked, this, &FullScreenFrame::hide);
 
     const auto ratio = devicePixelRatioF();
-    if (!qFuzzyCompare(ratio, double(int(ratio))))
+    if (!qFuzzyCompare(ratio, qreal(int(ratio))))
     {
         connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_allAppsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::updateItemHiDPIFixHook));
         connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_internetView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::updateItemHiDPIFixHook));

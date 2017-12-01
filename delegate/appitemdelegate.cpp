@@ -101,7 +101,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         // adjust
         if (adjust)
             --margin;
-        br = ibr.marginsRemoved(QMargins(margin, 0, margin, margin * 2));
+        br = ibr.marginsRemoved(QMargins(margin, 1, margin, margin * 2));
 
         // calc icon rect
         const int iconLeftMargins = (br.width() - iconSize.width()) / 2;

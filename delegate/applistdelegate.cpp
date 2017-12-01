@@ -36,10 +36,11 @@ DWIDGET_USE_NAMESPACE
 AppListDelegate::AppListDelegate(QObject *parent)
     : QAbstractItemDelegate(parent),
 
-      m_actived(false),
-      m_blueDotPixmap(":/skin/images/new_install_indicator.png")
+      m_actived(false)
 {
     const auto ratio = qApp->devicePixelRatio();
+    m_blueDotPixmap = DSvgRenderer::render(":/skin/images/new_install_indicator.svg", QSize(10, 10) * ratio);
+    m_blueDotPixmap.setDevicePixelRatio(ratio);
     m_autoStartPixmap = DSvgRenderer::render(":/skin/images/emblem-autostart.svg", QSize(16, 16) * ratio);
     m_autoStartPixmap.setDevicePixelRatio(ratio);
 }
@@ -63,7 +64,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         else
             painter->setBrush(QColor(0, 0, 0, 255 * .2));
         painter->setPen(Qt::NoPen);
-        painter->drawRoundedRect(option.rect, 4, 4);
+        painter->drawRoundedRect(option.rect.marginsRemoved(QMargins(1, 1, 1, 1)), 4, 4);
     }
 
     const int icon_x = r.x() + 10;
@@ -77,7 +78,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // draw blue dot if new installed
     const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();
     if (drawBlueDot)
-        painter->drawPixmap(70, r.y() + (r.height() - m_blueDotPixmap.height()) / 2, m_blueDotPixmap);
+        painter->drawPixmap(70, r.y() + (r.height() - m_blueDotPixmap.height() / m_blueDotPixmap.devicePixelRatio()) / 2, m_blueDotPixmap);
 
     painter->setPen(Qt::white);
     if (drawBlueDot)

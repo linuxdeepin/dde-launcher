@@ -44,7 +44,7 @@ public:
     ~BoxFrame();
 
     void setBackground(const QString &url, bool force = false);
-    QPixmap getBackground();
+    QPixmap backgroundPixmap();
 
 signals:
     void backgroundChanged();

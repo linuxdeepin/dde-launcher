@@ -74,7 +74,7 @@ void BoxFrame::setBackground(const QString &url, bool force)
     emit backgroundChanged();
 }
 
-QPixmap BoxFrame:: getBackground()
+QPixmap BoxFrame:: backgroundPixmap()
 {
     if (m_cache.isNull() || size() != m_cache.size()) {
         QPixmap cache = m_pixmap.scaled(size(), Qt::KeepAspectRatioByExpanding);

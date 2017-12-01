@@ -290,9 +290,15 @@ void FullScreenFrame::paintEvent(QPaintEvent *e)
     QFrame::paintEvent(e);
 
     QPainter painter(this);
-    painter.drawPixmap(e->rect(), getBackground(), e->rect());
-    //    painter.setBrush(QColor(255, 0, 0, 0.2 * 255));
-    //    painter.drawRect(rect());
+
+    const QPixmap &bgPix = backgroundPixmap();
+    for (QRect &r : e->region().rects())
+    {
+        // NOTE(sbw):
+        // There is a workaround to fix HiDPI 1px black line.
+        r += QMargins(0, 0, 1, 1);
+        painter.drawPixmap(r, bgPix, r);
+    }
 }
 
 bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
@@ -515,7 +521,7 @@ void FullScreenFrame::updateGradient() {
                                            QPoint(0, 0));
         QSize topSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
         QRect topRect(topLeft, topSize);
-        m_topGradient->setPixmap(getBackground().copy(topRect));
+        m_topGradient->setPixmap(backgroundPixmap().copy(topRect));
         m_topGradient->resize(topRect.size());
 
 //        qDebug() << "topleft point:" << topRect.topLeft() << topRect.size();
@@ -530,7 +536,7 @@ void FullScreenFrame::updateGradient() {
         QPoint bottomLeft(bottomPoint.x(), bottomPoint.y() + 1 - bottomSize.height());
 
         QRect bottomRect(bottomLeft, bottomSize);
-        m_bottomGradient->setPixmap(getBackground().copy(bottomRect));
+        m_bottomGradient->setPixmap(backgroundPixmap().copy(bottomRect));
 
         m_bottomGradient->resize(bottomRect.size());
         m_bottomGradient->move(bottomRect.topLeft());

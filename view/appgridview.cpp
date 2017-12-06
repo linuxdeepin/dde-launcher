@@ -104,7 +104,7 @@ void AppGridView::setContainerBox(const QWidget *container)
 }
 
 // FIXME(sbw):
-// some white/black lines occured in non-integer scale hidpi.
+// some white/black lines occurred in non-integer scale hidpi.
 void AppGridView::updateItemHiDPIFixHook(const QModelIndex &index)
 {
     const QRect &r = indexRect(index);

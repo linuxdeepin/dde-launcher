@@ -1,6 +1,7 @@
 
 QFrame#AppBox{
     background-color: transparent;
+    padding: 0 0 1px 0;
 }
 
 QFrame#LauncherFrame[dockPosition='0'] {

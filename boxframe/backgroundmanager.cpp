@@ -104,6 +104,8 @@ void BackgroundManager::updateBackgrounds()
 
     QString path = QUrl(current).isLocalFile() ? QUrl(current).toLocalFile() : current;
 
+    path = QFile::exists(path) ? path : DefaultWallpaper;
+
     QDBusPendingReply<QString> call = m_blurInter->Get(path);
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
     connect(watcher, &QDBusPendingCallWatcher::finished, this, &BackgroundManager::onGetBlurFinished);

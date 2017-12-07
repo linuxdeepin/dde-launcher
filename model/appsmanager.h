@@ -79,6 +79,7 @@ public slots:
     bool appIsOnDock(const QString &desktop);
     bool appIsOnDesktop(const QString &desktop);
     bool appIsProxy(const QString &desktop);
+    bool appIsEnableScaling(const QString &desktop);
     const QPixmap appIcon(const QString &iconKey, const int size);
     int appNums(const AppsListModel::AppCategory &category) const;
 

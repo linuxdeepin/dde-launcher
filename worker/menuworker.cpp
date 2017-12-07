@@ -28,6 +28,7 @@ static QString ChainsProxy_path = QStandardPaths::standardLocations(QStandardPat
 
 MenuWorker::MenuWorker(QObject *parent) : QObject(parent)
 {
+    m_xsettings = new QGSettings("com.deepin.xsettings", QByteArray(), this);
     m_menuManagerInterface = new DBusMenuManager(this);
     m_dockAppManagerInterface = new DBusDock(this);
     m_startManagerInterface = new DBusStartManager(this);
@@ -73,6 +74,7 @@ QString MenuWorker::createMenuContent(/*QString appKey*/){
     m_isItemStartup = m_currentModelIndex.data(AppsListModel::AppAutoStartRole).toBool();
     m_isRemovable = m_currentModelIndex.data(AppsListModel::AppIsRemovableRole).toBool();
     m_isItemProxy = m_currentModelIndex.data(AppsListModel::AppIsProxyRole).toBool();
+    m_isItemEnableScaling = m_currentModelIndex.data(AppsListModel::AppEnableScalingRole).toBool();
 
     QJsonObject openObj = createMenuItem(0, tr("Open(_O)"));
     QJsonObject seperatorObj1 = createSeperator();
@@ -101,6 +103,11 @@ QString MenuWorker::createMenuContent(/*QString appKey*/){
     proxyObj["isCheckable"] = true;
     proxyObj["checked"] = m_isItemProxy;
 
+    QJsonObject scalingObj;
+    scalingObj = createMenuItem(6, tr("Disable display scaling"));
+    scalingObj["isCheckable"] = true;
+    scalingObj["checked"] = !m_isItemEnableScaling;
+
     QJsonObject uninstallObj = createMenuItem(5, tr("Uninstall"), m_isRemovable);
 
     QJsonArray items;
@@ -110,6 +117,10 @@ QString MenuWorker::createMenuContent(/*QString appKey*/){
     items.append(dockObj);
     items.append(seperatorObj2);
     items.append(startupObj);
+
+    const double scale_ratio = m_xsettings->get("scale-factor").toDouble();
+    if (!qFuzzyCompare(1.0, scale_ratio))
+        items.append(scalingObj);
 
     if (QFile::exists(ChainsProxy_path))
         items.append(proxyObj);
@@ -215,6 +226,9 @@ void MenuWorker::menuItemInvoked(QString itemId, bool flag){
     case 5:
         emit  unInstallApp(m_currentModelIndex);
         break;
+    case 6:
+        handleSwitchScaling();
+        break;
     default:
         break;
     }
@@ -319,4 +333,9 @@ void MenuWorker::handleToStartup(){
 void MenuWorker::handleToProxy()
 {
     m_launcherInterface->SetUseProxy(m_appKey, !m_isItemProxy);
+}
+
+void MenuWorker::handleSwitchScaling()
+{
+    m_launcherInterface->SetDisableScaling(m_appKey, m_isItemEnableScaling);
 }

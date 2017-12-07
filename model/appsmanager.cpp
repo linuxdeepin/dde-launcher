@@ -389,6 +389,11 @@ bool AppsManager::appIsProxy(const QString &desktop)
     return m_launcherInter->GetUseProxy(desktop).value();
 }
 
+bool AppsManager::appIsEnableScaling(const QString &desktop)
+{
+    return !m_launcherInter->GetDisableScaling(desktop);
+}
+
 const QPixmap AppsManager::appIcon(const QString &iconKey, const int size)
 {
     return getThemeIcon(iconKey, size / qApp->devicePixelRatio() * 1.1);

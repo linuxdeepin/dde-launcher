@@ -52,6 +52,7 @@ public:
         AppIsOnDockRole,
         AppIsRemovableRole,
         AppIsProxyRole,
+        AppEnableScalingRole,
         AppIconSizeRole,
         AppFontSizeRole,
         AppItemIsDragingRole,

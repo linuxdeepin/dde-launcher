@@ -34,6 +34,7 @@
 #include <QDBusPendingReply>
 #include <QtCore>
 #include <QModelIndex>
+#include <QGSettings>
 
 #include "dbusmenu.h"
 #include "dbusmenumanager.h"
@@ -88,11 +89,13 @@ public slots:
     void handleToDock();
     void handleToStartup();
     void handleToProxy();
+    void handleSwitchScaling();
 
     void handleMenuClosed();
     void setCurrentModelIndex(const QModelIndex &index);
     const QModelIndex getCurrentModelIndex();
 private:
+    QGSettings *m_xsettings;
     DBusMenuManager* m_menuManagerInterface;
     DBusMenu* m_menuInterface;
     DBusDock* m_dockAppManagerInterface;
@@ -111,6 +114,7 @@ private:
     bool m_isItemStartup;
     bool m_isRemovable;
     bool m_isItemProxy;
+    bool m_isItemEnableScaling;
 
     bool m_menuIsShown = false;
 };

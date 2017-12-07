@@ -239,6 +239,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return !m_holdPackages.contains(itemInfo.m_key);
     case AppIsProxyRole:
         return m_appsManager->appIsProxy(itemInfo.m_key);
+    case AppEnableScalingRole:
+        return m_appsManager->appIsEnableScaling(itemInfo.m_key);
     case AppNewInstallRole:
         return m_appsManager->appIsNewInstall(itemInfo.m_key);
     case AppIconRole:

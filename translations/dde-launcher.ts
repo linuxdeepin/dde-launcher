@@ -65,6 +65,10 @@
         <source>Open by proxy</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Disable display scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>

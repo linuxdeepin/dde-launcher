@@ -1,3 +1,6 @@
+### 4.2.8
+* Add menu option to disable HiDPI-scale on application.
+
 ### 4.2.7
 * Fix non-integer HiDPI-scale 1px black line.
 

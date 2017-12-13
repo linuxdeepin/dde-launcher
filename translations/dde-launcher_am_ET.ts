@@ -63,6 +63,10 @@
         <source>Open by proxy</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
@@ -170,7 +174,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>እንደገና ማስነሻ</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -182,7 +186,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>ወደ ኋላ</translation>
     </message>
 </context>
 <context>
@@ -209,7 +213,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>እንደገና ማስነሻ</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -217,7 +221,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>ወደ ኋላ</translation>
     </message>
     <message>
         <source>Documents</source>

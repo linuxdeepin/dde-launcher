@@ -3,18 +3,18 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>No hi ha resultats de la cerca.</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Segur que voleu desinstal·lar %1?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Totes les dependencies seran esborrades a l&apos;hora</translation>
+        <translation>S&apos;eliminaran totes les dependències juntes.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -22,38 +22,38 @@
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation>Confirmeu-ho</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Open(_O)</source>
-        <translation type="unfinished"/>
+        <translation>Obre (_O)</translation>
     </message>
     <message>
         <source>Remove from desktop</source>
-        <translation type="unfinished"/>
+        <translation>Elimina de l&apos;escriptori</translation>
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation type="unfinished"/>
+        <translation>Envia a l&apos;escriptori (_E)</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation type="unfinished"/>
+        <translation>Elimina de l&apos;acoblador</translation>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation type="unfinished"/>
+        <translation>Envia a l&apos;acoblador (_C)</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
-        <translation type="unfinished"/>
+        <translation>Elimina de l&apos;inici (_R)</translation>
     </message>
     <message>
         <source>Add to startup(_A)</source>
-        <translation type="unfinished"/>
+        <translation>Afegeix a l&apos;inici (_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -61,6 +61,10 @@
     </message>
     <message>
         <source>Open by proxy</source>
+        <translation>Obre amb un servidor intermediari</translation>
+    </message>
+    <message>
+        <source>Disable display scaling</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -68,7 +72,7 @@
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>Totes les aplicacions</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -119,7 +123,7 @@
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Segur que voleu desinstal·lar %1?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
@@ -142,11 +146,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Documents</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Vídeos</translation>
     </message>
     <message>
         <source>Music</source>
@@ -154,7 +158,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Imatges</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -162,23 +166,23 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>Bloquejar</translation>
+        <translation>Bloqueja</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation type="unfinished"/>
+        <translation>Surt</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Reinicia</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspendre</translation>
+        <translation>Suspèn</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Shutdown</translation>
+        <translation>Atura</translation>
     </message>
     <message>
         <source>Back</source>
@@ -197,23 +201,23 @@
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Shutdown</translation>
+        <translation>Atura</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Bloquejar</translation>
+        <translation>Bloqueja</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation type="unfinished"/>
+        <translation>Surt</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Reinicia</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspendre</translation>
+        <translation>Suspèn</translation>
     </message>
     <message>
         <source>Back</source>
@@ -221,15 +225,15 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Documents</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Vídeos</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Imatges</translation>
     </message>
     <message>
         <source>Downloads</source>

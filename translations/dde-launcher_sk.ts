@@ -63,6 +63,10 @@
         <source>Open by proxy</source>
         <translation>Otvorené cez proxy</translation>
     </message>
+    <message>
+        <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>

@@ -18,7 +18,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal Et</translation>
+        <translation>İptal et</translation>
     </message>
     <message>
         <source>Confirm</source>
@@ -29,7 +29,7 @@
     <name>MenuWorker</name>
     <message>
         <source>Open(_O)</source>
-        <translation>Aç(_O)</translation>
+        <translation>Aç(_A)</translation>
     </message>
     <message>
         <source>Remove from desktop</source>
@@ -37,7 +37,7 @@
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation>Masaüstüne gönder (_E)</translation>
+        <translation>Masaüstüne gönder(_E)</translation>
     </message>
     <message>
         <source>Remove from dock</source>
@@ -61,7 +61,11 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation>Vekaleten aç</translation>
+        <translation>Vekil sunucuyla aç</translation>
+    </message>
+    <message>
+        <source>Disable display scaling</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -127,7 +131,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal Et</translation>
+        <translation>İptal et</translation>
     </message>
     <message>
         <source>Confirm</source>

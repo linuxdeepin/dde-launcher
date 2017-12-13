@@ -10,11 +10,11 @@
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>¿Está seguro qué quiere desinstalar %1?</translation>
+        <translation>¿Estás seguro de desinstalar %1?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Todas las dependencias serán removidas juntas</translation>
+        <translation>Todas las dependencias serán eliminadas juntas</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -33,19 +33,19 @@
     </message>
     <message>
         <source>Remove from desktop</source>
-        <translation>Quitar del escritorio</translation>
+        <translation>Eliminar del escritorio</translation>
     </message>
     <message>
         <source>Send to desktop(_E)</source>
-        <translation>Enviar al escritorio(_E)</translation>
+        <translation>Enviar a escritorio(_E)</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Quitar del panel</translation>
+        <translation>Quitar del muelle</translation>
     </message>
     <message>
         <source>Send to dock(_C)</source>
-        <translation>Enviar al panel(_C)</translation>
+        <translation>Anclar al muelle(_C)</translation>
     </message>
     <message>
         <source>Remove from startup(_R)</source>
@@ -53,7 +53,7 @@
     </message>
     <message>
         <source>Add to startup(_A)</source>
-        <translation>Agregar al inicio(_A)</translation>
+        <translation>Añadir al inicio(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -61,6 +61,10 @@
     </message>
     <message>
         <source>Open by proxy</source>
+        <translation>Abrir por proxy</translation>
+    </message>
+    <message>
+        <source>Disable display scaling</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -68,7 +72,7 @@
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>Todas las aplicaciones</translation>
+        <translation>Totalidad</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -76,7 +80,7 @@
     </message>
     <message>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation>Conversación</translation>
     </message>
     <message>
         <source>Music</source>
@@ -84,7 +88,7 @@
     </message>
     <message>
         <source>Video</source>
-        <translation>Video</translation>
+        <translation>Vídeo</translation>
     </message>
     <message>
         <source>Graphics</source>
@@ -92,11 +96,11 @@
     </message>
     <message>
         <source>Game</source>
-        <translation>Juego</translation>
+        <translation>Juegos</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation>Oficina</translation>
+        <translation>Ofimática</translation>
     </message>
     <message>
         <source>Reading</source>
@@ -119,11 +123,11 @@
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>¿Está seguro qué quiere desinstalar %1?</translation>
+        <translation>¿Está seguro de desinstalar %1?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Todas las dependencias serán removidas juntas</translation>
+        <translation>Todas las dependencias serán eliminadas juntas</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -138,7 +142,7 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Computadora</translation>
+        <translation>Equipo</translation>
     </message>
     <message>
         <source>Documents</source>
@@ -146,7 +150,7 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videos</translation>
+        <translation>Vídeos</translation>
     </message>
     <message>
         <source>Music</source>
@@ -170,7 +174,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Reiniciar</translation>
+        <translation>Reiniciar </translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -182,14 +186,14 @@
     </message>
     <message>
         <source>Back</source>
-        <translation>Atras</translation>
+        <translation>Atrás</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
         <source>Computer</source>
-        <translation>Computadora</translation>
+        <translation>Equipo</translation>
     </message>
     <message>
         <source>Music</source>
@@ -209,7 +213,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Reiniciar</translation>
+        <translation>Reiniciar </translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -217,7 +221,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation>Atras</translation>
+        <translation>Atrás</translation>
     </message>
     <message>
         <source>Documents</source>

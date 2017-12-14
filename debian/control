@@ -1,13 +1,13 @@
 Source: dde-launcher
 Section: x11
 Priority: optional
-Maintainer: Deepin Sysdev <sysdev@deepin.com>
+Maintainer: Deepin Packages Builder <packages@deepin.com>
 Build-Depends: debhelper (>= 8.0.0), pkg-config, 
- qt5-qmake, qt5-default, qtbase5-dev,
+ qt5-qmake, qtbase5-dev,
  libxcb-ewmh-dev, libqt5x11extras5-dev,
  libqt5svg5-dev, libgsettings-qt-dev,
  qttools5-dev-tools, libdtkcore-dev | libdtkutil-dev, libdtkwidget-dev, libdframeworkdbus-dev,
-Standards-Version: 3.9.4
+Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 
 Package: dde-launcher

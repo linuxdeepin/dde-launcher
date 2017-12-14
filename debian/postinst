@@ -15,3 +15,7 @@ X-GNOME-Autostart-Delay=5
 EOF
     fi
 fi
+
+#DEBHELPER#
+
+exit 0

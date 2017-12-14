@@ -125,7 +125,7 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
     connect(m_launcherInter, &DBusLauncher::UninstallSuccess, this, &AppsManager::abandonStashedItem);
-    connect(m_launcherInter, &DBusLauncher::UninstallFailed, [this] (const QString &appKey) {restoreItem(appKey); emit dataChanged(AppsListModel::All);});
+    connect(m_launcherInter, &DBusLauncher::UninstallFailed, [this] (const QString &appKey) { restoreItem(appKey); emit dataChanged(AppsListModel::All); });
     connect(m_launcherInter, &DBusLauncher::ItemChanged, this, &AppsManager::handleItemChanged);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &AppsManager::dockGeometryChanged);
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &AppsManager::dockGeometryChanged);
@@ -405,7 +405,11 @@ void AppsManager::refreshCategoryInfoList()
     QDataStream in(&readBuf, QIODevice::ReadOnly);
     in >> m_userSortedList;
 
-    m_allAppInfoList = m_launcherInter->GetAllItemInfos().value();
+    const ItemInfoList &datas = m_launcherInter->GetAllItemInfos().value();
+    m_allAppInfoList.reserve(datas.size());
+    for (const auto &it : datas)
+        if (!m_stashList.contains(it))
+            m_allAppInfoList.append(it);
 
     generateCategoryMap();
     saveUserSortedList();

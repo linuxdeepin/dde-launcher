@@ -58,6 +58,24 @@
 
 extern const QPoint widgetRelativeOffset(const QWidget * const self, const QWidget *w);
 
+const QPoint scaledPosition(const QPoint &xpos)
+{
+    const auto ratio = qApp->devicePixelRatio();
+    QRect g = qApp->primaryScreen()->geometry();
+    for (auto *screen : qApp->screens())
+    {
+        const QRect &sg = screen->geometry();
+        const QRect &rg = QRect(sg.topLeft(), sg.size() * ratio);
+        if (rg.contains(xpos))
+        {
+            g = rg;
+            break;
+        }
+    }
+
+    return g.topLeft() + (xpos - g.topLeft()) / ratio;
+}
+
 MiniFrame::MiniFrame(QWidget *parent)
     : DBlurEffectWidget(parent),
 
@@ -430,7 +448,7 @@ void MiniFrame::adjustPosition()
     const auto ratio = devicePixelRatioF();
     const int dockPos = m_dockInter->position();
     const QRect &r = m_dockInter->frontendRect();
-    const QRect &dockRect = QRect(r.topLeft() / ratio, r.size() / ratio);
+    const QRect &dockRect = QRect(scaledPosition(r.topLeft()), r.size() / ratio);
 
     const int spacing = 10;
     const QSize s = size();

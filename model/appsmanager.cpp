@@ -406,6 +406,7 @@ void AppsManager::refreshCategoryInfoList()
     in >> m_userSortedList;
 
     const ItemInfoList &datas = m_launcherInter->GetAllItemInfos().value();
+    m_allAppInfoList.clear();
     m_allAppInfoList.reserve(datas.size());
     for (const auto &it : datas)
         if (!m_stashList.contains(it))

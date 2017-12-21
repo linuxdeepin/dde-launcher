@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Deschide(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Șterge de pe desktop</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Trimitere la desktop(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Îndepărtare din suportul de andocare</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Trimitere la andocare(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Adăugare la pornire(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Deshide</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -186,7 +186,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Înapoi</translation>
     </message>
 </context>
 <context>
@@ -221,7 +221,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Înapoi</translation>
     </message>
     <message>
         <source>Documents</source>

@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Aç(_A)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Masaüstünden kaldır</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Masaüstüne gönder(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Rıhtım&apos;dan kaldır</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Rıhtım&apos;a gönder(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Başlangıçtan kaldır(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Başlangıca ekle(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,7 +45,27 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Ekran ölçeklendirmesi devre dışı</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Aç</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation>Masaüstüne _gönder</translation>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation>Rıhtıma gönder</translation>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation>Başlangıçtan kaldır</translation>
+    </message>
+    <message>
+        <source>Add to startup</source>
+        <translation>Başlangıca ekle</translation>
     </message>
 </context>
 <context>

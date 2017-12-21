@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Отвори(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Уклони са радне површине</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Пошаљи на радну површ(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Уклони са дока</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Пошаљи на док(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Уклони из покретања(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Додај на покретање(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -61,10 +41,30 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation type="unfinished"/>
+        <translation>Отвори уз посредника</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation>Онемогући скалирање приказа</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Отвори</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -80,7 +80,7 @@
     </message>
     <message>
         <source>Chat</source>
-        <translation>Чет</translation>
+        <translation>Ћаскање</translation>
     </message>
     <message>
         <source>Music</source>

@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>열기(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>바탕 화면에서 제거</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>바탕 화면으로 보내기(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>독(dock)에서 제거</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>독으로 보내기(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>시작(_R)부터 제거</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>시작에 추가(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>열기</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>

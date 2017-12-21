@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Openen(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Verwijderen van bureaublad</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Versturen naar bureaublad(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Verwijderen uit dock</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Versturen naar dock(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Verwijderen uit automatisch opstarten(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Toevoegen aan automatisch opstarten(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Openen</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>

@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Buka(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Hapus dari destop</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Kirim ke desktop(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Lepas dari dok</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Kirim ke dok(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Hilangkan dari startup(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Tambah ke start(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Buka</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>

@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Нээх(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Дэлгэц дээрээс хасах</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Дэлгэцрүү илгээх(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Докоос хасах</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Докруу(_C) илгээх</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Асах хэсгээс хасах(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Асах хэсэгт нэмэх(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>

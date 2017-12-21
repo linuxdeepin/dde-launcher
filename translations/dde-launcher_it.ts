@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Apri(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Rimuovi dal desktop</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Invia al desktop(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Rimuovi dalla dock</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Invia alla dock(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Rimuovi da Startup(R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Aggiungi allo startup(A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,7 +45,27 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Disabilita scaling del display</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Apri</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation>Invia al desktop</translation>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation>Invia alla dock</translation>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation>Rimuovi dall&apos;avvio automatico</translation>
+    </message>
+    <message>
+        <source>Add to startup</source>
+        <translation>Aggiungi all&apos;avvio automatico</translation>
     </message>
 </context>
 <context>

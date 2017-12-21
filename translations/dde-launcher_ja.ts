@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>開く(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>デスクトップから移動</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>デスクトップへ送る(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Dock から削除</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Dock へ送信(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>自動起動から削除(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>自動起動へ追加(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>開く</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -174,7 +174,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>再起動</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -213,7 +213,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>再起動</translation>
     </message>
     <message>
         <source>Suspend</source>

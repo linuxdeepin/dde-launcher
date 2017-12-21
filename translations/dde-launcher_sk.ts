@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Otvoriť(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Odstrániť z plochy</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Uložiť na pracovnú plochu(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Odstrániť z panelu</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Uložiť na dock(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Odobrať zo štartu(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Pridať do štartu(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,7 +45,27 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Zakázať škálovanie zobrazenia</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Otvoriť</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation>Odoslať na plochu</translation>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation>Odoslať na panel</translation>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation>Odobrať zo štartu</translation>
+    </message>
+    <message>
+        <source>Add to startup</source>
+        <translation>Pridať do štartu</translation>
     </message>
 </context>
 <context>

@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Odpri(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Odstrani z namizja</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Pošlji na namizje(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Odsidraj</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Zasidraj(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Odstrani z zagona(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Dodaj v zagon(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation>Onemogoči spreminjanje velikosti prikaza</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Odpri</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>

@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>खोलें (_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>डेस्कटॉप से हटाएं </translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>डेस्कटॉप(_E) को भेजें </translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>डॉक से हटाएं </translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>डॉक (_C) से भेजें </translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>स्टार्टअप(_A) में जोड़ें </translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>खोलो</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>

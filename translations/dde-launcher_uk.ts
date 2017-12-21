@@ -18,7 +18,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Відмінити</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <source>Confirm</source>
@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Відкрити (_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Видалити з робочого столу</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Надіслати на робочий стіл(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Видалити з док-панелі</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Надіслати на станцію(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Вилучити з автозапуску(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Додати до запуску(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation>Вимкнути масштабування дисплею</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Відкрити</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -131,7 +131,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Відмінити</translation>
+        <translation>Скасувати</translation>
     </message>
     <message>
         <source>Confirm</source>

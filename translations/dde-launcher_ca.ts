@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Obre (_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Elimina de l&apos;escriptori</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Envia a l&apos;escriptori (_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Elimina de l&apos;acoblador</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Envia a l&apos;acoblador (_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Elimina de l&apos;inici (_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Afegeix a l&apos;inici (_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,7 +45,27 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Inhabilita l&apos;escalatge de la pantalla</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Obre</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation>Enviar a l&apos;escriptori</translation>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation>Enviar al dock</translation>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation>Eliminar de l&apos;arrencada</translation>
+    </message>
+    <message>
+        <source>Add to startup</source>
+        <translation>Afegir a l&apos;arrencada</translation>
     </message>
 </context>
 <context>

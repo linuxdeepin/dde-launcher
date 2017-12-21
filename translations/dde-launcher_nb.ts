@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Åpne(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Fjern fra skrivebordet</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Send til skrivebordet(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Fjern fra dokk</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Send til dokk(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Fjern fra oppstart(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Legg til oppstart(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation>Slå av skalering</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Åpne</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -72,7 +72,7 @@
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>Alle programmer</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -146,11 +146,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumenter</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Videoer</translation>
     </message>
     <message>
         <source>Music</source>
@@ -158,7 +158,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Bilder</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -174,7 +174,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Omstart</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -213,7 +213,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Omstart</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -225,15 +225,15 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumenter</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Videoer</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Bilder</translation>
     </message>
     <message>
         <source>Downloads</source>

@@ -28,31 +28,11 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Remove from dock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Aç</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>

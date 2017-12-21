@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Mở(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Xóa khỏi cửa sổ trang đầu.</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Gởi ra cửa sổ trang đầu(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Xóa khỏi trạm</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Gởi ra trạm(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Xóa khỏi nhóm khởi động(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Thêm vào nhóm khởi động(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Mở</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>

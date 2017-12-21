@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>തുറക്കുക(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>ഡെസ്ക്ടോപ്പിൽ നിന്നും നീക്കം ചെയ്യുക</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>ഡെസ്ക്ടോപ്പിലേക്ക് അയയ്ക്കുക(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>ഡോക്കിൽ നിന്നും നീക്കം ചെയ്യുക</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>ഡോക്കിലേക്ക് ചേർക്കുക(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>പ്രാരംഭപ്രയോഗങ്ങളിൽ നിന്നും നീക്കം ചെയ്യുക(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>പ്രാരംഭപ്രയോഗങ്ങളിലേക്ക് ചേർക്കുക(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>

@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Открыть</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Удалить с рабочего стола</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Отправить на рабочий стол(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Убрать из дока</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Отправить в док(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Удалить из автозагрузки(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Добавить в автозагрузку(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,7 +45,27 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Отключить масштабирование дисплея</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Открыть</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation>Отправить на рабочий стол</translation>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation>Отправить в док</translation>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation>Удалить из автозагрузки</translation>
+    </message>
+    <message>
+        <source>Add to startup</source>
+        <translation>Добавить в автозагрузку</translation>
     </message>
 </context>
 <context>
@@ -96,7 +96,7 @@
     </message>
     <message>
         <source>Game</source>
-        <translation>Игра</translation>
+        <translation>Игры</translation>
     </message>
     <message>
         <source>Office</source>

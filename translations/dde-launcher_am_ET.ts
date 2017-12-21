@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>መክፈቻ(_መ)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>ከ ዴስክቶፕ ላይ ማስወገጃ</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>ወደ ዴስክቶፕ(_E) መላኪያ </translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>ከ ዶከ ላይ ማስወገጃ</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>ወደ ዶክ(_C) መላኪያ </translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>ከ ማስጀመሪያ ውስጥ ማስወገጃ(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>ወደ ማስጀመሪያ ውስጥ መጨመሪያ(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -61,10 +41,30 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation type="unfinished"/>
+        <translation>በ ወኪል መክፈቻ</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation>የ መመልከቻ መመጠኛ ማሰናከያ</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>መክፈቻ</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -72,7 +72,7 @@
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>ሁሉንም መተግበሪያ</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -146,11 +146,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>ሰነዶች</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>ቪዲዮዎች</translation>
     </message>
     <message>
         <source>Music</source>
@@ -158,7 +158,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>ስእሎች</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -225,15 +225,15 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>ሰነዶች</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>ቪዲዮዎች</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>ስእሎች</translation>
     </message>
     <message>
         <source>Downloads</source>

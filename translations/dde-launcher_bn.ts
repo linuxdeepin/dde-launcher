@@ -22,21 +22,13 @@
     </message>
     <message>
         <source>Confirm</source>
-        <translation type="unfinished"/>
+        <translation>নিশ্চিত করুন</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Remove from desktop</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Send to desktop(_E)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -44,20 +36,8 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Send to dock(_C)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Uninstall</source>
-        <translation type="unfinished"/>
+        <translation>আনইনস্টল করে দিন</translation>
     </message>
     <message>
         <source>Open by proxy</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>খুলুন</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -135,7 +135,7 @@
     </message>
     <message>
         <source>Confirm</source>
-        <translation type="unfinished"/>
+        <translation>নিশ্চিত করুন</translation>
     </message>
 </context>
 <context>
@@ -174,7 +174,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>পুনঃরায় চালু করুন</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -213,7 +213,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>পুনঃরায় চালু করুন</translation>
     </message>
     <message>
         <source>Suspend</source>

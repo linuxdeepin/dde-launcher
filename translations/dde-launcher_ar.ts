@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>فتح</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>حذف من سطح المكتب</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>إرسال إلى سطح المكتب</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>حذف من شريط الإرساء</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>إرسال إلى شريط الإرساء</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>حذف من بدء التشغيل</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation> إضافة إلى بدء التشغيل</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation>تعطيل تحجيم العرض</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>فتح</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>

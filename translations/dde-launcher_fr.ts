@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Ouvrir(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Supprimer du bureau</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Envoyer sur le bureau(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Supprimer du dock</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Épingler au dock(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Supprimer du démarrage(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Ajouter au démarrage(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,7 +45,27 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Désactivez la mise à l&apos;échelle de l&apos;affichage</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Ouvrir</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation>Envoyer sur le bureau</translation>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation>Épingler au lanceur</translation>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation>Supprimer du démarrage</translation>
+    </message>
+    <message>
+        <source>Add to startup</source>
+        <translation>Ajouter au démarrage</translation>
     </message>
 </context>
 <context>

@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Buka(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Buang dari desktop</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Hantar ke desktop(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Buang dari labuh</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Hantar ke labuh(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Buang dari permulaan(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Tambah ke permuaan(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,7 +45,27 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Lumpuhkan penskalaan paparan</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Buka</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation>Hantar ke desktop</translation>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation>Hantar ke labuh</translation>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation>Buang dari permulaan</translation>
+    </message>
+    <message>
+        <source>Add to startup</source>
+        <translation>Tambah ke permulaan</translation>
     </message>
 </context>
 <context>

@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Ανοίξτε(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Αφαιρέστε από την επιφάνεια εργασίας</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Στείλτε στην επιφάνεια εργασίας(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Αφαιρέστε από την πλατφόρμα</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Αποστολή στην πλατφόρμα(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Αφαίρεση από την εκκίνηση(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Πρόσθεση στην εκκίνηση(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Άνοιγμα</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>

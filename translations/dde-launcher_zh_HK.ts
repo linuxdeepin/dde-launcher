@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>開啟 (_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>從桌面移除</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>傳送到桌面 (_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>從快速工具列移除</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>傳送到快速工具列 _C</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>從開機啟動中移除 (_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>加至開機啟動 (_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>開啟</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>

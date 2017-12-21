@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Abrir(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Eliminar del escritorio</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Enviar a escritorio(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Quitar del muelle</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Anclar al muelle(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Quitar del inicio(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Añadir al inicio(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,7 +45,27 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Deshabilitar escala de visualización</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Abrir</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation>Enviar al escritorio</translation>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation>Enviar al muelle</translation>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation>Eliminar del arranque</translation>
+    </message>
+    <message>
+        <source>Add to startup</source>
+        <translation>Añadir al arranque</translation>
     </message>
 </context>
 <context>

@@ -28,32 +28,12 @@
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Open(_O)</source>
-        <translation>Atverti(_O)</translation>
-    </message>
-    <message>
         <source>Remove from desktop</source>
         <translation>Šalinti iš darbalaukio</translation>
     </message>
     <message>
-        <source>Send to desktop(_E)</source>
-        <translation>Siųsti į darbalaukį(_E)</translation>
-    </message>
-    <message>
         <source>Remove from dock</source>
         <translation>Šalinti iš doko</translation>
-    </message>
-    <message>
-        <source>Send to dock(_C)</source>
-        <translation>Siųsti į doką(_C)</translation>
-    </message>
-    <message>
-        <source>Remove from startup(_R)</source>
-        <translation>Šalinti iš paleidimo(_R)</translation>
-    </message>
-    <message>
-        <source>Add to startup(_A)</source>
-        <translation>Pridėti į paleidimą(_A)</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -65,6 +45,26 @@
     </message>
     <message>
         <source>Disable display scaling</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Atverti</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add to startup</source>
         <translation type="unfinished"/>
     </message>
 </context>

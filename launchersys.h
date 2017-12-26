@@ -27,6 +27,7 @@
 #include "dbusinterface/dbuslauncher.h"
 
 #include <QObject>
+#include <QTimer>
 
 class LauncherInterface;
 class LauncherSys : public QObject
@@ -43,10 +44,13 @@ public:
 
 private slots:
     void displayModeChanged();
+    void onAutoExitTimeout();
 
 private:
     LauncherInterface *m_launcherInter;
     DBusLauncher *m_dbusLauncherInter;
+
+    QTimer *m_autoExitTimer;
 };
 
 #endif // LAUNCHERSYS_H

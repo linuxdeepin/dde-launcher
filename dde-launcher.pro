@@ -16,6 +16,10 @@ isEqual(ARCH, mips64) | isEqual(ARCH, mips32) {
     DEFINES += ARCH_MIPSEL
 }
 
+isEqual(LAUNCHER_AUTO_EXIT, YES) {
+    DEFINES += LAUNCHER_AUTO_EXIT
+}
+
 SOURCES += \
     model/appslistmodel.cpp \
     model/appsmanager.cpp \

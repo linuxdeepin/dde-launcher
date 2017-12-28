@@ -54,15 +54,13 @@ int perfectIconSize(const int size)
     return 256;
 }
 
-const QPixmap getThemeIcon(const QString &iconName, const int size)
+QPixmap getThemeIcon(const QString &iconName, const int size)
 {
     const auto ratio = qApp->devicePixelRatio();
     const int s = perfectIconSize(size);
 
     QPixmap pixmap;
-
     do {
-
         if (iconName.startsWith("data:image/"))
         {
             const QStringList strs = iconName.split("base64,");
@@ -131,28 +129,6 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &AppsManager::dockGeometryChanged);
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
-}
-
-const QPixmap AppsManager::loadIconFile(const QString &fileName, const int size)
-{
-    QPixmap pixmap;
-    if (fileName.startsWith("data:image/")) {
-        //This icon file is an inline image
-        QStringList strs = fileName.split("base64,");
-        if (strs.length() == 2) {
-            QByteArray data = QByteArray::fromBase64(strs.at(1).toLatin1());
-            pixmap.loadFromData(data);
-        }
-
-    } else if (fileName.endsWith(".svg", Qt::CaseInsensitive))
-        pixmap = loadSvg(fileName, size);
-    else
-        pixmap = QPixmap(fileName);
-
-    if (pixmap.isNull())
-        return pixmap;
-
-    return pixmap.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
 void AppsManager::appendSearchResult(const QString &appKey)
@@ -392,11 +368,6 @@ bool AppsManager::appIsProxy(const QString &desktop)
 bool AppsManager::appIsEnableScaling(const QString &desktop)
 {
     return !m_launcherInter->GetDisableScaling(desktop);
-}
-
-const QPixmap AppsManager::appIcon(const QString &iconKey, const int size)
-{
-    return getThemeIcon(iconKey, size / qApp->devicePixelRatio() * 1.1);
 }
 
 void AppsManager::refreshCategoryInfoList()

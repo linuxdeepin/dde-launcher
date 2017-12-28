@@ -65,7 +65,7 @@ AppsListModel::AppCategory ItemInfo::category() const
 
 void ItemInfo::updateInfo(const ItemInfo &info)
 {
-    if (info.m_key != m_key)
+    if (!this->operator==(info))
         return;
 
     *this = info;
@@ -91,16 +91,18 @@ QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo &info)
 
 QDataStream &operator<<(QDataStream &argument, const ItemInfo &info)
 {
-    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
-    argument << info.m_categoryId << info.m_installedTime;
+    argument << info.m_desktop;
+//    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
+//    argument << info.m_categoryId << info.m_installedTime;
 
     return argument;
 }
 
 const QDataStream &operator>>(QDataStream &argument, ItemInfo &info)
 {
-    argument >> info.m_desktop >> info.m_name >> info.m_key >> info.m_iconKey;
-    argument >> info.m_categoryId >> info.m_installedTime;
+    argument >> info.m_desktop;
+//    argument >> info.m_desktop >> info.m_name >> info.m_key >> info.m_iconKey;
+//    argument >> info.m_categoryId >> info.m_installedTime;
 
     return argument;
 }

@@ -163,34 +163,38 @@ bool MiniCategoryWidget::event(QEvent *event)
 
 void MiniCategoryWidget::selectNext()
 {
-    int idx = 0;
+    int select = 0;
     for (int i(0); i != m_items.size(); ++i)
     {
         if (m_items[i]->isChecked())
         {
-            idx = i;
+            select = i + 1;
             break;
         }
     }
 
-    const int next = (idx + 1) % m_items.size();
-    m_items[next]->click();
+    while (!m_items[select % m_items.size()]->isVisible())
+        ++select;
+
+    m_items[select % m_items.size()]->click();
 }
 
 void MiniCategoryWidget::selectPrev()
 {
-    int idx = 0;
+    int select = 0;
     for (int i(0); i != m_items.size(); ++i)
     {
         if (m_items[i]->isChecked())
         {
-            idx = i;
+            select = i - 1;
             break;
         }
     }
 
-    const int prev = (idx - 1 + m_items.size()) % m_items.size();
-    m_items[prev]->click();
+    while (!m_items[(select + m_items.size()) % m_items.size()]->isVisible())
+        --select;
+
+    m_items[(select + m_items.size()) % m_items.size()]->click();
 }
 
 void MiniCategoryWidget::onCategoryListChanged()

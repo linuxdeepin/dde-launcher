@@ -23,21 +23,21 @@
 
 #include "menuworker.h"
 
+#include <QMenu>
+#include <QSignalMapper>
+
 static QString ChainsProxy_path = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first()
         + "/deepin/proxychains.conf";
 
 MenuWorker::MenuWorker(QObject *parent) : QObject(parent)
 {
     m_xsettings = new QGSettings("com.deepin.xsettings", QByteArray(), this);
-    m_menuManagerInterface = new DBusMenuManager(this);
     m_dockAppManagerInterface = new DBusDock(this);
     m_startManagerInterface = new DBusStartManager(this);
     m_launcherInterface = new DBusLauncher(this);
-    m_menuInterface = NULL;
     m_appManager = AppsManager::instance();
 
     initConnect();
-
 }
 
 
@@ -50,25 +50,11 @@ MenuWorker::~MenuWorker()
 }
 
 
-void MenuWorker::showMenuByAppItem(const QModelIndex &index, QPoint pos){
+void MenuWorker::showMenuByAppItem(const QModelIndex &index, QPoint pos) {
     setCurrentModelIndex(index);
+
     m_appKey = m_currentModelIndex.data(AppsListModel::AppKeyRole).toString();
     m_appDesktop = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
-    qDebug() << "appKey" << m_appKey;
-    QString menuContent = createMenuContent(/*m_appKey*/);
-    QString menuJsonContent = JsonToQString(pos, menuContent);
-    QString menuDBusObjectpath = registerMenu();
-    qDebug() << "dbus objectpath:" << menuDBusObjectpath;
-    if (menuDBusObjectpath.length() > 0){
-        showMenu(menuDBusObjectpath, menuJsonContent);
-        m_currentMenuObjectPath = menuDBusObjectpath;
-        m_menuObjectPaths.insert(m_appKey, menuDBusObjectpath);
-    }else{
-        qCritical() << "register menu fail!";
-    }
-}
-
-QString MenuWorker::createMenuContent(/*QString appKey*/){
     m_isItemOnDesktop = m_currentModelIndex.data(AppsListModel::AppIsOnDesktopRole).toBool();
     m_isItemOnDock = m_currentModelIndex.data(AppsListModel::AppIsOnDockRole).toBool();
     m_isItemStartup = m_currentModelIndex.data(AppsListModel::AppAutoStartRole).toBool();
@@ -76,164 +62,88 @@ QString MenuWorker::createMenuContent(/*QString appKey*/){
     m_isItemProxy = m_currentModelIndex.data(AppsListModel::AppIsProxyRole).toBool();
     m_isItemEnableScaling = m_currentModelIndex.data(AppsListModel::AppEnableScalingRole).toBool();
 
-    QJsonObject openObj = createMenuItem(0, tr("Open(_O)"));
-    QJsonObject seperatorObj1 = createSeperator();
-    QJsonObject desktopObj;
-    if (m_isItemOnDesktop){
-        desktopObj = createMenuItem(1, tr("Remove from desktop"));
-    }else{
-        desktopObj = createMenuItem(1, tr("Send to desktop(_E)"));
+    qDebug() << "appKey" << m_appKey;
+
+    QMenu *menu = new QMenu;
+    connect(menu, &QMenu::aboutToHide, menu, &QMenu::deleteLater);
+
+    QSignalMapper *signalMapper = new QSignalMapper(this);
+
+    QAction *open;
+    QAction *desktop;
+    QAction *dock;
+    QAction *startup;
+    QAction *proxy;
+    QAction *scale;
+    QAction *uninstall;
+
+    open = new QAction(tr("Open"), this);
+
+    desktop = new QAction(m_isItemOnDesktop ?
+                              tr("Remove from desktop") :
+                              tr("Send to desktop"),
+                          this);
+
+    dock = new QAction(m_isItemOnDock ?
+                           tr("Remove from dock") :
+                           tr("Send to dock"),
+                       this);
+
+    startup = new QAction(m_isItemStartup ?
+                              tr("Remove from startup") :
+                              tr("Add to startup"),
+                          this);
+
+    scale = new QAction(tr("Disable display scaling"), this);
+
+    uninstall = new QAction(tr("Uninstall"), this);
+
+    menu->addAction(open);
+    menu->addSeparator();
+    menu->addAction(desktop);
+    menu->addAction(dock);
+    menu->addSeparator();
+    menu->addAction(startup);
+
+    if (QFile::exists(ChainsProxy_path)) {
+        proxy = new QAction(tr("Open by proxy"), this);
+        proxy->setCheckable(true);
+        proxy->setChecked(m_isItemProxy);
+        menu->addAction(proxy);
+        signalMapper->setMapping(proxy, Proxy);
+        connect(proxy, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
     }
-    QJsonObject dockObj;
-    if (m_isItemOnDock){
-        dockObj = createMenuItem(2, tr("Remove from dock"));
-    }else{
-        dockObj = createMenuItem(2, tr("Send to dock(_C)"));
-    }
-    QJsonObject seperatorObj2 = createSeperator();
-    QJsonObject startupObj;
-    if (m_isItemStartup){
-        startupObj = createMenuItem(3, tr("Remove from startup(_R)"));
-    }else{
-        startupObj = createMenuItem(3, tr("Add to startup(_A)"));
-    }
-
-    QJsonObject proxyObj;
-    proxyObj = createMenuItem(4, tr("Open by proxy"));
-    proxyObj["isCheckable"] = true;
-    proxyObj["checked"] = m_isItemProxy;
-
-    QJsonObject scalingObj;
-    scalingObj = createMenuItem(6, tr("Disable display scaling"));
-    scalingObj["isCheckable"] = true;
-    scalingObj["checked"] = !m_isItemEnableScaling;
-
-    QJsonObject uninstallObj = createMenuItem(5, tr("Uninstall"), m_isRemovable);
-
-    QJsonArray items;
-    items.append(openObj);
-    items.append(seperatorObj1);
-    items.append(desktopObj);
-    items.append(dockObj);
-    items.append(seperatorObj2);
-    items.append(startupObj);
 
     const double scale_ratio = m_xsettings->get("scale-factor").toDouble();
-    if (!qFuzzyCompare(1.0, scale_ratio))
-        items.append(scalingObj);
-
-    if (QFile::exists(ChainsProxy_path))
-        items.append(proxyObj);
-
-#ifndef WITHOUT_UNINSTALL_APP
-    items.append(uninstallObj);
-#endif
-
-    QJsonObject menuObj;
-    menuObj["checkableMenu"] = false;
-    menuObj["singleCheck"] = false;
-    menuObj["items"] = items;
-
-    return QString(QJsonDocument(menuObj).toJson());
-}
-
-QJsonObject MenuWorker::createMenuItem(int itemId, QString itemText, bool isActive){
-    QJsonObject itemObj;
-    itemObj["itemId"] = QString::number(itemId);
-    itemObj["itemText"] = itemText;
-    itemObj["isActive"] = isActive;
-    itemObj["isCheckable"] = false;
-    itemObj["checked"] = false;
-    itemObj["itemIcon"] = "";
-    itemObj["itemIconHover"] = "";
-    itemObj["itemIconInactive"] = "";
-    itemObj["showCheckMark"] = false;
-    QJsonObject subMenuObj;
-    subMenuObj["checkableMenu"] = false;
-    subMenuObj["singleCheck"] = false;
-    subMenuObj["items"] = QJsonArray();
-    itemObj["itemSubMenu"] = subMenuObj;
-    return itemObj;
-}
-
-QJsonObject MenuWorker::createSeperator(){
-    return createMenuItem(-100, "");
-}
-
-QString MenuWorker::JsonToQString(QPoint pos, QString menucontent) {
-    QJsonObject menuObj;
-    menuObj["x"] = pos.x();
-    menuObj["y"] = pos.y();
-    menuObj["isDockMenu"] = false;
-    menuObj["menuJsonContent"] = menucontent;
-    return QString(QJsonDocument(menuObj).toJson());
-}
-
-QString MenuWorker::registerMenu() {
-    QDBusPendingReply<QDBusObjectPath> reply = m_menuManagerInterface->RegisterMenu();
-    reply.waitForFinished();
-    if (!reply.isError()) {
-        return reply.value().path();
-    } else {
-        qDebug() << "reply:" << reply.error().message();
-        return "";
+    if (!qFuzzyCompare(1.0, scale_ratio)) {
+        scale->setCheckable(true);
+        scale->setChecked(!m_isItemEnableScaling);
+        menu->addAction(scale);
+        signalMapper->setMapping(scale, SwitchScale);
+        connect(scale, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
     }
+
+    uninstall->setEnabled(m_isRemovable);
+    menu->addAction(uninstall);
+
+    connect(open, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+    connect(desktop, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+    connect(dock, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+    connect(startup, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+
+    connect(uninstall, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+
+    signalMapper->setMapping(open, Open);
+    signalMapper->setMapping(desktop, Desktop);
+    signalMapper->setMapping(dock, Dock);
+    signalMapper->setMapping(startup, Startup);
+    signalMapper->setMapping(uninstall, Uninstall);
+
+    connect(signalMapper, static_cast<void (QSignalMapper::*)(const int)>(&QSignalMapper::mapped), this, &MenuWorker::handleMenuAction);
+
+    menu->move(pos);
+    menu->exec();
 }
-
-void MenuWorker::showMenu(QString menuDBusObjectPath, QString menuContent) {
-    qDebug() << menuDBusObjectPath;
-    m_menuInterface = new DBusMenu(MenuManager_service, menuDBusObjectPath, QDBusConnection::sessionBus(), this);
-    m_menuInterface->ShowMenu(menuContent);
-    connect(m_menuInterface, SIGNAL(ItemInvoked(QString, bool)),this, SLOT(menuItemInvoked(QString,bool)));
-    connect(m_menuInterface, SIGNAL(MenuUnregistered()), this, SLOT(handleMenuClosed()));
-    connect(m_menuInterface, SIGNAL(MenuUnregistered()), m_menuInterface, SLOT(deleteLater()));
-
-    m_menuIsShown = true;
-}
-
-void MenuWorker::hideMenu(const QString &menuDBusObjectPath)
-{
-    m_menuManagerInterface->UnregisterMenu(menuDBusObjectPath);
-}
-
-void MenuWorker::hideMenuByAppKey(const QString &appKey)
-{
-    if (m_menuObjectPaths.contains(appKey)){
-        hideMenu(m_menuObjectPaths.value(appKey));
-    }
-}
-
-void MenuWorker::menuItemInvoked(QString itemId, bool flag){
-    Q_UNUSED(flag)
-    int id = itemId.toInt();
-    qDebug() << "menuItemInvoked" << itemId;
-    switch (id) {
-    case 0:
-        handleOpen();
-        break;
-    case 1:
-        handleToDesktop();
-        break;
-    case 2:
-        handleToDock();
-        break;
-    case 3:
-        handleToStartup();
-        break;
-    case 4:
-        handleToProxy();
-        break;
-    case 5:
-        emit  unInstallApp(m_currentModelIndex);
-        break;
-    case 6:
-        handleSwitchScaling();
-        break;
-    default:
-        break;
-    }
-}
-
 
 void MenuWorker::handleOpen(){
     m_appManager->launchApp(m_currentModelIndex);
@@ -253,6 +163,35 @@ void MenuWorker::setCurrentModelIndex(const QModelIndex &index) {
 
 const QModelIndex MenuWorker::getCurrentModelIndex() {
     return m_currentModelIndex;
+}
+
+void MenuWorker::handleMenuAction(int index)
+{
+    switch (index) {
+    case Open:
+        handleOpen();
+        break;
+    case Desktop:
+        handleToDesktop();
+        break;
+    case Dock:
+        handleToDock();
+        break;
+    case Startup:
+        handleToStartup();
+        break;
+    case Proxy:
+        handleToProxy();
+        break;
+    case SwitchScale:
+        handleSwitchScaling();
+        break;
+    case Uninstall:
+        emit unInstallApp(m_currentModelIndex);
+        break;
+    default:
+        break;
+    }
 }
 
 void MenuWorker::handleToDesktop(){

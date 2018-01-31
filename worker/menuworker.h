@@ -36,18 +36,11 @@
 #include <QModelIndex>
 #include <QGSettings>
 
-#include "dbusmenu.h"
-#include "dbusmenumanager.h"
 #include "dbusdock.h"
 #include "dbuslauncher.h"
 #include "dbustartmanager.h"
 #include "model/appsmanager.h"
 #include "model/appslistmodel.h"
-
-
-#define MenuManager_service "com.deepin.menu"
-#define MenuManager_path "/com/deepin/menu"
-
 
 class MenuWorker : public QObject
 {
@@ -58,18 +51,21 @@ public:
     explicit MenuWorker(QObject *parent = 0);
     ~MenuWorker();
 
+    enum MenuAction {
+        Open = 1,
+        Desktop = 2,
+        Dock = 3,
+        Startup = 4,
+        Proxy = 5,
+        SwitchScale = 6,
+        Uninstall = 7
+    };
+
     void initConnect();
     bool isMenuShown() const {return m_menuIsShown;}
     bool isItemOnDock(QString appKey);
     bool isItemOnDesktop(QString appKey);
     bool isItemStartup(QString appKey);
-
-    QJsonObject createMenuItem(int itemId, QString itemText, bool isActive = true);
-    QJsonObject createSeperator();
-
-    QString createMenuContent();
-    QString registerMenu();
-    QString JsonToQString(QPoint pos, QString menucontent);
 
 signals:
     void menuAccepted();
@@ -78,11 +74,6 @@ signals:
 
 public slots:
     void showMenuByAppItem(const QModelIndex &index, QPoint pos);
-    void menuItemInvoked(QString itemId, bool flag);
-
-    void showMenu(QString menuDBusObjectPath, QString menuContent);
-    void hideMenu(const QString& menuDBusObjectPath);
-    void hideMenuByAppKey(const QString& appKey);
 
     void handleOpen();
     void handleToDesktop();
@@ -94,10 +85,10 @@ public slots:
     void handleMenuClosed();
     void setCurrentModelIndex(const QModelIndex &index);
     const QModelIndex getCurrentModelIndex();
+    void handleMenuAction(int index);
+
 private:
     QGSettings *m_xsettings;
-    DBusMenuManager* m_menuManagerInterface;
-    DBusMenu* m_menuInterface;
     DBusDock* m_dockAppManagerInterface;
     DBusLauncher* m_launcherInterface;
     DBusStartManager* m_startManagerInterface;

@@ -59,6 +59,9 @@ public:
     explicit MiniFrame(QWidget *parent = 0);
     ~MiniFrame();
 
+signals:
+    void visibleChanged(bool visible);
+
 private:
     void showLauncher() Q_DECL_OVERRIDE;
     void hideLauncher() Q_DECL_OVERRIDE;
@@ -77,6 +80,7 @@ private:
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
+    void hideEvent(QHideEvent *e) Q_DECL_OVERRIDE;
     void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
 
 private slots:

@@ -82,9 +82,15 @@ void LauncherSys::displayModeChanged()
     delete m_launcherInter;
 
     if (!m_dbusLauncherInter->fullscreen())
-        m_launcherInter = new MiniFrame;
-    else
-        m_launcherInter = new FullScreenFrame;
+    {
+        MiniFrame *frame = new MiniFrame;
+        connect(frame, &MiniFrame::visibleChanged, this, &LauncherSys::visibleChanged);
+        m_launcherInter = frame;
+    } else {
+        FullScreenFrame *frame = new FullScreenFrame;
+        connect(frame, &FullScreenFrame::visibleChanged, this, &LauncherSys::visibleChanged);
+        m_launcherInter = frame;
+    }
 
     if (visible)
         m_launcherInter->showLauncher();

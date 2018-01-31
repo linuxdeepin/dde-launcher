@@ -254,15 +254,25 @@ void FullScreenFrame::showEvent(QShowEvent *e)
         raise();
         activateWindow();
         m_floatTitle->raise();
+
+        emit visibleChanged(true);
     });
+}
+
+void FullScreenFrame::hideEvent(QHideEvent *e)
+{
+    BoxFrame::hideEvent(e);
+
+    QTimer::singleShot(1, this, [=] { emit visibleChanged(false); });
 }
 
 void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
 {
-    QFrame::mouseReleaseEvent(e);
-    if (e->button() == Qt::RightButton) {
+    BoxFrame::mouseReleaseEvent(e);
+
+    if (e->button() == Qt::RightButton)
         return;
-    }
+
     hide();
 }
 
@@ -713,7 +723,7 @@ void FullScreenFrame::initConnection()
     connect(this, &FullScreenFrame::categoryAppNumsChanged, this, &FullScreenFrame::refershCategoryVisible);
     connect(this, &FullScreenFrame::displayModeChanged, this, &FullScreenFrame::checkCategoryVisible);
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
-    connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hide);
+    connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hide, Qt::QueuedConnection);
     connect(this, &FullScreenFrame::backgroundChanged, this, static_cast<void (FullScreenFrame::*)()>(&FullScreenFrame::update));
 
     // auto scroll when drag to app list box border
@@ -985,7 +995,7 @@ void FullScreenFrame::launchCurrentApp()
 
 bool FullScreenFrame::windowDeactiveEvent()
 {
-    if (isVisible() && !m_menuWorker->isMenuShown() && !m_isConfirmDialogShown)
+    if (!m_menuWorker->isMenuShown() && !m_isConfirmDialogShown && !m_delayHideTimer->isActive())
         m_delayHideTimer->start();
 
     return true;

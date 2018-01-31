@@ -42,6 +42,9 @@ public:
     void hideLauncher();
     void uninstallApp(const QString &appKey);
 
+signals:
+    void visibleChanged(bool visible);
+
 private slots:
     void displayModeChanged();
     void onAutoExitTimeout();

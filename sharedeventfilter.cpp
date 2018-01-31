@@ -45,7 +45,7 @@ bool SharedEventFilter::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == parent())
     {
-        if (event->type() == QEvent::WindowDeactivate)
+        if (event->type() == QEvent::WindowDeactivate && m_frame->visible())
             return m_frame->windowDeactiveEvent();
     }
 

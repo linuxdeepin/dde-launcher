@@ -26,38 +26,37 @@
 DBusLauncherService::DBusLauncherService(LauncherSys *parent)
     : QDBusAbstractAdaptor(parent)
 {
-    // constructor
     setAutoRelaySignals(true);
+
+    connect(parent, &LauncherSys::visibleChanged, this, &DBusLauncherService::VisibleChanged);
 }
 
 DBusLauncherService::~DBusLauncherService()
 {
-    // destructor
+    qApp->quit();
 }
 
 void DBusLauncherService::Exit()
 {
-    // handle method call com.deepin.dde.Launcher.Exit
     qApp->quit();
 }
 
 void DBusLauncherService::Hide()
 {
-    // handle method call com.deepin.dde.Launcher.Hide
     parent()->hideLauncher();
+
     emit Closed();
 }
 
 void DBusLauncherService::Show()
 {
-    // handle method call com.deepin.dde.Launcher.Show
     parent()->showLauncher();
+
     emit Shown();
 }
 
 void DBusLauncherService::ShowByMode(qlonglong in0)
 {
-    // handle method call com.deepin.dde.Launcher.ShowByMode
     qDebug() << in0;
 }
 
@@ -70,7 +69,6 @@ void DBusLauncherService::UninstallApp(const QString &appKey)
 
 void DBusLauncherService::Toggle()
 {
-    // handle method call com.deepin.dde.Launcher.Toggle
     if (parent()->visible())
     {
         parent()->hideLauncher();
@@ -79,5 +77,10 @@ void DBusLauncherService::Toggle()
         parent()->showLauncher();
         emit Shown();
     }
+}
+
+bool DBusLauncherService::IsVisible()
+{
+    return parent()->visible();
 }
 

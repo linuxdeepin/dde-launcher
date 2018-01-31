@@ -32,24 +32,7 @@ class DBusLauncherService: public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.deepin.dde.Launcher")
-    Q_CLASSINFO("D-Bus Introspection", ""
-"  <interface name=\"com.deepin.dde.Launcher\">\n"
-"    <method name=\"Exit\"/>\n"
-"    <method name=\"Show\"/>\n"
-"    <method name=\"Hide\"/>\n"
-"    <method name=\"Toggle\"/>\n"
-"    <method name=\"ShowByMode\">\n"
-"      <arg direction=\"in\" type=\"x\"/>\n"
-"    </method>\n"
-#ifndef WITHOUT_UNINSTALL_APP
-"    <method name=\"UninstallApp\">\n"
-"      <arg direction=\"in\" type=\"s\"/>\n"
-"    </method>\n"
-#endif
-"    <signal name=\"Closed\"/>\n"
-"    <signal name=\"Shown\"/>\n"
-"  </interface>\n"
-        "")
+
 public:
     explicit DBusLauncherService(LauncherSys *parent);
     virtual ~DBusLauncherService();
@@ -57,8 +40,10 @@ public:
     inline LauncherSys *parent() const
     { return static_cast<LauncherSys *>(QObject::parent()); }
 
-public: // PROPERTIES
-public Q_SLOTS: // METHODS
+public:
+    Q_PROPERTY(bool Visible READ IsVisible NOTIFY VisibleChanged)
+
+public Q_SLOTS:
     void Exit();
     void Hide();
     void Show();
@@ -67,9 +52,12 @@ public Q_SLOTS: // METHODS
     void UninstallApp(const QString &appKey);
 #endif
     void Toggle();
-Q_SIGNALS: // SIGNALS
+    bool IsVisible();
+
+Q_SIGNALS:
     void Closed();
     void Shown();
+    void VisibleChanged(bool visible);
 };
 
 #endif

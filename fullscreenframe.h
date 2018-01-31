@@ -70,6 +70,7 @@ public:
     int dockPosition();
 
 signals:
+    void visibleChanged(bool visible);
     void categoryAppNumsChanged(const AppsListModel::AppCategory category, const int appNums);
     void displayModeChanged(const int mode);
     void currentVisibleCategoryChanged(const AppsListModel::AppCategory currentVisibleCategory) const;
@@ -83,6 +84,7 @@ protected:
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
+    void hideEvent(QHideEvent *e) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;

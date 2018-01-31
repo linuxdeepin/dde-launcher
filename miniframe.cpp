@@ -185,7 +185,7 @@ MiniFrame::MiniFrame(QWidget *parent)
     centralLayout->setContentsMargins(10, 0, 10, 0);
 
     setMaskColor(DarkColor);
-    setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setFocusPolicy(Qt::ClickFocus);
     setFixedSize(550, 485);
@@ -226,14 +226,14 @@ void MiniFrame::showLauncher()
     if (visible())
         return;
 
+    show();
+
     // reset env
     m_searchWidget->clearSearchContent();
     m_viewWrapper->clear();
 
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &MiniFrame::adjustPosition, Qt::QueuedConnection);
     QTimer::singleShot(1, this, &MiniFrame::adjustPosition);
-
-    show();
 }
 
 void MiniFrame::hideLauncher()
@@ -396,7 +396,7 @@ void MiniFrame::mousePressEvent(QMouseEvent *e)
     QWidget::mousePressEvent(e);
 
     if (e->button() == Qt::LeftButton)
-        hide();
+        hideLauncher();
 }
 
 void MiniFrame::keyPressEvent(QKeyEvent *e)
@@ -418,7 +418,15 @@ void MiniFrame::showEvent(QShowEvent *e)
         raise();
         activateWindow();
         setFocus();
+        emit visibleChanged(true);
     });
+}
+
+void MiniFrame::hideEvent(QHideEvent *e)
+{
+    DBlurEffectWidget::hideEvent(e);
+
+    QTimer::singleShot(1, this, [=] { emit visibleChanged(false); });
 }
 
 void MiniFrame::enterEvent(QEvent *e)

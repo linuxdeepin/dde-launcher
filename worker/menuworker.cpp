@@ -65,9 +65,8 @@ void MenuWorker::showMenuByAppItem(const QModelIndex &index, QPoint pos) {
     qDebug() << "appKey" << m_appKey;
 
     QMenu *menu = new QMenu;
-    connect(menu, &QMenu::aboutToHide, menu, &QMenu::deleteLater);
 
-    QSignalMapper *signalMapper = new QSignalMapper(this);
+    QSignalMapper *signalMapper = new QSignalMapper(menu);
 
     QAction *open;
     QAction *desktop;
@@ -77,26 +76,25 @@ void MenuWorker::showMenuByAppItem(const QModelIndex &index, QPoint pos) {
     QAction *scale;
     QAction *uninstall;
 
-    open = new QAction(tr("Open"), this);
+    open = new QAction(tr("Open"), menu);
 
     desktop = new QAction(m_isItemOnDesktop ?
                               tr("Remove from desktop") :
                               tr("Send to desktop"),
-                          this);
+                          menu);
 
     dock = new QAction(m_isItemOnDock ?
                            tr("Remove from dock") :
                            tr("Send to dock"),
-                       this);
+                       menu);
 
     startup = new QAction(m_isItemStartup ?
                               tr("Remove from startup") :
                               tr("Add to startup"),
-                          this);
+                          menu);
 
-    scale = new QAction(tr("Disable display scaling"), this);
 
-    uninstall = new QAction(tr("Uninstall"), this);
+    uninstall = new QAction(tr("Uninstall"), menu);
 
     menu->addAction(open);
     menu->addSeparator();
@@ -106,7 +104,7 @@ void MenuWorker::showMenuByAppItem(const QModelIndex &index, QPoint pos) {
     menu->addAction(startup);
 
     if (QFile::exists(ChainsProxy_path)) {
-        proxy = new QAction(tr("Open by proxy"), this);
+        proxy = new QAction(tr("Open by proxy"), menu);
         proxy->setCheckable(true);
         proxy->setChecked(m_isItemProxy);
         menu->addAction(proxy);
@@ -116,6 +114,7 @@ void MenuWorker::showMenuByAppItem(const QModelIndex &index, QPoint pos) {
 
     const double scale_ratio = m_xsettings->get("scale-factor").toDouble();
     if (!qFuzzyCompare(1.0, scale_ratio)) {
+        scale = new QAction(tr("Disable display scaling"), menu);
         scale->setCheckable(true);
         scale->setChecked(!m_isItemEnableScaling);
         menu->addAction(scale);
@@ -140,6 +139,7 @@ void MenuWorker::showMenuByAppItem(const QModelIndex &index, QPoint pos) {
     signalMapper->setMapping(uninstall, Uninstall);
 
     connect(signalMapper, static_cast<void (QSignalMapper::*)(const int)>(&QSignalMapper::mapped), this, &MenuWorker::handleMenuAction);
+    connect(menu, &QMenu::aboutToHide, menu, &QMenu::deleteLater);
 
     menu->move(pos);
     menu->exec();

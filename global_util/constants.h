@@ -46,6 +46,8 @@ static const int APPS_AREA_ENSURE_VISIBLE_MARGIN_Y = 200;
 static const int APPS_AREA_AUTO_SCROLL_STEP = 5;
 static const int APPS_AREA_AUTO_SCROLL_TIMER = 15;
 
+static const int CLEAR_CACHE_TIMER = 60;
+
 }
 
 #endif // CONSTANTS_H

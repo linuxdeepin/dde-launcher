@@ -54,7 +54,7 @@ int perfectIconSize(const int size)
     return 256;
 }
 
-QPixmap getThemeIcon(const QString &iconName, const int size)
+const QPixmap getThemeIcon(const QString &iconName, const int size)
 {
     const auto ratio = qApp->devicePixelRatio();
     const int s = perfectIconSize(size);
@@ -368,6 +368,21 @@ bool AppsManager::appIsProxy(const QString &desktop)
 bool AppsManager::appIsEnableScaling(const QString &desktop)
 {
     return !m_launcherInter->GetDisableScaling(desktop);
+}
+
+const QPixmap AppsManager::appIcon(const QString &iconKey, const int size)
+{
+    QPair<QString, int> tmpKey { iconKey, size };
+
+    if (m_iconCache.contains(tmpKey) && !m_iconCache[tmpKey].isNull()) {
+        return m_iconCache[tmpKey];
+    }
+
+    const QPixmap &pixmap = getThemeIcon(iconKey, size / qApp->devicePixelRatio() * 1.1);
+
+    m_iconCache[tmpKey] = pixmap;
+
+    return pixmap;
 }
 
 void AppsManager::refreshCategoryInfoList()

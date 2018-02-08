@@ -159,6 +159,7 @@ private:
     QWidget *m_scrollDest;
     QTimer *m_delayHideTimer;
     QTimer *m_autoScrollTimer;
+    QTimer *m_clearCacheTimer;
 
     NavigationWidget *m_navigationWidget;
     QWidget *m_rightSpacing;

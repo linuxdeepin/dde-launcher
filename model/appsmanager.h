@@ -44,7 +44,7 @@
 
 #define DOCK_POS_RIGHT  1
 
-QPixmap getThemeIcon(const QString &iconName, const int size);
+const QPixmap getThemeIcon(const QString &iconName, const int size);
 
 class CalculateUtil;
 class AppsManager : public QObject
@@ -82,9 +82,9 @@ public slots:
     bool appIsOnDesktop(const QString &desktop);
     bool appIsProxy(const QString &desktop);
     bool appIsEnableScaling(const QString &desktop);
-    inline const QPixmap appIcon(const QString &iconKey, const int size) const
-    { return getThemeIcon(iconKey, size / qApp->devicePixelRatio() * 1.1); }
+    const QPixmap appIcon(const QString &iconKey, const int size);
     int appNums(const AppsListModel::AppCategory &category) const;
+    inline void clearCache() { m_iconCache.clear(); }
 
     // TODO: optimize
     void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
@@ -126,6 +126,7 @@ private:
     static QGSettings LAUNCHER_SETTINGS;
     static QSettings APP_AUTOSTART_CACHE;
     static QSettings APP_USER_SORTED_LIST;
+    QMap<QPair<QString, int>, QPixmap> m_iconCache;
 };
 
 #endif // APPSMANAGER_H

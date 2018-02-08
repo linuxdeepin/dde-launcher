@@ -69,6 +69,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_appsManager(AppsManager::instance()),
     m_delayHideTimer(new QTimer(this)),
     m_autoScrollTimer(new QTimer(this)),
+    m_clearCacheTimer(new QTimer(this)),
     m_navigationWidget(new NavigationWidget),
     m_rightSpacing(new QWidget),
     m_searchWidget(new SearchWidget(this)),
@@ -257,6 +258,8 @@ void FullScreenFrame::showEvent(QShowEvent *e)
 
         emit visibleChanged(true);
     });
+
+    m_clearCacheTimer->stop();
 }
 
 void FullScreenFrame::hideEvent(QHideEvent *e)
@@ -264,6 +267,8 @@ void FullScreenFrame::hideEvent(QHideEvent *e)
     BoxFrame::hideEvent(e);
 
     QTimer::singleShot(1, this, [=] { emit visibleChanged(false); });
+
+    m_clearCacheTimer->start();
 }
 
 void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
@@ -380,6 +385,9 @@ void FullScreenFrame::initUI()
 
     m_autoScrollTimer->setInterval(DLauncher::APPS_AREA_AUTO_SCROLL_TIMER);
     m_autoScrollTimer->setSingleShot(false);
+
+    m_clearCacheTimer->setSingleShot(true);
+    m_clearCacheTimer->setInterval(DLauncher::CLEAR_CACHE_TIMER * 1000);
 
     m_appsArea->setObjectName("AppBox");
     m_appsArea->setWidgetResizable(true);
@@ -725,6 +733,8 @@ void FullScreenFrame::initConnection()
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
     connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hide, Qt::QueuedConnection);
     connect(this, &FullScreenFrame::backgroundChanged, this, static_cast<void (FullScreenFrame::*)()>(&FullScreenFrame::update));
+
+    connect(m_clearCacheTimer, &QTimer::timeout, m_appsManager, &AppsManager::clearCache);
 
     // auto scroll when drag to app list box border
     connect(m_allAppsView, &AppGridView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);

@@ -1,5 +1,12 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_TW" version="2.1">
 <context>
+    <name>AppListDelegate</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -241,10 +248,83 @@
     </message>
 </context>
 <context>
+    <name>MiniFrameRightBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>電腦</translation>
+    </message>
+    <message>
+        <source>Document</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>影片</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>音樂</translation>
+    </message>
+    <message>
+        <source>Picture</source>
+        <translation>圖片</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>下載</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>手動</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>設定</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>關機</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameSwitchBtn</name>
+    <message>
+        <source>All programes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
         <translation>搜尋</translation>
+    </message>
+</context>
+<context>
+    <name>WindowedFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>確定移除 %1？</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>所有依賴的軟體也會移除</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>確定</translation>
     </message>
 </context>
 </TS>

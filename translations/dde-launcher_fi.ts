@@ -1,20 +1,27 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
 <context>
+    <name>AppListDelegate</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>Ei hakutuloksia</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Haluatko poistaa sovelluksen %1?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Kaikki riippuvaisuudet poistetaan samanaikaisesti</translation>
+        <translation>Kaikki riippuvaisuudet poistetaan yhdessä</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -33,7 +40,7 @@
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Poista asemalta</translation>
+        <translation>Poista telakasta</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -41,11 +48,11 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation type="unfinished"/>
+        <translation>Avaa välityspalvelimella</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Poista näytön skaalaus käytöstä</translation>
     </message>
     <message>
         <source>Open</source>
@@ -53,26 +60,26 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation>Lähetä työpöydälle</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation>Lähetä telakkaan</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation>Poista käynnistyksestä</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation>Lisää käynnistykseen</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>Kaikki sovellukset</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -104,7 +111,7 @@
     </message>
     <message>
         <source>Reading</source>
-        <translation>Luetaan</translation>
+        <translation>Lukeminen</translation>
     </message>
     <message>
         <source>Development</source>
@@ -123,11 +130,11 @@
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Haluatko poistaa sovelluksen %1?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Kaikki riippuvaisuudet poistetaan samanaikaisesti</translation>
+        <translation>Kaikki riippuvaisuudet poistetaan yhdessä</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -146,11 +153,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumentit</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Videot</translation>
     </message>
     <message>
         <source>Music</source>
@@ -158,7 +165,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Kuvat</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -174,7 +181,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Käynnistä uudelleen</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -186,7 +193,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Takaisin</translation>
     </message>
 </context>
 <context>
@@ -213,7 +220,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Käynnistä uudelleen</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -221,19 +228,19 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Takaisin</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumentit</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Videot</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Kuvat</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -241,10 +248,83 @@
     </message>
 </context>
 <context>
+    <name>MiniFrameRightBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Tietokone</translation>
+    </message>
+    <message>
+        <source>Document</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Video</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Musiikki</translation>
+    </message>
+    <message>
+        <source>Picture</source>
+        <translation>Kuvat</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Lataukset</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Manuaalinen</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Asetukset</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Sammuta</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameSwitchBtn</name>
+    <message>
+        <source>All programes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
         <translation>Etsi</translation>
+    </message>
+</context>
+<context>
+    <name>WindowedFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Haluatko poistaa sovelluksen %1?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Kaikki riippuvaisuudet poistetaan yhdessä</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Peruuta</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Vahvista</translation>
     </message>
 </context>
 </TS>

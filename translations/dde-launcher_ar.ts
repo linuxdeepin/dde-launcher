@@ -1,5 +1,12 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="ar" version="2.1">
 <context>
+    <name>AppListDelegate</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -53,19 +60,19 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation>إرسال إلى سطح المكتب</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation>إرسال إلى شريط الإرساء</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation>حذف من بدء التشغيل</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation> إضافة إلى بدء التشغيل</translation>
     </message>
 </context>
 <context>
@@ -241,10 +248,83 @@
     </message>
 </context>
 <context>
+    <name>MiniFrameRightBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>الحاسوب</translation>
+    </message>
+    <message>
+        <source>Document</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>الفيديو</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>موسيقى</translation>
+    </message>
+    <message>
+        <source>Picture</source>
+        <translation>صورة</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>‫التنزيلات</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>يدوي</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>إعدادات</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>إيقاف تشغيل</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameSwitchBtn</name>
+    <message>
+        <source>All programes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
         <translation>بحث </translation>
+    </message>
+</context>
+<context>
+    <name>WindowedFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>هل أنت متأكد من إلغاء تثبيت %1 ؟</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>كل الاعتماديات سيتم إزالتها معاً</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>إلغاء</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>تأكيد</translation>
     </message>
 </context>
 </TS>

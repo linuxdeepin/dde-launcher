@@ -1,5 +1,12 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.1">
 <context>
+    <name>AppListDelegate</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -45,7 +52,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Képernyő arányos skálázásának kikapcsolása</translation>
     </message>
     <message>
         <source>Open</source>
@@ -53,19 +60,19 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation>Asztalra küldés</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation>Dockba küldés</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation>Automatikus indításból eltávolítás</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation>Automatikus indításhoz adás</translation>
     </message>
 </context>
 <context>
@@ -241,10 +248,83 @@
     </message>
 </context>
 <context>
+    <name>MiniFrameRightBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Számítógép</translation>
+    </message>
+    <message>
+        <source>Document</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Videó</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Zene</translation>
+    </message>
+    <message>
+        <source>Picture</source>
+        <translation>Fénykép</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Letöltések</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Kézi</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Beállítások</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Leállítás</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameSwitchBtn</name>
+    <message>
+        <source>All programes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
         <translation>Keresés</translation>
+    </message>
+</context>
+<context>
+    <name>WindowedFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Biztosan eltávolítja ezt: %1 ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Az összes függőség eltávolításra kerül</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Mégse</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Megerősítés</translation>
     </message>
 </context>
 </TS>

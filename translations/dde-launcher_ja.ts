@@ -1,5 +1,12 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="ja" version="2.1">
 <context>
+    <name>AppListDelegate</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -241,10 +248,83 @@
     </message>
 </context>
 <context>
+    <name>MiniFrameRightBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>コンピュータ</translation>
+    </message>
+    <message>
+        <source>Document</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>ビデオ</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>ミュージック</translation>
+    </message>
+    <message>
+        <source>Picture</source>
+        <translation>ピクチャー</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>ダウンロード</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>手動</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>設定</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>シャットダウン</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameSwitchBtn</name>
+    <message>
+        <source>All programes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
         <translation>検索</translation>
+    </message>
+</context>
+<context>
+    <name>WindowedFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>%1 を削除してよろしいですか？</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>依存関係にあるものすべてが一緒に削除されます</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>確認</translation>
     </message>
 </context>
 </TS>

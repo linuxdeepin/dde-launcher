@@ -1,16 +1,23 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
 <context>
+    <name>AppListDelegate</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>Arama sonucu bulunamadı</translation>
+        <translation>Herhangi bir sonuç bulunamadı</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>%1&apos;i kaldırmak istediğinizden emin misiniz?</translation>
+        <translation>%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
@@ -18,7 +25,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal et</translation>
+        <translation>İptal</translation>
     </message>
     <message>
         <source>Confirm</source>
@@ -33,7 +40,7 @@
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Rıhtım&apos;dan kaldır</translation>
+        <translation>Görev çubuğundan kaldır</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -41,11 +48,11 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation>Vekil sunucuyla aç</translation>
+        <translation>Vekil sunucu ile aç</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>Ekran ölçeklendirmesi devre dışı</translation>
+        <translation>Ekran ölçeklendirmeyi devre dışı bırak</translation>
     </message>
     <message>
         <source>Open</source>
@@ -53,11 +60,11 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation>Masaüstüne _gönder</translation>
+        <translation>Masaüstüne gönder</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>Rıhtıma gönder</translation>
+        <translation>Görev çubuğuna gönder</translation>
     </message>
     <message>
         <source>Remove from startup</source>
@@ -88,7 +95,7 @@
     </message>
     <message>
         <source>Video</source>
-        <translation>Video</translation>
+        <translation>Görüntü</translation>
     </message>
     <message>
         <source>Graphics</source>
@@ -123,7 +130,7 @@
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>%1&apos;i kaldırmak istediğinizden emin misiniz?</translation>
+        <translation>%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
@@ -131,7 +138,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal et</translation>
+        <translation>İptal</translation>
     </message>
     <message>
         <source>Confirm</source>
@@ -150,7 +157,7 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videolar</translation>
+        <translation>Görüntüler</translation>
     </message>
     <message>
         <source>Music</source>
@@ -158,7 +165,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Resimler</translation>
+        <translation>Fotoğraflar</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -213,7 +220,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Yeniden başlat</translation>
+        <translation>Yeniden Başlat</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -229,11 +236,11 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videolar</translation>
+        <translation>Görüntüler</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Resimler</translation>
+        <translation>Fotoğraflar</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -241,10 +248,83 @@
     </message>
 </context>
 <context>
+    <name>MiniFrameRightBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Bilgisayar</translation>
+    </message>
+    <message>
+        <source>Document</source>
+        <translation>Belge</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Görüntü</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Müzik</translation>
+    </message>
+    <message>
+        <source>Picture</source>
+        <translation>Fotoğraf</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>İndirilenler</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>El ile</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Ayarlar</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Kapat</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameSwitchBtn</name>
+    <message>
+        <source>All programes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation>Ara</translation>
+        <translation>Arama</translation>
+    </message>
+</context>
+<context>
+    <name>WindowedFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Tüm bağımlılıklarıyla birlikte kaldırılacak</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Onayla</translation>
     </message>
 </context>
 </TS>

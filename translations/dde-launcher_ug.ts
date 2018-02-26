@@ -1,5 +1,12 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="ug" version="2.1">
 <context>
+    <name>AppListDelegate</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -76,11 +83,11 @@
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>ئىنتىرنېت تورى</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>ئالاقە</translation>
     </message>
     <message>
         <source>Music</source>
@@ -92,19 +99,19 @@
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>گىرافىك</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>ئويۇن</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation>ئىشخانا</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>ئوقۇشلۇق</translation>
     </message>
     <message>
         <source>Development</source>
@@ -116,7 +123,7 @@
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation>باشقىلار</translation>
     </message>
 </context>
 <context>
@@ -162,7 +169,7 @@
     </message>
     <message>
         <source>Downloads</source>
-        <translation type="unfinished"/>
+        <translation>چۈشۈرۈش</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -237,6 +244,60 @@
     </message>
     <message>
         <source>Downloads</source>
+        <translation>چۈشۈرۈش</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameRightBar</name>
+    <message>
+        <source>Computer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Document</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>سىن</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>مۇزىكا</translation>
+    </message>
+    <message>
+        <source>Picture</source>
+        <translation>سۈرەت</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>چۈشۈرۈش</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>قولدا</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>MiniFrameSwitchBtn</name>
+    <message>
+        <source>All programes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>New</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -245,6 +306,25 @@
     <message>
         <source>Search</source>
         <translation>ئىزدەش</translation>
+    </message>
+</context>
+<context>
+    <name>WindowedFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>بىكار قىلىش</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>جەزملەشتۈرۈش</translation>
     </message>
 </context>
 </TS>

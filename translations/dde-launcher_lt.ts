@@ -1,5 +1,12 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="lt" version="2.1">
 <context>
+    <name>AppListDelegate</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -241,10 +248,83 @@
     </message>
 </context>
 <context>
+    <name>MiniFrameRightBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Kompiuteris</translation>
+    </message>
+    <message>
+        <source>Document</source>
+        <translation>Dokumentas</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Vaizdo įrašai</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Muzika</translation>
+    </message>
+    <message>
+        <source>Picture</source>
+        <translation>Paveikslai</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Atsiuntimai</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Rankinis</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Nustatymai</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Išjungti</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameSwitchBtn</name>
+    <message>
+        <source>All programes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
         <translation>Ieškoti</translation>
+    </message>
+</context>
+<context>
+    <name>WindowedFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Ar tikrai norite pašalinti %1 ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Kartu bus pašalintos visos priklausomybės</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Atsisakyti</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Patvirtinti</translation>
     </message>
 </context>
 </TS>

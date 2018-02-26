@@ -1,5 +1,12 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="vi" version="2.1">
 <context>
+    <name>AppListDelegate</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -241,10 +248,83 @@
     </message>
 </context>
 <context>
+    <name>MiniFrameRightBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Máy tính</translation>
+    </message>
+    <message>
+        <source>Document</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Phim ảnh</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Âm nhạc</translation>
+    </message>
+    <message>
+        <source>Picture</source>
+        <translation>Hình ảnh</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Tải xuống</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Tự chỉnh</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Cài đặt</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Tắt</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameSwitchBtn</name>
+    <message>
+        <source>All programes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
         <translation>Tìm kiếm</translation>
+    </message>
+</context>
+<context>
+    <name>WindowedFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Bạn có chắc là gỡ bỏ %1 không?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Tất cả phần phụ thuộc sẽ được bỏ theo cùng</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Hủy</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Xác nhận</translation>
     </message>
 </context>
 </TS>

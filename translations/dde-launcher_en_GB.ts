@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en_GB" version="2.1">
 <context>
     <name>AppListDelegate</name>
     <message>
@@ -10,53 +10,53 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>Žádné výsledky hledání</translation>
+        <translation>No search results</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Opravdu chcete odinstalovat %1?</translation>
+        <translation>Are you sure you want to uninstall %1 ?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Všechny závislosti budou odstraněny společně</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Potvrdit</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation>Odstranit z plochy</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Odebrat z panelu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>Odinstalovat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation>Otevřít v zastoupení</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>Zakázat měřítko zobrazení</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open</source>
-        <translation>Otevřít</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Send to desktop</source>
@@ -79,179 +79,179 @@
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>Všechny programy</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Internet</source>
-        <translation>Internet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chat</source>
-        <translation>Rozhovor</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Hudba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Video</source>
-        <translation>Obraz</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Grafika</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Game</source>
-        <translation>Hra</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Office</source>
-        <translation>Kancelář</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reading</source>
-        <translation>Čtení</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Development</source>
-        <translation>Vývoj</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System</source>
-        <translation>Systém</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Others</source>
-        <translation>Jiné</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Opravdu chcete odinstalovat %1?</translation>
+        <translation>Are you sure you want to uninstall %1 ?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Všechny závislosti budou odstraněny společně</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Potvrdit</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Počítač</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumenty</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Obrazy</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Hudba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Obrázky</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Stahování</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Uzamknout</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Odhlásit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Restartovat</translation>
+        <translation>Reboot</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Uspat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Vypnout</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Back</source>
-        <translation>Zpět</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
         <source>Computer</source>
-        <translation>Počítač</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Hudba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Vypnout</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Uzamknout</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Odhlásit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Restartovat</translation>
+        <translation>Reboot</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Uspat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Back</source>
-        <translation>Zpět</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumenty</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Obrazy</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Obrázky</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Stahování</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Počítač</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Document</source>
@@ -259,31 +259,31 @@
     </message>
     <message>
         <source>Video</source>
-        <translation>Obraz</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Hudba</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Picture</source>
-        <translation>Obrázek</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Stahování</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Ruční</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Nastavení</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Vypnout</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -305,26 +305,26 @@
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation>Hledat</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>WindowedFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Opravdu chcete odinstalovat %1?</translation>
+        <translation>Are you sure you want to uninstall %1 ?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Všechny závislosti budou odstraněny společně</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Potvrdit</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

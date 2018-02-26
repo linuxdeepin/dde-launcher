@@ -1,5 +1,12 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="am_ET" version="2.1">
 <context>
+    <name>AppListDelegate</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -241,10 +248,83 @@
     </message>
 </context>
 <context>
+    <name>MiniFrameRightBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>ኮምፒዩተር</translation>
+    </message>
+    <message>
+        <source>Document</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>ቪዲዮ</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>ሙዚቃ</translation>
+    </message>
+    <message>
+        <source>Picture</source>
+        <translation>ስእል</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>የወረዱ</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>በ እጅ</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>ማሰናጃዎች</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>ማጥፊያ</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameSwitchBtn</name>
+    <message>
+        <source>All programes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
         <translation>መፈለጊያ</translation>
+    </message>
+</context>
+<context>
+    <name>WindowedFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>በ እርግጥ ማጥፋት ይፈልጋሉ %1 ?</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>ሁሉም ጥገኞች ይወገዳሉ</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>መሰረዣ</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>ማረጋገጫ</translation>
     </message>
 </context>
 </TS>

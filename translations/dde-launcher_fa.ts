@@ -1,5 +1,12 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="fa" version="2.1">
 <context>
+    <name>AppListDelegate</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -241,10 +248,83 @@
     </message>
 </context>
 <context>
+    <name>MiniFrameRightBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>رایانه</translation>
+    </message>
+    <message>
+        <source>Document</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>ویدیو</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>موسیقی</translation>
+    </message>
+    <message>
+        <source>Picture</source>
+        <translation>تصویر</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>بارگیری</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>دستی</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>تنظیمات</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>خاموش کردن</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameSwitchBtn</name>
+    <message>
+        <source>All programes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
         <translation>جستجو</translation>
+    </message>
+</context>
+<context>
+    <name>WindowedFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>آیا اطمینان دارید که می خواهید حذف کنید %1؟</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>تمام متعلقات با هم حذف خواهد شد</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>انصراف</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>تایید</translation>
     </message>
 </context>
 </TS>

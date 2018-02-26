@@ -1,5 +1,12 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="el" version="2.1">
 <context>
+    <name>AppListDelegate</name>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -53,26 +60,26 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation>Αποστολή στην επιφάνεια εργασίας</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation>Αποστολή στην πλατφόρμα</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation>Αφαίρεση από την εκκίνηση</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation>Πρόσθεση στην εκκίνηση</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>Όλες οι Εφαρμογές</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -150,7 +157,7 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Βίντεο</translation>
     </message>
     <message>
         <source>Music</source>
@@ -158,7 +165,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Εικόνες</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -174,7 +181,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Επανεκκίνηση</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -186,7 +193,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Πίσω</translation>
     </message>
 </context>
 <context>
@@ -213,7 +220,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Επανεκκίνηση</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -221,7 +228,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Πίσω</translation>
     </message>
     <message>
         <source>Documents</source>
@@ -229,11 +236,11 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Βίντεο</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Εικόνες</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -241,10 +248,83 @@
     </message>
 </context>
 <context>
+    <name>MiniFrameRightBar</name>
+    <message>
+        <source>Computer</source>
+        <translation>Υπολογιστής</translation>
+    </message>
+    <message>
+        <source>Document</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Βίντεο</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Μουσική</translation>
+    </message>
+    <message>
+        <source>Picture</source>
+        <translation>Εικόνα</translation>
+    </message>
+    <message>
+        <source>Downloads</source>
+        <translation>Λήψεις</translation>
+    </message>
+    <message>
+        <source>Manual</source>
+        <translation>Μη αυτόματα</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Ρυθμίσεις</translation>
+    </message>
+    <message>
+        <source>Shutdown</source>
+        <translation>Τερματισμός λειτουργίας</translation>
+    </message>
+</context>
+<context>
+    <name>MiniFrameSwitchBtn</name>
+    <message>
+        <source>All programes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Return</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
         <translation>Αναζήτηση</translation>
+    </message>
+</context>
+<context>
+    <name>WindowedFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>Είστε σίγουροι ότι θέλετε να απεγκαταστήσετε το %1 ;</translation>
+    </message>
+    <message>
+        <source>All dependencies will be removed together</source>
+        <translation>Όλες οι εξαρτήσεις θα απομακρυνθούν μαζί</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Ακύρωση</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>Επιβεβαίωση</translation>
     </message>
 </context>
 </TS>

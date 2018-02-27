@@ -36,6 +36,10 @@
 
 #include <QGSettings>
 
+#include <DApplication>
+
+DWIDGET_USE_NAMESPACE
+
 QPointer<AppsManager> AppsManager::INSTANCE = nullptr;
 
 QGSettings AppsManager::LAUNCHER_SETTINGS("com.deepin.dde.launcher", "", nullptr);
@@ -118,8 +122,7 @@ AppsManager::AppsManager(QObject *parent) :
     m_searchTimer->setSingleShot(true);
     m_searchTimer->setInterval(150);
 
-    //Maybe the signals newAppLaunched will be replaced by newAppMarkedAsLaunched
-    //newAppLaunched is the old one.
+    connect(qApp, &DApplication::iconThemeChanged, this, &AppsManager::onIconThemeChanged, Qt::QueuedConnection);
     connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
     connect(m_launcherInter, &DBusLauncher::UninstallSuccess, this, &AppsManager::abandonStashedItem);
@@ -451,6 +454,13 @@ void AppsManager::refreshAppAutoStartCache()
         const bool isAutoStart = m_startManagerInter->IsAutostart(info.m_desktop).value();
         APP_AUTOSTART_CACHE.setValue(info.m_desktop, isAutoStart);
     }
+
+    emit dataChanged(AppsListModel::All);
+}
+
+void AppsManager::onIconThemeChanged()
+{
+    m_iconCache.clear();
 
     emit dataChanged(AppsListModel::All);
 }

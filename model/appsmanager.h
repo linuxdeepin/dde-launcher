@@ -100,6 +100,7 @@ private:
     void refreshAppAutoStartCache();
 
 private slots:
+    void onIconThemeChanged();
     void searchDone(const QStringList &resultList);
     void markLaunched(QString appKey);
 

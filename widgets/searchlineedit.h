@@ -28,10 +28,25 @@
 #include <QLabel>
 #include <QSpacerItem>
 #include <QPropertyAnimation>
+#include <QProxyStyle>
 
 #include <dimagebutton.h>
 
 DWIDGET_USE_NAMESPACE
+
+class SearchLineeditStyle : public QProxyStyle
+{
+    friend class SearchLineEdit;
+
+public:
+
+    SearchLineeditStyle(QStyle *style = nullptr);
+
+    int pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const;
+
+private:
+    bool hideCursor;
+};
 
 class SearchLineEdit : public QLineEdit
 {
@@ -60,6 +75,7 @@ private:
 #ifndef ARCH_MIPSEL
     QPropertyAnimation *m_floatAni;
 #endif
+    SearchLineeditStyle *m_editStyle;
 };
 
 #endif // SEARCHLINEEDIT_H

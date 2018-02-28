@@ -35,17 +35,21 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     m_icon = new DImageButton;
     m_icon->setFixedSize(16, 16);
     m_icon->setNormalPic(":/skin/images/search.svg");
+
     m_clear = new DImageButton;
     m_clear->setFixedSize(16, 16);
     m_clear->setNormalPic(":/icons/skin/icons/input_clear_dark_normal.svg");
     m_clear->setHoverPic(":/icons/skin/icons/input_clear_dark_hover.svg");
     m_clear->setPressPic(":/icons/skin/icons/input_clear_dark_press.svg");
     m_clear->setVisible(false);
+
     m_placeholderText = new QLabel(tr("Search"));
     QFontMetrics fm(m_placeholderText->font());
     m_placeholderText->setFixedWidth(fm.width(m_placeholderText->text()) + 10);
     m_placeholderText->setStyleSheet("color:white;");
     m_floatWidget = new QWidget(this);
+
+    m_editStyle = new SearchLineeditStyle(style());
 
     QHBoxLayout *floatLayout = new QHBoxLayout;
     floatLayout->addWidget(m_icon);
@@ -71,6 +75,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     setFocusPolicy(Qt::ClickFocus);
     setFixedHeight(30);
     setObjectName("SearchEdit");
+    setStyle(m_editStyle);
 
     connect(this, &SearchLineEdit::textChanged, this, &SearchLineEdit::onTextChanged);
     connect(m_clear, &DImageButton::clicked, this, &SearchLineEdit::normalMode);
@@ -137,6 +142,11 @@ void SearchLineEdit::editMode()
     m_floatAni->setStartValue(m_floatWidget->pos());
     m_floatAni->setEndValue(QPoint(5, 0));
     m_floatAni->start();
+
+    m_editStyle->hideCursor = true;
+    QTimer::singleShot(m_floatAni->duration(), this, [=] {
+        m_editStyle->hideCursor = false;
+    });
 #else
     m_floatWidget->move(QPoint(5, 0));
 #endif
@@ -160,4 +170,19 @@ void SearchLineEdit::moveFloatWidget()
 #endif
 
     m_floatWidget->move(rect().center() - m_floatWidget->rect().center());
+}
+
+SearchLineeditStyle::SearchLineeditStyle(QStyle *style)
+    : QProxyStyle(style)
+    , hideCursor(false)
+{
+
+}
+
+int SearchLineeditStyle::pixelMetric(QStyle::PixelMetric metric, const QStyleOption *option, const QWidget *widget) const
+{
+    if (metric == QStyle::PM_TextCursorWidth && hideCursor)
+        return 0;
+
+    return QProxyStyle::pixelMetric(metric, option, widget);
 }

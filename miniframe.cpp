@@ -226,14 +226,17 @@ void MiniFrame::showLauncher()
     if (visible())
         return;
 
+    adjustPosition();
+
+    qApp->processEvents();
+
     show();
 
     // reset env
     m_searchWidget->clearSearchContent();
     m_viewWrapper->clear();
 
-    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &MiniFrame::adjustPosition, Qt::QueuedConnection);
-    QTimer::singleShot(1, this, &MiniFrame::adjustPosition);
+    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &MiniFrame::adjustPosition, Qt::UniqueConnection);
 }
 
 void MiniFrame::hideLauncher()

@@ -841,7 +841,7 @@ void FullScreenFrame::initConnection()
     connect(m_appsArea, &AppListArea::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
     connect(m_navigationWidget, &NavigationWidget::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
 
-    connect(m_menuWorker.get(), &MenuWorker::quitLauncher, this, &FullScreenFrame::hide);
+    connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
     connect(m_navigationWidget, &NavigationWidget::toggleMode, [this]{
         m_searchWidget->clearFocus();

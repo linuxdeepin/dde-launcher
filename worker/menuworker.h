@@ -68,8 +68,8 @@ public:
     bool isItemStartup(QString appKey);
 
 signals:
+    void appLaunched();
     void menuAccepted();
-    void quitLauncher();
     void unInstallApp(const QModelIndex &index);
 
 public slots:

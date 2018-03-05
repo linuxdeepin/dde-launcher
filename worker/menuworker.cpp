@@ -145,23 +145,26 @@ void MenuWorker::showMenuByAppItem(const QModelIndex &index, QPoint pos) {
     menu->exec();
 }
 
-void MenuWorker::handleOpen(){
+void MenuWorker::handleOpen()
+{
     m_appManager->launchApp(m_currentModelIndex);
 
-    emit quitLauncher();
+    emit appLaunched();
 }
 
-void MenuWorker::handleMenuClosed(){
-//    emit signalManager->rightClickedChanged(false);
+void MenuWorker::handleMenuClosed()
+{
     emit menuAccepted();
     m_menuIsShown = false;
 }
 
-void MenuWorker::setCurrentModelIndex(const QModelIndex &index) {
+void MenuWorker::setCurrentModelIndex(const QModelIndex &index)
+{
     m_currentModelIndex = index;
 }
 
-const QModelIndex MenuWorker::getCurrentModelIndex() {
+const QModelIndex MenuWorker::getCurrentModelIndex()
+{
     return m_currentModelIndex;
 }
 

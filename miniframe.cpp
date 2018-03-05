@@ -197,6 +197,7 @@ MiniFrame::MiniFrame(QWidget *parent)
 
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (MiniFrame::*)(const QModelIndex &)>(&MiniFrame::uninstallApp));
     connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_delayHideTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &MiniFrame::hideLauncher);
     connect(m_delayHideTimer, &QTimer::timeout, this, &MiniFrame::prepareHideLauncher);
     connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &MiniFrame::searchText, Qt::QueuedConnection);
     connect(m_modeToggle, &DImageButton::clicked, this, &MiniFrame::onToggleFullScreen, Qt::QueuedConnection);

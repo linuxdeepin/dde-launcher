@@ -156,8 +156,12 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->drawPixmap(iconRect, iconPix, iconPix.rect());
 
     // draw icon if app is auto startup
-    const QPoint autoStartIconPos = iconRect.topLeft() + QPoint(0, iconPix.height() / iconPix.devicePixelRatioF() -
-                                                  m_autoStartPixmap.height() / m_autoStartPixmap.devicePixelRatioF());
+    const QPoint autoStartIconPos = iconRect.bottomLeft()
+            // offset for auto-start mark itself
+            - QPoint(m_autoStartPixmap.height(), m_autoStartPixmap.width()) / m_autoStartPixmap.devicePixelRatioF() / 2
+            // extra offset
+            + QPoint(iconRect.width() / 10, -iconRect.height() / 10);
+
     if (index.data(AppsListModel::AppAutoStartRole).toBool())
         painter->drawPixmap(autoStartIconPos, m_autoStartPixmap);
 

@@ -1,3 +1,13 @@
+<a name="4.3.2"></a>
+### 4.3.2 (2018-03-16)
+
+
+#### Bug Fixes
+
+* **autostart:**  autostart mark indicator position error in HiDPI ([f18937a1](f18937a1))
+
+
+
 <a name="4.3.1"></a>
 ## 4.3.1 (2018-03-08)
 

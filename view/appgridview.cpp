@@ -222,23 +222,13 @@ void AppGridView::startDrag(const QModelIndex &index)
         return;
 
     const QModelIndex &dragIndex = index;
-    const QPixmap srcPix = index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
-    const auto ratio = srcPix.devicePixelRatioF();
-    const QSize size = srcPix.size();
-
-    QPixmap dstPix(size);
-    dstPix.fill(Qt::transparent);
-    dstPix.setDevicePixelRatio(ratio);
-
-    QPainter p(&dstPix);
-    p.setRenderHint(QPainter::SmoothPixmapTransform);
-    p.setOpacity(.8);
-    p.drawPixmap(0, 0, srcPix);
+    QPixmap srcPix = index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
+    srcPix.setDevicePixelRatio(qApp->devicePixelRatio());
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
-    drag->setPixmap(dstPix);
-    drag->setHotSpot(dstPix.rect().center() / ratio);
+    drag->setPixmap(srcPix);
+    drag->setHotSpot(srcPix.rect().center() / srcPix.devicePixelRatioF());
 
     // request remove current item.
     if (listModel->category() == AppsListModel::All)

@@ -55,7 +55,7 @@ public:
         AppEnableScalingRole,
         AppIconSizeRole,
         AppFontSizeRole,
-        AppItemIsDragingRole,
+        AppItemIsDraggingRole,
         AppDragIconRole,
     };
 
@@ -82,7 +82,7 @@ public:
     explicit AppsListModel(const AppCategory& category, QObject *parent = 0);
 
     inline AppCategory category() const {return m_category;}
-    void setDragingIndex(const QModelIndex &index);
+    void setDraggingIndex(const QModelIndex &index);
     void setDragDropIndex(const QModelIndex &index);
     void dropInsert(const QString &appKey, const int pos);
     void dropSwap(const int nextPos);
@@ -91,7 +91,7 @@ public:
     const QModelIndex indexAt(const QString &appKey) const;
 
 public slots:
-    void clearDragingIndex();
+    void clearDraggingIndex();
     void setCategory(const AppCategory category);
 
 protected:
@@ -104,7 +104,7 @@ protected:
 private:
     void dataChanged(const AppsListModel::AppCategory category);
     void layoutChanged(const AppsListModel::AppCategory category);
-    bool indexDraging(const QModelIndex &index) const;
+    bool indexDragging(const QModelIndex &index) const;
 //    bool itemIsRemovable(const QString &desktop) const;
 
 private:

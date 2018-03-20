@@ -234,7 +234,7 @@ void AppGridView::startDrag(const QModelIndex &index)
     if (listModel->category() == AppsListModel::All)
     {
         m_dropToPos = index.row();
-        listModel->setDragingIndex(index);
+        listModel->setDraggingIndex(index);
     }
 
     drag->exec(Qt::MoveAction);
@@ -255,11 +255,11 @@ void AppGridView::startDrag(const QModelIndex &index)
         else
             listModel->dropSwap(indexAt(m_dragStartPos).row());
 
-        listModel->clearDragingIndex();
+        listModel->clearDraggingIndex();
     }
     else
     {
-        connect(m_lastFakeAni, &QPropertyAnimation::finished, listModel, &AppsListModel::clearDragingIndex);
+        connect(m_lastFakeAni, &QPropertyAnimation::finished, listModel, &AppsListModel::clearDraggingIndex);
     }
 
     m_enableDropInside = false;
@@ -302,8 +302,8 @@ void AppGridView::prepareDropSwap()
     if (!listModel)
         return;
 
-    listModel->clearDragingIndex();
-    listModel->setDragingIndex(dragStartIndex);
+    listModel->clearDraggingIndex();
+    listModel->setDraggingIndex(dragStartIndex);
     listModel->setDragDropIndex(dropIndex);
 
     const int startIndex = dragStartIndex.row();

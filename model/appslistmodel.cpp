@@ -65,10 +65,10 @@ void AppsListModel::setCategory(const AppsListModel::AppCategory category)
 }
 
 ///
-/// \brief AppsListModel::setDragingIndex mark current item as draging item
+/// \brief AppsListModel::setDraggingIndex mark current item as dragging item
 /// \param index item index
 ///
-void AppsListModel::setDragingIndex(const QModelIndex &index)
+void AppsListModel::setDraggingIndex(const QModelIndex &index)
 {
     m_dragStartIndex = index;
     m_dragDropIndex = index;
@@ -102,7 +102,7 @@ void AppsListModel::dropInsert(const QString &appKey, const int pos)
 
 ///
 /// \brief AppsListModel::dropSwap drop m_draingIndex to nextPos
-/// \param nextPos m_dragingIndex insert position
+/// \param nextPos m_draggingIndex insert position
 ///
 void AppsListModel::dropSwap(const int nextPos)
 {
@@ -120,9 +120,9 @@ void AppsListModel::dropSwap(const int nextPos)
 }
 
 ///
-/// \brief AppsListModel::clearDragingIndex reset draging item record
+/// \brief AppsListModel::clearDraggingIndex reset dragging item record
 ///
-void AppsListModel::clearDragingIndex()
+void AppsListModel::clearDraggingIndex()
 {
     const QModelIndex startIndex = m_dragStartIndex;
     const QModelIndex endIndex = m_dragDropIndex;
@@ -253,8 +253,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_calcUtil->appIconSize();
     case AppFontSizeRole:
         return m_calcUtil->appItemFontSize();
-    case AppItemIsDragingRole:
-        return indexDraging(index);
+    case AppItemIsDraggingRole:
+        return indexDragging(index);
     default:;
     }
 
@@ -295,7 +295,7 @@ void AppsListModel::layoutChanged(const AppsListModel::AppCategory category)
         emit QAbstractItemModel::layoutChanged();
 }
 
-bool AppsListModel::indexDraging(const QModelIndex &index) const
+bool AppsListModel::indexDragging(const QModelIndex &index) const
 {
     if (!m_dragStartIndex.isValid() || !m_dragDropIndex.isValid())
         return false;

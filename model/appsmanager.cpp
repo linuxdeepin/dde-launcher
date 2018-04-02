@@ -517,10 +517,13 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
 {
     qDebug() << "in0" << operation << appInfo.m_name << "in2" << categoryNumber;
 
-    if (operation == "created")
+    if (operation == "created") {
         m_newInstalledAppsList.append(appInfo.m_key);
+        m_allAppInfoList.append(appInfo);
+    }
 
-    refreshCategoryInfoList();
+    generateCategoryMap();
+    saveUserSortedList();
 
     emit dataChanged(AppsListModel::All);
 }

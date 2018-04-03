@@ -37,6 +37,7 @@
 #include <QProcess>
 
 #include <ddialog.h>
+#include <DDBusSender>
 
 #include "sharedeventfilter.h"
 
@@ -567,17 +568,12 @@ void FullScreenFrame::toMiniMode()
     removeEventFilter(m_eventFilter);
     m_eventFilter->deleteLater();
 
-    const QStringList args {
-        "--print-reply",
-        "--dest=com.deepin.dde.daemon.Launcher",
-        "/com/deepin/dde/daemon/Launcher",
-        "org.freedesktop.DBus.Properties.Set",
-        "string:com.deepin.dde.daemon.Launcher",
-        "string:Fullscreen",
-        "variant:boolean:false"
-    };
-
-    QProcess::startDetached("dbus-send", args);
+    DDBusSender()
+            .service("com.deepin.dde.daemon.Launcher")
+            .interface("com.deepin.dde.daemon.Launcher")
+            .path("/com/deepin/dde/daemon/Launcher")
+            .property("Fullscreen")
+            .set(false);
 }
 
 void FullScreenFrame::refreshTitleVisible()

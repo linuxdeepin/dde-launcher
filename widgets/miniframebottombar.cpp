@@ -24,6 +24,7 @@
 #include "miniframebottombar.h"
 
 #include <DDesktopServices>
+#include <DDBusSender>
 
 DWIDGET_USE_NAMESPACE
 #ifdef DUTIL_NAMESPACE
@@ -136,20 +137,22 @@ void MiniFrameBottomBar::openStandardDirectory(const QStandardPaths::StandardLoc
 
 void MiniFrameBottomBar::handleShutdownAction(const QString &action)
 {
-    const QString command = QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront " \
-                                    "/com/deepin/dde/shutdownFront " \
-                                    "com.deepin.dde.shutdownFront.%1").arg(action);
-
-    QProcess::startDetached(command);
+    DDBusSender()
+            .service("com.deepin.dde.shutdownFront")
+            .interface("com.deepin.dde.shutdownFront")
+            .path("/com/deepin/dde/shutdownFront")
+            .method(action)
+            .call();
 }
 
 void MiniFrameBottomBar::handleLockAction()
 {
-    const QString command = QString("dbus-send --print-reply --dest=com.deepin.dde.lockFront " \
-                                    "/com/deepin/dde/lockFront " \
-                                    "com.deepin.dde.lockFront.Show");
-
-    QProcess::startDetached(command);
+    DDBusSender()
+            .service("com.deepin.dde.lockFront")
+            .interface("com.deepin.dde.lockFront")
+            .path("/com/deepin/dde/lockFront")
+            .method("Show")
+            .call();
 }
 
 void MiniFrameBottomBar::showShutdown()
@@ -159,11 +162,11 @@ void MiniFrameBottomBar::showShutdown()
 
 void MiniFrameBottomBar::showSysInfo()
 {
-    const QString command = QString("qdbus " \
-                                    "com.deepin.dde.ControlCenter "
-                                    "/com/deepin/dde/ControlCenter "
-                                    "com.deepin.dde.ControlCenter.ShowModule "
-                                    "\"systeminfo\"");
-
-    QProcess::startDetached(command);
+    DDBusSender()
+            .service("com.deepin.dde.ControlCenter")
+            .interface("com.deepin.dde.ControlCenter")
+            .path("/com/deepin/dde/ControlCenter")
+            .method("ShowPage")
+            .arg(QString("systeminfo"))
+            .call();
 }

@@ -29,6 +29,7 @@
 #include <QPainter>
 
 #include <DDesktopServices>
+#include <DDBusSender>
 
 #include <unistd.h>
 
@@ -194,18 +195,20 @@ void MiniFrameNavigation::openStandardDirectory(const QStandardPaths::StandardLo
 
 void MiniFrameNavigation::handleShutdownAction(const QString &action)
 {
-    const QString command = QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront " \
-                                    "/com/deepin/dde/shutdownFront " \
-                                    "com.deepin.dde.shutdownFront.%1").arg(action);
-
-    QProcess::startDetached(command);
+    DDBusSender()
+            .service("com.deepin.dde.shutdownFront")
+            .interface("com.deepin.dde.shutdownFront")
+            .path("/com/deepin/dde/shutdownFront")
+            .method(action)
+            .call();
 }
 
 void MiniFrameNavigation::handleLockAction()
 {
-    const QString command = QString("dbus-send --print-reply --dest=com.deepin.dde.lockFront " \
-                                    "/com/deepin/dde/lockFront " \
-                                    "com.deepin.dde.lockFront");
-
-    QProcess::startDetached(command);
+    DDBusSender()
+            .service("com.deepin.dde.lockFront")
+            .interface("com.deepin.dde.lockFront")
+            .path("/com/deepin/dde/lockFront")
+            .method(QString())
+            .call();
 }

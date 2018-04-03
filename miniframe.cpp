@@ -47,6 +47,7 @@
 #include <QScrollBar>
 
 #include <ddialog.h>
+#include <DDBusSender>
 
 #define DOCK_TOP        0
 #define DOCK_RIGHT      1
@@ -574,17 +575,12 @@ void MiniFrame::onToggleFullScreen()
 {
     removeEventFilter(m_eventFilter);
 
-    const QStringList args {
-        "--print-reply",
-        "--dest=com.deepin.dde.daemon.Launcher",
-        "/com/deepin/dde/daemon/Launcher",
-        "org.freedesktop.DBus.Properties.Set",
-        "string:com.deepin.dde.daemon.Launcher",
-        "string:Fullscreen",
-        "variant:boolean:true"
-    };
-
-    QProcess::startDetached("dbus-send", args);
+    DDBusSender()
+            .service("com.deepin.dde.daemon.Launcher")
+            .interface("com.deepin.dde.daemon.Launcher")
+            .path("/com/deepin/dde/daemon/Launcher")
+            .property("Fullscreen")
+            .set(true);
 }
 
 void MiniFrame::onToggleViewClicked()

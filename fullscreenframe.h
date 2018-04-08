@@ -71,8 +71,8 @@ public:
 
 signals:
     void visibleChanged(bool visible);
-    void categoryAppNumsChanged(const AppsListModel::AppCategory category, const int appNums);
     void displayModeChanged(const int mode);
+    void categoryAppNumsChanged(const AppsListModel::AppCategory category, const int appNums);
     void currentVisibleCategoryChanged(const AppsListModel::AppCategory currentVisibleCategory) const;
 
 public slots:

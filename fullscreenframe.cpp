@@ -287,7 +287,7 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
         bool inAppArea = m_appsArea->geometry().contains(e->pos());
         bool topMost = m_appsArea->verticalScrollBar()->value() == m_appsArea->verticalScrollBar()->minimum();
         bool bottomMost = m_appsArea->verticalScrollBar()->value() == m_appsArea->verticalScrollBar()->maximum();
-        bool exceedingLimits = (e->delta() > 0 && topMost) || (e->delta() < 0 && bottomMost);
+        bool exceedingLimits = e->modifiers() ? false : (e->delta() > 0 && topMost) || (e->delta() < 0 && bottomMost);
 
         return !inAppArea && !exceedingLimits;
     };

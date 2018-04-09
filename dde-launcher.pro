@@ -16,10 +16,6 @@ isEqual(ARCH, mips64) | isEqual(ARCH, mips32) {
     DEFINES += ARCH_MIPSEL
 }
 
-isEqual(Professional, $$(_PKG_TYPE)) {
-    DEFINES += LAUNCHER_AUTO_EXIT
-}
-
 PKGCONFIG += dtkcore
 
 SOURCES += \

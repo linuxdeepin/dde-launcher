@@ -27,6 +27,8 @@
 #include "miniframe.h"
 #include "model/appsmanager.h"
 
+#include <QGSettings>
+
 #define FULL_SCREEN     0
 #define MINI_FRAME      1
 
@@ -103,9 +105,11 @@ void LauncherSys::onAutoExitTimeout()
     if (visible())
         return m_autoExitTimer->start();
 
-#ifdef LAUNCHER_AUTO_EXIT
-    qWarning() << "Exit Timer timeout, may quitting...";
-    qApp->quit();
-#endif
+    QGSettings gsettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher");
+    if (gsettings.keys().contains("auto-exit") && gsettings.get("auto-exit").toBool())
+    {
+        qWarning() << "Exit Timer timeout, may quitting...";
+        qApp->quit();
+    }
 }
 

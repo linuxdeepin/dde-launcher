@@ -1,3 +1,17 @@
+<a name=""></a>
+##  4.3.2.1 (2018-04-11)
+
+
+#### Bug Fixes
+
+*   Not scrolling enlarge at the top ([0290e393](0290e393))
+*   gsettings key error ([08e5445b](08e5445b))
+
+#### Features
+
+*   read auto-exit settings ([89a34bae](89a34bae))
+*   hold deepin-manual, forbid uninstall ([388a948a](388a948a))
+
 <a name="4.3.2"></a>
 ### 4.3.2 (2018-03-16)
 

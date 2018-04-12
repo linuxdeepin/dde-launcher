@@ -37,10 +37,14 @@ AppListView::AppListView(QWidget *parent)
     setFrameStyle(NoFrame);
     setVerticalScrollMode(ScrollPerPixel);
     setSelectionMode(SingleSelection);
-    setFixedSize(380, 410);
     setSpacing(0);
     setContentsMargins(0, 0, 0, 0);
     setMouseTracking(true);
+
+#ifdef QT_DEBUG
+#else
+    setFixedSize(380, 410);
+#endif
 }
 
 void AppListView::mousePressEvent(QMouseEvent *e)

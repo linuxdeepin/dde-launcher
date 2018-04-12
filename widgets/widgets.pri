@@ -10,7 +10,9 @@ HEADERS += \
     $$PWD/applistarea.h \
     $$PWD/miniframenavigation.h \
     $$PWD/minicategorywidget.h \
-    $$PWD/miniframebottombar.h
+    $$PWD/miniframebottombar.h \
+    $$PWD/miniframerightbar.h \
+    $$PWD/avatar.h
 
 SOURCES += \
     $$PWD/categorybutton.cpp \
@@ -22,4 +24,6 @@ SOURCES += \
     $$PWD/applistarea.cpp \
     $$PWD/miniframenavigation.cpp \
     $$PWD/minicategorywidget.cpp \
-    $$PWD/miniframebottombar.cpp
+    $$PWD/miniframebottombar.cpp \
+    $$PWD/miniframerightbar.cpp \
+    $$PWD/avatar.cpp

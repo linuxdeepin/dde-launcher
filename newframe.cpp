@@ -20,11 +20,15 @@
  */
 
 #include "newframe.h"
+#include "global_util/util.h"
+
+#include <DDBusSender>
 #include <QHBoxLayout>
 #include <QApplication>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QScreen>
+#include <QTimer>
 #include <QDebug>
 
 #define DOCK_TOP        0
@@ -38,11 +42,15 @@
 NewFrame::NewFrame(QWidget *parent)
     : DBlurEffectWidget(parent),
       m_dockInter(new DBusDock(this)),
+      m_eventFilter(new SharedEventFilter(this)),
       m_windowHandle(this, this),
       m_wmHelper(DWindowManagerHelper::instance()),
-
+      m_appsManager(AppsManager::instance()),
       m_appsView(new AppListView),
-      m_appsModel(new AppsListModel(AppsListModel::All))
+      m_appsModel(new AppsListModel(AppsListModel::All)),
+      m_searchModel(new AppsListModel(AppsListModel::Search)),
+      m_searchWidget(new SearchWidget),
+      m_rightBar(new MiniFrameRightBar)
 {
     m_windowHandle.setShadowRadius(60);
     m_windowHandle.setShadowOffset(QPoint(0, -1));
@@ -52,11 +60,19 @@ NewFrame::NewFrame(QWidget *parent)
     m_appsView->setModel(m_appsModel);
     m_appsView->setItemDelegate(new AppListDelegate);
 
+    m_searchWidget->installEventFilter(m_eventFilter);
+
     QVBoxLayout *appsLayout = new QVBoxLayout;
+    appsLayout->addSpacing(10);
+    appsLayout->addWidget(m_searchWidget);
+    appsLayout->addSpacing(10);
     appsLayout->addWidget(m_appsView);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout->addSpacing(10);
     mainLayout->addLayout(appsLayout);
+    mainLayout->addSpacing(10);
+    mainLayout->addWidget(m_rightBar);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
 
@@ -66,6 +82,25 @@ NewFrame::NewFrame(QWidget *parent)
     setFocusPolicy(Qt::ClickFocus);
     setFixedSize(580, 635);
     setLayout(mainLayout);
+    setObjectName("MiniFrame");
+    setStyleSheet(getQssFromFile(":/skin/qss/miniframe.qss"));
+
+    installEventFilter(m_eventFilter);
+
+    connect(m_rightBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &NewFrame::onToggleFullScreen);
+    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &NewFrame::onWMCompositeChanged);
+    connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &NewFrame::searchText, Qt::QueuedConnection);
+
+    connect(m_appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
+    connect(m_appsView, &QListView::clicked, this, &NewFrame::hideLauncher, Qt::QueuedConnection);
+    connect(m_appsView, &QListView::entered, m_appsView, &AppListView::setCurrentIndex);
+
+    QTimer::singleShot(1, this, &NewFrame::onWMCompositeChanged);
+}
+
+NewFrame::~NewFrame()
+{
+    m_eventFilter->deleteLater();
 }
 
 void NewFrame::showLauncher()
@@ -74,8 +109,10 @@ void NewFrame::showLauncher()
         return;
     }
 
+    m_searchWidget->clearSearchContent();
     qApp->processEvents();
 
+    adjustPosition();
     show();
 
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &NewFrame::adjustPosition, Qt::UniqueConnection);
@@ -104,7 +141,8 @@ void NewFrame::moveCurrentSelectApp(const int key)
 
 void NewFrame::appendToSearchEdit(const char ch)
 {
-
+    m_searchWidget->edit()->setFocus(Qt::MouseFocusReason);
+    m_searchWidget->edit()->setText(m_searchWidget->edit()->text() + ch);
 }
 
 void NewFrame::launchCurrentApp()
@@ -134,8 +172,7 @@ void NewFrame::keyPressEvent(QKeyEvent *e)
 {
     DBlurEffectWidget::keyPressEvent(e);
 
-    switch (e->key())
-    {
+    switch (e->key()) {
     case Qt::Key_Escape:
         hideLauncher();
         break;
@@ -240,7 +277,41 @@ void NewFrame::adjustPosition()
         }
     }
 
-    qDebug() << p;
-
     move(p);
+}
+
+void NewFrame::onToggleFullScreen()
+{
+    removeEventFilter(m_eventFilter);
+
+    DDBusSender()
+            .service("com.deepin.dde.daemon.Launcher")
+            .interface("com.deepin.dde.daemon.Launcher")
+            .path("/com/deepin/dde/daemon/Launcher")
+            .property("Fullscreen")
+            .set(true);
+}
+
+void NewFrame::onWMCompositeChanged()
+{
+    if (m_wmHelper->hasComposite()) {
+        m_windowHandle.setWindowRadius(5);
+        m_windowHandle.setBorderColor(QColor(255, 255, 255, .1 * 255));
+    } else {
+        m_windowHandle.setWindowRadius(0);
+        m_windowHandle.setBorderColor(QColor("#2C3238"));
+    }
+}
+
+void NewFrame::searchText(const QString &text)
+{
+    if (text.isEmpty()) {
+        m_appsView->setModel(m_appsModel);
+    } else {
+        if (m_appsView->model() != m_searchModel) {
+            m_appsView->setModel(m_searchModel);
+        }
+
+        m_appsManager->searchApp(text.trimmed());
+    }
 }

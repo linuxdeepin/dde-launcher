@@ -23,10 +23,14 @@
 #define NEWFRAME_H
 
 #include "launcherinterface.h"
+#include "sharedeventfilter.h"
 #include "dbusinterface/dbusdock.h"
 #include "view/applistview.h"
 #include "model/appslistmodel.h"
+#include "model/appsmanager.h"
 #include "delegate/applistdelegate.h"
+#include "widgets/searchwidget.h"
+#include "widgets/miniframerightbar.h"
 
 #include <dblureffectwidget.h>
 #include <DPlatformWindowHandle>
@@ -40,6 +44,7 @@ class NewFrame : public DBlurEffectWidget, public LauncherInterface
 
 public:
     explicit NewFrame(QWidget *parent = nullptr);
+    ~NewFrame();
 
 signals:
     void visibleChanged(bool visible);
@@ -66,14 +71,21 @@ protected:
 private slots:
     const QPoint scaledPosition(const QPoint &xpos);
     void adjustPosition();
+    void onToggleFullScreen();
+    void onWMCompositeChanged();
+    void searchText(const QString &text);
 
 private:
     DBusDock *m_dockInter;
+    SharedEventFilter *m_eventFilter;
     DPlatformWindowHandle m_windowHandle;
     DWindowManagerHelper *m_wmHelper;
-
+    AppsManager *m_appsManager;
     AppListView *m_appsView;
     AppsListModel *m_appsModel;
+    AppsListModel *m_searchModel;
+    SearchWidget *m_searchWidget;
+    MiniFrameRightBar *m_rightBar;
 };
 
 #endif // NEWFRAME_H

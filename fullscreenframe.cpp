@@ -1030,7 +1030,7 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
     qDebug() << "show menu" << pos << context << context.data(AppsListModel::AppNameRole).toString()
              << "app key:" << context.data(AppsListModel::AppKeyRole).toString();
 
-    m_menuWorker->showMenuByAppItem(context, pos);
+    m_menuWorker->showMenuByAppItem(pos, context);
 }
 
 void FullScreenFrame::uninstallApp(const QString &appKey)

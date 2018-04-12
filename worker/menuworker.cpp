@@ -50,7 +50,7 @@ MenuWorker::~MenuWorker()
 }
 
 
-void MenuWorker::showMenuByAppItem(const QModelIndex &index, QPoint pos) {
+void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
     setCurrentModelIndex(index);
 
     m_appKey = m_currentModelIndex.data(AppsListModel::AppKeyRole).toString();

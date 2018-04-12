@@ -23,6 +23,8 @@
 #include "global_util/util.h"
 
 #include <DDBusSender>
+#include <ddialog.h>
+
 #include <QHBoxLayout>
 #include <QApplication>
 #include <QKeyEvent>
@@ -42,6 +44,7 @@
 NewFrame::NewFrame(QWidget *parent)
     : DBlurEffectWidget(parent),
       m_dockInter(new DBusDock(this)),
+      m_menuWorker(new MenuWorker),
       m_eventFilter(new SharedEventFilter(this)),
       m_windowHandle(this, this),
       m_wmHelper(DWindowManagerHelper::instance()),
@@ -50,7 +53,8 @@ NewFrame::NewFrame(QWidget *parent)
       m_appsModel(new AppsListModel(AppsListModel::All)),
       m_searchModel(new AppsListModel(AppsListModel::Search)),
       m_searchWidget(new SearchWidget),
-      m_rightBar(new MiniFrameRightBar)
+      m_rightBar(new MiniFrameRightBar),
+      m_delayHideTimer(new QTimer(this))
 {
     m_windowHandle.setShadowRadius(60);
     m_windowHandle.setShadowOffset(QPoint(0, -1));
@@ -61,6 +65,9 @@ NewFrame::NewFrame(QWidget *parent)
     m_appsView->setItemDelegate(new AppListDelegate);
 
     m_searchWidget->installEventFilter(m_eventFilter);
+
+    m_delayHideTimer->setInterval(200);
+    m_delayHideTimer->setSingleShot(true);
 
     QVBoxLayout *appsLayout = new QVBoxLayout;
     appsLayout->addSpacing(10);
@@ -90,10 +97,16 @@ NewFrame::NewFrame(QWidget *parent)
     connect(m_rightBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &NewFrame::onToggleFullScreen);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &NewFrame::onWMCompositeChanged);
     connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &NewFrame::searchText, Qt::QueuedConnection);
+    connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (NewFrame::*)(const QModelIndex &)>(&NewFrame::uninstallApp));
+    connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_delayHideTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &NewFrame::hideLauncher);
 
     connect(m_appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
     connect(m_appsView, &QListView::clicked, this, &NewFrame::hideLauncher, Qt::QueuedConnection);
     connect(m_appsView, &QListView::entered, m_appsView, &AppListView::setCurrentIndex);
+    connect(m_appsView, &AppListView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
+
+    connect(m_delayHideTimer, &QTimer::timeout, this, &NewFrame::prepareHideLauncher);
 
     QTimer::singleShot(1, this, &NewFrame::onWMCompositeChanged);
 }
@@ -147,25 +160,79 @@ void NewFrame::appendToSearchEdit(const char ch)
 
 void NewFrame::launchCurrentApp()
 {
+    const QModelIndex currentIdx = m_appsView->currentIndex();
 
+    if (currentIdx.isValid() && currentIdx.model() == m_appsView->model()) {
+        m_appsManager->launchApp(currentIdx);
+    } else {
+        m_appsManager->launchApp(m_appsView->model()->index(0, 0));
+    }
+
+    hideLauncher();
 }
 
 void NewFrame::uninstallApp(const QString &appKey)
 {
+    uninstallApp(m_appsModel->indexAt(appKey));
+}
 
+void NewFrame::uninstallApp(const QModelIndex &context)
+{
+    static bool UNINSTALL_DIALOG_SHOWN = false;
+
+    if (UNINSTALL_DIALOG_SHOWN) {
+        return;
+    }
+
+    UNINSTALL_DIALOG_SHOWN = true;
+    DTK_WIDGET_NAMESPACE::DDialog unInstallDialog;
+    unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
+    unInstallDialog.setWindowModality(Qt::WindowModal);
+
+    const QString appKey = context.data(AppsListModel::AppKeyRole).toString();
+    QString appName = context.data(AppsListModel::AppNameRole).toString();
+    unInstallDialog.setTitle(QString(tr("Are you sure to uninstall %1 ?")).arg(appName));
+    QPixmap appIcon = context.data(AppsListModel::AppIconRole).value<QPixmap>();
+    unInstallDialog.setIconPixmap(appIcon);
+
+    QString message = tr("All dependencies will be removed together");
+    unInstallDialog.setMessage(message);
+    QStringList buttons;
+    buttons << tr("Cancel") << tr("Confirm");
+    unInstallDialog.addButtons(buttons);
+
+    connect(&unInstallDialog, &DTK_WIDGET_NAMESPACE::DDialog::buttonClicked, [&] (int clickedResult) {
+        // 0 means "cancel" button clicked
+        if (clickedResult == 0) {
+            return;
+        }
+
+        m_appsManager->uninstallApp(appKey);
+    });
+
+    // hide frame
+    QTimer::singleShot(1, this, &NewFrame::hideLauncher);
+
+    unInstallDialog.exec();
+    UNINSTALL_DIALOG_SHOWN = false;
 }
 
 bool NewFrame::windowDeactiveEvent()
 {
+    if (isVisible() && !m_menuWorker->isMenuShown()) {
+        m_delayHideTimer->start();
+    }
 
+    return false;
 }
 
 void NewFrame::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
 
-    if (e->button() == Qt::LeftButton)
+    if (e->button() == Qt::LeftButton) {
         hideLauncher();
+    }
 }
 
 void NewFrame::keyPressEvent(QKeyEvent *e)
@@ -204,6 +271,8 @@ void NewFrame::enterEvent(QEvent *e)
 {
     DBlurEffectWidget::enterEvent(e);
 
+    m_delayHideTimer->stop();
+
     raise();
     activateWindow();
     setFocus();
@@ -213,12 +282,10 @@ const QPoint NewFrame::scaledPosition(const QPoint &xpos)
 {
     const auto ratio = qApp->devicePixelRatio();
     QRect g = qApp->primaryScreen()->geometry();
-    for (auto *screen : qApp->screens())
-    {
+    for (auto *screen : qApp->screens()) {
         const QRect &sg = screen->geometry();
         const QRect &rg = QRect(sg.topLeft(), sg.size() * ratio);
-        if (rg.contains(xpos))
-        {
+        if (rg.contains(xpos)) {
             g = rg;
             break;
         }
@@ -314,4 +381,17 @@ void NewFrame::searchText(const QString &text)
 
         m_appsManager->searchApp(text.trimmed());
     }
+}
+
+void NewFrame::prepareHideLauncher()
+{
+    if (!visible()) {
+        return;
+    }
+
+    if (geometry().contains(QCursor::pos())) {
+        return activateWindow(); /* get focus back */
+    }
+
+    hideLauncher();
 }

@@ -73,7 +73,7 @@ signals:
     void unInstallApp(const QModelIndex &index);
 
 public slots:
-    void showMenuByAppItem(const QModelIndex &index, QPoint pos);
+    void showMenuByAppItem(QPoint pos, const QModelIndex &index);
 
     void handleOpen();
     void handleToDesktop();

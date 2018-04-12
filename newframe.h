@@ -31,10 +31,13 @@
 #include "delegate/applistdelegate.h"
 #include "widgets/searchwidget.h"
 #include "widgets/miniframerightbar.h"
+#include "worker/menuworker.h"
 
 #include <dblureffectwidget.h>
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
+
+#include <memory>
 
 DWIDGET_USE_NAMESPACE
 
@@ -59,6 +62,7 @@ private:
     void launchCurrentApp() Q_DECL_OVERRIDE;
 
     void uninstallApp(const QString &appKey) Q_DECL_OVERRIDE;
+    void uninstallApp(const QModelIndex &context);
     bool windowDeactiveEvent() Q_DECL_OVERRIDE;
 
 protected:
@@ -74,9 +78,11 @@ private slots:
     void onToggleFullScreen();
     void onWMCompositeChanged();
     void searchText(const QString &text);
+    void prepareHideLauncher();
 
 private:
     DBusDock *m_dockInter;
+    std::unique_ptr<MenuWorker> m_menuWorker;
     SharedEventFilter *m_eventFilter;
     DPlatformWindowHandle m_windowHandle;
     DWindowManagerHelper *m_wmHelper;
@@ -86,6 +92,7 @@ private:
     AppsListModel *m_searchModel;
     SearchWidget *m_searchWidget;
     MiniFrameRightBar *m_rightBar;
+    QTimer *m_delayHideTimer;
 };
 
 #endif // NEWFRAME_H

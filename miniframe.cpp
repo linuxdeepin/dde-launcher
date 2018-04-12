@@ -340,7 +340,7 @@ void MiniFrame::launchCurrentApp()
 
 void MiniFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
 {
-    m_menuWorker->showMenuByAppItem(context, pos);
+    m_menuWorker->showMenuByAppItem(pos, context);
 }
 
 void MiniFrame::uninstallApp(const QString &appKey)

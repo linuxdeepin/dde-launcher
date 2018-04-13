@@ -28,11 +28,19 @@
 MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     : QWidget(parent),
       m_modeToggleBtn(new DImageButton),
-      m_avatar(new Avatar)
+      m_avatar(new Avatar),
+      m_currentTimeLabel(new QLabel),
+      m_currentDateLabel(new QLabel),
+      m_refreshDateTimer(new QTimer)
 {
     m_modeToggleBtn->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
     m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
     m_modeToggleBtn->setPressPic(":/icons/skin/icons/fullscreen_press.png");
+
+    m_currentTimeLabel->setStyleSheet("QLabel { font-size: 35px; }");
+
+    m_refreshDateTimer->setInterval(1000);
+    m_refreshDateTimer->start();
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     QHBoxLayout *bottomLayout = new QHBoxLayout;
@@ -60,16 +68,28 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     layout->addWidget(downloadBtn);
     layout->addWidget(manualBtn);
     layout->addStretch();
+    layout->addWidget(m_currentTimeLabel);
+    layout->addWidget(m_currentDateLabel);
+    layout->addStretch();
     layout->addLayout(bottomLayout);
     layout->setContentsMargins(20, 12, 12, 15);
 
     setFixedWidth(240);
+    updateTime();
 
     connect(m_modeToggleBtn, &DImageButton::clicked, this, &MiniFrameRightBar::modeToggleBtnClicked);
+    connect(m_refreshDateTimer, &QTimer::timeout, this, &MiniFrameRightBar::updateTime);
 }
 
 MiniFrameRightBar::~MiniFrameRightBar()
 {
+}
+
+void MiniFrameRightBar::updateTime()
+{
+    const QDateTime dateTime = QDateTime::currentDateTime();
+    m_currentTimeLabel->setText(dateTime.toString("HH:mm"));
+    m_currentDateLabel->setText(dateTime.date().toString(Qt::SystemLocaleLongDate));
 }
 
 void MiniFrameRightBar::paintEvent(QPaintEvent *e)

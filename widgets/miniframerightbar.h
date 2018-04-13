@@ -23,6 +23,9 @@
 #define MINIFRAMERIGHTBAR_H
 
 #include <QWidget>
+#include <QLabel>
+#include <QTimer>
+
 #include <dimagebutton.h>
 #include "avatar.h"
 
@@ -36,6 +39,8 @@ public:
     explicit MiniFrameRightBar(QWidget *parent = nullptr);
     ~MiniFrameRightBar();
 
+    void updateTime();
+
 signals:
     void modeToggleBtnClicked();
 
@@ -45,6 +50,9 @@ protected:
 private:
     DImageButton *m_modeToggleBtn;
     Avatar *m_avatar;
+    QLabel *m_currentTimeLabel;
+    QLabel *m_currentDateLabel;
+    QTimer *m_refreshDateTimer;
 };
 
 #endif // MINIFRAMERIGHTBAR_H

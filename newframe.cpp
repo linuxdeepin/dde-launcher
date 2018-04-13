@@ -54,7 +54,7 @@ NewFrame::NewFrame(QWidget *parent)
       m_searchModel(new AppsListModel(AppsListModel::Search)),
       m_searchWidget(new SearchWidget),
       m_rightBar(new MiniFrameRightBar),
-      m_delayHideTimer(new QTimer(this))
+      m_delayHideTimer(new QTimer)
 {
     m_windowHandle.setShadowRadius(60);
     m_windowHandle.setShadowOffset(QPoint(0, -1));
@@ -149,7 +149,25 @@ bool NewFrame::visible()
 
 void NewFrame::moveCurrentSelectApp(const int key)
 {
+    const QModelIndex currentIdx = m_appsView->currentIndex();
+    QModelIndex targetIndex;
 
+    const int row = currentIdx.row();
+
+    switch (key) {
+    case Qt::Key_Down:
+        targetIndex = currentIdx.sibling(row + 1, 0);
+        break;
+    case Qt::Key_Up:
+        targetIndex = currentIdx.sibling(row - 1, 0);
+        break;
+    }
+
+    if (!targetIndex.isValid()) {
+        return;
+    }
+
+    m_appsView->setCurrentIndex(targetIndex);
 }
 
 void NewFrame::appendToSearchEdit(const char ch)

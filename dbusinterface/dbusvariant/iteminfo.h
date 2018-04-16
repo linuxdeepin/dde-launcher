@@ -54,6 +54,7 @@ public:
     QString m_iconKey;
     qlonglong m_categoryId;
     qlonglong m_installedTime;
+    qlonglong m_openCount;
 };
 
 typedef QList<ItemInfo> ItemInfoList;

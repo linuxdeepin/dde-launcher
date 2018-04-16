@@ -51,6 +51,7 @@ NewFrame::NewFrame(QWidget *parent)
       m_appsManager(AppsManager::instance()),
       m_appsView(new AppListView),
       m_appsModel(new AppsListModel(AppsListModel::All)),
+      m_usedModel(new AppsListModel(AppsListModel::Used)),
       m_searchModel(new AppsListModel(AppsListModel::Search)),
       m_searchWidget(new SearchWidget),
       m_rightBar(new MiniFrameRightBar),
@@ -61,7 +62,7 @@ NewFrame::NewFrame(QWidget *parent)
     m_windowHandle.setEnableBlurWindow(false);
     m_windowHandle.setTranslucentBackground(true);
 
-    m_appsView->setModel(m_appsModel);
+    m_appsView->setModel(m_usedModel);
     m_appsView->setItemDelegate(new AppListDelegate);
 
     m_searchWidget->installEventFilter(m_eventFilter);

@@ -61,6 +61,7 @@ public:
 
     enum AppCategory {
         All,
+        Used,
         Custom,
         Search,
 

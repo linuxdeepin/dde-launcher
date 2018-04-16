@@ -86,10 +86,13 @@ private:
     SharedEventFilter *m_eventFilter;
     DPlatformWindowHandle m_windowHandle;
     DWindowManagerHelper *m_wmHelper;
+
     AppsManager *m_appsManager;
     AppListView *m_appsView;
     AppsListModel *m_appsModel;
+    AppsListModel *m_usedModel;
     AppsListModel *m_searchModel;
+
     SearchWidget *m_searchWidget;
     MiniFrameRightBar *m_rightBar;
     QTimer *m_delayHideTimer;

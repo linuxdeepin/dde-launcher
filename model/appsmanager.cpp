@@ -329,6 +329,7 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     {
     case AppsListModel::Custom:
     case AppsListModel::All:        return m_userSortedList;        break;
+    case AppsListModel::Used:       return m_usedSortedList;        break;
     case AppsListModel::Search:     return m_appSearchResultList;   break;
     default:;
     }
@@ -397,9 +398,14 @@ void AppsManager::refreshCategoryInfoList()
     const ItemInfoList &datas = m_launcherInter->GetAllItemInfos().value();
     m_allAppInfoList.clear();
     m_allAppInfoList.reserve(datas.size());
-    for (const auto &it : datas)
-        if (!m_stashList.contains(it))
+    for (const auto &it : datas) {
+        if (!m_stashList.contains(it)) {
             m_allAppInfoList.append(it);
+        }
+    }
+
+    m_usedSortedList = datas;
+    sortByPresetOrder(m_usedSortedList);
 
     generateCategoryMap();
     saveUserSortedList();

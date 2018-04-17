@@ -28,10 +28,11 @@
 #include "view/applistview.h"
 #include "model/appslistmodel.h"
 #include "model/appsmanager.h"
+#include "worker/menuworker.h"
 #include "delegate/applistdelegate.h"
 #include "widgets/searchwidget.h"
 #include "widgets/miniframerightbar.h"
-#include "worker/menuworker.h"
+#include "widgets/miniframeswitchbtn.h"
 
 #include <dblureffectwidget.h>
 #include <DPlatformWindowHandle>
@@ -73,7 +74,6 @@ protected:
     void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
 
 private slots:
-    const QPoint scaledPosition(const QPoint &xpos);
     void adjustPosition();
     void onToggleFullScreen();
     void onWMCompositeChanged();
@@ -95,6 +95,7 @@ private:
 
     SearchWidget *m_searchWidget;
     MiniFrameRightBar *m_rightBar;
+    MiniFrameSwitchBtn *m_switchBtn;
     QTimer *m_delayHideTimer;
 };
 

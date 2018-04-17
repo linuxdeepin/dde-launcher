@@ -59,7 +59,7 @@
 
 extern const QPoint widgetRelativeOffset(const QWidget * const self, const QWidget *w);
 
-const QPoint scaledPosition(const QPoint &xpos)
+inline const QPoint scaledPosition(const QPoint &xpos)
 {
     const auto ratio = qApp->devicePixelRatio();
     QRect g = qApp->primaryScreen()->geometry();

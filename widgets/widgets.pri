@@ -12,6 +12,7 @@ HEADERS += \
     $$PWD/minicategorywidget.h \
     $$PWD/miniframebottombar.h \
     $$PWD/miniframerightbar.h \
+    $$PWD/miniframeswitchbtn.h \
     $$PWD/avatar.h
 
 SOURCES += \
@@ -26,4 +27,5 @@ SOURCES += \
     $$PWD/minicategorywidget.cpp \
     $$PWD/miniframebottombar.cpp \
     $$PWD/miniframerightbar.cpp \
+    $$PWD/miniframeswitchbtn.cpp \
     $$PWD/avatar.cpp

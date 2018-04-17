@@ -41,6 +41,22 @@
 #define DOCK_FASHION    0
 #define DOCK_EFFICIENT  1
 
+inline const QPoint scaledPosition(const QPoint &xpos)
+{
+    const auto ratio = qApp->devicePixelRatio();
+    QRect g = qApp->primaryScreen()->geometry();
+    for (auto *screen : qApp->screens()) {
+        const QRect &sg = screen->geometry();
+        const QRect &rg = QRect(sg.topLeft(), sg.size() * ratio);
+        if (rg.contains(xpos)) {
+            g = rg;
+            break;
+        }
+    }
+
+    return g.topLeft() + (xpos - g.topLeft()) / ratio;
+}
+
 NewFrame::NewFrame(QWidget *parent)
     : DBlurEffectWidget(parent),
       m_dockInter(new DBusDock(this)),
@@ -55,6 +71,7 @@ NewFrame::NewFrame(QWidget *parent)
       m_searchModel(new AppsListModel(AppsListModel::Search)),
       m_searchWidget(new SearchWidget),
       m_rightBar(new MiniFrameRightBar),
+      m_switchBtn(new MiniFrameSwitchBtn),
       m_delayHideTimer(new QTimer)
 {
     m_windowHandle.setShadowRadius(60);
@@ -75,6 +92,9 @@ NewFrame::NewFrame(QWidget *parent)
     appsLayout->addWidget(m_searchWidget);
     appsLayout->addSpacing(10);
     appsLayout->addWidget(m_appsView);
+    appsLayout->addSpacing(10);
+    appsLayout->addWidget(m_switchBtn);
+    appsLayout->addSpacing(15);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addSpacing(10);
@@ -164,8 +184,8 @@ void NewFrame::moveCurrentSelectApp(const int key)
         break;
     }
 
-    if (!targetIndex.isValid()) {
-        return;
+    if (!currentIdx.isValid() || !targetIndex.isValid()) {
+        targetIndex = m_appsView->model()->index(0, 0);
     }
 
     m_appsView->setCurrentIndex(targetIndex);
@@ -295,22 +315,6 @@ void NewFrame::enterEvent(QEvent *e)
     raise();
     activateWindow();
     setFocus();
-}
-
-const QPoint NewFrame::scaledPosition(const QPoint &xpos)
-{
-    const auto ratio = qApp->devicePixelRatio();
-    QRect g = qApp->primaryScreen()->geometry();
-    for (auto *screen : qApp->screens()) {
-        const QRect &sg = screen->geometry();
-        const QRect &rg = QRect(sg.topLeft(), sg.size() * ratio);
-        if (rg.contains(xpos)) {
-            g = rg;
-            break;
-        }
-    }
-
-    return g.topLeft() + (xpos - g.topLeft()) / ratio;
 }
 
 void NewFrame::adjustPosition()

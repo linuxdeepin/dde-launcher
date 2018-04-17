@@ -112,7 +112,7 @@ void LauncherSys::onAutoExitTimeout()
     if (visible())
         return m_autoExitTimer->start();
 
-    QGSettings gsettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher");
+    QGSettings gsettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
     if (gsettings.keys().contains("autoExit") && gsettings.get("auto-exit").toBool())
     {
         qWarning() << "Exit Timer timeout, may quitting...";

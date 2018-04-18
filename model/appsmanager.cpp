@@ -115,6 +115,7 @@ AppsManager::AppsManager(QObject *parent) :
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
 
     refreshCategoryInfoList();
+    refreshUsedInfoList();
 
     if (APP_AUTOSTART_CACHE.value("version").toString() != qApp->applicationVersion())
         refreshAppAutoStartCache();
@@ -286,6 +287,14 @@ void AppsManager::launchApp(const QModelIndex &index)
     QString appKey = index.data(AppsListModel::AppKeyRole).toString();
     markLaunched(appKey);
 
+    for (ItemInfo &info : m_allAppInfoList) {
+        if (info.m_key == appKey) {
+            info.m_openCount++;
+        }
+    }
+
+    refreshUsedInfoList();
+
     if (!appDesktop.isEmpty())
         m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
 }
@@ -404,11 +413,28 @@ void AppsManager::refreshCategoryInfoList()
         }
     }
 
-    m_usedSortedList = datas;
-    sortByPresetOrder(m_usedSortedList);
-
     generateCategoryMap();
     saveUserSortedList();
+}
+
+void AppsManager::refreshUsedInfoList()
+{
+    m_usedSortedList = m_allAppInfoList;
+
+    qSort(m_usedSortedList.begin(), m_usedSortedList.end(), [] (const ItemInfo &a, const ItemInfo &b) {
+        return a.m_openCount > b.m_openCount;
+    });
+
+    const int reserveCount = 10;
+    ItemInfoList newList;
+    for (int i = 0; i < reserveCount; ++i) {
+        if (!m_usedSortedList.contains(m_usedSortedList.at(i))) {
+            break;
+        }
+        newList.append(m_usedSortedList.at(i));
+    }
+
+    m_usedSortedList = newList;
 }
 
 void AppsManager::generateCategoryMap()

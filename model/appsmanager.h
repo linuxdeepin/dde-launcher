@@ -96,6 +96,7 @@ private:
     void sortCategory(const AppsListModel::AppCategory category);
     void sortByPresetOrder(ItemInfoList &processList);
     void refreshCategoryInfoList();
+    void refreshUsedInfoList();
     void generateCategoryMap();
     void refreshAppAutoStartCache();
 

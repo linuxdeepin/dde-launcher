@@ -25,7 +25,7 @@
 
 ItemInfo::ItemInfo()
 {
-
+    m_openCount = 0;
 }
 
 ItemInfo::~ItemInfo()

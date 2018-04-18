@@ -76,6 +76,7 @@ protected:
 private slots:
     void adjustPosition();
     void onToggleFullScreen();
+    void onSwitchBtnClicked();
     void onWMCompositeChanged();
     void searchText(const QString &text);
     void prepareHideLauncher();

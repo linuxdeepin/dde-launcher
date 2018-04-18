@@ -104,6 +104,8 @@ NewFrame::NewFrame(QWidget *parent)
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
 
+    m_switchBtn->setText(tr("All"));
+
     setMaskColor(DBlurEffectWidget::DarkColor);
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_InputMethodEnabled, true);
@@ -126,6 +128,8 @@ NewFrame::NewFrame(QWidget *parent)
     connect(m_appsView, &QListView::clicked, this, &NewFrame::hideLauncher, Qt::QueuedConnection);
     connect(m_appsView, &QListView::entered, m_appsView, &AppListView::setCurrentIndex);
     connect(m_appsView, &AppListView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
+
+    connect(m_switchBtn, &QPushButton::clicked, this, &NewFrame::onSwitchBtnClicked);
 
     connect(m_delayHideTimer, &QTimer::timeout, this, &NewFrame::prepareHideLauncher);
 
@@ -380,6 +384,17 @@ void NewFrame::onToggleFullScreen()
             .path("/com/deepin/dde/daemon/Launcher")
             .property("Fullscreen")
             .set(true);
+}
+
+void NewFrame::onSwitchBtnClicked()
+{
+    if (m_appsView->model() == m_usedModel) {
+        m_appsView->setModel(m_appsModel);
+        m_switchBtn->setText("Return");
+    } else {
+        m_switchBtn->setText(tr("All"));
+        m_appsView->setModel(m_usedModel);
+    }
 }
 
 void NewFrame::onWMCompositeChanged()

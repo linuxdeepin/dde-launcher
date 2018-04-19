@@ -21,6 +21,8 @@
 
 #include "miniframerightbar.h"
 #include "avatar.h"
+#include <DDesktopServices>
+#include <DDBusSender>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QPainter>
@@ -79,6 +81,16 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     connect(m_modeToggleBtn, &DImageButton::clicked, this, &MiniFrameRightBar::modeToggleBtnClicked);
     connect(m_refreshDateTimer, &QTimer::timeout, this, &MiniFrameRightBar::updateTime);
+
+    connect(computerBtn, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
+    connect(documentBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DocumentsLocation); });
+    connect(videoBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::MoviesLocation); });
+    connect(musicBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::MusicLocation); });
+    connect(pictureBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::PicturesLocation); });
+    connect(downloadBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DownloadLocation); });
+    connect(manualBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showManual);
+    connect(settingsBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showSettings);
+    connect(shutdownBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showShutdown);
 }
 
 MiniFrameRightBar::~MiniFrameRightBar()
@@ -100,4 +112,52 @@ void MiniFrameRightBar::paintEvent(QPaintEvent *e)
     painter.setPen(QColor(255, 255, 255, 0.2 * 255));
     painter.drawLine(QPoint(0, 0),
                      QPoint(0, rect().height()));
+}
+
+void MiniFrameRightBar::openDirectory(const QString &dir)
+{
+    DDesktopServices::showFolder(QUrl(dir));
+
+    emit requestFrameHide();
+}
+
+void MiniFrameRightBar::openStandardDirectory(const QStandardPaths::StandardLocation &location)
+{
+    const QString dir = QStandardPaths::writableLocation(location);
+
+    if (!dir.isEmpty()) {
+        openDirectory(dir);
+    }
+}
+
+void MiniFrameRightBar::handleShutdownAction(const QString &action)
+{
+    DDBusSender()
+            .service("com.deepin.dde.shutdownFront")
+            .interface("com.deepin.dde.shutdownFront")
+            .path("/com/deepin/dde/shutdownFront")
+            .method(action)
+            .call();
+}
+
+void MiniFrameRightBar::showShutdown()
+{
+    QProcess::startDetached("dde-shutdown");
+}
+
+void MiniFrameRightBar::showSettings()
+{
+    DDBusSender()
+            .service("com.deepin.dde.ControlCenter")
+            .interface("com.deepin.dde.ControlCenter")
+            .path("/com/deepin/dde/ControlCenter")
+            .method(QString("Toggle"))
+            .call();
+}
+
+void MiniFrameRightBar::showManual()
+{
+    QProcess::startDetached("dman");
+
+    emit requestFrameHide();
 }

@@ -43,9 +43,18 @@ public:
 
 signals:
     void modeToggleBtnClicked();
+    void requestFrameHide();
 
 protected:
     void paintEvent(QPaintEvent *);
+
+private slots:
+    void openDirectory(const QString &dir);
+    void openStandardDirectory(const QStandardPaths::StandardLocation &location);
+    void handleShutdownAction(const QString &action);
+    void showShutdown();
+    void showSettings();
+    void showManual();
 
 private:
     DImageButton *m_modeToggleBtn;

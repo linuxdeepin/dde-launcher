@@ -118,6 +118,7 @@ NewFrame::NewFrame(QWidget *parent)
     installEventFilter(m_eventFilter);
 
     connect(m_rightBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &NewFrame::onToggleFullScreen);
+    connect(m_rightBar, &MiniFrameRightBar::requestFrameHide, this, &NewFrame::hideLauncher);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &NewFrame::onWMCompositeChanged);
     connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &NewFrame::searchText, Qt::QueuedConnection);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (NewFrame::*)(const QModelIndex &)>(&NewFrame::uninstallApp));

@@ -290,6 +290,7 @@ void AppsManager::launchApp(const QModelIndex &index)
     for (ItemInfo &info : m_allAppInfoList) {
         if (info.m_key == appKey) {
             info.m_openCount++;
+            break;
         }
     }
 
@@ -429,7 +430,7 @@ void AppsManager::refreshUsedInfoList()
     ItemInfoList newList;
     for (int i = 0; i < reserveCount; ++i) {
         if (!m_usedSortedList.contains(m_usedSortedList.at(i))) {
-            break;
+            continue;
         }
         newList.append(m_usedSortedList.at(i));
     }

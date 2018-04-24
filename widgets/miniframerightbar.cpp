@@ -20,6 +20,7 @@
  */
 
 #include "miniframerightbar.h"
+#include "miniframebutton.h"
 #include "avatar.h"
 #include <DDesktopServices>
 #include <DDBusSender>
@@ -46,15 +47,15 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     QHBoxLayout *bottomLayout = new QHBoxLayout;
-    QPushButton *computerBtn = new QPushButton(tr("Computer"));
-    QPushButton *documentBtn = new QPushButton(tr("Document"));
-    QPushButton *videoBtn = new QPushButton(tr("Video"));
-    QPushButton *musicBtn = new QPushButton(tr("Music"));
-    QPushButton *pictureBtn = new QPushButton(tr("Picture"));
-    QPushButton *downloadBtn = new QPushButton(tr("Downloads"));
-    QPushButton *manualBtn = new QPushButton(tr("Manual"));
-    QPushButton *settingsBtn = new QPushButton(tr("Settings"));
-    QPushButton *shutdownBtn = new QPushButton(tr("Shutdown"));
+    MiniFrameButton *computerBtn = new MiniFrameButton(tr("Computer"));
+    MiniFrameButton *documentBtn = new MiniFrameButton(tr("Document"));
+    MiniFrameButton *videoBtn = new MiniFrameButton(tr("Video"));
+    MiniFrameButton *musicBtn = new MiniFrameButton(tr("Music"));
+    MiniFrameButton *pictureBtn = new MiniFrameButton(tr("Picture"));
+    MiniFrameButton *downloadBtn = new MiniFrameButton(tr("Downloads"));
+    MiniFrameButton *manualBtn = new MiniFrameButton(tr("Manual"));
+    MiniFrameButton *settingsBtn = new MiniFrameButton(tr("Settings"));
+    MiniFrameButton *shutdownBtn = new MiniFrameButton(tr("Shutdown"));
 
     bottomLayout->addWidget(settingsBtn);
     bottomLayout->addWidget(shutdownBtn);

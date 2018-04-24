@@ -58,3 +58,10 @@ void AppListView::mousePressEvent(QMouseEvent *e)
             emit popupMenuRequested(rightClickPoint, clickedIndex);
     }
 }
+
+void AppListView::leaveEvent(QEvent *e)
+{
+    QListView::leaveEvent(e);
+
+    emit entered(QModelIndex());
+}

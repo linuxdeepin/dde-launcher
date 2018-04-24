@@ -51,6 +51,11 @@ public:
     explicit NewFrame(QWidget *parent = nullptr);
     ~NewFrame();
 
+    enum DisplayMode {
+        Used,
+        All
+    };
+
 signals:
     void visibleChanged(bool visible);
 
@@ -102,6 +107,8 @@ private:
     MiniFrameSwitchBtn *m_switchBtn;
     QLabel *m_tipsLabel;
     QTimer *m_delayHideTimer;
+
+    DisplayMode m_displayMode;
 };
 
 #endif // NEWFRAME_H

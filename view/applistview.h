@@ -38,6 +38,7 @@ signals:
 
 protected:
     void mousePressEvent(QMouseEvent *e);
+    void leaveEvent(QEvent *);
 };
 
 #endif // APPLISTVIEW_H

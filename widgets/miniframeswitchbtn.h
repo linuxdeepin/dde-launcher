@@ -21,6 +21,7 @@
 #define MINIFRAMESWITCHBTN_H
 
 #include <QPushButton>
+#include <QLabel>
 
 class MiniFrameSwitchBtn : public QPushButton
 {
@@ -29,6 +30,13 @@ class MiniFrameSwitchBtn : public QPushButton
 public:
     MiniFrameSwitchBtn(QWidget *parent = nullptr);
     ~MiniFrameSwitchBtn();
+
+public slots:
+    void updateStatus(int status);
+
+private:
+    QLabel *m_textLabel;
+    QLabel *m_enterIcon;
 };
 
 #endif

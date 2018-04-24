@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/widgets">
+        <file>images/enter_details_normal.svg</file>
+        <file>images/enter_details_hover.svg</file>
+        <file>images/enter_details_press.svg</file>
+    </qresource>
+</RCC>

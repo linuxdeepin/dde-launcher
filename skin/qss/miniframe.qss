@@ -12,14 +12,15 @@ QScrollArea#AppsArea {
     background: transparent;
 }
 
-NavigationButton {
+#MiniFrameButton {
     border: none;
     color: rgba(255, 255, 255);
     padding: 6px;
+    text-align: left;
     background: transparent;
 }
 
-NavigationButton:hover {
+#MiniFrameButton:hover {
     border: none;
     border-radius: 4px;
     padding: 6px;
@@ -27,7 +28,7 @@ NavigationButton:hover {
     background: rgba(255, 255, 255, 0.1);
 }
 
-NavigationButton:pressed {
+#MiniFrameButton:pressed {
     border: none;
     border-radius: 4px;
     padding: 6px;

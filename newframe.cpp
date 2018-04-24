@@ -73,7 +73,8 @@ NewFrame::NewFrame(QWidget *parent)
       m_rightBar(new MiniFrameRightBar),
       m_switchBtn(new MiniFrameSwitchBtn),
       m_tipsLabel(new QLabel(this)),
-      m_delayHideTimer(new QTimer)
+      m_delayHideTimer(new QTimer),
+      m_displayMode(Used)
 {
     m_windowHandle.setShadowRadius(60);
     m_windowHandle.setShadowOffset(QPoint(0, -1));
@@ -111,7 +112,7 @@ NewFrame::NewFrame(QWidget *parent)
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
 
-    m_switchBtn->setText(tr("All"));
+    m_switchBtn->updateStatus(Used);
 
     setMaskColor(DBlurEffectWidget::DarkColor);
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
@@ -397,13 +398,17 @@ void NewFrame::onToggleFullScreen()
 
 void NewFrame::onSwitchBtnClicked()
 {
-    if (m_appsView->model() == m_usedModel) {
+    if (m_displayMode == Used) {
+        m_displayMode = All;
         m_appsView->setModel(m_appsModel);
-        m_switchBtn->setText("Return");
+        m_switchBtn->updateStatus(All);
     } else {
-        m_switchBtn->setText(tr("All"));
+        m_displayMode = Used;
         m_appsView->setModel(m_usedModel);
+        m_switchBtn->updateStatus(Used);
     }
+
+    hideTips();
 }
 
 void NewFrame::onWMCompositeChanged()

@@ -86,15 +86,9 @@ void LauncherSys::displayModeChanged()
 
     if (!m_dbusLauncherInter->fullscreen())
     {
-#ifdef QT_DEBUG
         NewFrame *newFrame = new NewFrame;
         connect(newFrame, &NewFrame::visibleChanged, this, &LauncherSys::visibleChanged);
         m_launcherInter = newFrame;
-#else
-        MiniFrame *frame = new MiniFrame;
-        connect(frame, &MiniFrame::visibleChanged, this, &LauncherSys::visibleChanged);
-        m_launcherInter = frame;
-#endif
     } else {
         FullScreenFrame *frame = new FullScreenFrame;
         connect(frame, &FullScreenFrame::visibleChanged, this, &LauncherSys::visibleChanged);

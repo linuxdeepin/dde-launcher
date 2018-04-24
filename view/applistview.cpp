@@ -40,11 +40,6 @@ AppListView::AppListView(QWidget *parent)
     setSpacing(0);
     setContentsMargins(0, 0, 0, 0);
     setMouseTracking(true);
-
-#ifdef QT_DEBUG
-#else
-    setFixedSize(380, 410);
-#endif
 }
 
 void AppListView::mousePressEvent(QMouseEvent *e)

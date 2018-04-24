@@ -72,6 +72,7 @@ NewFrame::NewFrame(QWidget *parent)
       m_searchWidget(new SearchWidget),
       m_rightBar(new MiniFrameRightBar),
       m_switchBtn(new MiniFrameSwitchBtn),
+      m_tipsLabel(new QLabel(this)),
       m_delayHideTimer(new QTimer)
 {
     m_windowHandle.setShadowRadius(60);
@@ -83,6 +84,12 @@ NewFrame::NewFrame(QWidget *parent)
     m_appsView->setItemDelegate(new AppListDelegate);
 
     m_searchWidget->installEventFilter(m_eventFilter);
+
+    m_tipsLabel->setAlignment(Qt::AlignCenter);
+    m_tipsLabel->setFixedSize(500, 50);
+    m_tipsLabel->setVisible(false);
+    m_tipsLabel->setStyleSheet("color:rgba(238, 238, 238, .6);"
+                               "font-size:22px;");
 
     m_delayHideTimer->setInterval(200);
     m_delayHideTimer->setSingleShot(true);
@@ -130,8 +137,9 @@ NewFrame::NewFrame(QWidget *parent)
     connect(m_appsView, &QListView::entered, m_appsView, &AppListView::setCurrentIndex);
     connect(m_appsView, &AppListView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
 
+    connect(m_appsManager, &AppsManager::requestTips, this, &NewFrame::showTips);
+    connect(m_appsManager, &AppsManager::requestHideTips, this, &NewFrame::hideTips);
     connect(m_switchBtn, &QPushButton::clicked, this, &NewFrame::onSwitchBtnClicked);
-
     connect(m_delayHideTimer, &QTimer::timeout, this, &NewFrame::prepareHideLauncher);
 
     QTimer::singleShot(1, this, &NewFrame::onWMCompositeChanged);
@@ -413,6 +421,7 @@ void NewFrame::searchText(const QString &text)
 {
     if (text.isEmpty()) {
         m_appsView->setModel(m_appsModel);
+        hideTips();
     } else {
         if (m_appsView->model() != m_searchModel) {
             m_appsView->setModel(m_searchModel);
@@ -420,6 +429,24 @@ void NewFrame::searchText(const QString &text)
 
         m_appsManager->searchApp(text.trimmed());
     }
+}
+
+void NewFrame::showTips(const QString &text)
+{
+    if (m_appsView->model() != m_searchModel)
+        return;
+
+    m_tipsLabel->setText(text);
+
+    const QPoint center = m_appsView->rect().center() - m_tipsLabel->rect().center();
+    m_tipsLabel->move(center);
+    m_tipsLabel->setVisible(true);
+    m_tipsLabel->raise();
+}
+
+void NewFrame::hideTips()
+{
+    m_tipsLabel->setVisible(false);
 }
 
 void NewFrame::prepareHideLauncher()

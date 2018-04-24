@@ -38,6 +38,7 @@
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
 
+#include <QLabel>
 #include <memory>
 
 DWIDGET_USE_NAMESPACE
@@ -79,6 +80,8 @@ private slots:
     void onSwitchBtnClicked();
     void onWMCompositeChanged();
     void searchText(const QString &text);
+    void showTips(const QString &text);
+    void hideTips();
     void prepareHideLauncher();
 
 private:
@@ -97,6 +100,7 @@ private:
     SearchWidget *m_searchWidget;
     MiniFrameRightBar *m_rightBar;
     MiniFrameSwitchBtn *m_switchBtn;
+    QLabel *m_tipsLabel;
     QTimer *m_delayHideTimer;
 };
 

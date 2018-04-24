@@ -92,7 +92,7 @@ QSize AppListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
     Q_UNUSED(option);
     Q_UNUSED(index);
 
-    return QSize(0, 50);
+    return QSize(0, 52);
 }
 
 void AppListDelegate::setActived(bool active)

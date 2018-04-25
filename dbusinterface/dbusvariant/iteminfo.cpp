@@ -22,6 +22,7 @@
  */
 
 #include "iteminfo.h"
+#include <QDebug>
 
 ItemInfo::ItemInfo()
 {
@@ -91,7 +92,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo &info)
 
 QDataStream &operator<<(QDataStream &argument, const ItemInfo &info)
 {
-    argument << info.m_desktop;
+    argument << info.m_desktop << info.m_openCount;
 //    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
 //    argument << info.m_categoryId << info.m_installedTime;
 
@@ -100,7 +101,7 @@ QDataStream &operator<<(QDataStream &argument, const ItemInfo &info)
 
 const QDataStream &operator>>(QDataStream &argument, ItemInfo &info)
 {
-    argument >> info.m_desktop;
+    argument >> info.m_desktop >> info.m_openCount;
 //    argument >> info.m_desktop >> info.m_name >> info.m_key >> info.m_iconKey;
 //    argument >> info.m_categoryId >> info.m_installedTime;
 

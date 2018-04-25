@@ -425,7 +425,7 @@ void NewFrame::onWMCompositeChanged()
 void NewFrame::searchText(const QString &text)
 {
     if (text.isEmpty()) {
-        m_appsView->setModel(m_appsModel);
+        m_appsView->setModel((m_displayMode == All) ? m_appsModel : m_usedModel);
         hideTips();
     } else {
         if (m_appsView->model() != m_searchModel) {

@@ -272,6 +272,7 @@ void AppsManager::saveUserSortedList()
     QByteArray writeBuf;
     QDataStream out(&writeBuf, QIODevice::WriteOnly);
     out << m_userSortedList;
+
     APP_USER_SORTED_LIST.setValue("list", writeBuf);
 }
 
@@ -287,7 +288,7 @@ void AppsManager::launchApp(const QModelIndex &index)
     QString appKey = index.data(AppsListModel::AppKeyRole).toString();
     markLaunched(appKey);
 
-    for (ItemInfo &info : m_allAppInfoList) {
+    for (ItemInfo &info : m_userSortedList) {
         if (info.m_key == appKey) {
             info.m_openCount++;
             break;
@@ -420,7 +421,7 @@ void AppsManager::refreshCategoryInfoList()
 
 void AppsManager::refreshUsedInfoList()
 {
-    m_usedSortedList = m_allAppInfoList;
+    m_usedSortedList = m_userSortedList;
 
     std::stable_sort(m_usedSortedList.begin(), m_usedSortedList.end(),
                      [] (const ItemInfo &a, const ItemInfo &b) {
@@ -437,6 +438,7 @@ void AppsManager::refreshUsedInfoList()
     }
 
     m_usedSortedList = newList;
+    saveUserSortedList();
 }
 
 void AppsManager::generateCategoryMap()
@@ -444,14 +446,16 @@ void AppsManager::generateCategoryMap()
     m_appInfos.clear();
     sortByPresetOrder(m_allAppInfoList);
 
-    for (const ItemInfo &info : m_allAppInfoList)
-    {
+    for (const ItemInfo &info : m_allAppInfoList) {
         const int userIdx = m_userSortedList.indexOf(info);
         // append new installed app to user sorted list
-        if (userIdx == -1)
+        if (userIdx == -1) {
             m_userSortedList.append(info);
-        else
+        } else {
+            const int openCount = m_userSortedList[userIdx].m_openCount;
             m_userSortedList[userIdx].updateInfo(info);
+            m_userSortedList[userIdx].m_openCount = openCount;
+        }
 
         const AppsListModel::AppCategory category = info.category();
         if (!m_appInfos.contains(category))
@@ -461,8 +465,7 @@ void AppsManager::generateCategoryMap()
     }
 
     // remove uninstalled app item
-    for (auto it(m_userSortedList.begin()); it != m_userSortedList.end();)
-    {
+    for (auto it(m_userSortedList.begin()); it != m_userSortedList.end();) {
         const int idx = m_allAppInfoList.indexOf(*it);
 
         if (idx == -1)

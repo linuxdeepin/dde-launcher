@@ -222,7 +222,9 @@ void AppsManager::stashItem(const QString &appKey)
         {
             m_stashList.append(m_allAppInfoList[i]);
             m_allAppInfoList.removeAt(i);
+
             generateCategoryMap();
+            refreshUsedInfoList();
 
             return;
         }

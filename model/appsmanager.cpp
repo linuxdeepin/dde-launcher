@@ -422,10 +422,10 @@ void AppsManager::refreshUsedInfoList()
 {
     m_usedSortedList = m_allAppInfoList;
 
-    qSort(m_usedSortedList.begin(), m_usedSortedList.end(),
-          [] (const ItemInfo &a, const ItemInfo &b) {
-              return a.m_openCount > b.m_openCount;
-          });
+    std::stable_sort(m_usedSortedList.begin(), m_usedSortedList.end(),
+                     [] (const ItemInfo &a, const ItemInfo &b) {
+                         return a.m_openCount > b.m_openCount;
+                     });
 
     const int reserveCount = 10;
     ItemInfoList newList;

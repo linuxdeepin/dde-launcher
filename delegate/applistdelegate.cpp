@@ -47,44 +47,77 @@ AppListDelegate::AppListDelegate(QObject *parent)
 
 void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    const auto ratio = qApp->devicePixelRatio();
-    const QRect r = option.rect;
+    const qreal ratio = qApp->devicePixelRatio();
+    const QRect rect = option.rect;
     const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).value<QSize>();
-    QPixmap icon = index.data(AppsListModel::AppIconRole).value<QPixmap>();
-    icon = icon.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    if (ratio > 1.0)
-        icon.setDevicePixelRatio(ratio);
+    const bool drawTipsDot = index.data(AppsListModel::AppNewInstallRole).toBool();
+    QPixmap iconPixmap = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+    iconPixmap = iconPixmap.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    iconPixmap.setDevicePixelRatio(ratio);
 
     painter->setRenderHint(QPainter::Antialiasing);
 
-    if (option.state.testFlag(QStyle::State_Selected))
-    {
+    if (option.state.testFlag(QStyle::State_Selected)) {
         if (m_actived)
             painter->setBrush(QColor(0, 0, 0, 255 * .4));
         else
             painter->setBrush(QColor(0, 0, 0, 255 * .2));
+
         painter->setPen(Qt::NoPen);
-        painter->drawRoundedRect(option.rect.marginsRemoved(QMargins(1, 1, 1, 1)), 4, 4);
+        painter->drawRoundedRect(rect.marginsRemoved(QMargins(1, 1, 1, 1)), 4, 4);
     }
 
-    const int icon_x = r.x() + 10;
-    const int icon_y = r.y() + (r.height() - icon.height() / ratio) / 2;
-    painter->drawPixmap(icon_x, icon_y, icon);
+    const int iconX = rect.x() + 10;
+    const int iconY = rect.y() + (rect.height() - iconPixmap.height() / ratio) / 2;
+    painter->drawPixmap(iconX, iconY, iconPixmap);
 
     // draw icon if app is auto startup
-    if (index.data(AppsListModel::AppAutoStartRole).toBool())
-        painter->drawPixmap(icon_x, icon_y + 16, m_autoStartPixmap);
+    if (index.data(AppsListModel::AppAutoStartRole).toBool()) {
+        painter->drawPixmap(iconX, iconY + 16, m_autoStartPixmap);
+    }
 
-    // draw blue dot if new installed
-    const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();
-    if (drawBlueDot)
-        painter->drawPixmap(70, r.y() + (r.height() - m_blueDotPixmap.height() / m_blueDotPixmap.devicePixelRatio()) / 2, m_blueDotPixmap);
+    QRect textRect = rect.marginsRemoved(QMargins(60, 1, 1, 1));
+    QString appName = index.data(AppsListModel::AppNameRole).toString();
+    const QFontMetrics fm = painter->fontMetrics();
 
+    if (drawTipsDot) {
+        textRect.setWidth(textRect.width() - 90);
+    }
+
+    // draw app name.
     painter->setPen(Qt::white);
-    if (drawBlueDot)
-        painter->drawText(r.marginsRemoved(QMargins(85, 0, 0, 0)), Qt::AlignVCenter | Qt::AlignLeft, index.data(AppsListModel::AppNameRole).toString());
-    else
-        painter->drawText(r.marginsRemoved(QMargins(70, 0, 0, 0)), Qt::AlignVCenter | Qt::AlignLeft, index.data(AppsListModel::AppNameRole).toString());
+    painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, fm.elidedText(appName, Qt::ElideRight, textRect.width()));
+
+    if (drawTipsDot) {
+        QRect tipsRect = rect;
+        const int rightPadding = 5;
+        tipsRect.setLeft(rect.right() - 90 - rightPadding);
+        tipsRect.setWidth(90);
+        tipsRect.setHeight(30);
+        tipsRect.moveTop(rect.y() + (rect.height() - tipsRect.height() / ratio) / 2);
+
+        // draw tips background.
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(QColor(255, 255, 255, 255 * .5));
+        painter->drawRoundedRect(tipsRect, 15, 15);
+
+        // set the font size of tips text.
+        QFont font = painter->font();
+        const int fontSize = font.pointSize();
+        font.setPointSize(10);
+
+        const QRect tipsTextRect = tipsRect.marginsRemoved(QMargins(5, 0, 2, 0));
+        const QString tipsText = painter->fontMetrics().elidedText(tr("New Installed"), Qt::ElideRight, tipsTextRect.width());
+
+        // draw tips text.
+        painter->setFont(font);
+        painter->setPen(Qt::white);
+        painter->drawText(tipsTextRect, Qt::AlignCenter, tipsText);
+
+        // restore original font size.
+        font.setPointSize(fontSize);
+        painter->setFont(font);
+    }
 }
 
 QSize AppListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const

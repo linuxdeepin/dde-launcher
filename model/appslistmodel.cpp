@@ -136,6 +136,10 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
 
+    if (m_category == Used) {
+        return MAXIMUM_POPULAR_ITEMS;
+    }
+
     return m_appsManager->appsInfoList(m_category).size();
 }
 

@@ -292,6 +292,12 @@ void AppsManager::launchApp(const QModelIndex &index)
 
     for (ItemInfo &info : m_userSortedList) {
         if (info.m_key == appKey) {
+            const int idx = m_usedSortedList.indexOf(info);
+
+            if (idx != -1) {
+                m_usedSortedList[idx].m_openCount++;
+            }
+
             info.m_openCount++;
             break;
         }
@@ -423,23 +429,15 @@ void AppsManager::refreshCategoryInfoList()
 
 void AppsManager::refreshUsedInfoList()
 {
-    m_usedSortedList = m_userSortedList;
+    if (m_usedSortedList.isEmpty()) {
+        m_usedSortedList = m_userSortedList;
+    }
 
     std::stable_sort(m_usedSortedList.begin(), m_usedSortedList.end(),
                      [] (const ItemInfo &a, const ItemInfo &b) {
                          return a.m_openCount > b.m_openCount;
                      });
 
-    const int reserveCount = 10;
-    ItemInfoList newList;
-    for (int i = 0; i < reserveCount; ++i) {
-        if (!m_usedSortedList.contains(m_usedSortedList.at(i))) {
-            continue;
-        }
-        newList.append(m_usedSortedList.at(i));
-    }
-
-    m_usedSortedList = newList;
     saveUserSortedList();
 }
 

@@ -298,6 +298,12 @@ void AppGridView::prepareDropSwap()
     if (dragStartIndex == dropIndex)
         return;
 
+    // startPos may be in the space between two icons.
+    if (!dragStartIndex.isValid()) {
+        m_dragStartPos = indexRect(dropIndex).center();
+        return;
+    }
+
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     if (!listModel)
         return;

@@ -296,7 +296,7 @@ void AppsListModel::dataChanged(const AppCategory category)
 void AppsListModel::layoutChanged(const AppsListModel::AppCategory category)
 {
     if (category == All || category == m_category)
-        emit QAbstractItemModel::layoutChanged();
+        emit QAbstractItemModel::dataChanged(QModelIndex(), QModelIndex());
 }
 
 bool AppsListModel::indexDragging(const QModelIndex &index) const

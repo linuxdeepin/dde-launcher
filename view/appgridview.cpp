@@ -237,6 +237,7 @@ void AppGridView::startDrag(const QModelIndex &index)
         listModel->setDraggingIndex(index);
     }
 
+    setState(DraggingState);
     drag->exec(Qt::MoveAction);
 
     // disable animation when finally dropped
@@ -363,7 +364,6 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     {
         m_lastFakeAni = ani;
         connect(ani, &QPropertyAnimation::finished, this, &AppGridView::dropSwap, Qt::QueuedConnection);
-//        connect(ani, &QPropertyAnimation::finished, [this] {dropSwap(); m_lastFakeAni = nullptr;});
         connect(ani, &QPropertyAnimation::valueChanged, m_dropThresholdTimer, &QTimer::stop);
     }
 
@@ -381,6 +381,8 @@ void AppGridView::dropSwap()
 
     listModel->dropSwap(m_dropToPos);
     m_lastFakeAni = nullptr;
+
+    setState(NoState);
 }
 
 const QRect AppGridView::indexRect(const QModelIndex &index) const

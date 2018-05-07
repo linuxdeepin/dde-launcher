@@ -71,6 +71,7 @@ signals:
 
 public slots:
     void saveUserSortedList();
+    void saveUsedSortedList();
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
     void uninstallApp(const QString &appKey);
@@ -97,6 +98,7 @@ private:
     void sortByPresetOrder(ItemInfoList &processList);
     void refreshCategoryInfoList();
     void refreshUsedInfoList();
+    void updateUsedListInfo();
     void generateCategoryMap();
     void refreshAppAutoStartCache();
 
@@ -129,6 +131,7 @@ private:
     static QGSettings LAUNCHER_SETTINGS;
     static QSettings APP_AUTOSTART_CACHE;
     static QSettings APP_USER_SORTED_LIST;
+    static QSettings APP_USED_SORTED_LIST;
     QMap<QPair<QString, int>, QPixmap> m_iconCache;
 };
 

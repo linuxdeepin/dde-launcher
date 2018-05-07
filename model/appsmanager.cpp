@@ -45,6 +45,7 @@ QPointer<AppsManager> AppsManager::INSTANCE = nullptr;
 QGSettings AppsManager::LAUNCHER_SETTINGS("com.deepin.dde.launcher", "", nullptr);
 QSettings AppsManager::APP_AUTOSTART_CACHE("deepin", "dde-launcher-app-autostart", nullptr);
 QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
+QSettings AppsManager::APP_USED_SORTED_LIST("deepin", "dde-launcher-app-used-sorted-list");
 
 int perfectIconSize(const int size)
 {
@@ -278,6 +279,15 @@ void AppsManager::saveUserSortedList()
     APP_USER_SORTED_LIST.setValue("list", writeBuf);
 }
 
+void AppsManager::saveUsedSortedList()
+{
+    QByteArray writeBuf;
+    QDataStream out(&writeBuf, QIODevice::WriteOnly);
+    out << m_usedSortedList;
+
+    APP_USED_SORTED_LIST.setValue("list", writeBuf);
+}
+
 void AppsManager::searchApp(const QString &keywords)
 {
     m_searchTimer->start();
@@ -298,7 +308,6 @@ void AppsManager::launchApp(const QModelIndex &index)
                 m_usedSortedList[idx].m_openCount++;
             }
 
-            info.m_openCount++;
             break;
         }
     }
@@ -429,8 +438,19 @@ void AppsManager::refreshCategoryInfoList()
 
 void AppsManager::refreshUsedInfoList()
 {
+    // init data if used sorted list is empty.
     if (m_usedSortedList.isEmpty()) {
-        m_usedSortedList = m_userSortedList;
+        // first reads the config file.
+        QByteArray readBuffer = APP_USED_SORTED_LIST.value("list").toByteArray();
+        QDataStream in(&readBuffer, QIODevice::ReadOnly);
+        in >> m_usedSortedList;
+
+        // if data cache file is empty.
+        if (m_usedSortedList.isEmpty()) {
+            m_usedSortedList = m_userSortedList;
+        }
+
+        updateUsedListInfo();
     }
 
     // append new installed app to used sorted list.
@@ -452,7 +472,20 @@ void AppsManager::refreshUsedInfoList()
                          return a.m_openCount > b.m_openCount;
                      });
 
-    saveUserSortedList();
+    saveUsedSortedList();
+}
+
+void AppsManager::updateUsedListInfo()
+{
+    for (const ItemInfo &info : m_allAppInfoList) {
+        const int idx = m_usedSortedList.indexOf(info);
+
+        if (idx != -1) {
+            const int openCount = m_usedSortedList[idx].m_openCount;
+            m_usedSortedList[idx].updateInfo(info);
+            m_usedSortedList[idx].m_openCount = openCount;
+        }
+    }
 }
 
 void AppsManager::generateCategoryMap()

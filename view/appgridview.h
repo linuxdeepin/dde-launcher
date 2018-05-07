@@ -52,7 +52,6 @@ signals:
     void requestScrollStop() const;
 
 protected:
-    using QListView::startDrag;
     void startDrag(const QModelIndex &index);
     void dragEnterEvent(QDragEnterEvent *e);
     void dragMoveEvent(QDragMoveEvent *e);

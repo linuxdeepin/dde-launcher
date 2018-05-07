@@ -433,6 +433,20 @@ void AppsManager::refreshUsedInfoList()
         m_usedSortedList = m_userSortedList;
     }
 
+    // append new installed app to used sorted list.
+    for (const ItemInfo &info : m_userSortedList) {
+        if (!m_usedSortedList.contains(info)) {
+            m_usedSortedList.append(info);
+        }
+    }
+
+    // remove uninstalled app item.
+    for (const ItemInfo &info : m_usedSortedList) {
+        if (!m_allAppInfoList.contains(info)) {
+            m_usedSortedList.removeOne(info);
+        }
+    }
+
     std::stable_sort(m_usedSortedList.begin(), m_usedSortedList.end(),
                      [] (const ItemInfo &a, const ItemInfo &b) {
                          return a.m_openCount > b.m_openCount;

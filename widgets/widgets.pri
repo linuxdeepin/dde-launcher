@@ -14,6 +14,7 @@ HEADERS += \
     $$PWD/miniframerightbar.h \
     $$PWD/miniframeswitchbtn.h \
     $$PWD/miniframebutton.h \
+    $$PWD/hseparator.h \
     $$PWD/avatar.h
 
 SOURCES += \
@@ -30,6 +31,7 @@ SOURCES += \
     $$PWD/miniframerightbar.cpp \
     $$PWD/miniframeswitchbtn.cpp \
     $$PWD/miniframebutton.cpp \
+    $$PWD/hseparator.cpp \
     $$PWD/avatar.cpp
 
 RESOURCES += $$PWD/images.qrc

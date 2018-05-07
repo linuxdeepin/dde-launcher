@@ -20,6 +20,7 @@
  */
 
 #include "newframe.h"
+#include "widgets/hseparator.h"
 #include "global_util/util.h"
 
 #include <DDBusSender>
@@ -95,19 +96,36 @@ NewFrame::NewFrame(QWidget *parent)
     m_delayHideTimer->setInterval(200);
     m_delayHideTimer->setSingleShot(true);
 
-    QVBoxLayout *appsLayout = new QVBoxLayout;
-    appsLayout->addSpacing(10);
-    appsLayout->addWidget(m_searchWidget);
+    QHBoxLayout *searchLayout = new QHBoxLayout;
+    searchLayout->addSpacing(10);
+    searchLayout->addWidget(m_searchWidget);
+    searchLayout->addSpacing(10);
+
+    QHBoxLayout *appsLayout = new QHBoxLayout;
     appsLayout->addSpacing(10);
     appsLayout->addWidget(m_appsView);
     appsLayout->addSpacing(10);
-    appsLayout->addWidget(m_switchBtn);
-    appsLayout->addSpacing(15);
+
+    QHBoxLayout *switchLayout = new QHBoxLayout;
+    switchLayout->addSpacing(10);
+    switchLayout->addWidget(m_switchBtn);
+    switchLayout->addSpacing(10);
+
+    QVBoxLayout *containLayout = new QVBoxLayout;
+    containLayout->addSpacing(10);
+    containLayout->addLayout(searchLayout);
+    containLayout->addSpacing(7);
+    containLayout->addWidget(new HSeparator);
+    containLayout->addSpacing(5);
+    containLayout->addLayout(appsLayout);
+    containLayout->addSpacing(5);
+    containLayout->addLayout(switchLayout);
+    containLayout->addSpacing(15);
+    containLayout->setSpacing(0);
+    containLayout->setMargin(0);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addSpacing(10);
-    mainLayout->addLayout(appsLayout);
-    mainLayout->addSpacing(10);
+    mainLayout->addLayout(containLayout);
     mainLayout->addWidget(m_rightBar);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);

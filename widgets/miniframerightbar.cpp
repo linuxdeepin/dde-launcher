@@ -63,6 +63,19 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     bottomLayout->addWidget(settingsBtn);
     bottomLayout->addWidget(shutdownBtn);
 
+    QVBoxLayout *timedateLayout = new QVBoxLayout;
+    timedateLayout->addWidget(m_currentTimeLabel);
+    timedateLayout->addWidget(m_currentDateLabel);
+    timedateLayout->setSpacing(0);
+    timedateLayout->setContentsMargins(0, 0, 0, 0);
+
+    QPushButton *timedateButton = new QPushButton;
+    timedateButton->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    timedateButton->setLayout(timedateLayout);
+    timedateButton->setStyleSheet("QPushButton {"
+                                  "border: none;"
+                                  "}");
+
     layout->addWidget(m_modeToggleBtn, 0, Qt::AlignTop | Qt::AlignRight);
     layout->addWidget(m_avatar);
     layout->addSpacing(30);
@@ -74,8 +87,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     layout->addWidget(downloadBtn);
     layout->addWidget(manualBtn);
     layout->addStretch();
-    layout->addWidget(m_currentTimeLabel);
-    layout->addWidget(m_currentDateLabel);
+    layout->addWidget(timedateButton);
     layout->addStretch();
     layout->addLayout(bottomLayout);
     layout->setContentsMargins(20, 12, 12, 15);
@@ -96,6 +108,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     connect(settingsBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showSettings);
     connect(shutdownBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showShutdown);
     connect(m_avatar, &Avatar::clicked, this, &MiniFrameRightBar::handleAvatarClicked);
+    connect(timedateButton, &QPushButton::clicked, this, &MiniFrameRightBar::handleTimedateOpen);
 }
 
 MiniFrameRightBar::~MiniFrameRightBar()
@@ -130,9 +143,8 @@ void MiniFrameRightBar::openStandardDirectory(const QStandardPaths::StandardLoca
 {
     const QString dir = QStandardPaths::writableLocation(location);
 
-    if (!dir.isEmpty()) {
+    if (!dir.isEmpty())
         openDirectory(dir);
-    }
 }
 
 void MiniFrameRightBar::handleShutdownAction(const QString &action)
@@ -143,6 +155,21 @@ void MiniFrameRightBar::handleShutdownAction(const QString &action)
             .path("/com/deepin/dde/shutdownFront")
             .method(action)
             .call();
+
+    emit requestFrameHide();
+}
+
+void MiniFrameRightBar::handleTimedateOpen()
+{
+    DDBusSender()
+            .service("com.deepin.dde.ControlCenter")
+            .interface("com.deepin.dde.ControlCenter")
+            .path("/com/deepin/dde/ControlCenter")
+            .method(QStringLiteral("ShowModule"))
+            .arg(QStringLiteral("datetime"))
+            .call();
+
+    emit requestFrameHide();
 }
 
 void MiniFrameRightBar::handleAvatarClicked()
@@ -171,6 +198,8 @@ void MiniFrameRightBar::showSettings()
             .path("/com/deepin/dde/ControlCenter")
             .method(QString("Toggle"))
             .call();
+
+    emit requestFrameHide();
 }
 
 void MiniFrameRightBar::showManual()

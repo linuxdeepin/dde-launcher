@@ -51,7 +51,8 @@ public:
     explicit NewFrame(QWidget *parent = nullptr);
     ~NewFrame();
 
-    enum DisplayMode {
+    enum DisplayMode
+    {
         Used,
         All
     };

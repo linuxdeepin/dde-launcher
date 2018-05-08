@@ -52,6 +52,7 @@ private slots:
     void openStandardDirectory(const QStandardPaths::StandardLocation &location);
     void handleShutdownAction(const QString &action);
     void handleAvatarClicked();
+    void handleTimedateOpen();
     void showShutdown();
     void showSettings();
     void showManual();

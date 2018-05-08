@@ -57,6 +57,9 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     MiniFrameButton *settingsBtn = new MiniFrameButton(tr("Settings"));
     MiniFrameButton *shutdownBtn = new MiniFrameButton(tr("Shutdown"));
 
+    settingsBtn->setIcon(QIcon(":/widgets/images/settings.svg"));
+    shutdownBtn->setIcon(QIcon(":/widgets/images/power.svg"));
+
     bottomLayout->addWidget(settingsBtn);
     bottomLayout->addWidget(shutdownBtn);
 

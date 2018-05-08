@@ -34,7 +34,10 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     const auto ratio = devicePixelRatioF();
     QPixmap enterPixmap = DSvgRenderer::render(":/widgets/images/enter_details_normal.svg",
                                                QSize(20, 20) * ratio);
+    QPixmap allPixmap = DSvgRenderer::render(":/widgets/images/all.svg",
+                                             QSize(24, 24) * ratio);
     enterPixmap.setDevicePixelRatio(ratio);
+    allPixmap.setDevicePixelRatio(ratio);
 
     m_textLabel->setStyleSheet("QLabel {"
                                "font-size: 14px;"
@@ -47,14 +50,21 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     m_enterIcon->setPixmap(enterPixmap);
     m_enterIcon->setVisible(false);
 
-    setLayout(new QHBoxLayout(this));
+    QLabel *allIconLabel = new QLabel;
+    allIconLabel->setPixmap(allPixmap);
+    allIconLabel->setFixedSize(24, 24);
+
+    QHBoxLayout *mainLayout = new QHBoxLayout;
+    setLayout(mainLayout);
     setObjectName("MiniFrameButton");
     setFocusPolicy(Qt::NoFocus);
     setFixedHeight(48);
 
-    layout()->addWidget(m_textLabel);
-    layout()->addWidget(m_jumpButton);
-    layout()->addWidget(m_enterIcon);
+    mainLayout->addWidget(allIconLabel);
+    mainLayout->addSpacing(5);
+    mainLayout->addWidget(m_textLabel);
+    mainLayout->addWidget(m_jumpButton);
+    mainLayout->addWidget(m_enterIcon);
 
     connect(m_jumpButton, &QPushButton::clicked, this, &MiniFrameSwitchBtn::jumpButtonClicked);
 }

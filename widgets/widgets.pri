@@ -14,6 +14,7 @@ HEADERS += \
     $$PWD/miniframerightbar.h \
     $$PWD/miniframeswitchbtn.h \
     $$PWD/miniframebutton.h \
+    $$PWD/roundedbutton.h \
     $$PWD/hseparator.h \
     $$PWD/avatar.h
 
@@ -31,6 +32,7 @@ SOURCES += \
     $$PWD/miniframerightbar.cpp \
     $$PWD/miniframeswitchbtn.cpp \
     $$PWD/miniframebutton.cpp \
+    $$PWD/roundedbutton.cpp \
     $$PWD/hseparator.cpp \
     $$PWD/avatar.cpp
 

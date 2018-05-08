@@ -36,6 +36,28 @@ QScrollArea#AppsArea {
     background: rgba(255, 255, 255, 0.1);
 }
 
+#RoundedButton {
+    border: 1px solid transparent;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255);
+    padding: 6px;
+    text-align: left;
+    font-size: 12px;
+}
+
+#RoundedButton:hover {
+    padding: 6px;
+    color: rgba(255, 255, 255, 1);
+    background: rgba(255, 255, 255, 0.5);
+}
+
+#RoundedButton:pressed {
+    padding: 6px;
+    color: #2ca7f8;
+    background: rgba(255, 255, 255, 0.1);
+}
+
 MiniCategoryItem {
     border: none;
     border-radius: 0px;

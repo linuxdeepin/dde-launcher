@@ -83,6 +83,7 @@ private slots:
     void adjustPosition();
     void onToggleFullScreen();
     void onSwitchBtnClicked();
+    void onJumpBtnClicked();
     void onWMCompositeChanged();
     void searchText(const QString &text);
     void showTips(const QString &text);

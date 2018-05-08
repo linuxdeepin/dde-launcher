@@ -188,6 +188,7 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
     setState(NoState);
 
     const QModelIndex &idx = indexAt(e->pos());
+
     if (idx.isValid())
         emit entered(idx);
 

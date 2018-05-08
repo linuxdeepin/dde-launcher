@@ -145,6 +145,8 @@ NewFrame::NewFrame(QWidget *parent)
 
     connect(m_rightBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &NewFrame::onToggleFullScreen);
     connect(m_rightBar, &MiniFrameRightBar::requestFrameHide, this, &NewFrame::hideLauncher);
+    connect(m_switchBtn, &MiniFrameSwitchBtn::jumpButtonClicked, this, &NewFrame::onJumpBtnClicked);
+
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &NewFrame::onWMCompositeChanged);
     connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &NewFrame::searchText, Qt::QueuedConnection);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (NewFrame::*)(const QModelIndex &)>(&NewFrame::uninstallApp));
@@ -427,6 +429,13 @@ void NewFrame::onSwitchBtnClicked()
     }
 
     hideTips();
+}
+
+void NewFrame::onJumpBtnClicked()
+{
+    onSwitchBtnClicked();
+    m_switchBtn->hideJumpBtn();
+    m_appsView->scrollToBottom();
 }
 
 void NewFrame::onWMCompositeChanged()

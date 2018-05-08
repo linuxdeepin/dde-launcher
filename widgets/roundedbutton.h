@@ -17,33 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MINIFRAMESWITCHBTN_H
-#define MINIFRAMESWITCHBTN_H
+#ifndef ROUNDEDBUTTON_H
+#define ROUNDEDBUTTON_H
 
-#include "roundedbutton.h"
 #include <QPushButton>
-#include <QLabel>
 
-class MiniFrameSwitchBtn : public QPushButton
+class RoundedButton : public QPushButton
 {
     Q_OBJECT
 
 public:
-    MiniFrameSwitchBtn(QWidget *parent = nullptr);
-    ~MiniFrameSwitchBtn();
-
-Q_SIGNALS:
-    void jumpButtonClicked();
+    RoundedButton(QWidget *parent = nullptr);
+    ~RoundedButton();
 
 public slots:
-    void updateStatus(int status);
-    void showJumpBtn();
-    void hideJumpBtn();
-
-private:
-    QLabel *m_textLabel;
-    QLabel *m_enterIcon;
-    RoundedButton *m_jumpButton;
+    void setText(const QString &text);
 };
 
 #endif

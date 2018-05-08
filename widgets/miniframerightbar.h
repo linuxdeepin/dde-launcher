@@ -39,8 +39,6 @@ public:
     explicit MiniFrameRightBar(QWidget *parent = nullptr);
     ~MiniFrameRightBar();
 
-    void updateTime();
-
 signals:
     void modeToggleBtnClicked();
     void requestFrameHide();
@@ -49,9 +47,11 @@ protected:
     void paintEvent(QPaintEvent *);
 
 private slots:
+    void updateTime();
     void openDirectory(const QString &dir);
     void openStandardDirectory(const QStandardPaths::StandardLocation &location);
     void handleShutdownAction(const QString &action);
+    void handleAvatarClicked();
     void showShutdown();
     void showSettings();
     void showManual();

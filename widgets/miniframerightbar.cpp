@@ -92,6 +92,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     connect(manualBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showManual);
     connect(settingsBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showSettings);
     connect(shutdownBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showShutdown);
+    connect(m_avatar, &Avatar::clicked, this, &MiniFrameRightBar::handleAvatarClicked);
 }
 
 MiniFrameRightBar::~MiniFrameRightBar()
@@ -139,6 +140,19 @@ void MiniFrameRightBar::handleShutdownAction(const QString &action)
             .path("/com/deepin/dde/shutdownFront")
             .method(action)
             .call();
+}
+
+void MiniFrameRightBar::handleAvatarClicked()
+{
+    DDBusSender()
+            .service("com.deepin.dde.ControlCenter")
+            .interface("com.deepin.dde.ControlCenter")
+            .path("/com/deepin/dde/ControlCenter")
+            .method(QStringLiteral("ShowModule"))
+            .arg(QStringLiteral("accounts"))
+            .call();
+
+    emit requestFrameHide();
 }
 
 void MiniFrameRightBar::showShutdown()

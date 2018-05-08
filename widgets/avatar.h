@@ -36,8 +36,12 @@ class Avatar : public QWidget
 public:
     explicit Avatar(QWidget *parent = nullptr);
 
+signals:
+    void clicked();
+
 protected:
     void paintEvent(QPaintEvent *);
+    void mouseReleaseEvent(QMouseEvent *e);
 
 private:
     void setFilePath(const QString &filePath);

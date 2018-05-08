@@ -20,6 +20,7 @@
  */
 
 #include "avatar.h"
+
 #include <QPaintEvent>
 #include <QPainter>
 #include <QDebug>
@@ -55,6 +56,13 @@ void Avatar::paintEvent(QPaintEvent *e)
     painter.setClipPath(painterPath);
 
     painter.drawPixmap(e->rect(), m_avatarPixmap);
+}
+
+void Avatar::mouseReleaseEvent(QMouseEvent *e)
+{
+    QWidget::mousePressEvent(e);
+
+    emit clicked();
 }
 
 void Avatar::setFilePath(const QString &filePath)

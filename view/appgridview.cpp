@@ -79,7 +79,7 @@ AppGridView::AppGridView(QWidget *parent) :
 #ifndef DISABLE_DRAG_ANIMATION
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::prepareDropSwap, Qt::QueuedConnection);
 #else
-    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::dropSwap);
+    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::dropSwap);
 #endif
 }
 

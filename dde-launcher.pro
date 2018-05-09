@@ -11,10 +11,7 @@ include(./widgets/widgets.pri)
 include(./boxframe/boxframe.pri)
 include(./dbusinterface/dbusinterface.pri)
 
-ARCH = $$QMAKE_HOST.arch
-isEqual(ARCH, mips64) | isEqual(ARCH, mips32) {
-    DEFINES += ARCH_MIPSEL
-}
+load(deepin_qt)
 
 PKGCONFIG += dtkcore
 
@@ -84,3 +81,18 @@ RESOURCES += \
     skin.qrc
 
 DISTFILES += data/*
+
+deepin_professional {
+    host_x86_64: {
+    }
+
+    host_mips64: {
+        DEFINES += ARCH_MIPSEL
+        DEFINES += DISABLE_DRAG_ANIMATION
+    }
+
+    host_sw_64 {
+        DEFINES += ARCH_MIPSEL
+        DEFINES += DISABLE_DRAG_ANIMATION
+    }
+}

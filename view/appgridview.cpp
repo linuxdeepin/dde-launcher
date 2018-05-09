@@ -282,6 +282,15 @@ bool AppGridView::eventFilter(QObject *o, QEvent *e)
     return false;
 }
 
+void AppGridView::enterEvent(QEvent *e)
+{
+    QListView::enterEvent(e);
+
+    QEnterEvent *ee = static_cast<QEnterEvent *>(e);
+
+    emit entered(indexAt(ee->pos()));
+}
+
 ///
 /// \brief AppListView::fitToContent change view size to fit viewport content
 ///

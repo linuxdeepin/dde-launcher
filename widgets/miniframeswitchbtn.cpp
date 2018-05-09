@@ -18,7 +18,7 @@
  */
 
 #include "miniframeswitchbtn.h"
-#include "../newframe.h"
+#include "../windowedframe.h"
 
 #include <DSvgRenderer>
 #include <QHBoxLayout>
@@ -75,7 +75,7 @@ MiniFrameSwitchBtn::~MiniFrameSwitchBtn()
 
 void MiniFrameSwitchBtn::updateStatus(int status)
 {
-    if (status == NewFrame::Used) {
+    if (status == WindowedFrame::Used) {
         m_textLabel->setText(tr("All programes"));
         m_enterIcon->setVisible(true);
     } else {

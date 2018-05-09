@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "newframe.h"
+#include "windowedframe.h"
 #include "widgets/hseparator.h"
 #include "global_util/util.h"
 
@@ -58,7 +58,7 @@ inline const QPoint scaledPosition(const QPoint &xpos)
     return g.topLeft() + (xpos - g.topLeft()) / ratio;
 }
 
-NewFrame::NewFrame(QWidget *parent)
+WindowedFrame::WindowedFrame(QWidget *parent)
     : DBlurEffectWidget(parent),
       m_dockInter(new DBusDock(this)),
       m_menuWorker(new MenuWorker),
@@ -143,35 +143,35 @@ NewFrame::NewFrame(QWidget *parent)
 
     installEventFilter(m_eventFilter);
 
-    connect(m_rightBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &NewFrame::onToggleFullScreen);
-    connect(m_rightBar, &MiniFrameRightBar::requestFrameHide, this, &NewFrame::hideLauncher);
-    connect(m_switchBtn, &MiniFrameSwitchBtn::jumpButtonClicked, this, &NewFrame::onJumpBtnClicked);
+    connect(m_rightBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &WindowedFrame::onToggleFullScreen);
+    connect(m_rightBar, &MiniFrameRightBar::requestFrameHide, this, &WindowedFrame::hideLauncher);
+    connect(m_switchBtn, &MiniFrameSwitchBtn::jumpButtonClicked, this, &WindowedFrame::onJumpBtnClicked);
 
-    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &NewFrame::onWMCompositeChanged);
-    connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &NewFrame::searchText, Qt::QueuedConnection);
-    connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (NewFrame::*)(const QModelIndex &)>(&NewFrame::uninstallApp));
+    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &WindowedFrame::onWMCompositeChanged);
+    connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &WindowedFrame::searchText, Qt::QueuedConnection);
+    connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (WindowedFrame::*)(const QModelIndex &)>(&WindowedFrame::uninstallApp));
     connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_delayHideTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &NewFrame::hideLauncher);
+    connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &WindowedFrame::hideLauncher);
 
     connect(m_appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
-    connect(m_appsView, &QListView::clicked, this, &NewFrame::hideLauncher, Qt::QueuedConnection);
+    connect(m_appsView, &QListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
     connect(m_appsView, &QListView::entered, m_appsView, &AppListView::setCurrentIndex);
     connect(m_appsView, &AppListView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
 
-    connect(m_appsManager, &AppsManager::requestTips, this, &NewFrame::showTips);
-    connect(m_appsManager, &AppsManager::requestHideTips, this, &NewFrame::hideTips);
-    connect(m_switchBtn, &QPushButton::clicked, this, &NewFrame::onSwitchBtnClicked);
-    connect(m_delayHideTimer, &QTimer::timeout, this, &NewFrame::prepareHideLauncher);
+    connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
+    connect(m_appsManager, &AppsManager::requestHideTips, this, &WindowedFrame::hideTips);
+    connect(m_switchBtn, &QPushButton::clicked, this, &WindowedFrame::onSwitchBtnClicked);
+    connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher);
 
-    QTimer::singleShot(1, this, &NewFrame::onWMCompositeChanged);
+    QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
 }
 
-NewFrame::~NewFrame()
+WindowedFrame::~WindowedFrame()
 {
     m_eventFilter->deleteLater();
 }
 
-void NewFrame::showLauncher()
+void WindowedFrame::showLauncher()
 {
     if (visible()) {
         return;
@@ -183,26 +183,26 @@ void NewFrame::showLauncher()
     adjustPosition();
     show();
 
-    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &NewFrame::adjustPosition, Qt::UniqueConnection);
+    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition, Qt::UniqueConnection);
 }
 
-void NewFrame::hideLauncher()
+void WindowedFrame::hideLauncher()
 {
     if (!visible()) {
         return;
     }
 
-    disconnect(m_dockInter, &DBusDock::FrontendRectChanged, this, &NewFrame::adjustPosition);
+    disconnect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition);
 
     hide();
 }
 
-bool NewFrame::visible()
+bool WindowedFrame::visible()
 {
     return isVisible();
 }
 
-void NewFrame::moveCurrentSelectApp(const int key)
+void WindowedFrame::moveCurrentSelectApp(const int key)
 {
     const QModelIndex currentIdx = m_appsView->currentIndex();
     QModelIndex targetIndex;
@@ -225,13 +225,13 @@ void NewFrame::moveCurrentSelectApp(const int key)
     m_appsView->setCurrentIndex(targetIndex);
 }
 
-void NewFrame::appendToSearchEdit(const char ch)
+void WindowedFrame::appendToSearchEdit(const char ch)
 {
     m_searchWidget->edit()->setFocus(Qt::MouseFocusReason);
     m_searchWidget->edit()->setText(m_searchWidget->edit()->text() + ch);
 }
 
-void NewFrame::launchCurrentApp()
+void WindowedFrame::launchCurrentApp()
 {
     const QModelIndex currentIdx = m_appsView->currentIndex();
 
@@ -244,12 +244,12 @@ void NewFrame::launchCurrentApp()
     hideLauncher();
 }
 
-void NewFrame::uninstallApp(const QString &appKey)
+void WindowedFrame::uninstallApp(const QString &appKey)
 {
     uninstallApp(m_appsModel->indexAt(appKey));
 }
 
-void NewFrame::uninstallApp(const QModelIndex &context)
+void WindowedFrame::uninstallApp(const QModelIndex &context)
 {
     static bool UNINSTALL_DIALOG_SHOWN = false;
 
@@ -284,13 +284,13 @@ void NewFrame::uninstallApp(const QModelIndex &context)
     });
 
     // hide frame
-    QTimer::singleShot(1, this, &NewFrame::hideLauncher);
+    QTimer::singleShot(1, this, &WindowedFrame::hideLauncher);
 
     unInstallDialog.exec();
     UNINSTALL_DIALOG_SHOWN = false;
 }
 
-bool NewFrame::windowDeactiveEvent()
+bool WindowedFrame::windowDeactiveEvent()
 {
     if (isVisible() && !m_menuWorker->isMenuShown()) {
         m_delayHideTimer->start();
@@ -299,7 +299,7 @@ bool NewFrame::windowDeactiveEvent()
     return false;
 }
 
-void NewFrame::mousePressEvent(QMouseEvent *e)
+void WindowedFrame::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
 
@@ -308,7 +308,7 @@ void NewFrame::mousePressEvent(QMouseEvent *e)
     }
 }
 
-void NewFrame::keyPressEvent(QKeyEvent *e)
+void WindowedFrame::keyPressEvent(QKeyEvent *e)
 {
     DBlurEffectWidget::keyPressEvent(e);
 
@@ -321,7 +321,7 @@ void NewFrame::keyPressEvent(QKeyEvent *e)
     }
 }
 
-void NewFrame::showEvent(QShowEvent *e)
+void WindowedFrame::showEvent(QShowEvent *e)
 {
     DBlurEffectWidget::showEvent(e);
 
@@ -333,14 +333,14 @@ void NewFrame::showEvent(QShowEvent *e)
     });
 }
 
-void NewFrame::hideEvent(QHideEvent *e)
+void WindowedFrame::hideEvent(QHideEvent *e)
 {
     DBlurEffectWidget::hideEvent(e);
 
     QTimer::singleShot(1, this, [=] { emit visibleChanged(false); });
 }
 
-void NewFrame::enterEvent(QEvent *e)
+void WindowedFrame::enterEvent(QEvent *e)
 {
     DBlurEffectWidget::enterEvent(e);
 
@@ -351,7 +351,7 @@ void NewFrame::enterEvent(QEvent *e)
     setFocus();
 }
 
-void NewFrame::adjustPosition()
+void WindowedFrame::adjustPosition()
 {
     const auto ratio = devicePixelRatioF();
     const int dockPos = m_dockInter->position();
@@ -404,7 +404,7 @@ void NewFrame::adjustPosition()
     move(p);
 }
 
-void NewFrame::onToggleFullScreen()
+void WindowedFrame::onToggleFullScreen()
 {
     removeEventFilter(m_eventFilter);
 
@@ -416,7 +416,7 @@ void NewFrame::onToggleFullScreen()
             .set(true);
 }
 
-void NewFrame::onSwitchBtnClicked()
+void WindowedFrame::onSwitchBtnClicked()
 {
     if (m_displayMode == Used) {
         m_displayMode = All;
@@ -431,14 +431,14 @@ void NewFrame::onSwitchBtnClicked()
     hideTips();
 }
 
-void NewFrame::onJumpBtnClicked()
+void WindowedFrame::onJumpBtnClicked()
 {
     onSwitchBtnClicked();
     m_switchBtn->hideJumpBtn();
     m_appsView->scrollToBottom();
 }
 
-void NewFrame::onWMCompositeChanged()
+void WindowedFrame::onWMCompositeChanged()
 {
     if (m_wmHelper->hasComposite()) {
         m_windowHandle.setWindowRadius(5);
@@ -449,7 +449,7 @@ void NewFrame::onWMCompositeChanged()
     }
 }
 
-void NewFrame::searchText(const QString &text)
+void WindowedFrame::searchText(const QString &text)
 {
     if (text.isEmpty()) {
         m_appsView->setModel((m_displayMode == All) ? m_appsModel : m_usedModel);
@@ -463,7 +463,7 @@ void NewFrame::searchText(const QString &text)
     }
 }
 
-void NewFrame::showTips(const QString &text)
+void WindowedFrame::showTips(const QString &text)
 {
     if (m_appsView->model() != m_searchModel)
         return;
@@ -476,12 +476,12 @@ void NewFrame::showTips(const QString &text)
     m_tipsLabel->raise();
 }
 
-void NewFrame::hideTips()
+void WindowedFrame::hideTips()
 {
     m_tipsLabel->setVisible(false);
 }
 
-void NewFrame::prepareHideLauncher()
+void WindowedFrame::prepareHideLauncher()
 {
     if (!visible()) {
         return;

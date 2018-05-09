@@ -38,7 +38,7 @@ SOURCES += \
     global_util/recentlyused.cpp \
     historywidget.cpp \
     model/historymodel.cpp \
-    newframe.cpp
+    windowedframe.cpp
 
 HEADERS += \
     model/appslistmodel.h \
@@ -61,7 +61,7 @@ HEADERS += \
     global_util/recentlyused.h \
     historywidget.h \
     model/historymodel.h \
-    newframe.h
+    windowedframe.h
 
 #Automating generation .qm files from .ts files
 system($$PWD/translate_generation.sh)

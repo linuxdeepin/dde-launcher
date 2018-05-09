@@ -25,7 +25,7 @@
 #include "launcherinterface.h"
 #include "fullscreenframe.h"
 #include "miniframe.h"
-#include "newframe.h"
+#include "windowedframe.h"
 #include "model/appsmanager.h"
 
 #include <QGSettings>
@@ -86,8 +86,8 @@ void LauncherSys::displayModeChanged()
 
     if (!m_dbusLauncherInter->fullscreen())
     {
-        NewFrame *newFrame = new NewFrame;
-        connect(newFrame, &NewFrame::visibleChanged, this, &LauncherSys::visibleChanged);
+        WindowedFrame *newFrame = new WindowedFrame;
+        connect(newFrame, &WindowedFrame::visibleChanged, this, &LauncherSys::visibleChanged);
         m_launcherInter = newFrame;
     } else {
         FullScreenFrame *frame = new FullScreenFrame;

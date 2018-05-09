@@ -19,8 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NEWFRAME_H
-#define NEWFRAME_H
+#ifndef WINDOWEDFRAME_H
+#define WINDOWEDFRAME_H
 
 #include "launcherinterface.h"
 #include "sharedeventfilter.h"
@@ -43,13 +43,13 @@
 
 DWIDGET_USE_NAMESPACE
 
-class NewFrame : public DBlurEffectWidget, public LauncherInterface
+class WindowedFrame : public DBlurEffectWidget, public LauncherInterface
 {
     Q_OBJECT
 
 public:
-    explicit NewFrame(QWidget *parent = nullptr);
-    ~NewFrame();
+    explicit WindowedFrame(QWidget *parent = nullptr);
+    ~WindowedFrame();
 
     enum DisplayMode
     {
@@ -113,4 +113,4 @@ private:
     DisplayMode m_displayMode;
 };
 
-#endif // NEWFRAME_H
+#endif // WINDOWEDFRAME_H

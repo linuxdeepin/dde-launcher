@@ -118,6 +118,9 @@ void AppGridView::dropEvent(QDropEvent *e)
     e->accept();
 
     m_enableDropInside = true;
+
+    // set the correct hover item.
+    emit entered(QListView::indexAt(e->pos()));
 }
 
 void AppGridView::mousePressEvent(QMouseEvent *e)
@@ -140,8 +143,10 @@ void AppGridView::dragEnterEvent(QDragEnterEvent *e)
 {
     const QModelIndex index = indexAt(e->pos());
 
-    if (model()->canDropMimeData(e->mimeData(), e->dropAction(), index.row(), index.column(), QModelIndex()))
+    if (model()->canDropMimeData(e->mimeData(), e->dropAction(), index.row(), index.column(), QModelIndex())) {
+        emit entered(QModelIndex());
         return e->accept();
+    }
 }
 
 void AppGridView::dragMoveEvent(QDragMoveEvent *e)
@@ -196,8 +201,10 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
         return;
 
     if (qAbs(e->pos().x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
-        qAbs(e->pos().y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD)
+        qAbs(e->pos().y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
+        m_dragStartPos = e->pos();
         return startDrag(QListView::indexAt(e->pos()));
+    }
 }
 
 void AppGridView::mouseReleaseEvent(QMouseEvent *e)

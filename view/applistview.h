@@ -61,11 +61,8 @@ private:
     void dropSwap();
 
 private:
-    const QRect indexRect(const QModelIndex &index) const;
-
-private:
-    int m_dropToPos;
-    int m_dragStart;
+    int m_dropToRow;
+    int m_dragStartRow;
     QPoint m_dragStartPos;
     QTimer *m_dropThresholdTimer;
     bool m_enableDropInside = false;

@@ -96,7 +96,8 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
     if (qAbs(pos.x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
         qAbs(pos.y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
         m_dragStartPos = e->pos();
-        return startDrag(QListView::indexAt(e->pos()));
+        m_dragStartRow = index.row();
+        return startDrag(index);
     }
 }
 
@@ -118,7 +119,7 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 
     if (e->buttons() == Qt::LeftButton) {
         m_dragStartPos = e->pos();
-        m_dragStart = indexAt(e->pos()).row();
+        m_dragStartRow = indexAt(e->pos()).row();
     }
 }
 
@@ -141,7 +142,7 @@ void AppListView::dragMoveEvent(QDragMoveEvent *e)
 
     const QModelIndex dropIndex = QListView::indexAt(e->pos());
     if (dropIndex.isValid())
-        m_dropToPos = dropIndex.row();
+        m_dropToRow = dropIndex.row();
 
     m_dropThresholdTimer->stop();
     m_dropThresholdTimer->start();
@@ -156,6 +157,9 @@ void AppListView::dragMoveEvent(QDragMoveEvent *e)
     } else {
         Q_EMIT requestScrollStop();
     }
+
+    // drag move does not allow to have selected effect.
+    Q_EMIT entered(QModelIndex());
 }
 
 void AppListView::dragLeaveEvent(QDragLeaveEvent *e)
@@ -209,7 +213,7 @@ void AppListView::startDrag(const QModelIndex &index)
 
     // request remove current item.
     if (listModel->category() == AppsListModel::All) {
-        m_dropToPos = index.row();
+        m_dropToRow = index.row();
         listModel->setDraggingIndex(index);
     }
 
@@ -227,10 +231,9 @@ void AppListView::startDrag(const QModelIndex &index)
 
     if (!m_lastFakeAni) {
         if (m_enableDropInside)
-            listModel->dropSwap(m_dropToPos);
+            listModel->dropSwap(m_dropToRow);
         else
-            // listModel->dropSwap(indexAt(m_dragStartPos).row());
-            listModel->dropSwap(m_dragStart);
+            listModel->dropSwap(m_dragStartRow);
 
         listModel->clearDraggingIndex();
     } else {
@@ -245,17 +248,16 @@ void AppListView::prepareDropSwap()
     if (m_lastFakeAni || m_dropThresholdTimer->isActive())
         return;
 
-    const QModelIndex dropIndex = indexAt(m_dropToPos);
+    const QModelIndex dropIndex = indexAt(m_dropToRow);
     if (!dropIndex.isValid())
         return;
 
-    // const QModelIndex dragStartIndex = indexAt(m_dragStartPos);
-    const QModelIndex dragStartIndex = indexAt(m_dragStart);
+    const QModelIndex dragStartIndex = indexAt(m_dragStartRow);
     if (dropIndex == dragStartIndex)
         return;
 
     if (!dragStartIndex.isValid()) {
-        m_dragStartPos = indexRect(dropIndex).center();
+        m_dragStartRow = dropIndex.row();
         return;
     }
 
@@ -268,9 +270,9 @@ void AppListView::prepareDropSwap()
     listModel->setDragDropIndex(dropIndex);
 
     const int startIndex = dragStartIndex.row();
-    const bool moveToNext = startIndex <= m_dropToPos;
-    const int start = moveToNext ? startIndex : m_dropToPos;
-    const int end = !moveToNext ? startIndex : m_dropToPos;
+    const bool moveToNext = startIndex <= m_dropToRow;
+    const int start = moveToNext ? startIndex : m_dropToRow;
+    const int end = !moveToNext ? startIndex : m_dropToRow;
 
     if (start == end)
         return;
@@ -282,8 +284,7 @@ void AppListView::prepareDropSwap()
     // last animation.
     createFakeAnimation(end - !moveToNext, moveToNext, true);
 
-    // m_dragStartPos = QListView::visualRect(dropIndex).center();
-    m_dragStart = dropIndex.row();
+    m_dragStartRow = dropIndex.row();
 }
 
 void AppListView::createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni)
@@ -334,16 +335,10 @@ void AppListView::dropSwap()
     if (!listModel)
         return;
 
-    listModel->dropSwap(m_dropToPos);
-    m_lastFakeAni = nullptr;
+    listModel->dropSwap(m_dropToRow);
 
-    m_dragStartPos = visualRect(indexAt(m_dropToPos)).center();
-    m_dragStart = m_dropToPos;
+    m_lastFakeAni = nullptr;
+    m_dragStartRow = m_dropToRow;
 
     setState(NoState);
-}
-
-const QRect AppListView::indexRect(const QModelIndex &index) const
-{
-    return rectForIndex(index);
 }

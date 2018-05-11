@@ -202,7 +202,7 @@ void AppListView::startDrag(const QModelIndex &index)
     QPainter painter(&pixmap);
     QStyleOptionViewItem item;
     item.rect = QRect(QPoint(0, 0), rectSize);
-    item.features |= QStyleOptionViewItem::HasDisplay;
+    item.features |= QStyleOptionViewItem::Alternate;
 
     itemDelegate()->paint(&painter, item, index);
 

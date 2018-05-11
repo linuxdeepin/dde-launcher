@@ -47,32 +47,37 @@ AppListDelegate::AppListDelegate(QObject *parent)
 
 void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (index.data(AppsListModel::AppItemIsDraggingRole).value<bool>() && !(option.features & QStyleOptionViewItem::HasDisplay)) {
+    if (index.data(AppsListModel::AppItemIsDraggingRole).value<bool>() &&
+        !(option.features & QStyleOptionViewItem::HasDisplay)) {
         return;
     }
 
     const qreal ratio = qApp->devicePixelRatio();
     const QRect rect = option.rect;
     const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).value<QSize>();
-    const bool drawTipsDot = index.data(AppsListModel::AppNewInstallRole).toBool();
+    const bool isDrawTips = index.data(AppsListModel::AppNewInstallRole).toBool();
+    const bool isDragItem = option.features & QStyleOptionViewItem::Alternate;
+
     QPixmap iconPixmap = index.data(AppsListModel::AppIconRole).value<QPixmap>();
     iconPixmap = iconPixmap.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     iconPixmap.setDevicePixelRatio(ratio);
 
     painter->setRenderHint(QPainter::Antialiasing);
 
-    // if (option.features & QStyleOptionViewItem::HasDisplay) {
-    //     // painter->setBrush(QColor(255, 255, 255, 255 * .5));
-    //     painter->setBrush(Qt::red);
-    //     painter->setPen(Qt::NoPen);
-    //     painter->drawRoundedRect(rect.marginsRemoved(QMargins(1, 1, 1, 1)), 4, 4);
-    // }
-
     if (option.state.testFlag(QStyle::State_Selected)) {
+        // hover background color.
         painter->setBrush(QColor(0, 0, 0, 255 * .2));
-        painter->setPen(Qt::NoPen);
-        painter->drawRoundedRect(rect.marginsRemoved(QMargins(1, 1, 1, 1)), 4, 4);
+    } else if (isDragItem) {
+        // drag item background color.
+        painter->setBrush(QColor(255, 255, 255, 255 * .5));
+    } else {
+        // normal item.
+        painter->setBrush(Qt::NoBrush);
     }
+
+    // draw the background.
+    painter->setPen(Qt::NoPen);
+    painter->drawRoundedRect(rect.marginsRemoved(QMargins(1, 1, 1, 1)), 4, 4);
 
     const int iconX = rect.x() + 10;
     const int iconY = rect.y() + (rect.height() - iconPixmap.height() / ratio) / 2;
@@ -87,7 +92,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QString appName = index.data(AppsListModel::AppNameRole).toString();
     const QFontMetrics fm = painter->fontMetrics();
 
-    if (drawTipsDot) {
+    if (isDrawTips) {
         textRect.setWidth(textRect.width() - 90);
     }
 
@@ -95,7 +100,8 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setPen(Qt::white);
     painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, fm.elidedText(appName, Qt::ElideRight, textRect.width()));
 
-    if (drawTipsDot) {
+    // drag item is not drawing tips.
+    if (isDrawTips && !isDragItem) {
         QRect tipsRect = rect;
         const int rightPadding = 5;
         tipsRect.setLeft(rect.right() - 90 - rightPadding);

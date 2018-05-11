@@ -28,7 +28,10 @@
 
 #include <QCommandLineParser>
 #include <QTranslator>
+#include <QDebug>
+
 #include <unistd.h>
+
 #include <dapplication.h>
 #include <DLog>
 
@@ -39,6 +42,19 @@ DCORE_USE_NAMESPACE
 DUTIL_USE_NAMESPACE
 #endif
 
+void dump_user_apss_preset_order_list()
+{
+    AppsManager *appsManager = AppsManager::instance();
+    const auto appsList = appsManager->appsInfoList(AppsListModel::All);
+
+    QStringList buf;
+
+    for (const auto &app : appsList)
+        buf << QString("'%1'").arg(app.m_key);
+
+    qDebug().noquote() << '[' << buf.join(", ") << ']';
+}
+
 int main(int argv, char *args[])
 {
     DApplication::loadDXcbPlugin();
@@ -48,18 +64,19 @@ int main(int argv, char *args[])
     app.setApplicationName("dde-launcher");
     app.setApplicationVersion("3.0");
     app.setTheme("dark");
+    app.loadTranslator();
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-#ifdef QT_DEBUG
     DLogManager::registerConsoleAppender();
-#else
+#ifndef QT_DEBUG
     DLogManager::registerFileAppender();
 #endif
 
-    const bool quit = !app.setSingleInstance(QString("dde-launcher_%1").arg(getuid()));
+    bool quit = !app.setSingleInstance(QString("dde-launcher_%1").arg(getuid()));
 
     QCommandLineOption showOption(QStringList() << "s" << "show", "show launcher(hide for default.)");
     QCommandLineOption toggleOption(QStringList() << "t" << "toggle", "toggle launcher visible.");
+    QCommandLineOption dumpPresetOrder(QStringList() << "d" << "dump", "dump user-specificed preset order list and exit.");
 
     QCommandLineParser cmdParser;
     cmdParser.setApplicationDescription("DDE Launcher");
@@ -67,10 +84,15 @@ int main(int argv, char *args[])
     cmdParser.addVersionOption();
     cmdParser.addOption(showOption);
     cmdParser.addOption(toggleOption);
-//    cmdParser.addPositionalArgument("mode", "show and toogle to <mode>");
+    cmdParser.addOption(dumpPresetOrder);
     cmdParser.process(app);
 
-//    QStringList positionArgs = cmdParser.positionalArguments();
+    if (cmdParser.isSet(dumpPresetOrder))
+    {
+        quit = true;
+        dump_user_apss_preset_order_list();
+    }
+
     if (quit)
     {
         DBusLauncherFrame launcherFrame;
@@ -92,10 +114,6 @@ int main(int argv, char *args[])
     // INFO: what's this?
     setlocale(LC_ALL, "");
 
-    QTranslator translator;
-    translator.load("/usr/share/dde-launcher/translations/dde-launcher_" +
-                    QLocale::system().name() + ".qm");
-    app.installTranslator(&translator);
     LauncherSys launcher;
     DBusLauncherService service(&launcher);
     Q_UNUSED(service);

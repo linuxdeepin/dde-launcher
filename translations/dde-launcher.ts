@@ -4,7 +4,7 @@
 <context>
     <name>AppListDelegate</name>
     <message>
-        <source>New Installed</source>
+        <source>New</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

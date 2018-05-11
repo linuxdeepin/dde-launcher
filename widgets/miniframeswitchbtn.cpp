@@ -43,7 +43,7 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
                                "font-size: 14px;"
                                "}");
 
-    m_jumpButton->setText(tr("New Intalled"));
+    m_jumpButton->setText(tr("New"));
     m_jumpButton->setVisible(false);
 
     m_enterIcon->setFixedSize(20, 20);

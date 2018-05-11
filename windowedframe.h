@@ -33,6 +33,7 @@
 #include "widgets/searchwidget.h"
 #include "widgets/miniframerightbar.h"
 #include "widgets/miniframeswitchbtn.h"
+#include "global_util/constants.h"
 
 #include <dblureffectwidget.h>
 #include <DPlatformWindowHandle>
@@ -109,8 +110,11 @@ private:
     MiniFrameSwitchBtn *m_switchBtn;
     QLabel *m_tipsLabel;
     QTimer *m_delayHideTimer;
+    QTimer *m_autoScrollTimer;
 
     DisplayMode m_displayMode;
+
+    int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
 };
 
 #endif // WINDOWEDFRAME_H

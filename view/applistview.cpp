@@ -22,13 +22,25 @@
  */
 
 #include "applistview.h"
+#include "global_util/constants.h"
+#include "delegate/applistdelegate.h"
+#include "model/appslistmodel.h"
 
+#include <QStyleOptionViewItem>
+#include <QPropertyAnimation>
+#include <QApplication>
 #include <QMouseEvent>
-#include <QDebug>
 #include <QScrollBar>
+#include <QPainter>
+#include <QTimer>
+#include <QLabel>
+#include <QDebug>
+#include <QDrag>
 
 AppListView::AppListView(QWidget *parent)
-    : QListView(parent)
+    : QListView(parent),
+      m_dropThresholdTimer(new QTimer(this)),
+      m_opacityEffect(new QGraphicsOpacityEffect(this))
 {
     horizontalScrollBar()->setEnabled(false);
     setFocusPolicy(Qt::NoFocus);
@@ -40,6 +52,52 @@ AppListView::AppListView(QWidget *parent)
     setSpacing(0);
     setContentsMargins(0, 0, 0, 0);
     setMouseTracking(true);
+
+    // support drag and drop.
+    setDragDropMode(QAbstractItemView::DragDrop);
+    setMovement(QListView::Free);
+    setDragEnabled(true);
+
+    // init opacity effect.
+    m_opacityEffect->setOpacity(1);
+    setGraphicsEffect(m_opacityEffect);
+
+    // init drop threshold timer.
+    m_dropThresholdTimer->setInterval(DLauncher::APP_DRAG_SWAP_THRESHOLD);
+    m_dropThresholdTimer->setSingleShot(true);
+
+#ifndef DISABLE_DRAG_ANIMATION
+    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::prepareDropSwap, Qt::QueuedConnection);
+#else
+    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::dropSwap);
+#endif
+}
+
+const QModelIndex AppListView::indexAt(const int index) const
+{
+    return model()->index(index, 0, QModelIndex());
+}
+
+void AppListView::mouseMoveEvent(QMouseEvent *e)
+{
+    e->accept();
+
+    setState(NoState);
+
+    const QModelIndex &index = indexAt(e->pos());
+    const QPoint pos = e->pos();
+
+    if (index.isValid() && !m_enableDropInside)
+        Q_EMIT entered(index);
+
+    if (e->buttons() != Qt::LeftButton)
+        return;
+
+    if (qAbs(pos.x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
+        qAbs(pos.y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
+        m_dragStartPos = e->pos();
+        return startDrag(QListView::indexAt(e->pos()));
+    }
 }
 
 void AppListView::mousePressEvent(QMouseEvent *e)
@@ -52,9 +110,240 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 
     if (e->buttons() == Qt::RightButton) {
         const QPoint rightClickPoint = mapToGlobal(e->pos());
-
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
+
         if (clickedIndex.isValid())
             emit popupMenuRequested(rightClickPoint, clickedIndex);
     }
+
+    if (e->buttons() == Qt::LeftButton) {
+        m_dragStartPos = e->pos();
+        m_dragStart = indexAt(e->pos()).row();
+    }
+}
+
+void AppListView::dragEnterEvent(QDragEnterEvent *e)
+{
+    const QModelIndex index = indexAt(e->pos());
+
+    if (model()->canDropMimeData(e->mimeData(), e->dropAction(), index.row(), index.column(), QModelIndex())) {
+        // to enable transparent.
+        m_opacityEffect->setOpacity(0.5);
+
+        return e->accept();
+    }
+}
+
+void AppListView::dragMoveEvent(QDragMoveEvent *e)
+{
+    if (m_lastFakeAni)
+        return;
+
+    const QModelIndex dropIndex = QListView::indexAt(e->pos());
+    if (dropIndex.isValid())
+        m_dropToPos = dropIndex.row();
+
+    m_dropThresholdTimer->stop();
+    m_dropThresholdTimer->start();
+
+    const QPoint pos = e->pos();
+    const QRect rect = this->rect();
+
+    if (pos.y() < DRAG_SCROLL_THRESHOLD) {
+        Q_EMIT requestScrollUp();
+    } else if (pos.y() > rect.height() - DRAG_SCROLL_THRESHOLD) {
+        Q_EMIT requestScrollDown();
+    } else {
+        Q_EMIT requestScrollStop();
+    }
+}
+
+void AppListView::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    e->accept();
+
+    // drag leave will also restore opacity.
+    m_opacityEffect->setOpacity(1);
+    m_dropThresholdTimer->stop();
+
+    Q_EMIT requestScrollStop();
+}
+
+void AppListView::dropEvent(QDropEvent *e)
+{
+    e->accept();
+
+    // restore opacity.
+    m_opacityEffect->setOpacity(1);
+    m_enableDropInside = true;
+}
+
+void AppListView::startDrag(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return;
+
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel || listModel->category() != AppsListModel::All)
+        return;
+
+    const QModelIndex &dragIndex = index;
+    const auto ratio = devicePixelRatioF();
+    const QSize rectSize = QSize(320, 51);
+
+    QPixmap pixmap(rectSize * ratio);
+    pixmap.fill(Qt::transparent);
+    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+
+    QPainter painter(&pixmap);
+    QStyleOptionViewItem item;
+    item.rect = QRect(QPoint(0, 0), rectSize);
+    item.features |= QStyleOptionViewItem::HasDisplay;
+
+    itemDelegate()->paint(&painter, item, index);
+
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
+    drag->setPixmap(pixmap);
+    drag->setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
+
+    // request remove current item.
+    if (listModel->category() == AppsListModel::All) {
+        m_dropToPos = index.row();
+        listModel->setDraggingIndex(index);
+    }
+
+    setState(DraggingState);
+    drag->exec(Qt::MoveAction);
+
+    // disable animation when finally dropped
+    m_dropThresholdTimer->stop();
+
+    // disable auto scroll
+    Q_EMIT requestScrollStop();
+
+    if (listModel->category() != AppsListModel::All)
+        return;
+
+    if (!m_lastFakeAni) {
+        if (m_enableDropInside)
+            listModel->dropSwap(m_dropToPos);
+        else
+            // listModel->dropSwap(indexAt(m_dragStartPos).row());
+            listModel->dropSwap(m_dragStart);
+
+        listModel->clearDraggingIndex();
+    } else {
+        connect(m_lastFakeAni, &QPropertyAnimation::finished, listModel, &AppsListModel::clearDraggingIndex);
+    }
+
+    m_enableDropInside = false;
+}
+
+void AppListView::prepareDropSwap()
+{
+    if (m_lastFakeAni || m_dropThresholdTimer->isActive())
+        return;
+
+    const QModelIndex dropIndex = indexAt(m_dropToPos);
+    if (!dropIndex.isValid())
+        return;
+
+    // const QModelIndex dragStartIndex = indexAt(m_dragStartPos);
+    const QModelIndex dragStartIndex = indexAt(m_dragStart);
+    if (dropIndex == dragStartIndex)
+        return;
+
+    if (!dragStartIndex.isValid()) {
+        m_dragStartPos = indexRect(dropIndex).center();
+        return;
+    }
+
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel)
+        return;
+
+    listModel->clearDraggingIndex();
+    listModel->setDraggingIndex(dragStartIndex);
+    listModel->setDragDropIndex(dropIndex);
+
+    const int startIndex = dragStartIndex.row();
+    const bool moveToNext = startIndex <= m_dropToPos;
+    const int start = moveToNext ? startIndex : m_dropToPos;
+    const int end = !moveToNext ? startIndex : m_dropToPos;
+
+    if (start == end)
+        return;
+
+    for (int i = start + moveToNext; i != end - !moveToNext; ++i) {
+        createFakeAnimation(i, moveToNext);
+    }
+
+    // last animation.
+    createFakeAnimation(end - !moveToNext, moveToNext, true);
+
+    // m_dragStartPos = QListView::visualRect(dropIndex).center();
+    m_dragStart = dropIndex.row();
+}
+
+void AppListView::createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni)
+{
+    const QModelIndex index(indexAt(pos));
+
+    QLabel *floatLabel = new QLabel(this);
+    QPropertyAnimation *animation = new QPropertyAnimation(floatLabel, "pos", floatLabel);
+
+    const auto ratio = devicePixelRatioF();
+    const QSize rectSize(320, 51);
+
+    QPixmap pixmap(rectSize * ratio);
+    pixmap.fill(Qt::transparent);
+    pixmap.setDevicePixelRatio(ratio);
+
+    QStyleOptionViewItem item;
+    item.rect = QRect(QPoint(0, 0), rectSize);
+    item.features |= QStyleOptionViewItem::HasDisplay;
+
+    QPainter painter(&pixmap);
+    itemDelegate()->paint(&painter, item, index);
+
+    floatLabel->setFixedSize(rectSize);
+    floatLabel->setPixmap(pixmap);
+    floatLabel->show();
+
+    animation->setStartValue(visualRect(index).topLeft());
+    animation->setEndValue(visualRect(indexAt(moveNext ? pos - 1 : pos + 1)).topLeft());
+    animation->setEasingCurve(QEasingCurve::OutQuad);
+    animation->setDuration(200);
+
+    connect(animation, &QPropertyAnimation::finished, floatLabel, &QLabel::deleteLater);
+
+    if (isLastAni) {
+        m_lastFakeAni = animation;
+        connect(animation, &QPropertyAnimation::finished, this, &AppListView::dropSwap, Qt::QueuedConnection);
+        connect(animation, &QPropertyAnimation::valueChanged, m_dropThresholdTimer, &QTimer::stop);
+    }
+
+    animation->start();
+}
+
+void AppListView::dropSwap()
+{
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+
+    if (!listModel)
+        return;
+
+    listModel->dropSwap(m_dropToPos);
+    m_lastFakeAni = nullptr;
+
+    m_dragStartPos = visualRect(indexAt(m_dropToPos)).center();
+    m_dragStart = m_dropToPos;
+
+    setState(NoState);
+}
+
+const QRect AppListView::indexRect(const QModelIndex &index) const
+{
+    return rectForIndex(index);
 }

@@ -47,6 +47,10 @@ AppListDelegate::AppListDelegate(QObject *parent)
 
 void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    if (index.data(AppsListModel::AppItemIsDraggingRole).value<bool>() && !(option.features & QStyleOptionViewItem::HasDisplay)) {
+        return;
+    }
+
     const qreal ratio = qApp->devicePixelRatio();
     const QRect rect = option.rect;
     const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).value<QSize>();
@@ -57,12 +61,15 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     painter->setRenderHint(QPainter::Antialiasing);
 
-    if (option.state.testFlag(QStyle::State_Selected)) {
-        if (m_actived)
-            painter->setBrush(QColor(0, 0, 0, 255 * .4));
-        else
-            painter->setBrush(QColor(0, 0, 0, 255 * .2));
+    // if (option.features & QStyleOptionViewItem::HasDisplay) {
+    //     // painter->setBrush(QColor(255, 255, 255, 255 * .5));
+    //     painter->setBrush(Qt::red);
+    //     painter->setPen(Qt::NoPen);
+    //     painter->drawRoundedRect(rect.marginsRemoved(QMargins(1, 1, 1, 1)), 4, 4);
+    // }
 
+    if (option.state.testFlag(QStyle::State_Selected)) {
+        painter->setBrush(QColor(0, 0, 0, 255 * .2));
         painter->setPen(Qt::NoPen);
         painter->drawRoundedRect(rect.marginsRemoved(QMargins(1, 1, 1, 1)), 4, 4);
     }

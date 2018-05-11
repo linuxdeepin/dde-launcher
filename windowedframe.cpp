@@ -28,6 +28,7 @@
 
 #include <QHBoxLayout>
 #include <QApplication>
+#include <QScrollBar>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QScreen>
@@ -75,6 +76,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
       m_switchBtn(new MiniFrameSwitchBtn),
       m_tipsLabel(new QLabel(this)),
       m_delayHideTimer(new QTimer),
+      m_autoScrollTimer(new QTimer),
       m_displayMode(Used)
 {
     m_windowHandle.setShadowRadius(60);
@@ -96,6 +98,10 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_delayHideTimer->setInterval(200);
     m_delayHideTimer->setSingleShot(true);
 
+    m_autoScrollTimer->setInterval(DLauncher::APPS_AREA_AUTO_SCROLL_TIMER);
+    m_autoScrollTimer->setSingleShot(false);
+
+
     QHBoxLayout *searchLayout = new QHBoxLayout;
     searchLayout->addSpacing(10);
     searchLayout->addWidget(m_searchWidget);
@@ -114,7 +120,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     QVBoxLayout *containLayout = new QVBoxLayout;
     containLayout->addSpacing(10);
     containLayout->addLayout(searchLayout);
-    containLayout->addSpacing(7);
+    containLayout->addSpacing(10);
     containLayout->addWidget(new HSeparator);
     containLayout->addSpacing(5);
     containLayout->addLayout(appsLayout);
@@ -142,6 +148,22 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     setStyleSheet(getQssFromFile(":/skin/qss/miniframe.qss"));
 
     installEventFilter(m_eventFilter);
+
+    // auto scroll when drag to app list box border
+    connect(m_appsView, &AppListView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
+    connect(m_autoScrollTimer, &QTimer::timeout, [this] {
+        m_appsView->verticalScrollBar()->setValue(m_appsView->verticalScrollBar()->value() + m_autoScrollStep);
+    });
+    connect(m_appsView, &AppListView::requestScrollUp, [this] {
+        m_autoScrollStep = -DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
+        if (!m_autoScrollTimer->isActive())
+            m_autoScrollTimer->start();
+    });
+    connect(m_appsView, &AppListView::requestScrollDown, [this] {
+        m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
+        if (!m_autoScrollTimer->isActive())
+            m_autoScrollTimer->start();
+    });
 
     connect(m_rightBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &WindowedFrame::onToggleFullScreen);
     connect(m_rightBar, &MiniFrameRightBar::requestFrameHide, this, &WindowedFrame::hideLauncher);
@@ -210,10 +232,10 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     const int row = currentIdx.row();
 
     switch (key) {
-    case Qt::Key_Down:
+    case Qt::Key_Down: case Qt::Key_Right:
         targetIndex = currentIdx.sibling(row + 1, 0);
         break;
-    case Qt::Key_Up:
+    case Qt::Key_Up: case Qt::Key_Left:
         targetIndex = currentIdx.sibling(row - 1, 0);
         break;
     }

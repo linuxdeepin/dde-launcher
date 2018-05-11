@@ -25,6 +25,10 @@
 #define APPLISTVIEW_H
 
 #include <QListView>
+#include <QGraphicsOpacityEffect>
+#include <QPropertyAnimation>
+
+#define DRAG_SCROLL_THRESHOLD 10
 
 class AppListView : public QListView
 {
@@ -33,11 +37,41 @@ class AppListView : public QListView
 public:
     explicit AppListView(QWidget *parent = 0);
 
+    using QListView::indexAt;
+    const QModelIndex indexAt(const int index) const;
+
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
+    void requestScrollUp() const;
+    void requestScrollDown() const;
+    void requestScrollStop() const;
 
 protected:
+    void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e);
+    void dragMoveEvent(QDragMoveEvent *e);
+    void dragLeaveEvent(QDragLeaveEvent *e);
+    void dropEvent(QDropEvent *e);
+    void startDrag(const QModelIndex &index);
+
+private:
+    void prepareDropSwap();
+    void createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni = false);
+    void dropSwap();
+
+private:
+    const QRect indexRect(const QModelIndex &index) const;
+
+private:
+    int m_dropToPos;
+    int m_dragStart;
+    QPoint m_dragStartPos;
+    QTimer *m_dropThresholdTimer;
+    bool m_enableDropInside = false;
+
+    QPropertyAnimation *m_lastFakeAni = nullptr;
+    QGraphicsOpacityEffect *m_opacityEffect;
 };
 
 #endif // APPLISTVIEW_H

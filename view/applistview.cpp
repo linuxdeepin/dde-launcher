@@ -145,7 +145,6 @@ void AppListView::dragMoveEvent(QDragMoveEvent *e)
         m_dropToRow = dropIndex.row();
 
     m_dropThresholdTimer->stop();
-    m_dropThresholdTimer->start();
 
     const QPoint pos = e->pos();
     const QRect rect = this->rect();
@@ -156,6 +155,9 @@ void AppListView::dragMoveEvent(QDragMoveEvent *e)
         Q_EMIT requestScrollDown();
     } else {
         Q_EMIT requestScrollStop();
+
+        // rolling without swapping.
+        m_dropThresholdTimer->start();
     }
 
     // drag move does not allow to have selected effect.

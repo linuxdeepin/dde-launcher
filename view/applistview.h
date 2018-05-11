@@ -28,7 +28,7 @@
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
 
-#define DRAG_SCROLL_THRESHOLD 10
+#define DRAG_SCROLL_THRESHOLD 25
 
 class AppListView : public QListView
 {

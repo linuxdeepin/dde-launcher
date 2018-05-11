@@ -291,15 +291,15 @@
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
-        <source>New Intalled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>All programes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Return</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

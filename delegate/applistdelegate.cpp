@@ -107,7 +107,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         font.setPointSize(10);
 
         const QRect tipsTextRect = tipsRect.marginsRemoved(QMargins(5, 0, 2, 0));
-        const QString tipsText = painter->fontMetrics().elidedText(tr("New Installed"), Qt::ElideRight, tipsTextRect.width());
+        const QString tipsText = painter->fontMetrics().elidedText(tr("New"), Qt::ElideRight, tipsTextRect.width());
 
         // draw tips text.
         painter->setFont(font);

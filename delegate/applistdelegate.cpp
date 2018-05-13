@@ -33,6 +33,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+QT_BEGIN_NAMESPACE
+extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
+QT_END_NAMESPACE
+
 AppListDelegate::AppListDelegate(QObject *parent)
     : QAbstractItemDelegate(parent),
 
@@ -69,7 +73,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         painter->setBrush(QColor(0, 0, 0, 255 * .2));
     } else if (isDragItem) {
         // drag item background color.
-        painter->setBrush(QColor(255, 255, 255, 255 * .5));
+        painter->setBrush(QColor(255, 255, 255, 255 * 0.4));
     } else {
         // normal item.
         painter->setBrush(Qt::NoBrush);
@@ -144,4 +148,48 @@ QSize AppListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
 void AppListDelegate::setActived(bool active)
 {
     m_actived = active;
+}
+
+QPixmap AppListDelegate::dropShadow(const QPixmap &pixmap, int radius, const QColor &color, const QPoint &offset)
+{
+    if (pixmap.isNull()) {
+        return QPixmap();
+    }
+
+    // refrence here:
+    // https://forum.qt.io/topic/77576/painting-shadow-around-a-parentless-qwidget
+
+    const qreal ratio = qApp->devicePixelRatio();
+    QImage temp(pixmap.size() * ratio + QSize(radius * 2, radius * 2),
+               QImage::Format_ARGB32_Premultiplied);
+    temp.setDevicePixelRatio(ratio);
+    temp.fill(0);
+
+    QPainter tempPainter(&temp);
+    tempPainter.setCompositionMode(QPainter::CompositionMode_Source);
+    tempPainter.drawPixmap(QPoint(radius, radius), pixmap);
+    tempPainter.end();
+
+    QImage blurred(temp.size() * ratio,
+                   QImage::Format_ARGB32_Premultiplied);
+    blurred.setDevicePixelRatio(ratio);
+    blurred.fill(0);
+
+    QPainter blurPainter(&blurred);
+    qt_blurImage(&blurPainter, temp, radius, false, true);
+    blurPainter.end();
+
+    temp = blurred;
+
+    tempPainter.begin(&temp);
+    tempPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    tempPainter.fillRect(temp.rect(), color);
+    tempPainter.end();
+
+    QPainter pa(&temp);
+    pa.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    pa.drawPixmap(radius - offset.x(), radius - offset.y(), pixmap);
+    pa.end();
+
+    return QPixmap::fromImage(temp);
 }

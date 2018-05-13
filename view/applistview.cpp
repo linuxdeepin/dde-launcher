@@ -197,21 +197,26 @@ void AppListView::startDrag(const QModelIndex &index)
     const auto ratio = devicePixelRatioF();
     const QSize rectSize = QSize(320, 51);
 
-    QPixmap pixmap(rectSize * ratio);
-    pixmap.fill(Qt::transparent);
-    pixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+    QPixmap sourcePixmap(rectSize * ratio);
+    sourcePixmap.fill(Qt::transparent);
+    sourcePixmap.setDevicePixelRatio(qApp->devicePixelRatio());
 
-    QPainter painter(&pixmap);
+    QPainter painter(&sourcePixmap);
     QStyleOptionViewItem item;
     item.rect = QRect(QPoint(0, 0), rectSize);
     item.features |= QStyleOptionViewItem::Alternate;
 
     itemDelegate()->paint(&painter, item, index);
 
+    QColor shadowColor("#2CA7F8");
+    shadowColor.setAlpha(180);
+    QPixmap dropPixmap = AppListDelegate::dropShadow(sourcePixmap, 50, shadowColor, QPoint(0, 8));
+    dropPixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+
     QDrag *drag = new QDrag(this);
     drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
-    drag->setPixmap(pixmap);
-    drag->setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
+    drag->setPixmap(dropPixmap);
+    drag->setHotSpot(dropPixmap.rect().center() / dropPixmap.devicePixelRatioF());
 
     // request remove current item.
     if (listModel->category() == AppsListModel::All) {

@@ -72,7 +72,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     layout->addWidget(m_datetimeWidget);
     layout->addStretch();
     layout->addLayout(bottomLayout);
-    layout->setContentsMargins(20, 12, 12, 22);
+    layout->setContentsMargins(20, 12, 12, 18);
 
     setFixedWidth(240);
 

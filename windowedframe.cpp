@@ -123,9 +123,9 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     containLayout->addWidget(new HSeparator);
     containLayout->addSpacing(5);
     containLayout->addLayout(appsLayout);
-    containLayout->addSpacing(5);
+    containLayout->addSpacing(10);
     containLayout->addLayout(switchLayout);
-    containLayout->addSpacing(15);
+    containLayout->addSpacing(10);
     containLayout->setSpacing(0);
     containLayout->setMargin(0);
 

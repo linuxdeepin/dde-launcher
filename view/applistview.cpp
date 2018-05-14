@@ -52,6 +52,7 @@ AppListView::AppListView(QWidget *parent)
     setSpacing(0);
     setContentsMargins(0, 0, 0, 0);
     setMouseTracking(true);
+    setFixedHeight(510);
 
     // support drag and drop.
     setDragDropMode(QAbstractItemView::DragDrop);

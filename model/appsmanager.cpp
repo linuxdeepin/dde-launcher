@@ -572,6 +572,9 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
     if (operation == "created") {
         m_newInstalledAppsList.append(appInfo.m_key);
         m_allAppInfoList.append(appInfo);
+    } else if (operation == "deleted") {
+        m_allAppInfoList.removeOne(appInfo);
+        m_usedSortedList.removeOne(appInfo);
     }
 
     generateCategoryMap();

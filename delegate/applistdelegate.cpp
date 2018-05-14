@@ -58,13 +58,24 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     const qreal ratio = qApp->devicePixelRatio();
     const QRect rect = option.rect;
-    const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).value<QSize>();
     const bool isDrawTips = index.data(AppsListModel::AppNewInstallRole).toBool();
     const bool isDragItem = option.features & QStyleOptionViewItem::Alternate;
+
+    QSize iconSize = index.data(AppsListModel::AppIconSizeRole).value<QSize>();
 
     QPixmap iconPixmap = index.data(AppsListModel::AppIconRole).value<QPixmap>();
     iconPixmap = iconPixmap.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     iconPixmap.setDevicePixelRatio(ratio);
+
+    if (isDragItem) {
+        iconSize = iconSize * 1.1;
+
+        const QPixmap dragIndicator = DSvgRenderer::render(":/widgets/images/drag_indicator.svg",
+                                                     QSize(20, 20) * ratio);
+        painter->drawPixmap(rect.right() - 30,
+                            rect.y() + (rect.height() - dragIndicator.height() / ratio) / 2,
+                            dragIndicator);
+    }
 
     painter->setRenderHint(QPainter::Antialiasing);
 
@@ -100,6 +111,12 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         textRect.setWidth(textRect.width() - 90);
     }
 
+    if (isDragItem) {
+        QFont nameFont = painter->font();
+        nameFont.setPointSize(nameFont.pointSize() + 2);
+        painter->setFont(nameFont);
+    }
+
     // draw app name.
     painter->setPen(Qt::white);
     painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, fm.elidedText(appName, Qt::ElideRight, textRect.width()));
@@ -108,22 +125,22 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     if (isDrawTips && !isDragItem) {
         QRect tipsRect = rect;
         const int rightPadding = 5;
-        tipsRect.setLeft(rect.right() - 90 - rightPadding);
-        tipsRect.setWidth(90);
-        tipsRect.setHeight(30);
+        tipsRect.setLeft(rect.right() - 50 - rightPadding);
+        tipsRect.setWidth(50);
+        tipsRect.setHeight(20);
         tipsRect.moveTop(rect.y() + (rect.height() - tipsRect.height() / ratio) / 2);
 
         // draw tips background.
         painter->setPen(Qt::NoPen);
         painter->setBrush(QColor(255, 255, 255, 255 * .5));
-        painter->drawRoundedRect(tipsRect, 15, 15);
+        painter->drawRoundedRect(tipsRect, 10, 10);
 
         // set the font size of tips text.
         QFont font = painter->font();
         const int fontSize = font.pointSize();
-        font.setPointSize(10);
+        font.setPointSize(8);
 
-        const QRect tipsTextRect = tipsRect.marginsRemoved(QMargins(5, 0, 2, 0));
+        const QRect tipsTextRect = tipsRect;
         const QString tipsText = painter->fontMetrics().elidedText(tr("New"), Qt::ElideRight, tipsTextRect.width());
 
         // draw tips text.

@@ -39,10 +39,6 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     enterPixmap.setDevicePixelRatio(ratio);
     allPixmap.setDevicePixelRatio(ratio);
 
-    m_textLabel->setStyleSheet("QLabel {"
-                               "font-size: 14px;"
-                               "}");
-
     m_jumpButton->setText(tr("New"));
     m_jumpButton->setVisible(false);
 
@@ -60,11 +56,16 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     setFocusPolicy(Qt::NoFocus);
     setFixedHeight(48);
 
+    mainLayout->addSpacing(15);
     mainLayout->addWidget(allIconLabel);
-    mainLayout->addSpacing(5);
+    mainLayout->addSpacing(22);
     mainLayout->addWidget(m_textLabel);
     mainLayout->addWidget(m_jumpButton);
+    mainLayout->addSpacing(5);
     mainLayout->addWidget(m_enterIcon);
+    mainLayout->addSpacing(10);
+    mainLayout->setMargin(0);
+    mainLayout->setSpacing(0);
 
     connect(m_jumpButton, &QPushButton::clicked, this, &MiniFrameSwitchBtn::jumpButtonClicked);
 }

@@ -25,25 +25,17 @@
 #include <DDesktopServices>
 #include <DDBusSender>
 #include <QVBoxLayout>
-#include <QPushButton>
 #include <QPainter>
 
 MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     : QWidget(parent),
       m_modeToggleBtn(new DImageButton),
       m_avatar(new Avatar),
-      m_currentTimeLabel(new QLabel),
-      m_currentDateLabel(new QLabel),
-      m_refreshDateTimer(new QTimer)
+      m_datetimeWidget(new DatetimeWidget)
 {
     m_modeToggleBtn->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
     m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
     m_modeToggleBtn->setPressPic(":/icons/skin/icons/fullscreen_press.png");
-
-    m_currentTimeLabel->setStyleSheet("QLabel { font-size: 35px; }");
-
-    m_refreshDateTimer->setInterval(1000);
-    m_refreshDateTimer->start();
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     QHBoxLayout *bottomLayout = new QHBoxLayout;
@@ -60,21 +52,11 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     settingsBtn->setIcon(QIcon(":/widgets/images/settings.svg"));
     shutdownBtn->setIcon(QIcon(":/widgets/images/power.svg"));
 
+    settingsBtn->setStyleSheet(settingsBtn->styleSheet() + "font-size: 15px;");
+    shutdownBtn->setStyleSheet(settingsBtn->styleSheet() + "font-size: 15px;");
+
     bottomLayout->addWidget(settingsBtn);
     bottomLayout->addWidget(shutdownBtn);
-
-    QVBoxLayout *timedateLayout = new QVBoxLayout;
-    timedateLayout->addWidget(m_currentTimeLabel);
-    timedateLayout->addWidget(m_currentDateLabel);
-    timedateLayout->setSpacing(0);
-    timedateLayout->setContentsMargins(0, 0, 0, 0);
-
-    QPushButton *timedateButton = new QPushButton;
-    timedateButton->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    timedateButton->setLayout(timedateLayout);
-    timedateButton->setStyleSheet("QPushButton {"
-                                  "border: none;"
-                                  "}");
 
     layout->addWidget(m_modeToggleBtn, 0, Qt::AlignTop | Qt::AlignRight);
     layout->addWidget(m_avatar);
@@ -87,16 +69,14 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     layout->addWidget(downloadBtn);
     layout->addWidget(manualBtn);
     layout->addStretch();
-    layout->addWidget(timedateButton);
+    layout->addWidget(m_datetimeWidget);
     layout->addStretch();
     layout->addLayout(bottomLayout);
     layout->setContentsMargins(20, 12, 12, 15);
 
     setFixedWidth(240);
-    updateTime();
 
     connect(m_modeToggleBtn, &DImageButton::clicked, this, &MiniFrameRightBar::modeToggleBtnClicked);
-    connect(m_refreshDateTimer, &QTimer::timeout, this, &MiniFrameRightBar::updateTime);
 
     connect(computerBtn, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
     connect(documentBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DocumentsLocation); });
@@ -108,18 +88,11 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     connect(settingsBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showSettings);
     connect(shutdownBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showShutdown);
     connect(m_avatar, &Avatar::clicked, this, &MiniFrameRightBar::handleAvatarClicked);
-    connect(timedateButton, &QPushButton::clicked, this, &MiniFrameRightBar::handleTimedateOpen);
+    connect(m_datetimeWidget, &DatetimeWidget::clicked, this, &MiniFrameRightBar::handleTimedateOpen);
 }
 
 MiniFrameRightBar::~MiniFrameRightBar()
 {
-}
-
-void MiniFrameRightBar::updateTime()
-{
-    const QDateTime dateTime = QDateTime::currentDateTime();
-    m_currentTimeLabel->setText(dateTime.toString("HH:mm"));
-    m_currentDateLabel->setText(dateTime.date().toString(Qt::SystemLocaleLongDate));
 }
 
 void MiniFrameRightBar::paintEvent(QPaintEvent *e)
@@ -127,7 +100,7 @@ void MiniFrameRightBar::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
-    painter.setPen(QColor(255, 255, 255, 0.2 * 255));
+    painter.setPen(QColor(255, 255, 255, 0.1 * 255));
     painter.drawLine(QPoint(0, 0),
                      QPoint(0, rect().height()));
 }

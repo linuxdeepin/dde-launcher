@@ -24,9 +24,9 @@
 
 #include <QWidget>
 #include <QLabel>
-#include <QTimer>
 
 #include <dimagebutton.h>
+#include "datetimewidget.h"
 #include "avatar.h"
 
 DWIDGET_USE_NAMESPACE
@@ -47,7 +47,6 @@ protected:
     void paintEvent(QPaintEvent *);
 
 private slots:
-    void updateTime();
     void openDirectory(const QString &dir);
     void openStandardDirectory(const QStandardPaths::StandardLocation &location);
     void handleShutdownAction(const QString &action);
@@ -59,10 +58,8 @@ private slots:
 
 private:
     DImageButton *m_modeToggleBtn;
+    DatetimeWidget *m_datetimeWidget;
     Avatar *m_avatar;
-    QLabel *m_currentTimeLabel;
-    QLabel *m_currentDateLabel;
-    QTimer *m_refreshDateTimer;
 };
 
 #endif // MINIFRAMERIGHTBAR_H

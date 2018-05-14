@@ -111,7 +111,8 @@ AppsManager::AppsManager(QObject *parent) :
     m_startManagerInter(new DBusStartManager(this)),
     m_dockInter(new DBusDock(this)),
     m_calUtil(CalculateUtil::instance()),
-    m_searchTimer(new QTimer(this))
+    m_searchTimer(new QTimer(this)),
+    m_delayRefreshTimer(new QTimer(this))
 {
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
 
@@ -123,6 +124,8 @@ AppsManager::AppsManager(QObject *parent) :
 
     m_searchTimer->setSingleShot(true);
     m_searchTimer->setInterval(150);
+    m_delayRefreshTimer->setSingleShot(true);
+    m_delayRefreshTimer->setInterval(500);
 
     connect(qApp, &DApplication::iconThemeChanged, this, &AppsManager::onIconThemeChanged, Qt::QueuedConnection);
     connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
@@ -133,6 +136,7 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_dockInter, &DBusDock::PositionChanged, this, &AppsManager::dockGeometryChanged);
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &AppsManager::dockGeometryChanged);
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
+    connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
 }
 
@@ -351,6 +355,17 @@ void AppsManager::markLaunched(QString appKey)
     m_launcherInter->MarkLaunched(appKey);
 }
 
+void AppsManager::delayRefreshData()
+{
+    // refresh new installed apps
+    m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
+
+    generateCategoryMap();
+    saveUserSortedList();
+
+    emit dataChanged(AppsListModel::All);
+}
+
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const
 {
     switch (category)
@@ -564,21 +579,16 @@ void AppsManager::searchDone(const QStringList &resultList)
         emit requestHideTips();
 }
 
-// TODO: optimize
 void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber)
 {
-    qDebug() << "in0" << operation << appInfo.m_name << "in2" << categoryNumber;
+    qDebug() << operation << appInfo.m_name << categoryNumber;
 
     if (operation == "created") {
-        m_newInstalledAppsList.append(appInfo.m_key);
         m_allAppInfoList.append(appInfo);
     } else if (operation == "deleted") {
         m_allAppInfoList.removeOne(appInfo);
         m_usedSortedList.removeOne(appInfo);
     }
 
-    generateCategoryMap();
-    saveUserSortedList();
-
-    emit dataChanged(AppsListModel::All);
+    m_delayRefreshTimer->start();
 }

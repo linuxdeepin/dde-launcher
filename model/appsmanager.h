@@ -106,6 +106,7 @@ private slots:
     void onIconThemeChanged();
     void searchDone(const QStringList &resultList);
     void markLaunched(QString appKey);
+    void delayRefreshData();
 
 private:
     DBusLauncher *m_launcherInter;
@@ -126,6 +127,7 @@ private:
 
     CalculateUtil *m_calUtil;
     QTimer *m_searchTimer;
+    QTimer *m_delayRefreshTimer;
 
     static QPointer<AppsManager> INSTANCE;
     static QGSettings LAUNCHER_SETTINGS;

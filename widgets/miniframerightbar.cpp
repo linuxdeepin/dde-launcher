@@ -68,11 +68,11 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     layout->addWidget(pictureBtn);
     layout->addWidget(downloadBtn);
     layout->addWidget(manualBtn);
-    layout->addStretch();
+    layout->addSpacing(36);
     layout->addWidget(m_datetimeWidget);
     layout->addStretch();
     layout->addLayout(bottomLayout);
-    layout->setContentsMargins(20, 12, 12, 15);
+    layout->setContentsMargins(20, 12, 12, 22);
 
     setFixedWidth(240);
 

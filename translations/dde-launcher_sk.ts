@@ -3,7 +3,7 @@
     <name>AppListDelegate</name>
     <message>
         <source>New</source>
-        <translation type="unfinished"/>
+        <translation>Nový</translation>
     </message>
 </context>
 <context>
@@ -255,19 +255,11 @@
     </message>
     <message>
         <source>Document</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Video</source>
-        <translation>Video</translation>
+        <translation>Dokument</translation>
     </message>
     <message>
         <source>Music</source>
         <translation>Hudba</translation>
-    </message>
-    <message>
-        <source>Picture</source>
-        <translation>Obrázok</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -285,19 +277,27 @@
         <source>Shutdown</source>
         <translation>Vypnúť</translation>
     </message>
+    <message>
+        <source>Videos</source>
+        <translation>Videá</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Obrázky</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
-        <source>All programes</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Return</source>
-        <translation type="unfinished"/>
+        <translation>Návrat</translation>
     </message>
     <message>
         <source>New</source>
+        <translation>Nový</translation>
+    </message>
+    <message>
+        <source>All Programs</source>
         <translation type="unfinished"/>
     </message>
 </context>

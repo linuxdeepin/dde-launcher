@@ -258,16 +258,8 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Video</source>
-        <translation>Obraz</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Hudba</translation>
-    </message>
-    <message>
-        <source>Picture</source>
-        <translation>Obrázek</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -285,19 +277,27 @@
         <source>Shutdown</source>
         <translation>Vypnout</translation>
     </message>
+    <message>
+        <source>Videos</source>
+        <translation>Obrazy</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Obrázky</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
-    <message>
-        <source>All programes</source>
-        <translation type="unfinished"/>
-    </message>
     <message>
         <source>Return</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>All Programs</source>
         <translation type="unfinished"/>
     </message>
 </context>

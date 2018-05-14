@@ -258,16 +258,8 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Video</source>
-        <translation>நிகழ்படம்</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>இசை</translation>
-    </message>
-    <message>
-        <source>Picture</source>
-        <translation>படம்</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -285,19 +277,27 @@
         <source>Shutdown</source>
         <translation>நிறுத்து   </translation>
     </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
-    <message>
-        <source>All programes</source>
-        <translation type="unfinished"/>
-    </message>
     <message>
         <source>Return</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>All Programs</source>
         <translation type="unfinished"/>
     </message>
 </context>

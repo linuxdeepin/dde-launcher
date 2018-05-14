@@ -3,7 +3,7 @@
     <name>AppListDelegate</name>
     <message>
         <source>New</source>
-        <translation type="unfinished"/>
+        <translation>Nowy</translation>
     </message>
 </context>
 <context>
@@ -258,16 +258,8 @@
         <translation>Dokument</translation>
     </message>
     <message>
-        <source>Video</source>
-        <translation>Filmy</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Muzyka</translation>
-    </message>
-    <message>
-        <source>Picture</source>
-        <translation>Obrazy</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -285,19 +277,27 @@
         <source>Shutdown</source>
         <translation>Wyłącz</translation>
     </message>
+    <message>
+        <source>Videos</source>
+        <translation>Filmy</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Obrazy</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
-    <message>
-        <source>All programes</source>
-        <translation>Wszystkie programy</translation>
-    </message>
     <message>
         <source>Return</source>
         <translation>Powrót</translation>
     </message>
     <message>
         <source>New</source>
+        <translation>Nowy</translation>
+    </message>
+    <message>
+        <source>All Programs</source>
         <translation type="unfinished"/>
     </message>
 </context>

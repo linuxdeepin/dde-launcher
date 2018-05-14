@@ -60,19 +60,19 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation>Siųsti į darbalaukį</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation>Siųsti į doką</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation>Šalinti iš paleidimo</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti į paleidimą</translation>
     </message>
 </context>
 <context>
@@ -258,16 +258,8 @@
         <translation>Dokumentas</translation>
     </message>
     <message>
-        <source>Video</source>
-        <translation>Vaizdo įrašai</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Muzika</translation>
-    </message>
-    <message>
-        <source>Picture</source>
-        <translation>Paveikslai</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -285,19 +277,27 @@
         <source>Shutdown</source>
         <translation>Išjungti</translation>
     </message>
+    <message>
+        <source>Videos</source>
+        <translation>Vaizdo įrašai</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Paveikslai</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
-    <message>
-        <source>All programes</source>
-        <translation type="unfinished"/>
-    </message>
     <message>
         <source>Return</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>All Programs</source>
         <translation type="unfinished"/>
     </message>
 </context>

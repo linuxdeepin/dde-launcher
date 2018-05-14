@@ -258,16 +258,8 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Video</source>
-        <translation>Βίντεο</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Μουσική</translation>
-    </message>
-    <message>
-        <source>Picture</source>
-        <translation>Εικόνα</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -285,19 +277,27 @@
         <source>Shutdown</source>
         <translation>Τερματισμός λειτουργίας</translation>
     </message>
+    <message>
+        <source>Videos</source>
+        <translation>Βίντεο</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Εικόνες</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
-    <message>
-        <source>All programes</source>
-        <translation type="unfinished"/>
-    </message>
     <message>
         <source>Return</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>All Programs</source>
         <translation type="unfinished"/>
     </message>
 </context>

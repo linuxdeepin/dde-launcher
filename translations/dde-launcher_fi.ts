@@ -258,16 +258,8 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Video</source>
-        <translation>Video</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Musiikki</translation>
-    </message>
-    <message>
-        <source>Picture</source>
-        <translation>Kuvat</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -285,19 +277,27 @@
         <source>Shutdown</source>
         <translation>Sammuta</translation>
     </message>
+    <message>
+        <source>Videos</source>
+        <translation>Videot</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Kuvat</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
-    <message>
-        <source>All programes</source>
-        <translation type="unfinished"/>
-    </message>
     <message>
         <source>Return</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>New</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>All Programs</source>
         <translation type="unfinished"/>
     </message>
 </context>

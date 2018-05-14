@@ -3,7 +3,7 @@
     <name>AppListDelegate</name>
     <message>
         <source>New</source>
-        <translation type="unfinished"/>
+        <translation>Nuovo</translation>
     </message>
 </context>
 <context>
@@ -258,16 +258,8 @@
         <translation>Documenti</translation>
     </message>
     <message>
-        <source>Video</source>
-        <translation>Video</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Musica</translation>
-    </message>
-    <message>
-        <source>Picture</source>
-        <translation>Immagini</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -285,19 +277,27 @@
         <source>Shutdown</source>
         <translation>Spegni</translation>
     </message>
+    <message>
+        <source>Videos</source>
+        <translation>Video</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Immagini</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
-    <message>
-        <source>All programes</source>
-        <translation>Tutti i programmi</translation>
-    </message>
     <message>
         <source>Return</source>
         <translation>Indietro</translation>
     </message>
     <message>
         <source>New</source>
+        <translation>Nuovo</translation>
+    </message>
+    <message>
+        <source>All Programs</source>
         <translation type="unfinished"/>
     </message>
 </context>

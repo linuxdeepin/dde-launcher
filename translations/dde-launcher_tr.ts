@@ -3,7 +3,7 @@
     <name>AppListDelegate</name>
     <message>
         <source>New</source>
-        <translation type="unfinished"/>
+        <translation>Yeni</translation>
     </message>
 </context>
 <context>
@@ -258,16 +258,8 @@
         <translation>Belge</translation>
     </message>
     <message>
-        <source>Video</source>
-        <translation>Görüntü</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Müzik</translation>
-    </message>
-    <message>
-        <source>Picture</source>
-        <translation>Fotoğraf</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -275,7 +267,7 @@
     </message>
     <message>
         <source>Manual</source>
-        <translation>El ile</translation>
+        <translation>Kılavuz</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -285,19 +277,27 @@
         <source>Shutdown</source>
         <translation>Kapat</translation>
     </message>
+    <message>
+        <source>Videos</source>
+        <translation>Görüntüler</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>Fotoğraflar</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
-        <source>All programes</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Return</source>
-        <translation type="unfinished"/>
+        <translation>Geri Dön</translation>
     </message>
     <message>
         <source>New</source>
+        <translation>Yeni</translation>
+    </message>
+    <message>
+        <source>All Programs</source>
         <translation type="unfinished"/>
     </message>
 </context>

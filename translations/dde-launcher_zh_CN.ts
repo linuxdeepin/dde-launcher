@@ -258,16 +258,8 @@
         <translation>文档</translation>
     </message>
     <message>
-        <source>Video</source>
-        <translation>视频播放</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>音乐</translation>
-    </message>
-    <message>
-        <source>Picture</source>
-        <translation>图片</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -275,7 +267,7 @@
     </message>
     <message>
         <source>Manual</source>
-        <translation>手动</translation>
+        <translation>帮助手册</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -285,13 +277,17 @@
         <source>Shutdown</source>
         <translation>关机</translation>
     </message>
+    <message>
+        <source>Videos</source>
+        <translation>视频</translation>
+    </message>
+    <message>
+        <source>Pictures</source>
+        <translation>图片</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
-    <message>
-        <source>All programes</source>
-        <translation>所有程序</translation>
-    </message>
     <message>
         <source>Return</source>
         <translation>返回</translation>
@@ -299,6 +295,10 @@
     <message>
         <source>New</source>
         <translation>新安装</translation>
+    </message>
+    <message>
+        <source>All Programs</source>
+        <translation>所有程序</translation>
     </message>
 </context>
 <context>

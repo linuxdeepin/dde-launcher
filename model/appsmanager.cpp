@@ -585,6 +585,8 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
 
     if (operation == "created") {
         m_allAppInfoList.append(appInfo);
+
+        emit newItemCreated();
     } else if (operation == "deleted") {
         m_allAppInfoList.removeOne(appInfo);
         m_usedSortedList.removeOne(appInfo);

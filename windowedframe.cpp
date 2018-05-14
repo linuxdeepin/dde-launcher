@@ -181,6 +181,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &WindowedFrame::hideTips);
+    connect(m_appsManager, &AppsManager::newItemCreated, m_switchBtn, &MiniFrameSwitchBtn::showJumpBtn);
     connect(m_switchBtn, &QPushButton::clicked, this, &WindowedFrame::onSwitchBtnClicked);
     connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher);
 
@@ -450,6 +451,7 @@ void WindowedFrame::onSwitchBtnClicked()
         m_switchBtn->updateStatus(Used);
     }
 
+    m_switchBtn->hideJumpBtn();
     hideTips();
 }
 

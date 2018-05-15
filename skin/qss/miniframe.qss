@@ -45,7 +45,7 @@ QScrollArea#AppsArea {
     background: rgba(255, 255, 255, 0.2);
     color: rgba(255, 255, 255);
     padding: 6px;
-    text-align: left;
+    text-align: center;
     font-size: 12px;
 }
 

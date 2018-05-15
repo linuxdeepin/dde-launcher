@@ -24,7 +24,7 @@ RoundedButton::RoundedButton(QWidget *parent)
 {
     setObjectName("RoundedButton");
     setFocusPolicy(Qt::NoFocus);
-    setFixedWidth(75);
+    setFixedSize(60, 30);
 }
 
 RoundedButton::~RoundedButton()

@@ -41,9 +41,9 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     MiniFrameButton *computerBtn = new MiniFrameButton(tr("Computer"));
     MiniFrameButton *documentBtn = new MiniFrameButton(tr("Document"));
-    MiniFrameButton *videoBtn = new MiniFrameButton(tr("Video"));
+    MiniFrameButton *videoBtn = new MiniFrameButton(tr("Videos"));
     MiniFrameButton *musicBtn = new MiniFrameButton(tr("Music"));
-    MiniFrameButton *pictureBtn = new MiniFrameButton(tr("Picture"));
+    MiniFrameButton *pictureBtn = new MiniFrameButton(tr("Pictures"));
     MiniFrameButton *downloadBtn = new MiniFrameButton(tr("Downloads"));
     MiniFrameButton *manualBtn = new MiniFrameButton(tr("Manual"));
     MiniFrameButton *settingsBtn = new MiniFrameButton(tr("Settings"));

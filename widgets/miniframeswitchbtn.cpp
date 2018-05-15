@@ -77,7 +77,7 @@ MiniFrameSwitchBtn::~MiniFrameSwitchBtn()
 void MiniFrameSwitchBtn::updateStatus(int status)
 {
     if (status == WindowedFrame::Used) {
-        m_textLabel->setText(tr("All programes"));
+        m_textLabel->setText(tr("All Programs"));
         m_enterIcon->setVisible(true);
     } else {
         m_textLabel->setText(tr("Return"));

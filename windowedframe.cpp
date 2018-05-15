@@ -43,6 +43,8 @@
 #define DOCK_FASHION    0
 #define DOCK_EFFICIENT  1
 
+extern const QPoint widgetRelativeOffset(const QWidget * const self, const QWidget *w);
+
 inline const QPoint scaledPosition(const QPoint &xpos)
 {
     const auto ratio = qApp->devicePixelRatio();
@@ -372,6 +374,29 @@ void WindowedFrame::enterEvent(QEvent *e)
     raise();
     activateWindow();
     setFocus();
+}
+
+void WindowedFrame::inputMethodEvent(QInputMethodEvent *e)
+{
+    if (!e->commitString().isEmpty()) {
+        m_searchWidget->edit()->setText(e->commitString());
+        m_searchWidget->edit()->setFocus();
+    }
+
+    QWidget::inputMethodEvent(e);
+}
+
+QVariant WindowedFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
+{
+    switch (prop) {
+    case Qt::ImEnabled:
+        return true;
+    case Qt::ImCursorRectangle:
+        return widgetRelativeOffset(this, m_searchWidget->edit());
+    default: ;
+    }
+
+    return QWidget::inputMethodQuery(prop);
 }
 
 void WindowedFrame::adjustPosition()

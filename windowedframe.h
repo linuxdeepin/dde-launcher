@@ -80,6 +80,8 @@ protected:
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
     void hideEvent(QHideEvent *e) Q_DECL_OVERRIDE;
     void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
+    void inputMethodEvent(QInputMethodEvent *e) Q_DECL_OVERRIDE;
+    QVariant inputMethodQuery(Qt::InputMethodQuery prop) const Q_DECL_OVERRIDE;
 
 private slots:
     void adjustPosition();

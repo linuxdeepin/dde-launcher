@@ -91,7 +91,7 @@ deepin_professional {
         DEFINES += DISABLE_DRAG_ANIMATION
     }
 
-    host_sw_64 {
+    host_sw_64: {
         DEFINES += ARCH_MIPSEL
         DEFINES += DISABLE_DRAG_ANIMATION
     }

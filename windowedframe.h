@@ -103,6 +103,7 @@ private slots:
     void onSwitchBtnClicked();
     void onJumpBtnClicked();
     void onWMCompositeChanged();
+    void onNewItemCreated();
     void searchText(const QString &text);
     void showTips(const QString &text);
     void hideTips();

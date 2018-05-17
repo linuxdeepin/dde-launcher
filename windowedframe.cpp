@@ -193,7 +193,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &WindowedFrame::hideTips);
-    connect(m_appsManager, &AppsManager::newItemCreated, m_switchBtn, &MiniFrameSwitchBtn::showJumpBtn);
+    connect(m_appsManager, &AppsManager::newItemCreated, this, &WindowedFrame::onNewItemCreated);
     connect(m_switchBtn, &QPushButton::clicked, this, &WindowedFrame::onSwitchBtnClicked);
     connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher);
 
@@ -608,6 +608,13 @@ void WindowedFrame::onWMCompositeChanged()
     } else {
         m_windowHandle.setWindowRadius(0);
         m_windowHandle.setBorderColor(QColor("#2C3238"));
+    }
+}
+
+void WindowedFrame::onNewItemCreated()
+{
+    if (m_appsView->model() == m_usedModel) {
+        m_switchBtn->showJumpBtn();
     }
 }
 

@@ -40,7 +40,8 @@
 AppListView::AppListView(QWidget *parent)
     : QListView(parent),
       m_dropThresholdTimer(new QTimer(this)),
-      m_opacityEffect(new QGraphicsOpacityEffect(this))
+      m_opacityEffect(new QGraphicsOpacityEffect(this)),
+      m_wmHelper(DWindowManagerHelper::instance())
 {
     horizontalScrollBar()->setEnabled(false);
     setFocusPolicy(Qt::NoFocus);
@@ -198,9 +199,10 @@ void AppListView::startDrag(const QModelIndex &index)
     const auto ratio = devicePixelRatioF();
     const QSize rectSize = QSize(320, 51);
 
+    QPixmap dropPixmap;
     QPixmap sourcePixmap(rectSize * ratio);
     sourcePixmap.fill(Qt::transparent);
-    sourcePixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+    sourcePixmap.setDevicePixelRatio(ratio);
 
     QPainter painter(&sourcePixmap);
     QStyleOptionViewItem item;
@@ -208,11 +210,15 @@ void AppListView::startDrag(const QModelIndex &index)
     item.features |= QStyleOptionViewItem::Alternate;
 
     itemDelegate()->paint(&painter, item, index);
+    dropPixmap = sourcePixmap;
 
-    QColor shadowColor("#2CA7F8");
-    shadowColor.setAlpha(180);
-    QPixmap dropPixmap = AppListDelegate::dropShadow(sourcePixmap, 50, shadowColor, QPoint(0, 8));
-    dropPixmap.setDevicePixelRatio(qApp->devicePixelRatio());
+    // wm support transparent to draw a shadow effect.
+    if (m_wmHelper->hasComposite()) {
+        QColor shadowColor("#2CA7F8");
+        shadowColor.setAlpha(180);
+        dropPixmap = AppListDelegate::dropShadow(sourcePixmap, 50, shadowColor, QPoint(0, 8));
+        dropPixmap.setDevicePixelRatio(ratio);
+    }
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));

@@ -27,8 +27,11 @@
 #include <QListView>
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
+#include <DWindowManagerHelper>
 
 #define DRAG_SCROLL_THRESHOLD 25
+
+DWIDGET_USE_NAMESPACE
 
 class AppListView : public QListView
 {
@@ -69,6 +72,7 @@ private:
 
     QPropertyAnimation *m_lastFakeAni = nullptr;
     QGraphicsOpacityEffect *m_opacityEffect;
+    DWindowManagerHelper *m_wmHelper;
 };
 
 #endif // APPLISTVIEW_H

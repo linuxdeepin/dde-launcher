@@ -26,12 +26,13 @@
 #include <DDBusSender>
 #include <ddialog.h>
 
-#include <QHBoxLayout>
 #include <QApplication>
+#include <QHBoxLayout>
 #include <QScrollBar>
 #include <QKeyEvent>
-#include <QEvent>
+#include <QPainter>
 #include <QScreen>
+#include <QEvent>
 #include <QTimer>
 #include <QDebug>
 
@@ -62,7 +63,7 @@ inline const QPoint scaledPosition(const QPoint &xpos)
 }
 
 WindowedFrame::WindowedFrame(QWidget *parent)
-    : DBlurEffectWidget(parent)
+    : QWidget(parent)
     , m_dockInter(new DBusDock(this))
     , m_menuWorker(new MenuWorker)
     , m_eventFilter(new SharedEventFilter(this))
@@ -82,6 +83,10 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_regionMonitor(new DRegionMonitor(this))
     , m_displayMode(Used)
 {
+    DBlurEffectWidget *bgWidget = new DBlurEffectWidget(this);
+    bgWidget->setMaskColor(DBlurEffectWidget::DarkColor);
+    bgWidget->setBlendMode(DBlurEffectWidget::BehindWindowBlend);
+
     m_windowHandle.setShadowRadius(60);
     m_windowHandle.setBorderWidth(0);
     m_windowHandle.setShadowOffset(QPoint(0, -1));
@@ -141,15 +146,18 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     m_switchBtn->updateStatus(Used);
 
-    setMaskColor(DBlurEffectWidget::DarkColor);
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_InputMethodEnabled, true);
+    setAttribute(Qt::WA_TranslucentBackground, true);
     setFocusPolicy(Qt::ClickFocus);
     setFixedSize(580, 635);
     setLayout(mainLayout);
     setObjectName("MiniFrame");
     setStyleSheet(getQssFromFile(":/skin/qss/miniframe.qss"));
 
+    bgWidget->resize(size());
+
+    initAnchoredCornor();
     installEventFilter(m_eventFilter);
 
     // auto scroll when drag to app list box border
@@ -335,6 +343,66 @@ bool WindowedFrame::windowDeactiveEvent()
     return false;
 }
 
+QPainterPath WindowedFrame::getCornerPath(AnchoredCornor direction)
+{
+    const QRect rect = this->rect();
+    const QPoint topLeft = rect.topLeft();
+    const QPoint topRight = rect.topRight();
+    const QPoint bottomLeft = rect.bottomLeft();
+    const QPoint bottomRight = rect.bottomRight();
+
+    QPainterPath path;
+
+    switch (direction) {
+    case TopLeft:
+        path.moveTo(topLeft.x() + m_radius, topLeft.y());
+        path.lineTo(topRight.x(), topRight.y());
+        path.lineTo(bottomRight.x(), bottomRight.y());
+        path.lineTo(bottomLeft.x(), bottomLeft.y());
+        path.arcTo(topLeft.x(), topLeft.y(), m_radius * 2, m_radius * 2, -180, -90);
+        break;
+
+    case TopRight:
+        path.moveTo(topLeft.x(), topLeft.y());
+        path.lineTo(topRight.x() - m_radius, topRight.y());
+        path.arcTo(topRight.x() - m_radius * 2, topRight.y(), m_radius * 2, m_radius * 2, 90, -90);
+        path.lineTo(bottomRight.x(), bottomRight.y());
+        path.lineTo(bottomLeft.x(), bottomLeft.y());
+        break;
+
+    case BottomLeft:
+        path.moveTo(topLeft.x(), topLeft.y());
+        path.lineTo(topRight.x(), topRight.y());
+        path.lineTo(bottomRight.x(), bottomRight.y());
+        path.lineTo(bottomLeft.x() + m_radius, bottomLeft.y());
+        path.arcTo(bottomLeft.x(), bottomLeft.y() - m_radius * 2, m_radius * 2, m_radius * 2, -90, -90);
+        break;
+
+    case BottomRight:
+        path.moveTo(topLeft.x(), topLeft.y());
+        path.lineTo(topRight.x(), topRight.y());
+        path.lineTo(bottomRight.x(), bottomRight.y() - m_radius);
+        path.arcTo(bottomRight.x() - m_radius * 2, bottomRight.y() - m_radius * 2, m_radius * 2, m_radius * 2, 0, -90);
+        path.lineTo(bottomLeft.x(), bottomLeft.y());
+        break;
+    }
+
+    return path;
+}
+
+void WindowedFrame::paintEvent(QPaintEvent *e)
+{
+    QWidget::paintEvent(e);
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    painter.setClipPath(m_cornerPath);
+    painter.fillPath(m_cornerPath, Qt::red);
+
+    m_windowHandle.setClipPath(m_cornerPath);
+}
+
 void WindowedFrame::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
@@ -347,7 +415,7 @@ void WindowedFrame::mousePressEvent(QMouseEvent *e)
 
 void WindowedFrame::keyPressEvent(QKeyEvent *e)
 {
-    DBlurEffectWidget::keyPressEvent(e);
+    QWidget::keyPressEvent(e);
 
     switch (e->key()) {
     case Qt::Key_Escape:
@@ -360,7 +428,7 @@ void WindowedFrame::keyPressEvent(QKeyEvent *e)
 
 void WindowedFrame::showEvent(QShowEvent *e)
 {
-    DBlurEffectWidget::showEvent(e);
+    QWidget::showEvent(e);
 
     QTimer::singleShot(1, this, [this] () {
         raise();
@@ -372,14 +440,14 @@ void WindowedFrame::showEvent(QShowEvent *e)
 
 void WindowedFrame::hideEvent(QHideEvent *e)
 {
-    DBlurEffectWidget::hideEvent(e);
+    QWidget::hideEvent(e);
 
     QTimer::singleShot(1, this, [=] { emit visibleChanged(false); });
 }
 
 void WindowedFrame::enterEvent(QEvent *e)
 {
-    DBlurEffectWidget::enterEvent(e);
+    QWidget::enterEvent(e);
 
     m_delayHideTimer->stop();
 
@@ -411,6 +479,37 @@ QVariant WindowedFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
     return QWidget::inputMethodQuery(prop);
 }
 
+void WindowedFrame::initAnchoredCornor()
+{
+    if (m_dockInter->displayMode() == DOCK_EFFICIENT) {
+
+        const int dockPos = m_dockInter->position();
+
+        switch (dockPos) {
+        case DOCK_TOP:
+            m_anchoredCornor = BottomRight;
+            break;
+        case DOCK_BOTTOM:
+            m_anchoredCornor = TopRight;
+            break;
+        case DOCK_LEFT:
+            m_anchoredCornor = BottomRight;
+            break;
+        case DOCK_RIGHT:
+            m_anchoredCornor = BottomLeft;
+            break;
+        }
+
+    } else {
+        m_anchoredCornor = Normal;
+    }
+
+    // when change calculated only once.
+    m_cornerPath = getCornerPath(m_anchoredCornor);
+
+    update();
+}
+
 void WindowedFrame::adjustPosition()
 {
     const auto ratio = devicePixelRatioF();
@@ -432,13 +531,13 @@ void WindowedFrame::adjustPosition()
             p = QPoint(primaryRect.left() + screenSpacing, dockRect.bottom() + dockSpacing + 1);
             break;
         case DOCK_BOTTOM:
-            p = QPoint(primaryRect.left() + screenSpacing, dockRect.top() - s.height() - dockSpacing);
+            p = QPoint(primaryRect.left() + screenSpacing, dockRect.top() - s.height() - dockSpacing + 1);
             break;
         case DOCK_LEFT:
             p = QPoint(dockRect.right() + dockSpacing + 1, primaryRect.top() + screenSpacing);
             break;
         case DOCK_RIGHT:
-            p = QPoint(dockRect.left() - s.width() - dockSpacing, primaryRect.top() + screenSpacing);
+            p = QPoint(dockRect.left() - s.width() - dockSpacing + 1, primaryRect.top() + screenSpacing);
             break;
         default:
             Q_UNREACHABLE_IMPL();
@@ -462,6 +561,7 @@ void WindowedFrame::adjustPosition()
         }
     }
 
+    initAnchoredCornor();
     move(p);
 }
 

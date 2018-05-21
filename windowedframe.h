@@ -45,7 +45,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class WindowedFrame : public DBlurEffectWidget, public LauncherInterface
+class WindowedFrame : public QWidget, public LauncherInterface
 {
     Q_OBJECT
 
@@ -57,6 +57,15 @@ public:
     {
         Used,
         All
+    };
+
+    enum AnchoredCornor
+    {
+        TopLeft,
+        TopRight,
+        BottomLeft,
+        BottomRight,
+        Normal
     };
 
 signals:
@@ -75,7 +84,10 @@ private:
     void uninstallApp(const QModelIndex &context);
     bool windowDeactiveEvent() Q_DECL_OVERRIDE;
 
+    QPainterPath getCornerPath(AnchoredCornor direction);
+
 protected:
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
@@ -85,6 +97,7 @@ protected:
     QVariant inputMethodQuery(Qt::InputMethodQuery prop) const Q_DECL_OVERRIDE;
 
 private slots:
+    void initAnchoredCornor();
     void adjustPosition();
     void onToggleFullScreen();
     void onSwitchBtnClicked();
@@ -119,6 +132,9 @@ private:
     DisplayMode m_displayMode;
 
     int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
+    int m_radius = 10;
+    AnchoredCornor m_anchoredCornor = Normal;
+    QPainterPath m_cornerPath;
 };
 
 #endif // WINDOWEDFRAME_H

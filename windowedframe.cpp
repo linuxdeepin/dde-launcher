@@ -62,24 +62,25 @@ inline const QPoint scaledPosition(const QPoint &xpos)
 }
 
 WindowedFrame::WindowedFrame(QWidget *parent)
-    : DBlurEffectWidget(parent),
-      m_dockInter(new DBusDock(this)),
-      m_menuWorker(new MenuWorker),
-      m_eventFilter(new SharedEventFilter(this)),
-      m_windowHandle(this, this),
-      m_wmHelper(DWindowManagerHelper::instance()),
-      m_appsManager(AppsManager::instance()),
-      m_appsView(new AppListView),
-      m_appsModel(new AppsListModel(AppsListModel::All)),
-      m_usedModel(new AppsListModel(AppsListModel::Used)),
-      m_searchModel(new AppsListModel(AppsListModel::Search)),
-      m_searchWidget(new SearchWidget),
-      m_rightBar(new MiniFrameRightBar),
-      m_switchBtn(new MiniFrameSwitchBtn),
-      m_tipsLabel(new QLabel(this)),
-      m_delayHideTimer(new QTimer),
-      m_autoScrollTimer(new QTimer),
-      m_displayMode(Used)
+    : DBlurEffectWidget(parent)
+    , m_dockInter(new DBusDock(this))
+    , m_menuWorker(new MenuWorker)
+    , m_eventFilter(new SharedEventFilter(this))
+    , m_windowHandle(this, this)
+    , m_wmHelper(DWindowManagerHelper::instance())
+    , m_appsManager(AppsManager::instance())
+    , m_appsView(new AppListView)
+    , m_appsModel(new AppsListModel(AppsListModel::All))
+    , m_usedModel(new AppsListModel(AppsListModel::Used))
+    , m_searchModel(new AppsListModel(AppsListModel::Search))
+    , m_searchWidget(new SearchWidget)
+    , m_rightBar(new MiniFrameRightBar)
+    , m_switchBtn(new MiniFrameSwitchBtn)
+    , m_tipsLabel(new QLabel(this))
+    , m_delayHideTimer(new QTimer)
+    , m_autoScrollTimer(new QTimer)
+    , m_regionMonitor(new DRegionMonitor(this))
+    , m_displayMode(Used)
 {
     m_windowHandle.setShadowRadius(60);
     m_windowHandle.setShadowOffset(QPoint(0, -1));
@@ -187,6 +188,12 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_switchBtn, &QPushButton::clicked, this, &WindowedFrame::onSwitchBtnClicked);
     connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher);
 
+    connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [=] (const QPoint &point) {
+            if (!geometry().contains(point)) {
+                hideLauncher();
+            }
+    });
+
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
 }
 
@@ -207,6 +214,8 @@ void WindowedFrame::showLauncher()
     adjustPosition();
     show();
 
+    m_regionMonitor->registerRegion();
+
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition, Qt::UniqueConnection);
 }
 
@@ -217,6 +226,8 @@ void WindowedFrame::hideLauncher()
     }
 
     disconnect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition);
+
+    m_regionMonitor->unregisterRegion();
 
     hide();
 }

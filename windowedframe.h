@@ -38,6 +38,7 @@
 #include <dblureffectwidget.h>
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
+#include <dregionmonitor.h>
 
 #include <QLabel>
 #include <memory>
@@ -114,6 +115,7 @@ private:
     QTimer *m_delayHideTimer;
     QTimer *m_autoScrollTimer;
 
+    DRegionMonitor *m_regionMonitor;
     DisplayMode m_displayMode;
 
     int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;

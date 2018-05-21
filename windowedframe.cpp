@@ -83,6 +83,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_displayMode(Used)
 {
     m_windowHandle.setShadowRadius(60);
+    m_windowHandle.setBorderWidth(0);
     m_windowHandle.setShadowOffset(QPoint(0, -1));
     m_windowHandle.setEnableBlurWindow(false);
     m_windowHandle.setTranslucentBackground(true);
@@ -419,7 +420,7 @@ void WindowedFrame::adjustPosition()
 
     const int dockSpacing = 0;
     const int screenSpacing = 0;
-    const QSize s = size();
+    const auto &s = size();
     QPoint p;
 
     // extra spacing for efficient mode

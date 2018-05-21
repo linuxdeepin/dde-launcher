@@ -28,10 +28,11 @@
 #include <QPainter>
 
 MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
-    : QWidget(parent),
-      m_modeToggleBtn(new DImageButton),
-      m_avatar(new Avatar),
-      m_datetimeWidget(new DatetimeWidget)
+    : QWidget(parent)
+
+    , m_modeToggleBtn(new DImageButton)
+    , m_datetimeWidget(new DatetimeWidget)
+    , m_avatar(new Avatar)
 {
     m_modeToggleBtn->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
     m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");

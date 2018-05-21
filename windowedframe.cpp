@@ -415,9 +415,10 @@ void WindowedFrame::adjustPosition()
     const auto ratio = devicePixelRatioF();
     const int dockPos = m_dockInter->position();
     const QRect &r = m_dockInter->frontendRect();
-    const QRect &dockRect = QRect(scaledPosition(r.topLeft()), r.size() / ratio);
+    QRect dockRect = QRect(scaledPosition(r.topLeft()), r.size() / ratio);
 
-    const int spacing = 0;
+    const int dockSpacing = 0;
+    const int screenSpacing = 0;
     const QSize s = size();
     QPoint p;
 
@@ -427,16 +428,16 @@ void WindowedFrame::adjustPosition()
 
         switch (dockPos) {
         case DOCK_TOP:
-            p = QPoint(primaryRect.left() + spacing, dockRect.bottom() + spacing);
+            p = QPoint(primaryRect.left() + screenSpacing, dockRect.bottom() + dockSpacing + 1);
             break;
         case DOCK_BOTTOM:
-            p = QPoint(primaryRect.left() + spacing, dockRect.top() - s.height() - spacing);
+            p = QPoint(primaryRect.left() + screenSpacing, dockRect.top() - s.height() - dockSpacing);
             break;
         case DOCK_LEFT:
-            p = QPoint(dockRect.right() + spacing, primaryRect.top() + spacing);
+            p = QPoint(dockRect.right() + dockSpacing + 1, primaryRect.top() + screenSpacing);
             break;
         case DOCK_RIGHT:
-            p = QPoint(dockRect.left() - s.width() - spacing, primaryRect.top() + spacing);
+            p = QPoint(dockRect.left() - s.width() - dockSpacing, primaryRect.top() + screenSpacing);
             break;
         default:
             Q_UNREACHABLE_IMPL();
@@ -444,16 +445,16 @@ void WindowedFrame::adjustPosition()
     } else {
         switch (dockPos) {
         case DOCK_TOP:
-            p = QPoint(dockRect.left(), dockRect.bottom() + spacing);
+            p = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
             break;
         case DOCK_BOTTOM:
-            p = QPoint(dockRect.left(), dockRect.top() - s.height() - spacing);
+            p = QPoint(dockRect.left(), dockRect.top() - s.height() - dockSpacing);
             break;
         case DOCK_LEFT:
-            p = QPoint(dockRect.right() + spacing, dockRect.top());
+            p = QPoint(dockRect.right() + dockSpacing + 1, dockRect.top());
             break;
         case DOCK_RIGHT:
-            p = QPoint(dockRect.left() - s.width() - spacing, dockRect.top());
+            p = QPoint(dockRect.left() - s.width() - dockSpacing, dockRect.top());
             break;
         default:
             Q_UNREACHABLE_IMPL();

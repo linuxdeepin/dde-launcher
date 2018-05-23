@@ -309,7 +309,7 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
     const QString appKey = context.data(AppsListModel::AppKeyRole).toString();
     QString appName = context.data(AppsListModel::AppNameRole).toString();
     unInstallDialog.setTitle(QString(tr("Are you sure to uninstall %1 ?")).arg(appName));
-    QPixmap appIcon = context.data(AppsListModel::AppIconRole).value<QPixmap>();
+    QPixmap appIcon = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
     unInstallDialog.setIconPixmap(appIcon);
 
     QString message = tr("All dependencies will be removed together");

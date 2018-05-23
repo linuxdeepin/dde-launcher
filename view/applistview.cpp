@@ -38,11 +38,15 @@
 #include <QDrag>
 
 AppListView::AppListView(QWidget *parent)
-    : QListView(parent),
-      m_dropThresholdTimer(new QTimer(this)),
-      m_opacityEffect(new QGraphicsOpacityEffect(this)),
-      m_wmHelper(DWindowManagerHelper::instance())
+    : QListView(parent)
+    , m_dropThresholdTimer(new QTimer(this))
+    , m_scrollAni(new QPropertyAnimation(verticalScrollBar(), "value"))
+    , m_opacityEffect(new QGraphicsOpacityEffect(this))
+    , m_wmHelper(DWindowManagerHelper::instance())
 {
+    m_scrollAni->setEasingCurve(QEasingCurve::OutQuint);
+    m_scrollAni->setDuration(800);
+
     horizontalScrollBar()->setEnabled(false);
     setFocusPolicy(Qt::NoFocus);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -78,6 +82,34 @@ AppListView::AppListView(QWidget *parent)
 const QModelIndex AppListView::indexAt(const int index) const
 {
     return model()->index(index, 0, QModelIndex());
+}
+
+void AppListView::wheelEvent(QWheelEvent *e)
+{
+    // only support all programs rolling.
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel || listModel->category() != AppsListModel::All)
+        return;
+
+    if (e->pixelDelta().y() == 0) {
+        QWheelEvent ve(e->pos(), e->globalPos(), e->pixelDelta(),
+                       e->angleDelta(), e->delta() * 16,
+                       Qt::Vertical, e->buttons(), e->modifiers());
+        QListView::wheelEvent(&ve);
+    } else {
+        int offset = -e->delta();
+
+        if (m_scrollAni->state() == QPropertyAnimation::Running) {
+            m_speedTime += 0.1;
+        } else {
+            m_speedTime = DEFAULT_SPEED_TIME;
+        }
+
+        m_scrollAni->stop();
+        m_scrollAni->setStartValue(verticalScrollBar()->value());
+        m_scrollAni->setEndValue(verticalScrollBar()->value() + offset * std::min(m_speedTime, MAX_SPEED_TIME));
+        m_scrollAni->start();
+    }
 }
 
 void AppListView::mouseMoveEvent(QMouseEvent *e)

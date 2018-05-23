@@ -30,6 +30,8 @@
 #include <DWindowManagerHelper>
 
 #define DRAG_SCROLL_THRESHOLD 25
+#define DEFAULT_SPEED_TIME 4.0
+#define MAX_SPEED_TIME 5.0
 
 DWIDGET_USE_NAMESPACE
 
@@ -50,6 +52,7 @@ signals:
     void requestScrollStop() const;
 
 protected:
+    void wheelEvent(QWheelEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
@@ -71,8 +74,10 @@ private:
     bool m_enableDropInside = false;
 
     QPropertyAnimation *m_lastFakeAni = nullptr;
+    QPropertyAnimation *m_scrollAni;
     QGraphicsOpacityEffect *m_opacityEffect;
     DWindowManagerHelper *m_wmHelper;
+    double m_speedTime = DEFAULT_SPEED_TIME;
 };
 
 #endif // APPLISTVIEW_H

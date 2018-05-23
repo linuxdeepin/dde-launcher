@@ -35,9 +35,9 @@
 #include "widgets/miniframeswitchbtn.h"
 #include "global_util/constants.h"
 
-#include <dblureffectwidget.h>
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
+#include <dblureffectwidget.h>
 #include <dregionmonitor.h>
 
 #include <QLabel>

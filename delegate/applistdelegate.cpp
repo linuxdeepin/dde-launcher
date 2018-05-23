@@ -125,7 +125,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     // drag item is not drawing tips.
     if (isDrawTips && !isDragItem) {
-        QRect tipsRect;
+        QRect tipsRect = rect.marginsRemoved(QMargins(1, 1, 1, 1));
         tipsRect.setWidth(50);
         tipsRect.setHeight(20);
         tipsRect.moveTopLeft(QPoint(rect.right() - (tipsRect.width() + 5),

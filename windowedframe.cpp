@@ -481,7 +481,7 @@ QVariant WindowedFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
 
 void WindowedFrame::initAnchoredCornor()
 {
-    if (m_dockInter->displayMode() == DOCK_EFFICIENT) {
+    if (m_dockInter->displayMode() == DOCK_EFFICIENT && m_wmHelper->hasComposite()) {
 
         const int dockPos = m_dockInter->position();
 

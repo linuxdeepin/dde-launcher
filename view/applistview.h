@@ -30,8 +30,6 @@
 #include <DWindowManagerHelper>
 
 #define DRAG_SCROLL_THRESHOLD 25
-#define DEFAULT_SPEED_TIME 4.0
-#define MAX_SPEED_TIME 5.0
 
 DWIDGET_USE_NAMESPACE
 
@@ -77,7 +75,7 @@ private:
     QPropertyAnimation *m_scrollAni;
     QGraphicsOpacityEffect *m_opacityEffect;
     DWindowManagerHelper *m_wmHelper;
-    double m_speedTime = DEFAULT_SPEED_TIME;
+    double m_speedTime = 3.0;
 };
 
 #endif // APPLISTVIEW_H

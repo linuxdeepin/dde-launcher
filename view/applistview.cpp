@@ -99,15 +99,9 @@ void AppListView::wheelEvent(QWheelEvent *e)
     } else {
         int offset = -e->delta();
 
-        if (m_scrollAni->state() == QPropertyAnimation::Running) {
-            m_speedTime += 0.1;
-        } else {
-            m_speedTime = DEFAULT_SPEED_TIME;
-        }
-
         m_scrollAni->stop();
         m_scrollAni->setStartValue(verticalScrollBar()->value());
-        m_scrollAni->setEndValue(verticalScrollBar()->value() + offset * std::min(m_speedTime, MAX_SPEED_TIME));
+        m_scrollAni->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
         m_scrollAni->start();
     }
 }

@@ -23,7 +23,7 @@
 
 #include "backgroundmanager.h"
 
-#include <QGSettings>
+#include <unistd.h>
 
 using namespace com::deepin;
 
@@ -33,22 +33,23 @@ BackgroundManager::BackgroundManager(QObject *parent)
     : QObject(parent)
     , m_currentWorkspace(0)
     , m_wmInter(new wm("com.deepin.wm", "/com/deepin/wm", QDBusConnection::sessionBus(), this))
-    , m_gsettings(new QGSettings("com.deepin.dde.appearance", "", this))
+    , m_userInter(new User("com.deepin.daemon.Accounts", QString("/com/deepin/daemon/Accounts/User%1").arg(getuid()), QDBusConnection::systemBus(), this))
     , m_blurInter(new ImageBlurInter("com.deepin.daemon.Accounts",
                                      "/com/deepin/daemon/ImageBlur",
                                      QDBusConnection::systemBus(), this))
 {
     m_blurInter->setSync(false);
+    m_userInter->setSync(false);
 
     auto updateWorkspace = [this] (int, int to) {
         setCurrentWorkspace(to);
     };
 
-    connect(m_gsettings, &QGSettings::changed, this, &BackgroundManager::updateBackgrounds);
+    connect(m_userInter, &User::DesktopBackgroundsChanged, this, &BackgroundManager::onDesktopBGChanged);
     connect(m_wmInter, &__wm::WorkspaceSwitched, updateWorkspace);
     connect(m_blurInter, &ImageBlurInter::BlurDone, this, &BackgroundManager::onBlurDone);
 
-    updateBackgrounds();
+    onDesktopBGChanged(m_userInter->desktopBackgrounds());
     updateWorkspace(0, 0);
 }
 
@@ -92,17 +93,27 @@ void BackgroundManager::setCurrentWorkspace(int currentWorkspace)
 {
     if (m_currentWorkspace != currentWorkspace) {
         m_currentWorkspace = currentWorkspace;
-        updateBackgrounds();
+
+        if (!m_backgrounds.isEmpty()) {
+            updateBackground();
+        }
     }
 }
 
-void BackgroundManager::updateBackgrounds()
+void BackgroundManager::onDesktopBGChanged(const QStringList &list)
 {
-    m_backgrounds = m_gsettings->get("background-uris").toStringList();
+    if (list.isEmpty()) return;
 
-    const QString &current = currentWorkspaceBackground();
+    m_backgrounds = list;
 
-    QString path = QUrl(current).isLocalFile() ? QUrl(current).toLocalFile() : current;
+    updateBackground();
+}
+
+void BackgroundManager::updateBackground()
+{
+    QUrl url(m_backgrounds[currentWorkspace()]);
+
+    QString path = url.isLocalFile() ? url.toLocalFile() : url.url();
 
     path = QFile::exists(path) ? path : DefaultWallpaper;
 

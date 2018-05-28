@@ -468,20 +468,6 @@ void AppsManager::refreshUsedInfoList()
         updateUsedListInfo();
     }
 
-    // append new installed app to used sorted list.
-    for (const ItemInfo &info : m_userSortedList) {
-        if (!m_usedSortedList.contains(info)) {
-            m_usedSortedList.append(info);
-        }
-    }
-
-    // remove uninstalled app item.
-    for (const ItemInfo &info : m_usedSortedList) {
-        if (!m_allAppInfoList.contains(info)) {
-            m_usedSortedList.removeOne(info);
-        }
-    }
-
     std::stable_sort(m_usedSortedList.begin(), m_usedSortedList.end(),
                      [] (const ItemInfo &a, const ItemInfo &b) {
                          return a.m_openCount > b.m_openCount;
@@ -585,6 +571,7 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
 
     if (operation == "created") {
         m_allAppInfoList.append(appInfo);
+        m_usedSortedList.append(appInfo);
 
         emit newItemCreated();
     } else if (operation == "deleted") {

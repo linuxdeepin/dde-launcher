@@ -1,4 +1,23 @@
 <a name=""></a>
+##  4.3.3.1 (2018-05-29)
+
+#### Bug Fixes
+
+*   drop hotspot support hidpi ([1521c978](1521c978))
+*   used list error. ([7e991834](7e991834))
+*   hot spot invalid. ([7760af39](7760af39))
+*   optimize rolling speed. ([a1fdb3c4](a1fdb3c4))
+*   unified dialog icon size. ([b44378ff](b44378ff))
+*   tips rect has no vertical. ([f9bf57ce](f9bf57ce))
+*   2D only draw rect. ([2061a3b2](2061a3b2))
+*   modify display jump btn logic. ([6633542c](6633542c))
+
+#### Features
+
+*   add scroll animation. ([0139257f](0139257f))
+
+
+<a name=""></a>
 ##  4.3.3 (2018-05-23)
 
 

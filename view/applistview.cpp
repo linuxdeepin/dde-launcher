@@ -252,7 +252,7 @@ void AppListView::startDrag(const QModelIndex &index)
 
     QPoint topLeft = visualRect(index).topLeft();
     QPoint hotSpot = m_dragStartPos - topLeft + dropPixmap.rect().center() - sourcePixmap.rect().center();
-    drag->setHotSpot(hotSpot);
+    drag->setHotSpot(hotSpot / ratio);
 
     // request remove current item.
     if (listModel->category() == AppsListModel::All) {

@@ -34,15 +34,19 @@
 #define MINI_FRAME      1
 
 LauncherSys::LauncherSys(QObject *parent)
-    : QObject(parent),
+    : QObject(parent)
 
-      m_launcherInter(nullptr),
-      m_dbusLauncherInter(new DBusLauncher(this)),
+    , m_launcherInter(nullptr)
+    , m_dbusLauncherInter(new DBusLauncher(this))
 
-      m_autoExitTimer(new QTimer(this))
+    , m_autoExitTimer(new QTimer(this))
+    , m_ignoreRepeatVisibleChangeTimer(new QTimer(this))
 {
     m_autoExitTimer->setInterval(60 * 1000);
     m_autoExitTimer->setSingleShot(true);
+
+    m_ignoreRepeatVisibleChangeTimer->setInterval(200);
+    m_ignoreRepeatVisibleChangeTimer->setSingleShot(true);
 
     displayModeChanged();
 
@@ -56,6 +60,10 @@ LauncherSys::LauncherSys(QObject *parent)
 
 void LauncherSys::showLauncher()
 {
+    if (m_ignoreRepeatVisibleChangeTimer->isActive())
+        return;
+    m_ignoreRepeatVisibleChangeTimer->start();
+
     qApp->processEvents();
 
     m_autoExitTimer->stop();
@@ -64,6 +72,10 @@ void LauncherSys::showLauncher()
 
 void LauncherSys::hideLauncher()
 {
+    if (m_ignoreRepeatVisibleChangeTimer->isActive())
+        return;
+    m_ignoreRepeatVisibleChangeTimer->start();
+
     m_autoExitTimer->start();
     m_launcherInter->hideLauncher();
 }
@@ -87,11 +99,17 @@ void LauncherSys::displayModeChanged()
     if (!m_dbusLauncherInter->fullscreen())
     {
         WindowedFrame *newFrame = new WindowedFrame;
+
         connect(newFrame, &WindowedFrame::visibleChanged, this, &LauncherSys::visibleChanged);
+        connect(newFrame, &WindowedFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
+
         m_launcherInter = newFrame;
     } else {
         FullScreenFrame *frame = new FullScreenFrame;
+
         connect(frame, &FullScreenFrame::visibleChanged, this, &LauncherSys::visibleChanged);
+        connect(frame, &FullScreenFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
+
         m_launcherInter = frame;
     }
 

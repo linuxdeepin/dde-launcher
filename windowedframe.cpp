@@ -213,9 +213,8 @@ WindowedFrame::~WindowedFrame()
 
 void WindowedFrame::showLauncher()
 {
-    if (visible()) {
+    if (visible() || m_delayHideTimer->isActive())
         return;
-    }
 
     m_searchWidget->clearSearchContent();
     qApp->processEvents();
@@ -387,6 +386,7 @@ QPainterPath WindowedFrame::getCornerPath(AnchoredCornor direction)
         path.arcTo(bottomRight.x() - m_radius * 2, bottomRight.y() - m_radius * 2, m_radius * 2, m_radius * 2, 0, -90);
         path.lineTo(bottomLeft.x(), bottomLeft.y());
         break;
+    default:;
     }
 
     return path;

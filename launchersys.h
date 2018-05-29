@@ -54,6 +54,7 @@ private:
     DBusLauncher *m_dbusLauncherInter;
 
     QTimer *m_autoExitTimer;
+    QTimer *m_ignoreRepeatVisibleChangeTimer;
 };
 
 #endif // LAUNCHERSYS_H

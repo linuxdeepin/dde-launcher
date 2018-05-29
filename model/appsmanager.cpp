@@ -137,7 +137,7 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &AppsManager::dockGeometryChanged);
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
-    connect(m_searchTimer, &QTimer::timeout, [this] {m_launcherInter->Search(m_searchText);});
+    connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
 }
 
 void AppsManager::appendSearchResult(const QString &appKey)
@@ -541,6 +541,16 @@ void AppsManager::refreshAppAutoStartCache()
     }
 
     emit dataChanged(AppsListModel::All);
+}
+
+void AppsManager::onSearchTimeOut()
+{
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(m_launcherInter->Search(m_searchText), this);
+    connect(watcher, &QDBusPendingCallWatcher::finished, this, [=] (QDBusPendingCallWatcher * w) {
+        if (w->isError()) qDebug() << w->error();
+
+        w->deleteLater();
+    });
 }
 
 void AppsManager::onIconThemeChanged()

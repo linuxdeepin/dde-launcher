@@ -102,6 +102,7 @@ private:
     void updateUsedListInfo();
     void generateCategoryMap();
     void refreshAppAutoStartCache();
+    void onSearchTimeOut();
 
 private slots:
     void onIconThemeChanged();

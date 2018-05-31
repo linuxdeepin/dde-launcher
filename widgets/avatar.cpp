@@ -62,7 +62,9 @@ void Avatar::mouseReleaseEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
 
-    emit clicked();
+    if (e->button() == Qt::LeftButton) {
+        emit clicked();
+    }
 }
 
 void Avatar::setFilePath(const QString &filePath)

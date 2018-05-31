@@ -20,6 +20,7 @@
 #include "datetimewidget.h"
 #include <QVBoxLayout>
 #include <QDateTime>
+#include <QMouseEvent>
 
 DatetimeWidget::DatetimeWidget(QWidget *parent)
     : QWidget(parent),
@@ -53,7 +54,9 @@ void DatetimeWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
 
-    emit clicked();
+    if (e->button() == Qt::LeftButton) {
+        emit clicked();
+    }
 }
 
 void DatetimeWidget::updateTime()

@@ -85,11 +85,6 @@ const QModelIndex AppListView::indexAt(const int index) const
 
 void AppListView::wheelEvent(QWheelEvent *e)
 {
-    // only support all programs rolling.
-    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
-    if (!listModel || listModel->category() != AppsListModel::All)
-        return;
-
     if (e->pixelDelta().y() == 0) {
         QWheelEvent ve(e->pos(), e->globalPos(), e->pixelDelta(),
                        e->angleDelta(), e->delta() * 16,

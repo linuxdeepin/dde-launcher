@@ -108,6 +108,7 @@ private slots:
     void showTips(const QString &text);
     void hideTips();
     void prepareHideLauncher();
+    void recoveryAll();
 
 private:
     DBusDock *m_dockInter;

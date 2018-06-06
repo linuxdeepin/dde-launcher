@@ -238,6 +238,9 @@ void WindowedFrame::hideLauncher()
     m_regionMonitor->unregisterRegion();
 
     hide();
+
+    // clean all state
+    recoveryAll();
 }
 
 bool WindowedFrame::visible()
@@ -663,4 +666,16 @@ void WindowedFrame::prepareHideLauncher()
     }
 
     hideLauncher();
+}
+
+void WindowedFrame::recoveryAll()
+{
+    // recovery list view
+    m_displayMode = Used;
+    m_appsView->setModel(m_usedModel);
+
+    // recovery switch button
+    m_switchBtn->updateStatus(Used);
+    m_switchBtn->hideJumpBtn();
+    hideTips();
 }

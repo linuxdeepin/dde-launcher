@@ -26,7 +26,7 @@
 
 #include <QAbstractListModel>
 
-#define MAXIMUM_POPULAR_ITEMS 10
+#define MAXIMUM_POPULAR_ITEMS 11
 
 class AppsManager;
 class CalculateUtil;

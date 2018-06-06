@@ -126,17 +126,17 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     switchLayout->addSpacing(10);
 
     QVBoxLayout *containLayout = new QVBoxLayout;
+    containLayout->setSpacing(0);
+    containLayout->setMargin(0);
+
     containLayout->addSpacing(10);
     containLayout->addLayout(searchLayout);
     containLayout->addSpacing(10);
     containLayout->addWidget(new HSeparator);
-    containLayout->addSpacing(5);
+    containLayout->addSpacing(4);
     containLayout->addLayout(appsLayout);
-    containLayout->addSpacing(10);
     containLayout->addLayout(switchLayout);
-    containLayout->addSpacing(10);
-    containLayout->setSpacing(0);
-    containLayout->setMargin(0);
+    containLayout->addSpacing(15);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addLayout(containLayout);
@@ -150,7 +150,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_TranslucentBackground, true);
     setFocusPolicy(Qt::ClickFocus);
-    setFixedSize(580, 635);
+    setFixedSize(520, 502);
     setLayout(mainLayout);
     setObjectName("MiniFrame");
     setStyleSheet(getQssFromFile(":/skin/qss/miniframe.qss"));

@@ -94,7 +94,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     }
 
     // draw the background.
-    painter->drawRoundedRect(rect.marginsRemoved(QMargins(1, 1, 1, 1)), 4, 4);
+    painter->drawRoundedRect(rect, 4, 4);
 
     const int iconX = rect.x() + 10;
     const int iconY = rect.y() + (rect.height() - iconPixmap.height() / ratio) / 2;
@@ -105,7 +105,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         painter->drawPixmap(iconX, iconY + 16, m_autoStartPixmap);
     }
 
-    QRect textRect = rect.marginsRemoved(QMargins(60, 1, 1, 1));
+    QRect textRect = rect.marginsRemoved(QMargins(48, 1, 1, 1));
     QString appName = index.data(AppsListModel::AppNameRole).toString();
     const QFontMetrics fm = painter->fontMetrics();
 
@@ -160,7 +160,7 @@ QSize AppListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
     Q_UNUSED(option);
     Q_UNUSED(index);
 
-    return QSize(0, 51);
+    return QSize(0, 36);
 }
 
 void AppListDelegate::setActived(bool active)

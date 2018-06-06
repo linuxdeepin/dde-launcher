@@ -57,7 +57,6 @@ AppListView::AppListView(QWidget *parent)
     setSpacing(0);
     setContentsMargins(0, 0, 0, 0);
     setMouseTracking(true);
-    setFixedHeight(510);
 
     // support drag and drop.
     setDragDropMode(QAbstractItemView::DragDrop);
@@ -338,7 +337,7 @@ void AppListView::createFakeAnimation(const int pos, const bool moveNext, const 
     QPropertyAnimation *animation = new QPropertyAnimation(floatLabel, "pos", floatLabel);
 
     const auto ratio = devicePixelRatioF();
-    const QSize rectSize(320, 51);
+    const QSize rectSize(300, 36);
 
     QPixmap pixmap(rectSize * ratio);
     pixmap.fill(Qt::transparent);

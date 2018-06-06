@@ -54,11 +54,11 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     setLayout(mainLayout);
     setObjectName("MiniFrameButton");
     setFocusPolicy(Qt::NoFocus);
-    setFixedHeight(48);
+    setFixedHeight(36);
 
-    mainLayout->addSpacing(15);
+    mainLayout->addSpacing(10);
     mainLayout->addWidget(allIconLabel);
-    mainLayout->addSpacing(22);
+    mainLayout->addSpacing(12);
     mainLayout->addWidget(m_textLabel);
     mainLayout->addWidget(m_jumpButton);
     mainLayout->addSpacing(5);

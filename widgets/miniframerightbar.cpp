@@ -59,6 +59,8 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     bottomLayout->addWidget(settingsBtn);
     bottomLayout->addWidget(shutdownBtn);
 
+
+    layout->addSpacing(10);
     layout->addWidget(m_modeToggleBtn, 0, Qt::AlignTop | Qt::AlignRight);
     layout->addWidget(m_avatar);
     layout->addSpacing(30);
@@ -73,9 +75,9 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     layout->addWidget(m_datetimeWidget);
     layout->addStretch();
     layout->addLayout(bottomLayout);
-    layout->setContentsMargins(20, 12, 12, 18);
+    layout->setContentsMargins(20, 0, 12, 18);
 
-    setFixedWidth(240);
+    setFixedWidth(220);
 
     connect(m_modeToggleBtn, &DImageButton::clicked, this, &MiniFrameRightBar::modeToggleBtnClicked);
 

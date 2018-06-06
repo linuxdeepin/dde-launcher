@@ -298,7 +298,7 @@
     </message>
     <message>
         <source>All Programs</source>
-        <translation type="unfinished"/>
+        <translation>Všetky programy</translation>
     </message>
 </context>
 <context>

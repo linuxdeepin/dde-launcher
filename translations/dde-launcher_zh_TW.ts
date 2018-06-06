@@ -3,7 +3,7 @@
     <name>AppListDelegate</name>
     <message>
         <source>New</source>
-        <translation type="unfinished"/>
+        <translation>新的</translation>
     </message>
 </context>
 <context>
@@ -60,19 +60,19 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation>建立桌面捷徑</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation>釘選到 Dock</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation>取消開機啟動</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation>開機啟動</translation>
     </message>
 </context>
 <context>
@@ -255,7 +255,7 @@
     </message>
     <message>
         <source>Document</source>
-        <translation type="unfinished"/>
+        <translation>文件</translation>
     </message>
     <message>
         <source>Music</source>
@@ -267,7 +267,7 @@
     </message>
     <message>
         <source>Manual</source>
-        <translation>手動</translation>
+        <translation>手冊</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -290,15 +290,15 @@
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>Return</source>
-        <translation type="unfinished"/>
+        <translation>返回</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"/>
+        <translation>新的</translation>
     </message>
     <message>
         <source>All Programs</source>
-        <translation type="unfinished"/>
+        <translation>所有程式</translation>
     </message>
 </context>
 <context>

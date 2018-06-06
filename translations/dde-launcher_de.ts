@@ -3,7 +3,7 @@
     <name>AppListDelegate</name>
     <message>
         <source>New</source>
-        <translation type="unfinished"/>
+        <translation>Neu</translation>
     </message>
 </context>
 <context>
@@ -52,7 +52,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>Automatische Größenanpassung an den Bildschirm deaktivieren</translation>
+        <translation>Anzeigenskalierung deaktivieren</translation>
     </message>
     <message>
         <source>Open</source>
@@ -255,7 +255,7 @@
     </message>
     <message>
         <source>Document</source>
-        <translation type="unfinished"/>
+        <translation>Dokument</translation>
     </message>
     <message>
         <source>Music</source>
@@ -267,7 +267,7 @@
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manuell</translation>
+        <translation>Handbuch</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -290,15 +290,15 @@
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>Return</source>
-        <translation type="unfinished"/>
+        <translation>Zurück</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"/>
+        <translation>Neu</translation>
     </message>
     <message>
         <source>All Programs</source>
-        <translation type="unfinished"/>
+        <translation>Alle Programme</translation>
     </message>
 </context>
 <context>

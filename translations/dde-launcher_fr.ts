@@ -255,7 +255,7 @@
     </message>
     <message>
         <source>Document</source>
-        <translation>Document</translation>
+        <translation>Documents</translation>
     </message>
     <message>
         <source>Music</source>
@@ -298,7 +298,7 @@
     </message>
     <message>
         <source>All Programs</source>
-        <translation type="unfinished"/>
+        <translation>Tous les programmes </translation>
     </message>
 </context>
 <context>

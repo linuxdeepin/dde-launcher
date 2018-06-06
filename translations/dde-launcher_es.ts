@@ -255,7 +255,7 @@
     </message>
     <message>
         <source>Document</source>
-        <translation>Documento</translation>
+        <translation>Documentos</translation>
     </message>
     <message>
         <source>Music</source>
@@ -298,7 +298,7 @@
     </message>
     <message>
         <source>All Programs</source>
-        <translation type="unfinished"/>
+        <translation>Todos los programas</translation>
     </message>
 </context>
 <context>
@@ -312,7 +312,7 @@
     <name>WindowedFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>¿Está seguro de desinstalar %1?</translation>
+        <translation>¿Estás seguro de desinstalar %1?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>

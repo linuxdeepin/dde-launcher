@@ -1,4 +1,21 @@
 <a name=""></a>
+##  4.3.4 (2018-06-07)
+
+
+#### Bug Fixes
+
+* **Mini:**
+  *  no prompt for new installation ([997f0cc8](997f0cc8))
+  *  delete rolling restrictions ([7c7fc185](7c7fc185))
+* **mini:**  disable right button click on avatar ([61ab297b](61ab297b))
+
+#### Features
+
+* **Mini:**
+  *  recovery all state when frame hide ([6c3edb46](6c3edb46))
+  *  update new style ([8193493c](8193493c))
+
+<a name=""></a>
 ##  4.3.3.1 (2018-05-29)
 
 #### Bug Fixes

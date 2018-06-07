@@ -60,6 +60,7 @@ public:
     void restoreItem(const QString &appKey, const int pos = -1);
     int dockPosition() const;
     int dockWidth() const;
+    bool isHaveNewInstall() const { return !m_newInstalledAppsList.isEmpty(); }
 
 signals:
     void dataChanged(const AppsListModel::AppCategory category) const;

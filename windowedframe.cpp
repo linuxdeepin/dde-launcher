@@ -204,6 +204,10 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     });
 
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
+
+    if (m_appsManager->isHaveNewInstall()) {
+        m_switchBtn->showJumpBtn();
+    }
 }
 
 WindowedFrame::~WindowedFrame()
@@ -584,6 +588,8 @@ void WindowedFrame::onToggleFullScreen()
 
 void WindowedFrame::onSwitchBtnClicked()
 {
+    m_switchBtn->hideJumpBtn();
+
     if (m_displayMode == Used) {
         m_displayMode = All;
         m_appsView->setModel(m_appsModel);
@@ -592,9 +598,11 @@ void WindowedFrame::onSwitchBtnClicked()
         m_displayMode = Used;
         m_appsView->setModel(m_usedModel);
         m_switchBtn->updateStatus(Used);
+        if (m_appsManager->isHaveNewInstall()) {
+            m_switchBtn->showJumpBtn();
+        }
     }
 
-    m_switchBtn->hideJumpBtn();
     hideTips();
 }
 
@@ -676,6 +684,8 @@ void WindowedFrame::recoveryAll()
 
     // recovery switch button
     m_switchBtn->updateStatus(Used);
-    m_switchBtn->hideJumpBtn();
     hideTips();
+    if (m_appsManager->isHaveNewInstall()) {
+        m_switchBtn->showJumpBtn();
+    }
 }

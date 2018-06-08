@@ -85,19 +85,12 @@ const QModelIndex AppListView::indexAt(const int index) const
 
 void AppListView::wheelEvent(QWheelEvent *e)
 {
-    if (e->pixelDelta().y() == 0) {
-        QWheelEvent ve(e->pos(), e->globalPos(), e->pixelDelta(),
-                       e->angleDelta(), e->delta() * 16,
-                       Qt::Vertical, e->buttons(), e->modifiers());
-        QListView::wheelEvent(&ve);
-    } else {
-        int offset = -e->delta();
+    int offset = -e->delta();
 
-        m_scrollAni->stop();
-        m_scrollAni->setStartValue(verticalScrollBar()->value());
-        m_scrollAni->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
-        m_scrollAni->start();
-    }
+    m_scrollAni->stop();
+    m_scrollAni->setStartValue(verticalScrollBar()->value());
+    m_scrollAni->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
+    m_scrollAni->start();
 }
 
 void AppListView::mouseMoveEvent(QMouseEvent *e)

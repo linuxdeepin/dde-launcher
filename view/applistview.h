@@ -75,7 +75,7 @@ private:
     QPropertyAnimation *m_scrollAni;
     QGraphicsOpacityEffect *m_opacityEffect;
     DWindowManagerHelper *m_wmHelper;
-    double m_speedTime = 3.0;
+    double m_speedTime = 2.0;
 };
 
 #endif // APPLISTVIEW_H

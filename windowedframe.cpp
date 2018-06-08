@@ -199,6 +199,9 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [=] (const QPoint &point) {
             if (!geometry().contains(point)) {
+                if (m_menuWorker->isMenuShown() && m_menuWorker->menuGeometry().contains(point)) {
+                    return;
+                }
                 hideLauncher();
             }
     });
@@ -669,7 +672,7 @@ void WindowedFrame::prepareHideLauncher()
         return;
     }
 
-    if (geometry().contains(QCursor::pos())) {
+    if (geometry().contains(QCursor::pos()) || m_menuWorker->menuGeometry().contains(QCursor::pos())) {
         return activateWindow(); /* get focus back */
     }
 

@@ -66,6 +66,7 @@ public:
     bool isItemOnDock(QString appKey);
     bool isItemOnDesktop(QString appKey);
     bool isItemStartup(QString appKey);
+    QRect menuGeometry() const {return m_menuGeometry;}
 
 signals:
     void appLaunched();
@@ -100,6 +101,7 @@ private:
     QString m_appDesktop;
     QString m_currentMenuObjectPath;
     QMap<QString, QString> m_menuObjectPaths;
+    QRect m_menuGeometry;
     bool m_isItemOnDesktop;
     bool m_isItemOnDock;
     bool m_isItemStartup;

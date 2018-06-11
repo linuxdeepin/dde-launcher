@@ -353,6 +353,8 @@ void AppsManager::markLaunched(QString appKey)
 
     m_newInstalledAppsList.removeOne(appKey);
     m_launcherInter->MarkLaunched(appKey);
+
+    emit newInstallListChanged();
 }
 
 void AppsManager::delayRefreshData()
@@ -362,6 +364,8 @@ void AppsManager::delayRefreshData()
 
     generateCategoryMap();
     saveUserSortedList();
+
+    emit newInstallListChanged();
 
     emit dataChanged(AppsListModel::All);
 }
@@ -582,8 +586,6 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
     if (operation == "created") {
         m_allAppInfoList.append(appInfo);
         m_usedSortedList.append(appInfo);
-
-        emit newItemCreated();
     } else if (operation == "deleted") {
 
         m_allAppInfoList.removeOne(appInfo);

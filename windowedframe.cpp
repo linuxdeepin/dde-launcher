@@ -193,7 +193,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &WindowedFrame::hideTips);
-    connect(m_appsManager, &AppsManager::newItemCreated, this, &WindowedFrame::onNewItemCreated);
+    connect(m_appsManager, &AppsManager::newInstallListChanged, this, &WindowedFrame::onNewInstallListChanged, Qt::QueuedConnection);
     connect(m_switchBtn, &QPushButton::clicked, this, &WindowedFrame::onSwitchBtnClicked);
     connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher, Qt::QueuedConnection);
 
@@ -629,10 +629,13 @@ void WindowedFrame::onWMCompositeChanged()
     }
 }
 
-void WindowedFrame::onNewItemCreated()
+void WindowedFrame::onNewInstallListChanged()
 {
-    if (m_appsView->model() == m_usedModel) {
+    if (m_appsManager->isHaveNewInstall()) {
         m_switchBtn->showJumpBtn();
+    }
+    else {
+        m_switchBtn->hideJumpBtn();
     }
 }
 

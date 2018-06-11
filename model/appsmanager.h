@@ -66,7 +66,7 @@ signals:
     void dataChanged(const AppsListModel::AppCategory category) const;
     void layoutChanged(const AppsListModel::AppCategory category) const;
     void requestTips(const QString &tips) const;
-    void newItemCreated() const;
+    void newInstallListChanged() const;
     void requestHideTips() const;
     void categoryListChanged() const;
     void dockGeometryChanged() const;

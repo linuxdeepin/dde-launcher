@@ -177,14 +177,14 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     });
 
     connect(m_rightBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &WindowedFrame::onToggleFullScreen);
-    connect(m_rightBar, &MiniFrameRightBar::requestFrameHide, this, &WindowedFrame::hideLauncher);
+    connect(m_rightBar, &MiniFrameRightBar::requestFrameHide, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
     connect(m_switchBtn, &MiniFrameSwitchBtn::jumpButtonClicked, this, &WindowedFrame::onJumpBtnClicked);
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &WindowedFrame::onWMCompositeChanged);
     connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &WindowedFrame::searchText, Qt::QueuedConnection);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (WindowedFrame::*)(const QModelIndex &)>(&WindowedFrame::uninstallApp));
     connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_delayHideTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &WindowedFrame::hideLauncher);
+    connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
 
     connect(m_appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
     connect(m_appsView, &QListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
@@ -195,15 +195,15 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_appsManager, &AppsManager::requestHideTips, this, &WindowedFrame::hideTips);
     connect(m_appsManager, &AppsManager::newItemCreated, this, &WindowedFrame::onNewItemCreated);
     connect(m_switchBtn, &QPushButton::clicked, this, &WindowedFrame::onSwitchBtnClicked);
-    connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher);
+    connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher, Qt::QueuedConnection);
 
     connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [=] (const QPoint &point) {
-            if (!geometry().contains(point)) {
-                if (m_menuWorker->isMenuShown() && m_menuWorker->menuGeometry().contains(point)) {
-                    return;
-                }
-                hideLauncher();
+        if (!geometry().contains(point)) {
+            if (m_menuWorker->isMenuShown() && m_menuWorker->menuGeometry().contains(point)) {
+                return;
             }
+            hideLauncher();
+        }
     });
 
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
@@ -239,6 +239,8 @@ void WindowedFrame::hideLauncher()
     if (!visible()) {
         return;
     }
+
+    m_delayHideTimer->stop();
 
     disconnect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition);
 

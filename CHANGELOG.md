@@ -1,3 +1,16 @@
+<a name="4.3.5"></a>
+### 4.3.5 (2018-06-12)
+
+
+#### Bug Fixes
+
+* **Mini:**
+  *  uninstalled just installed app, tips still exist ([99261d81](https://github.com/linuxdeepin/dde-launcher/commit/99261d8116dc32fc190125642ef59e7cf15158fd))
+  *  reduce scroll speed ([a104a810](https://github.com/linuxdeepin/dde-launcher/commit/a104a8106129100b55d63e9de0e217e8b73a4ca2))
+  *  stop hidden timer when hidden ([ba0ace41](https://github.com/linuxdeepin/dde-launcher/commit/ba0ace4161c7aaef3d935967f6954aae56a4491f))
+
+
+
 <a name=""></a>
 ##  4.3.4 (2018-06-07)
 

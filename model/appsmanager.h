@@ -89,7 +89,6 @@ public slots:
     int appNums(const AppsListModel::AppCategory &category) const;
     inline void clearCache() { m_iconCache.clear(); }
 
-    // TODO: optimize
     void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
 
 private:

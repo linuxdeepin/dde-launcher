@@ -577,7 +577,7 @@ void AppsManager::searchDone(const QStringList &resultList)
 
 void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber)
 {
-    qDebug() << operation << appInfo.m_name << categoryNumber;
+    qDebug() << operation << appInfo << categoryNumber;
 
     if (operation == "created") {
         m_allAppInfoList.append(appInfo);
@@ -585,8 +585,22 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
 
         emit newItemCreated();
     } else if (operation == "deleted") {
+
         m_allAppInfoList.removeOne(appInfo);
         m_usedSortedList.removeOne(appInfo);
+    } else if (operation == "updated") {
+
+        Q_ASSERT(m_allAppInfoList.contains(appInfo));
+
+        // update item info
+        for (auto &item : m_allAppInfoList)
+        {
+            if (item == appInfo)
+            {
+                item.updateInfo(appInfo);
+                break;
+            }
+        }
     }
 
     m_delayRefreshTimer->start();

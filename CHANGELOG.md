@@ -1,3 +1,13 @@
+<a name="4.3.6"></a>
+### 4.3.6 (2018-06-14)
+
+
+#### Bug Fixes
+
+* **Mini:**  check the list of users'use ([e9ff3873](https://github.com/linuxdeepin/dde-launcher/commit/e9ff3873b3a253d3b1e54b763309a8b92d4e2c28))
+
+
+
 <a name="4.3.5"></a>
 ### 4.3.5 (2018-06-12)
 

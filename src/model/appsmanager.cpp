@@ -469,6 +469,16 @@ void AppsManager::refreshUsedInfoList()
             m_usedSortedList = m_userSortedList;
         }
 
+        // check used list isvaild
+        for (QList<ItemInfo>::iterator it = m_usedSortedList.begin(); it != m_usedSortedList.end();) {
+            if (m_allAppInfoList.contains(*it)) {
+                it++;
+            }
+            else {
+                it = m_usedSortedList.erase(it);
+            }
+        }
+
         updateUsedListInfo();
     }
 

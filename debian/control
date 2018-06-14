@@ -2,18 +2,31 @@ Source: dde-launcher
 Section: x11
 Priority: optional
 Maintainer: Deepin Packages Builder <packages@deepin.com>
-Build-Depends: debhelper (>= 8.0.0), pkg-config, 
- qt5-qmake, qtbase5-dev,
- libxcb-ewmh-dev, libqt5x11extras5-dev,
- libqt5svg5-dev, libgsettings-qt-dev,
- qttools5-dev-tools, libdtkcore-dev | libdtkutil-dev, libdtkwidget-dev, libdframeworkdbus-dev,
+Build-Depends:
+ debhelper (>= 8.0.0),
+ pkg-config,
+ cmake,
+ qtbase5-dev,
+ libxcb-ewmh-dev,
+ libqt5x11extras5-dev,
+ libqt5svg5-dev,
+ libgsettings-qt-dev,
+ qttools5-dev-tools,
+ libdtkcore-dev | libdtkutil-dev,
+ libdtkwidget-dev,
+ libdframeworkdbus-dev,
  deepin-qt5config
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 
 Package: dde-launcher
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libnotify-bin, lastore-daemon, deepin-desktop-schemas (>= 3.1.11)
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+ libnotify-bin,
+ lastore-daemon,
+ deepin-desktop-schemas (>= 3.1.11)
 Conflicts: dde-workspace (<< 2.90.5)
 Description: deepin desktop-environment - launcher module
  Deepin desktop environment 2015 - launcher module.

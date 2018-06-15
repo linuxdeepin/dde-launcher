@@ -45,7 +45,7 @@ pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 
-add_executable(${BIN_NAME} ${SRCS} ${INTERFACES} src/skin.qrc)
+add_executable(${BIN_NAME} ${SRCS} ${INTERFACES} src/skin.qrc src/widgets/images.qrc)
 target_include_directories(${BIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                               ${XCB_EWMH_INCLUDE_DIRS}
                                               ${DFrameworkDBus_INCLUDE_DIRS}

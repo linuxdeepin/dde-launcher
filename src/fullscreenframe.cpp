@@ -317,8 +317,15 @@ void FullScreenFrame::paintEvent(QPaintEvent *e)
     }
 }
 
+///
+/// \brief FullScreenFrame::eventFilter
+/// \param o
+/// \param e
+/// \return
+///
 bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
 {
+    // we filter some key events from LineEdit, to implements cursor move.
     if (o == m_searchWidget->edit() && e->type() == QEvent::KeyPress)
     {
         QKeyEvent *keyPress = static_cast<QKeyEvent *>(e);
@@ -484,8 +491,6 @@ void FullScreenFrame::initUI()
                                              0, DLauncher::APPS_AREA_BOTTOM_MARGIN);
     m_appsArea->setWidget(m_appsVbox);
 
-//    m_viewListPlaceholder->setStyleSheet("background-color:red;");
-
     m_scrollAreaLayout = new QVBoxLayout;
     m_scrollAreaLayout->setMargin(0);
     m_scrollAreaLayout->setSpacing(0);
@@ -525,7 +530,6 @@ void FullScreenFrame::initUI()
 
     setLayout(m_mainLayout);
 
-//    m_floatTitle->setStyleSheet(getQssFromFile(":/skin/qss/categorytitlewidget.qss"));;
     // animation
     m_scrollAnimation = new QPropertyAnimation(m_appsArea->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
@@ -534,33 +538,33 @@ void FullScreenFrame::initUI()
     updateBackground(m_backgroundManager->currentWorkspaceBackground());
 }
 
-// FIXME:
-void FullScreenFrame::updateGradient() {
-        QPoint topLeft = m_appsArea->mapTo(this,
-                                           QPoint(0, 0));
-        QSize topSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
-        QRect topRect(topLeft, topSize);
-        m_topGradient->setPixmap(backgroundPixmap().copy(topRect));
-        m_topGradient->resize(topRect.size());
+// FIXME(sbw): optimize this implements.
+void FullScreenFrame::updateGradient()
+{
+    QPoint topLeft = m_appsArea->mapTo(this,
+                                       QPoint(0, 0));
+    QSize topSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
+    QRect topRect(topLeft, topSize);
+    m_topGradient->setPixmap(backgroundPixmap().copy(topRect));
+    m_topGradient->resize(topRect.size());
 
-//        qDebug() << "topleft point:" << topRect.topLeft() << topRect.size();
-        m_topGradient->move(topRect.topLeft());
-        m_topGradient->show();
-        m_topGradient->raise();
+    m_topGradient->move(topRect.topLeft());
+    m_topGradient->show();
+    m_topGradient->raise();
 
-        QPoint bottomPoint = m_appsArea->mapTo(this,
-                                             m_appsArea->rect().bottomLeft());
-        QSize bottomSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
+    QPoint bottomPoint = m_appsArea->mapTo(this,
+                                         m_appsArea->rect().bottomLeft());
+    QSize bottomSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
 
-        QPoint bottomLeft(bottomPoint.x(), bottomPoint.y() + 1 - bottomSize.height());
+    QPoint bottomLeft(bottomPoint.x(), bottomPoint.y() + 1 - bottomSize.height());
 
-        QRect bottomRect(bottomLeft, bottomSize);
-        m_bottomGradient->setPixmap(backgroundPixmap().copy(bottomRect));
+    QRect bottomRect(bottomLeft, bottomSize);
+    m_bottomGradient->setPixmap(backgroundPixmap().copy(bottomRect));
 
-        m_bottomGradient->resize(bottomRect.size());
-        m_bottomGradient->move(bottomRect.topLeft());
-        m_bottomGradient->show();
-        m_bottomGradient->raise();
+    m_bottomGradient->resize(bottomRect.size());
+    m_bottomGradient->move(bottomRect.topLeft());
+    m_bottomGradient->show();
+    m_bottomGradient->raise();
 }
 
 void FullScreenFrame::toMiniMode()
@@ -761,10 +765,6 @@ void FullScreenFrame::initConnection()
     connect(m_systemView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
     connect(m_othersView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
 
-//    connect(m_allAppsView, &AppListView::appBeDraged, m_appsManager, &AppsManager::handleDragedApp);
-//    connect(m_allAppsView, &AppListView::appDropedIn, m_appsManager, &AppsManager::handleDropedApp);
-//    connect(m_allAppsView, &AppListView::handleDragItems, m_appsManager, &AppsManager::handleDragedApp);
-
     connect(m_allAppsView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_internetView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_chatView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
@@ -804,35 +804,18 @@ void FullScreenFrame::initConnection()
     connect(m_systemView, &AppGridView::clicked, this, &FullScreenFrame::hide);
     connect(m_othersView, &AppGridView::clicked, this, &FullScreenFrame::hide);
 
-//    const auto ratio = devicePixelRatioF();
-//    if (!qFuzzyCompare(ratio, qreal(int(ratio))))
-//    {
-//        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_allAppsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::updateItemHiDPIFixHook));
-//        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_internetView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::updateItemHiDPIFixHook));
-//        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_chatView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::updateItemHiDPIFixHook));
-//        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_musicView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::updateItemHiDPIFixHook));
-//        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_videoView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::updateItemHiDPIFixHook));
-//        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_graphicsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::updateItemHiDPIFixHook));
-//        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_gameView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::updateItemHiDPIFixHook));
-//        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_officeView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::updateItemHiDPIFixHook));
-//        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_readingView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::updateItemHiDPIFixHook));
-//        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_developmentView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::updateItemHiDPIFixHook));
-//        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_systemView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::updateItemHiDPIFixHook));
-//        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_othersView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::updateItemHiDPIFixHook));
-//    } else {
-        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_allAppsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_internetView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_chatView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_musicView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_videoView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_graphicsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_gameView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_officeView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_readingView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_developmentView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_systemView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_othersView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-//    }
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_allAppsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_internetView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_chatView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_musicView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_videoView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_graphicsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_gameView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_officeView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_readingView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_developmentView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_systemView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_othersView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
 
     connect(m_appsArea, &AppListArea::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
     connect(m_navigationWidget, &NavigationWidget::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
@@ -877,11 +860,18 @@ void FullScreenFrame::updateGeometry()
     QFrame::updateGeometry();
 }
 
+///
+/// NOTE(sbw): for design, user can change current item by keys.
+/// so we need calculate which item will be hovered after key event processed.
+///
+/// \brief FullScreenFrame::moveCurrentSelectApp
+/// \param key
+///
 void FullScreenFrame::moveCurrentSelectApp(const int key)
 {
     const QModelIndex currentIndex = m_appItemDelegate->currentIndex();
-//    const AppsListModel::AppCategory indexMode = currentIndex.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 
+    // move operation should be start from a vaild location, if not, just init it.
     if (!currentIndex.isValid())
     {
         m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? m_internetView->indexAt(0) : m_allAppsView->indexAt(0));
@@ -892,6 +882,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     const int column = m_calcUtil->appColumnCount();
     QModelIndex index;
 
+    // calculate destination sibling by keys, it may cause an invalid position.
     switch (key)
     {
     case Qt::Key_Backtab:
@@ -903,11 +894,14 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     default:;
     }
 
+    // now, we need to check and fix if destination is invalid.
     do {
         if (index.isValid())
             break;
 
+        // the column number of destination, when moving up/down, columns should't be changed.
         const int realColumn = currentIndex.row() % column;
+
         const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
         if (key == Qt::Key_Down || key == Qt::Key_Right || key == Qt::Key_Tab)
             model = nextCategoryModel(model);
@@ -928,11 +922,14 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
                 else
                     model = prevCategoryModel(model);
 
+        // if we can't find any available model which contains that column. this move operate should be abort.
         if (!model)
             break;
 
+        // now, we got a right model which contains destination location. but we also need to re-calculate QModelIndex from that model.
         const int count = model->rowCount(QModelIndex()) - 1;
-        int realIndex = count;
+
+        int finalIndex = count;
 
         switch (key)
         {
@@ -940,9 +937,9 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
             index = model->index(realColumn);
             break;
         case Qt::Key_Up:
-            while (realIndex && realIndex % column != realColumn)
-                --realIndex;
-            index = model->index(realIndex);
+            while (finalIndex && finalIndex % column != realColumn)
+                --finalIndex;
+            index = model->index(finalIndex);
             break;
         case Qt::Key_Left:
         case Qt::Key_Backtab:
@@ -957,6 +954,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
 
     } while (false);
 
+    // valid verify and UI adjustment.
     const QModelIndex selectedIndex = index.isValid() ? index : currentIndex;
     m_appItemDelegate->setCurrentIndex(selectedIndex);
     ensureItemVisible(selectedIndex);

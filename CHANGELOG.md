@@ -1,3 +1,14 @@
+<a name="4.3.8"></a>
+### 4.3.8 (2018-06-20)
+
+
+#### Bug Fixes
+
+*   compatible processing ([d01d447f](https://github.com/linuxdeepin/dde-launcher/commit/d01d447f8592a0c1bd1446783e788db91939d80f))
+* **Mini:**  conflict with mouse hover, block signal ([48ead6de](https://github.com/linuxdeepin/dde-launcher/commit/48ead6deae0ec4e3f0b0558f477368f024bb9f5e))
+
+
+
 <a name="4.3.7"></a>
 ### 4.3.7 (2018-06-20)
 

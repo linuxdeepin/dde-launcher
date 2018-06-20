@@ -1,3 +1,13 @@
+<a name="4.3.7"></a>
+### 4.3.7 (2018-06-20)
+
+
+#### Bug Fixes
+
+* **Mini:**  widgets qrc lost ([96e6f24e](https://github.com/linuxdeepin/dde-launcher/commit/96e6f24e182ec7e03824668b4ce858ef83c5eac4))
+
+
+
 <a name="4.3.6"></a>
 ### 4.3.6 (2018-06-14)
 

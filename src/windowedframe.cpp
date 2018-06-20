@@ -284,7 +284,10 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         targetIndex = m_appsView->model()->index(0, 0);
     }
 
+    // Hover conflict with the mouse, temporarily blocking the signal
+    m_appsView->blockSignals(true);
     m_appsView->setCurrentIndex(targetIndex);
+    m_appsView->blockSignals(false);
 }
 
 void WindowedFrame::appendToSearchEdit(const char ch)

@@ -37,7 +37,12 @@
 #include <QProcess>
 
 #include <ddialog.h>
+
+#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
 #include <DDBusSender>
+#else
+#include <QProcess>
+#endif
 
 #include "sharedeventfilter.h"
 
@@ -572,12 +577,26 @@ void FullScreenFrame::toMiniMode()
     removeEventFilter(m_eventFilter);
     m_eventFilter->deleteLater();
 
+#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.daemon.Launcher")
             .interface("com.deepin.dde.daemon.Launcher")
             .path("/com/deepin/dde/daemon/Launcher")
             .property("Fullscreen")
             .set(false);
+#else
+    const QStringList args {
+        "--print-reply",
+        "--dest=com.deepin.dde.daemon.Launcher",
+        "/com/deepin/dde/daemon/Launcher",
+        "org.freedesktop.DBus.Properties.Set",
+        "string:com.deepin.dde.daemon.Launcher",
+        "string:Fullscreen",
+        "variant:boolean:false"
+    };
+
+    QProcess::startDetached("dbus-send", args);
+#endif
 }
 
 void FullScreenFrame::refreshTitleVisible()

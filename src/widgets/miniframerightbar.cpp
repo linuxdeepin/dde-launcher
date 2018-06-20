@@ -22,10 +22,16 @@
 #include "miniframerightbar.h"
 #include "miniframebutton.h"
 #include "avatar.h"
+
 #include <DDesktopServices>
-#include <DDBusSender>
 #include <QVBoxLayout>
 #include <QPainter>
+
+#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
+#include <DDBusSender>
+#else
+#include <QProcess>
+#endif
 
 MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     : QWidget(parent)
@@ -125,18 +131,26 @@ void MiniFrameRightBar::openStandardDirectory(const QStandardPaths::StandardLoca
 
 void MiniFrameRightBar::handleShutdownAction(const QString &action)
 {
+#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.shutdownFront")
             .interface("com.deepin.dde.shutdownFront")
             .path("/com/deepin/dde/shutdownFront")
             .method(action)
             .call();
+#else
+    const QString command = QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront " \
+                                    "/com/deepin/dde/shutdownFront " \
+                                    "com.deepin.dde.shutdownFront.%1").arg(action);
 
+    QProcess::startDetached(command);
+#endif
     emit requestFrameHide();
 }
 
 void MiniFrameRightBar::handleTimedateOpen()
 {
+#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.ControlCenter")
             .interface("com.deepin.dde.ControlCenter")
@@ -144,12 +158,22 @@ void MiniFrameRightBar::handleTimedateOpen()
             .method(QStringLiteral("ShowModule"))
             .arg(QStringLiteral("datetime"))
             .call();
+#else
+    const QString command("qdbus "
+                          "--literal "
+                          "com.deepin.dde.ControlCenter "
+                          "/com/deepin/dde/ControlCenter "
+                          "com.deepin.dde.ControlCenter.ShowModule "
+                          "datetime");
 
+    QProcess::startDetached(command);
+#endif
     emit requestFrameHide();
 }
 
 void MiniFrameRightBar::handleAvatarClicked()
 {
+#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.ControlCenter")
             .interface("com.deepin.dde.ControlCenter")
@@ -157,7 +181,16 @@ void MiniFrameRightBar::handleAvatarClicked()
             .method(QStringLiteral("ShowModule"))
             .arg(QStringLiteral("accounts"))
             .call();
+#else
+    const QString command("qdbus "
+                          "--literal "
+                          "com.deepin.dde.ControlCenter "
+                          "/com/deepin/dde/ControlCenter "
+                          "com.deepin.dde.ControlCenter.ShowModule "
+                          "accounts");
 
+    QProcess::startDetached(command);
+#endif
     emit requestFrameHide();
 }
 
@@ -168,12 +201,17 @@ void MiniFrameRightBar::showShutdown()
 
 void MiniFrameRightBar::showSettings()
 {
+#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.ControlCenter")
             .interface("com.deepin.dde.ControlCenter")
             .path("/com/deepin/dde/ControlCenter")
             .method(QString("Toggle"))
             .call();
+#else
+    const QString command("qdbus --literal com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.Toggle");
+    QProcess::startDetached(command);
+#endif
 
     emit requestFrameHide();
 }

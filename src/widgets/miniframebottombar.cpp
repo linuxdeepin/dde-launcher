@@ -24,7 +24,12 @@
 #include "miniframebottombar.h"
 
 #include <DDesktopServices>
+
+#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
 #include <DDBusSender>
+#else
+#include <QProcess>
+#endif
 
 DWIDGET_USE_NAMESPACE
 #ifdef DUTIL_NAMESPACE
@@ -137,22 +142,38 @@ void MiniFrameBottomBar::openStandardDirectory(const QStandardPaths::StandardLoc
 
 void MiniFrameBottomBar::handleShutdownAction(const QString &action)
 {
+#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.shutdownFront")
             .interface("com.deepin.dde.shutdownFront")
             .path("/com/deepin/dde/shutdownFront")
             .method(action)
             .call();
+#else
+    const QString command = QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront " \
+                                    "/com/deepin/dde/shutdownFront " \
+                                    "com.deepin.dde.shutdownFront.%1").arg(action);
+
+    QProcess::startDetached(command);
+#endif
 }
 
 void MiniFrameBottomBar::handleLockAction()
 {
+#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.lockFront")
             .interface("com.deepin.dde.lockFront")
             .path("/com/deepin/dde/lockFront")
             .method("Show")
             .call();
+#else
+    const QString command = QString("dbus-send --print-reply --dest=com.deepin.dde.lockFront " \
+                                    "/com/deepin/dde/lockFront " \
+                                    "com.deepin.dde.lockFront.Show");
+
+    QProcess::startDetached(command);
+#endif
 }
 
 void MiniFrameBottomBar::showShutdown()
@@ -162,6 +183,7 @@ void MiniFrameBottomBar::showShutdown()
 
 void MiniFrameBottomBar::showSysInfo()
 {
+#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.ControlCenter")
             .interface("com.deepin.dde.ControlCenter")
@@ -169,4 +191,13 @@ void MiniFrameBottomBar::showSysInfo()
             .method("ShowPage")
             .arg(QString("systeminfo"))
             .call();
+#else
+    const QString command = QString("qdbus " \
+                                    "com.deepin.dde.ControlCenter "
+                                    "/com/deepin/dde/ControlCenter "
+                                    "com.deepin.dde.ControlCenter.ShowModule "
+                                    "\"systeminfo\"");
+
+    QProcess::startDetached(command);
+#endif
 }

@@ -209,11 +209,15 @@ void AppListView::startDrag(const QModelIndex &index)
         return;
 
     const QModelIndex &dragIndex = index;
+    const QRect index_rect = visualRect(index);
     const auto ratio = devicePixelRatioF();
-    const QSize rectSize = QSize(320, 51);
+    const QSize rectSize = index_rect.size();
+
+    // QPoint(50, 42) is shadow radius
+    const QPoint hotSpot = m_dragStartPos - index_rect.topLeft() + QPoint(50, 42)  / ratio;
 
     QPixmap dropPixmap;
-    QPixmap sourcePixmap(rectSize * ratio);
+    QImage sourcePixmap(rectSize * ratio, QImage::Format_ARGB32_Premultiplied);
     sourcePixmap.fill(Qt::transparent);
     sourcePixmap.setDevicePixelRatio(ratio);
 
@@ -223,23 +227,20 @@ void AppListView::startDrag(const QModelIndex &index)
     item.features |= QStyleOptionViewItem::Alternate;
 
     itemDelegate()->paint(&painter, item, index);
-    dropPixmap = sourcePixmap;
+    dropPixmap = QPixmap::fromImage(sourcePixmap);
 
     // wm support transparent to draw a shadow effect.
     if (m_wmHelper->hasComposite()) {
         QColor shadowColor("#2CA7F8");
         shadowColor.setAlpha(180);
-        dropPixmap = AppListDelegate::dropShadow(sourcePixmap, 50, shadowColor, QPoint(0, 8));
+        dropPixmap = AppListDelegate::dropShadow(dropPixmap, 50, shadowColor, QPoint(0, 8));
         dropPixmap.setDevicePixelRatio(ratio);
     }
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
     drag->setPixmap(dropPixmap);
-
-    QPoint topLeft = visualRect(index).topLeft();
-    QPoint hotSpot = m_dragStartPos - topLeft + dropPixmap.rect().center() - sourcePixmap.rect().center();
-    drag->setHotSpot(hotSpot / ratio);
+    drag->setHotSpot(hotSpot);
 
     // request remove current item.
     if (listModel->category() == AppsListModel::All) {

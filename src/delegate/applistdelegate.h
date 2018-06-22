@@ -35,7 +35,7 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    static QPixmap dropShadow(const QPixmap &pixmap, int radius, const QColor &color, const QPoint &offset);
+    static QPixmap dropShadow(QPixmap pixmap, int radius, const QColor &color, const QPoint &offset);
 
 public slots:
     void setActived(bool active);

@@ -168,19 +168,19 @@ void AppListDelegate::setActived(bool active)
     m_actived = active;
 }
 
-QPixmap AppListDelegate::dropShadow(const QPixmap &pixmap, int radius, const QColor &color, const QPoint &offset)
+QPixmap AppListDelegate::dropShadow(QPixmap pixmap, int radius, const QColor &color, const QPoint &offset)
 {
     if (pixmap.isNull()) {
         return QPixmap();
     }
 
+    pixmap.setDevicePixelRatio(1);
+
     // refrence here:
     // https://forum.qt.io/topic/77576/painting-shadow-around-a-parentless-qwidget
 
-    const qreal ratio = qApp->devicePixelRatio();
-    QImage temp(pixmap.size() * ratio + QSize(radius * 2, radius * 2),
+    QImage temp(pixmap.size() + QSize(radius * 2, radius * 2),
                QImage::Format_ARGB32_Premultiplied);
-    temp.setDevicePixelRatio(ratio);
     temp.fill(0);
 
     QPainter tempPainter(&temp);
@@ -188,9 +188,8 @@ QPixmap AppListDelegate::dropShadow(const QPixmap &pixmap, int radius, const QCo
     tempPainter.drawPixmap(QPoint(radius, radius), pixmap);
     tempPainter.end();
 
-    QImage blurred(temp.size() * ratio,
+    QImage blurred(temp.size(),
                    QImage::Format_ARGB32_Premultiplied);
-    blurred.setDevicePixelRatio(ratio);
     blurred.fill(0);
 
     QPainter blurPainter(&blurred);

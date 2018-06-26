@@ -23,7 +23,7 @@
 
 #include "backgroundmanager.h"
 
-#include <unistd.h>
+#include <QGSettings>
 
 using namespace com::deepin;
 
@@ -33,44 +33,30 @@ BackgroundManager::BackgroundManager(QObject *parent)
     : QObject(parent)
     , m_currentWorkspace(0)
     , m_wmInter(new wm("com.deepin.wm", "/com/deepin/wm", QDBusConnection::sessionBus(), this))
-    , m_userInter(new User("com.deepin.daemon.Accounts", QString("/com/deepin/daemon/Accounts/User%1").arg(getuid()), QDBusConnection::systemBus(), this))
+    , m_gsettings(new QGSettings("com.deepin.dde.appearance", "", this))
     , m_blurInter(new ImageBlurInter("com.deepin.daemon.Accounts",
                                      "/com/deepin/daemon/ImageBlur",
                                      QDBusConnection::systemBus(), this))
 {
     m_blurInter->setSync(false);
-    m_userInter->setSync(false);
 
     auto updateWorkspace = [this] (int, int to) {
         setCurrentWorkspace(to);
     };
 
-    connect(m_userInter, &User::DesktopBackgroundsChanged, this, &BackgroundManager::onDesktopBGChanged);
+    connect(m_gsettings, &QGSettings::changed, this, &BackgroundManager::updateBackgrounds);
     connect(m_wmInter, &__wm::WorkspaceSwitched, updateWorkspace);
     connect(m_blurInter, &ImageBlurInter::BlurDone, this, &BackgroundManager::onBlurDone);
 
-    onDesktopBGChanged(m_userInter->desktopBackgrounds());
+    updateBackgrounds();
     updateWorkspace(0, 0);
 }
 
 QString BackgroundManager::currentWorkspaceBackground() const
 {
-    if (m_backgrounds.length() >= m_currentWorkspace + 1) {
-        return m_backgrounds.at(m_currentWorkspace);
-    }
+    if (m_backgrounds.isEmpty()) return DefaultWallpaper;
 
-    return DefaultWallpaper;
-}
-
-void BackgroundManager::onGetBlurFinished(QDBusPendingCallWatcher *w)
-{
-    if (!w->isError()) {
-        QDBusPendingReply<QString> reply = w->reply();
-        const QString &value = reply.value();
-        emit currentWorkspaceBackgroundChanged(value.isEmpty() ? currentWorkspaceBackground() : value);
-    }
-
-    w->deleteLater();
+    return m_backgrounds[m_currentWorkspace];
 }
 
 void BackgroundManager::onBlurDone(const QString &source, const QString &blur, bool done)
@@ -93,31 +79,22 @@ void BackgroundManager::setCurrentWorkspace(int currentWorkspace)
 {
     if (m_currentWorkspace != currentWorkspace) {
         m_currentWorkspace = currentWorkspace;
-
-        if (!m_backgrounds.isEmpty()) {
-            updateBackground();
-        }
+        updateBackgrounds();
     }
 }
 
-void BackgroundManager::onDesktopBGChanged(const QStringList &list)
+void BackgroundManager::updateBackgrounds()
 {
-    if (list.isEmpty()) return;
+    m_backgrounds = m_gsettings->get("background-uris").toStringList();
 
-    m_backgrounds = list;
+    const QString &current = currentWorkspaceBackground();
 
-    updateBackground();
-}
-
-void BackgroundManager::updateBackground()
-{
-    QUrl url(m_backgrounds[currentWorkspace()]);
-
-    QString path = url.isLocalFile() ? url.toLocalFile() : url.url();
+    QString path = QUrl(current).isLocalFile() ? QUrl(current).toLocalFile() : current;
 
     path = QFile::exists(path) ? path : DefaultWallpaper;
 
-    QDBusPendingReply<QString> call = m_blurInter->Get(path);
-    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
-    connect(watcher, &QDBusPendingCallWatcher::finished, this, &BackgroundManager::onGetBlurFinished);
+    const QString &file = m_blurInter->Get(path);
+
+    if (!file.isEmpty())
+        emit currentWorkspaceBackgroundChanged(file);
 }

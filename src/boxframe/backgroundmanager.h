@@ -27,11 +27,12 @@
 #include <QObject>
 
 #include <com_deepin_wm.h>
-#include <com_deepin_daemon_accounts_user.h>
+
 #include <com_deepin_daemon_imageblur.h>
 
 using ImageBlurInter = com::deepin::daemon::ImageBlur;
-using User = com::deepin::daemon::accounts::User;
+
+class QGSettings;
 
 class BackgroundManager : public QObject
 {
@@ -48,9 +49,7 @@ signals:
     void currentWorkspaceBackgroundChanged(const QString &background);
 
 private slots:
-    void onDesktopBGChanged(const QStringList &list);
-    void updateBackground();
-    void onGetBlurFinished(QDBusPendingCallWatcher *w);
+    void updateBackgrounds();
     void onBlurDone(const QString &source, const QString &blur, bool done);
 
 private:
@@ -58,7 +57,7 @@ private:
     QStringList m_backgrounds;
 
     com::deepin::wm *m_wmInter;
-    User *m_userInter;
+    QGSettings *m_gsettings;
     ImageBlurInter *m_blurInter;
 };
 

@@ -1,3 +1,13 @@
+<a name="4.3.10"></a>
+### 4.3.10 (2018-06-27)
+
+
+#### Bug Fixes
+
+* **background:**  cannot get blur wallpaper ([69486c62](https://github.com/linuxdeepin/dde-launcher/commit/69486c627f8417ad969831e627af9da6f7d187be))
+
+
+
 <a name="4.3.9"></a>
 ### 4.3.9 (2018-06-27)
 

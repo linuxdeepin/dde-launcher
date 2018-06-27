@@ -1,3 +1,15 @@
+<a name="4.3.9"></a>
+### 4.3.9 (2018-06-27)
+
+
+#### Bug Fixes
+
+* **Mini:**
+  *  time overlaps in different fonts ([4456de02](https://github.com/linuxdeepin/dde-launcher/commit/4456de028812ddbcd2c65ca0c8d5d57c55de534d))
+  *  Drag and drop coordinate errors after window scale ([b6c3d47a](https://github.com/linuxdeepin/dde-launcher/commit/b6c3d47a560801a2e9084c2638921fb991fb5d07))
+
+
+
 <a name="4.3.8"></a>
 ### 4.3.8 (2018-06-20)
 

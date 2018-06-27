@@ -56,12 +56,16 @@ QString BackgroundManager::currentWorkspaceBackground() const
 {
     if (m_backgrounds.isEmpty()) return DefaultWallpaper;
 
-    return m_backgrounds[m_currentWorkspace];
+    const QString &source = m_backgrounds[m_currentWorkspace];
+    const QString &path = QUrl(source).isLocalFile() ? QUrl(source).toLocalFile() : source;
+    const QString &s = m_blurInter->Get(QFile::exists(path) ? path : DefaultWallpaper);
+
+    return s.isEmpty() ? DefaultWallpaper : s;
 }
 
 void BackgroundManager::onBlurDone(const QString &source, const QString &blur, bool done)
 {
-    const QString &current = currentWorkspaceBackground();
+    const QString &current = m_backgrounds[m_currentWorkspace];
 
     const QString &currentPath = QUrl(current).isLocalFile() ? QUrl(current).toLocalFile() : current;
     const QString &sourcePath = QUrl(source).isLocalFile() ? QUrl(source).toLocalFile() : source;
@@ -87,7 +91,7 @@ void BackgroundManager::updateBackgrounds()
 {
     m_backgrounds = m_gsettings->get("background-uris").toStringList();
 
-    const QString &current = currentWorkspaceBackground();
+    const QString &current = m_backgrounds[m_currentWorkspace];
 
     QString path = QUrl(current).isLocalFile() ? QUrl(current).toLocalFile() : current;
 

@@ -122,6 +122,7 @@ private:
     ItemInfoList m_userSortedList;
     ItemInfoList m_appSearchResultList;
     ItemInfoList m_stashList;
+    ItemInfoList m_categoryList;
     QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfos;
 
     ItemInfo m_unInstallItem = ItemInfo();

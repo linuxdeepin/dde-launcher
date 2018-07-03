@@ -47,6 +47,27 @@ QSettings AppsManager::APP_AUTOSTART_CACHE("deepin", "dde-launcher-app-autostart
 QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
 QSettings AppsManager::APP_USED_SORTED_LIST("deepin", "dde-launcher-app-used-sorted-list");
 
+static const QMap<AppsListModel::AppCategory, QString> categoryTs {
+    {AppsListModel::Internet, QObject::tr("Internet")},
+    {AppsListModel::Chat, QObject::tr("Chat")},
+    {AppsListModel::Music, QObject::tr("Music")},
+    {AppsListModel::Video, QObject::tr("Video")},
+    {AppsListModel::Graphics, QObject::tr("Graphics")},
+    {AppsListModel::Game, QObject::tr("Game")},
+    {AppsListModel::Office, QObject::tr("Office")},
+    {AppsListModel::Reading, QObject::tr("Reading")},
+    {AppsListModel::Development, QObject::tr("Development")},
+    {AppsListModel::System, QObject::tr("System")},
+    {AppsListModel::Others, QObject::tr("Others")},
+};
+
+static const ItemInfo createOfCategory(AppsListModel::AppCategory category) {
+    ItemInfo info;
+    info.m_name = categoryTs[category];
+    info.m_categoryId = category;
+    return std::move(info);
+}
+
 int perfectIconSize(const int size)
 {
     const int s = 8;
@@ -114,6 +135,10 @@ AppsManager::AppsManager(QObject *parent) :
     m_searchTimer(new QTimer(this)),
     m_delayRefreshTimer(new QTimer(this))
 {
+    for (auto it = categoryTs.begin(); it != categoryTs.end(); ++it) {
+        m_categoryList << std::move(createOfCategory(it.key()));
+    }
+
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
 
     refreshCategoryInfoList();
@@ -378,6 +403,7 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     case AppsListModel::All:        return m_userSortedList;        break;
     case AppsListModel::Used:       return m_usedSortedList;        break;
     case AppsListModel::Search:     return m_appSearchResultList;   break;
+    case AppsListModel::Category:   return m_categoryList;          break;
     default:;
     }
 

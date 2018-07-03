@@ -67,6 +67,7 @@ public:
         Used,
         Custom,
         Search,
+        Category,
 
         // apps category
         Chat,

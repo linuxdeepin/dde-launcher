@@ -118,13 +118,13 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
 
 void AppListView::mousePressEvent(QMouseEvent *e)
 {
-    QListView::mousePressEvent(e);
-
     const QModelIndex &index = indexAt(e->pos());
     if (!index.isValid())
         e->ignore();
 
-    if (e->buttons() == Qt::RightButton) {
+    const bool isCategoryList = qobject_cast<AppsListModel*>(model())->category() == AppsListModel::Category;
+
+    if (e->buttons() == Qt::RightButton && isCategoryList) {
         const QPoint rightClickPoint = mapToGlobal(e->pos());
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
 
@@ -133,8 +133,22 @@ void AppListView::mousePressEvent(QMouseEvent *e)
     }
 
     if (e->buttons() == Qt::LeftButton) {
-        m_dragStartPos = e->pos();
-        m_dragStartRow = indexAt(e->pos()).row();
+        if (isCategoryList) {
+            emit requestSwitchToCategory(index);
+            return;
+        } else {
+            m_dragStartPos = e->pos();
+            m_dragStartRow = indexAt(e->pos()).row();
+        }
+    }
+
+    QListView::mousePressEvent(e);
+}
+
+void AppListView::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (qobject_cast<AppsListModel*>(model())->category() != AppsListModel::Category) {
+        QListView::mouseReleaseEvent(e);
     }
 }
 

@@ -31,6 +31,9 @@
 #include <QDebug>
 #include <QPixmap>
 #include <QSettings>
+#include <DHiDPIHelper>
+
+DWIDGET_USE_NAMESPACE
 
 const QStringList sysHoldPackages()
 {
@@ -261,6 +264,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_calcUtil->appItemFontSize();
     case AppItemIsDraggingRole:
         return indexDragging(index);
+    case CategoryEnterIconRole:
+        return DHiDPIHelper::loadNxPixmap(":/widgets/images/enter_details_normal.svg");
     default:;
     }
 

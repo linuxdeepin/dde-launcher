@@ -60,6 +60,7 @@ public:
         AppFontSizeRole,
         AppItemIsDraggingRole,
         AppDragIconRole,
+        CategoryEnterIconRole,
     };
 
     enum AppCategory {

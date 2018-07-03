@@ -60,6 +60,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const QRect rect = option.rect;
     const bool isDrawTips = index.data(AppsListModel::AppNewInstallRole).toBool();
     const bool isDragItem = option.features & QStyleOptionViewItem::Alternate;
+    const bool isCategoryList(static_cast<AppsListModel::AppCategory>(index.data(AppsListModel::AppGroupRole).toInt()) == AppsListModel::Category);
 
     QSize iconSize = index.data(AppsListModel::AppIconSizeRole).value<QSize>();
 
@@ -122,6 +123,17 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // draw app name.
     painter->setPen(Qt::white);
     painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, fm.elidedText(appName, Qt::ElideRight, textRect.width()));
+
+    // draw category right icon
+
+    if (isCategoryList) {
+        const QPixmap &pixmap = index.data(AppsListModel::CategoryEnterIconRole).value<QPixmap>();
+        painter->drawPixmap(rect.right()- pixmap.width(),
+                            rect.y() + (rect.height() - pixmap.height()) / 2,
+                            pixmap.width(),
+                            pixmap.height(),
+                            pixmap);
+    }
 
     // drag item is not drawing tips.
     if (isDrawTips && !isDragItem) {

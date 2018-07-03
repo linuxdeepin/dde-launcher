@@ -61,10 +61,25 @@ static const QMap<AppsListModel::AppCategory, QString> categoryTs {
     {AppsListModel::Others, QObject::tr("Others")},
 };
 
+static const QMap<AppsListModel::AppCategory, QString> categoryIcon {
+    {AppsListModel::Internet, QString(":/icons/skin/icons/internet_normal_16px.svg")},
+    {AppsListModel::Chat, QString(":/icons/skin/icons/chat_normal_16px.svg")},
+    {AppsListModel::Music, QString(":/icons/skin/icons/music_normal_16px.svg")},
+    {AppsListModel::Video, QString(":/icons/skin/icons/multimedia_normal_16px.svg")},
+    {AppsListModel::Graphics, QString(":/icons/skin/icons/graphics_normal_16px.svg")},
+    {AppsListModel::Game, QString(":/icons/skin/icons/game_normal_16px.svg")},
+    {AppsListModel::Office, QString(":/icons/skin/icons/office_normal_16px.svg")},
+    {AppsListModel::Reading, QString(":/icons/skin/icons/reading_normal_16px.svg")},
+    {AppsListModel::Development, QString(":/icons/skin/icons/development_normal_16px.svg")},
+    {AppsListModel::System, QString(":/icons/skin/icons/system_normal_16px.svg")},
+    {AppsListModel::Others, QString(":/icons/skin/icons/others_normal_16px.svg")},
+};
+
 static const ItemInfo createOfCategory(AppsListModel::AppCategory category) {
     ItemInfo info;
     info.m_name = categoryTs[category];
     info.m_categoryId = category;
+    info.m_iconKey = categoryIcon[category];
     return std::move(info);
 }
 

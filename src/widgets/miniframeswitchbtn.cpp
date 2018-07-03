@@ -27,7 +27,7 @@ DWIDGET_USE_NAMESPACE
 
 MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     : QPushButton(parent),
-      m_textLabel(new QLabel),
+      m_textLabel(new QLabel("Category")),
       m_enterIcon(new QLabel),
       m_jumpButton(new RoundedButton)
 {
@@ -72,17 +72,6 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
 
 MiniFrameSwitchBtn::~MiniFrameSwitchBtn()
 {
-}
-
-void MiniFrameSwitchBtn::updateStatus(int status)
-{
-    if (status == WindowedFrame::Used) {
-        m_textLabel->setText(tr("All Programs"));
-        m_enterIcon->setVisible(true);
-    } else {
-        m_textLabel->setText(tr("Return"));
-        m_enterIcon->setVisible(false);
-    }
 }
 
 void MiniFrameSwitchBtn::showJumpBtn()

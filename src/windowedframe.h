@@ -122,7 +122,7 @@ private:
     AppsListModel *m_appsModel;
     AppsListModel *m_usedModel;
     AppsListModel *m_searchModel;
-
+    DImageButton *m_backBtn;
     SearchWidget *m_searchWidget;
     MiniFrameRightBar *m_rightBar;
     MiniFrameSwitchBtn *m_switchBtn;

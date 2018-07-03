@@ -7,5 +7,11 @@
         <file>images/settings.svg</file>
         <file>images/power.svg</file>
         <file>images/drag_indicator.svg</file>
+        <file>images/back_hover.png</file>
+        <file>images/back_hover@2x.png</file>
+        <file>images/back_normal.png</file>
+        <file>images/back_normal@2x.png</file>
+        <file>images/back_press.png</file>
+        <file>images/back_press@2x.png</file>
     </qresource>
 </RCC>

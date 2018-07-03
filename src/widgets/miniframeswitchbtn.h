@@ -36,7 +36,6 @@ Q_SIGNALS:
     void jumpButtonClicked();
 
 public slots:
-    void updateStatus(int status);
     void showJumpBtn();
     void hideJumpBtn();
 

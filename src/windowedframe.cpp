@@ -77,7 +77,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_appsManager(AppsManager::instance())
     , m_appsView(new AppListView)
     , m_appsModel(new AppsListModel(AppsListModel::All))
-    , m_usedModel(new AppsListModel(AppsListModel::Used))
     , m_searchModel(new AppsListModel(AppsListModel::Search))
     , m_searchWidget(new SearchWidget)
     , m_rightBar(new MiniFrameRightBar)
@@ -98,7 +97,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_windowHandle.setEnableBlurWindow(false);
     m_windowHandle.setTranslucentBackground(true);
 
-    m_appsView->setModel(m_usedModel);
+    m_appsView->setModel(m_appsModel);
     m_appsView->setItemDelegate(new AppListDelegate);
 
     m_searchWidget->installEventFilter(m_eventFilter);
@@ -115,7 +114,17 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_autoScrollTimer->setInterval(DLauncher::APPS_AREA_AUTO_SCROLL_TIMER);
     m_autoScrollTimer->setSingleShot(false);
 
+
+    m_backBtn = new DImageButton(":/widgets/images/back_normal.png",
+                                 ":/widgets/images/back_hover.png",
+                                 ":/widgets/images/back_press.png",
+                                 this);
+
+    m_backBtn->hide();
+
     QHBoxLayout *searchLayout = new QHBoxLayout;
+    searchLayout->addSpacing(10);
+    searchLayout->addWidget(m_backBtn);
     searchLayout->addSpacing(10);
     searchLayout->addWidget(m_searchWidget);
     searchLayout->addSpacing(10);
@@ -149,8 +158,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
 
-    m_switchBtn->updateStatus(Used);
-
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_TranslucentBackground, true);
@@ -180,6 +187,8 @@ WindowedFrame::WindowedFrame(QWidget *parent)
         if (!m_autoScrollTimer->isActive())
             m_autoScrollTimer->start();
     });
+
+    connect(m_backBtn, &DImageButton::clicked, this, &WindowedFrame::recoveryAll);
 
     connect(m_rightBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &WindowedFrame::onToggleFullScreen);
     connect(m_rightBar, &MiniFrameRightBar::requestFrameHide, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
@@ -618,27 +627,15 @@ void WindowedFrame::onToggleFullScreen()
 
 void WindowedFrame::onSwitchBtnClicked()
 {
-    m_switchBtn->hideJumpBtn();
-
-    if (m_displayMode == Used) {
-        m_displayMode = All;
-        m_appsView->setModel(m_appsModel);
-        m_switchBtn->updateStatus(All);
-    } else {
-        m_displayMode = Used;
-        m_appsView->setModel(m_usedModel);
-        m_switchBtn->updateStatus(Used);
-        if (m_appsManager->isHaveNewInstall()) {
-            m_switchBtn->showJumpBtn();
-        }
-    }
-
-    hideTips();
+    m_appsModel->setCategory(AppsListModel::Category);
+    m_appsView->setModel(m_appsModel);
+    m_switchBtn->hide();
+    m_backBtn->show();
 }
 
 void WindowedFrame::onJumpBtnClicked()
 {
-    onSwitchBtnClicked();
+//    onSwitchBtnClicked();
     m_switchBtn->hideJumpBtn();
     m_appsView->scrollToBottom();
 }
@@ -667,7 +664,7 @@ void WindowedFrame::onNewInstallListChanged()
 void WindowedFrame::searchText(const QString &text)
 {
     if (text.isEmpty()) {
-        m_appsView->setModel((m_displayMode == All) ? m_appsModel : m_usedModel);
+        m_appsView->setModel(m_appsModel);
         hideTips();
     } else {
         if (m_appsView->model() != m_searchModel) {
@@ -713,10 +710,12 @@ void WindowedFrame::recoveryAll()
 {
     // recovery list view
     m_displayMode = Used;
-    m_appsView->setModel(m_usedModel);
+    m_appsModel->setCategory(AppsListModel::All);
+    m_appsView->setModel(m_appsModel);
 
     // recovery switch button
-    m_switchBtn->updateStatus(Used);
+    m_switchBtn->show();
+    m_backBtn->hide();
     hideTips();
     if (m_appsManager->isHaveNewInstall()) {
         m_switchBtn->showJumpBtn();

@@ -31,7 +31,7 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     m_refreshDateTimer->setInterval(1000);
     m_refreshDateTimer->start();
 
-    m_currentTimeLabel->setStyleSheet("QLabel { font-size: 40px; font-weight: bold;}");
+    m_currentTimeLabel->setStyleSheet("QLabel { font-size: 40px;}");
     m_currentTimeLabel->setFixedHeight(40);
     m_currentTimeLabel->setAlignment(Qt::AlignVCenter);
     m_currentDateLabel->setStyleSheet("QLabel { color: rgba(255, 255, 255, 0.6); }");

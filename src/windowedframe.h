@@ -137,6 +137,7 @@ private:
     int m_radius = 10;
     AnchoredCornor m_anchoredCornor = Normal;
     QPainterPath m_cornerPath;
+    bool m_isLeft;
 };
 
 #endif // WINDOWEDFRAME_H

@@ -39,6 +39,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     , m_modeToggleBtn(new DImageButton)
     , m_datetimeWidget(new DatetimeWidget)
     , m_avatar(new Avatar)
+    , m_currentIndex(0)
 {
     m_modeToggleBtn->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
     m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
@@ -55,6 +56,26 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     MiniFrameButton *manualBtn = new MiniFrameButton(tr("Manual"));
     MiniFrameButton *settingsBtn = new MiniFrameButton(tr("Settings"));
     MiniFrameButton *shutdownBtn = new MiniFrameButton(tr("Shutdown"));
+
+    uint index = 0;
+    m_btns[index++] = computerBtn;
+    m_btns[index++] = documentBtn;
+    m_btns[index++] = videoBtn;
+    m_btns[index++] = musicBtn;
+    m_btns[index++] = pictureBtn;
+    m_btns[index++] = downloadBtn;
+    m_btns[index++] = manualBtn;
+    m_btns[index++] = settingsBtn;
+    m_btns[index++] = shutdownBtn;
+
+    for (auto it = m_btns.constBegin(); it != m_btns.constEnd(); ++it) {
+        it.value()->setCheckable(true);
+        connect(it.value(), &MiniFrameButton::entered, this, [=] {
+            hideAllHoverState();
+            m_currentIndex = m_btns.key(it.value());
+            setCurrentCheck(true);
+        }, Qt::QueuedConnection);
+    }
 
     settingsBtn->setIcon(QIcon(":/widgets/images/settings.svg"));
     shutdownBtn->setIcon(QIcon(":/widgets/images/power.svg"));
@@ -102,6 +123,44 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
 MiniFrameRightBar::~MiniFrameRightBar()
 {
+}
+
+void MiniFrameRightBar::setCurrentCheck(bool checked) const
+{
+    m_btns[m_currentIndex]->setChecked(checked);
+}
+
+void MiniFrameRightBar::moveUp()
+{
+    hideAllHoverState();
+
+    // move to bottom
+    if (--m_currentIndex < 0) {
+        m_currentIndex = m_btns.size() - 1;
+        m_btns.last()->setChecked(true);
+        return;
+    }
+
+    setCurrentCheck(true);
+}
+
+void MiniFrameRightBar::moveDown()
+{
+    hideAllHoverState();
+
+    // move to head
+    if (++m_currentIndex > m_btns.size() - 1) {
+        m_currentIndex = 0;
+        m_btns.first()->setChecked(true);
+        return;
+    }
+
+    setCurrentCheck(true);
+}
+
+void MiniFrameRightBar::execCurrent()
+{
+    emit m_btns[m_currentIndex]->clicked();
 }
 
 void MiniFrameRightBar::paintEvent(QPaintEvent *e)
@@ -221,4 +280,11 @@ void MiniFrameRightBar::showManual()
     QProcess::startDetached("dman");
 
     emit requestFrameHide();
+}
+
+void MiniFrameRightBar::hideAllHoverState() const
+{
+    for (auto it = m_btns.constBegin(); it != m_btns.constEnd(); ++it) {
+        it.value()->setChecked(false);
+    }
 }

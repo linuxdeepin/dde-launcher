@@ -25,7 +25,7 @@ QScrollArea#AppsArea {
     background: transparent;
 }
 
-#MiniFrameButton:hover {
+#MiniFrameButton:checked {
     border: none;
     border-radius: 4px;
     padding-left: 6px;

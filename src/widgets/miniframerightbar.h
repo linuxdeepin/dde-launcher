@@ -31,6 +31,7 @@
 
 DWIDGET_USE_NAMESPACE
 
+class MiniFrameButton;
 class MiniFrameRightBar : public QWidget
 {
     Q_OBJECT
@@ -38,6 +39,11 @@ class MiniFrameRightBar : public QWidget
 public:
     explicit MiniFrameRightBar(QWidget *parent = nullptr);
     ~MiniFrameRightBar();
+
+    void setCurrentCheck(bool checked) const;
+    void moveUp();
+    void moveDown();
+    void execCurrent();
 
 signals:
     void modeToggleBtnClicked();
@@ -55,11 +61,14 @@ private slots:
     void showShutdown();
     void showSettings();
     void showManual();
+    void hideAllHoverState() const;
 
 private:
     DImageButton *m_modeToggleBtn;
     DatetimeWidget *m_datetimeWidget;
     Avatar *m_avatar;
+    int m_currentIndex;
+    QMap<uint, MiniFrameButton*> m_btns;
 };
 
 #endif // MINIFRAMERIGHTBAR_H

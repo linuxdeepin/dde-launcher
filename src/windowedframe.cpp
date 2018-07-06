@@ -86,6 +86,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_autoScrollTimer(new QTimer)
     , m_regionMonitor(new DRegionMonitor(this))
     , m_displayMode(Used)
+    , m_isLeft(true)
 {
     DBlurEffectWidget *bgWidget = new DBlurEffectWidget(this);
     bgWidget->setMaskColor(DBlurEffectWidget::DarkColor);
@@ -283,15 +284,41 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     const int row = currentIdx.row();
 
     switch (key) {
-    case Qt::Key_Down:
-    case Qt::Key_Right:
-    case Qt::Key_Tab:
-        targetIndex = currentIdx.sibling(row + 1, 0);
+    case Qt::Key_Left:
+        m_isLeft = true;
         break;
-    case Qt::Key_Up: case Qt::Key_Left:
-        targetIndex = currentIdx.sibling(row - 1, 0);
+    case Qt::Key_Right:
+        m_isLeft = false;
+        break;
+    case Qt::Key_Up: {
+        if (m_isLeft) {
+            targetIndex = currentIdx.sibling(row - 1, 0);
+        }
+        else {
+            m_rightBar->moveUp();
+        }
         break;
     }
+    case Qt::Key_Down: {
+        if (m_isLeft) {
+            targetIndex = currentIdx.sibling(row + 1, 0);
+        }
+        else {
+            m_rightBar->moveDown();
+        }
+        break;
+    }
+    default:
+        break;
+    }
+
+    if (!m_isLeft) {
+        m_rightBar->setCurrentCheck(true);
+        m_appsView->clearSelection();
+        return;
+    }
+
+    m_rightBar->setCurrentCheck(false);
 
     if (!currentIdx.isValid() || !targetIndex.isValid()) {
         targetIndex = m_appsView->model()->index(0, 0);
@@ -311,6 +338,11 @@ void WindowedFrame::appendToSearchEdit(const char ch)
 
 void WindowedFrame::launchCurrentApp()
 {
+    if (!m_isLeft) {
+        m_rightBar->execCurrent();
+        return;
+    }
+
     const QModelIndex currentIdx = m_appsView->currentIndex();
 
     if (currentIdx.isValid() && currentIdx.model() == m_appsView->model()) {
@@ -720,4 +752,8 @@ void WindowedFrame::recoveryAll()
     if (m_appsManager->isHaveNewInstall()) {
         m_switchBtn->showJumpBtn();
     }
+
+    //
+    m_isLeft = true;
+    m_rightBar->setCurrentCheck(false);
 }

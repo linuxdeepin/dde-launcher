@@ -10,3 +10,19 @@ MiniFrameButton::MiniFrameButton(const QString &text, QWidget *parent)
 MiniFrameButton::~MiniFrameButton()
 {
 }
+
+void MiniFrameButton::enterEvent(QEvent *event)
+{
+    QPushButton::enterEvent(event);
+
+    setChecked(true);
+
+    emit entered();
+}
+
+void MiniFrameButton::leaveEvent(QEvent *event)
+{
+    QPushButton::leaveEvent(event);
+
+    setChecked(false);
+}

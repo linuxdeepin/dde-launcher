@@ -10,6 +10,13 @@ class MiniFrameButton : public QPushButton
 public:
     explicit MiniFrameButton(const QString &text, QWidget *parent = nullptr);
     ~MiniFrameButton();
+
+signals:
+    void entered() const;
+
+protected:
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 };
 
 #endif

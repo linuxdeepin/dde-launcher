@@ -284,11 +284,8 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     const int row = currentIdx.row();
 
     switch (key) {
-    case Qt::Key_Left:
-        m_isLeft = true;
-        break;
-    case Qt::Key_Right:
-        m_isLeft = false;
+    case Qt::Key_Tab:
+        m_isLeft = !m_isLeft;
         break;
     case Qt::Key_Up: {
         if (m_isLeft) {

@@ -137,7 +137,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     // draw blue dot if needed
     if (index.data(AppsListModel::AppNewInstallRole).toBool() && !isDragItem) {
-        const QPointF blueDotPos(rect.width() - m_blueDotPixmap.width() / ratio,
+        const QPointF blueDotPos(rect.width() - m_blueDotPixmap.width() / ratio - 20,
                                  rect.y() + (+ rect.height() - m_blueDotPixmap.height() / ratio) / 2);
 
         painter->drawPixmap(blueDotPos, m_blueDotPixmap);

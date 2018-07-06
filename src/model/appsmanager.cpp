@@ -293,7 +293,7 @@ void AppsManager::restoreItem(const QString &appKey, const int pos)
         {
             // if pos is valid
             if (pos != -1)
-                m_userSortedList.insert(pos, m_stashList[i]);
+                m_usedSortedList.insert(pos, m_stashList[i]);
             m_allAppInfoList.append(m_stashList[i]);
             m_stashList.removeAt(i);
 
@@ -319,7 +319,7 @@ void AppsManager::saveUserSortedList()
     // save cache
     QByteArray writeBuf;
     QDataStream out(&writeBuf, QIODevice::WriteOnly);
-    out << m_userSortedList;
+    out << m_usedSortedList;
 
     APP_USER_SORTED_LIST.setValue("list", writeBuf);
 }
@@ -345,7 +345,7 @@ void AppsManager::launchApp(const QModelIndex &index)
     QString appKey = index.data(AppsListModel::AppKeyRole).toString();
     markLaunched(appKey);
 
-    for (ItemInfo &info : m_userSortedList) {
+    for (ItemInfo &info : m_usedSortedList) {
         if (info.m_key == appKey) {
             const int idx = m_usedSortedList.indexOf(info);
 
@@ -416,7 +416,6 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     switch (category)
     {
     case AppsListModel::Custom:
-    case AppsListModel::All:        return m_userSortedList;        break;
     case AppsListModel::Used:       return m_usedSortedList;        break;
     case AppsListModel::Search:     return m_appSearchResultList;   break;
     case AppsListModel::Category:   return m_categoryList;          break;
@@ -482,7 +481,7 @@ void AppsManager::refreshCategoryInfoList()
 {
     QByteArray readBuf = APP_USER_SORTED_LIST.value("list").toByteArray();
     QDataStream in(&readBuf, QIODevice::ReadOnly);
-    in >> m_userSortedList;
+    in >> m_usedSortedList;
 
     const ItemInfoList &datas = m_launcherInter->GetAllItemInfos().value();
     m_allAppInfoList.clear();
@@ -508,7 +507,14 @@ void AppsManager::refreshUsedInfoList()
 
         // if data cache file is empty.
         if (m_usedSortedList.isEmpty()) {
-            m_usedSortedList = m_userSortedList;
+            m_usedSortedList = m_allAppInfoList;
+        }
+
+        // add new additions
+        for (QList<ItemInfo>::ConstIterator it = m_allAppInfoList.constBegin(); it != m_allAppInfoList.constEnd(); ++it) {
+            if (!m_usedSortedList.contains(*it)) {
+                m_usedSortedList.append(*it);
+            }
         }
 
         // check used list isvaild
@@ -551,14 +557,14 @@ void AppsManager::generateCategoryMap()
     sortByPresetOrder(m_allAppInfoList);
 
     for (const ItemInfo &info : m_allAppInfoList) {
-        const int userIdx = m_userSortedList.indexOf(info);
+        const int userIdx = m_usedSortedList.indexOf(info);
         // append new installed app to user sorted list
         if (userIdx == -1) {
-            m_userSortedList.append(info);
+            m_usedSortedList.append(info);
         } else {
-            const int openCount = m_userSortedList[userIdx].m_openCount;
-            m_userSortedList[userIdx].updateInfo(info);
-            m_userSortedList[userIdx].m_openCount = openCount;
+            const int openCount = m_usedSortedList[userIdx].m_openCount;
+            m_usedSortedList[userIdx].updateInfo(info);
+            m_usedSortedList[userIdx].m_openCount = openCount;
         }
 
         const AppsListModel::AppCategory category = info.category();
@@ -569,11 +575,11 @@ void AppsManager::generateCategoryMap()
     }
 
     // remove uninstalled app item
-    for (auto it(m_userSortedList.begin()); it != m_userSortedList.end();) {
+    for (auto it(m_usedSortedList.begin()); it != m_usedSortedList.end();) {
         const int idx = m_allAppInfoList.indexOf(*it);
 
         if (idx == -1)
-            it = m_userSortedList.erase(it);
+            it = m_usedSortedList.erase(it);
         else
             ++it;
     }

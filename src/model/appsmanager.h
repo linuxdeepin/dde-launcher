@@ -119,7 +119,6 @@ private:
     QStringList m_newInstalledAppsList;
     ItemInfoList m_allAppInfoList;
     ItemInfoList m_usedSortedList;
-    ItemInfoList m_userSortedList;
     ItemInfoList m_appSearchResultList;
     ItemInfoList m_stashList;
     ItemInfoList m_categoryList;

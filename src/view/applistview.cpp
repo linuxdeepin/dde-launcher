@@ -219,7 +219,7 @@ void AppListView::startDrag(const QModelIndex &index)
         return;
 
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
-    if (!listModel || listModel->category() != AppsListModel::All)
+    if (!listModel || listModel->category() != AppsListModel::Used)
         return;
 
     const QModelIndex &dragIndex = index;
@@ -257,7 +257,7 @@ void AppListView::startDrag(const QModelIndex &index)
     drag->setHotSpot(hotSpot);
 
     // request remove current item.
-    if (listModel->category() == AppsListModel::All) {
+    if (listModel->category() == AppsListModel::Used) {
         m_dropToRow = index.row();
         listModel->setDraggingIndex(index);
     }
@@ -271,7 +271,7 @@ void AppListView::startDrag(const QModelIndex &index)
     // disable auto scroll
     Q_EMIT requestScrollStop();
 
-    if (listModel->category() != AppsListModel::All)
+    if (listModel->category() != AppsListModel::Used)
         return;
 
     if (!m_lastFakeAni) {

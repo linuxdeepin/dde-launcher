@@ -135,35 +135,12 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
                             pixmap);
     }
 
-    // drag item is not drawing tips.
-    if (isDrawTips && !isDragItem) {
-        QRect tipsRect = rect.marginsRemoved(QMargins(1, 1, 1, 1));
-        tipsRect.setWidth(50);
-        tipsRect.setHeight(20);
-        tipsRect.moveTopLeft(QPoint(rect.right() - (tipsRect.width() + 5),
-                                    rect.y() + (rect.height() - tipsRect.height()) / 2));
+    // draw blue dot if needed
+    if (index.data(AppsListModel::AppNewInstallRole).toBool() && !isDragItem) {
+        const QPointF blueDotPos(rect.width() - m_blueDotPixmap.width() / ratio,
+                                 rect.y() + (+ rect.height() - m_blueDotPixmap.height() / ratio) / 2);
 
-        // draw tips background.
-        painter->setPen(Qt::NoPen);
-        painter->setBrush(QColor(255, 255, 255, 255 * .5));
-        painter->drawRoundedRect(tipsRect, 10, 10);
-
-        // set the font size of tips text.
-        QFont font = painter->font();
-        const int fontSize = font.pointSize();
-        font.setPointSize(8);
-
-        const QRect tipsTextRect = tipsRect;
-        const QString tipsText = painter->fontMetrics().elidedText(tr("New"), Qt::ElideRight, tipsTextRect.width());
-
-        // draw tips text.
-        painter->setFont(font);
-        painter->setPen(Qt::white);
-        painter->drawText(tipsTextRect, Qt::AlignCenter, tipsText);
-
-        // restore original font size.
-        font.setPointSize(fontSize);
-        painter->setFont(font);
+        painter->drawPixmap(blueDotPos, m_blueDotPixmap);
     }
 }
 

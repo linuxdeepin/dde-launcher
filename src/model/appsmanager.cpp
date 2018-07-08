@@ -416,7 +416,7 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     switch (category)
     {
     case AppsListModel::Custom:
-    case AppsListModel::Used:       return m_usedSortedList;        break;
+    case AppsListModel::All:       return m_usedSortedList;        break;
     case AppsListModel::Search:     return m_appSearchResultList;   break;
     case AppsListModel::Category:   return m_categoryList;          break;
     default:;

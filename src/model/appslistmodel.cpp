@@ -144,7 +144,7 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
 
 const QModelIndex AppsListModel::indexAt(const QString &appKey) const
 {
-    Q_ASSERT(m_category == Used);
+    Q_ASSERT(m_category == All);
 
     int i = 0;
     const int count = rowCount(QModelIndex());
@@ -185,7 +185,7 @@ bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action
     if (data->data("RequestDock").isEmpty())
         return false;
 
-    if (m_category != Used)
+    if (m_category != All)
         return false;
 
     return true;
@@ -275,7 +275,7 @@ Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const
 
     const Qt::ItemFlags defaultFlags = QAbstractListModel::flags(index);
 
-    if (m_category == Used)
+    if (m_category == All)
         return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
     else
         return defaultFlags;
@@ -287,7 +287,7 @@ Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const
 ///
 void AppsListModel::dataChanged(const AppCategory category)
 {
-    if (category == Used || category == m_category)
+    if (category == All || category == m_category)
         emit QAbstractItemModel::layoutChanged();
 //        emit QAbstractItemModel::dataChanged(index(0), index(rowCount(QModelIndex())));
 }
@@ -298,7 +298,7 @@ void AppsListModel::dataChanged(const AppCategory category)
 ///
 void AppsListModel::layoutChanged(const AppsListModel::AppCategory category)
 {
-    if (category == Used || category == m_category)
+    if (category == All || category == m_category)
         emit QAbstractItemModel::dataChanged(QModelIndex(), QModelIndex());
 }
 

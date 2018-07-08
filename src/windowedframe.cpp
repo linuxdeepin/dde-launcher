@@ -76,7 +76,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_appsManager(AppsManager::instance())
     , m_appsView(new AppListView)
-    , m_appsModel(new AppsListModel(AppsListModel::Used))
+    , m_appsModel(new AppsListModel(AppsListModel::All))
     , m_searchModel(new AppsListModel(AppsListModel::Search))
     , m_searchWidget(new SearchWidget)
     , m_rightBar(new MiniFrameRightBar)
@@ -739,7 +739,7 @@ void WindowedFrame::recoveryAll()
 {
     // recovery list view
     m_displayMode = Used;
-    m_appsModel->setCategory(AppsListModel::Used);
+    m_appsModel->setCategory(AppsListModel::All);
     m_appsView->setModel(m_appsModel);
 
     // recovery switch button

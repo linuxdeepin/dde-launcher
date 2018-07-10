@@ -233,7 +233,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppGroupRole:
         return QVariant::fromValue(m_category);
     case AppAutoStartRole:
-        return m_appsManager->appIsAutoStart(itemInfo.m_desktop);
+        return m_category != Category ? m_appsManager->appIsAutoStart(itemInfo.m_desktop) : false;
     case AppIsOnDesktopRole:
         return m_appsManager->appIsOnDesktop(itemInfo.m_key);
     case AppIsOnDockRole:
@@ -244,8 +244,16 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIsProxy(itemInfo.m_key);
     case AppEnableScalingRole:
         return m_appsManager->appIsEnableScaling(itemInfo.m_key);
-    case AppNewInstallRole:
+    case AppNewInstallRole: {
+        if (m_category == Category) {
+            const ItemInfoList &list = m_appsManager->appsInfoList(static_cast<AppsListModel::AppCategory>(itemInfo.m_categoryId));
+            for (const ItemInfo &in : list) {
+                if (m_appsManager->appIsNewInstall(in.m_key)) return true;
+            }
+        }
+
         return m_appsManager->appIsNewInstall(itemInfo.m_key);
+    }
     case AppIconRole:
         return m_appsManager->appIcon(itemInfo.m_iconKey, m_calcUtil->appIconSize().width());
     case AppDialogIconRole:

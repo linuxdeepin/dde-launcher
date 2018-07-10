@@ -32,6 +32,8 @@ public:
     MiniFrameSwitchBtn(QWidget *parent = nullptr);
     ~MiniFrameSwitchBtn();
 
+    void updateStatus(int status);
+
 Q_SIGNALS:
     void jumpButtonClicked();
 

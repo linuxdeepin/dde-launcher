@@ -128,16 +128,16 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     if (isCategoryList) {
         const QPixmap &pixmap = index.data(AppsListModel::CategoryEnterIconRole).value<QPixmap>();
-        painter->drawPixmap(rect.right()- pixmap.width(),
-                            rect.y() + (rect.height() - pixmap.height()) / 2,
-                            pixmap.width(),
-                            pixmap.height(),
+        painter->drawPixmap(rect.right() - pixmap.width() / ratio,
+                            rect.y() + (rect.height() - pixmap.height() / ratio) / 2,
+                            pixmap.width() /  ratio,
+                            pixmap.height() / ratio,
                             pixmap);
     }
 
     // draw blue dot if needed
     if (index.data(AppsListModel::AppNewInstallRole).toBool() && !isDragItem) {
-        const QPointF blueDotPos(rect.width() - m_blueDotPixmap.width() / ratio - 20,
+        const QPointF blueDotPos(rect.width() - m_blueDotPixmap.width() / ratio - (isCategoryList ? 20 : 6),
                                  rect.y() + (+ rect.height() - m_blueDotPixmap.height() / ratio) / 2);
 
         painter->drawPixmap(blueDotPos, m_blueDotPixmap);

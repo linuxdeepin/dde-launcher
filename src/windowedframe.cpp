@@ -85,7 +85,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_delayHideTimer(new QTimer)
     , m_autoScrollTimer(new QTimer)
     , m_regionMonitor(new DRegionMonitor(this))
-    , m_displayMode(Used)
+    , m_displayMode(All)
     , m_isLeft(true)
 {
     DBlurEffectWidget *bgWidget = new DBlurEffectWidget(this);
@@ -189,7 +189,22 @@ WindowedFrame::WindowedFrame(QWidget *parent)
             m_autoScrollTimer->start();
     });
 
-    connect(m_backBtn, &DImageButton::clicked, this, &WindowedFrame::recoveryAll);
+    connect(m_backBtn, &DImageButton::clicked, this, [=] {
+        // restore action
+        if (m_displayMode == Category && m_appsModel->category() != AppsListModel::Category) {
+            m_backBtn->show();
+            m_appsModel->setCategory(AppsListModel::Category);
+            m_switchBtn->show();
+        }
+        else {
+            m_displayMode = All;
+            m_backBtn->hide();
+            m_appsModel->setCategory(AppsListModel::All);
+        }
+
+        m_switchBtn->updateStatus(m_displayMode);
+        m_appsView->setModel(m_appsModel);
+    });
 
     connect(m_rightBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &WindowedFrame::onToggleFullScreen);
     connect(m_rightBar, &MiniFrameRightBar::requestFrameHide, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
@@ -208,6 +223,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_appsView, &AppListView::requestSwitchToCategory, this, [=] (const QModelIndex &index) {
         m_appsView->setModel(m_appsModel);
         m_appsModel->setCategory(index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>());
+        m_switchBtn->hide();
     });
 
     connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
@@ -230,6 +246,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     if (m_appsManager->isHaveNewInstall()) {
         m_switchBtn->showJumpBtn();
     }
+    m_switchBtn->updateStatus(All);
 }
 
 WindowedFrame::~WindowedFrame()
@@ -656,10 +673,24 @@ void WindowedFrame::onToggleFullScreen()
 
 void WindowedFrame::onSwitchBtnClicked()
 {
-    m_appsModel->setCategory(AppsListModel::Category);
+    switch (m_displayMode) {
+    case All:
+        m_displayMode = Category;
+        m_appsModel->setCategory(AppsListModel::Category);
+        m_backBtn->show();
+
+        break;
+    case Category:
+        m_displayMode = All;
+        m_appsModel->setCategory(AppsListModel::All);
+        m_backBtn->hide();
+        break;
+    default:
+        break;
+    }
+
+    m_switchBtn->updateStatus(m_displayMode);
     m_appsView->setModel(m_appsModel);
-    m_switchBtn->hide();
-    m_backBtn->show();
 }
 
 void WindowedFrame::onJumpBtnClicked()
@@ -738,12 +769,13 @@ void WindowedFrame::prepareHideLauncher()
 void WindowedFrame::recoveryAll()
 {
     // recovery list view
-    m_displayMode = Used;
+    m_displayMode = All;
     m_appsModel->setCategory(AppsListModel::All);
     m_appsView->setModel(m_appsModel);
 
     // recovery switch button
     m_switchBtn->show();
+    m_switchBtn->updateStatus(All);
     m_backBtn->hide();
     hideTips();
     if (m_appsManager->isHaveNewInstall()) {

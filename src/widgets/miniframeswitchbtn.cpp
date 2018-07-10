@@ -27,7 +27,7 @@ DWIDGET_USE_NAMESPACE
 
 MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     : QPushButton(parent),
-      m_textLabel(new QLabel("Category")),
+      m_textLabel(new QLabel),
       m_enterIcon(new QLabel),
       m_jumpButton(new RoundedButton)
 {
@@ -52,7 +52,7 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     setLayout(mainLayout);
-    setObjectName("MiniFrameButton");
+    setObjectName("MiniFrameSwitchBtn");
     setFocusPolicy(Qt::NoFocus);
     setFixedHeight(36);
 
@@ -72,6 +72,17 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
 
 MiniFrameSwitchBtn::~MiniFrameSwitchBtn()
 {
+}
+
+void MiniFrameSwitchBtn::updateStatus(int status)
+{
+    if (status == WindowedFrame::All) {
+        m_textLabel->setText(tr("Category"));
+        m_enterIcon->setVisible(true);
+    } else {
+        m_textLabel->setText(tr("Return"));
+        m_enterIcon->setVisible(false);
+    }
 }
 
 void MiniFrameSwitchBtn::showJumpBtn()

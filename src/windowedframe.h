@@ -55,7 +55,7 @@ public:
 
     enum DisplayMode
     {
-        Used,
+        Category,
         All
     };
 

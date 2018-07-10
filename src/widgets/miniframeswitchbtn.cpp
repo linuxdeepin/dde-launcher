@@ -26,10 +26,9 @@
 DWIDGET_USE_NAMESPACE
 
 MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
-    : QPushButton(parent),
-      m_textLabel(new QLabel),
-      m_enterIcon(new QLabel),
-      m_jumpButton(new RoundedButton)
+    : QPushButton(parent)
+    , m_textLabel(new QLabel)
+    , m_enterIcon(new QLabel)
 {
     const auto ratio = devicePixelRatioF();
     QPixmap enterPixmap = DSvgRenderer::render(":/widgets/images/enter_details_normal.svg",
@@ -38,9 +37,6 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
                                              QSize(24, 24) * ratio);
     enterPixmap.setDevicePixelRatio(ratio);
     allPixmap.setDevicePixelRatio(ratio);
-
-    m_jumpButton->setText(tr("New"));
-    m_jumpButton->setVisible(false);
 
     m_enterIcon->setFixedSize(20, 20);
     m_enterIcon->setPixmap(enterPixmap);
@@ -60,14 +56,10 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     mainLayout->addWidget(allIconLabel);
     mainLayout->addSpacing(12);
     mainLayout->addWidget(m_textLabel);
-    mainLayout->addWidget(m_jumpButton);
-    mainLayout->addSpacing(5);
     mainLayout->addWidget(m_enterIcon);
     mainLayout->addSpacing(10);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
-
-    connect(m_jumpButton, &QPushButton::clicked, this, &MiniFrameSwitchBtn::jumpButtonClicked);
 }
 
 MiniFrameSwitchBtn::~MiniFrameSwitchBtn()
@@ -83,14 +75,4 @@ void MiniFrameSwitchBtn::updateStatus(int status)
         m_textLabel->setText(tr("Return"));
         m_enterIcon->setVisible(false);
     }
-}
-
-void MiniFrameSwitchBtn::showJumpBtn()
-{
-    m_jumpButton->setVisible(true);
-}
-
-void MiniFrameSwitchBtn::hideJumpBtn()
-{
-    m_jumpButton->setVisible(false);
 }

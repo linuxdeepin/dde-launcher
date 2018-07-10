@@ -101,9 +101,7 @@ private slots:
     void adjustPosition();
     void onToggleFullScreen();
     void onSwitchBtnClicked();
-    void onJumpBtnClicked();
     void onWMCompositeChanged();
-    void onNewInstallListChanged();
     void searchText(const QString &text);
     void showTips(const QString &text);
     void hideTips();
@@ -122,7 +120,7 @@ private:
     AppsListModel *m_appsModel;
     AppsListModel *m_usedModel;
     AppsListModel *m_searchModel;
-    DImageButton *m_backBtn;
+
     SearchWidget *m_searchWidget;
     MiniFrameRightBar *m_rightBar;
     MiniFrameSwitchBtn *m_switchBtn;

@@ -34,17 +34,9 @@ public:
 
     void updateStatus(int status);
 
-Q_SIGNALS:
-    void jumpButtonClicked();
-
-public slots:
-    void showJumpBtn();
-    void hideJumpBtn();
-
 private:
     QLabel *m_textLabel;
     QLabel *m_enterIcon;
-    RoundedButton *m_jumpButton;
 };
 
 #endif

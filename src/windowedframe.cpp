@@ -115,17 +115,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_autoScrollTimer->setInterval(DLauncher::APPS_AREA_AUTO_SCROLL_TIMER);
     m_autoScrollTimer->setSingleShot(false);
 
-
-    m_backBtn = new DImageButton(":/widgets/images/back_normal.png",
-                                 ":/widgets/images/back_hover.png",
-                                 ":/widgets/images/back_press.png",
-                                 this);
-
-    m_backBtn->hide();
-
     QHBoxLayout *searchLayout = new QHBoxLayout;
-    searchLayout->addSpacing(10);
-    searchLayout->addWidget(m_backBtn);
     searchLayout->addSpacing(10);
     searchLayout->addWidget(m_searchWidget);
     searchLayout->addSpacing(10);
@@ -189,26 +179,8 @@ WindowedFrame::WindowedFrame(QWidget *parent)
             m_autoScrollTimer->start();
     });
 
-    connect(m_backBtn, &DImageButton::clicked, this, [=] {
-        // restore action
-        if (m_displayMode == Category && m_appsModel->category() != AppsListModel::Category) {
-            m_backBtn->show();
-            m_appsModel->setCategory(AppsListModel::Category);
-            m_switchBtn->show();
-        }
-        else {
-            m_displayMode = All;
-            m_backBtn->hide();
-            m_appsModel->setCategory(AppsListModel::All);
-        }
-
-        m_switchBtn->updateStatus(m_displayMode);
-        m_appsView->setModel(m_appsModel);
-    });
-
     connect(m_rightBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &WindowedFrame::onToggleFullScreen);
     connect(m_rightBar, &MiniFrameRightBar::requestFrameHide, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
-    connect(m_switchBtn, &MiniFrameSwitchBtn::jumpButtonClicked, this, &WindowedFrame::onJumpBtnClicked);
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &WindowedFrame::onWMCompositeChanged);
     connect(m_searchWidget->edit(), &SearchLineEdit::textChanged, this, &WindowedFrame::searchText, Qt::QueuedConnection);
@@ -223,12 +195,10 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_appsView, &AppListView::requestSwitchToCategory, this, [=] (const QModelIndex &index) {
         m_appsView->setModel(m_appsModel);
         m_appsModel->setCategory(index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>());
-        m_switchBtn->hide();
     });
 
     connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &WindowedFrame::hideTips);
-    connect(m_appsManager, &AppsManager::newInstallListChanged, this, &WindowedFrame::onNewInstallListChanged, Qt::QueuedConnection);
     connect(m_switchBtn, &QPushButton::clicked, this, &WindowedFrame::onSwitchBtnClicked);
     connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher, Qt::QueuedConnection);
 
@@ -243,9 +213,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
 
-    if (m_appsManager->isHaveNewInstall()) {
-        m_switchBtn->showJumpBtn();
-    }
     m_switchBtn->updateStatus(All);
 }
 
@@ -673,31 +640,20 @@ void WindowedFrame::onToggleFullScreen()
 
 void WindowedFrame::onSwitchBtnClicked()
 {
-    switch (m_displayMode) {
-    case All:
-        m_displayMode = Category;
+    if (m_displayMode == All) {
         m_appsModel->setCategory(AppsListModel::Category);
-        m_backBtn->show();
-
-        break;
-    case Category:
+        m_displayMode = Category;
+    }
+    else if (m_displayMode == Category && m_appsModel->category() != AppsListModel::Category) {
+        m_appsModel->setCategory(AppsListModel::Category);
+    }
+    else {
         m_displayMode = All;
         m_appsModel->setCategory(AppsListModel::All);
-        m_backBtn->hide();
-        break;
-    default:
-        break;
     }
 
     m_switchBtn->updateStatus(m_displayMode);
     m_appsView->setModel(m_appsModel);
-}
-
-void WindowedFrame::onJumpBtnClicked()
-{
-//    onSwitchBtnClicked();
-    m_switchBtn->hideJumpBtn();
-    m_appsView->scrollToBottom();
 }
 
 void WindowedFrame::onWMCompositeChanged()
@@ -708,16 +664,6 @@ void WindowedFrame::onWMCompositeChanged()
     } else {
         m_windowHandle.setWindowRadius(0);
         m_windowHandle.setBorderColor(QColor("#2C3238"));
-    }
-}
-
-void WindowedFrame::onNewInstallListChanged()
-{
-    if (m_appsManager->isHaveNewInstall()) {
-        m_switchBtn->showJumpBtn();
-    }
-    else {
-        m_switchBtn->hideJumpBtn();
     }
 }
 
@@ -776,13 +722,8 @@ void WindowedFrame::recoveryAll()
     // recovery switch button
     m_switchBtn->show();
     m_switchBtn->updateStatus(All);
-    m_backBtn->hide();
     hideTips();
-    if (m_appsManager->isHaveNewInstall()) {
-        m_switchBtn->showJumpBtn();
-    }
 
-    //
     m_isLeft = true;
     m_rightBar->setCurrentCheck(false);
 }

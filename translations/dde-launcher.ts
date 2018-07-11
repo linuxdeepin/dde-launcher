@@ -2,13 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
-    <name>AppListDelegate</name>
-    <message>
-        <source>New</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -295,11 +288,54 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>New</source>
+        <source>Category</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Internet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>All Programs</source>
+        <source>Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Others</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

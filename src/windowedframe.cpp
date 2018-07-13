@@ -359,8 +359,6 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
     QPixmap appIcon = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
     unInstallDialog.setIconPixmap(appIcon);
 
-    QString message = tr("All dependencies will be removed together");
-    unInstallDialog.setMessage(message);
     QStringList buttons;
     buttons << tr("Cancel") << tr("Confirm");
     unInstallDialog.addButtons(buttons);

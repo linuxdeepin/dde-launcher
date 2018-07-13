@@ -69,7 +69,7 @@ MiniFrameSwitchBtn::~MiniFrameSwitchBtn()
 void MiniFrameSwitchBtn::updateStatus(int status)
 {
     if (status == WindowedFrame::All) {
-        m_textLabel->setText(tr("Category"));
+        m_textLabel->setText(tr("All Categories"));
         m_enterIcon->setVisible(true);
     } else {
         m_textLabel->setText(tr("Return"));

@@ -39,6 +39,7 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setMargin(0);
     layout->setSpacing(0);
+    layout->setContentsMargins(5, 0, 0, 0);
     layout->addWidget(m_currentTimeLabel);
     layout->addWidget(m_currentDateLabel);
 

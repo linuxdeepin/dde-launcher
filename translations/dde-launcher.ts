@@ -288,7 +288,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Category</source>
+        <source>All Categories</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

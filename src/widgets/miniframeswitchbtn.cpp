@@ -72,7 +72,7 @@ void MiniFrameSwitchBtn::updateStatus(int status)
         m_textLabel->setText(tr("All Categories"));
         m_enterIcon->setVisible(true);
     } else {
-        m_textLabel->setText(tr("Return"));
+        m_textLabel->setText(tr("Back"));
         m_enterIcon->setVisible(false);
     }
 }

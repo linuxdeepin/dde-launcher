@@ -284,11 +284,11 @@
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
-        <source>Return</source>
+        <source>All Categories</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>All Categories</source>
+        <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

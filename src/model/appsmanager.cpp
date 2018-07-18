@@ -35,6 +35,7 @@
 #include <QIcon>
 
 #include <QGSettings>
+#include <DHiDPIHelper>
 
 #include <DApplication>
 
@@ -63,17 +64,17 @@ static const QMap<uint, QString> categoryTs {
 };
 
 static const QMap<uint, QString> categoryIcon {
-    {0, QString(":/icons/skin/icons/internet_normal_16px.svg")},
-    {1, QString(":/icons/skin/icons/chat_normal_16px.svg")},
-    {2, QString(":/icons/skin/icons/music_normal_16px.svg")},
-    {3, QString(":/icons/skin/icons/multimedia_normal_16px.svg")},
-    {4, QString(":/icons/skin/icons/graphics_normal_16px.svg")},
-    {5, QString(":/icons/skin/icons/game_normal_16px.svg")},
-    {6, QString(":/icons/skin/icons/office_normal_16px.svg")},
-    {7, QString(":/icons/skin/icons/reading_normal_16px.svg")},
-    {8, QString(":/icons/skin/icons/development_normal_16px.svg")},
-    {9, QString(":/icons/skin/icons/system_normal_16px.svg")},
-    {10, QString(":/icons/skin/icons/others_normal_16px.svg")},
+    {0, QString(":/icons/skin/icons/internet_normal_22px.svg")},
+    {1, QString(":/icons/skin/icons/chat_normal_22px.svg")},
+    {2, QString(":/icons/skin/icons/music_normal_22px.svg")},
+    {3, QString(":/icons/skin/icons/multimedia_normal_22px.svg")},
+    {4, QString(":/icons/skin/icons/graphics_normal_22px.svg")},
+    {5, QString(":/icons/skin/icons/game_normal_22px.svg")},
+    {6, QString(":/icons/skin/icons/office_normal_22px.svg")},
+    {7, QString(":/icons/skin/icons/reading_normal_22px.svg")},
+    {8, QString(":/icons/skin/icons/development_normal_22px.svg")},
+    {9, QString(":/icons/skin/icons/system_normal_22px.svg")},
+    {10, QString(":/icons/skin/icons/others_normal_22px.svg")},
 };
 
 static const ItemInfo createOfCategory(uint category) {
@@ -118,7 +119,7 @@ const QPixmap getThemeIcon(const QString &iconName, const int size)
             if (iconName.endsWith(".svg"))
                 pixmap = loadSvg(iconName, s * ratio);
             else
-                pixmap = QPixmap(iconName);
+                pixmap = DHiDPIHelper::loadNxPixmap(iconName);
 
             if (!pixmap.isNull())
                 break;

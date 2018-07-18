@@ -62,7 +62,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const bool isDragItem = option.features & QStyleOptionViewItem::Alternate;
     const bool isCategoryList(static_cast<AppsListModel::AppCategory>(index.data(AppsListModel::AppGroupRole).toInt()) == AppsListModel::Category);
 
-    QSize iconSize = index.data(AppsListModel::AppIconSizeRole).value<QSize>();
+    QSize iconSize = isCategoryList ? QSize(22, 22) * ratio : index.data(AppsListModel::AppIconSizeRole).value<QSize>();
 
     QPixmap iconPixmap = index.data(AppsListModel::AppIconRole).value<QPixmap>();
     iconPixmap = iconPixmap.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);

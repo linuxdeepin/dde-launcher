@@ -63,12 +63,13 @@ const QStringList sysHoldPackages()
     return holds_list;
 }
 
-AppsListModel::AppsListModel(const AppCategory &category, QObject *parent) :
-    QAbstractListModel(parent),
-    m_appsManager(AppsManager::instance()),
-    m_calcUtil(CalculateUtil::instance()),
-    m_holdPackages(sysHoldPackages()),
-    m_category(category)
+AppsListModel::AppsListModel(const AppCategory &category, QObject *parent)
+    : QAbstractListModel(parent)
+    , m_appsManager(AppsManager::instance())
+    , m_calcUtil(CalculateUtil::instance())
+    , m_holdPackages(sysHoldPackages())
+    , m_category(category)
+    , m_drawBackground(true)
 {
     connect(m_appsManager, &AppsManager::dataChanged, this, &AppsListModel::dataChanged);
     connect(m_appsManager, &AppsManager::layoutChanged, this, &AppsListModel::layoutChanged);
@@ -170,6 +171,15 @@ const QModelIndex AppsListModel::indexAt(const QString &appKey) const
     }
 
     Q_UNREACHABLE();
+}
+
+void AppsListModel::setDrawBackground(bool draw)
+{
+    if (draw == m_drawBackground) return;
+
+    m_drawBackground = draw;
+
+    emit QAbstractItemModel::dataChanged(QModelIndex(), QModelIndex());
 }
 
 bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
@@ -284,6 +294,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return indexDragging(index);
     case CategoryEnterIconRole:
         return DHiDPIHelper::loadNxPixmap(":/widgets/images/enter_details_normal.svg");
+    case DrawBackgroundRole:
+        return m_drawBackground;
     default:;
     }
 

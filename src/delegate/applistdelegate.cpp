@@ -94,8 +94,10 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         painter->setBrush(Qt::NoBrush);
     }
 
-    // draw the background.
-    painter->drawRoundedRect(option.rect.marginsRemoved(QMargins(1, 1, 1, 1)), 4, 4);
+    if (index.data(AppsListModel::DrawBackgroundRole).toBool()) {
+        // draw the background.
+        painter->drawRoundedRect(option.rect.marginsRemoved(QMargins(1, 1, 1, 1)), 4, 4);
+    }
 
     const int iconX = rect.x() + 10;
     const int iconY = rect.y() + (rect.height() - iconPixmap.height() / ratio) / 2;

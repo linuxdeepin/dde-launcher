@@ -213,6 +213,20 @@ void AppListView::dropEvent(QDropEvent *e)
     m_enableDropInside = true;
 }
 
+void AppListView::enterEvent(QEvent *event)
+{
+    QListView::leaveEvent(event);
+
+    emit requestEnter(true);
+}
+
+void AppListView::leaveEvent(QEvent *event)
+{
+    QListView::leaveEvent(event);
+
+    emit requestEnter(false);
+}
+
 void AppListView::startDrag(const QModelIndex &index)
 {
     if (!index.isValid())

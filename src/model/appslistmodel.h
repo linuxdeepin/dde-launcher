@@ -61,6 +61,7 @@ public:
         AppItemIsDraggingRole,
         AppDragIconRole,
         CategoryEnterIconRole,
+        DrawBackgroundRole
     };
 
     enum AppCategory {
@@ -95,6 +96,8 @@ public:
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
     const QModelIndex indexAt(const QString &appKey) const;
 
+    void setDrawBackground(bool draw);
+
 public slots:
     void clearDraggingIndex();
     void setCategory(const AppCategory category);
@@ -121,6 +124,8 @@ private:
     QModelIndex m_dragStartIndex = QModelIndex();
     QModelIndex m_dragDropIndex = QModelIndex();
     AppCategory m_category = All;
+
+    bool m_drawBackground;
 };
 
 Q_DECLARE_METATYPE(AppsListModel::AppCategory)

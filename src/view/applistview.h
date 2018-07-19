@@ -49,6 +49,7 @@ signals:
     void requestScrollDown() const;
     void requestScrollStop() const;
     void requestSwitchToCategory(const QModelIndex &index) const;
+    void requestEnter(bool enter) const;
 
 protected:
     void wheelEvent(QWheelEvent *e) override;
@@ -59,6 +60,8 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dragLeaveEvent(QDragLeaveEvent *e) override;
     void dropEvent(QDropEvent *e) override;
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
     void startDrag(const QModelIndex &index);
 
 private:

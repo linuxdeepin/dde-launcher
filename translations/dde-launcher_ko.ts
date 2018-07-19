@@ -1,12 +1,5 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="ko" version="2.1">
 <context>
-    <name>AppListDelegate</name>
-    <message>
-        <source>New</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -60,11 +53,11 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation>바탕화면으로 보내기</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation>독으로 보내기</translation>
     </message>
     <message>
         <source>Remove from startup</source>
@@ -153,7 +146,7 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>문서</translation>
     </message>
     <message>
         <source>Videos</source>
@@ -165,7 +158,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>사진</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -181,7 +174,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>다시 시작</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -220,7 +213,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>다시 시작</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -232,7 +225,7 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>문서</translation>
     </message>
     <message>
         <source>Videos</source>
@@ -240,7 +233,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>사진</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -283,21 +276,64 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>사진</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
-        <source>Return</source>
+        <source>All Categories</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>New</source>
+        <source>Back</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Internet</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>All Programs</source>
+        <source>Chat</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>System</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Others</source>
         <translation type="unfinished"/>
     </message>
 </context>

@@ -1,12 +1,5 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
 <context>
-    <name>AppListDelegate</name>
-    <message>
-        <source>New</source>
-        <translation>Nuevo</translation>
-    </message>
-</context>
-<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -21,7 +14,7 @@
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Todas las dependencias serán eliminadas juntas</translation>
+        <translation>Todas las dependencias serán eliminadas</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -79,7 +72,7 @@
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>Totalidad</translation>
+        <translation>Programas</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -130,11 +123,11 @@
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>¿Está seguro de desinstalar %1?</translation>
+        <translation>¿Está seguro de desinstalar %1 ?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Todas las dependencias serán eliminadas juntas</translation>
+        <translation>Todas las dependencias serán eliminadas</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -271,7 +264,7 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation>Configuración</translation>
+        <translation>Ajustes</translation>
     </message>
     <message>
         <source>Shutdown</source>
@@ -289,16 +282,59 @@
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
-        <source>Return</source>
-        <translation>Regresar</translation>
+        <source>All Categories</source>
+        <translation>Todas las Categorias</translation>
     </message>
     <message>
-        <source>New</source>
-        <translation>Nuevo</translation>
+        <source>Back</source>
+        <translation>Atrás</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Internet</source>
+        <translation>Internet</translation>
     </message>
     <message>
-        <source>All Programs</source>
-        <translation>Todos los programas</translation>
+        <source>Chat</source>
+        <translation>Conversación</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Música</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Vídeo</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>Gráficos</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>Juego</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>Oficina</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>Lectura</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Desarrollo</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Sistema</translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation>Otros</translation>
     </message>
 </context>
 <context>
@@ -316,7 +352,7 @@
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Todas las dependencias serán eliminadas juntas</translation>
+        <translation>Todas las dependencias serán eliminadas</translation>
     </message>
     <message>
         <source>Cancel</source>

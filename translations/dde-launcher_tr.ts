@@ -1,12 +1,5 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
 <context>
-    <name>AppListDelegate</name>
-    <message>
-        <source>New</source>
-        <translation>Yeni</translation>
-    </message>
-</context>
-<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -283,22 +276,65 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Fotoğraflar</translation>
+        <translation>Resimler</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
-        <source>Return</source>
-        <translation>Geri Dön</translation>
+        <source>All Categories</source>
+        <translation>Tüm Kategoriler</translation>
     </message>
     <message>
-        <source>New</source>
-        <translation>Yeni</translation>
+        <source>Back</source>
+        <translation>Geri</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Internet</source>
+        <translation>İnternet</translation>
     </message>
     <message>
-        <source>All Programs</source>
-        <translation>Tüm Program</translation>
+        <source>Chat</source>
+        <translation>Sohbet</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Müzik</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Görüntü</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>Grafik</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>Oyun</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>Ofis</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>Okuma</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Geliştirme</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Sistem</translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation>Diğer</translation>
     </message>
 </context>
 <context>

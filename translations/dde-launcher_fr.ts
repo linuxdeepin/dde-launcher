@@ -1,12 +1,5 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
 <context>
-    <name>AppListDelegate</name>
-    <message>
-        <source>New</source>
-        <translation>Nouveau</translation>
-    </message>
-</context>
-<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -289,16 +282,59 @@
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
-        <source>Return</source>
-        <translation>Retourner</translation>
+        <source>All Categories</source>
+        <translation>Toutes catégories</translation>
     </message>
     <message>
-        <source>New</source>
-        <translation>Nouveau</translation>
+        <source>Back</source>
+        <translation>Retour</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Internet</source>
+        <translation>Internet</translation>
     </message>
     <message>
-        <source>All Programs</source>
-        <translation>Tous les programmes </translation>
+        <source>Chat</source>
+        <translation>Chat</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Musique</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Video</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>Schémas</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>Jeux</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>Bureau</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>Lecture</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Développement</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Système</translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation>Autres</translation>
     </message>
 </context>
 <context>

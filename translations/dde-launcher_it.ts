@@ -1,12 +1,5 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
 <context>
-    <name>AppListDelegate</name>
-    <message>
-        <source>New</source>
-        <translation>Nuovo</translation>
-    </message>
-</context>
-<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -289,16 +282,59 @@
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
-        <source>Return</source>
+        <source>All Categories</source>
+        <translation>Tutte le categorie</translation>
+    </message>
+    <message>
+        <source>Back</source>
         <translation>Indietro</translation>
     </message>
+</context>
+<context>
+    <name>QObject</name>
     <message>
-        <source>New</source>
-        <translation>Nuovo</translation>
+        <source>Internet</source>
+        <translation>Internet</translation>
     </message>
     <message>
-        <source>All Programs</source>
-        <translation>Tutti i programmi</translation>
+        <source>Chat</source>
+        <translation>Chat</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Musica</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Video</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>Grafica</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>Giochi</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>Ufficio</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>Lettura</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Sviluppo</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Sistema</translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation>Altro</translation>
     </message>
 </context>
 <context>

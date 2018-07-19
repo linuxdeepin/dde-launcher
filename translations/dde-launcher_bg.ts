@@ -1,12 +1,5 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="bg" version="2.1">
 <context>
-    <name>AppListDelegate</name>
-    <message>
-        <source>New</source>
-        <translation>Нов</translation>
-    </message>
-</context>
-<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -289,16 +282,59 @@
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
-        <source>Return</source>
-        <translation>Връщане</translation>
+        <source>All Categories</source>
+        <translation>Всички файлове</translation>
     </message>
     <message>
-        <source>New</source>
-        <translation>Нов</translation>
+        <source>Back</source>
+        <translation>Назад</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Internet</source>
+        <translation>Интернет</translation>
     </message>
     <message>
-        <source>All Programs</source>
-        <translation>Всички програми</translation>
+        <source>Chat</source>
+        <translation>Чат</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Музика</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Видео</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>Графика</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>Игра</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>Офис</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>Четене</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Разработка</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Система</translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation>Други</translation>
     </message>
 </context>
 <context>

@@ -1,12 +1,5 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
 <context>
-    <name>AppListDelegate</name>
-    <message>
-        <source>New</source>
-        <translation>Новый</translation>
-    </message>
-</context>
-<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -289,16 +282,59 @@
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
-        <source>Return</source>
-        <translation>Вернуть</translation>
+        <source>All Categories</source>
+        <translation>Все Категории</translation>
     </message>
     <message>
-        <source>New</source>
-        <translation>Новый</translation>
+        <source>Back</source>
+        <translation>Назад</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Internet</source>
+        <translation>Интернет</translation>
     </message>
     <message>
-        <source>All Programs</source>
-        <translation>Все Программы</translation>
+        <source>Chat</source>
+        <translation>Общение</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Музыка</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Видео</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>Графика</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>Игры</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>Офис</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>Чтение</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Разработка</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Система</translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation>Другое</translation>
     </message>
 </context>
 <context>

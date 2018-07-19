@@ -1,12 +1,5 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="lt" version="2.1">
 <context>
-    <name>AppListDelegate</name>
-    <message>
-        <source>New</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -289,16 +282,59 @@
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
-        <source>Return</source>
+        <source>All Categories</source>
+        <translation>Visos kategorijos</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Atgal</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Internet</source>
+        <translation>Internetas</translation>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation>Pokalbiai</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Muzika</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Vaizdo įrašai</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>Grafika</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>Žaidimai</translation>
+    </message>
+    <message>
+        <source>Office</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>New</source>
-        <translation type="unfinished"/>
+        <source>Reading</source>
+        <translation>Skaitymas</translation>
     </message>
     <message>
-        <source>All Programs</source>
-        <translation>Visos programos</translation>
+        <source>Development</source>
+        <translation>Kūrimas</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Sistema</translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation>Kita</translation>
     </message>
 </context>
 <context>

@@ -1,12 +1,5 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="sr" version="2.1">
 <context>
-    <name>AppListDelegate</name>
-    <message>
-        <source>New</source>
-        <translation>Ново</translation>
-    </message>
-</context>
-<context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
@@ -255,7 +248,7 @@
     </message>
     <message>
         <source>Document</source>
-        <translation>Документ</translation>
+        <translation>Документи</translation>
     </message>
     <message>
         <source>Music</source>
@@ -289,16 +282,59 @@
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
-        <source>Return</source>
+        <source>All Categories</source>
+        <translation>Све Категорије</translation>
+    </message>
+    <message>
+        <source>Back</source>
         <translation>Назад</translation>
     </message>
+</context>
+<context>
+    <name>QObject</name>
     <message>
-        <source>New</source>
-        <translation>Ново</translation>
+        <source>Internet</source>
+        <translation>Интернет</translation>
     </message>
     <message>
-        <source>All Programs</source>
-        <translation>Сви Програми</translation>
+        <source>Chat</source>
+        <translation>Ћаскање</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Музика</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Видео</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>Графика</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>Игре</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>Канцеларија</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>Читање</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Развој</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Систем</translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation>Остало</translation>
     </message>
 </context>
 <context>

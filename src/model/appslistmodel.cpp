@@ -35,6 +35,20 @@
 
 DWIDGET_USE_NAMESPACE
 
+static QMap<int, AppsListModel::AppCategory> CateGoryMap {
+    { 0,  AppsListModel::Internet    },
+    { 1,  AppsListModel::Chat        },
+    { 2,  AppsListModel::Music       },
+    { 3,  AppsListModel::Video       },
+    { 4,  AppsListModel::Graphics    },
+    { 5,  AppsListModel::Game        },
+    { 6,  AppsListModel::Office      },
+    { 7,  AppsListModel::Reading     },
+    { 8,  AppsListModel::Development },
+    { 9,  AppsListModel::System      },
+    { 10, AppsListModel::Others      }
+};
+
 const QStringList sysHoldPackages()
 {
     const QSettings settings("/etc/deepin-installer.conf", QSettings::IniFormat);
@@ -246,7 +260,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIsEnableScaling(itemInfo.m_key);
     case AppNewInstallRole: {
         if (m_category == Category) {
-            const ItemInfoList &list = m_appsManager->appsInfoList(static_cast<AppsListModel::AppCategory>(itemInfo.m_categoryId));
+            const ItemInfoList &list = m_appsManager->appsInfoList(CateGoryMap[itemInfo.m_categoryId]);
             for (const ItemInfo &in : list) {
                 if (m_appsManager->appIsNewInstall(in.m_key)) return true;
             }

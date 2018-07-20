@@ -676,6 +676,7 @@ void WindowedFrame::searchText(const QString &text)
     } else {
         if (m_appsView->model() != m_searchModel) {
             m_appsView->setModel(m_searchModel);
+            m_searchModel->setDrawBackground(true);
         }
 
         m_appsManager->searchApp(text.trimmed());

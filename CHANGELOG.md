@@ -1,3 +1,30 @@
+<a name=""></a>
+##  4.4.0 (2018-07-20)
+
+
+#### Bug Fixes
+
+* **Mini:**
+  *  Read the wrong classification information ([d0e1158f](https://github.com/linuxdeepin/dde-launcher/commit/d0e1158fb49b2f4d4b919659015af087acb7373e))
+  *  icon error ([aadbc3fe](https://github.com/linuxdeepin/dde-launcher/commit/aadbc3fe14b8afce34134d528c51e71fd5e79b18))
+  *  set datetime contents margins ([ceaa522c](https://github.com/linuxdeepin/dde-launcher/commit/ceaa522c1dbdd132ca00ddc05f504dd7f5a4b757))
+  *  right menu not popup ([cdc1a120](https://github.com/linuxdeepin/dde-launcher/commit/cdc1a1208d6912e82401e40773e6d88516fe52bb))
+
+#### Features
+
+*   remove message of the uninstall dialog ([0b8e3205](https://github.com/linuxdeepin/dde-launcher/commit/0b8e3205fac54ea54479ed2c6e7c646ab76adf97))
+* **Mini:**
+  *  not draw background when list view not focus ([ca6c120f](https://github.com/linuxdeepin/dde-launcher/commit/ca6c120f559a22bbb579b87df6031344a725f694))
+  *  update ts of switch button ([c17dcd51](https://github.com/linuxdeepin/dde-launcher/commit/c17dcd5186d13d5f9bbcaa5cce1be9bed4ed2625))
+  *  support HiDPI ([686bd847](https://github.com/linuxdeepin/dde-launcher/commit/686bd8479372a3ff1c8a692b080cba0378131f59))
+  *  support use of the direction key ([9ff2ffab](https://github.com/linuxdeepin/dde-launcher/commit/9ff2ffabea194421fcd7eaec5d25c734d0d3915f))
+  *  add back button ([33d5629b](https://github.com/linuxdeepin/dde-launcher/commit/33d5629be2452ab2bd0e455a3a8e8a17d1bc3eba))
+  *  support switch to cagegory ([6ac8b357](https://github.com/linuxdeepin/dde-launcher/commit/6ac8b357283cdcb262bb8b0deda366bf4fb40551))
+  *  draw catelate enter icon ([41a6c2d4](https://github.com/linuxdeepin/dde-launcher/commit/41a6c2d41e821201d6c6c3bdcf5bc8bb9f6b0092))
+  *  create category list ([18f4a439](https://github.com/linuxdeepin/dde-launcher/commit/18f4a4398c3e782da8ebc6bbb3a2109bb1d03980))
+
+
+
 <a name="4.3.10"></a>
 ### 4.3.10 (2018-06-27)
 

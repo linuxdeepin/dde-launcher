@@ -1,3 +1,13 @@
+<a name="4.4.1"></a>
+### 4.4.1 (2018-07-20)
+
+
+#### Bug Fixes
+
+* **Mini:**  no hover state in the search mode ([e1ca8678](https://github.com/linuxdeepin/dde-launcher/commit/e1ca8678b78212dee576ae11b38b52b4043a2992))
+
+
+
 <a name=""></a>
 ##  4.4.0 (2018-07-20)
 

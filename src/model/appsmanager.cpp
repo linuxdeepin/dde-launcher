@@ -49,7 +49,7 @@ QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-l
 QSettings AppsManager::APP_USED_SORTED_LIST("deepin", "dde-launcher-app-used-sorted-list");
 
 // A separate definition, in the category of ItemInfo
-static const QMap<uint, QString> categoryTs {
+static const QMap<qlonglong, QString> categoryTs {
     {0, QObject::tr("Internet")},
     {1, QObject::tr("Chat")},
     {2, QObject::tr("Music")},
@@ -63,7 +63,7 @@ static const QMap<uint, QString> categoryTs {
     {10, QObject::tr("Others")},
 };
 
-static const QMap<uint, QString> categoryIcon {
+static const QMap<qlonglong, QString> categoryIcon {
     {0, QString(":/icons/skin/icons/internet_normal_22px.svg")},
     {1, QString(":/icons/skin/icons/chat_normal_22px.svg")},
     {2, QString(":/icons/skin/icons/music_normal_22px.svg")},
@@ -77,12 +77,12 @@ static const QMap<uint, QString> categoryIcon {
     {10, QString(":/icons/skin/icons/others_normal_22px.svg")},
 };
 
-static const ItemInfo createOfCategory(uint category) {
+static const ItemInfo createOfCategory(qlonglong category) {
     ItemInfo info;
     info.m_name = categoryTs[category];
     info.m_categoryId = category;
     info.m_iconKey = categoryIcon[category];
-    return std::move(info);
+    return info;
 }
 
 int perfectIconSize(const int size)
@@ -152,10 +152,6 @@ AppsManager::AppsManager(QObject *parent) :
     m_searchTimer(new QTimer(this)),
     m_delayRefreshTimer(new QTimer(this))
 {
-    for (auto it = categoryTs.begin(); it != categoryTs.end(); ++it) {
-        m_categoryList << std::move(createOfCategory(it.key()));
-    }
-
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
 
     refreshCategoryInfoList();
@@ -634,6 +630,23 @@ void AppsManager::generateCategoryMap()
         else
             ++it;
     }
+
+    std::list<qlonglong> categoryID;
+    for (const ItemInfo &it : m_allAppInfoList) {
+        if (std::find(categoryID.begin(), categoryID.end(), it.m_categoryId) == categoryID.end()) {
+            categoryID.push_back(it.m_categoryId);
+        }
+    }
+
+    for (auto it = categoryID.begin(); it != categoryID.end(); ++it) {
+        m_categoryList << createOfCategory(*it);
+    }
+
+    std::sort(m_categoryList.begin(),
+              m_categoryList.end(),
+              [=] (const ItemInfo &info1, const ItemInfo &info2) {
+        return info1.m_categoryId < info2.m_categoryId;
+    });
 
     emit categoryListChanged();
 }

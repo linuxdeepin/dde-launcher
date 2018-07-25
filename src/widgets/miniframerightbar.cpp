@@ -48,10 +48,10 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(this);
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     MiniFrameButton *computerBtn = new MiniFrameButton(tr("Computer"));
-    MiniFrameButton *documentBtn = new MiniFrameButton(tr("Document"));
     MiniFrameButton *videoBtn = new MiniFrameButton(tr("Videos"));
     MiniFrameButton *musicBtn = new MiniFrameButton(tr("Music"));
     MiniFrameButton *pictureBtn = new MiniFrameButton(tr("Pictures"));
+    MiniFrameButton *documentBtn = new MiniFrameButton(tr("Document"));
     MiniFrameButton *downloadBtn = new MiniFrameButton(tr("Downloads"));
     MiniFrameButton *manualBtn = new MiniFrameButton(tr("Manual"));
     MiniFrameButton *settingsBtn = new MiniFrameButton(tr("Settings"));
@@ -59,10 +59,10 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     uint index = 0;
     m_btns[index++] = computerBtn;
-    m_btns[index++] = documentBtn;
     m_btns[index++] = videoBtn;
     m_btns[index++] = musicBtn;
     m_btns[index++] = pictureBtn;
+    m_btns[index++] = documentBtn;
     m_btns[index++] = downloadBtn;
     m_btns[index++] = manualBtn;
     m_btns[index++] = settingsBtn;
@@ -92,10 +92,10 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     layout->addWidget(m_avatar);
     layout->addSpacing(30);
     layout->addWidget(computerBtn);
-    layout->addWidget(documentBtn);
     layout->addWidget(videoBtn);
     layout->addWidget(musicBtn);
     layout->addWidget(pictureBtn);
+    layout->addWidget(documentBtn);
     layout->addWidget(downloadBtn);
     layout->addWidget(manualBtn);
     layout->addStretch();

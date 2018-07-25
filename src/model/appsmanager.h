@@ -99,7 +99,9 @@ private:
     void sortByPresetOrder(ItemInfoList &processList);
     void refreshCategoryInfoList();
     void refreshUsedInfoList();
+    void refreshUserInfoList();
     void updateUsedListInfo();
+    void updateUserListInfo();
     void generateCategoryMap();
     void refreshAppAutoStartCache();
     void onSearchTimeOut();
@@ -118,7 +120,8 @@ private:
     QString m_searchText;
     QStringList m_newInstalledAppsList;
     ItemInfoList m_allAppInfoList;
-    ItemInfoList m_usedSortedList;
+    ItemInfoList m_usedSortedList; // FullScreen
+    ItemInfoList m_userSortedList; // Mini
     ItemInfoList m_appSearchResultList;
     ItemInfoList m_stashList;
     ItemInfoList m_categoryList;

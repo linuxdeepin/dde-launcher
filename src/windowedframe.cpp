@@ -76,7 +76,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_appsManager(AppsManager::instance())
     , m_appsView(new AppListView)
-    , m_appsModel(new AppsListModel(AppsListModel::All))
+    , m_appsModel(new AppsListModel(AppsListModel::Custom))
     , m_searchModel(new AppsListModel(AppsListModel::Search))
     , m_searchWidget(new SearchWidget)
     , m_rightBar(new MiniFrameRightBar)
@@ -190,7 +190,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     connect(m_appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
     connect(m_appsView, &QListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
-    connect(m_appsView, &QListView::entered, m_appsView, &AppListView::setCurrentIndex);
+    connect(m_appsView, &QListView::entered, m_appsView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
     connect(m_appsView, &AppListView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
     connect(m_appsView, &AppListView::requestSwitchToCategory, this, [=] (const QModelIndex &index) {
         m_appsView->setModel(m_appsModel);
@@ -650,7 +650,7 @@ void WindowedFrame::onSwitchBtnClicked()
     }
     else {
         m_displayMode = All;
-        m_appsModel->setCategory(AppsListModel::All);
+        m_appsModel->setCategory(AppsListModel::Custom);
     }
 
     m_switchBtn->updateStatus(m_displayMode);
@@ -718,7 +718,7 @@ void WindowedFrame::recoveryAll()
 {
     // recovery list view
     m_displayMode = All;
-    m_appsModel->setCategory(AppsListModel::All);
+    m_appsModel->setCategory(AppsListModel::Custom);
     m_appsView->setModel(m_appsModel);
 
     // recovery switch button

@@ -160,6 +160,7 @@ AppsManager::AppsManager(QObject *parent) :
 
     refreshCategoryInfoList();
     refreshUsedInfoList();
+    refreshUserInfoList();
 
     if (APP_AUTOSTART_CACHE.value("version").toString() != qApp->applicationVersion())
         refreshAppAutoStartCache();
@@ -272,6 +273,7 @@ void AppsManager::stashItem(const QString &appKey)
 
             generateCategoryMap();
             refreshUsedInfoList();
+            refreshUserInfoList();
 
             return;
         }
@@ -300,7 +302,7 @@ void AppsManager::restoreItem(const QString &appKey, const int pos)
 
             generateCategoryMap();
 
-            return saveUserSortedList();
+            return saveUsedSortedList();
         }
     }
 }
@@ -320,7 +322,7 @@ void AppsManager::saveUserSortedList()
     // save cache
     QByteArray writeBuf;
     QDataStream out(&writeBuf, QIODevice::WriteOnly);
-    out << m_usedSortedList;
+    out << m_userSortedList;
 
     APP_USER_SORTED_LIST.setValue("list", writeBuf);
 }
@@ -346,19 +348,19 @@ void AppsManager::launchApp(const QModelIndex &index)
     QString appKey = index.data(AppsListModel::AppKeyRole).toString();
     markLaunched(appKey);
 
-    for (ItemInfo &info : m_usedSortedList) {
+    for (ItemInfo &info : m_userSortedList) {
         if (info.m_key == appKey) {
-            const int idx = m_usedSortedList.indexOf(info);
+            const int idx = m_userSortedList.indexOf(info);
 
             if (idx != -1) {
-                m_usedSortedList[idx].m_openCount++;
+                m_userSortedList[idx].m_openCount++;
             }
 
             break;
         }
     }
 
-    refreshUsedInfoList();
+    refreshUserInfoList();
 
     if (!appDesktop.isEmpty())
         m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
@@ -416,7 +418,7 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
 {
     switch (category)
     {
-    case AppsListModel::Custom:
+    case AppsListModel::Custom:    return m_userSortedList;        break;
     case AppsListModel::All:       return m_usedSortedList;        break;
     case AppsListModel::Search:     return m_appSearchResultList;   break;
     case AppsListModel::Category:   return m_categoryList;          break;
@@ -480,7 +482,7 @@ const QPixmap AppsManager::appIcon(const QString &iconKey, const int size)
 
 void AppsManager::refreshCategoryInfoList()
 {
-    QByteArray readBuf = APP_USER_SORTED_LIST.value("list").toByteArray();
+    QByteArray readBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
     QDataStream in(&readBuf, QIODevice::ReadOnly);
     in >> m_usedSortedList;
 
@@ -494,7 +496,6 @@ void AppsManager::refreshCategoryInfoList()
     }
 
     generateCategoryMap();
-    saveUserSortedList();
 }
 
 void AppsManager::refreshUsedInfoList()
@@ -531,12 +532,48 @@ void AppsManager::refreshUsedInfoList()
         updateUsedListInfo();
     }
 
-    std::stable_sort(m_usedSortedList.begin(), m_usedSortedList.end(),
+    saveUsedSortedList();
+}
+
+void AppsManager::refreshUserInfoList()
+{
+    if (m_userSortedList.isEmpty()) {
+        // first reads the config file.
+        QByteArray readBuffer = APP_USER_SORTED_LIST.value("list").toByteArray();
+        QDataStream in(&readBuffer, QIODevice::ReadOnly);
+        in >> m_userSortedList;
+
+        // if data cache file is empty.
+        if (m_userSortedList.isEmpty()) {
+            m_userSortedList = m_allAppInfoList;
+        }
+
+        // add new additions
+        for (QList<ItemInfo>::ConstIterator it = m_allAppInfoList.constBegin(); it != m_allAppInfoList.constEnd(); ++it) {
+            if (!m_userSortedList.contains(*it)) {
+                m_userSortedList.append(*it);
+            }
+        }
+
+        // check used list isvaild
+        for (QList<ItemInfo>::iterator it = m_userSortedList.begin(); it != m_userSortedList.end();) {
+            if (m_allAppInfoList.contains(*it)) {
+                it++;
+            }
+            else {
+                it = m_userSortedList.erase(it);
+            }
+        }
+
+        updateUserListInfo();
+    }
+
+    std::stable_sort(m_userSortedList.begin(), m_userSortedList.end(),
                      [] (const ItemInfo &a, const ItemInfo &b) {
                          return a.m_openCount > b.m_openCount;
                      });
 
-    saveUsedSortedList();
+    saveUserSortedList();
 }
 
 void AppsManager::updateUsedListInfo()
@@ -548,6 +585,19 @@ void AppsManager::updateUsedListInfo()
             const int openCount = m_usedSortedList[idx].m_openCount;
             m_usedSortedList[idx].updateInfo(info);
             m_usedSortedList[idx].m_openCount = openCount;
+        }
+    }
+}
+
+void AppsManager::updateUserListInfo()
+{
+    for (const ItemInfo &info : m_allAppInfoList) {
+        const int idx = m_userSortedList.indexOf(info);
+
+        if (idx != -1) {
+            const int openCount = m_userSortedList[idx].m_openCount;
+            m_userSortedList[idx].updateInfo(info);
+            m_userSortedList[idx].m_openCount = openCount;
         }
     }
 }
@@ -645,10 +695,12 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
     if (operation == "created") {
         m_allAppInfoList.append(appInfo);
         m_usedSortedList.append(appInfo);
+        m_userSortedList.append(appInfo);
     } else if (operation == "deleted") {
 
         m_allAppInfoList.removeOne(appInfo);
         m_usedSortedList.removeOne(appInfo);
+        m_userSortedList.removeOne(appInfo);
     } else if (operation == "updated") {
 
         Q_ASSERT(m_allAppInfoList.contains(appInfo));

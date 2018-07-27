@@ -298,7 +298,7 @@
     </message>
     <message>
         <source>Chat</source>
-        <translation>Bate-Papo</translation>
+        <translation>Chat</translation>
     </message>
     <message>
         <source>Music</source>

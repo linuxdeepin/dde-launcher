@@ -601,6 +601,7 @@ void AppsManager::updateUserListInfo()
 void AppsManager::generateCategoryMap()
 {
     m_appInfos.clear();
+    m_categoryList.clear();
     sortByPresetOrder(m_allAppInfoList);
 
     for (const ItemInfo &info : m_allAppInfoList) {

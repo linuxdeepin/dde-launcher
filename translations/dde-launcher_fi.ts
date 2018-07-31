@@ -13,10 +13,6 @@
         <translation>Haluatko poistaa sovelluksen %1?</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Kaikki riippuvaisuudet poistetaan yhdessä</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Peruuta</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>Tietokone</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Musiikki</translation>
     </message>
@@ -277,6 +269,10 @@
     <message>
         <source>Pictures</source>
         <translation>Kuvat</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>Haluatko poistaa sovelluksen %1?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Kaikki riippuvaisuudet poistetaan yhdessä</translation>
     </message>
     <message>
         <source>Cancel</source>

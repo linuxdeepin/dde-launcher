@@ -13,10 +13,6 @@
         <translation>%1 -ыг системээс устгахдаа итгэлтэй байна уу?</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Харьяалагдах сангууд бүгд устана</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Цуцлах</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>Компьютер</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Хөгжим</translation>
     </message>
@@ -276,6 +268,10 @@
     </message>
     <message>
         <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Documents</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>%1 -ыг системээс устгахдаа итгэлтэй байна уу?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Харьяалагдах сангууд бүгд устана</translation>
     </message>
     <message>
         <source>Cancel</source>

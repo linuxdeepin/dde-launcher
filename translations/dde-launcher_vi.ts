@@ -13,10 +13,6 @@
         <translation>Bạn có chắc là gỡ bỏ %1 không?</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Tất cả phần phụ thuộc sẽ được bỏ theo cùng</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>Máy tính</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Âm nhạc</translation>
     </message>
@@ -277,6 +269,10 @@
     <message>
         <source>Pictures</source>
         <translation>Hình ảnh</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>Bạn có chắc là gỡ bỏ %1 không?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Tất cả phần phụ thuộc sẽ được bỏ theo cùng</translation>
     </message>
     <message>
         <source>Cancel</source>

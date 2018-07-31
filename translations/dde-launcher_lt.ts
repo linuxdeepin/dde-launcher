@@ -13,10 +13,6 @@
         <translation>Ar tikrai norite pašalinti %1 ?</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Kartu bus pašalintos visos priklausomybės</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Atsisakyti</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>Kompiuteris</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation>Dokumentas</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Muzika</translation>
     </message>
@@ -277,6 +269,10 @@
     <message>
         <source>Pictures</source>
         <translation>Paveikslai</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>Ar tikrai norite pašalinti %1 ?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Kartu bus pašalintos visos priklausomybės</translation>
     </message>
     <message>
         <source>Cancel</source>

@@ -13,10 +13,6 @@
         <translation>Заиста желите да уклоните %1 ?</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Све зависности биће уклоњене заједно</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Откажи</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>Рачунар</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation>Документи</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Музика</translation>
     </message>
@@ -277,6 +269,10 @@
     <message>
         <source>Pictures</source>
         <translation>Слике</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>Заиста желите да уклоните %1 ?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Све зависности биће уклоњене заједно</translation>
     </message>
     <message>
         <source>Cancel</source>

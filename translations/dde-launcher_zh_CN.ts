@@ -13,10 +13,6 @@
         <translation>您确定要卸载 %1 吗？</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>所有依赖也会被一起移除 </translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>计算机</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation>文档</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>音乐</translation>
     </message>
@@ -277,6 +269,10 @@
     <message>
         <source>Pictures</source>
         <translation>图片</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation>文档</translation>
     </message>
 </context>
 <context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>您确定要卸载 %1 吗？</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>所有依赖也会被一起移除 </translation>
     </message>
     <message>
         <source>Cancel</source>

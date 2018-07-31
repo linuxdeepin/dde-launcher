@@ -13,10 +13,6 @@
         <translation>Ĉu vi vere volas malinstali %1 ?</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Ĉiuj dependaĵoj estos forigitaj kune</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Nuligi</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>Komputilo</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Muziko</translation>
     </message>
@@ -276,6 +268,10 @@
     </message>
     <message>
         <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Documents</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>Ĉu vi vere volas malinstali %1 ?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Ĉiuj dependaĵoj estos forigitaj kune</translation>
     </message>
     <message>
         <source>Cancel</source>

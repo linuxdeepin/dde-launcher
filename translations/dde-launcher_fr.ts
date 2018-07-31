@@ -13,10 +13,6 @@
         <translation>Désinstaller %1 ?</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Toutes les dépendances seront supprimées</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>Ordinateur </translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation>Documents</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Musique</translation>
     </message>
@@ -277,6 +269,10 @@
     <message>
         <source>Pictures</source>
         <translation>Images</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>Désinstaller %1 ?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Toutes les dépendances seront supprimées</translation>
     </message>
     <message>
         <source>Cancel</source>

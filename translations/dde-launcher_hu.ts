@@ -13,10 +13,6 @@
         <translation>%1 biztos eltávolítjuk?</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Az összes függőség eltávolításra kerül.</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Mégse</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>Számítógép</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Zene</translation>
     </message>
@@ -277,6 +269,10 @@
     <message>
         <source>Pictures</source>
         <translation>Képek</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>Biztosan eltávolítja ezt: %1 ?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Az összes függőség eltávolításra kerül</translation>
     </message>
     <message>
         <source>Cancel</source>

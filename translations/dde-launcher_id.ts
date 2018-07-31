@@ -13,10 +13,6 @@
         <translation>Anda yakin untuk melepas %1?</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Semua dependensi akan dihapus</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>Komputer</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Musik</translation>
     </message>
@@ -277,6 +269,10 @@
     <message>
         <source>Pictures</source>
         <translation>Gambar</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>Anda yakin untuk melepas %1?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Semua dependensi akan dihapus</translation>
     </message>
     <message>
         <source>Cancel</source>

@@ -13,10 +13,6 @@
         <translation>Opravdu chcete odinstalovat %1?</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Všechny závislosti budou odstraněny společně</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>Počítač</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation>Dokument</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Hudba</translation>
     </message>
@@ -277,6 +269,10 @@
     <message>
         <source>Pictures</source>
         <translation>Obrázky</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>Opravdu chcete odinstalovat %1?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Všechny závislosti budou odstraněny společně</translation>
     </message>
     <message>
         <source>Cancel</source>

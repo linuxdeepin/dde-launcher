@@ -13,10 +13,6 @@
         <translation>%1 を削除してよろしいですか？</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>依存関係にあるものすべてが一緒に削除されます</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>コンピュータ</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Music</source>
         <translation>ミュージック</translation>
     </message>
@@ -276,6 +268,10 @@
     </message>
     <message>
         <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Documents</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>%1 を削除してよろしいですか？</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>依存関係にあるものすべてが一緒に削除されます</translation>
     </message>
     <message>
         <source>Cancel</source>

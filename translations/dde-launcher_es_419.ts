@@ -13,10 +13,6 @@
         <translation>¿Estás seguro de desinstalar %1?</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Todas las dependencias serán eliminadas juntas</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>Equipo</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Música</translation>
     </message>
@@ -277,6 +269,10 @@
     <message>
         <source>Pictures</source>
         <translation>Imágenes</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>¿Está seguro de desinstalar %1?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Todas las dependencias serán eliminadas juntas</translation>
     </message>
     <message>
         <source>Cancel</source>

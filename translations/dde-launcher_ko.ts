@@ -13,10 +13,6 @@
         <translation>정말로 %1(을)를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>모든 의존성이 함께 제거됩니다</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>컴퓨터</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Music</source>
         <translation>음악</translation>
     </message>
@@ -277,6 +269,10 @@
     <message>
         <source>Pictures</source>
         <translation>사진</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>정말로 %1(을)를 삭제하시겠습니까?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>모든 의존성이 함께 제거됩니다</translation>
     </message>
     <message>
         <source>Cancel</source>

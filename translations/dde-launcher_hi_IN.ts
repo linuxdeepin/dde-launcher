@@ -13,10 +13,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>सभी अनियमितता को एक साथ हटा दिया जाएगा </translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>रद्द करो</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>कंप्यूटर</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Music</source>
         <translation>संगीत</translation>
     </message>
@@ -276,6 +268,10 @@
     </message>
     <message>
         <source>Pictures</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Documents</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>सभी अनियमितता को एक साथ हटा दिया जाएगा </translation>
     </message>
     <message>
         <source>Cancel</source>

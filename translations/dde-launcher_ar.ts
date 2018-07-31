@@ -13,10 +13,6 @@
         <translation>هل أنت متأكد من إلغاء تثبيت %1 ؟</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>كل الاعتماديات سيتم إزالتها معاً</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>إلغاء</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>الحاسوب</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation>مستند</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>موسيقى</translation>
     </message>
@@ -277,6 +269,10 @@
     <message>
         <source>Pictures</source>
         <translation>الصور </translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>هل أنت متأكد من إلغاء تثبيت %1 ؟</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>كل الاعتماديات سيتم إزالتها معاً</translation>
     </message>
     <message>
         <source>Cancel</source>

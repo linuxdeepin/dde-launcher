@@ -13,10 +13,6 @@
         <translation>確定移除 %1？</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>所有依賴的軟體也會移除</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>電腦</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation>文件</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>音樂</translation>
     </message>
@@ -277,6 +269,10 @@
     <message>
         <source>Pictures</source>
         <translation>圖片</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>確定移除 %1？</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>所有依賴的軟體也會移除</translation>
     </message>
     <message>
         <source>Cancel</source>

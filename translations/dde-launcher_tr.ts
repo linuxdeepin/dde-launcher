@@ -13,10 +13,6 @@
         <translation>%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Tüm bağımlılıklarıyla birlikte kaldırılacak</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
@@ -247,10 +243,6 @@
         <translation>Bilgisayar</translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation>Belge</translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation>Müzik</translation>
     </message>
@@ -277,6 +269,10 @@
     <message>
         <source>Pictures</source>
         <translation>Resimler</translation>
+    </message>
+    <message>
+        <source>Documents</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -349,10 +345,6 @@
     <message>
         <source>Are you sure to uninstall %1 ?</source>
         <translation>%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Tüm bağımlılıklarıyla birlikte kaldırılacak</translation>
     </message>
     <message>
         <source>Cancel</source>

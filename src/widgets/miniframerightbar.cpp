@@ -51,7 +51,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     MiniFrameButton *videoBtn = new MiniFrameButton(tr("Videos"));
     MiniFrameButton *musicBtn = new MiniFrameButton(tr("Music"));
     MiniFrameButton *pictureBtn = new MiniFrameButton(tr("Pictures"));
-    MiniFrameButton *documentBtn = new MiniFrameButton(tr("Document"));
+    MiniFrameButton *documentBtn = new MiniFrameButton(tr("Documents"));
     MiniFrameButton *downloadBtn = new MiniFrameButton(tr("Downloads"));
     MiniFrameButton *manualBtn = new MiniFrameButton(tr("Manual"));
     MiniFrameButton *settingsBtn = new MiniFrameButton(tr("Settings"));

@@ -15,10 +15,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>All dependencies will be removed together</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -249,10 +245,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Document</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
@@ -278,6 +270,10 @@
     </message>
     <message>
         <source>Pictures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Documents</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -350,10 +346,6 @@
     <name>WindowedFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

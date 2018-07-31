@@ -1,3 +1,21 @@
+<a name="4.4.2"></a>
+### 4.4.2 (2018-07-31)
+
+
+#### Bug Fixes
+
+* **Mini:**
+  *  repeat generation of category list ([1b1ea389](https://github.com/linuxdeepin/dde-launcher/commit/1b1ea389b1fe2b02426ab37fead938352d5b21c0))
+  *  mini mode and full screen mode separation ([eeb31e5c](https://github.com/linuxdeepin/dde-launcher/commit/eeb31e5c50cc73f46675a1fa694cc1611deea631))
+
+#### Features
+
+* **Mini:**
+  *  hidden empty category ([31b889cc](https://github.com/linuxdeepin/dde-launcher/commit/31b889ccf50211f3b39a6ae0669ce473e8b72c90))
+  *  change right buttons order ([f925b9be](https://github.com/linuxdeepin/dde-launcher/commit/f925b9be163002be52b73803e05cb7cee833e8dd))
+
+
+
 <a name="4.4.1"></a>
 ### 4.4.1 (2018-07-20)
 

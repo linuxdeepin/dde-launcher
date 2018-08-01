@@ -5,6 +5,50 @@
         <source>No search results</source>
         <translation>Ничего не найдено</translation>
     </message>
+    <message>
+        <source>Internet</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>System</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
@@ -272,7 +316,7 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Документы</translation>
     </message>
 </context>
 <context>
@@ -284,53 +328,6 @@
     <message>
         <source>Back</source>
         <translation>Назад</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Internet</source>
-        <translation>Интернет</translation>
-    </message>
-    <message>
-        <source>Chat</source>
-        <translation>Общение</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation>Музыка</translation>
-    </message>
-    <message>
-        <source>Video</source>
-        <translation>Видео</translation>
-    </message>
-    <message>
-        <source>Graphics</source>
-        <translation>Графика</translation>
-    </message>
-    <message>
-        <source>Game</source>
-        <translation>Игры</translation>
-    </message>
-    <message>
-        <source>Office</source>
-        <translation>Офис</translation>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation>Чтение</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation>Разработка</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Система</translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation>Другое</translation>
     </message>
 </context>
 <context>

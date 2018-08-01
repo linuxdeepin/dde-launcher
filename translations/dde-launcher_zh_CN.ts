@@ -5,6 +5,50 @@
         <source>No search results</source>
         <translation>无搜索结果</translation>
     </message>
+    <message>
+        <source>Internet</source>
+        <translation>网络应用</translation>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation>社交沟通</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>音乐欣赏</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>视频播放</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>图形图像</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>游戏娱乐</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>办公学习</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>阅读翻译</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>编程开发</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>系统管理</translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation>其他应用</translation>
+    </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
@@ -284,53 +328,6 @@
     <message>
         <source>Back</source>
         <translation>返回</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Internet</source>
-        <translation>网络应用</translation>
-    </message>
-    <message>
-        <source>Chat</source>
-        <translation>社交沟通</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation>音乐欣赏</translation>
-    </message>
-    <message>
-        <source>Video</source>
-        <translation>视频播放</translation>
-    </message>
-    <message>
-        <source>Graphics</source>
-        <translation>图形图像</translation>
-    </message>
-    <message>
-        <source>Game</source>
-        <translation>游戏娱乐</translation>
-    </message>
-    <message>
-        <source>Office</source>
-        <translation>办公学习</translation>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation>阅读翻译</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation>编程开发</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>系统管理</translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation>其他应用</translation>
     </message>
 </context>
 <context>

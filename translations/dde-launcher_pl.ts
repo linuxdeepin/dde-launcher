@@ -5,6 +5,50 @@
         <source>No search results</source>
         <translation>Brak wyników wyszukiwania</translation>
     </message>
+    <message>
+        <source>Internet</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>System</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
@@ -272,7 +316,7 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumenty</translation>
     </message>
 </context>
 <context>
@@ -284,53 +328,6 @@
     <message>
         <source>Back</source>
         <translation>Wstecz</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Internet</source>
-        <translation>Internet</translation>
-    </message>
-    <message>
-        <source>Chat</source>
-        <translation>Rozmowy</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation>Muzyka</translation>
-    </message>
-    <message>
-        <source>Video</source>
-        <translation>Filmy</translation>
-    </message>
-    <message>
-        <source>Graphics</source>
-        <translation>Grafika</translation>
-    </message>
-    <message>
-        <source>Game</source>
-        <translation>Gry</translation>
-    </message>
-    <message>
-        <source>Office</source>
-        <translation>Biurowe</translation>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation>Czytanie</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation>Programowanie</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Systemowe</translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation>Inne</translation>
     </message>
 </context>
 <context>

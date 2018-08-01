@@ -5,6 +5,50 @@
         <source>No search results</source>
         <translation>No hi ha resultats de la cerca.</translation>
     </message>
+    <message>
+        <source>Internet</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>System</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
@@ -284,53 +328,6 @@
     <message>
         <source>Back</source>
         <translation>Enrere</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Internet</source>
-        <translation>Internet</translation>
-    </message>
-    <message>
-        <source>Chat</source>
-        <translation>Xat</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation>Música</translation>
-    </message>
-    <message>
-        <source>Video</source>
-        <translation>Vídeo</translation>
-    </message>
-    <message>
-        <source>Graphics</source>
-        <translation>Gràfics</translation>
-    </message>
-    <message>
-        <source>Game</source>
-        <translation>Jocs</translation>
-    </message>
-    <message>
-        <source>Office</source>
-        <translation>Oficina</translation>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation>Lectura</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation>Desenvolupament</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Sistema</translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation>Altres</translation>
     </message>
 </context>
 <context>

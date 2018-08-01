@@ -5,6 +5,50 @@
         <source>No search results</source>
         <translation>Herhangi bir sonuç bulunamadı</translation>
     </message>
+    <message>
+        <source>Internet</source>
+        <translation>İnternet</translation>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation>Sohbet</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>Müzik</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>Görüntü</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>Grafik</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>Oyun</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>Ofis</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>Okuma</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Geliştirme</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>Sistem</translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation>Diğerleri</translation>
+    </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
@@ -272,7 +316,7 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Belgeler</translation>
     </message>
 </context>
 <context>
@@ -284,53 +328,6 @@
     <message>
         <source>Back</source>
         <translation>Geri</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Internet</source>
-        <translation>İnternet</translation>
-    </message>
-    <message>
-        <source>Chat</source>
-        <translation>Sohbet</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation>Müzik</translation>
-    </message>
-    <message>
-        <source>Video</source>
-        <translation>Görüntü</translation>
-    </message>
-    <message>
-        <source>Graphics</source>
-        <translation>Grafik</translation>
-    </message>
-    <message>
-        <source>Game</source>
-        <translation>Oyun</translation>
-    </message>
-    <message>
-        <source>Office</source>
-        <translation>Ofis</translation>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation>Okuma</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation>Geliştirme</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Sistem</translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation>Diğer</translation>
     </message>
 </context>
 <context>

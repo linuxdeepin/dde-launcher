@@ -5,6 +5,50 @@
         <source>No search results</source>
         <translation>Paieškos rezultatų nėra</translation>
     </message>
+    <message>
+        <source>Internet</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>System</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
@@ -272,7 +316,7 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumentai</translation>
     </message>
 </context>
 <context>
@@ -284,53 +328,6 @@
     <message>
         <source>Back</source>
         <translation>Atgal</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Internet</source>
-        <translation>Internetas</translation>
-    </message>
-    <message>
-        <source>Chat</source>
-        <translation>Pokalbiai</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation>Muzika</translation>
-    </message>
-    <message>
-        <source>Video</source>
-        <translation>Vaizdo įrašai</translation>
-    </message>
-    <message>
-        <source>Graphics</source>
-        <translation>Grafika</translation>
-    </message>
-    <message>
-        <source>Game</source>
-        <translation>Žaidimai</translation>
-    </message>
-    <message>
-        <source>Office</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation>Skaitymas</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation>Kūrimas</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Sistema</translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation>Kita</translation>
     </message>
 </context>
 <context>

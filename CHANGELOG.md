@@ -1,3 +1,13 @@
+<a name="4.4.3"></a>
+### 4.4.3 (2018-08-01)
+
+
+#### Bug Fixes
+
+*   No translation of static variables ([7356afc1](https://github.com/linuxdeepin/dde-launcher/commit/7356afc11b926004e7e291e23f73fdb9cdbed560))
+
+
+
 <a name="4.4.2"></a>
 ### 4.4.2 (2018-07-31)
 

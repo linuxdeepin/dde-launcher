@@ -134,7 +134,6 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 
     if (e->buttons() == Qt::LeftButton) {
         if (isCategoryList) {
-            emit requestSwitchToCategory(index);
             return;
         } else {
             m_dragStartPos = e->pos();
@@ -147,9 +146,15 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 
 void AppListView::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (qobject_cast<AppsListModel*>(model())->category() != AppsListModel::Category) {
-        QListView::mouseReleaseEvent(e);
+    const QModelIndex &index = indexAt(e->pos());
+    if (!index.isValid())
+        e->ignore();
+
+    if (qobject_cast<AppsListModel*>(model())->category() == AppsListModel::Category && e->button() == Qt::LeftButton) {
+        emit requestSwitchToCategory(index);
+        return;
     }
+    QListView::mouseReleaseEvent(e);
 }
 
 void AppListView::dragEnterEvent(QDragEnterEvent *e)

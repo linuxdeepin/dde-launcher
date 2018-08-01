@@ -113,6 +113,9 @@ private slots:
     void delayRefreshData();
 
 private:
+    const ItemInfo createOfCategory(qlonglong category);
+
+private:
     DBusLauncher *m_launcherInter;
     DBusStartManager *m_startManagerInter;
     DBusDock *m_dockInter;
@@ -140,6 +143,8 @@ private:
     static QSettings APP_USER_SORTED_LIST;
     static QSettings APP_USED_SORTED_LIST;
     QMap<QPair<QString, int>, QPixmap> m_iconCache;
+    QStringList m_categoryTs;
+    QStringList m_categoryIcon;
 };
 
 #endif // APPSMANAGER_H

@@ -48,43 +48,6 @@ QSettings AppsManager::APP_AUTOSTART_CACHE("deepin", "dde-launcher-app-autostart
 QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
 QSettings AppsManager::APP_USED_SORTED_LIST("deepin", "dde-launcher-app-used-sorted-list");
 
-// A separate definition, in the category of ItemInfo
-static const QMap<qlonglong, QString> categoryTs {
-    {0, QObject::tr("Internet")},
-    {1, QObject::tr("Chat")},
-    {2, QObject::tr("Music")},
-    {3, QObject::tr("Video")},
-    {4, QObject::tr("Graphics")},
-    {5, QObject::tr("Game")},
-    {6, QObject::tr("Office")},
-    {7, QObject::tr("Reading")},
-    {8, QObject::tr("Development")},
-    {9, QObject::tr("System")},
-    {10, QObject::tr("Others")},
-};
-
-static const QMap<qlonglong, QString> categoryIcon {
-    {0, QString(":/icons/skin/icons/internet_normal_22px.svg")},
-    {1, QString(":/icons/skin/icons/chat_normal_22px.svg")},
-    {2, QString(":/icons/skin/icons/music_normal_22px.svg")},
-    {3, QString(":/icons/skin/icons/multimedia_normal_22px.svg")},
-    {4, QString(":/icons/skin/icons/graphics_normal_22px.svg")},
-    {5, QString(":/icons/skin/icons/game_normal_22px.svg")},
-    {6, QString(":/icons/skin/icons/office_normal_22px.svg")},
-    {7, QString(":/icons/skin/icons/reading_normal_22px.svg")},
-    {8, QString(":/icons/skin/icons/development_normal_22px.svg")},
-    {9, QString(":/icons/skin/icons/system_normal_22px.svg")},
-    {10, QString(":/icons/skin/icons/others_normal_22px.svg")},
-};
-
-static const ItemInfo createOfCategory(qlonglong category) {
-    ItemInfo info;
-    info.m_name = categoryTs[category];
-    info.m_categoryId = category;
-    info.m_iconKey = categoryIcon[category];
-    return info;
-}
-
 int perfectIconSize(const int size)
 {
     const int s = 8;
@@ -152,6 +115,32 @@ AppsManager::AppsManager(QObject *parent) :
     m_searchTimer(new QTimer(this)),
     m_delayRefreshTimer(new QTimer(this))
 {
+    m_categoryTs
+            << tr("Internet")
+            << tr("Chat")
+            << tr("Music")
+            << tr("Video")
+            << tr("Graphics")
+            << tr("Game")
+            << tr("Office")
+            << tr("Reading")
+            << tr("Development")
+            << tr("System")
+            << tr("Others");
+
+    m_categoryIcon
+            << QString(":/icons/skin/icons/internet_normal_22px.svg")
+            << QString(":/icons/skin/icons/chat_normal_22px.svg")
+            << QString(":/icons/skin/icons/music_normal_22px.svg")
+            << QString(":/icons/skin/icons/multimedia_normal_22px.svg")
+            << QString(":/icons/skin/icons/graphics_normal_22px.svg")
+            << QString(":/icons/skin/icons/game_normal_22px.svg")
+            << QString(":/icons/skin/icons/office_normal_22px.svg")
+            << QString(":/icons/skin/icons/reading_normal_22px.svg")
+            << QString(":/icons/skin/icons/development_normal_22px.svg")
+            << QString(":/icons/skin/icons/system_normal_22px.svg")
+            << QString(":/icons/skin/icons/others_normal_22px.svg");
+
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
 
     refreshCategoryInfoList();
@@ -408,6 +397,15 @@ void AppsManager::delayRefreshData()
     emit newInstallListChanged();
 
     emit dataChanged(AppsListModel::All);
+}
+
+const ItemInfo AppsManager::createOfCategory(qlonglong category)
+{
+    ItemInfo info;
+    info.m_name = m_categoryTs[category];
+    info.m_categoryId = category;
+    info.m_iconKey = m_categoryIcon[category];
+    return info;
 }
 
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const

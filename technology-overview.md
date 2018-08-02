@@ -55,6 +55,10 @@
 
 `CalculateUtils` 类负责进行基本的数据运算，例如不同模式下的图标大小、字体大小计算。
 
+`Utils` 类是一些 qss 加载函数、图标查找函数等杂项的存放。
+
+`RecentlyUsed` 类负责解析和处理最近使用的文件列表，它是读取 `~/.local/share/recently-used.xbel` 进行显示的，这主要是之前的一个定制功能，没有做的很仔细，由 `HISTORY_PANEL` 选项控制。
+
 # 接口设计
 
 ## DBus 服务接口

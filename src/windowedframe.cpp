@@ -302,6 +302,8 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         return;
     }
 
+    m_appsModel->setDrawBackground(true);
+    m_searchModel->setDrawBackground(true);
     m_rightBar->setCurrentCheck(false);
 
     if (!currentIdx.isValid() || !targetIndex.isValid()) {

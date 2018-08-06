@@ -86,7 +86,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_autoScrollTimer(new QTimer)
     , m_regionMonitor(new DRegionMonitor(this))
     , m_displayMode(All)
-    , m_isLeft(true)
+    , m_focusPos(LeftTop)
 {
     DBlurEffectWidget *bgWidget = new DBlurEffectWidget(this);
     bgWidget->setMaskColor(DBlurEffectWidget::DarkColor);
@@ -192,10 +192,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_appsView, &QListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
     connect(m_appsView, &QListView::entered, m_appsView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
     connect(m_appsView, &AppListView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
-    connect(m_appsView, &AppListView::requestSwitchToCategory, this, [=] (const QModelIndex &index) {
-        m_appsView->setModel(m_appsModel);
-        m_appsModel->setCategory(index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>());
-    });
+    connect(m_appsView, &AppListView::requestSwitchToCategory, this, &WindowedFrame::switchToCategory);
 
     connect(m_appsView, &AppListView::requestEnter, m_appsModel, &AppsListModel::setDrawBackground);
     connect(m_appsView, &AppListView::requestEnter, m_searchModel, &AppsListModel::setDrawBackground);
@@ -272,22 +269,31 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
 
     switch (key) {
     case Qt::Key_Tab:
-        m_isLeft = !m_isLeft;
+        if (m_focusPos == LeftTop) {
+            m_focusPos = LeftBottom;
+        } else if (m_focusPos == LeftBottom) {
+            m_focusPos = Right;
+            m_rightBar->setCurrentIndex(0);
+        } else {
+            m_focusPos = LeftTop;
+        }
         break;
     case Qt::Key_Up: {
-        if (m_isLeft) {
+        if (m_focusPos == LeftTop) {
             targetIndex = currentIdx.sibling(row - 1, 0);
-        }
-        else {
+        } else if (m_focusPos == LeftBottom) {
+
+        } else {
             m_rightBar->moveUp();
         }
         break;
     }
     case Qt::Key_Down: {
-        if (m_isLeft) {
+        if (m_focusPos == LeftTop) {
             targetIndex = currentIdx.sibling(row + 1, 0);
-        }
-        else {
+        } else if (m_focusPos == LeftBottom) {
+
+        } else {
             m_rightBar->moveDown();
         }
         break;
@@ -296,15 +302,22 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         break;
     }
 
-    if (!m_isLeft) {
+    if (m_focusPos == LeftTop) {
+        m_appsModel->setDrawBackground(true);
+        m_searchModel->setDrawBackground(true);
+        m_rightBar->setCurrentCheck(false);
+        m_switchBtn->setChecked(false);
+    } else if (m_focusPos == LeftBottom) {
+        m_appsView->setCurrentIndex(QModelIndex());
+        m_switchBtn->setChecked(true);
+        m_rightBar->setCurrentCheck(false);
+        return;
+    } else {
+        m_appsView->setCurrentIndex(QModelIndex());
+        m_switchBtn->setChecked(false);
         m_rightBar->setCurrentCheck(true);
-        m_appsView->clearSelection();
         return;
     }
-
-    m_appsModel->setDrawBackground(true);
-    m_searchModel->setDrawBackground(true);
-    m_rightBar->setCurrentCheck(false);
 
     if (!currentIdx.isValid() || !targetIndex.isValid()) {
         targetIndex = m_appsView->model()->index(0, 0);
@@ -324,8 +337,17 @@ void WindowedFrame::appendToSearchEdit(const char ch)
 
 void WindowedFrame::launchCurrentApp()
 {
-    if (!m_isLeft) {
+    if (m_focusPos == Right) {
         m_rightBar->execCurrent();
+        return;
+    } else if (m_focusPos == LeftBottom) {
+        m_switchBtn->click();
+        m_switchBtn->setChecked(true);
+        return;
+    }
+
+    if (m_displayMode == Category && m_appsModel->category() == AppsListModel::Category) {
+        switchToCategory(m_appsView->currentIndex());
         return;
     }
 
@@ -391,6 +413,13 @@ bool WindowedFrame::windowDeactiveEvent()
     }
 
     return false;
+}
+
+void WindowedFrame::switchToCategory(const QModelIndex &index)
+{
+    m_appsView->setModel(m_appsModel);
+    m_appsView->setCurrentIndex(QModelIndex());
+    m_appsModel->setCategory(index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>());
 }
 
 QPainterPath WindowedFrame::getCornerPath(AnchoredCornor direction)
@@ -728,6 +757,6 @@ void WindowedFrame::recoveryAll()
     m_switchBtn->updateStatus(All);
     hideTips();
 
-    m_isLeft = true;
+    m_focusPos = LeftTop;
     m_rightBar->setCurrentCheck(false);
 }

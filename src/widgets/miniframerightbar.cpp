@@ -86,7 +86,6 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     bottomLayout->addWidget(settingsBtn);
     bottomLayout->addWidget(shutdownBtn);
 
-
     layout->addSpacing(10);
     layout->addWidget(m_modeToggleBtn, 0, Qt::AlignTop | Qt::AlignRight);
     layout->addWidget(m_avatar);

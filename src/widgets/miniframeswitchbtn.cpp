@@ -49,8 +49,8 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     QHBoxLayout *mainLayout = new QHBoxLayout;
     setLayout(mainLayout);
     setObjectName("MiniFrameSwitchBtn");
-    setFocusPolicy(Qt::NoFocus);
     setFixedHeight(36);
+    setCheckable(true);
 
     mainLayout->addSpacing(10);
     mainLayout->addWidget(allIconLabel);

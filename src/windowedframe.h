@@ -68,6 +68,11 @@ public:
         Normal
     };
 
+    enum FocusPosition
+    {
+        LeftTop, LeftBottom, Right
+    };
+
 signals:
     void visibleChanged(bool visible);
 
@@ -83,6 +88,7 @@ private:
     void uninstallApp(const QString &appKey) Q_DECL_OVERRIDE;
     void uninstallApp(const QModelIndex &context);
     bool windowDeactiveEvent() Q_DECL_OVERRIDE;
+    void switchToCategory(const QModelIndex &index);
 
     QPainterPath getCornerPath(AnchoredCornor direction);
 
@@ -135,7 +141,7 @@ private:
     int m_radius = 10;
     AnchoredCornor m_anchoredCornor = Normal;
     QPainterPath m_cornerPath;
-    bool m_isLeft;
+    FocusPosition m_focusPos;
 };
 
 #endif // WINDOWEDFRAME_H

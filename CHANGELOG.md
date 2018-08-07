@@ -1,3 +1,19 @@
+<a name="4.4.4"></a>
+### 4.4.4 (2018-08-07)
+
+
+#### Features
+
+*   tab selected category button. ([c8ca2e12](https://github.com/linuxdeepin/dde-launcher/commit/c8ca2e1244cf2c1384662bb0cd481dc7e85c43fe))
+* **Mini:**  update hover color ([9232ef1e](https://github.com/linuxdeepin/dde-launcher/commit/9232ef1e5f50d794873daff4bad53fb5e07aaa93))
+
+#### Bug Fixes
+
+*   no effect selected when scrolling. ([12cbc38c](https://github.com/linuxdeepin/dde-launcher/commit/12cbc38c72901798c7cb18afed3cebec2a4228a1))
+* **Mini:**  not draw background when leave list again ([15d9bcc7](https://github.com/linuxdeepin/dde-launcher/commit/15d9bcc7ef312a9c8c6676d1bb0ce40ba13cd112))
+
+
+
 <a name="4.4.3"></a>
 ### 4.4.3 (2018-08-01)
 

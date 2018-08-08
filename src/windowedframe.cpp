@@ -759,4 +759,5 @@ void WindowedFrame::recoveryAll()
 
     m_focusPos = LeftTop;
     m_rightBar->setCurrentCheck(false);
+    m_switchBtn->setChecked(false);
 }

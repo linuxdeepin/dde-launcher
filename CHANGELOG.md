@@ -1,3 +1,13 @@
+<a name="4.4.5"></a>
+### 4.4.5 (2018-08-12)
+
+
+#### Bug Fixes
+
+* **switch_btn:**  clear check status when clicked. ([04bda128](https://github.com/linuxdeepin/dde-launcher/commit/04bda1288c57e29e1659d76cafbede35bd5765ad))
+
+
+
 <a name="4.4.4"></a>
 ### 4.4.4 (2018-08-07)
 

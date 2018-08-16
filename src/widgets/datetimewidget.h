@@ -32,6 +32,8 @@ public:
     DatetimeWidget(QWidget *parent = nullptr);
     ~DatetimeWidget();
 
+    int getDateTextWidth();
+
 signals:
     void clicked();
 

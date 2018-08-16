@@ -41,6 +41,7 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     layout->setSpacing(0);
     layout->setContentsMargins(5, 0, 0, 0);
     layout->addWidget(m_currentTimeLabel);
+    layout->addSpacing(2);
     layout->addWidget(m_currentDateLabel);
 
     setLayout(layout);
@@ -52,6 +53,11 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
 
 DatetimeWidget::~DatetimeWidget()
 {
+}
+
+int DatetimeWidget::getDateTextWidth()
+{
+    return m_currentDateLabel->fontMetrics().boundingRect(m_currentDateLabel->text()).width();
 }
 
 void DatetimeWidget::mouseReleaseEvent(QMouseEvent *e)

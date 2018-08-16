@@ -76,9 +76,6 @@ AppListView::AppListView(QWidget *parent)
 #else
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::dropSwap);
 #endif
-
-    connect(m_scrollAni, &QPropertyAnimation::valueChanged, [=] { blockSignals(true); });
-    connect(m_scrollAni, &QPropertyAnimation::finished, [=] { blockSignals(false); });
 }
 
 const QModelIndex AppListView::indexAt(const int index) const

@@ -105,6 +105,8 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
 
     if (index.isValid() && !m_enableDropInside)
         Q_EMIT entered(index);
+    else
+        Q_EMIT entered(QModelIndex());
 
     if (e->buttons() != Qt::LeftButton)
         return;

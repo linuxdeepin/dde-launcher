@@ -63,7 +63,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     int btnWidth = 0;
     int frameWidth = 0;
 
-    const int dateTextWidth = m_datetimeWidget->getDateTextWidth() + 50;
+    const int dateTextWidth = m_datetimeWidget->getDateTextWidth() + 60;
 
     btnWidth += settingsBtn->fontMetrics().boundingRect(settingsBtn->text()).width() + iconWidth + padding;
     btnWidth += shutdownBtn->fontMetrics().boundingRect(shutdownBtn->text()).width() + iconWidth + padding;

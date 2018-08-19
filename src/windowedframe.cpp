@@ -490,7 +490,7 @@ void WindowedFrame::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
 
-    // PM dont't want auto-hide when click WindowedFrame blank area.
+    // PM don't want auto-hide when click WindowedFrame blank area.
 //    if (e->button() == Qt::LeftButton) {
 //        hideLauncher();
 //    }

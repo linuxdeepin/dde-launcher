@@ -890,7 +890,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
 {
     const QModelIndex currentIndex = m_appItemDelegate->currentIndex();
 
-    // move operation should be start from a vaild location, if not, just init it.
+    // move operation should be start from a valid location, if not, just init it.
     if (!currentIndex.isValid())
     {
         m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? m_internetView->indexAt(0) : m_allAppsView->indexAt(0));
@@ -918,7 +918,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         if (index.isValid())
             break;
 
-        // the column number of destination, when moving up/down, columns should't be changed.
+        // the column number of destination, when moving up/down, columns shouldn't be changed.
         const int realColumn = currentIndex.row() % column;
 
         const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());

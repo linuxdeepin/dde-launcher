@@ -167,7 +167,7 @@ QPixmap AppListDelegate::dropShadow(QPixmap pixmap, int radius, const QColor &co
 
     pixmap.setDevicePixelRatio(1);
 
-    // refrence here:
+    // reference here:
     // https://forum.qt.io/topic/77576/painting-shadow-around-a-parentless-qwidget
 
     QImage temp(pixmap.size() + QSize(radius * 2, radius * 2),

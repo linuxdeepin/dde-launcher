@@ -7,47 +7,47 @@
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>Internet</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>Xat</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Música</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>Vídeo</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>Gràfics</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>Jocs</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation>Oficina</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>Lectura</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation>Desenvolupament</translation>
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation>Sistema</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation>Altres</translation>
     </message>
 </context>
 <context>
@@ -167,7 +167,7 @@
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Totes les dependencies seran esborrades a l&apos;hora</translation>
+        <translation>S&apos;eliminaran totes les dependències conjuntament.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -316,7 +316,7 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Documents</translation>
     </message>
 </context>
 <context>

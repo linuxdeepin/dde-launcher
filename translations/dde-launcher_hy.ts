@@ -19,7 +19,7 @@
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>Տեսանյութ</translation>
     </message>
     <message>
         <source>Graphics</source>

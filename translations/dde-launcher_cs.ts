@@ -7,47 +7,47 @@
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>Internet</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>Rozhovor</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Hudba</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>Obraz</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>Grafika</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>Hra</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation>Kancelář</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>Čtení</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation>Vývoj</translation>
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation>Systém</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation>Jiné</translation>
     </message>
 </context>
 <context>
@@ -316,18 +316,18 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumenty</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation>Všechny kategorie</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Zpět</translation>
     </message>
 </context>
 <context>

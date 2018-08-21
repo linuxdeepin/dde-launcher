@@ -15,7 +15,7 @@
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>میوزیک</translation>
     </message>
     <message>
         <source>Video</source>
@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Confirm</source>
-        <translation type="unfinished"/>
+        <translation>Bipejirîne</translation>
     </message>
 </context>
 <context>
@@ -175,7 +175,7 @@
     </message>
     <message>
         <source>Confirm</source>
-        <translation type="unfinished"/>
+        <translation>Bipejirîne</translation>
     </message>
 </context>
 <context>
@@ -226,7 +226,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Paşve</translation>
     </message>
 </context>
 <context>
@@ -261,7 +261,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Paşve</translation>
     </message>
     <message>
         <source>Documents</source>
@@ -300,7 +300,7 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Mîheng</translation>
     </message>
     <message>
         <source>Shutdown</source>
@@ -327,14 +327,14 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Paşve</translation>
     </message>
 </context>
 <context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>Lê bigere</translation>
     </message>
 </context>
 <context>
@@ -349,7 +349,7 @@
     </message>
     <message>
         <source>Confirm</source>
-        <translation type="unfinished"/>
+        <translation>Bipejirîne</translation>
     </message>
 </context>
 </TS>

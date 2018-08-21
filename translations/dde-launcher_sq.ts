@@ -1,95 +1,95 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="am_ET" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sq" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>ምንም መፈለጊያ የለም</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Internet</source>
-        <translation>ኢንተርኔት</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chat</source>
-        <translation>ውይይት</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>ሙዚቃ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Video</source>
-        <translation>ቪዲዮ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>ንድፎች</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Game</source>
-        <translation>ጨዋታ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Office</source>
-        <translation>ቢሮ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reading</source>
-        <translation>ማንበቢያ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Development</source>
-        <translation>አበልጻጊ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System</source>
-        <translation>ስርአት</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Others</source>
-        <translation>ሌሎች</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>በ እርግጥ ማጥፋት ይፈልጋሉ %1 ?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>መሰረዣ</translation>
+        <translation>Anuloje</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>ማረጋገጫ</translation>
+        <translation>Ripohojeni</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation>ከ ዴስክቶፕ ላይ ማስወገጃ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>ከ ዶከ ላይ ማስወገጃ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>ማጥፊያ</translation>
+        <translation>Çinstaloje</translation>
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation>በ ወኪል መክፈቻ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>የ መመልከቻ መመጠኛ ማሰናከያ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open</source>
-        <translation>መክፈቻ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Send to desktop</source>
@@ -112,211 +112,211 @@
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>ሁሉንም መተግበሪያ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Internet</source>
-        <translation>ኢንተርኔት</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chat</source>
-        <translation>ውይይት</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>ሙዚቃ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Video</source>
-        <translation>ቪዲዮ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>ንድፎች</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Game</source>
-        <translation>ጨዋታ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Office</source>
-        <translation>ቢሮ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reading</source>
-        <translation>ማንበቢያ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Development</source>
-        <translation>አበልጻጊ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System</source>
-        <translation>ስርአት</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Others</source>
-        <translation>ሌሎች</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>በ እርግጥ ማጥፋት ይፈልጋሉ %1 ?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>ሁሉም ጥገኞች ይወገዳሉ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>መሰረዣ</translation>
+        <translation>Anuloje</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>ማረጋገጫ</translation>
+        <translation>Ripohojeni</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>ኮምፒዩተር</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Documents</source>
-        <translation>ሰነዶች</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Videos</source>
-        <translation>ቪዲዮዎች</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>ሙዚቃ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>ስእሎች</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>የወረዱ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Lock</source>
-        <translation>መቆለፊያ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Logout</source>
-        <translation>መውጫ</translation>
+        <translation>Dalje</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>እንደገና ማስነሻ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>ማገጃ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>ማጥፊያ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Back</source>
-        <translation>ወደ ኋላ</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
         <source>Computer</source>
-        <translation>ኮምፒዩተር</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>ሙዚቃ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>ማጥፊያ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Lock</source>
-        <translation>መቆለፊያ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Logout</source>
-        <translation>መውጫ</translation>
+        <translation>Dalje</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>እንደገና ማስነሻ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>ማገጃ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Back</source>
-        <translation>ወደ ኋላ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Documents</source>
-        <translation>ሰነዶች</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Videos</source>
-        <translation>ቪዲዮዎች</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>ስእሎች</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>የወረዱ</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>ኮምፒዩተር</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>ሙዚቃ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>የወረዱ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Manual</source>
-        <translation>በ እጅ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Settings</source>
-        <translation>ማሰናጃዎች</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>ማጥፊያ</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Videos</source>
-        <translation>ቪዲዮዎች</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>ስእሎች</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Documents</source>
-        <translation>ሰነዶች</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -327,29 +327,29 @@
     </message>
     <message>
         <source>Back</source>
-        <translation>ወደ ኋላ</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation>መፈለጊያ</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>WindowedFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>በ እርግጥ ማጥፋት ይፈልጋሉ %1 ?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>መሰረዣ</translation>
+        <translation>Anuloje</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>ማረጋገጫ</translation>
+        <translation>Ripohojeni</translation>
     </message>
 </context>
 </TS>

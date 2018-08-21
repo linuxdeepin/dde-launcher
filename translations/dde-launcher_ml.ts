@@ -15,11 +15,11 @@
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>സംഗീതം</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>ചലച്ചിത്രം</translation>
     </message>
     <message>
         <source>Graphics</source>
@@ -43,7 +43,7 @@
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation>സിസ്റ്റം</translation>
     </message>
     <message>
         <source>Others</source>

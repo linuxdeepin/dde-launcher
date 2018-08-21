@@ -15,11 +15,11 @@
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>இசை</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>நிகழ்படம்</translation>
     </message>
     <message>
         <source>Graphics</source>
@@ -27,7 +27,7 @@
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>விளையாட்டு</translation>
     </message>
     <message>
         <source>Office</source>
@@ -43,7 +43,7 @@
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation>கணினி</translation>
     </message>
     <message>
         <source>Others</source>

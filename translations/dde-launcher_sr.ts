@@ -7,47 +7,47 @@
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>Интернет</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>Ћаскање</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Музика</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>Видео</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>Графика</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>Игре</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation>Канцеларија</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>Читање</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation>Развој</translation>
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation>Систем</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation>Остало</translation>
     </message>
 </context>
 <context>
@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation>Отвори уз посредника</translation>
+        <translation>Покрени уз посредника</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
@@ -89,11 +89,11 @@
     </message>
     <message>
         <source>Open</source>
-        <translation>Отвори</translation>
+        <translation>Покрени</translation>
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation>Пошаљи на радну површ</translation>
+        <translation>Пошаљи на радну површину</translation>
     </message>
     <message>
         <source>Send to dock</source>
@@ -101,7 +101,7 @@
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation>Уклони из покретања</translation>
+        <translation>Уклони са покретања</translation>
     </message>
     <message>
         <source>Add to startup</source>
@@ -136,7 +136,7 @@
     </message>
     <message>
         <source>Game</source>
-        <translation>Игра</translation>
+        <translation>Игре</translation>
     </message>
     <message>
         <source>Office</source>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Поновно покретање</translation>
+        <translation>Поново покрени</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -222,7 +222,7 @@
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Угаси</translation>
+        <translation>Искључи</translation>
     </message>
     <message>
         <source>Back</source>
@@ -241,7 +241,7 @@
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Угаси</translation>
+        <translation>Искључи</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -253,7 +253,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Поновно покретање</translation>
+        <translation>Поново покрени</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -269,7 +269,7 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation>Видео снимци</translation>
+        <translation>Видео</translation>
     </message>
     <message>
         <source>Pictures</source>
@@ -300,11 +300,11 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation>Подешавања</translation>
+        <translation>Подeшавања</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Угаси</translation>
+        <translation>Искључи</translation>
     </message>
     <message>
         <source>Videos</source>
@@ -323,7 +323,7 @@
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation>Све Категорије</translation>
+        <translation>Све категорије</translation>
     </message>
     <message>
         <source>Back</source>

@@ -15,7 +15,7 @@
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Musika</translation>
     </message>
     <message>
         <source>Video</source>

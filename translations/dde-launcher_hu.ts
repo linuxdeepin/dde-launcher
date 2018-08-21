@@ -7,54 +7,54 @@
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>Internet</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>Csevegés</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Zene</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>Videó</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>Grafika</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>Játék</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation>Iroda</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>Olvasás</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation>Fejlesztés</translation>
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation>Rendszer</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation>Egyebek</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>%1 biztos eltávolítjuk?</translation>
+        <translation>%1 biztos eltávolítod?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -163,7 +163,7 @@
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Biztosan eltávolítja ezt: %1 ?</translation>
+        <translation>Biztosan eltávolítod ezt: %1 ?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
@@ -316,18 +316,18 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokumentumok</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation>Minden kategória</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Vissza</translation>
     </message>
 </context>
 <context>
@@ -341,7 +341,7 @@
     <name>WindowedFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Biztosan eltávolítja ezt: %1 ?</translation>
+        <translation>Biztosan eltávolítod ezt: %1 ?</translation>
     </message>
     <message>
         <source>Cancel</source>

@@ -3,51 +3,51 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>نتیجه جستوجو یافت نشد</translation>
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>اینترنت</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>چت</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>موسیقی</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>ویدیو</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>گرافیک‌ها</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>بازی‌</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation>اداری</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>خواندن</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation>توسعه</translation>
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation>سیستمی</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation>غیره</translation>
     </message>
 </context>
 <context>
@@ -81,11 +81,11 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation type="unfinished"/>
+        <translation>با پروکسی باز کنید</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>خاموش کردن مقیاس گذاری صفحه نمایش</translation>
     </message>
     <message>
         <source>Open</source>
@@ -93,26 +93,26 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation>بفرست به دسکتاپ</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation>بفرست به لنگرگاه</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation>حذف از استارت آپ</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation>اضافه کردن به استارت آپ</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>تمام برنامه ها</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -186,11 +186,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>اسناد</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>ویدیوها</translation>
     </message>
     <message>
         <source>Music</source>
@@ -198,7 +198,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>تصاویر</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>راه اندازی مجدد</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -253,7 +253,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>راه اندازی مجدد</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -265,15 +265,15 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>اسناد</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>ویدیوها</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>تصاویر</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -308,26 +308,26 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>ویدیوها</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>تصاویر</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>اسناد</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation>تمام دسته بندی ها</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>بازگشت </translation>
     </message>
 </context>
 <context>

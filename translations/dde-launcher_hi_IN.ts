@@ -3,116 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Internet</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Chat</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Video</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Graphics</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Game</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Office</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>System</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>रद्द करो</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>पुष्टि</translation>
-    </message>
-</context>
-<context>
-    <name>MenuWorker</name>
-    <message>
-        <source>Remove from desktop</source>
-        <translation>डेस्कटॉप से हटाएं </translation>
-    </message>
-    <message>
-        <source>Remove from dock</source>
-        <translation>डॉक से हटाएं </translation>
-    </message>
-    <message>
-        <source>Uninstall</source>
-        <translation>स्थापना रद्द करें</translation>
-    </message>
-    <message>
-        <source>Open by proxy</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Disable display scaling</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation>खोलो</translation>
-    </message>
-    <message>
-        <source>Send to desktop</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Send to dock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Remove from startup</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add to startup</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>MiniCategoryWidget</name>
-    <message>
-        <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>खोज का कोई परिणाम नहीं मिला</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -132,11 +23,11 @@
     </message>
     <message>
         <source>Graphics</source>
-        <translation>ग्राफिक्स</translation>
+        <translation>ग्राफ़िक्स</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation>गेम</translation>
+        <translation>खेल</translation>
     </message>
     <message>
         <source>Office</source>
@@ -144,15 +35,124 @@
     </message>
     <message>
         <source>Reading</source>
-        <translation>पढ़ें</translation>
+        <translation>पठन</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation>विकास</translation>
+        <translation>सॉफ्टवेयर विकास</translation>
     </message>
     <message>
         <source>System</source>
-        <translation>प्रणाली</translation>
+        <translation>सिस्टम </translation>
+    </message>
+    <message>
+        <source>Others</source>
+        <translation>अन्य</translation>
+    </message>
+</context>
+<context>
+    <name>FullScreenFrame</name>
+    <message>
+        <source>Are you sure to uninstall %1 ?</source>
+        <translation>क्या आप वाकई %1 को हटाना चाहते हैं?</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>रद्द करें</translation>
+    </message>
+    <message>
+        <source>Confirm</source>
+        <translation>पुष्टि करें </translation>
+    </message>
+</context>
+<context>
+    <name>MenuWorker</name>
+    <message>
+        <source>Remove from desktop</source>
+        <translation>डेस्कटॉप से हटाएँ</translation>
+    </message>
+    <message>
+        <source>Remove from dock</source>
+        <translation>डॉक से हटाएँ</translation>
+    </message>
+    <message>
+        <source>Uninstall</source>
+        <translation>हटाएँ</translation>
+    </message>
+    <message>
+        <source>Open by proxy</source>
+        <translation>प्रॉक्सी सर्वर द्वारा खोलें</translation>
+    </message>
+    <message>
+        <source>Disable display scaling</source>
+        <translation>डिस्प्ले मापन निष्क्रिय करें</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>खोलें</translation>
+    </message>
+    <message>
+        <source>Send to desktop</source>
+        <translation>डेस्कटॉप पर भेजें</translation>
+    </message>
+    <message>
+        <source>Send to dock</source>
+        <translation>डॉक पर भेजें</translation>
+    </message>
+    <message>
+        <source>Remove from startup</source>
+        <translation>स्टार्टअप से हटाएँ</translation>
+    </message>
+    <message>
+        <source>Add to startup</source>
+        <translation>स्टार्टअप में जोड़ें</translation>
+    </message>
+</context>
+<context>
+    <name>MiniCategoryWidget</name>
+    <message>
+        <source>All Apps</source>
+        <translation>सभी अनुप्रयोग</translation>
+    </message>
+    <message>
+        <source>Internet</source>
+        <translation>इंटरनेट</translation>
+    </message>
+    <message>
+        <source>Chat</source>
+        <translation>वार्तालाप</translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation>संगीत</translation>
+    </message>
+    <message>
+        <source>Video</source>
+        <translation>वीडियो</translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation>ग्राफ़िक्स</translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation>खेल</translation>
+    </message>
+    <message>
+        <source>Office</source>
+        <translation>कार्यालय</translation>
+    </message>
+    <message>
+        <source>Reading</source>
+        <translation>पठन</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>सॉफ्टवेयर विकास</translation>
+    </message>
+    <message>
+        <source>System</source>
+        <translation>सिस्टम </translation>
     </message>
     <message>
         <source>Others</source>
@@ -163,19 +163,19 @@
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>क्या आप वाकई %1 को हटाना चाहते हैं?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>सभी अनियमितता को एक साथ हटा दिया जाएगा </translation>
+        <translation>सभी सॉफ्टवेयर निर्भरताओं को एक साथ हटा दिया जाएगा </translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>रद्द करो</translation>
+        <translation>रद्द करें</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>पुष्टि</translation>
+        <translation>पुष्टि करें </translation>
     </message>
 </context>
 <context>
@@ -186,11 +186,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>दस्तावेज़</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>वीडियो</translation>
     </message>
     <message>
         <source>Music</source>
@@ -198,7 +198,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>चित्र</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -206,7 +206,7 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>अवरोधित</translation>
+        <translation>लॉक स्क्रीन</translation>
     </message>
     <message>
         <source>Logout</source>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>पुनः आरंभ करें</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -226,7 +226,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>वापस</translation>
     </message>
 </context>
 <context>
@@ -249,31 +249,31 @@
     </message>
     <message>
         <source>Logout</source>
-        <translation>लॉग आउट करें </translation>
+        <translation>लॉगआउट करें</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>पुनः आरंभ करें</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>निलंबित</translation>
+        <translation>स्थगित करें</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>वापस</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>दस्तावेज़</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>वीडियो</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>चित्र</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -300,56 +300,56 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation>व्यवस्था</translation>
+        <translation>सेटिंग्स</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>शटडाउन </translation>
+        <translation>बंद करें</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>वीडियो</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>चित्र</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>दस्तावेज़</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation>सभी श्रेणियाँ</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>वापस</translation>
     </message>
 </context>
 <context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation>खोज</translation>
+        <translation>खोजें</translation>
     </message>
 </context>
 <context>
     <name>WindowedFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>क्या आप वाकई %1 को हटाना चाहते हैं?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>रद्द करो</translation>
+        <translation>रद्द करें</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>पुष्टि</translation>
+        <translation>पुष्टि करें </translation>
     </message>
 </context>
 </TS>

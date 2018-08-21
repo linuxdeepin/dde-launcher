@@ -15,11 +15,11 @@
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Musiek</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>Video</translation>
     </message>
     <message>
         <source>Graphics</source>
@@ -27,7 +27,7 @@
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>Speletjies</translation>
     </message>
     <message>
         <source>Office</source>
@@ -43,7 +43,7 @@
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation>Stelsel</translation>
     </message>
     <message>
         <source>Others</source>

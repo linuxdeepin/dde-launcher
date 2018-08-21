@@ -3,58 +3,58 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>অনুসন্ধানের কোন ফলাফল নেই</translation>
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>ইন্টারনেট</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>চ্যাট</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>মিউজিক</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>ভিডিও</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>গ্রাফিক্স</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>গেম</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation>অফিস</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>পড়া</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation>ডেভেলপমেন্ট</translation>
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation>সিস্টেম</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation>অন্যান্য</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>আপনি কি %1 আনইন্সটল করার ব্যাপারে নিশ্চিত?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -69,11 +69,11 @@
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation type="unfinished"/>
+        <translation>ডেস্কটপ হতে সরিয়ে ফেলুন</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation type="unfinished"/>
+        <translation>ডক হতে সরিয়ে ফেলুন</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -81,11 +81,11 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation type="unfinished"/>
+        <translation>প্রক্সি দিয়ে খুলুন</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>ডিসপ্লে স্কেলিং বন্ধ করুন</translation>
     </message>
     <message>
         <source>Open</source>
@@ -93,34 +93,34 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation>ডেস্কটপে পাঠান</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation>ডকে পাঠান</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation>স্টার্টআপ থেকে সরান</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation>স্টার্টআপে যোগ করুন</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>সকল অ্যাপ্লিকেশান</translation>
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>ইন্টারনেট</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>চ্যাট</translation>
     </message>
     <message>
         <source>Music</source>
@@ -128,46 +128,46 @@
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>ভিডিও</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>গ্রাফিক্স</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>গেম</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation>অফিস</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>পড়া</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation>ডেভেলপমেন্ট</translation>
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation>সিস্টেম</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation>অন্যান্য</translation>
     </message>
 </context>
 <context>
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>আপনি কি %1 আনইন্সটল করার ব্যাপারে নিশ্চিত?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation type="unfinished"/>
+        <translation>সমস্ত নির্ভরশীলতা একইসাথে সরানো হবে</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -186,11 +186,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>ডকুমেন্ট সমূহ</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>ভিডিও সমূহ</translation>
     </message>
     <message>
         <source>Music</source>
@@ -198,7 +198,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>ছবি সমূহ</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -206,11 +206,11 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation type="unfinished"/>
+        <translation>লক করুন</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation type="unfinished"/>
+        <translation>লগ আউট করুন</translation>
     </message>
     <message>
         <source>Reboot</source>
@@ -218,15 +218,15 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation type="unfinished"/>
+        <translation>সাময়িক ভাবে বন্ধ করুন</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation type="unfinished"/>
+        <translation>বন্ধ করুন</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>ফিরে যান</translation>
     </message>
 </context>
 <context>
@@ -241,15 +241,15 @@
     </message>
     <message>
         <source>Shutdown</source>
-        <translation type="unfinished"/>
+        <translation>বন্ধ করুন</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation type="unfinished"/>
+        <translation>লক করুন</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation type="unfinished"/>
+        <translation>লগ আউট করুন</translation>
     </message>
     <message>
         <source>Reboot</source>
@@ -257,23 +257,23 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation type="unfinished"/>
+        <translation>সাময়িক ভাবে বন্ধ করুন</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>ফিরে যান</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>ডকুমেন্ট সমূহ</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>ভিডিও সমূহ</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>ছবি সমূহ</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -304,44 +304,44 @@
     </message>
     <message>
         <source>Shutdown</source>
-        <translation type="unfinished"/>
+        <translation>বন্ধ করুন</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>ভিডিও সমূহ</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>ছবি সমূহ</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>ডকুমেন্ট সমূহ</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation>সব ধরনের</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>ফিরে যান</translation>
     </message>
 </context>
 <context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished"/>
+        <translation>খুঁজুন</translation>
     </message>
 </context>
 <context>
     <name>WindowedFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>আপনি কি %1 আনইন্সটল করার ব্যাপারে নিশ্চিত?</translation>
     </message>
     <message>
         <source>Cancel</source>

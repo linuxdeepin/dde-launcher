@@ -7,47 +7,47 @@
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>Интернет</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>Чат</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Музика</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>Видео</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>Графика</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>Игра</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation>Офис</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>Четене</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation>Разработка</translation>
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation>Система</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation>Други</translation>
     </message>
 </context>
 <context>
@@ -73,7 +73,7 @@
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Разкачане</translation>
+        <translation>Премахване от дока</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation>Отваряне чрез прокси</translation>
+        <translation>Отваряне през прокси</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
@@ -93,7 +93,7 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation>Изпрати на работният плот</translation>
+        <translation>Изпрати на работния плот</translation>
     </message>
     <message>
         <source>Send to dock</source>
@@ -167,7 +167,7 @@
     </message>
     <message>
         <source>All dependencies will be removed together</source>
-        <translation>Всички зависимости ще бъдат премахнати заедно</translation>
+        <translation>Всички зависимости ще бъдат премахнати с него</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -206,7 +206,7 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>3аключвам</translation>
+        <translation>3аключване</translation>
     </message>
     <message>
         <source>Logout</source>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Рестарт</translation>
+        <translation>Рестартиране</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -226,7 +226,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation>Върни</translation>
+        <translation>Връщане</translation>
     </message>
 </context>
 <context>
@@ -245,15 +245,15 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>3аключвам</translation>
+        <translation>3аключване</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Изход</translation>
+        <translation>Излизане</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Рестарт</translation>
+        <translation>Рестартиране</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -261,7 +261,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation>Върни</translation>
+        <translation>Връщане</translation>
     </message>
     <message>
         <source>Documents</source>
@@ -323,11 +323,11 @@
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation>Всички файлове</translation>
+        <translation>Всички категории</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Назад</translation>
+        <translation>Връщане</translation>
     </message>
 </context>
 <context>

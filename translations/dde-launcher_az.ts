@@ -7,7 +7,7 @@
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>İnternet</translation>
     </message>
     <message>
         <source>Chat</source>
@@ -15,11 +15,11 @@
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Musiqi</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>Video</translation>
     </message>
     <message>
         <source>Graphics</source>
@@ -27,11 +27,11 @@
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>Oyun</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation>Ofis</translation>
     </message>
     <message>
         <source>Reading</source>
@@ -43,7 +43,7 @@
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation>Sistem</translation>
     </message>
     <message>
         <source>Others</source>

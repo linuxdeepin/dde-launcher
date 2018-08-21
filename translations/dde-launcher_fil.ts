@@ -7,27 +7,27 @@
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>Internet</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>Komunikasyon</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>Musika</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation>Bidyo</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>Grapiko</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>Laro</translation>
     </message>
     <message>
         <source>Office</source>
@@ -35,7 +35,7 @@
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>Pagbabasa</translation>
     </message>
     <message>
         <source>Development</source>
@@ -47,7 +47,7 @@
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation>Iba</translation>
     </message>
 </context>
 <context>

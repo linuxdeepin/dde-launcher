@@ -28,6 +28,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QClipboard>
 #include <QScreen>
 #include <QHBoxLayout>
 #include <QDebug>
@@ -215,33 +216,29 @@ void FullScreenFrame::resizeEvent(QResizeEvent *e)
 
 void FullScreenFrame::keyPressEvent(QKeyEvent *e)
 {
-    switch (e->key())
-    {
-#ifdef QT_DEBUG
-    case Qt::Key_Control:       scrollToCategory(AppsListModel::Internet);      return;
-//    case Qt::Key_F2:            updateDisplayMode(GroupByCategory);             return;
-    case Qt::Key_Slash:         m_calcUtil->increaseItemSize();
-                                emit m_appsManager->layoutChanged(AppsListModel::All);
-                                                                                return;
-    case Qt::Key_Asterisk:      m_calcUtil->decreaseItemSize();
-                                emit m_appsManager->layoutChanged(AppsListModel::All);
-                                                                                return;
-#endif
-    case Qt::Key_Minus:
+    if (e->key() == Qt::Key_Minus) {
         if (!e->modifiers().testFlag(Qt::ControlModifier))
             return;
+
         e->accept();
         if (m_calcUtil->decreaseIconSize())
             emit m_appsManager->layoutChanged(AppsListModel::All);
-        break;
-    case Qt::Key_Equal:
+    } else if (e->key() == Qt::Key_Equal) {
         if (!e->modifiers().testFlag(Qt::ControlModifier))
             return;
         e->accept();
         if (m_calcUtil->increaseIconSize())
             emit m_appsManager->layoutChanged(AppsListModel::All);
-        break;
-    default:;
+    } else if (e->key() == Qt::Key_V &&
+               e->modifiers().testFlag(Qt::ControlModifier)) {
+        const QString &clipboardText = QApplication::clipboard()->text();
+
+        // support Ctrl+V shortcuts.
+        if (!clipboardText.isEmpty()) {
+            m_searchWidget->edit()->setText(clipboardText);
+            m_searchWidget->setFocus();
+            m_searchWidget->edit()->setFocus();
+        }
     }
 }
 

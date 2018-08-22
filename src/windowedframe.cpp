@@ -33,6 +33,7 @@
 
 #include <QApplication>
 #include <QHBoxLayout>
+#include <QClipboard>
 #include <QScrollBar>
 #include <QKeyEvent>
 #include <QPainter>
@@ -500,12 +501,18 @@ void WindowedFrame::keyPressEvent(QKeyEvent *e)
 {
     QWidget::keyPressEvent(e);
 
-    switch (e->key()) {
-    case Qt::Key_Escape:
+    if (e->key() == Qt::Key_Escape) {
         hideLauncher();
-        break;
-    default:
-        break;
+    } else if (e->key() == Qt::Key_V &&
+               e->modifiers().testFlag(Qt::ControlModifier)) {
+        const QString &clipboardText = QApplication::clipboard()->text();
+
+        // support Ctrl+V shortcuts.
+        if (!clipboardText.isEmpty()) {
+            m_searchWidget->edit()->setText(clipboardText);
+            m_searchWidget->setFocus();
+            m_searchWidget->edit()->setFocus();
+        }
     }
 }
 

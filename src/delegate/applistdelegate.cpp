@@ -23,15 +23,12 @@
 
 #include "applistdelegate.h"
 #include "src/model/appslistmodel.h"
+#include "../global_util/util.h"
 
 #include <QPixmap>
 #include <QPainter>
 #include <QDebug>
 #include <QApplication>
-
-#include <DSvgRenderer>
-
-DWIDGET_USE_NAMESPACE
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
@@ -42,11 +39,8 @@ AppListDelegate::AppListDelegate(QObject *parent)
 
       m_actived(false)
 {
-    const auto ratio = qApp->devicePixelRatio();
-    m_blueDotPixmap = DSvgRenderer::render(":/skin/images/new_install_indicator.svg", QSize(10, 10) * ratio);
-    m_blueDotPixmap.setDevicePixelRatio(ratio);
-    m_autoStartPixmap = DSvgRenderer::render(":/skin/images/emblem-autostart.svg", QSize(16, 16) * ratio);
-    m_autoStartPixmap.setDevicePixelRatio(ratio);
+    m_blueDotPixmap = renderSVG(":/skin/images/new_install_indicator.svg", QSize(10, 10));
+    m_autoStartPixmap = renderSVG(":/skin/images/emblem-autostart.svg", QSize(16, 16));
 }
 
 void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -71,8 +65,8 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     if (isDragItem) {
         iconSize = iconSize * 1.1;
 
-        QPixmap dragIndicator = DSvgRenderer::render(":/widgets/images/drag_indicator.svg",
-                                                     QSize(20, 20) * ratio);
+        QPixmap dragIndicator = renderSVG(":/widgets/images/drag_indicator.svg",
+                                                     QSize(20, 20));
         dragIndicator.setDevicePixelRatio(ratio);
         painter->drawPixmap(rect.right() - 30,
                             rect.y() + (rect.height() - dragIndicator.height() / ratio) / 2,

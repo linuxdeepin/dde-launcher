@@ -19,24 +19,17 @@
 
 #include "miniframeswitchbtn.h"
 #include "../windowedframe.h"
+#include "../global_util/util.h"
 
-#include <DSvgRenderer>
 #include <QHBoxLayout>
-
-DWIDGET_USE_NAMESPACE
 
 MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     : QPushButton(parent)
     , m_textLabel(new QLabel)
     , m_enterIcon(new QLabel)
 {
-    const auto ratio = devicePixelRatioF();
-    QPixmap enterPixmap = DSvgRenderer::render(":/widgets/images/enter_details_normal.svg",
-                                               QSize(20, 20) * ratio);
-    QPixmap allPixmap = DSvgRenderer::render(":/widgets/images/all.svg",
-                                             QSize(24, 24) * ratio);
-    enterPixmap.setDevicePixelRatio(ratio);
-    allPixmap.setDevicePixelRatio(ratio);
+    QPixmap enterPixmap = renderSVG(":/widgets/images/enter_details_normal.svg", QSize(20, 20));
+    QPixmap allPixmap = renderSVG(":/widgets/images/all.svg", QSize(24, 24));
 
     m_enterIcon->setFixedSize(20, 20);
     m_enterIcon->setPixmap(enterPixmap);

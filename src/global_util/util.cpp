@@ -28,6 +28,8 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QSvgRenderer>
+#include <QImageReader>
+#include <QApplication>
 
 QString getQssFromFile(QString filename)
 {
@@ -65,6 +67,23 @@ const QPixmap loadSvg(const QString &fileName, const int size)
     painter.begin(&pixmap);
     renderer.render(&painter);
     painter.end();
+
+    return pixmap;
+}
+
+const QPixmap& renderSVG(const QString &path, const QSize &size) {
+    QImageReader reader;
+    QPixmap pixmap;
+    reader.setFileName(path);
+    if (reader.canRead()) {
+        const qreal ratio = qApp->devicePixelRatio();
+        reader.setScaledSize(size * ratio);
+        pixmap = QPixmap::fromImage(reader.read());
+        pixmap.setDevicePixelRatio(ratio);
+    }
+    else {
+        pixmap.load(path);
+    }
 
     return pixmap;
 }

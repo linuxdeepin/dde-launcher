@@ -77,6 +77,9 @@ AppListView::AppListView(QWidget *parent)
 #else
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::dropSwap);
 #endif
+
+    connect(m_scrollAni, &QPropertyAnimation::valueChanged, this, &AppListView::handleScrollValueChanged);
+    connect(m_scrollAni, &QPropertyAnimation::finished, this, &AppListView::handleScrollFinished);
 }
 
 const QModelIndex AppListView::indexAt(const int index) const
@@ -99,6 +102,7 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
     e->accept();
 
     setState(NoState);
+    blockSignals(false);
 
     const QModelIndex &index = indexAt(e->pos());
     const QPoint pos = e->pos();
@@ -308,6 +312,26 @@ void AppListView::startDrag(const QModelIndex &index)
     }
 
     m_enableDropInside = false;
+}
+
+void AppListView::handleScrollValueChanged()
+{
+    QScrollBar *vscroll = verticalScrollBar();
+
+    if (vscroll->value() == vscroll->maximum() ||
+        vscroll->value() == vscroll->minimum()) {
+        blockSignals(false);
+    } else {
+        blockSignals(true);
+    }
+}
+
+void AppListView::handleScrollFinished()
+{
+    blockSignals(false);
+
+    QPoint pos = mapFromGlobal(QCursor::pos());
+    emit entered(indexAt(pos));
 }
 
 void AppListView::prepareDropSwap()

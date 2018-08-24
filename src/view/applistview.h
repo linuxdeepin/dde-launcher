@@ -65,6 +65,8 @@ protected:
     void startDrag(const QModelIndex &index);
 
 private:
+    void handleScrollValueChanged();
+    void handleScrollFinished();
     void prepareDropSwap();
     void createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni = false);
     void dropSwap();

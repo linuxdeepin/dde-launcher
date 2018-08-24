@@ -252,6 +252,11 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     // To make sure the window is placed at the right position.
     updateGeometry();
 
+    // force refresh
+    if (!m_appsManager->isVaild()) {
+        m_appsManager->refreshAllList();
+    }
+
     QFrame::showEvent(e);
 
     QTimer::singleShot(0, this, [this] () {

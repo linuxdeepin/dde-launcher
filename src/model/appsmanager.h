@@ -61,6 +61,8 @@ public:
     int dockPosition() const;
     int dockWidth() const;
     bool isHaveNewInstall() const { return !m_newInstalledAppsList.isEmpty(); }
+    bool isVaild();
+    void refreshAllList();
 
 signals:
     void dataChanged(const AppsListModel::AppCategory category) const;

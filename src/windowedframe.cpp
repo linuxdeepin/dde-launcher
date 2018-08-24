@@ -229,6 +229,11 @@ void WindowedFrame::showLauncher()
     m_searchWidget->clearSearchContent();
     qApp->processEvents();
 
+    // force refresh
+    if (!m_appsManager->isVaild()) {
+        m_appsManager->refreshAllList();
+    }
+
     adjustPosition();
     show();
 

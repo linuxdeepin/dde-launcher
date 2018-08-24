@@ -141,11 +141,7 @@ AppsManager::AppsManager(QObject *parent) :
             << QString(":/icons/skin/icons/system_normal_22px.svg")
             << QString(":/icons/skin/icons/others_normal_22px.svg");
 
-    m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
-
-    refreshCategoryInfoList();
-    refreshUsedInfoList();
-    refreshUserInfoList();
+    refreshAllList();
 
     if (APP_AUTOSTART_CACHE.value("version").toString() != qApp->applicationVersion())
         refreshAppAutoStartCache();
@@ -300,6 +296,20 @@ int AppsManager::dockPosition() const
 int AppsManager::dockWidth() const
 {
     return QRect(m_dockInter->frontendRect()).width();
+}
+
+bool AppsManager::isVaild()
+{
+    return m_launcherInter->isValid() && !m_allAppInfoList.isEmpty();
+}
+
+void AppsManager::refreshAllList()
+{
+    m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
+
+    refreshCategoryInfoList();
+    refreshUsedInfoList();
+    refreshUserInfoList();
 }
 
 void AppsManager::saveUserSortedList()

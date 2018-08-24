@@ -258,6 +258,11 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     updateBackground();
     updateGradient();
 
+    // force refresh
+    if (!m_appsManager->isVaild()) {
+        m_appsManager->refreshAllList();
+    }
+
     QFrame::showEvent(e);
 
     QTimer::singleShot(0, this, [this] () {

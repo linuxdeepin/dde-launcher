@@ -476,11 +476,18 @@ const QPixmap AppsManager::appIcon(const QString &iconKey, const int size)
 
 void AppsManager::refreshCategoryInfoList()
 {
+    QDBusPendingReply<ItemInfoList> reply = m_launcherInter->GetAllItemInfos();
+    if (reply.isError()) {
+        qWarning() << "data is empty, quit!!";
+        qWarning() << reply.error();
+        qApp->quit();
+    }
+
     QByteArray readBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
     QDataStream in(&readBuf, QIODevice::ReadOnly);
     in >> m_usedSortedList;
 
-    const ItemInfoList &datas = m_launcherInter->GetAllItemInfos().value();
+    const ItemInfoList &datas = reply.value();
     m_allAppInfoList.clear();
     m_allAppInfoList.reserve(datas.size());
     for (const auto &it : datas) {

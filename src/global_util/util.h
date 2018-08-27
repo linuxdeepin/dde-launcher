@@ -31,6 +31,6 @@ QString joinPath(const QString& path, const QString& fileName);
 QString getThumbnailsPath();
 QString getCategoryNames(QString text);
 const QPixmap loadSvg(const QString &fileName, const int size);
-const QPixmap& renderSVG(const QString &path, const QSize &size);
+const QPixmap renderSVG(const QString &path, const QSize &size);
 #endif // UTIL_H
 

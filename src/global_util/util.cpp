@@ -71,7 +71,7 @@ const QPixmap loadSvg(const QString &fileName, const int size)
     return pixmap;
 }
 
-const QPixmap& renderSVG(const QString &path, const QSize &size) {
+const QPixmap renderSVG(const QString &path, const QSize &size) {
     QImageReader reader;
     QPixmap pixmap;
     reader.setFileName(path);

@@ -1,3 +1,13 @@
+<a name=""></a>
+##  4.4.5.1 (2018-08-28)
+
+
+#### Bug Fixes
+
+*   don't show when not have app infos ([6d85a527](https://github.com/linuxdeepin/dde-launcher/commit/6d85a527be7539ce815f990bc9142b1c8524bff6))
+
+
+
 <a name="4.4.5"></a>
 ### 4.4.5 (2018-08-12)
 

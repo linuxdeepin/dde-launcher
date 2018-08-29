@@ -68,8 +68,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     BoxFrame(parent),
     m_menuWorker(new MenuWorker),
     m_eventFilter(new SharedEventFilter(this)),
-
-    m_backgroundManager(new BackgroundManager(this)),
     m_displayInter(new DBusDisplay(this)),
 
     m_calcUtil(CalculateUtil::instance()),
@@ -209,7 +207,10 @@ void FullScreenFrame::resizeEvent(QResizeEvent *e)
     m_navigationWidget->setFixedWidth(besidePadding);
     m_rightSpacing->setFixedWidth(besidePadding);
 
-    updateGradient();
+    QTimer::singleShot(0, this, [=] {
+        updateBackground();
+        updateGradient();
+    });
 
     QFrame::resizeEvent(e);
 }
@@ -251,6 +252,8 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     XcbMisc::instance()->set_deepin_override(winId());
     // To make sure the window is placed at the right position.
     updateGeometry();
+    updateBackground();
+    updateGradient();
 
     // force refresh
     if (!m_appsManager->isVaild()) {
@@ -305,22 +308,6 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
         qApp->postEvent(m_appsArea->viewport(), event);
 
         e->accept();
-    }
-}
-
-void FullScreenFrame::paintEvent(QPaintEvent *e)
-{
-    QFrame::paintEvent(e);
-
-    QPainter painter(this);
-
-    const QPixmap &bgPix = backgroundPixmap();
-    for (QRect &r : e->region().rects())
-    {
-        // NOTE(sbw):
-        // There is a workaround to fix HiDPI 1px black line.
-        r += QMargins(1, 1, 1, 1);
-        painter.drawPixmap(r, bgPix, r);
     }
 }
 
@@ -540,9 +527,6 @@ void FullScreenFrame::initUI()
     // animation
     m_scrollAnimation = new QPropertyAnimation(m_appsArea->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
-
-    connect(m_backgroundManager, &BackgroundManager::currentWorkspaceBackgroundChanged, this, &FullScreenFrame::updateBackground);
-    updateBackground(m_backgroundManager->currentWorkspaceBackground());
 }
 
 // FIXME(sbw): optimize this implements.
@@ -652,12 +636,6 @@ void FullScreenFrame::refershCurrentFloatTitle()
                              sourceTitle->visibleRegion().boundingRect().height() < 20);
 }
 
-void FullScreenFrame::updateBackground(const QString &uri)
-{
-    setBackground(uri);
-    updateGradient();
-}
-
 CategoryTitleWidget *FullScreenFrame::categoryTitle(const AppsListModel::AppCategory category) const
 {
     CategoryTitleWidget *dest = nullptr;
@@ -753,7 +731,6 @@ void FullScreenFrame::initConnection()
     connect(this, &FullScreenFrame::displayModeChanged, this, &FullScreenFrame::checkCategoryVisible);
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
     connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hide, Qt::QueuedConnection);
-    connect(this, &FullScreenFrame::backgroundChanged, this, static_cast<void (FullScreenFrame::*)()>(&FullScreenFrame::update));
 
     connect(m_clearCacheTimer, &QTimer::timeout, m_appsManager, &AppsManager::clearCache);
 

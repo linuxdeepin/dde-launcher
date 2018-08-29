@@ -87,7 +87,6 @@ protected:
     void hideEvent(QHideEvent *e) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
-    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
 
     // input method
@@ -117,7 +116,6 @@ private:
     void updatePlaceholderSize();
     void updateDockPosition();
 
-
     AppsListModel *nextCategoryModel(const AppsListModel *currentModel);
     AppsListModel *prevCategoryModel(const AppsListModel *currentModel);
 
@@ -132,7 +130,6 @@ private slots:
     void refreshTitleVisible();
     void refershCategoryTextVisible();
     void refershCurrentFloatTitle();
-    void updateBackground(const QString &uri);
 
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
@@ -148,8 +145,6 @@ private:
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
     std::unique_ptr<MenuWorker> m_menuWorker;
     SharedEventFilter *m_eventFilter;
-
-    BackgroundManager *m_backgroundManager;
 
     DBusDisplay *m_displayInter;
 

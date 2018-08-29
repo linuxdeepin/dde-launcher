@@ -21,25 +21,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QDebug>
-#include <QPushButton>
-#include <QScreen>
-#include <QTimer>
-#include <QCryptographicHash>
-
 #include "boxframe.h"
+#include "backgroundmanager.h"
+
+#include <QDebug>
+#include <QUrl>
+#include <QFile>
 
 static const QString DefaultBackground = "/usr/share/backgrounds/default_background.jpg";
 
 BoxFrame::BoxFrame(QWidget *parent)
-    : QFrame(parent)
+    : QLabel(parent)
+    , m_bgManager(new BackgroundManager(this))
 {
-}
+    connect(m_bgManager, &BackgroundManager::currentWorkspaceBackgroundChanged, this, &BoxFrame::setBackground);
 
-BoxFrame::BoxFrame(const QString &url, QWidget *parent)
-    : BoxFrame(parent)
-{
-    this->setBackground(url);
+    QTimer::singleShot(0, this, [=] {
+        setBackground(m_bgManager->currentWorkspaceBackground());
+    });
 }
 
 BoxFrame::~BoxFrame()
@@ -52,9 +51,9 @@ BoxFrame::~BoxFrame()
 // ShutdownFrame takes ~260ms to complete. On the other hand, this function takes
 // ~130ms by setting pixmap, yet takes only ~12ms to complete the show() of ShutdownFrame.
 // It'll be more obvious on dual screens environment.
-void BoxFrame::setBackground(const QString &url, bool force)
+void BoxFrame::setBackground(const QString &url)
 {
-    if (m_lastUrl == url && !force) return;
+    if (m_lastUrl == url) return;
 
     m_lastUrl = url;
     QString path = QUrl(url).isLocalFile() ? QUrl(url).toLocalFile() : url;
@@ -70,14 +69,13 @@ void BoxFrame::setBackground(const QString &url, bool force)
     }
 
     m_pixmap = pix;
-    m_cache = QPixmap();
-    emit backgroundChanged();
+
+    updateBackground();
 }
 
-QPixmap BoxFrame:: backgroundPixmap()
-{
+const QPixmap BoxFrame::backgroundPixmap() {
     if (m_cache.isNull() || size() != m_cache.size()) {
-        QPixmap cache = m_pixmap.scaled(size(), Qt::KeepAspectRatioByExpanding);
+        const QPixmap &cache = m_pixmap.scaled(size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 
         QRect copyRect((cache.width() - size().width()) / 2,
                        (cache.height() - size().height()) / 2,
@@ -85,6 +83,12 @@ QPixmap BoxFrame:: backgroundPixmap()
 
         m_cache = cache.copy(copyRect);
     }
-
     return m_cache;
+}
+
+void BoxFrame::updateBackground()
+{
+    m_cache = QPixmap();
+
+    setPixmap(backgroundPixmap());
 }

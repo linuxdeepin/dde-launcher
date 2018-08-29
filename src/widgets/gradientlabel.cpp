@@ -51,15 +51,10 @@ void setText(const QString &)
 
 void GradientLabel::paintEvent(QPaintEvent*)
 {
-//    QPainter painter;
-//    painter.begin(this);
-
-//    painter.fillRect(rect(), Qt::red);
-
-//    painter.end();
-
     // process the pixmap
     const QPixmap *thisPix = pixmap();
+    if (!thisPix) return;
+
     QPixmap pix(thisPix->rect().size());
     pix.fill(Qt::transparent);
 

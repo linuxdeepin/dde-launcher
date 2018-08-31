@@ -1,4 +1,15 @@
 <a name=""></a>
+##  4.4.5.2 (2018-08-31)
+
+
+#### Bug Fixes
+
+*   check all app info is vaild ([0c860c02](https://github.com/linuxdeepin/dde-launcher/commit/0c860c0254b609dd5cb88aac93468c31cd37b303))
+* **sw:**  mission mieee ([27d755ae](https://github.com/linuxdeepin/dde-launcher/commit/27d755aed14c4bddb1cb4c712b553e9862fd91e8))
+
+
+
+<a name=""></a>
 ##  4.4.5.1 (2018-08-28)
 
 

@@ -560,9 +560,6 @@ void FullScreenFrame::updateGradient()
 
 void FullScreenFrame::toMiniMode()
 {
-    removeEventFilter(m_eventFilter);
-    m_eventFilter->deleteLater();
-
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.daemon.Launcher")

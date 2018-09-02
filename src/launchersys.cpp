@@ -38,7 +38,8 @@ LauncherSys::LauncherSys(QObject *parent)
 
     , m_launcherInter(nullptr)
     , m_dbusLauncherInter(new DBusLauncher(this))
-
+    , m_windowLauncher(new WindowedFrame)
+    , m_fullLauncher(new FullScreenFrame)
     , m_autoExitTimer(new QTimer(this))
     , m_ignoreRepeatVisibleChangeTimer(new QTimer(this))
 {
@@ -54,6 +55,10 @@ LauncherSys::LauncherSys(QObject *parent)
 
     connect(m_dbusLauncherInter, &DBusLauncher::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
     connect(m_autoExitTimer, &QTimer::timeout, this, &LauncherSys::onAutoExitTimeout, Qt::QueuedConnection);
+    connect(m_windowLauncher, &WindowedFrame::visibleChanged, this, &LauncherSys::visibleChanged);
+    connect(m_windowLauncher, &WindowedFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
+    connect(m_fullLauncher, &FullScreenFrame::visibleChanged, this, &LauncherSys::visibleChanged);
+    connect(m_fullLauncher, &FullScreenFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
 
     m_autoExitTimer->start();
 }
@@ -94,24 +99,13 @@ void LauncherSys::displayModeChanged()
 {
     const bool visible = m_launcherInter && m_launcherInter->visible();
 
-    delete m_launcherInter;
-
-    if (!m_dbusLauncherInter->fullscreen())
-    {
-        WindowedFrame *newFrame = new WindowedFrame;
-
-        connect(newFrame, &WindowedFrame::visibleChanged, this, &LauncherSys::visibleChanged);
-        connect(newFrame, &WindowedFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
-
-        m_launcherInter = newFrame;
-    } else {
-        FullScreenFrame *frame = new FullScreenFrame;
-
-        connect(frame, &FullScreenFrame::visibleChanged, this, &LauncherSys::visibleChanged);
-        connect(frame, &FullScreenFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
-
-        m_launcherInter = frame;
+    if (m_launcherInter) {
+        m_launcherInter->hideLauncher();
     }
+
+    m_launcherInter = m_dbusLauncherInter->fullscreen() ?
+                static_cast<LauncherInterface*>(m_fullLauncher) :
+                static_cast<LauncherInterface*>(m_windowLauncher);
 
     if (visible)
         m_launcherInter->showLauncher();

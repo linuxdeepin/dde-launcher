@@ -30,6 +30,8 @@
 #include <QTimer>
 
 class LauncherInterface;
+class WindowedFrame;
+class FullScreenFrame;
 class LauncherSys : public QObject
 {
     Q_OBJECT
@@ -52,6 +54,9 @@ private slots:
 private:
     LauncherInterface *m_launcherInter;
     DBusLauncher *m_dbusLauncherInter;
+
+    WindowedFrame* m_windowLauncher;
+    FullScreenFrame* m_fullLauncher;
 
     QTimer *m_autoExitTimer;
     QTimer *m_ignoreRepeatVisibleChangeTimer;

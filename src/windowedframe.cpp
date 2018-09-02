@@ -652,8 +652,6 @@ void WindowedFrame::adjustPosition()
 
 void WindowedFrame::onToggleFullScreen()
 {
-    removeEventFilter(m_eventFilter);
-
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.daemon.Launcher")

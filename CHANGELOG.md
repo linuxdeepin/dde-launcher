@@ -1,4 +1,19 @@
 <a name=""></a>
+##  4.4.5.3 (2018-09-03)
+
+
+#### Bug Fixes
+
+*   Incorrect return reference ([08a23f93](https://github.com/linuxdeepin/dde-launcher/commit/08a23f9387f337483ac365140a9640877d08f1d2))
+* **FullScreen:**  draw background error after changing the dock position ([ace96c82](https://github.com/linuxdeepin/dde-launcher/commit/ace96c820547eb27de28fbf8dcd34f4716b4f52b))
+
+#### Features
+
+*   optimization switch mode ([0fa53198](https://github.com/linuxdeepin/dde-launcher/commit/0fa531985fcea2cbe4023c7fc2be7c8abfc885f9))
+
+
+
+<a name=""></a>
 ##  4.4.5.2 (2018-08-31)
 
 

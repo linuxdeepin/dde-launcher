@@ -27,6 +27,10 @@
 #include <QDebug>
 #include <QUrl>
 #include <QFile>
+#include <QApplication>
+#include <QScreen>
+#include <QPainter>
+#include <QPaintEvent>
 
 static const QString DefaultBackground = "/usr/share/backgrounds/default_background.jpg";
 
@@ -74,12 +78,15 @@ void BoxFrame::setBackground(const QString &url)
 }
 
 const QPixmap BoxFrame::backgroundPixmap() {
-    if (m_cache.isNull() || size() != m_cache.size()) {
-        const QPixmap &cache = m_pixmap.scaled(size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+    const QSize &size = qApp->primaryScreen()->size();
+    if (m_cache.isNull() || size != m_cache.size()) {
+        const QPixmap &cache = m_pixmap.scaled(size,
+                                               Qt::KeepAspectRatioByExpanding,
+                                               Qt::SmoothTransformation);
 
-        QRect copyRect((cache.width() - size().width()) / 2,
-                       (cache.height() - size().height()) / 2,
-                       size().width(), size().height());
+        QRect copyRect((cache.width() - size.width()) / 2,
+                       (cache.height() - size.height()) / 2,
+                       size.width(), size.height());
 
         m_cache = cache.copy(copyRect);
     }
@@ -88,7 +95,30 @@ const QPixmap BoxFrame::backgroundPixmap() {
 
 void BoxFrame::updateBackground()
 {
-    m_cache = QPixmap();
+    m_cache = backgroundPixmap();
 
-    setPixmap(backgroundPixmap());
+    update();
+}
+
+void BoxFrame::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+
+    QScreen *s = qApp->primaryScreen();
+    const QRect &geom = s->geometry();
+    QRect tr(geom.topLeft() / s->devicePixelRatio(), geom.size());
+
+    tr = tr & event->rect();
+    if (tr.isEmpty()) return;
+
+    QPixmap pix = m_cache.scaled(s->size() * s->devicePixelRatio(),
+                                      Qt::KeepAspectRatioByExpanding,
+                                      Qt::SmoothTransformation);
+
+    pix.setDevicePixelRatio(devicePixelRatioF());
+
+    painter.drawPixmap(tr,
+                       pix,
+                       QRect(tr.topLeft() * s->devicePixelRatio() - geom.topLeft(),
+                                      tr.size() * pix.devicePixelRatioF()));
 }

@@ -42,6 +42,7 @@ public:
 
 protected:
     void updateBackground();
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private:
     QString m_lastUrl;

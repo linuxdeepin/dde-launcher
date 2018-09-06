@@ -37,7 +37,6 @@
 #include "model/appslistmodel.h"
 #include "view/appgridview.h"
 #include "worker/menuworker.h"
-#include "dbusinterface/dbusdisplay.h"
 #include "widgets/applistarea.h"
 #include "boxframe/boxframe.h"
 
@@ -145,8 +144,6 @@ private:
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
     std::unique_ptr<MenuWorker> m_menuWorker;
     SharedEventFilter *m_eventFilter;
-
-    DBusDisplay *m_displayInter;
 
     CalculateUtil *m_calcUtil;
     AppsManager *m_appsManager;

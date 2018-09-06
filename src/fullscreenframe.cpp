@@ -68,7 +68,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     BoxFrame(parent),
     m_menuWorker(new MenuWorker),
     m_eventFilter(new SharedEventFilter(this)),
-    m_displayInter(new DBusDisplay(this)),
 
     m_calcUtil(CalculateUtil::instance()),
     m_appsManager(AppsManager::instance()),
@@ -714,8 +713,8 @@ void FullScreenFrame::initConnection()
 
     connect(m_miniMode, &DImageButton::clicked, this, &FullScreenFrame::toMiniMode, Qt::QueuedConnection);
 
-    connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &FullScreenFrame::updateGeometry);
-    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &FullScreenFrame::updateGeometry);
+    connect(qApp, &QApplication::primaryScreenChanged, this, &FullScreenFrame::updateGeometry);
+    connect(qApp->primaryScreen(), &QScreen::geometryChanged, this, &FullScreenFrame::updateGeometry);
 
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
 
@@ -831,7 +830,7 @@ void FullScreenFrame::initConnection()
 
 void FullScreenFrame::showLauncher()
 {
-    show();
+    showFullScreen();
 }
 
 void FullScreenFrame::hideLauncher()
@@ -846,7 +845,7 @@ bool FullScreenFrame::visible()
 
 void FullScreenFrame::updateGeometry()
 {
-    const QRect rect = m_displayInter->primaryRect();
+    const QRect rect = qApp->primaryScreen()->geometry();
     const qreal ratio = qApp->primaryScreen()->devicePixelRatio();
 
     setFixedSize(rect.width() / ratio, rect.height() / ratio);

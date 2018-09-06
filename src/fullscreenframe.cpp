@@ -830,7 +830,7 @@ void FullScreenFrame::initConnection()
 
 void FullScreenFrame::showLauncher()
 {
-    showFullScreen();
+    show();
 }
 
 void FullScreenFrame::hideLauncher()
@@ -846,10 +846,8 @@ bool FullScreenFrame::visible()
 void FullScreenFrame::updateGeometry()
 {
     const QRect rect = qApp->primaryScreen()->geometry();
-    const qreal ratio = qApp->primaryScreen()->devicePixelRatio();
 
-    setFixedSize(rect.width() / ratio, rect.height() / ratio);
-    move(rect.topLeft());
+    setGeometry(rect);
 
     QFrame::updateGeometry();
 }

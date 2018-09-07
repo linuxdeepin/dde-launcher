@@ -104,12 +104,9 @@ void BoxFrame::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
 
-    QScreen *s = qApp->primaryScreen();
+    QScreen const *s = qApp->primaryScreen();
     const QRect &geom = s->geometry();
-    QRect tr(geom.topLeft() / s->devicePixelRatio(), geom.size());
-
-    tr = tr & event->rect();
-    if (tr.isEmpty()) return;
+    QRect tr(QPoint(0, 0), geom.size());
 
     QPixmap pix = m_cache.scaled(s->size() * s->devicePixelRatio(),
                                       Qt::KeepAspectRatioByExpanding,
@@ -119,6 +116,6 @@ void BoxFrame::paintEvent(QPaintEvent *event)
 
     painter.drawPixmap(tr,
                        pix,
-                       QRect(tr.topLeft() * s->devicePixelRatio() - geom.topLeft(),
+                       QRect(tr.topLeft(),
                                       tr.size() * pix.devicePixelRatioF()));
 }

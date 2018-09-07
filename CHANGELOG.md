@@ -1,4 +1,14 @@
 <a name=""></a>
+##  4.4.5.4 (2018-09-07)
+
+
+#### Bug Fixes
+
+*   background shift ([cd29ce9d](https://github.com/linuxdeepin/dde-launcher/commit/cd29ce9d61db15142aa808241cea6c68b799788b))
+
+
+
+<a name=""></a>
 ##  4.4.5.3 (2018-09-03)
 
 

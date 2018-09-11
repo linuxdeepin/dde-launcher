@@ -535,7 +535,7 @@ void FullScreenFrame::updateGradient()
                                        QPoint(0, 0));
     QSize topSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
     QRect topRect(topLeft, topSize);
-    m_topGradient->setPixmap(backgroundPixmap().copy(topRect));
+    m_topGradient->setPixmap(cachePixmap().copy(topRect));
     m_topGradient->resize(topRect.size());
 
     m_topGradient->move(topRect.topLeft());
@@ -549,7 +549,7 @@ void FullScreenFrame::updateGradient()
     QPoint bottomLeft(bottomPoint.x(), bottomPoint.y() + 1 - bottomSize.height());
 
     QRect bottomRect(bottomLeft, bottomSize);
-    m_bottomGradient->setPixmap(backgroundPixmap().copy(bottomRect));
+    m_bottomGradient->setPixmap(cachePixmap().copy(bottomRect));
 
     m_bottomGradient->resize(bottomRect.size());
     m_bottomGradient->move(bottomRect.topLeft());

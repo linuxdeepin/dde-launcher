@@ -23,33 +23,40 @@
 
 #include "backgroundmanager.h"
 
-#include <QGSettings>
+#include <unistd.h>
 
 using namespace com::deepin;
 
 static const QString DefaultWallpaper = "/usr/share/backgrounds/default_background.jpg";
 
+static QString getLocalFile(const QString &file) {
+    const QUrl url(file);
+    return url.isLocalFile() ? url.toLocalFile() : url.url();
+}
+
 BackgroundManager::BackgroundManager(QObject *parent)
     : QObject(parent)
-    , m_currentWorkspace(0)
+    , m_currentWorkspace(-1)
     , m_wmInter(new wm("com.deepin.wm", "/com/deepin/wm", QDBusConnection::sessionBus(), this))
-    , m_gsettings(new QGSettings("com.deepin.dde.appearance", "", this))
     , m_blurInter(new ImageBlurInter("com.deepin.daemon.Accounts",
                                      "/com/deepin/daemon/ImageBlur",
                                      QDBusConnection::systemBus(), this))
+    , m_currentUser(new User("com.deepin.daemon.Accounts",
+                             QString("/com/deepin/daemon/Accounts/User%1").arg(getuid()),
+                             QDBusConnection::systemBus(), this))
 {
-    m_blurInter->setSync(false);
+    m_blurInter->setSync(false, false);
+    m_currentUser->setSync(false, false);
 
     auto updateWorkspace = [this] (int, int to) {
         setCurrentWorkspace(to);
     };
 
-    connect(m_gsettings, &QGSettings::changed, this, &BackgroundManager::updateBackgrounds);
     connect(m_wmInter, &__wm::WorkspaceSwitched, updateWorkspace);
     connect(m_blurInter, &ImageBlurInter::BlurDone, this, &BackgroundManager::onBlurDone);
+    connect(m_currentUser, &User::DesktopBackgroundsChanged, this, &BackgroundManager::onDesktopWallpapersChanged);
 
-    updateBackgrounds();
-    updateWorkspace(0, 0);
+    onDesktopWallpapersChanged(m_currentUser->desktopBackgrounds());
 }
 
 QString BackgroundManager::currentWorkspaceBackground() const
@@ -89,16 +96,29 @@ void BackgroundManager::setCurrentWorkspace(int currentWorkspace)
 
 void BackgroundManager::updateBackgrounds()
 {
-    m_backgrounds = m_gsettings->get("background-uris").toStringList();
-
-    const QString &current = m_backgrounds[m_currentWorkspace];
-
-    QString path = QUrl(current).isLocalFile() ? QUrl(current).toLocalFile() : current;
+    QString path;
+    if (m_currentWorkspace == -1) {
+        path = getLocalFile(m_wmInter->GetCurrentWorkspaceBackground());
+    }
+    else {
+        const QString &current = m_backgrounds[m_currentWorkspace];
+        path = getLocalFile(current);
+    }
 
     path = QFile::exists(path) ? path : DefaultWallpaper;
 
     const QString &file = m_blurInter->Get(path);
 
-    if (!file.isEmpty())
-        emit currentWorkspaceBackgroundChanged(file);
+    emit currentWorkspaceBackgroundChanged(file.isEmpty() ? path : file);
+}
+
+void BackgroundManager::onDesktopWallpapersChanged(const QStringList &files)
+{
+    m_backgrounds.clear();
+
+    for (const QString &path : files) {
+        m_backgrounds << getLocalFile(path);
+    }
+
+    updateBackgrounds();
 }

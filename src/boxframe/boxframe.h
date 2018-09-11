@@ -38,11 +38,14 @@ public:
     ~BoxFrame();
 
     void setBackground(const QString &url);
-    const QPixmap backgroundPixmap();
+    inline QPixmap cachePixmap() { return m_cache; }
 
 protected:
     void updateBackground();
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
+private:
+    const QPixmap backgroundPixmap();
 
 private:
     QString m_lastUrl;

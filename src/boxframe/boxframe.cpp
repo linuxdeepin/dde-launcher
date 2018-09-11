@@ -39,10 +39,6 @@ BoxFrame::BoxFrame(QWidget *parent)
     , m_bgManager(new BackgroundManager(this))
 {
     connect(m_bgManager, &BackgroundManager::currentWorkspaceBackgroundChanged, this, &BoxFrame::setBackground);
-
-    QTimer::singleShot(0, this, [=] {
-        setBackground(m_bgManager->currentWorkspaceBackground());
-    });
 }
 
 BoxFrame::~BoxFrame()
@@ -60,13 +56,8 @@ void BoxFrame::setBackground(const QString &url)
     if (m_lastUrl == url) return;
 
     m_lastUrl = url;
-    QString path = QUrl(url).isLocalFile() ? QUrl(url).toLocalFile() : url;
 
-    if (!QFile::exists(path)) {
-        path = DefaultBackground;
-    }
-
-    QPixmap pix(path);
+    QPixmap pix(url);
 
     if (pix.isNull()) {
         pix.load(DefaultBackground);
@@ -79,18 +70,16 @@ void BoxFrame::setBackground(const QString &url)
 
 const QPixmap BoxFrame::backgroundPixmap() {
     const QSize &size = qApp->primaryScreen()->size();
-    if (m_cache.isNull() || size != m_cache.size()) {
-        const QPixmap &cache = m_pixmap.scaled(size,
-                                               Qt::KeepAspectRatioByExpanding,
-                                               Qt::SmoothTransformation);
 
-        QRect copyRect((cache.width() - size.width()) / 2,
-                       (cache.height() - size.height()) / 2,
-                       size.width(), size.height());
+    const QPixmap &cache = m_pixmap.scaled(size,
+                                           Qt::KeepAspectRatioByExpanding,
+                                           Qt::SmoothTransformation);
 
-        m_cache = cache.copy(copyRect);
-    }
-    return m_cache;
+    QRect copyRect((cache.width() - size.width()) / 2,
+                   (cache.height() - size.height()) / 2,
+                   size.width(), size.height());
+
+    return cache.copy(copyRect);
 }
 
 void BoxFrame::updateBackground()
@@ -109,13 +98,13 @@ void BoxFrame::paintEvent(QPaintEvent *event)
     QRect tr(QPoint(0, 0), geom.size());
 
     QPixmap pix = m_cache.scaled(s->size() * s->devicePixelRatio(),
-                                      Qt::KeepAspectRatioByExpanding,
-                                      Qt::SmoothTransformation);
+                                 Qt::KeepAspectRatioByExpanding,
+                                 Qt::SmoothTransformation);
 
     pix.setDevicePixelRatio(devicePixelRatioF());
 
     painter.drawPixmap(tr,
                        pix,
                        QRect(tr.topLeft(),
-                                      tr.size() * pix.devicePixelRatioF()));
+                             tr.size() * pix.devicePixelRatioF()));
 }

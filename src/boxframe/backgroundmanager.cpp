@@ -72,13 +72,18 @@ QString BackgroundManager::currentWorkspaceBackground() const
 
 void BackgroundManager::onBlurDone(const QString &source, const QString &blur, bool done)
 {
-    const QString &current = m_backgrounds[m_currentWorkspace];
-
-    const QString &currentPath = QUrl(current).isLocalFile() ? QUrl(current).toLocalFile() : current;
-    const QString &sourcePath = QUrl(source).isLocalFile() ? QUrl(source).toLocalFile() : source;
-
-    if (done && QFile::exists(blur) && currentPath == sourcePath)
+    if (m_currentWorkspace == -1) {
         emit currentWorkspaceBackgroundChanged(blur);
+    }
+    else {
+        const QString &current = m_backgrounds[m_currentWorkspace];
+
+        const QString &currentPath = QUrl(current).isLocalFile() ? QUrl(current).toLocalFile() : current;
+        const QString &sourcePath = QUrl(source).isLocalFile() ? QUrl(source).toLocalFile() : source;
+
+        if (done && QFile::exists(blur) && currentPath == sourcePath)
+            emit currentWorkspaceBackgroundChanged(blur);
+    }
 }
 
 int BackgroundManager::currentWorkspace() const

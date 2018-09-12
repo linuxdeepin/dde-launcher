@@ -531,28 +531,36 @@ void FullScreenFrame::initUI()
 // FIXME(sbw): optimize this implements.
 void FullScreenFrame::updateGradient()
 {
+    const qreal ratio = devicePixelRatioF();
+    QPixmap pixmap = cachePixmap();
+    pixmap.setDevicePixelRatio(1);
+
     QPoint topLeft = m_appsArea->mapTo(this,
                                        QPoint(0, 0));
     QSize topSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
-    QRect topRect(topLeft, topSize);
-    m_topGradient->setPixmap(cachePixmap().copy(topRect));
-    m_topGradient->resize(topRect.size());
+    QRect topRect(topLeft * ratio, topSize * ratio);
+    QPixmap topCache = pixmap.copy(topRect);
+    topCache.setDevicePixelRatio(ratio);
 
-    m_topGradient->move(topRect.topLeft());
+    m_topGradient->setPixmap(topCache);
+    m_topGradient->resize(topSize);
+
+    m_topGradient->move(topLeft);
     m_topGradient->show();
     m_topGradient->raise();
 
-    QPoint bottomPoint = m_appsArea->mapTo(this,
+    QPointF bottomPoint = m_appsArea->mapTo(this,
                                          m_appsArea->rect().bottomLeft());
     QSize bottomSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
 
     QPoint bottomLeft(bottomPoint.x(), bottomPoint.y() + 1 - bottomSize.height());
 
-    QRect bottomRect(bottomLeft, bottomSize);
-    m_bottomGradient->setPixmap(cachePixmap().copy(bottomRect));
+    QRect bottomRect(bottomLeft * ratio, bottomSize * ratio);
+    QPixmap bottomCache = cachePixmap().copy(bottomRect);
 
-    m_bottomGradient->resize(bottomRect.size());
-    m_bottomGradient->move(bottomRect.topLeft());
+    m_bottomGradient->setPixmap(bottomCache);
+    m_bottomGradient->resize(bottomSize);
+    m_bottomGradient->move(QPoint(bottomPoint.x(), bottomPoint.y() + 1 * ratio - bottomSize.height()));
     m_bottomGradient->show();
     m_bottomGradient->raise();
 }

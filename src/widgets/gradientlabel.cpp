@@ -34,33 +34,16 @@ GradientLabel::GradientLabel(QWidget *parent) :
     setAttribute(Qt::WA_TransparentForMouseEvents);
 }
 
-GradientLabel::Direction GradientLabel::direction() const
+void GradientLabel::setPixmap(QPixmap pixmap)
 {
-    return m_direction;
-}
-
-void GradientLabel::setDirection(const GradientLabel::Direction &direction)
-{
-    m_direction = direction;
-}
-
-void setText(const QString &)
-{
-    // do nothing !
-}
-
-void GradientLabel::paintEvent(QPaintEvent*)
-{
-    // process the pixmap
-    const QPixmap *thisPix = pixmap();
-    if (!thisPix) return;
-
-    QPixmap pix(thisPix->rect().size());
+    pixmap.setDevicePixelRatio(1);
+    QPixmap pix(pixmap.size());
     pix.fill(Qt::transparent);
 
     QPainter pixPainter;
     pixPainter.begin(&pix);
-    pixPainter.drawPixmap(0, 0, *thisPix);
+    pixPainter.drawPixmap(0, 0, pixmap);
+    pix.setDevicePixelRatio(devicePixelRatioF());
 
     pixPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
 
@@ -79,11 +62,28 @@ void GradientLabel::paintEvent(QPaintEvent*)
 
     pixPainter.end();
 
+    m_pixmap = pix;
+}
+
+GradientLabel::Direction GradientLabel::direction() const
+{
+    return m_direction;
+}
+
+void GradientLabel::setDirection(const GradientLabel::Direction &direction)
+{
+    m_direction = direction;
+}
+
+void setText(const QString &)
+{
+    // do nothing !
+}
+
+void GradientLabel::paintEvent(QPaintEvent*)
+{
     // draw the pixmap
-    QPainter painter;
-    painter.begin(this);
-
-    painter.drawPixmap(0, 0, pix);
-
+    QPainter painter(this);
+    painter.drawPixmap(0, 0, m_pixmap);
     painter.end();
 }

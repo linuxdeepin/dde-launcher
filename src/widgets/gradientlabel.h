@@ -39,14 +39,17 @@ public:
     };
 
     void setText(const QString &);
+    void setPixmap(QPixmap pixmap);
 
     Direction direction() const;
     void setDirection(const Direction &direction);
 
+protected:
+    void paintEvent(QPaintEvent* event);
+
 private:
     Direction m_direction;
-
-    void paintEvent(QPaintEvent* event);
+    QPixmap m_pixmap;
 };
 
 #endif // GRADIENTLABEL_H

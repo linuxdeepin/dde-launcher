@@ -15,6 +15,10 @@ if (DEFINED ENABLE_MIEEE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mieee")
 endif()
 
+if (DEFINED DISABLE_DRAG_ANIMATION)
+    add_definitions(-DDISABLE_DRAG_ANIMATION)
+endif ()
+
 set(BIN_NAME dde-launcher)
 
 # Sources files

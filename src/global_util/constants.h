@@ -43,7 +43,14 @@ static const int TOP_BOTTOM_GRADIENT_HEIGHT = 60;
 static const int APPS_AREA_TOP_MARGIN = 20;
 static const int APPS_AREA_BOTTOM_MARGIN = 20;
 static const int APPS_AREA_ENSURE_VISIBLE_MARGIN_Y = 200;
+
+#ifndef DISABLE_DRAG_ANIMATION
 static const int APPS_AREA_AUTO_SCROLL_STEP = 5;
+#else
+// 130 is app item fix size
+static const int APPS_AREA_AUTO_SCROLL_STEP = 130;
+#endif
+
 static const int APPS_AREA_AUTO_SCROLL_TIMER = 15;
 
 static const int CLEAR_CACHE_TIMER = 60;

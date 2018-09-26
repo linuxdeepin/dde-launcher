@@ -1,4 +1,18 @@
 <a name=""></a>
+##  4.4.5.6 (2018-09-26)
+
+
+#### Bug Fixes
+
+*   mission disable animation macro ([8d832b68](https://github.com/linuxdeepin/dde-launcher/commit/8d832b683929a7c4c7367c65fbce42f6aa85c09f))
+
+#### Features
+
+*   disable animation when scroll for sw ([1d5b235a](https://github.com/linuxdeepin/dde-launcher/commit/1d5b235aca33ce5a098d986acd59a547ad6c3e79))
+
+
+
+<a name=""></a>
 ##  4.4.5.5 (2018-09-20)
 
 

@@ -105,10 +105,3 @@ void BoxFrame::paintEvent(QPaintEvent *event)
                        QRect(tr.topLeft(),
                              tr.size() * m_cache.devicePixelRatioF()));
 }
-
-void BoxFrame::updateBackground()
-{
-    m_cache = QPixmap();
-
-    setPixmap(backgroundPixmap());
-}

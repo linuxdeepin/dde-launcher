@@ -85,13 +85,16 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_tipsLabel(new QLabel(this))
     , m_delayHideTimer(new QTimer)
     , m_autoScrollTimer(new QTimer)
+    , m_appearanceInter(new Appearance("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
     , m_regionMonitor(new DRegionMonitor(this))
     , m_displayMode(All)
     , m_focusPos(LeftTop)
 {
-    DBlurEffectWidget *bgWidget = new DBlurEffectWidget(this);
-    bgWidget->setMaskColor(DBlurEffectWidget::DarkColor);
-    bgWidget->setBlendMode(DBlurEffectWidget::BehindWindowBlend);
+    m_blurEffectWidget = new DBlurEffectWidget(this);
+    m_blurEffectWidget->setMaskColor(DBlurEffectWidget::DarkColor);
+    m_blurEffectWidget->setBlendMode(DBlurEffectWidget::BehindWindowBlend);
+
+    m_appearanceInter->setSync(false, false);
 
     m_windowHandle.setShadowRadius(60);
     m_windowHandle.setBorderWidth(0);
@@ -162,7 +165,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     setObjectName("MiniFrame");
     setStyleSheet(getQssFromFile(":/skin/qss/miniframe.qss"));
 
-    bgWidget->resize(size());
+    m_blurEffectWidget->resize(size());
 
     initAnchoredCornor();
     installEventFilter(m_eventFilter);
@@ -206,6 +209,8 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_switchBtn, &QPushButton::clicked, this, &WindowedFrame::onSwitchBtnClicked);
     connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher, Qt::QueuedConnection);
 
+    connect(m_appearanceInter, &Appearance::OpacityChanged, this, &WindowedFrame::onOpacityChanged);
+
     connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [=] (const QPoint &point) {
         if (!geometry().contains(point)) {
             if (m_menuWorker->isMenuShown() && m_menuWorker->menuGeometry().contains(point)) {
@@ -216,6 +221,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     });
 
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
+    onOpacityChanged(m_appearanceInter->opacity());
 
     m_switchBtn->updateStatus(All);
 }
@@ -773,4 +779,9 @@ void WindowedFrame::recoveryAll()
     m_focusPos = LeftTop;
     m_rightBar->setCurrentCheck(false);
     m_switchBtn->setChecked(false);
+}
+
+void WindowedFrame::onOpacityChanged(const double value)
+{
+    m_blurEffectWidget->setMaskAlpha(value * 255);
 }

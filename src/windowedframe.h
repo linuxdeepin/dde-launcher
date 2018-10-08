@@ -39,11 +39,14 @@
 #include <DWindowManagerHelper>
 #include <dblureffectwidget.h>
 #include <dregionmonitor.h>
+#include <com_deepin_daemon_appearance.h>
 
 #include <QLabel>
 #include <memory>
 
 DWIDGET_USE_NAMESPACE
+
+using Appearance = com::deepin::daemon::Appearance;
 
 class WindowedFrame : public QWidget, public LauncherInterface
 {
@@ -113,8 +116,10 @@ private slots:
     void hideTips();
     void prepareHideLauncher();
     void recoveryAll();
+    void onOpacityChanged(const double value);
 
 private:
+    DBlurEffectWidget *m_blurEffectWidget;
     DBusDock *m_dockInter;
     std::unique_ptr<MenuWorker> m_menuWorker;
     SharedEventFilter *m_eventFilter;
@@ -133,7 +138,7 @@ private:
     QLabel *m_tipsLabel;
     QTimer *m_delayHideTimer;
     QTimer *m_autoScrollTimer;
-
+    Appearance *m_appearanceInter;
     DRegionMonitor *m_regionMonitor;
     DisplayMode m_displayMode;
 

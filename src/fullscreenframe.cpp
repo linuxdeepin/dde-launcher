@@ -481,14 +481,13 @@ void FullScreenFrame::initUI()
     m_appsVbox->layout()->addWidget(m_viewListPlaceholder);
     m_appsVbox->layout()->setSpacing(0);
     m_appsVbox->layout()->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN,
-                                             0, DLauncher::APPS_AREA_BOTTOM_MARGIN);
+                                             0, 0);
     m_appsArea->setWidget(m_appsVbox);
 
     m_scrollAreaLayout = new QVBoxLayout;
     m_scrollAreaLayout->setMargin(0);
     m_scrollAreaLayout->setSpacing(0);
     m_scrollAreaLayout->addWidget(m_appsArea);
-    m_scrollAreaLayout->addSpacing(DLauncher::VIEWLIST_BOTTOM_MARGIN);
 
     m_bottomGradient->setDirection(GradientLabel::BottomToTop);
 
@@ -551,6 +550,7 @@ void FullScreenFrame::updateGradient()
 
     QPointF bottomPoint = m_appsArea->mapTo(this,
                                          m_appsArea->rect().bottomLeft());
+
     QSize bottomSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
 
     QPoint bottomLeft(bottomPoint.x(), bottomPoint.y() + 1 - bottomSize.height());
@@ -1223,7 +1223,7 @@ void FullScreenFrame::updatePlaceholderSize()
     const AppGridView *view = lastVisibleView();
     Q_ASSERT(view);
 
-    m_viewListPlaceholder->setFixedHeight(m_appsArea->height() - view->height() - DLauncher::APPS_AREA_BOTTOM_MARGIN);
+    m_viewListPlaceholder->setVisible(dockPosition() == DOCK_POS_BOTTOM);
 }
 
 void FullScreenFrame::updateDockPosition()
@@ -1231,10 +1231,20 @@ void FullScreenFrame::updateDockPosition()
     m_calcUtil->calculateAppLayout(m_appsArea->size(), m_appsManager->dockPosition());
     setStyleSheet(getQssFromFile(":/skin/qss/fullscreenframe.qss"));
 
-    if (m_appsManager->dockPosition() == DOCK_POS_RIGHT)
+    switch (m_appsManager->dockPosition()) {
+    case DOCK_POS_RIGHT:
         m_rightLayout->setContentsMargins(0, 30, 20 + m_appsManager->dockWidth(), 0);
-    else
+        m_scrollAreaLayout->setContentsMargins(0, 0, 0, 10);
+        break;
+    case DOCK_POS_BOTTOM:
+        m_rightLayout->setContentsMargins(0, 30, 0, 0);
+        m_scrollAreaLayout->setContentsMargins(0, 0, 0, DLauncher::VIEWLIST_BOTTOM_MARGIN);
+        break;
+    default:
         m_rightLayout->setContentsMargins(0, 30, 20, 0);
+        m_scrollAreaLayout->setContentsMargins(0, 0, 0, 10);
+        break;
+    }
 }
 
 AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentModel)

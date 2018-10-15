@@ -43,6 +43,7 @@
 #include <QList>
 
 #define DOCK_POS_RIGHT  1
+#define DOCK_POS_BOTTOM 2
 
 const QPixmap getThemeIcon(const QString &iconName, const int size);
 

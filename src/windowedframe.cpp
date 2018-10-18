@@ -286,13 +286,28 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     case Qt::Key_Tab:
         if (m_focusPos == LeftTop) {
             m_focusPos = LeftBottom;
-        } else if (m_focusPos == LeftBottom) {
+        }
+        else if (m_focusPos == LeftBottom) {
             m_focusPos = Right;
             m_rightBar->setCurrentIndex(0);
-        } else {
+        }
+        else {
             m_focusPos = LeftTop;
         }
         break;
+    case Qt::Key_Backtab: {
+        if (m_focusPos == LeftTop) {
+            m_focusPos = Right;
+        }
+        else if (m_focusPos == LeftBottom) {
+            m_focusPos = LeftTop;
+            m_rightBar->setCurrentIndex(0);
+        }
+        else {
+            m_focusPos = LeftBottom;
+        }
+        break;
+    }
     case Qt::Key_Up: {
         if (m_focusPos == LeftTop) {
             targetIndex = currentIdx.sibling(row - 1, 0);
@@ -310,6 +325,20 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
 
         } else {
             m_rightBar->moveDown();
+        }
+        break;
+    }
+    case Qt::Key_Left: {
+        if (m_focusPos == Right) {
+            m_focusPos  = LeftTop;
+            targetIndex = currentIdx.sibling(row + 1, 0);
+        }
+        break;
+    }
+    case Qt::Key_Right: {
+        if (m_focusPos == LeftTop || m_focusPos == LeftBottom) {
+            m_focusPos = Right;
+            m_rightBar->setCurrentIndex(0);
         }
         break;
     }

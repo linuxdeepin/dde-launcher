@@ -24,7 +24,6 @@
 #include "launchersys.h"
 #include "launcherinterface.h"
 #include "fullscreenframe.h"
-#include "miniframe.h"
 #include "windowedframe.h"
 #include "model/appsmanager.h"
 
@@ -125,4 +124,3 @@ void LauncherSys::onAutoExitTimeout()
         qApp->quit();
     }
 }
-

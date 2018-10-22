@@ -253,6 +253,7 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     updateGeometry();
     updateBackground();
     updateGradient();
+    updateDockPosition();
 
     // force refresh
     if (!m_appsManager->isVaild()) {
@@ -509,7 +510,6 @@ void FullScreenFrame::initUI()
     m_rightLayout->addWidget(m_miniMode);
     m_rightLayout->setAlignment(m_miniMode, Qt::AlignTop | Qt::AlignRight);
     m_rightLayout->setSpacing(0);
-    m_rightLayout->setContentsMargins(0, 30, 20, 0);
 
     m_rightSpacing->setLayout(m_rightLayout);
 
@@ -1228,7 +1228,8 @@ void FullScreenFrame::updatePlaceholderSize()
 
 void FullScreenFrame::updateDockPosition()
 {
-    m_calcUtil->calculateAppLayout(m_appsArea->size(), m_appsManager->dockPosition());
+    m_calcUtil->calculateAppLayout(m_appsArea->size(),
+                                   m_appsManager->dockPosition());
     setStyleSheet(getQssFromFile(":/skin/qss/fullscreenframe.qss"));
 
     switch (m_appsManager->dockPosition()) {

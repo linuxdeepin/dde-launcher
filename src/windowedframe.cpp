@@ -452,9 +452,10 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
 
 bool WindowedFrame::windowDeactiveEvent()
 {
-    if (isVisible() && !m_menuWorker->isMenuShown()) {
-        m_delayHideTimer->start();
-    }
+      // don't need
+//    if (isVisible() && !m_menuWorker->isMenuShown() && !m_delayHideTimer->isActive()) {
+//        m_delayHideTimer->start();
+//    }
 
     return false;
 }

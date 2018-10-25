@@ -1,4 +1,36 @@
 <a name=""></a>
+##  4.5.0 (2018-10-25)
+
+
+#### Features
+
+*   support back tab key ([69bf3e71](https://github.com/linuxdeepin/dde-launcher/commit/69bf3e7155e5b775ca0517aeeae7bfd7bf0b1f20))
+*   support change frame opacity ([8f715f8e](https://github.com/linuxdeepin/dde-launcher/commit/8f715f8ed4f33351310c5305e1392affa4cb9db1))
+*   disable animation when scroll for sw ([dd2e4d75](https://github.com/linuxdeepin/dde-launcher/commit/dd2e4d75a6ec61daba86bc803e01476bfaf500d7))
+*   optimization switch mode ([3648a8f4](https://github.com/linuxdeepin/dde-launcher/commit/3648a8f455dd7e46c2f807ef72a467b2069914a1))
+*   support Ctrl+V shortcuts to pasted text to the search widget ([9de76fef](https://github.com/linuxdeepin/dde-launcher/commit/9de76fef10012a6ebe11802500a640c680db86ef))
+* **windowed_frame:**  adaptive window width. ([5cb86144](https://github.com/linuxdeepin/dde-launcher/commit/5cb86144eaace4cb9e0851a9c741edc73ec684fd))
+
+#### Bug Fixes
+
+*   content highly adaptable to dock's position ([c4d65ffa](https://github.com/linuxdeepin/dde-launcher/commit/c4d65ffa177f013a363c4e712070ddf37242b0e6))
+*   mission disable animation macro ([579b9a48](https://github.com/linuxdeepin/dde-launcher/commit/579b9a4804064163090b30c4df98416966d6f185))
+*   background shift ([b5aea889](https://github.com/linuxdeepin/dde-launcher/commit/b5aea889a1614eb5f3b63d80337982d96d18bb76))
+*   geometry error ([d91b45b0](https://github.com/linuxdeepin/dde-launcher/commit/d91b45b0c01024510e4225f00b2fa357fff23a92))
+*   don't show when not have app infos ([2d88823c](https://github.com/linuxdeepin/dde-launcher/commit/2d88823c00f3fbf434e560aa21f2ff76d60c10a7))
+*   Incorrect return reference ([aa8eb95e](https://github.com/linuxdeepin/dde-launcher/commit/aa8eb95e2fba2cf496e5c5f5ddc9cc44a79bde0a))
+*   check all app info is vaild ([81b07fc2](https://github.com/linuxdeepin/dde-launcher/commit/81b07fc222cc7d24d6582920b346af6157caee40))
+*   current index is incorrect ([8690239b](https://github.com/linuxdeepin/dde-launcher/commit/8690239b29bc6613606bf573c982be4262fe21ee))
+* **FullScreen:**
+  *  size error when dock's position is right ([6bac4efe](https://github.com/linuxdeepin/dde-launcher/commit/6bac4efedb5792bca25acbfe10929aa7d9579bdd))
+  *  draw background error after changing the dock position ([4bd00c20](https://github.com/linuxdeepin/dde-launcher/commit/4bd00c2011b0ea3e0878da0583ae0a5902246ee7))
+* **Mini:**  double hide launcher ([3a129bc5](https://github.com/linuxdeepin/dde-launcher/commit/3a129bc5efde20ee71fb35076a480b9f1ed562b7))
+* **sw:**  mission mieee ([2291a99f](https://github.com/linuxdeepin/dde-launcher/commit/2291a99f256e32b8307da46eb16a8e42b9a61406))
+* **windowed:**  more perfect scrolling. ([1c5ffd9b](https://github.com/linuxdeepin/dde-launcher/commit/1c5ffd9b8f5c94c9d9500dcc56ce6625a8ae3f17))
+
+
+
+<a name=""></a>
 ##  4.4.5.6 (2018-09-26)
 
 

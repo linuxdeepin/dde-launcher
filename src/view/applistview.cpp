@@ -49,7 +49,7 @@ AppListView::AppListView(QWidget *parent)
 
     horizontalScrollBar()->setEnabled(false);
     setFocusPolicy(Qt::NoFocus);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(NoFrame);
     setVerticalScrollMode(ScrollPerPixel);

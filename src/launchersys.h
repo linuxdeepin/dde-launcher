@@ -28,6 +28,9 @@
 
 #include <QObject>
 #include <QTimer>
+#include <dregionmonitor.h>
+
+DWIDGET_USE_NAMESPACE
 
 class LauncherInterface;
 class WindowedFrame;
@@ -47,6 +50,9 @@ public:
 signals:
     void visibleChanged(bool visible);
 
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+
 private slots:
     void displayModeChanged();
     void onAutoExitTimeout();
@@ -57,9 +63,10 @@ private:
 
     WindowedFrame* m_windowLauncher;
     FullScreenFrame* m_fullLauncher;
-
+    DRegionMonitor *m_regionMonitor;
     QTimer *m_autoExitTimer;
     QTimer *m_ignoreRepeatVisibleChangeTimer;
+    QMetaObject::Connection m_regionMonitorConnect;
 };
 
 #endif // LAUNCHERSYS_H

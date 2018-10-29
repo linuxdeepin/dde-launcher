@@ -61,6 +61,7 @@ public:
     void restoreItem(const QString &appKey, const int pos = -1);
     int dockPosition() const;
     int dockWidth() const;
+    QRect dockGeometry() const;
     bool isHaveNewInstall() const { return !m_newInstalledAppsList.isEmpty(); }
     bool isVaild();
     void refreshAllList();

@@ -25,6 +25,7 @@
 #define LAUNCHERINTERFACE_H
 
 class QString;
+class QPoint;
 class LauncherInterface
 {
 public:
@@ -36,7 +37,7 @@ public:
     virtual void launchCurrentApp() = 0;
     virtual void appendToSearchEdit(const char ch) = 0;
     virtual void moveCurrentSelectApp(const int key) = 0;
-
+    virtual void regionMonitorPoint(const QPoint &point) = 0;
     virtual bool windowDeactiveEvent() = 0;
 
     virtual void uninstallApp(const QString &appKey) = 0;

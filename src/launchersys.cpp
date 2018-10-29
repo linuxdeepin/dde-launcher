@@ -39,9 +39,15 @@ LauncherSys::LauncherSys(QObject *parent)
     , m_dbusLauncherInter(new DBusLauncher(this))
     , m_windowLauncher(new WindowedFrame)
     , m_fullLauncher(new FullScreenFrame)
+    , m_regionMonitor(new DRegionMonitor(this))
     , m_autoExitTimer(new QTimer(this))
     , m_ignoreRepeatVisibleChangeTimer(new QTimer(this))
 {
+    m_regionMonitor->setCoordinateType(DRegionMonitor::Original);
+
+    m_fullLauncher->installEventFilter(this);
+    m_windowLauncher->installEventFilter(this);
+
     m_autoExitTimer->setInterval(60 * 1000);
     m_autoExitTimer->setSingleShot(true);
 
@@ -68,6 +74,14 @@ void LauncherSys::showLauncher()
         return;
     m_ignoreRepeatVisibleChangeTimer->start();
 
+    m_regionMonitorConnect = connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [=] (const QPoint &p) {
+        m_launcherInter->regionMonitorPoint(p);
+    });
+
+    if (!m_regionMonitor->registered()) {
+        m_regionMonitor->registerRegion();
+    }
+
     qApp->processEvents();
 
     m_autoExitTimer->stop();
@@ -79,6 +93,10 @@ void LauncherSys::hideLauncher()
     if (m_ignoreRepeatVisibleChangeTimer->isActive())
         return;
     m_ignoreRepeatVisibleChangeTimer->start();
+
+    m_regionMonitor->unregisterRegion();
+
+    disconnect(m_regionMonitorConnect);
 
     m_autoExitTimer->start();
     m_launcherInter->hideLauncher();
@@ -123,4 +141,15 @@ void LauncherSys::onAutoExitTimeout()
         qWarning() << "Exit Timer timeout, may quitting...";
         qApp->quit();
     }
+}
+
+bool LauncherSys::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::Hide && (watched == m_fullLauncher || watched == m_windowLauncher)) {
+        m_regionMonitor->unregisterRegion();
+        disconnect(m_regionMonitorConnect);
+        m_autoExitTimer->start();
+    }
+
+    return QObject::eventFilter(watched, event);
 }

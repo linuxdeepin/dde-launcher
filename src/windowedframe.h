@@ -104,6 +104,7 @@ protected:
     void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
     void inputMethodEvent(QInputMethodEvent *e) Q_DECL_OVERRIDE;
     QVariant inputMethodQuery(Qt::InputMethodQuery prop) const Q_DECL_OVERRIDE;
+    void regionMonitorPoint(const QPoint &point) Q_DECL_OVERRIDE;
 
 private slots:
     void initAnchoredCornor();
@@ -139,7 +140,6 @@ private:
     QTimer *m_delayHideTimer;
     QTimer *m_autoScrollTimer;
     Appearance *m_appearanceInter;
-    DRegionMonitor *m_regionMonitor;
     DisplayMode m_displayMode;
 
     int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;

@@ -298,6 +298,11 @@ int AppsManager::dockWidth() const
     return QRect(m_dockInter->frontendRect()).width();
 }
 
+QRect AppsManager::dockGeometry() const
+{
+    return std::move(m_dockInter->frontendRect());
+}
+
 bool AppsManager::isVaild()
 {
     return m_launcherInter->isValid() && !m_allAppInfoList.isEmpty();

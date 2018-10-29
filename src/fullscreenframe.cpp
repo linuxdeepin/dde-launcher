@@ -999,10 +999,17 @@ void FullScreenFrame::launchCurrentApp()
 
 bool FullScreenFrame::windowDeactiveEvent()
 {
-    if (!m_menuWorker->isMenuShown() && !m_isConfirmDialogShown && !m_delayHideTimer->isActive())
-        m_delayHideTimer->start();
+    return false;
+}
 
-    return true;
+void FullScreenFrame::regionMonitorPoint(const QPoint &point)
+{
+    if (!m_menuWorker->isMenuShown() && !m_isConfirmDialogShown && !m_delayHideTimer->isActive()) {
+        if (m_appsManager->dockGeometry().contains(point)) {
+            m_delayHideTimer->start();
+            hideLauncher();
+        }
+    }
 }
 
 void FullScreenFrame::checkCategoryVisible()
@@ -1238,7 +1245,7 @@ void FullScreenFrame::updateDockPosition()
         m_scrollAreaLayout->setContentsMargins(0, 0, 0, 10);
         break;
     case DOCK_POS_BOTTOM:
-        m_rightLayout->setContentsMargins(0, 30, 0, 0);
+        m_rightLayout->setContentsMargins(0, 30, 20, 0);
         m_scrollAreaLayout->setContentsMargins(0, 0, 0, DLauncher::VIEWLIST_BOTTOM_MARGIN);
         break;
     default:

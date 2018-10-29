@@ -106,6 +106,7 @@ private:
     void appendToSearchEdit(const char ch) Q_DECL_OVERRIDE;
     void launchCurrentApp() Q_DECL_OVERRIDE;
     bool windowDeactiveEvent() Q_DECL_OVERRIDE;
+    void regionMonitorPoint(const QPoint &point) Q_DECL_OVERRIDE;
 
     void updateGeometry();
     void checkCategoryVisible();

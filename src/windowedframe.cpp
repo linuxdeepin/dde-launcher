@@ -86,7 +86,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_delayHideTimer(new QTimer)
     , m_autoScrollTimer(new QTimer)
     , m_appearanceInter(new Appearance("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
-    , m_regionMonitor(new DRegionMonitor(this))
     , m_displayMode(All)
     , m_focusPos(LeftTop)
 {
@@ -211,15 +210,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     connect(m_appearanceInter, &Appearance::OpacityChanged, this, &WindowedFrame::onOpacityChanged);
 
-    connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [=] (const QPoint &point) {
-        if (!geometry().contains(point)) {
-            if (m_menuWorker->isMenuShown() && m_menuWorker->menuGeometry().contains(point)) {
-                return;
-            }
-            hideLauncher();
-        }
-    });
-
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
     onOpacityChanged(m_appearanceInter->opacity());
 
@@ -247,8 +237,6 @@ void WindowedFrame::showLauncher()
     adjustPosition();
     show();
 
-    m_regionMonitor->registerRegion();
-
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition, Qt::UniqueConnection);
 }
 
@@ -261,8 +249,6 @@ void WindowedFrame::hideLauncher()
     m_delayHideTimer->stop();
 
     disconnect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition);
-
-    m_regionMonitor->unregisterRegion();
 
     hide();
 
@@ -608,6 +594,17 @@ QVariant WindowedFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
     }
 
     return QWidget::inputMethodQuery(prop);
+}
+
+void WindowedFrame::regionMonitorPoint(const QPoint &point)
+{
+    const QPoint p { point / devicePixelRatioF() };
+    if (!geometry().contains(p)) {
+        if (m_menuWorker->isMenuShown() && m_menuWorker->menuGeometry().contains(p)) {
+            return;
+        }
+        hideLauncher();
+    }
 }
 
 void WindowedFrame::initAnchoredCornor()

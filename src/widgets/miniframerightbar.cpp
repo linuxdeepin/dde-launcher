@@ -57,24 +57,6 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     MiniFrameButton *settingsBtn = new MiniFrameButton(tr("Settings"));
     MiniFrameButton *shutdownBtn = new MiniFrameButton(tr("Shutdown"));
 
-    // To calculate width to adaptive width.
-    const int padding = 10;
-    const int iconWidth = 24;
-    int btnWidth = 0;
-    int frameWidth = 0;
-
-    const int dateTextWidth = m_datetimeWidget->getDateTextWidth() + 60;
-
-    btnWidth += settingsBtn->fontMetrics().boundingRect(settingsBtn->text()).width() + iconWidth + padding;
-    btnWidth += shutdownBtn->fontMetrics().boundingRect(shutdownBtn->text()).width() + iconWidth + padding;
-    btnWidth += 38; // padding
-
-    if (btnWidth > dateTextWidth) {
-        frameWidth = btnWidth;
-    } else {
-        frameWidth = dateTextWidth;
-    }
-
     uint index = 0;
     m_btns[index++] = computerBtn;
     m_btns[index++] = videoBtn;
@@ -121,10 +103,27 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     layout->addLayout(bottomLayout);
     layout->setContentsMargins(18, 0, 12, 18);
 
+    // To calculate width to adaptive width.
+    const int padding = 10;
+    const int iconWidth = 24;
+    int btnWidth = 0;
+    int frameWidth = 0;
+
+    const int dateTextWidth = m_datetimeWidget->getDateTextWidth() + 60;
+
+    btnWidth += settingsBtn->fontMetrics().boundingRect(settingsBtn->text()).width() + iconWidth + padding;
+    btnWidth += shutdownBtn->fontMetrics().boundingRect(shutdownBtn->text()).width() + iconWidth + padding;
+    btnWidth += 38; // padding
+
+    if (btnWidth > dateTextWidth) {
+        frameWidth = btnWidth;
+    } else {
+        frameWidth = dateTextWidth;
+    }
+
     setFixedWidth(frameWidth);
 
     connect(m_modeToggleBtn, &DImageButton::clicked, this, &MiniFrameRightBar::modeToggleBtnClicked);
-
     connect(computerBtn, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
     connect(documentBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DocumentsLocation); });
     connect(videoBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::MoviesLocation); });

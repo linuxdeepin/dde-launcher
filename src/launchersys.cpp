@@ -32,6 +32,8 @@
 #define FULL_SCREEN     0
 #define MINI_FRAME      1
 
+#define MOUSE_LEFTBUTTON 1
+
 LauncherSys::LauncherSys(QObject *parent)
     : QObject(parent)
 
@@ -74,8 +76,10 @@ void LauncherSys::showLauncher()
         return;
     m_ignoreRepeatVisibleChangeTimer->start();
 
-    m_regionMonitorConnect = connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [=] (const QPoint &p) {
-        m_launcherInter->regionMonitorPoint(p);
+    m_regionMonitorConnect = connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [=] (const QPoint &p, const int flag) {
+        if (flag == MOUSE_LEFTBUTTON) {
+            m_launcherInter->regionMonitorPoint(p);
+        }
     });
 
     if (!m_regionMonitor->registered()) {

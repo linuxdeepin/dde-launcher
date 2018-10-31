@@ -41,6 +41,7 @@
 #include <QEvent>
 #include <QTimer>
 #include <QDebug>
+#include <qpa/qplatformwindow.h>
 
 #define DOCK_TOP        0
 #define DOCK_RIGHT      1
@@ -598,9 +599,8 @@ QVariant WindowedFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
 
 void WindowedFrame::regionMonitorPoint(const QPoint &point)
 {
-    const QPoint p { point / devicePixelRatioF() };
-    if (!geometry().contains(p)) {
-        if (m_menuWorker->isMenuShown() && m_menuWorker->menuGeometry().contains(p)) {
+    if (!windowHandle()->handle()->geometry().contains(point)) {
+        if (m_menuWorker->isMenuShown() && m_menuWorker->menuGeometry().contains(point)) {
             return;
         }
         hideLauncher();

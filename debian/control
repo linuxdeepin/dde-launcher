@@ -15,7 +15,8 @@ Build-Depends:
  libdtkcore-dev | libdtkutil-dev,
  libdtkwidget-dev,
  libdframeworkdbus-dev,
- deepin-qt5config
+ deepin-qt5config,
+ qtbase5-private-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 

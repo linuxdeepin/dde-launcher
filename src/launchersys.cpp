@@ -111,7 +111,7 @@ void LauncherSys::displayModeChanged()
     const bool visible = m_launcherInter && m_launcherInter->visible();
 
     if (m_launcherInter) {
-        hideLauncher();
+        m_launcherInter->hideLauncher();
     }
 
     m_launcherInter = m_dbusLauncherInter->fullscreen() ?

@@ -58,6 +58,10 @@ private slots:
     void onAutoExitTimeout();
 
 private:
+    void registerRegion();
+    void unRegisterRegion();
+
+private:
     LauncherInterface *m_launcherInter;
     DBusLauncher *m_dbusLauncherInter;
 

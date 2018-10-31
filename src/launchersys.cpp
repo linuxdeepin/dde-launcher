@@ -76,15 +76,7 @@ void LauncherSys::showLauncher()
         return;
     m_ignoreRepeatVisibleChangeTimer->start();
 
-    m_regionMonitorConnect = connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [=] (const QPoint &p, const int flag) {
-        if (flag == MOUSE_LEFTBUTTON) {
-            m_launcherInter->regionMonitorPoint(p);
-        }
-    });
-
-    if (!m_regionMonitor->registered()) {
-        m_regionMonitor->registerRegion();
-    }
+    registerRegion();
 
     qApp->processEvents();
 
@@ -98,9 +90,7 @@ void LauncherSys::hideLauncher()
         return;
     m_ignoreRepeatVisibleChangeTimer->start();
 
-    m_regionMonitor->unregisterRegion();
-
-    disconnect(m_regionMonitorConnect);
+    unRegisterRegion();
 
     m_autoExitTimer->start();
     m_launcherInter->hideLauncher();
@@ -121,17 +111,21 @@ void LauncherSys::displayModeChanged()
     const bool visible = m_launcherInter && m_launcherInter->visible();
 
     if (m_launcherInter) {
-        m_launcherInter->hideLauncher();
+        hideLauncher();
     }
 
     m_launcherInter = m_dbusLauncherInter->fullscreen() ?
                 static_cast<LauncherInterface*>(m_fullLauncher) :
                 static_cast<LauncherInterface*>(m_windowLauncher);
 
-    if (visible)
+    if (visible) {
+        registerRegion();
         m_launcherInter->showLauncher();
-    else
+    }
+    else {
+        unRegisterRegion();
         m_launcherInter->hideLauncher();
+    }
 }
 
 void LauncherSys::onAutoExitTimeout()
@@ -156,4 +150,21 @@ bool LauncherSys::eventFilter(QObject *watched, QEvent *event)
     }
 
     return QObject::eventFilter(watched, event);
+}
+
+void LauncherSys::registerRegion() {
+    m_regionMonitorConnect = connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [=] (const QPoint &p, const int flag) {
+        if (flag == MOUSE_LEFTBUTTON) {
+            m_launcherInter->regionMonitorPoint(p);
+        }
+    });
+
+    if (!m_regionMonitor->registered()) {
+        m_regionMonitor->registerRegion();
+    }
+}
+
+void LauncherSys::unRegisterRegion() {
+    m_regionMonitor->unregisterRegion();
+    disconnect(m_regionMonitorConnect);
 }

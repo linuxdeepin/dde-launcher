@@ -1,3 +1,23 @@
+<a name="4.5.1"></a>
+### 4.5.1 (2018-11-01)
+
+
+#### Bug Fixes
+
+*   auto exit ([f73862ca](https://github.com/linuxdeepin/dde-launcher/commit/f73862ca23d8d690613021897014f2f11b8291a6))
+*   scroll down is very short ([9870f39f](https://github.com/linuxdeepin/dde-launcher/commit/9870f39f8e39888d8d6302a447f36c1645a15406))
+* **Mini:**
+  *  cannot hide ([c2fee131](https://github.com/linuxdeepin/dde-launcher/commit/c2fee1311c91642b80dbd5eca594cb690a46c2ea))
+  *  Multi-screen coordinates ([78328987](https://github.com/linuxdeepin/dde-launcher/commit/78328987a1e84c70533d5ab8cc3ffebbda0ace5a))
+* **windowed_frame:**  width calculation is incorrect. ([df5d56e9](https://github.com/linuxdeepin/dde-launcher/commit/df5d56e93c3168fc4599ba34bd05b1d5bd9b5b2a))
+
+#### Features
+
+*   add regionMonitorPoint interface ([d0aff55a](https://github.com/linuxdeepin/dde-launcher/commit/d0aff55a2c5aa06ae597918ab80019389b95384c))
+* **Mini:**  support vertical scrollbar show as needed ([c9d581da](https://github.com/linuxdeepin/dde-launcher/commit/c9d581daef9b754a14d4eceac2425440e8050b51))
+
+
+
 <a name=""></a>
 ##  4.5.0 (2018-10-25)
 

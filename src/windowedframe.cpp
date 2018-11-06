@@ -732,6 +732,10 @@ void WindowedFrame::onSwitchBtnClicked()
 
     m_switchBtn->updateStatus(m_displayMode);
     m_appsView->setModel(m_appsModel);
+
+    // each time press "switch btn" must hide tips label.
+    hideTips();
+    m_searchWidget->clearSearchContent();
 }
 
 void WindowedFrame::onWMCompositeChanged()

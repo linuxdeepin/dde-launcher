@@ -107,7 +107,7 @@ private:
     void updateUsedListInfo();
     void updateUserListInfo();
     void generateCategoryMap();
-    void refreshAppAutoStartCache();
+    void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
     void onSearchTimeOut();
 
 private slots:
@@ -143,7 +143,7 @@ private:
 
     static QPointer<AppsManager> INSTANCE;
     static QGSettings LAUNCHER_SETTINGS;
-    static QSettings APP_AUTOSTART_CACHE;
+    static QSet<QString> APP_AUTOSTART_CACHE;
     static QSettings APP_USER_SORTED_LIST;
     static QSettings APP_USED_SORTED_LIST;
     QMap<QPair<QString, int>, QPixmap> m_iconCache;

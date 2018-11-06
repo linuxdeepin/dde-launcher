@@ -44,7 +44,7 @@ DWIDGET_USE_NAMESPACE
 QPointer<AppsManager> AppsManager::INSTANCE = nullptr;
 
 QGSettings AppsManager::LAUNCHER_SETTINGS("com.deepin.dde.launcher", "", nullptr);
-QSettings AppsManager::APP_AUTOSTART_CACHE("deepin", "dde-launcher-app-autostart", nullptr);
+QSet<QString> AppsManager::APP_AUTOSTART_CACHE;
 QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
 QSettings AppsManager::APP_USED_SORTED_LIST("deepin", "dde-launcher-app-used-sorted-list");
 
@@ -142,9 +142,7 @@ AppsManager::AppsManager(QObject *parent) :
             << QString(":/icons/skin/icons/others_normal_22px.svg");
 
     refreshAllList();
-
-    if (APP_AUTOSTART_CACHE.value("version").toString() != qApp->applicationVersion())
-        refreshAppAutoStartCache();
+    refreshAppAutoStartCache();
 
     m_searchTimer->setSingleShot(true);
     m_searchTimer->setInterval(150);
@@ -444,14 +442,7 @@ bool AppsManager::appIsNewInstall(const QString &key)
 
 bool AppsManager::appIsAutoStart(const QString &desktop)
 {
-    if (APP_AUTOSTART_CACHE.contains(desktop))
-        return APP_AUTOSTART_CACHE.value(desktop).toBool();
-
-    const bool isAutoStart = m_startManagerInter->IsAutostart(desktop).value();
-
-    APP_AUTOSTART_CACHE.setValue(desktop, isAutoStart);
-
-    return isAutoStart;
+    return APP_AUTOSTART_CACHE.contains(desktop.split("/").last());
 }
 
 bool AppsManager::appIsOnDock(const QString &desktop)
@@ -677,17 +668,32 @@ int AppsManager::appNums(const AppsListModel::AppCategory &category) const
     return appsInfoList(category).size();
 }
 
-void AppsManager::refreshAppAutoStartCache()
+void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &desktpFilePath)
 {
-    APP_AUTOSTART_CACHE.setValue("version", qApp->applicationVersion());
+    if (type.isEmpty()) {
+        APP_AUTOSTART_CACHE.clear();
+        const QStringList &desktop_list = m_startManagerInter->AutostartList().value();
 
-    for (const ItemInfo &info : m_allAppInfoList)
-    {
-        const bool isAutoStart = m_startManagerInter->IsAutostart(info.m_desktop).value();
-        APP_AUTOSTART_CACHE.setValue(info.m_desktop, isAutoStart);
+        for (const QString &auto_start_desktop : desktop_list) {
+            const QString desktop_file_name = auto_start_desktop.split("/").last();
+
+            if (!desktop_file_name.isEmpty())
+                APP_AUTOSTART_CACHE.insert(desktop_file_name);
+        }
+    } else {
+        const QString desktop_file_name = desktpFilePath.split("/").last();
+
+        if (desktop_file_name.isEmpty())
+            return;
+
+        if (type == "added") {
+            APP_AUTOSTART_CACHE.insert(desktop_file_name);
+        } else if (type == "deleted") {
+            APP_AUTOSTART_CACHE.remove(desktop_file_name);
+        }
+
+        emit dataChanged(AppsListModel::All);
     }
-
-    emit dataChanged(AppsListModel::All);
 }
 
 void AppsManager::onSearchTimeOut()

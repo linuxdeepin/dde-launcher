@@ -36,6 +36,9 @@
 #include <QLabel>
 #include <QDebug>
 #include <QDrag>
+#include <QScroller>
+#include <private/qguiapplication_p.h>
+#include <qpa/qplatformtheme.h>
 
 AppListView::AppListView(QWidget *parent)
     : QListView(parent)
@@ -43,6 +46,7 @@ AppListView::AppListView(QWidget *parent)
     , m_scrollAni(new QPropertyAnimation(verticalScrollBar(), "value"))
     , m_opacityEffect(new QGraphicsOpacityEffect(this))
     , m_wmHelper(DWindowManagerHelper::instance())
+    , m_updateEnableSelectionByMouseTimer(nullptr)
 {
     m_scrollAni->setEasingCurve(QEasingCurve::OutQuint);
     m_scrollAni->setDuration(800);
@@ -73,6 +77,12 @@ AppListView::AppListView(QWidget *parent)
     m_dropThresholdTimer->setInterval(DLauncher::APP_DRAG_SWAP_THRESHOLD);
     m_dropThresholdTimer->setSingleShot(true);
 
+#if QT_VERSION < QT_VERSION_CHECK(5,9,0)
+    touchTapDistance = 15;
+#else
+    touchTapDistance = QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::TouchDoubleTapDistance).toInt();
+#endif
+
 #ifndef DISABLE_DRAG_ANIMATION
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::prepareDropSwap, Qt::QueuedConnection);
 #else
@@ -100,7 +110,26 @@ void AppListView::wheelEvent(QWheelEvent *e)
 
 void AppListView::mouseMoveEvent(QMouseEvent *e)
 {
-    e->accept();
+    if (e->source() == Qt::MouseEventSynthesizedByQt) {
+        if (QScroller::hasScroller(viewport())) {
+            return;
+        }
+
+        if (m_updateEnableSelectionByMouseTimer && m_updateEnableSelectionByMouseTimer->isActive()) {
+            const QPoint difference_pos = e->pos() - m_lastTouchBeginPos;
+
+            if (qAbs(difference_pos.x()) > touchTapDistance || qAbs(difference_pos.y()) > touchTapDistance) {
+                QScroller::grabGesture(viewport());
+                QScroller *scroller = QScroller::scroller(viewport());
+
+                scroller->handleInput(QScroller::InputPress, e->localPos(), e->timestamp());
+                scroller->handleInput(QScroller::InputMove, e->localPos(), e->timestamp());
+            }
+            return;
+        }
+    }
+
+    QListView::mouseMoveEvent(e);
 
     setState(NoState);
     blockSignals(false);
@@ -113,7 +142,7 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
     else
         Q_EMIT entered(QModelIndex());
 
-    if (e->buttons() != Qt::LeftButton)
+    if (e->button() != Qt::LeftButton)
         return;
 
     if (qAbs(pos.x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
@@ -126,13 +155,37 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
 
 void AppListView::mousePressEvent(QMouseEvent *e)
 {
+    // 当source为MouseEventSynthesizedByQt时，认为正在使用触屏，开始手动控制触摸操作
+    if (e->source() == Qt::MouseEventSynthesizedByQt) {
+        m_lastTouchBeginPos = e->pos();
+
+        if (QScroller::hasScroller(this))  {
+            QScroller::scroller(this)->deleteLater();
+        }
+
+        if (m_updateEnableSelectionByMouseTimer) {
+            m_updateEnableSelectionByMouseTimer->stop();
+        }
+        else {
+            m_updateEnableSelectionByMouseTimer = new QTimer(this);
+            m_updateEnableSelectionByMouseTimer->setSingleShot(true);
+            m_updateEnableSelectionByMouseTimer->setInterval(300);
+
+            connect(m_updateEnableSelectionByMouseTimer, &QTimer::timeout, this, [=] {
+                m_updateEnableSelectionByMouseTimer->deleteLater();
+                m_updateEnableSelectionByMouseTimer = nullptr;
+            });
+        }
+        m_updateEnableSelectionByMouseTimer->start();
+    }
+
     const QModelIndex &index = indexAt(e->pos());
     if (!index.isValid())
         e->ignore();
 
     const bool isCategoryList = qobject_cast<AppsListModel*>(model())->category() == AppsListModel::Category;
 
-    if (e->buttons() == Qt::RightButton && !isCategoryList) {
+    if (e->button() == Qt::RightButton && !isCategoryList) {
         const QPoint rightClickPoint = mapToGlobal(e->pos());
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
 
@@ -140,7 +193,7 @@ void AppListView::mousePressEvent(QMouseEvent *e)
             emit popupMenuRequested(rightClickPoint, clickedIndex);
     }
 
-    if (e->buttons() == Qt::LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         if (isCategoryList) {
             return;
         } else {
@@ -154,6 +207,10 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 
 void AppListView::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (!QScroller::hasScroller(viewport())) {
+        QListView::mouseReleaseEvent(e);
+    }
+
     const QModelIndex &index = indexAt(e->pos());
     if (!index.isValid())
         e->ignore();
@@ -162,7 +219,6 @@ void AppListView::mouseReleaseEvent(QMouseEvent *e)
         emit requestSwitchToCategory(index);
         return;
     }
-    QListView::mouseReleaseEvent(e);
 }
 
 void AppListView::dragEnterEvent(QDragEnterEvent *e)

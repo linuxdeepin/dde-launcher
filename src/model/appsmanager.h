@@ -44,6 +44,11 @@
 
 #define DOCK_POS_RIGHT  1
 #define DOCK_POS_BOTTOM 2
+#define DOCK_POS_LEFT   3
+#define DOCK_POS_TOP    0
+
+#define LEFT_PADDING 200
+#define RIGHT_PADDING 200
 
 const QPixmap getThemeIcon(const QString &iconName, const int size);
 

@@ -126,7 +126,6 @@ private slots:
     void ensureItemVisible(const QModelIndex &index);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
     void updateGradient();
-    void toMiniMode();
     void refreshTitleVisible();
     void refershCategoryTextVisible();
     void refershCurrentFloatTitle();
@@ -155,8 +154,6 @@ private:
     QTimer *m_clearCacheTimer;
 
     NavigationWidget *m_navigationWidget;
-    QWidget *m_rightSpacing;
-    DImageButton *m_miniMode;
     SearchWidget *m_searchWidget;
     AppListArea *m_appsArea;
     DVBoxWidget *m_appsVbox;
@@ -207,10 +204,12 @@ private:
     CategoryTitleWidget *m_systemTitle;
     CategoryTitleWidget *m_othersTitle;
 
-    QVBoxLayout *m_scrollAreaLayout;
-    QHBoxLayout *m_mainLayout;
-    QVBoxLayout *m_contentLayout;
-    QVBoxLayout *m_rightLayout;
+    QFrame *m_topSpacing;
+    QFrame *m_bottomSpacing;
+
+    QFrame *m_contentFrame;
+
+    QVBoxLayout *m_mainLayout;
 };
 
 #endif // MAINFRAME_H

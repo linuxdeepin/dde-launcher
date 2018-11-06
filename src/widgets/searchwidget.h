@@ -25,8 +25,10 @@
 #define SEARCHWIDGET_H
 
 #include "searchlineedit.h"
-
+#include <dimagebutton.h>
 #include <QWidget>
+
+DWIDGET_USE_NAMESPACE
 
 class SearchWidget : public QFrame
 {
@@ -37,14 +39,25 @@ public:
 
     QLineEdit *edit();
 
+    void setLeftSpacing(int spacing);
+    void setRightSpacing(int spacing);
+
+    void showToggle();
+    void hideToggle();
+
 public slots:
     void clearSearchContent();
 
 signals:
     void searchTextChanged(const QString &text) const;
+    void toggleMode();
 
-private:
+  private:
     SearchLineEdit* m_searchEdit;
+    QFrame *m_leftSpacing;
+    QFrame *m_rightSpacing;
+    DImageButton *m_toggleCategoryBtn;
+    DImageButton *m_toggleModeBtn;
 };
 
 #endif // SEARCHWIDGET_H

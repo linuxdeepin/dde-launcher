@@ -92,6 +92,8 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_displayMode(All)
     , m_focusPos(LeftTop)
 {
+    m_searchWidget->hideToggle();
+
     m_blurEffectWidget = new DBlurEffectWidget(this);
     m_blurEffectWidget->setMaskColor(DBlurEffectWidget::DarkColor);
     m_blurEffectWidget->setBlendMode(DBlurEffectWidget::BehindWindowBlend);

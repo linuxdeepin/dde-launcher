@@ -27,10 +27,8 @@
 #include <QVBoxLayout>
 #include <QDebug>
 
-DWIDGET_USE_NAMESPACE
-
 NavigationWidget::NavigationWidget(QWidget *parent) :
-    QWidget(parent),
+    QFrame(parent),
     m_calcUtil(CalculateUtil::instance()),
     m_categoryGroup(new QButtonGroup(this)),
     m_internetBtn(new CategoryButton(AppsListModel::Internet, this)),
@@ -43,10 +41,7 @@ NavigationWidget::NavigationWidget(QWidget *parent) :
     m_readingBtn(new CategoryButton(AppsListModel::Reading, this)),
     m_developmentBtn(new CategoryButton(AppsListModel::Development, this)),
     m_systemBtn(new CategoryButton(AppsListModel::System, this)),
-    m_othersBtn(new CategoryButton(AppsListModel::Others, this)),
-
-    m_toggleModeBtn(new DImageButton(this))
-
+    m_othersBtn(new CategoryButton(AppsListModel::Others, this))
 {
     initUI();
     initConnection();
@@ -107,12 +102,6 @@ void NavigationWidget::refershCategoryVisible(const AppsListModel::AppCategory c
 
 void NavigationWidget::initUI()
 {
-    m_toggleModeBtn->setAccessibleName("mode-toggle-button");
-    m_toggleModeBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.png");
-    m_toggleModeBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.png");
-    m_toggleModeBtn->setPressPic(":/icons/skin/icons/category_active_22px.png");
-    m_toggleModeBtn->setStyleSheet("margin:0 0 0 20px;");
-
     m_categoryGroup->addButton(m_internetBtn);
     m_categoryGroup->addButton(m_chatBtn);
     m_categoryGroup->addButton(m_musicBtn);
@@ -129,8 +118,6 @@ void NavigationWidget::initUI()
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addSpacing(30);
-    mainLayout->addWidget(m_toggleModeBtn);
-    mainLayout->setAlignment(m_toggleModeBtn, Qt::AlignVCenter | Qt::AlignLeft);
     mainLayout->addStretch();
     mainLayout->addWidget(m_internetBtn);
     mainLayout->addWidget(m_chatBtn);
@@ -163,8 +150,6 @@ void NavigationWidget::initConnection()
     connect(m_developmentBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_systemBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
     connect(m_othersBtn, &CategoryButton::clicked, this, &NavigationWidget::buttonClicked);
-
-    connect(m_toggleModeBtn, &DImageButton::clicked, this, &NavigationWidget::toggleMode);
 }
 
 void NavigationWidget::buttonClicked()
@@ -223,7 +208,7 @@ void NavigationWidget::setZoomLevel(const qreal &zoomLevel)
 
 void NavigationWidget::enterEvent(QEvent *e)
 {
-    QWidget::enterEvent(e);
+    QFrame::enterEvent(e);
 
     QPropertyAnimation * ani = new QPropertyAnimation(this, "zoomLevel");
     ani->setDuration(300);
@@ -236,11 +221,18 @@ void NavigationWidget::enterEvent(QEvent *e)
 
 void NavigationWidget::leaveEvent(QEvent *e)
 {
-    QWidget::leaveEvent(e);
+    QFrame::leaveEvent(e);
 
     QPropertyAnimation * ani = new QPropertyAnimation(this, "zoomLevel");
     ani->setDuration(300);
     ani->setEndValue(zoomLevel());
     ani->setEndValue(1);
     ani->start(QPropertyAnimation::DeleteWhenStopped);
+}
+
+void NavigationWidget::showEvent(QShowEvent *e)
+{
+    QFrame::showEvent(e);
+
+    QTimer::singleShot(0, this, &NavigationWidget::raise);
 }

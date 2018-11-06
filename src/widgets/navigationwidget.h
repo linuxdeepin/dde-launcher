@@ -30,11 +30,7 @@
 #include <QWidget>
 #include <QButtonGroup>
 
-#include <dimagebutton.h>
-
-DWIDGET_USE_NAMESPACE
-
-class NavigationWidget : public QWidget
+class NavigationWidget : public QFrame
 {
     Q_OBJECT
 
@@ -53,15 +49,15 @@ public:
 signals:
     void scrollToCategory(const AppsListModel::AppCategory category) const;
     void mouseEntered();
-    void toggleMode();
 
 public slots:
     void setCurrentCategory(const AppsListModel::AppCategory category);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
 
 protected:
-    void enterEvent(QEvent *e);
-    void leaveEvent(QEvent *e);
+    void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
+    void leaveEvent(QEvent *e) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void initUI();
@@ -84,8 +80,6 @@ private:
     CategoryButton *m_developmentBtn;
     CategoryButton *m_systemBtn;
     CategoryButton *m_othersBtn;
-
-    DImageButton *m_toggleModeBtn;
 
     qreal m_zoomLevel = 1;
 };

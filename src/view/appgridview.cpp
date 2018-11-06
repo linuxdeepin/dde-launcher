@@ -41,9 +41,9 @@
 QPointer<AppsManager> AppGridView::m_appManager = nullptr;
 QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
 
-AppGridView::AppGridView(QWidget *parent) :
-    QListView(parent),
-    m_dropThresholdTimer(new QTimer(this))
+AppGridView::AppGridView(QWidget *parent)
+    : QListView(parent)
+    , m_dropThresholdTimer(new QTimer(this))
 {
     if (!m_appManager)
         m_appManager = AppsManager::instance();
@@ -71,7 +71,7 @@ AppGridView::AppGridView(QWidget *parent) :
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(QFrame::NoFrame);
 
-    setStyleSheet("background-color:transparent;");
+    setStyleSheet("background-color: transparent;");
 
     // update item spacing
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] { setSpacing(m_calcUtil->appItemSpacing()); });
@@ -125,7 +125,7 @@ void AppGridView::dropEvent(QDropEvent *e)
 
 void AppGridView::mousePressEvent(QMouseEvent *e)
 {
-    if (e->buttons() == Qt::RightButton) {
+    if (e->button() == Qt::RightButton) {
         QPoint rightClickPoint = mapToGlobal(e->pos());
 
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
@@ -196,6 +196,8 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
 
     if (idx.isValid())
         emit entered(idx);
+
+    qDebug() << e->buttons() << e->button();
 
     if (e->buttons() != Qt::LeftButton)
         return;
@@ -296,10 +298,13 @@ void AppGridView::enterEvent(QEvent *e)
 ///
 void AppGridView::fitToContent()
 {
-    if (width() == contentsRect().width() && height() == contentsSize().height())
+    const int h = contentsSize().height();
+
+    //FIXME(lxz): sometimes, contentsSize will periodic changes when dragging icons
+    if (width() == contentsRect().width() && (m_newHeight == height() || m_newHeight == h))
         return;
 
-    const int h = contentsSize().height();
+    m_newHeight = h;
 
     setFixedHeight(h < 0 ? 0 : h);
     setFixedWidth(contentsRect().width());

@@ -28,23 +28,77 @@
 #include <QEvent>
 #include <QDebug>
 #include <QKeyEvent>
+#include <dimagebutton.h>
+#include <DDBusSender>
+
+DWIDGET_USE_NAMESPACE
 
 SearchWidget::SearchWidget(QWidget *parent) :
     QFrame(parent)
 {
+    m_leftSpacing = new QFrame(this);
+    m_rightSpacing = new QFrame(this);
+
+    m_leftSpacing->setFixedWidth(0);
+    m_rightSpacing->setFixedWidth(0);
+
+    m_toggleCategoryBtn = new DImageButton(this);
+    m_toggleCategoryBtn->setAccessibleName("mode-toggle-button");
+    m_toggleCategoryBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.png");
+    m_toggleCategoryBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.png");
+    m_toggleCategoryBtn->setPressPic(":/icons/skin/icons/category_active_22px.png");
+
+    m_toggleModeBtn = new DImageButton(this);
+    m_toggleModeBtn->setNormalPic(":/icons/skin/icons/unfullscreen_normal.png");
+    m_toggleModeBtn->setHoverPic(":/icons/skin/icons/unfullscreen_hover.png");
+    m_toggleModeBtn->setPressPic(":/icons/skin/icons/unfullscreen_press.png");
+
     m_searchEdit = new SearchLineEdit(this);
     m_searchEdit->setAccessibleName("search-edit");
     m_searchEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    m_searchEdit->setFixedWidth(290);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addWidget(m_searchEdit);
+    mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
-    mainLayout->setContentsMargins(0, 0, 0, 0);
+
+    mainLayout->addSpacing(30);
+    mainLayout->addWidget(m_leftSpacing);
+    mainLayout->addWidget(m_toggleCategoryBtn);
+    mainLayout->addStretch();
+    mainLayout->addWidget(m_searchEdit);
+    mainLayout->addStretch();
+    mainLayout->addWidget(m_toggleModeBtn);
+    mainLayout->addWidget(m_rightSpacing);
+    mainLayout->addSpacing(30);
+
     setLayout(mainLayout);
 
     connect(m_searchEdit, &SearchLineEdit::textChanged, [this] {
         emit searchTextChanged(m_searchEdit->text().trimmed());
     });
+    connect(m_toggleModeBtn, &DImageButton::clicked, this, [=] {
+#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
+        DDBusSender()
+            .service("com.deepin.dde.daemon.Launcher")
+            .interface("com.deepin.dde.daemon.Launcher")
+            .path("/com/deepin/dde/daemon/Launcher")
+            .property("Fullscreen")
+            .set(false);
+#else
+            const QStringList args{
+                "--print-reply",
+                "--dest=com.deepin.dde.daemon.Launcher",
+                "/com/deepin/dde/daemon/Launcher",
+                "org.freedesktop.DBus.Properties.Set",
+                "string:com.deepin.dde.daemon.Launcher",
+                "string:Fullscreen",
+                "variant:boolean:false"};
+
+            QProcess::startDetached("dbus-send", args);
+#endif
+    });
+    connect(m_toggleCategoryBtn, &DImageButton::clicked, this, &SearchWidget::toggleMode);
 }
 
 QLineEdit *SearchWidget::edit()
@@ -56,4 +110,24 @@ void SearchWidget::clearSearchContent()
 {
     m_searchEdit->normalMode();
     m_searchEdit->moveFloatWidget();
+}
+
+void SearchWidget::setLeftSpacing(int spacing) {
+    m_leftSpacing->setFixedWidth(spacing);
+}
+
+void SearchWidget::setRightSpacing(int spacing) {
+    m_rightSpacing->setFixedWidth(spacing);
+}
+
+void SearchWidget::showToggle()
+{
+    m_toggleCategoryBtn->show();
+    m_toggleModeBtn->show();
+}
+
+void SearchWidget::hideToggle()
+{
+    m_toggleCategoryBtn->hide();
+    m_toggleModeBtn->hide();
 }

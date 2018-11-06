@@ -36,7 +36,6 @@
 #include <QKeyEvent>
 #include <QGraphicsEffect>
 #include <QProcess>
-
 #include <ddialog.h>
 
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
@@ -74,8 +73,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_delayHideTimer(new QTimer(this)),
     m_autoScrollTimer(new QTimer(this)),
     m_clearCacheTimer(new QTimer(this)),
-    m_navigationWidget(new NavigationWidget),
-    m_rightSpacing(new QWidget),
+    m_navigationWidget(new NavigationWidget(this)),
     m_searchWidget(new SearchWidget(this)),
     m_appsArea(new AppListArea),
     m_appsVbox(new DVBoxWidget),
@@ -125,6 +123,9 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_developmentTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Development"))),
     m_systemTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "System"))),
     m_othersTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Others")))
+    , m_topSpacing(new QFrame)
+    , m_bottomSpacing(new QFrame)
+    , m_contentFrame(new QFrame)
 {
     setFocusPolicy(Qt::ClickFocus);
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
@@ -199,16 +200,9 @@ void FullScreenFrame::hideTips()
 
 void FullScreenFrame::resizeEvent(QResizeEvent *e)
 {
-    const int screenWidth = e->size().width();
-
-    // reset widgets size
-    const int besidePadding = m_calcUtil->calculateBesidePadding(screenWidth);
-    m_navigationWidget->setFixedWidth(besidePadding);
-    m_rightSpacing->setFixedWidth(besidePadding);
-
     QTimer::singleShot(0, this, [=] {
         updateBackground();
-        updateGradient();
+        updateDockPosition();
     });
 
     QFrame::resizeEvent(e);
@@ -252,7 +246,6 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     // To make sure the window is placed at the right position.
     updateGeometry();
     updateBackground();
-    updateGradient();
     updateDockPosition();
 
     // force refresh
@@ -284,8 +277,6 @@ void FullScreenFrame::hideEvent(QHideEvent *e)
 
 void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
 {
-    BoxFrame::mouseReleaseEvent(e);
-
     if (e->button() == Qt::RightButton)
         return;
 
@@ -339,7 +330,7 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
     else if (o == m_appsArea->viewport() && e->type() == QEvent::Resize)
     {
         const int pos = m_appsManager->dockPosition();
-        m_calcUtil->calculateAppLayout(static_cast<QResizeEvent *>(e)->size(), pos);
+        m_calcUtil->calculateAppLayout(static_cast<QResizeEvent *>(e)->size() - QSize(LEFT_PADDING + RIGHT_PADDING, 0), pos);
         updatePlaceholderSize();
     }
 
@@ -373,7 +364,7 @@ QVariant FullScreenFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
 
 void FullScreenFrame::initUI()
 {
-    m_searchWidget->setFixedWidth(290);
+    m_searchWidget->showToggle();
 
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setFixedSize(500, 50);
@@ -483,42 +474,33 @@ void FullScreenFrame::initUI()
     m_appsVbox->layout()->setSpacing(0);
     m_appsVbox->layout()->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN,
                                              0, 0);
-    m_appsArea->setWidget(m_appsVbox);
 
-    m_scrollAreaLayout = new QVBoxLayout;
-    m_scrollAreaLayout->setMargin(0);
-    m_scrollAreaLayout->setSpacing(0);
-    m_scrollAreaLayout->addWidget(m_appsArea);
+    m_contentFrame = new QFrame;
+    m_contentFrame->setStyleSheet("background: transparent;");
+    QHBoxLayout *scrollLayout = new QHBoxLayout;
+    scrollLayout->setMargin(0);
+    scrollLayout->setSpacing(0);
+    scrollLayout->addSpacing(LEFT_PADDING);
+    scrollLayout->addWidget(m_appsVbox);
+    scrollLayout->addSpacing(RIGHT_PADDING);
+
+    m_contentFrame->setLayout(scrollLayout);
+
+    m_appsArea->setWidget(m_contentFrame);
+
+    m_navigationWidget->show();
+    m_navigationWidget->raise();
 
     m_bottomGradient->setDirection(GradientLabel::BottomToTop);
 
-    m_contentLayout = new QVBoxLayout;
-    m_contentLayout->setMargin(0);
-    m_contentLayout->setSpacing(0);
-    m_contentLayout->addSpacing(30);
-    m_contentLayout->addWidget(m_searchWidget);
-    m_contentLayout->setAlignment(m_searchWidget, Qt::AlignCenter);
-    m_contentLayout->addSpacing(30);
-    m_contentLayout->addLayout(m_scrollAreaLayout);
-
-    m_miniMode = new DImageButton;
-    m_miniMode->setNormalPic(":/icons/skin/icons/unfullscreen_normal.png");
-    m_miniMode->setHoverPic(":/icons/skin/icons/unfullscreen_hover.png");
-    m_miniMode->setPressPic(":/icons/skin/icons/unfullscreen_press.png");
-
-    m_rightLayout = new QVBoxLayout;
-    m_rightLayout->addWidget(m_miniMode);
-    m_rightLayout->setAlignment(m_miniMode, Qt::AlignTop | Qt::AlignRight);
-    m_rightLayout->setSpacing(0);
-
-    m_rightSpacing->setLayout(m_rightLayout);
-
-    m_mainLayout = new QHBoxLayout;
+    m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
     m_mainLayout->addSpacing(0);
-    m_mainLayout->addWidget(m_navigationWidget);
-    m_mainLayout->addLayout(m_contentLayout);
-    m_mainLayout->addWidget(m_rightSpacing);
+    m_mainLayout->addWidget(m_topSpacing);
+    m_mainLayout->addWidget(m_searchWidget);
+    m_mainLayout->addSpacing(20);
+    m_mainLayout->addWidget(m_appsArea);
+    m_mainLayout->addWidget(m_bottomSpacing);
 
     setLayout(m_mainLayout);
 
@@ -563,30 +545,6 @@ void FullScreenFrame::updateGradient()
     m_bottomGradient->move(QPoint(bottomPoint.x(), bottomPoint.y() + 1 * ratio - bottomSize.height()));
     m_bottomGradient->show();
     m_bottomGradient->raise();
-}
-
-void FullScreenFrame::toMiniMode()
-{
-#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
-    DDBusSender()
-            .service("com.deepin.dde.daemon.Launcher")
-            .interface("com.deepin.dde.daemon.Launcher")
-            .path("/com/deepin/dde/daemon/Launcher")
-            .property("Fullscreen")
-            .set(false);
-#else
-    const QStringList args {
-        "--print-reply",
-        "--dest=com.deepin.dde.daemon.Launcher",
-        "/com/deepin/dde/daemon/Launcher",
-        "org.freedesktop.DBus.Properties.Set",
-        "string:com.deepin.dde.daemon.Launcher",
-        "string:Fullscreen",
-        "variant:boolean:false"
-    };
-
-    QProcess::startDetached("dbus-send", args);
-#endif
 }
 
 void FullScreenFrame::refreshTitleVisible()
@@ -719,8 +677,6 @@ void FullScreenFrame::initConnection()
     connect(m_appsArea, &AppListArea::increaseIcon, this, [=] { m_calcUtil->increaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
     connect(m_appsArea, &AppListArea::decreaseIcon, this, [=] { m_calcUtil->decreaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
 
-    connect(m_miniMode, &DImageButton::clicked, this, &FullScreenFrame::toMiniMode, Qt::QueuedConnection);
-
     connect(qApp, &QApplication::primaryScreenChanged, this, &FullScreenFrame::updateGeometry);
     connect(qApp->primaryScreen(), &QScreen::geometryChanged, this, &FullScreenFrame::updateGeometry);
 
@@ -824,7 +780,7 @@ void FullScreenFrame::initConnection()
 
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
-    connect(m_navigationWidget, &NavigationWidget::toggleMode, [this]{
+    connect(m_searchWidget, &SearchWidget::toggleMode, [this]{
         m_searchWidget->clearFocus();
         m_searchWidget->clearSearchContent();
         updateDisplayMode(m_displayMode == GROUP_BY_CATEGORY ? ALL_APPS : GROUP_BY_CATEGORY);
@@ -1214,8 +1170,6 @@ void FullScreenFrame::updateCurrentVisibleCategory()
         currentVisibleCategory = AppsListModel::System;
     else if (!m_othersView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Others;
-    else
-        Q_ASSERT(false);
 
     if (m_currentCategory == currentVisibleCategory)
         return;
@@ -1235,24 +1189,51 @@ void FullScreenFrame::updatePlaceholderSize()
 
 void FullScreenFrame::updateDockPosition()
 {
-    m_calcUtil->calculateAppLayout(m_appsArea->size(),
+   // reset all spacing size
+    m_topSpacing->setFixedHeight(30);
+    m_bottomSpacing->setFixedHeight(0);
+
+    const int searchHeight = m_searchWidget->y() + m_searchWidget->height();
+
+    // reset widgets size
+    const int besidePadding = m_calcUtil->calculateBesidePadding(width());
+    m_navigationWidget->setFixedWidth(besidePadding);
+    m_navigationWidget->setFixedHeight(height() - searchHeight);
+
+    const QRect dockGeometry = m_appsManager->dockGeometry();
+
+    switch (m_appsManager->dockPosition()) {
+    case DOCK_POS_TOP:
+        m_topSpacing->setFixedHeight(30 + dockGeometry.height());
+        m_navigationWidget->move(0, searchHeight);
+        m_searchWidget->setLeftSpacing(0);
+        m_searchWidget->setRightSpacing(0);
+        break;
+    case DOCK_POS_BOTTOM:
+        m_bottomSpacing->setFixedHeight(DLauncher::VIEWLIST_BOTTOM_MARGIN);
+        m_navigationWidget->move(0, searchHeight);
+        m_searchWidget->setLeftSpacing(0);
+        m_searchWidget->setRightSpacing(0);
+        break;
+    case DOCK_POS_LEFT:
+        m_navigationWidget->move(dockGeometry.width(), searchHeight);
+        m_searchWidget->setLeftSpacing(dockGeometry.width());
+        m_searchWidget->setRightSpacing(0);
+        break;
+    case DOCK_POS_RIGHT:
+        m_navigationWidget->move(0, searchHeight);
+        m_searchWidget->setLeftSpacing(0);
+        m_searchWidget->setRightSpacing(dockGeometry.width());
+        break;
+    default:
+        break;
+    }
+
+    m_calcUtil->calculateAppLayout(m_appsArea->size() - QSize(LEFT_PADDING + RIGHT_PADDING, 0),
                                    m_appsManager->dockPosition());
     setStyleSheet(getQssFromFile(":/skin/qss/fullscreenframe.qss"));
 
-    switch (m_appsManager->dockPosition()) {
-    case DOCK_POS_RIGHT:
-        m_rightLayout->setContentsMargins(0, 30, 20 + m_appsManager->dockWidth(), 0);
-        m_scrollAreaLayout->setContentsMargins(0, 0, 0, 10);
-        break;
-    case DOCK_POS_BOTTOM:
-        m_rightLayout->setContentsMargins(0, 30, 20, 0);
-        m_scrollAreaLayout->setContentsMargins(0, 0, 0, DLauncher::VIEWLIST_BOTTOM_MARGIN);
-        break;
-    default:
-        m_rightLayout->setContentsMargins(0, 30, 20, 0);
-        m_scrollAreaLayout->setContentsMargins(0, 0, 0, 10);
-        break;
-    }
+    QTimer::singleShot(0, this, &FullScreenFrame::updateGradient);
 }
 
 AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentModel)
@@ -1315,7 +1296,7 @@ AppsListModel *FullScreenFrame::prevCategoryModel(const AppsListModel *currentMo
 
 void FullScreenFrame::layoutChanged()
 {
-    const int appsContentWidth = m_appsArea->width();
+    const int appsContentWidth = (width() - LEFT_PADDING - RIGHT_PADDING);
 
     m_appsVbox->setFixedWidth(appsContentWidth);
     m_allAppsView->setFixedWidth(appsContentWidth);
@@ -1330,7 +1311,7 @@ void FullScreenFrame::layoutChanged()
     m_systemView->setFixedWidth(appsContentWidth);
     m_othersView->setFixedWidth(appsContentWidth);
 
-    m_floatTitle->move(m_appsArea->pos().x(), m_appsArea->y() - m_floatTitle->height() + 20);
+    m_floatTitle->move(m_appsArea->pos().x() + LEFT_PADDING, m_appsArea->y() - m_floatTitle->height() + 20);
 }
 
 void FullScreenFrame::searchTextChanged(const QString &keywords)

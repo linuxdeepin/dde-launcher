@@ -1,3 +1,13 @@
+<a name="4.5.2"></a>
+### 4.5.2 (2018-11-09)
+
+
+#### Bug Fixes
+
+*   tips label is not hidden. ([ef0072d9](https://github.com/linuxdeepin/dde-launcher/commit/ef0072d9fc0b647433a7d7c196674166ba9c8a8b))
+
+
+
 <a name="4.5.1"></a>
 ### 4.5.1 (2018-11-01)
 

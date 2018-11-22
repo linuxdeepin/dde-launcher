@@ -36,6 +36,8 @@
 #include <QKeyEvent>
 #include <QGraphicsEffect>
 #include <QProcess>
+#include <DWindowManagerHelper>
+
 #include <ddialog.h>
 #include <QScroller>
 
@@ -46,6 +48,8 @@
 #endif
 
 #include "sharedeventfilter.h"
+
+DWIDGET_USE_NAMESPACE
 
 static const QString WallpaperKey = "pictureUri";
 static const QString DisplayModeKey = "display-mode";
@@ -129,8 +133,23 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     , m_contentFrame(new QFrame)
 {
     setFocusPolicy(Qt::ClickFocus);
-    setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
     setAttribute(Qt::WA_InputMethodEnabled, true);
+
+#if (DTK_VERSION <= DTK_VERSION_CHECK(2, 0, 9, 9))
+    setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
+#else
+    auto compositeChanged = [=] {
+        if (DWindowManagerHelper::instance()->windowManagerName() == DWindowManagerHelper::WMName::KWinWM) {
+            setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
+        }
+        else {
+            setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
+        }
+    };
+
+    connect(DWindowManagerHelper::instance(), &DWindowManagerHelper::hasCompositeChanged, this, compositeChanged);
+    compositeChanged();
+#endif
 
     setObjectName("LauncherFrame");
 
@@ -821,6 +840,7 @@ void FullScreenFrame::initConnection()
 void FullScreenFrame::showLauncher()
 {
     show();
+    setFixedSize(qApp->primaryScreen()->geometry().size());
 }
 
 void FullScreenFrame::hideLauncher()

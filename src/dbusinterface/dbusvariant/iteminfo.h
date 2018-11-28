@@ -55,6 +55,7 @@ public:
     qlonglong m_categoryId;
     qlonglong m_installedTime;
     qlonglong m_openCount;
+    qlonglong m_firstRunTime;
 };
 
 typedef QList<ItemInfo> ItemInfoList;

@@ -556,7 +556,7 @@ void AppsManager::refreshUserInfoList()
         }
 
         // add new additions
-        for (QList<ItemInfo>::ConstIterator it = m_allAppInfoList.constBegin(); it != m_allAppInfoList.constEnd(); ++it) {
+        for (QList<ItemInfo>::Iterator it = m_allAppInfoList.begin(); it != m_allAppInfoList.end(); ++it) {
             if (!m_userSortedList.contains(*it)) {
                 m_userSortedList.append(*it);
             }
@@ -575,10 +575,20 @@ void AppsManager::refreshUserInfoList()
         updateUserListInfo();
     }
 
-    std::stable_sort(m_userSortedList.begin(), m_userSortedList.end(),
-                     [] (const ItemInfo &a, const ItemInfo &b) {
-                         return a.m_openCount > b.m_openCount;
-                     });
+    const qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
+    // If the first run time is less than the current time, I am not sure can maintain the correct results.
+    std::stable_sort(m_userSortedList.begin(), m_userSortedList.end(), [=] (const ItemInfo &a, const ItemInfo &b) {
+        const double AFirstRunTime = static_cast<double>(a.m_firstRunTime);
+        const double BFirstRunTime = static_cast<double>(b.m_firstRunTime);
+
+        // If it's past time, will be sorted by open count
+        if (AFirstRunTime > currentTime || BFirstRunTime > currentTime) {
+            return a.m_openCount > b.m_openCount;
+        }
+
+        // Average number of starts
+        return (static_cast<double>(a.m_openCount) / (currentTime - AFirstRunTime)) > (static_cast<double>(b.m_openCount) / (currentTime - BFirstRunTime));
+    });
 
     saveUserSortedList();
 }
@@ -605,6 +615,14 @@ void AppsManager::updateUserListInfo()
             const int openCount = m_userSortedList[idx].m_openCount;
             m_userSortedList[idx].updateInfo(info);
             m_userSortedList[idx].m_openCount = openCount;
+        }
+    }
+
+    // check first run time
+    const qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
+    for (auto it = m_userSortedList.begin(); it != m_userSortedList.end(); ++it) {
+        if (it->m_firstRunTime == 0) {
+            it->m_firstRunTime = currentTime;
         }
     }
 }
@@ -733,9 +751,12 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
     qDebug() << operation << appInfo << categoryNumber;
 
     if (operation == "created") {
-        m_allAppInfoList.append(appInfo);
-        m_usedSortedList.append(appInfo);
-        m_userSortedList.append(appInfo);
+        ItemInfo info = appInfo;
+        info.m_firstRunTime = QDateTime::currentMSecsSinceEpoch();
+
+        m_allAppInfoList.append(info);
+        m_usedSortedList.append(info);
+        m_userSortedList.append(info);
     } else if (operation == "deleted") {
 
         m_allAppInfoList.removeOne(appInfo);

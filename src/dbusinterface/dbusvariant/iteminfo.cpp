@@ -25,8 +25,9 @@
 #include <QDebug>
 
 ItemInfo::ItemInfo()
+    : m_openCount(0)
+    , m_firstRunTime(0)
 {
-    m_openCount = 0;
 }
 
 ItemInfo::~ItemInfo()

@@ -1,3 +1,17 @@
+<a name="4.5.3"></a>
+### 4.5.3 (2018-11-30)
+
+
+#### Features
+
+* **Mini:**  average startup number sort ([ad4e14b4](https://github.com/linuxdeepin/dde-launcher/commit/ad4e14b4b727917f086e949f381f6945d7caf81f))
+
+#### Bug Fixes
+
+* **Mini:**  disable verticalScroll context menu ([9ade7a8e](https://github.com/linuxdeepin/dde-launcher/commit/9ade7a8ecce0942a52238c624f5fdc734682d5f4))
+
+
+
 <a name="4.5.2"></a>
 ### 4.5.2 (2018-11-09)
 

@@ -41,6 +41,8 @@
 #include <QEvent>
 #include <QTimer>
 #include <QDebug>
+#include <DWindowManagerHelper>
+#include <DForeignWindow>
 #include <qpa/qplatformwindow.h>
 
 #define DOCK_TOP        0
@@ -599,6 +601,13 @@ QVariant WindowedFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
 
 void WindowedFrame::regionMonitorPoint(const QPoint &point)
 {
+    auto windowList = DWindowManagerHelper::instance()->currentWorkspaceWindows();
+    for (auto window : windowList) {
+        if (window->handle()->geometry().contains(point)) {
+            if (window->wmClass() == "onboard") return;
+        }
+    }
+
     if (!windowHandle()->handle()->geometry().contains(point)) {
         if (m_menuWorker->isMenuShown() && m_menuWorker->menuGeometry().contains(point)) {
             return;

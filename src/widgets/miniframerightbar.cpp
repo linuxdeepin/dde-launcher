@@ -45,6 +45,8 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
     m_modeToggleBtn->setPressPic(":/icons/skin/icons/fullscreen_press.png");
 
+    bool hasManual = QProcess::execute("which", QStringList() << "dman") == 0;
+
     QVBoxLayout *layout = new QVBoxLayout(this);
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     MiniFrameButton *computerBtn = new MiniFrameButton(tr("Computer"));
@@ -57,6 +59,8 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     MiniFrameButton *settingsBtn = new MiniFrameButton(tr("Settings"));
     MiniFrameButton *shutdownBtn = new MiniFrameButton(tr("Shutdown"));
 
+    manualBtn->setVisible(hasManual);
+
     uint index = 0;
     m_btns[index++] = computerBtn;
     m_btns[index++] = videoBtn;
@@ -64,7 +68,11 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     m_btns[index++] = pictureBtn;
     m_btns[index++] = documentBtn;
     m_btns[index++] = downloadBtn;
-    m_btns[index++] = manualBtn;
+
+    if (hasManual) {
+        m_btns[index++] = manualBtn;
+    }
+
     m_btns[index++] = settingsBtn;
     m_btns[index++] = shutdownBtn;
 

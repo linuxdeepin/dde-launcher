@@ -197,8 +197,6 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
     if (idx.isValid())
         emit entered(idx);
 
-    qDebug() << e->buttons() << e->button();
-
     if (e->buttons() != Qt::LeftButton)
         return;
 

@@ -1,3 +1,15 @@
+<a name="4.5.4"></a>
+### 4.5.4 (2018-12-07)
+
+
+#### Features
+
+*   support touch scroll ([523b1feb](https://github.com/linuxdeepin/dde-launcher/commit/523b1feb0638f7fe23ee6519df8a873b368d8c55))
+*   check deepin-manual ([0b8b5a32](https://github.com/linuxdeepin/dde-launcher/commit/0b8b5a32777d6f1deba9136027587888a2ecc4a8))
+* **Mini:**  don't hide when using virtual keyboard ([a7eef873](https://github.com/linuxdeepin/dde-launcher/commit/a7eef8739e340c60bcf25963f0bc3d8d74a1d13a))
+
+
+
 <a name="4.5.3"></a>
 ### 4.5.3 (2018-11-30)
 

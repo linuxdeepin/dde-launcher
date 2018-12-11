@@ -41,9 +41,9 @@ signals:
 protected:
     void wheelEvent(QWheelEvent *e);
     void enterEvent(QEvent *e);
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
+    // void mousePressEvent(QMouseEvent *event) override;
+    // void mouseReleaseEvent(QMouseEvent *event) override;
+    // void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
     QTimer *m_updateEnableSelectionByMouseTimer;

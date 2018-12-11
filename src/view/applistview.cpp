@@ -64,6 +64,8 @@ AppListView::AppListView(QWidget *parent)
     setFixedWidth(300);
     verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
 
+    QScroller::grabGesture(viewport(), QScroller::TouchGesture);
+
     // support drag and drop.
     setDragDropMode(QAbstractItemView::DragDrop);
     setMovement(QListView::Free);

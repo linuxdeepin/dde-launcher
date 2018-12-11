@@ -37,6 +37,7 @@
 #include <QGraphicsEffect>
 #include <QProcess>
 #include <ddialog.h>
+#include <QScroller>
 
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
 #include <DDBusSender>
@@ -390,6 +391,8 @@ void FullScreenFrame::initUI()
     m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->viewport()->installEventFilter(this);
+
+    QScroller::grabGesture(m_appsArea->viewport(), QScroller::LeftMouseButtonGesture);
 
 //    m_othersView->installEventFilter(this);
 //    m_navigationWidget->installEventFilter(this);

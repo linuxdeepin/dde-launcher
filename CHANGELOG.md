@@ -1,3 +1,13 @@
+<a name=""></a>
+##  4.5.5.1 (2018-12-12)
+
+
+#### Bug Fixes
+
+* **Mini:**  cannot click ([91675f5e](https://github.com/linuxdeepin/dde-launcher/commit/91675f5e7c5ce39209ba616eb72185b77ae24494))
+
+
+
 <a name="4.5.5"></a>
 ### 4.5.5 (2018-12-11)
 

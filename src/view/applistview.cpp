@@ -112,27 +112,6 @@ void AppListView::wheelEvent(QWheelEvent *e)
 
 void AppListView::mouseMoveEvent(QMouseEvent *e)
 {
-    if (e->source() == Qt::MouseEventSynthesizedByQt) {
-        if (QScroller::hasScroller(viewport())) {
-            return;
-        }
-
-        if (m_updateEnableSelectionByMouseTimer && m_updateEnableSelectionByMouseTimer->isActive()) {
-            const QPoint difference_pos = e->pos() - m_lastTouchBeginPos;
-
-            if (qAbs(difference_pos.x()) > touchTapDistance || qAbs(difference_pos.y()) > touchTapDistance) {
-                QScroller::grabGesture(viewport());
-                QScroller *scroller = QScroller::scroller(viewport());
-
-                scroller->handleInput(QScroller::InputPress, e->localPos(), e->timestamp());
-                scroller->handleInput(QScroller::InputMove, e->localPos(), e->timestamp());
-            }
-            return;
-        }
-    }
-
-    QListView::mouseMoveEvent(e);
-
     setState(NoState);
     blockSignals(false);
 
@@ -153,34 +132,12 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
         m_dragStartRow = index.row();
         return startDrag(index);
     }
+
+    QListView::mouseMoveEvent(e);
 }
 
 void AppListView::mousePressEvent(QMouseEvent *e)
 {
-    // 当source为MouseEventSynthesizedByQt时，认为正在使用触屏，开始手动控制触摸操作
-    if (e->source() == Qt::MouseEventSynthesizedByQt) {
-        m_lastTouchBeginPos = e->pos();
-
-        if (QScroller::hasScroller(this))  {
-            QScroller::scroller(this)->deleteLater();
-        }
-
-        if (m_updateEnableSelectionByMouseTimer) {
-            m_updateEnableSelectionByMouseTimer->stop();
-        }
-        else {
-            m_updateEnableSelectionByMouseTimer = new QTimer(this);
-            m_updateEnableSelectionByMouseTimer->setSingleShot(true);
-            m_updateEnableSelectionByMouseTimer->setInterval(300);
-
-            connect(m_updateEnableSelectionByMouseTimer, &QTimer::timeout, this, [=] {
-                m_updateEnableSelectionByMouseTimer->deleteLater();
-                m_updateEnableSelectionByMouseTimer = nullptr;
-            });
-        }
-        m_updateEnableSelectionByMouseTimer->start();
-    }
-
     const QModelIndex &index = indexAt(e->pos());
     if (!index.isValid())
         e->ignore();
@@ -209,10 +166,6 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 
 void AppListView::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (!QScroller::hasScroller(viewport())) {
-        QListView::mouseReleaseEvent(e);
-    }
-
     const QModelIndex &index = indexAt(e->pos());
     if (!index.isValid())
         e->ignore();
@@ -221,6 +174,8 @@ void AppListView::mouseReleaseEvent(QMouseEvent *e)
         emit requestSwitchToCategory(index);
         return;
     }
+
+    QListView::mouseReleaseEvent(e);
 }
 
 void AppListView::dragEnterEvent(QDragEnterEvent *e)

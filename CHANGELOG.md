@@ -1,4 +1,14 @@
 <a name=""></a>
+##  4.5.5.2 (2018-12-12)
+
+
+#### Bug Fixes
+
+*   cannot launcher app ([77fe8dee](https://github.com/linuxdeepin/dde-launcher/commit/77fe8dee68bcd3085dd5ef7a03cc0b4720127721))
+
+
+
+<a name=""></a>
 ##  4.5.5.1 (2018-12-12)
 
 

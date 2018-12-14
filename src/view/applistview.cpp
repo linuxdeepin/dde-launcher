@@ -46,6 +46,7 @@ AppListView::AppListView(QWidget *parent)
     , m_scrollAni(new QPropertyAnimation(verticalScrollBar(), "value"))
     , m_opacityEffect(new QGraphicsOpacityEffect(this))
     , m_wmHelper(DWindowManagerHelper::instance())
+    , m_updateEnableSelectionByMouseTimer(nullptr)
 {
     m_scrollAni->setEasingCurve(QEasingCurve::OutQuint);
     m_scrollAni->setDuration(800);
@@ -62,8 +63,6 @@ AppListView::AppListView(QWidget *parent)
     setMouseTracking(true);
     setFixedWidth(300);
     verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
-
-    QScroller::grabGesture(this, QScroller::LeftMouseButtonGesture);
 
     // support drag and drop.
     setDragDropMode(QAbstractItemView::DragDrop);
@@ -82,6 +81,12 @@ AppListView::AppListView(QWidget *parent)
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::prepareDropSwap, Qt::QueuedConnection);
 #else
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::dropSwap);
+#endif
+
+#if QT_VERSION < QT_VERSION_CHECK(5,9,0)
+    touchTapDistance = 15;
+#else
+    touchTapDistance = QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::TouchDoubleTapDistance).toInt();
 #endif
 
     connect(m_scrollAni, &QPropertyAnimation::valueChanged, this, &AppListView::handleScrollValueChanged);
@@ -105,6 +110,33 @@ void AppListView::wheelEvent(QWheelEvent *e)
 
 void AppListView::mouseMoveEvent(QMouseEvent *e)
 {
+    if (e->source() == Qt::MouseEventSynthesizedByQt) {
+        if (QScroller::hasScroller(this)) {
+            return;
+        }
+
+        if (m_updateEnableSelectionByMouseTimer && m_updateEnableSelectionByMouseTimer->isActive()) {
+            const QPoint difference_pos = e->pos() - m_lastTouchBeginPos;
+            if (qAbs(difference_pos.x()) > touchTapDistance || qAbs(difference_pos.y()) > touchTapDistance) {
+                QScroller::grabGesture(this);
+                QScroller *scroller = QScroller::scroller(this);
+                QScrollerProperties sp;
+                sp.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+                scroller->setScrollerProperties(sp);
+
+                scroller->handleInput(QScroller::InputPress, e->localPos(), e->timestamp());
+                scroller->handleInput(QScroller::InputMove, e->localPos(), e->timestamp());
+
+                connect(scroller, &QScroller::stateChanged, this, [=](QScroller::State newstate) {
+                    if (newstate == QScroller::Inactive) {
+                        QScroller::scroller(this)->deleteLater();
+                    }
+                });
+            }
+            return;
+        }
+    }
+
     setState(NoState);
     blockSignals(false);
 
@@ -131,6 +163,26 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
 
 void AppListView::mousePressEvent(QMouseEvent *e)
 {
+    if (e->source() == Qt::MouseEventSynthesizedByQt) {
+        m_lastTouchBeginPos = e->pos();
+
+        if (m_updateEnableSelectionByMouseTimer) {
+            m_updateEnableSelectionByMouseTimer->stop();
+        }
+        else {
+            m_updateEnableSelectionByMouseTimer = new QTimer(this);
+            m_updateEnableSelectionByMouseTimer->setSingleShot(true);
+            m_updateEnableSelectionByMouseTimer->setInterval(500);
+
+            connect(m_updateEnableSelectionByMouseTimer, &QTimer::timeout, this, [=] {
+                m_updateEnableSelectionByMouseTimer->deleteLater();
+                m_updateEnableSelectionByMouseTimer = nullptr;
+            });
+        }
+        m_updateEnableSelectionByMouseTimer->start();
+        return;
+    }
+
     const QModelIndex &index = indexAt(e->pos());
     if (!index.isValid())
         e->ignore();
@@ -159,6 +211,10 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 
 void AppListView::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (QScroller::hasScroller(this)) {
+        return;
+    }
+
     const QModelIndex &index = indexAt(e->pos());
     if (!index.isValid())
         e->ignore();
@@ -166,6 +222,11 @@ void AppListView::mouseReleaseEvent(QMouseEvent *e)
     if (qobject_cast<AppsListModel*>(model())->category() == AppsListModel::Category && e->button() == Qt::LeftButton) {
         emit requestSwitchToCategory(index);
         return;
+    }
+
+    if (e->source() == Qt::MouseEventSynthesizedByQt) {
+        // reissue event
+        emit clicked(index);
     }
 
     QListView::mouseReleaseEvent(e);

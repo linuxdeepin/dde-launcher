@@ -392,8 +392,6 @@ void FullScreenFrame::initUI()
     m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->viewport()->installEventFilter(this);
 
-    QScroller::grabGesture(m_appsArea->viewport(), QScroller::LeftMouseButtonGesture);
-
 //    m_othersView->installEventFilter(this);
 //    m_navigationWidget->installEventFilter(this);
     m_searchWidget->edit()->installEventFilter(this);
@@ -477,6 +475,31 @@ void FullScreenFrame::initUI()
     m_appsVbox->layout()->setSpacing(0);
     m_appsVbox->layout()->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN,
                                              0, 0);
+
+    m_appsArea->addWidget(m_allAppsView->viewport());
+    m_appsArea->addWidget(m_internetTitle);
+    m_appsArea->addWidget(m_internetView->viewport());
+    m_appsArea->addWidget(m_chatTitle);
+    m_appsArea->addWidget(m_chatView->viewport());
+    m_appsArea->addWidget(m_musicTitle);
+    m_appsArea->addWidget(m_musicView->viewport());
+    m_appsArea->addWidget(m_videoTitle);
+    m_appsArea->addWidget(m_videoView->viewport());
+    m_appsArea->addWidget(m_graphicsTitle);
+    m_appsArea->addWidget(m_graphicsView->viewport());
+    m_appsArea->addWidget(m_gameTitle);
+    m_appsArea->addWidget(m_gameView->viewport());
+    m_appsArea->addWidget(m_officeTitle);
+    m_appsArea->addWidget(m_officeView->viewport());
+    m_appsArea->addWidget(m_readingTitle);
+    m_appsArea->addWidget(m_readingView->viewport());
+    m_appsArea->addWidget(m_developmentTitle);
+    m_appsArea->addWidget(m_developmentView->viewport());
+    m_appsArea->addWidget(m_systemTitle);
+    m_appsArea->addWidget(m_systemView->viewport());
+    m_appsArea->addWidget(m_othersTitle);
+    m_appsArea->addWidget(m_othersView->viewport());
+    m_appsArea->addWidget(m_viewListPlaceholder);
 
     m_contentFrame = new QFrame;
     m_contentFrame->setStyleSheet("background: transparent;");

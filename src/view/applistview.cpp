@@ -46,7 +46,6 @@ AppListView::AppListView(QWidget *parent)
     , m_scrollAni(new QPropertyAnimation(verticalScrollBar(), "value"))
     , m_opacityEffect(new QGraphicsOpacityEffect(this))
     , m_wmHelper(DWindowManagerHelper::instance())
-    , m_updateEnableSelectionByMouseTimer(nullptr)
 {
     m_scrollAni->setEasingCurve(QEasingCurve::OutQuint);
     m_scrollAni->setDuration(800);
@@ -78,12 +77,6 @@ AppListView::AppListView(QWidget *parent)
     // init drop threshold timer.
     m_dropThresholdTimer->setInterval(DLauncher::APP_DRAG_SWAP_THRESHOLD);
     m_dropThresholdTimer->setSingleShot(true);
-
-#if QT_VERSION < QT_VERSION_CHECK(5,9,0)
-    touchTapDistance = 15;
-#else
-    touchTapDistance = QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::TouchDoubleTapDistance).toInt();
-#endif
 
 #ifndef DISABLE_DRAG_ANIMATION
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::prepareDropSwap, Qt::QueuedConnection);

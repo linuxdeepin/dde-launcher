@@ -25,6 +25,7 @@
 #define APPLISTAREA_H
 
 #include <QScrollArea>
+#include <QSet>
 
 class AppListArea : public QScrollArea
 {
@@ -32,6 +33,7 @@ class AppListArea : public QScrollArea
 
 public:
     explicit AppListArea(QWidget *parent = 0);
+    void addWidget(QWidget * view);
 
 signals:
     void mouseEntered();
@@ -41,14 +43,13 @@ signals:
 protected:
     void wheelEvent(QWheelEvent *e);
     void enterEvent(QEvent *e);
-    // void mousePressEvent(QMouseEvent *event) override;
-    // void mouseReleaseEvent(QMouseEvent *event) override;
-    // void mouseMoveEvent(QMouseEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *e) override;
 
 private:
     QTimer *m_updateEnableSelectionByMouseTimer;
     QPoint m_lastTouchBeginPos;
     int touchTapDistance = -1;
+    QSet<QWidget*> m_views;
 };
 
 #endif // APPLISTAREA_H

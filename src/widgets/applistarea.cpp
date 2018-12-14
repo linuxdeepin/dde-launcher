@@ -39,6 +39,14 @@ AppListArea::AppListArea(QWidget *parent)
 #else
     touchTapDistance = QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::TouchDoubleTapDistance).toInt();
 #endif
+
+    addWidget(this);
+}
+
+void AppListArea::addWidget(QWidget * view) {
+    view->installEventFilter(this);
+
+    m_views << view;
 }
 
 void AppListArea::wheelEvent(QWheelEvent *e)
@@ -63,59 +71,65 @@ void AppListArea::enterEvent(QEvent *e)
     emit mouseEntered();
 }
 
-// void AppListArea::mousePressEvent(QMouseEvent *event) {
-//     // 当source为MouseEventSynthesizedByQt时，认为正在使用触屏，开始手动控制触摸操作
-//     if (event->source() == Qt::MouseEventSynthesizedByQt) {
-//         m_lastTouchBeginPos = event->pos();
+bool AppListArea::eventFilter(QObject *watched, QEvent *e)
+{
+    QWidget *    view  = qobject_cast<QWidget *>(watched);
+    QMouseEvent *event = static_cast<QMouseEvent *>(e);
 
-//         if (m_updateEnableSelectionByMouseTimer) {
-//             m_updateEnableSelectionByMouseTimer->stop();
-//         }
-//         else {
-//             m_updateEnableSelectionByMouseTimer = new QTimer(this);
-//             m_updateEnableSelectionByMouseTimer->setSingleShot(true);
-//             m_updateEnableSelectionByMouseTimer->setInterval(300);
+    if (view && m_views.contains(view) && event) {
+        if (event->source() == Qt::MouseEventSynthesizedByQt) {
+            switch (event->type()) {
+                case QMouseEvent::MouseButtonPress:
+                    m_lastTouchBeginPos = event->pos();
 
-//             connect(m_updateEnableSelectionByMouseTimer, &QTimer::timeout, this, [=] {
-//                 m_updateEnableSelectionByMouseTimer->deleteLater();
-//                 m_updateEnableSelectionByMouseTimer = nullptr;
-//             });
-//         }
-//         m_updateEnableSelectionByMouseTimer->start();
-//     }
+                    if (m_updateEnableSelectionByMouseTimer) {
+                        m_updateEnableSelectionByMouseTimer->stop();
+                    }
+                    else {
+                        m_updateEnableSelectionByMouseTimer = new QTimer(this);
+                        m_updateEnableSelectionByMouseTimer->setSingleShot(true);
+                        m_updateEnableSelectionByMouseTimer->setInterval(500);
 
-//     QScrollArea::mousePressEvent(event);
-// }
+                        connect(m_updateEnableSelectionByMouseTimer, &QTimer::timeout, this, [=] {
+                            m_updateEnableSelectionByMouseTimer->deleteLater();
+                            m_updateEnableSelectionByMouseTimer = nullptr;
+                        });
+                    }
+                    m_updateEnableSelectionByMouseTimer->start();
+                    break;
+                case QMouseEvent::MouseButtonRelease:
+                    if (QScroller::hasScroller(this)) {
+                        return true;
+                    }
+                    break;
+                case QMouseEvent::MouseMove:
+                    if (QScroller::hasScroller(this)) {
+                        return true;
+                    }
 
-// void AppListArea::mouseReleaseEvent(QMouseEvent *event) {
-//     if (!QScroller::hasScroller(this)) {
-//         QScrollArea::mouseReleaseEvent(event);
-//     }
-// }
+                    if (m_updateEnableSelectionByMouseTimer && m_updateEnableSelectionByMouseTimer->isActive()) {
+                        const QPoint difference_pos = event->pos() - m_lastTouchBeginPos;
+                        if (qAbs(difference_pos.x()) > touchTapDistance || qAbs(difference_pos.y()) > touchTapDistance) {
+                            QScroller::grabGesture(this);
+                            QScroller *scroller = QScroller::scroller(this);
 
-// void AppListArea::mouseMoveEvent(QMouseEvent *event) {
-//     if (event->source() == Qt::MouseEventSynthesizedByQt) {
-//         if (QScroller::hasScroller(this)) {
-//             return;
-//         }
+                            const QPointF point = view->mapTo(this, event->localPos().toPoint());
 
-//         if (m_updateEnableSelectionByMouseTimer && m_updateEnableSelectionByMouseTimer->isActive()) {
-//             const QPoint difference_pos = event->pos() - m_lastTouchBeginPos;
-//             if (qAbs(difference_pos.x()) > touchTapDistance || qAbs(difference_pos.y()) > touchTapDistance) {
-//                 QScroller::grabGesture(this);
-//                 QScroller *scroller = QScroller::scroller(this);
+                            scroller->handleInput(QScroller::InputPress, point, event->timestamp());
+                            scroller->handleInput(QScroller::InputMove, point, event->timestamp());
 
-//                 connect(scroller, &QScroller::stateChanged, this, [=] (QScroller::State newstate) {
-//                     if (newstate == QScroller::Inactive)  {
-//                         QScroller::scroller(this)->deleteLater();
-//                     }
-//                 });
-//                 scroller->handleInput(QScroller::InputPress, event->localPos(), event->timestamp());
-//                 scroller->handleInput(QScroller::InputMove, event->localPos(), event->timestamp());
-//             }
-//             return;
-//         }
-//     }
-
-//     return QScrollArea::mouseMoveEvent(event);
-// }
+                            connect(scroller, &QScroller::stateChanged, this, [=](QScroller::State newstate) {
+                                if (newstate == QScroller::Inactive) {
+                                    QScroller::scroller(this)->deleteLater();
+                                }
+                            });
+                        }
+                        return true;
+                    }
+                    break;
+                default: break;
+            }
+        }
+    }
+    return QScrollArea::eventFilter(watched, e);
+}

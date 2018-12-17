@@ -1,4 +1,14 @@
 <a name=""></a>
+##  4.5.6 (2018-12-17)
+
+
+#### Bug Fixes
+
+* **Mini:**  stop the inertial scrolling of the head and bottom ([e0fec2f6](https://github.com/linuxdeepin/dde-launcher/commit/e0fec2f6cd26a1b60f32ebacd21e85ea0ee7c73b))
+
+
+
+<a name=""></a>
 ##  4.5.5.2 (2018-12-12)
 
 

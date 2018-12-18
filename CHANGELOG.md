@@ -1,3 +1,13 @@
+<a name="4.5.7"></a>
+### 4.5.7 (2018-12-18)
+
+
+#### Bug Fixes
+
+* **Mini:**  use DWindowManagerHelper::currentWorkSpaceWindowIdList ([9a75d655](https://github.com/linuxdeepin/dde-launcher/commit/9a75d6559116c8ee9c28a7824be411bcc890f8f5))
+
+
+
 <a name=""></a>
 ##  4.5.6 (2018-12-17)
 

@@ -71,9 +71,11 @@ public:
         Normal
     };
 
-    enum FocusPosition
-    {
-        LeftTop, LeftBottom, Right
+    enum FocusPosition {
+        LeftTop,
+        LeftBottom,
+        Right,
+        Search
     };
 
 signals:

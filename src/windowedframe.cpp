@@ -109,7 +109,9 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_appsView->setModel(m_appsModel);
     m_appsView->setItemDelegate(new AppListDelegate);
 
-    m_searchWidget->installEventFilter(m_eventFilter);
+    m_appsView->installEventFilter(m_eventFilter);
+    m_searchWidget->edit()->installEventFilter(m_eventFilter);
+    m_switchBtn->installEventFilter(m_eventFilter);
 
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setFixedSize(500, 50);
@@ -122,6 +124,8 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     m_autoScrollTimer->setInterval(DLauncher::APPS_AREA_AUTO_SCROLL_TIMER);
     m_autoScrollTimer->setSingleShot(false);
+
+    m_rightBar->installEventFilter(m_eventFilter);
 
     QHBoxLayout *searchLayout = new QHBoxLayout;
     searchLayout->addSpacing(10);
@@ -268,6 +272,13 @@ bool WindowedFrame::visible()
 
 void WindowedFrame::moveCurrentSelectApp(const int key)
 {
+    if (m_appsView->model() == m_searchModel && m_focusPos == Search) {
+        m_appsView->setCurrentIndex(m_appsView->model()->index(0, 0));
+        m_appsView->setFocus();
+        m_focusPos = LeftTop;
+        return;
+    }
+
     const QModelIndex currentIdx = m_appsView->currentIndex();
     QModelIndex targetIndex;
 
@@ -342,15 +353,18 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         m_searchModel->setDrawBackground(true);
         m_rightBar->setCurrentCheck(false);
         m_switchBtn->setChecked(false);
+        m_appsView->setFocus();
     } else if (m_focusPos == LeftBottom) {
         m_appsView->setCurrentIndex(QModelIndex());
-        m_switchBtn->setChecked(true);
         m_rightBar->setCurrentCheck(false);
+        m_switchBtn->setChecked(true);
+        m_switchBtn->setFocus();
         return;
     } else {
         m_appsView->setCurrentIndex(QModelIndex());
         m_switchBtn->setChecked(false);
         m_rightBar->setCurrentCheck(true);
+        m_rightBar->setFocus();
         return;
     }
 
@@ -782,6 +796,7 @@ void WindowedFrame::searchText(const QString &text)
         if (m_appsView->model() != m_searchModel) {
             m_appsView->setModel(m_searchModel);
             m_searchModel->setDrawBackground(true);
+            m_focusPos = Search;
         }
 
         m_appsManager->searchApp(text.trimmed());

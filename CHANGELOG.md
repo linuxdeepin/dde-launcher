@@ -1,3 +1,13 @@
+<a name="4.5.8"></a>
+### 4.5.8 (2018-12-18)
+
+
+#### Bug Fixes
+
+*   add DTK version check ([6b697f67](https://github.com/linuxdeepin/dde-launcher/commit/6b697f67b6b12af54b83b813fe2be997bd06ec24))
+
+
+
 <a name="4.5.7"></a>
 ### 4.5.7 (2018-12-18)
 

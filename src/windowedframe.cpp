@@ -603,6 +603,7 @@ QVariant WindowedFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
 
 void WindowedFrame::regionMonitorPoint(const QPoint &point)
 {
+#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 9, 11))
     auto windowList = DWindowManagerHelper::instance()->currentWorkspaceWindowIdList();
     for (auto window : windowList) {
         if (window == this->window()->windowHandle()->winId()) continue;
@@ -613,6 +614,14 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point)
         }
         w->deleteLater();
     }
+#else
+    auto windowList = DWindowManagerHelper::instance()->currentWorkspaceWindows();
+    for (auto window : windowList) {
+        if (window->handle()->geometry().contains(point)) {
+            if (window->wmClass() == "onboard") return;
+        }
+    }
+#endif
 
     if (!windowHandle()->handle()->geometry().contains(point)) {
         if (m_menuWorker->isMenuShown() && m_menuWorker->menuGeometry().contains(point)) {

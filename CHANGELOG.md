@@ -1,3 +1,17 @@
+<a name="4.5.9"></a>
+### 4.5.9 (2018-12-19)
+
+
+#### Features
+
+* **fullscreen:**  support kwin ([105aa33e](https://github.com/linuxdeepin/dde-launcher/commit/105aa33e7e3bfa29e59f7facc1d9c725452eadd2))
+
+#### Bug Fixes
+
+*   focus keyboard switch. ([0e6e7857](https://github.com/linuxdeepin/dde-launcher/commit/0e6e785737c2b0883a2b69b9f5f49ee354871b3a))
+
+
+
 <a name="4.5.8"></a>
 ### 4.5.8 (2018-12-18)
 

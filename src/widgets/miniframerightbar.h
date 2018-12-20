@@ -51,7 +51,7 @@ signals:
     void requestFrameHide();
 
 protected:
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 
 private slots:
     void openDirectory(const QString &dir);

@@ -26,6 +26,9 @@
 #include <DDesktopServices>
 #include <QVBoxLayout>
 #include <QPainter>
+#include <QEvent>
+#include <QApplication>
+#include <QDesktopWidget>
 
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
 #include <DDBusSender>
@@ -36,7 +39,7 @@
 MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     : QWidget(parent)
 
-    , m_modeToggleBtn(new DImageButton)
+    , m_modeToggleBtn(new DImageButton(this))
     , m_datetimeWidget(new DatetimeWidget)
     , m_avatar(new Avatar)
     , m_currentIndex(0)
@@ -44,6 +47,9 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     m_modeToggleBtn->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
     m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
     m_modeToggleBtn->setPressPic(":/icons/skin/icons/fullscreen_press.png");
+    m_modeToggleBtn->setFixedSize(24, 24);
+
+    m_modeToggleBtn->raise();
 
     bool hasManual = QProcess::execute("which", QStringList() << "dman") == 0;
 
@@ -88,27 +94,40 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     settingsBtn->setIcon(QIcon(":/widgets/images/settings.svg"));
     shutdownBtn->setIcon(QIcon(":/widgets/images/power.svg"));
 
-    settingsBtn->setStyleSheet(settingsBtn->styleSheet() + "font-size: 15px;");
-    shutdownBtn->setStyleSheet(settingsBtn->styleSheet() + "font-size: 15px;");
-
     bottomLayout->addWidget(settingsBtn);
     bottomLayout->addWidget(shutdownBtn);
 
-    layout->addSpacing(10);
-    layout->addWidget(m_modeToggleBtn, 0, Qt::AlignTop | Qt::AlignRight);
-    layout->addWidget(m_avatar);
+    QWidget *top_widget = new QWidget;
+    QHBoxLayout *top_layout = new QHBoxLayout;
+    top_layout->setMargin(0);
+    top_layout->addWidget(m_avatar, 0, Qt::AlignVCenter | Qt::AlignLeft);
+
+    top_widget->setLayout(top_layout);
+
+    QWidget *center_widget = new QWidget;
+    QVBoxLayout *center_layout = new QVBoxLayout;
+    center_layout->setMargin(0);
+    center_widget->setLayout(center_layout);
+    center_layout->addWidget(computerBtn);
+    center_layout->addWidget(videoBtn);
+    center_layout->addWidget(musicBtn);
+    center_layout->addWidget(pictureBtn);
+    center_layout->addWidget(documentBtn);
+    center_layout->addWidget(downloadBtn);
+    center_layout->addWidget(manualBtn);
+
+    QWidget *bottom_widget = new QWidget;
+    QVBoxLayout *bottom_layout = new QVBoxLayout;
+    bottom_layout->setMargin(0);
+    bottom_layout->addWidget(m_datetimeWidget);
+    bottom_layout->addLayout(bottomLayout);
+    bottom_widget->setLayout(bottom_layout);
+
+    layout->setSpacing(0);
     layout->addSpacing(30);
-    layout->addWidget(computerBtn);
-    layout->addWidget(videoBtn);
-    layout->addWidget(musicBtn);
-    layout->addWidget(pictureBtn);
-    layout->addWidget(documentBtn);
-    layout->addWidget(downloadBtn);
-    layout->addWidget(manualBtn);
-    layout->addStretch();
-    layout->addWidget(m_datetimeWidget);
-    layout->addStretch();
-    layout->addLayout(bottomLayout);
+    layout->addWidget(top_widget, 0, Qt::AlignTop);
+    layout->addWidget(center_widget, 0, Qt::AlignVCenter);
+    layout->addWidget(bottom_widget, 0, Qt::AlignBottom);
     layout->setContentsMargins(18, 0, 12, 18);
 
     // To calculate width to adaptive width.
@@ -121,15 +140,18 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     btnWidth += settingsBtn->fontMetrics().boundingRect(settingsBtn->text()).width() + iconWidth + padding;
     btnWidth += shutdownBtn->fontMetrics().boundingRect(shutdownBtn->text()).width() + iconWidth + padding;
-    btnWidth += 38; // padding
+    btnWidth += 38;  // padding
 
     if (btnWidth > dateTextWidth) {
         frameWidth = btnWidth;
-    } else {
+    }
+    else {
         frameWidth = dateTextWidth;
     }
 
     setFixedWidth(frameWidth);
+
+    m_modeToggleBtn->move(frameWidth - 24 - 5, 12);
 
     connect(m_modeToggleBtn, &DImageButton::clicked, this, &MiniFrameRightBar::modeToggleBtnClicked);
     connect(computerBtn, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });

@@ -27,11 +27,9 @@
 #include <QObject>
 
 #include <com_deepin_wm.h>
-#include <com_deepin_daemon_accounts_user.h>
 #include <com_deepin_daemon_imageblur.h>
 
 using ImageBlurInter = com::deepin::daemon::ImageBlur;
-using User = com::deepin::daemon::accounts::User;
 
 class BackgroundManager : public QObject
 {
@@ -39,26 +37,19 @@ class BackgroundManager : public QObject
 public:
     explicit BackgroundManager(QObject *parent = 0);
 
-    QString currentWorkspaceBackground() const;
-
-    int currentWorkspace() const;
-    void setCurrentWorkspace(int currentWorkspace);
-
 signals:
     void currentWorkspaceBackgroundChanged(const QString &background);
 
 private slots:
     void updateBackgrounds();
-    void onDesktopWallpapersChanged(const QStringList &files);
     void onBlurDone(const QString &source, const QString &blur, bool done);
 
 private:
     int m_currentWorkspace;
-    QStringList m_backgrounds;
+    mutable QString m_background;
 
     com::deepin::wm *m_wmInter;
     ImageBlurInter *m_blurInter;
-    User *m_currentUser;
 };
 
 #endif // BACKGROUNDMANAGER_H

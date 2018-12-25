@@ -88,7 +88,17 @@ bool AppListArea::eventFilter(QObject *watched, QEvent *e)
                     else {
                         m_updateEnableSelectionByMouseTimer = new QTimer(this);
                         m_updateEnableSelectionByMouseTimer->setSingleShot(true);
-                        m_updateEnableSelectionByMouseTimer->setInterval(500);
+
+                        static QObject *theme_settings =
+                            reinterpret_cast<QObject *>(qvariant_cast<quintptr>(qApp->property("_d_theme_settings_object")));
+                        QVariant touchFlickBeginMoveDelay;
+
+                        if (theme_settings) {
+                            touchFlickBeginMoveDelay = theme_settings->property("touchFlickBeginMoveDelay");
+                        }
+
+                        m_updateEnableSelectionByMouseTimer->setInterval(touchFlickBeginMoveDelay.isValid() ? touchFlickBeginMoveDelay.toInt()
+                                                                                                             : 300);
 
                         connect(m_updateEnableSelectionByMouseTimer, &QTimer::timeout, this, [=] {
                             m_updateEnableSelectionByMouseTimer->deleteLater();

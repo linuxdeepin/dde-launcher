@@ -37,11 +37,18 @@ BackgroundManager::BackgroundManager(QObject *parent)
     , m_currentWorkspace(-1)
     , m_wmInter(new wm("com.deepin.wm", "/com/deepin/wm", QDBusConnection::sessionBus(), this))
     , m_blurInter(new ImageBlurInter("com.deepin.daemon.Accounts", "/com/deepin/daemon/ImageBlur", QDBusConnection::systemBus(), this))
+    , m_appearanceInter(new AppearanceInter("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
 {
     m_blurInter->setSync(false, false);
+    m_appearanceInter->setSync(false, false);
 
     connect(m_wmInter, &__wm::WorkspaceSwitched, this, &BackgroundManager::updateBackgrounds);
     connect(m_blurInter, &ImageBlurInter::BlurDone, this, &BackgroundManager::onBlurDone);
+    connect(m_appearanceInter, &AppearanceInter::Changed, this, [=] (const QString &type, const QString &) {
+        if (type == "background") {
+            updateBackgrounds();
+        }
+    });
 
     QTimer::singleShot(0, this, &BackgroundManager::updateBackgrounds);
 }

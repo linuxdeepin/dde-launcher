@@ -28,8 +28,10 @@
 
 #include <com_deepin_wm.h>
 #include <com_deepin_daemon_imageblur.h>
+#include <com_deepin_daemon_appearance.h>
 
 using ImageBlurInter = com::deepin::daemon::ImageBlur;
+using AppearanceInter = com::deepin::daemon::Appearance;
 
 class BackgroundManager : public QObject
 {
@@ -50,6 +52,7 @@ private:
 
     com::deepin::wm *m_wmInter;
     ImageBlurInter *m_blurInter;
+    AppearanceInter *m_appearanceInter;
 };
 
 #endif // BACKGROUNDMANAGER_H

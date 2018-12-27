@@ -212,6 +212,7 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 void AppListView::mouseReleaseEvent(QMouseEvent *e)
 {
     if (QScroller::hasScroller(this)) {
+        QScroller::scroller(this)->deleteLater();
         return;
     }
 

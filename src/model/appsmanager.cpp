@@ -355,7 +355,7 @@ void AppsManager::launchApp(const QModelIndex &index)
                 m_userSortedList[idx].m_openCount++;
 
                 if (m_userSortedList[idx].m_firstRunTime == 0) {
-                    m_userSortedList[idx].m_firstRunTime = QDateTime::currentSecsSinceEpoch();
+                    m_userSortedList[idx].m_firstRunTime = QDateTime::currentMSecsSinceEpoch() / 1000;
                 }
             }
 
@@ -571,7 +571,7 @@ void AppsManager::refreshUserInfoList()
 
                     if (it->m_openCount > 0 && it->m_firstRunTime == 0) {
                         // 对于未曾记录过第一次运行时间的应用（但是确保打开过），假定其单位小时打开次数为1，以此为根据给它一个有效的firstRunTime
-                        it->m_firstRunTime = QDateTime::currentSecsSinceEpoch() - it->m_openCount * USER_SORT_UNIT_TIME;
+                        it->m_firstRunTime = QDateTime::currentMSecsSinceEpoch() / 1000 - it->m_openCount * USER_SORT_UNIT_TIME;
                     }
 
                     it++;
@@ -590,7 +590,7 @@ void AppsManager::refreshUserInfoList()
         }
     }
 
-    const qint64 currentTime = QDateTime::currentSecsSinceEpoch();
+    const qint64 currentTime = QDateTime::currentMSecsSinceEpoch() / 1000;
     // If the first run time is less than the current time, I am not sure can maintain the correct results.
     std::stable_sort(m_userSortedList.begin(), m_userSortedList.end(), [=] (const ItemInfo &a, const ItemInfo &b) {
         const auto AFirstRunTime = a.m_firstRunTime;

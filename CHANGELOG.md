@@ -1,3 +1,19 @@
+<a name=""></a>
+##  4.6.0 (2018-12-27)
+
+
+#### Bug Fixes
+
+*   optimized application list sorting algorithm on mini mode ([a3b6962e](https://github.com/linuxdeepin/dde-launcher/commit/a3b6962ed0ebc7d61b31df5458e391b601c45d91))
+* **background:**  refresh background ([e9a6c4bb](https://github.com/linuxdeepin/dde-launcher/commit/e9a6c4bbf08226caf997b4a88a4b1c3d990adabd))
+
+#### Features
+
+*   update scroll interval ([0371f517](https://github.com/linuxdeepin/dde-launcher/commit/0371f517a274fe3591cf9eb607d96049093c3032))
+* **mini:**  auto change font size ([288d123d](https://github.com/linuxdeepin/dde-launcher/commit/288d123dc7e97f2f69c6dd39e02d3b50f8fbe075))
+
+
+
 <a name="4.5.9"></a>
 ### 4.5.9 (2018-12-19)
 

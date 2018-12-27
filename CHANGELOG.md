@@ -1,3 +1,13 @@
+<a name="4.6.1"></a>
+### 4.6.1 (2018-12-27)
+
+
+#### Bug Fixes
+
+* **Mini:**  compatible with Qt5.6 ([5efd2925](https://github.com/linuxdeepin/dde-launcher/commit/5efd2925723d14f0f12b52b356e00673d5050318))
+
+
+
 <a name=""></a>
 ##  4.6.0 (2018-12-27)
 

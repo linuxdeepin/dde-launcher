@@ -47,6 +47,7 @@ QGSettings AppsManager::LAUNCHER_SETTINGS("com.deepin.dde.launcher", "", nullptr
 QSet<QString> AppsManager::APP_AUTOSTART_CACHE;
 QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
 QSettings AppsManager::APP_USED_SORTED_LIST("deepin", "dde-launcher-app-used-sorted-list");
+static constexpr int USER_SORT_UNIT_TIME = 3600; // 1 hours
 
 int perfectIconSize(const int size)
 {
@@ -352,6 +353,10 @@ void AppsManager::launchApp(const QModelIndex &index)
 
             if (idx != -1) {
                 m_userSortedList[idx].m_openCount++;
+
+                if (m_userSortedList[idx].m_firstRunTime == 0) {
+                    m_userSortedList[idx].m_firstRunTime = QDateTime::currentSecsSinceEpoch();
+                }
             }
 
             break;
@@ -553,41 +558,54 @@ void AppsManager::refreshUserInfoList()
         // if data cache file is empty.
         if (m_userSortedList.isEmpty()) {
             m_userSortedList = m_allAppInfoList;
-        }
+        } else {
+            // check used list isvaild
+            for (QList<ItemInfo>::iterator it = m_userSortedList.begin(); it != m_userSortedList.end();) {
+                int idx = m_allAppInfoList.indexOf(*it);
 
-        // add new additions
-        for (QList<ItemInfo>::Iterator it = m_allAppInfoList.begin(); it != m_allAppInfoList.end(); ++it) {
-            if (!m_userSortedList.contains(*it)) {
-                m_userSortedList.append(*it);
+                if (idx >= 0) {
+                    // 更新app的其它信息（sort list中可能未保存app的所有信息）
+                    const int openCount = it->m_openCount;
+                    it->updateInfo(m_allAppInfoList.at(idx));
+                    it->m_openCount = openCount;
+
+                    if (it->m_openCount > 0 && it->m_firstRunTime == 0) {
+                        // 对于未曾记录过第一次运行时间的应用（但是确保打开过），假定其单位小时打开次数为1，以此为根据给它一个有效的firstRunTime
+                        it->m_firstRunTime = QDateTime::currentSecsSinceEpoch() - it->m_openCount * USER_SORT_UNIT_TIME;
+                    }
+
+                    it++;
+                }
+                else {
+                    it = m_userSortedList.erase(it);
+                }
+            }
+
+            // add new additions
+            for (QList<ItemInfo>::Iterator it = m_allAppInfoList.begin(); it != m_allAppInfoList.end(); ++it) {
+                if (!m_userSortedList.contains(*it)) {
+                    m_userSortedList.append(*it);
+                }
             }
         }
-
-        // check used list isvaild
-        for (QList<ItemInfo>::iterator it = m_userSortedList.begin(); it != m_userSortedList.end();) {
-            if (m_allAppInfoList.contains(*it)) {
-                it++;
-            }
-            else {
-                it = m_userSortedList.erase(it);
-            }
-        }
-
-        updateUserListInfo();
     }
 
-    const qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
+    const qint64 currentTime = QDateTime::currentSecsSinceEpoch();
     // If the first run time is less than the current time, I am not sure can maintain the correct results.
     std::stable_sort(m_userSortedList.begin(), m_userSortedList.end(), [=] (const ItemInfo &a, const ItemInfo &b) {
-        const double AFirstRunTime = static_cast<double>(a.m_firstRunTime);
-        const double BFirstRunTime = static_cast<double>(b.m_firstRunTime);
+        const auto AFirstRunTime = a.m_firstRunTime;
+        const auto BFirstRunTime = b.m_firstRunTime;
 
         // If it's past time, will be sorted by open count
         if (AFirstRunTime > currentTime || BFirstRunTime > currentTime) {
             return a.m_openCount > b.m_openCount;
         }
 
+        int hours_diff_a = (currentTime - AFirstRunTime) / USER_SORT_UNIT_TIME + 1;
+        int hours_diff_b = (currentTime - BFirstRunTime) / USER_SORT_UNIT_TIME + 1;
+
         // Average number of starts
-        return (static_cast<double>(a.m_openCount) / (currentTime - AFirstRunTime)) > (static_cast<double>(b.m_openCount) / (currentTime - BFirstRunTime));
+        return (static_cast<double>(a.m_openCount) / hours_diff_a) > (static_cast<double>(b.m_openCount) / hours_diff_b);
     });
 
     saveUserSortedList();
@@ -602,27 +620,6 @@ void AppsManager::updateUsedListInfo()
             const int openCount = m_usedSortedList[idx].m_openCount;
             m_usedSortedList[idx].updateInfo(info);
             m_usedSortedList[idx].m_openCount = openCount;
-        }
-    }
-}
-
-void AppsManager::updateUserListInfo()
-{
-    for (const ItemInfo &info : m_allAppInfoList) {
-        const int idx = m_userSortedList.indexOf(info);
-
-        if (idx != -1) {
-            const int openCount = m_userSortedList[idx].m_openCount;
-            m_userSortedList[idx].updateInfo(info);
-            m_userSortedList[idx].m_openCount = openCount;
-        }
-    }
-
-    // check first run time
-    const qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
-    for (auto it = m_userSortedList.begin(); it != m_userSortedList.end(); ++it) {
-        if (it->m_firstRunTime == 0) {
-            it->m_firstRunTime = currentTime;
         }
     }
 }
@@ -752,7 +749,6 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
 
     if (operation == "created") {
         ItemInfo info = appInfo;
-        info.m_firstRunTime = QDateTime::currentMSecsSinceEpoch();
 
         m_allAppInfoList.append(info);
         m_usedSortedList.append(info);

@@ -110,7 +110,6 @@ private:
     void refreshUsedInfoList();
     void refreshUserInfoList();
     void updateUsedListInfo();
-    void updateUserListInfo();
     void generateCategoryMap();
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
     void onSearchTimeOut();

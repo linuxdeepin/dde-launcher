@@ -1,3 +1,13 @@
+<a name="4.6.2"></a>
+### 4.6.2 (2018-12-28)
+
+
+#### Bug Fixes
+
+* **Mini:**  cannot enter category when not scroll view ([269276d1](https://github.com/linuxdeepin/dde-launcher/commit/269276d19886701318962e333b61eed9b1e13a90))
+
+
+
 <a name="4.6.1"></a>
 ### 4.6.1 (2018-12-27)
 

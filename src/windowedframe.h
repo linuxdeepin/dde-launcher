@@ -30,7 +30,7 @@
 #include "model/appsmanager.h"
 #include "worker/menuworker.h"
 #include "delegate/applistdelegate.h"
-#include "widgets/searchwidget.h"
+#include "widgets/searchlineedit.h"
 #include "widgets/miniframerightbar.h"
 #include "widgets/miniframeswitchbtn.h"
 #include "global_util/constants.h"
@@ -135,7 +135,7 @@ private:
     AppsListModel *m_usedModel;
     AppsListModel *m_searchModel;
 
-    SearchWidget *m_searchWidget;
+    SearchLineEdit *m_searchWidget;
     MiniFrameRightBar *m_rightBar;
     MiniFrameSwitchBtn *m_switchBtn;
     QLabel *m_tipsLabel;

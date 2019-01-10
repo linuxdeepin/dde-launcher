@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>Niciun rezultat la căutare</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -54,7 +54,7 @@
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Sunteți sigur că doriți să dezinstalați %1 ?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -69,7 +69,7 @@
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation>Șterge de pe desktop</translation>
+        <translation>Îndepărtare de pe desktop</translation>
     </message>
     <message>
         <source>Remove from dock</source>
@@ -81,11 +81,11 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation type="unfinished"/>
+        <translation>Deschide prin proxy</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Dezactivați redimensionarea afișajului</translation>
     </message>
     <message>
         <source>Open</source>
@@ -93,26 +93,26 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation>Trimite pe desktop</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation>Trimite în suportul de andocare</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation>Dezactivați deschiderea automată la pornirea sistemului</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation>Activați deschiderea automată la pornirea sistemului</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>Toate aplicațiile</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -163,7 +163,7 @@
     <name>MiniFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Sunteți sigur că doriți să dezinstalați %1 ?</translation>
     </message>
     <message>
         <source>All dependencies will be removed together</source>
@@ -186,11 +186,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Documente</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Videoclipuri</translation>
     </message>
     <message>
         <source>Music</source>
@@ -198,7 +198,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Imagini</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Repornire</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -222,7 +222,7 @@
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Închide</translation>
+        <translation>Închidere</translation>
     </message>
     <message>
         <source>Back</source>
@@ -241,7 +241,7 @@
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Închide</translation>
+        <translation>Închidere</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -253,7 +253,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Repornire</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -265,15 +265,15 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Documente</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Videoclipuri</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Imagini</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -304,26 +304,26 @@
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Închide</translation>
+        <translation>Închidere</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Videoclipuri</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Imagini</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Documente</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation>Toate categoriile</translation>
     </message>
     <message>
         <source>Back</source>
@@ -341,7 +341,7 @@
     <name>WindowedFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Sunteți sigur că doriți să dezinstalați %1 ?</translation>
     </message>
     <message>
         <source>Cancel</source>

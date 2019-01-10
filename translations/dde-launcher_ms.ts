@@ -202,7 +202,7 @@
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Muat turun</translation>
+        <translation>Muat Turun</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation>But semula</translation>
+        <translation>But Semula</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -253,7 +253,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation>But semula</translation>
+        <translation>But Semula</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -277,7 +277,7 @@
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Muat turun</translation>
+        <translation>Muat Turun</translation>
     </message>
 </context>
 <context>
@@ -292,7 +292,7 @@
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Muat turun</translation>
+        <translation>Muat Turun</translation>
     </message>
     <message>
         <source>Manual</source>

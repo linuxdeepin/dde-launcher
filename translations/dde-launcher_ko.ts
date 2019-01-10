@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>검색결과가　없습니다.</translation>
+        <translation>검색결과가 없습니다.</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -35,7 +35,7 @@
     </message>
     <message>
         <source>Reading</source>
-        <translation>읽는 중</translation>
+        <translation>읽기</translation>
     </message>
     <message>
         <source>Development</source>
@@ -73,7 +73,7 @@
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>독(dock)에서 제거</translation>
+        <translation>도크(dock)에서 제거</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -81,11 +81,11 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation type="unfinished"/>
+        <translation>프록시로 열기</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>디스플레이 크기 조정 해제하기</translation>
     </message>
     <message>
         <source>Open</source>
@@ -97,22 +97,22 @@
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>독으로 보내기</translation>
+        <translation>도크(dock)로 보내기</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation>시작에서 제거하기</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation>시작에 추가하기</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>모든 앱</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -144,7 +144,7 @@
     </message>
     <message>
         <source>Reading</source>
-        <translation>읽는 중</translation>
+        <translation>읽기</translation>
     </message>
     <message>
         <source>Development</source>
@@ -190,7 +190,7 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>비디오</translation>
     </message>
     <message>
         <source>Music</source>
@@ -226,7 +226,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>뒤로 가기</translation>
     </message>
 </context>
 <context>
@@ -261,7 +261,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>뒤로 가기</translation>
     </message>
     <message>
         <source>Documents</source>
@@ -269,7 +269,7 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>비디오</translation>
     </message>
     <message>
         <source>Pictures</source>
@@ -308,7 +308,7 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>비디오</translation>
     </message>
     <message>
         <source>Pictures</source>
@@ -323,11 +323,11 @@
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation>모든 카테고리</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>뒤로 가기</translation>
     </message>
 </context>
 <context>

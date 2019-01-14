@@ -1,3 +1,14 @@
+<a name="4.6.3"></a>
+### 4.6.3 (2019-01-14)
+
+
+#### Bug Fixes
+
+*   delete selected text when append new char to search bar ([ee2a071b](https://github.com/linuxdeepin/dde-launcher/commit/ee2a071b3a223136dd9c6f78343ec0e5dba33365))
+* **Mini:**  replace search widget ([03cd5170](https://github.com/linuxdeepin/dde-launcher/commit/03cd5170b6cfee7f00da3a47c0ccc54bff27b959))
+
+
+
 <a name="4.6.2"></a>
 ### 4.6.2 (2018-12-28)
 

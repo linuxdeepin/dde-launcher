@@ -71,6 +71,9 @@ AppGridView::AppGridView(QWidget *parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(QFrame::NoFrame);
 
+    // init origin size
+    setFixedSize(qApp->primaryScreen()->geometry().size());
+
     setStyleSheet("background-color: transparent;");
 
     // update item spacing

@@ -1,3 +1,13 @@
+<a name="4.6.4"></a>
+### 4.6.4 (2019-01-25)
+
+
+#### Bug Fixes
+
+* **FullScreen:**  not set origin size ([9d517817](https://github.com/linuxdeepin/dde-launcher/commit/9d5178179a379608c0fc04a89f65422416606423))
+
+
+
 <a name="4.6.3"></a>
 ### 4.6.3 (2019-01-14)
 

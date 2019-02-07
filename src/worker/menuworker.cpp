@@ -122,7 +122,10 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
     }
 
     uninstall->setEnabled(m_isRemovable);
+
+#ifndef WITHOUT_UNINSTALL_APP
     menu->addAction(uninstall);
+#endif
 
     connect(open, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
     connect(desktop, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));

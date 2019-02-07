@@ -19,6 +19,10 @@ if (DEFINED DISABLE_DRAG_ANIMATION)
     add_definitions(-DDISABLE_DRAG_ANIMATION)
 endif ()
 
+if (DEFINED WITHOUT_UNINSTALL_APP)
+    add_definitions(-DWITHOUT_UNINSTALL_APP)
+endif ()
+
 set(BIN_NAME dde-launcher)
 
 # Sources files

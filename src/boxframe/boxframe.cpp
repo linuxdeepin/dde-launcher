@@ -89,6 +89,8 @@ void BoxFrame::updateBackground()
 {
     m_cache = backgroundPixmap();
 
+    updateGradient();
+
     update();
 }
 

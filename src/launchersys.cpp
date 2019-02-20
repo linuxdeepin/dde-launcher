@@ -34,11 +34,15 @@
 
 #define MOUSE_LEFTBUTTON 1
 
+#define SessionManagerService "com.deepin.SessionManager"
+#define SessionManagerPath "/com/deepin/SessionManager"
+
 LauncherSys::LauncherSys(QObject *parent)
     : QObject(parent)
 
     , m_launcherInter(nullptr)
     , m_dbusLauncherInter(new DBusLauncher(this))
+    , m_sessionManagerInter(new com::deepin::SessionManager(SessionManagerService, SessionManagerPath, QDBusConnection::sessionBus(), this))
     , m_windowLauncher(new WindowedFrame)
     , m_fullLauncher(new FullScreenFrame)
     , m_regionMonitor(new DRegionMonitor(this))
@@ -72,6 +76,11 @@ LauncherSys::LauncherSys(QObject *parent)
 
 void LauncherSys::showLauncher()
 {
+    if (m_sessionManagerInter->locked()) {
+        qDebug() << "session locked, can not show launcher";
+        return;
+    }
+
     if (m_ignoreRepeatVisibleChangeTimer->isActive())
         return;
     m_ignoreRepeatVisibleChangeTimer->start();

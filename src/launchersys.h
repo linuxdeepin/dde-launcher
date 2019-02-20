@@ -30,6 +30,8 @@
 #include <QTimer>
 #include <dregionmonitor.h>
 
+#include <com_deepin_sessionmanager.h>
+
 DWIDGET_USE_NAMESPACE
 
 class LauncherInterface;
@@ -64,6 +66,7 @@ private:
 private:
     LauncherInterface *m_launcherInter;
     DBusLauncher *m_dbusLauncherInter;
+    com::deepin::SessionManager *m_sessionManagerInter;
 
     WindowedFrame* m_windowLauncher;
     FullScreenFrame* m_fullLauncher;

@@ -264,12 +264,12 @@ void MiniFrameRightBar::handleTimedateOpen()
             .arg(QStringLiteral("datetime"))
             .call();
 #else
-    const QString command("qdbus "
-                          "--literal "
-                          "com.deepin.dde.ControlCenter "
+    const QString command("dbus-send "
+                          "--type=method_call "
+                          "--dest=com.deepin.dde.ControlCenter "
                           "/com/deepin/dde/ControlCenter "
                           "com.deepin.dde.ControlCenter.ShowModule "
-                          "datetime");
+                          "string:datetime");
 
     QProcess::startDetached(command);
 #endif
@@ -287,12 +287,12 @@ void MiniFrameRightBar::handleAvatarClicked()
             .arg(QStringLiteral("accounts"))
             .call();
 #else
-    const QString command("qdbus "
-                          "--literal "
-                          "com.deepin.dde.ControlCenter "
+    const QString command("dbus-send "
+                          "--type=method_call "
+                          "--dest=com.deepin.dde.ControlCenter "
                           "/com/deepin/dde/ControlCenter "
                           "com.deepin.dde.ControlCenter.ShowModule "
-                          "accounts");
+                          "string:accounts");
 
     QProcess::startDetached(command);
 #endif
@@ -314,7 +314,11 @@ void MiniFrameRightBar::showSettings()
             .method(QString("Toggle"))
             .call();
 #else
-    const QString command("qdbus --literal com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.Toggle");
+    const QString command("dbus-send "
+                          "--type=method_call "
+                          "--dest=com.deepin.dde.ControlCenter "
+                          "/com/deepin/dde/ControlCenter "
+                          "com.deepin.dde.ControlCenter.Toggle");
     QProcess::startDetached(command);
 #endif
 

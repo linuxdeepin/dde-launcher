@@ -192,11 +192,12 @@ void MiniFrameBottomBar::showSysInfo()
             .arg(QString("systeminfo"))
             .call();
 #else
-    const QString command = QString("qdbus " \
-                                    "com.deepin.dde.ControlCenter "
+    const QString command = QString("dbus-send "
+                                    "--type=method_call "
+                                    "--dest=com.deepin.dde.ControlCenter "
                                     "/com/deepin/dde/ControlCenter "
                                     "com.deepin.dde.ControlCenter.ShowModule "
-                                    "\"systeminfo\"");
+                                    "string:systeminfo");
 
     QProcess::startDetached(command);
 #endif

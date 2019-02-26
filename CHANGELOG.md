@@ -1,3 +1,13 @@
+<a name="4.6.6"></a>
+## 4.6.6 (2019-02-26)
+
+
+#### Bug Fixes
+
+*   dragging icon size error in fullscreen frame ([e68a0439](https://github.com/linuxdeepin/dde-launcher/commit/e68a043926f406ac473090aa0aaf3c0de2cb5732))
+
+
+
 <a name="4.6.5"></a>
 ### 4.6.5 (2019-02-26)
 

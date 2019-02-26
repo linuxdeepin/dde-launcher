@@ -1,3 +1,15 @@
+<a name="4.6.5"></a>
+### 4.6.5 (2019-02-26)
+
+
+#### Bug Fixes
+
+*   show launcher on lock ([5d2d44c0](https://github.com/linuxdeepin/dde-launcher/commit/5d2d44c012cd97d02c62d554bfc50168f3730148))
+*   compile-time option to disable uninstall ([03bd8a91](https://github.com/linuxdeepin/dde-launcher/commit/03bd8a9126e2164b2ccbd7c3dfac17f92bdf7cdd))
+* **Background:**  gradient not update when background changed ([11fe6a11](https://github.com/linuxdeepin/dde-launcher/commit/11fe6a11b7f424642bcab3b283b278a655072c03))
+
+
+
 <a name="4.6.4"></a>
 ### 4.6.4 (2019-01-25)
 

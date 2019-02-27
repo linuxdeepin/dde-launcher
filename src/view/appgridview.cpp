@@ -301,16 +301,11 @@ void AppGridView::enterEvent(QEvent *e)
 ///
 void AppGridView::fitToContent()
 {
-    const int h = contentsSize().height();
+    const QSize size { contentsRect().width(), contentsSize().height() };
 
-    //FIXME(lxz): sometimes, contentsSize will periodic changes when dragging icons
-    if (width() == contentsRect().width() && (m_newHeight == height() || m_newHeight == h))
-        return;
+    if (size == rect().size()) return;
 
-    m_newHeight = h;
-
-    setFixedHeight(h < 0 ? 0 : h);
-    setFixedWidth(contentsRect().width());
+    setFixedSize(size);
 }
 
 void AppGridView::prepareDropSwap()

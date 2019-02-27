@@ -80,7 +80,6 @@ private:
     const QWidget *m_containerBox = nullptr;
     QTimer *m_dropThresholdTimer;
     QPropertyAnimation *m_lastFakeAni = nullptr;
-    int m_newHeight;
 
     static QPointer<AppsManager> m_appManager;
     static QPointer<CalculateUtil> m_calcUtil;

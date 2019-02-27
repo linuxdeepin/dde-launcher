@@ -522,14 +522,21 @@ void FullScreenFrame::initUI()
 
     m_contentFrame = new QFrame;
     m_contentFrame->setStyleSheet("background: transparent;");
-    QHBoxLayout *scrollLayout = new QHBoxLayout;
-    scrollLayout->setMargin(0);
-    scrollLayout->setSpacing(0);
-    scrollLayout->addSpacing(LEFT_PADDING);
-    scrollLayout->addWidget(m_appsVbox);
-    scrollLayout->addSpacing(RIGHT_PADDING);
 
-    m_contentFrame->setLayout(scrollLayout);
+    QVBoxLayout *scrollVLayout = new QVBoxLayout;
+    scrollVLayout->setMargin(0);
+    scrollVLayout->setSpacing(0);
+
+    QHBoxLayout *scrollHLayout = new QHBoxLayout;
+    scrollHLayout->setMargin(0);
+    scrollHLayout->setSpacing(0);
+    scrollHLayout->addSpacing(LEFT_PADDING);
+    scrollHLayout->addWidget(m_appsVbox, 0, Qt::AlignTop);
+    scrollHLayout->addSpacing(RIGHT_PADDING);
+
+    scrollVLayout->addLayout(scrollHLayout);
+
+    m_contentFrame->setLayout(scrollVLayout);
 
     m_appsArea->setWidget(m_contentFrame);
 

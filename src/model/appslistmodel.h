@@ -30,6 +30,7 @@
 
 class AppsManager;
 class CalculateUtil;
+class ItemInfo;
 class AppsListModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -113,6 +114,7 @@ private:
     void dataChanged(const AppsListModel::AppCategory category);
     void layoutChanged(const AppsListModel::AppCategory category);
     bool indexDragging(const QModelIndex &index) const;
+    void itemDataChanged(const ItemInfo &info);
 //    bool itemIsRemovable(const QString &desktop) const;
 
 private:

@@ -41,6 +41,7 @@
 #include <QScreen>
 #include <QDBusArgument>
 #include <QList>
+#include <memory>
 
 #define DOCK_POS_RIGHT  1
 #define DOCK_POS_BOTTOM 2
@@ -50,7 +51,6 @@
 #define LEFT_PADDING 200
 #define RIGHT_PADDING 200
 
-const QPixmap getThemeIcon(const QString &iconName, const int size);
 
 class CalculateUtil;
 class AppsManager : public QObject
@@ -70,8 +70,10 @@ public:
     bool isHaveNewInstall() const { return !m_newInstalledAppsList.isEmpty(); }
     bool isVaild();
     void refreshAllList();
+    const QPixmap getThemeIcon(const ItemInfo &itemInfo, const int size);
 
 signals:
+    void itemDataChanged(const ItemInfo &info) const;
     void dataChanged(const AppsListModel::AppCategory category) const;
     void layoutChanged(const AppsListModel::AppCategory category) const;
     void requestTips(const QString &tips) const;
@@ -94,7 +96,7 @@ public slots:
     bool appIsOnDesktop(const QString &desktop);
     bool appIsProxy(const QString &desktop);
     bool appIsEnableScaling(const QString &desktop);
-    const QPixmap appIcon(const QString &iconKey, const int size);
+    const QPixmap appIcon(const ItemInfo &info, const int size);
     int appNums(const AppsListModel::AppCategory &category) const;
     inline void clearCache() { m_iconCache.clear(); }
 
@@ -113,6 +115,7 @@ private:
     void generateCategoryMap();
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
     void onSearchTimeOut();
+    void refreshNotFoundIcon();
 
 private slots:
     void onIconThemeChanged();
@@ -127,6 +130,7 @@ private:
     DBusLauncher *m_launcherInter;
     DBusStartManager *m_startManagerInter;
     DBusDock *m_dockInter;
+    std::unique_ptr<QTimer> m_iconRefreshTimer;
 
     QString m_searchText;
     QStringList m_newInstalledAppsList;
@@ -151,6 +155,7 @@ private:
     static QSettings APP_USER_SORTED_LIST;
     static QSettings APP_USED_SORTED_LIST;
     QMap<QPair<QString, int>, QPixmap> m_iconCache;
+    std::map<std::pair<ItemInfo, int>, int> m_notExistIconMap;
     QStringList m_categoryTs;
     QStringList m_categoryIcon;
 };

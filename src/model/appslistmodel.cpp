@@ -73,6 +73,7 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent)
 {
     connect(m_appsManager, &AppsManager::dataChanged, this, &AppsListModel::dataChanged);
     connect(m_appsManager, &AppsManager::layoutChanged, this, &AppsListModel::layoutChanged);
+    connect(m_appsManager, &AppsManager::itemDataChanged, this, &AppsListModel::itemDataChanged);
 }
 
 void AppsListModel::setCategory(const AppsListModel::AppCategory category)
@@ -279,11 +280,11 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIsNewInstall(itemInfo.m_key);
     }
     case AppIconRole:
-        return m_appsManager->appIcon(itemInfo.m_iconKey, m_calcUtil->appIconSize().width());
+        return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize().width());
     case AppDialogIconRole:
-        return m_appsManager->appIcon(itemInfo.m_iconKey, 36 * qApp->devicePixelRatio());
+        return m_appsManager->appIcon(itemInfo, 36 * qApp->devicePixelRatio());
     case AppDragIconRole:
-        return m_appsManager->appIcon(itemInfo.m_iconKey, m_calcUtil->appIconSize().width() * 1.2);
+        return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize().width() * 1.2);
     case ItemSizeHintRole:
         return m_calcUtil->appItemSize();
     case AppIconSizeRole:
@@ -347,6 +348,20 @@ bool AppsListModel::indexDragging(const QModelIndex &index) const
 
     return (start <= end && current >= start && current <= end) ||
             (start >= end && current <= start && current >= end);
+}
+
+void AppsListModel::itemDataChanged(const ItemInfo &info) {
+   int i = 0;
+   const int count = rowCount(QModelIndex());
+   while (i != count)
+   {
+       if (index(i).data(AppKeyRole).toString() == info.m_key) {
+           const QModelIndex modelIndex = index(i);
+           emit QAbstractItemModel::dataChanged(modelIndex, modelIndex);
+           return;
+       }
+       ++i;
+   }
 }
 
 //bool AppsListModel::itemIsRemovable(const QString &desktop) const

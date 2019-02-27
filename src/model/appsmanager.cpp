@@ -36,8 +36,11 @@
 
 #include <QGSettings>
 #include <DHiDPIHelper>
-
+#include <private/qguiapplication_p.h>
+#include <qpa/qplatformtheme.h>
+#include <qiconengine.h>
 #include <DApplication>
+#include <QScopedPointer>
 
 DWIDGET_USE_NAMESPACE
 
@@ -61,10 +64,12 @@ int perfectIconSize(const int size)
     return 256;
 }
 
-const QPixmap getThemeIcon(const QString &iconName, const int size)
+const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size)
 {
+    const QString &iconName = itemInfo.m_iconKey;
     const auto ratio = qApp->devicePixelRatio();
     const int s = perfectIconSize(size);
+    QPlatformTheme * const platformTheme = QGuiApplicationPrivate::platformTheme();
 
     QPixmap pixmap;
     do {
@@ -89,7 +94,32 @@ const QPixmap getThemeIcon(const QString &iconName, const int size)
                 break;
         }
 
-        const QIcon icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));
+        QScopedPointer<QIconEngine> engine(platformTheme->createIconEngine(iconName));
+        QIcon icon;
+
+        if (!engine.isNull()) {
+            if (engine->isNull()) {
+                auto iterator =
+                    std::find_if(m_notExistIconMap.begin(), m_notExistIconMap.end(),
+                                 [=](const std::pair<std::pair<ItemInfo, int>, int> value) {
+                                     return value.first.first.m_iconKey == iconName && value.first.second == size;
+                                 });
+
+                if (iterator == m_notExistIconMap.end()) {
+                    if (!iconName.isEmpty()) {
+                        const std::pair<ItemInfo, int> pair{ itemInfo, size };
+                        m_notExistIconMap[pair] = 0;
+                        m_iconRefreshTimer->start();
+                    }
+
+                    icon = QIcon::fromTheme("application-x-desktop");
+                }
+            }
+            else {
+                icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));
+            }
+        }
+
         pixmap = icon.pixmap(QSize(s, s));
         if (!pixmap.isNull())
             break;
@@ -112,10 +142,14 @@ AppsManager::AppsManager(QObject *parent) :
     m_launcherInter(new DBusLauncher(this)),
     m_startManagerInter(new DBusStartManager(this)),
     m_dockInter(new DBusDock(this)),
+    m_iconRefreshTimer(std::make_unique<QTimer>(new QTimer)),
     m_calUtil(CalculateUtil::instance()),
     m_searchTimer(new QTimer(this)),
     m_delayRefreshTimer(new QTimer(this))
 {
+    m_iconRefreshTimer->setInterval(10 * 1000);
+    m_iconRefreshTimer->setSingleShot(false);
+
     m_categoryTs
             << tr("Internet")
             << tr("Chat")
@@ -161,6 +195,7 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
+    connect(m_iconRefreshTimer.get(), &QTimer::timeout, this, &AppsManager::refreshNotFoundIcon);
 }
 
 void AppsManager::appendSearchResult(const QString &appKey)
@@ -263,9 +298,14 @@ void AppsManager::stashItem(const QString &appKey)
 void AppsManager::abandonStashedItem(const QString &appKey)
 {
     //qDebug() << "bana" << appKey;
-    for (int i(0); i != m_stashList.size(); ++i)
-        if (m_stashList[i].m_key == appKey)
-            return m_stashList.removeAt(i);
+    for (int i(0); i != m_stashList.size(); ++i) {
+        if (m_stashList[i].m_key == appKey) {
+            m_stashList.removeAt(i);
+            break;
+        }
+    }
+
+    emit dataChanged(AppsListModel::All);
 }
 
 void AppsManager::restoreItem(const QString &appKey, const int pos)
@@ -470,15 +510,15 @@ bool AppsManager::appIsEnableScaling(const QString &desktop)
     return !m_launcherInter->GetDisableScaling(desktop);
 }
 
-const QPixmap AppsManager::appIcon(const QString &iconKey, const int size)
+const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
 {
-    QPair<QString, int> tmpKey { iconKey, size };
+    QPair<QString, int> tmpKey { info.m_iconKey, size };
 
     if (m_iconCache.contains(tmpKey) && !m_iconCache[tmpKey].isNull()) {
         return m_iconCache[tmpKey];
     }
 
-    const QPixmap &pixmap = getThemeIcon(iconKey, size / qApp->devicePixelRatio());
+    const QPixmap &pixmap = getThemeIcon(info, size / qApp->devicePixelRatio());
 
     m_iconCache[tmpKey] = pixmap;
 
@@ -719,6 +759,45 @@ void AppsManager::onSearchTimeOut()
 
         w->deleteLater();
     });
+}
+
+void AppsManager::refreshNotFoundIcon() {
+    QPlatformTheme * const platformTheme = QGuiApplicationPrivate::platformTheme();
+    const qreal ratio = qApp->devicePixelRatio();
+
+    for (auto it = m_notExistIconMap.begin(); it != m_notExistIconMap.end();) {
+        // The number of retries is 6
+        if (it->second > 6) {
+            it = m_notExistIconMap.erase(it);
+            continue;
+        }
+
+        const std::pair<ItemInfo, int> itemPair = it->first;
+        // QIcon have cache, cannot use QIcon::fromTheme or QIcon::hasThemeIcon
+        QScopedPointer<QIconEngine> engine(platformTheme->createIconEngine(itemPair.first.m_iconKey));
+        if (!engine.isNull() && !engine->isNull()) {
+            for (auto iconIt = m_iconCache.begin(); iconIt != m_iconCache.end(); ++iconIt) {
+                if (iconIt.key().first == itemPair.first.m_iconKey && iconIt.key().second / ratio == itemPair.second) {
+                    const QPair<QString, int> iconPair{ itemPair.first.m_iconKey, iconIt.key().second };
+                    const QPixmap &           pixmap = getThemeIcon(itemPair.first, itemPair.second);
+                    m_iconCache[iconPair]            = pixmap;
+                    emit itemDataChanged(itemPair.first);
+                    it = m_notExistIconMap.erase(it);
+                    break;
+                }
+            }
+        }
+
+        // Maybe map only have one data
+        if (it != m_notExistIconMap.end()) {
+            it->second += 1;
+            ++it;
+        }
+    }
+
+    if (m_notExistIconMap.size() == 0) {
+        return m_iconRefreshTimer->stop();
+    }
 }
 
 void AppsManager::onIconThemeChanged()

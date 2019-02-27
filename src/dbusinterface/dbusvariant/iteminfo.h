@@ -32,6 +32,7 @@ class ItemInfo
 {
 public:
     ItemInfo();
+    ItemInfo(const ItemInfo &info);
     ~ItemInfo();
 
     static void registerMetaType();
@@ -46,6 +47,8 @@ public:
     friend const QDataStream &operator>>(QDataStream &argument, ItemInfo &info);
 
     void updateInfo(const ItemInfo &info);
+
+    bool operator<(const ItemInfo &info) const;
 
 public:
     QString m_desktop;

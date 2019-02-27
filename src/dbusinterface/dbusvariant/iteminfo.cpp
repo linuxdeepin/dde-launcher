@@ -30,6 +30,19 @@ ItemInfo::ItemInfo()
 {
 }
 
+ItemInfo::ItemInfo(const ItemInfo &info)
+    : m_desktop(info.m_desktop)
+    , m_name(info.m_name)
+    , m_key(info.m_key)
+    , m_iconKey(info.m_iconKey)
+    , m_categoryId(info.m_categoryId)
+    , m_installedTime(info.m_installedTime)
+    , m_openCount(info.m_openCount)
+    , m_firstRunTime(info.m_firstRunTime)
+{
+
+}
+
 ItemInfo::~ItemInfo()
 {
 
@@ -117,4 +130,8 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, ItemInfo &info)
     argument.endStructure();
 
     return argument;
+}
+
+bool ItemInfo::operator<(const ItemInfo &info) const {
+    return info.m_name < m_name;
 }

@@ -70,6 +70,7 @@ bool SharedEventFilter::handleKeyEvent(QKeyEvent *e)
     case Qt::Key_Down:
     case Qt::Key_Left:
     case Qt::Key_Right:         m_frame->moveCurrentSelectApp(e->key());        return true;
+    case Qt::Key_Backspace:     m_frame->appendToSearchEdit(-1);                return true;
     }
 
     // handle normal keys

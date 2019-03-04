@@ -974,9 +974,17 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
 void FullScreenFrame::appendToSearchEdit(const char ch)
 {
     m_searchWidget->edit()->setFocus(Qt::MouseFocusReason);
+
+    // -1 means backspace key pressed
+    if (ch == -1) {
+        m_searchWidget->edit()->backspace();
+        return;
+    }
+
     if (!m_searchWidget->edit()->selectedText().isEmpty()) {
         m_searchWidget->edit()->backspace();
     }
+
     m_searchWidget->edit()->setText(m_searchWidget->edit()->text() + ch);
 }
 

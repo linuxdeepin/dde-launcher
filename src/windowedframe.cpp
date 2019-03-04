@@ -381,9 +381,17 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
 void WindowedFrame::appendToSearchEdit(const char ch)
 {
     m_searchWidget->setFocus(Qt::MouseFocusReason);
+
+    // -1 means backspace key pressed
+    if (ch == -1) {
+        m_searchWidget->backspace();
+        return;
+    }
+
     if (!m_searchWidget->selectedText().isEmpty()) {
         m_searchWidget->backspace();
     }
+
     m_searchWidget->setText(m_searchWidget->text() + ch);
 }
 

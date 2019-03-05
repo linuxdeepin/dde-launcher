@@ -73,8 +73,7 @@ bool CalculateUtil::increaseIconSize()
     const double value = m_launcherGsettings->get("apps-icon-ratio").toDouble();
     const double ratio = std::min(0.6, value + 0.1);
 
-    if (ratio == value)
-        return false;
+    if (qFuzzyCompare(value, ratio)) return false;
 
     m_launcherGsettings->set("apps-icon-ratio", ratio);
     return true;
@@ -85,8 +84,7 @@ bool CalculateUtil::decreaseIconSize()
     const double value = m_launcherGsettings->get("apps-icon-ratio").toDouble();
     const double ratio = std::max(0.2, value - 0.1);
 
-    if (ratio == value)
-        return false;
+    if (qFuzzyCompare(value, ratio)) return false;
 
     m_launcherGsettings->set("apps-icon-ratio", ratio);
     return true;

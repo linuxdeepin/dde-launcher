@@ -1,3 +1,14 @@
+<a name="4.6.7"></a>
+### 4.6.7 (2019-03-05)
+
+
+#### Bug Fixes
+
+*   backspace do not work in window mode search edit ([e983ffc7](https://github.com/linuxdeepin/dde-launcher/commit/e983ffc70df79f0b270c830a239f4631902c388f))
+* **Box:**  search result page has no height adjustment ([9cd2d72b](https://github.com/linuxdeepin/dde-launcher/commit/9cd2d72b0cb872a18f6702d03095093798ad0c5a))
+
+
+
 <a name="4.6.6"></a>
 ## 4.6.6 (2019-02-26)
 

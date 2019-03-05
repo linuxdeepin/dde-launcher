@@ -53,17 +53,17 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     bool hasManual = QProcess::execute("which", QStringList() << "dman") == 0;
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    QHBoxLayout *bottomLayout = new QHBoxLayout;
-    MiniFrameButton *computerBtn = new MiniFrameButton(tr("Computer"));
-    MiniFrameButton *videoBtn = new MiniFrameButton(tr("Videos"));
-    MiniFrameButton *musicBtn = new MiniFrameButton(tr("Music"));
-    MiniFrameButton *pictureBtn = new MiniFrameButton(tr("Pictures"));
-    MiniFrameButton *documentBtn = new MiniFrameButton(tr("Documents"));
-    MiniFrameButton *downloadBtn = new MiniFrameButton(tr("Downloads"));
-    MiniFrameButton *manualBtn = new MiniFrameButton(tr("Manual"));
-    MiniFrameButton *settingsBtn = new MiniFrameButton(tr("Settings"));
-    MiniFrameButton *shutdownBtn = new MiniFrameButton(tr("Shutdown"));
+    QVBoxLayout *    layout       = new QVBoxLayout(this);
+    QHBoxLayout *    bottomLayout = new QHBoxLayout;
+    MiniFrameButton *computerBtn  = new MiniFrameButton(tr("Computer"));
+    MiniFrameButton *videoBtn     = new MiniFrameButton(tr("Videos"));
+    MiniFrameButton *musicBtn     = new MiniFrameButton(tr("Music"));
+    MiniFrameButton *pictureBtn   = new MiniFrameButton(tr("Pictures"));
+    MiniFrameButton *documentBtn  = new MiniFrameButton(tr("Documents"));
+    MiniFrameButton *downloadBtn  = new MiniFrameButton(tr("Downloads"));
+    MiniFrameButton *manualBtn    = new MiniFrameButton(tr("Manual"));
+    m_settingsBtn                 = new MiniFrameButton(tr("Settings"));
+    m_shutdownBtn                 = new MiniFrameButton(tr("Shutdown"));
 
     manualBtn->setVisible(hasManual);
 
@@ -79,8 +79,8 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
         m_btns[index++] = manualBtn;
     }
 
-    m_btns[index++] = settingsBtn;
-    m_btns[index++] = shutdownBtn;
+    m_btns[index++] = m_settingsBtn;
+    m_btns[index++] = m_shutdownBtn;
 
     for (auto it = m_btns.constBegin(); it != m_btns.constEnd(); ++it) {
         it.value()->setCheckable(true);
@@ -91,11 +91,11 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
         }, Qt::QueuedConnection);
     }
 
-    settingsBtn->setIcon(QIcon(":/widgets/images/settings.svg"));
-    shutdownBtn->setIcon(QIcon(":/widgets/images/power.svg"));
+    m_settingsBtn->setIcon(QIcon(":/widgets/images/settings.svg"));
+    m_shutdownBtn->setIcon(QIcon(":/widgets/images/power.svg"));
 
-    bottomLayout->addWidget(settingsBtn);
-    bottomLayout->addWidget(shutdownBtn);
+    bottomLayout->addWidget(m_settingsBtn);
+    bottomLayout->addWidget(m_shutdownBtn);
 
     QWidget *top_widget = new QWidget;
     QHBoxLayout *top_layout = new QHBoxLayout;
@@ -130,28 +130,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     layout->addWidget(bottom_widget, 0, Qt::AlignBottom);
     layout->setContentsMargins(18, 0, 12, 18);
 
-    // To calculate width to adaptive width.
-    const int padding = 10;
-    const int iconWidth = 24;
-    int btnWidth = 0;
-    int frameWidth = 0;
-
-    const int dateTextWidth = m_datetimeWidget->getDateTextWidth() + 60;
-
-    btnWidth += settingsBtn->fontMetrics().boundingRect(settingsBtn->text()).width() + iconWidth + padding;
-    btnWidth += shutdownBtn->fontMetrics().boundingRect(shutdownBtn->text()).width() + iconWidth + padding;
-    btnWidth += 38;  // padding
-
-    if (btnWidth > dateTextWidth) {
-        frameWidth = btnWidth;
-    }
-    else {
-        frameWidth = dateTextWidth;
-    }
-
-    setFixedWidth(frameWidth);
-
-    m_modeToggleBtn->move(frameWidth - 24 - 5, 12);
+    updateSize();
 
     connect(m_modeToggleBtn, &DImageButton::clicked, this, &MiniFrameRightBar::modeToggleBtnClicked);
     connect(computerBtn, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
@@ -161,8 +140,8 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     connect(pictureBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::PicturesLocation); });
     connect(downloadBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DownloadLocation); });
     connect(manualBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showManual);
-    connect(settingsBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showSettings);
-    connect(shutdownBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showShutdown);
+    connect(m_settingsBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showSettings);
+    connect(m_shutdownBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showShutdown);
     connect(m_avatar, &Avatar::clicked, this, &MiniFrameRightBar::handleAvatarClicked);
     connect(m_datetimeWidget, &DatetimeWidget::clicked, this, &MiniFrameRightBar::handleTimedateOpen);
 }
@@ -216,7 +195,19 @@ void MiniFrameRightBar::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setPen(QColor(255, 255, 255, 0.1 * 255));
     painter.drawLine(QPoint(0, 0),
-                     QPoint(0, rect().height()));
+    QPoint(0, rect().height()));
+}
+
+void MiniFrameRightBar::showEvent(QShowEvent *event) {
+    return QWidget::showEvent(event);
+}
+
+bool MiniFrameRightBar::event(QEvent *event) {
+    if (event->type() == QEvent::ApplicationFontChange) {
+        updateSize();
+    }
+
+    return QWidget::event(event);
 }
 
 void MiniFrameRightBar::openDirectory(const QString &dir)
@@ -337,4 +328,29 @@ void MiniFrameRightBar::hideAllHoverState() const
     for (auto it = m_btns.constBegin(); it != m_btns.constEnd(); ++it) {
         it.value()->setChecked(false);
     }
+}
+
+void MiniFrameRightBar::updateSize()
+{
+    // To calculate width to adaptive width.
+    const int padding    = 10;
+    const int iconWidth  = 24;
+    int       btnWidth   = 0;
+    int       frameWidth = 0;
+
+    const int dateTextWidth = m_datetimeWidget->getDateTextWidth() + 60;
+
+    btnWidth += m_settingsBtn->fontMetrics().boundingRect(m_settingsBtn->text()).width() + iconWidth + padding;
+    btnWidth += m_shutdownBtn->fontMetrics().boundingRect(m_shutdownBtn->text()).width() + iconWidth + padding;
+    btnWidth += 38;  // padding
+
+    if (btnWidth > dateTextWidth) {
+        frameWidth = btnWidth;
+    }
+    else {
+        frameWidth = dateTextWidth;
+    }
+
+    setFixedWidth(frameWidth);
+    m_modeToggleBtn->move(frameWidth - 24 - 5, 12);
 }

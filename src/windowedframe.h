@@ -48,7 +48,7 @@ DWIDGET_USE_NAMESPACE
 
 using Appearance = com::deepin::daemon::Appearance;
 
-class WindowedFrame : public QWidget, public LauncherInterface
+class WindowedFrame : public DBlurEffectWidget, public LauncherInterface
 {
     Q_OBJECT
 
@@ -98,7 +98,6 @@ private:
     QPainterPath getCornerPath(AnchoredCornor direction);
 
 protected:
-    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
@@ -107,6 +106,8 @@ protected:
     void inputMethodEvent(QInputMethodEvent *e) Q_DECL_OVERRIDE;
     QVariant inputMethodQuery(Qt::InputMethodQuery prop) const Q_DECL_OVERRIDE;
     void regionMonitorPoint(const QPoint &point) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private slots:
     void initAnchoredCornor();
@@ -122,7 +123,6 @@ private slots:
     void onOpacityChanged(const double value);
 
 private:
-    DBlurEffectWidget *m_blurEffectWidget;
     DBusDock *m_dockInter;
     std::unique_ptr<MenuWorker> m_menuWorker;
     SharedEventFilter *m_eventFilter;
@@ -136,6 +136,7 @@ private:
     AppsListModel *m_searchModel;
 
     SearchLineEdit *m_searchWidget;
+    QWidget *m_leftWidget;
     MiniFrameRightBar *m_rightBar;
     MiniFrameSwitchBtn *m_switchBtn;
     QLabel *m_tipsLabel;

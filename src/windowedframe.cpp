@@ -36,6 +36,7 @@
 #include <QClipboard>
 #include <QScrollBar>
 #include <QKeyEvent>
+#include <QResizeEvent>
 #include <QPainter>
 #include <QScreen>
 #include <QEvent>
@@ -72,7 +73,7 @@ inline const QPoint scaledPosition(const QPoint &xpos)
 }
 
 WindowedFrame::WindowedFrame(QWidget *parent)
-    : QWidget(parent)
+    : DBlurEffectWidget(parent)
     , m_dockInter(new DBusDock(this))
     , m_menuWorker(new MenuWorker)
     , m_eventFilter(new SharedEventFilter(this))
@@ -92,17 +93,16 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_displayMode(All)
     , m_focusPos(LeftTop)
 {
-    m_blurEffectWidget = new DBlurEffectWidget(this);
-    m_blurEffectWidget->setMaskColor(DBlurEffectWidget::DarkColor);
-    m_blurEffectWidget->setBlendMode(DBlurEffectWidget::BehindWindowBlend);
+    setMaskColor(DBlurEffectWidget::DarkColor);
+    setBlendMode(DBlurEffectWidget::InWindowBlend);
 
     m_appearanceInter->setSync(false, false);
 
     m_windowHandle.setShadowRadius(60);
     m_windowHandle.setBorderWidth(0);
     m_windowHandle.setShadowOffset(QPoint(0, -1));
-    m_windowHandle.setEnableBlurWindow(false);
-    m_windowHandle.setTranslucentBackground(true);
+    m_windowHandle.setEnableBlurWindow(true);
+    m_windowHandle.setTranslucentBackground(false);
 
     m_appsView->setModel(m_appsModel);
     m_appsView->setItemDelegate(new AppListDelegate);
@@ -124,6 +124,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_autoScrollTimer->setSingleShot(false);
 
     m_rightBar->installEventFilter(m_eventFilter);
+    m_rightBar->installEventFilter(this);
 
     m_searchWidget->setFixedWidth(290);
 
@@ -155,25 +156,22 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     containLayout->addLayout(switchLayout);
     containLayout->addSpacing(15);
 
-    QWidget *leftWidget = new QWidget;
-    leftWidget->setLayout(containLayout);
-    leftWidget->setFixedWidth(320);
+    m_leftWidget = new QWidget;
+    m_leftWidget->setLayout(containLayout);
+    m_leftWidget->setFixedWidth(320);
 
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
-    mainLayout->addWidget(leftWidget);
+    mainLayout->addWidget(m_leftWidget);
     mainLayout->addWidget(m_rightBar);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
 
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_InputMethodEnabled, true);
-    setAttribute(Qt::WA_TranslucentBackground, true);
     setFocusPolicy(Qt::ClickFocus);
-    setFixedSize(leftWidget->width() + m_rightBar->width(), 502);
+    setFixedHeight(502);
     setObjectName("MiniFrame");
     setStyleSheet(getQssFromFile(":/skin/qss/miniframe.qss"));
-
-    m_blurEffectWidget->resize(size());
 
     initAnchoredCornor();
     installEventFilter(m_eventFilter);
@@ -531,19 +529,6 @@ QPainterPath WindowedFrame::getCornerPath(AnchoredCornor direction)
     return path;
 }
 
-void WindowedFrame::paintEvent(QPaintEvent *e)
-{
-    QWidget::paintEvent(e);
-
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-
-    painter.setClipPath(m_cornerPath);
-    painter.fillPath(m_cornerPath, Qt::red);
-
-    m_windowHandle.setClipPath(m_cornerPath);
-}
-
 void WindowedFrame::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
@@ -642,6 +627,25 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point)
     }
 }
 
+bool WindowedFrame::eventFilter(QObject *watched, QEvent *event) {
+    if (watched == m_rightBar && event->type() == QEvent::Resize) {
+        setFixedSize(m_leftWidget->width() + m_rightBar->width(), 502);
+    }
+
+    return QWidget::eventFilter(watched, event);
+}
+
+void WindowedFrame::resizeEvent(QResizeEvent *event)
+{
+    QTimer::singleShot(0, this, [=] {
+        initAnchoredCornor();
+        m_cornerPath = getCornerPath(m_anchoredCornor);
+        m_windowHandle.setClipPath(m_cornerPath);
+    });
+
+    return DBlurEffectWidget::resizeEvent(event);
+}
+
 void WindowedFrame::initAnchoredCornor()
 {
     if (m_dockInter->displayMode() == DOCK_EFFICIENT && m_wmHelper->hasComposite()) {
@@ -666,9 +670,6 @@ void WindowedFrame::initAnchoredCornor()
     } else {
         m_anchoredCornor = Normal;
     }
-
-    // when change calculated only once.
-    m_cornerPath = getCornerPath(m_anchoredCornor);
 
     update();
 }
@@ -850,5 +851,5 @@ void WindowedFrame::recoveryAll()
 
 void WindowedFrame::onOpacityChanged(const double value)
 {
-    m_blurEffectWidget->setMaskAlpha(value * 255);
+    setMaskAlpha(value * 255);
 }

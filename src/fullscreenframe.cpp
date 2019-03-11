@@ -24,7 +24,6 @@
 #include "fullscreenframe.h"
 #include "global_util/constants.h"
 #include "global_util/xcb_misc.h"
-#include "src/boxframe/backgroundmanager.h"
 
 #include <QApplication>
 #include <QDesktopWidget>

@@ -24,17 +24,26 @@
 #ifndef BOXFRAME_H
 #define BOXFRAME_H
 
+#include "src/model/backgroundcache.h"
+
 #include <QLabel>
+#include <tuple>
+
+#include <com_deepin_wm.h>
+#include <com_deepin_daemon_imageblur.h>
+#include <com_deepin_daemon_appearance.h>
+
+using WMinter = com::deepin::wm;
+using ImageBlurInter = com::deepin::daemon::ImageBlur;
+using AppearanceInter = com::deepin::daemon::Appearance;
 
 class QPixmap;
-class BackgroundManager;
-
 class BoxFrame : public QLabel
 {
     Q_OBJECT
 
 public:
-    explicit BoxFrame(QWidget* parent = 0);
+    explicit BoxFrame(QWidget* parent = nullptr);
     ~BoxFrame();
 
     void setBackground(const QString &url);
@@ -48,12 +57,24 @@ protected:
 
 private:
     const QPixmap backgroundPixmap();
+    const std::pair<uint, uint> resolution() const; // std::pair<width, height>
+    const QString resolutionToQString(const std::pair<uint, uint> resolution) const;
+    const std::pair<uint, uint> resolutionByQString(const QString &resolution) const;
+    void updateBackgrounds();
+    void onBlurDone(const QString &source, const QString &blur, bool done);
+    void saveCurrentPixmap(const QPixmap &pixmap);
 
 private:
-    QString m_lastUrl;
     QPixmap m_pixmap;
     QPixmap m_cache;
-    BackgroundManager *m_bgManager;
+
+    int m_currentWorkspace;
+    mutable QString m_background;
+    BackgroundCache m_currentBackgroundInfo; // std::tuple<md5, resolution, workspace>
+
+    WMinter *m_wmInter;
+    ImageBlurInter *m_blurInter;
+    AppearanceInter *m_appearanceInter;
 };
 
 #endif // BOXFRAME_H

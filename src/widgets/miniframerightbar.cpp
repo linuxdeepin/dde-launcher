@@ -63,7 +63,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     MiniFrameButton *downloadBtn  = new MiniFrameButton(tr("Downloads"));
     MiniFrameButton *manualBtn    = new MiniFrameButton(tr("Manual"));
     m_settingsBtn                 = new MiniFrameButton(tr("Settings"));
-    m_shutdownBtn                 = new MiniFrameButton(tr("Shutdown"));
+    m_powerBtn                    = new MiniFrameButton(tr("Power"));
 
     manualBtn->setVisible(hasManual);
 
@@ -80,7 +80,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     }
 
     m_btns[index++] = m_settingsBtn;
-    m_btns[index++] = m_shutdownBtn;
+    m_btns[index++] = m_powerBtn;
 
     for (auto it = m_btns.constBegin(); it != m_btns.constEnd(); ++it) {
         it.value()->setCheckable(true);
@@ -92,10 +92,10 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     }
 
     m_settingsBtn->setIcon(QIcon(":/widgets/images/settings.svg"));
-    m_shutdownBtn->setIcon(QIcon(":/widgets/images/power.svg"));
+    m_powerBtn->setIcon(QIcon(":/widgets/images/power.svg"));
 
     bottomLayout->addWidget(m_settingsBtn);
-    bottomLayout->addWidget(m_shutdownBtn);
+    bottomLayout->addWidget(m_powerBtn);
 
     QWidget *top_widget = new QWidget;
     QHBoxLayout *top_layout = new QHBoxLayout;
@@ -141,7 +141,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     connect(downloadBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DownloadLocation); });
     connect(manualBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showManual);
     connect(m_settingsBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showSettings);
-    connect(m_shutdownBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showShutdown);
+    connect(m_powerBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showShutdown);
     connect(m_avatar, &Avatar::clicked, this, &MiniFrameRightBar::handleAvatarClicked);
     connect(m_datetimeWidget, &DatetimeWidget::clicked, this, &MiniFrameRightBar::handleTimedateOpen);
 }
@@ -341,7 +341,7 @@ void MiniFrameRightBar::updateSize()
     const int dateTextWidth = m_datetimeWidget->getDateTextWidth() + 60;
 
     btnWidth += m_settingsBtn->fontMetrics().boundingRect(m_settingsBtn->text()).width() + iconWidth + padding;
-    btnWidth += m_shutdownBtn->fontMetrics().boundingRect(m_shutdownBtn->text()).width() + iconWidth + padding;
+    btnWidth += m_powerBtn->fontMetrics().boundingRect(m_powerBtn->text()).width() + iconWidth + padding;
     btnWidth += 38;  // padding
 
     if (btnWidth > dateTextWidth) {

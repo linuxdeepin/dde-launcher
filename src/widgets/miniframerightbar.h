@@ -74,7 +74,7 @@ private:
     int m_currentIndex;
     QMap<uint, MiniFrameButton*> m_btns;
     MiniFrameButton *m_settingsBtn;
-    MiniFrameButton *m_shutdownBtn;
+    MiniFrameButton *m_powerBtn;
 };
 
 #endif // MINIFRAMERIGHTBAR_H

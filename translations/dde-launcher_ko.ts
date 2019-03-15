@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>정말로 %1(을)를 삭제하시겠습니까?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>모든 의존성이 함께 제거됩니다</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>취소</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>확인</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>설정 </translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>전원 종료</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>비디오</translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>문서</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

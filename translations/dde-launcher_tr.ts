@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Tüm bağımlılıklarıyla birlikte kaldırılacak</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>İptal</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Onayla</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>Kapat</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>Görüntüler</translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>Belgeler</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation>Güç</translation>
     </message>
 </context>
 <context>

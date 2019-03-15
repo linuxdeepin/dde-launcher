@@ -81,11 +81,11 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation type="unfinished"/>
+        <translation>Atverti pagal įgaliotąjį serverį</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Išjungti ekrano mastelį</translation>
     </message>
     <message>
         <source>Open</source>
@@ -157,25 +157,6 @@
     <message>
         <source>Others</source>
         <translation>Kita</translation>
-    </message>
-</context>
-<context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Ar tikrai norite pašalinti %1 ?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Kartu bus pašalintos visos priklausomybės</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Atsisakyti</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Patvirtinti</translation>
     </message>
 </context>
 <context>
@@ -303,10 +284,6 @@
         <translation>Nustatymai</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>Išjungti</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>Vaizdo įrašai</translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>Dokumentai</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation>Energija</translation>
     </message>
 </context>
 <context>

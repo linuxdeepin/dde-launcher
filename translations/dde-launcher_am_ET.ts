@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>በ እርግጥ ማጥፋት ይፈልጋሉ %1 ?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>ሁሉም ጥገኞች ይወገዳሉ</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>መሰረዣ</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>ማረጋገጫ</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>ማሰናጃዎች</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>ማጥፊያ</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>ቪዲዮዎች</translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>ሰነዶች</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

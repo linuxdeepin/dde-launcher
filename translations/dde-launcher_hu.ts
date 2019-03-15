@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Biztosan eltávolítod ezt: %1 ?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Az összes függőség eltávolításra kerül</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Mégse</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Megerősítés</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>Beállítások</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>Leállítás</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>Videók</translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>Dokumentumok</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Заиста желите да уклоните %1 ?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Све зависности биће уклоњене заједно</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Откажи</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Потврди</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>Подeшавања</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>Искључи</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>Видео</translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>Документи</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation>Напајање</translation>
     </message>
 </context>
 <context>

@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Bạn có chắc là gỡ bỏ %1 không?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Tất cả phần phụ thuộc sẽ được bỏ theo cùng</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Hủy</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Xác nhận</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>Cài đặt</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>Tắt</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>Phim</translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>Tài liệu</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

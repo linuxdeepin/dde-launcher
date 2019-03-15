@@ -11,7 +11,7 @@
     </message>
     <message>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation>Chatti</translation>
     </message>
     <message>
         <source>Music</source>
@@ -54,7 +54,7 @@
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Haluatko poistaa sovelluksen %1?</translation>
+        <translation>Haluatko poistaa sovelluksen %1 ?</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -120,7 +120,7 @@
     </message>
     <message>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation>Chatti</translation>
     </message>
     <message>
         <source>Music</source>
@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Haluatko poistaa sovelluksen %1?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Kaikki riippuvaisuudet poistetaan yhdessä</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Peruuta</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Vahvista</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -186,7 +167,7 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumentit</translation>
+        <translation>Asiakirjat</translation>
     </message>
     <message>
         <source>Videos</source>
@@ -303,10 +284,6 @@
         <translation>Asetukset</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>Sammuta</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>Videot</translation>
     </message>
@@ -316,14 +293,18 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumentit</translation>
+        <translation>Asiakirjat</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation>Virta</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation>Kaikki luokat</translation>
     </message>
     <message>
         <source>Back</source>
@@ -341,7 +322,7 @@
     <name>WindowedFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Haluatko poistaa sovelluksen %1?</translation>
+        <translation>Haluatko poistaa sovelluksen %1 ?</translation>
     </message>
     <message>
         <source>Cancel</source>

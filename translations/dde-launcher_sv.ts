@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Är du säker på att avinstallera %1?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Alla beroenden kommer att tas bort tillsammans</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Avbryt</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Bekräfta</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>Inställningar</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>Stäng av</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation type="unfinished"/>
     </message>
@@ -316,6 +293,10 @@
     </message>
     <message>
         <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Power</source>
         <translation type="unfinished"/>
     </message>
 </context>

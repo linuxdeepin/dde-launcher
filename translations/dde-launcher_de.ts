@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Sind Sie sicher, dass Sie %1 deinstallieren möchten?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Alle Abhängigkeiten werden zusammen entfernt</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Abbrechen</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Bestätigen</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>Herunterfahren</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>Videos</translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>Dokumente</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation>Energie</translation>
     </message>
 </context>
 <context>

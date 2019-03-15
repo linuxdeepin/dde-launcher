@@ -116,7 +116,7 @@
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>ອີນເຕິແນດ</translation>
     </message>
     <message>
         <source>Chat</source>
@@ -132,57 +132,38 @@
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>ພາບກຣາບຟິກ</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>ເກມ</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation>ອ໊ອບຟີກ</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>ການອ່ານ</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation>ການພັດທະນາ</translation>
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation>ລະບົບ</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation type="unfinished"/>
+        <translation>ອື່ນໆ</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation type="unfinished"/>
+        <translation>ຄອມພີວເຕີ</translation>
     </message>
     <message>
         <source>Documents</source>
@@ -194,7 +175,7 @@
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>ເພງ</translation>
     </message>
     <message>
         <source>Pictures</source>
@@ -206,23 +187,23 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation type="unfinished"/>
+        <translation>ລ໊ອກ</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation type="unfinished"/>
+        <translation>ອອກຈາກລະບົບ</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>ເປີດຄືນ</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation type="unfinished"/>
+        <translation>ຢຸດໄວ້</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation type="unfinished"/>
+        <translation>ປີດລະບົບ</translation>
     </message>
     <message>
         <source>Back</source>
@@ -253,15 +234,15 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>ເປີດຄືນ</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation type="unfinished"/>
+        <translation>ຢຸດໄວ້</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>ກັບຄືນ</translation>
     </message>
     <message>
         <source>Documents</source>
@@ -284,11 +265,11 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation type="unfinished"/>
+        <translation>ຄອມພີວເຕີ</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"/>
+        <translation>ເພງ</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -303,10 +284,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Videos</source>
         <translation type="unfinished"/>
     </message>
@@ -318,6 +295,10 @@
         <source>Documents</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Power</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
@@ -327,7 +308,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>ກັບຄືນ</translation>
     </message>
 </context>
 <context>
@@ -341,15 +322,15 @@
     <name>WindowedFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>ເຈົ້າແນ່ໃຈທີ່ຈະຖອນການຕິດຕັ້ງ %1 ?</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>ຍົກເລີກ</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation type="unfinished"/>
+        <translation>ຢັ້ງຢືນ</translation>
     </message>
 </context>
 </TS>

@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Είστε σίγουροι ότι θέλετε να απεγκαταστήσετε το %1 ;</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Όλες οι εξαρτήσεις θα απομακρυνθούν μαζί</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Ακύρωση</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Επιβεβαίωση</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>Ρυθμίσεις</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>Τερματισμός λειτουργίας</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>Βίντεο</translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>Έγγραφα</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

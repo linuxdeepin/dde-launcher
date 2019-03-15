@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>क्या आप वाकई %1 को हटाना चाहते हैं?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>सभी सॉफ्टवेयर निर्भरताओं को एक साथ हटा दिया जाएगा </translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>रद्द करें</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>पुष्टि करें </translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>सेटिंग्स</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>बंद करें</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>वीडियो</translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>दस्तावेज़</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

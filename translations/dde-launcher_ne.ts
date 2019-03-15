@@ -1,83 +1,83 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ne" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>Nema rezultata pretrage</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Internet</source>
-        <translation>Internet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chat</source>
-        <translation>Razgovor</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Glazba</translation>
+        <translation>संगीत</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation>Video</translation>
+        <translation>भिडियो</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Grafika</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Game</source>
-        <translation>Igra</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Office</source>
-        <translation>Ured</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reading</source>
-        <translation>Čitanje</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Development</source>
-        <translation>Razvojni alati</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System</source>
-        <translation>Sustav</translation>
+        <translation>सिस्टम / प्रणाली</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation>Ostalo</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Jeste li sigurni da želite deinstalirati %1 ?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Otkaži</translation>
+        <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Potvrdi</translation>
+        <translation>पक्का गर्नु</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation>Ukloni s radne površine</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Ukloni sa sidrišta</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>Deinstaliraj</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open by proxy</source>
@@ -89,11 +89,11 @@
     </message>
     <message>
         <source>Open</source>
-        <translation>Otvori</translation>
+        <translation>खोल्नुहोस्</translation>
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation>Pošalji na radnu površinu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Send to dock</source>
@@ -101,199 +101,199 @@
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation>Ukloni iz početnih</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation>Dodaj u početne</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>Svi programi</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Internet</source>
-        <translation>Internet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chat</source>
-        <translation>Razgovor</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Glazba</translation>
+        <translation>संगीत</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation>Video</translation>
+        <translation>भिडियो</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Grafika</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Game</source>
-        <translation>Igra</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Office</source>
-        <translation>Ured</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reading</source>
-        <translation>Čitanje</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Development</source>
-        <translation>Razvojni alati</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System</source>
-        <translation>Sustav</translation>
+        <translation>सिस्टम / प्रणाली</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation>Ostalo</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Računalo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumenti</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Video datoteke</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Glazba</translation>
+        <translation>संगीत</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Slike</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Preuzimanja</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Zaključaj</translation>
+        <translation>लक</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Odjava</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Ponovno podigni sustav</translation>
+        <translation>रिबुट गर्नुहोस्</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspendiraj</translation>
+        <translation>निलम्बन गर्नुहोस्</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Isključi</translation>
+        <translation>बन्द गर्नुहोस्</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Natrag</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
         <source>Computer</source>
-        <translation>Računalo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Glazba</translation>
+        <translation>संगीत</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Isključi</translation>
+        <translation>बन्द गर्नुहोस्</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Zaključaj</translation>
+        <translation>लक</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Odjava</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Ponovno podigni sustav</translation>
+        <translation>रिबुट गर्नुहोस्</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspendiraj</translation>
+        <translation>निलम्बन गर्नुहोस्</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Natrag</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumenti</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Video datoteke</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Slike</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Preuzimanja</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Računalo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Glazba</translation>
+        <translation>संगीत</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Preuzimanja</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Ručno</translation>
+        <translation>म्यानुअल</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Postavke</translation>
+        <translation>सेटिंग्स</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Video datoteke</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Slike</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumenti</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Power</source>
@@ -304,33 +304,33 @@
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation>Sve kategorije</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Back</source>
-        <translation>Natrag</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation>Traži</translation>
+        <translation>खोजी गर्नुहोस्</translation>
     </message>
 </context>
 <context>
     <name>WindowedFrame</name>
     <message>
         <source>Are you sure to uninstall %1 ?</source>
-        <translation>Jeste li sigurni da želite deinstalirati %1 ?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Otkaži</translation>
+        <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Potvrdi</translation>
+        <translation>पक्का गर्नु</translation>
     </message>
 </context>
 </TS>

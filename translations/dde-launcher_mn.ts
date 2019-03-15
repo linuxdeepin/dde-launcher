@@ -7,11 +7,11 @@
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>Интернэт</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>Чат</translation>
     </message>
     <message>
         <source>Music</source>
@@ -23,23 +23,23 @@
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>График</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>Тоглоом</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation>Оффис</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>Унших</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation>Хөгжүүлэлт</translation>
     </message>
     <message>
         <source>System</source>
@@ -47,7 +47,7 @@
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation>Бусад</translation>
     </message>
 </context>
 <context>
@@ -73,7 +73,7 @@
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Докоос хасах</translation>
+        <translation>Байршуулагчаас хасах</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -81,46 +81,46 @@
     </message>
     <message>
         <source>Open by proxy</source>
-        <translation type="unfinished"/>
+        <translation>Проксигоор нээх</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Дэлгэцийн өсгөлтийг цуцлах</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>Нээх</translation>
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation>Дэлгэцрүү илгээх</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation>Байршуулагчруу илгээх</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation>Эхлүүлэлтээс хасах</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation>Эхлүүлэлтэд нэмэх</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>Бүх програмууд</translation>
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation>Интернэт</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation>Чат</translation>
     </message>
     <message>
         <source>Music</source>
@@ -132,23 +132,23 @@
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation>График</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation>Тоглоом</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation>Оффис</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation>Унших</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation>Хөгжүүлэлт</translation>
     </message>
     <message>
         <source>System</source>
@@ -156,26 +156,7 @@
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>%1 -ыг системээс устгахдаа итгэлтэй байна уу?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Харьяалагдах сангууд бүгд устана</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Цуцлах</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Батлах</translation>
+        <translation>Бусад</translation>
     </message>
 </context>
 <context>
@@ -186,11 +167,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Бичиг баримт</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Видео</translation>
     </message>
     <message>
         <source>Music</source>
@@ -198,15 +179,15 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Зураг</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation type="unfinished"/>
+        <translation>Татац</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Цоожлох</translation>
+        <translation>Түгжих</translation>
     </message>
     <message>
         <source>Logout</source>
@@ -214,7 +195,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Дахин ачааллах</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -226,7 +207,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Буцах</translation>
     </message>
 </context>
 <context>
@@ -253,7 +234,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Дахин ачааллах</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -261,23 +242,23 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Буцах</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Бичиг баримт</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Видео</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Зураг</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation type="unfinished"/>
+        <translation>Татац</translation>
     </message>
 </context>
 <context>
@@ -292,30 +273,30 @@
     </message>
     <message>
         <source>Downloads</source>
-        <translation type="unfinished"/>
+        <translation>Татац</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation type="unfinished"/>
+        <translation>Гар арга</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation>Унтраах</translation>
+        <translation>Тохиргоо</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Видео</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Зураг</translation>
     </message>
     <message>
         <source>Documents</source>
+        <translation>Бичиг баримтууд</translation>
+    </message>
+    <message>
+        <source>Power</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -323,11 +304,11 @@
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation>Бүх ангилал</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Буцах</translation>
     </message>
 </context>
 <context>

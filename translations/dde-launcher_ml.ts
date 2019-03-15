@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>%1 നീക്കം ചെയ്യണമെന്ന് ഉറപ്പാണോ?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>റദ്ദാക്കുക</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>ഉറപ്പാക്കുക</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>ഷട്ട്ഡൗൺ</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation type="unfinished"/>
     </message>
@@ -316,6 +293,10 @@
     </message>
     <message>
         <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Power</source>
         <translation type="unfinished"/>
     </message>
 </context>

@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>هل أنت متأكد من إلغاء تثبيت %1 ؟</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>كل الاعتماديات سيتم إزالتها معاً</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>إلغاء</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>تأكيد</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>إعدادات</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>إيقاف تشغيل</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>الفيديوهات </translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>المستندات</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

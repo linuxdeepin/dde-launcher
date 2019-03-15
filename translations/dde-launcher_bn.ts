@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>আপনি কি %1 আনইন্সটল করার ব্যাপারে নিশ্চিত?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>সমস্ত নির্ভরশীলতা একইসাথে সরানো হবে</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>বাতিল</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>নিশ্চিত করুন</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>সেটিংস</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>বন্ধ করুন</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>ভিডিও সমূহ</translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>ডকুমেন্ট সমূহ</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

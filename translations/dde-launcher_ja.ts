@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>%1 を削除してよろしいですか？</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>依存関係にあるものすべてが一緒に削除されます</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>キャンセル</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>確認</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>設定</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>シャットダウン</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>ビデオ</translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>ドキュメント</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

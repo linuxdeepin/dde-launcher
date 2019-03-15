@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>آیا اطمینان دارید که می خواهید حذف کنید %1؟</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>تمام متعلقات با هم حذف خواهد شد</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>انصراف</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>تایید</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>تنظیمات</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>خاموش کردن</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>ویدیوها</translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>اسناد</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

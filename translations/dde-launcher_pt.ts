@@ -11,7 +11,7 @@
     </message>
     <message>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation>Conversação</translation>
     </message>
     <message>
         <source>Music</source>
@@ -73,7 +73,7 @@
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Remover do dock</translation>
+        <translation>Remover da dock</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -97,7 +97,7 @@
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>Enviar para o dock</translation>
+        <translation>Enviar para a dock</translation>
     </message>
     <message>
         <source>Remove from startup</source>
@@ -120,7 +120,7 @@
     </message>
     <message>
         <source>Chat</source>
-        <translation>Conversar</translation>
+        <translation>Conversação</translation>
     </message>
     <message>
         <source>Music</source>
@@ -157,25 +157,6 @@
     <message>
         <source>Others</source>
         <translation>Outros</translation>
-    </message>
-</context>
-<context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Tem a certeza que deseja desinstalar %1 ?</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>Todas as dependências serão removidas em conjunto</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>Cancelar</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>Confirmar</translation>
     </message>
 </context>
 <context>
@@ -303,10 +284,6 @@
         <translation>Definições</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>Encerrar</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>Vídeos</translation>
     </message>
@@ -317,6 +294,10 @@
     <message>
         <source>Documents</source>
         <translation>Documentos</translation>
+    </message>
+    <message>
+        <source>Power</source>
+        <translation>Energia</translation>
     </message>
 </context>
 <context>

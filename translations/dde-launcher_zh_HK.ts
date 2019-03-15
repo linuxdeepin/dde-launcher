@@ -160,25 +160,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>你確定要解除安裝 %1 嗎？</translation>
-    </message>
-    <message>
-        <source>All dependencies will be removed together</source>
-        <translation>所有相關內容將會一併刪除</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation>取消</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation>確定</translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
@@ -303,10 +284,6 @@
         <translation>設置</translation>
     </message>
     <message>
-        <source>Shutdown</source>
-        <translation>關機</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation type="unfinished"/>
     </message>
@@ -316,6 +293,10 @@
     </message>
     <message>
         <source>Documents</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Power</source>
         <translation type="unfinished"/>
     </message>
 </context>

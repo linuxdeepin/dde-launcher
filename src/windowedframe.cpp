@@ -241,6 +241,7 @@ void WindowedFrame::showLauncher()
         m_appsManager->refreshAllList();
     }
 
+    adjustSize(); // right widget need calculate width based on font
     adjustPosition();
     show();
 

@@ -284,6 +284,10 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     });
 
     m_clearCacheTimer->stop();
+
+    if (m_displayMode != ALL_APPS) {
+        refreshTitleVisible();
+    }
 }
 
 void FullScreenFrame::hideEvent(QHideEvent *e)
@@ -1375,7 +1379,7 @@ void FullScreenFrame::layoutChanged()
     m_systemView->setFixedWidth(appsContentWidth);
     m_othersView->setFixedWidth(appsContentWidth);
 
-    m_floatTitle->move(m_appsArea->pos().x() + LEFT_PADDING, m_appsArea->y() - m_floatTitle->height() + 20);
+    m_floatTitle->move(m_appsArea->pos().x() + LEFT_PADDING, m_appsArea->y() - m_floatTitle->height() + 10);
 }
 
 void FullScreenFrame::searchTextChanged(const QString &keywords)

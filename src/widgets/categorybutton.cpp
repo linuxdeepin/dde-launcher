@@ -31,6 +31,8 @@
 #include <QApplication>
 #include <QSvgRenderer>
 #include <QPainter>
+#include <QApplication>
+#include <QDesktopWidget>
 
 CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidget *parent) :
     QAbstractButton(parent),
@@ -44,7 +46,6 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
 
     setObjectName("CategoryButton");
     m_iconLabel->setFixedSize(22 * ratio, 22 * ratio);
-    m_textLabel->setFixedHeight(22 * ratio);
     m_textLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->setSpacing(0);
@@ -214,10 +215,9 @@ void CategoryButton::addTextShadow() {
 
 void CategoryButton::relayout()
 {
-//    setStyleSheet(QString("background-color:transparent; color: white; font-size: %1px;")
-//                  .arg(m_calcUtil->navgationTextSize()));
-    QFont font = m_textLabel->font();
-    font.setPixelSize(m_calcUtil->navgationTextSize());
+    QFont font   = m_textLabel->font();
+    const int px = (qApp->font().pointSizeF() * qApp->desktop()->logicalDpiX() / 72) + 2;
+    font.setPixelSize(std::max(px, m_calcUtil->navgationTextSize()));
     m_textLabel->setFont(font);
 }
 
@@ -236,9 +236,7 @@ void CategoryButton::setZoomLevel(const qreal &zoomLevel)
         setFixedHeight(double(DLauncher::NAVIGATION_ICON_HEIGHT) * zoomLevel);
         m_iconLabel->setFixedSize(qRound(22.0 * ratio * zoomLevel) + 1, qRound(22.0 * ratio * zoomLevel) + 1);
 
-        QFont font = m_textLabel->font();
-        font.setPixelSize(m_calcUtil->navgationTextSize() * zoomLevel);
-        m_textLabel->setFont(font);
+        relayout();
     }
 }
 

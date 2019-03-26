@@ -1,3 +1,18 @@
+<a name="4.6.8"></a>
+### 4.6.8 (2019-03-26)
+
+
+#### Bug Fixes
+
+*   Category heading is truncated ([2434217c](https://github.com/linuxdeepin/dde-launcher/commit/2434217c372fe7717a9f59a2934949658d0c8576))
+* **Window:**  When the dock is on the right, the position is not close ([74cad49b](https://github.com/linuxdeepin/dde-launcher/commit/74cad49be6897aca8e2f695346a21f00f34e91b1))
+
+#### Features
+
+*   category button support dynamic font size ([e950b669](https://github.com/linuxdeepin/dde-launcher/commit/e950b669071c264e2c4396ce0e935a2acd4bed0d))
+
+
+
 <a name="4.6.7"></a>
 ### 4.6.7 (2019-03-05)
 

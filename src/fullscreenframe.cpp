@@ -495,6 +495,7 @@ void FullScreenFrame::initUI()
     m_appsVbox->layout()->addWidget(m_othersTitle);
     m_appsVbox->layout()->addWidget(m_othersView);
     m_appsVbox->layout()->addWidget(m_viewListPlaceholder);
+    m_appsVbox->layout()->addStretch();
     m_appsVbox->layout()->setSpacing(0);
     m_appsVbox->layout()->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN,
                                              0, 0);

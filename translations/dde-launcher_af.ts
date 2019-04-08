@@ -26,10 +26,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Speletjies</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation type="unfinished"/>
     </message>
@@ -46,16 +42,16 @@
         <translation>Stelsel</translation>
     </message>
     <message>
-        <source>Others</source>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>Kanselleer</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>Bevestig</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Kanselleer</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>Bevestig</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

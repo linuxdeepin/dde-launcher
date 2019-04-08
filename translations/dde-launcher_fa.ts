@@ -26,10 +26,6 @@
         <translation>گرافیک‌ها</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>بازی‌</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>اداری</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>سیستمی</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>غیره</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>آیا اطمینان دارید که می خواهید حذف کنید %1؟</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>انصراف</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>تایید</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>آیا اطمینان دارید که می خواهید حذف کنید %1؟</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>انصراف</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>تایید</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

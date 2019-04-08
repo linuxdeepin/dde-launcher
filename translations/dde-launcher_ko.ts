@@ -26,10 +26,6 @@
         <translation>그래픽</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>게임</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>오피스</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>시스템</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>기타</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>정말로 %1(을)를 삭제하시겠습니까?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>취소</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>확인</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>정말로 %1(을)를 삭제하시겠습니까?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>확인</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

@@ -26,10 +26,6 @@
         <translation>Графіка</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Ігри</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>Офіс</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>Система</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>Інше</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Ви впевнені, що хочете видалити %1 ?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>Скасувати</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>Підтвердити</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Акумулятор</translation>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Ви впевнені, що хочете видалити %1 ?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>Підтвердити</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

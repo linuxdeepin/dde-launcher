@@ -26,10 +26,6 @@
         <translation>Grafika</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Játék</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>Iroda</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>Rendszer</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>Egyebek</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>%1 biztos eltávolítod?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>Mégse</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>Megerősítés</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Kikapcsolás</translation>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Biztosan eltávolítod ezt: %1 ?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Mégse</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>Megerősítés</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

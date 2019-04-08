@@ -26,10 +26,6 @@
         <translation>ພາບກຣາບຟິກ</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>ເກມ</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>ອ໊ອບຟີກ</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>ລະບົບ</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>ອື່ນໆ</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>ເຈົ້າແນ່ໃຈທີ່ຈະຖອນການຕິດຕັ້ງ %1 ?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>ຍົກເລີກ</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>ຢັ້ງຢືນ</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>ເຈົ້າແນ່ໃຈທີ່ຈະຖອນການຕິດຕັ້ງ %1 ?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>ຍົກເລີກ</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>ຢັ້ງຢືນ</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

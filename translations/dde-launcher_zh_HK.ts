@@ -26,10 +26,6 @@
         <translation>美工繪圖</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>遊戲</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>文書處理</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>系統</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>其他</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>你確定要解除安裝 %1 嗎？</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>取消</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>確定</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>你確定要解除安裝 %1 嗎？</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>確定</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

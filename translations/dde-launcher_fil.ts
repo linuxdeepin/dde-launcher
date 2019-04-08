@@ -26,10 +26,6 @@
         <translation>Grapiko</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Laro</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation type="unfinished"/>
     </message>
@@ -46,22 +42,26 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <source>Others</source>
-        <translation>Iba</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
-    </message>
     <message>
         <source>Cancel</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Confirm</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -321,15 +321,15 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <source>Confirm</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
         <translation type="unfinished"/>
     </message>
 </context>

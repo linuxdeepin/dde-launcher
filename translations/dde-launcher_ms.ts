@@ -26,10 +26,6 @@
         <translation>Grafik</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Permainan</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>Pejabat</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>Sistem</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>Lain-lain</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Anda pasti mahu menyahpasang %1 ?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>Batal</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>Sahkan</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Anda pasti mahu menyahpasang %1 ?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>Sahkan</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

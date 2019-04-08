@@ -26,10 +26,6 @@
         <translation>Gràfics</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Jocs</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>Oficina</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>Sistema</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>Altres</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Segur que voleu desinstal·lar %1?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>Confirmeu-ho</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Energia</translation>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Segur que voleu desinstal·lar %1?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>Confirmeu-ho</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

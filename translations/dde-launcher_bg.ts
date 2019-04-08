@@ -26,10 +26,6 @@
         <translation>Графика</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Игра</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>Офис</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>Система</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>Други</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Наистина ли ще деинсталирате %1?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>Отказ</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>Потвърждение</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Наистина ли ще деинсталирате %1?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Отказ</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>Потвърждение</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

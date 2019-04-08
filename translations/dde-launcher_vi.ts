@@ -26,10 +26,6 @@
         <translation>Đồ họa</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Trò chơi</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>Văn phòng</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>Hệ thống</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>Khác</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Bạn có chắc là gỡ bỏ %1 không?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>Hủy</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>Xác nhận</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Bạn có chắc là gỡ bỏ %1 không?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>Xác nhận</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

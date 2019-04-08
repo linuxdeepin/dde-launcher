@@ -26,10 +26,6 @@
         <translation>Grafiikka</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Peli</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>Toimisto</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>Järjestelmä</translation>
     </message>
     <message>
-        <source>Others</source>
+        <source>Games</source>
+        <translation>Pelit</translation>
+    </message>
+    <message>
+        <source>Other</source>
         <translation>Muut</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Haluatko poistaa sovelluksen %1 ?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>Peruuta</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>Vahvista</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation>Haluatko varmasti poistaa %1 ?</translation>
     </message>
 </context>
 <context>
@@ -77,7 +77,7 @@
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>Poista asennus</translation>
+        <translation>Poista</translation>
     </message>
     <message>
         <source>Open by proxy</source>
@@ -195,7 +195,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Käynnistä uudelleen</translation>
+        <translation>Käynnistä</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -230,11 +230,11 @@
     </message>
     <message>
         <source>Logout</source>
-        <translation>Kirjaudu ulos</translation>
+        <translation>Poistu</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Käynnistä uudelleen</translation>
+        <translation>Käynnistä</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -246,7 +246,7 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumentit</translation>
+        <translation>Tiedostot</translation>
     </message>
     <message>
         <source>Videos</source>
@@ -277,7 +277,7 @@
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manuaalinen</translation>
+        <translation>Ohjeet</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Haluatko poistaa sovelluksen %1 ?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Peruuta</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>Vahvista</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

@@ -26,10 +26,6 @@
         <translation>Grafika</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Žaidimai</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>Raštinė</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>Sistema</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>Kita</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Ar tikrai norite pašalinti %1 ?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>Atsisakyti</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>Patvirtinti</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Ar tikrai norite pašalinti %1 ?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Atsisakyti</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>Patvirtinti</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

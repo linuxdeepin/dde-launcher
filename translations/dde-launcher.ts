@@ -55,15 +55,15 @@
 <context>
     <name>FullScreenFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -323,15 +323,15 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

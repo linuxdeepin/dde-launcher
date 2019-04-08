@@ -331,7 +331,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
+        <source>Are you sure you want to uninstall %1 ?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

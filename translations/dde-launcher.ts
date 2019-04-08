@@ -28,10 +28,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation type="unfinished"></translation>
     </message>
@@ -48,7 +44,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Others</source>
+        <source>Games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -156,12 +156,12 @@ AppsManager::AppsManager(QObject *parent) :
             << tr("Music")
             << tr("Video")
             << tr("Graphics")
-            << tr("Game")
+            << tr("Games")
             << tr("Office")
             << tr("Reading")
             << tr("Development")
             << tr("System")
-            << tr("Others");
+            << tr("Other");
 
     m_categoryIcon
             << QString(":/icons/skin/icons/internet_normal_22px.svg")

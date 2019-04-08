@@ -26,10 +26,6 @@
         <translation>图形图像</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>游戏娱乐</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>办公学习</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>系统管理</translation>
     </message>
     <message>
-        <source>Others</source>
+        <source>Games</source>
+        <translation>游戏娱乐</translation>
+    </message>
+    <message>
+        <source>Other</source>
         <translation>其他应用</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>您确定要卸载 %1 吗？</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>取消</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>确定</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation>您确定要卸载 %1 吗？</translation>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>您确定要卸载 %1 吗？</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>确认</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation>您确定要卸载 %1 吗？</translation>
     </message>
 </context>
 </TS>

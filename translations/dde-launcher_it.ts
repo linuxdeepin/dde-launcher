@@ -26,10 +26,6 @@
         <translation>Grafica</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Giochi</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>Ufficio</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>Sistema</translation>
     </message>
     <message>
-        <source>Others</source>
+        <source>Games</source>
+        <translation>Giochi</translation>
+    </message>
+    <message>
+        <source>Other</source>
         <translation>Altro</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Sicuro di voler disinstallare %1 ?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>Annulla</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>Conferma</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation>Sicuro di voler disinstallare %1 ?</translation>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Alimentazione</translation>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Sicuro di voler disinstallare %1 ?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Annulla</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>Conferma</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

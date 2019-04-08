@@ -26,10 +26,6 @@
         <translation>গ্রাফিক্স</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>গেম</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>অফিস</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>সিস্টেম</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>অন্যান্য</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>আপনি কি %1 আনইন্সটল করার ব্যাপারে নিশ্চিত?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>বাতিল</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>নিশ্চিত করুন</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>আপনি কি %1 আনইন্সটল করার ব্যাপারে নিশ্চিত?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>বাতিল</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>নিশ্চিত করুন</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

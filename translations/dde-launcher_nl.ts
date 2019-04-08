@@ -26,10 +26,6 @@
         <translation>Grafisch</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Spellen</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>Kantoor</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>Systeem</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>Overigen</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Weet u zeker dat u %1 wilt deïnstalleren?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>Annuleren</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>Bevestigen</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Weet u zeker dat u %1 wilt deïnstalleren?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>Bevestigen</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

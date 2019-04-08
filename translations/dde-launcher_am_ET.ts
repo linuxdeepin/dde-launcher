@@ -26,10 +26,6 @@
         <translation>ንድፎች</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>ጨዋታ</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>ቢሮ</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>ስርአት</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>ሌሎች</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>በ እርግጥ ማጥፋት ይፈልጋሉ %1 ?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>መሰረዣ</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>ማረጋገጫ</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>በ እርግጥ ማጥፋት ይፈልጋሉ %1 ?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>መሰረዣ</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>ማረጋገጫ</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

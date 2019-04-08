@@ -26,10 +26,6 @@
         <translation>Graphisme</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Jeux</translation>
-    </message>
-    <message>
         <source>Office</source>
         <translation>Bureautique</translation>
     </message>
@@ -46,16 +42,16 @@
         <translation>Système</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>Autres</translation>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
-    <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Désinstaller %1 ?</translation>
-    </message>
     <message>
         <source>Cancel</source>
         <translation>Annuler</translation>
@@ -63,6 +59,10 @@
     <message>
         <source>Confirm</source>
         <translation>Confirmer</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Alimentation</translation>
     </message>
 </context>
 <context>
@@ -321,16 +321,16 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Are you sure to uninstall %1 ?</source>
-        <translation>Désinstaller %1 ?</translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
         <source>Confirm</source>
         <translation>Confirmer</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

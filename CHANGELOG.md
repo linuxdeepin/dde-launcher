@@ -1,3 +1,13 @@
+<a name="4.6.9"></a>
+### 4.6.9 (2019-04-09)
+
+
+#### Bug Fixes
+
+*   will flash on the sw platform ([e142543b](https://github.com/linuxdeepin/dde-launcher/commit/e142543ba4f3570c0794fc84d9213e73885121a5))
+
+
+
 <a name="4.6.8"></a>
 ### 4.6.8 (2019-03-26)
 

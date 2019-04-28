@@ -103,7 +103,7 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
     menu->addAction(startup);
 
     if (QFile::exists(ChainsProxy_path)) {
-        proxy = new QAction(tr("Open by proxy"), menu);
+        proxy = new QAction(tr("Use a proxy"), menu);
         proxy->setCheckable(true);
         proxy->setChecked(m_isItemProxy);
         menu->addAction(proxy);

@@ -82,10 +82,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation type="unfinished"></translation>
     </message>
@@ -107,6 +103,10 @@
     </message>
     <message>
         <source>Add to startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

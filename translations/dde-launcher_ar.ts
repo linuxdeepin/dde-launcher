@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>العاب</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>أخرى</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>إلغاء التثبيت</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>فُتح بواسطة بروكسي</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>تعطيل تحجيم العرض</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation> إضافة إلى بدء التشغيل</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>الطاقة</translation>
     </message>
 </context>
 <context>

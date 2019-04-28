@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>ゲーム</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>その他</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>アンインストール</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>ディスプレイスケーリングを無効にする</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>スタートアップへ追加</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>パワー</translation>
     </message>
 </context>
 <context>

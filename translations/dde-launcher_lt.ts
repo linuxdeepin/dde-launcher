@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>Žaidimai</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>Kita</translation>
     </message>
 </context>
 <context>
@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Ar tikrai norite pašalinti %1 ?</translation>
     </message>
 </context>
 <context>
@@ -78,10 +78,6 @@
     <message>
         <source>Uninstall</source>
         <translation>Pašalinti</translation>
-    </message>
-    <message>
-        <source>Open by proxy</source>
-        <translation>Atverti pagal įgaliotąjį serverį</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Pridėti į paleidimą</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -330,7 +330,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Ar tikrai norite pašalinti %1 ?</translation>
     </message>
 </context>
 </TS>

@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>Игри</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>Други</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>Деинсталиране</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>Отваряне през прокси</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>Забрана за мащабиране на екрана</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Добавяне към стартиращи</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Захранване</translation>
     </message>
 </context>
 <context>

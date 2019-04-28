@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>Spil</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>Andre</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>Afinstaller</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>Åbn med proxy</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>Deaktivér skærmskalering</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Tilføj til opstart</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

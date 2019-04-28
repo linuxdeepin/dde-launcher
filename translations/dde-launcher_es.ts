@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>Juegos</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>Otro</translation>
     </message>
 </context>
 <context>
@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>¿Esta seguro de desinstalar %1?</translation>
     </message>
 </context>
 <context>
@@ -78,10 +78,6 @@
     <message>
         <source>Uninstall</source>
         <translation>Desinstalar</translation>
-    </message>
-    <message>
-        <source>Open by proxy</source>
-        <translation>Abrir por proxy</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Añadir al arranque</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -330,7 +330,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>¿Esta seguro de desinstalar %1?</translation>
     </message>
 </context>
 </TS>

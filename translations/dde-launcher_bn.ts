@@ -80,10 +80,6 @@
         <translation>আনইনস্টল করে দিন</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>প্রক্সি দিয়ে খুলুন</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>ডিসপ্লে স্কেলিং বন্ধ করুন</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>স্টার্টআপে যোগ করুন</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>পাওয়ার</translation>
     </message>
 </context>
 <context>

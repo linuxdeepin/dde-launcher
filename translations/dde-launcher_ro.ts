@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>Jocuri</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>Altul</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>Dezinstalare</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>Deschide prin proxy</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>Dezactivați redimensionarea afișajului</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Activați deschiderea automată la pornirea sistemului</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Energie</translation>
     </message>
 </context>
 <context>

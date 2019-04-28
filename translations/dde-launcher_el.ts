@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>Παιχνίδια</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>Άλλο</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>Απεγκατάσταση</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation type="unfinished"/>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Πρόσθεση στην εκκίνηση</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Ενέργεια</translation>
     </message>
 </context>
 <context>

@@ -80,10 +80,6 @@
         <translation>Disinstalla</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>Apri via proxy</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>Disabilita scaling del display</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Aggiungi all&apos;avvio automatico</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -330,7 +330,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Sicuro di voler disinstallare %1 ?</translation>
     </message>
 </context>
 </TS>

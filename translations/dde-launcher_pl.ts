@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>Gry</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>Inne</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>Odinstaluj</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>Otwórz przez pośrednik</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>Wyłącz skalowanie ekranu</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Dodaj do uruchamiania</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Zasilanie</translation>
     </message>
 </context>
 <context>

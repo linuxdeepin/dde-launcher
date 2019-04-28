@@ -43,7 +43,7 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>بازی‌ها</translation>
     </message>
     <message>
         <source>Other</source>
@@ -80,10 +80,6 @@
         <translation>حذف</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>با پروکسی باز کنید</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>خاموش کردن مقیاس گذاری صفحه نمایش</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>اضافه کردن به استارت آپ</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>منبع قدرت</translation>
     </message>
 </context>
 <context>

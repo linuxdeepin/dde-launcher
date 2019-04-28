@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>Permainan</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>Lainnya</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>Hapus instal</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>Buka dengan proxy</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>Non aktif tampilan skala</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Tambah ke tampilan awal</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Daya</translation>
     </message>
 </context>
 <context>

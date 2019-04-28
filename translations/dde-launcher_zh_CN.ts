@@ -80,10 +80,6 @@
         <translation>卸载</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>使用代理打开</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>禁用屏幕缩放</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>开机自动启动</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation>使用代理</translation>
     </message>
 </context>
 <context>

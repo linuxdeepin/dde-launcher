@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>Igre</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>Ostalo</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>Odstrani</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>Odpri s proxyjem</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>Onemogoči spreminjanje velikosti prikaza</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Dodaj v zagon</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Napajanje</translation>
     </message>
 </context>
 <context>

@@ -80,10 +80,6 @@
         <translation>Poista</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>Avaa välityspalvelimella</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>Poista näytön skaalaus käytöstä</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Lisää käynnistykseen</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -330,7 +330,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Haluatko varmasti poistaa %1 ?</translation>
     </message>
 </context>
 </TS>

@@ -1,107 +1,107 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt_BR" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="et" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>Não há resultados de pesquisa</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Internet</source>
-        <translation>Internet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chat</source>
-        <translation>Bate-papo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Música</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Video</source>
-        <translation>Vídeo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Gráficos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Office</source>
-        <translation>Escritório</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reading</source>
-        <translation>Leitura</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Development</source>
-        <translation>Desenvolvimento</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System</source>
-        <translation>Sistema</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Games</source>
-        <translation>Jogos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Other</source>
-        <translation>Outro</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Tühista</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Quer realmente desinstalar %1 ?</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation>Remover da área de trabalho</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Remover da dock</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>Desinstalar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>Desativar escala de exibição</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open</source>
-        <translation>Abrir</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation>Enviar para a área de trabalho</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>Enviar para a dock</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation>Remover da inicialização</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation>Adicionar a inicialização</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Use a proxy</source>
@@ -112,225 +112,225 @@
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>Todos os Apps</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Internet</source>
-        <translation>Internet</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Músicas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Video</source>
-        <translation>Vídeos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Gráficos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Game</source>
-        <translation>Jogos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Office</source>
-        <translation>Escritório</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Reading</source>
-        <translation>Leituras</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Development</source>
-        <translation>Desenvolvedor</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>System</source>
-        <translation>Sistema</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Others</source>
-        <translation>Outros</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Computador</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Documentos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Vídeos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Músicas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Fotos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Downloads</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Bloquear</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Desconectar</translation>
+        <translation>Logi välja</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Reiniciar</translation>
+        <translation>Taaskäivita</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspender</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Desligar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Back</source>
-        <translation>Voltar</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
         <source>Computer</source>
-        <translation>Computador</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Músicas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Desligar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Bloquear</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Desconectar</translation>
+        <translation>Logi välja</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Reiniciar</translation>
+        <translation>Taaskäivita</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspender</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Back</source>
-        <translation>Voltar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Documentos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Vídeos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Fotos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Downloads</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Computador</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Music</source>
-        <translation>Músicas</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Downloads</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manual</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Configurações</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Vídeos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Fotos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Documentos</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Power</source>
-        <translation>Energia</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation>Todas as categorias</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Back</source>
-        <translation>Voltar</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation>Pesquisar</translation>
+        <translation>Otsi</translation>
     </message>
 </context>
 <context>
     <name>WindowedFrame</name>
     <message>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Tühista</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Confirmar</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Quer realmente desinstalar %1?</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

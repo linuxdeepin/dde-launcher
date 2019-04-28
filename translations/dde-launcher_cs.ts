@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>Hry</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>Jiné</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>Odinstalovat</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>Otevřít v zastoupení</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>Zakázat měřítko zobrazení</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Přidat do spuštění</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Napájení</translation>
     </message>
 </context>
 <context>

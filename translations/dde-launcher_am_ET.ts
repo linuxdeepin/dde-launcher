@@ -47,7 +47,7 @@
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>ለላ</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>ማጥፊያ</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>በ ወኪል መክፈቻ</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>የ መመልከቻ መመጠኛ ማሰናከያ</translation>
     </message>
@@ -105,6 +101,10 @@
     </message>
     <message>
         <source>Add to startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Use a proxy</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>ሐይል</translation>
     </message>
 </context>
 <context>

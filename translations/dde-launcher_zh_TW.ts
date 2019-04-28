@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>遊戲娛樂</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>其它</translation>
     </message>
 </context>
 <context>
@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>確定解除安裝 %1？</translation>
     </message>
 </context>
 <context>
@@ -78,10 +78,6 @@
     <message>
         <source>Uninstall</source>
         <translation>移除</translation>
-    </message>
-    <message>
-        <source>Open by proxy</source>
-        <translation>開啟時套用 Proxy</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>開機啟動</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation>使用代理伺服器</translation>
     </message>
 </context>
 <context>
@@ -330,7 +330,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>確定解除安裝 %1？</translation>
     </message>
 </context>
 </TS>

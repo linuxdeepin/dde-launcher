@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>游戲娛樂</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>其它</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>解除安裝</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation type="unfinished"/>
     </message>
@@ -105,6 +101,10 @@
     </message>
     <message>
         <source>Add to startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Use a proxy</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -207,7 +207,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>返回</translation>
     </message>
 </context>
 <context>
@@ -242,7 +242,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>返回</translation>
     </message>
     <message>
         <source>Documents</source>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>電源</translation>
     </message>
 </context>
 <context>
@@ -308,7 +308,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>返回</translation>
     </message>
 </context>
 <context>

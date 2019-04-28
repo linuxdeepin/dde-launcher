@@ -80,10 +80,6 @@
         <translation>Устгах</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>Проксигоор нээх</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>Дэлгэцийн өсгөлтийг цуцлах</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Эхлүүлэлтэд нэмэх</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Цэнэг</translation>
     </message>
 </context>
 <context>

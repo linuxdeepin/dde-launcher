@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>Xuegos</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>Otro</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>Desinstalar</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>Desactivar escaláu de pantalla</translation>
     </message>
@@ -105,6 +101,10 @@
     </message>
     <message>
         <source>Add to startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Use a proxy</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>Enerxía</translation>
     </message>
 </context>
 <context>

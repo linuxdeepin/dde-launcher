@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>Ігри</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>Інше</translation>
     </message>
 </context>
 <context>
@@ -62,14 +62,14 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Ви впевнені, що хочете видалити %1 ?</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation>Видалити з робочого столу</translation>
+        <translation>Видалити з стільниці</translation>
     </message>
     <message>
         <source>Remove from dock</source>
@@ -78,10 +78,6 @@
     <message>
         <source>Uninstall</source>
         <translation>Видалити</translation>
-    </message>
-    <message>
-        <source>Open by proxy</source>
-        <translation>Відкрити через проксі</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Додати до запуску</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -330,7 +330,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Ви впевнені, що хочете видалити %1 ?</translation>
     </message>
 </context>
 </TS>

@@ -47,7 +47,7 @@
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>Andre</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>Avinstaller</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>Åpne via proxy</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>Slå av skalering</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>Legg til oppstart</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

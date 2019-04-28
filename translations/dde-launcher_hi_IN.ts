@@ -47,7 +47,7 @@
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>अन्य</translation>
     </message>
 </context>
 <context>
@@ -80,10 +80,6 @@
         <translation>हटाएँ</translation>
     </message>
     <message>
-        <source>Open by proxy</source>
-        <translation>प्रॉक्सी सर्वर द्वारा खोलें</translation>
-    </message>
-    <message>
         <source>Disable display scaling</source>
         <translation>डिस्प्ले मापन निष्क्रिय करें</translation>
     </message>
@@ -106,6 +102,10 @@
     <message>
         <source>Add to startup</source>
         <translation>स्टार्टअप में जोड़ें</translation>
+    </message>
+    <message>
+        <source>Use a proxy</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -297,7 +297,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation type="unfinished"/>
+        <translation>पॉवर</translation>
     </message>
 </context>
 <context>

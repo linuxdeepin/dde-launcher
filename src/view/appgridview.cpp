@@ -291,9 +291,8 @@ void AppGridView::enterEvent(QEvent *e)
 {
     QListView::enterEvent(e);
 
-    QEnterEvent *ee = static_cast<QEnterEvent *>(e);
-
-    emit entered(indexAt(ee->pos()));
+    // The coordinates of the entervent are incorrect after the menu is closed.
+    emit entered(indexAt(mapFromGlobal(QCursor::pos())));
 }
 
 ///

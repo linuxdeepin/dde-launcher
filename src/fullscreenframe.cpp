@@ -1285,7 +1285,7 @@ void FullScreenFrame::updateDockPosition()
         m_searchWidget->setRightSpacing(0);
         break;
     case DOCK_POS_LEFT:
-        m_navigationWidget->move(dockGeometry.width(), searchHeight);
+        m_navigationWidget->move(dockGeometry.width() / devicePixelRatioF(), searchHeight);
         m_searchWidget->setLeftSpacing(dockGeometry.width());
         m_searchWidget->setRightSpacing(0);
         break;

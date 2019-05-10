@@ -1,3 +1,14 @@
+<a name="4.6.10"></a>
+### 4.6.10 (2019-05-10)
+
+
+#### Bug Fixes
+
+*   The coordinates of the entervent are incorrect after the menu is closed. ([e367c4b5](https://github.com/linuxdeepin/dde-launcher/commit/e367c4b5b8cf7c8b8e1ad0b91278b416031c5798))
+* **FullScreen:**  category list coordinate error ([7344033a](https://github.com/linuxdeepin/dde-launcher/commit/7344033ad5332d8c53da739ad998b56aeb0af092))
+
+
+
 <a name="4.6.9"></a>
 ### 4.6.9 (2019-04-09)
 

@@ -800,6 +800,8 @@ void WindowedFrame::searchText(const QString &text)
 
         m_appsManager->searchApp(text.trimmed());
     }
+
+    m_displayMode = All;
 }
 
 void WindowedFrame::showTips(const QString &text)

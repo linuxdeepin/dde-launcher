@@ -1,3 +1,13 @@
+<a name="4.6.11"></a>
+### 4.6.11 (2019-06-01)
+
+
+#### Bug Fixes
+
+* **Mini:**  unable to launch app in category list search ([cf8a936c](https://github.com/linuxdeepin/dde-launcher/commit/cf8a936c504dcdc87945228b8c7dd27a9484ada3))
+
+
+
 <a name="4.6.10"></a>
 ### 4.6.10 (2019-05-10)
 

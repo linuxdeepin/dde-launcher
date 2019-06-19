@@ -59,7 +59,7 @@ const QStringList sysHoldPackages()
         return QStringList () << "dde-control-center" << "dde-computer" << "dde-trash"
                               << "dde-file-manager" << "deepin-appstore" << "deepin-toggle-desktop"
                               << "deepin-wm-multitaskingview" << "dde-calendar" << "deepin-manual"
-                              << "deepin-terminal";
+                              << "deepin-terminal" << "dde-introduction";
 
     return holds_list;
 }

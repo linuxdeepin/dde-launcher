@@ -1,3 +1,14 @@
+<a name="4.6.12"></a>
+### 4.6.12 (2019-06-25)
+
+
+#### Features
+
+*   disable uninstall dde-introduction ([f7df3349](https://github.com/linuxdeepin/dde-launcher/commit/f7df3349c63bbc965f9e5c6945276ebbab8fbdc1))
+*   disable uninstall for deepin-terminal ([ca3d622e](https://github.com/linuxdeepin/dde-launcher/commit/ca3d622e2b924442e0a4586af478f2aea418112e))
+
+
+
 <a name="4.6.11"></a>
 ### 4.6.11 (2019-06-01)
 

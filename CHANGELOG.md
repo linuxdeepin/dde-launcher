@@ -1,3 +1,13 @@
+<a name="4.6.13"></a>
+### 4.6.13 (2019-06-26)
+
+
+#### Bug Fixes
+
+*   remove unused deepin-qt5config ([ea4fdb37](https://github.com/linuxdeepin/dde-launcher/commit/ea4fdb3743b07bb057cb1b3190db11260c5240e7))
+
+
+
 <a name="4.6.12"></a>
 ### 4.6.12 (2019-06-25)
 

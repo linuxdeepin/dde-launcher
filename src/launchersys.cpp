@@ -39,20 +39,16 @@
 
 LauncherSys::LauncherSys(QObject *parent)
     : QObject(parent)
-
     , m_launcherInter(nullptr)
     , m_dbusLauncherInter(new DBusLauncher(this))
     , m_sessionManagerInter(new com::deepin::SessionManager(SessionManagerService, SessionManagerPath, QDBusConnection::sessionBus(), this))
-    , m_windowLauncher(new WindowedFrame)
-    , m_fullLauncher(new FullScreenFrame)
+    , m_windowLauncher(nullptr)
+    , m_fullLauncher(nullptr)
     , m_regionMonitor(new DRegionMonitor(this))
     , m_autoExitTimer(new QTimer(this))
     , m_ignoreRepeatVisibleChangeTimer(new QTimer(this))
 {
     m_regionMonitor->setCoordinateType(DRegionMonitor::Original);
-
-    m_fullLauncher->installEventFilter(this);
-    m_windowLauncher->installEventFilter(this);
 
     m_autoExitTimer->setInterval(60 * 1000);
     m_autoExitTimer->setSingleShot(true);
@@ -117,23 +113,36 @@ bool LauncherSys::visible()
 
 void LauncherSys::displayModeChanged()
 {
-    const bool visible = m_launcherInter && m_launcherInter->visible();
+    LauncherInterface* lastLauncher = m_launcherInter;
 
-    if (m_launcherInter) {
-        m_launcherInter->hideLauncher();
+    if (m_dbusLauncherInter->fullscreen()) {
+        if (!m_fullLauncher) {
+            m_fullLauncher = new FullScreenFrame;
+            m_fullLauncher->installEventFilter(this);
+        }
+        m_launcherInter = static_cast<LauncherInterface*>(m_fullLauncher);
+    }
+    else {
+        if (!m_windowLauncher) {
+            m_windowLauncher = new WindowedFrame;
+            m_windowLauncher->installEventFilter(this);
+        }
+        m_launcherInter = static_cast<LauncherInterface*>(m_windowLauncher);
     }
 
-    m_launcherInter = m_dbusLauncherInter->fullscreen() ?
-                static_cast<LauncherInterface*>(m_fullLauncher) :
-                static_cast<LauncherInterface*>(m_windowLauncher);
+    lastLauncher = lastLauncher ? lastLauncher : m_launcherInter;
 
-    if (visible) {
+    if (lastLauncher->visible()) {
         registerRegion();
         m_launcherInter->showLauncher();
     }
     else {
         unRegisterRegion();
         m_launcherInter->hideLauncher();
+    }
+
+    if (lastLauncher != m_launcherInter) {
+        lastLauncher->hideLauncher();
     }
 }
 

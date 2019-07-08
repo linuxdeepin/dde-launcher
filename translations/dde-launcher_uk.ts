@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>Використовувати проксі</translation>
     </message>
 </context>
 <context>

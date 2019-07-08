@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Είστε σίγουροι ότι θέλετε να απεγκαταστήσετε το %1 ;</translation>
     </message>
 </context>
 <context>
@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Απενεργοποίηση κλίμακας οθόνης</translation>
     </message>
     <message>
         <source>Open</source>
@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>Χρησιμοποιήστε ένα proxy</translation>
     </message>
 </context>
 <context>
@@ -304,7 +304,7 @@
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation>Όλες οι κατηγορίες</translation>
     </message>
     <message>
         <source>Back</source>
@@ -330,7 +330,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Είστε σίγουροι ότι θέλετε να απεγκαταστήσετε το %1 ;</translation>
     </message>
 </context>
 </TS>

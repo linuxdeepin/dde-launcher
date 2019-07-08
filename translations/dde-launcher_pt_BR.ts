@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>Não há resultados de pesquisa</translation>
+        <translation>Nenhum resultado para a pesquisa</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -11,7 +11,7 @@
     </message>
     <message>
         <source>Chat</source>
-        <translation>Bate-papo</translation>
+        <translation>Bate-Papo</translation>
     </message>
     <message>
         <source>Music</source>
@@ -23,7 +23,7 @@
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Gráficos</translation>
+        <translation>Imagem</translation>
     </message>
     <message>
         <source>Office</source>
@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Quer realmente desinstalar %1 ?</translation>
+        <translation>Deseja desinstalar %1?</translation>
     </message>
 </context>
 <context>
@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>Desativar escala de exibição</translation>
+        <translation>Desativar a escala de exibição</translation>
     </message>
     <message>
         <source>Open</source>
@@ -101,18 +101,18 @@
     </message>
     <message>
         <source>Add to startup</source>
-        <translation>Adicionar a inicialização</translation>
+        <translation>Adicionar para a inicialização</translation>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>Usar um proxy</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>Todos os Apps</translation>
+        <translation>Todos os Aplicativos</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -120,19 +120,19 @@
     </message>
     <message>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation>Bate-Papo</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Músicas</translation>
+        <translation>Música</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation>Vídeos</translation>
+        <translation>Vídeo</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Gráficos</translation>
+        <translation>Imagem</translation>
     </message>
     <message>
         <source>Game</source>
@@ -144,7 +144,7 @@
     </message>
     <message>
         <source>Reading</source>
-        <translation>Leituras</translation>
+        <translation>Leitura</translation>
     </message>
     <message>
         <source>Development</source>
@@ -191,7 +191,7 @@
     </message>
     <message>
         <source>Logout</source>
-        <translation>Desconectar</translation>
+        <translation>Sair</translation>
     </message>
     <message>
         <source>Reboot</source>
@@ -218,7 +218,7 @@
     </message>
     <message>
         <source>Music</source>
-        <translation>Músicas</translation>
+        <translation>Música</translation>
     </message>
     <message>
         <source>Shutdown</source>
@@ -230,7 +230,7 @@
     </message>
     <message>
         <source>Logout</source>
-        <translation>Desconectar</translation>
+        <translation>Sair</translation>
     </message>
     <message>
         <source>Reboot</source>
@@ -269,7 +269,7 @@
     </message>
     <message>
         <source>Music</source>
-        <translation>Músicas</translation>
+        <translation>Música</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -297,14 +297,14 @@
     </message>
     <message>
         <source>Power</source>
-        <translation>Energia</translation>
+        <translation>Sair</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation>Todas as categorias</translation>
+        <translation>Todas as Categorias</translation>
     </message>
     <message>
         <source>Back</source>
@@ -330,7 +330,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Quer realmente desinstalar %1?</translation>
+        <translation>Deseja desinstalar %1?</translation>
     </message>
 </context>
 </TS>

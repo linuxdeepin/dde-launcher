@@ -1,21 +1,21 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sw" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>Arama sonucu bulunamadı</translation>
+        <translation>Hakuna matokeo ya utafutaji</translation>
     </message>
     <message>
         <source>Internet</source>
-        <translation>İnternet</translation>
+        <translation>Wavuti</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation>Sohbet</translation>
+        <translation>Sogoa</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Müzik</translation>
+        <translation>Muziki</translation>
     </message>
     <message>
         <source>Video</source>
@@ -23,108 +23,108 @@
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Grafik</translation>
+        <translation>Michoro</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation>Ofis</translation>
+        <translation>Ofisi</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation>Okuma</translation>
+        <translation>Masomo</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation>Geliştirme</translation>
+        <translation>Maendeleo</translation>
     </message>
     <message>
         <source>System</source>
-        <translation>Sistem</translation>
+        <translation>Mfumo</translation>
     </message>
     <message>
         <source>Games</source>
-        <translation>Oyunlar</translation>
+        <translation>Michezo</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation>Diğer</translation>
+        <translation>Ingine</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>Katisha</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Onayla</translation>
+        <translation>Hakikisha</translation>
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
+        <translation>Ni kweli unataka kutoa %1 ?</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation>Masaüstünden kaldır</translation>
+        <translation>Toa kwa eneo la kazi</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Görev çubuğundan kaldır</translation>
+        <translation>Toa kwa mwambaa wa kazi</translation>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>Kaldır</translation>
+        <translation>sakinusha</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>Ekran ölçeklendirmeyi devre dışı bırak</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open</source>
-        <translation>Aç</translation>
+        <translation>Fungua</translation>
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation>Masaüstüne gönder</translation>
+        <translation>Peleka kwa eneo la kazi</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>Görev çubuğuna gönder</translation>
+        <translation>Peleka kwa mwambaa wa kazi</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation>Başlangıçtan kaldır</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation>Başlangıca ekle</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation>Vekil sunucu kullan</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>Tüm Uygulamalar</translation>
+        <translation>Programu zote</translation>
     </message>
     <message>
         <source>Internet</source>
-        <translation>İnternet</translation>
+        <translation>Wavuti</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation>Sohbet</translation>
+        <translation>Sogoa</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Müzik</translation>
+        <translation>Muziki</translation>
     </message>
     <message>
         <source>Video</source>
@@ -132,205 +132,205 @@
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Grafik</translation>
+        <translation>Michoro</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation>Oyun</translation>
+        <translation>Mchezo</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation>Ofis</translation>
+        <translation>Ofisi</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation>Okuma</translation>
+        <translation>Masomo</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation>Geliştirme</translation>
+        <translation>Maendeleo</translation>
     </message>
     <message>
         <source>System</source>
-        <translation>Sistem</translation>
+        <translation>Mfumo</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation>Diğerleri</translation>
+        <translation>Nyingine</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Bilgisayar</translation>
+        <translation>Kichakato</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Belgeler</translation>
+        <translation>Nyaraka</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videolar</translation>
+        <translation>Mavideo</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Müzik</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Resimler</translation>
+        <translation>Picha</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>İndirilenler</translation>
+        <translation>Mapakua</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Kilitle</translation>
+        <translation>Funga skrini</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Oturumu Kapat</translation>
+        <translation>Toka</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Yeniden Başlat</translation>
+        <translation>Washa upya</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Askıya Al</translation>
+        <translation>Ahirisha</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Kapat</translation>
+        <translation>Zima</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Geri</translation>
+        <translation>Rudi</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
         <source>Computer</source>
-        <translation>Bilgisayar</translation>
+        <translation>Kichakato</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Müzik</translation>
+        <translation>Muziki</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Kapat</translation>
+        <translation>Zima</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Kilitle</translation>
+        <translation>Funga skrini</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Oturumu Kapat</translation>
+        <translation>Toka</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Yeniden Başlat</translation>
+        <translation>Washa upya</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Askıya Al</translation>
+        <translation>Ahirisha</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Geri</translation>
+        <translation>Rudi</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Belgeler</translation>
+        <translation>Nyaraka</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videolar</translation>
+        <translation>Mavideo</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Resimler</translation>
+        <translation>Picha</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>İndirilenler</translation>
+        <translation>Mapakua</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Bilgisayar</translation>
+        <translation>Kichakato</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Müzik</translation>
+        <translation>Muziki</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>İndirilenler</translation>
+        <translation>Mapakua</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Kılavuz</translation>
+        <translation>Mwongozo</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Ayarlar</translation>
+        <translation>Sifa</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videolar</translation>
+        <translation>Mavideo</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Resimler</translation>
+        <translation>Picha</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Belgeler</translation>
+        <translation>Nyaraka</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Güç</translation>
+        <translation>Kiwashio</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation>Tüm Kategoriler</translation>
+        <translation>Aina yote</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Geri</translation>
+        <translation>Rudi</translation>
     </message>
 </context>
 <context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation>Ara</translation>
+        <translation>Tafuta</translation>
     </message>
 </context>
 <context>
     <name>WindowedFrame</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>Katisha</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Onayla</translation>
+        <translation>Hakikisha</translation>
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
+        <translation>Ni kweli unataka kutoa %1 ?</translation>
     </message>
 </context>
 </TS>

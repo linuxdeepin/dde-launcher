@@ -93,7 +93,7 @@
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>Enviar al dock</translation>
+        <translation>Envia a l&apos;acoblador</translation>
     </message>
     <message>
         <source>Remove from startup</source>
@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>Utilitza un servidor intermediari</translation>
     </message>
 </context>
 <context>

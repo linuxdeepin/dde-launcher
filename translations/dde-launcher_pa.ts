@@ -1,336 +1,336 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="pa" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>Arama sonucu bulunamadı</translation>
+        <translation>ਕੋਈ ਖੋਜ ਨਤੀਜਾ ਨਹੀਂ ਹੈ</translation>
     </message>
     <message>
         <source>Internet</source>
-        <translation>İnternet</translation>
+        <translation>ਇੰਟਰਨੈੱਟ</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation>Sohbet</translation>
+        <translation>ਗੱਲਬਾਤ</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Müzik</translation>
+        <translation>ਸੰਗੀਤ</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation>Video</translation>
+        <translation>ਵੀਡਿਓ</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Grafik</translation>
+        <translation>ਗਰਾਫਿਕਸ</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation>Ofis</translation>
+        <translation>ਦਫ਼ਤਰ</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation>Okuma</translation>
+        <translation>ਪੜ੍ਹਨਾ</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation>Geliştirme</translation>
+        <translation>ਵਿਕਾਸ</translation>
     </message>
     <message>
         <source>System</source>
-        <translation>Sistem</translation>
+        <translation>ਸਿਸਟਮ</translation>
     </message>
     <message>
         <source>Games</source>
-        <translation>Oyunlar</translation>
+        <translation>ਖੇਡਾਂ</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation>Diğer</translation>
+        <translation>ਹੋਰ</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>ਰੱਦ ਕਰੋ</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Onayla</translation>
+        <translation>ਤਸਦੀਕ ਕਰੋ</translation>
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
+        <translation>ਕੀ ਤੁਸੀਂ %1 ਨੂੰ ਅਣ-ਇੰਸਟਾਲ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation>Masaüstünden kaldır</translation>
+        <translation>ਡੈਸਕਟਾਪ ਤੋਂ ਹਟਾਓ</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Görev çubuğundan kaldır</translation>
+        <translation>ਡੌਕ ਤੋਂ ਹਟਾਓ</translation>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation>Kaldır</translation>
+        <translation>ਅਣ-ਇੰਸਟਾਲ ਕਰੋ</translation>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>Ekran ölçeklendirmeyi devre dışı bırak</translation>
+        <translation>ਡਿਸਪਲੇਅ ਸਕੇਲ ਕਰਨਾ ਅਸਮਰੱਥ ਕਰੋ</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation>Aç</translation>
+        <translation>ਖੋਲ੍ਹੋ</translation>
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation>Masaüstüne gönder</translation>
+        <translation>ਡੈਸਕਟਾਪ &apos;ਤੇ ਭੇਜੋ</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>Görev çubuğuna gönder</translation>
+        <translation>ਡੌਕ &apos;ਤੇ ਭੇਜੋ</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation>Başlangıçtan kaldır</translation>
+        <translation>ਸ਼ੁਰੂਆਤ ਤੋਂ ਹਟਾਓ</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation>Başlangıca ekle</translation>
+        <translation>ਸ਼ੁਰੂਆਤ &apos;ਚ ਜੋੜੋ</translation>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation>Vekil sunucu kullan</translation>
+        <translation>ਪਰਾਕਸੀ ਵਰਤੋਂ</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>Tüm Uygulamalar</translation>
+        <translation>ਸਾਰੀਆਂ ਐਪਾਂ</translation>
     </message>
     <message>
         <source>Internet</source>
-        <translation>İnternet</translation>
+        <translation>ਇੰਟਰਨੈੱਟ</translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation>Sohbet</translation>
+        <translation>ਗੱਲਬਾਤ</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Müzik</translation>
+        <translation>ਸੰਗੀਤ</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation>Video</translation>
+        <translation>ਵੀਡਿਓ</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Grafik</translation>
+        <translation>ਗਰਾਫਿਕਸ</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation>Oyun</translation>
+        <translation>ਖੇਡ</translation>
     </message>
     <message>
         <source>Office</source>
-        <translation>Ofis</translation>
+        <translation>ਦਫ਼ਤਰ</translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation>Okuma</translation>
+        <translation>ਪੜ੍ਹਨਾ</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation>Geliştirme</translation>
+        <translation>ਵਿਕਾਸ</translation>
     </message>
     <message>
         <source>System</source>
-        <translation>Sistem</translation>
+        <translation>ਸਿਸਟਮ</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation>Diğerleri</translation>
+        <translation>ਹੋਰ</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Bilgisayar</translation>
+        <translation>ਕੰਪਿਊਟਰ</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Belgeler</translation>
+        <translation>ਦਸਤਾਵੇਜ਼</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videolar</translation>
+        <translation>ਵੀਡਿਓ</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Müzik</translation>
+        <translation>ਸੰਗੀਤ</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Resimler</translation>
+        <translation>ਤਸਵੀਰਾਂ</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>İndirilenler</translation>
+        <translation>ਡਾਊਨਲੋਡ</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Kilitle</translation>
+        <translation>ਲਾਕ ਕਰੋ</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Oturumu Kapat</translation>
+        <translation>ਲਾਗ ਆਉਟ</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Yeniden Başlat</translation>
+        <translation>ਮੁੜ-ਚਾਲੂ ਕਰੋ</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Askıya Al</translation>
+        <translation>ਸਸਪੈਂਡ ਕਰੋ</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Kapat</translation>
+        <translation>ਬੰਦ ਕਰੋ</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Geri</translation>
+        <translation>ਪਿੱਛੇ</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
         <source>Computer</source>
-        <translation>Bilgisayar</translation>
+        <translation>ਕੰਪਿਊਟਰ</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Müzik</translation>
+        <translation>ਸੰਗੀਤ</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Kapat</translation>
+        <translation>ਬੰਦ ਕਰੋ</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Kilitle</translation>
+        <translation>ਲਾਕ ਕਰੋ</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Oturumu Kapat</translation>
+        <translation>ਲਾਗ ਆਉਟ</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Yeniden Başlat</translation>
+        <translation>ਮੁੜ-ਚਾਲੂ ਕਰੋ</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Askıya Al</translation>
+        <translation>ਸਸਪੈਂਡ ਕਰੋ</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Geri</translation>
+        <translation>ਪਿੱਛੇ</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Belgeler</translation>
+        <translation>ਦਸਤਾਵੇਜ਼</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videolar</translation>
+        <translation>ਵੀਡਿਓ</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Resimler</translation>
+        <translation>ਤਸਵੀਰਾਂ</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>İndirilenler</translation>
+        <translation>ਡਾਊਨਲੋਡ</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Bilgisayar</translation>
+        <translation>ਕੰਪਿਊਟਰ</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Müzik</translation>
+        <translation>ਸੰਗੀਤ</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>İndirilenler</translation>
+        <translation>ਡਾਊਨਲੋਡ</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Kılavuz</translation>
+        <translation>ਦਸਤੀ</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Ayarlar</translation>
+        <translation>ਸੈਟਿੰਗਾਂ</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videolar</translation>
+        <translation>ਵੀਡਿਓ</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Resimler</translation>
+        <translation>ਤਸਵੀਰਾਂ</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Belgeler</translation>
+        <translation>ਦਸਤਾਵੇਜ਼</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Güç</translation>
+        <translation>ਊਰਜਾ</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation>Tüm Kategoriler</translation>
+        <translation>ਸਾਰੇ ਵਰਗ</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Geri</translation>
+        <translation>ਪਿੱਛੇ</translation>
     </message>
 </context>
 <context>
     <name>SearchLineEdit</name>
     <message>
         <source>Search</source>
-        <translation>Ara</translation>
+        <translation>ਖੋਜੋ</translation>
     </message>
 </context>
 <context>
     <name>WindowedFrame</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>ਰੱਦ ਕਰੋ</translation>
     </message>
     <message>
         <source>Confirm</source>
-        <translation>Onayla</translation>
+        <translation>ਤਸਦੀਕ ਕਰੋ</translation>
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
+        <translation>ਕੀ ਤੁਸੀਂ %1 ਨੂੰ ਅਣ-ਇੰਸਟਾਲ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?</translation>
     </message>
 </context>
 </TS>

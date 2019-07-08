@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Weet u zeker dat u %1 wilt deïnstalleren?</translation>
     </message>
 </context>
 <context>
@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>gebruik een proxy</translation>
     </message>
 </context>
 <context>
@@ -304,7 +304,7 @@
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation>Alle categorieën</translation>
     </message>
     <message>
         <source>Back</source>
@@ -330,7 +330,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Weet u zeker dat u %1 wilt deïnstalleren?</translation>
     </message>
 </context>
 </TS>

@@ -43,7 +43,7 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation>Spill</translation>
     </message>
     <message>
         <source>Other</source>
@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Er du sikker på at du vil avinstallere %1 ?</translation>
     </message>
 </context>
 <context>
@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>Bruk en Proxy</translation>
     </message>
 </context>
 <context>
@@ -330,7 +330,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Er du sikker på at du vil avinstallere %1 ?</translation>
     </message>
 </context>
 </TS>

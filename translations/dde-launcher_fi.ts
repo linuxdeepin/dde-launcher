@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>Käytä välityspalvelinta</translation>
     </message>
 </context>
 <context>
@@ -191,7 +191,7 @@
     </message>
     <message>
         <source>Logout</source>
-        <translation>Kirjaudu ulos</translation>
+        <translation>Poistu</translation>
     </message>
     <message>
         <source>Reboot</source>

@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Er du sikker på, at du vil afinstallere %1?</translation>
     </message>
 </context>
 <context>
@@ -330,7 +330,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Er du sikker på, at du vil afinstallere %1?</translation>
     </message>
 </context>
 </TS>

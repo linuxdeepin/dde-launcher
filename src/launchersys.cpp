@@ -133,17 +133,21 @@ void LauncherSys::displayModeChanged()
     lastLauncher = lastLauncher ? lastLauncher : m_launcherInter;
 
     if (lastLauncher->visible()) {
-        registerRegion();
         m_launcherInter->showLauncher();
     }
     else {
-        unRegisterRegion();
         m_launcherInter->hideLauncher();
     }
 
     if (lastLauncher != m_launcherInter) {
         lastLauncher->hideLauncher();
     }
+
+    QTimer::singleShot(0, this, [=] {
+        if (m_launcherInter->visible()) {
+            registerRegion();
+        }
+    });
 }
 
 void LauncherSys::onAutoExitTimeout()

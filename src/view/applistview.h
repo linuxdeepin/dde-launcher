@@ -31,7 +31,7 @@
 
 #define DRAG_SCROLL_THRESHOLD 25
 
-DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 class AppListView : public QListView
 {

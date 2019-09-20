@@ -21,6 +21,10 @@
 #include <QVBoxLayout>
 #include <QDateTime>
 #include <QMouseEvent>
+#include <DFontSizeManager>
+#include <QDBusInterface>
+
+DWIDGET_USE_NAMESPACE
 
 DatetimeWidget::DatetimeWidget(QWidget *parent)
     : QWidget(parent),
@@ -31,10 +35,14 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     m_refreshDateTimer->setInterval(1000);
     m_refreshDateTimer->start();
 
-    m_currentTimeLabel->setStyleSheet("QLabel { font-size: 40px;}");
+    m_24HourFormatInter = new QDBusInterface("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "com.deepin.daemon.Timedate",
+                                                     QDBusConnection::sessionBus(), this);
+
+    DFontSizeManager::instance()->bind(m_currentTimeLabel, DFontSizeManager::T3);
     m_currentTimeLabel->setFixedHeight(40);
     m_currentTimeLabel->setAlignment(Qt::AlignVCenter);
     m_currentDateLabel->setStyleSheet("QLabel { color: rgba(255, 255, 255, 0.6); }");
+    DFontSizeManager::instance()->bind(m_currentDateLabel, DFontSizeManager::T8);
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setMargin(0);
@@ -72,6 +80,11 @@ void DatetimeWidget::mouseReleaseEvent(QMouseEvent *e)
 void DatetimeWidget::updateTime()
 {
     const QDateTime dateTime = QDateTime::currentDateTime();
-    m_currentTimeLabel->setText(dateTime.toString("HH:mm"));
+    QString format;
+    if (m_24HourFormatInter->property("Use24HourFormat").toBool())
+        format = "hh:mm";
+    else
+        format = "hh:mm AP";
+    m_currentTimeLabel->setText(dateTime.toString(format));
     m_currentDateLabel->setText(dateTime.date().toString(Qt::SystemLocaleLongDate));
 }

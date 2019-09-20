@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QTimer>
 
+class QDBusInterface;
 class DatetimeWidget : public QWidget
 {
     Q_OBJECT
@@ -47,6 +48,7 @@ private:
     QLabel *m_currentTimeLabel;
     QLabel *m_currentDateLabel;
     QTimer *m_refreshDateTimer;
+    QDBusInterface* m_24HourFormatInter;
 };
 
 #endif

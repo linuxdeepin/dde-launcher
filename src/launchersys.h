@@ -58,6 +58,7 @@ protected:
 private slots:
     void displayModeChanged();
     void onAutoExitTimeout();
+    void onVisibleChanged();
 
 private:
     void registerRegion();

@@ -115,7 +115,7 @@ void LauncherSys::displayModeChanged()
         if (!m_fullLauncher) {
             m_fullLauncher = new FullScreenFrame;
             m_fullLauncher->installEventFilter(this);
-            connect(m_fullLauncher, &FullScreenFrame::visibleChanged, this, &LauncherSys::visibleChanged);
+            connect(m_fullLauncher, &FullScreenFrame::visibleChanged, this, &LauncherSys::onVisibleChanged);
             connect(m_fullLauncher, &FullScreenFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
         }
         m_launcherInter = static_cast<LauncherInterface*>(m_fullLauncher);
@@ -124,7 +124,7 @@ void LauncherSys::displayModeChanged()
         if (!m_windowLauncher) {
             m_windowLauncher = new WindowedFrame;
             m_windowLauncher->installEventFilter(this);
-            connect(m_windowLauncher, &WindowedFrame::visibleChanged, this, &LauncherSys::visibleChanged);
+            connect(m_windowLauncher, &WindowedFrame::visibleChanged, this, &LauncherSys::onVisibleChanged);
             connect(m_windowLauncher, &WindowedFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
         }
         m_launcherInter = static_cast<LauncherInterface*>(m_windowLauncher);
@@ -148,6 +148,11 @@ void LauncherSys::displayModeChanged()
             registerRegion();
         }
     });
+}
+
+void LauncherSys::onVisibleChanged()
+{
+    emit visibleChanged(m_launcherInter->visible());
 }
 
 void LauncherSys::onAutoExitTimeout()

@@ -23,6 +23,7 @@
 #include <QMouseEvent>
 #include <DFontSizeManager>
 #include <QDBusInterface>
+#include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -36,12 +37,22 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     m_refreshDateTimer->start();
 
     m_24HourFormatInter = new QDBusInterface("com.deepin.daemon.Timedate", "/com/deepin/daemon/Timedate", "com.deepin.daemon.Timedate",
-                                                     QDBusConnection::sessionBus(), this);
+                                             QDBusConnection::sessionBus(), this);
 
     DFontSizeManager::instance()->bind(m_currentTimeLabel, DFontSizeManager::T3);
     m_currentTimeLabel->setFixedHeight(40);
     m_currentTimeLabel->setAlignment(Qt::AlignVCenter);
-    m_currentDateLabel->setStyleSheet("QLabel { color: rgba(255, 255, 255, 0.6); }");
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        QPalette pa = m_currentTimeLabel->palette();
+        pa.setBrush(QPalette::WindowText, pa.brightText());
+        m_currentTimeLabel->setPalette(pa);
+
+        pa = m_currentDateLabel->palette();
+        pa.setBrush(QPalette::WindowText, pa.brightText());
+        m_currentDateLabel->setPalette(pa);
+    });
+
     DFontSizeManager::instance()->bind(m_currentDateLabel, DFontSizeManager::T8);
 
     QVBoxLayout *layout = new QVBoxLayout;

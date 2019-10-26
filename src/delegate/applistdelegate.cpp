@@ -78,7 +78,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     if (option.state.testFlag(QStyle::State_Selected)) {
         // hover background color.
-        painter->setBrush(QColor(255, 255, 255, 255 * .1));
+        painter->setBrush(QColor(21, 21, 21, 102));
     } else if (isDragItem) {
         // drag item background color.
         painter->setBrush(QColor(255, 255, 255, 255 * 0.4));
@@ -117,7 +117,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     }
 
     // draw app name.
-    painter->setPen(Qt::white);
+    painter->setPen(QPen(QPalette().brightText(),1));
     painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, fm.elidedText(appName, Qt::ElideRight, textRect.width()));
 
     // draw category right icon

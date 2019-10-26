@@ -32,8 +32,10 @@
 #include <QPixmap>
 #include <QSettings>
 #include <DHiDPIHelper>
+#include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 static QMap<int, AppsListModel::AppCategory> CateGoryMap {
     { 0,  AppsListModel::Internet    },
@@ -302,7 +304,11 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppItemIsDraggingRole:
         return indexDragging(index);
     case CategoryEnterIconRole:
-        return DHiDPIHelper::loadNxPixmap(":/widgets/images/enter_details_normal.svg");
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+            return DHiDPIHelper::loadNxPixmap(":/widgets/images/enter_details_normal-dark.svg");
+        } else {
+            return DHiDPIHelper::loadNxPixmap(":/widgets/images/enter_details_normal.svg");
+        }
     case DrawBackgroundRole:
         return m_drawBackground;
     default:;

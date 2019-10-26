@@ -45,6 +45,7 @@
 #include <DWindowManagerHelper>
 #include <DForeignWindow>
 #include <qpa/qplatformwindow.h>
+#include <DGuiApplicationHelper>
 
 #define DOCK_TOP        0
 #define DOCK_RIGHT      1
@@ -53,6 +54,8 @@
 
 #define DOCK_FASHION    0
 #define DOCK_EFFICIENT  1
+
+DGUI_USE_NAMESPACE
 
 extern const QPoint widgetRelativeOffset(const QWidget * const self, const QWidget *w);
 
@@ -93,7 +96,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_displayMode(All)
     , m_focusPos(LeftTop)
 {
-    setMaskColor(DBlurEffectWidget::DarkColor);
+    setMaskColor(DBlurEffectWidget::AutoColor);
     setBlendMode(DBlurEffectWidget::InWindowBlend);
 
     m_appearanceInter->setSync(false, false);
@@ -114,8 +117,12 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setFixedSize(500, 50);
     m_tipsLabel->setVisible(false);
-    m_tipsLabel->setStyleSheet("color:rgba(238, 238, 238, .6);"
-                               "font-size:22px;");
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
+        QPalette pa = m_tipsLabel->palette();
+        pa.setBrush(QPalette::WindowText, pa.brightText());
+        m_tipsLabel->setPalette(pa);
+    });
 
     m_delayHideTimer->setInterval(200);
     m_delayHideTimer->setSingleShot(true);
@@ -171,7 +178,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     setFocusPolicy(Qt::ClickFocus);
     setFixedHeight(502);
     setObjectName("MiniFrame");
-    setStyleSheet(getQssFromFile(":/skin/qss/miniframe.qss"));
 
     initAnchoredCornor();
     installEventFilter(m_eventFilter);
@@ -212,7 +218,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &WindowedFrame::hideTips);
-    connect(m_switchBtn, &QPushButton::clicked, this, &WindowedFrame::onSwitchBtnClicked);
+    connect(m_switchBtn, &MiniFrameSwitchBtn::clicked, this, &WindowedFrame::onSwitchBtnClicked);
     connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher, Qt::QueuedConnection);
 
     connect(m_appearanceInter, &Appearance::OpacityChanged, this, &WindowedFrame::onOpacityChanged);
@@ -351,17 +357,14 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         m_appsModel->setDrawBackground(true);
         m_searchModel->setDrawBackground(true);
         m_rightBar->setCurrentCheck(false);
-        m_switchBtn->setChecked(false);
         m_appsView->setFocus();
     } else if (m_focusPos == LeftBottom) {
         m_appsView->setCurrentIndex(QModelIndex());
         m_rightBar->setCurrentCheck(false);
-        m_switchBtn->setChecked(true);
         m_switchBtn->setFocus();
         return;
     } else {
         m_appsView->setCurrentIndex(QModelIndex());
-        m_switchBtn->setChecked(false);
         m_rightBar->setCurrentCheck(true);
         m_rightBar->setFocus();
         return;
@@ -401,7 +404,6 @@ void WindowedFrame::launchCurrentApp()
         return;
     } else if (m_focusPos == LeftBottom) {
         m_switchBtn->click();
-        m_switchBtn->setChecked(true);
         return;
     }
 
@@ -849,7 +851,6 @@ void WindowedFrame::recoveryAll()
 
     m_focusPos = LeftTop;
     m_rightBar->setCurrentCheck(false);
-    m_switchBtn->setChecked(false);
 }
 
 void WindowedFrame::onOpacityChanged(const double value)

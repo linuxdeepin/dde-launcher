@@ -21,6 +21,10 @@ protected:
 
 private:
     void updateFont();
+
+    // QWidget interface
+protected:
+    void paintEvent(QPaintEvent *event) override;
 };
 
 #endif

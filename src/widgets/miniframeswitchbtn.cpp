@@ -22,39 +22,50 @@
 #include "../global_util/util.h"
 
 #include <QHBoxLayout>
+#include <DGuiApplicationHelper>
+
+DGUI_USE_NAMESPACE
 
 MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
-    : QPushButton(parent)
+    : QWidget(parent)
     , m_textLabel(new QLabel)
     , m_enterIcon(new QLabel)
+    , m_allIconLabel(new QLabel)
 {
-    QPixmap enterPixmap = renderSVG(":/widgets/images/enter_details_normal.svg", QSize(20, 20));
-    QPixmap allPixmap = renderSVG(":/widgets/images/all.svg", QSize(24, 24));
+    setFocusPolicy(Qt::StrongFocus);
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
+        if (DGuiApplicationHelper::LightType == themeType) {
+            m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all-dark.svg", QSize(24, 24)));
+            m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal-dark.svg", QSize(20, 20)));
+        } else {
+            m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all.svg", QSize(24, 24)));
+            m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal.svg", QSize(20, 20)));
+        }
+
+        QPalette pa = m_textLabel->palette();
+        pa.setBrush(QPalette::WindowText, pa.brightText());
+        m_textLabel->setPalette(pa);
+    });
 
     m_enterIcon->setFixedSize(20, 20);
-    m_enterIcon->setPixmap(enterPixmap);
     m_enterIcon->setVisible(false);
 
-    QLabel *allIconLabel = new QLabel;
-    allIconLabel->setPixmap(allPixmap);
-    allIconLabel->setFixedSize(24, 24);
+    m_allIconLabel->setFixedSize(24, 24);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     setLayout(mainLayout);
     setObjectName("MiniFrameSwitchBtn");
     setFixedHeight(36);
-    setCheckable(true);
 
     mainLayout->addSpacing(10);
-    mainLayout->addWidget(allIconLabel);
+    mainLayout->addWidget(m_allIconLabel);
     mainLayout->addSpacing(12);
     mainLayout->addWidget(m_textLabel);
     mainLayout->addWidget(m_enterIcon);
     mainLayout->addSpacing(10);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
-
-    connect(this, &QPushButton::clicked, [=] { setChecked(false); });
 }
 
 MiniFrameSwitchBtn::~MiniFrameSwitchBtn()
@@ -70,4 +81,45 @@ void MiniFrameSwitchBtn::updateStatus(int status)
         m_textLabel->setText(tr("Back"));
         m_enterIcon->setVisible(false);
     }
+}
+
+void MiniFrameSwitchBtn::click()
+{
+    emit clicked();
+}
+
+void MiniFrameSwitchBtn::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+
+    QPainter p(this);
+    p.setRenderHint(QPainter::Antialiasing, true);
+    if (hasFocus() || m_hover) {
+        QPainterPath path;
+        path.addRoundedRect(rect(), 4, 4);
+        p.fillPath(path, QColor(21, 21, 21, 102));
+    }
+}
+
+void MiniFrameSwitchBtn::enterEvent(QEvent *event)
+{
+    QWidget::enterEvent(event);
+
+    m_hover = true;
+    update();
+}
+
+void MiniFrameSwitchBtn::leaveEvent(QEvent *event)
+{
+    QWidget::leaveEvent(event);
+
+    m_hover = false;
+    update();
+}
+
+void MiniFrameSwitchBtn::mouseReleaseEvent(QMouseEvent *event)
+{
+    QWidget::mouseReleaseEvent(event);
+
+    emit clicked();
 }

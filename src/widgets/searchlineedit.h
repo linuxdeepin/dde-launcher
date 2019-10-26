@@ -30,7 +30,7 @@
 #include <QPropertyAnimation>
 #include <QProxyStyle>
 
-#include <dimagebutton.h>
+#include <DIconButton>
 
 DWIDGET_USE_NAMESPACE
 
@@ -66,10 +66,11 @@ private slots:
 protected:
     bool event(QEvent *e);
     void resizeEvent(QResizeEvent *e);
+    void themeChanged();
 
 private:
-    DImageButton *m_icon;
-    DImageButton *m_clear;
+    DIconButton *m_icon;
+    DIconButton *m_clear;
     QLabel *m_placeholderText;
     QWidget *m_floatWidget;
 #ifndef ARCH_MIPSEL

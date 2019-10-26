@@ -21,22 +21,35 @@
 #define MINIFRAMESWITCHBTN_H
 
 #include "roundedbutton.h"
-#include <QPushButton>
+#include <QWidget>
 #include <QLabel>
 
-class MiniFrameSwitchBtn : public QPushButton
+class MiniFrameSwitchBtn : public QWidget
 {
     Q_OBJECT
 
 public:
     MiniFrameSwitchBtn(QWidget *parent = nullptr);
-    ~MiniFrameSwitchBtn();
+    ~MiniFrameSwitchBtn() override;
 
     void updateStatus(int status);
+    void click();
+
+signals:
+    void clicked();
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
     QLabel *m_textLabel;
     QLabel *m_enterIcon;
+    QLabel *m_allIconLabel;
+    bool m_hover = false;
+
 };
 
 #endif

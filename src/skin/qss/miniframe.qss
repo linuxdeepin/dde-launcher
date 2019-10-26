@@ -12,80 +12,6 @@ QScrollArea#AppsArea {
     background: transparent;
 }
 
-#MiniFrameSwitchBtn {
-    border: none;
-    color: rgba(255, 255, 255);
-    padding-left: 6px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    text-align: left;
-    font-weight: 500;
-    color: white;
-    background: transparent;
-}
-
-#MiniFrameSwitchBtn:hover {
-    border: none;
-    border-radius: 4px;
-    padding-left: 6px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    color: rgba(255, 255, 255, 1);
-    background: rgba(255, 255, 255, 0.1);
-}
-
-#MiniFrameSwitchBtn:checked {
-    border: none;
-    border-radius: 4px;
-    padding-left: 6px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    color: rgba(255, 255, 255, 1);
-    background: rgba(255, 255, 255, 0.1);
-}
-
-#MiniFrameSwitchBtn:pressed {
-    border: none;
-    border-radius: 4px;
-    padding-left: 6px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    color: #2ca7f8;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-#MiniFrameButton {
-    border: none;
-    color: rgba(255, 255, 255);
-    padding-left: 6px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    text-align: left;
-    font-weight: 500;
-    color: white;
-    background: transparent;
-}
-
-#MiniFrameButton:checked {
-    border: none;
-    border-radius: 4px;
-    padding-left: 6px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    color: rgba(255, 255, 255, 1);
-    background: rgba(255, 255, 255, 0.1);
-}
-
-#MiniFrameButton:pressed {
-    border: none;
-    border-radius: 4px;
-    padding-left: 6px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    color: #2ca7f8;
-    background: rgba(255, 255, 255, 0.1);
-}
-
 #RoundedButton {
     border: 1px solid transparent;
     border-radius: 15px;
@@ -127,12 +53,4 @@ MiniCategoryItem {
 
 #MiniCategoryWidget[active=true] > MiniCategoryItem:checked {
     background: rgba(21, 21, 21, 0.4);
-}
-
-#SearchEdit {
-    background-color:rgba(255, 255, 255, 0);
-    padding:0px 20px 0 25px;
-    border:none;
-    border-radius:5px;
-    color:white;
 }

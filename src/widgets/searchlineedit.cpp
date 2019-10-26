@@ -28,25 +28,34 @@
 #include <QEvent>
 #include <QTimer>
 #include <QResizeEvent>
+#include <DGuiApplicationHelper>
+
+DGUI_USE_NAMESPACE
 
 SearchLineEdit::SearchLineEdit(QWidget *parent) :
     QLineEdit(parent)
+    , m_icon(new DIconButton(this))
+    , m_clear(new DIconButton(this))
 {
-    m_icon = new DImageButton;
+    setTextMargins(20, 0, 0, 0);
+    m_icon->setIconSize(QSize(16, 16));
     m_icon->setFixedSize(16, 16);
-    m_icon->setNormalPic(":/skin/images/search.svg");
+    m_icon->setFlat(true);
 
-    m_clear = new DImageButton;
+    m_clear->setIconSize(QSize(16, 16));
     m_clear->setFixedSize(16, 16);
-    m_clear->setNormalPic(":/icons/skin/icons/input_clear_dark_normal.svg");
-    m_clear->setHoverPic(":/icons/skin/icons/input_clear_dark_hover.svg");
-    m_clear->setPressPic(":/icons/skin/icons/input_clear_dark_press.svg");
     m_clear->setVisible(false);
+    m_clear->setFlat(true);
+
+    themeChanged();
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        themeChanged();
+    });
 
     m_placeholderText = new QLabel(tr("Search"));
     QFontMetrics fm(m_placeholderText->font());
     m_placeholderText->setFixedWidth(fm.width(m_placeholderText->text()) + 10);
-    m_placeholderText->setStyleSheet("color:white;");
+    m_placeholderText->setForegroundRole(QPalette::BrightText);
     m_floatWidget = new QWidget(this);
 
     m_editStyle = new SearchLineeditStyle(style());
@@ -78,7 +87,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     setStyle(m_editStyle);
 
     connect(this, &SearchLineEdit::textChanged, this, &SearchLineEdit::onTextChanged);
-    connect(m_clear, &DImageButton::clicked, this, &SearchLineEdit::normalMode);
+    connect(m_clear, &DIconButton::clicked, this, &SearchLineEdit::normalMode);
 
 #ifndef ARCH_MIPSEL
     m_floatAni = new QPropertyAnimation(m_floatWidget, "pos", this);
@@ -94,8 +103,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
 
 bool SearchLineEdit::event(QEvent *e)
 {
-    switch (e->type())
-    {
+    switch (e->type()) {
 #ifdef ARCH_MIPSEL
     case QEvent::InputMethodQuery: // for loongson, there's no FocusIn event when the widget gets focus.
 #endif
@@ -144,7 +152,7 @@ void SearchLineEdit::editMode()
     m_floatAni->start();
 
     m_editStyle->hideCursor = true;
-    QTimer::singleShot(m_floatAni->duration(), this, [=] {
+    QTimer::singleShot(m_floatAni->duration(), this, [ = ] {
         m_editStyle->hideCursor = false;
     });
 #else
@@ -170,6 +178,24 @@ void SearchLineEdit::moveFloatWidget()
 #endif
 
     m_floatWidget->move(rect().center() - m_floatWidget->rect().center());
+}
+
+void SearchLineEdit::themeChanged()
+{
+    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
+        m_icon->setIcon(QIcon::fromTheme(":/skin/images/search-dark.svg"));
+        m_clear->setIcon(QIcon::fromTheme(":/icons/skin/icons/input_clear_normal-dark.svg"));
+    } else {
+        m_icon->setIcon(QIcon::fromTheme(":/skin/images/search.svg"));
+        m_clear->setIcon(QIcon::fromTheme(":/icons/skin/icons/input_clear_normal.svg"));
+    }
+
+    QPalette pa = palette();
+    pa.setBrush(QPalette::Text, pa.brightText());
+    pa.setBrush(QPalette::Foreground, pa.brightText());
+    pa.setColor(QPalette::Button, Qt::transparent); // 背景
+    pa.setColor(QPalette::Highlight, Qt::transparent); // 激活后的边框
+    setPalette(pa);
 }
 
 SearchLineeditStyle::SearchLineeditStyle(QStyle *style)

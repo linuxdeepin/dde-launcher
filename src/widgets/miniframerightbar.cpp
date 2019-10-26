@@ -29,6 +29,9 @@
 #include <QEvent>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <DGuiApplicationHelper>
+
+DGUI_USE_NAMESPACE
 
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
 #include <DDBusSender>
@@ -91,8 +94,15 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
         }, Qt::QueuedConnection);
     }
 
-    m_settingsBtn->setIcon(QIcon(":/widgets/images/settings.svg"));
-    m_powerBtn->setIcon(QIcon(":/widgets/images/power.svg"));
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
+        if (DGuiApplicationHelper::LightType == themeType) {
+            m_settingsBtn->setIcon(QIcon(":/widgets/images/settings-dark.svg"));
+            m_powerBtn->setIcon(QIcon(":/widgets/images/power-dark.svg"));
+        } else {
+            m_settingsBtn->setIcon(QIcon(":/widgets/images/settings.svg"));
+            m_powerBtn->setIcon(QIcon(":/widgets/images/power.svg"));
+        }
+    });
 
     bottomLayout->addWidget(m_settingsBtn);
     bottomLayout->addWidget(m_powerBtn);

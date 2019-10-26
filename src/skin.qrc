@@ -62,6 +62,7 @@
         <file>skin/images/search.svg</file>
         <file>skin/images/emblem-autostart.svg</file>
         <file>skin/images/new_install_indicator.svg</file>
+        <file>skin/images/search-dark.svg</file>
     </qresource>
     <qresource prefix="/icons">
         <file>skin/icons/category_active_16px.svg</file>
@@ -184,8 +185,9 @@
         <file>skin/icons/poweroff_normal@2x.png</file>
         <file>skin/icons/poweroff_hover@2x.png</file>
         <file>skin/icons/poweroff_press@2x.png</file>
-        <file>skin/icons/input_clear_dark_normal.svg</file>
         <file>skin/icons/input_clear_dark_hover.svg</file>
         <file>skin/icons/input_clear_dark_press.svg</file>
+        <file>skin/icons/input_clear_normal-dark.svg</file>
+        <file>skin/icons/input_clear_normal.svg</file>
     </qresource>
 </RCC>

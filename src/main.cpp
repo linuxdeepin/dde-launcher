@@ -33,6 +33,7 @@
 #include <unistd.h>
 
 #include <dapplication.h>
+#include <DGuiApplicationHelper>
 #include <DLog>
 
 DWIDGET_USE_NAMESPACE
@@ -58,12 +59,13 @@ void dump_user_apss_preset_order_list()
 int main(int argv, char *args[])
 {
     DApplication::loadDXcbPlugin();
+    DGuiApplicationHelper::setUseInactiveColorGroup(false);
+    DGuiApplicationHelper::setColorCompositingEnabled(true);
     DApplication app(argv, args);
     app.setQuitOnLastWindowClosed(false);
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-launcher");
     app.setApplicationVersion("3.0");
-    app.setTheme("dark");
     app.loadTranslator();
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 

@@ -318,6 +318,9 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     case Qt::Key_Up: {
         if (m_focusPos == LeftTop) {
             targetIndex = currentIdx.sibling(row - 1, 0);
+            if (!currentIdx.isValid() || !targetIndex.isValid()) {
+                targetIndex = m_appsView->model()->index(m_appsView->model()->rowCount() - 1, 0);
+            }
         } else if (m_focusPos == LeftBottom) {
 
         } else {
@@ -328,6 +331,9 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     case Qt::Key_Down: {
         if (m_focusPos == LeftTop) {
             targetIndex = currentIdx.sibling(row + 1, 0);
+            if (!currentIdx.isValid() || !targetIndex.isValid()) {
+                targetIndex = m_appsView->model()->index(0, 0);
+            }
         } else if (m_focusPos == LeftBottom) {
 
         } else {
@@ -368,10 +374,6 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         m_rightBar->setCurrentCheck(true);
         m_rightBar->setFocus();
         return;
-    }
-
-    if (!currentIdx.isValid() || !targetIndex.isValid()) {
-        targetIndex = m_appsView->model()->index(0, 0);
     }
 
     // Hover conflict with the mouse, temporarily blocking the signal

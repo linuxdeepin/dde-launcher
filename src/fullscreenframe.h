@@ -67,6 +67,7 @@ public:
     void exit();
     void showByMode(const qlonglong mode);
     int dockPosition();
+    void updateDisplayMode(const int mode);
 
 signals:
     void visibleChanged(bool visible);
@@ -111,7 +112,6 @@ private:
     void updateGeometry();
     void checkCategoryVisible();
     void showPopupMenu(const QPoint &pos, const QModelIndex &context);
-    void updateDisplayMode(const int mode);
     void updateCurrentVisibleCategory();
     void updatePlaceholderSize();
     void updateDockPosition();

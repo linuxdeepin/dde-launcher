@@ -64,6 +64,10 @@ public:
     inline bool fullscreen() const
     { return qvariant_cast< bool >(property("Fullscreen")); }
 
+    Q_PROPERTY(int DisplayMode READ displaymode NOTIFY DisplayModeChanged)
+    inline int displaymode() const
+    { return qvariant_cast< int >(property("DisplayMode")); }
+
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<CategoryInfoList> GetAllCategoryInfos()
     {
@@ -206,6 +210,7 @@ public Q_SLOTS: // METHODS
        void UninstallSuccess(const QString &in0);
 
        void FullscreenChanged();
+       void DisplayModeChanged();
 };
 
 namespace com {

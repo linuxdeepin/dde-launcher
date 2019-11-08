@@ -61,6 +61,7 @@ LauncherSys::LauncherSys(QObject *parent)
     AppsManager::instance();
 
     connect(m_dbusLauncherInter, &DBusLauncher::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
+    connect(m_dbusLauncherInter, &DBusLauncher::DisplayModeChanged, this, &LauncherSys::onDisplayModeChanged, Qt::QueuedConnection);
     connect(m_autoExitTimer, &QTimer::timeout, this, &LauncherSys::onAutoExitTimeout, Qt::QueuedConnection);
 
     m_autoExitTimer->start();
@@ -194,4 +195,8 @@ void LauncherSys::registerRegion() {
 void LauncherSys::unRegisterRegion() {
     m_regionMonitor->unregisterRegion();
     disconnect(m_regionMonitorConnect);
+}
+void LauncherSys::onDisplayModeChanged()
+{
+    m_fullLauncher->updateDisplayMode(m_dbusLauncherInter->displaymode());
 }

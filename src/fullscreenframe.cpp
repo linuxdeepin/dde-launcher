@@ -342,7 +342,8 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
             qApp->postEvent(this, event);
             return true;
         }
-    } else if (o == m_appsArea->viewport() && e->type() == QEvent::Wheel) {
+    } else if ((o == m_appsArea->viewport() && e->type() == QEvent::Wheel)
+               || (o == m_appsArea && e->type() == QEvent::Scroll)) {
         updateCurrentVisibleCategory();
         QMetaObject::invokeMethod(this, "refershCurrentFloatTitle", Qt::QueuedConnection);
     } else if (o == m_appsArea->viewport() && e->type() == QEvent::Resize) {
@@ -405,6 +406,7 @@ void FullScreenFrame::initUI()
     m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->viewport()->installEventFilter(this);
+    m_appsArea->installEventFilter(this);
 
 //    m_othersView->installEventFilter(this);
 //    m_navigationWidget->installEventFilter(this);

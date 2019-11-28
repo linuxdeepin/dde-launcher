@@ -31,6 +31,9 @@
 #include <dimagebutton.h>
 #include <DDBusSender>
 
+#define BTN_WIDTH   40
+#define BTN_HEIGHT  40
+
 DWIDGET_USE_NAMESPACE
 
 SearchWidget::SearchWidget(QWidget *parent) :
@@ -42,16 +45,18 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_leftSpacing->setFixedWidth(0);
     m_rightSpacing->setFixedWidth(0);
 
-    m_toggleCategoryBtn = new DImageButton(this);
+    m_toggleCategoryBtn = new DFloatingButton(this);
     m_toggleCategoryBtn->setAccessibleName("mode-toggle-button");
-    m_toggleCategoryBtn->setNormalPic(":/icons/skin/icons/category_normal_22px.png");
-    m_toggleCategoryBtn->setHoverPic(":/icons/skin/icons/category_hover_22px.png");
-    m_toggleCategoryBtn->setPressPic(":/icons/skin/icons/category_active_22px.png");
+    m_toggleCategoryBtn->setIcon(QIcon(":/icons/skin/icons/category_normal_22px.png"));
+    m_toggleCategoryBtn->setIconSize(QSize(BTN_WIDTH, BTN_HEIGHT));
+    m_toggleCategoryBtn->setFixedSize(QSize(BTN_WIDTH, BTN_HEIGHT));
+    m_toggleCategoryBtn->setBackgroundRole(DPalette::Button);
 
-    m_toggleModeBtn = new DImageButton(this);
-    m_toggleModeBtn->setNormalPic(":/icons/skin/icons/unfullscreen_normal.png");
-    m_toggleModeBtn->setHoverPic(":/icons/skin/icons/unfullscreen_hover.png");
-    m_toggleModeBtn->setPressPic(":/icons/skin/icons/unfullscreen_press.png");
+    m_toggleModeBtn = new DFloatingButton(this);
+    m_toggleModeBtn->setIcon(QIcon(":/icons/skin/icons/unfullscreen_normal.png"));
+    m_toggleModeBtn->setIconSize(QSize(BTN_WIDTH, BTN_HEIGHT));
+    m_toggleModeBtn->setFixedSize(QSize(BTN_WIDTH, BTN_HEIGHT));
+    m_toggleModeBtn->setBackgroundRole(DPalette::Button);
 
     m_searchEdit = new SearchLineEdit(this);
     m_searchEdit->setAccessibleName("search-edit");
@@ -77,7 +82,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     connect(m_searchEdit, &SearchLineEdit::textChanged, [this] {
         emit searchTextChanged(m_searchEdit->text().trimmed());
     });
-    connect(m_toggleModeBtn, &DImageButton::clicked, this, [=] {
+    connect(m_toggleModeBtn, &DIconButton::clicked, this, [=] {
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
         DDBusSender()
             .service("com.deepin.dde.daemon.Launcher")
@@ -98,7 +103,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
             QProcess::startDetached("dbus-send", args);
 #endif
     });
-    connect(m_toggleCategoryBtn, &DImageButton::clicked, this, &SearchWidget::toggleMode);
+    connect(m_toggleCategoryBtn, &DIconButton::clicked, this, &SearchWidget::toggleMode);
 }
 
 QLineEdit *SearchWidget::edit()

@@ -163,7 +163,7 @@ void SearchLineEdit::editMode()
 void SearchLineEdit::onTextChanged()
 {
     m_clear->setVisible(!text().isEmpty());
-    if(!this->text().isEmpty()){
+    if (!this->text().isEmpty()) {
         this->setFocus();
     }
 }

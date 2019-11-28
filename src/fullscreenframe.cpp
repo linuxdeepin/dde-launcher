@@ -279,7 +279,7 @@ void FullScreenFrame::showEvent(QShowEvent *e)
         raise();
         activateWindow();
         m_floatTitle->raise();
-        m_searchWidget->raise();
+
         emit visibleChanged(true);
     });
 

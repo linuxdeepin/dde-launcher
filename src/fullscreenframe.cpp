@@ -56,11 +56,10 @@ static const QString DisplayModeKey = "display-mode";
 static const QString DisplayModeFree = "free";
 static const QString DisplayModeCategory = "category";
 
-const QPoint widgetRelativeOffset(const QWidget * const self, const QWidget *w)
+const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w)
 {
     QPoint offset;
-    while (w && w != self)
-    {
+    while (w && w != self) {
         offset += w->pos();
         w = qobject_cast<QWidget *>(w->parent());
     }
@@ -138,11 +137,12 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 #if (DTK_VERSION <= DTK_VERSION_CHECK(2, 0, 9, 9))
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
 #else
-    auto compositeChanged = [=] {
-        if (DWindowManagerHelper::instance()->windowManagerName() == DWindowManagerHelper::WMName::KWinWM) {
+    auto compositeChanged = [ = ] {
+        if (DWindowManagerHelper::instance()->windowManagerName() == DWindowManagerHelper::WMName::KWinWM)
+        {
             setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
-        }
-        else {
+        } else
+        {
             setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
         }
     };
@@ -220,7 +220,7 @@ void FullScreenFrame::hideTips()
 
 void FullScreenFrame::resizeEvent(QResizeEvent *e)
 {
-    QTimer::singleShot(0, this, [=] {
+    QTimer::singleShot(0, this, [ = ] {
         updateBackground();
         updateDockPosition();
     });
@@ -275,7 +275,7 @@ void FullScreenFrame::showEvent(QShowEvent *e)
 
     QFrame::showEvent(e);
 
-    QTimer::singleShot(0, this, [this] () {
+    QTimer::singleShot(0, this, [this]() {
         raise();
         activateWindow();
         m_floatTitle->raise();
@@ -294,7 +294,7 @@ void FullScreenFrame::hideEvent(QHideEvent *e)
 {
     BoxFrame::hideEvent(e);
 
-    QTimer::singleShot(1, this, [=] { emit visibleChanged(false); });
+    QTimer::singleShot(1, this, [ = ] { emit visibleChanged(false); });
 
     m_clearCacheTimer->start();
 }
@@ -335,24 +335,17 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
 bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
 {
     // we filter some key events from LineEdit, to implements cursor move.
-    if (o == m_searchWidget->edit() && e->type() == QEvent::KeyPress)
-    {
+    if (o == m_searchWidget->edit() && e->type() == QEvent::KeyPress) {
         QKeyEvent *keyPress = static_cast<QKeyEvent *>(e);
-        if (keyPress->key() == Qt::Key_Left || keyPress->key() == Qt::Key_Right)
-        {
+        if (keyPress->key() == Qt::Key_Left || keyPress->key() == Qt::Key_Right) {
             QKeyEvent *event = new QKeyEvent(keyPress->type(), keyPress->key(), keyPress->modifiers());
-
             qApp->postEvent(this, event);
             return true;
         }
-    }
-    else if (o == m_appsArea->viewport() && e->type() == QEvent::Wheel)
-    {
+    } else if (o == m_appsArea->viewport() && e->type() == QEvent::Wheel) {
         updateCurrentVisibleCategory();
         QMetaObject::invokeMethod(this, "refershCurrentFloatTitle", Qt::QueuedConnection);
-    }
-    else if (o == m_appsArea->viewport() && e->type() == QEvent::Resize)
-    {
+    } else if (o == m_appsArea->viewport() && e->type() == QEvent::Resize) {
         const int pos = m_appsManager->dockPosition();
         m_calcUtil->calculateAppLayout(static_cast<QResizeEvent *>(e)->size() - QSize(LEFT_PADDING + RIGHT_PADDING, 0), pos);
         updatePlaceholderSize();
@@ -363,8 +356,7 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
 
 void FullScreenFrame::inputMethodEvent(QInputMethodEvent *e)
 {
-    if (!e->commitString().isEmpty())
-    {
+    if (!e->commitString().isEmpty()) {
         m_searchWidget->edit()->setText(e->commitString());
         m_searchWidget->edit()->setFocus();
     }
@@ -374,8 +366,7 @@ void FullScreenFrame::inputMethodEvent(QInputMethodEvent *e)
 
 QVariant FullScreenFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
 {
-    switch (prop)
-    {
+    switch (prop) {
     case Qt::ImEnabled:
         return true;
     case Qt::ImCursorRectangle:
@@ -588,7 +579,7 @@ void FullScreenFrame::updateGradient()
     m_topGradient->raise();
 
     QPointF bottomPoint = m_appsArea->mapTo(this,
-                                         m_appsArea->rect().bottomLeft());
+                                            m_appsArea->rect().bottomLeft());
 
     QSize bottomSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
 
@@ -659,8 +650,7 @@ CategoryTitleWidget *FullScreenFrame::categoryTitle(const AppsListModel::AppCate
 {
     CategoryTitleWidget *dest = nullptr;
 
-    switch (category)
-    {
+    switch (category) {
     case AppsListModel::Internet:       dest = m_internetTitle;         break;
     case AppsListModel::Chat:           dest = m_chatTitle;             break;
     case AppsListModel::Music:          dest = m_musicTitle;            break;
@@ -682,8 +672,7 @@ AppGridView *FullScreenFrame::categoryView(const AppsListModel::AppCategory cate
 {
     AppGridView *view = nullptr;
 
-    switch (category)
-    {
+    switch (category) {
     case AppsListModel::Internet:       view = m_internetView;      break;
     case AppsListModel::Chat:           view = m_chatView;          break;
     case AppsListModel::Music:          view = m_musicView;         break;
@@ -731,8 +720,8 @@ AppGridView *FullScreenFrame::lastVisibleView() const
 
 void FullScreenFrame::initConnection()
 {
-    connect(m_appsArea, &AppListArea::increaseIcon, this, [=] { m_calcUtil->increaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
-    connect(m_appsArea, &AppListArea::decreaseIcon, this, [=] { m_calcUtil->decreaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
+    connect(m_appsArea, &AppListArea::increaseIcon, this, [ = ] { m_calcUtil->increaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
+    connect(m_appsArea, &AppListArea::decreaseIcon, this, [ = ] { m_calcUtil->decreaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
 
     connect(qApp, &QApplication::primaryScreenChanged, this, &FullScreenFrame::updateGeometry);
     connect(qApp->primaryScreen(), &QScreen::geometryChanged, this, &FullScreenFrame::updateGeometry);
@@ -819,25 +808,25 @@ void FullScreenFrame::initConnection()
     connect(m_systemView, &AppGridView::clicked, this, &FullScreenFrame::hide);
     connect(m_othersView, &AppGridView::clicked, this, &FullScreenFrame::hide);
 
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_allAppsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_internetView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_chatView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_musicView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_videoView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_graphicsView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_gameView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_officeView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_readingView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_developmentView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_systemView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_othersView, static_cast<void (AppGridView::*)(const QModelIndex&)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_allAppsView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_internetView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_chatView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_musicView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_videoView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_graphicsView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_gameView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_officeView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_readingView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_developmentView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_systemView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_othersView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
 
     connect(m_appsArea, &AppListArea::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
     connect(m_navigationWidget, &NavigationWidget::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
 
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
-    connect(m_searchWidget, &SearchWidget::toggleMode, [this]{
+    connect(m_searchWidget, &SearchWidget::toggleMode, [this] {
         m_searchWidget->clearFocus();
         m_searchWidget->clearSearchContent();
         updateDisplayMode(m_displayMode == GROUP_BY_CATEGORY ? ALL_APPS : GROUP_BY_CATEGORY);
@@ -886,8 +875,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     const QModelIndex currentIndex = m_appItemDelegate->currentIndex();
 
     // move operation should be start from a valid location, if not, just init it.
-    if (!currentIndex.isValid())
-    {
+    if (!currentIndex.isValid()) {
         m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? m_internetView->indexAt(0) : m_allAppsView->indexAt(0));
         update();
         return;
@@ -897,8 +885,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     QModelIndex index;
 
     // calculate destination sibling by keys, it may cause an invalid position.
-    switch (key)
-    {
+    switch (key) {
     case Qt::Key_Backtab:
     case Qt::Key_Left:      index = currentIndex.sibling(currentIndex.row() - 1, 0);        break;
     case Qt::Key_Tab:
@@ -945,8 +932,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
 
         int finalIndex = count;
 
-        switch (key)
-        {
+        switch (key) {
         case Qt::Key_Down:
             index = model->index(realColumn);
             break;
@@ -997,14 +983,12 @@ void FullScreenFrame::launchCurrentApp()
 {
     const QModelIndex &index = m_appItemDelegate->currentIndex();
 
-    if (index.isValid() && !index.data(AppsListModel::AppDesktopRole).toString().isEmpty())
-    {
+    if (index.isValid() && !index.data(AppsListModel::AppDesktopRole).toString().isEmpty()) {
         const AppsListModel::AppCategory category = index.data(AppsListModel::AppGroupRole).value<AppsListModel::AppCategory>();
 
         if ((category == AppsListModel::All && m_displayMode == ALL_APPS) ||
-            (category == AppsListModel::Search && m_displayMode == SEARCH) ||
-            (m_displayMode == GROUP_BY_CATEGORY && category != AppsListModel::All && category != AppsListModel::Search))
-        {
+                (category == AppsListModel::Search && m_displayMode == SEARCH) ||
+                (m_displayMode == GROUP_BY_CATEGORY && category != AppsListModel::All && category != AppsListModel::Search)) {
             m_appsManager->launchApp(index);
 
             hide();
@@ -1012,8 +996,7 @@ void FullScreenFrame::launchCurrentApp()
         }
     }
 
-    switch (m_displayMode)
-    {
+    switch (m_displayMode) {
     case SEARCH:
     case ALL_APPS:            m_appsManager->launchApp(m_allAppsView->indexAt(0));     break;
     case GROUP_BY_CATEGORY:   m_appsManager->launchApp(m_internetView->indexAt(0));    break;
@@ -1090,7 +1073,7 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
     unInstallDialog.addButtons(buttons);
 
 //    connect(&unInstallDialog, SIGNAL(buttonClicked(int, QString)), this, SLOT(handleUninstallResult(int, QString)));
-    connect(&unInstallDialog, &DTK_WIDGET_NAMESPACE::DDialog::buttonClicked, [&] (int clickedResult) {
+    connect(&unInstallDialog, &DTK_WIDGET_NAMESPACE::DDialog::buttonClicked, [&](int clickedResult) {
         // 0 means "cancel" button clicked
         if (clickedResult == 0)
             return;
@@ -1258,7 +1241,7 @@ void FullScreenFrame::updatePlaceholderSize()
 
 void FullScreenFrame::updateDockPosition()
 {
-   // reset all spacing size
+    // reset all spacing size
     m_topSpacing->setFixedHeight(30);
     m_bottomSpacing->setFixedHeight(0);
 
@@ -1392,3 +1375,4 @@ void FullScreenFrame::searchTextChanged(const QString &keywords)
     else
         updateDisplayMode(SEARCH);
 }
+

@@ -240,6 +240,7 @@ void WindowedFrame::showLauncher()
         return;
 
     m_searchWidget->clear();
+    m_searchWidget->normalMode();
     qApp->processEvents();
 
     // force refresh

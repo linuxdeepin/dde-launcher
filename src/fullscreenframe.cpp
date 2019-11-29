@@ -422,6 +422,7 @@ void FullScreenFrame::initUI()
     m_clearCacheTimer->setInterval(DLauncher::CLEAR_CACHE_TIMER * 1000);
 
     m_appsArea->setObjectName("AppBox");
+    m_appsArea->viewport()->setAutoFillBackground(false);
     m_appsArea->setWidgetResizable(true);
     m_appsArea->setFocusPolicy(Qt::NoFocus);
     m_appsArea->setFrameStyle(QFrame::NoFrame);
@@ -543,7 +544,7 @@ void FullScreenFrame::initUI()
     m_appsArea->addWidget(m_viewListPlaceholder);
 
     m_contentFrame = new QFrame;
-    m_contentFrame->setStyleSheet("background: transparent;");
+    m_contentFrame->setAttribute(Qt::WA_TranslucentBackground);
 
     QVBoxLayout *scrollVLayout = new QVBoxLayout;
     scrollVLayout->setMargin(0);
@@ -1349,7 +1350,6 @@ void FullScreenFrame::updateDockPosition()
 
     m_calcUtil->calculateAppLayout(m_appsArea->size() - QSize(LEFT_PADDING + RIGHT_PADDING, 0),
                                    m_appsManager->dockPosition());
-    setStyleSheet(getQssFromFile(":/skin/qss/fullscreenframe.qss"));
 
     QTimer::singleShot(0, this, &FullScreenFrame::updateGradient);
 }

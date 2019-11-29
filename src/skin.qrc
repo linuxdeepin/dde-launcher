@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>skin/qss/fullscreenframe.qss</file>
-        <file>skin/qss/miniframe.qss</file>
         <file>skin/images/application-default-icon.svg</file>
         <file>skin/images/category_10.svg</file>
         <file>skin/images/category_50.svg</file>
@@ -54,8 +52,6 @@
         <file>skin/images/office_100.svg</file>
         <file>skin/images/others_10.svg</file>
         <file>skin/images/others_50.svg</file>
-        <file>skin/qss/categorytitlewidget.qss</file>
-        <file>skin/qss/searchwidget.qss</file>
         <file>skin/images/search_hover.png</file>
         <file>skin/images/search_normal.png</file>
         <file>skin/images/search_press.png</file>

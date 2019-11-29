@@ -60,10 +60,6 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
 
     addTextShadow();
 
-//    setStyleSheet("QLabel#CategoryWhiteLine {"
-//                  "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255,255,255,0.3), stop:1 rgba(255,255,255,0))"
-//                  "}");
-
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &CategoryTitleWidget::relayout);
 }
 
@@ -100,13 +96,6 @@ void CategoryTitleWidget::setText(const QString &title)
     QFontMetrics fontMetric(m_title->font());
     const int width = fontMetric.width(title);
     m_title->setFixedWidth(width + 10);
-
-    // DON'T set style sheet for m_title, otherwise we can't fake opacity
-    // animation on it.
-    /*
-    m_title->setStyleSheet("color: white; background-color:transparent;");
-    */
-
     m_title->setText(title);
 }
 

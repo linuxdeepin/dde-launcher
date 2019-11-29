@@ -75,7 +75,6 @@ void MiniFrameButton::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setPen(QPen(palette().brightText(), 1));
 
     if (isChecked()) {
         QPainterPath path;
@@ -83,13 +82,7 @@ void MiniFrameButton::paintEvent(QPaintEvent *event)
         painter.fillPath(path, QColor(96, 96, 96, 160));
     }
 
-    int leftMargin = 5;
-
     if (!icon().isNull()) {
-        painter.drawPixmap(leftMargin, rect().center().y() - iconSize().height() / 2, icon().pixmap(iconSize()));
-        leftMargin += iconSize().width() + 5;
+        painter.drawPixmap(rect().center().x() - iconSize().width() / 2 + 1 , rect().center().y() - iconSize().height() / 2 + 1, icon().pixmap(iconSize()));
     }
-    QRect textRect = rect();
-    textRect.setLeft(leftMargin);
-    painter.drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, text());
 }

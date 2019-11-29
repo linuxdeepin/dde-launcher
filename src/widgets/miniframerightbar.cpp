@@ -78,32 +78,32 @@ protected:
 
 MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     : QWidget(parent)
-
-    , m_modeToggleBtn(new ButtonWithThemeCursor(this))
-    , m_datetimeWidget(new DatetimeWidget)
     , m_avatar(new Avatar)
     , m_currentIndex(0)
 {
-    m_modeToggleBtn->setFixedSize(24, 24);
-    m_modeToggleBtn->setBackgroundRole(DPalette::Button);
-
-    m_modeToggleBtn->raise();
+    setFixedWidth(60);
+//    m_modeToggleBtn->raise();
 
     bool hasManual = QProcess::execute("which", QStringList() << "dman") == 0;
 
     QVBoxLayout *    layout       = new QVBoxLayout(this);
-    QHBoxLayout *    bottomLayout = new QHBoxLayout;
-    MiniFrameButton *computerBtn  = new MiniFrameButton(tr("Computer"));
-    MiniFrameButton *videoBtn     = new MiniFrameButton(tr("Videos"));
-    MiniFrameButton *musicBtn     = new MiniFrameButton(tr("Music"));
-    MiniFrameButton *pictureBtn   = new MiniFrameButton(tr("Pictures"));
-    MiniFrameButton *documentBtn  = new MiniFrameButton(tr("Documents"));
-    MiniFrameButton *downloadBtn  = new MiniFrameButton(tr("Downloads"));
-    MiniFrameButton *manualBtn    = new MiniFrameButton(tr("Manual"));
-    m_settingsBtn                 = new MiniFrameButton(tr("Settings"));
-    m_powerBtn                    = new MiniFrameButton(tr("Power"));
-
-    manualBtn->setVisible(hasManual);
+    QVBoxLayout *    bottomLayout = new QVBoxLayout;
+    MiniFrameButton *computerBtn  = new MiniFrameButton(tr(""));
+    computerBtn->setFixedSize(16, 16);
+    MiniFrameButton *videoBtn     = new MiniFrameButton(tr(""));
+    videoBtn->setFixedSize(16, 16);
+    MiniFrameButton *musicBtn     = new MiniFrameButton(tr(""));
+    musicBtn->setFixedSize(16, 16);
+    MiniFrameButton *pictureBtn   = new MiniFrameButton(tr(""));
+    pictureBtn->setFixedSize(16, 16);
+    MiniFrameButton *documentBtn  = new MiniFrameButton(tr(""));
+    documentBtn->setFixedSize(16, 16);
+    MiniFrameButton *downloadBtn  = new MiniFrameButton(tr(""));
+    downloadBtn->setFixedSize(16, 16);
+    m_settingsBtn                 = new MiniFrameButton(tr(""));
+    m_settingsBtn->setFixedSize(18, 18);
+    m_powerBtn                    = new MiniFrameButton(tr(""));
+    m_powerBtn->setFixedSize(18, 18);
 
     uint index = 0;
     m_btns[index++] = computerBtn;
@@ -112,10 +112,6 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     m_btns[index++] = pictureBtn;
     m_btns[index++] = documentBtn;
     m_btns[index++] = downloadBtn;
-
-    if (hasManual) {
-        m_btns[index++] = manualBtn;
-    }
 
     m_btns[index++] = m_settingsBtn;
     m_btns[index++] = m_powerBtn;
@@ -131,28 +127,37 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
         if (DGuiApplicationHelper::LightType == themeType) {
-            m_modeToggleBtn->setNormalPic(":/widgets/images/fullscreen.svg");
-            m_settingsBtn->setIcon(QIcon(":/widgets/images/settings-dark.svg"));
-            m_powerBtn->setIcon(QIcon(":/widgets/images/power-dark.svg"));
+            m_settingsBtn->setIcon(QIcon(":/widgets/images/setting_dark.svg"));
+            m_powerBtn->setIcon(QIcon(":/widgets/images/shutdown_dark.svg"));
+            computerBtn->setIcon(QIcon(":/widgets/images/computer-symbolic_dark"));
+            videoBtn->setIcon(QIcon(":/widgets/images/folder-videos-symbolic_dark"));
+            musicBtn->setIcon(QIcon(":/widgets/images/folder-music-symbolic_dark"));
+            pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic_dark"));
+            documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic_dark"));
+            downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic_dark"));
         } else {
-            m_modeToggleBtn->setNormalPic(":/widgets/images/fullscreen_dark.svg");
-            m_settingsBtn->setIcon(QIcon(":/widgets/images/settings.svg"));
-            m_powerBtn->setIcon(QIcon(":/widgets/images/power.svg"));
+            m_settingsBtn->setIcon(QIcon(":/widgets/images/setting.svg"));
+            m_powerBtn->setIcon(QIcon(":/widgets/images/shutdown.svg"));
+            computerBtn->setIcon(QIcon(":/widgets/images/computer-symbolic"));
+            videoBtn->setIcon(QIcon(":/widgets/images/folder-videos-symbolic"));
+            musicBtn->setIcon(QIcon(":/widgets/images/folder-music-symbolic"));
+            pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic"));
+            documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic"));
+            downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic"));
         }
     });
 
     if (DGuiApplicationHelper::LightType ==DGuiApplicationHelper::instance()->themeType()) {
-        m_modeToggleBtn->setNormalPic(":/widgets/images/fullscreen.svg");
         m_settingsBtn->setIcon(QIcon(":/widgets/images/settings-dark.svg"));
         m_powerBtn->setIcon(QIcon(":/widgets/images/power-dark.svg"));
     } else {
-        m_modeToggleBtn->setNormalPic(":/widgets/images/fullscreen_dark.svg");
         m_settingsBtn->setIcon(QIcon(":/widgets/images/settings.svg"));
         m_powerBtn->setIcon(QIcon(":/widgets/images/power.svg"));
     }
 
-    bottomLayout->addWidget(m_settingsBtn);
-    bottomLayout->addWidget(m_powerBtn);
+    bottomLayout->addWidget(m_settingsBtn, 0, Qt::AlignCenter);
+    bottomLayout->addWidget(m_powerBtn,0 ,Qt::AlignCenter);
+    bottomLayout->setSpacing(18);
 
     QWidget *top_widget = new QWidget;
     QHBoxLayout *top_layout = new QHBoxLayout;
@@ -165,46 +170,36 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     QVBoxLayout *center_layout = new QVBoxLayout;
     center_layout->setMargin(0);
     center_widget->setLayout(center_layout);
-    center_layout->addWidget(computerBtn);
-    center_layout->addWidget(videoBtn);
-    center_layout->addWidget(musicBtn);
-    center_layout->addWidget(pictureBtn);
-    center_layout->addWidget(documentBtn);
-    center_layout->addWidget(downloadBtn);
-    center_layout->addWidget(manualBtn);
+    center_layout->setSpacing(24);
+    center_layout->addWidget(m_avatar, 0, Qt::AlignCenter);
+    center_layout->addWidget(computerBtn, 0, Qt::AlignCenter);
+    center_layout->addWidget(documentBtn, 0, Qt::AlignCenter);
+    center_layout->addWidget(pictureBtn, 0, Qt::AlignCenter);
+    center_layout->addWidget(musicBtn, 0, Qt::AlignCenter);
+    center_layout->addWidget(videoBtn, 0, Qt::AlignCenter);
+    center_layout->addWidget(downloadBtn, 0, Qt::AlignCenter);
 
     QWidget *bottom_widget = new QWidget;
     QVBoxLayout *bottom_layout = new QVBoxLayout;
     bottom_layout->setMargin(0);
-    bottom_layout->addWidget(m_datetimeWidget);
     bottom_layout->addLayout(bottomLayout);
     bottom_widget->setLayout(bottom_layout);
 
-    layout->setSpacing(0);
-    layout->addSpacing(30);
-    layout->addWidget(top_widget, 0, Qt::AlignTop);
-    layout->addWidget(center_widget, 0, Qt::AlignVCenter);
+    layout->addSpacing(18);
+    layout->addWidget(center_widget);
     layout->addWidget(bottom_widget, 0, Qt::AlignBottom);
-    layout->setContentsMargins(18, 0, 12, 18);
+    layout->setContentsMargins(0, 0, 0, 14);
 
-    updateSize();
-
-    connect(qApp, &QApplication::fontChanged, this, [&] {
-        updateSize();
-    });
-
-    connect(m_modeToggleBtn, &DImageButton::clicked, this, &MiniFrameRightBar::modeToggleBtnClicked);
     connect(computerBtn, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
     connect(documentBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DocumentsLocation); });
     connect(videoBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::MoviesLocation); });
     connect(musicBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::MusicLocation); });
     connect(pictureBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::PicturesLocation); });
     connect(downloadBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DownloadLocation); });
-    connect(manualBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showManual);
     connect(m_settingsBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showSettings);
     connect(m_powerBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showShutdown);
     connect(m_avatar, &Avatar::clicked, this, &MiniFrameRightBar::handleAvatarClicked);
-    connect(m_datetimeWidget, &DatetimeWidget::clicked, this, &MiniFrameRightBar::handleTimedateOpen);
+
 }
 
 MiniFrameRightBar::~MiniFrameRightBar()
@@ -249,26 +244,8 @@ void MiniFrameRightBar::execCurrent()
     emit m_btns[m_currentIndex]->clicked();
 }
 
-void MiniFrameRightBar::paintEvent(QPaintEvent *e)
-{
-    QWidget::paintEvent(e);
-
-    QPainter painter(this);
-    painter.setPen(QColor(255, 255, 255, 0.1 * 255));
-    painter.drawLine(QPoint(0, 0),
-    QPoint(0, rect().height()));
-}
-
 void MiniFrameRightBar::showEvent(QShowEvent *event) {
     return QWidget::showEvent(event);
-}
-
-bool MiniFrameRightBar::event(QEvent *event) {
-    if (event->type() == QEvent::ApplicationFontChange) {
-        updateSize();
-    }
-
-    return QWidget::event(event);
 }
 
 void MiniFrameRightBar::openDirectory(const QString &dir)
@@ -393,27 +370,3 @@ void MiniFrameRightBar::hideAllHoverState() const
     }
 }
 
-void MiniFrameRightBar::updateSize()
-{
-    // To calculate width to adaptive width.
-    const int padding    = 10;
-    const int iconWidth  = 24;
-    int       btnWidth   = 0;
-    int       frameWidth = 0;
-
-    const int dateTextWidth = m_datetimeWidget->getDateTextWidth() + 60;
-
-    btnWidth += m_settingsBtn->fontMetrics().boundingRect(m_settingsBtn->text()).width() + iconWidth + padding;
-    btnWidth += m_powerBtn->fontMetrics().boundingRect(m_powerBtn->text()).width() + iconWidth + padding;
-    btnWidth += 38;  // padding
-
-    if (btnWidth > dateTextWidth) {
-        frameWidth = btnWidth;
-    }
-    else {
-        frameWidth = dateTextWidth;
-    }
-
-    setFixedWidth(frameWidth);
-    m_modeToggleBtn->move(frameWidth - 24-12 , 12);
-}

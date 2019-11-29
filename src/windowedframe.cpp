@@ -136,7 +136,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     QHBoxLayout *searchLayout = new QHBoxLayout;
     searchLayout->addSpacing(10);
     searchLayout->addWidget(m_searcherEdit);
-    DStyle::setFocusRectVisible(m_searcherEdit, false);
+    DStyle::setFocusRectVisible(m_searcherEdit->lineEdit(), false);
     searchLayout->addWidget(m_modeToggleBtn);
 
     QHBoxLayout *appsLayout = new QHBoxLayout;
@@ -865,6 +865,8 @@ void WindowedFrame::onOpacityChanged(const double value)
 
 void WindowedFrame:: paintEvent(QPaintEvent *e)
 {
+    DBlurEffectWidget::paintEvent(e);
+
     QPainter painter(this);
     painter.fillRect(m_leftBar->geometry(), QColor(0, 0, 0, 25));
 }

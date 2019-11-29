@@ -44,15 +44,6 @@ CalculateUtil *CalculateUtil::instance()
     return INSTANCE;
 }
 
-int CalculateUtil::calculateBesidePadding(const int screenWidth)
-{
-    // static const int NAVIGATION_WIDGET_WIDTH = 180;
-    if (screenWidth > 1366)
-        return 180;
-
-    return 130;
-}
-
 void CalculateUtil::setDisplayMode(const int mode)
 {
     m_launcherGsettings->set(DisplayModeKey, mode == ALL_APPS ? DisplayModeFree : DisplayModeCategory);
@@ -119,7 +110,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 
     const QRect pr = qApp->primaryScreen()->geometry();
     const int screenWidth = pr.width();
-    const int remain_width = screenWidth - calculateBesidePadding(screenWidth) * 2;
+    const int remain_width = screenWidth;
 
     const int itemWidth = pr.width() <= 1440 ? 170 : 200;
     const int spacing = pr.width() <= 1440 ? 10 : 14;

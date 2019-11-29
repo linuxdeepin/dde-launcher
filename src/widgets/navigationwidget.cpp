@@ -62,28 +62,6 @@ void NavigationWidget::setButtonsVisible(const bool visible)
     m_othersBtn->setVisible(visible);
 }
 
-void NavigationWidget::setCategoryTextVisible(const bool visible, const bool animation)
-{
-    m_internetBtn->setTextVisible(visible, animation);
-    m_chatBtn->setTextVisible(visible, animation);
-    m_musicBtn->setTextVisible(visible, animation);
-    m_videoBtn->setTextVisible(visible, animation);
-    m_graphicsBtn->setTextVisible(visible, animation);
-    m_gameBtn->setTextVisible(visible, animation);
-    m_officeBtn->setTextVisible(visible, animation);
-    m_readingBtn->setTextVisible(visible, animation);
-    m_developmentBtn->setTextVisible(visible, animation);
-    m_systemBtn->setTextVisible(visible, animation);
-    m_othersBtn->setTextVisible(visible, animation);
-}
-
-QLabel *NavigationWidget::categoryTextLabel(const AppsListModel::AppCategory category) const
-{
-    CategoryButton *btn = button(category);
-
-    return btn ? btn->textLabel() : nullptr;
-}
-
 void NavigationWidget::setCurrentCategory(const AppsListModel::AppCategory category)
 {
     CategoryButton *btn = button(category);
@@ -116,7 +94,7 @@ void NavigationWidget::initUI()
 
     m_internetBtn->setChecked(true);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->addSpacing(30);
     mainLayout->addStretch();
     mainLayout->addWidget(m_internetBtn);
@@ -182,39 +160,9 @@ CategoryButton *NavigationWidget::button(const AppsListModel::AppCategory catego
     return nullptr;
 }
 
-qreal NavigationWidget::zoomLevel() const
-{
-    return m_zoomLevel;
-}
-
-void NavigationWidget::setZoomLevel(const qreal &zoomLevel)
-{
-    if (m_zoomLevel != zoomLevel) {
-        m_zoomLevel = zoomLevel;
-
-        m_internetBtn->setZoomLevel(zoomLevel);
-        m_chatBtn->setZoomLevel(zoomLevel);
-        m_musicBtn->setZoomLevel(zoomLevel);
-        m_videoBtn->setZoomLevel(zoomLevel);
-        m_graphicsBtn->setZoomLevel(zoomLevel);
-        m_gameBtn->setZoomLevel(zoomLevel);
-        m_officeBtn->setZoomLevel(zoomLevel);
-        m_readingBtn->setZoomLevel(zoomLevel);
-        m_developmentBtn->setZoomLevel(zoomLevel);
-        m_systemBtn->setZoomLevel(zoomLevel);
-        m_othersBtn->setZoomLevel(zoomLevel);
-    }
-}
-
 void NavigationWidget::enterEvent(QEvent *e)
 {
     QFrame::enterEvent(e);
-
-    QPropertyAnimation * ani = new QPropertyAnimation(this, "zoomLevel");
-    ani->setDuration(300);
-    ani->setStartValue(zoomLevel());
-    ani->setEndValue(1.2);
-    ani->start(QPropertyAnimation::DeleteWhenStopped);
 
     emit mouseEntered();
 }
@@ -223,11 +171,6 @@ void NavigationWidget::leaveEvent(QEvent *e)
 {
     QFrame::leaveEvent(e);
 
-    QPropertyAnimation * ani = new QPropertyAnimation(this, "zoomLevel");
-    ani->setDuration(300);
-    ani->setEndValue(zoomLevel());
-    ani->setEndValue(1);
-    ani->start(QPropertyAnimation::DeleteWhenStopped);
 }
 
 void NavigationWidget::showEvent(QShowEvent *e)

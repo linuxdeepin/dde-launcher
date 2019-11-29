@@ -27,7 +27,7 @@
 #include "categorybutton.h"
 #include "src/global_util/calculate_util.h"
 
-#include <QWidget>
+#include <QFrame>
 #include <QButtonGroup>
 
 class NavigationWidget : public QFrame
@@ -37,14 +37,7 @@ class NavigationWidget : public QFrame
 public:
     explicit NavigationWidget(QWidget *parent = 0);
 
-    Q_PROPERTY(qreal zoomLevel READ zoomLevel WRITE setZoomLevel)
-
     void setButtonsVisible(const bool visible);
-    void setCategoryTextVisible(const bool visible, const bool animation = false);
-    QLabel *categoryTextLabel(const AppsListModel::AppCategory category) const;
-
-    qreal zoomLevel() const;
-    void setZoomLevel(const qreal &zoomLevel);
 
 signals:
     void scrollToCategory(const AppsListModel::AppCategory category) const;
@@ -55,9 +48,9 @@ public slots:
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
 
 protected:
-    void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent *e) Q_DECL_OVERRIDE;
-    void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
+    void showEvent(QShowEvent *e);
 
 private:
     void initUI();
@@ -80,8 +73,6 @@ private:
     CategoryButton *m_developmentBtn;
     CategoryButton *m_systemBtn;
     CategoryButton *m_othersBtn;
-
-    qreal m_zoomLevel = 1;
 };
 
 #endif // NAVIGATIONWIDGET_H

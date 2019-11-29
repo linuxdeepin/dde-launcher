@@ -28,7 +28,7 @@
 #include "src/global_util/calculate_util.h"
 
 #include <QAbstractButton>
-#include <QLabel>
+#include <QIcon>
 
 class CategoryButton : public QAbstractButton
 {
@@ -42,51 +42,25 @@ public:
     };
 
 public:
-    explicit CategoryButton(const AppsListModel::AppCategory category, QWidget *parent = 0);
-
-    Q_PROPERTY(qreal titleOpacity READ titleOpacity WRITE setTitleOpacity)
-    Q_PROPERTY(qreal zoomLevel READ zoomLevel WRITE setZoomLevel)
-
-    QLabel *textLabel();
-
-    qreal titleOpacity() const;
-    void setTitleOpacity(const qreal &titleOpacity);
-
-    qreal zoomLevel() const;
-    void setZoomLevel(const qreal &zoomLevel);
+    explicit CategoryButton(const AppsListModel::AppCategory category, QWidget *parent = nullptr);
 
 public slots:
     void setChecked(bool isChecked);
-    void setTextVisible(bool visible, const bool animation = false);
     AppsListModel::AppCategory category() const;
 
 protected:
-    void paintEvent(QPaintEvent *e);
-    void enterEvent(QEvent *e);
-    void leaveEvent(QEvent *e);
+    void paintEvent(QPaintEvent *event);
 
 private:
     void setInfoByCategory();
     void updateState(const State state);
-    void updateTextColor();
-    void addTextShadow();
-
-private slots:
-    void relayout();
 
 private:
     CalculateUtil *m_calcUtil;
-    State m_state = Checked;
+    State m_state = Normal;
     AppsListModel::AppCategory m_category;
     QString m_iconName;
-
-    QLabel *m_iconLabel;
-    QLabel *m_textLabel;
-
-    QPropertyAnimation *m_opacityAnimation;
-    qreal m_titleOpacity = 1;
-
-    qreal m_zoomLevel = 1;
+    QPixmap m_icon;
 };
 
 #endif // CATEGORYBUTTON_H

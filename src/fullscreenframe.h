@@ -134,7 +134,6 @@ private slots:
     void ensureScrollToDest(const QVariant &value);
     void ensureItemVisible(const QModelIndex &index);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
-    void updateGradient();
     void refreshTitleVisible();
     void refershCategoryTextVisible();
     void refershCurrentFloatTitle();
@@ -171,15 +170,13 @@ private:
 
     NavigationWidget *m_navigationWidget;
     SearchWidget *m_searchWidget;
-    AppListArea *m_appsArea;
-    DVBoxWidget *m_appsVbox;
+    AppListArea *m_appsArea;    // app 滚动区域
+    DVBoxWidget *m_appsVbox;    // app 分组
 
     QWidget *m_viewListPlaceholder;
     QLabel *m_tipsLabel;
 
     AppItemDelegate *m_appItemDelegate;
-    GradientLabel* m_topGradient;
-    GradientLabel* m_bottomGradient;
 
     AppGridView *m_allAppsView;
     AppGridView *m_internetView;

@@ -87,8 +87,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_viewListPlaceholder(new QWidget),
     m_tipsLabel(new QLabel(this)),
     m_appItemDelegate(new AppItemDelegate),
-    m_topGradient(new GradientLabel(this)),
-    m_bottomGradient(new GradientLabel(this)),
 
     m_allAppsView(new AppGridView),
     m_internetView(new AppGridView),
@@ -566,8 +564,6 @@ void FullScreenFrame::initUI()
     m_navigationWidget->show();
     m_navigationWidget->raise();
 
-    m_bottomGradient->setDirection(GradientLabel::BottomToTop);
-
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
     m_mainLayout->addSpacing(0);
@@ -582,44 +578,6 @@ void FullScreenFrame::initUI()
     // animation
     m_scrollAnimation = new QPropertyAnimation(m_appsArea->verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::OutQuad);
-}
-
-// FIXME(sbw): optimize this implements.
-void FullScreenFrame::updateGradient()
-{
-    const qreal ratio = devicePixelRatioF();
-    QPixmap pixmap = cachePixmap();
-    pixmap.setDevicePixelRatio(1);
-
-    QPoint topLeft = m_appsArea->mapTo(this,
-                                       QPoint(0, 0));
-    QSize topSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
-    QRect topRect(topLeft * ratio, topSize * ratio);
-    QPixmap topCache = pixmap.copy(topRect);
-    topCache.setDevicePixelRatio(ratio);
-
-    m_topGradient->setPixmap(topCache);
-    m_topGradient->resize(topSize);
-
-    m_topGradient->move(topLeft);
-    m_topGradient->show();
-    m_topGradient->raise();
-
-    QPointF bottomPoint = m_appsArea->mapTo(this,
-                                            m_appsArea->rect().bottomLeft());
-
-    QSize bottomSize(m_appsArea->width(), DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT);
-
-    QPoint bottomLeft(bottomPoint.x(), bottomPoint.y() + 1 - bottomSize.height());
-
-    QRect bottomRect(bottomLeft * ratio, bottomSize * ratio);
-    QPixmap bottomCache = cachePixmap().copy(bottomRect);
-
-    m_bottomGradient->setPixmap(bottomCache);
-    m_bottomGradient->resize(bottomSize);
-    m_bottomGradient->move(QPoint(bottomPoint.x(), bottomPoint.y() + 1 * ratio - bottomSize.height()));
-    m_bottomGradient->show();
-    m_bottomGradient->raise();
 }
 
 void FullScreenFrame::refreshTitleVisible()
@@ -1346,8 +1304,6 @@ void FullScreenFrame::updateDockPosition()
 
     m_calcUtil->calculateAppLayout(m_appsArea->size() - QSize(LEFT_PADDING + RIGHT_PADDING, 0),
                                    m_appsManager->dockPosition());
-
-    QTimer::singleShot(0, this, &FullScreenFrame::updateGradient);
 }
 
 AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentModel)

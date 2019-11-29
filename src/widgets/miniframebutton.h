@@ -25,6 +25,9 @@ private:
     // QWidget interface
 protected:
     void paintEvent(QPaintEvent *event) override;
+
+private:
+    QColor m_color;
 };
 
 #endif

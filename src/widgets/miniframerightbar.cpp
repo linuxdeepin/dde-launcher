@@ -82,28 +82,27 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     , m_currentIndex(0)
 {
     setFixedWidth(60);
+    QSize m_size(36, 36);
 //    m_modeToggleBtn->raise();
-
-    bool hasManual = QProcess::execute("which", QStringList() << "dman") == 0;
 
     QVBoxLayout *    layout       = new QVBoxLayout(this);
     QVBoxLayout *    bottomLayout = new QVBoxLayout;
     MiniFrameButton *computerBtn  = new MiniFrameButton(tr(""));
-    computerBtn->setFixedSize(16, 16);
+    computerBtn->setFixedSize(m_size);
     MiniFrameButton *videoBtn     = new MiniFrameButton(tr(""));
-    videoBtn->setFixedSize(16, 16);
+    videoBtn->setFixedSize(m_size);
     MiniFrameButton *musicBtn     = new MiniFrameButton(tr(""));
-    musicBtn->setFixedSize(16, 16);
+    musicBtn->setFixedSize(m_size);
     MiniFrameButton *pictureBtn   = new MiniFrameButton(tr(""));
-    pictureBtn->setFixedSize(16, 16);
+    pictureBtn->setFixedSize(m_size);
     MiniFrameButton *documentBtn  = new MiniFrameButton(tr(""));
-    documentBtn->setFixedSize(16, 16);
+    documentBtn->setFixedSize(m_size);
     MiniFrameButton *downloadBtn  = new MiniFrameButton(tr(""));
-    downloadBtn->setFixedSize(16, 16);
+    downloadBtn->setFixedSize(m_size);
     m_settingsBtn                 = new MiniFrameButton(tr(""));
-    m_settingsBtn->setFixedSize(18, 18);
+    m_settingsBtn->setFixedSize(m_size);
     m_powerBtn                    = new MiniFrameButton(tr(""));
-    m_powerBtn->setFixedSize(18, 18);
+    m_powerBtn->setFixedSize(m_size);
 
     uint index = 0;
     m_btns[index++] = computerBtn;
@@ -160,7 +159,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     bottomLayout->addWidget(m_settingsBtn, 0, Qt::AlignCenter);
     bottomLayout->addWidget(m_powerBtn,0 ,Qt::AlignCenter);
-    bottomLayout->setSpacing(18);
+    bottomLayout->setSpacing(0);
 
     QWidget *top_widget = new QWidget;
     QHBoxLayout *top_layout = new QHBoxLayout;
@@ -173,7 +172,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     QVBoxLayout *center_layout = new QVBoxLayout;
     center_layout->setMargin(0);
     center_widget->setLayout(center_layout);
-    center_layout->setSpacing(24);
+    center_layout->setSpacing(10);
     center_layout->addWidget(m_avatar, 0, Qt::AlignCenter);
     center_layout->addWidget(computerBtn, 0, Qt::AlignCenter);
     center_layout->addWidget(documentBtn, 0, Qt::AlignCenter);

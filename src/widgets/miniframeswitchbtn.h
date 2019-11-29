@@ -49,6 +49,7 @@ private:
     QLabel *m_enterIcon;
     QLabel *m_allIconLabel;
     bool m_hover = false;
+    QColor m_color;
 
 };
 

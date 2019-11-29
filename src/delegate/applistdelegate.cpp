@@ -25,10 +25,14 @@
 #include "src/model/appslistmodel.h"
 #include "../global_util/util.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QPixmap>
 #include <QPainter>
 #include <QDebug>
 #include <QApplication>
+
+DGUI_USE_NAMESPACE
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
@@ -41,6 +45,13 @@ AppListDelegate::AppListDelegate(QObject *parent)
 {
     m_blueDotPixmap = renderSVG(":/skin/images/new_install_indicator.svg", QSize(10, 10));
     m_autoStartPixmap = renderSVG(":/skin/images/emblem-autostart.svg", QSize(16, 16));
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
+        if (DGuiApplicationHelper::DarkType == themeType) {
+             m_color.setRgb(255, 255, 255, 25);
+        } else {
+            m_color.setRgb(0, 0, 0, 25);
+        }
+    });
 }
 
 void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -78,7 +89,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     if (option.state.testFlag(QStyle::State_Selected)) {
         // hover background color.
-        painter->setBrush(QColor(96, 96, 96, 160));
+         painter->setBrush(m_color);
     } else if (isDragItem) {
         // drag item background color.
         painter->setBrush(QColor(255, 255, 255, 255 * 0.4));

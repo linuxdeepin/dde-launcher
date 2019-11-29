@@ -16,12 +16,13 @@ MiniFrameButton::MiniFrameButton(const QString &text, QWidget *parent)
     setObjectName("MiniFrameButton");
     setFlat(true);
 
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
-        QPalette pa = palette();
-        pa.setBrush(QPalette::ButtonText, pa.brightText());
-        pa.setBrush(QPalette::HighlightedText, pa.brightText());
-        pa.setColor(QPalette::All, QPalette::Highlight, QColor(96, 96, 96, 160));
-        setPalette(pa);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
+        if (DGuiApplicationHelper::DarkType == themeType) {
+            m_color.setRgb(255, 255, 255, 25);
+        } else {
+            m_color.setRgb(0, 0, 0, 25);
+        }
+        update();
     });
 
     QPalette pa = palette();
@@ -79,7 +80,7 @@ void MiniFrameButton::paintEvent(QPaintEvent *event)
     if (isChecked()) {
         QPainterPath path;
         path.addRoundedRect(rect(), 4, 4);
-        painter.fillPath(path, QColor(96, 96, 96, 160));
+        painter.fillPath(path, m_color);
     }
 
     if (!icon().isNull()) {

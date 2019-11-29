@@ -35,17 +35,20 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
-        if (DGuiApplicationHelper::LightType == themeType) {
+        if (DGuiApplicationHelper::DarkType == themeType) {
             m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all-dark.svg", QSize(24, 24)));
             m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal-dark.svg", QSize(20, 20)));
+            m_color.setRgb(255, 255, 255, 25);
         } else {
             m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all.svg", QSize(24, 24)));
             m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal.svg", QSize(20, 20)));
+             m_color.setRgb(0, 0, 0, 25);
         }
 
         QPalette pa = m_textLabel->palette();
         pa.setBrush(QPalette::WindowText, pa.brightText());
         m_textLabel->setPalette(pa);
+        update();
     });
 
     if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
@@ -105,7 +108,7 @@ void MiniFrameSwitchBtn::paintEvent(QPaintEvent *event)
     if (hasFocus() || m_hover) {
         QPainterPath path;
         path.addRoundedRect(rect(), 4, 4);
-        p.fillPath(path, QColor(96, 96, 96, 160));
+        p.fillPath(path, m_color);
     }
 }
 

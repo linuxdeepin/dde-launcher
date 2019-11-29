@@ -44,14 +44,12 @@ signals:
 
 private slots:
     void updateBackgrounds();
-    void onBlurDone(const QString &source, const QString &blur, bool done);
 
 private:
     int m_currentWorkspace;
     mutable QString m_background;
 
     com::deepin::wm *m_wmInter;
-    ImageBlurInter *m_blurInter;
     AppearanceInter *m_appearanceInter;
 };
 

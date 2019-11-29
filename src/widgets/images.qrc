@@ -9,5 +9,21 @@
         <file>images/enter_details_normal.svg</file>
         <file>images/enter_details_normal-dark.svg</file>
         <file>images/drag_indicator.svg</file>
+        <file>images/computer-symbolic.svg</file>
+        <file>images/folder-documents-symbolic.svg</file>
+        <file>images/folder-downloads-symbolic.svg</file>
+        <file>images/folder-music-symbolic.svg</file>
+        <file>images/folder-pictures-symbolic.svg</file>
+        <file>images/folder-videos-symbolic.svg</file>
+        <file>images/computer-symbolic_dark.svg</file>
+        <file>images/folder-documents-symbolic_dark.svg</file>
+        <file>images/folder-downloads-symbolic_dark.svg</file>
+        <file>images/folder-music-symbolic_dark.svg</file>
+        <file>images/folder-pictures-symbolic_dark.svg</file>
+        <file>images/folder-videos-symbolic_dark.svg</file>
+        <file>images/setting_dark.svg</file>
+        <file>images/setting.svg</file>
+        <file>images/shutdown.svg</file>
+        <file>images/shutdown_dark.svg</file>
     </qresource>
 </RCC>

@@ -38,7 +38,7 @@ Avatar::Avatar(QWidget *parent)
                                 QString("/com/deepin/daemon/Accounts/User%1").arg(getuid()),
                                 QDBusConnection::systemBus(), this);
 
-    setFixedSize(60, 60);
+    setFixedSize(32, 32);
     setFilePath(m_userInter->iconFile());
 
     connect(m_userInter, &UserInter::IconFileChanged, this, &Avatar::setFilePath);
@@ -49,7 +49,7 @@ void Avatar::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainterPath painterPath;
-    painterPath.addEllipse(QRect(0, 0, width(), height()));
+    painterPath.addRoundedRect(QRect(0, 0, width(), height()), 6, 6);
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);

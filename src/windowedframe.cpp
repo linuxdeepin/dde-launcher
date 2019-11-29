@@ -87,7 +87,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_appsModel(new AppsListModel(AppsListModel::Custom))
     , m_searchModel(new AppsListModel(AppsListModel::Search))
     , m_searchWidget(new SearchLineEdit)
-    , m_rightBar(new MiniFrameRightBar)
+    , m_leftBar(new MiniFrameRightBar)
     , m_switchBtn(new MiniFrameSwitchBtn)
     , m_tipsLabel(new QLabel(this))
     , m_delayHideTimer(new QTimer)
@@ -95,6 +95,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_appearanceInter(new Appearance("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
     , m_displayMode(All)
     , m_focusPos(LeftTop)
+    , m_modeToggleBtn(new DImageButton(this))
 {
     setMaskColor(DBlurEffectWidget::AutoColor);
     setBlendMode(DBlurEffectWidget::InWindowBlend);
@@ -130,25 +131,24 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_autoScrollTimer->setInterval(DLauncher::APPS_AREA_AUTO_SCROLL_TIMER);
     m_autoScrollTimer->setSingleShot(false);
 
-    m_rightBar->installEventFilter(m_eventFilter);
-    m_rightBar->installEventFilter(this);
+    m_leftBar->installEventFilter(m_eventFilter);
+    m_leftBar->installEventFilter(this);
 
-    m_searchWidget->setFixedWidth(290);
+    m_searchWidget->setFixedWidth(257);
 
     QHBoxLayout *searchLayout = new QHBoxLayout;
     searchLayout->addSpacing(10);
     searchLayout->addWidget(m_searchWidget);
-    searchLayout->addSpacing(10);
+    searchLayout->addWidget(m_modeToggleBtn);
 
     QHBoxLayout *appsLayout = new QHBoxLayout;
     appsLayout->addSpacing(10);
     appsLayout->addWidget(m_appsView);
-    appsLayout->addSpacing(10);
+    appsLayout->setContentsMargins(0, 0, 0, 0);
 
     QHBoxLayout *switchLayout = new QHBoxLayout;
     switchLayout->addSpacing(10);
     switchLayout->addWidget(m_switchBtn);
-    switchLayout->addSpacing(10);
 
     QVBoxLayout *containLayout = new QVBoxLayout;
     containLayout->setSpacing(0);
@@ -156,20 +156,18 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     containLayout->addSpacing(10);
     containLayout->addLayout(searchLayout);
-    containLayout->addSpacing(10);
-    containLayout->addWidget(new HSeparator);
-    containLayout->addSpacing(4);
+    //containLayout->addWidget(new HSeparator);
     containLayout->addLayout(appsLayout);
     containLayout->addLayout(switchLayout);
     containLayout->addSpacing(15);
 
-    m_leftWidget = new QWidget;
-    m_leftWidget->setLayout(containLayout);
-    m_leftWidget->setFixedWidth(320);
+    m_rightWidget = new QWidget;
+    m_rightWidget->setLayout(containLayout);
+    m_rightWidget->setFixedWidth(320);
 
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
-    mainLayout->addWidget(m_leftWidget);
-    mainLayout->addWidget(m_rightBar);
+    mainLayout->addWidget(m_leftBar);
+    mainLayout->addWidget(m_rightWidget);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
 
@@ -198,8 +196,8 @@ WindowedFrame::WindowedFrame(QWidget *parent)
             m_autoScrollTimer->start();
     });
 
-    connect(m_rightBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &WindowedFrame::onToggleFullScreen);
-    connect(m_rightBar, &MiniFrameRightBar::requestFrameHide, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
+    connect(m_leftBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &WindowedFrame::onToggleFullScreen);
+    connect(m_leftBar, &MiniFrameRightBar::requestFrameHide, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &WindowedFrame::onWMCompositeChanged);
     connect(m_searchWidget, &SearchLineEdit::textChanged, this, &WindowedFrame::searchText, Qt::QueuedConnection);
@@ -222,11 +220,17 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher, Qt::QueuedConnection);
 
     connect(m_appearanceInter, &Appearance::OpacityChanged, this, &WindowedFrame::onOpacityChanged);
+    connect(m_modeToggleBtn, &DImageButton::clicked, m_leftBar, &MiniFrameRightBar::modeToggleBtnClicked);
 
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
     onOpacityChanged(m_appearanceInter->opacity());
 
     m_switchBtn->updateStatus(All);
+
+        m_modeToggleBtn->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
+        m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
+        m_modeToggleBtn->setPressPic(":/icons/skin/icons/fullscreen_press.png");
+        m_modeToggleBtn->setFixedSize(40, 40);
 }
 
 WindowedFrame::~WindowedFrame()
@@ -296,7 +300,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         }
         else if (m_focusPos == LeftBottom) {
             m_focusPos = Right;
-            m_rightBar->setCurrentIndex(0);
+            m_leftBar->setCurrentIndex(0);
         }
         else {
             m_focusPos = LeftTop;
@@ -308,7 +312,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         }
         else if (m_focusPos == LeftBottom) {
             m_focusPos = LeftTop;
-            m_rightBar->setCurrentIndex(0);
+            m_leftBar->setCurrentIndex(0);
         }
         else {
             m_focusPos = LeftBottom;
@@ -324,7 +328,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         } else if (m_focusPos == LeftBottom) {
 
         } else {
-            m_rightBar->moveUp();
+            m_leftBar->moveUp();
         }
         break;
     }
@@ -337,7 +341,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         } else if (m_focusPos == LeftBottom) {
 
         } else {
-            m_rightBar->moveDown();
+            m_leftBar->moveDown();
         }
         break;
     }
@@ -351,7 +355,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     case Qt::Key_Right: {
         if (m_focusPos == LeftTop || m_focusPos == LeftBottom) {
             m_focusPos = Right;
-            m_rightBar->setCurrentIndex(0);
+            m_leftBar->setCurrentIndex(0);
         }
         break;
     }
@@ -362,17 +366,17 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     if (m_focusPos == LeftTop) {
         m_appsModel->setDrawBackground(true);
         m_searchModel->setDrawBackground(true);
-        m_rightBar->setCurrentCheck(false);
+        m_leftBar->setCurrentCheck(false);
         m_appsView->setFocus();
     } else if (m_focusPos == LeftBottom) {
         m_appsView->setCurrentIndex(QModelIndex());
-        m_rightBar->setCurrentCheck(false);
+        m_leftBar->setCurrentCheck(false);
         m_switchBtn->setFocus();
         return;
     } else {
         m_appsView->setCurrentIndex(QModelIndex());
-        m_rightBar->setCurrentCheck(true);
-        m_rightBar->setFocus();
+        m_leftBar->setCurrentCheck(true);
+        m_leftBar->setFocus();
         return;
     }
 
@@ -402,7 +406,7 @@ void WindowedFrame::appendToSearchEdit(const char ch)
 void WindowedFrame::launchCurrentApp()
 {
     if (m_focusPos == Right) {
-        m_rightBar->execCurrent();
+        m_leftBar->execCurrent();
         return;
     } else if (m_focusPos == LeftBottom) {
         m_switchBtn->click();
@@ -633,8 +637,8 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point)
 }
 
 bool WindowedFrame::eventFilter(QObject *watched, QEvent *event) {
-    if (watched == m_rightBar && event->type() == QEvent::Resize) {
-        setFixedSize(m_leftWidget->width() + m_rightBar->width(), 502);
+    if (watched == m_leftBar && event->type() == QEvent::Resize) {
+        setFixedSize(m_rightWidget->width() + m_leftBar->width(), 502);
     }
 
     return QWidget::eventFilter(watched, event);
@@ -852,10 +856,18 @@ void WindowedFrame::recoveryAll()
     hideTips();
 
     m_focusPos = LeftTop;
-    m_rightBar->setCurrentCheck(false);
+    m_leftBar->setCurrentCheck(false);
 }
 
 void WindowedFrame::onOpacityChanged(const double value)
 {
     setMaskAlpha(value * 255);
+}
+
+void WindowedFrame:: paintEvent(QPaintEvent *e)
+{
+    QPainter painter(this);
+    QPainterPath painterPath;
+    painterPath.addRoundRect(m_leftBar->geometry(), 0, 0);
+    painter.fillPath(painterPath, QColor(0, 0, 0, 25));
 }

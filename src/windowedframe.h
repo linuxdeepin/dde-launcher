@@ -40,6 +40,7 @@
 #include <dblureffectwidget.h>
 #include <dregionmonitor.h>
 #include <com_deepin_daemon_appearance.h>
+#include <dimagebutton.h>
 
 #include <QLabel>
 #include <memory>
@@ -108,6 +109,7 @@ protected:
     void regionMonitorPoint(const QPoint &point) Q_DECL_OVERRIDE;
     bool eventFilter(QObject *watched, QEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
+    void paintEvent(QPaintEvent *e);
 
 private slots:
     void initAnchoredCornor();
@@ -136,8 +138,8 @@ private:
     AppsListModel *m_searchModel;
 
     SearchLineEdit *m_searchWidget;
-    QWidget *m_leftWidget;
-    MiniFrameRightBar *m_rightBar;
+    QWidget *m_rightWidget;
+    MiniFrameRightBar *m_leftBar;
     MiniFrameSwitchBtn *m_switchBtn;
     QLabel *m_tipsLabel;
     QTimer *m_delayHideTimer;
@@ -146,10 +148,11 @@ private:
     DisplayMode m_displayMode;
 
     int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
-    int m_radius = 10;
+    int m_radius = 0;
     AnchoredCornor m_anchoredCornor = Normal;
     QPainterPath m_cornerPath;
     FocusPosition m_focusPos;
+    DImageButton *m_modeToggleBtn;
 };
 
 #endif // WINDOWEDFRAME_H

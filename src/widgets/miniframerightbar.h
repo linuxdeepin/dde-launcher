@@ -26,7 +26,6 @@
 #include <QLabel>
 
 #include <dimagebutton.h>
-#include "datetimewidget.h"
 #include "avatar.h"
 
 DWIDGET_USE_NAMESPACE
@@ -51,9 +50,7 @@ signals:
     void requestFrameHide();
 
 protected:
-    void paintEvent(QPaintEvent *) override;
     void showEvent(QShowEvent *event) override;
-    bool event(QEvent *event) override;
 
 private slots:
     void openDirectory(const QString &dir);
@@ -65,11 +62,8 @@ private slots:
     void showSettings();
     void showManual();
     void hideAllHoverState() const;
-    void updateSize();
 
 private:
-    DImageButton *m_modeToggleBtn;
-    DatetimeWidget *m_datetimeWidget;
     Avatar *m_avatar;
     int m_currentIndex;
     QMap<uint, MiniFrameButton*> m_btns;

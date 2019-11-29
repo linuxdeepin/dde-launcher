@@ -87,34 +87,30 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     QVBoxLayout *    layout       = new QVBoxLayout(this);
     QVBoxLayout *    bottomLayout = new QVBoxLayout;
-    MiniFrameButton *computerBtn  = new MiniFrameButton(tr(""));
-    computerBtn->setFixedSize(m_size);
-    MiniFrameButton *videoBtn     = new MiniFrameButton(tr(""));
-    videoBtn->setFixedSize(m_size);
-    MiniFrameButton *musicBtn     = new MiniFrameButton(tr(""));
-    musicBtn->setFixedSize(m_size);
-    MiniFrameButton *pictureBtn   = new MiniFrameButton(tr(""));
-    pictureBtn->setFixedSize(m_size);
-    MiniFrameButton *documentBtn  = new MiniFrameButton(tr(""));
-    documentBtn->setFixedSize(m_size);
-    MiniFrameButton *downloadBtn  = new MiniFrameButton(tr(""));
-    downloadBtn->setFixedSize(m_size);
-    m_settingsBtn                 = new MiniFrameButton(tr(""));
+    m_computerBtn  = new MiniFrameButton(tr(""));
+    m_computerBtn->setFixedSize(m_size);
+    m_videoBtn = new MiniFrameButton(tr(""));
+    m_videoBtn->setFixedSize(m_size);
+    m_musicBtn = new MiniFrameButton(tr(""));
+    m_musicBtn->setFixedSize(m_size);
+    m_pictureBtn = new MiniFrameButton(tr(""));
+    m_pictureBtn->setFixedSize(m_size);
+    m_documentBtn = new MiniFrameButton(tr(""));
+    m_documentBtn->setFixedSize(m_size);
+    m_downloadBtn = new MiniFrameButton(tr(""));
+    m_downloadBtn->setFixedSize(m_size);
+    m_settingsBtn = new MiniFrameButton(tr(""));
     m_settingsBtn->setFixedSize(m_size);
-    m_powerBtn                    = new MiniFrameButton(tr(""));
+    m_powerBtn = new MiniFrameButton(tr(""));
     m_powerBtn->setFixedSize(m_size);
 
     uint index = 0;
-    m_btns[index++] = computerBtn;
-    m_btns[index++] = documentBtn;
-    m_btns[index++] = pictureBtn;
-    m_btns[index++] = musicBtn;
-    m_btns[index++] = videoBtn;
-
-
-
-    m_btns[index++] = downloadBtn;
-
+    m_btns[index++] = m_computerBtn;
+    m_btns[index++] = m_documentBtn;
+    m_btns[index++] = m_pictureBtn;
+    m_btns[index++] = m_musicBtn;
+    m_btns[index++] = m_videoBtn;
+    m_btns[index++] =m_downloadBtn;
     m_btns[index++] = m_settingsBtn;
     m_btns[index++] = m_powerBtn;
 
@@ -127,26 +123,10 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
         }, Qt::QueuedConnection);
     }
 
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
-        if (DGuiApplicationHelper::LightType == themeType) {
-            m_settingsBtn->setIcon(QIcon(":/widgets/images/setting_dark.svg"));
-            m_powerBtn->setIcon(QIcon(":/widgets/images/shutdown_dark.svg"));
-            computerBtn->setIcon(QIcon(":/widgets/images/computer-symbolic_dark"));
-            videoBtn->setIcon(QIcon(":/widgets/images/folder-videos-symbolic_dark"));
-            musicBtn->setIcon(QIcon(":/widgets/images/folder-music-symbolic_dark"));
-            pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic_dark"));
-            documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic_dark"));
-            downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic_dark"));
-        } else {
-            m_settingsBtn->setIcon(QIcon(":/widgets/images/setting.svg"));
-            m_powerBtn->setIcon(QIcon(":/widgets/images/shutdown.svg"));
-            computerBtn->setIcon(QIcon(":/widgets/images/computer-symbolic"));
-            videoBtn->setIcon(QIcon(":/widgets/images/folder-videos-symbolic"));
-            musicBtn->setIcon(QIcon(":/widgets/images/folder-music-symbolic"));
-            pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic"));
-            documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic"));
-            downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic"));
-        }
+    updateIcon();
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        updateIcon();
     });
 
     if (DGuiApplicationHelper::LightType ==DGuiApplicationHelper::instance()->themeType()) {
@@ -174,12 +154,12 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     center_widget->setLayout(center_layout);
     center_layout->setSpacing(10);
     center_layout->addWidget(m_avatar, 0, Qt::AlignCenter);
-    center_layout->addWidget(computerBtn, 0, Qt::AlignCenter);
-    center_layout->addWidget(documentBtn, 0, Qt::AlignCenter);
-    center_layout->addWidget(pictureBtn, 0, Qt::AlignCenter);
-    center_layout->addWidget(musicBtn, 0, Qt::AlignCenter);
-    center_layout->addWidget(videoBtn, 0, Qt::AlignCenter);
-    center_layout->addWidget(downloadBtn, 0, Qt::AlignCenter);
+    center_layout->addWidget(m_computerBtn, 0, Qt::AlignCenter);
+    center_layout->addWidget(m_documentBtn, 0, Qt::AlignCenter);
+    center_layout->addWidget(m_pictureBtn, 0, Qt::AlignCenter);
+    center_layout->addWidget(m_musicBtn, 0, Qt::AlignCenter);
+    center_layout->addWidget(m_videoBtn, 0, Qt::AlignCenter);
+    center_layout->addWidget(m_downloadBtn, 0, Qt::AlignCenter);
 
     QWidget *bottom_widget = new QWidget;
     QVBoxLayout *bottom_layout = new QVBoxLayout;
@@ -192,12 +172,12 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     layout->addWidget(bottom_widget, 0, Qt::AlignBottom);
     layout->setContentsMargins(0, 0, 0, 14);
 
-    connect(computerBtn, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
-    connect(documentBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DocumentsLocation); });
-    connect(videoBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::MoviesLocation); });
-    connect(musicBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::MusicLocation); });
-    connect(pictureBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::PicturesLocation); });
-    connect(downloadBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DownloadLocation); });
+    connect(m_computerBtn, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
+    connect(m_documentBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DocumentsLocation); });
+    connect(m_videoBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::MoviesLocation); });
+    connect(m_musicBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::MusicLocation); });
+    connect(m_pictureBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::PicturesLocation); });
+    connect(m_downloadBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DownloadLocation); });
     connect(m_settingsBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showSettings);
     connect(m_powerBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showShutdown);
     connect(m_avatar, &Avatar::clicked, this, &MiniFrameRightBar::handleAvatarClicked);
@@ -370,5 +350,29 @@ void MiniFrameRightBar::hideAllHoverState() const
     for (auto it = m_btns.constBegin(); it != m_btns.constEnd(); ++it) {
         it.value()->setChecked(false);
     }
+}
+
+void MiniFrameRightBar::updateIcon()
+{
+    if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+        m_settingsBtn->setIcon(QIcon(":/widgets/images/setting_dark.svg"));
+        m_powerBtn->setIcon(QIcon(":/widgets/images/shutdown_dark.svg"));
+        m_computerBtn->setIcon(QIcon(":/widgets/images/computer-symbolic_dark"));
+        m_videoBtn->setIcon(QIcon(":/widgets/images/folder-videos-symbolic_dark"));
+        m_musicBtn->setIcon(QIcon(":/widgets/images/folder-music-symbolic_dark"));
+        m_pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic_dark"));
+        m_documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic_dark"));
+        m_downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic_dark"));
+    } else {
+        m_settingsBtn->setIcon(QIcon(":/widgets/images/setting.svg"));
+        m_powerBtn->setIcon(QIcon(":/widgets/images/shutdown.svg"));
+        m_computerBtn->setIcon(QIcon(":/widgets/images/computer-symbolic"));
+        m_videoBtn->setIcon(QIcon(":/widgets/images/folder-videos-symbolic"));
+        m_musicBtn->setIcon(QIcon(":/widgets/images/folder-music-symbolic"));
+        m_pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic"));
+        m_documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic"));
+        m_downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic"));
+    }
+
 }
 

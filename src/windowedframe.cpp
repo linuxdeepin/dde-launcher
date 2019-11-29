@@ -866,7 +866,5 @@ void WindowedFrame::onOpacityChanged(const double value)
 void WindowedFrame:: paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);
-    QPainterPath painterPath;
-    painterPath.addRoundRect(m_leftBar->geometry(), 0, 0);
-    painter.fillPath(painterPath, QColor(0, 0, 0, 25));
+    painter.fillRect(m_leftBar->geometry(), QColor(0, 0, 0, 25));
 }

@@ -201,8 +201,6 @@ void CategoryButton::updateTextColor()
         p.setColor(m_textLabel->foregroundRole(), QColor::fromRgbF(1, 1, 1, m_titleOpacity));
     }
     p.setColor(m_textLabel->backgroundRole(), Qt::transparent);
-//    m_textLabel->setPalette(p);
-//    m_textLabel->setStyleSheet("color: rgba(255, 255, 255, .5);");
 }
 
 void CategoryButton::addTextShadow() {

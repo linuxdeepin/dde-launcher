@@ -74,7 +74,7 @@ AppGridView::AppGridView(QWidget *parent)
     // init origin size
     setFixedSize(qApp->primaryScreen()->geometry().size());
 
-    setStyleSheet("background-color: transparent;");
+    viewport()->setAutoFillBackground(false);
 
     // update item spacing
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] { setSpacing(m_calcUtil->appItemSpacing()); });

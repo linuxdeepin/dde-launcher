@@ -1370,11 +1370,11 @@ void FullScreenFrame::layoutChanged()
 
 void FullScreenFrame::searchTextChanged(const QString &keywords)
 {
-    m_appsManager->searchApp(keywords);
-
     if (keywords.isEmpty())
         updateDisplayMode(m_calcUtil->displayMode());
     else
         updateDisplayMode(SEARCH);
+
+    m_appsManager->searchApp(keywords.trimmed());
 }
 

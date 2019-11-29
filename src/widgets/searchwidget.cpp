@@ -75,7 +75,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     setLayout(mainLayout);
 
     connect(m_searchEdit, &SearchLineEdit::textChanged, [this] {
-        emit searchTextChanged(m_searchEdit->text().trimmed());
+        emit searchTextChanged(m_searchEdit->text());
     });
     connect(m_toggleModeBtn, &DImageButton::clicked, this, [ = ] {
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))

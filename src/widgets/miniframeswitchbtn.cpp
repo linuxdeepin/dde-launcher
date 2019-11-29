@@ -33,18 +33,10 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     , m_allIconLabel(new QLabel)
 {
     setFocusPolicy(Qt::StrongFocus);
+    updateIcon();
 
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
-        if (DGuiApplicationHelper::DarkType == themeType) {
-            m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all-dark.svg", QSize(24, 24)));
-            m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal-dark.svg", QSize(20, 20)));
-            m_color.setRgb(255, 255, 255, 25);
-        } else {
-            m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all.svg", QSize(24, 24)));
-            m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal.svg", QSize(20, 20)));
-             m_color.setRgb(0, 0, 0, 25);
-        }
-
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        updateIcon();
         QPalette pa = m_textLabel->palette();
         pa.setBrush(QPalette::WindowText, pa.brightText());
         m_textLabel->setPalette(pa);
@@ -125,4 +117,21 @@ void MiniFrameSwitchBtn::mouseReleaseEvent(QMouseEvent *event)
     QWidget::mouseReleaseEvent(event);
 
     emit clicked();
+}
+
+void MiniFrameSwitchBtn::updateIcon()
+{
+    if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()){
+         m_color.setRgb(255, 255, 255, 25);
+         m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all-dark.svg", QSize(24, 24)));
+         m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal-dark.svg", QSize(20, 20)));
+    }else {
+        m_color.setRgb(0, 0, 0, 25);
+        m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all.svg", QSize(24, 24)));
+        m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal.svg", QSize(20, 20)));
+    }
+
+    QPalette pa = m_textLabel->palette();
+    pa.setBrush(QPalette::WindowText, pa.brightText());
+    m_textLabel->setPalette(pa);
 }

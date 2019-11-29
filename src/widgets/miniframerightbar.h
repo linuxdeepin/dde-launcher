@@ -62,6 +62,7 @@ private slots:
     void showSettings();
     void showManual();
     void hideAllHoverState() const;
+    void updateIcon();
 
 private:
     Avatar *m_avatar;
@@ -69,6 +70,12 @@ private:
     QMap<uint, MiniFrameButton*> m_btns;
     MiniFrameButton *m_settingsBtn;
     MiniFrameButton *m_powerBtn;
+    MiniFrameButton *m_computerBtn;
+    MiniFrameButton *m_videoBtn;
+    MiniFrameButton *m_musicBtn;
+    MiniFrameButton *m_pictureBtn;
+    MiniFrameButton *m_documentBtn;
+    MiniFrameButton *m_downloadBtn;
 };
 
 #endif // MINIFRAMERIGHTBAR_H

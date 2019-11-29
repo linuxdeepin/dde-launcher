@@ -45,6 +45,11 @@ AppListDelegate::AppListDelegate(QObject *parent)
 {
     m_blueDotPixmap = renderSVG(":/skin/images/new_install_indicator.svg", QSize(10, 10));
     m_autoStartPixmap = renderSVG(":/skin/images/emblem-autostart.svg", QSize(16, 16));
+    if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()){
+         m_color.setRgb(255, 255, 255, 25);
+    }else {
+        m_color.setRgb(0, 0, 0, 25);
+    }
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
         if (DGuiApplicationHelper::DarkType == themeType) {
              m_color.setRgb(255, 255, 255, 25);

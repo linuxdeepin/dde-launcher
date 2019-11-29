@@ -46,6 +46,7 @@
 #include <DForeignWindow>
 #include <qpa/qplatformwindow.h>
 #include <DGuiApplicationHelper>
+#include <DStyle>
 
 #define DOCK_TOP        0
 #define DOCK_RIGHT      1
@@ -86,7 +87,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_appsView(new AppListView)
     , m_appsModel(new AppsListModel(AppsListModel::Custom))
     , m_searchModel(new AppsListModel(AppsListModel::Search))
-    , m_searchWidget(new SearchLineEdit)
     , m_leftBar(new MiniFrameRightBar)
     , m_switchBtn(new MiniFrameSwitchBtn)
     , m_tipsLabel(new QLabel(this))
@@ -96,10 +96,10 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_displayMode(All)
     , m_focusPos(LeftTop)
     , m_modeToggleBtn(new DImageButton(this))
+    ,m_searcherEdit(new DSearchEdit)
 {
     setMaskColor(DBlurEffectWidget::AutoColor);
     setBlendMode(DBlurEffectWidget::InWindowBlend);
-
     m_appearanceInter->setSync(false, false);
 
     m_windowHandle.setShadowRadius(60);
@@ -112,7 +112,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_appsView->setItemDelegate(new AppListDelegate);
 
     m_appsView->installEventFilter(m_eventFilter);
-    m_searchWidget->installEventFilter(m_eventFilter);
     m_switchBtn->installEventFilter(m_eventFilter);
 
     m_tipsLabel->setAlignment(Qt::AlignCenter);
@@ -134,11 +133,10 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_leftBar->installEventFilter(m_eventFilter);
     m_leftBar->installEventFilter(this);
 
-    m_searchWidget->setFixedWidth(257);
-
     QHBoxLayout *searchLayout = new QHBoxLayout;
     searchLayout->addSpacing(10);
-    searchLayout->addWidget(m_searchWidget);
+    searchLayout->addWidget(m_searcherEdit);
+    DStyle::setFocusRectVisible(m_searcherEdit, false);
     searchLayout->addWidget(m_modeToggleBtn);
 
     QHBoxLayout *appsLayout = new QHBoxLayout;
@@ -149,6 +147,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     QHBoxLayout *switchLayout = new QHBoxLayout;
     switchLayout->addSpacing(10);
     switchLayout->addWidget(m_switchBtn);
+    switchLayout->setContentsMargins(6, 0, 6, 0);
 
     QVBoxLayout *containLayout = new QVBoxLayout;
     containLayout->setSpacing(0);
@@ -200,7 +199,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_leftBar, &MiniFrameRightBar::requestFrameHide, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &WindowedFrame::onWMCompositeChanged);
-    connect(m_searchWidget, &SearchLineEdit::textChanged, this, &WindowedFrame::searchText, Qt::QueuedConnection);
+    connect(m_searcherEdit, &DSearchEdit::textChanged, this, &WindowedFrame::searchText, Qt::QueuedConnection);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (WindowedFrame::*)(const QModelIndex &)>(&WindowedFrame::uninstallApp));
     connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_delayHideTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
@@ -243,7 +242,7 @@ void WindowedFrame::showLauncher()
     if (visible() || m_delayHideTimer->isActive())
         return;
 
-    m_searchWidget->clear();
+    m_searcherEdit->clear();
     qApp->processEvents();
 
     // force refresh
@@ -388,19 +387,19 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
 
 void WindowedFrame::appendToSearchEdit(const char ch)
 {
-    m_searchWidget->setFocus(Qt::MouseFocusReason);
+    m_searcherEdit->setFocus(Qt::MouseFocusReason);
 
-    // -1 means backspace key pressed
-    if (ch == static_cast<const char>(-1)) {
-        m_searchWidget->backspace();
-        return;
-    }
+//    // -1 means backspace key pressed
+//    if (ch == static_cast<const char>(-1)) {
+//        m_searchWidget->backspace();
+//        return;
+//    }
 
-    if (!m_searchWidget->selectedText().isEmpty()) {
-        m_searchWidget->backspace();
-    }
+//    if (!m_searchWidget->selectedText().isEmpty()) {
+//        m_searchWidget->backspace();
+//    }
 
-    m_searchWidget->setText(m_searchWidget->text() + ch);
+//    m_searchWidget->setText(m_searchWidget->text() + ch);
 }
 
 void WindowedFrame::launchCurrentApp()
@@ -560,8 +559,8 @@ void WindowedFrame::keyPressEvent(QKeyEvent *e)
 
         // support Ctrl+V shortcuts.
         if (!clipboardText.isEmpty()) {
-            m_searchWidget->setText(clipboardText);
-            m_searchWidget->setFocus();
+            m_searcherEdit->setText(clipboardText);
+            m_searcherEdit->setFocus();
         }
     }
 }
@@ -599,8 +598,8 @@ void WindowedFrame::enterEvent(QEvent *e)
 void WindowedFrame::inputMethodEvent(QInputMethodEvent *e)
 {
     if (!e->commitString().isEmpty()) {
-        m_searchWidget->setText(e->commitString());
-        m_searchWidget->setFocus();
+        m_searcherEdit->setText(e->commitString());
+        m_searcherEdit->setFocus();
     }
 
     QWidget::inputMethodEvent(e);
@@ -608,13 +607,13 @@ void WindowedFrame::inputMethodEvent(QInputMethodEvent *e)
 
 QVariant WindowedFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
 {
-    switch (prop) {
-    case Qt::ImEnabled:
-        return true;
-    case Qt::ImCursorRectangle:
-        return widgetRelativeOffset(this, m_searchWidget);
-    default: ;
-    }
+//    switch (prop) {
+//    case Qt::ImEnabled:
+//        return true;
+//    case Qt::ImCursorRectangle:
+//        return widgetRelativeOffset(this, m_searchWidget);
+//    default: ;
+//    }
 
     return QWidget::inputMethodQuery(prop);
 }
@@ -780,7 +779,7 @@ void WindowedFrame::onSwitchBtnClicked()
 
     // each time press "switch btn" must hide tips label.
     hideTips();
-    m_searchWidget->clear();
+    m_searcherEdit->clear();
 }
 
 void WindowedFrame::onWMCompositeChanged()

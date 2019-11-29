@@ -70,10 +70,13 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     uint index = 0;
     m_btns[index++] = computerBtn;
-    m_btns[index++] = videoBtn;
-    m_btns[index++] = musicBtn;
-    m_btns[index++] = pictureBtn;
     m_btns[index++] = documentBtn;
+    m_btns[index++] = pictureBtn;
+    m_btns[index++] = musicBtn;
+    m_btns[index++] = videoBtn;
+
+
+
     m_btns[index++] = downloadBtn;
 
     m_btns[index++] = m_settingsBtn;

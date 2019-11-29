@@ -515,7 +515,6 @@ void FullScreenFrame::initUI()
     m_appsVbox->layout()->setSpacing(0);
     m_appsVbox->layout()->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN,
                                              0, 0);
-    m_appsArea->addWidget(m_navigationWidget);
     m_appsArea->addWidget(m_allAppsView->viewport());
     m_appsArea->addWidget(m_internetTitle);
     m_appsArea->addWidget(m_internetView->viewport());
@@ -561,15 +560,16 @@ void FullScreenFrame::initUI()
 
     m_appsArea->setWidget(m_contentFrame);
 
+    m_navigationWidget->setFixedWidth(width());
+    m_navigationWidget->setFixedHeight(m_calcUtil->instance()->navigationHeight());
     m_navigationWidget->show();
-    m_navigationWidget->raise();
 
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
     m_mainLayout->addSpacing(0);
     m_mainLayout->addWidget(m_topSpacing);
     m_mainLayout->addWidget(m_searchWidget);
-    m_mainLayout->addWidget(m_navigationWidget);
+    m_mainLayout->addWidget(m_navigationWidget, 0, Qt::AlignHCenter);
     m_mainLayout->addWidget(m_appsArea);
     m_mainLayout->addWidget(m_bottomSpacing);
 
@@ -1187,7 +1187,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     m_othersView->setVisible(isCategoryMode);
 
     m_viewListPlaceholder->setVisible(isCategoryMode);
-    m_navigationWidget->setButtonsVisible(isCategoryMode);
+    m_navigationWidget->setVisible(isCategoryMode);
 
     m_allAppsView->setModel(m_displayMode == SEARCH ? m_searchResultModel : m_allAppsModel);
     // choose nothing
@@ -1267,34 +1267,24 @@ void FullScreenFrame::updateDockPosition()
     m_topSpacing->setFixedHeight(30);
     m_bottomSpacing->setFixedHeight(0);
 
-    const int searchHeight = m_searchWidget->y() + m_searchWidget->height();
-
-    // reset widgets size
-    m_navigationWidget->setFixedWidth(width());
-    m_navigationWidget->setFixedHeight(m_calcUtil->instance()->navigationHeight());
-
     const QRect dockGeometry = m_appsManager->dockGeometry();
 
     switch (m_appsManager->dockPosition()) {
     case DOCK_POS_TOP:
         m_topSpacing->setFixedHeight(30 + dockGeometry.height());
-        m_navigationWidget->move(0, searchHeight);
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(0);
         break;
     case DOCK_POS_BOTTOM:
         m_bottomSpacing->setFixedHeight(DLauncher::VIEWLIST_BOTTOM_MARGIN);
-        m_navigationWidget->move(0, searchHeight);
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(0);
         break;
     case DOCK_POS_LEFT:
-        m_navigationWidget->move(dockGeometry.width() / devicePixelRatioF(), searchHeight);
         m_searchWidget->setLeftSpacing(dockGeometry.width());
         m_searchWidget->setRightSpacing(0);
         break;
     case DOCK_POS_RIGHT:
-        m_navigationWidget->move(0, searchHeight);
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(dockGeometry.width());
         break;

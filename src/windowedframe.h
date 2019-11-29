@@ -42,6 +42,7 @@
 #include <dregionmonitor.h>
 #include <com_deepin_daemon_appearance.h>
 #include <dimagebutton.h>
+#include <DSearchEdit>
 
 #include <QLabel>
 #include <memory>
@@ -148,7 +149,6 @@ private:
     AppsListModel *m_usedModel;
     AppsListModel *m_searchModel;
 
-    DSearchEdit *m_searchWidget;
     QWidget *m_rightWidget;
     MiniFrameRightBar *m_leftBar;
 
@@ -167,6 +167,7 @@ private:
     FocusPosition m_focusPos;
     bool m_firstStart{true};
     DImageButton *m_modeToggleBtn;
+    DSearchEdit *m_searcherEdit;
 };
 
 #endif // WINDOWEDFRAME_H

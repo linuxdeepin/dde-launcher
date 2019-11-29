@@ -45,8 +45,6 @@ signals:
 public:
     static CalculateUtil *instance();
 
-    static int calculateBesidePadding(const int screenWidth);
-
     inline int titleTextSize() const {return m_titleTextSize;}
     // NOTE: navgation text size animation max zoom scale is 1.2
     inline int navgationTextSize() const {return double(m_navgationTextSize) / 1.2;}
@@ -62,7 +60,7 @@ public:
     bool decreaseIconSize();
     inline void increaseItemSize() { m_appItemSize += 16; }
     inline void decreaseItemSize() { m_appItemSize -= 16; }
-
+    inline int navigationHeight() { return 117; }
 public slots:
     void calculateAppLayout(const QSize &containerSize, const int dockPosition);
 

@@ -108,6 +108,15 @@ bool SearchLineEdit::event(QEvent *e)
     case QEvent::InputMethodQuery: // for loongson, there's no FocusIn event when the widget gets focus.
 #endif
     case QEvent::FocusIn:       editMode();         break;
+    case QEvent::KeyPress: {
+        if (QKeyEvent *keyEvent = static_cast<QKeyEvent *>(e)) {
+            if (keyEvent->key() == Qt::Key_Z && keyEvent->modifiers() == Qt::ControlModifier) {
+                backspace();
+                return true;
+            }
+        }
+    }
+    break;
 //    case QEvent::FocusOut:      normalMode();       break;
     default:;
     }

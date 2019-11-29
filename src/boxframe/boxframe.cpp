@@ -71,7 +71,6 @@ void BoxFrame::setBackground(const QString &url)
 
 const QPixmap BoxFrame::backgroundPixmap() {
     const QSize &size = QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height) * qApp->primaryScreen()->devicePixelRatio();
-
     QPixmap cache = m_pixmap.scaled(size,
                                     Qt::KeepAspectRatioByExpanding,
                                     Qt::SmoothTransformation);
@@ -106,4 +105,6 @@ void BoxFrame::paintEvent(QPaintEvent *event)
                        m_cache,
                        QRect(tr.topLeft(),
                              tr.size() * m_cache.devicePixelRatioF()));
+
+    painter.fillRect(tr, QColor(0, 15, 39, 0.7 * 255));
 }

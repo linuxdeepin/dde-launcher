@@ -171,7 +171,7 @@ private:
     NavigationWidget *m_navigationWidget;
     SearchWidget *m_searchWidget;
     AppListArea *m_appsArea;    // app 滚动区域
-    DVBoxWidget *m_appsVbox;    // app 分组
+    DHBoxWidget *m_appsHbox;    // app 分组
 
     QWidget *m_viewListPlaceholder;
     QLabel *m_tipsLabel;
@@ -180,7 +180,7 @@ private:
 
     AppGridView *m_allAppsView;
     AppGridView *m_internetView;
-    AppGridView * m_chatView;
+    AppGridView *m_chatView;
     AppGridView *m_musicView;
     AppGridView *m_videoView;
     AppGridView *m_graphicsView;
@@ -204,7 +204,7 @@ private:
     AppsListModel *m_systemModel;
     AppsListModel *m_othersModel;
 
-    CategoryTitleWidget* m_floatTitle;
+    CategoryTitleWidget *m_floatTitle;
     CategoryTitleWidget *m_internetTitle;
     CategoryTitleWidget *m_chatTitle;
     CategoryTitleWidget *m_musicTitle;
@@ -228,5 +228,4 @@ private:
     FocusIndex m_currentFocusIndex;
     bool m_firstStart{true};
 };
-
 #endif // MAINFRAME_H

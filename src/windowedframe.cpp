@@ -656,7 +656,7 @@ void WindowedFrame::resizeEvent(QResizeEvent *event)
 
 void WindowedFrame::initAnchoredCornor()
 {
-    if (m_dockInter->displayMode() == DOCK_EFFICIENT && m_wmHelper->hasComposite()) {
+    if (m_wmHelper->hasComposite()) {
 
         const int dockPos = m_dockInter->position();
 
@@ -785,12 +785,13 @@ void WindowedFrame::onSwitchBtnClicked()
 void WindowedFrame::onWMCompositeChanged()
 {
     if (m_wmHelper->hasComposite()) {
-        m_windowHandle.setWindowRadius(5);
-        m_windowHandle.setBorderColor(QColor(255, 255, 255, .1 * 255));
+        m_radius = 10;
     } else {
-        m_windowHandle.setWindowRadius(0);
-        m_windowHandle.setBorderColor(QColor("#2C3238"));
+        m_radius = 0;
     }
+    initAnchoredCornor();
+    m_cornerPath = getCornerPath(m_anchoredCornor);
+    m_windowHandle.setClipPath(m_cornerPath);
 }
 
 void WindowedFrame::searchText(const QString &text)

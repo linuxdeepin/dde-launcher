@@ -34,7 +34,7 @@ static const int DRAG_THRESHOLD = 15;
 
 static const int CATEGORY_TITLE_WIDGET_HEIGHT = 50;
 
-static const int VIEWLIST_BOTTOM_MARGIN = 60;
+static const int VIEWLIST_BOTTOM_MARGIN = 140;
 
 static const int NAVIGATION_ICON_SIZE = 32;
 static const int NAVIGATION_BUTTON_SIZE = 60;

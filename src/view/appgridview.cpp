@@ -84,6 +84,9 @@ AppGridView::AppGridView(QWidget *parent)
 #else
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::dropSwap);
 #endif
+
+    // TODO  分类背景模糊
+    setStyleSheet("background-color:rgba(255, 255, 255, 0.05)");
 }
 
 const QModelIndex AppGridView::indexAt(const int index) const

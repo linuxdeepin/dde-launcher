@@ -499,19 +499,20 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
 
 void WindowedFrame::appendToSearchEdit(const char ch)
 {
-    m_searcherEdit->setFocus(Qt::MouseFocusReason);
+    m_searcherEdit->lineEdit()->setFocus();
 
-//    // -1 means backspace key pressed
-//    if (ch == static_cast<const char>(-1)) {
-//        m_searchWidget->backspace();
-//        return;
-//    }
+     //-1 means backspace key pressed
+    if (ch == static_cast<const char>(-1)) {
+        m_searcherEdit->lineEdit()->backspace();
+        return;
+    }
 
-//    if (!m_searchWidget->selectedText().isEmpty()) {
-//        m_searchWidget->backspace();
-//    }
+    if (!m_searcherEdit->lineEdit()->selectedText().isEmpty()) {
+        m_searcherEdit->lineEdit()->backspace();
+    }
 
-//    m_searchWidget->setText(m_searchWidget->text() + ch);
+    m_searcherEdit->lineEdit()->setText(m_searcherEdit->lineEdit()->text() + ch);
+
 }
 
 void WindowedFrame::launchCurrentApp()

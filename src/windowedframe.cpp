@@ -451,7 +451,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         }
         break;
     }
-    case Qt::Key_Right: {
+    case Qt::Key_Left: {
         if (m_focusPos == Search || m_focusPos == Applist || m_focusPos == RightBottom || m_focusPos == Default) {
             m_focusPos = Applist;
             m_focusPos  = Computer;
@@ -459,10 +459,10 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         }
         break;
     }
-    case Qt::Key_Left: {
+    case Qt::Key_Right: {
         if (m_focusPos == Computer || m_focusPos == Setting || m_focusPos == Power || m_focusPos == Default) {
             m_focusPos = Applist;
-            if (m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0) {
+            if(m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0){
                 targetIndex = m_appsView->model()->index(0, 0);
             }
         }
@@ -662,7 +662,6 @@ void WindowedFrame::mousePressEvent(QMouseEvent *e)
 
 void WindowedFrame::keyPressEvent(QKeyEvent *e)
 {
-    qDebug()<<"1111111111111111111";
     if (e->key() == Qt::Key_Escape) {
         hideLauncher();
     } else if (e->key() == Qt::Key_V &&  e->modifiers().testFlag(Qt::ControlModifier)) {

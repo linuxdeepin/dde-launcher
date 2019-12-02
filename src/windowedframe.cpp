@@ -375,8 +375,10 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
             if (!currentIdx.isValid() || !targetIndex.isValid()) {
                 targetIndex = m_appsView->model()->index(m_appsView->model()->rowCount() - 1, 0);
             }
-        } else if (m_focusPos == RightBottom) {
-
+        } else if (m_focusPos == Default) {
+            m_focusPos = Computer;
+            m_leftBar->hideAllHoverState();
+            m_leftBar->setCurrentIndex(0);
         } else {
             m_leftBar->moveUp();
         }
@@ -388,15 +390,17 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
             if (!currentIdx.isValid() || !targetIndex.isValid()) {
                 targetIndex = m_appsView->model()->index(0, 0);
             }
-        } else if (m_focusPos == RightBottom) {
-
+        } else if (m_focusPos == Default) {
+            m_focusPos = Computer;
+            m_leftBar->hideAllHoverState();
+            m_leftBar->setCurrentIndex(0);
         } else {
             m_leftBar->moveDown();
         }
         break;
     }
     case Qt::Key_Left: {
-        if (m_focusPos == Search || m_focusPos == Applist || m_focusPos == RightBottom) {
+        if (m_focusPos == Search || m_focusPos == Applist || m_focusPos == RightBottom || m_focusPos == Default) {
             m_focusPos = Applist;
             m_focusPos  = Computer;
             m_leftBar->setCurrentIndex(0);
@@ -404,10 +408,9 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         break;
     }
     case Qt::Key_Right: {
-        if (m_focusPos == Computer || m_focusPos == Setting || m_focusPos == Power) {
+        if (m_focusPos == Computer || m_focusPos == Setting || m_focusPos == Power || m_focusPos == Default) {
             m_focusPos = Applist;
-            targetIndex = currentIdx.sibling(row + 1, 0);
-            if (!currentIdx.isValid() || !targetIndex.isValid()) {
+            if(m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0){
                 targetIndex = m_appsView->model()->index(0, 0);
             }
         }
@@ -607,7 +610,6 @@ void WindowedFrame::mousePressEvent(QMouseEvent *e)
 
 void WindowedFrame::keyPressEvent(QKeyEvent *e)
 {
-    qDebug()<<"1111111111111111111";
     if (e->key() == Qt::Key_Escape) {
         hideLauncher();
     } else if (e->key() == Qt::Key_V &&  e->modifiers().testFlag(Qt::ControlModifier)) {
@@ -636,6 +638,7 @@ void WindowedFrame::showEvent(QShowEvent *e)
 
 void WindowedFrame::hideEvent(QHideEvent *e)
 {
+    m_appsModel->setDrawBackground(false);
     QWidget::hideEvent(e);
 
     QTimer::singleShot(1, this, [=] { emit visibleChanged(false); });

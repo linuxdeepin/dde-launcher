@@ -79,7 +79,8 @@ public:
         Setting,
         Power,
         Search,
-        Applist
+        Applist,
+        Default //确保首次切换都切换到所有分类
     };
 
 signals:

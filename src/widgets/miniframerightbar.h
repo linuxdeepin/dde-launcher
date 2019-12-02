@@ -44,6 +44,7 @@ public:
     void moveUp();
     void moveDown();
     void execCurrent();
+    void hideAllHoverState() const;
 
 signals:
     void modeToggleBtnClicked();
@@ -61,7 +62,7 @@ private slots:
     void showShutdown();
     void showSettings();
     void showManual();
-    void hideAllHoverState() const;
+   // void hideAllHoverState() const;
     void updateIcon();
 
 private:

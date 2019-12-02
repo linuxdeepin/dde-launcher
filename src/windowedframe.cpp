@@ -104,7 +104,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_autoScrollTimer(new QTimer)
     , m_appearanceInter(new Appearance("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
     , m_displayMode(All)
-    , m_focusPos(Default)
+    , m_focusPos(Applist)
     , m_displayInter(new DBusDisplay(this))
     , m_modeToggleBtn(new DImageButton(this))
     , m_searcherEdit(new DSearchEdit)
@@ -335,7 +335,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     if (m_appsView->model() == m_searchModel && m_focusPos == Search) {
         m_appsView->setCurrentIndex(m_appsView->model()->index(0, 0));
         m_appsView->setFocus();
-        m_focusPos = Applist;
+        m_focusPos = RightBottom;
         return;
     }
 
@@ -347,9 +347,9 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     case Qt::Key_Tab: {
         switch (m_focusPos) {
         case Default:
-            m_focusPos = LeftBottom;
+            m_focusPos = RightBottom;
             break;
-        case LeftBottom:
+        case RightBottom:
             m_focusPos = Computer;
             m_leftBar->hideAllHoverState();
             m_leftBar->setCurrentIndex(0);
@@ -357,26 +357,29 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         case Computer:
             m_focusPos = Setting;
             m_leftBar->hideAllHoverState();
-            m_leftBar->setCurrentIndex(7);
+            m_leftBar->setCurrentIndex(6);
             break;
         case Setting:
             m_focusPos = Power;
             m_leftBar->hideAllHoverState();
-            m_leftBar->setCurrentIndex(8);
+            m_leftBar->setCurrentIndex(7);
             break;
         case Power:
             m_focusPos = Search;
             m_leftBar->hideAllHoverState();
             m_leftBar->setCurrentCheck(false);
+           // m_searcherEdit->lineEdit()->setFocus();
+            setFocus();
             break;
         case Search:
-            if (m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0) {
+            if(m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0){
                 targetIndex = m_appsView->model()->index(0, 0);
             }
             m_focusPos = Applist;
             break;
         case Applist:
-            m_focusPos = LeftBottom;
+            m_focusPos = RightBottom;
+            m_switchBtn->setFocus();
             break;
         }
         break;
@@ -384,16 +387,17 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     case Qt::Key_Backtab: {
         switch (m_focusPos) {
         case Default:
-            m_focusPos = LeftBottom;
+            m_focusPos = RightBottom;
             break;
-        case LeftBottom:
+        case RightBottom:
             m_focusPos = Applist;
             if (m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0) {
                 targetIndex = m_appsView->model()->index(0, 0);
             }
             break;
         case Computer:
-            m_focusPos = LeftBottom;
+            m_focusPos = RightBottom;
+            m_switchBtn->setFocus();
             break;
         case Setting:
             m_focusPos = Computer;
@@ -403,15 +407,17 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         case Power:
             m_focusPos = Setting;
             m_leftBar->hideAllHoverState();
-            m_leftBar->setCurrentIndex(7);
+            m_leftBar->setCurrentIndex(6);
             break;
         case Search:
             m_focusPos = Power;
             m_leftBar->hideAllHoverState();
-            m_leftBar->setCurrentIndex(8);
+            m_leftBar->setCurrentIndex(7);
             break;
         case Applist:
             m_focusPos = Search;
+            m_searcherEdit->setFocus();
+            //m_searcherEdit->lineEdit()->setFocus();
             break;
         }
         break;
@@ -447,7 +453,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         break;
     }
     case Qt::Key_Right: {
-        if (m_focusPos == Search || m_focusPos == Applist || m_focusPos == LeftBottom || m_focusPos == Default) {
+        if (m_focusPos == Search || m_focusPos == Applist || m_focusPos == RightBottom || m_focusPos == Default) {
             m_focusPos = Applist;
             m_focusPos  = Computer;
             m_leftBar->setCurrentIndex(0);
@@ -472,10 +478,10 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         m_searchModel->setDrawBackground(true);
         m_leftBar->setCurrentCheck(false);
         m_appsView->setFocus();
-    } else if (m_focusPos == LeftBottom) {
+    } else if (m_focusPos == RightBottom) {
         m_appsView->setCurrentIndex(QModelIndex());
         m_leftBar->setCurrentCheck(false);
-        m_switchBtn->setFocus();
+         m_switchBtn->setFocus();
         return;
     } else if (m_focusPos == Search) {
         m_leftBar->setCurrentCheck(false);
@@ -514,7 +520,7 @@ void WindowedFrame::launchCurrentApp()
     if (m_focusPos == Computer || m_focusPos == Setting || m_focusPos == Power) {
         m_leftBar->execCurrent();
         return;
-    } else if (m_focusPos == LeftBottom) {
+    } else if (m_focusPos == RightBottom) {
         m_switchBtn->click();
         return;
     }
@@ -657,18 +663,16 @@ void WindowedFrame::mousePressEvent(QMouseEvent *e)
 
 void WindowedFrame::keyPressEvent(QKeyEvent *e)
 {
-    QWidget::keyPressEvent(e);
-
+    qDebug()<<"1111111111111111111";
     if (e->key() == Qt::Key_Escape) {
         hideLauncher();
-    } else if (e->key() == Qt::Key_V &&
-               e->modifiers().testFlag(Qt::ControlModifier)) {
+    } else if (e->key() == Qt::Key_V &&  e->modifiers().testFlag(Qt::ControlModifier)) {
         const QString &clipboardText = QApplication::clipboard()->text();
 
         // support Ctrl+V shortcuts.
         if (!clipboardText.isEmpty()) {
             m_searcherEdit->setText(clipboardText);
-            m_searcherEdit->setFocus();
+            m_searcherEdit->lineEdit()->setFocus();
         }
     }
 }
@@ -711,7 +715,7 @@ void WindowedFrame::inputMethodEvent(QInputMethodEvent *e)
 {
     if (!e->commitString().isEmpty()) {
         m_searcherEdit->setText(e->commitString());
-        m_searcherEdit->setFocus();
+        m_searcherEdit->lineEdit()->setFocus();
     }
 
     QWidget::inputMethodEvent(e);
@@ -750,6 +754,10 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point)
 bool WindowedFrame::eventFilter(QObject *watched, QEvent *event) {
     if (watched == m_leftBar && event->type() == QEvent::Resize) {
         setFixedSize(m_rightWidget->width() + m_leftBar->width(), 502);
+    }
+
+    if(watched == m_searcherEdit   && event->type() ==QEvent:: KeyPress){
+        qDebug()<<"11111111111111";
     }
 
     return QWidget::eventFilter(watched, event);
@@ -877,9 +885,9 @@ void WindowedFrame::onSwitchBtnClicked()
     if (m_displayMode == All) {
         m_appsModel->setCategory(AppsListModel::Category);
         m_displayMode = Category;
-        m_focusPos = LeftBottom;
+        m_focusPos = RightBottom;
     } else if (m_displayMode == Category && m_appsModel->category() != AppsListModel::Category) {
-        m_focusPos = LeftBottom;
+        m_focusPos = RightBottom;
         m_appsModel->setCategory(AppsListModel::Category);
     } else {
         m_displayMode = All;

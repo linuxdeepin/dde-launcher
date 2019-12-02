@@ -77,7 +77,7 @@ public:
     };
 
     enum FocusPosition {
-        LeftBottom, //所有分类
+        RightBottom, //所有分类
         Computer,
         Setting,
         Power,

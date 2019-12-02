@@ -28,7 +28,7 @@
 
 #include <QObject>
 #include <QTimer>
-#include <dregionmonitor.h>
+#include <DRegionMonitor>
 
 #include <com_deepin_sessionmanager.h>
 

@@ -64,6 +64,7 @@ private slots:
     void showShutdown();
     void showSettings();
     void showManual();
+   // void hideAllHoverState() const;
     void updateIcon();
 
 private:

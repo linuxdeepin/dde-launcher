@@ -416,7 +416,6 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
             break;
         case Applist:
             m_focusPos = Search;
-            m_searcherEdit->setFocus();
             //m_searcherEdit->lineEdit()->setFocus();
             break;
         }
@@ -687,7 +686,6 @@ void WindowedFrame::showEvent(QShowEvent *e)
         setFocus();
         emit visibleChanged(true);
     });
-
     m_focusPos = Default;
 }
 
@@ -754,10 +752,6 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point)
 bool WindowedFrame::eventFilter(QObject *watched, QEvent *event) {
     if (watched == m_leftBar && event->type() == QEvent::Resize) {
         setFixedSize(m_rightWidget->width() + m_leftBar->width(), 502);
-    }
-
-    if(watched == m_searcherEdit   && event->type() ==QEvent:: KeyPress){
-        qDebug()<<"11111111111111";
     }
 
     return QWidget::eventFilter(watched, event);

@@ -86,4 +86,6 @@ private:
 
 };
 
+typedef QList<AppGridView*> AppGridViewList;
+
 #endif // APPGRIDVIEW_H

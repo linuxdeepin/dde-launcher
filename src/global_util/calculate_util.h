@@ -51,6 +51,7 @@ public:
     inline int appColumnCount() const {return m_appColumnCount;}
     inline int appItemFontSize() const {return m_appItemFontSize;}
     inline int appItemSpacing() const {return m_appItemSpacing;}
+    inline int appPageItemCount() const {return m_appPageItemCount;}
     inline QSize appItemSize() const { return QSize(m_appItemSize, m_appItemSize); }
     QSize appIconSize() const;
     int displayMode() const;
@@ -77,6 +78,7 @@ private:
     int m_appColumnCount = 7;
     int m_navgationTextSize = 14;
     int m_titleTextSize = 15;
+    int m_appPageItemCount = 28;
 
     DBusLauncher *m_launcherInter;
     QGSettings *m_launcherGsettings;

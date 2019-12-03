@@ -86,7 +86,8 @@ public:
     };
 
 public:
-    explicit AppsListModel(const AppCategory& category, QObject *parent = 0);
+    explicit AppsListModel(const AppCategory& category, QObject *parent = nullptr);
+    void setPageIndex(int pageIndex){m_pageIndex = pageIndex;};
 
     inline AppCategory category() const {return m_category;}
     void setDraggingIndex(const QModelIndex &index);
@@ -128,7 +129,9 @@ private:
     AppCategory m_category = All;
 
     bool m_drawBackground;
+    int m_pageIndex;
 };
+typedef QList<AppsListModel*> pageAppsModelist;
 
 Q_DECLARE_METATYPE(AppsListModel::AppCategory)
 

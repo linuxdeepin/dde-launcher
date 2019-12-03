@@ -88,7 +88,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_tipsLabel(new QLabel(this)),
     m_appItemDelegate(new AppItemDelegate),
 
-    m_allAppsView(new AppGridView),
     m_internetView(new AppGridView),
     m_chatView(new AppGridView),
     m_musicView(new AppGridView),
@@ -100,8 +99,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_developmentView(new AppGridView),
     m_systemView(new AppGridView),
     m_othersView(new AppGridView),
-
-    m_allAppsModel(new AppsListModel(AppsListModel::All)),
     m_searchResultModel(new AppsListModel(AppsListModel::Search)),
     m_internetModel(new AppsListModel(AppsListModel::Internet)),
     m_chatModel(new AppsListModel(AppsListModel::Chat)),
@@ -133,6 +130,17 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     , m_contentFrame(new QFrame)
     , m_displayInter(new DBusDisplay(this))
 {
+    int pageCount = m_appsManager->getPageCount();
+    for(int i=0; i<pageCount; i++){
+        AppGridView *pView = new AppGridView;
+        pView->setStyleSheet("background-color:transparent");
+        m_pageAppsViewList.push_back(pView);
+
+        AppsListModel *pModel = new AppsListModel(AppsListModel::All);
+        pModel->setPageIndex(i);
+        m_pageAppsModelList.push_back(pModel);
+    }
+
     setFocusPolicy(Qt::ClickFocus);
     setAttribute(Qt::WA_InputMethodEnabled, true);
     m_nextFocusIndex = Applist;
@@ -428,19 +436,22 @@ void FullScreenFrame::initUI()
     m_appsArea->setFrameStyle(QFrame::NoFrame);
     m_appsArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_appsArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    m_appsArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsArea->viewport()->installEventFilter(this);
     m_appsArea->installEventFilter(this);
 
-    //    m_othersView->installEventFilter(this);
-    //    m_navigationWidget->installEventFilter(this);
-    m_searchWidget->edit()->installEventFilter(m_eventFilter);
-    m_searchWidget->categoryBtn()->installEventFilter(m_eventFilter);
-    //    qApp->installEventFilter(this);
-    m_allAppsView->setAccessibleName("all");
-    m_allAppsView->setModel(m_allAppsModel);
-    m_allAppsView->setItemDelegate(m_appItemDelegate);
-    m_allAppsView->setContainerBox(m_appsArea);
+    m_searchWidget->edit()->installEventFilter(this);
+
+    for (int i=0; i<m_appsManager->getPageCount(); i++) {
+        QString name = QString("page%1").arg(i+1);
+        m_pageAppsViewList[i]->setAccessibleName(name);
+        m_pageAppsViewList[i]->setModel(m_pageAppsModelList[i]);
+        m_pageAppsViewList[i]->setItemDelegate(m_appItemDelegate);
+        m_pageAppsViewList[i]->setContainerBox(m_appsArea);
+
+        m_appsHbox->layout()->addWidget(m_pageAppsViewList[i]);
+        m_appsArea->addWidget(m_pageAppsViewList[i]->viewport());
+    }
     m_internetView->setAccessibleName("internet");
     m_internetView->setModel(m_internetModel);
     m_internetView->setItemDelegate(m_appItemDelegate);
@@ -488,7 +499,6 @@ void FullScreenFrame::initUI()
     m_systemTitle->setTextVisible(false);
     m_othersTitle->setTextVisible(false);
 
-    m_appsHbox->layout()->addWidget(m_allAppsView);
     m_appsHbox->layout()->addWidget(m_internetTitle);
     m_appsHbox->layout()->addWidget(m_internetView);
     m_appsHbox->layout()->addWidget(m_chatTitle);
@@ -513,10 +523,10 @@ void FullScreenFrame::initUI()
     m_appsHbox->layout()->addWidget(m_othersView);
     m_appsHbox->layout()->addWidget(m_viewListPlaceholder);
     m_appsHbox->layout()->addStretch();
-    m_appsHbox->layout()->setSpacing(0);
+    m_appsHbox->layout()->setSpacing(200);
     m_appsHbox->layout()->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN,
                                              0, 0);
-    m_appsArea->addWidget(m_allAppsView->viewport());
+
     m_appsArea->addWidget(m_internetTitle);
     m_appsArea->addWidget(m_internetView->viewport());
     m_appsArea->addWidget(m_chatTitle);
@@ -726,22 +736,29 @@ void FullScreenFrame::initConnection()
     connect(m_clearCacheTimer, &QTimer::timeout, m_appsManager, &AppsManager::clearCache);
 
     // auto scroll when drag to app list box border
-    connect(m_allAppsView, &AppGridView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
+    connect(m_pageAppsViewList[0], &AppGridView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
     connect(m_autoScrollTimer, &QTimer::timeout, [this] {
         m_appsArea->horizontalScrollBar()->setValue(m_appsArea->horizontalScrollBar()->value() + m_autoScrollStep);
     });
-    connect(m_allAppsView, &AppGridView::requestScrollUp, [this] {
+    connect(m_pageAppsViewList[0], &AppGridView::requestScrollUp, [this] {
         m_autoScrollStep = -DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
         if (!m_autoScrollTimer->isActive())
             m_autoScrollTimer->start();
     });
-    connect(m_allAppsView, &AppGridView::requestScrollDown, [this] {
+    connect(m_pageAppsViewList[0], &AppGridView::requestScrollDown, [this] {
         m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
         if (!m_autoScrollTimer->isActive())
             m_autoScrollTimer->start();
     });
 
-    connect(m_allAppsView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    for (auto pageView: m_pageAppsViewList) {
+        connect(pageView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+        connect(pageView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+        connect(pageView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+        connect(pageView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pageView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    }
+
     connect(m_internetView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
     connect(m_chatView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
     connect(m_musicView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
@@ -754,7 +771,6 @@ void FullScreenFrame::initConnection()
     connect(m_systemView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
     connect(m_othersView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
 
-    connect(m_allAppsView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_internetView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_chatView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_musicView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
@@ -767,7 +783,6 @@ void FullScreenFrame::initConnection()
     connect(m_systemView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_othersView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
 
-    connect(m_allAppsView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
     connect(m_internetView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
     connect(m_chatView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
     connect(m_musicView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
@@ -780,7 +795,6 @@ void FullScreenFrame::initConnection()
     connect(m_systemView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
     connect(m_othersView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
 
-    connect(m_allAppsView, &AppGridView::clicked, this, &FullScreenFrame::hide);
     connect(m_internetView, &AppGridView::clicked, this, &FullScreenFrame::hide);
     connect(m_chatView, &AppGridView::clicked, this, &FullScreenFrame::hide);
     connect(m_musicView, &AppGridView::clicked, this, &FullScreenFrame::hide);
@@ -793,7 +807,6 @@ void FullScreenFrame::initConnection()
     connect(m_systemView, &AppGridView::clicked, this, &FullScreenFrame::hide);
     connect(m_othersView, &AppGridView::clicked, this, &FullScreenFrame::hide);
 
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_allAppsView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_internetView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_chatView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_musicView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
@@ -875,7 +888,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
 
     // move operation should be start from a valid location, if not, just init it.
     if (!currentIndex.isValid()) {
-        m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? m_internetView->indexAt(0) : m_allAppsView->indexAt(0));
+        m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? m_internetView->indexAt(0) : m_pageAppsViewList[0]->indexAt(0));
         update();
         return;
     }
@@ -1019,7 +1032,7 @@ void FullScreenFrame::launchCurrentApp()
 
     switch (m_displayMode) {
     case SEARCH:
-    case ALL_APPS:            m_appsManager->launchApp(m_allAppsView->indexAt(0));     break;
+    case ALL_APPS:            m_appsManager->launchApp(m_pageAppsViewList[0]->indexAt(0));     break;
     case GROUP_BY_CATEGORY:   m_appsManager->launchApp(m_internetView->indexAt(0));    break;
     }
 
@@ -1069,7 +1082,8 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
 
 void FullScreenFrame::uninstallApp(const QString &appKey)
 {
-    uninstallApp(m_allAppsModel->indexAt(appKey));
+    for(auto pageModel: m_pageAppsModelList)
+        uninstallApp(pageModel->indexAt(appKey));
 }
 
 void FullScreenFrame::uninstallApp(const QModelIndex &context)
@@ -1128,7 +1142,7 @@ void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
     const AppsListModel::AppCategory category = index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 
     if (m_displayMode == SEARCH || m_displayMode == ALL_APPS)
-        view = m_allAppsView;
+        view = m_pageAppsViewList[0];
     else
         view = categoryView(category);
 
@@ -1163,7 +1177,9 @@ void FullScreenFrame::updateDisplayMode(const int mode)
 
     bool isCategoryMode = m_displayMode == GROUP_BY_CATEGORY;
 
-    m_allAppsView->setVisible(!isCategoryMode);
+    for (auto pageView: m_pageAppsViewList)
+        pageView->setVisible(!isCategoryMode);
+
     m_internetTitle->setVisible(isCategoryMode);
     m_internetView->setVisible(isCategoryMode);
     m_chatTitle->setVisible(isCategoryMode);
@@ -1190,7 +1206,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     m_viewListPlaceholder->setVisible(isCategoryMode);
     m_navigationWidget->setVisible(isCategoryMode);
 
-    m_allAppsView->setModel(m_displayMode == SEARCH ? m_searchResultModel : m_allAppsModel);
+    m_pageAppsViewList[0]->setModel(m_displayMode == SEARCH ? m_searchResultModel : m_pageAppsModelList[0]);
     // choose nothing
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
@@ -1362,7 +1378,9 @@ void FullScreenFrame::layoutChanged()
 
     m_appsHbox->setFixedHeight(m_appsArea->height());
 
-    m_allAppsView->setFixedSize(boxSize);
+    for (auto pageView: m_pageAppsViewList)
+        pageView->setFixedSize(boxSize);
+
     m_internetView->setFixedSize(boxSize);
     m_musicView->setFixedSize(boxSize);
     m_videoView->setFixedSize(boxSize);
@@ -1397,7 +1415,6 @@ void FullScreenFrame::nextTabWidget(int key)
         case Applist: {
             m_searchWidget->categoryBtn()->clearFocus();
             if(m_displayMode == GROUP_BY_CATEGORY && (m_currentCategory < AppsListModel::Internet || m_currentCategory > AppsListModel::Others )) m_currentCategory = AppsListModel::Internet;
-            m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? categoryView(m_currentCategory)->indexAt(0) : m_allAppsView->indexAt(0));
             update();
             m_searchWidget->edit()->lineEdit()->clearFocus();
             m_currentFocusIndex = m_nextFocusIndex;
@@ -1431,7 +1448,7 @@ void FullScreenFrame::nextTabWidget(int key)
         switch (m_nextFocusIndex) {
         case Applist: {
             if(m_displayMode == GROUP_BY_CATEGORY && (m_currentCategory < AppsListModel::Internet || m_currentCategory > AppsListModel::Others )) m_currentCategory = AppsListModel::Internet;
-            m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? categoryView(m_currentCategory)->indexAt(0) : m_allAppsView->indexAt(0));
+            //m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? categoryView(m_currentCategory)->indexAt(0) : m_allAppsView->indexAt(0));
             update();
             m_searchWidget->categoryBtn()->clearFocus();
             m_currentFocusIndex = m_nextFocusIndex;

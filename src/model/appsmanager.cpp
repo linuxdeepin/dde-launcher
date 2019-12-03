@@ -116,10 +116,7 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
                     }
                 }
             } else {
-               icon = QIcon::fromTheme(iconName);
-               if(icon.isNull()){
-                       icon = QIcon::fromTheme("deepinwine-"+iconName, QIcon::fromTheme("application-x-desktop"));
-               }
+                icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));
             }
         }
 
@@ -131,8 +128,7 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
         Q_ASSERT(!pixmap.isNull());
     } while (false);
 
-    if (qFuzzyCompare(pixmap.devicePixelRatioF(), 1.))
-    {
+    if (qFuzzyCompare(pixmap.devicePixelRatioF(), 1.)) {
         pixmap = pixmap.scaled(QSize(s, s) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         pixmap.setDevicePixelRatio(ratio);
     }
@@ -182,6 +178,8 @@ AppsManager::AppsManager(QObject *parent) :
     refreshAllList();
     refreshAppAutoStartCache();
 
+    m_pageIndex = 0;
+
     m_searchTimer->setSingleShot(true);
     m_searchTimer->setInterval(150);
     m_delayRefreshTimer->setSingleShot(true);
@@ -191,7 +189,7 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
     connect(m_launcherInter, &DBusLauncher::UninstallSuccess, this, &AppsManager::abandonStashedItem);
-    connect(m_launcherInter, &DBusLauncher::UninstallFailed, [this] (const QString &appKey) { restoreItem(appKey); emit dataChanged(AppsListModel::All); });
+    connect(m_launcherInter, &DBusLauncher::UninstallFailed, [this](const QString & appKey) { restoreItem(appKey); emit dataChanged(AppsListModel::All); });
     connect(m_launcherInter, &DBusLauncher::ItemChanged, this, &AppsManager::handleItemChanged);
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &AppsManager::dockGeometryChanged);
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &AppsManager::dockGeometryChanged);
@@ -245,7 +243,7 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
     if (preset.isEmpty())
         preset = LAUNCHER_SETTINGS.get("apps-order").toStringList();
 
-    qSort(processList.begin(), processList.end(), [&preset] (const ItemInfo &i1, const ItemInfo &i2) {
+    qSort(processList.begin(), processList.end(), [&preset](const ItemInfo & i1, const ItemInfo & i2) {
         int index1 = preset.indexOf(i1.m_key.toLower());
         int index2 = preset.indexOf(i2.m_key.toLower());
 
@@ -317,10 +315,8 @@ void AppsManager::stashItem(const QModelIndex &index)
 
 void AppsManager::stashItem(const QString &appKey)
 {
-    for (int i(0); i != m_allAppInfoList.size(); ++i)
-    {
-        if (m_allAppInfoList[i].m_key == appKey)
-        {
+    for (int i(0); i != m_allAppInfoList.size(); ++i) {
+        if (m_allAppInfoList[i].m_key == appKey) {
             m_stashList.append(m_allAppInfoList[i]);
             m_allAppInfoList.removeAt(i);
 
@@ -348,10 +344,8 @@ void AppsManager::abandonStashedItem(const QString &appKey)
 
 void AppsManager::restoreItem(const QString &appKey, const int pos)
 {
-    for (int i(0); i != m_stashList.size(); ++i)
-    {
-        if (m_stashList[i].m_key == appKey)
-        {
+    for (int i(0); i != m_stashList.size(); ++i) {
+        if (m_stashList[i].m_key == appKey) {
             // if pos is valid
             if (pos != -1)
                 m_usedSortedList.insert(pos, m_stashList[i]);
@@ -450,10 +444,8 @@ void AppsManager::launchApp(const QModelIndex &index)
 void AppsManager::uninstallApp(const QString &appKey)
 {
     // refersh auto start cache
-    for (const ItemInfo &info : m_allAppInfoList)
-    {
-        if (info.m_key == appKey)
-        {
+    for (const ItemInfo &info : m_allAppInfoList) {
+        if (info.m_key == appKey) {
             APP_AUTOSTART_CACHE.remove(info.m_desktop);
             break;
         }
@@ -504,11 +496,11 @@ const ItemInfo AppsManager::createOfCategory(qlonglong category)
     return info;
 }
 
-const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const
+const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category, int pageIndex) const
 {
     switch (category) {
     case AppsListModel::Custom:    return m_userSortedList;        break;
-    case AppsListModel::All:       return m_usedSortedList;        break;
+    case AppsListModel::All:       return m_usedSortedListVec[pageIndex];        break;
     case AppsListModel::Search:     return m_appSearchResultList;   break;
     case AppsListModel::Category:   return m_categoryList;          break;
     default:;
@@ -560,6 +552,22 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
     m_iconCache[tmpKey] = pixmap;
 
     return pixmap;
+}
+
+void AppsManager::ReflashSortList()
+{
+    while (m_pageCount > 0) {
+        m_usedSortedListVec[m_pageCount - 1].clear();
+        m_pageCount --;
+    }
+    int index = 0;
+    for (int i = 0; i < m_usedSortedList.size(); i++) {
+        m_usedSortedListVec[index].push_back(m_usedSortedList[i]);
+        if (m_usedSortedListVec[index].size() >= m_calUtil->appPageItemCount()) {
+            index ++;
+        }
+    }
+    m_pageCount = index + 1;
 }
 
 void AppsManager::refreshCategoryInfoList()
@@ -651,8 +659,7 @@ void AppsManager::refreshUserInfoList()
                     }
 
                     it++;
-                }
-                else {
+                } else {
                     it = m_userSortedList.erase(it);
                 }
             }
@@ -668,7 +675,7 @@ void AppsManager::refreshUserInfoList()
 
     const qint64 currentTime = QDateTime::currentMSecsSinceEpoch() / 1000;
     // If the first run time is less than the current time, I am not sure can maintain the correct results.
-    std::stable_sort(m_userSortedList.begin(), m_userSortedList.end(), [=] (const ItemInfo &a, const ItemInfo &b) {
+    std::stable_sort(m_userSortedList.begin(), m_userSortedList.end(), [ = ](const ItemInfo & a, const ItemInfo & b) {
         const auto AFirstRunTime = a.m_firstRunTime;
         const auto BFirstRunTime = b.m_firstRunTime;
 
@@ -683,6 +690,7 @@ void AppsManager::refreshUserInfoList()
         // Average number of starts
         return (static_cast<double>(a.m_openCount) / hours_diff_a) > (static_cast<double>(b.m_openCount) / hours_diff_b);
     });
+    ReflashSortList();
 
     saveUserSortedList();
 }
@@ -698,6 +706,7 @@ void AppsManager::updateUsedListInfo()
             m_usedSortedList[idx].m_openCount = openCount;
         }
     }
+    ReflashSortList();
 }
 
 void AppsManager::generateCategoryMap()
@@ -761,16 +770,18 @@ void AppsManager::generateCategoryMap()
 
     std::sort(m_categoryList.begin(),
               m_categoryList.end(),
-              [=] (const ItemInfo &info1, const ItemInfo &info2) {
+    [ = ](const ItemInfo & info1, const ItemInfo & info2) {
         return info1.m_categoryId < info2.m_categoryId;
     });
+
+    ReflashSortList();
 
     emit categoryListChanged();
 }
 
 int AppsManager::appNums(const AppsListModel::AppCategory &category) const
 {
-    return appsInfoList(category).size();
+    return appsInfoList(category, m_pageIndex).size();
 }
 
 void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &desktpFilePath)
@@ -811,8 +822,9 @@ void AppsManager::onSearchTimeOut()
     });
 }
 
-void AppsManager::refreshNotFoundIcon() {
-    QPlatformTheme * const platformTheme = QGuiApplicationPrivate::platformTheme();
+void AppsManager::refreshNotFoundIcon()
+{
+    QPlatformTheme *const platformTheme = QGuiApplicationPrivate::platformTheme();
     const qreal ratio = qApp->devicePixelRatio();
 
     for (auto it = m_notExistIconMap.begin(); it != m_notExistIconMap.end();) {
@@ -829,7 +841,7 @@ void AppsManager::refreshNotFoundIcon() {
             for (auto iconIt = m_iconCache.begin(); iconIt != m_iconCache.end(); ++iconIt) {
                 if (iconIt.key().first == itemPair.first.m_iconKey && iconIt.key().second / ratio == itemPair.second) {
                     const QPair<QString, int> iconPair{ itemPair.first.m_iconKey, iconIt.key().second };
-                    const QPixmap &           pixmap = getThemeIcon(itemPair.first, itemPair.second);
+                    const QPixmap            &pixmap = getThemeIcon(itemPair.first, itemPair.second);
                     m_iconCache[iconPair]            = pixmap;
                     emit itemDataChanged(itemPair.first);
                     it = m_notExistIconMap.erase(it);
@@ -924,15 +936,14 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
         Q_ASSERT(m_allAppInfoList.contains(appInfo));
 
         // update item info
-        for (auto &item : m_allAppInfoList)
-        {
-            if (item == appInfo)
-            {
+        for (auto &item : m_allAppInfoList) {
+            if (item == appInfo) {
                 item.updateInfo(appInfo);
                 break;
             }
         }
     }
+    ReflashSortList();
 
     m_delayRefreshTimer->start();
 }

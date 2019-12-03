@@ -51,6 +51,8 @@
 #define LEFT_PADDING 200
 #define RIGHT_PADDING 200
 
+#define MAX_VIEW_NUM    255
+
 
 class CalculateUtil;
 class AppsManager : public QObject
@@ -72,6 +74,9 @@ public:
     bool isVaild();
     void refreshAllList();
     const QPixmap getThemeIcon(const ItemInfo &itemInfo, const int size);
+    int getPageCount(){return m_pageCount;}
+    void setPageIndex(int pageIndex){m_pageIndex = pageIndex;}
+    int getPageIndex(){return m_pageIndex;}
 
 signals:
     void itemDataChanged(const ItemInfo &info) const;
@@ -89,7 +94,7 @@ public slots:
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
     void uninstallApp(const QString &appKey);
-    const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
+    const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category, int pageIndex=0) const;
 
     bool appIsNewInstall(const QString &key);
     bool appIsAutoStart(const QString &desktop);
@@ -120,6 +125,7 @@ private:
     void refreshNotFoundIcon();
     void refreshAppListIcon();
 
+    void ReflashSortList();
 private slots:
     void onIconThemeChanged();
     void searchDone(const QStringList &resultList);
@@ -139,6 +145,7 @@ private:
     QStringList m_newInstalledAppsList;
     ItemInfoList m_allAppInfoList;
     ItemInfoList m_usedSortedList; // FullScreen
+    ItemInfoList m_usedSortedListVec[MAX_VIEW_NUM];
     ItemInfoList m_userSortedList; // Mini
     ItemInfoList m_appSearchResultList;
     ItemInfoList m_stashList;
@@ -149,6 +156,8 @@ private:
     ItemInfo m_beDragedItem = ItemInfo();
 
     CalculateUtil *m_calUtil;
+    int m_pageCount;
+    int m_pageIndex;
     QTimer *m_searchTimer;
     QTimer *m_delayRefreshTimer;
 

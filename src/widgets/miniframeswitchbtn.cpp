@@ -129,14 +129,15 @@ void MiniFrameSwitchBtn::mouseReleaseEvent(QMouseEvent *event)
 
 void MiniFrameSwitchBtn::updateIcon()
 {
-    if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()){
-         m_color.setRgb(255, 255, 255, 25);
-         m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all-dark.svg", QSize(24, 24)));
-         m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal-dark.svg", QSize(20, 20)));
-    }else {
+    if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+        m_color.setRgb(255, 255, 255, 25);
+        m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all-dark.svg", QSize(24, 24)));
+        m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal.svg", QSize(20, 20)));
+
+    } else {
         m_color.setRgb(0, 0, 0, 25);
         m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all.svg", QSize(24, 24)));
-        m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal.svg", QSize(20, 20)));
+        m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal-dark.svg", QSize(20, 20)));
     }
 
     QPalette pa = m_textLabel->palette();

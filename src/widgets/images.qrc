@@ -25,5 +25,7 @@
         <file>images/setting.svg</file>
         <file>images/shutdown.svg</file>
         <file>images/shutdown_dark.svg</file>
+        <file>images/page_indicator.svg</file>
+        <file>images/page_indicator_active.svg</file>
     </qresource>
 </RCC>

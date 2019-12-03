@@ -142,6 +142,10 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     updateSize();
 
+    connect(qApp, &QApplication::fontChanged, this, [&] {
+        updateSize();
+    });
+
     connect(m_modeToggleBtn, &DImageButton::clicked, this, &MiniFrameRightBar::modeToggleBtnClicked);
     connect(computerBtn, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
     connect(documentBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DocumentsLocation); });

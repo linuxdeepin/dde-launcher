@@ -110,11 +110,9 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 
     const QRect pr = qApp->primaryScreen()->geometry();
     const int screenWidth = pr.width();
-    const int remain_width = screenWidth;
 
-    const int itemWidth = pr.width() <= 1440 ? 170 : 200;
     const int spacing = pr.width() <= 1440 ? 10 : 14;
-    const int columns = remain_width / itemWidth;
+    const int columns = 7;
 
     const int calc_item_width = (double(containerSize.width()) - spacing * columns * 2) / columns + 0.5;
     const int calc_spacing = (double(containerSize.width()) - calc_item_width * columns) / (columns * 2) - 1;

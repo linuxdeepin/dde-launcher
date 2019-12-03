@@ -284,9 +284,6 @@ void AppGridView::startDrag(const QModelIndex &index)
 
 bool AppGridView::eventFilter(QObject *o, QEvent *e)
 {
-    if (o == viewport() && e->type() == QEvent::Paint)
-        fitToContent();
-
     return false;
 }
 

@@ -165,7 +165,7 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
 
-    return m_appsManager->appsInfoList(m_category).size();
+    return m_appsManager->appsInfoList(m_category, m_pageIndex).size();
 }
 
 const QModelIndex AppsListModel::indexAt(const QString &appKey) const
@@ -246,10 +246,10 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
 
 QVariant AppsListModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || index.row() >= m_appsManager->appsInfoList(m_category).size())
+    if (!index.isValid() || index.row() >= m_appsManager->appsInfoList(m_category, m_pageIndex).size())
         return QVariant();
 
-    const ItemInfo itemInfo = m_appsManager->appsInfoList(m_category)[index.row()];
+    const ItemInfo itemInfo = m_appsManager->appsInfoList(m_category, m_pageIndex)[index.row()];
 
     switch (role)
     {
@@ -281,7 +281,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIsEnableScaling(itemInfo.m_key);
     case AppNewInstallRole: {
         if (m_category == Category) {
-            const ItemInfoList &list = m_appsManager->appsInfoList(CateGoryMap[itemInfo.m_categoryId]);
+            const ItemInfoList &list = m_appsManager->appsInfoList(CateGoryMap[itemInfo.m_categoryId], m_pageIndex);
             for (const ItemInfo &in : list) {
                 if (m_appsManager->appIsNewInstall(in.m_key)) return true;
             }

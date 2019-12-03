@@ -162,7 +162,7 @@ private:
 
     AppItemDelegate *m_appItemDelegate;
 
-    AppGridView *m_allAppsView;
+    AppGridViewList m_pageAppsViewList;
     AppGridView *m_internetView;
     AppGridView *m_chatView;
     AppGridView *m_musicView;
@@ -174,7 +174,8 @@ private:
     AppGridView *m_developmentView;
     AppGridView *m_systemView;
     AppGridView *m_othersView;
-    AppsListModel *m_allAppsModel;
+
+    pageAppsModelist m_pageAppsModelList;
     AppsListModel *m_searchResultModel;
     AppsListModel *m_internetModel;
     AppsListModel *m_chatModel;

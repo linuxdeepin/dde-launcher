@@ -373,8 +373,8 @@ void FullScreenFrame::hideEvent(QHideEvent *e)
 
 void FullScreenFrame::pageBtnClick()
 {
-    for (int i=0; i<m_floatBtnList.size(); i++) {
-        if(sender() == m_floatBtnList[i]){
+    for (int i = 0; i < m_floatBtnList.size(); i++) {
+        if (sender() == m_floatBtnList[i]) {
             m_pageCurrent = i;
             emit scrollChanged(AppsListModel::All);
             break;
@@ -428,10 +428,12 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
         bool rightMost = m_appsArea->horizontalScrollBar()->value() == m_appsArea->horizontalScrollBar()->maximum();
         bool exceedingLimits = e->modifiers() ? false : (e->delta() > 0 && leftMost) || (e->delta() < 0 && rightMost);
 
-        if (e->delta() > 0) {
+        if (e->delta() > 0)
+        {
             if (m_pageCurrent - 1 >= 0)
                 -- m_pageCurrent;
-        } else if (e->delta() < 0) {
+        } else if (e->delta() < 0)
+        {
             if (m_pageCurrent + 1 < m_appsManager->getPageCount())
                 ++ m_pageCurrent;
         }

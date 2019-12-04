@@ -268,10 +268,10 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     m_switchBtn->updateStatus(All);
 
-        m_modeToggleBtn->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
-        m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
-        m_modeToggleBtn->setPressPic(":/icons/skin/icons/fullscreen_press.png");
-        m_modeToggleBtn->setFixedSize(40, 40);
+    m_modeToggleBtn->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
+    m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
+    m_modeToggleBtn->setPressPic(":/icons/skin/icons/fullscreen_press.png");
+    m_modeToggleBtn->setFixedSize(40, 40);
 }
 
 WindowedFrame::~WindowedFrame()
@@ -368,11 +368,11 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
             m_focusPos = Search;
             m_leftBar->hideAllHoverState();
             m_leftBar->setCurrentCheck(false);
-           // m_searcherEdit->lineEdit()->setFocus();
+            // m_searcherEdit->lineEdit()->setFocus();
             setFocus();
             break;
         case Search:
-            if(m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0){
+            if (m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0) {
                 targetIndex = m_appsView->model()->index(0, 0);
             }
             m_focusPos = Applist;
@@ -462,7 +462,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     case Qt::Key_Right: {
         if (m_focusPos == Computer || m_focusPos == Setting || m_focusPos == Power || m_focusPos == Default) {
             m_focusPos = Applist;
-            if(m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0){
+            if (m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0) {
                 targetIndex = m_appsView->model()->index(0, 0);
             }
         }
@@ -480,7 +480,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     } else if (m_focusPos == RightBottom) {
         m_appsView->setCurrentIndex(QModelIndex());
         m_leftBar->setCurrentCheck(false);
-         m_switchBtn->setFocus();
+        m_switchBtn->setFocus();
         return;
     } else if (m_focusPos == Search) {
         m_leftBar->setCurrentCheck(false);
@@ -501,7 +501,7 @@ void WindowedFrame::appendToSearchEdit(const char ch)
 {
     m_searcherEdit->lineEdit()->setFocus();
 
-     //-1 means backspace key pressed
+    //-1 means backspace key pressed
     if (ch == static_cast<const char>(-1)) {
         m_searcherEdit->lineEdit()->backspace();
         return;
@@ -749,7 +749,8 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point)
     }
 }
 
-bool WindowedFrame::eventFilter(QObject *watched, QEvent *event) {
+bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
+{
     if (watched == m_leftBar && event->type() == QEvent::Resize) {
         setFixedSize(m_rightWidget->width() + m_leftBar->width(), 502);
     }

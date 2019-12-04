@@ -61,8 +61,8 @@ void AppListArea::wheelEvent(QWheelEvent *e)
             emit decreaseIcon();
     } else {
         // 默认是上下滚动，这里改成左右滚动
-        QWheelEvent *event = new QWheelEvent(e->pos(), e->delta(), e->buttons(), e->modifiers(),Qt::Horizontal);
-        QScrollArea::wheelEvent(event);
+        //QWheelEvent *event = new QWheelEvent(e->pos(), e->delta(), e->buttons(), e->modifiers(),Qt::Horizontal);
+        QScrollArea::wheelEvent(e);
     }
 }
 

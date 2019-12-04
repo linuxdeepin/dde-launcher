@@ -62,6 +62,7 @@ public:
     inline void increaseItemSize() { m_appItemSize += 16; }
     inline void decreaseItemSize() { m_appItemSize -= 16; }
     inline int navigationHeight() { return 117; }
+    QSize getAppBoxSize() ;
 public slots:
     void calculateAppLayout(const QSize &containerSize, const int dockPosition);
 
@@ -77,8 +78,8 @@ private:
     int m_appItemSize = 130;
     int m_appColumnCount = 7;
     int m_navgationTextSize = 14;
-    int m_titleTextSize = 15;
     int m_appPageItemCount = 28;
+    int m_titleTextSize = 40;
 
     DBusLauncher *m_launcherInter;
     QGSettings *m_launcherGsettings;

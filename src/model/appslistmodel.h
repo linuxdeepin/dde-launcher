@@ -72,8 +72,8 @@ public:
         Category,
 
         // apps category
-        Chat,
         Internet,
+        Chat,
         Music,
         Video,
         Graphics,

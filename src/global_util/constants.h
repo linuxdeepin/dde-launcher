@@ -37,12 +37,16 @@ static const int APP_DRAG_SCROLL_THRESHOLD = 150;
 
 static const int DRAG_THRESHOLD = 15;
 
-static const int CATEGORY_TITLE_WIDGET_HEIGHT = 50;
+static const int CATEGORY_TITLE_WIDGET_HEIGHT = 70;
 
 static const int VIEWLIST_BOTTOM_MARGIN = 140;
 
 static const int NAVIGATION_ICON_SIZE = 32;
 static const int NAVIGATION_BUTTON_SIZE = 60;
+
+static const int APPHBOX_SPACING = 60;
+
+static const int APPHBOX_ALPHA = 100;
 
 static const int TOP_BOTTOM_GRADIENT_HEIGHT = 60;
 
@@ -67,6 +71,8 @@ const DSysInfo::DeepinType DeepinType = DSysInfo::deepinType();
 const bool IsServerSystem = (DSysInfo::DeepinServer == DeepinType);
 const bool IsDesktopSystem = DSysInfo::isCommunityEdition();
 const bool IsProfessionalSystem = (DSysInfo::DeepinProfessional == DeepinType);
+
+static const int WHOOLTIME_TO_SCROOL = 10;
 
 }
 

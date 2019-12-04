@@ -93,6 +93,9 @@ void CategoryTitleWidget::setText(const QString &title)
 {
     m_text = title;
 
+    QFont titleFont(m_title->font());
+    titleFont.setPixelSize(m_calcUtil->titleTextSize());
+    m_title->setFont(titleFont);
     QFontMetrics fontMetric(m_title->font());
     const int width = fontMetric.width(title);
     m_title->setFixedWidth(width + 10);

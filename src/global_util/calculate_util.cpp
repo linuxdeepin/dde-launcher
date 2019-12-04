@@ -59,6 +59,13 @@ QSize CalculateUtil::appIconSize() const
     return s * ratio;
 }
 
+QSize CalculateUtil::getAppBoxSize()
+{
+    int width = qApp->primaryScreen()->geometry().size().width() * 0.51;
+    int height = qApp->primaryScreen()->geometry().size().height() * 0.71;
+    return  QSize(width, height);
+}
+
 bool CalculateUtil::increaseIconSize()
 {
     const double value = m_launcherGsettings->get("apps-icon-ratio").toDouble();
@@ -96,22 +103,22 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 {
     Q_UNUSED(dockPosition);
 
+    const QRect pr = qApp->primaryScreen()->geometry();
+    const int screenWidth = pr.width();
+    const int spacing = pr.width() <= 1440 ? 10 : 14;
     // mini mode
-    if (!m_launcherInter->fullscreen())
-    {
-        m_appItemSpacing = 6;
-        m_appItemSize = 120;
-        m_appItemFontSize = 8;
+    if (m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeCategory) {
+
+        m_appItemFontSize = 12;
         m_appColumnCount = displayMode() == ALL_APPS ? 4 : 1;
+
+        m_appItemSize = 120;
+        m_appItemSpacing = 10;
 
         emit layoutChanged();
         return;
     }
 
-    const QRect pr = qApp->primaryScreen()->geometry();
-    const int screenWidth = pr.width();
-
-    const int spacing = pr.width() <= 1440 ? 10 : 14;
     const int columns = 7;
 
     const int calc_item_width = (double(containerSize.width()) - spacing * columns * 2) / columns + 0.5;
@@ -139,12 +146,11 @@ CalculateUtil::CalculateUtil(QObject *parent)
 
 void CalculateUtil::calculateTextSize(const int screenWidth)
 {
-    if (screenWidth > 1366)
-    {
+    if (screenWidth > 1366) {
         m_navgationTextSize = 14;
-        m_titleTextSize = 15;
+        m_titleTextSize = 40;
     } else {
         m_navgationTextSize = 11;
-        m_titleTextSize = 13;
+        m_titleTextSize = 38;
     }
 }

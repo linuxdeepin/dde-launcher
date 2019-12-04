@@ -52,7 +52,8 @@
 #include <QDebug>
 
 #include <dboxwidget.h>
-
+#include <DFloatingButton>
+typedef QList<DFloatingButton*>  DFloatBtnList;
 
 DWIDGET_USE_NAMESPACE
 
@@ -85,10 +86,12 @@ signals:
     void displayModeChanged(const int mode);
     void categoryAppNumsChanged(const AppsListModel::AppCategory category, const int appNums);
     void currentVisibleCategoryChanged(const AppsListModel::AppCategory currentVisibleCategory) const;
+    void scrollChanged(const AppsListModel::AppCategory &category);
 
 public slots:
     void scrollToCategory(const AppsListModel::AppCategory &category);
     void scrollToBlurBoxWidget(BlurBoxWidget *category);
+    void scrollToPage(const AppsListModel::AppCategory &category);
 
     void showTips(const QString &tips);
     void hideTips();
@@ -170,6 +173,7 @@ private:
     CalculateUtil *m_calcUtil;
     AppsManager *m_appsManager;
     QPropertyAnimation *m_scrollAnimation;
+
     QWidget *m_scrollDest;
     QTimer *m_delayHideTimer;
     QTimer *m_autoScrollTimer;
@@ -211,8 +215,6 @@ private:
     BlurBoxWidget *m_systemBoxWidget;
     BlurBoxWidget *m_othersBoxWidget;
 
-
-    AppsListModel *m_allAppsModel;
     AppsListModel *m_searchResultModel;
     AppsListModel *m_internetModel;
     AppsListModel *m_chatModel;
@@ -239,6 +241,10 @@ private:
     CategoryTitleWidget *m_systemTitle;
     CategoryTitleWidget *m_othersTitle;
 
+    DFloatBtnList m_floatBtnList;
+    QIcon m_iconViewActive;
+    QIcon m_iconView;
+
     QFrame *m_topSpacing;
     QFrame *m_bottomSpacing;
 
@@ -255,5 +261,7 @@ private:
                                         };
     //当前处在第几个分类
     int m_currentBox ;
+
+    int m_pageCurrent;
 };
 #endif // MAINFRAME_H

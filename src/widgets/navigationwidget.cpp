@@ -110,7 +110,7 @@ void NavigationWidget::initUI()
     mainLayout->addWidget(m_othersBtn);
     mainLayout->addStretch();
     mainLayout->setSpacing(0);
-    mainLayout->setMargin(0);
+    mainLayout->setMargin(30);
 
     setLayout(mainLayout);
 }

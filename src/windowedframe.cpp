@@ -58,7 +58,7 @@
 
 DGUI_USE_NAMESPACE
 
-extern const QPoint widgetRelativeOffset(const QWidget * const self, const QWidget *w);
+extern const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w);
 
 inline const QPoint scaledPosition(const QPoint &xpos)
 {
@@ -96,7 +96,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_displayMode(All)
     , m_focusPos(Applist)
     , m_modeToggleBtn(new DImageButton(this))
-    ,m_searcherEdit(new DSearchEdit)
+    , m_searcherEdit(new DSearchEdit)
 {
     setMaskColor(DBlurEffectWidget::AutoColor);
     setBlendMode(DBlurEffectWidget::InWindowBlend);
@@ -226,10 +226,10 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     m_switchBtn->updateStatus(All);
 
-        m_modeToggleBtn->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
-        m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
-        m_modeToggleBtn->setPressPic(":/icons/skin/icons/fullscreen_press.png");
-        m_modeToggleBtn->setFixedSize(40, 40);
+    m_modeToggleBtn->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
+    m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
+    m_modeToggleBtn->setPressPic(":/icons/skin/icons/fullscreen_press.png");
+    m_modeToggleBtn->setFixedSize(40, 40);
 }
 
 WindowedFrame::~WindowedFrame()
@@ -242,7 +242,6 @@ void WindowedFrame::showLauncher()
     if (visible() || m_delayHideTimer->isActive())
         return;
 
-    m_searcherEdit->clear();
     qApp->processEvents();
 
     // force refresh
@@ -292,15 +291,15 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
 
     const int row = currentIdx.row();
     switch (key) {
-    case Qt::Key_Tab:{
+    case Qt::Key_Tab: {
         switch (m_focusPos) {
         case Default:
             m_focusPos = RightBottom;
             break;
         case RightBottom:
-             m_focusPos = Computer;
-             m_leftBar->hideAllHoverState();
-             m_leftBar->setCurrentIndex(0);
+            m_focusPos = Computer;
+            m_leftBar->hideAllHoverState();
+            m_leftBar->setCurrentIndex(0);
             break;
         case Computer:
             m_focusPos = Setting;
@@ -316,11 +315,11 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
             m_focusPos = Search;
             m_leftBar->hideAllHoverState();
             m_leftBar->setCurrentCheck(false);
-           // m_searcherEdit->lineEdit()->setFocus();
+            // m_searcherEdit->lineEdit()->setFocus();
             setFocus();
             break;
         case Search:
-            if(m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0){
+            if (m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0) {
                 targetIndex = m_appsView->model()->index(0, 0);
             }
             m_focusPos = Applist;
@@ -339,7 +338,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
             break;
         case RightBottom:
             m_focusPos = Applist;
-            if(m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0){
+            if (m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0) {
                 targetIndex = m_appsView->model()->index(0, 0);
             }
             break;
@@ -410,7 +409,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     case Qt::Key_Right: {
         if (m_focusPos == Computer || m_focusPos == Setting || m_focusPos == Power || m_focusPos == Default) {
             m_focusPos = Applist;
-            if(m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0){
+            if (m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0) {
                 targetIndex = m_appsView->model()->index(0, 0);
             }
         }
@@ -428,12 +427,11 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
     } else if (m_focusPos == RightBottom) {
         m_appsView->setCurrentIndex(QModelIndex());
         m_leftBar->setCurrentCheck(false);
-         m_switchBtn->setFocus();
+        m_switchBtn->setFocus();
         return;
-    }else if (m_focusPos == Search){
+    } else if (m_focusPos == Search) {
         m_leftBar->setCurrentCheck(false);
-    }
-    else {
+    } else {
         m_appsView->setCurrentIndex(QModelIndex());
         m_leftBar->setCurrentCheck(true);
         m_leftBar->setFocus();
@@ -450,7 +448,7 @@ void WindowedFrame::appendToSearchEdit(const char ch)
 {
     m_searcherEdit->lineEdit()->setFocus();
 
-     //-1 means backspace key pressed
+    //-1 means backspace key pressed
     if (ch == static_cast<const char>(-1)) {
         m_searcherEdit->lineEdit()->backspace();
         return;
@@ -518,7 +516,7 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
     buttons << tr("Cancel") << tr("Confirm");
     unInstallDialog.addButtons(buttons);
 
-    connect(&unInstallDialog, &DTK_WIDGET_NAMESPACE::DDialog::buttonClicked, [&] (int clickedResult) {
+    connect(&unInstallDialog, &DTK_WIDGET_NAMESPACE::DDialog::buttonClicked, [&](int clickedResult) {
         // 0 means "cancel" button clicked
         if (clickedResult == 0) {
             return;
@@ -536,7 +534,7 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
 
 bool WindowedFrame::windowDeactiveEvent()
 {
-      // don't need
+    // don't need
 //    if (isVisible() && !m_menuWorker->isMenuShown() && !m_delayHideTimer->isActive()) {
 //        m_delayHideTimer->start();
 //    }
@@ -628,7 +626,7 @@ void WindowedFrame::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
 
-    QTimer::singleShot(1, this, [this] () {
+    QTimer::singleShot(1, this, [this]() {
         raise();
         activateWindow();
         setFocus();
@@ -642,7 +640,7 @@ void WindowedFrame::hideEvent(QHideEvent *e)
     m_appsModel->setDrawBackground(false);
     QWidget::hideEvent(e);
 
-    QTimer::singleShot(1, this, [=] { emit visibleChanged(false); });
+    QTimer::singleShot(1, this, [ = ] { emit visibleChanged(false); });
 }
 
 void WindowedFrame::enterEvent(QEvent *e)
@@ -696,7 +694,8 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point)
     }
 }
 
-bool WindowedFrame::eventFilter(QObject *watched, QEvent *event) {
+bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
+{
     if (watched == m_leftBar && event->type() == QEvent::Resize) {
         setFixedSize(m_rightWidget->width() + m_leftBar->width(), 502);
     }
@@ -706,7 +705,7 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event) {
 
 void WindowedFrame::resizeEvent(QResizeEvent *event)
 {
-    QTimer::singleShot(0, this, [=] {
+    QTimer::singleShot(0, this, [ = ] {
         initAnchoredCornor();
         m_cornerPath = getCornerPath(m_anchoredCornor);
         m_windowHandle.setClipPath(m_cornerPath);
@@ -802,11 +801,11 @@ void WindowedFrame::onToggleFullScreen()
 {
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
-            .service("com.deepin.dde.daemon.Launcher")
-            .interface("com.deepin.dde.daemon.Launcher")
-            .path("/com/deepin/dde/daemon/Launcher")
-            .property("Fullscreen")
-            .set(true);
+    .service("com.deepin.dde.daemon.Launcher")
+    .interface("com.deepin.dde.daemon.Launcher")
+    .path("/com/deepin/dde/daemon/Launcher")
+    .property("Fullscreen")
+    .set(true);
 #else
     const QStringList args {
         "--print-reply",
@@ -826,11 +825,9 @@ void WindowedFrame::onSwitchBtnClicked()
     if (m_displayMode == All) {
         m_appsModel->setCategory(AppsListModel::Category);
         m_displayMode = Category;
-    }
-    else if (m_displayMode == Category && m_appsModel->category() != AppsListModel::Category) {
+    } else if (m_displayMode == Category && m_appsModel->category() != AppsListModel::Category) {
         m_appsModel->setCategory(AppsListModel::Category);
-    }
-    else {
+    } else {
         m_displayMode = All;
         m_appsModel->setCategory(AppsListModel::Custom);
     }

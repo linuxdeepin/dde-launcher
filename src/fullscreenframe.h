@@ -39,6 +39,7 @@
 #include "worker/menuworker.h"
 #include "widgets/applistarea.h"
 #include "boxframe/boxframe.h"
+#include "widgets/blurboxwidget.h"
 
 #include <memory>
 
@@ -47,8 +48,10 @@
 #include <QPropertyAnimation>
 #include <QSettings>
 #include <QTimer>
+#include <QDebug>
 
 #include <dboxwidget.h>
+
 
 DWIDGET_USE_NAMESPACE
 
@@ -77,6 +80,8 @@ signals:
 
 public slots:
     void scrollToCategory(const AppsListModel::AppCategory &category);
+    void scrollToBlurBoxWidget(BlurBoxWidget *category);
+
     void showTips(const QString &tips);
     void hideTips();
 
@@ -128,10 +133,12 @@ private slots:
     void refreshTitleVisible();
     void refershCategoryTextVisible();
     void refershCurrentFloatTitle();
+    void setblurboxChange();
 
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
     AppGridView *categoryView(const AppsListModel::AppCategory category) const;
+    BlurBoxWidget  *categoryBoxWidget(const AppsListModel::AppCategory category) const;
     AppGridView *lastVisibleView() const;
 
 private:
@@ -176,6 +183,20 @@ private:
     AppGridView *m_othersView;
 
     pageAppsModelist m_pageAppsModelList;
+    BlurBoxWidget *m_internetBoxWidget;
+    BlurBoxWidget *m_chatBoxWidget;
+    BlurBoxWidget *m_musicBoxWidget;
+    BlurBoxWidget *m_videoBoxWidget;
+    BlurBoxWidget *m_graphicsBoxWidget;
+    BlurBoxWidget *m_gameBoxWidget;
+    BlurBoxWidget *m_officeBoxWidget;
+    BlurBoxWidget *m_readingBoxWidget;
+    BlurBoxWidget *m_developmentBoxWidget;
+    BlurBoxWidget *m_systemBoxWidget;
+    BlurBoxWidget *m_othersBoxWidget;
+
+
+    AppsListModel *m_allAppsModel;
     AppsListModel *m_searchResultModel;
     AppsListModel *m_internetModel;
     AppsListModel *m_chatModel;
@@ -208,5 +229,11 @@ private:
     QFrame *m_contentFrame;
 
     QVBoxLayout *m_mainLayout;
+    //总共的分类
+    BlurBoxWidget *m_BoxWidget[11]   =  {m_internetBoxWidget, m_chatBoxWidget, m_musicBoxWidget, m_videoBoxWidget, m_graphicsBoxWidget, m_gameBoxWidget
+                                         , m_officeBoxWidget, m_readingBoxWidget, m_developmentBoxWidget, m_systemBoxWidget, m_othersBoxWidget
+                                        };
+    //当前处在第几个分类
+    int m_currentBox ;
 };
 #endif // MAINFRAME_H

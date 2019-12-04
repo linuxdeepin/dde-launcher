@@ -80,27 +80,29 @@ SearchWidget::SearchWidget(QWidget *parent) :
     setLayout(mainLayout);
 
     connect(m_searchEdit, &SearchLineEdit::textChanged, [this] {
-        emit searchTextChanged(m_searchEdit->text().trimmed());
+        emit searchTextChanged(m_searchEdit->text());
     });
-    connect(m_toggleModeBtn, &DIconButton::clicked, this, [=] {
+
+    connect(m_toggleModeBtn, &DIconButton::clicked, this, [ = ] {
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
         DDBusSender()
-            .service("com.deepin.dde.daemon.Launcher")
-            .interface("com.deepin.dde.daemon.Launcher")
-            .path("/com/deepin/dde/daemon/Launcher")
-            .property("Fullscreen")
-            .set(false);
+        .service("com.deepin.dde.daemon.Launcher")
+        .interface("com.deepin.dde.daemon.Launcher")
+        .path("/com/deepin/dde/daemon/Launcher")
+        .property("Fullscreen")
+        .set(false);
 #else
-            const QStringList args{
-                "--print-reply",
-                "--dest=com.deepin.dde.daemon.Launcher",
-                "/com/deepin/dde/daemon/Launcher",
-                "org.freedesktop.DBus.Properties.Set",
-                "string:com.deepin.dde.daemon.Launcher",
-                "string:Fullscreen",
-                "variant:boolean:false"};
+        const QStringList args{
+            "--print-reply",
+            "--dest=com.deepin.dde.daemon.Launcher",
+            "/com/deepin/dde/daemon/Launcher",
+            "org.freedesktop.DBus.Properties.Set",
+            "string:com.deepin.dde.daemon.Launcher",
+            "string:Fullscreen",
+            "variant:boolean:false"
+        };
 
-            QProcess::startDetached("dbus-send", args);
+        QProcess::startDetached("dbus-send", args);
 #endif
     });
     connect(m_toggleCategoryBtn, &DIconButton::clicked, this, &SearchWidget::toggleMode);
@@ -117,11 +119,13 @@ void SearchWidget::clearSearchContent()
     m_searchEdit->moveFloatWidget();
 }
 
-void SearchWidget::setLeftSpacing(int spacing) {
+void SearchWidget::setLeftSpacing(int spacing)
+{
     m_leftSpacing->setFixedWidth(spacing);
 }
 
-void SearchWidget::setRightSpacing(int spacing) {
+void SearchWidget::setRightSpacing(int spacing)
+{
     m_rightSpacing->setFixedWidth(spacing);
 }
 

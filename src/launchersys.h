@@ -70,8 +70,8 @@ private:
     DBusLauncher *m_dbusLauncherInter;
     com::deepin::SessionManager *m_sessionManagerInter;
 
-    WindowedFrame* m_windowLauncher;
-    FullScreenFrame* m_fullLauncher;
+    WindowedFrame *m_windowLauncher;
+    FullScreenFrame *m_fullLauncher;
     DRegionMonitor *m_regionMonitor;
     QTimer *m_autoExitTimer;
     QTimer *m_ignoreRepeatVisibleChangeTimer;

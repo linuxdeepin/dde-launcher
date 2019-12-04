@@ -83,6 +83,9 @@ void CategoryTitleWidget::setTextVisible(const bool visible, const bool animatio
 
 void CategoryTitleWidget::setText(const QString &title)
 {
+    QFont titleFont(m_title->font());
+    titleFont.setPixelSize(m_calcUtil->titleTextSize());
+    m_title->setFont(titleFont);
     QFontMetrics fontMetric(m_title->font());
     const int width = fontMetric.width(title);
     m_title->setFixedWidth(width + 10);

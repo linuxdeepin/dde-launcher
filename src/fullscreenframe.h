@@ -84,6 +84,7 @@ public slots:
     void scrollToCategory(const AppsListModel::AppCategory &category);
     void scrollToBlurBoxWidget(BlurBoxWidget *category);
     void scrollToPage(const AppsListModel::AppCategory &category);
+    void pageBtnClick();
 
     void showTips(const QString &tips);
     void hideTips();

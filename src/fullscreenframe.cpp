@@ -156,6 +156,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
         pBtn->setIconSize(QSize(20, 20));
         pBtn->setFixedSize(QSize(20, 20));
         pBtn->setBackgroundRole(DPalette::Button);
+        connect(pBtn, &DFloatingButton::clicked, this, &FullScreenFrame::pageBtnClick);
         m_floatBtnList.push_back(pBtn);
     }
 
@@ -368,6 +369,17 @@ void FullScreenFrame::hideEvent(QHideEvent *e)
     QTimer::singleShot(1, this, [ = ] { emit visibleChanged(false); });
 
     m_clearCacheTimer->start();
+}
+
+void FullScreenFrame::pageBtnClick()
+{
+    for (int i=0; i<m_floatBtnList.size(); i++) {
+        if(sender() == m_floatBtnList[i]){
+            m_pageCurrent = i;
+            emit scrollChanged(AppsListModel::All);
+            break;
+        }
+    }
 }
 
 void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)

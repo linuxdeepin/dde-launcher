@@ -439,34 +439,16 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
         return;
     }
 
-
-    auto shouldPostWheelEvent = [this, e]() -> bool {
-        bool inAppArea = m_appsArea->geometry().contains(e->pos());
-        bool leftMost = m_appsArea->horizontalScrollBar()->value() == m_appsArea->horizontalScrollBar()->minimum();
-        bool rightMost = m_appsArea->horizontalScrollBar()->value() == m_appsArea->horizontalScrollBar()->maximum();
-        bool exceedingLimits = e->modifiers() ? false : (e->delta() > 0 && leftMost) || (e->delta() < 0 && rightMost);
-
-        if (e->delta() > 0)
-        {
-            if (m_pageCurrent - 1 >= 0)
-                -- m_pageCurrent;
-        } else if (e->delta() < 0)
-        {
-            if (m_pageCurrent + 1 < m_appsManager->getPageCount())
-                ++ m_pageCurrent;
-        }
-        if (QAbstractAnimation::Running != m_scrollAnimation->state())
-            emit scrollChanged(AppsListModel::All);
-
-        return !inAppArea && !exceedingLimits;
-    };
-
-    if (shouldPostWheelEvent()) {
-        QWheelEvent *event = new QWheelEvent(e->pos(), e->delta(), e->buttons(), e->modifiers());
-        qApp->postEvent(m_appsArea->viewport(), event);
-
-        e->accept();
+    int page = m_pageCurrent;
+    if (e->delta() > 0) {
+        if (m_pageCurrent - 1 >= 0)
+            -- m_pageCurrent;
+    } else if (e->delta() < 0) {
+        if (m_pageCurrent + 1 < m_appsManager->getPageCount())
+            ++ m_pageCurrent;
     }
+    if (page != m_pageCurrent)
+        emit scrollChanged(AppsListModel::All);
 }
 
 ///
@@ -1376,8 +1358,10 @@ void FullScreenFrame::updateDisplayMode(const int mode)
 
     bool isCategoryMode = m_displayMode == GROUP_BY_CATEGORY;
 
-    for (auto pageView : m_pageAppsViewList)
-        pageView->setVisible(!isCategoryMode);
+    for (int i = 0; i < m_appsManager->getPageCount(); i++) {
+        m_pageAppsViewList[i]->setVisible(!isCategoryMode);
+        m_floatBtnList[i]->setVisible(!isCategoryMode);
+    }
 
     m_internetTitle->setVisible(isCategoryMode);
     m_internetView->setVisible(isCategoryMode);

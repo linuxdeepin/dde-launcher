@@ -416,16 +416,14 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
         bool rightMost = m_appsArea->horizontalScrollBar()->value() == m_appsArea->horizontalScrollBar()->maximum();
         bool exceedingLimits = e->modifiers() ? false : (e->delta() > 0 && leftMost) || (e->delta() < 0 && rightMost);
 
-        if (e->delta() > 0)
-        {
+        if (e->delta() > 0) {
             if (m_pageCurrent - 1 >= 0)
                 -- m_pageCurrent;
-        } else if (e->delta() < 0)
-        {
+        } else if (e->delta() < 0) {
             if (m_pageCurrent + 1 < m_appsManager->getPageCount())
                 ++ m_pageCurrent;
         }
-//        if (QAbstractAnimation::Running != m_scrollAnimation->state())
+        if (QAbstractAnimation::Running != m_scrollAnimation->state())
             emit scrollChanged(AppsListModel::All);
 
         return !inAppArea && !exceedingLimits;

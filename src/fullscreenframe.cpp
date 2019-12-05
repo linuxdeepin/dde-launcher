@@ -251,6 +251,7 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
     m_scrollAnimation->setEndValue(endValue);
     m_scrollAnimation->start();
 
+    emit currentVisibleCategoryChanged(m_currentCategory);
 }
 
 void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category)
@@ -415,6 +416,21 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
                     m_currentBox = boxWidgetLen - 1;
                 }
             }
+
+            if (!m_BoxWidget[m_currentBox]->isVisible()) {
+                if (wheelTime > 0) {
+                    m_currentBox++;
+                    if (m_currentBox > boxWidgetLen - 1) {
+                        m_currentBox = 0;
+                    }
+                } else {
+                    m_currentBox--;
+                    if (m_currentBox < 0) {
+                        m_currentBox = boxWidgetLen - 1;
+                    }
+                }
+
+            }
             scrollToBlurBoxWidget(m_BoxWidget[m_currentBox]);
             wheelTime = 0;
         }
@@ -452,11 +468,11 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
     } else if ((o == m_appsArea->viewport() && e->type() == QEvent::Wheel)
                || (o == m_appsArea && e->type() == QEvent::Scroll)) {
 
-        updateCurrentVisibleCategory();
     } else if (o == m_appsArea->viewport() && e->type() == QEvent::Resize) {
         const int pos = m_appsManager->dockPosition();
         m_calcUtil->calculateAppLayout(static_cast<QResizeEvent *>(e)->size() - QSize(LEFT_PADDING + RIGHT_PADDING, 0), pos);
         updatePlaceholderSize();
+
     }
 
     return false;
@@ -1249,21 +1265,27 @@ void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
 
 void FullScreenFrame::setblurboxChange()
 {
-    qDebug() << "-------------->";
     if (m_displayMode != GROUP_BY_CATEGORY)
         return;
 
     int  boxWidgetLen = sizeof(m_BoxWidget) / sizeof(m_BoxWidget[0]) - 1;
+    m_BoxWidget[m_currentBox]->layout()->itemAt(0)->setAlignment(Qt::AlignHCenter);
+    m_BoxWidget[m_currentBox]->layout()->update();
     if (m_currentBox > 0) {
         m_BoxWidget[m_currentBox - 1]->layout()->itemAt(0)->setAlignment(Qt::AlignRight);
+        m_BoxWidget[m_currentBox - 1]->layout()->update();
     } else {
         m_BoxWidget[boxWidgetLen - 1]->layout()->itemAt(0)->setAlignment(Qt::AlignRight);
+        m_BoxWidget[boxWidgetLen - 1]->layout()->update();
     }
 
     if (m_currentBox == boxWidgetLen) {
         m_BoxWidget[0]->layout()->itemAt(0)->setAlignment(Qt::AlignLeft);
+        m_BoxWidget[ 0]->layout()->update();
+
     } else {
         m_BoxWidget[ m_currentBox + 1]->layout()->itemAt(0)->setAlignment(Qt::AlignLeft);
+        m_BoxWidget[m_currentBox + 1]->layout()->update();
     }
 }
 
@@ -1273,7 +1295,7 @@ void FullScreenFrame::refershCategoryVisible(const AppsListModel::AppCategory ca
         return;
 
     QWidget *categoryTitle = this->categoryTitle(category);
-    QWidget *categoryView = this->categoryView(category);
+    QWidget *categoryView = this->categoryBoxWidget(category);
 
     if (categoryView)
         categoryView->setVisible(appNums);
@@ -1287,6 +1309,17 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         return;
 
     m_displayMode = mode;
+
+    switch (m_displayMode) {
+    case ALL_APPS:
+        m_calcUtil->setDisplayMode(ALL_APPS);
+        break;
+    case GROUP_BY_CATEGORY:
+        m_calcUtil->setDisplayMode(GROUP_BY_CATEGORY);
+        break;
+    default:
+        break;
+    }
 
     bool isCategoryMode = m_displayMode == GROUP_BY_CATEGORY;
 
@@ -1325,22 +1358,6 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     // choose nothing
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
-    switch (m_displayMode) {
-    case ALL_APPS:
-        m_calcUtil->setDisplayMode(ALL_APPS);
-        break;
-    case GROUP_BY_CATEGORY:
-        m_calcUtil->setDisplayMode(GROUP_BY_CATEGORY);
-        break;
-    default:
-        break;
-    }
-
-    if (m_displayMode == GROUP_BY_CATEGORY)
-        scrollToCategory(m_currentCategory);
-    else
-        // scroll to top on group mode
-        m_appsArea->horizontalScrollBar()->setValue(0);
 
     hideTips();
 
@@ -1487,9 +1504,14 @@ AppsListModel *FullScreenFrame::prevCategoryModel(const AppsListModel *currentMo
 
 void FullScreenFrame::layoutChanged()
 {
-    const int appsContentWidth = (width() - LEFT_PADDING - RIGHT_PADDING);
-
-    QSize boxSize(appsContentWidth, m_appsArea->height());
+    QSize boxSize;
+    if (m_displayMode == ALL_APPS) {
+        const int appsContentWidth = (width() - LEFT_PADDING - RIGHT_PADDING);
+        boxSize.setWidth(appsContentWidth);
+        boxSize.setHeight(m_appsArea->height());
+    } else {
+        boxSize = m_calcUtil->getAppBoxSize();
+    }
 
     m_appsHbox->setFixedHeight(m_appsArea->height());
 
@@ -1508,6 +1530,12 @@ void FullScreenFrame::layoutChanged()
     m_othersView->setFixedSize(boxSize);
 
     m_floatTitle->move(m_appsArea->pos().x() + LEFT_PADDING, m_appsArea->y() - m_floatTitle->height() + 10);
+
+    if (m_displayMode == ALL_APPS) {
+        m_appsArea->horizontalScrollBar()->setValue(0);
+    } else {
+        scrollToCategory(m_currentCategory);
+    }
 }
 
 void FullScreenFrame::searchTextChanged(const QString &keywords)

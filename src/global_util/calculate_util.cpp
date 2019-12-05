@@ -110,9 +110,8 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     if (m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeCategory) {
 
         m_appItemFontSize = 12;
-        m_appColumnCount = displayMode() == ALL_APPS ? 4 : 1;
-
-        m_appItemSize = 120;
+        m_appColumnCount = 4;
+        m_appItemSize = 220;
         m_appItemSpacing = 10;
 
         emit layoutChanged();

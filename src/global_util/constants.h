@@ -46,7 +46,9 @@ static const int NAVIGATION_BUTTON_SIZE = 60;
 
 static const int APPHBOX_SPACING = 60;
 
-static const int APPHBOX_ALPHA = 100;
+static const int APPHBOX_ALPHA = 20;
+
+static const int APPHBOX_RADIUS = 36;
 
 static const int TOP_BOTTOM_GRADIENT_HEIGHT = 60;
 

@@ -10,6 +10,8 @@ BlurBoxWidget::BlurBoxWidget(QWidget *parent)
     setMaskColor(DBlurEffectWidget::AutoColor);
     setBlendMode(DBlurEffectWidget::InWindowBlend);
     setMaskAlpha(DLauncher::APPHBOX_ALPHA);
+    setRadius(DLauncher::APPHBOX_RADIUS);
+
     qvLayout = new QVBoxLayout();
     setLayout(qvLayout);
     qvLayout->setAlignment(Qt::AlignTop);

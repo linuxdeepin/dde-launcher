@@ -334,8 +334,10 @@ void AppsManager::restoreItem(const QString &appKey, const int pos)
     for (int i(0); i != m_stashList.size(); ++i) {
         if (m_stashList[i].m_key == appKey) {
             // if pos is valid
-            if (pos != -1)
-                m_usedSortedList.insert(pos, m_stashList[i]);
+            if (pos != -1) {
+                int itemIndex = m_pageIndex * m_calUtil->appPageItemCount() + pos;
+                m_usedSortedList.insert(itemIndex, m_stashList[i]);
+            }
             m_allAppInfoList.append(m_stashList[i]);
             m_stashList.removeAt(i);
 

@@ -457,6 +457,9 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
         return;
     }
 
+    if(m_scrollAnimation->state() == QPropertyAnimation::Running)
+        return;
+
     int page = m_pageCurrent;
     if (e->delta() > 0) {
         if (m_pageCurrent - 1 >= 0)

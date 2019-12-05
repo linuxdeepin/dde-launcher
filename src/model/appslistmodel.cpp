@@ -169,7 +169,7 @@ void AppsListModel::clearDraggingIndex()
 int AppsListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-
+    m_appsManager->setPageIndex(m_pageIndex);
     return m_appsManager->appsInfoList(m_category, m_pageIndex).size();
 }
 
@@ -254,6 +254,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     if (!index.isValid() || index.row() >= m_appsManager->appsInfoList(m_category, m_pageIndex).size())
         return QVariant();
 
+    m_appsManager->setPageIndex(m_pageIndex);
     const ItemInfo itemInfo = m_appsManager->appsInfoList(m_category, m_pageIndex)[index.row()];
 
     switch (role)
@@ -287,6 +288,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIsEnableScaling(itemInfo.m_key);
     case AppNewInstallRole: {
         if (m_category == Category) {
+            m_appsManager->setPageIndex(m_pageIndex);
             const ItemInfoList &list = m_appsManager->appsInfoList(CateGoryMap[itemInfo.m_categoryId], m_pageIndex);
             for (const ItemInfo &in : list) {
                 if (m_appsManager->appIsNewInstall(in.m_key)) return true;

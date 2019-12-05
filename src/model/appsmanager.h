@@ -124,8 +124,8 @@ private:
     void onSearchTimeOut();
     void refreshNotFoundIcon();
     void refreshAppListIcon();
-
     void ReflashSortList();
+
 private slots:
     void onIconThemeChanged();
     void searchDone(const QStringList &resultList);

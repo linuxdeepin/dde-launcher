@@ -106,8 +106,8 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_displayMode(All)
     , m_focusPos(Applist)
     , m_displayInter(new DBusDisplay(this))
-    , m_modeToggleBtn(new DImageButton(this))
     , m_searcherEdit(new DSearchEdit)
+    , m_modeToggleBtn(new DToolButton(this))
 {
     setMaskColor(DBlurEffectWidget::AutoColor);
     setBlendMode(DBlurEffectWidget::InWindowBlend);
@@ -156,6 +156,10 @@ WindowedFrame::WindowedFrame(QWidget *parent)
         }
         m_maskBg->setPalette(pal);
 
+        if (themeType == DGuiApplicationHelper::LightType)
+            m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_normal.svg"));
+        else
+             m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_dark.svg"));
     });
 
     m_delayHideTimer->setInterval(200);
@@ -168,8 +172,10 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_leftBar->installEventFilter(this);
 
     QHBoxLayout *searchLayout = new QHBoxLayout;
+    searchLayout->setContentsMargins(0, 0, 5, 0);
     searchLayout->addSpacing(10);
 
+    searchLayout->setSpacing(8);
     searchLayout->addWidget(m_searcherEdit);
     DStyle::setFocusRectVisible(m_searcherEdit->lineEdit(), false);
     searchLayout->addWidget(m_modeToggleBtn);
@@ -261,17 +267,17 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher, Qt::QueuedConnection);
 
     connect(m_appearanceInter, &Appearance::OpacityChanged, this, &WindowedFrame::onOpacityChanged);
-    connect(m_modeToggleBtn, &DImageButton::clicked, m_leftBar, &MiniFrameRightBar::modeToggleBtnClicked);
-
+    connect(m_modeToggleBtn, &DToolButton::clicked, m_leftBar, &MiniFrameRightBar::modeToggleBtnClicked);
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
     onOpacityChanged(m_appearanceInter->opacity());
 
     m_switchBtn->updateStatus(All);
-
-    m_modeToggleBtn->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
-    m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
-    m_modeToggleBtn->setPressPic(":/icons/skin/icons/fullscreen_press.png");
+    m_modeToggleBtn->setIconSize(QSize(32,32));
     m_modeToggleBtn->setFixedSize(40, 40);
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+        m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_normal.svg"));
+    else
+         m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_dark.svg"));
 }
 
 WindowedFrame::~WindowedFrame()

@@ -160,7 +160,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
         m_floatBtnList.push_back(pBtn);
     }
 
-    setFocusPolicy(Qt::ClickFocus);
+    setFocusPolicy(Qt::TabFocus);
+
     setAttribute(Qt::WA_InputMethodEnabled, true);
     m_currentBox = 0;
 #if (DTK_VERSION <= DTK_VERSION_CHECK(2, 0, 9, 9))
@@ -439,7 +440,7 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
         return;
     }
 
-    if(m_scrollAnimation->state() == QPropertyAnimation::Running)
+    if (m_scrollAnimation->state() == QPropertyAnimation::Running)
         return;
 
     int page = m_pageCurrent;
@@ -1017,7 +1018,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
 
     // move operation should be start from a valid location, if not, just init it.
     if (!currentIndex.isValid()) {
-        m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? m_internetView->indexAt(0) : m_pageAppsViewList[0]->indexAt(0));
+        m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? m_internetView->indexAt(0) : m_pageAppsViewList[m_pageCurrent]->indexAt(0));
         update();
         return;
     }
@@ -1029,11 +1030,30 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     switch (key) {
     case Qt::Key_Backtab:
     case Qt::Key_Left:      index = currentIndex.sibling(currentIndex.row() - 1, 0);        break;
-    case Qt::Key_Tab:
+//    case Qt::Key_Tab:
     case Qt::Key_Right:     index = currentIndex.sibling(currentIndex.row() + 1, 0);        break;
     case Qt::Key_Up:        index = currentIndex.sibling(currentIndex.row() - column, 0);   break;
     case Qt::Key_Down:      index = currentIndex.sibling(currentIndex.row() + column, 0);   break;
     default:;
+    }
+
+    //to next page
+    if (m_displayMode == ALL_APPS && !index.isValid()) {
+        int page = m_pageCurrent;
+        int itemSelect = 0;
+        if (Qt::Key_Left == key || Qt::Key_Up == key) {
+            if (m_pageCurrent - 1 >= 0) {
+                -- m_pageCurrent;
+                itemSelect = m_calcUtil->appPageItemCount() - 1;
+            }
+        } else {
+            if (m_pageCurrent + 1 < m_appsManager->getPageCount())
+                ++ m_pageCurrent;
+        }
+        if (page != m_pageCurrent)
+            emit scrollChanged(AppsListModel::All);
+
+        index = m_pageAppsViewList[m_pageCurrent]->indexAt(itemSelect);
     }
 
     // now, we need to check and fix if destination is invalid.
@@ -1058,7 +1078,6 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     // valid verify and UI adjustment.
     const QModelIndex selectedIndex = index.isValid() ? index : currentIndex;
     m_appItemDelegate->setCurrentIndex(selectedIndex);
-    ensureItemVisible(selectedIndex);
 
     update();
 }
@@ -1099,7 +1118,7 @@ void FullScreenFrame::launchCurrentApp()
 
     switch (m_displayMode) {
     case SEARCH:
-    case ALL_APPS:            m_appsManager->launchApp(m_pageAppsViewList[0]->indexAt(0));     break;
+    case ALL_APPS:            m_appsManager->launchApp(m_pageAppsViewList[m_pageCurrent]->indexAt(0));     break;
     case GROUP_BY_CATEGORY:   m_appsManager->launchApp(m_internetView->indexAt(0));    break;
     }
 
@@ -1207,7 +1226,7 @@ void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
     const AppsListModel::AppCategory category = index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 
     if (m_displayMode == SEARCH || m_displayMode == ALL_APPS)
-        view = m_pageAppsViewList[0];
+        view = m_pageAppsViewList[m_pageCurrent];
     else
         view = categoryView(category);
 
@@ -1318,7 +1337,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     m_viewListPlaceholder->setVisible(isCategoryMode);
     m_navigationWidget->setVisible(isCategoryMode);
 
-    m_pageAppsViewList[0]->setModel(m_displayMode == SEARCH ? m_searchResultModel : m_pageAppsModelList[0]);
+    m_pageAppsViewList[m_pageCurrent]->setModel(m_displayMode == SEARCH ? m_searchResultModel : m_pageAppsModelList[m_pageCurrent]);
     // choose nothing
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 

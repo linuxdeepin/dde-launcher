@@ -251,12 +251,15 @@ void FullScreenFrame::scrollToPage(const AppsListModel::AppCategory &category)
 
 void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &category)
 {
-    QWidget *dest = categoryBoxWidget(category);
+    AppsListModel::AppCategory tempMode = category;
+    if (tempMode < AppsListModel::Internet)
+        tempMode  = AppsListModel::Internet;
+    QWidget *dest = categoryBoxWidget(tempMode);
 
     if (!dest)
         return;
 
-    m_currentCategory = category;
+    m_currentCategory = tempMode;
 
     m_currentBox = m_currentCategory - 4;
 
@@ -613,17 +616,17 @@ void FullScreenFrame::initUI()
     m_othersView->setItemDelegate(m_appItemDelegate);
 
     m_floatTitle->setVisible(false);
-    m_internetTitle->setTextVisible(false);
-    m_chatTitle->setTextVisible(false);
-    m_musicTitle->setTextVisible(false);
-    m_videoTitle->setTextVisible(false);
-    m_graphicsTitle->setTextVisible(false);
-    m_gameTitle->setTextVisible(false);
-    m_officeTitle->setTextVisible(false);
-    m_readingTitle->setTextVisible(false);
-    m_developmentTitle->setTextVisible(false);
-    m_systemTitle->setTextVisible(false);
-    m_othersTitle->setTextVisible(false);
+    m_internetTitle->setTextVisible(true);
+    m_chatTitle->setTextVisible(true);
+    m_musicTitle->setTextVisible(true);
+    m_videoTitle->setTextVisible(true);
+    m_graphicsTitle->setTextVisible(true);
+    m_gameTitle->setTextVisible(true);
+    m_officeTitle->setTextVisible(true);
+    m_readingTitle->setTextVisible(true);
+    m_developmentTitle->setTextVisible(true);
+    m_systemTitle->setTextVisible(true);
+    m_othersTitle->setTextVisible(true);
 
     m_internetBoxWidget->qvLayout->addWidget(m_internetTitle, m_internetView->width() / 2, Qt::AlignHCenter);
     m_internetBoxWidget->qvLayout->addWidget(m_internetView);
@@ -895,7 +898,7 @@ void FullScreenFrame::initConnection()
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &FullScreenFrame::updateGeometry, Qt::QueuedConnection);
 
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
-    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullScreenFrame::ensureScrollToDest);
+    //connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullScreenFrame::ensureScrollToDest);
     connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &FullScreenFrame::refershCurrentFloatTitle, Qt::QueuedConnection);
     connect(m_navigationWidget, &NavigationWidget::scrollToCategory, this, &FullScreenFrame::scrollToCategory);
     connect(this, &FullScreenFrame::scrollChanged, this, &FullScreenFrame::scrollToPage);
@@ -1389,6 +1392,11 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         break;
     }
 
+    if (m_displayMode == GROUP_BY_CATEGORY)
+        scrollToCategory(m_currentCategory);
+    else
+        m_appsArea->horizontalScrollBar()->setValue(0);
+
     bool isCategoryMode = m_displayMode == GROUP_BY_CATEGORY;
 
     for (int i = 0; i < m_appsManager->getPageCount(); i++) {
@@ -1428,6 +1436,11 @@ void FullScreenFrame::updateDisplayMode(const int mode)
 
 
     hideTips();
+
+    if (m_displayMode == GROUP_BY_CATEGORY)
+        scrollToCategory(m_currentCategory);
+    else
+        m_appsArea->horizontalScrollBar()->setValue(0);
 
     emit displayModeChanged(m_displayMode);
 }

@@ -42,6 +42,7 @@
 #include <com_deepin_daemon_appearance.h>
 #include <dimagebutton.h>
 #include <DSearchEdit>
+#include <DToolButton>
 
 #include <QLabel>
 #include <memory>
@@ -155,7 +156,7 @@ private:
     AnchoredCornor m_anchoredCornor = Normal;
     QPainterPath m_cornerPath;
     FocusPosition m_focusPos;
-    DImageButton *m_modeToggleBtn;
+    DToolButton *m_modeToggleBtn;
     DSearchEdit *m_searcherEdit;
 };
 

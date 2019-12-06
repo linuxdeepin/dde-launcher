@@ -57,6 +57,8 @@ signals:
     void toggleMode();
 
 private:
+
+    //SearchLineEdit *m_searchEdit;
     QFrame *m_leftSpacing;
     QFrame *m_rightSpacing;
     DFloatingButton *m_toggleModeBtn;

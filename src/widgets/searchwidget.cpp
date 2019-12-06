@@ -65,6 +65,8 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_searchEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_searchEdit->setFixedWidth(290);
 
+    setFocusPolicy(Qt::ClickFocus);
+
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
@@ -145,3 +147,4 @@ void SearchWidget::hideToggle()
     m_toggleCategoryBtn->hide();
     m_toggleModeBtn->hide();
 }
+

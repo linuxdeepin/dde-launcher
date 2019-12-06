@@ -142,6 +142,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     , m_contentFrame(new QFrame)
     , m_displayInter(new DBusDisplay(this))
 {
+    m_focusIndex = 0;
     m_pageCurrent = 0;
     m_iconViewActive = QIcon(":/widgets/images/page_indicator_active.svg");
     m_iconView = QIcon(":/widgets/images/page_indicator.svg");
@@ -164,7 +165,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
         m_floatBtnList.push_back(pBtn);
     }
 
-    setFocusPolicy(Qt::TabFocus);
+    setFocusPolicy(Qt::NoFocus);
 
     setAttribute(Qt::WA_InputMethodEnabled, true);
     m_nextFocusIndex = Applist;
@@ -191,7 +192,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     setObjectName("LauncherFrame");
 
-    installEventFilter(m_eventFilter);
+//    installEventFilter(m_eventFilter);
+    qApp->installEventFilter(m_eventFilter);
 
     initUI();
     initConnection();
@@ -563,6 +565,7 @@ void FullScreenFrame::initUI()
     m_appsArea->installEventFilter(this);
 
     m_searchWidget->edit()->installEventFilter(this);
+    m_searchWidget->installEventFilter(this);
 
     QHBoxLayout *iconHLayout = new QHBoxLayout;
     iconHLayout->setSpacing(10);
@@ -1052,9 +1055,16 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
 {
     //Prevent the application from being added or uninstalled. Each time you go to get the total number
     m_appNum = m_appsManager->GetAllAppNum();
-
     if (Qt::Key_Tab == key || Qt::Key_Backtab == key) {
-        nextTabWidget(key);
+        nextTabWidget();
+        return;
+    }
+
+    if (Qt::Key_Space == key && m_searchWidget->categoryBtn()->hasFocus()) {
+        QMouseEvent btnPress(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+        QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnPress);
+        QMouseEvent btnRelease(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+        QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnRelease);
         return;
     }
 
@@ -1095,6 +1105,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
             index = currentIndex.sibling(currentIndex.row() + column, 0);
         }
         break;
+
     default:;
     }
 
@@ -1164,6 +1175,12 @@ void FullScreenFrame::launchCurrentApp()
 {
     if (m_currentFocusIndex == Category) {
         emit m_searchWidget->categoryBtn()->clicked();
+    }
+    if (m_searchWidget->categoryBtn()->hasFocus()) {
+        QMouseEvent btnPress(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+        QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnPress);
+        QMouseEvent btnRelease(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+        QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnRelease);
         return;
     }
 
@@ -1528,6 +1545,36 @@ AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentMo
         return m_internetModel;
 
     return nullptr;
+}
+
+void FullScreenFrame::nextTabWidget()
+{
+    switch (m_focusIndex) {
+    case 0: {
+        AppGridView *pView = (m_displayMode == GROUP_BY_CATEGORY) ? m_internetView : m_pageAppsViewList[m_pageCurrent];
+        pView->setFocus();
+        m_appItemDelegate->setCurrentIndex(pView->indexAt(0));
+        update();
+        m_focusIndex = 1;
+    }
+    break;
+    case 1: {
+        QModelIndex model;
+        m_appItemDelegate->setCurrentIndex(model);
+        m_searchWidget->edit()->setFocus();
+        m_focusIndex = 2;
+    }
+    break;
+    case 2:
+        m_searchWidget->categoryBtn()->setFocus();
+        m_focusIndex = (m_displayMode != GROUP_BY_CATEGORY) ? 0 : 3;
+        break;
+    case 3:
+        m_navigationWidget->setCurrentCategory(AppsListModel::Internet);
+        m_navigationWidget->button(AppsListModel::Internet)->setFocus();
+        m_focusIndex = 0;
+        break;
+    }
 }
 
 AppsListModel *FullScreenFrame::prevCategoryModel(const AppsListModel *currentModel)

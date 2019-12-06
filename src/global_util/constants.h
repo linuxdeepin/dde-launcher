@@ -74,7 +74,7 @@ const bool IsServerSystem = (DSysInfo::DeepinServer == DeepinType);
 const bool IsDesktopSystem = DSysInfo::isCommunityEdition();
 const bool IsProfessionalSystem = (DSysInfo::DeepinProfessional == DeepinType);
 
-static const int WHOOLTIME_TO_SCROOL = 10;
+static const int WHOOLTIME_TO_SCROOL = 1;
 
 }
 

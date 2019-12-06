@@ -70,6 +70,7 @@ AppGridView::AppGridView(QWidget *parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(QFrame::NoFrame);
+    setViewportMargins(40, 0, 0, 0);
 
     // init origin size
     setFixedSize(qApp->primaryScreen()->size());
@@ -172,7 +173,7 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
 
     const QPoint pos = mapTo(m_containerBox, e->pos());
     const QRect containerRect = m_containerBox->rect().marginsRemoved(QMargins(0, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
-                                                                                   0, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
+                                                                               0, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
 
     /*if (containerRect.contains(pos))
         return */m_dropThresholdTimer->start();
@@ -212,7 +213,7 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
         return;
 
     if (qAbs(e->pos().x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
-        qAbs(e->pos().y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
+            qAbs(e->pos().y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
         m_dragStartPos = e->pos();
         return startDrag(QListView::indexAt(e->pos()));
     }
@@ -253,8 +254,7 @@ void AppGridView::startDrag(const QModelIndex &index)
     drag->setHotSpot(srcPix.rect().center() / ratio);
 
     // request remove current item.
-    if (listModel->category() == AppsListModel::All)
-    {
+    if (listModel->category() == AppsListModel::All) {
         m_dropToPos = index.row();
         listModel->setDraggingIndex(index);
     }
@@ -271,17 +271,14 @@ void AppGridView::startDrag(const QModelIndex &index)
     if (listModel->category() != AppsListModel::All)
         return;
 
-    if (!m_lastFakeAni)
-    {
+    if (!m_lastFakeAni) {
         if (m_enableDropInside)
             listModel->dropSwap(m_dropToPos);
         else
             listModel->dropSwap(indexAt(m_dragStartPos).row());
 
         listModel->clearDraggingIndex();
-    }
-    else
-    {
+    } else {
         connect(m_lastFakeAni, &QPropertyAnimation::finished, listModel, &AppsListModel::clearDraggingIndex);
     }
 
@@ -386,8 +383,7 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     ani->setDuration(300);
 
     connect(ani, &QPropertyAnimation::finished, floatLabel, &QLabel::deleteLater);
-    if (isLastAni)
-    {
+    if (isLastAni) {
         m_lastFakeAni = ani;
         connect(ani, &QPropertyAnimation::finished, this, &AppGridView::dropSwap, Qt::QueuedConnection);
         connect(ani, &QPropertyAnimation::valueChanged, m_dropThresholdTimer, &QTimer::stop);

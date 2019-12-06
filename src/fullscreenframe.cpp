@@ -418,6 +418,7 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
 {
 
     if (m_displayMode == GROUP_BY_CATEGORY) {
+        if (m_scrollAnimation->state() == m_scrollAnimation->Running) return;
         static int  wheelTime = 0;
         if (e->angleDelta().y() < 0) {
             wheelTime++;
@@ -1136,12 +1137,12 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
             break;
 
         // the column number of destination, when moving up/down, columns shouldn't be changed.
-        const int realColumn = currentIndex.row() % column;
+        //const int realColumn = currentIndex.row() % column;
 
         const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
-        if (key == Qt::Key_Down || key == Qt::Key_Right || key == Qt::Key_Tab)
+        if (key == Qt::Key_Down || key == Qt::Key_Right)
             model = nextCategoryModel(model);
-        else
+        else if (key == Qt::Key_Up || key == Qt::Key_Left)
             model = prevCategoryModel(model);
         // if we can't find any available model which contains that column. this move operate should be abort.
         if (!model)

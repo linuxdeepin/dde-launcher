@@ -5,15 +5,16 @@
 DWIDGET_USE_NAMESPACE
 BlurBoxWidget::BlurBoxWidget(QWidget *parent)
     : DBlurEffectWidget(parent)
+    , qvLayout(new QVBoxLayout)
     , m_calcUtil(CalculateUtil::instance())
 {
     setMaskColor(DBlurEffectWidget::AutoColor);
     setBlendMode(DBlurEffectWidget::InWindowBlend);
     setMaskAlpha(DLauncher::APPHBOX_ALPHA);
-    setRadius(DLauncher::APPHBOX_RADIUS);
+    setBlurRectXRadius(DLauncher::APPHBOX_RADIUS);
+    setBlurRectYRadius(DLauncher::APPHBOX_RADIUS);
 
-    qvLayout = new QVBoxLayout();
     setLayout(qvLayout);
     qvLayout->setAlignment(Qt::AlignTop);
-    setFixedSize(m_calcUtil->getAppBoxSize());
+    setFixedWidth(m_calcUtil->getAppBoxSize().width());
 }

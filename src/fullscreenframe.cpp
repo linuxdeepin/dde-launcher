@@ -415,10 +415,9 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
 void FullScreenFrame::wheelEvent(QWheelEvent *e)
 {
 
-    // qDebug() <<"滚动数："<< e->angleDelta().y()<< "正反："<<e->delta();
     if (m_displayMode == GROUP_BY_CATEGORY) {
         static int  wheelTime = 0;
-        if (e->angleDelta().y() > 0) {
+        if (e->angleDelta().y() < 0) {
             wheelTime++;
         } else {
             wheelTime--;
@@ -721,7 +720,7 @@ void FullScreenFrame::initUI()
 
     m_appsArea->setWidget(m_contentFrame);
 
-    m_navigationWidget->setFixedWidth(width());
+    //m_navigationWidget->setFixedWidth(width());
     m_navigationWidget->setFixedHeight(m_calcUtil->instance()->navigationHeight());
     m_navigationWidget->show();
 
@@ -784,11 +783,6 @@ void FullScreenFrame::refershCurrentFloatTitle()
     CategoryTitleWidget *sourceTitle = categoryTitle(m_currentCategory);
     if (!sourceTitle)
         return;
-
-    m_floatTitle->setFixedSize(sourceTitle->size());
-    m_floatTitle->textLabel()->setText(sourceTitle->textLabel()->text());
-    //m_floatTitle->setVisible(sourceTitle->visibleRegion().isEmpty() ||
-    //                        sourceTitle->visibleRegion().boundingRect().height() < 20);
 }
 
 CategoryTitleWidget *FullScreenFrame::categoryTitle(const AppsListModel::AppCategory category) const
@@ -996,10 +990,6 @@ void FullScreenFrame::initConnection()
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_developmentView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_systemView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_othersView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
-
-    //connect(m_appsArea, &AppListArea::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
-    //connect(m_navigationWidget, &NavigationWidget::mouseEntered, this, &FullScreenFrame::refreshTitleVisible);
-
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
     connect(m_searchWidget, &SearchWidget::toggleMode, [this] {
@@ -1117,50 +1107,10 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
             model = nextCategoryModel(model);
         else
             model = prevCategoryModel(model);
-
-        // need to keep column
-        if (key == Qt::Key_Up || key == Qt::Key_Down)
-            while (model && model->rowCount(QModelIndex()) <= realColumn)
-                if (key == Qt::Key_Down)
-                    model = nextCategoryModel(model);
-                else
-                    model = prevCategoryModel(model);
-        else
-            while (model && !model->rowCount(QModelIndex()))
-                if (key == Qt::Key_Right || key == Qt::Key_Tab)
-                    model = nextCategoryModel(model);
-                else
-                    model = prevCategoryModel(model);
-
         // if we can't find any available model which contains that column. this move operate should be abort.
         if (!model)
             break;
-
-        // now, we got a right model which contains destination location. but we also need to re-calculate QModelIndex from that model.
-        const int count = model->rowCount(QModelIndex()) - 1;
-
-        int finalIndex = count;
-
-        switch (key) {
-        case Qt::Key_Down:
-            index = model->index(realColumn);
-            break;
-        case Qt::Key_Up:
-            while (finalIndex && finalIndex % column != realColumn)
-                --finalIndex;
-            index = model->index(finalIndex);
-            break;
-        case Qt::Key_Left:
-        case Qt::Key_Backtab:
-            index = model->index(count);
-            break;
-        case Qt::Key_Right:
-        case Qt::Key_Tab:
-            index = model->index(0);
-            break;
-        default:;
-        }
-
+        index = model->index(0);
     } while (false);
 
     // valid verify and UI adjustment.
@@ -1329,9 +1279,12 @@ void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
     if (!view)
         return;
 
-    m_appsArea->ensureVisible(0, view->indexYOffset(index) + view->pos().y(), 0, DLauncher::APPS_AREA_ENSURE_VISIBLE_MARGIN_Y);
-    updateCurrentVisibleCategory();
-    refershCurrentFloatTitle();
+    // m_appsArea->ensureVisible(0, view->indexYOffset(index) + view->pos().y(), 0, DLauncher::APPS_AREA_ENSURE_VISIBLE_MARGIN_Y);
+    //updateCurrentVisibleCategory();
+    if (category != m_currentCategory) {
+        scrollToCategory(category);
+    }
+    // refershCurrentFloatTitle();
 }
 
 void FullScreenFrame::setblurboxChange()
@@ -1550,7 +1503,7 @@ AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentMo
     if (currentModel == m_systemModel)
         return m_othersModel;
     if (currentModel == m_othersModel)
-        return nullptr;
+        return m_internetModel;
 
     return nullptr;
 }
@@ -1558,7 +1511,7 @@ AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentMo
 AppsListModel *FullScreenFrame::prevCategoryModel(const AppsListModel *currentModel)
 {
     if (currentModel == m_internetModel)
-        return nullptr;
+        return m_othersModel;
     if (currentModel == m_chatModel)
         return m_internetModel;
     if (currentModel == m_musicModel)

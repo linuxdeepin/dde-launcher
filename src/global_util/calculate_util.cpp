@@ -62,7 +62,7 @@ QSize CalculateUtil::appIconSize() const
 QSize CalculateUtil::getAppBoxSize()
 {
     int width = qApp->primaryScreen()->geometry().size().width() * 0.51;
-    int height = qApp->primaryScreen()->geometry().size().height() * 0.71;
+    int height = qApp->primaryScreen()->geometry().size().height() * 0.69;
     return  QSize(width, height);
 }
 
@@ -111,8 +111,8 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 
         m_appItemFontSize = 12;
         m_appColumnCount = 4;
-        m_appItemSize = 220;
-        m_appItemSpacing = 10;
+        m_appItemSize = 140;
+        m_appItemSpacing = 50;
 
         emit layoutChanged();
         return;

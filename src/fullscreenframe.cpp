@@ -1153,7 +1153,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     // valid verify and UI adjustment.
     const QModelIndex selectedIndex = index.isValid() ? index : currentIndex;
     m_appItemDelegate->setCurrentIndex(selectedIndex);
-
+    ensureItemVisible(selectedIndex);
     update();
 }
 
@@ -1616,7 +1616,7 @@ AppsListModel *FullScreenFrame::prevCategoryModel(const AppsListModel *currentMo
 void FullScreenFrame::layoutChanged()
 {
     QSize boxSize;
-    if (m_displayMode == ALL_APPS) {
+    if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
         const int appsContentWidth = (width() - LEFT_PADDING - RIGHT_PADDING);
         boxSize.setWidth(appsContentWidth);
         boxSize.setHeight(m_appsArea->height());
@@ -1642,7 +1642,7 @@ void FullScreenFrame::layoutChanged()
 
     m_floatTitle->move(m_appsArea->pos().x() + LEFT_PADDING, m_appsArea->y() - m_floatTitle->height() + 10);
 
-    if (m_displayMode == ALL_APPS) {
+    if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
         m_appsArea->horizontalScrollBar()->setValue(0);
     } else {
         scrollToCategory(m_currentCategory);

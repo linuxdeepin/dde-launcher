@@ -53,7 +53,7 @@
 
 #include <dboxwidget.h>
 #include <DFloatingButton>
-typedef QList<DFloatingButton*>  DFloatBtnList;
+typedef QList<DFloatingButton *>  DFloatBtnList;
 
 DWIDGET_USE_NAMESPACE
 
@@ -245,6 +245,9 @@ private:
     CategoryTitleWidget *m_othersTitle;
 
     DFloatBtnList m_floatBtnList;
+    DFloatBtnList m_categoryfloatBtnList[11];
+
+
     QIcon m_iconViewActive;
     QIcon m_iconView;
 
@@ -267,5 +270,6 @@ private:
 
     int m_pageCurrent;
     int m_focusIndex;
+    int m_boxWidgetPageCurrent[11] = {0};
 };
 #endif // MAINFRAME_H

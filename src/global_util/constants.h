@@ -62,7 +62,7 @@ static const int APPS_AREA_AUTO_SCROLL_TIMER = 15;
 
 static const int CLEAR_CACHE_TIMER = 60;
 
-static const int WHOOLTIME_TO_SCROOL = 10;
+static const int WHOOLTIME_TO_SCROOL = 1;
 
 }
 

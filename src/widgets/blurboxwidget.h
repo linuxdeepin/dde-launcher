@@ -15,6 +15,11 @@ class BlurBoxWidget : public DBlurEffectWidget
 public:
     explicit BlurBoxWidget(QWidget *parent = nullptr);
     QVBoxLayout *qvLayout ;
+public :
+    void initconnect();
+    void layoutAddWidget(QWidget *child);
+    void layoutAddWidget(QWidget *, int stretch = 0, Qt::Alignment alignment = Qt::Alignment());
+
 private:
     CalculateUtil *m_calcUtil;
 };

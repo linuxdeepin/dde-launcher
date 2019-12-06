@@ -52,7 +52,7 @@
 
 #include <dboxwidget.h>
 #include <DFloatingButton>
-typedef QList<DFloatingButton*>  DFloatBtnList;
+typedef QList<DFloatingButton *>  DFloatBtnList;
 
 DWIDGET_USE_NAMESPACE
 
@@ -229,6 +229,9 @@ private:
     CategoryTitleWidget *m_othersTitle;
 
     DFloatBtnList m_floatBtnList;
+    DFloatBtnList m_categoryfloatBtnList[11];
+
+
     QIcon m_iconViewActive;
     QIcon m_iconView;
 
@@ -238,6 +241,7 @@ private:
     QFrame *m_contentFrame;
 
     QVBoxLayout *m_mainLayout;
+    int m_pageCurrent;
 
     //总共的分类
     BlurBoxWidget *m_BoxWidget[11]   =  {m_internetBoxWidget, m_chatBoxWidget, m_musicBoxWidget, m_videoBoxWidget, m_graphicsBoxWidget, m_gameBoxWidget
@@ -248,5 +252,6 @@ private:
 
     int m_pageCurrent;
     int m_focusIndex;
+    int m_boxWidgetPageCurrent[11] = {0};
 };
 #endif // MAINFRAME_H

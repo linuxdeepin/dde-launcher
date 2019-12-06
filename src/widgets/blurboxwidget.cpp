@@ -13,8 +13,28 @@ BlurBoxWidget::BlurBoxWidget(QWidget *parent)
     setMaskAlpha(DLauncher::APPHBOX_ALPHA);
     setBlurRectXRadius(DLauncher::APPHBOX_RADIUS);
     setBlurRectYRadius(DLauncher::APPHBOX_RADIUS);
+    setFixedWidth(m_calcUtil->getAppBoxSize().width());
 
     setLayout(qvLayout);
+    qvLayout->setSpacing(10);
     qvLayout->setAlignment(Qt::AlignTop);
-    setFixedWidth(m_calcUtil->getAppBoxSize().width());
+    initconnect();
 }
+
+void BlurBoxWidget::initconnect()
+{
+    //connect()
+
+}
+
+void BlurBoxWidget::layoutAddWidget(QWidget *child)
+{
+    qvLayout->addWidget(child);
+}
+
+void BlurBoxWidget::layoutAddWidget(QWidget *child, int stretch, Qt::Alignment alignment)
+{
+    qvLayout->addWidget(child, stretch, alignment);
+}
+
+

@@ -609,47 +609,47 @@ void FullScreenFrame::initUI()
     m_systemTitle->setTextVisible(true);
     m_othersTitle->setTextVisible(true);
 
-    m_internetBoxWidget->qvLayout->addWidget(m_internetTitle, m_internetView->width() / 2, Qt::AlignHCenter);
-    m_internetBoxWidget->qvLayout->addWidget(m_internetView);
+    m_internetBoxWidget->layoutAddWidget(m_internetTitle, m_internetView->width() / 2, Qt::AlignHCenter);
+    m_internetBoxWidget->layout()->addWidget(m_internetView);
     m_appsHbox->layout()->addWidget(m_internetBoxWidget);
 
-    m_chatBoxWidget->qvLayout->addWidget(m_chatTitle, m_chatView->width() / 2, Qt::AlignHCenter);
-    m_chatBoxWidget->qvLayout->addWidget(m_chatView);
+    m_chatBoxWidget->layoutAddWidget(m_chatTitle, m_chatView->width() / 2, Qt::AlignHCenter);
+    m_chatBoxWidget->layout()->addWidget(m_chatView);
     m_appsHbox->layout()->addWidget(m_chatBoxWidget);
 
-    m_musicBoxWidget->qvLayout->addWidget(m_musicTitle, m_musicView->width() / 2, Qt::AlignHCenter);
+    m_musicBoxWidget->layoutAddWidget(m_musicTitle, m_musicView->width() / 2, Qt::AlignHCenter);
     m_musicBoxWidget->layout()->addWidget(m_musicView);
     m_appsHbox->layout()->addWidget(m_musicBoxWidget);
 
-    m_videoBoxWidget->qvLayout->addWidget(m_videoTitle, m_videoView->width() / 2, Qt::AlignHCenter);
-    m_videoBoxWidget->qvLayout->addWidget(m_videoView);
+    m_videoBoxWidget->layoutAddWidget(m_videoTitle, m_videoView->width() / 2, Qt::AlignHCenter);
+    m_videoBoxWidget->layout()->addWidget(m_videoView);
     m_appsHbox->layout()->addWidget(m_videoBoxWidget);
 
-    m_graphicsBoxWidget->qvLayout->addWidget(m_graphicsTitle, m_graphicsView->width() / 2, Qt::AlignHCenter);
+    m_graphicsBoxWidget->layoutAddWidget(m_graphicsTitle, m_graphicsView->width() / 2, Qt::AlignHCenter);
     m_graphicsBoxWidget->layout()->addWidget(m_graphicsView);
     m_appsHbox->layout()->addWidget(m_graphicsBoxWidget);
 
-    m_gameBoxWidget->qvLayout->addWidget(m_gameTitle, m_gameView->width() / 2, Qt::AlignHCenter);
+    m_gameBoxWidget->layoutAddWidget(m_gameTitle, m_gameView->width() / 2, Qt::AlignHCenter);
     m_gameBoxWidget->layout()->addWidget(m_gameView);
     m_appsHbox->layout()->addWidget(m_gameBoxWidget);
 
-    m_officeBoxWidget->qvLayout->addWidget(m_officeTitle, m_officeView->width() / 2, Qt::AlignHCenter);
+    m_officeBoxWidget->layoutAddWidget(m_officeTitle, m_officeView->width() / 2, Qt::AlignHCenter);
     m_officeBoxWidget->layout()->addWidget(m_officeView);
     m_appsHbox->layout()->addWidget(m_officeBoxWidget);
 
-    m_readingBoxWidget->qvLayout->addWidget(m_readingTitle, m_readingView->width() / 2, Qt::AlignHCenter);
+    m_readingBoxWidget->layoutAddWidget(m_readingTitle, m_readingView->width() / 2, Qt::AlignHCenter);
     m_readingBoxWidget->layout()->addWidget(m_readingView);
     m_appsHbox->layout()->addWidget(m_readingBoxWidget);
 
-    m_developmentBoxWidget->qvLayout->addWidget(m_developmentTitle, m_developmentView->width() / 2, Qt::AlignHCenter);
+    m_developmentBoxWidget->layoutAddWidget(m_developmentTitle, m_developmentView->width() / 2, Qt::AlignHCenter);
     m_developmentBoxWidget->layout()->addWidget(m_developmentView);
     m_appsHbox->layout()->addWidget(m_developmentBoxWidget);
 
-    m_systemBoxWidget->qvLayout->addWidget(m_systemTitle, m_systemView->width() / 2, Qt::AlignHCenter);
+    m_systemBoxWidget->layoutAddWidget(m_systemTitle, m_systemView->width() / 2, Qt::AlignHCenter);
     m_systemBoxWidget->layout()->addWidget(m_systemView);
     m_appsHbox->layout()->addWidget(m_systemBoxWidget);
 
-    m_othersBoxWidget->qvLayout->addWidget(m_othersTitle, m_othersView->width() / 2, Qt::AlignHCenter);
+    m_othersBoxWidget->layoutAddWidget(m_othersTitle, m_othersView->width() / 2, Qt::AlignHCenter);
     m_othersBoxWidget->layout()->addWidget(m_othersView);
     m_appsHbox->layout()->addWidget(m_othersBoxWidget);
 

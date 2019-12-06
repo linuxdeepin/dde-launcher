@@ -39,6 +39,7 @@ public:
     explicit SearchWidget(QWidget *parent = 0);
 
     QLineEdit *edit();
+    DFloatingButton *categoryBtn();
 
     void setLeftSpacing(int spacing);
     void setRightSpacing(int spacing);
@@ -53,8 +54,8 @@ signals:
     void searchTextChanged(const QString &text) const;
     void toggleMode();
 
-  private:
-    SearchLineEdit* m_searchEdit;
+private:
+    SearchLineEdit *m_searchEdit;
     QFrame *m_leftSpacing;
     QFrame *m_rightSpacing;
     DFloatingButton *m_toggleCategoryBtn;

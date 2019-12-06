@@ -39,6 +39,8 @@ public:
 
     void setButtonsVisible(const bool visible);
 
+    CategoryButton *button(const AppsListModel::AppCategory category) const;
+
 signals:
     void scrollToCategory(const AppsListModel::AppCategory category) const;
     void mouseEntered();
@@ -57,7 +59,6 @@ private:
     void initConnection();
 
     void buttonClicked();
-    CategoryButton *button(const AppsListModel::AppCategory category) const;
 
 private:
     CalculateUtil *m_calcUtil;

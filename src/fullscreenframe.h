@@ -73,6 +73,7 @@ public:
     int dockPosition();
     void updateDisplayMode(const int mode);
 
+    void nextTabWidget();
 signals:
     void visibleChanged(bool visible);
     void displayModeChanged(const int mode);
@@ -245,5 +246,6 @@ private:
     int m_currentBox ;
 
     int m_pageCurrent;
+    int m_focusIndex;
 };
 #endif // MAINFRAME_H

@@ -43,11 +43,11 @@ SharedEventFilter::SharedEventFilter(QObject *parent)
 
 bool SharedEventFilter::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == parent())
-    {
-        if (event->type() == QEvent::WindowDeactivate && m_frame->visible())
-            return m_frame->windowDeactiveEvent();
-    }
+//    if (watched == parent())
+//    {
+//        if (event->type() == QEvent::WindowDeactivate && m_frame->visible())
+//            return m_frame->windowDeactiveEvent();
+//    }
 
     if (event->type() == QEvent::KeyPress)
         return handleKeyEvent(static_cast<QKeyEvent *>(event));
@@ -64,6 +64,7 @@ bool SharedEventFilter::handleKeyEvent(QKeyEvent *e)
     case Qt::Key_Enter:
     case Qt::Key_Return:        m_frame->launchCurrentApp();                    return true;
     case Qt::Key_Escape:        m_frame->hideLauncher();                        return true;
+    case Qt::Key_Space:
     case Qt::Key_Tab:
     case Qt::Key_Backtab:
     case Qt::Key_Up:
@@ -75,8 +76,7 @@ bool SharedEventFilter::handleKeyEvent(QKeyEvent *e)
 
     // handle normal keys
     if ((e->key() <= Qt::Key_Z && e->key() >= Qt::Key_A) ||
-        (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_0) ||
-        (e->key() == Qt::Key_Space))
+        (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_0))
     {
         // handle the emacs key bindings
         if(ctrlPressed) {

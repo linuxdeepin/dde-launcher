@@ -274,6 +274,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_switchBtn->updateStatus(All);
     m_modeToggleBtn->setIconSize(QSize(32,32));
     m_modeToggleBtn->setFixedSize(40, 40);
+    m_modeToggleBtn->setFocusPolicy(Qt::NoFocus);
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_normal.svg"));
     else
@@ -374,8 +375,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
             m_focusPos = Search;
             m_leftBar->hideAllHoverState();
             m_leftBar->setCurrentCheck(false);
-            // m_searcherEdit->lineEdit()->setFocus();
-            setFocus();
+            m_searcherEdit->lineEdit()->setFocus();
             break;
         case Search:
             if (m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0) {
@@ -385,7 +385,6 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
             break;
         case Applist:
             m_focusPos = RightBottom;
-            m_switchBtn->setFocus();
             break;
         }
         break;
@@ -403,7 +402,6 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
             break;
         case Computer:
             m_focusPos = RightBottom;
-            m_switchBtn->setFocus();
             break;
         case Setting:
             m_focusPos = Computer;
@@ -422,7 +420,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
             break;
         case Applist:
             m_focusPos = Search;
-            //m_searcherEdit->lineEdit()->setFocus();
+            m_searcherEdit->lineEdit()->setFocus();
             break;
         }
         break;

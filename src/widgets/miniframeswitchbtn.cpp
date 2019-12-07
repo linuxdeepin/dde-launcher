@@ -23,6 +23,7 @@
 
 #include <QHBoxLayout>
 #include <DGuiApplicationHelper>
+#include <DFontSizeManager>
 
 DGUI_USE_NAMESPACE
 
@@ -40,6 +41,9 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
         QPalette pa = m_textLabel->palette();
         pa.setBrush(QPalette::WindowText, pa.brightText());
         m_textLabel->setPalette(pa);
+        QFont font;
+        font.setWeight(QFont::Bold);
+        m_textLabel->setFont(font);
         update();
     });
 
@@ -51,7 +55,7 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
         m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal.svg", QSize(20, 20)));
     }
 
-    m_enterIcon->setFixedSize(20, 20);
+    m_enterIcon->setFixedSize(16, 16);
     m_enterIcon->setVisible(false);
 
     m_allIconLabel->setFixedSize(24, 24);
@@ -59,16 +63,13 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     QHBoxLayout *mainLayout = new QHBoxLayout;
     setLayout(mainLayout);
     setObjectName("MiniFrameSwitchBtn");
-    setFixedHeight(36);
+    setFixedSize(300, 36);
 
-    mainLayout->addSpacing(10);
+    mainLayout->setContentsMargins(20, 0, 0, 0);
     mainLayout->addWidget(m_allIconLabel);
     mainLayout->addSpacing(12);
     mainLayout->addWidget(m_textLabel);
     mainLayout->addWidget(m_enterIcon);
-    mainLayout->addSpacing(10);
-    mainLayout->setMargin(0);
-    mainLayout->setSpacing(0);
 }
 
 MiniFrameSwitchBtn::~MiniFrameSwitchBtn()
@@ -132,12 +133,12 @@ void MiniFrameSwitchBtn::updateIcon()
     if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
         m_color.setRgb(255, 255, 255, 25);
         m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all-dark.svg", QSize(24, 24)));
-        m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal.svg", QSize(20, 20)));
+        m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal.svg", QSize(16, 16)));
 
     } else {
         m_color.setRgb(0, 0, 0, 25);
         m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all.svg", QSize(24, 24)));
-        m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal-dark.svg", QSize(20, 20)));
+        m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal-dark.svg", QSize(16, 16)));
     }
 
     QPalette pa = m_textLabel->palette();

@@ -175,28 +175,26 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     searchLayout->setContentsMargins(0, 0, 5, 0);
     searchLayout->addSpacing(10);
 
-    searchLayout->setSpacing(8);
+    searchLayout->setSpacing(12);
     searchLayout->addWidget(m_searcherEdit);
     DStyle::setFocusRectVisible(m_searcherEdit->lineEdit(), false);
     searchLayout->addWidget(m_modeToggleBtn);
 
     QHBoxLayout *appsLayout = new QHBoxLayout;
-    appsLayout->addSpacing(10);
     appsLayout->addWidget(m_appsView);
     appsLayout->setContentsMargins(0, 0, 0, 0);
 
     QHBoxLayout *switchLayout = new QHBoxLayout;
-    switchLayout->addSpacing(10);
     switchLayout->addWidget(m_switchBtn);
-    switchLayout->setContentsMargins(6, 0, 6, 0);
 
     QVBoxLayout *containLayout = new QVBoxLayout;
     containLayout->setSpacing(0);
     containLayout->setMargin(0);
 
-    containLayout->addSpacing(10);
+    containLayout->addSpacing(6);
     containLayout->addLayout(searchLayout);
     //containLayout->addWidget(new HSeparator);
+    containLayout->addSpacing(6);
     containLayout->addLayout(appsLayout);
     containLayout->addLayout(switchLayout);
     containLayout->addSpacing(15);
@@ -214,7 +212,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setFocusPolicy(Qt::ClickFocus);
-    setFixedHeight(502);
+    setFixedHeight(538);
     setObjectName("MiniFrame");
 
     initAnchoredCornor();
@@ -756,7 +754,7 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point)
 bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_leftBar && event->type() == QEvent::Resize) {
-        setFixedSize(m_rightWidget->width() + m_leftBar->width(), 502);
+        setFixedSize(m_rightWidget->width() + m_leftBar->width(), 538);
     }
 
     return QWidget::eventFilter(watched, event);

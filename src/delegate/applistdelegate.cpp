@@ -111,14 +111,14 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     const int iconX = rect.x() + 10;
     const int iconY = rect.y() + (rect.height() - iconPixmap.height() / ratio) / 2;
-    painter->drawPixmap(iconX, iconY, iconPixmap);
+    painter->drawPixmap(iconX + 10, iconY, iconPixmap);
 
     // draw icon if app is auto startup
     if (index.data(AppsListModel::AppAutoStartRole).toBool()) {
         painter->drawPixmap(iconX, iconY + 16, m_autoStartPixmap);
     }
 
-    QRect textRect = rect.marginsRemoved(QMargins(48, 1, 1, 1));
+    QRect textRect = rect.marginsRemoved(QMargins(58, 1, 1, 1));
     QString appName = index.data(AppsListModel::AppNameRole).toString();
     const QFontMetrics fm = painter->fontMetrics();
 

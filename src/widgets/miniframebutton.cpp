@@ -84,7 +84,7 @@ void MiniFrameButton::paintEvent(QPaintEvent *event)
 
     if (isChecked()) {
         QPainterPath path;
-        path.addRoundedRect(rect(), 4, 4);
+        path.addRoundedRect(rect(), 8, 8);
         painter.fillPath(path, m_color);
     }
 

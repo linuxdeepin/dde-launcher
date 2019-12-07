@@ -184,7 +184,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     setObjectName("LauncherFrame");
 
-//    installEventFilter(m_eventFilter);
     qApp->installEventFilter(m_eventFilter);
 
     initUI();
@@ -1022,11 +1021,13 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         return;
     }
 
-    if (Qt::Key_Space == key && m_searchWidget->categoryBtn()->hasFocus()) {
-        QMouseEvent btnPress(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-        QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnPress);
-        QMouseEvent btnRelease(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-        QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnRelease);
+    if (Qt::Key_Space == key) {
+        if (m_searchWidget->categoryBtn()->hasFocus()) {
+            QMouseEvent btnPress(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+            QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnPress);
+            QMouseEvent btnRelease(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+            QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnRelease);
+        }
         return;
     }
 
@@ -1044,9 +1045,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
 
     // calculate destination sibling by keys, it may cause an invalid position.
     switch (key) {
-//    case Qt::Key_Backtab:
     case Qt::Key_Left:      index = currentIndex.sibling(currentIndex.row() - 1, 0);        break;
-//    case Qt::Key_Tab:       nextTabWidget();    return;
     case Qt::Key_Right:     index = currentIndex.sibling(currentIndex.row() + 1, 0);        break;
     case Qt::Key_Up:        index = currentIndex.sibling(currentIndex.row() - column, 0);   break;
     case Qt::Key_Down:      index = currentIndex.sibling(currentIndex.row() + column, 0);   break;
@@ -1323,16 +1322,18 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         break;
     }
 
-    if (m_displayMode == GROUP_BY_CATEGORY)
-        scrollToCategory(m_currentCategory);
-    else
-        m_appsArea->horizontalScrollBar()->setValue(0);
-
     bool isCategoryMode = m_displayMode == GROUP_BY_CATEGORY;
+    m_pageCurrent = (m_displayMode == SEARCH) ? 0 : m_pageCurrent;
 
     for (int i = 0; i < m_appsManager->getPageCount(); i++) {
-        m_pageAppsViewList[i]->setVisible(!isCategoryMode);
-        m_floatBtnList[i]->setVisible(!isCategoryMode);
+        if (m_displayMode == SEARCH) {
+            m_pageAppsViewList[i]->setVisible(i == 0);
+            m_floatBtnList[i]->setVisible(i == 0);
+            m_floatBtnList[i]->setIcon((i == 0) ? m_iconViewActive : m_iconView);
+        } else {
+            m_pageAppsViewList[i]->setVisible(!isCategoryMode);
+            m_floatBtnList[i]->setVisible(!isCategoryMode);
+        }
     }
 
     m_internetTitle->setVisible(isCategoryMode);
@@ -1361,10 +1362,9 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     m_viewListPlaceholder->setVisible(isCategoryMode);
     m_navigationWidget->setVisible(isCategoryMode);
 
-    m_pageAppsViewList[m_pageCurrent]->setModel(m_displayMode == SEARCH ? m_searchResultModel : m_pageAppsModelList[m_pageCurrent]);
+    m_pageAppsViewList[0]->setModel(m_displayMode == SEARCH ? m_searchResultModel : m_pageAppsModelList[0]);
     // choose nothing
     m_appItemDelegate->setCurrentIndex(QModelIndex());
-
 
     hideTips();
 
@@ -1489,30 +1489,33 @@ AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentMo
 void FullScreenFrame::nextTabWidget()
 {
     switch (m_focusIndex) {
-    case 0: {
+    case FirstItem: {
         AppGridView *pView = (m_displayMode == GROUP_BY_CATEGORY) ? m_internetView : m_pageAppsViewList[m_pageCurrent];
         pView->setFocus();
         m_appItemDelegate->setCurrentIndex(pView->indexAt(0));
         update();
-        m_focusIndex = 1;
+        m_focusIndex = SearchEdit;
     }
     break;
-    case 1: {
-        QModelIndex model;
-        m_appItemDelegate->setCurrentIndex(model);
+    case SearchEdit: {
+        m_appItemDelegate->setCurrentIndex(QModelIndex());
         m_searchWidget->edit()->setFocus();
-        m_focusIndex = 2;
+        m_focusIndex = CategoryChangeBtn;
     }
     break;
-    case 2:
+    case CategoryChangeBtn: {
+        m_appItemDelegate->setCurrentIndex(QModelIndex());
         m_searchWidget->categoryBtn()->setFocus();
-        m_focusIndex = (m_displayMode != GROUP_BY_CATEGORY) ? 0 : 3;
-        break;
-    case 3:
+        m_focusIndex = (m_displayMode != GROUP_BY_CATEGORY) ? FirstItem : CategoryTital;
+    }
+    break;
+    case CategoryTital: {
+        m_appItemDelegate->setCurrentIndex(QModelIndex());
         m_navigationWidget->setCurrentCategory(AppsListModel::Internet);
         m_navigationWidget->button(AppsListModel::Internet)->setFocus();
-        m_focusIndex = 0;
-        break;
+        m_focusIndex = FirstItem;
+    }
+    break;
     }
 }
 

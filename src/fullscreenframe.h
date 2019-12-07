@@ -65,6 +65,7 @@ class FullScreenFrame : public BoxFrame, public LauncherInterface
     Q_PROPERTY(int dockPosition READ dockPosition DESIGNABLE true)
 
 public:
+    enum tabFocus{FirstItem, SearchEdit, CategoryChangeBtn, CategoryTital};
     explicit FullScreenFrame(QWidget *parent = 0);
     ~FullScreenFrame();
 

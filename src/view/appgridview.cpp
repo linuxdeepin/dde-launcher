@@ -176,8 +176,11 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
 
     /*if (containerRect.contains(pos))
         return */m_dropThresholdTimer->start();
-
-    if (pos.y() < containerRect.top())
+    if (pos.x() < containerRect.left())
+        emit requestScrollLeft();
+    else if (pos.x() > containerRect.right())
+        emit requestScrollRight();
+    else if (pos.y() < containerRect.top())
         emit requestScrollUp();
     else if (pos.y() > containerRect.bottom())
         emit requestScrollDown();
@@ -287,6 +290,7 @@ void AppGridView::startDrag(const QModelIndex &index)
 
 bool AppGridView::eventFilter(QObject *o, QEvent *e)
 {
+    qDebug("AppGridView::eventFilter");
     return false;
 }
 

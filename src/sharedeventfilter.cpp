@@ -43,12 +43,6 @@ SharedEventFilter::SharedEventFilter(QObject *parent)
 
 bool SharedEventFilter::eventFilter(QObject *watched, QEvent *event)
 {
-//    if (watched == parent())
-//    {
-//        if (event->type() == QEvent::WindowDeactivate && m_frame->visible())
-//            return m_frame->windowDeactiveEvent();
-//    }
-
     if (event->type() == QEvent::KeyPress)
         return handleKeyEvent(static_cast<QKeyEvent *>(event));
 

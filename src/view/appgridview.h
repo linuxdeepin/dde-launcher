@@ -50,6 +50,8 @@ signals:
     void requestScrollUp() const;
     void requestScrollDown() const;
     void requestScrollStop() const;
+    void requestScrollLeft() const;
+    void requestScrollRight() const;
 
 protected:
     void startDrag(const QModelIndex &index);

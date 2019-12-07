@@ -311,6 +311,11 @@ void WindowedFrame::showLauncher()
     adjustSize(); // right widget need calculate width based on font
     adjustPosition();
 
+    m_cornerPath = getCornerPath(m_anchoredCornor);
+    m_windowHandle.setClipPath(m_cornerPath);
+    m_searcherEdit->clear();
+    show();
+
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition, Qt::UniqueConnection);
 }
 
@@ -904,7 +909,7 @@ void WindowedFrame::onSwitchBtnClicked()
 void WindowedFrame::onWMCompositeChanged()
 {
     if (m_wmHelper->hasComposite()) {
-        m_radius = 10;
+        m_radius = 18;
     } else {
         m_radius = 0;
     }

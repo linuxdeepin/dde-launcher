@@ -92,7 +92,7 @@ void MiniFrameSwitchBtn::paintEvent(QPaintEvent *event)
     p.setRenderHint(QPainter::Antialiasing, true);
     if (hasFocus() || m_hover) {
         QPainterPath path;
-        path.addRoundedRect(rect(), 4, 4);
+        path.addRoundedRect(rect(), 8, 8);
         p.fillPath(path, m_color);
     }
 }

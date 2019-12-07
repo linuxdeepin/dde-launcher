@@ -259,7 +259,6 @@ void WindowedFrame::showLauncher()
     adjustPosition();
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
-    m_searcherEdit->clear();
     show();
 
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition, Qt::UniqueConnection);
@@ -276,6 +275,7 @@ void WindowedFrame::hideLauncher()
     disconnect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition);
 
     hide();
+    m_searcherEdit->clear();
 
     // clean all state
     recoveryAll();

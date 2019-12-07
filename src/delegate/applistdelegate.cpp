@@ -45,14 +45,14 @@ AppListDelegate::AppListDelegate(QObject *parent)
 {
     m_blueDotPixmap = renderSVG(":/skin/images/new_install_indicator.svg", QSize(10, 10));
     m_autoStartPixmap = renderSVG(":/skin/images/emblem-autostart.svg", QSize(16, 16));
-    if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()){
-         m_color.setRgb(255, 255, 255, 25);
-    }else {
+    if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
+        m_color.setRgb(255, 255, 255, 25);
+    } else {
         m_color.setRgb(0, 0, 0, 25);
     }
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
         if (DGuiApplicationHelper::DarkType == themeType) {
-             m_color.setRgb(255, 255, 255, 25);
+            m_color.setRgb(255, 255, 255, 25);
         } else {
             m_color.setRgb(0, 0, 0, 25);
         }
@@ -62,7 +62,7 @@ AppListDelegate::AppListDelegate(QObject *parent)
 void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (index.data(AppsListModel::AppItemIsDraggingRole).value<bool>() &&
-        !(option.features & QStyleOptionViewItem::HasDisplay)) {
+            !(option.features & QStyleOptionViewItem::HasDisplay)) {
         return;
     }
 
@@ -72,7 +72,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const bool isDragItem = option.features & QStyleOptionViewItem::Alternate;
     const bool isCategoryList(static_cast<AppsListModel::AppCategory>(index.data(AppsListModel::AppGroupRole).toInt()) == AppsListModel::Category);
 
-    QSize iconSize = isCategoryList ? QSize(22, 22) * ratio : index.data(AppsListModel::AppIconSizeRole).value<QSize>();
+    QSize iconSize = isCategoryList ? QSize(24, 24) * ratio : index.data(AppsListModel::AppIconSizeRole).value<QSize>();
 
     QPixmap iconPixmap = index.data(AppsListModel::AppIconRole).value<QPixmap>();
     iconPixmap = iconPixmap.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -82,7 +82,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         iconSize = iconSize * 1.1;
 
         QPixmap dragIndicator = renderSVG(":/widgets/images/drag_indicator.svg",
-                                                     QSize(20, 20));
+                                          QSize(20, 20));
         dragIndicator.setDevicePixelRatio(ratio);
         painter->drawPixmap(rect.right() - 30,
                             rect.y() + (rect.height() - dragIndicator.height() / ratio) / 2,
@@ -94,7 +94,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     if (option.state.testFlag(QStyle::State_Selected)) {
         // hover background color.
-         painter->setBrush(m_color);
+        painter->setBrush(m_color);
     } else if (isDragItem) {
         // drag item background color.
         painter->setBrush(QColor(255, 255, 255, 255 * 0.4));
@@ -106,7 +106,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     if (index.data(AppsListModel::DrawBackgroundRole).toBool()) {
         // draw the background.
-        painter->drawRoundedRect(option.rect.marginsRemoved(QMargins(1, 1, 1, 1)), 4, 4);
+        painter->drawRoundedRect(option.rect, 8, 8);
     }
 
     const int iconX = rect.x() + 10;
@@ -118,7 +118,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         painter->drawPixmap(iconX, iconY + 16, m_autoStartPixmap);
     }
 
-    QRect textRect = rect.marginsRemoved(QMargins(58, 1, 1, 1));
+    QRect textRect = rect.marginsRemoved(QMargins(60, 1, 1, 1));
     QString appName = index.data(AppsListModel::AppNameRole).toString();
     const QFontMetrics fm = painter->fontMetrics();
 
@@ -133,7 +133,14 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     }
 
     // draw app name.
-    painter->setPen(QPen(QPalette().brightText(),1));
+    painter->setPen(QPen(QPalette().brightText(), 1));
+    if (option.state.testFlag(QStyle::State_Selected)) {
+        if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType())
+            painter->setPen(QPen(DGuiApplicationHelper::standardPalette(DGuiApplicationHelper::LightType).brightText(), 1));
+        else
+            painter->setPen(QPen(DGuiApplicationHelper::standardPalette(DGuiApplicationHelper::DarkType).brightText(), 1));
+    }
+
     painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, fm.elidedText(appName, Qt::ElideRight, textRect.width()));
 
     // draw category right icon
@@ -181,7 +188,7 @@ QPixmap AppListDelegate::dropShadow(QPixmap pixmap, int radius, const QColor &co
     // https://forum.qt.io/topic/77576/painting-shadow-around-a-parentless-qwidget
 
     QImage temp(pixmap.size() + QSize(radius * 2, radius * 2),
-               QImage::Format_ARGB32_Premultiplied);
+                QImage::Format_ARGB32_Premultiplied);
     temp.fill(0);
 
     QPainter tempPainter(&temp);

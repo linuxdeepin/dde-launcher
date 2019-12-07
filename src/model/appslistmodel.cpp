@@ -85,6 +85,7 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent)
     , m_holdPackages(sysHoldPackages())
     , m_category(category)
     , m_drawBackground(true)
+    , m_pageIndex(0)
 {
     connect(m_appsManager, &AppsManager::dataChanged, this, &AppsListModel::dataChanged);
     connect(m_appsManager, &AppsManager::layoutChanged, this, &AppsListModel::layoutChanged);

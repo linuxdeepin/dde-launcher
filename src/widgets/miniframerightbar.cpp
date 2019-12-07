@@ -66,6 +66,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     m_settingsBtn->setFixedSize(m_size);
     m_powerBtn = new MiniFrameButton(tr(""));
     m_powerBtn->setFixedSize(m_size);
+    m_powerBtn->setIconSize(QSize(20, 20));
 
     uint index = 0;
     m_btns[index++] = m_computerBtn;
@@ -94,7 +95,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     bottomLayout->addWidget(m_settingsBtn, 0, Qt::AlignCenter);
     bottomLayout->addWidget(m_powerBtn,0 ,Qt::AlignCenter);
-    bottomLayout->setSpacing(0);
+    bottomLayout->setSpacing(2);
 
     QWidget *center_widget = new QWidget;
     QVBoxLayout *center_layout = new QVBoxLayout;
@@ -102,6 +103,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     center_widget->setLayout(center_layout);
     center_layout->setSpacing(10);
     center_layout->addWidget(m_avatar, 0, Qt::AlignCenter);
+    center_layout->addSpacing(10);
     center_layout->addWidget(m_computerBtn, 0, Qt::AlignCenter);
     center_layout->addWidget(m_documentBtn, 0, Qt::AlignCenter);
     center_layout->addWidget(m_pictureBtn, 0, Qt::AlignCenter);
@@ -115,10 +117,10 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     bottom_layout->addLayout(bottomLayout);
     bottom_widget->setLayout(bottom_layout);
 
-    layout->addSpacing(18);
+    layout->addSpacing(13);
     layout->addWidget(center_widget);
     layout->addWidget(bottom_widget, 0, Qt::AlignBottom);
-    layout->setContentsMargins(0, 0, 0, 14);
+    layout->setContentsMargins(0, 0, 0, 6);
 
     connect(m_computerBtn, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
     connect(m_documentBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DocumentsLocation); });

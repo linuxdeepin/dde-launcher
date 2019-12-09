@@ -3,6 +3,7 @@
 
 #include <dblureffectwidget.h>
 #include <QVBoxLayout>
+#include <QMouseEvent>
 #include "src/global_util/constants.h"
 #include  "src/global_util/calculate_util.h"
 #include "qapplication.h"
@@ -29,12 +30,12 @@ public :
     AppsListModel::AppCategory getCategory() {return category;}
 
 signals:
-    void maskClick(AppsListModel::AppCategory category);
+    void maskClick(AppsListModel::AppCategory category, int nNext);
 
 
 protected:
-    void mousePressEvent(QMouseEvent *ev);
-    void mouseReleaseEvent(QMouseEvent *ev);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
 
 private:
     CalculateUtil *m_calcUtil;

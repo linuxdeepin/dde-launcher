@@ -66,7 +66,7 @@ class FullScreenFrame : public BoxFrame, public LauncherInterface
     Q_PROPERTY(int dockPosition READ dockPosition DESIGNABLE true)
 
 public:
-    enum tabFocus{FirstItem, SearchEdit, CategoryChangeBtn, CategoryTital};
+    enum tabFocus {FirstItem, SearchEdit, CategoryChangeBtn, CategoryTital};
     explicit FullScreenFrame(QWidget *parent = 0);
     ~FullScreenFrame();
 
@@ -91,14 +91,14 @@ signals:
     void scrollChanged(const AppsListModel::AppCategory &category);
 
 public slots:
-    void scrollToCategory(const AppsListModel::AppCategory &category);
+    void scrollToCategory(const AppsListModel::AppCategory &category, int nNext = 0);
     void scrollToBlurBoxWidget(BlurBoxWidget *category);
     void scrollToPage(const AppsListModel::AppCategory &category);
     void pageBtnClick();
     void clickToCategory(const QModelIndex &index);
     void showTips(const QString &tips);
     void hideTips();
-    void setCategoryIndex(const AppsListModel::AppCategory &category);
+    void setCategoryIndex(const AppsListModel::AppCategory &category, int nNext = 0);
 
 protected:
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;

@@ -65,7 +65,8 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_searchEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_searchEdit->setFixedWidth(290);
 
-    setFocusPolicy(Qt::ClickFocus);
+    DStyle::setFocusRectVisible(m_searchEdit->lineEdit(), false);
+    setFocusPolicy(Qt::NoFocus);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->setMargin(0);
@@ -124,6 +125,7 @@ DFloatingButton *SearchWidget::categoryBtn()
 void SearchWidget::clearSearchContent()
 {
     m_searchEdit->clearEdit();
+    m_searchEdit->clear();
 }
 
 void SearchWidget::setLeftSpacing(int spacing)

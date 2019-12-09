@@ -27,6 +27,8 @@
 #include "searchlineedit.h"
 #include <dimagebutton.h>
 #include <QWidget>
+#include <DFloatingButton>
+#include <DSearchEdit>
 
 DWIDGET_BEGIN_NAMESPACE
 class DSearchEdit;
@@ -57,8 +59,6 @@ signals:
     void toggleMode();
 
 private:
-
-    //SearchLineEdit *m_searchEdit;
     QFrame *m_leftSpacing;
     QFrame *m_rightSpacing;
     DFloatingButton *m_toggleModeBtn;

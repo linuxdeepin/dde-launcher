@@ -192,7 +192,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     setObjectName("LauncherFrame");
 
-    qApp->installEventFilter(m_eventFilter);
+    installEventFilter(m_eventFilter);
 
     initUI();
     initConnection();
@@ -563,8 +563,10 @@ void FullScreenFrame::initUI()
     m_appsArea->viewport()->installEventFilter(this);
     m_appsArea->installEventFilter(this);
 
-    m_searchWidget->edit()->installEventFilter(this);
-    m_searchWidget->installEventFilter(this);
+    m_searchWidget->edit()->lineEdit()->installEventFilter(m_eventFilter);
+    m_searchWidget->categoryBtn()->installEventFilter(m_eventFilter);
+    m_searchWidget->installEventFilter(m_eventFilter);
+    m_appItemDelegate->installEventFilter(m_eventFilter);
 
     QHBoxLayout *iconHLayout = new QHBoxLayout;
     iconHLayout->setSpacing(10);
@@ -1082,7 +1084,6 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     QModelIndex index;
     // calculate destination sibling by keys, it may cause an invalid position.
     switch (key) {
-<<<<<<< HEAD
     case Qt::Key_Backtab:
     // When it is in the first one, another operation will let you select the last app
     case Qt::Key_Left:      index = currentIndex.sibling((currentIndex.row() == FIRST_APP_INDEX ? m_appNum : currentIndex.row()) - 1, 0);       break;
@@ -1107,13 +1108,6 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
             index = currentIndex.sibling(currentIndex.row() + column, 0);
         }
         break;
-
-=======
-    case Qt::Key_Left:      index = currentIndex.sibling(currentIndex.row() - 1, 0);        break;
-    case Qt::Key_Right:     index = currentIndex.sibling(currentIndex.row() + 1, 0);        break;
-    case Qt::Key_Up:        index = currentIndex.sibling(currentIndex.row() - column, 0);   break;
-    case Qt::Key_Down:      index = currentIndex.sibling(currentIndex.row() + column, 0);   break;
->>>>>>> 8305e91... feat:Change search mode show
     default:;
     }
 
@@ -1560,8 +1554,8 @@ void FullScreenFrame::nextTabWidget()
 {
     switch (m_focusIndex) {
     case FirstItem: {
+        m_searchWidget->categoryBtn()->clearFocus();
         AppGridView *pView = (m_displayMode == GROUP_BY_CATEGORY) ? m_internetView : m_pageAppsViewList[m_pageCurrent];
-        pView->setFocus();
         m_appItemDelegate->setCurrentIndex(pView->indexAt(0));
         update();
         m_focusIndex = SearchEdit;
@@ -1569,13 +1563,14 @@ void FullScreenFrame::nextTabWidget()
     break;
     case SearchEdit: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
-        m_searchWidget->edit()->setFocus();
+        m_searchWidget->edit()->lineEdit()->setFocus();
         m_focusIndex = CategoryChangeBtn;
     }
     break;
     case CategoryChangeBtn: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
         m_searchWidget->categoryBtn()->setFocus();
+        m_focusIndex = FirstItem;
         m_focusIndex = (m_displayMode != GROUP_BY_CATEGORY) ? FirstItem : CategoryTital;
     }
     break;

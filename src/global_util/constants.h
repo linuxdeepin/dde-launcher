@@ -64,6 +64,8 @@ static const int CLEAR_CACHE_TIMER = 60;
 
 static const int WHOOLTIME_TO_SCROOL = 1;
 
+static const int APPS_AREA_CATEGORY_INDEX = 255;
+
 }
 
 #endif // CONSTANTS_H

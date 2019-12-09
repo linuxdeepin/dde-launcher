@@ -87,9 +87,10 @@ public slots:
     void scrollToBlurBoxWidget(BlurBoxWidget *category);
     void scrollToPage(const AppsListModel::AppCategory &category);
     void pageBtnClick();
-
+    void clickToCategory(const QModelIndex &index);
     void showTips(const QString &tips);
     void hideTips();
+    void setCategoryIndex(const AppsListModel::AppCategory &category);
 
 protected:
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
@@ -139,7 +140,6 @@ private slots:
     void refreshTitleVisible();
     void refershCategoryTextVisible();
     void refershCurrentFloatTitle();
-    void setblurboxChange();
 
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
@@ -229,9 +229,6 @@ private:
     CategoryTitleWidget *m_othersTitle;
 
     DFloatBtnList m_floatBtnList;
-    DFloatBtnList m_categoryfloatBtnList[11];
-
-
     QIcon m_iconViewActive;
     QIcon m_iconView;
 
@@ -241,7 +238,6 @@ private:
     QFrame *m_contentFrame;
 
     QVBoxLayout *m_mainLayout;
-    int m_pageCurrent;
 
     //总共的分类
     BlurBoxWidget *m_BoxWidget[11]   =  {m_internetBoxWidget, m_chatBoxWidget, m_musicBoxWidget, m_videoBoxWidget, m_graphicsBoxWidget, m_gameBoxWidget

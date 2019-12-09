@@ -58,12 +58,13 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_toggleModeBtn->setFixedSize(QSize(BTN_WIDTH, BTN_HEIGHT));
     m_toggleModeBtn->setBackgroundRole(DPalette::Button);
 
-    m_searchEdit = new SearchLineEdit(this);
+    m_searchEdit = new DSearchEdit(this);
     m_searchEdit->setAccessibleName("search-edit");
     m_searchEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_searchEdit->setFixedWidth(290);
 
-    setFocusPolicy(Qt::ClickFocus);
+    DStyle::setFocusRectVisible(m_searchEdit->lineEdit(), false);
+    setFocusPolicy(Qt::NoFocus);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout->setMargin(0);
@@ -81,7 +82,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
 
     setLayout(mainLayout);
 
-    connect(m_searchEdit, &SearchLineEdit::textChanged, [this] {
+    connect(m_searchEdit, &DSearchEdit::textChanged, [this] {
         emit searchTextChanged(m_searchEdit->text());
     });
 
@@ -110,7 +111,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     connect(m_toggleCategoryBtn, &DIconButton::clicked, this, &SearchWidget::toggleMode);
 }
 
-QLineEdit *SearchWidget::edit()
+DSearchEdit *SearchWidget::edit()
 {
     return m_searchEdit;
 }
@@ -122,8 +123,9 @@ DFloatingButton *SearchWidget::categoryBtn()
 
 void SearchWidget::clearSearchContent()
 {
-    m_searchEdit->normalMode();
-    m_searchEdit->moveFloatWidget();
+//    m_searchEdit->normalMode();
+//    m_searchEdit->moveFloatWidget();
+    m_searchEdit->clear();
 }
 
 void SearchWidget::setLeftSpacing(int spacing)

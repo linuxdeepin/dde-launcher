@@ -184,7 +184,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     setObjectName("LauncherFrame");
 
-    qApp->installEventFilter(m_eventFilter);
+    installEventFilter(m_eventFilter);
 
     initUI();
     initConnection();
@@ -536,8 +536,10 @@ void FullScreenFrame::initUI()
     m_appsArea->viewport()->installEventFilter(this);
     m_appsArea->installEventFilter(this);
 
-    m_searchWidget->edit()->installEventFilter(this);
-    m_searchWidget->installEventFilter(this);
+    m_searchWidget->edit()->lineEdit()->installEventFilter(m_eventFilter);
+    m_searchWidget->categoryBtn()->installEventFilter(m_eventFilter);
+    m_searchWidget->installEventFilter(m_eventFilter);
+    m_appItemDelegate->installEventFilter(m_eventFilter);
 
     QHBoxLayout *iconHLayout = new QHBoxLayout;
     iconHLayout->setSpacing(10);
@@ -1103,12 +1105,13 @@ void FullScreenFrame::appendToSearchEdit(const char ch)
 
     // -1 means backspace key pressed
     if (ch == -1) {
-        m_searchWidget->edit()->backspace();
+//        m_searchWidget->edit()->backspace();
+        m_searchWidget->edit()->lineEdit()->backspace();
         return;
     }
 
-    if (!m_searchWidget->edit()->selectedText().isEmpty()) {
-        m_searchWidget->edit()->backspace();
+    if (!m_searchWidget->edit()->lineEdit()->selectedText().isEmpty()) {
+        m_searchWidget->edit()->lineEdit()->backspace();
     }
 
     m_searchWidget->edit()->setText(m_searchWidget->edit()->text() + ch);
@@ -1490,8 +1493,8 @@ void FullScreenFrame::nextTabWidget()
 {
     switch (m_focusIndex) {
     case FirstItem: {
+        m_searchWidget->categoryBtn()->clearFocus();
         AppGridView *pView = (m_displayMode == GROUP_BY_CATEGORY) ? m_internetView : m_pageAppsViewList[m_pageCurrent];
-        pView->setFocus();
         m_appItemDelegate->setCurrentIndex(pView->indexAt(0));
         update();
         m_focusIndex = SearchEdit;
@@ -1499,13 +1502,14 @@ void FullScreenFrame::nextTabWidget()
     break;
     case SearchEdit: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
-        m_searchWidget->edit()->setFocus();
+        m_searchWidget->edit()->lineEdit()->setFocus();
         m_focusIndex = CategoryChangeBtn;
     }
     break;
     case CategoryChangeBtn: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
         m_searchWidget->categoryBtn()->setFocus();
+        m_focusIndex = FirstItem;
         m_focusIndex = (m_displayMode != GROUP_BY_CATEGORY) ? FirstItem : CategoryTital;
     }
     break;

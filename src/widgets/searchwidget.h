@@ -28,6 +28,7 @@
 #include <dimagebutton.h>
 #include <QWidget>
 #include <DFloatingButton>
+#include <DSearchEdit>
 
 DWIDGET_USE_NAMESPACE
 
@@ -38,7 +39,7 @@ class SearchWidget : public QFrame
 public:
     explicit SearchWidget(QWidget *parent = 0);
 
-    QLineEdit *edit();
+    DSearchEdit *edit();
     DFloatingButton *categoryBtn();
 
     void setLeftSpacing(int spacing);
@@ -55,7 +56,7 @@ signals:
     void toggleMode();
 
 private:
-    SearchLineEdit *m_searchEdit;
+    DSearchEdit *m_searchEdit;
     QFrame *m_leftSpacing;
     QFrame *m_rightSpacing;
     DFloatingButton *m_toggleCategoryBtn;

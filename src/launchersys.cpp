@@ -198,5 +198,5 @@ void LauncherSys::unRegisterRegion() {
 }
 void LauncherSys::onDisplayModeChanged()
 {
-    m_fullLauncher->updateDisplayMode(m_dbusLauncherInter->displaymode());
+    QTimer::singleShot(50, this, [ = ] {m_fullLauncher->updateDisplayMode(m_dbusLauncherInter->displaymode());});
 }

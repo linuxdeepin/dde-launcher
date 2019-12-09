@@ -235,7 +235,7 @@ void FullScreenFrame::scrollToPage(const AppsListModel::AppCategory &category)
 }
 
 
-void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &category)
+void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &category, int nNext)
 {
 
     AppsListModel::AppCategory tempMode = category;
@@ -245,8 +245,8 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
 
     if (!dest) return;
 
-    if (category != m_currentCategory) {
-        setCategoryIndex(tempMode);
+    if (category != m_currentCategory || category == 0) {
+        setCategoryIndex(tempMode, nNext);
     }
 
 
@@ -287,17 +287,20 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category)
     emit currentVisibleCategoryChanged(m_currentCategory);
 }
 
-void FullScreenFrame::setCategoryIndex(const AppsListModel::AppCategory &category)
+void FullScreenFrame::setCategoryIndex(const AppsListModel::AppCategory &category, int nNext)
 {
     bool isScrollLeft = true;
-    if (category < m_currentCategory) isScrollLeft = false;
+    if (nNext > 0) isScrollLeft = true;
+    else if (nNext == 0 && category < m_currentCategory)  isScrollLeft = false;
+    else  if (nNext < 0) isScrollLeft = false;
+
 
     AppsListModel::AppCategory tempMode = category;
     if (tempMode < AppsListModel::Internet)
         tempMode = AppsListModel::Internet ;
     int categoryCount = m_calcUtil->appCategoryCount();
     for (int type = tempMode, i = 0; i < categoryCount; i++, type++) {
-        if (categoryBoxWidget(tempMode)->isVisible()) {
+        if (m_appsManager->appNums((AppsListModel::AppCategory)type)) {
             tempMode = (AppsListModel::AppCategory)type;
             break;
         }
@@ -310,8 +313,9 @@ void FullScreenFrame::setCategoryIndex(const AppsListModel::AppCategory &categor
     for (int type = tempMode - 1, i = 0; i < categoryCount; i++, type--) {
         if (type < AppsListModel::Internet) type = AppsListModel::Others;
         leftBlurBox = categoryBoxWidget((AppsListModel::AppCategory)type);
-        if (leftBlurBox->isVisible()) {
+        if (m_appsManager->appNums((AppsListModel::AppCategory)type)) {
             m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX, leftBlurBox);
+            leftBlurBox->setMaskVisible(true);
             leftBlurBox->layout()->itemAt(0)->setAlignment(Qt::AlignRight);
             leftBlurBox->layout()->update();
             break;
@@ -319,6 +323,7 @@ void FullScreenFrame::setCategoryIndex(const AppsListModel::AppCategory &categor
     }
 
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + 1, dest);
+    dest->setMaskVisible(false);
     dest->layout()->itemAt(0)->setAlignment(Qt::AlignHCenter);
     dest->layout()->update();
 
@@ -326,8 +331,9 @@ void FullScreenFrame::setCategoryIndex(const AppsListModel::AppCategory &categor
     for (int type = tempMode + 1, i = 0; i < categoryCount; i++, type++) {
         if (type > AppsListModel::Others) type = AppsListModel::Internet;
         rightBlurBox = categoryBoxWidget((AppsListModel::AppCategory)type);
-        if (rightBlurBox->isVisible()) {
+        if (m_appsManager->appNums((AppsListModel::AppCategory)type)) {
             m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + 2, rightBlurBox);
+            rightBlurBox->setMaskVisible(true);
             rightBlurBox->layout()->itemAt(0)->setAlignment(Qt::AlignLeft);
             rightBlurBox->layout()->update();
             break;
@@ -546,7 +552,6 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
         const int pos = m_appsManager->dockPosition();
         m_calcUtil->calculateAppLayout(static_cast<QResizeEvent *>(e)->size() - QSize(LEFT_PADDING + RIGHT_PADDING, 0), pos);
         updatePlaceholderSize();
-
     }
 
     return false;
@@ -571,7 +576,6 @@ QVariant FullScreenFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
         return widgetRelativeOffset(this, m_searchWidget->edit());
     default:;
     }
-
     return QWidget::inputMethodQuery(prop);
 }
 
@@ -1399,26 +1403,37 @@ void FullScreenFrame::updateDisplayMode(const int mode)
 
     m_internetTitle->setVisible(isCategoryMode);
     m_internetView->setVisible(isCategoryMode);
+    m_internetBoxWidget->setVisible(isCategoryMode);
     m_chatTitle->setVisible(isCategoryMode);
     m_chatView->setVisible(isCategoryMode);
+    m_chatBoxWidget->setVisible(isCategoryMode);
     m_musicTitle->setVisible(isCategoryMode);
     m_musicView->setVisible(isCategoryMode);
+    m_musicBoxWidget->setVisible(isCategoryMode);
     m_videoTitle->setVisible(isCategoryMode);
     m_videoView->setVisible(isCategoryMode);
+    m_videoBoxWidget->setVisible(isCategoryMode);
     m_graphicsTitle->setVisible(isCategoryMode);
     m_graphicsView->setVisible(isCategoryMode);
+    m_graphicsBoxWidget->setVisible(isCategoryMode);
     m_gameTitle->setVisible(isCategoryMode);
     m_gameView->setVisible(isCategoryMode);
+    m_gameBoxWidget->setVisible(isCategoryMode);
     m_officeTitle->setVisible(isCategoryMode);
     m_officeView->setVisible(isCategoryMode);
+    m_officeBoxWidget->setVisible(isCategoryMode);
     m_readingTitle->setVisible(isCategoryMode);
     m_readingView->setVisible(isCategoryMode);
+    m_readingBoxWidget->setVisible(isCategoryMode);
     m_developmentTitle->setVisible(isCategoryMode);
     m_developmentView->setVisible(isCategoryMode);
+    m_developmentBoxWidget->setVisible(isCategoryMode);
     m_systemTitle->setVisible(isCategoryMode);
     m_systemView->setVisible(isCategoryMode);
+    m_systemBoxWidget->setVisible(isCategoryMode);
     m_othersTitle->setVisible(isCategoryMode);
     m_othersView->setVisible(isCategoryMode);
+    m_othersBoxWidget->setVisible(isCategoryMode);
 
     m_viewListPlaceholder->setVisible(isCategoryMode);
     m_navigationWidget->setVisible(isCategoryMode);
@@ -1627,14 +1642,25 @@ void FullScreenFrame::layoutChanged()
 
     m_internetBoxWidget->setMaskSize(boxSize);
     m_internetView->setFixedSize(boxSize);
+    m_chatBoxWidget->setMaskSize(boxSize);
+    m_chatView->setFixedSize(boxSize);
+    m_musicBoxWidget->setMaskSize(boxSize);
     m_musicView->setFixedSize(boxSize);
+    m_videoBoxWidget->setMaskSize(boxSize);
     m_videoView->setFixedSize(boxSize);
+    m_graphicsBoxWidget->setMaskSize(boxSize);
     m_graphicsView->setFixedSize(boxSize);
+    m_gameBoxWidget->setMaskSize(boxSize);
     m_gameView->setFixedSize(boxSize);
+    m_officeBoxWidget->setMaskSize(boxSize);
     m_officeView->setFixedSize(boxSize);
+    m_readingBoxWidget->setMaskSize(boxSize);
     m_readingView->setFixedSize(boxSize);
+    m_developmentBoxWidget->setMaskSize(boxSize);
     m_developmentView->setFixedSize(boxSize);
+    m_systemBoxWidget->setMaskSize(boxSize);
     m_systemView->setFixedSize(boxSize);
+    m_othersBoxWidget->setMaskSize(boxSize);
     m_othersView->setFixedSize(boxSize);
 
     m_floatTitle->move(m_appsArea->pos().x() + LEFT_PADDING, m_appsArea->y() - m_floatTitle->height() + 10);

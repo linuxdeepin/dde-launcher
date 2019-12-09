@@ -42,7 +42,7 @@ public:
     CategoryButton *button(const AppsListModel::AppCategory category) const;
 
 signals:
-    void scrollToCategory(const AppsListModel::AppCategory category) const;
+    void scrollToCategory(const AppsListModel::AppCategory category, int nNext) const;
     void mouseEntered();
 
 public slots:
@@ -64,7 +64,7 @@ private:
     CalculateUtil *m_calcUtil;
     QButtonGroup *m_categoryGroup;
     CategoryButton *m_internetBtn;
-    CategoryButton* m_chatBtn;
+    CategoryButton *m_chatBtn;
     CategoryButton *m_musicBtn;
     CategoryButton *m_videoBtn;
     CategoryButton *m_graphicsBtn;

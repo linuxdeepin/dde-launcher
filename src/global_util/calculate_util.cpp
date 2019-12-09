@@ -59,6 +59,14 @@ QSize CalculateUtil::appIconSize() const
     return s * ratio;
 }
 
+
+QSize CalculateUtil::getScreenSize() const
+{
+    int width = qApp->primaryScreen()->geometry().size().width();
+    int height = qApp->primaryScreen()->geometry().size().height();
+    return  QSize(width, height);
+}
+
 QSize CalculateUtil::getAppBoxSize()
 {
     int width = qApp->primaryScreen()->geometry().size().width() * 0.51;

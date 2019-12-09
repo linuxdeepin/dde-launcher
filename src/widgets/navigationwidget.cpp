@@ -136,13 +136,12 @@ void NavigationWidget::buttonClicked()
     if (!btn)
         return;
 
-    emit scrollToCategory(btn->category());
+    emit scrollToCategory(btn->category(), 0);
 }
 
 CategoryButton *NavigationWidget::button(const AppsListModel::AppCategory category) const
 {
-    switch (category)
-    {
+    switch (category) {
     case AppsListModel::Internet:       return m_internetBtn;
     case AppsListModel::Chat:           return m_chatBtn;
     case AppsListModel::Music:          return m_musicBtn;

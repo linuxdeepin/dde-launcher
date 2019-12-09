@@ -95,9 +95,10 @@ public slots:
     void scrollToBlurBoxWidget(BlurBoxWidget *category);
     void scrollToPage(const AppsListModel::AppCategory &category);
     void pageBtnClick();
-
+    void clickToCategory(const QModelIndex &index);
     void showTips(const QString &tips);
     void hideTips();
+    void setCategoryIndex(const AppsListModel::AppCategory &category);
 
 protected:
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
@@ -149,7 +150,6 @@ private slots:
     void refershCategoryTextVisible();
     void refershCurrentFloatTitle();
     void nextTabWidget(int key);
-    void setblurboxChange();
 
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
@@ -245,9 +245,6 @@ private:
     CategoryTitleWidget *m_othersTitle;
 
     DFloatBtnList m_floatBtnList;
-    DFloatBtnList m_categoryfloatBtnList[11];
-
-
     QIcon m_iconViewActive;
     QIcon m_iconView;
 

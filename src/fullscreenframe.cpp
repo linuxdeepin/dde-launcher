@@ -144,6 +144,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 {
     m_focusIndex = 0;
     m_pageCurrent = 0;
+    //m_currentCategory = AppsListModel::Internet;
     m_iconViewActive = QIcon(":/widgets/images/page_indicator_active.svg");
     m_iconView = QIcon(":/widgets/images/page_indicator.svg");
     int pageCount = m_appsManager->getPageCount();
@@ -251,15 +252,21 @@ void FullScreenFrame::scrollToPage(const AppsListModel::AppCategory &category)
     }
 }
 
+
 void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &category)
 {
+
     AppsListModel::AppCategory tempMode = category;
     if (tempMode < AppsListModel::Internet)
-        tempMode  = AppsListModel::Internet;
+        tempMode = AppsListModel::Internet ;
     QWidget *dest = categoryBoxWidget(tempMode);
 
-    if (!dest)
-        return;
+    if (!dest) return;
+
+    if (category != m_currentCategory) {
+        setCategoryIndex(tempMode);
+    }
+
 
     m_currentCategory = tempMode;
 
@@ -285,6 +292,8 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category)
         return;
 
     m_currentCategory =  AppsListModel::AppCategory(m_currentBox + 4);
+    setCategoryIndex(m_currentCategory);
+
     const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  LEFT_PADDING * 2) / 2 ;
     m_scrollDest = dest;
 
@@ -294,6 +303,63 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category)
     m_scrollAnimation->start();
 
     emit currentVisibleCategoryChanged(m_currentCategory);
+}
+
+void FullScreenFrame::setCategoryIndex(const AppsListModel::AppCategory &category)
+{
+    bool isScrollLeft = true;
+    if (category < m_currentCategory) isScrollLeft = false;
+
+    AppsListModel::AppCategory tempMode = category;
+    if (tempMode < AppsListModel::Internet)
+        tempMode = AppsListModel::Internet ;
+    int categoryCount = m_calcUtil->appCategoryCount();
+    for (int type = tempMode, i = 0; i < categoryCount; i++, type++) {
+        if (categoryBoxWidget(tempMode)->isVisible()) {
+            tempMode = (AppsListModel::AppCategory)type;
+            break;
+        }
+    }
+
+    auto *dest = categoryBoxWidget(tempMode);
+    if (!dest) return;
+
+    BlurBoxWidget *leftBlurBox = nullptr;
+    for (int type = tempMode - 1, i = 0; i < categoryCount; i++, type--) {
+        if (type < AppsListModel::Internet) type = AppsListModel::Others;
+        leftBlurBox = categoryBoxWidget((AppsListModel::AppCategory)type);
+        if (leftBlurBox->isVisible()) {
+            m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX, leftBlurBox);
+            leftBlurBox->layout()->itemAt(0)->setAlignment(Qt::AlignRight);
+            leftBlurBox->layout()->update();
+            break;
+        }
+    }
+
+    m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + 1, dest);
+    dest->layout()->itemAt(0)->setAlignment(Qt::AlignHCenter);
+    dest->layout()->update();
+
+    BlurBoxWidget *rightBlurBox = nullptr;
+    for (int type = tempMode + 1, i = 0; i < categoryCount; i++, type++) {
+        if (type > AppsListModel::Others) type = AppsListModel::Internet;
+        rightBlurBox = categoryBoxWidget((AppsListModel::AppCategory)type);
+        if (rightBlurBox->isVisible()) {
+            m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + 2, rightBlurBox);
+            rightBlurBox->layout()->itemAt(0)->setAlignment(Qt::AlignLeft);
+            rightBlurBox->layout()->update();
+            break;
+        }
+    }
+    m_appsHbox->adjustSize();
+    if (isScrollLeft) {
+        if (leftBlurBox != nullptr)
+            m_appsArea->horizontalScrollBar()->setValue(leftBlurBox->x());
+    } else {
+        if (rightBlurBox != nullptr)
+            m_appsArea->horizontalScrollBar()->setValue(rightBlurBox->x());
+    }
+
 }
 
 void FullScreenFrame::showTips(const QString &tips)
@@ -572,8 +638,6 @@ void FullScreenFrame::initUI()
     QHBoxLayout *iconHLayout = new QHBoxLayout;
     iconHLayout->setSpacing(10);
     iconHLayout->addStretch();
-
-    DHBoxWidget *allAppHbox = new DHBoxWidget;
     for (int i = 0; i < m_appsManager->getPageCount(); i++) {
         QString name = QString("page%1").arg(i + 1);
         m_pageAppsViewList[i]->setAccessibleName(name);
@@ -591,35 +655,46 @@ void FullScreenFrame::initUI()
 
     m_internetView->setAccessibleName("internet");
     m_internetView->setModel(m_internetModel);
+    m_internetBoxWidget->setCategory(AppsListModel::Internet);
     m_internetView->setItemDelegate(m_appItemDelegate);
     m_chatView->setAccessibleName("chat");
+    m_chatBoxWidget->setCategory(AppsListModel::Chat);
     m_chatView->setModel(m_chatModel);
     m_chatView->setItemDelegate(m_appItemDelegate);
     m_musicView->setAccessibleName("music");
+    m_musicBoxWidget->setCategory(AppsListModel::Music);
     m_musicView->setModel(m_musicModel);
     m_musicView->setItemDelegate(m_appItemDelegate);
     m_videoView->setAccessibleName("video");
+    m_videoBoxWidget->setCategory(AppsListModel::Video);
     m_videoView->setModel(m_videoModel);
     m_videoView->setItemDelegate(m_appItemDelegate);
     m_graphicsView->setAccessibleName("graphics");
+    m_graphicsBoxWidget->setCategory(AppsListModel::Graphics);
     m_graphicsView->setModel(m_graphicsModel);
     m_graphicsView->setItemDelegate(m_appItemDelegate);
     m_gameView->setAccessibleName("game");
+    m_gameBoxWidget->setCategory(AppsListModel::Game);
     m_gameView->setModel(m_gameModel);
     m_gameView->setItemDelegate(m_appItemDelegate);
     m_officeView->setAccessibleName("office");
+    m_officeBoxWidget->setCategory(AppsListModel::Office);
     m_officeView->setModel(m_officeModel);
     m_officeView->setItemDelegate(m_appItemDelegate);
     m_readingView->setAccessibleName("reading");
+    m_readingBoxWidget->setCategory(AppsListModel::Reading);
     m_readingView->setModel(m_readingModel);
     m_readingView->setItemDelegate(m_appItemDelegate);
     m_developmentView->setAccessibleName("development");
+    m_developmentBoxWidget->setCategory(AppsListModel::Development);
     m_developmentView->setModel(m_developmentModel);
     m_developmentView->setItemDelegate(m_appItemDelegate);
     m_systemView->setAccessibleName("system");
+    m_systemBoxWidget->setCategory(AppsListModel::System);
     m_systemView->setModel(m_systemModel);
     m_systemView->setItemDelegate(m_appItemDelegate);
     m_othersView->setAccessibleName("others");
+    m_othersBoxWidget->setCategory(AppsListModel::Others);
     m_othersView->setModel(m_othersModel);
     m_othersView->setItemDelegate(m_appItemDelegate);
 
@@ -638,47 +713,47 @@ void FullScreenFrame::initUI()
 
     m_internetBoxWidget->layoutAddWidget(m_internetTitle, m_internetView->width() / 2, Qt::AlignHCenter);
     m_internetBoxWidget->layout()->addWidget(m_internetView);
-    m_appsHbox->layout()->addWidget(m_internetBoxWidget);
+    m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Internet, m_internetBoxWidget);
 
     m_chatBoxWidget->layoutAddWidget(m_chatTitle, m_chatView->width() / 2, Qt::AlignHCenter);
     m_chatBoxWidget->layout()->addWidget(m_chatView);
-    m_appsHbox->layout()->addWidget(m_chatBoxWidget);
+    m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Chat, m_chatBoxWidget);
 
     m_musicBoxWidget->layoutAddWidget(m_musicTitle, m_musicView->width() / 2, Qt::AlignHCenter);
     m_musicBoxWidget->layout()->addWidget(m_musicView);
-    m_appsHbox->layout()->addWidget(m_musicBoxWidget);
+    m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Music, m_musicBoxWidget);
 
     m_videoBoxWidget->layoutAddWidget(m_videoTitle, m_videoView->width() / 2, Qt::AlignHCenter);
     m_videoBoxWidget->layout()->addWidget(m_videoView);
-    m_appsHbox->layout()->addWidget(m_videoBoxWidget);
+    m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Video, m_videoBoxWidget);
 
     m_graphicsBoxWidget->layoutAddWidget(m_graphicsTitle, m_graphicsView->width() / 2, Qt::AlignHCenter);
     m_graphicsBoxWidget->layout()->addWidget(m_graphicsView);
-    m_appsHbox->layout()->addWidget(m_graphicsBoxWidget);
+    m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Graphics, m_graphicsBoxWidget);
 
     m_gameBoxWidget->layoutAddWidget(m_gameTitle, m_gameView->width() / 2, Qt::AlignHCenter);
     m_gameBoxWidget->layout()->addWidget(m_gameView);
-    m_appsHbox->layout()->addWidget(m_gameBoxWidget);
+    m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Game, m_gameBoxWidget);
 
     m_officeBoxWidget->layoutAddWidget(m_officeTitle, m_officeView->width() / 2, Qt::AlignHCenter);
     m_officeBoxWidget->layout()->addWidget(m_officeView);
-    m_appsHbox->layout()->addWidget(m_officeBoxWidget);
+    m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Office, m_officeBoxWidget);
 
     m_readingBoxWidget->layoutAddWidget(m_readingTitle, m_readingView->width() / 2, Qt::AlignHCenter);
     m_readingBoxWidget->layout()->addWidget(m_readingView);
-    m_appsHbox->layout()->addWidget(m_readingBoxWidget);
+    m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Reading, m_readingBoxWidget);
 
     m_developmentBoxWidget->layoutAddWidget(m_developmentTitle, m_developmentView->width() / 2, Qt::AlignHCenter);
     m_developmentBoxWidget->layout()->addWidget(m_developmentView);
-    m_appsHbox->layout()->addWidget(m_developmentBoxWidget);
+    m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Development, m_developmentBoxWidget);
 
     m_systemBoxWidget->layoutAddWidget(m_systemTitle, m_systemView->width() / 2, Qt::AlignHCenter);
     m_systemBoxWidget->layout()->addWidget(m_systemView);
-    m_appsHbox->layout()->addWidget(m_systemBoxWidget);
+    m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::System, m_systemBoxWidget);
 
     m_othersBoxWidget->layoutAddWidget(m_othersTitle, m_othersView->width() / 2, Qt::AlignHCenter);
     m_othersBoxWidget->layout()->addWidget(m_othersView);
-    m_appsHbox->layout()->addWidget(m_othersBoxWidget);
+    m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Others, m_othersBoxWidget);
 
     m_appsHbox->layout()->addWidget(m_viewListPlaceholder);
     m_appsHbox->layout()->addStretch();
@@ -907,12 +982,12 @@ void FullScreenFrame::initConnection()
     connect(this, &FullScreenFrame::scrollChanged, this, &FullScreenFrame::scrollToPage);
 
     connect(this, &FullScreenFrame::currentVisibleCategoryChanged, m_navigationWidget, &NavigationWidget::setCurrentCategory);
-    connect(this, &FullScreenFrame::currentVisibleCategoryChanged, this, &FullScreenFrame::setblurboxChange);
     connect(this, &FullScreenFrame::categoryAppNumsChanged, m_navigationWidget, &NavigationWidget::refershCategoryVisible);
     connect(this, &FullScreenFrame::categoryAppNumsChanged, this, &FullScreenFrame::refershCategoryVisible);
     connect(this, &FullScreenFrame::displayModeChanged, this, &FullScreenFrame::checkCategoryVisible);
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
     connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hide, Qt::QueuedConnection);
+
 
     connect(m_clearCacheTimer, &QTimer::timeout, m_appsManager, &AppsManager::clearCache);
 
@@ -976,17 +1051,17 @@ void FullScreenFrame::initConnection()
     connect(m_systemView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
     connect(m_othersView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
 
-    connect(m_internetView, &AppGridView::clicked, this, &FullScreenFrame::hide);
-    connect(m_chatView, &AppGridView::clicked, this, &FullScreenFrame::hide);
-    connect(m_musicView, &AppGridView::clicked, this, &FullScreenFrame::hide);
-    connect(m_videoView, &AppGridView::clicked, this, &FullScreenFrame::hide);
-    connect(m_graphicsView, &AppGridView::clicked, this, &FullScreenFrame::hide);
-    connect(m_gameView, &AppGridView::clicked, this, &FullScreenFrame::hide);
-    connect(m_officeView, &AppGridView::clicked, this, &FullScreenFrame::hide);
-    connect(m_readingView, &AppGridView::clicked, this, &FullScreenFrame::hide);
-    connect(m_developmentView, &AppGridView::clicked, this, &FullScreenFrame::hide);
-    connect(m_systemView, &AppGridView::clicked, this, &FullScreenFrame::hide);
-    connect(m_othersView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(m_internetBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
+    connect(m_chatBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
+    connect(m_musicBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
+    connect(m_videoBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
+    connect(m_graphicsBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
+    connect(m_gameBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
+    connect(m_officeBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
+    connect(m_readingBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
+    connect(m_developmentBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
+    connect(m_systemBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
+    connect(m_othersBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
 
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_internetView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_chatView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
@@ -1295,6 +1370,12 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
     m_isConfirmDialogShown = false;
 }
 
+void FullScreenFrame::clickToCategory(const QModelIndex &index)
+{
+    qDebug() << "modeValue" <<  index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
+}
+
+
 void FullScreenFrame::ensureScrollToDest(const QVariant &value)
 {
     Q_UNUSED(value);
@@ -1327,32 +1408,6 @@ void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
         scrollToCategory(category);
     }
     // refershCurrentFloatTitle();
-}
-
-void FullScreenFrame::setblurboxChange()
-{
-    if (m_displayMode != GROUP_BY_CATEGORY)
-        return;
-
-    int  boxWidgetLen = sizeof(m_BoxWidget) / sizeof(m_BoxWidget[0]) - 1;
-    m_BoxWidget[m_currentBox]->layout()->itemAt(0)->setAlignment(Qt::AlignHCenter);
-    m_BoxWidget[m_currentBox]->layout()->update();
-    if (m_currentBox > 0) {
-        m_BoxWidget[m_currentBox - 1]->layout()->itemAt(0)->setAlignment(Qt::AlignRight);
-        m_BoxWidget[m_currentBox - 1]->layout()->update();
-    } else {
-        m_BoxWidget[boxWidgetLen - 1]->layout()->itemAt(0)->setAlignment(Qt::AlignRight);
-        m_BoxWidget[boxWidgetLen - 1]->layout()->update();
-    }
-
-    if (m_currentBox == boxWidgetLen) {
-        m_BoxWidget[0]->layout()->itemAt(0)->setAlignment(Qt::AlignLeft);
-        m_BoxWidget[ 0]->layout()->update();
-
-    } else {
-        m_BoxWidget[ m_currentBox + 1]->layout()->itemAt(0)->setAlignment(Qt::AlignLeft);
-        m_BoxWidget[m_currentBox + 1]->layout()->update();
-    }
 }
 
 void FullScreenFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
@@ -1629,6 +1684,7 @@ void FullScreenFrame::layoutChanged()
     for (auto pageView : m_pageAppsViewList)
         pageView->setFixedSize(boxSize);
 
+    m_internetBoxWidget->setMaskSize(boxSize);
     m_internetView->setFixedSize(boxSize);
     m_musicView->setFixedSize(boxSize);
     m_videoView->setFixedSize(boxSize);

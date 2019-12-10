@@ -1677,7 +1677,7 @@ void FullScreenFrame::nextTabWidget(int key)
         if (m_displayMode == GROUP_BY_CATEGORY) {
             if (m_focusIndex > CategoryTital) m_focusIndex = FirstItem;
         } else {
-            if (m_focusIndex < CategoryChangeBtn) m_focusIndex = FirstItem;
+            if (m_focusIndex > CategoryChangeBtn) m_focusIndex = FirstItem;
         }
     }
 

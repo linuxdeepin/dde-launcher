@@ -24,11 +24,12 @@
 #include "categorytitlewidget.h"
 #include "src/global_util/constants.h"
 #include "src/global_util/util.h"
-
+#include <DFontSizeManager>
 #include <QHBoxLayout>
 #include <QGraphicsDropShadowEffect>
 #include <QGraphicsOpacityEffect>
 
+DWIDGET_USE_NAMESPACE
 CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) :
     QFrame(parent),
     m_calcUtil(CalculateUtil::instance()),
@@ -47,6 +48,7 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     lineLayout->addStretch();
 
     setText(title);
+    DFontSizeManager::instance()->bind(m_title, DFontSizeManager::T1);
     setTitleOpacity(1);  // update the style of this widget by force.
     m_opacityAnimation->setDuration(300);
 
@@ -96,6 +98,7 @@ void CategoryTitleWidget::setText(const QString &title)
     QFont titleFont(m_title->font());
     titleFont.setPixelSize(m_calcUtil->titleTextSize());
     m_title->setFont(titleFont);
+
     QFontMetrics fontMetric(m_title->font());
     const int width = fontMetric.width(title);
     m_title->setFixedWidth(width + 10);

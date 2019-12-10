@@ -72,10 +72,13 @@ public:
     };
 
     enum FocusPosition {
-        LeftTop,
-        LeftBottom,
-        Right,
-        Search
+        LeftBottom, //所有分类
+        Computer,
+        Setting,
+        Power,
+        Search,
+        Applist,
+        Default //确保首次切换都切换到所有分类
     };
 
 signals:

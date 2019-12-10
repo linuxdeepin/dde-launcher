@@ -1169,13 +1169,13 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
             scrollToCategory(AppsListModel::AppCategory(nextCategory), -1);
             return;
         }
-
         case Qt::Key_Right: {
             int nextCategory = m_currentCategory + 1;
             if (nextCategory > AppsListModel::Others) nextCategory = AppsListModel::Internet;
-            scrollToCategory(AppsListModel::AppCategory(nextCategory), 1);       return;
+            scrollToCategory(AppsListModel::AppCategory(nextCategory), 1);
+            return;
         }
-
+        case Qt::Key_Down:  m_focusIndex = SearchEdit;  break;
         default:;
         }
     }

@@ -98,7 +98,7 @@ public slots:
     void clickToCategory(const QModelIndex &index);
     void showTips(const QString &tips);
     void hideTips();
-    void setCategoryIndex(const AppsListModel::AppCategory &category, int nNext = 0);
+    void setCategoryIndex(AppsListModel::AppCategory &category, int nNext = 0);
 
 protected:
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;

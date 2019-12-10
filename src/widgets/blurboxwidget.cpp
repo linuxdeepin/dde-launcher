@@ -6,7 +6,7 @@
 DWIDGET_USE_NAMESPACE
 BlurBoxWidget::BlurBoxWidget(QWidget *parent)
     : DBlurEffectWidget(parent)
-    , qvLayout(new QVBoxLayout(this))
+    , m_vLayout(new QVBoxLayout(this))
     , m_maskLayer(new QWidget(this))
     , m_calcUtil(CalculateUtil::instance())
 {
@@ -21,11 +21,11 @@ BlurBoxWidget::BlurBoxWidget(QWidget *parent)
 //    pal.setColor(QPalette::Background, QColor(0x0, 0x0, 0x0, 10));
 //    m_maskLayer->setAutoFillBackground(true);
 //    m_maskLayer->setPalette(pal);
-    m_maskLayer->show();
+//    m_maskLayer->show();
 
-    setLayout(qvLayout);
-    qvLayout->setSpacing(10);
-    qvLayout->setAlignment(Qt::AlignTop);
+    setLayout(m_vLayout);
+    m_vLayout->setSpacing(10);
+    m_vLayout->setAlignment(Qt::AlignTop);
 
     initconnect();
 }
@@ -37,12 +37,12 @@ void BlurBoxWidget::initconnect()
 
 void BlurBoxWidget::layoutAddWidget(QWidget *child)
 {
-    qvLayout->addWidget(child);
+    m_vLayout->addWidget(child);
 }
 
 void BlurBoxWidget::layoutAddWidget(QWidget *child, int stretch, Qt::Alignment alignment)
 {
-    qvLayout->addWidget(child, stretch, alignment);
+    m_vLayout->addWidget(child, stretch, alignment);
 }
 
 void BlurBoxWidget::mousePressEvent(QMouseEvent *e)

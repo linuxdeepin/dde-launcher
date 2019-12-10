@@ -19,7 +19,7 @@ public:
 
     void setMaskVisible(bool visible);
     void setMaskSize(QSize size);
-    QVBoxLayout *qvLayout ;
+    QVBoxLayout *m_vLayout ;
     QWidget *m_maskLayer = nullptr;
 
 public :

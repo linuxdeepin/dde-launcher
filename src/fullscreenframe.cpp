@@ -255,21 +255,20 @@ void FullScreenFrame::scrollToPage(const AppsListModel::AppCategory &category)
 
 void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &category, int nNext)
 {
-
     AppsListModel::AppCategory tempMode = category;
-    if (tempMode < AppsListModel::Internet)
+    if (tempMode < AppsListModel::Internet || tempMode > AppsListModel::Others)
         tempMode = AppsListModel::Internet ;
-    QWidget *dest = categoryBoxWidget(tempMode);
-
-    if (!dest) return;
 
     if (category != m_currentCategory || category == 0) {
         setCategoryIndex(tempMode, nNext);
     }
 
+    QWidget *dest = categoryBoxWidget(tempMode);
+
+    if (!dest) return;
 
     m_currentCategory = tempMode;
-
+    m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
     m_currentBox = m_currentCategory - 4;
 
     const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  LEFT_PADDING * 2) / 2 ;
@@ -293,7 +292,7 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category)
 
     m_currentCategory =  AppsListModel::AppCategory(m_currentBox + 4);
     setCategoryIndex(m_currentCategory);
-
+    m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
     const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  LEFT_PADDING * 2) / 2 ;
     m_scrollDest = dest;
 
@@ -305,7 +304,7 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category)
     emit currentVisibleCategoryChanged(m_currentCategory);
 }
 
-void FullScreenFrame::setCategoryIndex(const AppsListModel::AppCategory &category, int nNext)
+void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int nNext)
 {
     bool isScrollLeft = true;
     if (nNext > 0) isScrollLeft = true;
@@ -313,17 +312,25 @@ void FullScreenFrame::setCategoryIndex(const AppsListModel::AppCategory &categor
     else  if (nNext < 0) isScrollLeft = false;
 
 
-    AppsListModel::AppCategory tempMode = category;
-    if (tempMode < AppsListModel::Internet)
-        tempMode = AppsListModel::Internet ;
+    if (category < AppsListModel::Internet) category = AppsListModel::Internet;
+
     int categoryCount = m_calcUtil->appCategoryCount();
-    for (int type = tempMode, i = 0; i < categoryCount; i++, type++) {
+    for (int type = category, i = 0; i < categoryCount; i++, isScrollLeft ? type++ : type--) {
+        if (nNext != 0) {
+            if (type < AppsListModel::Internet && !isScrollLeft)
+                category = AppsListModel::Others;
+            else if (type > AppsListModel::Others) {
+                category = AppsListModel::Internet ;
+            }
+        }
+
         if (m_appsManager->appNums((AppsListModel::AppCategory)type)) {
-            tempMode = (AppsListModel::AppCategory)type;
+            category = (AppsListModel::AppCategory)type;
             break;
         }
     }
 
+    AppsListModel::AppCategory tempMode = category;
     auto *dest = categoryBoxWidget(tempMode);
     if (!dest) return;
 
@@ -1151,14 +1158,35 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         return;
     }
 
-    const QModelIndex currentIndex = m_appItemDelegate->currentIndex();
+    if (m_focusIndex == FirstItem) {
+        switch (key) {
+        case Qt::Key_Backtab:
+        case Qt::Key_Left: {
+            int nextCategory = m_currentCategory - 1;
+            if (nextCategory < AppsListModel::Internet) nextCategory = AppsListModel::Others;
+            scrollToCategory(AppsListModel::AppCategory(nextCategory), -1);
+            return;
+        }
 
+        case Qt::Key_Right: {
+            int nextCategory = m_currentCategory + 1;
+            if (nextCategory > AppsListModel::Others) nextCategory = AppsListModel::Internet;
+            scrollToCategory(AppsListModel::AppCategory(nextCategory), 1);       return;
+        }
+
+        default:;
+        }
+    }
+    const QModelIndex currentIndex = m_appItemDelegate->currentIndex();
     // move operation should be start from a valid location, if not, just init it.
     if (!currentIndex.isValid()) {
-        m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? m_internetView->indexAt(0) : m_pageAppsViewList[m_pageCurrent]->indexAt(0));
+        if (m_currentCategory < AppsListModel::Internet) m_currentCategory = AppsListModel::Internet;
+        m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? categoryView(m_currentCategory)->indexAt(0) : m_pageAppsViewList[m_pageCurrent]->indexAt(0));
         update();
         return;
     }
+
+
 
     const int column = m_calcUtil->appColumnCount();
     QModelIndex index;
@@ -1593,32 +1621,38 @@ void FullScreenFrame::updateDockPosition()
 
 AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentModel)
 {
+    AppsListModel *nextModel = m_internetModel;
     if (currentModel == nullptr)
-        return m_internetModel;
-    if (currentModel == m_internetModel)
-        return m_chatModel;
-    if (currentModel == m_chatModel)
-        return m_musicModel;
-    if (currentModel == m_musicModel)
-        return m_videoModel;
-    if (currentModel == m_videoModel)
-        return m_graphicsModel;
-    if (currentModel == m_graphicsModel)
-        return m_gameModel;
-    if (currentModel == m_gameModel)
-        return m_officeModel;
-    if (currentModel == m_officeModel)
-        return m_readingModel;
-    if (currentModel == m_readingModel)
-        return m_developmentModel;
-    if (currentModel == m_developmentModel)
-        return m_systemModel;
-    if (currentModel == m_systemModel)
-        return m_othersModel;
-    if (currentModel == m_othersModel)
-        return m_internetModel;
-
-    return nullptr;
+        nextModel =  m_internetModel;
+    else if (currentModel == m_internetModel)
+        nextModel =   m_chatModel;
+    else if (currentModel == m_chatModel)
+        nextModel =   m_musicModel;
+    else if (currentModel == m_musicModel)
+        nextModel =   m_videoModel;
+    else if (currentModel == m_videoModel)
+        nextModel =   m_graphicsModel;
+    else if (currentModel == m_graphicsModel)
+        nextModel =   m_gameModel;
+    else if (currentModel == m_gameModel)
+        nextModel =   m_officeModel;
+    else if (currentModel == m_officeModel)
+        nextModel =   m_readingModel;
+    else  if (currentModel == m_readingModel)
+        nextModel =   m_developmentModel;
+    else if (currentModel == m_developmentModel)
+        nextModel =   m_systemModel;
+    else if (currentModel == m_systemModel)
+        nextModel =   m_othersModel;
+    else if (currentModel == m_othersModel)
+        nextModel =   m_internetModel;
+    else {
+        nextModel = m_internetModel;
+    }
+    if (!m_appsManager->appNums(nextModel->category())) {
+        nextModel = nextCategoryModel(nextModel);
+    }
+    return nextModel;
 }
 
 void FullScreenFrame::nextTabWidget()
@@ -1626,9 +1660,11 @@ void FullScreenFrame::nextTabWidget()
     switch (m_focusIndex) {
     case FirstItem: {
         m_searchWidget->categoryBtn()->clearFocus();
-        AppGridView *pView = (m_displayMode == GROUP_BY_CATEGORY) ? m_internetView : m_pageAppsViewList[m_pageCurrent];
+        if (m_currentCategory < AppsListModel::Internet) m_currentCategory = AppsListModel::Internet;
+        AppGridView *pView = (m_displayMode == GROUP_BY_CATEGORY) ? categoryView(m_currentCategory) : m_pageAppsViewList[m_pageCurrent];
         m_appItemDelegate->setCurrentIndex(pView->indexAt(0));
         update();
+        m_navigationWidget->setCancelCurrentCategory(m_currentCategory);
         m_focusIndex = SearchEdit;
     }
     break;
@@ -1641,14 +1677,15 @@ void FullScreenFrame::nextTabWidget()
     case CategoryChangeBtn: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
         m_searchWidget->categoryBtn()->setFocus();
-        m_focusIndex = FirstItem;
         m_focusIndex = (m_displayMode != GROUP_BY_CATEGORY) ? FirstItem : CategoryTital;
     }
     break;
     case CategoryTital: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
-        m_navigationWidget->setCurrentCategory(AppsListModel::Internet);
-        m_navigationWidget->button(AppsListModel::Internet)->setFocus();
+
+        if (m_currentCategory < AppsListModel::Internet) m_currentCategory = AppsListModel::Internet;
+        m_navigationWidget->setCurrentCategory(m_currentCategory);
+        m_navigationWidget->button(m_currentCategory)->setFocus();
         m_focusIndex = FirstItem;
     }
     break;
@@ -1657,30 +1694,37 @@ void FullScreenFrame::nextTabWidget()
 
 AppsListModel *FullScreenFrame::prevCategoryModel(const AppsListModel *currentModel)
 {
-    if (currentModel == m_internetModel)
-        return m_othersModel;
-    if (currentModel == m_chatModel)
-        return m_internetModel;
-    if (currentModel == m_musicModel)
-        return m_chatModel;
-    if (currentModel == m_videoModel)
-        return m_musicModel;
-    if (currentModel == m_graphicsModel)
-        return m_videoModel;
-    if (currentModel == m_gameModel)
-        return m_graphicsModel;
-    if (currentModel == m_officeModel)
-        return m_gameModel;
-    if (currentModel == m_readingModel)
-        return m_officeModel;
-    if (currentModel == m_developmentModel)
-        return m_readingModel;
-    if (currentModel == m_systemModel)
-        return m_developmentModel;
-    if (currentModel == m_othersModel)
-        return m_systemModel;
+    AppsListModel *prevModel = m_othersModel;
 
-    return nullptr;
+    if (currentModel == m_internetModel)
+        prevModel = m_othersModel;
+    else if (currentModel == m_chatModel)
+        prevModel =  m_internetModel;
+    else  if (currentModel == m_musicModel)
+        prevModel =  m_chatModel;
+    else  if (currentModel == m_videoModel)
+        prevModel =  m_musicModel;
+    else if (currentModel == m_graphicsModel)
+        prevModel =  m_videoModel;
+    else  if (currentModel == m_gameModel)
+        prevModel =  m_graphicsModel;
+    else if (currentModel == m_officeModel)
+        prevModel =  m_gameModel;
+    else  if (currentModel == m_readingModel)
+        prevModel =  m_officeModel;
+    else if (currentModel == m_developmentModel)
+        prevModel =  m_readingModel;
+    else if (currentModel == m_systemModel)
+        prevModel =  m_developmentModel;
+    else if (currentModel == m_othersModel)
+        prevModel =  m_systemModel;
+    else {
+        prevModel = m_othersModel;
+    }
+    if (!m_appsManager->appNums(prevModel->category())) {
+        prevModel = prevCategoryModel(prevModel);
+    }
+    return prevModel;
 }
 
 void FullScreenFrame::layoutChanged()

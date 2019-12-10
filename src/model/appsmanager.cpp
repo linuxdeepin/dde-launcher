@@ -670,6 +670,7 @@ void AppsManager::generateCategoryMap()
     m_categoryList.clear();
     sortByPresetOrder(m_allAppInfoList);
 
+    ItemInfoList newInstallAppList;
     for (const ItemInfo &info : m_allAppInfoList) {
         const int userIdx = m_usedSortedList.indexOf(info);
         // append new installed app to user sorted list
@@ -685,7 +686,17 @@ void AppsManager::generateCategoryMap()
         if (!m_appInfos.contains(category))
             m_appInfos.insert(category, ItemInfoList());
 
-        m_appInfos[category].append(info);
+        if (!m_newInstalledAppsList.contains(info.m_key)){
+            m_appInfos[category].append(info);
+        } else {
+            newInstallAppList.append(info);
+        }
+    }
+
+    if (!newInstallAppList.isEmpty()) {
+        for (const ItemInfo &info : newInstallAppList){
+           m_appInfos[info.category()].append(info);
+        }
     }
 
     // remove uninstalled app item

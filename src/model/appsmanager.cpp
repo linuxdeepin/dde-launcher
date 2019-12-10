@@ -184,7 +184,8 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
     connect(m_iconRefreshTimer.get(), &QTimer::timeout, this, &AppsManager::refreshNotFoundIcon);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
-        refreshAppListIcon();});
+        refreshAppListIcon();
+    });
 
 }
 
@@ -521,7 +522,7 @@ void AppsManager::ReflashSortList()
             index ++;
         }
     }
-    m_pageCount = index + 1;
+    m_pageCount = (m_usedSortedList.size() % m_calUtil->appPageItemCount()) ? index + 1 : index;
 }
 
 void AppsManager::refreshCategoryInfoList()

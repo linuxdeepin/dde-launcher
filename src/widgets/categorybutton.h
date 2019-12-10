@@ -60,6 +60,7 @@ private:
     State m_state = Normal;
     AppsListModel::AppCategory m_category;
     QString m_iconName;
+    QString m_systemTheme;
     QPixmap m_icon;
 };
 

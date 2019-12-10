@@ -33,7 +33,9 @@
 #include <QPainter>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <DGuiApplicationHelper>
 
+DGUI_USE_NAMESPACE
 CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidget *parent) :
     QAbstractButton(parent)
     , m_calcUtil(CalculateUtil::instance())
@@ -67,15 +69,15 @@ void CategoryButton::setInfoByCategory()
 {
     switch (m_category) {
     case AppsListModel::Internet:       setAccessibleName("internet");
-        m_iconName = "internet";                    break;
+        m_iconName = "network";                    break;
     case AppsListModel::Chat:           setAccessibleName("chat");
         m_iconName = "chat";                        break;
     case AppsListModel::Music:          setAccessibleName("music");
         m_iconName = "music";                       break;
     case AppsListModel::Video:          setAccessibleName("multimedia");
-        m_iconName = "multimedia";                  break;
+        m_iconName = "video";                  break;
     case AppsListModel::Graphics:       setAccessibleName("graphics");
-        m_iconName = "graphics";                    break;
+        m_iconName = "graphic";                    break;
     case AppsListModel::Game:           setAccessibleName("game");
         m_iconName = "game";                        break;
     case AppsListModel::Office:         setAccessibleName("office");
@@ -83,7 +85,7 @@ void CategoryButton::setInfoByCategory()
     case AppsListModel::Reading:        setAccessibleName("reading");
         m_iconName = "reading";                     break;
     case AppsListModel::Development:    setAccessibleName("development");
-        m_iconName = "development";                 break;
+        m_iconName = "develop";                 break;
     case AppsListModel::System:         setAccessibleName("system");
         m_iconName = "system";                      break;
     default:                            setAccessibleName("others");
@@ -92,7 +94,13 @@ void CategoryButton::setInfoByCategory()
 
 
     const auto ratio = devicePixelRatioF();
-    m_icon = loadSvg(QString(":/icons/skin/icons/%1_active_22px.svg").arg(m_iconName), DLauncher::NAVIGATION_ICON_SIZE * ratio);
+
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+        m_systemTheme = "_dark";
+    } else {
+        m_systemTheme = "";
+    }
+    m_icon = loadSvg(QString(":/icons/skin/icons/category_%1%2.svg").arg(m_iconName, m_systemTheme), DLauncher::NAVIGATION_ICON_SIZE * ratio);
     m_icon.setDevicePixelRatio(qApp->devicePixelRatio());
 }
 

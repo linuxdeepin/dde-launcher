@@ -15,11 +15,7 @@ BlurBoxWidget::BlurBoxWidget(QWidget *parent)
     setBlurRectYRadius(DLauncher::APPHBOX_RADIUS);
     setFixedWidth(m_calcUtil->getAppBoxSize().width());
 
-//    QPalette pal(m_maskLayer->palette());
-//    pal.setColor(QPalette::Background, QColor(0x0, 0x0, 0x0, 10));
-//    m_maskLayer->setAutoFillBackground(true);
-//    m_maskLayer->setPalette(pal);
-//    m_maskLayer->show();
+    m_maskLayer->setStyleSheet("QWidget{border-radius:40px;background-color:rgba(1, 1, 1, 67)}");
 
     setLayout(m_vLayout);
     m_vLayout->setSpacing(10);
@@ -65,6 +61,7 @@ void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
 
 void BlurBoxWidget::setMaskSize(QSize size)
 {
+    m_maskLayer->move(0, -3);
     m_maskLayer->setFixedSize(size);
     m_maskLayer->raise();
 }

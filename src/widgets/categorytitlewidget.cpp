@@ -24,22 +24,23 @@
 #include "categorytitlewidget.h"
 #include "src/global_util/constants.h"
 #include "src/global_util/util.h"
-
+#include <DFontSizeManager>
 #include <QHBoxLayout>
 #include <QGraphicsDropShadowEffect>
 #include <QGraphicsOpacityEffect>
 
+DWIDGET_USE_NAMESPACE
 CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) :
     QFrame(parent),
     m_calcUtil(CalculateUtil::instance()),
     m_title(new QLabel(this)),
     m_opacityAnimation(new QPropertyAnimation(this, "titleOpacity"))
 {
-    QLabel* whiteLine = new QLabel(this);
+    QLabel *whiteLine = new QLabel(this);
     whiteLine->setObjectName("CategoryWhiteLine");
     whiteLine->setFixedHeight(1);
 
-    QVBoxLayout* lineLayout = new QVBoxLayout;
+    QVBoxLayout *lineLayout = new QVBoxLayout;
     lineLayout->setMargin(0);
     lineLayout->setSpacing(0);
     lineLayout->addStretch();
@@ -47,6 +48,7 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     lineLayout->addStretch();
 
     setText(title);
+    DFontSizeManager::instance()->bind(m_title, DFontSizeManager::T1);
     setTitleOpacity(1);  // update the style of this widget by force.
     m_opacityAnimation->setDuration(300);
 
@@ -83,9 +85,6 @@ void CategoryTitleWidget::setTextVisible(const bool visible, const bool animatio
 
 void CategoryTitleWidget::setText(const QString &title)
 {
-    QFont titleFont(m_title->font());
-    titleFont.setPixelSize(m_calcUtil->titleTextSize());
-    m_title->setFont(titleFont);
     QFontMetrics fontMetric(m_title->font());
     const int width = fontMetric.width(title);
     m_title->setFixedWidth(width + 10);
@@ -94,7 +93,7 @@ void CategoryTitleWidget::setText(const QString &title)
 
 void CategoryTitleWidget::addTextShadow()
 {
-    QGraphicsDropShadowEffect* textDropShadow = new QGraphicsDropShadowEffect;
+    QGraphicsDropShadowEffect *textDropShadow = new QGraphicsDropShadowEffect;
     textDropShadow->setBlurRadius(4);
     textDropShadow->setColor(QColor(0, 0, 0, 128));
     textDropShadow->setOffset(0, 2);

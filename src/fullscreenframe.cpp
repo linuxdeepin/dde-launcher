@@ -1068,7 +1068,7 @@ void FullScreenFrame::initConnection()
     connect(m_appsManager, &AppsManager::requestTips, this, &FullScreenFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
     connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::updateDockPosition);
-    connect(m_appsManager, &AppsManager::dataChanged, [this]{reflashPageView();});
+    connect(m_appsManager, &AppsManager::dataChanged, [this] {reflashPageView();});
 
 
 }
@@ -1108,7 +1108,7 @@ void FullScreenFrame::updateGeometry()
 void FullScreenFrame::moveCurrentSelectApp(const int key)
 {
     if (Qt::Key_Tab == key || Qt::Key_Backtab == key) {
-        nextTabWidget();
+        nextTabWidget(key);
         return;
     }
 
@@ -1122,7 +1122,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         return;
     }
 
-    if (m_focusIndex == FirstItem) {
+    if (m_focusIndex == CategoryTital) {
         switch (key) {
         case Qt::Key_Backtab:
         case Qt::Key_Left: {
@@ -1137,7 +1137,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
             scrollToCategory(AppsListModel::AppCategory(nextCategory), 1);
             return;
         }
-        case Qt::Key_Down:  m_focusIndex = SearchEdit;  break;
+        case Qt::Key_Down:  m_focusIndex = FirstItem;  break;
         default:;
         }
     }
@@ -1395,45 +1395,45 @@ void FullScreenFrame::reflashPageView()
 
     if (currentCount < pageCount) {
         while (currentCount < pageCount) {
-             AppGridView *pView = new AppGridView;
-             m_pageAppsViewList.push_back(pView);
-             AppsListModel *pModel = new AppsListModel(AppsListModel::All);
-             pModel->setPageIndex(currentCount);
-             m_pageAppsModelList.push_back(pModel);
+            AppGridView *pView = new AppGridView;
+            m_pageAppsViewList.push_back(pView);
+            AppsListModel *pModel = new AppsListModel(AppsListModel::All);
+            pModel->setPageIndex(currentCount);
+            m_pageAppsModelList.push_back(pModel);
 
-             QString name = QString("page%1").arg(currentCount);
-             pView->setAccessibleName(name);
-             pView->setModel(pModel);
-             pView->setItemDelegate(m_appItemDelegate);
-             pView->setContainerBox(m_appsArea);
+            QString name = QString("page%1").arg(currentCount);
+            pView->setAccessibleName(name);
+            pView->setModel(pModel);
+            pView->setItemDelegate(m_appItemDelegate);
+            pView->setContainerBox(m_appsArea);
 
-             connect(pView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-             connect(pView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-             connect(pView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-             connect(pView, &AppGridView::clicked, this, &FullScreenFrame::hide);
-             connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+            connect(pView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+            connect(pView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+            connect(pView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+            connect(pView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+            connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
 
-             m_appsHbox->layout()->insertWidget(currentCount*2, pView);
-             m_appsHbox->layout()->insertSpacing(currentCount*2+1, RIGHT_PADDING);
-             m_appsArea->addWidget(pView->viewport());
+            m_appsHbox->layout()->insertWidget(currentCount * 2, pView);
+            m_appsHbox->layout()->insertSpacing(currentCount * 2 + 1, RIGHT_PADDING);
+            m_appsArea->addWidget(pView->viewport());
 
-             DFloatingButton *pBtn = new DFloatingButton(this);
-             pBtn->setIcon(m_iconView);
-             pBtn->setIconSize(QSize(20, 20));
-             pBtn->setFixedSize(QSize(20, 20));
-             pBtn->setBackgroundRole(DPalette::Button);
-             connect(pBtn, &DFloatingButton::clicked, this, &FullScreenFrame::pageBtnClick);
-             m_floatBtnList.push_back(pBtn);
+            DFloatingButton *pBtn = new DFloatingButton(this);
+            pBtn->setIcon(m_iconView);
+            pBtn->setIconSize(QSize(20, 20));
+            pBtn->setFixedSize(QSize(20, 20));
+            pBtn->setBackgroundRole(DPalette::Button);
+            connect(pBtn, &DFloatingButton::clicked, this, &FullScreenFrame::pageBtnClick);
+            m_floatBtnList.push_back(pBtn);
 
-             m_iconHLayout->insertWidget(currentCount+1, pBtn);
+            m_iconHLayout->insertWidget(currentCount + 1, pBtn);
 
-             currentCount ++;
+            currentCount ++;
         }
     } else {
         while (currentCount > pageCount) {
-            QLayoutItem *item = m_appsHbox->layout()->itemAt(currentCount*2-2);
+            QLayoutItem *item = m_appsHbox->layout()->itemAt(currentCount * 2 - 2);
             m_appsHbox->layout()->removeItem(item);
-            item = m_appsHbox->layout()->itemAt(currentCount*2-2);
+            item = m_appsHbox->layout()->itemAt(currentCount * 2 - 2);
             m_appsHbox->layout()->removeItem(item);
             item = m_iconHLayout->itemAt(currentCount);
             m_iconHLayout->removeItem(item);
@@ -1663,8 +1663,24 @@ AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentMo
     return nextModel;
 }
 
-void FullScreenFrame::nextTabWidget()
+void FullScreenFrame::nextTabWidget(int key)
 {
+    if (Qt::Key_Backtab == key) {
+        m_focusIndex--;
+        if (m_displayMode == GROUP_BY_CATEGORY) {
+            if (m_focusIndex < FirstItem) m_focusIndex = CategoryTital;
+        } else {
+            if (m_focusIndex < FirstItem) m_focusIndex = CategoryChangeBtn;
+        }
+    } else if (Qt::Key_Tab == key) {
+        m_focusIndex++;
+        if (m_displayMode == GROUP_BY_CATEGORY) {
+            if (m_focusIndex > CategoryTital) m_focusIndex = FirstItem;
+        } else {
+            if (m_focusIndex < CategoryChangeBtn) m_focusIndex = FirstItem;
+        }
+    }
+
     switch (m_focusIndex) {
     case FirstItem: {
         m_searchWidget->categoryBtn()->clearFocus();
@@ -1673,28 +1689,25 @@ void FullScreenFrame::nextTabWidget()
         m_appItemDelegate->setCurrentIndex(pView->indexAt(0));
         update();
         m_navigationWidget->setCancelCurrentCategory(m_currentCategory);
-        m_focusIndex = SearchEdit;
     }
     break;
     case SearchEdit: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
         m_searchWidget->edit()->lineEdit()->setFocus();
-        m_focusIndex = CategoryChangeBtn;
     }
     break;
     case CategoryChangeBtn: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
         m_searchWidget->categoryBtn()->setFocus();
-        m_focusIndex = (m_displayMode != GROUP_BY_CATEGORY) ? FirstItem : CategoryTital;
+        m_navigationWidget->setCancelCurrentCategory(m_currentCategory);
+
     }
     break;
     case CategoryTital: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
-
         if (m_currentCategory < AppsListModel::Internet) m_currentCategory = AppsListModel::Internet;
         m_navigationWidget->setCurrentCategory(m_currentCategory);
         m_navigationWidget->button(m_currentCategory)->setFocus();
-        m_focusIndex = FirstItem;
     }
     break;
     }

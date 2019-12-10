@@ -74,7 +74,7 @@ public:
     int dockPosition();
     void updateDisplayMode(const int mode);
 
-    void nextTabWidget();
+    void nextTabWidget(int key);
 signals:
     void visibleChanged(bool visible);
     void displayModeChanged(const int mode);

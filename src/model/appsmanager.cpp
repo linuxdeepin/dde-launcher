@@ -556,7 +556,7 @@ void AppsManager::ReflashSortList()
             index ++;
         }
     }
-    m_pageCount = index + 1;
+    m_pageCount = (m_usedSortedList.size() % m_calUtil->appPageItemCount()) ? index + 1 : index;
 }
 
 void AppsManager::refreshCategoryInfoList()

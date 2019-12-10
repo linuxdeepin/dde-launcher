@@ -151,6 +151,7 @@ private slots:
     void refershCurrentFloatTitle();
     void nextTabWidget(int key);
 
+    void reflashPageView();
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
     AppGridView *categoryView(const AppsListModel::AppCategory category) const;
@@ -186,6 +187,7 @@ private:
     SearchWidget *m_searchWidget;
     AppListArea *m_appsArea;    // app 滚动区域
     DHBoxWidget *m_appsHbox;    // app 分组
+    QHBoxLayout *m_iconHLayout;
 
     QWidget *m_viewListPlaceholder;
     QLabel *m_tipsLabel;

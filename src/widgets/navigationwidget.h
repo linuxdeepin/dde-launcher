@@ -47,6 +47,7 @@ signals:
 
 public slots:
     void setCurrentCategory(const AppsListModel::AppCategory category);
+    void setCancelCurrentCategory(const AppsListModel::AppCategory category);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
 
 protected:

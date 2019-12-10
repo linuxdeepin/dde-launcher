@@ -70,6 +70,14 @@ void NavigationWidget::setCurrentCategory(const AppsListModel::AppCategory categ
         btn->setChecked(true);
 }
 
+void NavigationWidget::setCancelCurrentCategory(const AppsListModel::AppCategory category)
+{
+    CategoryButton *btn = button(category);
+
+    if (btn)
+        btn->setChecked(false);
+}
+
 void NavigationWidget::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
 {
     QAbstractButton *btn = button(category);
@@ -109,7 +117,7 @@ void NavigationWidget::initUI()
     mainLayout->addWidget(m_systemBtn);
     mainLayout->addWidget(m_othersBtn);
     mainLayout->addStretch();
-    mainLayout->setSpacing(0);
+    mainLayout->setSpacing(30);
     mainLayout->setMargin(30);
 
     setLayout(mainLayout);

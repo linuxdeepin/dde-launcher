@@ -286,7 +286,7 @@ void AppGridView::startDrag(const QModelIndex &index)
 
 bool AppGridView::eventFilter(QObject *o, QEvent *e)
 {
-    qDebug("AppGridView::eventFilter");
+    //qDebug("AppGridView::eventFilter");
     return false;
 }
 

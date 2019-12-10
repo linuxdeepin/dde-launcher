@@ -36,6 +36,9 @@
 #define BTN_WIDTH   40
 #define BTN_HEIGHT  40
 
+#define SEARCHEIT_WIDTH 479
+#define SEARCHEIT_HEIGHT 46
+
 DWIDGET_USE_NAMESPACE
 
 SearchWidget::SearchWidget(QWidget *parent) :
@@ -63,7 +66,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_searchEdit = new DSearchEdit(this);
     m_searchEdit->setAccessibleName("search-edit");
     m_searchEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    m_searchEdit->setFixedWidth(290);
+    m_searchEdit->setFixedSize(SEARCHEIT_WIDTH, SEARCHEIT_HEIGHT);
 
     DStyle::setFocusRectVisible(m_searchEdit->lineEdit(), false);
     setFocusPolicy(Qt::NoFocus);

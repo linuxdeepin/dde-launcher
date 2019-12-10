@@ -82,7 +82,7 @@ public:
     int dockPosition();
     void updateDisplayMode(const int mode);
 
-    void nextTabWidget();
+    void nextTabWidget(int key);
 signals:
     void visibleChanged(bool visible);
     void displayModeChanged(const int mode);
@@ -149,9 +149,8 @@ private slots:
     void refreshTitleVisible();
     void refershCategoryTextVisible();
     void refershCurrentFloatTitle();
-    void nextTabWidget(int key);
-
     void reflashPageView();
+
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
     AppGridView *categoryView(const AppsListModel::AppCategory category) const;

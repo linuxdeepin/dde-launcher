@@ -233,7 +233,6 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
     qSort(processList.begin(), processList.end(), [&preset](const ItemInfo & i1, const ItemInfo & i2) {
         int index1 = preset.indexOf(i1.m_key.toLower());
         int index2 = preset.indexOf(i2.m_key.toLower());
-
         if (index1 == index2) {
             // If both of them don't exist in the preset list,
             // fallback to comparing their name.
@@ -708,6 +707,7 @@ void AppsManager::generateCategoryMap()
     for (const ItemInfo &info : m_allAppInfoList) {
 
         const int userIdx = m_usedSortedList.indexOf(info);
+        qDebug() << "InstallTime: " << info.m_installedTime << info.m_openCount << info.m_name;
         // append new installed app to user sorted list
         if (userIdx == -1) {
             m_usedSortedList.append(info);
@@ -721,13 +721,14 @@ void AppsManager::generateCategoryMap()
         if (!m_appInfos.contains(category))
             m_appInfos.insert(category, ItemInfoList());
 
-        if (!m_newInstalledAppsList.contains(info.m_key)){
+
+        //m_appInfos[category].append(info);
+        if (!m_newInstalledAppsList.contains(info.m_key)) {
             m_appInfos[category].append(info);
         } else {
             newInstallAppList.append(info);
         }
     }
-
 
     sortByInstallTimeOrder(newInstallAppList);
     if (!newInstallAppList.isEmpty()) {

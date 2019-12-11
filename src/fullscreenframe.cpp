@@ -127,9 +127,9 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_developmentTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Development"))),
     m_systemTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "System"))),
     m_othersTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", "Others")))
-    , m_topSpacing(new QFrame)
-    , m_bottomSpacing(new QFrame)
-    , m_contentFrame(new QFrame)
+  , m_topSpacing(new QFrame)
+  , m_bottomSpacing(new QFrame)
+  , m_contentFrame(new QFrame)
 {
     setFocusPolicy(Qt::ClickFocus);
     setAttribute(Qt::WA_InputMethodEnabled, true);
@@ -192,7 +192,7 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
     m_currentCategory = category;
 
     // scroll to destination
-//    m_appsArea->verticalScrollBar()->setValue(dest->pos().y());
+    //    m_appsArea->verticalScrollBar()->setValue(dest->pos().y());
     m_scrollDest = dest;
     m_scrollAnimation->stop();
     m_scrollAnimation->setStartValue(m_appsArea->verticalScrollBar()->value());
@@ -273,7 +273,7 @@ void FullScreenFrame::showEvent(QShowEvent *e)
         m_appsManager->refreshAllList();
     }
 
-    m_nextFocusIndex = Category;
+    m_nextFocusIndex = Applist;
     m_currentFocusIndex = m_nextFocusIndex;
     QFrame::showEvent(e);
 
@@ -388,7 +388,7 @@ void FullScreenFrame::initUI()
     m_tipsLabel->setFixedSize(500, 50);
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setStyleSheet("color:rgba(238, 238, 238, .6);"
-//                               "background-color:red;"
+                               //                               "background-color:red;"
                                "font-size:22px;");
 
     m_delayHideTimer->setInterval(500);
@@ -410,10 +410,10 @@ void FullScreenFrame::initUI()
     m_appsArea->viewport()->installEventFilter(this);
     m_appsArea->installEventFilter(this);
 
-//    m_othersView->installEventFilter(this);
-//    m_navigationWidget->installEventFilter(this);
+    //    m_othersView->installEventFilter(this);
+    //    m_navigationWidget->installEventFilter(this);
     m_searchWidget->edit()->installEventFilter(this);
-//    qApp->installEventFilter(this);
+    //    qApp->installEventFilter(this);
 
     m_allAppsView->setAccessibleName("all");
     m_allAppsView->setModel(m_allAppsModel);
@@ -1087,7 +1087,7 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
     buttons << tr("Cancel") << tr("Confirm");
     unInstallDialog.addButtons(buttons);
 
-//    connect(&unInstallDialog, SIGNAL(buttonClicked(int, QString)), this, SLOT(handleUninstallResult(int, QString)));
+    //    connect(&unInstallDialog, SIGNAL(buttonClicked(int, QString)), this, SLOT(handleUninstallResult(int, QString)));
     connect(&unInstallDialog, &DTK_WIDGET_NAMESPACE::DDialog::buttonClicked, [&](int clickedResult) {
         // 0 means "cancel" button clicked
         if (clickedResult == 0)
@@ -1097,7 +1097,7 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
     });
 
     unInstallDialog.exec();
-//    unInstallDialog.deleteLater();
+    //    unInstallDialog.deleteLater();
     m_isConfirmDialogShown = false;
 }
 
@@ -1402,7 +1402,7 @@ void FullScreenFrame::nextTabWidget(int key)
             m_currentFocusIndex = m_nextFocusIndex;
             m_nextFocusIndex = Category;
         }
-        break;
+            break;
         case Category: {
             m_searchWidget->m_toggleCategoryBtn->setFocus();
             m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Hover);
@@ -1410,15 +1410,25 @@ void FullScreenFrame::nextTabWidget(int key)
             m_currentFocusIndex = m_nextFocusIndex;
             m_nextFocusIndex = Search;
         }
-        break;
+            break;
         case Search: {
             m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Normal);
             m_searchWidget->edit()->setFocus();
             m_searchWidget->m_searchEdit->editMode();
             m_currentFocusIndex = m_nextFocusIndex;
+            m_nextFocusIndex = Default;
+        }
+            break;
+        case Default:
+        {
+            m_searchWidget->edit()->clearFocus();
+            m_searchWidget->m_searchEdit->normalMode();
+            m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Normal);
+            m_appItemDelegate->setCurrentIndex(QModelIndex());
+            m_currentFocusIndex = m_nextFocusIndex;
             m_nextFocusIndex = Applist;
         }
-        break;
+            break;
         }
     }
     else {
@@ -1428,9 +1438,9 @@ void FullScreenFrame::nextTabWidget(int key)
             m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Normal);
             update();
             m_currentFocusIndex = m_nextFocusIndex;
-            m_nextFocusIndex = Search;
+            m_nextFocusIndex = Default;
         }
-        break;
+            break;
         case Category: {
             m_searchWidget->m_toggleCategoryBtn->setFocus();
             m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Hover);
@@ -1438,14 +1448,24 @@ void FullScreenFrame::nextTabWidget(int key)
             m_currentFocusIndex = m_nextFocusIndex;
             m_nextFocusIndex = Applist;
         }
-        break;
+            break;
         case Search: {
             m_searchWidget->edit()->setFocus();
             m_appItemDelegate->setCurrentIndex(QModelIndex());
             m_currentFocusIndex = m_nextFocusIndex;
             m_nextFocusIndex = Category;
         }
-        break;
+            break;
+        case Default:
+        {
+            m_searchWidget->edit()->clearFocus();
+            m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Normal);
+            m_searchWidget->m_searchEdit->normalMode();
+            m_appItemDelegate->setCurrentIndex(QModelIndex());
+            m_currentFocusIndex = m_nextFocusIndex;
+            m_nextFocusIndex = Search;
+        }
+            break;
         }
     }
 }

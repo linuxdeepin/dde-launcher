@@ -68,6 +68,7 @@ public:
         Applist,
         Category,
         Search,
+        Default
     };
 
     void exit();

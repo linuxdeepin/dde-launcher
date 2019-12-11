@@ -466,6 +466,10 @@ void WindowedFrame::launchCurrentApp()
     } else if (m_focusPos == LeftBottom) {
         m_switchBtn->click();
         return;
+    } else if(m_focusPos == Default)
+    {
+        const QModelIndex index = m_appsView->model()->sibling(0,0,QModelIndex());
+        m_appsManager->launchApp(index);
     }
 
     if (m_displayMode == Category && m_appsModel->category() == AppsListModel::Category) {

@@ -23,11 +23,10 @@
 
 #include <QHBoxLayout>
 
-MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, int space, QWidget *parent)
+MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget *parent)
     : QWidget(parent)
     , m_pageCount(0)
     , m_pageIndex(0)
-    , m_viewSpace(space)
     , m_appModel(categoryModel)
     , m_appsManager(AppsManager::instance())
     , m_calcUtil(CalculateUtil::instance())
@@ -57,7 +56,7 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, int spa
     connect(m_appListArea, &AppListArea::decreaseIcon, this, [ = ] { m_calcUtil->decreaseIconSize(); emit m_appsManager->layoutChanged(m_appModel); });
 }
 
-void MultiPagesView::UpdatePageCount(int pageCount)
+void MultiPagesView::updatePageCount(int pageCount)
 {
     if (0 == pageCount || pageCount == m_pageCount)
         return;
@@ -119,9 +118,22 @@ void MultiPagesView::setDataDelegate(QAbstractItemDelegate *delegate)
     Init();
 }
 
+void MultiPagesView::setSearchModel(AppsListModel* appMode, bool bSearch)
+{
+    AppsListModel *pAppModel = bSearch? appMode: m_pageAppsModelList[0];
+    m_appGridViewList[0]->setModel(pAppModel);
+
+    for (int i = 0; i < m_pageCount; i++) {
+        m_floatBtnList[i]->setVisible(!bSearch);
+
+        if (0 != i)
+            m_appGridViewList[i]->setVisible(!bSearch);
+    }
+}
+
 void MultiPagesView::Init()
 {
-    m_pHBoxLayout->layout()->setSpacing(m_viewSpace);
+    m_pHBoxLayout->layout()->setSpacing(VIEW_SPACE);
 
     m_iconLayout->setMargin(0);
     m_iconLayout->setSpacing(ICON_SPACE);
@@ -242,13 +254,4 @@ void MultiPagesView::wheelEvent(QWheelEvent *e)
 
     if (page != m_pageIndex)
         showCurrentPage(page);
-}
-
-bool MultiPagesView::eventFilter(QObject *o, QEvent *e)
-{
-//    if (Qt::Key_Down == e->type())
-//    {
-//        return true;
-//    }
-    return false;
 }

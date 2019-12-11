@@ -41,6 +41,7 @@
 DWIDGET_USE_NAMESPACE
 
 #define     ICON_SPACE      10
+#define     VIEW_SPACE      20
 
 typedef QList<DFloatingButton *> FloatBtnList;
 
@@ -48,9 +49,9 @@ class MultiPagesView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MultiPagesView(AppsListModel::AppCategory categoryModel = AppsListModel::All, int space = RIGHT_PADDING, QWidget *parent = nullptr);
+    explicit MultiPagesView(AppsListModel::AppCategory categoryModel = AppsListModel::All, QWidget *parent = nullptr);
 
-    void UpdatePageCount(int pageCount);
+    void updatePageCount(int pageCount);
     void showCurrentPage(int currentPage);
     QModelIndex selectApp(const int key);
     AppGridView* pageView(int pageIndex);
@@ -58,6 +59,7 @@ public:
 
     QModelIndex getAppItem(int index);
     void setDataDelegate(QAbstractItemDelegate* delegate);
+    void setSearchModel(AppsListModel* appMode, bool bSearch);
 signals:
 
 private slots:
@@ -66,13 +68,11 @@ private slots:
 
 protected:
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
     void Init();
 
 private:
     int m_pageCount;
     int m_pageIndex;
-    int m_viewSpace;
     AppsListModel::AppCategory m_appModel;
 
     AppsManager *m_appsManager;

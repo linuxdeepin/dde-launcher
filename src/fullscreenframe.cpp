@@ -584,7 +584,7 @@ void FullScreenFrame::initUI()
 
     m_multiPagesView->setAccessibleName("all");
     m_multiPagesView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesView->UpdatePageCount(m_appsManager->getPageCount());
+    m_multiPagesView->updatePageCount(m_appsManager->getPageCount());
     m_multiPagesView->installEventFilter(this);
 
     m_internetView->setAccessibleName("internet");
@@ -1361,7 +1361,7 @@ void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
 
 void FullScreenFrame::reflashPageView()
 {
-    m_multiPagesView->UpdatePageCount(m_appsManager->getPageCount());
+    m_multiPagesView->updatePageCount(m_appsManager->getPageCount());
 }
 
 void FullScreenFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
@@ -1397,18 +1397,8 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     }
 
     bool isCategoryMode = m_displayMode == GROUP_BY_CATEGORY;
-//    m_pageCurrent = (m_displayMode == SEARCH) ? 0 : m_pageCurrent;
 
-//    for (int i = 0; i < m_appsManager->getPageCount(); i++) {
-//        if (m_displayMode == SEARCH) {
-//            m_pageAppsViewList[i]->setVisible(i == 0);
-//            m_floatBtnList[i]->setVisible(i == 0);
-//            m_floatBtnList[i]->setIcon((i == 0) ? m_iconViewActive : m_iconView);
-//        } else {
-//            m_pageAppsViewList[i]->setVisible(!isCategoryMode);
-//            m_floatBtnList[i]->setVisible(!isCategoryMode);
-//        }
-//    }
+    m_multiPagesView->setVisible(!isCategoryMode);
 
     m_internetTitle->setVisible(isCategoryMode);
     m_internetView->setVisible(isCategoryMode);
@@ -1447,7 +1437,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     m_viewListPlaceholder->setVisible(isCategoryMode);
     m_navigationWidget->setVisible(isCategoryMode);
 
-//    m_pageAppsViewList[0]->setModel(m_displayMode == SEARCH ? m_searchResultModel : m_pageAppsModelList[0]);
+    m_multiPagesView->setSearchModel(m_searchResultModel, m_displayMode==SEARCH);
     // choose nothing
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
@@ -1676,13 +1666,12 @@ void FullScreenFrame::layoutChanged()
         const int appsContentWidth = (width() - LEFT_PADDING - RIGHT_PADDING);
         boxSize.setWidth(appsContentWidth);
         boxSize.setHeight(m_appsArea->height()- m_topSpacing->height());
+        m_multiPagesView->setFixedSize(boxSize);
     } else {
         boxSize = m_calcUtil->getAppBoxSize();
     }
 
     m_appsHbox->setFixedHeight(m_appsArea->height());
-
-    m_multiPagesView->setFixedSize(boxSize);
 
     m_internetBoxWidget->setMaskSize(boxSize);
     m_internetView->setFixedSize(boxSize);

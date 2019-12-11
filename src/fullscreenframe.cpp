@@ -88,6 +88,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_tipsLabel(new QLabel(this)),
     m_appItemDelegate(new AppItemDelegate),
 
+    m_multiPagesView(new MultiPagesView()),
     m_internetView(new AppGridView),
     m_chatView(new AppGridView),
     m_musicView(new AppGridView),
@@ -143,28 +144,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     , m_displayInter(new DBusDisplay(this))
 {
     m_focusIndex = 0;
-    m_pageCurrent = 0;
     //m_currentCategory = AppsListModel::Internet;
-    m_iconViewActive = QIcon(":/widgets/images/page_indicator_active.svg");
-    m_iconView = QIcon(":/widgets/images/page_indicator.svg");
-    int pageCount = m_appsManager->getPageCount();
-    for (int i = 0; i < pageCount; i++) {
-        AppGridView *pView = new AppGridView;
-        m_pageAppsViewList.push_back(pView);
-
-        AppsListModel *pModel = new AppsListModel(AppsListModel::All);
-        pModel->setPageIndex(i);
-        m_pageAppsModelList.push_back(pModel);
-
-        DFloatingButton *pBtn = new DFloatingButton(this);
-        QIcon iconSelect = (i == m_pageCurrent) ? m_iconViewActive : m_iconView;
-        pBtn->setIcon(iconSelect);
-        pBtn->setIconSize(QSize(20, 20));
-        pBtn->setFixedSize(QSize(20, 20));
-        pBtn->setBackgroundRole(DPalette::Button);
-        connect(pBtn, &DFloatingButton::clicked, this, &FullScreenFrame::pageBtnClick);
-        m_floatBtnList.push_back(pBtn);
-    }
 
     setFocusPolicy(Qt::NoFocus);
 
@@ -231,27 +211,6 @@ int FullScreenFrame::dockPosition()
 {
     return m_appsManager->dockPosition();
 }
-
-void FullScreenFrame::scrollToPage(const AppsListModel::AppCategory &category)
-{
-    QWidget *dest = categoryView(category);
-    if (!dest)
-        return;
-
-    m_currentCategory = category;
-
-    m_scrollDest = dest;
-    m_scrollAnimation->stop();
-    m_scrollAnimation->setStartValue(m_appsArea->horizontalScrollBar()->value());
-    m_scrollAnimation->setEndValue(dest->x());
-    m_scrollAnimation->start();
-
-    for (int i = 0; i < m_appsManager->getPageCount(); i++) {
-        m_floatBtnList[i]->setIcon(m_iconView);
-    }
-    m_floatBtnList[m_pageCurrent]->setIcon(m_iconViewActive);
-}
-
 
 void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &category, int nNext)
 {
@@ -474,16 +433,6 @@ void FullScreenFrame::hideEvent(QHideEvent *e)
     m_clearCacheTimer->start();
 }
 
-void FullScreenFrame::pageBtnClick()
-{
-    for (int i = 0; i < m_floatBtnList.size(); i++) {
-        if (sender() == m_floatBtnList[i]) {
-            m_pageCurrent = i;
-            emit scrollChanged(AppsListModel::All);
-            break;
-        }
-    }
-}
 
 void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
 {
@@ -539,19 +488,6 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
         return;
     }
 
-    if (m_scrollAnimation->state() == QPropertyAnimation::Running)
-        return;
-
-    int page = m_pageCurrent;
-    if (e->delta() > 0) {
-        if (m_pageCurrent - 1 >= 0)
-            -- m_pageCurrent;
-    } else if (e->delta() < 0) {
-        if (m_pageCurrent + 1 < m_appsManager->getPageCount())
-            ++ m_pageCurrent;
-    }
-    if (page != m_pageCurrent)
-        emit scrollChanged(AppsListModel::All);
 }
 
 ///
@@ -646,24 +582,10 @@ void FullScreenFrame::initUI()
     m_searchWidget->installEventFilter(m_eventFilter);
     m_appItemDelegate->installEventFilter(m_eventFilter);
 
-    m_iconHLayout = new QHBoxLayout;
-    m_iconHLayout->setSpacing(10);
-    m_iconHLayout->addStretch();
-
-    for (int i = 0; i < m_appsManager->getPageCount(); i++) {
-        QString name = QString("page%1").arg(i + 1);
-        m_pageAppsViewList[i]->setAccessibleName(name);
-        m_pageAppsViewList[i]->setModel(m_pageAppsModelList[i]);
-        m_pageAppsViewList[i]->setItemDelegate(m_appItemDelegate);
-        m_pageAppsViewList[i]->setContainerBox(m_appsArea);
-
-        m_appsHbox->layout()->addWidget(m_pageAppsViewList[i]);
-        m_appsHbox->layout()->addSpacing(RIGHT_PADDING);
-        m_appsArea->addWidget(m_pageAppsViewList[i]->viewport());
-
-        m_iconHLayout->addWidget(m_floatBtnList[i]);
-    }
-    m_iconHLayout->addStretch();
+    m_multiPagesView->setAccessibleName("all");
+    m_multiPagesView->setDataDelegate(m_appItemDelegate);
+    m_multiPagesView->UpdatePageCount(m_appsManager->getPageCount());
+    m_multiPagesView->installEventFilter(this);
 
     m_internetView->setAccessibleName("internet");
     m_internetView->setModel(m_internetModel);
@@ -722,6 +644,8 @@ void FullScreenFrame::initUI()
     m_developmentTitle->setTextVisible(true);
     m_systemTitle->setTextVisible(true);
     m_othersTitle->setTextVisible(true);
+
+    m_appsHbox->layout()->addWidget(m_multiPagesView);
 
     m_internetBoxWidget->layoutAddWidget(m_internetTitle, m_internetView->width() / 2, Qt::AlignHCenter);
     m_internetBoxWidget->layout()->addWidget(m_internetView);
@@ -827,7 +751,6 @@ void FullScreenFrame::initUI()
     m_mainLayout->addWidget(m_searchWidget);
     m_mainLayout->addWidget(m_navigationWidget, 0, Qt::AlignHCenter);
     m_mainLayout->addWidget(m_appsArea);
-    m_mainLayout->addLayout(m_iconHLayout);
     m_mainLayout->addWidget(m_bottomSpacing);
 
     setLayout(m_mainLayout);
@@ -919,7 +842,7 @@ AppGridView *FullScreenFrame::categoryView(const AppsListModel::AppCategory cate
     case AppsListModel::Development:    view = m_developmentView;   break;
     case AppsListModel::System:         view = m_systemView;        break;
     case AppsListModel::Others:         view = m_othersView;        break;
-    case AppsListModel::All:            view = m_pageAppsViewList[m_pageCurrent];   break;
+//    case AppsListModel::All:            view = m_pageAppsViewList[m_pageCurrent];   break;
     default:;
     }
 
@@ -979,9 +902,6 @@ AppGridView *FullScreenFrame::lastVisibleView() const
 
 void FullScreenFrame::initConnection()
 {
-    connect(m_appsArea, &AppListArea::increaseIcon, this, [ = ] { m_calcUtil->increaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
-    connect(m_appsArea, &AppListArea::decreaseIcon, this, [ = ] { m_calcUtil->decreaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
-
     connect(qApp, &QApplication::primaryScreenChanged, this, &FullScreenFrame::updateGeometry);
     connect(qApp->primaryScreen(), &QScreen::geometryChanged, this, &FullScreenFrame::updateGeometry);
     connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &FullScreenFrame::updateGeometry, Qt::QueuedConnection);
@@ -991,7 +911,6 @@ void FullScreenFrame::initConnection()
     //connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullScreenFrame::ensureScrollToDest);
     connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &FullScreenFrame::refershCurrentFloatTitle, Qt::QueuedConnection);
     connect(m_navigationWidget, &NavigationWidget::scrollToCategory, this, &FullScreenFrame::scrollToCategory);
-    connect(this, &FullScreenFrame::scrollChanged, this, &FullScreenFrame::scrollToPage);
 
     connect(this, &FullScreenFrame::currentVisibleCategoryChanged, m_navigationWidget, &NavigationWidget::setCurrentCategory);
     connect(this, &FullScreenFrame::categoryAppNumsChanged, m_navigationWidget, &NavigationWidget::refershCategoryVisible);
@@ -1004,27 +923,27 @@ void FullScreenFrame::initConnection()
     connect(m_clearCacheTimer, &QTimer::timeout, m_appsManager, &AppsManager::clearCache);
 
     // auto scroll when drag to app list box border
-    connect(m_pageAppsViewList[0], &AppGridView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
-    connect(m_autoScrollTimer, &QTimer::timeout, [this] {
-        m_appsArea->horizontalScrollBar()->setValue(m_appsArea->horizontalScrollBar()->value() + m_autoScrollStep);
-    });
-    connect(m_pageAppsViewList[0], &AppGridView::requestScrollUp, [this] {
-        m_autoScrollStep = -DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
-        if (!m_autoScrollTimer->isActive())
-            m_autoScrollTimer->start();
-    });
-    connect(m_pageAppsViewList[0], &AppGridView::requestScrollDown, [this] {
-        m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
-        if (!m_autoScrollTimer->isActive())
-            m_autoScrollTimer->start();
-    });
+//    connect(m_pageAppsViewList[0], &AppGridView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
+//    connect(m_autoScrollTimer, &QTimer::timeout, [this] {
+//        m_appsArea->horizontalScrollBar()->setValue(m_appsArea->horizontalScrollBar()->value() + m_autoScrollStep);
+//    });
+//    connect(m_pageAppsViewList[0], &AppGridView::requestScrollUp, [this] {
+//        m_autoScrollStep = -DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
+//        if (!m_autoScrollTimer->isActive())
+//            m_autoScrollTimer->start();
+//    });
+//    connect(m_pageAppsViewList[0], &AppGridView::requestScrollDown, [this] {
+//        m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
+//        if (!m_autoScrollTimer->isActive())
+//            m_autoScrollTimer->start();
+//    });
 
-    for (auto pageView : m_pageAppsViewList) {
-        connect(pageView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-        connect(pageView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-        connect(pageView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-        connect(pageView, &AppGridView::clicked, this, &FullScreenFrame::hide);
-        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pageView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    for (int i=0; i<m_appsManager->getPageCount(); i++) {
+        connect(m_multiPagesView->pageView(i), &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+        connect(m_multiPagesView->pageView(i), &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+        connect(m_multiPagesView->pageView(i), &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+        connect(m_multiPagesView->pageView(i), &AppGridView::clicked, this, &FullScreenFrame::hide);
+        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_multiPagesView->pageView(i), static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
     }
 
     connect(m_internetView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
@@ -1099,8 +1018,6 @@ void FullScreenFrame::initConnection()
     connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
     connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::updateDockPosition);
     connect(m_appsManager, &AppsManager::dataChanged, [this] {reflashPageView();});
-
-
 }
 
 void FullScreenFrame::showLauncher()
@@ -1182,9 +1099,17 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     const QModelIndex currentIndex = m_appItemDelegate->currentIndex();
     // move operation should be start from a valid location, if not, just init it.
     if (!currentIndex.isValid()) {
-        if (m_currentCategory < AppsListModel::Internet) m_currentCategory = AppsListModel::Internet;
-        m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? categoryView(m_currentCategory)->indexAt(0) : m_pageAppsViewList[m_pageCurrent]->indexAt(0));
+        if (m_currentCategory < AppsListModel::Internet)
+            m_currentCategory = AppsListModel::Internet;
+
+        if (m_displayMode == GROUP_BY_CATEGORY)
+            m_appItemDelegate->setCurrentIndex(categoryView(m_currentCategory)->indexAt(0));
+        else
+            m_appItemDelegate->setCurrentIndex(m_multiPagesView->getAppItem(0));
+
+//        m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? categoryView(m_currentCategory)->indexAt(0) : m_pageAppsViewList[m_pageCurrent]->indexAt(0));
         update();
+
         return;
     }
 
@@ -1223,21 +1148,8 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
 
     //to next page
     if (m_displayMode == ALL_APPS && !index.isValid()) {
-        int page = m_pageCurrent;
-        int itemSelect = 0;
-        if (Qt::Key_Left == key || Qt::Key_Up == key) {
-            if (m_pageCurrent - 1 >= 0) {
-                -- m_pageCurrent;
-                itemSelect = m_calcUtil->appPageItemCount() - 1;
-            }
-        } else {
-            if (m_pageCurrent + 1 < m_appsManager->getPageCount())
-                ++ m_pageCurrent;
-        }
-        if (page != m_pageCurrent)
-            emit scrollChanged(AppsListModel::All);
-
-        index = m_pageAppsViewList[m_pageCurrent]->indexAt(itemSelect);
+        index = m_multiPagesView->selectApp(key);
+        index = index.isValid()? index: currentIndex;
     }
 
     // now, we need to check and fix if destination is invalid.
@@ -1313,7 +1225,8 @@ void FullScreenFrame::launchCurrentApp()
 
     switch (m_displayMode) {
     case SEARCH:
-    case ALL_APPS:            m_appsManager->launchApp(m_pageAppsViewList[m_pageCurrent]->indexAt(0));     break;
+    case ALL_APPS:            m_appsManager->launchApp(m_multiPagesView->getAppItem(0));     break;
+//    case ALL_APPS:            m_appsManager->launchApp(m_pageAppsViewList[m_pageCurrent]->indexAt(0));     break;
     case GROUP_BY_CATEGORY:   m_appsManager->launchApp(m_internetView->indexAt(0));    break;
     }
 
@@ -1363,8 +1276,9 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
 
 void FullScreenFrame::uninstallApp(const QString &appKey)
 {
-    for (auto pageModel : m_pageAppsModelList)
-        uninstallApp(pageModel->indexAt(appKey));
+    for (int i=0; i<m_appsManager->getPageCount(); i++) {
+        uninstallApp(m_multiPagesView->pageModel(i)->indexAt(appKey));
+    }
 
 }
 
@@ -1429,10 +1343,10 @@ void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
     AppGridView *view = nullptr;
     const AppsListModel::AppCategory category = index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 
-    if (m_displayMode == SEARCH || m_displayMode == ALL_APPS)
-        view = m_pageAppsViewList[m_pageCurrent];
-    else
-        view = categoryView(category);
+//    if (m_displayMode == SEARCH || m_displayMode == ALL_APPS)
+//        view = m_pageAppsViewList[m_pageCurrent];
+//    else
+//        view = categoryView(category);
 
     if (!view)
         return;
@@ -1447,66 +1361,7 @@ void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
 
 void FullScreenFrame::reflashPageView()
 {
-    int pageCount = m_appsManager->getPageCount();
-    int currentCount = m_pageAppsViewList.size();
-    if (currentCount == pageCount)
-        return;
-
-    if (currentCount < pageCount) {
-        while (currentCount < pageCount) {
-            AppGridView *pView = new AppGridView;
-            m_pageAppsViewList.push_back(pView);
-            AppsListModel *pModel = new AppsListModel(AppsListModel::All);
-            pModel->setPageIndex(currentCount);
-            m_pageAppsModelList.push_back(pModel);
-
-            QString name = QString("page%1").arg(currentCount);
-            pView->setAccessibleName(name);
-            pView->setModel(pModel);
-            pView->setItemDelegate(m_appItemDelegate);
-            pView->setContainerBox(m_appsArea);
-
-            connect(pView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-            connect(pView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-            connect(pView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-            connect(pView, &AppGridView::clicked, this, &FullScreenFrame::hide);
-            connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
-
-            m_appsHbox->layout()->insertWidget(currentCount * 2, pView);
-            m_appsHbox->layout()->insertSpacing(currentCount * 2 + 1, RIGHT_PADDING);
-            m_appsArea->addWidget(pView->viewport());
-
-            DFloatingButton *pBtn = new DFloatingButton(this);
-            pBtn->setIcon(m_iconView);
-            pBtn->setIconSize(QSize(20, 20));
-            pBtn->setFixedSize(QSize(20, 20));
-            pBtn->setBackgroundRole(DPalette::Button);
-            connect(pBtn, &DFloatingButton::clicked, this, &FullScreenFrame::pageBtnClick);
-            m_floatBtnList.push_back(pBtn);
-
-            m_iconHLayout->insertWidget(currentCount + 1, pBtn);
-
-            currentCount ++;
-        }
-    } else {
-        while (currentCount > pageCount) {
-            QLayoutItem *item = m_appsHbox->layout()->itemAt(currentCount * 2 - 2);
-            m_appsHbox->layout()->removeItem(item);
-            item = m_appsHbox->layout()->itemAt(currentCount * 2 - 2);
-            m_appsHbox->layout()->removeItem(item);
-            item = m_iconHLayout->itemAt(currentCount);
-            m_iconHLayout->removeItem(item);
-            item->widget()->setParent(nullptr);
-
-            m_pageAppsViewList.removeLast();
-            m_pageAppsModelList.removeLast();
-            m_floatBtnList.removeLast();
-
-            currentCount --;
-        }
-    }
-    m_pageCurrent = 0;
-    emit scrollChanged(AppsListModel::All);
+    m_multiPagesView->UpdatePageCount(m_appsManager->getPageCount());
 }
 
 void FullScreenFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
@@ -1542,18 +1397,18 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     }
 
     bool isCategoryMode = m_displayMode == GROUP_BY_CATEGORY;
-    m_pageCurrent = (m_displayMode == SEARCH) ? 0 : m_pageCurrent;
+//    m_pageCurrent = (m_displayMode == SEARCH) ? 0 : m_pageCurrent;
 
-    for (int i = 0; i < m_appsManager->getPageCount(); i++) {
-        if (m_displayMode == SEARCH) {
-            m_pageAppsViewList[i]->setVisible(i == 0);
-            m_floatBtnList[i]->setVisible(i == 0);
-            m_floatBtnList[i]->setIcon((i == 0) ? m_iconViewActive : m_iconView);
-        } else {
-            m_pageAppsViewList[i]->setVisible(!isCategoryMode);
-            m_floatBtnList[i]->setVisible(!isCategoryMode);
-        }
-    }
+//    for (int i = 0; i < m_appsManager->getPageCount(); i++) {
+//        if (m_displayMode == SEARCH) {
+//            m_pageAppsViewList[i]->setVisible(i == 0);
+//            m_floatBtnList[i]->setVisible(i == 0);
+//            m_floatBtnList[i]->setIcon((i == 0) ? m_iconViewActive : m_iconView);
+//        } else {
+//            m_pageAppsViewList[i]->setVisible(!isCategoryMode);
+//            m_floatBtnList[i]->setVisible(!isCategoryMode);
+//        }
+//    }
 
     m_internetTitle->setVisible(isCategoryMode);
     m_internetView->setVisible(isCategoryMode);
@@ -1592,7 +1447,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     m_viewListPlaceholder->setVisible(isCategoryMode);
     m_navigationWidget->setVisible(isCategoryMode);
 
-    m_pageAppsViewList[0]->setModel(m_displayMode == SEARCH ? m_searchResultModel : m_pageAppsModelList[0]);
+//    m_pageAppsViewList[0]->setModel(m_displayMode == SEARCH ? m_searchResultModel : m_pageAppsModelList[0]);
     // choose nothing
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
@@ -1743,9 +1598,16 @@ void FullScreenFrame::nextTabWidget(int key)
     switch (m_focusIndex) {
     case FirstItem: {
         m_searchWidget->categoryBtn()->clearFocus();
-        if (m_currentCategory < AppsListModel::Internet) m_currentCategory = AppsListModel::Internet;
-        AppGridView *pView = (m_displayMode == GROUP_BY_CATEGORY) ? categoryView(m_currentCategory) : m_pageAppsViewList[m_pageCurrent];
-        m_appItemDelegate->setCurrentIndex(pView->indexAt(0));
+        if (m_currentCategory < AppsListModel::Internet)
+            m_currentCategory = AppsListModel::Internet;
+
+//        AppGridView *pView = (m_displayMode == GROUP_BY_CATEGORY) ? categoryView(m_currentCategory) : m_pageAppsViewList[m_pageCurrent];
+//        m_appItemDelegate->setCurrentIndex(pView->indexAt(0));
+        if (m_displayMode == GROUP_BY_CATEGORY)
+            m_appItemDelegate->setCurrentIndex(categoryView(m_currentCategory)->indexAt(0));
+        else
+            m_appItemDelegate->setCurrentIndex(m_multiPagesView->getAppItem(0));
+
         update();
         m_navigationWidget->setCancelCurrentCategory(m_currentCategory);
     }
@@ -1813,15 +1675,14 @@ void FullScreenFrame::layoutChanged()
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
         const int appsContentWidth = (width() - LEFT_PADDING - RIGHT_PADDING);
         boxSize.setWidth(appsContentWidth);
-        boxSize.setHeight(m_appsArea->height());
+        boxSize.setHeight(m_appsArea->height()- m_topSpacing->height());
     } else {
         boxSize = m_calcUtil->getAppBoxSize();
     }
 
     m_appsHbox->setFixedHeight(m_appsArea->height());
 
-    for (auto pageView : m_pageAppsViewList)
-        pageView->setFixedSize(boxSize);
+    m_multiPagesView->setFixedSize(boxSize);
 
     m_internetBoxWidget->setMaskSize(boxSize);
     m_internetView->setFixedSize(boxSize);

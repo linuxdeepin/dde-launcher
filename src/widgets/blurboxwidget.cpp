@@ -1,5 +1,6 @@
 #include "blurboxwidget.h"
 #include "src/global_util/calculate_util.h"
+#include <QPainter>
 
 DWIDGET_USE_NAMESPACE
 BlurBoxWidget::BlurBoxWidget(QWidget *parent)
@@ -16,7 +17,6 @@ BlurBoxWidget::BlurBoxWidget(QWidget *parent)
 
     setLayout(m_vLayout);
     m_vLayout->setContentsMargins(60, 27, 30, 0);
-    //m_vLayout->setSpacing(0);
     m_vLayout->setAlignment(Qt::AlignTop);
 }
 
@@ -28,6 +28,23 @@ void BlurBoxWidget::layoutAddWidget(QWidget *child)
 void BlurBoxWidget::layoutAddWidget(QWidget *child, int stretch, Qt::Alignment alignment)
 {
     m_vLayout->addWidget(child, stretch, alignment);
+}
+
+void BlurBoxWidget::paintEvent(QPaintEvent *event)
+{
+    DBlurEffectWidget::paintEvent(event);
+    if (m_maskLayer) {
+        QPainter painter(this);
+        m_maskLayer->raise();
+        painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
+        painter.setBrush(QBrush(QColor(0, 0, 0, 100)));
+        painter.setPen(Qt::transparent);
+        QRect rect = this->rect();
+        rect.setWidth(rect.width() - 1);
+        rect.setHeight(rect.height() - 1);
+        painter.drawRoundedRect(rect, DLauncher::APPHBOX_RADIUS, DLauncher::APPHBOX_RADIUS);
+        QWidget::paintEvent(event);
+    }
 }
 
 void BlurBoxWidget::mousePressEvent(QMouseEvent *e)
@@ -52,7 +69,6 @@ void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
 
 void BlurBoxWidget::setMaskSize(QSize size)
 {
-    m_maskLayer->move(0, -3);
     m_maskLayer->setFixedSize(size);
     m_maskLayer->raise();
 }

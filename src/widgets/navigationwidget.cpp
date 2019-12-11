@@ -103,7 +103,6 @@ void NavigationWidget::initUI()
     m_internetBtn->setChecked(true);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addSpacing(30);
     mainLayout->addStretch();
     mainLayout->addWidget(m_internetBtn);
     mainLayout->addWidget(m_chatBtn);

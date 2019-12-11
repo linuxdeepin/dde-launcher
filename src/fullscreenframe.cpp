@@ -253,7 +253,7 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
     m_currentBox = m_currentCategory - 4;
 
-    const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  LEFT_PADDING * 2) / 2 ;
+    const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  LEFT_PADDING * 2 - 20) / 2 ;
 
     m_scrollDest = dest;
     int endValue = dest->x() - temp;
@@ -275,7 +275,7 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category)
     m_currentCategory =  AppsListModel::AppCategory(m_currentBox + 4);
     setCategoryIndex(m_currentCategory);
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
-    const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  LEFT_PADDING * 2) / 2 ;
+    const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  LEFT_PADDING * 2 - 20) / 2 ;
     m_scrollDest = dest;
 
     m_scrollAnimation->stop();

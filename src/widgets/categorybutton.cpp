@@ -92,14 +92,8 @@ void CategoryButton::setInfoByCategory()
         m_iconName = "others";                      break;
     }
 
-
     const auto ratio = devicePixelRatioF();
-
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
-        m_systemTheme = "_dark";
-    } else {
-        m_systemTheme = "";
-    }
+    m_systemTheme = "_dark";
     m_icon = loadSvg(QString(":/icons/skin/icons/category_%1%2.svg").arg(m_iconName, m_systemTheme), DLauncher::NAVIGATION_ICON_SIZE * ratio);
     m_icon.setDevicePixelRatio(qApp->devicePixelRatio());
 }

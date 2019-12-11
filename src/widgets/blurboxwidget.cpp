@@ -17,7 +17,8 @@ BlurBoxWidget::BlurBoxWidget(QWidget *parent)
     setFixedWidth(m_calcUtil->getAppBoxSize().width());
 
     setLayout(m_vLayout);
-    m_vLayout->setSpacing(10);
+    m_vLayout->setContentsMargins(60, 27, 30, 0);
+    //m_vLayout->setSpacing(0);
     m_vLayout->setAlignment(Qt::AlignTop);
 }
 

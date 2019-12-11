@@ -70,7 +70,7 @@ AppGridView::AppGridView(QWidget *parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(QFrame::NoFrame);
-    setViewportMargins(40, 0, 0, 0);
+    setViewportMargins(0, 0, 0, 0);
 
     // init origin size
     setFixedSize(qApp->primaryScreen()->size());
@@ -85,11 +85,6 @@ AppGridView::AppGridView(QWidget *parent)
 #else
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::dropSwap);
 #endif
-
-    //setFixedSize(width()*0.51,height()*0.69);
-
-    // TODO  分类背景模糊
-    //setStyleSheet("background-color:rgba(255, 255, 255, 0.05)");
 }
 
 const QModelIndex AppGridView::indexAt(const int index) const

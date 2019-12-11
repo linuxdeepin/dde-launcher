@@ -29,6 +29,9 @@
 
 #include <QAbstractButton>
 #include <QIcon>
+#include <DApplicationHelper>
+
+DGUI_USE_NAMESPACE
 
 class CategoryButton : public QAbstractButton
 {

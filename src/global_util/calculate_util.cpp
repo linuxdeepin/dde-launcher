@@ -119,8 +119,8 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 
         m_appItemFontSize = 12;
         m_appColumnCount = 4;
-        m_appItemSpacing = 40;
-        const int calc_item_width = (getAppBoxSize().width() - m_appItemSpacing * m_appColumnCount * 2 - 40 * 2 - spacing) / m_appColumnCount;
+        m_appItemSpacing = 50;
+        const int calc_item_width = (getAppBoxSize().width() - m_appItemSpacing * m_appColumnCount * 2 - m_appItemSpacing * 2) / m_appColumnCount;
         m_appItemSize = calc_item_width;
         emit layoutChanged();
         return;

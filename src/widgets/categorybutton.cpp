@@ -33,9 +33,7 @@
 #include <QPainter>
 #include <QApplication>
 #include <QDesktopWidget>
-#include <DGuiApplicationHelper>
 
-DGUI_USE_NAMESPACE
 CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidget *parent) :
     QAbstractButton(parent)
     , m_calcUtil(CalculateUtil::instance())

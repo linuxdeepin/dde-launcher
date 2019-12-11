@@ -707,7 +707,6 @@ void AppsManager::generateCategoryMap()
     for (const ItemInfo &info : m_allAppInfoList) {
 
         const int userIdx = m_usedSortedList.indexOf(info);
-        qDebug() << "InstallTime: " << info.m_installedTime << info.m_openCount << info.m_name;
         // append new installed app to user sorted list
         if (userIdx == -1) {
             m_usedSortedList.append(info);

@@ -32,6 +32,7 @@ signals:
 protected:
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
+    void paintEvent(QPaintEvent *event);
 
 private:
     QPoint mousePos;

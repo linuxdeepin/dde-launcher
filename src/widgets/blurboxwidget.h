@@ -1,12 +1,14 @@
 #ifndef BLURBOXWIDGET_H
 #define BLURBOXWIDGET_H
 
-#include <dblureffectwidget.h>
-#include <QVBoxLayout>
 #include <QMouseEvent>
+#include <QVBoxLayout>
+
 #include "src/global_util/constants.h"
 #include  "src/global_util/calculate_util.h"
 #include "qapplication.h"
+
+#include <DBlurEffectWidget>
 
 DWIDGET_USE_NAMESPACE
 
@@ -19,11 +21,6 @@ public:
 
     void setMaskVisible(bool visible);
     void setMaskSize(QSize size);
-    QVBoxLayout *m_vLayout ;
-    QWidget *m_maskLayer = nullptr;
-
-public :
-    void initconnect();
     void layoutAddWidget(QWidget *child);
     void layoutAddWidget(QWidget *, int stretch = 0, Qt::Alignment alignment = Qt::Alignment());
     void setCategory(AppsListModel::AppCategory setcategory) {category = setcategory;}
@@ -32,17 +29,16 @@ public :
 signals:
     void maskClick(AppsListModel::AppCategory category, int nNext);
 
-
 protected:
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
 
 private:
+    QPoint mousePos;
+    QVBoxLayout *m_vLayout ;
+    QWidget *m_maskLayer = nullptr;
     CalculateUtil *m_calcUtil;
     AppsListModel::AppCategory category;
-
-private:
-    QPoint mousePos;
 };
 
 #endif // BLURBOXWIDGET_H

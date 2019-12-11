@@ -40,6 +40,7 @@
 #include "widgets/applistarea.h"
 #include "boxframe/boxframe.h"
 #include "widgets/blurboxwidget.h"
+#include "view/multipagesview.h"
 
 #include <memory>
 
@@ -85,8 +86,6 @@ signals:
 public slots:
     void scrollToCategory(const AppsListModel::AppCategory &category, int nNext = 0);
     void scrollToBlurBoxWidget(BlurBoxWidget *category);
-    void scrollToPage(const AppsListModel::AppCategory &category);
-    void pageBtnClick();
     void clickToCategory(const QModelIndex &index);
     void showTips(const QString &tips);
     void hideTips();
@@ -178,7 +177,8 @@ private:
 
     AppItemDelegate *m_appItemDelegate;
 
-    AppGridViewList m_pageAppsViewList;
+//    AppGridViewList m_pageAppsViewList;
+    MultiPagesView *m_multiPagesView;
     AppGridView *m_internetView;
     AppGridView *m_chatView;
     AppGridView *m_musicView;
@@ -191,7 +191,7 @@ private:
     AppGridView *m_systemView;
     AppGridView *m_othersView;
 
-    pageAppsModelist m_pageAppsModelList;
+//    pageAppsModelist m_pageAppsModelList;
     BlurBoxWidget *m_internetBoxWidget;
     BlurBoxWidget *m_chatBoxWidget;
     BlurBoxWidget *m_musicBoxWidget;
@@ -248,7 +248,6 @@ private:
     //当前处在第几个分类
     int m_currentBox ;
 
-    int m_pageCurrent;
     int m_focusIndex;
     int m_boxWidgetPageCurrent[11] = {0};
 };

@@ -129,7 +129,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     const int columns = 7;
 
     const int calc_item_width = (double(containerSize.width()) - spacing * columns * 2) / columns + 0.5;
-    const int calc_spacing = (double(containerSize.width()) - calc_item_width * columns) / (columns * 2) - 5;
+    const int calc_spacing = (double(containerSize.width()) - calc_item_width * columns) / (columns * 2) - 8;
 
     calculateTextSize(screenWidth);
 

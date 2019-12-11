@@ -64,6 +64,12 @@ public:
     explicit FullScreenFrame(QWidget *parent = 0);
     ~FullScreenFrame();
 
+    enum FocusIndex {
+        Applist,
+        Category,
+        Search,
+    };
+
     void exit();
     void showByMode(const qlonglong mode);
     int dockPosition();
@@ -129,6 +135,7 @@ private slots:
     void refreshTitleVisible();
     void refershCategoryTextVisible();
     void refershCurrentFloatTitle();
+    void nextTabWidget(int key);
 
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
@@ -210,6 +217,8 @@ private:
     QFrame *m_contentFrame;
 
     QVBoxLayout *m_mainLayout;
+    FocusIndex m_nextFocusIndex;
+    FocusIndex m_currentFocusIndex;
 };
 
 #endif // MAINFRAME_H

@@ -57,10 +57,10 @@ public:
 
 public slots:
     void normalMode();
+    void editMode();
     void moveFloatWidget();
 
 private slots:
-    void editMode();
     void onTextChanged();
 
 protected:

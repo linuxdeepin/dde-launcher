@@ -85,6 +85,8 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     setFixedHeight(30);
     setObjectName("SearchEdit");
     setStyle(m_editStyle);
+    m_icon->setFocusPolicy(Qt::NoFocus);
+    m_clear->setFocusPolicy(Qt::NoFocus);
 
     connect(this, &SearchLineEdit::textChanged, this, &SearchLineEdit::onTextChanged);
     connect(m_clear, &DIconButton::clicked, this, &SearchLineEdit::normalMode);
@@ -224,3 +226,4 @@ int SearchLineeditStyle::pixelMetric(QStyle::PixelMetric metric, const QStyleOpt
 
     return QProxyStyle::pixelMetric(metric, option, widget);
 }
+

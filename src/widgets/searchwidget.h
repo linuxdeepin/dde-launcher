@@ -53,11 +53,13 @@ signals:
     void toggleMode();
 
   private:
-    SearchLineEdit* m_searchEdit;
     QFrame *m_leftSpacing;
     QFrame *m_rightSpacing;
-    DImageButton *m_toggleCategoryBtn;
     DImageButton *m_toggleModeBtn;
+    
+public:
+    DImageButton *m_toggleCategoryBtn;
+    SearchLineEdit* m_searchEdit;
 };
 
 #endif // SEARCHWIDGET_H

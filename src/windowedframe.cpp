@@ -255,6 +255,8 @@ void WindowedFrame::showLauncher()
         m_appsManager->refreshAllList();
     }
 
+    m_appsView->setCurrentIndex(QModelIndex());
+
     adjustSize(); // right widget need calculate width based on font
     adjustPosition();
     m_cornerPath = getCornerPath(m_anchoredCornor);

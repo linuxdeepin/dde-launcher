@@ -57,7 +57,7 @@
 
 DGUI_USE_NAMESPACE
 
-extern const QPoint widgetRelativeOffset(const QWidget * const self, const QWidget *w);
+extern const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w);
 
 inline const QPoint scaledPosition(const QPoint &xpos)
 {
@@ -466,9 +466,8 @@ void WindowedFrame::launchCurrentApp()
     } else if (m_focusPos == LeftBottom) {
         m_switchBtn->click();
         return;
-    } else if(m_focusPos == Default)
-    {
-        const QModelIndex index = m_appsView->model()->sibling(0,0,QModelIndex());
+    } else if (m_focusPos == Default) {
+        const QModelIndex index = m_appsView->model()->sibling(0, 0, QModelIndex());
         m_appsManager->launchApp(index);
     }
 
@@ -516,7 +515,7 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
     buttons << tr("Cancel") << tr("Confirm");
     unInstallDialog.addButtons(buttons);
 
-    connect(&unInstallDialog, &DTK_WIDGET_NAMESPACE::DDialog::buttonClicked, [&] (int clickedResult) {
+    connect(&unInstallDialog, &DTK_WIDGET_NAMESPACE::DDialog::buttonClicked, [&](int clickedResult) {
         // 0 means "cancel" button clicked
         if (clickedResult == 0) {
             return;
@@ -534,7 +533,7 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
 
 bool WindowedFrame::windowDeactiveEvent()
 {
-      // don't need
+    // don't need
 //    if (isVisible() && !m_menuWorker->isMenuShown() && !m_delayHideTimer->isActive()) {
 //        m_delayHideTimer->start();
 //    }
@@ -629,7 +628,7 @@ void WindowedFrame::showEvent(QShowEvent *e)
 {
     QWidget::showEvent(e);
 
-    QTimer::singleShot(1, this, [this] () {
+    QTimer::singleShot(1, this, [this]() {
         raise();
         activateWindow();
         setFocus();
@@ -643,7 +642,7 @@ void WindowedFrame::hideEvent(QHideEvent *e)
     m_appsModel->setDrawBackground(false);
     QWidget::hideEvent(e);
 
-    QTimer::singleShot(1, this, [=] { emit visibleChanged(false); });
+    QTimer::singleShot(1, this, [ = ] { emit visibleChanged(false); });
 }
 
 void WindowedFrame::enterEvent(QEvent *e)
@@ -708,7 +707,7 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
 
 void WindowedFrame::resizeEvent(QResizeEvent *event)
 {
-    QTimer::singleShot(0, this, [=] {
+    QTimer::singleShot(0, this, [ = ] {
         initAnchoredCornor();
         m_cornerPath = getCornerPath(m_anchoredCornor);
         m_windowHandle.setClipPath(m_cornerPath);
@@ -804,11 +803,11 @@ void WindowedFrame::onToggleFullScreen()
 {
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
-            .service("com.deepin.dde.daemon.Launcher")
-            .interface("com.deepin.dde.daemon.Launcher")
-            .path("/com/deepin/dde/daemon/Launcher")
-            .property("Fullscreen")
-            .set(true);
+    .service("com.deepin.dde.daemon.Launcher")
+    .interface("com.deepin.dde.daemon.Launcher")
+    .path("/com/deepin/dde/daemon/Launcher")
+    .property("Fullscreen")
+    .set(true);
 #else
     const QStringList args {
         "--print-reply",
@@ -828,11 +827,9 @@ void WindowedFrame::onSwitchBtnClicked()
     if (m_displayMode == All) {
         m_appsModel->setCategory(AppsListModel::Category);
         m_displayMode = Category;
-    }
-    else if (m_displayMode == Category && m_appsModel->category() != AppsListModel::Category) {
+    } else if (m_displayMode == Category && m_appsModel->category() != AppsListModel::Category) {
         m_appsModel->setCategory(AppsListModel::Category);
-    }
-    else {
+    } else {
         m_displayMode = All;
         m_appsModel->setCategory(AppsListModel::Custom);
     }

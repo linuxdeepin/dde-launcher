@@ -8,25 +8,15 @@ BlurBoxWidget::BlurBoxWidget(QWidget *parent)
     , m_maskLayer(new QWidget(this))
     , m_calcUtil(CalculateUtil::instance())
 {
-    setMaskColor(DBlurEffectWidget::AutoColor);
-    setBlendMode(DBlurEffectWidget::InWindowBlend);
+    setMaskColor(LightColor);
     setMaskAlpha(DLauncher::APPHBOX_ALPHA);
     setBlurRectXRadius(DLauncher::APPHBOX_RADIUS);
     setBlurRectYRadius(DLauncher::APPHBOX_RADIUS);
     setFixedWidth(m_calcUtil->getAppBoxSize().width());
 
-    m_maskLayer->setStyleSheet("QWidget{border-radius:40px;background-color:rgba(1, 1, 1, 67)}");
-
     setLayout(m_vLayout);
     m_vLayout->setSpacing(10);
     m_vLayout->setAlignment(Qt::AlignTop);
-
-    initconnect();
-}
-
-void BlurBoxWidget::initconnect()
-{
-
 }
 
 void BlurBoxWidget::layoutAddWidget(QWidget *child)

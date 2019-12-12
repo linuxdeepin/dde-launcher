@@ -1563,7 +1563,7 @@ void FullScreenFrame::layoutChanged()
 
     for (int i = 0; i < CATEGORY_MAX; i++) {
         for (int j = 0; j < m_appsManager->getPageCount(AppsListModel::AppCategory(i + 4)); j++) {
-            getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j)->setFixedHeight(boxSize.width());
+            getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j)->setFixedHeight(boxSize.height());
         }
     }
 

@@ -61,6 +61,7 @@ public:
     void setDataDelegate(QAbstractItemDelegate *delegate);
     void setSearchModel(AppsListModel *searchMode, bool bSearch);
 signals:
+    void connectViewEvent(AppGridView* pView);
 
 private slots:
     void clickIconBtn();

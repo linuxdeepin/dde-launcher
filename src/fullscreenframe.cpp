@@ -167,6 +167,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     installEventFilter(m_eventFilter);
 
+    connect(m_multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
     initUI();
     initConnection();
 
@@ -314,6 +315,15 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int
             m_appsArea->horizontalScrollBar()->setValue(rightBlurBox->x());
     }
 
+}
+
+void FullScreenFrame::addViewEvent(AppGridView* pView)
+{
+    connect(pView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(pView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(pView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+    connect(pView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
 }
 
 void FullScreenFrame::showTips(const QString &tips)
@@ -908,13 +918,13 @@ void FullScreenFrame::initConnection()
 //            m_autoScrollTimer->start();
 //    });
 
-    for (int i=0; i<m_appsManager->getPageCount(); i++) {
-        connect(m_multiPagesView->pageView(i), &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-        connect(m_multiPagesView->pageView(i), &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-        connect(m_multiPagesView->pageView(i), &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-        connect(m_multiPagesView->pageView(i), &AppGridView::clicked, this, &FullScreenFrame::hide);
-        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_multiPagesView->pageView(i), static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
-    }
+//    for (int i=0; i<m_appsManager->getPageCount(); i++) {
+//        connect(m_multiPagesView->pageView(i), &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+//        connect(m_multiPagesView->pageView(i), &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+//        connect(m_multiPagesView->pageView(i), &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+//        connect(m_multiPagesView->pageView(i), &AppGridView::clicked, this, &FullScreenFrame::hide);
+//        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_multiPagesView->pageView(i), static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+//    }
 
     connect(m_internetView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
     connect(m_chatView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);

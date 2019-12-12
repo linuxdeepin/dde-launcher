@@ -87,10 +87,16 @@ void MultiPagesView::updatePageCount(int pageCount)
             m_pageLayout->insertWidget(m_pageCount + 1, pageButton);
 
             m_pageCount ++;
+
+            emit connectViewEvent(pageView);
         }
     } else {
         while (pageCount < m_pageCount) {
-            DFloatingButton *pageButton = qobject_cast<DFloatingButton *>(m_pageLayout->itemAt(pageCount)->widget());
+            AppGridView *pageView = qobject_cast<AppGridView *>(m_viewBox->layout()->itemAt(m_pageCount-1)->widget());
+            m_viewBox->layout()->removeWidget(pageView);
+            pageView->deleteLater();
+
+            DFloatingButton *pageButton = qobject_cast<DFloatingButton *>(m_pageLayout->itemAt(m_pageCount)->widget());
             m_pageLayout->removeWidget(pageButton);
             pageButton->deleteLater();
 

@@ -54,12 +54,12 @@ public:
     void updatePageCount(int pageCount);
     void showCurrentPage(int currentPage);
     QModelIndex selectApp(const int key);
-    AppGridView* pageView(int pageIndex);
-    AppsListModel* pageModel(int pageIndex);
+    AppGridView *pageView(int pageIndex);
+    AppsListModel *pageModel(int pageIndex);
 
     QModelIndex getAppItem(int index);
-    void setDataDelegate(QAbstractItemDelegate* delegate);
-    void setSearchModel(AppsListModel* appMode, bool bSearch);
+    void setDataDelegate(QAbstractItemDelegate *delegate);
+    void setSearchModel(AppsListModel *searchMode, bool bSearch);
 signals:
 
 private slots:
@@ -68,7 +68,7 @@ private slots:
 
 protected:
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
-    void Init();
+    void InitUI();
 
 private:
     int m_pageCount;
@@ -82,13 +82,13 @@ private:
     pageAppsModelist m_pageAppsModelList;
     FloatBtnList m_floatBtnList;
 
-    DHBoxWidget *m_pHBoxLayout;
-    QHBoxLayout *m_iconLayout;
+    DHBoxWidget *m_viewBox;
+    QHBoxLayout *m_pageLayout;
 
     QPropertyAnimation *pageSwitchAnimation;
 
-    QIcon m_iconViewActive;
-    QIcon m_iconView;
+    QIcon m_iconPageActive;
+    QIcon m_iconPageNormal;
 
     QAbstractItemDelegate *m_delegate = nullptr;
 };

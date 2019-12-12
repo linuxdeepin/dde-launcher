@@ -99,7 +99,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_multiPagesReadingView(new MultiPagesView(AppsListModel::Reading)),
     m_multiPagesDevelopmentView(new MultiPagesView(AppsListModel::Development)),
     m_multiPageSystemView(new MultiPagesView(AppsListModel::System)),
-    m_multiPagesOthersView(new MultiPagesView(AppsListModel::Others) ),
+    m_multiPagesOthersView(new MultiPagesView(AppsListModel::Others)),
 
     m_internetBoxWidget(new BlurBoxWidget),
     m_chatBoxWidget(new BlurBoxWidget),
@@ -227,6 +227,7 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
 
     if (!dest) return;
 
+    m_focusIndex = CategoryTital;
     m_currentCategory = tempMode;
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
     m_currentBox = m_currentCategory - 4;
@@ -249,7 +250,7 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category)
 
     if (!dest)
         return;
-
+    m_focusIndex = CategoryTital;
     m_currentCategory =  AppsListModel::AppCategory(m_currentBox + 4);
     setCategoryIndex(m_currentCategory);
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
@@ -335,7 +336,7 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int
 
 }
 
-void FullScreenFrame::addViewEvent(AppGridView* pView)
+void FullScreenFrame::addViewEvent(AppGridView *pView)
 {
     connect(pView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
     connect(pView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
@@ -906,14 +907,12 @@ void FullScreenFrame::initConnection()
 //        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_multiPagesView->pageView(i), static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
 //    }
 
-    for(int i = 0;i< CATEGORY_MAX;i++)
-    {
-        for(int j =0;j<m_appsManager->getPageCount(AppsListModel::AppCategory(i+4));j++)
-        {
-            connect(getCategoryGridViewList(AppsListModel::AppCategory(i+4))->pageView(j), &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-            connect(getCategoryGridViewList(AppsListModel::AppCategory(i+4))->pageView(j), &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-            connect(getCategoryGridViewList(AppsListModel::AppCategory(i+4))->pageView(j), &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-            connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, getCategoryGridViewList(AppsListModel::AppCategory(i+4))->pageView(j), static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    for (int i = 0; i < CATEGORY_MAX; i++) {
+        for (int j = 0; j < m_appsManager->getPageCount(AppsListModel::AppCategory(i + 4)); j++) {
+            connect(getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j), &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+            connect(getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j), &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+            connect(getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j), &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+            connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j), static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
         }
     }
 
@@ -1071,7 +1070,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     //to next page
     if (m_displayMode == ALL_APPS && !index.isValid()) {
         index = m_multiPagesView->selectApp(key);
-        index = index.isValid()? index: currentIndex;
+        index = index.isValid() ? index : currentIndex;
     }
 
     // now, we need to check and fix if destination is invalid.
@@ -1082,41 +1081,29 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         // the column number of destination, when moving up/down, columns shouldn't be changed.
         //const int realColumn = currentIndex.row() % column;
 
-       // const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
+        // const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
 
-        if (key == Qt::Key_Down || key == Qt::Key_Right)
-        {
-           qDebug() <<m_currentCategory <<m_appsManager->getPageCount(m_currentCategory) << m_appsManager->getPageIndex(m_currentCategory);
+        if (key == Qt::Key_Down || key == Qt::Key_Right) {
             int currentIndex = m_appsManager->getPageIndex(m_currentCategory);
-            if(m_appsManager->getPageCount(m_currentCategory) != (currentIndex+1))
-            {
+            if (m_appsManager->getPageCount(m_currentCategory) != (currentIndex + 1)) {
                 getCategoryGridViewList(m_currentCategory)->showCurrentPage(++currentIndex);
                 auto index = getCategoryGridViewList(m_currentCategory)->getAppItem(0);
-                if(!index.isValid()) return;
+                if (!index.isValid()) return;
+                m_appItemDelegate->setCurrentIndex(index);
+                update();
+                return;
+            }
+        } else if (key == Qt::Key_Up || key == Qt::Key_Left) {
+            int currentIndex = m_appsManager->getPageIndex(m_currentCategory);
+            if (0 < currentIndex) {
+                getCategoryGridViewList(m_currentCategory)->showCurrentPage(--currentIndex);
+                auto index = getCategoryGridViewList(m_currentCategory)->getAppItem(0);
+                if (!index.isValid()) return;
                 m_appItemDelegate->setCurrentIndex(index);
                 update();
                 return;
             }
         }
-        else if (key == Qt::Key_Up || key == Qt::Key_Left)
-               {
-                   qDebug() <<m_currentCategory <<m_appsManager->getPageCount(m_currentCategory) << m_appsManager->getPageIndex(m_currentCategory);
-                    int currentIndex = m_appsManager->getPageIndex(m_currentCategory);
-                   if(0 < currentIndex)
-                   {
-                       getCategoryGridViewList(m_currentCategory)->showCurrentPage(--currentIndex);
-                       auto index = getCategoryGridViewList(m_currentCategory)->getAppItem(0);
-                       if(!index.isValid()) return;
-                       m_appItemDelegate->setCurrentIndex(index);
-                       update();
-                       return;
-                   }
-               }
-            //model = prevCategoryModel(model);
-        // if we can't find any available model which contains that column. this move operate should be abort.
-        //        if (!model)
-        //            break;
-        // index = model->index(0);
     } while (false);
 
     // valid verify and UI adjustment.
@@ -1224,7 +1211,7 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
 
 void FullScreenFrame::uninstallApp(const QString &appKey)
 {
-    for (int i=0; i<m_appsManager->getPageCount(AppsListModel::All); i++) {
+    for (int i = 0; i < m_appsManager->getPageCount(AppsListModel::All); i++) {
         uninstallApp(m_multiPagesView->pageModel(i)->indexAt(appKey));
     }
 
@@ -1291,11 +1278,11 @@ void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
     MultiPagesView *view = nullptr;
     const AppsListModel::AppCategory category = index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 
- //   if (m_displayMode == SEARCH || m_displayMode == ALL_APPS)
+//   if (m_displayMode == SEARCH || m_displayMode == ALL_APPS)
 //        view = m_pageAppsViewList[m_pageCurrent];
 //    else
-    if(m_displayMode == GROUP_BY_CATEGORY)
-       view = getCategoryGridViewList(category);
+    if (m_displayMode == GROUP_BY_CATEGORY)
+        view = getCategoryGridViewList(category);
 
     if (!view)
         return;
@@ -1385,7 +1372,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     m_viewListPlaceholder->setVisible(isCategoryMode);
     m_navigationWidget->setVisible(isCategoryMode);
 
-    m_multiPagesView->setSearchModel(m_searchResultModel, m_displayMode==SEARCH);
+    m_multiPagesView->setSearchModel(m_searchResultModel, m_displayMode == SEARCH);
     // choose nothing
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
@@ -1613,7 +1600,7 @@ void FullScreenFrame::layoutChanged()
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
         const int appsContentWidth = (width() - LEFT_PADDING - RIGHT_PADDING);
         boxSize.setWidth(appsContentWidth);
-        boxSize.setHeight(m_appsArea->height()- m_topSpacing->height());
+        boxSize.setHeight(m_appsArea->height() - m_topSpacing->height());
         m_multiPagesView->setFixedSize(boxSize);
     } else {
         boxSize = m_calcUtil->getAppBoxSize();
@@ -1633,11 +1620,9 @@ void FullScreenFrame::layoutChanged()
     m_systemBoxWidget->setMaskSize(boxSize);
     m_othersBoxWidget->setMaskSize(boxSize);
 
-    for(int i = 0;i< CATEGORY_MAX;i++)
-    {
-        for(int j =0;j<m_appsManager->getPageCount(AppsListModel::AppCategory(i+4));j++)
-        {
-            getCategoryGridViewList(AppsListModel::AppCategory(i+4))->pageView(j)->setFixedHeight(boxSize.width());
+    for (int i = 0; i < CATEGORY_MAX; i++) {
+        for (int j = 0; j < m_appsManager->getPageCount(AppsListModel::AppCategory(i + 4)); j++) {
+            getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j)->setFixedHeight(boxSize.width());
         }
     }
 

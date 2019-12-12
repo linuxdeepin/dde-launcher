@@ -593,53 +593,53 @@ void FullScreenFrame::initUI()
 
     m_multiPagesView->setAccessibleName("all");
     m_multiPagesView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesView->updatePageCount(m_appsManager->getPageCount());
+    m_multiPagesView->updatePageCount(m_appsManager->getPageCount(AppsListModel::All));
     m_multiPagesView->installEventFilter(this);
 
     m_multiPagesInternetView->setAccessibleName("internet");
     m_multiPagesInternetView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesInternetView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Internet));
+    m_multiPagesInternetView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Internet));
     m_internetBoxWidget->setCategory(AppsListModel::Internet);
     m_multiPagesChatView->setAccessibleName("chat");
     m_multiPagesChatView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesChatView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Chat));
+    m_multiPagesChatView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Chat));
     m_chatBoxWidget->setCategory(AppsListModel::Chat);
     m_multiPagesMusicView->setAccessibleName("music");
     m_musicBoxWidget->setCategory(AppsListModel::Music);
     m_multiPagesMusicView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesMusicView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Music));
+    m_multiPagesMusicView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Music));
     m_multiPagesVideoView->setAccessibleName("video");
     m_videoBoxWidget->setCategory(AppsListModel::Video);
     m_multiPagesVideoView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesVideoView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Video));
+    m_multiPagesVideoView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Video));
     m_multiPagesGraphicsView->setAccessibleName("graphics");
     m_graphicsBoxWidget->setCategory(AppsListModel::Graphics);
     m_multiPagesGraphicsView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesGraphicsView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Graphics));
+    m_multiPagesGraphicsView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Graphics));
     m_multiPagesGameView->setAccessibleName("game");
     m_gameBoxWidget->setCategory(AppsListModel::Game);
     m_multiPagesGameView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesGameView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Game));
+    m_multiPagesGameView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Game));
     m_multiPagesOfficeView->setAccessibleName("office");
     m_officeBoxWidget->setCategory(AppsListModel::Office);
     m_multiPagesOfficeView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesOfficeView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Office));
+    m_multiPagesOfficeView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Office));
     m_multiPagesReadingView->setAccessibleName("reading");
     m_readingBoxWidget->setCategory(AppsListModel::Reading);
     m_multiPagesReadingView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesReadingView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Reading));
+    m_multiPagesReadingView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Reading));
     m_multiPagesDevelopmentView->setAccessibleName("development");
     m_developmentBoxWidget->setCategory(AppsListModel::Development);
     m_multiPagesDevelopmentView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesDevelopmentView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Development));
+    m_multiPagesDevelopmentView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Development));
     m_multiPageSystemView->setAccessibleName("system");
     m_systemBoxWidget->setCategory(AppsListModel::System);
     m_multiPageSystemView->setDataDelegate(m_appItemDelegate);
-    m_multiPageSystemView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::System));
+    m_multiPageSystemView->updatePageCount(m_appsManager->getPageCount(AppsListModel::System));
     m_multiPagesOthersView->setAccessibleName("others");
     m_othersBoxWidget->setCategory(AppsListModel::Others);
     m_multiPagesOthersView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesOthersView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Others));
+    m_multiPagesOthersView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Others));
 
     m_floatTitle->setVisible(false);
     m_internetTitle->setTextVisible(true);
@@ -908,7 +908,7 @@ void FullScreenFrame::initConnection()
 
     for(int i = 0;i< CATEGORY_MAX;i++)
     {
-        for(int j =0;j<m_appsManager->getPageCategoryCount(AppsListModel::AppCategory(i+4));j++)
+        for(int j =0;j<m_appsManager->getPageCount(AppsListModel::AppCategory(i+4));j++)
         {
             connect(getCategoryGridViewList(AppsListModel::AppCategory(i+4))->pageView(j), &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
             connect(getCategoryGridViewList(AppsListModel::AppCategory(i+4))->pageView(j), &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
@@ -1082,21 +1082,47 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         // the column number of destination, when moving up/down, columns shouldn't be changed.
         //const int realColumn = currentIndex.row() % column;
 
-        const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
+       // const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
+
         if (key == Qt::Key_Down || key == Qt::Key_Right)
-            model = nextCategoryModel(model);
+        {
+           qDebug() <<m_currentCategory <<m_appsManager->getPageCount(m_currentCategory) << m_appsManager->getPageIndex(m_currentCategory);
+            int currentIndex = m_appsManager->getPageIndex(m_currentCategory);
+            if(m_appsManager->getPageCount(m_currentCategory) != (currentIndex+1))
+            {
+                getCategoryGridViewList(m_currentCategory)->showCurrentPage(++currentIndex);
+                auto index = getCategoryGridViewList(m_currentCategory)->getAppItem(0);
+                if(!index.isValid()) return;
+                m_appItemDelegate->setCurrentIndex(index);
+                update();
+                return;
+            }
+        }
         else if (key == Qt::Key_Up || key == Qt::Key_Left)
-            model = prevCategoryModel(model);
+               {
+                   qDebug() <<m_currentCategory <<m_appsManager->getPageCount(m_currentCategory) << m_appsManager->getPageIndex(m_currentCategory);
+                    int currentIndex = m_appsManager->getPageIndex(m_currentCategory);
+                   if(0 < currentIndex)
+                   {
+                       getCategoryGridViewList(m_currentCategory)->showCurrentPage(--currentIndex);
+                       auto index = getCategoryGridViewList(m_currentCategory)->getAppItem(0);
+                       if(!index.isValid()) return;
+                       m_appItemDelegate->setCurrentIndex(index);
+                       update();
+                       return;
+                   }
+               }
+            //model = prevCategoryModel(model);
         // if we can't find any available model which contains that column. this move operate should be abort.
-        if (!model)
-            break;
-        index = model->index(0);
+        //        if (!model)
+        //            break;
+        // index = model->index(0);
     } while (false);
 
     // valid verify and UI adjustment.
     const QModelIndex selectedIndex = index.isValid() ? index : currentIndex;
     m_appItemDelegate->setCurrentIndex(selectedIndex);
-    ensureItemVisible(selectedIndex);
+    //ensureItemVisible(selectedIndex);
     update();
 }
 
@@ -1198,7 +1224,7 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
 
 void FullScreenFrame::uninstallApp(const QString &appKey)
 {
-    for (int i=0; i<m_appsManager->getPageCount(); i++) {
+    for (int i=0; i<m_appsManager->getPageCount(AppsListModel::All); i++) {
         uninstallApp(m_multiPagesView->pageModel(i)->indexAt(appKey));
     }
 
@@ -1262,28 +1288,28 @@ void FullScreenFrame::ensureScrollToDest(const QVariant &value)
 
 void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
 {
-    AppGridView *view = nullptr;
+    MultiPagesView *view = nullptr;
     const AppsListModel::AppCategory category = index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 
-//    if (m_displayMode == SEARCH || m_displayMode == ALL_APPS)
+ //   if (m_displayMode == SEARCH || m_displayMode == ALL_APPS)
 //        view = m_pageAppsViewList[m_pageCurrent];
 //    else
-//        view = categoryView(category);
+    if(m_displayMode == GROUP_BY_CATEGORY)
+       view = getCategoryGridViewList(category);
 
     if (!view)
         return;
 
     // m_appsArea->ensureVisible(0, view->indexYOffset(index) + view->pos().y(), 0, DLauncher::APPS_AREA_ENSURE_VISIBLE_MARGIN_Y);
-    //updateCurrentVisibleCategory();
+    updateCurrentVisibleCategory();
     if (category != m_currentCategory) {
         scrollToCategory(category);
     }
-    // refershCurrentFloatTitle();
 }
 
 void FullScreenFrame::reflashPageView()
 {
-    m_multiPagesView->updatePageCount(m_appsManager->getPageCount());
+    m_multiPagesView->updatePageCount(m_appsManager->getPageCount(AppsListModel::All));
 }
 
 void FullScreenFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
@@ -1453,29 +1479,31 @@ void FullScreenFrame::updateDockPosition()
 AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentModel)
 {
     AppsListModel *nextModel = m_internetModel;
-    if (currentModel == nullptr)
+    AppsListModel::AppCategory categoty = currentModel->category();
+
+    if (categoty < AppsListModel::Internet)
         nextModel =  m_internetModel;
-    else if (currentModel == m_internetModel)
+    else if (categoty == AppsListModel::Internet)
         nextModel =   m_chatModel;
-    else if (currentModel == m_chatModel)
+    else if (categoty == AppsListModel::Chat)
         nextModel =   m_musicModel;
-    else if (currentModel == m_musicModel)
+    else if (categoty == AppsListModel::Music)
         nextModel =   m_videoModel;
-    else if (currentModel == m_videoModel)
+    else if (categoty == AppsListModel::Video)
         nextModel =   m_graphicsModel;
-    else if (currentModel == m_graphicsModel)
+    else if (categoty == AppsListModel::Graphics)
         nextModel =   m_gameModel;
-    else if (currentModel == m_gameModel)
+    else if (categoty == AppsListModel::Game)
         nextModel =   m_officeModel;
-    else if (currentModel == m_officeModel)
+    else if (categoty == AppsListModel::Office)
         nextModel =   m_readingModel;
-    else  if (currentModel == m_readingModel)
+    else  if (categoty == AppsListModel::Reading)
         nextModel =   m_developmentModel;
-    else if (currentModel == m_developmentModel)
+    else if (categoty == AppsListModel::Development)
         nextModel =   m_systemModel;
-    else if (currentModel == m_systemModel)
+    else if (categoty == AppsListModel::System)
         nextModel =   m_othersModel;
-    else if (currentModel == m_othersModel)
+    else if (categoty == AppsListModel::Others)
         nextModel =   m_internetModel;
     else {
         nextModel = m_internetModel;
@@ -1546,28 +1574,29 @@ void FullScreenFrame::nextTabWidget(int key)
 AppsListModel *FullScreenFrame::prevCategoryModel(const AppsListModel *currentModel)
 {
     AppsListModel *prevModel = m_othersModel;
+    AppsListModel::AppCategory categoty = currentModel->category();
 
-    if (currentModel == m_internetModel)
+    if (categoty < AppsListModel::Internet)
         prevModel = m_othersModel;
-    else if (currentModel == m_chatModel)
+    else if (categoty == AppsListModel::Others)
         prevModel =  m_internetModel;
-    else  if (currentModel == m_musicModel)
+    else  if (categoty == AppsListModel::Music)
         prevModel =  m_chatModel;
-    else  if (currentModel == m_videoModel)
+    else  if (categoty == AppsListModel::Video)
         prevModel =  m_musicModel;
-    else if (currentModel == m_graphicsModel)
+    else if (categoty == AppsListModel::Graphics)
         prevModel =  m_videoModel;
-    else  if (currentModel == m_gameModel)
+    else  if (categoty == AppsListModel::Game)
         prevModel =  m_graphicsModel;
-    else if (currentModel == m_officeModel)
+    else if (categoty == AppsListModel::Office)
         prevModel =  m_gameModel;
-    else  if (currentModel == m_readingModel)
+    else  if (categoty == AppsListModel::Reading)
         prevModel =  m_officeModel;
-    else if (currentModel == m_developmentModel)
+    else if (categoty == AppsListModel::Development)
         prevModel =  m_readingModel;
-    else if (currentModel == m_systemModel)
+    else if (categoty == AppsListModel::System)
         prevModel =  m_developmentModel;
-    else if (currentModel == m_othersModel)
+    else if (categoty == AppsListModel::Others)
         prevModel =  m_systemModel;
     else {
         prevModel = m_othersModel;
@@ -1606,7 +1635,7 @@ void FullScreenFrame::layoutChanged()
 
     for(int i = 0;i< CATEGORY_MAX;i++)
     {
-        for(int j =0;j<m_appsManager->getPageCategoryCount(AppsListModel::AppCategory(i+4));j++)
+        for(int j =0;j<m_appsManager->getPageCount(AppsListModel::AppCategory(i+4));j++)
         {
             getCategoryGridViewList(AppsListModel::AppCategory(i+4))->pageView(j)->setFixedHeight(boxSize.width());
         }

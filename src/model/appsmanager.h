@@ -75,12 +75,9 @@ public:
     bool isVaild();
     void refreshAllList();
     const QPixmap getThemeIcon(const ItemInfo &itemInfo, const int size);
-    int getPageCount(){return m_pageCount;}
-    void setPageIndex(int pageIndex){m_pageIndex = pageIndex;}
-    int getPageIndex(){return m_pageIndex;}
-    int getPageCategoryCount(const AppsListModel::AppCategory category){return m_pageCategoryCount[category -4];}
-    void setPageCategoryIndex(const AppsListModel::AppCategory category,int pageIndex){m_pageCategoryIndex[category -4] = pageIndex;}
-    int getPageCategoryIndex(const AppsListModel::AppCategory category){return m_pageCategoryIndex[category-4];}
+    int getPageCount(const AppsListModel::AppCategory category){return m_pageCount[category];}
+    void setPageIndex(const AppsListModel::AppCategory category,int pageIndex){m_pageIndex[category] = pageIndex;}
+    int getPageIndex(const AppsListModel::AppCategory category){return m_pageIndex[category];}
 
 signals:
     void itemDataChanged(const ItemInfo &info) const;
@@ -162,10 +159,8 @@ private:
     ItemInfo m_beDragedItem = ItemInfo();
 
     CalculateUtil *m_calUtil;
-    int m_pageCount;
-    int m_pageIndex;
-    int m_pageCategoryCount[CATEGORY_COUNT] = {0};
-    int m_pageCategoryIndex[CATEGORY_COUNT] = {0};
+    int m_pageCount[CATEGORY_COUNT+4] = {0};
+    int m_pageIndex[CATEGORY_COUNT+4] = {0};
     QTimer *m_searchTimer;
     QTimer *m_delayRefreshTimer;
 

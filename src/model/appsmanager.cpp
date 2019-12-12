@@ -164,8 +164,6 @@ AppsManager::AppsManager(QObject *parent) :
     refreshAllList();
     refreshAppAutoStartCache();
 
-    m_pageIndex = 0;
-
     m_searchTimer->setSingleShot(true);
     m_searchTimer->setInterval(150);
     m_delayRefreshTimer->setSingleShot(true);
@@ -300,7 +298,7 @@ void AppsManager::restoreItem(const QString &appKey, const int pos)
         if (m_stashList[i].m_key == appKey) {
             // if pos is valid
             if (pos != -1) {
-                int itemIndex = m_pageIndex * m_calUtil->appPageItemCount() + pos;
+                int itemIndex = m_pageIndex[AppsListModel::All] * m_calUtil->appPageItemCount() + pos;
                 m_usedSortedList.insert(itemIndex, m_stashList[i]);
             }
             m_allAppInfoList.append(m_stashList[i]);
@@ -510,9 +508,9 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
 
 void AppsManager::ReflashSortList()
 {
-    while (m_pageCount > 0) {
-        m_usedSortedListVec[m_pageCount - 1].clear();
-        m_pageCount --;
+    while (m_pageCount[AppsListModel::All] > 0) {
+        m_usedSortedListVec[m_pageCount[AppsListModel::All] - 1].clear();
+        m_pageCount[AppsListModel::All] --;
     }
     int index = 0;
     for (int i = 0; i < m_usedSortedList.size(); i++) {
@@ -521,14 +519,14 @@ void AppsManager::ReflashSortList()
             index ++;
         }
     }
-    m_pageCount = (m_usedSortedList.size() % m_calUtil->appPageItemCount()) ? index + 1 : index;
+    m_pageCount[AppsListModel::All] = (m_usedSortedList.size() % m_calUtil->appPageItemCount()) ? index + 1 : index;
 }
 
 void AppsManager::ReflashCategorySortList(const AppsListModel::AppCategory& category)
 {
-    while (m_pageCategoryCount[category - 4] > 0) {
-        m_appInfosVec[m_pageCategoryCount[category - 4] - 1][category].clear();
-        m_pageCategoryCount[category - 4] --;
+    while (m_pageCount[category ] > 0) {
+        m_appInfosVec[m_pageCount[category ] - 1][category].clear();
+        m_pageCount[category] --;
     }
     int index = 0;
     for (int i = 0; i < m_appInfos[category].size(); i++) {
@@ -537,7 +535,7 @@ void AppsManager::ReflashCategorySortList(const AppsListModel::AppCategory& cate
             index ++;
         }
     }
-    m_pageCategoryCount[category - 4] = index + 1;
+    m_pageCount[category] = index + 1;
 }
 
 void AppsManager::refreshCategoryInfoList()
@@ -752,7 +750,7 @@ void AppsManager::generateCategoryMap()
 
 int AppsManager::appNums(const AppsListModel::AppCategory &category) const
 {
-    return appsInfoList(category, m_pageIndex).size();
+    return appsInfoList(category, m_pageIndex[category]).size();
 }
 
 void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &desktpFilePath)

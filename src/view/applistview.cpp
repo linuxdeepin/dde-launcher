@@ -218,13 +218,15 @@ void AppListView::mouseReleaseEvent(QMouseEvent *e)
     }
 
     const QModelIndex &index = indexAt(e->pos());
-    if (!index.isValid())
+    if (!index.isValid()){
         e->ignore();
+        return;
+    }
 
-//    if (qobject_cast<AppsListModel*>(model())->category() == AppsListModel::Category && e->button() == Qt::LeftButton) {
-//        emit requestSwitchToCategory(index);
-//        return;
-//    }
+    if (qobject_cast<AppsListModel*>(model())->category() == AppsListModel::Category && e->button() == Qt::LeftButton) {
+        emit requestSwitchToCategory(index);
+        return;
+    }
 
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         // reissue event

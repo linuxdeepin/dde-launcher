@@ -98,7 +98,7 @@ public slots:
     void showTips(const QString &tips);
     void hideTips();
     void setCategoryIndex(AppsListModel::AppCategory &category, int nNext = 0);
-
+    void addViewEvent(AppGridView* pView);
 protected:
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;

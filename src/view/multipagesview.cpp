@@ -31,12 +31,10 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     , m_appsManager(AppsManager::instance())
     , m_calcUtil(CalculateUtil::instance())
     , m_appListArea(new AppListArea)
-    , m_pHBoxLayout(new DHBoxWidget)
-    , m_iconLayout(new QHBoxLayout)
+    , m_viewBox(new DHBoxWidget)
+    , m_pageLayout(new QHBoxLayout)
 {
-    m_iconViewActive = QIcon(":/widgets/images/page_indicator_active.svg");
-    m_iconView = QIcon(":/widgets/images/page_indicator.svg");
-
+    // 滚动区域
     m_appListArea->setObjectName("MultiPageBox");
     m_appListArea->viewport()->setAutoFillBackground(false);
     m_appListArea->setWidgetResizable(true);
@@ -48,6 +46,9 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_appListArea->viewport()->installEventFilter(this);
     m_appListArea->installEventFilter(this);
 
+    // 翻页按钮和动画
+    m_iconPageActive = QIcon(":/widgets/images/page_indicator_active.svg");
+    m_iconPageNormal = QIcon(":/widgets/images/page_indicator.svg");
     pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value");
     pageSwitchAnimation->setEasingCurve(QEasingCurve::OutQuad);
 
@@ -67,35 +68,31 @@ void MultiPagesView::updatePageCount(int pageCount)
             pModel->setPageIndex(m_pageCount);
             m_pageAppsModelList.push_back(pModel);
 
-            AppGridView *pView = new AppGridView;
-            pView->setModel(pModel);
-            pView->setItemDelegate(m_delegate);
-            pView->setContainerBox(m_appListArea);
-            pView->installEventFilter(this);
-            m_appGridViewList.push_back(pView);
+            AppGridView *pageView = new AppGridView;
+            pageView->setModel(pModel);
+            pageView->setItemDelegate(m_delegate);
+            pageView->setContainerBox(m_appListArea);
+            pageView->installEventFilter(this);
+            m_appGridViewList.push_back(pageView);
 
-            DFloatingButton *floatBtn = new DFloatingButton(this);
-            floatBtn->setIcon(m_iconView);
-            floatBtn->setIconSize(QSize(20, 20));
-            floatBtn->setFixedSize(QSize(20, 20));
-            floatBtn->setBackgroundRole(DPalette::Button);
-            connect(floatBtn, &DFloatingButton::clicked, this, &MultiPagesView::clickIconBtn);
-            m_floatBtnList.push_back(floatBtn);
+            DFloatingButton *pageButton = new DFloatingButton(this);
+            pageButton->setIcon(m_iconPageNormal);
+            pageButton->setIconSize(QSize(20, 20));
+            pageButton->setFixedSize(QSize(20, 20));
+            pageButton->setBackgroundRole(DPalette::Button);
+            connect(pageButton, &DFloatingButton::clicked, this, &MultiPagesView::clickIconBtn);
+            m_floatBtnList.push_back(pageButton);
 
-            m_pHBoxLayout->layout()->insertWidget(m_pageCount, pView);
-            m_iconLayout->insertWidget(m_pageCount + 1, floatBtn);
+            m_viewBox->layout()->insertWidget(m_pageCount, pageView);
+            m_pageLayout->insertWidget(m_pageCount + 1, pageButton);
 
             m_pageCount ++;
         }
     } else {
         while (pageCount < m_pageCount) {
-            QLayoutItem *item = m_pHBoxLayout->layout()->itemAt(m_pageCount);
-            m_pHBoxLayout->layout()->removeItem(item);
-            item->widget()->setParent(nullptr);
-
-            item = m_iconLayout->itemAt(pageCount);
-            m_iconLayout->removeItem(item);
-            item->widget()->setParent(nullptr);
+            DFloatingButton *pageButton = qobject_cast<DFloatingButton *>(m_pageLayout->itemAt(pageCount)->widget());
+            m_pageLayout->removeWidget(pageButton);
+            pageButton->deleteLater();
 
             m_pageAppsModelList.removeLast();
             m_appGridViewList.removeLast();
@@ -115,12 +112,12 @@ QModelIndex MultiPagesView::getAppItem(int index)
 void MultiPagesView::setDataDelegate(QAbstractItemDelegate *delegate)
 {
     m_delegate = delegate;
-    Init();
+    InitUI();
 }
 
-void MultiPagesView::setSearchModel(AppsListModel* appMode, bool bSearch)
-{
-    AppsListModel *pAppModel = bSearch? appMode: m_pageAppsModelList[0];
+void MultiPagesView::setSearchModel(AppsListModel *searchMode, bool bSearch)
+{    
+    AppsListModel *pAppModel = bSearch ? searchMode : m_pageAppsModelList[0];
     m_appGridViewList[0]->setModel(pAppModel);
 
     for (int i = 0; i < m_pageCount; i++) {
@@ -131,31 +128,22 @@ void MultiPagesView::setSearchModel(AppsListModel* appMode, bool bSearch)
     }
 }
 
-void MultiPagesView::Init()
+void MultiPagesView::InitUI()
 {
-    m_pHBoxLayout->layout()->setSpacing(VIEW_SPACE);
+    m_viewBox->layout()->setSpacing(VIEW_SPACE);
+    m_viewBox->setAttribute(Qt::WA_TranslucentBackground);
+    m_appListArea->setWidget(m_viewBox);
 
-    m_iconLayout->setMargin(0);
-    m_iconLayout->setSpacing(ICON_SPACE);
-    m_iconLayout->addStretch();
-    m_iconLayout->addStretch();
-
-    QVBoxLayout *scrollVLayout = new QVBoxLayout;
-    scrollVLayout->setMargin(0);
-    scrollVLayout->setSpacing(0);
-    scrollVLayout->addWidget(m_pHBoxLayout, 0, Qt::AlignTop);
-
-    QFrame *m_contentFrame = new QFrame;
-    m_contentFrame->setAttribute(Qt::WA_TranslucentBackground);
-    m_contentFrame->setLayout(scrollVLayout);
-
-    m_appListArea->setWidget(m_contentFrame);
+    m_pageLayout->setMargin(0);
+    m_pageLayout->setSpacing(ICON_SPACE);
+    m_pageLayout->addStretch();
+    m_pageLayout->addStretch();
 
     QVBoxLayout *layoutMain = new QVBoxLayout;
     layoutMain->setMargin(0);
     layoutMain->setSpacing(0);
     layoutMain->addWidget(m_appListArea);
-    layoutMain->addLayout(m_iconLayout);
+    layoutMain->addLayout(m_pageLayout);
 
     setLayout(layoutMain);
 }
@@ -173,10 +161,10 @@ void MultiPagesView::showCurrentPage(int currentPage)
     bool bVisible = m_pageCount > 1;
 
     for (int i = 0; i < m_pageCount; i++) {
-        m_floatBtnList[i]->setIcon(m_iconView);
+        m_floatBtnList[i]->setIcon(m_iconPageNormal);
         m_floatBtnList[i]->setVisible(bVisible);
     }
-    m_floatBtnList[m_pageIndex]->setIcon(m_iconViewActive);
+    m_floatBtnList[m_pageIndex]->setIcon(m_iconPageActive);
 }
 
 QModelIndex MultiPagesView::selectApp(const int key)
@@ -232,7 +220,8 @@ void MultiPagesView::layoutChanged()
     QSize boxSize;
     boxSize.setWidth(appsContentWidth);
     boxSize.setHeight(m_appListArea->height());
-    m_pHBoxLayout->setFixedHeight(m_appListArea->height());
+    m_viewBox->setFixedHeight(m_appListArea->height());
+
     for (auto *pView : m_appGridViewList)
         pView->setFixedSize(boxSize);
 

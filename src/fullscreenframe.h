@@ -56,6 +56,8 @@
 #include <DFloatingButton>
 typedef QList<DFloatingButton *>  DFloatBtnList;
 
+#define CATEGORY_MAX 11
+
 DWIDGET_USE_NAMESPACE
 
 class BackgroundManager;
@@ -152,9 +154,8 @@ private slots:
 
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
-    AppGridView *categoryView(const AppsListModel::AppCategory category) const;
+    MultiPagesView *getCategoryGridViewList(const AppsListModel::AppCategory category);
     BlurBoxWidget  *categoryBoxWidget(const AppsListModel::AppCategory category) const;
-    AppGridView *lastVisibleView() const;
 
     //根据光前cursor theme更新frame的光标
     void updateFrameCursor();
@@ -194,17 +195,17 @@ private:
 
 //    AppGridViewList m_pageAppsViewList;
     MultiPagesView *m_multiPagesView;
-    AppGridView *m_internetView;
-    AppGridView *m_chatView;
-    AppGridView *m_musicView;
-    AppGridView *m_videoView;
-    AppGridView *m_graphicsView;
-    AppGridView *m_gameView;
-    AppGridView *m_officeView;
-    AppGridView *m_readingView;
-    AppGridView *m_developmentView;
-    AppGridView *m_systemView;
-    AppGridView *m_othersView;
+    MultiPagesView *m_multiPagesInternetView;
+    MultiPagesView *m_multiPagesChatView;
+    MultiPagesView *m_multiPagesMusicView;
+    MultiPagesView *m_multiPagesVideoView;
+    MultiPagesView *m_multiPagesGraphicsView;
+    MultiPagesView *m_multiPagesGameView;
+    MultiPagesView *m_multiPagesOfficeView;
+    MultiPagesView *m_multiPagesReadingView;
+    MultiPagesView *m_multiPagesDevelopmentView;
+    MultiPagesView *m_multiPageSystemView;
+    MultiPagesView *m_multiPagesOthersView;
 
 //    pageAppsModelist m_pageAppsModelList;
     BlurBoxWidget *m_internetBoxWidget;
@@ -260,13 +261,13 @@ private:
     FocusIndex m_currentFocusIndex;
     bool m_firstStart{true};
     //总共的分类
-    BlurBoxWidget *m_BoxWidget[11]   =  {m_internetBoxWidget, m_chatBoxWidget, m_musicBoxWidget, m_videoBoxWidget, m_graphicsBoxWidget, m_gameBoxWidget
+    BlurBoxWidget *m_BoxWidget[CATEGORY_MAX]   =  {m_internetBoxWidget, m_chatBoxWidget, m_musicBoxWidget, m_videoBoxWidget, m_graphicsBoxWidget, m_gameBoxWidget
                                          , m_officeBoxWidget, m_readingBoxWidget, m_developmentBoxWidget, m_systemBoxWidget, m_othersBoxWidget
                                         };
     //当前处在第几个分类
     int m_currentBox ;
 
     int m_focusIndex;
-    int m_boxWidgetPageCurrent[11] = {0};
+    int m_boxWidgetPageCurrent[CATEGORY_MAX] = {0};
 };
 #endif // MAINFRAME_H

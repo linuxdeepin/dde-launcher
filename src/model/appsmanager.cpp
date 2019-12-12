@@ -494,7 +494,7 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     default:;
     }
 
-    return m_appInfos[category];
+    return m_appInfosVec[pageIndex][category];
 }
 
 bool AppsManager::appIsNewInstall(const QString &key)
@@ -556,6 +556,22 @@ void AppsManager::ReflashSortList()
         }
     }
     m_pageCount = (m_usedSortedList.size() % m_calUtil->appPageItemCount()) ? index + 1 : index;
+}
+
+void AppsManager::ReflashCategorySortList(const AppsListModel::AppCategory& category)
+{
+    while (m_pageCategoryCount[category - 4] > 0) {
+        m_appInfosVec[m_pageCategoryCount[category - 4] - 1][category].clear();
+        m_pageCategoryCount[category - 4] --;
+    }
+    int index = 0;
+    for (int i = 0; i < m_appInfos[category].size(); i++) {
+        m_appInfosVec[index][category].push_back(m_appInfos[category][i]);
+        if (m_appInfosVec[index][category].size() >= m_calUtil->appCategoryPageItemCount()) {
+            index ++;
+        }
+    }
+    m_pageCategoryCount[category - 4] = index + 1;
 }
 
 void AppsManager::refreshCategoryInfoList()
@@ -764,7 +780,9 @@ void AppsManager::generateCategoryMap()
     });
 
     ReflashSortList();
-
+    for (int i = 0; i < CATEGORY_COUNT; i++) {
+           ReflashCategorySortList(AppsListModel::AppCategory(i + 4));
+       }
     emit categoryListChanged();
 }
 

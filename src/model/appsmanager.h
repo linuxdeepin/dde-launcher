@@ -52,6 +52,7 @@
 #define RIGHT_PADDING 200
 
 #define MAX_VIEW_NUM    255
+#define CATEGORY_COUNT    11
 
 
 class CalculateUtil;
@@ -77,6 +78,9 @@ public:
     int getPageCount(){return m_pageCount;}
     void setPageIndex(int pageIndex){m_pageIndex = pageIndex;}
     int getPageIndex(){return m_pageIndex;}
+    int getPageCategoryCount(const AppsListModel::AppCategory category){return m_pageCategoryCount[category -4];}
+    void setPageCategoryIndex(const AppsListModel::AppCategory category,int pageIndex){m_pageCategoryIndex[category -4] = pageIndex;}
+    int getPageCategoryIndex(const AppsListModel::AppCategory category){return m_pageCategoryIndex[category-4];}
 
 signals:
     void itemDataChanged(const ItemInfo &info) const;
@@ -125,6 +129,7 @@ private:
     void refreshNotFoundIcon();
     void refreshAppListIcon();
     void ReflashSortList();
+    void ReflashCategorySortList(const AppsListModel::AppCategory& category);
 
 private slots:
     void onIconThemeChanged();
@@ -151,6 +156,7 @@ private:
     ItemInfoList m_stashList;
     ItemInfoList m_categoryList;
     QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfos;
+    QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfosVec[MAX_VIEW_NUM];
 
     ItemInfo m_unInstallItem = ItemInfo();
     ItemInfo m_beDragedItem = ItemInfo();
@@ -158,6 +164,8 @@ private:
     CalculateUtil *m_calUtil;
     int m_pageCount;
     int m_pageIndex;
+    int m_pageCategoryCount[CATEGORY_COUNT] = {0};
+    int m_pageCategoryIndex[CATEGORY_COUNT] = {0};
     QTimer *m_searchTimer;
     QTimer *m_delayRefreshTimer;
 

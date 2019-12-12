@@ -89,17 +89,17 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_appItemDelegate(new AppItemDelegate),
 
     m_multiPagesView(new MultiPagesView()),
-    m_internetView(new AppGridView),
-    m_chatView(new AppGridView),
-    m_musicView(new AppGridView),
-    m_videoView(new AppGridView),
-    m_graphicsView(new AppGridView),
-    m_gameView(new AppGridView),
-    m_officeView(new AppGridView),
-    m_readingView(new AppGridView),
-    m_developmentView(new AppGridView),
-    m_systemView(new AppGridView),
-    m_othersView(new AppGridView),
+    m_multiPagesInternetView(new MultiPagesView(AppsListModel::Internet)),
+    m_multiPagesChatView(new MultiPagesView(AppsListModel::Chat)),
+    m_multiPagesMusicView(new MultiPagesView(AppsListModel::Music)),
+    m_multiPagesVideoView(new MultiPagesView(AppsListModel::Video)),
+    m_multiPagesGraphicsView(new MultiPagesView(AppsListModel::Graphics)),
+    m_multiPagesGameView(new MultiPagesView(AppsListModel::Game)),
+    m_multiPagesOfficeView(new MultiPagesView(AppsListModel::Office)),
+    m_multiPagesReadingView(new MultiPagesView(AppsListModel::Reading)),
+    m_multiPagesDevelopmentView(new MultiPagesView(AppsListModel::Development)),
+    m_multiPageSystemView(new MultiPagesView(AppsListModel::System)),
+    m_multiPagesOthersView(new MultiPagesView(AppsListModel::Others) ),
 
     m_internetBoxWidget(new BlurBoxWidget),
     m_chatBoxWidget(new BlurBoxWidget),
@@ -524,7 +524,6 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
         m_calcUtil->calculateAppLayout(static_cast<QResizeEvent *>(e)->size() - QSize(LEFT_PADDING + RIGHT_PADDING, 0), pos);
         updatePlaceholderSize();
     }
-
     return false;
 }
 
@@ -597,50 +596,50 @@ void FullScreenFrame::initUI()
     m_multiPagesView->updatePageCount(m_appsManager->getPageCount());
     m_multiPagesView->installEventFilter(this);
 
-    m_internetView->setAccessibleName("internet");
-    m_internetView->setModel(m_internetModel);
+    m_multiPagesInternetView->setAccessibleName("internet");
+    m_multiPagesInternetView->setDataDelegate(m_appItemDelegate);
+    m_multiPagesInternetView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Internet));
     m_internetBoxWidget->setCategory(AppsListModel::Internet);
-    m_internetView->setItemDelegate(m_appItemDelegate);
-    m_chatView->setAccessibleName("chat");
+    m_multiPagesChatView->setAccessibleName("chat");
+    m_multiPagesChatView->setDataDelegate(m_appItemDelegate);
+    m_multiPagesChatView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Chat));
     m_chatBoxWidget->setCategory(AppsListModel::Chat);
-    m_chatView->setModel(m_chatModel);
-    m_chatView->setItemDelegate(m_appItemDelegate);
-    m_musicView->setAccessibleName("music");
+    m_multiPagesMusicView->setAccessibleName("music");
     m_musicBoxWidget->setCategory(AppsListModel::Music);
-    m_musicView->setModel(m_musicModel);
-    m_musicView->setItemDelegate(m_appItemDelegate);
-    m_videoView->setAccessibleName("video");
+    m_multiPagesMusicView->setDataDelegate(m_appItemDelegate);
+    m_multiPagesMusicView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Music));
+    m_multiPagesVideoView->setAccessibleName("video");
     m_videoBoxWidget->setCategory(AppsListModel::Video);
-    m_videoView->setModel(m_videoModel);
-    m_videoView->setItemDelegate(m_appItemDelegate);
-    m_graphicsView->setAccessibleName("graphics");
+    m_multiPagesVideoView->setDataDelegate(m_appItemDelegate);
+    m_multiPagesVideoView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Video));
+    m_multiPagesGraphicsView->setAccessibleName("graphics");
     m_graphicsBoxWidget->setCategory(AppsListModel::Graphics);
-    m_graphicsView->setModel(m_graphicsModel);
-    m_graphicsView->setItemDelegate(m_appItemDelegate);
-    m_gameView->setAccessibleName("game");
+    m_multiPagesGraphicsView->setDataDelegate(m_appItemDelegate);
+    m_multiPagesGraphicsView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Graphics));
+    m_multiPagesGameView->setAccessibleName("game");
     m_gameBoxWidget->setCategory(AppsListModel::Game);
-    m_gameView->setModel(m_gameModel);
-    m_gameView->setItemDelegate(m_appItemDelegate);
-    m_officeView->setAccessibleName("office");
+    m_multiPagesGameView->setDataDelegate(m_appItemDelegate);
+    m_multiPagesGameView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Game));
+    m_multiPagesOfficeView->setAccessibleName("office");
     m_officeBoxWidget->setCategory(AppsListModel::Office);
-    m_officeView->setModel(m_officeModel);
-    m_officeView->setItemDelegate(m_appItemDelegate);
-    m_readingView->setAccessibleName("reading");
+    m_multiPagesOfficeView->setDataDelegate(m_appItemDelegate);
+    m_multiPagesOfficeView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Office));
+    m_multiPagesReadingView->setAccessibleName("reading");
     m_readingBoxWidget->setCategory(AppsListModel::Reading);
-    m_readingView->setModel(m_readingModel);
-    m_readingView->setItemDelegate(m_appItemDelegate);
-    m_developmentView->setAccessibleName("development");
+    m_multiPagesReadingView->setDataDelegate(m_appItemDelegate);
+    m_multiPagesReadingView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Reading));
+    m_multiPagesDevelopmentView->setAccessibleName("development");
     m_developmentBoxWidget->setCategory(AppsListModel::Development);
-    m_developmentView->setModel(m_developmentModel);
-    m_developmentView->setItemDelegate(m_appItemDelegate);
-    m_systemView->setAccessibleName("system");
+    m_multiPagesDevelopmentView->setDataDelegate(m_appItemDelegate);
+    m_multiPagesDevelopmentView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Development));
+    m_multiPageSystemView->setAccessibleName("system");
     m_systemBoxWidget->setCategory(AppsListModel::System);
-    m_systemView->setModel(m_systemModel);
-    m_systemView->setItemDelegate(m_appItemDelegate);
-    m_othersView->setAccessibleName("others");
+    m_multiPageSystemView->setDataDelegate(m_appItemDelegate);
+    m_multiPageSystemView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::System));
+    m_multiPagesOthersView->setAccessibleName("others");
     m_othersBoxWidget->setCategory(AppsListModel::Others);
-    m_othersView->setModel(m_othersModel);
-    m_othersView->setItemDelegate(m_appItemDelegate);
+    m_multiPagesOthersView->setDataDelegate(m_appItemDelegate);
+    m_multiPagesOthersView->updatePageCount(m_appsManager->getPageCategoryCount(AppsListModel::Others));
 
     m_floatTitle->setVisible(false);
     m_internetTitle->setTextVisible(true);
@@ -657,48 +656,49 @@ void FullScreenFrame::initUI()
 
     m_appsHbox->layout()->addWidget(m_multiPagesView);
 
-    m_internetBoxWidget->layoutAddWidget(m_internetTitle, m_internetView->width() / 2, Qt::AlignHCenter);
-    m_internetBoxWidget->layout()->addWidget(m_internetView);
+    auto titleStretch  = m_calcUtil->getAppBoxSize().width() / 2;
+    m_internetBoxWidget->layoutAddWidget(m_internetTitle,  titleStretch, Qt::AlignHCenter);
+    m_internetBoxWidget->layout()->addWidget(m_multiPagesInternetView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Internet, m_internetBoxWidget);
 
-    m_chatBoxWidget->layoutAddWidget(m_chatTitle, m_chatView->width() / 2, Qt::AlignHCenter);
-    m_chatBoxWidget->layout()->addWidget(m_chatView);
+    m_chatBoxWidget->layoutAddWidget(m_chatTitle, titleStretch, Qt::AlignHCenter);
+    m_chatBoxWidget->layout()->addWidget(m_multiPagesChatView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Chat, m_chatBoxWidget);
 
-    m_musicBoxWidget->layoutAddWidget(m_musicTitle, m_musicView->width() / 2, Qt::AlignHCenter);
-    m_musicBoxWidget->layout()->addWidget(m_musicView);
+    m_musicBoxWidget->layoutAddWidget(m_musicTitle, titleStretch, Qt::AlignHCenter);
+    m_musicBoxWidget->layout()->addWidget(m_multiPagesMusicView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Music, m_musicBoxWidget);
 
-    m_videoBoxWidget->layoutAddWidget(m_videoTitle, m_videoView->width() / 2, Qt::AlignHCenter);
-    m_videoBoxWidget->layout()->addWidget(m_videoView);
+    m_videoBoxWidget->layoutAddWidget(m_videoTitle, titleStretch, Qt::AlignHCenter);
+    m_videoBoxWidget->layout()->addWidget(m_multiPagesVideoView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Video, m_videoBoxWidget);
 
-    m_graphicsBoxWidget->layoutAddWidget(m_graphicsTitle, m_graphicsView->width() / 2, Qt::AlignHCenter);
-    m_graphicsBoxWidget->layout()->addWidget(m_graphicsView);
+    m_graphicsBoxWidget->layoutAddWidget(m_graphicsTitle, titleStretch, Qt::AlignHCenter);
+    m_graphicsBoxWidget->layout()->addWidget(m_multiPagesGraphicsView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Graphics, m_graphicsBoxWidget);
 
-    m_gameBoxWidget->layoutAddWidget(m_gameTitle, m_gameView->width() / 2, Qt::AlignHCenter);
-    m_gameBoxWidget->layout()->addWidget(m_gameView);
+    m_gameBoxWidget->layoutAddWidget(m_gameTitle, titleStretch, Qt::AlignHCenter);
+    m_gameBoxWidget->layout()->addWidget(m_multiPagesGameView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Game, m_gameBoxWidget);
 
-    m_officeBoxWidget->layoutAddWidget(m_officeTitle, m_officeView->width() / 2, Qt::AlignHCenter);
-    m_officeBoxWidget->layout()->addWidget(m_officeView);
+    m_officeBoxWidget->layoutAddWidget(m_officeTitle, titleStretch, Qt::AlignHCenter);
+    m_officeBoxWidget->layout()->addWidget(m_multiPagesOfficeView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Office, m_officeBoxWidget);
 
-    m_readingBoxWidget->layoutAddWidget(m_readingTitle, m_readingView->width() / 2, Qt::AlignHCenter);
-    m_readingBoxWidget->layout()->addWidget(m_readingView);
+    m_readingBoxWidget->layoutAddWidget(m_readingTitle, titleStretch, Qt::AlignHCenter);
+    m_readingBoxWidget->layout()->addWidget(m_multiPagesReadingView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Reading, m_readingBoxWidget);
 
-    m_developmentBoxWidget->layoutAddWidget(m_developmentTitle, m_developmentView->width() / 2, Qt::AlignHCenter);
-    m_developmentBoxWidget->layout()->addWidget(m_developmentView);
+    m_developmentBoxWidget->layoutAddWidget(m_developmentTitle, titleStretch, Qt::AlignHCenter);
+    m_developmentBoxWidget->layout()->addWidget(m_multiPagesDevelopmentView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Development, m_developmentBoxWidget);
 
-    m_systemBoxWidget->layoutAddWidget(m_systemTitle, m_systemView->width() / 2, Qt::AlignHCenter);
-    m_systemBoxWidget->layout()->addWidget(m_systemView);
+    m_systemBoxWidget->layoutAddWidget(m_systemTitle, titleStretch, Qt::AlignHCenter);
+    m_systemBoxWidget->layout()->addWidget(m_multiPageSystemView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::System, m_systemBoxWidget);
 
-    m_othersBoxWidget->layoutAddWidget(m_othersTitle, m_othersView->width() / 2, Qt::AlignHCenter);
-    m_othersBoxWidget->layout()->addWidget(m_othersView);
+    m_othersBoxWidget->layoutAddWidget(m_othersTitle, titleStretch, Qt::AlignHCenter);
+    m_othersBoxWidget->layout()->addWidget(m_multiPagesOthersView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Others, m_othersBoxWidget);
 
     m_appsHbox->layout()->addWidget(m_viewListPlaceholder);
@@ -706,28 +706,6 @@ void FullScreenFrame::initUI()
     m_appsHbox->layout()->setSpacing(DLauncher::APPHBOX_SPACING);
     m_appsHbox->layout()->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN, 0, 0);
 
-    m_appsArea->addWidget(m_internetTitle);
-    m_appsArea->addWidget(m_internetView->viewport());
-    m_appsArea->addWidget(m_chatTitle);
-    m_appsArea->addWidget(m_chatView->viewport());
-    m_appsArea->addWidget(m_musicTitle);
-    m_appsArea->addWidget(m_musicView->viewport());
-    m_appsArea->addWidget(m_videoTitle);
-    m_appsArea->addWidget(m_videoView->viewport());
-    m_appsArea->addWidget(m_graphicsTitle);
-    m_appsArea->addWidget(m_graphicsView->viewport());
-    m_appsArea->addWidget(m_gameTitle);
-    m_appsArea->addWidget(m_gameView->viewport());
-    m_appsArea->addWidget(m_officeTitle);
-    m_appsArea->addWidget(m_officeView->viewport());
-    m_appsArea->addWidget(m_readingTitle);
-    m_appsArea->addWidget(m_readingView->viewport());
-    m_appsArea->addWidget(m_developmentTitle);
-    m_appsArea->addWidget(m_developmentView->viewport());
-    m_appsArea->addWidget(m_systemTitle);
-    m_appsArea->addWidget(m_systemView->viewport());
-    m_appsArea->addWidget(m_othersTitle);
-    m_appsArea->addWidget(m_othersView->viewport());
     m_appsArea->addWidget(m_viewListPlaceholder);
 
     m_contentFrame = new QFrame;
@@ -836,22 +814,22 @@ CategoryTitleWidget *FullScreenFrame::categoryTitle(const AppsListModel::AppCate
     return dest;
 }
 
-AppGridView *FullScreenFrame::categoryView(const AppsListModel::AppCategory category) const
+MultiPagesView *FullScreenFrame::getCategoryGridViewList(const AppsListModel::AppCategory category)
 {
-    AppGridView *view = nullptr;
+    MultiPagesView *view = nullptr;
 
     switch (category) {
-    case AppsListModel::Internet:       view = m_internetView;      break;
-    case AppsListModel::Chat:           view = m_chatView;          break;
-    case AppsListModel::Music:          view = m_musicView;         break;
-    case AppsListModel::Video:          view = m_videoView;         break;
-    case AppsListModel::Graphics:       view = m_graphicsView;      break;
-    case AppsListModel::Game:           view = m_gameView;          break;
-    case AppsListModel::Office:         view = m_officeView;        break;
-    case AppsListModel::Reading:        view = m_readingView;       break;
-    case AppsListModel::Development:    view = m_developmentView;   break;
-    case AppsListModel::System:         view = m_systemView;        break;
-    case AppsListModel::Others:         view = m_othersView;        break;
+    case AppsListModel::Internet:       view = m_multiPagesInternetView;      break;
+    case AppsListModel::Chat:           view = m_multiPagesChatView;          break;
+    case AppsListModel::Music:          view = m_multiPagesMusicView;         break;
+    case AppsListModel::Video:          view = m_multiPagesVideoView;         break;
+    case AppsListModel::Graphics:       view = m_multiPagesGraphicsView;      break;
+    case AppsListModel::Game:           view = m_multiPagesGameView;          break;
+    case AppsListModel::Office:         view = m_multiPagesOfficeView;        break;
+    case AppsListModel::Reading:        view = m_multiPagesReadingView;       break;
+    case AppsListModel::Development:    view = m_multiPagesDevelopmentView;   break;
+    case AppsListModel::System:         view = m_multiPageSystemView;        break;
+    case AppsListModel::Others:         view = m_multiPagesOthersView;        break;
 //    case AppsListModel::All:            view = m_pageAppsViewList[m_pageCurrent];   break;
     default:;
     }
@@ -880,34 +858,6 @@ BlurBoxWidget *FullScreenFrame::categoryBoxWidget(const AppsListModel::AppCatego
     }
 
     return view;
-}
-
-AppGridView *FullScreenFrame::lastVisibleView() const
-{
-    if (!m_appsManager->appsInfoList(AppsListModel::Others).isEmpty())
-        return m_othersView;
-    if (!m_appsManager->appsInfoList(AppsListModel::System).isEmpty())
-        return m_systemView;
-    if (!m_appsManager->appsInfoList(AppsListModel::Development).isEmpty())
-        return m_developmentView;
-    if (!m_appsManager->appsInfoList(AppsListModel::Reading).isEmpty())
-        return m_readingView;
-    if (!m_appsManager->appsInfoList(AppsListModel::Office).isEmpty())
-        return m_officeView;
-    if (!m_appsManager->appsInfoList(AppsListModel::Game).isEmpty())
-        return m_gameView;
-    if (!m_appsManager->appsInfoList(AppsListModel::Graphics).isEmpty())
-        return m_graphicsView;
-    if (!m_appsManager->appsInfoList(AppsListModel::Video).isEmpty())
-        return m_videoView;
-    if (!m_appsManager->appsInfoList(AppsListModel::Music).isEmpty())
-        return m_musicView;
-    if (!m_appsManager->appsInfoList(AppsListModel::Chat).isEmpty())
-        return m_chatView;
-    if (!m_appsManager->appsInfoList(AppsListModel::Internet).isEmpty())
-        return m_internetView;
-
-    return nullptr;
 }
 
 void FullScreenFrame::initConnection()
@@ -956,41 +906,16 @@ void FullScreenFrame::initConnection()
 //        connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_multiPagesView->pageView(i), static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
 //    }
 
-    connect(m_internetView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_chatView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_musicView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_videoView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_graphicsView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_gameView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_officeView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_readingView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_developmentView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_systemView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(m_othersView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-
-    connect(m_internetView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_chatView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_musicView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_videoView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_graphicsView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_gameView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_officeView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_readingView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_developmentView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_systemView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(m_othersView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-
-    connect(m_internetView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_chatView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_musicView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_videoView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_graphicsView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_gameView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_officeView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_readingView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_developmentView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_systemView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(m_othersView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+    for(int i = 0;i< CATEGORY_MAX;i++)
+    {
+        for(int j =0;j<m_appsManager->getPageCategoryCount(AppsListModel::AppCategory(i+4));j++)
+        {
+            connect(getCategoryGridViewList(AppsListModel::AppCategory(i+4))->pageView(j), &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+            connect(getCategoryGridViewList(AppsListModel::AppCategory(i+4))->pageView(j), &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+            connect(getCategoryGridViewList(AppsListModel::AppCategory(i+4))->pageView(j), &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+            connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, getCategoryGridViewList(AppsListModel::AppCategory(i+4))->pageView(j), static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+        }
+    }
 
     connect(m_internetBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
     connect(m_chatBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
@@ -1004,17 +929,6 @@ void FullScreenFrame::initConnection()
     connect(m_systemBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
     connect(m_othersBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
 
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_internetView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_chatView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_musicView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_videoView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_graphicsView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_gameView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_officeView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_readingView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_developmentView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_systemView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_othersView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
     connect(m_searchWidget, &SearchWidget::toggleMode, [this] {
@@ -1113,13 +1027,11 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
             m_currentCategory = AppsListModel::Internet;
 
         if (m_displayMode == GROUP_BY_CATEGORY)
-            m_appItemDelegate->setCurrentIndex(categoryView(m_currentCategory)->indexAt(0));
+            m_appItemDelegate->setCurrentIndex(getCategoryGridViewList(m_currentCategory)->getAppItem(0));
         else
             m_appItemDelegate->setCurrentIndex(m_multiPagesView->getAppItem(0));
 
-//        m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? categoryView(m_currentCategory)->indexAt(0) : m_pageAppsViewList[m_pageCurrent]->indexAt(0));
         update();
-
         return;
     }
 
@@ -1237,7 +1149,7 @@ void FullScreenFrame::launchCurrentApp()
     case SEARCH:
     case ALL_APPS:            m_appsManager->launchApp(m_multiPagesView->getAppItem(0));     break;
 //    case ALL_APPS:            m_appsManager->launchApp(m_pageAppsViewList[m_pageCurrent]->indexAt(0));     break;
-    case GROUP_BY_CATEGORY:   m_appsManager->launchApp(m_internetView->indexAt(0));    break;
+    case GROUP_BY_CATEGORY:   m_appsManager->launchApp(getCategoryGridViewList(m_currentCategory)->getAppItem(0));    break;
     }
 
     hide();
@@ -1411,37 +1323,37 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     m_multiPagesView->setVisible(!isCategoryMode);
 
     m_internetTitle->setVisible(isCategoryMode);
-    m_internetView->setVisible(isCategoryMode);
+    m_multiPagesInternetView->setVisible(isCategoryMode);
     m_internetBoxWidget->setVisible(isCategoryMode);
     m_chatTitle->setVisible(isCategoryMode);
-    m_chatView->setVisible(isCategoryMode);
+    m_multiPagesChatView->setVisible(isCategoryMode);
     m_chatBoxWidget->setVisible(isCategoryMode);
     m_musicTitle->setVisible(isCategoryMode);
-    m_musicView->setVisible(isCategoryMode);
+    m_multiPagesMusicView->setVisible(isCategoryMode);
     m_musicBoxWidget->setVisible(isCategoryMode);
     m_videoTitle->setVisible(isCategoryMode);
-    m_videoView->setVisible(isCategoryMode);
+    m_multiPagesVideoView->setVisible(isCategoryMode);
     m_videoBoxWidget->setVisible(isCategoryMode);
     m_graphicsTitle->setVisible(isCategoryMode);
-    m_graphicsView->setVisible(isCategoryMode);
+    m_multiPagesGraphicsView->setVisible(isCategoryMode);
     m_graphicsBoxWidget->setVisible(isCategoryMode);
     m_gameTitle->setVisible(isCategoryMode);
-    m_gameView->setVisible(isCategoryMode);
+    m_multiPagesGameView->setVisible(isCategoryMode);
     m_gameBoxWidget->setVisible(isCategoryMode);
     m_officeTitle->setVisible(isCategoryMode);
-    m_officeView->setVisible(isCategoryMode);
+    m_multiPagesOfficeView->setVisible(isCategoryMode);
     m_officeBoxWidget->setVisible(isCategoryMode);
     m_readingTitle->setVisible(isCategoryMode);
-    m_readingView->setVisible(isCategoryMode);
+    m_multiPagesReadingView->setVisible(isCategoryMode);
     m_readingBoxWidget->setVisible(isCategoryMode);
     m_developmentTitle->setVisible(isCategoryMode);
-    m_developmentView->setVisible(isCategoryMode);
+    m_multiPagesDevelopmentView->setVisible(isCategoryMode);
     m_developmentBoxWidget->setVisible(isCategoryMode);
     m_systemTitle->setVisible(isCategoryMode);
-    m_systemView->setVisible(isCategoryMode);
+    m_multiPageSystemView->setVisible(isCategoryMode);
     m_systemBoxWidget->setVisible(isCategoryMode);
     m_othersTitle->setVisible(isCategoryMode);
-    m_othersView->setVisible(isCategoryMode);
+    m_multiPagesOthersView->setVisible(isCategoryMode);
     m_othersBoxWidget->setVisible(isCategoryMode);
 
     m_viewListPlaceholder->setVisible(isCategoryMode);
@@ -1467,27 +1379,27 @@ void FullScreenFrame::updateCurrentVisibleCategory()
         return;
 
     AppsListModel::AppCategory currentVisibleCategory;
-    if (!m_internetView->visibleRegion().isEmpty())
+    if (!m_multiPagesInternetView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Internet;
-    else if (!m_chatView->visibleRegion().isEmpty())
+    else if (!m_multiPagesChatView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Chat;
-    else if (!m_musicView->visibleRegion().isEmpty())
+    else if (!m_multiPagesMusicView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Music;
-    else if (!m_videoView->visibleRegion().isEmpty())
+    else if (!m_multiPagesVideoView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Video;
-    else if (!m_graphicsView->visibleRegion().isEmpty())
+    else if (!m_multiPagesGraphicsView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Graphics;
-    else if (!m_gameView->visibleRegion().isEmpty())
+    else if (!m_multiPagesGameView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Game;
-    else if (!m_officeView->visibleRegion().isEmpty())
+    else if (!m_multiPagesOfficeView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Office;
-    else if (!m_readingView->visibleRegion().isEmpty())
+    else if (!m_multiPagesReadingView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Reading;
-    else if (!m_developmentView->visibleRegion().isEmpty())
+    else if (!m_multiPagesDevelopmentView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Development;
-    else if (!m_systemView->visibleRegion().isEmpty())
+    else if (!m_multiPageSystemView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::System;
-    else if (!m_othersView->visibleRegion().isEmpty())
+    else if (!m_multiPagesOthersView->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Others;
 
     if (m_currentCategory == currentVisibleCategory)
@@ -1500,9 +1412,6 @@ void FullScreenFrame::updateCurrentVisibleCategory()
 
 void FullScreenFrame::updatePlaceholderSize()
 {
-    const AppGridView *view = lastVisibleView();
-    Q_ASSERT(view);
-
     m_viewListPlaceholder->setVisible(dockPosition() == DOCK_POS_BOTTOM);
 }
 
@@ -1604,7 +1513,7 @@ void FullScreenFrame::nextTabWidget(int key)
 //        AppGridView *pView = (m_displayMode == GROUP_BY_CATEGORY) ? categoryView(m_currentCategory) : m_pageAppsViewList[m_pageCurrent];
 //        m_appItemDelegate->setCurrentIndex(pView->indexAt(0));
         if (m_displayMode == GROUP_BY_CATEGORY)
-            m_appItemDelegate->setCurrentIndex(categoryView(m_currentCategory)->indexAt(0));
+            m_appItemDelegate->setCurrentIndex(getCategoryGridViewList(m_currentCategory)->getAppItem(0));
         else
             m_appItemDelegate->setCurrentIndex(m_multiPagesView->getAppItem(0));
 
@@ -1684,27 +1593,24 @@ void FullScreenFrame::layoutChanged()
     m_appsHbox->setFixedHeight(m_appsArea->height());
 
     m_internetBoxWidget->setMaskSize(boxSize);
-    m_internetView->setFixedSize(boxSize);
     m_chatBoxWidget->setMaskSize(boxSize);
-    m_chatView->setFixedSize(boxSize);
     m_musicBoxWidget->setMaskSize(boxSize);
-    m_musicView->setFixedSize(boxSize);
     m_videoBoxWidget->setMaskSize(boxSize);
-    m_videoView->setFixedSize(boxSize);
     m_graphicsBoxWidget->setMaskSize(boxSize);
-    m_graphicsView->setFixedSize(boxSize);
     m_gameBoxWidget->setMaskSize(boxSize);
-    m_gameView->setFixedSize(boxSize);
     m_officeBoxWidget->setMaskSize(boxSize);
-    m_officeView->setFixedSize(boxSize);
     m_readingBoxWidget->setMaskSize(boxSize);
-    m_readingView->setFixedSize(boxSize);
     m_developmentBoxWidget->setMaskSize(boxSize);
-    m_developmentView->setFixedSize(boxSize);
     m_systemBoxWidget->setMaskSize(boxSize);
-    m_systemView->setFixedSize(boxSize);
     m_othersBoxWidget->setMaskSize(boxSize);
-    m_othersView->setFixedSize(boxSize);
+
+    for(int i = 0;i< CATEGORY_MAX;i++)
+    {
+        for(int j =0;j<m_appsManager->getPageCategoryCount(AppsListModel::AppCategory(i+4));j++)
+        {
+            getCategoryGridViewList(AppsListModel::AppCategory(i+4))->pageView(j)->setFixedHeight(boxSize.width());
+        }
+    }
 
     m_floatTitle->move(m_appsArea->pos().x() + LEFT_PADDING, m_appsArea->y() - m_floatTitle->height() + 10);
 

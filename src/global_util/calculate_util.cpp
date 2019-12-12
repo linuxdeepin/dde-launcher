@@ -119,9 +119,11 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 
         m_appItemFontSize = 12;
         m_appColumnCount = 4;
-        m_appItemSpacing = 50;
-        const int calc_item_width = (getAppBoxSize().width() - m_appItemSpacing * m_appColumnCount * 2 - m_appItemSpacing * 2) / m_appColumnCount;
-        m_appItemSize = calc_item_width;
+        int Catespacing = 54;
+        const int calc_categroyitem_width = (getAppBoxSize().width() - Catespacing * m_appColumnCount * 2 ) / m_appColumnCount + 0.5;
+        //const int calc_categoryspacing = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount -Catespacing*2) / (m_appColumnCount * 2) - 8;
+        m_appItemSpacing = 40;
+        m_appItemSize = calc_categroyitem_width;
         emit layoutChanged();
         return;
     }

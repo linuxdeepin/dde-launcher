@@ -28,6 +28,7 @@
 #include "src/global_util/constants.h"
 #include  "src/global_util/calculate_util.h"
 #include "qapplication.h"
+#include "maskqwidget.h"
 
 #include <DBlurEffectWidget>
 
@@ -53,12 +54,11 @@ signals:
 protected:
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
-    void paintEvent(QPaintEvent *event);
 
 private:
     QPoint mousePos;
     QVBoxLayout *m_vLayout ;
-    QWidget *m_maskLayer = nullptr;
+    MaskQWidget *m_maskLayer = nullptr;
     CalculateUtil *m_calcUtil;
     AppsListModel::AppCategory category;
 };

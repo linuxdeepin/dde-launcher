@@ -28,7 +28,7 @@ DWIDGET_USE_NAMESPACE
 BlurBoxWidget::BlurBoxWidget(QWidget *parent)
     : DBlurEffectWidget(parent)
     , m_vLayout(new QVBoxLayout(this))
-    , m_maskLayer(new QWidget(this))
+    , m_maskLayer(new MaskQWidget(this))
     , m_calcUtil(CalculateUtil::instance())
 {
     setMaskColor(LightColor);
@@ -50,23 +50,6 @@ void BlurBoxWidget::layoutAddWidget(QWidget *child)
 void BlurBoxWidget::layoutAddWidget(QWidget *child, int stretch, Qt::Alignment alignment)
 {
     m_vLayout->addWidget(child, stretch, alignment);
-}
-
-void BlurBoxWidget::paintEvent(QPaintEvent *event)
-{
-   DBlurEffectWidget::paintEvent(event);
-    if (m_maskLayer) {
-        m_maskLayer->raise();
-        QPainter painter(this);
-        painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
-        painter.setBrush(QBrush(QColor(0, 0, 0, 67)));
-        painter.setPen(Qt::transparent);
-        QRect rect = this->rect();
-        rect.setWidth(rect.width() - 1);
-        rect.setHeight(rect.height() - 1);
-        painter.drawRoundedRect(rect, DLauncher::APPHBOX_RADIUS, DLauncher::APPHBOX_RADIUS);
-        QWidget::paintEvent(event);
-    }
 }
 
 void BlurBoxWidget::mousePressEvent(QMouseEvent *e)

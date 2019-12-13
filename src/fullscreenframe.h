@@ -100,7 +100,7 @@ public slots:
     void showTips(const QString &tips);
     void hideTips();
     void setCategoryIndex(AppsListModel::AppCategory &category, int nNext = 0);
-    void addViewEvent(AppGridView* pView);
+    void addViewEvent(AppGridView *pView);
 protected:
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
@@ -262,8 +262,8 @@ private:
     bool m_firstStart{true};
     //总共的分类
     BlurBoxWidget *m_BoxWidget[CATEGORY_MAX]   =  {m_internetBoxWidget, m_chatBoxWidget, m_musicBoxWidget, m_videoBoxWidget, m_graphicsBoxWidget, m_gameBoxWidget
-                                         , m_officeBoxWidget, m_readingBoxWidget, m_developmentBoxWidget, m_systemBoxWidget, m_othersBoxWidget
-                                        };
+                                                   , m_officeBoxWidget, m_readingBoxWidget, m_developmentBoxWidget, m_systemBoxWidget, m_othersBoxWidget
+                                                  };
     //当前处在第几个分类
     int m_currentBox ;
 

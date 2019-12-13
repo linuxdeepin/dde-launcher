@@ -148,8 +148,6 @@ private slots:
     void ensureItemVisible(const QModelIndex &index);
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
     void refreshTitleVisible();
-    void refershCategoryTextVisible();
-    void refershCurrentFloatTitle();
     void reflashPageView(const AppsListModel::AppCategory category);
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
@@ -231,19 +229,6 @@ private:
     AppsListModel *m_developmentModel;
     AppsListModel *m_systemModel;
     AppsListModel *m_othersModel;
-
-    CategoryTitleWidget *m_floatTitle;
-    CategoryTitleWidget *m_internetTitle;
-    CategoryTitleWidget *m_chatTitle;
-    CategoryTitleWidget *m_musicTitle;
-    CategoryTitleWidget *m_videoTitle;
-    CategoryTitleWidget *m_graphicsTitle;
-    CategoryTitleWidget *m_gameTitle;
-    CategoryTitleWidget *m_officeTitle;
-    CategoryTitleWidget *m_readingTitle;
-    CategoryTitleWidget *m_developmentTitle;
-    CategoryTitleWidget *m_systemTitle;
-    CategoryTitleWidget *m_othersTitle;
 
     DFloatBtnList m_floatBtnList;
     QIcon m_iconViewActive;

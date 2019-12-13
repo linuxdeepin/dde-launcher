@@ -25,11 +25,13 @@
 #include <QPainter>
 
 DWIDGET_USE_NAMESPACE
-BlurBoxWidget::BlurBoxWidget(QWidget *parent)
+BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name, QWidget *parent)
     : DBlurEffectWidget(parent)
     , m_vLayout(new QVBoxLayout(this))
     , m_maskLayer(new MaskQWidget(this))
     , m_calcUtil(CalculateUtil::instance())
+    ,category(curCategory)
+    ,m_categoryTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", name)))
 {
     setMaskColor(LightColor);
     setMaskAlpha(DLauncher::APPHBOX_ALPHA);
@@ -40,6 +42,7 @@ BlurBoxWidget::BlurBoxWidget(QWidget *parent)
     setLayout(m_vLayout);
     m_vLayout->setContentsMargins(60, 27, 30, 0);
     m_vLayout->setAlignment(Qt::AlignTop);
+    layoutAddWidget(m_categoryTitle,m_calcUtil->getAppBoxSize().width() / 2,Qt::AlignHCenter);
 }
 
 void BlurBoxWidget::layoutAddWidget(QWidget *child)
@@ -82,7 +85,6 @@ void BlurBoxWidget::setMaskSize(QSize size)
 void BlurBoxWidget::setMaskVisible(bool visible)
 {
     m_maskLayer->setVisible(visible);
-
 }
 
 

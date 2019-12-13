@@ -752,8 +752,6 @@ void FullScreenFrame::initConnection()
     connect(this, &FullScreenFrame::displayModeChanged, this, &FullScreenFrame::checkCategoryVisible);
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
     connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hide, Qt::QueuedConnection);
-
-
     connect(m_clearCacheTimer, &QTimer::timeout, m_appsManager, &AppsManager::clearCache);
 
     // auto scroll when drag to app list box border
@@ -763,6 +761,7 @@ void FullScreenFrame::initConnection()
             connect(getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j), &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
             connect(getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j), &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
             connect(getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j), &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
+            connect(getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j), &AppGridView::clicked, this, &FullScreenFrame::hide);
             connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j), static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
         }
     }
@@ -1442,6 +1441,7 @@ void FullScreenFrame::layoutChanged()
     for (int i = 0; i < CATEGORY_MAX; i++) {
         for (int j = 0; j < m_appsManager->getPageCount(AppsListModel::AppCategory(i + 4)); j++) {
             getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j)->setFixedHeight(boxSize.height());
+            getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j)->setFixedWidth(840);
         }
         getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->updatePosition();
     }

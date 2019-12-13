@@ -87,7 +87,7 @@ signals:
 
 public slots:
     void scrollToCategory(const AppsListModel::AppCategory &category, int nNext = 0);
-    void scrollToBlurBoxWidget(BlurBoxWidget *category);
+    void scrollToBlurBoxWidget(BlurBoxWidget *category,int nNext = 0);
     void clickToCategory(const QModelIndex &index);
     void showTips(const QString &tips);
     void hideTips();

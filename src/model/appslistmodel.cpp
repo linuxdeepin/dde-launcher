@@ -63,6 +63,7 @@ const QStringList sysHoldPackages()
                              << "dde-trash"
                              << "dde-file-manager"
                              << "deepin-appstore"
+                             << "deepin-app-store"
                              << "deepin-toggle-desktop"
                              << "deepin-wm-multitaskingview"
                              << "dde-calendar"

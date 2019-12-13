@@ -34,16 +34,11 @@
 #include "../model/appslistmodel.h"
 #include "../model/appsmanager.h"
 #include "../global_util/calculate_util.h"
+#include "pagecontrol.h"
 
-#include <DFloatingButton>
 #include <dboxwidget.h>
 
 DWIDGET_USE_NAMESPACE
-
-#define     ICON_SPACE      10
-#define     VIEW_SPACE      20
-
-typedef QList<DFloatingButton *> FloatBtnList;
 
 class MultiPagesView : public QWidget
 {
@@ -51,7 +46,8 @@ class MultiPagesView : public QWidget
 public:
     explicit MultiPagesView(AppsListModel::AppCategory categoryModel = AppsListModel::All, QWidget *parent = nullptr);
 
-    void updatePageCount(int pageCount);
+    void updatePageCount(AppsListModel::AppCategory category = AppsListModel::All);
+    void showCurrentPage(int currentPage);
     QModelIndex selectApp(const int key);
     AppGridView *pageView(int pageIndex);
     AppsListModel *pageModel(int pageIndex);
@@ -60,12 +56,12 @@ public:
     void setDataDelegate(QAbstractItemDelegate *delegate);
     void setSearchModel(AppsListModel *searchMode, bool bSearch);
     void updatePosition();
-    void showCurrentPage(int currentPage);
+
 signals:
     void connectViewEvent(AppGridView* pView);
 
 private slots:
-    void clickIconBtn();
+    void layoutChanged();
 
 protected:
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
@@ -73,22 +69,19 @@ protected:
 private:
     int m_pageCount;
     int m_pageIndex;
-    AppsListModel::AppCategory m_appModel;
+    AppsListModel::AppCategory m_category;
 
     AppsManager *m_appsManager;
     CalculateUtil *m_calcUtil;
     AppListArea *m_appListArea;
     AppGridViewList m_appGridViewList;
     pageAppsModelist m_pageAppsModelList;
-    FloatBtnList m_floatBtnList;
 
     DHBoxWidget *m_viewBox;
     QHBoxLayout *m_pageLayout;
+    pageControl *m_pageControl;
 
     QPropertyAnimation *pageSwitchAnimation;
-
-    QIcon m_iconPageActive;
-    QIcon m_iconPageNormal;
 
     QAbstractItemDelegate *m_delegate = nullptr;
 

@@ -150,7 +150,7 @@ private slots:
     void refreshTitleVisible();
     void refershCategoryTextVisible();
     void refershCurrentFloatTitle();
-    void reflashPageView();
+    void reflashPageView(const AppsListModel::AppCategory category);
 
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;

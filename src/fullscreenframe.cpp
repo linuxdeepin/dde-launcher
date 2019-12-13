@@ -594,53 +594,53 @@ void FullScreenFrame::initUI()
 
     m_multiPagesView->setAccessibleName("all");
     m_multiPagesView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesView->updatePageCount(m_appsManager->getPageCount(AppsListModel::All));
+    m_multiPagesView->updatePageCount();
     m_multiPagesView->installEventFilter(this);
 
     m_multiPagesInternetView->setAccessibleName("internet");
     m_multiPagesInternetView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesInternetView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Internet));
+    m_multiPagesInternetView->updatePageCount();
     m_internetBoxWidget->setCategory(AppsListModel::Internet);
     m_multiPagesChatView->setAccessibleName("chat");
     m_multiPagesChatView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesChatView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Chat));
+    m_multiPagesChatView->updatePageCount();
     m_chatBoxWidget->setCategory(AppsListModel::Chat);
     m_multiPagesMusicView->setAccessibleName("music");
     m_musicBoxWidget->setCategory(AppsListModel::Music);
     m_multiPagesMusicView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesMusicView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Music));
+    m_multiPagesMusicView->updatePageCount();
     m_multiPagesVideoView->setAccessibleName("video");
     m_videoBoxWidget->setCategory(AppsListModel::Video);
     m_multiPagesVideoView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesVideoView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Video));
+    m_multiPagesVideoView->updatePageCount();
     m_multiPagesGraphicsView->setAccessibleName("graphics");
     m_graphicsBoxWidget->setCategory(AppsListModel::Graphics);
     m_multiPagesGraphicsView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesGraphicsView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Graphics));
+    m_multiPagesGraphicsView->updatePageCount();
     m_multiPagesGameView->setAccessibleName("game");
     m_gameBoxWidget->setCategory(AppsListModel::Game);
     m_multiPagesGameView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesGameView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Game));
+    m_multiPagesGameView->updatePageCount();
     m_multiPagesOfficeView->setAccessibleName("office");
     m_officeBoxWidget->setCategory(AppsListModel::Office);
     m_multiPagesOfficeView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesOfficeView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Office));
+    m_multiPagesOfficeView->updatePageCount();
     m_multiPagesReadingView->setAccessibleName("reading");
     m_readingBoxWidget->setCategory(AppsListModel::Reading);
     m_multiPagesReadingView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesReadingView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Reading));
+    m_multiPagesReadingView->updatePageCount();
     m_multiPagesDevelopmentView->setAccessibleName("development");
     m_developmentBoxWidget->setCategory(AppsListModel::Development);
     m_multiPagesDevelopmentView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesDevelopmentView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Development));
+    m_multiPagesDevelopmentView->updatePageCount();
     m_multiPageSystemView->setAccessibleName("system");
     m_systemBoxWidget->setCategory(AppsListModel::System);
     m_multiPageSystemView->setDataDelegate(m_appItemDelegate);
-    m_multiPageSystemView->updatePageCount(m_appsManager->getPageCount(AppsListModel::System));
+    m_multiPageSystemView->updatePageCount();
     m_multiPagesOthersView->setAccessibleName("others");
     m_othersBoxWidget->setCategory(AppsListModel::Others);
     m_multiPagesOthersView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesOthersView->updatePageCount(m_appsManager->getPageCount(AppsListModel::Others));
+    m_multiPagesOthersView->updatePageCount();
 
     m_floatTitle->setVisible(false);
     m_internetTitle->setTextVisible(true);
@@ -940,7 +940,7 @@ void FullScreenFrame::initConnection()
     connect(m_appsManager, &AppsManager::requestTips, this, &FullScreenFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
     connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::updateDockPosition);
-    connect(m_appsManager, &AppsManager::dataChanged, [this] {reflashPageView();});
+    connect(m_appsManager, &AppsManager::dataChanged, [this](const AppsListModel::AppCategory category) {reflashPageView(category);});
 }
 
 void FullScreenFrame::showLauncher()
@@ -1295,9 +1295,10 @@ void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
     }
 }
 
-void FullScreenFrame::reflashPageView()
+void FullScreenFrame::reflashPageView(const AppsListModel::AppCategory category)
 {
-    m_multiPagesView->updatePageCount(m_appsManager->getPageCount(AppsListModel::All));
+    if(category == AppsListModel::Search && m_displayMode == SEARCH)
+        m_multiPagesView->updatePageCount(category);
 }
 
 void FullScreenFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)

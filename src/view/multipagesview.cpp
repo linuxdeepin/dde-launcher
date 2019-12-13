@@ -52,7 +52,6 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value");
     pageSwitchAnimation->setEasingCurve(QEasingCurve::OutQuad);
 
-    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &MultiPagesView::layoutChanged, Qt::QueuedConnection);
     connect(m_appListArea, &AppListArea::increaseIcon, this, [ = ] { m_calcUtil->increaseIconSize(); emit m_appsManager->layoutChanged(m_appModel); });
     connect(m_appListArea, &AppListArea::decreaseIcon, this, [ = ] { m_calcUtil->decreaseIconSize(); emit m_appsManager->layoutChanged(m_appModel); });
 }
@@ -92,7 +91,7 @@ void MultiPagesView::updatePageCount(int pageCount)
         }
     } else {
         while (pageCount < m_pageCount) {
-            AppGridView *pageView = qobject_cast<AppGridView *>(m_viewBox->layout()->itemAt(m_pageCount-1)->widget());
+            AppGridView *pageView = qobject_cast<AppGridView *>(m_viewBox->layout()->itemAt(m_pageCount - 1)->widget());
             m_viewBox->layout()->removeWidget(pageView);
             pageView->deleteLater();
 
@@ -122,7 +121,7 @@ void MultiPagesView::setDataDelegate(QAbstractItemDelegate *delegate)
 }
 
 void MultiPagesView::setSearchModel(AppsListModel *searchMode, bool bSearch)
-{    
+{
     AppsListModel *pAppModel = bSearch ? searchMode : m_pageAppsModelList[0];
     m_appGridViewList[0]->setModel(pAppModel);
 
@@ -132,6 +131,17 @@ void MultiPagesView::setSearchModel(AppsListModel *searchMode, bool bSearch)
         if (0 != i)
             m_appGridViewList[i]->setVisible(!bSearch);
     }
+}
+
+void MultiPagesView::updatePosition()
+{
+    QSize boxSize;
+    boxSize.setWidth(width());
+    boxSize.setHeight(m_appListArea->height());
+    m_viewBox->setFixedHeight(m_appListArea->height());
+
+    for (auto *pView : m_appGridViewList)
+        pView->setFixedSize(boxSize);
 }
 
 void MultiPagesView::InitUI()
@@ -220,21 +230,11 @@ void MultiPagesView::clickIconBtn()
     }
 }
 
-void MultiPagesView::layoutChanged()
-{
-    const int appsContentWidth = width();
-    QSize boxSize;
-    boxSize.setWidth(appsContentWidth);
-    boxSize.setHeight(m_appListArea->height());
-    m_viewBox->setFixedHeight(m_appListArea->height());
-
-    for (auto *pView : m_appGridViewList)
-        pView->setFixedSize(boxSize);
-
-}
-
 void MultiPagesView::wheelEvent(QWheelEvent *e)
 {
+    if (AppsListModel::All != m_appModel)
+        return;
+
     if (pageSwitchAnimation->state() == QPropertyAnimation::Running)
         return;
 

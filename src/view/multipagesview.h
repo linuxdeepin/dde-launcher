@@ -52,7 +52,6 @@ public:
     explicit MultiPagesView(AppsListModel::AppCategory categoryModel = AppsListModel::All, QWidget *parent = nullptr);
 
     void updatePageCount(int pageCount);
-    void showCurrentPage(int currentPage);
     QModelIndex selectApp(const int key);
     AppGridView *pageView(int pageIndex);
     AppsListModel *pageModel(int pageIndex);
@@ -60,17 +59,17 @@ public:
     QModelIndex getAppItem(int index);
     void setDataDelegate(QAbstractItemDelegate *delegate);
     void setSearchModel(AppsListModel *searchMode, bool bSearch);
+    void updatePosition();
+    void showCurrentPage(int currentPage);
 signals:
     void connectViewEvent(AppGridView* pView);
 
 private slots:
     void clickIconBtn();
-    void layoutChanged();
 
 protected:
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
     void InitUI();
-
 private:
     int m_pageCount;
     int m_pageIndex;
@@ -92,6 +91,7 @@ private:
     QIcon m_iconPageNormal;
 
     QAbstractItemDelegate *m_delegate = nullptr;
+
 };
 
 #endif // MULTIPAGESVIEW_H

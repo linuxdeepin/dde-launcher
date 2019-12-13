@@ -349,7 +349,7 @@ void FullScreenFrame::resizeEvent(QResizeEvent *e)
 {
     QTimer::singleShot(0, this, [ = ] {
         updateBackground();
-        updateDockPosition();
+//        updateDockPosition();
     });
 
     QFrame::resizeEvent(e);
@@ -1154,6 +1154,7 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
 
 void FullScreenFrame::uninstallApp(const QString &appKey)
 {
+
     for (int i = 0; i < m_appsManager->getPageCount(AppsListModel::All); i++) {
         uninstallApp(m_multiPagesView->pageModel(i)->indexAt(appKey));
     }
@@ -1374,6 +1375,7 @@ void FullScreenFrame::updateDockPosition()
     // reset all spacing size
     m_topSpacing->setFixedHeight(30);
     m_bottomSpacing->setFixedHeight(0);
+    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? DLauncher::VIEWLIST_BOTTOM_MARGIN : DLauncher::PAGEVIEW_BOTTOM_MARGIN;
 
     const QRect dockGeometry = m_appsManager->dockGeometry();
 
@@ -1384,7 +1386,7 @@ void FullScreenFrame::updateDockPosition()
         m_searchWidget->setRightSpacing(0);
         break;
     case DOCK_POS_BOTTOM:
-        m_bottomSpacing->setFixedHeight(DLauncher::VIEWLIST_BOTTOM_MARGIN);
+        m_bottomSpacing->setFixedHeight(bottomMargin);
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(0);
         break;
@@ -1538,11 +1540,14 @@ AppsListModel *FullScreenFrame::prevCategoryModel(const AppsListModel *currentMo
 void FullScreenFrame::layoutChanged()
 {
     QSize boxSize;
+    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? DLauncher::VIEWLIST_BOTTOM_MARGIN : DLauncher::PAGEVIEW_BOTTOM_MARGIN;
+    m_bottomSpacing->setFixedHeight(bottomMargin);
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
-        const int appsContentWidth = (width() - LEFT_PADDING - RIGHT_PADDING);
+        const int appsContentWidth = (m_appsArea->width() - LEFT_PADDING - RIGHT_PADDING);
         boxSize.setWidth(appsContentWidth);
         boxSize.setHeight(m_appsArea->height() - m_topSpacing->height());
         m_multiPagesView->setFixedSize(boxSize);
+        m_multiPagesView->updatePosition();
     } else {
         boxSize = m_calcUtil->getAppBoxSize();
     }
@@ -1565,6 +1570,7 @@ void FullScreenFrame::layoutChanged()
         for (int j = 0; j < m_appsManager->getPageCount(AppsListModel::AppCategory(i + 4)); j++) {
             getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j)->setFixedHeight(boxSize.height());
         }
+        getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->updatePosition();
     }
 
     m_floatTitle->move(m_appsArea->pos().x() + LEFT_PADDING, m_appsArea->y() - m_floatTitle->height() + 10);

@@ -275,8 +275,8 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int
             }
         }
 
-        if (m_appsManager->appNums((AppsListModel::AppCategory)type)) {
-            category = (AppsListModel::AppCategory)type;
+        if (m_appsManager->appNums(AppsListModel::AppCategory(type))) {
+            category = AppsListModel::AppCategory(type);
             break;
         }
     }
@@ -288,8 +288,8 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int
     BlurBoxWidget *leftBlurBox = nullptr;
     for (int type = tempMode - 1, i = 0; i < categoryCount; i++, type--) {
         if (type < AppsListModel::Internet) type = AppsListModel::Others;
-        leftBlurBox = categoryBoxWidget((AppsListModel::AppCategory)type);
-        if (m_appsManager->appNums((AppsListModel::AppCategory)type)) {
+        leftBlurBox = categoryBoxWidget(AppsListModel::AppCategory(type));
+        if (m_appsManager->appNums(AppsListModel::AppCategory(type))) {
             m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX, leftBlurBox);
             leftBlurBox->setMaskVisible(true);
             leftBlurBox->layout()->itemAt(0)->setAlignment(Qt::AlignRight);
@@ -306,8 +306,8 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int
     BlurBoxWidget *rightBlurBox = nullptr;
     for (int type = tempMode + 1, i = 0; i < categoryCount; i++, type++) {
         if (type > AppsListModel::Others) type = AppsListModel::Internet;
-        rightBlurBox = categoryBoxWidget((AppsListModel::AppCategory)type);
-        if (m_appsManager->appNums((AppsListModel::AppCategory)type)) {
+        rightBlurBox = categoryBoxWidget(AppsListModel::AppCategory(type));
+        if (m_appsManager->appNums(AppsListModel::AppCategory(type))) {
             m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + 2, rightBlurBox);
             rightBlurBox->setMaskVisible(true);
             rightBlurBox->layout()->itemAt(0)->setAlignment(Qt::AlignLeft);
@@ -323,7 +323,6 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int
         if (rightBlurBox != nullptr)
             m_appsArea->horizontalScrollBar()->setValue(rightBlurBox->x());
     }
-
 }
 
 void FullScreenFrame::addViewEvent(AppGridView *pView)

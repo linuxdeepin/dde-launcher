@@ -27,6 +27,7 @@
 
 #include "src/global_util/constants.h"
 #include  "src/global_util/calculate_util.h"
+#include "src/widgets/categorytitlewidget.h"
 #include "qapplication.h"
 #include "maskqwidget.h"
 
@@ -38,7 +39,7 @@ class BlurBoxWidget : public DBlurEffectWidget
 {
     Q_OBJECT
 public:
-    explicit BlurBoxWidget(QWidget *parent = nullptr);
+    explicit BlurBoxWidget(AppsListModel::AppCategory category,char* name,QWidget *parent = nullptr);
     Q_PROPERTY(AppsListModel::AppCategory category READ getCategory WRITE setCategory)
 
     void setMaskVisible(bool visible);
@@ -61,6 +62,7 @@ private:
     MaskQWidget *m_maskLayer = nullptr;
     CalculateUtil *m_calcUtil;
     AppsListModel::AppCategory category;
+     CategoryTitleWidget *m_categoryTitle;
 };
 
 #endif // BLURBOXWIDGET_H

@@ -76,11 +76,13 @@ void BlurBoxWidget::setMaskSize(QSize size)
 {
     m_maskLayer->setFixedSize(size);
     m_maskLayer->raise();
+    m_maskLayer->move(0,-5);
 }
 
 void BlurBoxWidget::setMaskVisible(bool visible)
 {
     m_maskLayer->setVisible(visible);
+
 }
 
 

@@ -451,10 +451,10 @@ const ItemInfo AppsManager::createOfCategory(qlonglong category)
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category, int pageIndex) const
 {
     switch (category) {
-    case AppsListModel::Custom:    return m_userSortedList;        break;
-    case AppsListModel::All:       return m_usedSortedListVec[pageIndex];        break;
-    case AppsListModel::Search:     return m_appSearchResultList;   break;
-    case AppsListModel::Category:   return m_categoryList;          break;
+    case AppsListModel::Custom:    return m_userSortedList;
+    case AppsListModel::All:       return m_usedSortedListVec[pageIndex];
+    case AppsListModel::Search:     return m_appSearchResultList;
+    case AppsListModel::Category:   return m_categoryList;
     default:;
     }
 

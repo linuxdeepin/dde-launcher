@@ -27,12 +27,13 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     : QWidget(parent)
     , m_pageCount(0)
     , m_pageIndex(0)
-    , m_appModel(categoryModel)
+    , m_category(categoryModel)
     , m_appsManager(AppsManager::instance())
     , m_calcUtil(CalculateUtil::instance())
     , m_appListArea(new AppListArea)
     , m_viewBox(new DHBoxWidget)
     , m_pageLayout(new QHBoxLayout)
+    , m_pageControl(new pageControl)
 {
     // 滚动区域
     m_appListArea->setObjectName("MultiPageBox");
@@ -47,23 +48,26 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_appListArea->installEventFilter(this);
 
     // 翻页按钮和动画
-    m_iconPageActive = QIcon(":/widgets/images/page_indicator_active.svg");
-    m_iconPageNormal = QIcon(":/widgets/images/page_indicator.svg");
     pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value");
     pageSwitchAnimation->setEasingCurve(QEasingCurve::OutQuad);
 
-    connect(m_appListArea, &AppListArea::increaseIcon, this, [ = ] { m_calcUtil->increaseIconSize(); emit m_appsManager->layoutChanged(m_appModel); });
-    connect(m_appListArea, &AppListArea::decreaseIcon, this, [ = ] { m_calcUtil->decreaseIconSize(); emit m_appsManager->layoutChanged(m_appModel); });
+    connect(m_appListArea, &AppListArea::increaseIcon, this, [ = ] { m_calcUtil->increaseIconSize(); emit m_appsManager->layoutChanged(m_category); });
+    connect(m_appListArea, &AppListArea::decreaseIcon, this, [ = ] { m_calcUtil->decreaseIconSize(); emit m_appsManager->layoutChanged(m_category); });
+    connect(m_pageControl, &pageControl::onPageChanged, this, &MultiPagesView::showCurrentPage);
 }
 
-void MultiPagesView::updatePageCount(int pageCount)
+void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
 {
-    if (0 == pageCount || pageCount == m_pageCount)
+    int pageCount = m_appsManager->getPageCount(category == AppsListModel::All ? m_category : category);
+    if(pageCount < 1)
+        pageCount = 1;
+
+    if (pageCount == m_pageCount)
         return;
 
     if (pageCount > m_pageCount) {
         while (pageCount > m_pageCount) {
-            AppsListModel *pModel = new AppsListModel(m_appModel);
+            AppsListModel *pModel = new AppsListModel(m_category);
             pModel->setPageIndex(m_pageCount);
             m_pageAppsModelList.push_back(pModel);
 
@@ -74,16 +78,7 @@ void MultiPagesView::updatePageCount(int pageCount)
             pageView->installEventFilter(this);
             m_appGridViewList.push_back(pageView);
 
-            DFloatingButton *pageButton = new DFloatingButton(this);
-            pageButton->setIcon(m_iconPageNormal);
-            pageButton->setIconSize(QSize(20, 20));
-            pageButton->setFixedSize(QSize(20, 20));
-            pageButton->setBackgroundRole(DPalette::Button);
-            connect(pageButton, &DFloatingButton::clicked, this, &MultiPagesView::clickIconBtn);
-            m_floatBtnList.push_back(pageButton);
-
             m_viewBox->layout()->insertWidget(m_pageCount, pageView);
-            m_pageLayout->insertWidget(m_pageCount + 1, pageButton);
 
             m_pageCount ++;
 
@@ -95,18 +90,14 @@ void MultiPagesView::updatePageCount(int pageCount)
             m_viewBox->layout()->removeWidget(pageView);
             pageView->deleteLater();
 
-            DFloatingButton *pageButton = qobject_cast<DFloatingButton *>(m_pageLayout->itemAt(m_pageCount)->widget());
-            m_pageLayout->removeWidget(pageButton);
-            pageButton->deleteLater();
-
             m_pageAppsModelList.removeLast();
             m_appGridViewList.removeLast();
-            m_floatBtnList.removeLast();
 
             m_pageCount --;
         }
     }
-    showCurrentPage(0);
+
+    m_pageControl->setPageCount(m_pageCount);
 }
 
 QModelIndex MultiPagesView::getAppItem(int index)
@@ -125,12 +116,7 @@ void MultiPagesView::setSearchModel(AppsListModel *searchMode, bool bSearch)
     AppsListModel *pAppModel = bSearch ? searchMode : m_pageAppsModelList[0];
     m_appGridViewList[0]->setModel(pAppModel);
 
-    for (int i = 0; i < m_pageCount; i++) {
-        m_floatBtnList[i]->setVisible(!bSearch);
-
-        if (0 != i)
-            m_appGridViewList[i]->setVisible(!bSearch);
-    }
+    updatePageCount(bSearch ? AppsListModel::Search : AppsListModel::All);
 }
 
 void MultiPagesView::updatePosition()
@@ -146,14 +132,10 @@ void MultiPagesView::updatePosition()
 
 void MultiPagesView::InitUI()
 {
-    m_viewBox->layout()->setSpacing(VIEW_SPACE);
     m_viewBox->setAttribute(Qt::WA_TranslucentBackground);
     m_appListArea->setWidget(m_viewBox);
 
-    m_pageLayout->setMargin(0);
-    m_pageLayout->setSpacing(ICON_SPACE);
-    m_pageLayout->addStretch();
-    m_pageLayout->addStretch();
+    m_pageLayout->addWidget(m_pageControl, 0, Qt::AlignCenter);
 
     QVBoxLayout *layoutMain = new QVBoxLayout;
     layoutMain->setMargin(0);
@@ -174,13 +156,7 @@ void MultiPagesView::showCurrentPage(int currentPage)
     pageSwitchAnimation->setEndValue(endValue);
     pageSwitchAnimation->start();
 
-    bool bVisible = m_pageCount > 1;
-
-    for (int i = 0; i < m_pageCount; i++) {
-        m_floatBtnList[i]->setIcon(m_iconPageNormal);
-        m_floatBtnList[i]->setVisible(bVisible);
-    }
-    m_floatBtnList[m_pageIndex]->setIcon(m_iconPageActive);
+    m_pageControl->setCurrent(currentPage);
 }
 
 QModelIndex MultiPagesView::selectApp(const int key)
@@ -220,19 +196,22 @@ AppsListModel *MultiPagesView::pageModel(int pageIndex)
     return m_pageAppsModelList[pageIndex];
 }
 
-void MultiPagesView::clickIconBtn()
+
+void MultiPagesView::layoutChanged()
 {
-    for (int i = 0; i < m_pageCount; i++) {
-        if (sender() == m_floatBtnList[i]) {
-            showCurrentPage(i);
-            break;
-        }
-    }
+    const int appsContentWidth = width();
+    QSize boxSize;
+    boxSize.setWidth(appsContentWidth);
+    boxSize.setHeight(m_appListArea->height());
+    m_viewBox->setFixedHeight(m_appListArea->height());
+
+    for (auto *pView : m_appGridViewList)
+        pView->setFixedSize(boxSize);
 }
 
 void MultiPagesView::wheelEvent(QWheelEvent *e)
 {
-    if (AppsListModel::All != m_appModel)
+    if (AppsListModel::All != m_category)
         return;
 
     if (pageSwitchAnimation->state() == QPropertyAnimation::Running)

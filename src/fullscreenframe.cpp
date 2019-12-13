@@ -244,7 +244,7 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
     emit currentVisibleCategoryChanged(m_currentCategory);
 }
 
-void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category)
+void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category,int nNext)
 {
     QWidget *dest = category;
 
@@ -252,7 +252,9 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category)
         return;
     m_focusIndex = CategoryTital;
     m_currentCategory =  AppsListModel::AppCategory(m_currentBox + 4);
-    setCategoryIndex(m_currentCategory);
+
+    setCategoryIndex(m_currentCategory,nNext);
+
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
     const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  LEFT_PADDING * 2 - 20) / 2 ;
     m_scrollDest = dest;
@@ -458,11 +460,14 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
 
     if (m_displayMode == GROUP_BY_CATEGORY) {
         if (m_scrollAnimation->state() == m_scrollAnimation->Running) return;
+        int nNext = 0;
         static int  wheelTime = 0;
         if (e->angleDelta().y() < 0) {
             wheelTime++;
+            nNext = 1;
         } else {
             wheelTime--;
+            nNext = -1;
         }
 
         if (wheelTime >= DLauncher::WHOOLTIME_TO_SCROOL || wheelTime <= -DLauncher::WHOOLTIME_TO_SCROOL) {
@@ -491,9 +496,9 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
                         m_currentBox = boxWidgetLen - 1;
                     }
                 }
-
             }
-            scrollToBlurBoxWidget(m_BoxWidget[m_currentBox]);
+
+            scrollToBlurBoxWidget(m_BoxWidget[m_currentBox],nNext);
             wheelTime = 0;
         }
         return;

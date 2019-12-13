@@ -37,8 +37,8 @@ void MaskQWidget::paintEvent(QPaintEvent *event)
     painter.setBrush(QBrush(QColor(0, 0, 0, 67)));
     painter.setPen(Qt::transparent);
     QRect rect = this->rect();
-    rect.setWidth(rect.width() - 1);
-    rect.setHeight(rect.height() - 1);
-    painter.drawRoundedRect(rect, DLauncher::APPHBOX_RADIUS, DLauncher::APPHBOX_RADIUS);
+    rect.setWidth(rect.width());
+    rect.setHeight(rect.height());
+    painter.drawRoundedRect(rect, DLauncher::APPHBOX_RADIUS+10, DLauncher::APPHBOX_RADIUS+9);
     QWidget::paintEvent(event);
 }

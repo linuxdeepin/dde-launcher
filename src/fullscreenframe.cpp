@@ -101,17 +101,17 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_multiPageSystemView(new MultiPagesView(AppsListModel::System)),
     m_multiPagesOthersView(new MultiPagesView(AppsListModel::Others)),
 
-    m_internetBoxWidget(new BlurBoxWidget(AppsListModel::Internet,const_cast<char*>("Internet"))),
-    m_chatBoxWidget(new BlurBoxWidget(AppsListModel::Chat,const_cast<char*>("Chat"))),
-    m_musicBoxWidget(new BlurBoxWidget(AppsListModel::Music,const_cast<char*>("Music"))),
-    m_videoBoxWidget(new BlurBoxWidget(AppsListModel::Video,const_cast<char*>("Video"))),
-    m_graphicsBoxWidget(new BlurBoxWidget(AppsListModel::Graphics,const_cast<char*>("Graphics"))),
-    m_gameBoxWidget(new BlurBoxWidget(AppsListModel::Game,const_cast<char*>("Game"))),
-    m_officeBoxWidget(new BlurBoxWidget(AppsListModel::Office,const_cast<char*>("Office"))),
-    m_readingBoxWidget(new BlurBoxWidget(AppsListModel::Reading,const_cast<char*>("Reading"))),
-    m_developmentBoxWidget(new BlurBoxWidget(AppsListModel::Development,const_cast<char*>("Development"))),
-    m_systemBoxWidget(new BlurBoxWidget(AppsListModel::System,const_cast<char*>("System"))),
-    m_othersBoxWidget(new BlurBoxWidget(AppsListModel::Others,const_cast<char*>("Others"))),
+    m_internetBoxWidget(new BlurBoxWidget(AppsListModel::Internet, const_cast<char *>("Internet"))),
+    m_chatBoxWidget(new BlurBoxWidget(AppsListModel::Chat, const_cast<char *>("Chat"))),
+    m_musicBoxWidget(new BlurBoxWidget(AppsListModel::Music, const_cast<char *>("Music"))),
+    m_videoBoxWidget(new BlurBoxWidget(AppsListModel::Video, const_cast<char *>("Video"))),
+    m_graphicsBoxWidget(new BlurBoxWidget(AppsListModel::Graphics, const_cast<char *>("Graphics"))),
+    m_gameBoxWidget(new BlurBoxWidget(AppsListModel::Game, const_cast<char *>("Game"))),
+    m_officeBoxWidget(new BlurBoxWidget(AppsListModel::Office, const_cast<char *>("Office"))),
+    m_readingBoxWidget(new BlurBoxWidget(AppsListModel::Reading, const_cast<char *>("Reading"))),
+    m_developmentBoxWidget(new BlurBoxWidget(AppsListModel::Development, const_cast<char *>("Development"))),
+    m_systemBoxWidget(new BlurBoxWidget(AppsListModel::System, const_cast<char *>("System"))),
+    m_othersBoxWidget(new BlurBoxWidget(AppsListModel::Others, const_cast<char *>("Others"))),
 
     m_searchResultModel(new AppsListModel(AppsListModel::Search)),
     m_internetModel(new AppsListModel(AppsListModel::Internet)),
@@ -232,7 +232,7 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
     emit currentVisibleCategoryChanged(m_currentCategory);
 }
 
-void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category,int nNext)
+void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category, int nNext)
 {
     QWidget *dest = category;
 
@@ -241,7 +241,7 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category,int nNext)
     m_focusIndex = CategoryTital;
     m_currentCategory =  AppsListModel::AppCategory(m_currentBox + 4);
 
-    setCategoryIndex(m_currentCategory,nNext);
+    setCategoryIndex(m_currentCategory, nNext);
 
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
     const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  LEFT_PADDING * 2 - 20) / 2 ;
@@ -480,7 +480,7 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
                 }
             }
 
-            scrollToBlurBoxWidget(m_BoxWidget[m_currentBox],nNext);
+            scrollToBlurBoxWidget(m_BoxWidget[m_currentBox], nNext);
             wheelTime = 0;
         }
         return;
@@ -1217,7 +1217,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     bool isCategoryMode = m_displayMode == GROUP_BY_CATEGORY;
 
     m_multiPagesView->setVisible(!isCategoryMode);
-    AppsListModel::AppCategory category = (m_displayMode == SEARCH)? AppsListModel::Search: AppsListModel::All;
+    AppsListModel::AppCategory category = (m_displayMode == SEARCH) ? AppsListModel::Search : AppsListModel::All;
     m_multiPagesView->setModel(category);
 
     m_multiPagesInternetView->setVisible(isCategoryMode);
@@ -1500,7 +1500,6 @@ void FullScreenFrame::layoutChanged()
     for (int i = 0; i < CATEGORY_MAX; i++) {
         for (int j = 0; j < m_appsManager->getPageCount(AppsListModel::AppCategory(i + 4)); j++) {
             getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j)->setFixedHeight(boxSize.height());
-            getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j)->setFixedWidth(840);
         }
         getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->updatePosition();
     }

@@ -134,7 +134,11 @@ void MultiPagesView::updatePosition()
     boxSize.setWidth(width());
     boxSize.setHeight(m_appListArea->height());
     m_viewBox->setFixedHeight(m_appListArea->height());
-
+    if (m_category >= AppsListModel::Internet) {
+        boxSize.setHeight(m_calcUtil->getAppBoxSize().height());
+        auto temp = m_pageControl->pos();
+        m_pageControl->move(temp.x() - 5, temp.y() - 5);
+    }
     for (auto *pView : m_appGridViewList)
         pView->setFixedSize(boxSize);
 }

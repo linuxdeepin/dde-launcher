@@ -26,6 +26,8 @@
 pageControl::pageControl(QWidget *parent) : QWidget(parent)
 {
     QHBoxLayout *layout = new QHBoxLayout();
+    layout->setMargin(0);
+    layout->setSpacing(ICON_SPACE);
     setLayout(layout);
 
     m_iconActive = QIcon(":/widgets/images/page_indicator_active.svg");

@@ -142,7 +142,6 @@ private slots:
     void refershCategoryTextVisible();
     void refershCurrentFloatTitle();
     void reflashPageView(const AppsListModel::AppCategory category);
-
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
     MultiPagesView *getCategoryGridViewList(const AppsListModel::AppCategory category);

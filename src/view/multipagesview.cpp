@@ -59,7 +59,7 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
 void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
 {
     int pageCount = m_appsManager->getPageCount(category == AppsListModel::All ? m_category : category);
-    if(pageCount < 1)
+    if (pageCount < 1)
         pageCount = 1;
 
     if (pageCount == m_pageCount)
@@ -97,7 +97,7 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
         }
     }
 
-    m_pageControl->setPageCount(m_pageCount);
+    m_pageControl->setPageCount(m_pageCount > 1 ? pageCount : 0);
 }
 
 QModelIndex MultiPagesView::getAppItem(int index)
@@ -111,12 +111,21 @@ void MultiPagesView::setDataDelegate(QAbstractItemDelegate *delegate)
     InitUI();
 }
 
-void MultiPagesView::setSearchModel(AppsListModel *searchMode, bool bSearch)
+void MultiPagesView::ShowPageView(AppsListModel::AppCategory category)
 {
-    AppsListModel *pAppModel = bSearch ? searchMode : m_pageAppsModelList[0];
-    m_appGridViewList[0]->setModel(pAppModel);
+    int pageCount = m_appsManager->getPageCount(category);
+    for (int i = 0; i < m_pageCount; i++) {
+        m_appGridViewList[i]->setVisible(i < pageCount);
+    }
+    m_pageControl->setPageCount(pageCount > 1 ? pageCount : 0);
+}
 
-    updatePageCount(bSearch ? AppsListModel::Search : AppsListModel::All);
+void MultiPagesView::setModel(AppsListModel::AppCategory category)
+{
+    for (int i = 0; i < m_pageCount; i++) {
+        m_pageAppsModelList[i]->setCategory(category);
+        m_appGridViewList[i]->setModel(m_pageAppsModelList[i]);
+    }
 }
 
 void MultiPagesView::updatePosition()
@@ -194,19 +203,6 @@ AppsListModel *MultiPagesView::pageModel(int pageIndex)
         return nullptr;
 
     return m_pageAppsModelList[pageIndex];
-}
-
-
-void MultiPagesView::layoutChanged()
-{
-    const int appsContentWidth = width();
-    QSize boxSize;
-    boxSize.setWidth(appsContentWidth);
-    boxSize.setHeight(m_appListArea->height());
-    m_viewBox->setFixedHeight(m_appListArea->height());
-
-    for (auto *pView : m_appGridViewList)
-        pView->setFixedSize(boxSize);
 }
 
 void MultiPagesView::wheelEvent(QWheelEvent *e)

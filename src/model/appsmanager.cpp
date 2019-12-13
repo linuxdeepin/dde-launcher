@@ -451,10 +451,10 @@ const ItemInfo AppsManager::createOfCategory(qlonglong category)
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category, int pageIndex) const
 {
     switch (category) {
-    case AppsListModel::Custom:    return m_userSortedList;
-    case AppsListModel::All:       return m_usedSortedListVec[pageIndex];
-    case AppsListModel::Search:     return m_appSearchResultList;
-    case AppsListModel::Category:   return m_categoryList;
+    case AppsListModel::Custom:    return m_userSortedList;        break;
+    case AppsListModel::All:       return m_usedSortedListVec[pageIndex];       break;
+    case AppsListModel::Search:     return m_appSearchListVec[pageIndex];       break;
+    case AppsListModel::Category:   return m_categoryList;          break;
     default:;
     }
 
@@ -522,7 +522,7 @@ void AppsManager::ReflashSortList()
     m_pageCount[AppsListModel::All] = (m_usedSortedList.size() % m_calUtil->appPageItemCount()) ? index + 1 : index;
 }
 
-void AppsManager::ReflashCategorySortList(const AppsListModel::AppCategory& category)
+void AppsManager::ReflashCategorySortList(const AppsListModel::AppCategory &category)
 {
     while (m_pageCount[category ] > 0) {
         m_appInfosVec[m_pageCount[category ] - 1][category].clear();
@@ -535,7 +535,7 @@ void AppsManager::ReflashCategorySortList(const AppsListModel::AppCategory& cate
             index ++;
         }
     }
-    m_pageCount[category] = index + 1;
+    m_pageCount[category] = (m_appInfos[category].size() % m_calUtil->appCategoryPageItemCount()) ? index + 1 : index;
 }
 
 void AppsManager::refreshCategoryInfoList()
@@ -743,8 +743,8 @@ void AppsManager::generateCategoryMap()
 
     ReflashSortList();
     for (int i = 0; i < CATEGORY_COUNT; i++) {
-           ReflashCategorySortList(AppsListModel::AppCategory(i + 4));
-       }
+        ReflashCategorySortList(AppsListModel::AppCategory(i + 4));
+    }
     emit categoryListChanged();
 }
 
@@ -841,9 +841,22 @@ void AppsManager::onIconThemeChanged()
 void AppsManager::searchDone(const QStringList &resultList)
 {
     m_appSearchResultList.clear();
+    while (m_pageCount[AppsListModel::Search] > 0) {
+        m_appSearchListVec[m_pageCount[AppsListModel::Search] - 1].clear();
+        m_pageCount[AppsListModel::Search] --;
+    }
 
     for (const QString &key : resultList)
         appendSearchResult(key);
+
+    int index = 0;
+    for (int i = 0; i < m_appSearchResultList.size(); i++) {
+        m_appSearchListVec[index].push_back(m_appSearchResultList[i]);
+        if (m_appSearchListVec[index].size() >= m_calUtil->appPageItemCount()) {
+            index ++;
+        }
+    }
+    m_pageCount[AppsListModel::Search] = m_appSearchResultList.size() % m_calUtil->appPageItemCount() ? index + 1 : index;
 
     emit dataChanged(AppsListModel::Search);
 

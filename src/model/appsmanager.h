@@ -148,6 +148,7 @@ private:
     ItemInfoList m_usedSortedListVec[MAX_VIEW_NUM];
     ItemInfoList m_userSortedList; // Mini
     ItemInfoList m_appSearchResultList;
+    ItemInfoList m_appSearchListVec[MAX_VIEW_NUM];
     ItemInfoList m_stashList;
     ItemInfoList m_categoryList;
     QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfos;

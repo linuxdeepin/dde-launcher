@@ -54,14 +54,14 @@ public:
 
     QModelIndex getAppItem(int index);
     void setDataDelegate(QAbstractItemDelegate *delegate);
-    void setSearchModel(AppsListModel *searchMode, bool bSearch);
+    void setModel(AppsListModel::AppCategory category);
     void updatePosition();
 
+    void ShowPageView(AppsListModel::AppCategory category);
 signals:
     void connectViewEvent(AppGridView* pView);
 
 private slots:
-    void layoutChanged();
 
 protected:
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;

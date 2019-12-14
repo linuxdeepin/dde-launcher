@@ -31,8 +31,8 @@
 #include <dimagebutton.h>
 #include <DDBusSender>
 
-#define BTN_WIDTH   40
-#define BTN_HEIGHT  40
+#define ICON_SIZE   20
+#define BTN_SIZE    40
 
 #define SEARCHEIT_WIDTH 479
 #define SEARCHEIT_HEIGHT 46
@@ -51,14 +51,16 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_toggleCategoryBtn = new DFloatingButton(this);
     m_toggleCategoryBtn->setAccessibleName("mode-toggle-button");
     m_toggleCategoryBtn->setIcon(QIcon(":/icons/skin/icons/category_normal_22px.png"));
-    m_toggleCategoryBtn->setIconSize(QSize(BTN_WIDTH, BTN_HEIGHT));
-    m_toggleCategoryBtn->setFixedSize(QSize(BTN_WIDTH, BTN_HEIGHT));
+    m_toggleCategoryBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
+    m_toggleCategoryBtn->setFixedSize(QSize(BTN_SIZE, BTN_SIZE));
+    m_toggleCategoryBtn->setAutoExclusive(true);
     m_toggleCategoryBtn->setBackgroundRole(DPalette::Button);
 
     m_toggleModeBtn = new DFloatingButton(this);
     m_toggleModeBtn->setIcon(QIcon(":/icons/skin/icons/unfullscreen_normal.png"));
-    m_toggleModeBtn->setIconSize(QSize(BTN_WIDTH, BTN_HEIGHT));
-    m_toggleModeBtn->setFixedSize(QSize(BTN_WIDTH, BTN_HEIGHT));
+    m_toggleModeBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
+    m_toggleModeBtn->setFixedSize(QSize(BTN_SIZE, BTN_SIZE));
+    m_toggleModeBtn->setAutoExclusive(true);
     m_toggleModeBtn->setBackgroundRole(DPalette::Button);
 
     m_searchEdit = new DSearchEdit(this);

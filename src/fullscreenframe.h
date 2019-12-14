@@ -131,6 +131,8 @@ private:
 
     AppsListModel *nextCategoryModel(const AppsListModel *currentModel);
     AppsListModel *prevCategoryModel(const AppsListModel *currentModel);
+    AppsListModel::AppCategory nextCategoryModel(const AppsListModel::AppCategory category);
+    AppsListModel::AppCategory prevCategoryModel(const AppsListModel::AppCategory category);
 
 private slots:
     void layoutChanged();

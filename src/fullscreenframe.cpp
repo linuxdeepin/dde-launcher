@@ -215,7 +215,6 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
 
     if (!dest) return;
 
-    m_focusIndex = CategoryTital;
     m_currentCategory = tempMode;
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
     m_currentBox = m_currentCategory - 4;
@@ -884,15 +883,11 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         switch (key) {
         case Qt::Key_Backtab:
         case Qt::Key_Left: {
-            int nextCategory = m_currentCategory - 1;
-            if (nextCategory < AppsListModel::Internet) nextCategory = AppsListModel::Others;
-            scrollToCategory(AppsListModel::AppCategory(nextCategory), -1);
+            scrollToCategory(prevCategoryModel(m_currentCategory), -1);
             return;
         }
         case Qt::Key_Right: {
-            int nextCategory = m_currentCategory + 1;
-            if (nextCategory > AppsListModel::Others) nextCategory = AppsListModel::Internet;
-            scrollToCategory(AppsListModel::AppCategory(nextCategory), 1);
+            scrollToCategory(nextCategoryModel(m_currentCategory), 1);
             return;
         }
         case Qt::Key_Down:  m_focusIndex = FirstItem;  break;
@@ -913,8 +908,6 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         update();
         return;
     }
-
-
 
     const int column = m_calcUtil->appColumnCount();
     QModelIndex index;
@@ -961,35 +954,30 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         // the column number of destination, when moving up/down, columns shouldn't be changed.
         //const int realColumn = currentIndex.row() % column;
 
-        // const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
+        const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
 
         if (key == Qt::Key_Down || key == Qt::Key_Right) {
             int currentIndex = m_appsManager->getPageIndex(m_currentCategory);
-            if (m_appsManager->getPageCount(m_currentCategory) != (currentIndex + 1)) {
+            if (m_appsManager->getPageCount(m_currentCategory) != (currentIndex + 1))
                 getCategoryGridViewList(m_currentCategory)->showCurrentPage(++currentIndex);
-                auto index = getCategoryGridViewList(m_currentCategory)->getAppItem(0);
-                if (!index.isValid()) return;
-                m_appItemDelegate->setCurrentIndex(index);
-                update();
-                return;
-            }
+            else
+                scrollToCategory(nextCategoryModel(m_currentCategory), 1);
+
         } else if (key == Qt::Key_Up || key == Qt::Key_Left) {
             int currentIndex = m_appsManager->getPageIndex(m_currentCategory);
-            if (0 < currentIndex) {
+            if (0 < currentIndex)
                 getCategoryGridViewList(m_currentCategory)->showCurrentPage(--currentIndex);
-                auto index = getCategoryGridViewList(m_currentCategory)->getAppItem(0);
-                if (!index.isValid()) return;
-                m_appItemDelegate->setCurrentIndex(index);
-                update();
-                return;
-            }
+            else
+                scrollToCategory(prevCategoryModel(m_currentCategory), -1);
         }
+        index = getCategoryGridViewList(m_currentCategory)->getAppItem(0);
+
     } while (false);
 
     // valid verify and UI adjustment.
     const QModelIndex selectedIndex = index.isValid() ? index : currentIndex;
     m_appItemDelegate->setCurrentIndex(selectedIndex);
-    //ensureItemVisible(selectedIndex);
+//    ensureItemVisible(selectedIndex);
     update();
 }
 
@@ -1168,7 +1156,6 @@ void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
     if (!view)
         return;
 
-    // m_appsArea->ensureVisible(0, view->indexYOffset(index) + view->pos().y(), 0, DLauncher::APPS_AREA_ENSURE_VISIBLE_MARGIN_Y);
     updateCurrentVisibleCategory();
     if (category != m_currentCategory) {
         scrollToCategory(category);
@@ -1466,6 +1453,24 @@ AppsListModel *FullScreenFrame::prevCategoryModel(const AppsListModel *currentMo
         prevModel = prevCategoryModel(prevModel);
     }
     return prevModel;
+}
+
+AppsListModel::AppCategory FullScreenFrame::nextCategoryModel(const AppsListModel::AppCategory category)
+{
+    int nextCategory = category + 1;
+    if (nextCategory > AppsListModel::Others)
+        nextCategory = AppsListModel::Internet;
+
+    return (AppsListModel::AppCategory)nextCategory;
+}
+
+AppsListModel::AppCategory FullScreenFrame::prevCategoryModel(const AppsListModel::AppCategory category)
+{
+    int nextCategory = category - 1;
+    if (nextCategory < AppsListModel::Internet)
+        nextCategory = AppsListModel::Others;
+
+    return (AppsListModel::AppCategory)nextCategory;
 }
 
 void FullScreenFrame::layoutChanged()

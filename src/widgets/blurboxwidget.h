@@ -62,7 +62,7 @@ private:
     MaskQWidget *m_maskLayer = nullptr;
     CalculateUtil *m_calcUtil;
     AppsListModel::AppCategory category;
-     CategoryTitleWidget *m_categoryTitle;
+    CategoryTitleWidget *m_categoryTitle;
 };
 
 #endif // BLURBOXWIDGET_H

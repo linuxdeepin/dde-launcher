@@ -30,8 +30,8 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     , m_vLayout(new QVBoxLayout(this))
     , m_maskLayer(new MaskQWidget(this))
     , m_calcUtil(CalculateUtil::instance())
-    ,category(curCategory)
-    ,m_categoryTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", name)))
+    , category(curCategory)
+    , m_categoryTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", name)))
 {
     setMaskColor(LightColor);
     setMaskAlpha(DLauncher::APPHBOX_ALPHA);
@@ -40,9 +40,9 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     setFixedWidth(m_calcUtil->getAppBoxSize().width());
 
     setLayout(m_vLayout);
-    m_vLayout->setContentsMargins(60, 27, 30, 0);
+    m_vLayout->setContentsMargins(0, 0, 0, 0);
     m_vLayout->setAlignment(Qt::AlignTop);
-    layoutAddWidget(m_categoryTitle,m_calcUtil->getAppBoxSize().width() / 2,Qt::AlignHCenter);
+    layoutAddWidget(m_categoryTitle, m_calcUtil->getAppBoxSize().width() / 2, Qt::AlignHCenter);
 }
 
 void BlurBoxWidget::layoutAddWidget(QWidget *child)
@@ -79,7 +79,7 @@ void BlurBoxWidget::setMaskSize(QSize size)
 {
     m_maskLayer->setFixedSize(size);
     m_maskLayer->raise();
-    m_maskLayer->move(0,-5);
+    m_maskLayer->move(0, -5);
 }
 
 void BlurBoxWidget::setMaskVisible(bool visible)

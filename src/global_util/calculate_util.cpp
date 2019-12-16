@@ -122,9 +122,10 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
         m_appColumnCount = 4;
         int Catespacing = 54;
         const int calc_categroyitem_width = (getAppBoxSize().width() - Catespacing * m_appColumnCount * 2 ) / m_appColumnCount + 0.5;
-        //const int calc_categoryspacing = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount -Catespacing*2) / (m_appColumnCount * 2) - 8;
-        m_appItemSpacing = 40;
+        const int calc_categoryspacing = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount -Catespacing*2) / (m_appColumnCount * 2) - 8;
+        m_appItemSpacing = calc_categoryspacing;
         m_appItemSize = calc_categroyitem_width;
+        m_gridListLeft = (getAppBoxSize().width() - calc_categroyitem_width*m_appColumnCount - calc_categoryspacing*m_appColumnCount*2)/2;
         emit layoutChanged();
         return;
     }
@@ -142,7 +143,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 
     // calculate font size;
     m_appItemFontSize = m_appItemSize <= 80 ? 8 : qApp->font().pointSize();
-
+    m_gridListLeft = 0;
     emit layoutChanged();
 }
 

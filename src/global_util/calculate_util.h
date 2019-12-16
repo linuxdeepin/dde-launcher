@@ -51,6 +51,7 @@ public:
     inline int appColumnCount() const {return m_appColumnCount;}
     inline int appItemFontSize() const {return m_appItemFontSize;}
     inline int appItemSpacing() const {return m_appItemSpacing;}
+    inline int gridListLeft() const {return m_gridListLeft;}
     inline int appPageItemCount() const {return m_appPageItemCount;}
     inline int appCategoryPageItemCount() const {return m_categoryAppPageItemCount;}
     inline int appCategoryCount() const {return m_categoryCount;}
@@ -78,6 +79,7 @@ private:
 
     int m_appItemFontSize = 12;
     int m_appItemSpacing = 10;
+    int m_gridListLeft = 0;
     int m_appItemSize = 130;
     int m_appColumnCount = 7;
     int m_navgationTextSize = 14;

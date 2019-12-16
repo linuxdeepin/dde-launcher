@@ -53,8 +53,9 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     m_opacityAnimation->setDuration(300);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout->addSpacing(DLauncher::APPS_CATEGORY_TITLE_SPACING);
     mainLayout->addWidget(m_title);
-    mainLayout->addLayout(lineLayout);
+    mainLayout->addSpacing(DLauncher::APPS_CATEGORY_TITLE_SPACING);
 
     setAccessibleName(title);
     setLayout(mainLayout);

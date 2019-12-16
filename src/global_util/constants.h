@@ -79,6 +79,8 @@ static const int WHOOLTIME_TO_SCROOL = 1;
 
 static const int APPS_AREA_CATEGORY_INDEX = 255;
 
+static const int APPS_CATEGORY_TITLE_SPACING = 60;
+
 }
 
 #endif // CONSTANTS_H

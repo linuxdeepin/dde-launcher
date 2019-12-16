@@ -117,7 +117,8 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     // mini mode
     if (m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeCategory) {
 
-        m_appItemFontSize = 12;
+        m_appItemFontSize = m_appItemSize <= 80 ? 8 : qApp->font().pointSize();
+
         m_appColumnCount = 4;
         int Catespacing = 54;
         const int calc_categroyitem_width = (getAppBoxSize().width() - Catespacing * m_appColumnCount * 2 ) / m_appColumnCount + 0.5;

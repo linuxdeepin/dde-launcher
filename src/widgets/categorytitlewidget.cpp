@@ -117,8 +117,6 @@ void CategoryTitleWidget::addTextShadow()
 void CategoryTitleWidget::relayout()
 {
     QFont titleFont(m_title->font());
-    titleFont.setPixelSize(m_calcUtil->titleTextSize());
-    m_title->setFont(titleFont);
     QFontMetrics fontMetric(titleFont);
     const int width = fontMetric.width(m_title->text());
     m_title->setFixedWidth(width + 10);

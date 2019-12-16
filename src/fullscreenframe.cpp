@@ -271,11 +271,13 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int
                 category = AppsListModel::Others;
             else if (type > AppsListModel::Others) {
                 category = AppsListModel::Internet ;
+            } else {
+                category = AppsListModel::AppCategory(type);
             }
         }
 
-        if (m_appsManager->appNums(AppsListModel::AppCategory(type))) {
-            category = AppsListModel::AppCategory(type);
+        if (m_appsManager->appNums(AppsListModel::AppCategory(category))) {
+            category = AppsListModel::AppCategory(category);
             break;
         }
     }

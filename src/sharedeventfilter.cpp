@@ -58,7 +58,7 @@ bool SharedEventFilter::handleKeyEvent(QKeyEvent *e)
     case Qt::Key_Enter:
     case Qt::Key_Return:        m_frame->launchCurrentApp();                    return true;
     case Qt::Key_Escape:        m_frame->hideLauncher();                        return true;
-    case Qt::Key_Space:
+    case Qt::Key_Space:                                                                                 break;
     case Qt::Key_Tab:
     case Qt::Key_Backtab:
     case Qt::Key_Up:
@@ -70,7 +70,7 @@ bool SharedEventFilter::handleKeyEvent(QKeyEvent *e)
 
     // handle normal keys
     if ((e->key() <= Qt::Key_Z && e->key() >= Qt::Key_A) ||
-        (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_0))
+        (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_0) || e->key() == Qt::Key_Space)
     {
         // handle the emacs key bindings
         if(ctrlPressed) {

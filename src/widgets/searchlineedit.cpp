@@ -28,6 +28,7 @@
 #include <QEvent>
 #include <QTimer>
 #include <QResizeEvent>
+#include <QGuiApplication>
 #include <DGuiApplicationHelper>
 
 DGUI_USE_NAMESPACE
@@ -91,6 +92,13 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     connect(this, &SearchLineEdit::textChanged, this, &SearchLineEdit::onTextChanged);
     connect(m_clear, &DIconButton::clicked, this, &SearchLineEdit::normalMode);
 
+    connect(qApp, &QGuiApplication::fontChanged, this, [ = ](const QFont & font) {
+        m_placeholderText->setFont(font);
+        QFontMetrics fm(font);
+        m_placeholderText->setFixedWidth(fm.width(m_placeholderText->text()) + 10);
+        m_floatWidget->setFixedWidth(m_icon->width() + m_placeholderText->width() + 5);
+    });
+
 #ifndef ARCH_MIPSEL
     m_floatAni = new QPropertyAnimation(m_floatWidget, "pos", this);
     m_floatAni->setDuration(260);
@@ -119,7 +127,7 @@ bool SearchLineEdit::event(QEvent *e)
         }
     }
     break;
-//    case QEvent::FocusOut:      normalMode();       break;
+    //    case QEvent::FocusOut:      normalMode();       break;
     default:;
     }
 

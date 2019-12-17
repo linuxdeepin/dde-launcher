@@ -107,6 +107,8 @@ protected:
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
     void hideEvent(QHideEvent *e) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
     bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
     void enterEvent(QEvent*) override;
@@ -192,7 +194,7 @@ private:
 
     AppItemDelegate *m_appItemDelegate;
 
-//    AppGridViewList m_pageAppsViewList;
+    //    AppGridViewList m_pageAppsViewList;
     MultiPagesView *m_multiPagesView;
     MultiPagesView *m_multiPagesInternetView;
     MultiPagesView *m_multiPagesChatView;
@@ -206,7 +208,7 @@ private:
     MultiPagesView *m_multiPageSystemView;
     MultiPagesView *m_multiPagesOthersView;
 
-//    pageAppsModelist m_pageAppsModelList;
+    //    pageAppsModelist m_pageAppsModelList;
     BlurBoxWidget *m_internetBoxWidget;
     BlurBoxWidget *m_chatBoxWidget;
     BlurBoxWidget *m_musicBoxWidget;
@@ -255,5 +257,12 @@ private:
 
     int m_focusIndex;
     int m_boxWidgetPageCurrent[CATEGORY_MAX] = {0};
+
+    //鼠标单击位置
+    QPoint m_mousePos;
+    int m_appsAreaHScrollBarValue;
+
+    qint64 m_mouse_press_time;
+    bool m_mouse_press;
 };
 #endif // MAINFRAME_H

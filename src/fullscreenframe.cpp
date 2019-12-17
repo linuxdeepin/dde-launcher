@@ -431,6 +431,9 @@ void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
     }
 
     int move_diff = e->pos().x() - m_mousePos.x();
+    int limit_move = m_calcUtil->getAppBoxSize().width() -  DLauncher::MOUSE_MOVE_TO_NEXT;
+    if (move_diff  > limit_move)  move_diff = limit_move;
+    if (move_diff < -limit_move) move_diff = -limit_move;
     m_appsArea->horizontalScrollBar()->setValue(m_appsAreaHScrollBarValue - move_diff);
 }
 
@@ -447,11 +450,23 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
         //快速滑动
         if (mouse_release_time - m_mouse_press_time <= DLauncher::MOUSE_PRESS_TIME_DIFF) {
             if (move_diff > 0) {
-                scrollToCategory(prevCategoryModel(m_currentCategory), -1);
+                //快速长距离滑动
+                if (move_diff > DLauncher::MOUSE_MOVE_TO_NEXT * 2) {
+                    int targetCategory = prevCategoryModel(prevCategoryModel(m_currentCategory));
+                    scrollToCategory(AppsListModel::AppCategory(targetCategory), -1);
+                } else {
+                    scrollToCategory(prevCategoryModel(m_currentCategory), -1);
+                }
             } else {
-                scrollToCategory(nextCategoryModel(m_currentCategory), 1);
+                if (move_diff < -DLauncher::MOUSE_MOVE_TO_NEXT * 2) {
+                    int targetCategory = nextCategoryModel(nextCategoryModel(m_currentCategory));
+                    scrollToCategory(AppsListModel::AppCategory(targetCategory), 1);
+                } else {
+                    scrollToCategory(nextCategoryModel(m_currentCategory), 1);
+                }
             }
         } else {
+
             if (move_diff > DLauncher::MOUSE_MOVE_TO_NEXT) {
                 scrollToCategory(prevCategoryModel(m_currentCategory), -1);
             } else if (move_diff < -DLauncher::MOUSE_MOVE_TO_NEXT) {

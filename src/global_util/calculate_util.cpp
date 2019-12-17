@@ -117,15 +117,23 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     // mini mode
     if (m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeCategory) {
 
-        m_appItemFontSize = m_appItemSize <= 80 ? 8 : qApp->font().pointSize();
-
         m_appColumnCount = 4;
         int Catespacing = 54;
-        const int calc_categroyitem_width = (getAppBoxSize().width() - Catespacing * m_appColumnCount * 2 ) / m_appColumnCount + 0.5;
-        const int calc_categoryspacing = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount -Catespacing*2) / (m_appColumnCount * 2) - 8;
+        int calc_categroyitem_width = 0;
+        int calc_categoryspacing = 0;
+        if (pr.width() <= 1440) {
+            Catespacing = 60;
+            calc_categroyitem_width = (getAppBoxSize().height() - Catespacing * 3 * 2) / 3 + 0.5;
+            calc_categoryspacing  = (double(getAppBoxSize().height()) - calc_categroyitem_width * 3 - Catespacing * 2) / (3 * 2) - 8;
+        } else {
+            calc_categroyitem_width = (getAppBoxSize().width() - Catespacing * m_appColumnCount * 2) / m_appColumnCount + 0.5;
+            calc_categoryspacing = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount - Catespacing * 2) / (m_appColumnCount * 2) - 8;
+        }
+
         m_appItemSpacing = calc_categoryspacing;
         m_appItemSize = calc_categroyitem_width;
-        m_gridListLeft = (getAppBoxSize().width() - calc_categroyitem_width*m_appColumnCount - calc_categoryspacing*m_appColumnCount*2)/2;
+        m_appItemFontSize = m_appItemSize <= 130 ? 6 : qApp->font().pointSize();
+        m_gridListLeft = (getAppBoxSize().width() - calc_categroyitem_width * m_appColumnCount - calc_categoryspacing * m_appColumnCount * 2) / 2;
         emit layoutChanged();
         return;
     }

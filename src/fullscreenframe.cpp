@@ -159,6 +159,9 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     installEventFilter(m_eventFilter);
 
     connect(m_multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
+    for (int i = 0; i < CATEGORY_MAX; i++)
+        connect(getCategoryGridViewList(AppsListModel::AppCategory(i+4)), &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
+
     initUI();
     initConnection();
 
@@ -814,18 +817,6 @@ void FullScreenFrame::initConnection()
     connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hide, Qt::QueuedConnection);
     connect(m_clearCacheTimer, &QTimer::timeout, m_appsManager, &AppsManager::clearCache);
 
-    // auto scroll when drag to app list box border
-
-    for (int i = 0; i < CATEGORY_MAX; i++) {
-        for (int j = 0; j < m_appsManager->getPageCount(AppsListModel::AppCategory(i + 4)); j++) {
-            connect(getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j), &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-            connect(getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j), &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-            connect(getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j), &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-            connect(getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j), &AppGridView::clicked, this, &FullScreenFrame::hide);
-            connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, getCategoryGridViewList(AppsListModel::AppCategory(i + 4))->pageView(j), static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
-        }
-    }
-
     connect(m_internetBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
     connect(m_chatBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
     connect(m_musicBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
@@ -963,14 +954,14 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
 
         if (key == Qt::Key_Down || key == Qt::Key_Right) {
-            int currentIndex = m_appsManager->getPageIndex(m_currentCategory);
+            int currentIndex = getCategoryGridViewList(m_currentCategory)->currentPage();
             if (m_appsManager->getPageCount(m_currentCategory) != (currentIndex + 1))
                 getCategoryGridViewList(m_currentCategory)->showCurrentPage(++currentIndex);
             else
                 scrollToCategory(nextCategoryModel(m_currentCategory), 1);
 
         } else if (key == Qt::Key_Up || key == Qt::Key_Left) {
-            int currentIndex = m_appsManager->getPageIndex(m_currentCategory);
+            int currentIndex = getCategoryGridViewList(m_currentCategory)->currentPage();
             if (0 < currentIndex)
                 getCategoryGridViewList(m_currentCategory)->showCurrentPage(--currentIndex);
             else
@@ -1033,7 +1024,6 @@ void FullScreenFrame::launchCurrentApp()
     switch (m_displayMode) {
     case SEARCH:
     case ALL_APPS:            m_appsManager->launchApp(m_multiPagesView->getAppItem(0));     break;
-    //    case ALL_APPS:            m_appsManager->launchApp(m_pageAppsViewList[m_pageCurrent]->indexAt(0));     break;
     case GROUP_BY_CATEGORY:   m_appsManager->launchApp(getCategoryGridViewList(m_currentCategory)->getAppItem(0));    break;
     }
 
@@ -1083,11 +1073,9 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
 
 void FullScreenFrame::uninstallApp(const QString &appKey)
 {
-
     for (int i = 0; i < m_appsManager->getPageCount(AppsListModel::All); i++) {
         uninstallApp(m_multiPagesView->pageModel(i)->indexAt(appKey));
     }
-
 }
 
 void FullScreenFrame::uninstallApp(const QModelIndex &context)

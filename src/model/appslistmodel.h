@@ -87,7 +87,7 @@ public:
 
 public:
     explicit AppsListModel(const AppCategory& category, QObject *parent = nullptr);
-    void setPageIndex(int pageIndex){m_pageIndex = pageIndex;};
+    void setPageIndex(int pageIndex){m_pageIndex = pageIndex;}
 
     inline AppCategory category() const {return m_category;}
     void setDraggingIndex(const QModelIndex &index);
@@ -121,6 +121,8 @@ private:
 private:
     AppsManager *m_appsManager;
     CalculateUtil *m_calcUtil;
+
+    QList<ItemInfo> m_itemList;
 
     QStringList m_holdPackages;
 

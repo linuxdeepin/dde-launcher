@@ -75,9 +75,7 @@ public:
     bool isVaild();
     void refreshAllList();
     const QPixmap getThemeIcon(const ItemInfo &itemInfo, const int size);
-    int getPageCount(const AppsListModel::AppCategory category){return m_pageCount[category];}
-    void setPageIndex(const AppsListModel::AppCategory category,int pageIndex){m_pageIndex[category] = pageIndex;}
-    int getPageIndex(const AppsListModel::AppCategory category){return m_pageIndex[category];}
+    int getPageCount(const AppsListModel::AppCategory category);
 
 signals:
     void itemDataChanged(const ItemInfo &info) const;
@@ -95,7 +93,7 @@ public slots:
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
     void uninstallApp(const QString &appKey);
-    const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category, int pageIndex=0) const;
+    const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
 
     bool appIsNewInstall(const QString &key);
     bool appIsAutoStart(const QString &desktop);
@@ -125,8 +123,6 @@ private:
     void onSearchTimeOut();
     void refreshNotFoundIcon();
     void refreshAppListIcon();
-    void ReflashSortList();
-    void ReflashCategorySortList(const AppsListModel::AppCategory& category);
 
 private slots:
     void onIconThemeChanged();
@@ -147,21 +143,16 @@ private:
     QStringList m_newInstalledAppsList;
     ItemInfoList m_allAppInfoList;
     ItemInfoList m_usedSortedList; // FullScreen
-    ItemInfoList m_usedSortedListVec[MAX_VIEW_NUM];
     ItemInfoList m_userSortedList; // Mini
     ItemInfoList m_appSearchResultList;
-    ItemInfoList m_appSearchListVec[MAX_VIEW_NUM];
     ItemInfoList m_stashList;
     ItemInfoList m_categoryList;
     QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfos;
-    QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfosVec[MAX_VIEW_NUM];
 
     ItemInfo m_unInstallItem = ItemInfo();
     ItemInfo m_beDragedItem = ItemInfo();
 
     CalculateUtil *m_calUtil;
-    int m_pageCount[CATEGORY_COUNT+4] = {0};
-    int m_pageIndex[CATEGORY_COUNT+4] = {0};
     QTimer *m_searchTimer;
     QTimer *m_delayRefreshTimer;
 

@@ -136,6 +136,14 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
     return pixmap;
 }
 
+int AppsManager::getPageCount(const AppsListModel::AppCategory category)
+{
+    int nSize = appsInfoList(category).size();
+    int page = nSize / m_calUtil->appPageItemCount();
+    page = nSize % m_calUtil->appPageItemCount() ? page + 1 : page;
+    return page;
+}
+
 AppsManager::AppsManager(QObject *parent) :
     QObject(parent),
     m_launcherInter(new DBusLauncher(this)),
@@ -332,8 +340,8 @@ void AppsManager::restoreItem(const QString &appKey, const int pos)
         if (m_stashList[i].m_key == appKey) {
             // if pos is valid
             if (pos != -1) {
-                int itemIndex = m_pageIndex[AppsListModel::All] * m_calUtil->appPageItemCount() + pos;
-                m_usedSortedList.insert(itemIndex, m_stashList[i]);
+//                int itemIndex = m_pageIndex[AppsListModel::All] * m_calUtil->appPageItemCount() + pos;
+                m_usedSortedList.insert(pos, m_stashList[i]);
             }
             m_allAppInfoList.append(m_stashList[i]);
             m_stashList.removeAt(i);
@@ -482,17 +490,17 @@ const ItemInfo AppsManager::createOfCategory(qlonglong category)
     return info;
 }
 
-const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category, int pageIndex) const
+const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const
 {
     switch (category) {
     case AppsListModel::Custom:    return m_userSortedList;        break;
-    case AppsListModel::All:       return m_usedSortedListVec[pageIndex];       break;
-    case AppsListModel::Search:     return m_appSearchListVec[pageIndex];       break;
+    case AppsListModel::All:       return m_usedSortedList;       break;
+    case AppsListModel::Search:     return m_appSearchResultList;       break;
     case AppsListModel::Category:   return m_categoryList;          break;
     default:;
     }
 
-    return m_appInfosVec[pageIndex][category];
+    return m_appInfos[category];
 }
 
 bool AppsManager::appIsNewInstall(const QString &key)
@@ -538,38 +546,6 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
     m_iconCache[tmpKey] = pixmap;
 
     return pixmap;
-}
-
-void AppsManager::ReflashSortList()
-{
-    while (m_pageCount[AppsListModel::All] > 0) {
-        m_usedSortedListVec[m_pageCount[AppsListModel::All] - 1].clear();
-        m_pageCount[AppsListModel::All] --;
-    }
-    int index = 0;
-    for (int i = 0; i < m_usedSortedList.size(); i++) {
-        m_usedSortedListVec[index].push_back(m_usedSortedList[i]);
-        if (m_usedSortedListVec[index].size() >= m_calUtil->appPageItemCount()) {
-            index ++;
-        }
-    }
-    m_pageCount[AppsListModel::All] = (m_usedSortedList.size() % m_calUtil->appPageItemCount()) ? index + 1 : index;
-}
-
-void AppsManager::ReflashCategorySortList(const AppsListModel::AppCategory &category)
-{
-    while (m_pageCount[category ] > 0) {
-        m_appInfosVec[m_pageCount[category ] - 1][category].clear();
-        m_pageCount[category] --;
-    }
-    int index = 0;
-    for (int i = 0; i < m_appInfos[category].size(); i++) {
-        m_appInfosVec[index][category].push_back(m_appInfos[category][i]);
-        if (m_appInfosVec[index][category].size() >= m_calUtil->appCategoryPageItemCount()) {
-            index ++;
-        }
-    }
-    m_pageCount[category] = (m_appInfos[category].size() % m_calUtil->appCategoryPageItemCount()) ? index + 1 : index;
 }
 
 void AppsManager::refreshCategoryInfoList()
@@ -692,7 +668,7 @@ void AppsManager::refreshUserInfoList()
         // Average number of starts
         return (static_cast<double>(a.m_openCount) / hours_diff_a) > (static_cast<double>(b.m_openCount) / hours_diff_b);
     });
-    ReflashSortList();
+//    ReflashSortList();
 
     saveUserSortedList();
 }
@@ -708,7 +684,7 @@ void AppsManager::updateUsedListInfo()
             m_usedSortedList[idx].m_openCount = openCount;
         }
     }
-    ReflashSortList();
+//    ReflashSortList();
 }
 
 void AppsManager::generateCategoryMap()
@@ -777,16 +753,13 @@ void AppsManager::generateCategoryMap()
         return info1.m_categoryId < info2.m_categoryId;
     });
 
-    ReflashSortList();
-    for (int i = 0; i < CATEGORY_COUNT; i++) {
-        ReflashCategorySortList(AppsListModel::AppCategory(i + 4));
-    }
     emit categoryListChanged();
 }
 
 int AppsManager::appNums(const AppsListModel::AppCategory &category) const
 {
-    return appsInfoList(category, m_pageIndex[category]).size();
+//    return appsInfoList(category, m_pageIndex[category]).size();
+    return appsInfoList(category).size();
 }
 
 void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &desktpFilePath)
@@ -877,22 +850,9 @@ void AppsManager::onIconThemeChanged()
 void AppsManager::searchDone(const QStringList &resultList)
 {
     m_appSearchResultList.clear();
-    while (m_pageCount[AppsListModel::Search] > 0) {
-        m_appSearchListVec[m_pageCount[AppsListModel::Search] - 1].clear();
-        m_pageCount[AppsListModel::Search] --;
-    }
 
     for (const QString &key : resultList)
         appendSearchResult(key);
-
-    int index = 0;
-    for (int i = 0; i < m_appSearchResultList.size(); i++) {
-        m_appSearchListVec[index].push_back(m_appSearchResultList[i]);
-        if (m_appSearchListVec[index].size() >= m_calUtil->appPageItemCount()) {
-            index ++;
-        }
-    }
-    m_pageCount[AppsListModel::Search] = m_appSearchResultList.size() % m_calUtil->appPageItemCount() ? index + 1 : index;
 
     emit dataChanged(AppsListModel::Search);
 
@@ -929,7 +889,7 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
             }
         }
     }
-    ReflashSortList();
+//    ReflashSortList();
 
     m_delayRefreshTimer->start();
 }

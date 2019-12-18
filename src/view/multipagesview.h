@@ -51,6 +51,7 @@ public:
     QModelIndex selectApp(const int key);
     AppGridView *pageView(int pageIndex);
     AppsListModel *pageModel(int pageIndex);
+    int currentPage(){return m_pageIndex;}
 
     QModelIndex getAppItem(int index);
     void setDataDelegate(QAbstractItemDelegate *delegate);

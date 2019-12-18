@@ -60,20 +60,19 @@ const QStringList sysHoldPackages()
     const auto holds_list = gsettings.get("apps-hold-list").toStringList();
 
     if (holds_list.isEmpty() ||
-        (holds_list.size() == 1 && holds_list.first().isEmpty()))
+            (holds_list.size() == 1 && holds_list.first().isEmpty()))
         return QStringList() << "dde-control-center"
-                             << "dde-computer"
-                             << "dde-trash"
-                             << "dde-file-manager"
-                             << "deepin-appstore"
-                             << "deepin-app-store"
-                             << "deepin-toggle-desktop"
-                             << "deepin-wm-multitaskingview"
-                             << "dde-calendar"
-                             << "deepin-manual"
-                             << "deepin-terminal"
-                             << "deepin-defender"
-                             << "kwin-wm-multitaskingview";
+               << "dde-computer"
+               << "dde-trash"
+               << "dde-file-manager"
+               << "deepin-appstore"
+               << "deepin-app-store"
+               << "deepin-toggle-desktop"
+               << "deepin-wm-multitaskingview"
+               << "dde-calendar"
+               << "deepin-manual"
+               << "deepin-terminal"
+               << "kwin-wm-multitaskingview";
 
     return holds_list;
 }
@@ -170,8 +169,10 @@ void AppsListModel::clearDraggingIndex()
 int AppsListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    m_appsManager->setPageIndex(m_category,m_pageIndex);
-    return m_appsManager->appsInfoList(m_category, m_pageIndex).size();
+
+    int nSize = m_appsManager->appsInfoList(m_category).size();
+    int pageCount = m_calcUtil->appPageItemCount();
+    return qMin(pageCount, nSize - pageCount * m_pageIndex);
 }
 
 const QModelIndex AppsListModel::indexAt(const QString &appKey) const
@@ -180,8 +181,7 @@ const QModelIndex AppsListModel::indexAt(const QString &appKey) const
 
     int i = 0;
     const int count = rowCount(QModelIndex());
-    while (i != count)
-    {
+    while (i != count) {
         if (index(i).data(AppKeyRole).toString() == appKey)
             return index(i);
         ++i;
@@ -252,14 +252,15 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
 
 QVariant AppsListModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || index.row() >= m_appsManager->appsInfoList(m_category, m_pageIndex).size())
+    int nSize = m_appsManager->appsInfoList(m_category).size();
+    int pageCount = qMin(m_calcUtil->appPageItemCount(), nSize - m_calcUtil->appPageItemCount() * m_pageIndex);
+    if (!index.isValid() || index.row() >= pageCount)
         return QVariant();
 
-    m_appsManager->setPageIndex(m_category,m_pageIndex);
-    const ItemInfo itemInfo = m_appsManager->appsInfoList(m_category, m_pageIndex)[index.row()];
+    int start = m_calcUtil->appPageItemCount() * m_pageIndex;
+    const ItemInfo itemInfo = m_appsManager->appsInfoList(m_category)[start + index.row()];
 
-    switch (role)
-    {
+    switch (role) {
     case AppRawItemInfoRole:
         return QVariant::fromValue(itemInfo);
     case AppNameRole:
@@ -289,10 +290,9 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIsEnableScaling(itemInfo.m_key);
     case AppNewInstallRole: {
         if (m_category == Category) {
-            m_appsManager->setPageIndex(m_category,m_pageIndex);
-            const ItemInfoList &list = m_appsManager->appsInfoList(CateGoryMap[itemInfo.m_categoryId], m_pageIndex);
-            for (const ItemInfo &in : list) {
-                if (m_appsManager->appIsNewInstall(in.m_key)) return true;
+            const ItemInfoList &list = m_appsManager->appsInfoList(CateGoryMap[itemInfo.m_categoryId]);
+            for (int i = 0; i < pageCount; i++) {
+                if (m_appsManager->appIsNewInstall(list[i + start].m_key)) return true;
             }
         }
 
@@ -370,21 +370,21 @@ bool AppsListModel::indexDragging(const QModelIndex &index) const
     const int current = index.row();
 
     return (start <= end && current >= start && current <= end) ||
-            (start >= end && current <= start && current >= end);
+           (start >= end && current <= start && current >= end);
 }
 
-void AppsListModel::itemDataChanged(const ItemInfo &info) {
-   int i = 0;
-   const int count = rowCount(QModelIndex());
-   while (i != count)
-   {
-       if (index(i).data(AppKeyRole).toString() == info.m_key) {
-           const QModelIndex modelIndex = index(i);
-           emit QAbstractItemModel::dataChanged(modelIndex, modelIndex);
-           return;
-       }
-       ++i;
-   }
+void AppsListModel::itemDataChanged(const ItemInfo &info)
+{
+    int i = 0;
+    const int count = rowCount(QModelIndex());
+    while (i != count) {
+        if (index(i).data(AppKeyRole).toString() == info.m_key) {
+            const QModelIndex modelIndex = index(i);
+            emit QAbstractItemModel::dataChanged(modelIndex, modelIndex);
+            return;
+        }
+        ++i;
+    }
 }
 
 //bool AppsListModel::itemIsRemovable(const QString &desktop) const

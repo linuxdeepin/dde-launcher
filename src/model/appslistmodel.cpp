@@ -295,8 +295,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppNewInstallRole: {
         if (m_category == Category) {
             const ItemInfoList &list = m_appsManager->appsInfoList(CateGoryMap[itemInfo.m_categoryId]);
-            for (int i = 0; i < pageCount; i++) {
-                if (m_appsManager->appIsNewInstall(list[i + start].m_key)) return true;
+            for (const ItemInfo &in : list) {
+                if (m_appsManager->appIsNewInstall(in.m_key)) return true;
             }
         }
 

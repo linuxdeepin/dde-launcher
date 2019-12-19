@@ -110,8 +110,12 @@ bool SearchLineEdit::event(QEvent *e)
     case QEvent::FocusIn:       editMode();         break;
     case QEvent::KeyPress: {
         if (QKeyEvent *keyEvent = static_cast<QKeyEvent *>(e)) {
-            if (keyEvent->key() == Qt::Key_Z && keyEvent->modifiers() == Qt::ControlModifier) {
-                backspace();
+            if (keyEvent->matches(QKeySequence::Undo)) {
+                QString oldText = this->text();
+                undo();
+                if (!oldText.isEmpty() && oldText == this->text()) {
+                    this->clear();
+                }
                 return true;
             }
         }

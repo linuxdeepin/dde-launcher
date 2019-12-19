@@ -922,7 +922,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     }
 
     if (Qt::Key_Space == key) {
-        if (m_searchWidget->categoryBtn()->hasFocus()) {
+        if (m_searchWidget->categoryBtn()->hasFocus() || m_focusIndex == CategoryChangeBtn) {
             QMouseEvent btnPress(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
             QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnPress);
             QMouseEvent btnRelease(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
@@ -1052,10 +1052,11 @@ void FullScreenFrame::appendToSearchEdit(const char ch)
 
 void FullScreenFrame::launchCurrentApp()
 {
+
     if (m_currentFocusIndex == Category) {
         emit m_searchWidget->categoryBtn()->clicked();
     }
-    if (m_searchWidget->categoryBtn()->hasFocus()) {
+    if (m_searchWidget->categoryBtn()->hasFocus() ||  m_focusIndex == CategoryChangeBtn) {
         QMouseEvent btnPress(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
         QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnPress);
         QMouseEvent btnRelease(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);

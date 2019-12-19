@@ -112,6 +112,7 @@ private:
     void appendSearchResult(const QString &appKey);
     void sortCategory(const AppsListModel::AppCategory category);
     void sortByPresetOrder(ItemInfoList &processList);
+    void sortByInstallTimeOrder(ItemInfoList &processList);
     void refreshCategoryInfoList();
     void refreshUsedInfoList();
     void refreshUserInfoList();

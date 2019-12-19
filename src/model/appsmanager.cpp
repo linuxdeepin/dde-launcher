@@ -257,6 +257,31 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
     });
 }
 
+void AppsManager::sortByInstallTimeOrder(ItemInfoList &processList)
+{
+    qSort(processList.begin(), processList.end(), [&](const ItemInfo & i1, const ItemInfo & i2) {
+
+        if (i1.m_installedTime == i2.m_installedTime && i1.m_installedTime != 0) {
+            // If both of them don't exist in the preset list,
+            // fallback to comparing their name.
+            return i1.m_installedTime < i2.m_installedTime;
+        }
+
+        // If one of them doesn't exist in the preset list,
+        // the one exists go first.
+        if (i1.m_installedTime == 0) {
+            return false;
+        }
+
+        if (i2.m_installedTime == 0) {
+            return true;
+        }
+
+        // If both of them exist, then obey the preset order.
+        return i1.m_installedTime < i2.m_installedTime;
+    });
+}
+
 AppsManager *AppsManager::instance()
 {
     if (INSTANCE.isNull())
@@ -662,6 +687,7 @@ void AppsManager::generateCategoryMap()
 
     ItemInfoList newInstallAppList;
     for (const ItemInfo &info : m_allAppInfoList) {
+
         const int userIdx = m_usedSortedList.indexOf(info);
         // append new installed app to user sorted list
         if (userIdx == -1) {
@@ -684,11 +710,13 @@ void AppsManager::generateCategoryMap()
         }
     }
 
+
+    sortByInstallTimeOrder(newInstallAppList);
     if (!newInstallAppList.isEmpty()) {
         for (const ItemInfo &info : newInstallAppList) {
             m_appInfos[info.category()].append(info);
+            qDebug() << info.category() << info.m_installedTime << m_appInfos[info.category()].length() << m_appInfos[info.category()].last().m_name;
         }
-
     }
 
     // remove uninstalled app item
@@ -829,7 +857,7 @@ void AppsManager::searchDone(const QStringList &resultList)
 
 void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber)
 {
-    qDebug() << operation << appInfo << categoryNumber;
+    qDebug() << operation << appInfo << categoryNumber << appInfo.m_installedTime;
 
     if (operation == "created") {
         ItemInfo info = appInfo;

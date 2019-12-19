@@ -130,7 +130,8 @@ void AppsListModel::setDragDropIndex(const QModelIndex &index)
 void AppsListModel::dropInsert(const QString &appKey, const int pos)
 {
     beginInsertRows(QModelIndex(), pos, pos);
-    m_appsManager->restoreItem(appKey, pos);
+    int appPos = m_pageIndex * m_calcUtil->appPageItemCount() + pos;
+    m_appsManager->restoreItem(appKey, appPos);
     endInsertRows();
 }
 
@@ -172,7 +173,10 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
 
     int nSize = m_appsManager->appsInfoList(m_category).size();
     int pageCount = m_calcUtil->appPageItemCount();
-    return qMin(pageCount, nSize - pageCount * m_pageIndex);
+    int nPageCount = nSize - pageCount * m_pageIndex;
+    nPageCount = nPageCount > 0 ? nPageCount : 0;
+
+    return qMin(pageCount, nPageCount);
 }
 
 const QModelIndex AppsListModel::indexAt(const QString &appKey) const

@@ -113,7 +113,8 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 
     const QRect pr = qApp->primaryScreen()->geometry();
     const int screenWidth = pr.width();
-    const int spacing = pr.width() <= 1440 ? 10 : 14;
+//    const int spacing = pr.width() <= 1440 ? 10 : 14;
+    const int spacing = pr.width() <= 1440 ? 20 : 28;
     // mini mode
     if (m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeCategory) {
 

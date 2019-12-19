@@ -721,9 +721,10 @@ void AppsManager::generateCategoryMap()
 
     sortByInstallTimeOrder(newInstallAppList);
     if (!newInstallAppList.isEmpty()) {
-        for (const ItemInfo &info : newInstallAppList){
-           m_appInfos[info.category()].append(info);
-      }
+        for (const ItemInfo &info : newInstallAppList) {
+            m_appInfos[info.category()].append(info);
+            qDebug() << info.category() << info.m_installedTime << m_appInfos[info.category()].length() << m_appInfos[info.category()].last().m_name;
+        }
     }
 
     // remove uninstalled app item
@@ -864,7 +865,7 @@ void AppsManager::searchDone(const QStringList &resultList)
 
 void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber)
 {
-    qDebug() << operation << appInfo << categoryNumber;
+    qDebug() << operation << appInfo << categoryNumber << appInfo.m_installedTime;
 
     if (operation == "created") {
         ItemInfo info = appInfo;

@@ -58,7 +58,7 @@ bool SharedEventFilter::handleKeyEvent(QKeyEvent *e)
     case Qt::Key_Enter:
     case Qt::Key_Return:        m_frame->launchCurrentApp();                    return true;
     case Qt::Key_Escape:        m_frame->hideLauncher();                        return true;
-    case Qt::Key_Space:                                                                                 break;
+    case Qt::Key_Space:          m_frame->moveCurrentSelectApp(e->key()); break;
     case Qt::Key_Tab:
     case Qt::Key_Backtab:
     case Qt::Key_Up:

@@ -69,12 +69,11 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
     const QString &iconName = itemInfo.m_iconKey;
     const auto ratio = qApp->devicePixelRatio();
     const int s = perfectIconSize(size);
-    QPlatformTheme * const platformTheme = QGuiApplicationPrivate::platformTheme();
+    QPlatformTheme *const platformTheme = QGuiApplicationPrivate::platformTheme();
 
     QPixmap pixmap;
     do {
-        if (iconName.startsWith("data:image/"))
-        {
+        if (iconName.startsWith("data:image/")) {
             const QStringList strs = iconName.split("base64,");
             if (strs.size() == 2)
                 pixmap.loadFromData(QByteArray::fromBase64(strs.at(1).toLatin1()));
@@ -83,8 +82,7 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
                 break;
         }
 
-        if (QFile::exists(iconName))
-        {
+        if (QFile::exists(iconName)) {
             if (iconName.endsWith(".svg"))
                 pixmap = loadSvg(iconName, s * ratio);
             else
@@ -101,9 +99,9 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
             if (engine->isNull()) {
                 auto iterator =
                     std::find_if(m_notExistIconMap.begin(), m_notExistIconMap.end(),
-                                 [=](const std::pair<std::pair<ItemInfo, int>, int> value) {
-                                     return value.first.first.m_iconKey == iconName && value.first.second == size;
-                                 });
+                [ = ](const std::pair<std::pair<ItemInfo, int>, int> value) {
+                    return value.first.first.m_iconKey == iconName && value.first.second == size;
+                });
 
                 if (iterator == m_notExistIconMap.end()) {
                     if (!iconName.isEmpty()) {
@@ -114,8 +112,7 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
 
                     icon = QIcon::fromTheme("application-x-desktop");
                 }
-            }
-            else {
+            } else {
                 icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));
             }
         }
@@ -207,8 +204,7 @@ void AppsManager::appendSearchResult(const QString &appKey)
 
 void AppsManager::sortCategory(const AppsListModel::AppCategory category)
 {
-    switch (category)
-    {
+    switch (category) {
     case AppsListModel::Search:     sortByPresetOrder(m_appSearchResultList);      break;
 //    case AppsListModel::All:        sortByName(m_appInfoList);              break;
     // disable sort other category
@@ -221,8 +217,7 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
     const QString system_lang = QLocale::system().name();
 
     QString key = "appsOrder";
-    for (const auto &item : system_lang.split('_'))
-    {
+    for (const auto &item : system_lang.split('_')) {
         Q_ASSERT(!item.isEmpty());
 
         QString k = item.toLower();
@@ -259,6 +254,31 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
 
         // If both of them exist, then obey the preset order.
         return index1 < index2;
+    });
+}
+
+void AppsManager::sortByInstallTimeOrder(ItemInfoList &processList)
+{
+    qSort(processList.begin(), processList.end(), [&](const ItemInfo & i1, const ItemInfo & i2) {
+
+        if (i1.m_installedTime == i2.m_installedTime && i1.m_installedTime != 0) {
+            // If both of them don't exist in the preset list,
+            // fallback to comparing their name.
+            return i1.m_installedTime < i2.m_installedTime;
+        }
+
+        // If one of them doesn't exist in the preset list,
+        // the one exists go first.
+        if (i1.m_installedTime == 0) {
+            return false;
+        }
+
+        if (i2.m_installedTime == 0) {
+            return true;
+        }
+
+        // If both of them exist, then obey the preset order.
+        return i1.m_installedTime < i2.m_installedTime;
     });
 }
 
@@ -468,8 +488,7 @@ const ItemInfo AppsManager::createOfCategory(qlonglong category)
 
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const
 {
-    switch (category)
-    {
+    switch (category) {
     case AppsListModel::Custom:    return m_userSortedList;        break;
     case AppsListModel::All:       return m_usedSortedList;        break;
     case AppsListModel::Search:     return m_appSearchResultList;   break;
@@ -575,8 +594,7 @@ void AppsManager::refreshUsedInfoList()
         for (QList<ItemInfo>::iterator it = m_usedSortedList.begin(); it != m_usedSortedList.end();) {
             if (m_allAppInfoList.contains(*it)) {
                 it++;
-            }
-            else {
+            } else {
                 it = m_usedSortedList.erase(it);
             }
         }
@@ -672,6 +690,7 @@ void AppsManager::generateCategoryMap()
 
     ItemInfoList newInstallAppList;
     for (const ItemInfo &info : m_allAppInfoList) {
+
         const int userIdx = m_usedSortedList.indexOf(info);
         // append new installed app to user sorted list
         if (userIdx == -1) {
@@ -693,10 +712,12 @@ void AppsManager::generateCategoryMap()
         }
     }
 
+
+    sortByInstallTimeOrder(newInstallAppList);
     if (!newInstallAppList.isEmpty()) {
         for (const ItemInfo &info : newInstallAppList){
            m_appInfos[info.category()].append(info);
-        }
+      }
     }
 
     // remove uninstalled app item
@@ -765,7 +786,7 @@ void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &d
 void AppsManager::onSearchTimeOut()
 {
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(m_launcherInter->Search(m_searchText), this);
-    connect(watcher, &QDBusPendingCallWatcher::finished, this, [=] (QDBusPendingCallWatcher * w) {
+    connect(watcher, &QDBusPendingCallWatcher::finished, this, [ = ](QDBusPendingCallWatcher * w) {
         if (w->isError()) qDebug() << w->error();
 
         w->deleteLater();

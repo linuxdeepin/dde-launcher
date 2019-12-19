@@ -184,6 +184,9 @@ QModelIndex MultiPagesView::selectApp(const int key)
         if (page + 1 < m_pageCount) {
             ++ page;
             itemSelect = 0;
+        } else {
+            page = 0;
+            itemSelect = 0;
         }
     }
     if (page != m_pageIndex)

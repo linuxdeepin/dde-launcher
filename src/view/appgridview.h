@@ -100,7 +100,7 @@ private:
 
     static QPointer<AppsManager> m_appManager;
     static QPointer<CalculateUtil> m_calcUtil;
-
+    DragPageDelegate *m_pDelegate;
 };
 
 typedef QList<AppGridView*> AppGridViewList;

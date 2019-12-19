@@ -119,6 +119,7 @@ void AppGridView::updateItemHiDPIFixHook(const QModelIndex &index)
 
 void AppGridView::dropEvent(QDropEvent *e)
 {
+    qDebug("AppGridView::dropEvent");
     e->accept();
 
     m_enableDropInside = true;
@@ -129,6 +130,7 @@ void AppGridView::dropEvent(QDropEvent *e)
 
 void AppGridView::mousePressEvent(QMouseEvent *e)
 {
+    qDebug("AppGridView::mousePressEvent");
     if (e->button() == Qt::RightButton) {
         QPoint rightClickPoint = mapToGlobal(e->pos());
 
@@ -145,6 +147,7 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
 
 void AppGridView::dragEnterEvent(QDragEnterEvent *e)
 {
+    qDebug("AppGridView::dragEnterEvent");
     const QModelIndex index = indexAt(e->pos());
 
     if (model()->canDropMimeData(e->mimeData(), e->dropAction(), index.row(), index.column(), QModelIndex())) {
@@ -155,6 +158,7 @@ void AppGridView::dragEnterEvent(QDragEnterEvent *e)
 
 void AppGridView::dragMoveEvent(QDragMoveEvent *e)
 {
+    qDebug("AppGridView::dragMoveEvent");
     Q_ASSERT(m_containerBox);
 
     if (m_lastFakeAni)
@@ -168,9 +172,12 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
 
     const QPoint pos = mapTo(m_containerBox, e->pos());
     int nSpace = m_calcUtil->appItemSpacing() + m_calcUtil->gridListLeft();
-    const QRect containerRect = m_containerBox->rect().marginsRemoved(QMargins(nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
-                                                                               nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
+
     const QModelIndex dropStart = QListView::indexAt(m_dragStartPos);
+
+    const QRect containerRect = m_containerBox->rect().marginsRemoved(QMargins(DLauncher::APPHBOX_SPACING, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
+                                                                               DLauncher::APPHBOX_SPACING, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
+
     /*if (containerRect.contains(pos))
         return */m_dropThresholdTimer->start();
     if (pos.x() < containerRect.left())
@@ -213,6 +220,7 @@ void AppGridView::flashDrag()
 
 void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 {
+    qDebug("AppGridView::dragLeaveEvent");
     e->accept();
 
     m_dropThresholdTimer->stop();
@@ -220,6 +228,7 @@ void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 
 void AppGridView::mouseMoveEvent(QMouseEvent *e)
 {
+    qDebug("AppGridView::mouseMoveEvent");
     e->accept();
 
     // disable qlistview default drag
@@ -233,28 +242,29 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
     if (e->buttons() != Qt::LeftButton)
         return;
 
-    if (qAbs(e->pos().x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
-            qAbs(e->pos().y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
-        m_dragStartPos = e->pos();
+    if (indexAt(m_dragStartPos).isValid())
         return startDrag(QListView::indexAt(e->pos()));
-    }
+
+    if (m_pDelegate)
+        m_pDelegate->mouseMove(e);
 }
 
 void AppGridView::mouseReleaseEvent(QMouseEvent *e)
 {
     // request main frame hide when click invalid area
+    qDebug("AppGridView::mouseReleaseEvent");
     if (e->button() != Qt::LeftButton)
         return;
 
-    const QModelIndex index = QListView::indexAt(e->pos());
-    if (!index.isValid())
-        emit clicked(index);
+    if (m_pDelegate)
+        m_pDelegate->mouseRelease(e);
 
     QListView::mouseReleaseEvent(e);
 }
 
 void AppGridView::startDrag(const QModelIndex &index)
 {
+    qDebug("AppGridView::startDrag");
     if (!index.isValid())
         return;
 
@@ -320,6 +330,7 @@ bool AppGridView::eventFilter(QObject *o, QEvent *e)
 
 void AppGridView::enterEvent(QEvent *e)
 {
+    qDebug("AppGridView::enterEvent");
     QListView::enterEvent(e);
 
     // The coordinates of the entervent are incorrect after the menu is closed.
@@ -340,6 +351,7 @@ void AppGridView::fitToContent()
 
 void AppGridView::prepareDropSwap()
 {
+    qDebug("AppGridView::prepareDropSwap");
     if (m_lastFakeAni || m_dropThresholdTimer->isActive())
         return;
     const QModelIndex dropIndex = indexAt(m_dropToPos);
@@ -424,6 +436,7 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
 ///
 void AppGridView::dropSwap()
 {
+    qDebug("AppGridView::dropSwap");
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     if (!listModel)
         return;

@@ -993,7 +993,7 @@ void FullScreenFrame::appendToSearchEdit(const char ch)
         m_searchWidget->edit()->lineEdit()->backspace();
     }
 
-    m_searchWidget->edit()->setText(m_searchWidget->edit()->text() + ch);
+    m_searchWidget->edit()->lineEdit()->setText(m_searchWidget->edit()->lineEdit()->text() + ch);
 }
 
 void FullScreenFrame::launchCurrentApp()

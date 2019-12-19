@@ -127,7 +127,7 @@ void AppsListModel::setDragDropIndex(const QModelIndex &index)
 void AppsListModel::dropInsert(const QString &appKey, const int pos)
 {
     beginInsertRows(QModelIndex(), pos, pos);
-    int appPos = m_pageIndex * m_calcUtil->appPageItemCount() + pos;
+    int appPos = m_pageIndex * m_calcUtil->appPageItemCount(m_category) + pos;
     m_appsManager->restoreItem(appKey, appPos);
     endInsertRows();
 }
@@ -169,7 +169,7 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
     Q_UNUSED(parent)
 
     int nSize = m_appsManager->appsInfoList(m_category).size();
-    int pageCount = m_calcUtil->appPageItemCount();
+    int pageCount = m_calcUtil->appPageItemCount(m_category);
     int nPageCount = nSize - pageCount * m_pageIndex;
     nPageCount = nPageCount > 0 ? nPageCount : 0;
 
@@ -254,11 +254,12 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
 QVariant AppsListModel::data(const QModelIndex &index, int role) const
 {
     int nSize = m_appsManager->appsInfoList(m_category).size();
-    int pageCount = qMin(m_calcUtil->appPageItemCount(), nSize - m_calcUtil->appPageItemCount() * m_pageIndex);
+    int nFixCount = m_calcUtil->appPageItemCount(m_category);
+    int pageCount = qMin(nFixCount, nSize - nFixCount * m_pageIndex);
     if (!index.isValid() || index.row() >= pageCount)
         return QVariant();
 
-    int start = m_calcUtil->appPageItemCount() * m_pageIndex;
+    int start = nFixCount * m_pageIndex;
     const ItemInfo itemInfo = m_appsManager->appsInfoList(m_category)[start + index.row()];
 
     switch (role) {

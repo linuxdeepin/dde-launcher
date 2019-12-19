@@ -45,6 +45,8 @@ AppGridView::AppGridView(QWidget *parent)
     : QListView(parent)
     , m_dropThresholdTimer(new QTimer(this))
 {
+    m_pDelegate = nullptr;
+
     if (!m_appManager)
         m_appManager = AppsManager::instance();
     if (!m_calcUtil)
@@ -114,7 +116,17 @@ void AppGridView::updateItemHiDPIFixHook(const QModelIndex &index)
     const QRect &r = indexRect(index);
     update(r.marginsRemoved(QMargins(0, 0, 1, 1)));
 //    update(r.marginsAdded(QMargins(-1, -1, -1, -1)));
-//    QListView::update(index);
+    //    QListView::update(index);
+}
+
+void AppGridView::setDelegate(DragPageDelegate *pDelegate)
+{
+    m_pDelegate = pDelegate;
+}
+
+DragPageDelegate *AppGridView::getDelegate()
+{
+    return m_pDelegate;
 }
 
 void AppGridView::dropEvent(QDropEvent *e)
@@ -139,6 +151,9 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
 
     if (e->buttons() == Qt::LeftButton && !m_lastFakeAni)
         m_dragStartPos = e->pos();
+
+    if (m_pDelegate)
+        m_pDelegate->mousePress(e);
 
     QListView::mousePressEvent(e);
 }
@@ -212,6 +227,9 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
         m_dragStartPos = e->pos();
         return startDrag(QListView::indexAt(e->pos()));
     }
+
+    if (m_pDelegate)
+        m_pDelegate->mouseMove(e);
 }
 
 void AppGridView::mouseReleaseEvent(QMouseEvent *e)
@@ -220,9 +238,12 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
-    const QModelIndex index = QListView::indexAt(e->pos());
-    if (!index.isValid())
-        emit clicked(index);
+//    const QModelIndex index = QListView::indexAt(e->pos());
+//    if (!index.isValid())
+//        emit clicked(index);
+
+    if (m_pDelegate)
+        m_pDelegate->mouseRelease(e);
 
     QListView::mouseReleaseEvent(e);
 }

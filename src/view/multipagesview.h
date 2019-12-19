@@ -40,7 +40,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class MultiPagesView : public QWidget
+class MultiPagesView : public QWidget, public DragPageDelegate
 {
     Q_OBJECT
 public:
@@ -59,6 +59,10 @@ public:
     void updatePosition();
 
     void ShowPageView(AppsListModel::AppCategory category);
+
+    void mousePress(QMouseEvent *e);
+    void mouseMove(QMouseEvent *e);
+    void mouseRelease(QMouseEvent *e);
 signals:
     void connectViewEvent(AppGridView* pView);
 
@@ -68,6 +72,11 @@ protected:
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
     void InitUI();
 private:
+    bool m_bMousePress;
+    int m_nMousePos;
+    int m_scrollValue;
+    int m_scrollStart;
+
     int m_pageCount;
     int m_pageIndex;
     AppsListModel::AppCategory m_category;

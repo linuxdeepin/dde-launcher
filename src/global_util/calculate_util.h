@@ -52,8 +52,7 @@ public:
     inline int appItemFontSize() const {return m_appItemFontSize;}
     inline int appItemSpacing() const {return m_appItemSpacing;}
     inline int gridListLeft() const {return m_gridListLeft;}
-    inline int appPageItemCount() const {return m_appPageItemCount;}
-    inline int appCategoryPageItemCount() const {return m_categoryAppPageItemCount;}
+    inline int appPageItemCount(AppsListModel::AppCategory category) const {return category > AppsListModel::Category ? m_categoryAppPageItemCount : m_appPageItemCount;}
     inline int appCategoryCount() const {return m_categoryCount;}
     inline QSize appItemSize() const { return QSize(m_appItemSize, m_appItemSize); }
     QSize appIconSize() const;

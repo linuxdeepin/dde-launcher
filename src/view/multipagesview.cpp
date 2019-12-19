@@ -20,6 +20,7 @@
  */
 
 #include "multipagesview.h"
+#include "../global_util/constants.h"
 
 #include <QHBoxLayout>
 
@@ -35,6 +36,10 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     , m_pageLayout(new QHBoxLayout)
     , m_pageControl(new pageControl)
 {
+    m_bMousePress = false;
+    m_nMousePos = 0;
+    m_scrollValue = 0;
+    m_scrollStart = 0;
     // 滚动区域
     m_appListArea->setObjectName("MultiPageBox");
     m_appListArea->viewport()->setAutoFillBackground(false);
@@ -46,6 +51,7 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_appListArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appListArea->viewport()->installEventFilter(this);
     m_appListArea->installEventFilter(this);
+
     // 翻页按钮和动画
     pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value");
     pageSwitchAnimation->setEasingCurve(QEasingCurve::OutQuad);
@@ -75,6 +81,7 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             pageView->setItemDelegate(m_delegate);
             pageView->setContainerBox(m_appListArea);
             pageView->installEventFilter(this);
+            pageView->setDelegate(this);
             m_appGridViewList.push_back(pageView);
 
             m_viewBox->layout()->insertWidget(m_pageCount, pageView);
@@ -160,15 +167,15 @@ void MultiPagesView::InitUI()
 
 void MultiPagesView::showCurrentPage(int currentPage)
 {
-    m_pageIndex = currentPage;
-    int endValue = m_appGridViewList[currentPage]->x();
+    m_pageIndex = currentPage > 0 ? (currentPage < m_pageCount ? currentPage : m_pageCount - 1) : 0;
+    int endValue = m_appGridViewList[m_pageIndex]->x();
     int startValue = m_appListArea->horizontalScrollBar()->value();
     pageSwitchAnimation->stop();
     pageSwitchAnimation->setStartValue(startValue);
     pageSwitchAnimation->setEndValue(endValue);
     pageSwitchAnimation->start();
 
-    m_pageControl->setCurrent(currentPage);
+    m_pageControl->setCurrent(m_pageIndex);
 }
 
 QModelIndex MultiPagesView::selectApp(const int key)
@@ -178,7 +185,7 @@ QModelIndex MultiPagesView::selectApp(const int key)
     if (Qt::Key_Left == key || Qt::Key_Up == key) {
         if (page - 1 >= 0) {
             -- page;
-            itemSelect = m_calcUtil->appPageItemCount() - 1;
+            itemSelect = m_calcUtil->appPageItemCount(m_category) - 1;
         }
     } else {
         if (page + 1 < m_pageCount) {
@@ -227,4 +234,43 @@ void MultiPagesView::wheelEvent(QWheelEvent *e)
 
     if (page != m_pageIndex)
         showCurrentPage(page);
+}
+
+void MultiPagesView::mousePress(QMouseEvent *e)
+{
+    m_bMousePress = true;
+    m_nMousePos = e->x();
+    qDebug("mousePress: m_nMousePos=%d", m_nMousePos);
+    m_scrollValue = m_appListArea->horizontalScrollBar()->value();
+    m_scrollStart = m_scrollValue;
+}
+
+void MultiPagesView::mouseMove(QMouseEvent *e)
+{
+    int nDiff = m_nMousePos - e->x();
+    qDebug("mouseMove: e->x()=%d, nDiff=%d", e->x(), nDiff);
+    m_scrollValue += nDiff;
+    m_appListArea->horizontalScrollBar()->setValue(m_scrollValue);
+}
+
+void MultiPagesView::mouseRelease(QMouseEvent *e)
+{
+    int nDiff = m_nMousePos - e->x();
+    qDebug("mouseRelease: e->x()=%d, nDiff=%d", e->x(), nDiff);
+    if (nDiff > 0) {
+        showCurrentPage(m_pageIndex + 1);
+    } else if (nDiff < 0) {
+        showCurrentPage(m_pageIndex - 1);
+    } else {
+        int nScroll = m_appListArea->horizontalScrollBar()->value();
+        if (nScroll == m_scrollStart)
+            emit m_appGridViewList[m_pageIndex]->clicked(QModelIndex());
+        else if (nScroll - m_scrollStart > DLauncher::MOUSE_MOVE_TO_NEXT)
+            showCurrentPage(m_pageIndex + 1);
+        else if (nScroll - m_scrollStart < -DLauncher::MOUSE_MOVE_TO_NEXT)
+            showCurrentPage(m_pageIndex - 1);
+        else
+            showCurrentPage(m_pageIndex);
+    }
+    m_bMousePress = false;
 }

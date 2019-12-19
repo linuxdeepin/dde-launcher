@@ -121,6 +121,7 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
         connect(scale, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
     }
 
+    dock->setEnabled(m_appKey != "dde-trash");
     uninstall->setEnabled(m_isRemovable);
 
 #ifndef WITHOUT_UNINSTALL_APP

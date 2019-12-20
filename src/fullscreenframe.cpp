@@ -153,7 +153,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     connect(m_multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
     for (int i = 0; i < CATEGORY_MAX; i++)
-        connect(getCategoryGridViewList(AppsListModel::AppCategory(i+4)), &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
+        connect(getCategoryGridViewList(AppsListModel::AppCategory(i + 4)), &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
 
     initUI();
     initConnection();
@@ -546,8 +546,8 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
                || (o == m_appsArea && e->type() == QEvent::Scroll)) {
 
     } else if (o == m_appsArea->viewport() && e->type() == QEvent::Resize) {
-        const int pos = m_appsManager->dockPosition();
-        m_calcUtil->calculateAppLayout(static_cast<QResizeEvent *>(e)->size() - QSize(LEFT_PADDING + RIGHT_PADDING, 0), pos);
+        qDebug("eventFilter");
+        updateDockPosition();
         updatePlaceholderSize();
     }
     return false;
@@ -1237,19 +1237,23 @@ void FullScreenFrame::updatePlaceholderSize()
 void FullScreenFrame::updateDockPosition()
 {
     // reset all spacing size
-    m_topSpacing->setFixedHeight(30);
-    m_bottomSpacing->setFixedHeight(0);
-    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? DLauncher::VIEWLIST_BOTTOM_MARGIN : DLauncher::PAGEVIEW_BOTTOM_MARGIN;
 
     const QRect dockGeometry = m_appsManager->dockGeometry();
+    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? DLauncher::VIEWLIST_BOTTOM_MARGIN : 0;
+
+    m_topSpacing->setFixedHeight(30);
+    m_bottomSpacing->setFixedHeight(bottomMargin);
+
 
     switch (m_appsManager->dockPosition()) {
     case DOCK_POS_TOP:
         m_topSpacing->setFixedHeight(30 + dockGeometry.height());
+        bottomMargin = m_topSpacing->height() + 20;
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(0);
         break;
     case DOCK_POS_BOTTOM:
+        bottomMargin += dockGeometry.height();
         m_bottomSpacing->setFixedHeight(bottomMargin);
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(0);
@@ -1266,7 +1270,9 @@ void FullScreenFrame::updateDockPosition()
         break;
     }
 
-    m_calcUtil->calculateAppLayout(m_appsArea->size() - QSize(LEFT_PADDING + RIGHT_PADDING, 0),
+    qDebug("FullScreenFrame::updateDockPosition m_appsArea=%d  bottomMargin=%d", m_appsArea->height(), bottomMargin);
+
+    m_calcUtil->calculateAppLayout(m_appsArea->size() - QSize(LEFT_PADDING + RIGHT_PADDING, bottomMargin),
                                    m_appsManager->dockPosition());
 }
 
@@ -1429,9 +1435,8 @@ AppsListModel::AppCategory FullScreenFrame::prevCategoryModel(const AppsListMode
 
 void FullScreenFrame::layoutChanged()
 {
+    qDebug("FullScreenFrame::layoutChanged");
     QSize boxSize;
-    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? DLauncher::VIEWLIST_BOTTOM_MARGIN : DLauncher::PAGEVIEW_BOTTOM_MARGIN;
-    m_bottomSpacing->setFixedHeight(bottomMargin);
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
         const int appsContentWidth = (m_appsArea->width() - LEFT_PADDING - RIGHT_PADDING);
         boxSize.setWidth(appsContentWidth);

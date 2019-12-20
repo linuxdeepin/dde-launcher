@@ -153,6 +153,7 @@ private slots:
     void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
     void refreshTitleVisible();
     void reflashPageView(const AppsListModel::AppCategory category);
+    void primaryScreenChanged();
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
     MultiPagesView *getCategoryGridViewList(const AppsListModel::AppCategory category);
@@ -253,16 +254,18 @@ private:
                                                    , m_officeBoxWidget, m_readingBoxWidget, m_developmentBoxWidget, m_systemBoxWidget, m_othersBoxWidget
                                                   };
     //当前处在第几个分类
-    int m_currentBox ;
-
-    int m_focusIndex;
     int m_boxWidgetPageCurrent[CATEGORY_MAX] = {0};
+    int m_currentBox ;
+    int m_focusIndex;
 
     //鼠标单击位置
     QPoint m_mousePos;
-    int m_appsAreaHScrollBarValue;
-
     qint64 m_mouse_press_time;
+    int m_appsAreaHScrollBarValue;
     bool m_mouse_press;
+
+    QRect m_primaryRawRect;
+    int m_screenRawHeight;
+    int m_screenRawWidth;
 };
 #endif // MAINFRAME_H

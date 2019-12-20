@@ -133,6 +133,9 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 {
     m_focusIndex = 0;
     //m_currentCategory = AppsListModel::Internet;
+    m_primaryRawRect = m_displayInter->primaryRect();
+    m_screenRawHeight = m_displayInter->screenHeight();
+    m_screenRawWidth = m_displayInter->screenWidth();
 
     setFocusPolicy(Qt::NoFocus);
     setMouseTracking(true);
@@ -872,6 +875,11 @@ void FullScreenFrame::initConnection()
     connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
     connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::updateDockPosition);
     connect(m_appsManager, &AppsManager::dataChanged, this, &FullScreenFrame::reflashPageView);
+
+    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &FullScreenFrame::primaryScreenChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &FullScreenFrame::primaryScreenChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &FullScreenFrame::primaryScreenChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &FullScreenFrame::primaryScreenChanged, Qt::QueuedConnection);
 }
 
 void FullScreenFrame::showLauncher()
@@ -1219,6 +1227,17 @@ void FullScreenFrame::reflashPageView(AppsListModel::AppCategory category)
     } else {
         m_multiPagesView->updatePageCount(category);
     }
+}
+
+void FullScreenFrame::primaryScreenChanged()
+{
+    //    qDebug() << Q_FUNC_INFO;
+        m_primaryRawRect = m_displayInter->primaryRect();
+        m_screenRawHeight = m_displayInter->screenHeight();
+        m_screenRawWidth = m_displayInter->screenWidth();
+
+        const int pos = m_appsManager->dockPosition();
+        m_calcUtil->calculateAppLayout(QSize(m_screenRawWidth - LEFT_PADDING + RIGHT_PADDING, m_screenRawHeight), pos);
 }
 
 void FullScreenFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)

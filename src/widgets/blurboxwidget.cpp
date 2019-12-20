@@ -48,6 +48,8 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     m_vLayout->setAlignment(Qt::AlignTop);
     layoutAddWidget(m_categoryTitle, m_calcUtil->getAppBoxSize().width() / 2, Qt::AlignHCenter);
     m_vLayout->addWidget(m_categoryMultiPagesView);
+    m_categoryMultiPagesView->setGraphicsEffect(m_pagesOpacityEffect);
+    m_categoryTitle->setGraphicsEffect(m_titleOpacityEffect);
 }
 
 void BlurBoxWidget::layoutAddWidget(QWidget *child)
@@ -109,11 +111,6 @@ void BlurBoxWidget::setMaskVisible(bool visible)
 
     m_titleOpacityEffect->setOpacity(opacity);
     m_pagesOpacityEffect->setOpacity(opacity);
-    m_categoryTitle->setGraphicsEffect(m_titleOpacityEffect);
-   m_categoryMultiPagesView->setGraphicsEffect(m_pagesOpacityEffect);
-
-
-
 }
 
 

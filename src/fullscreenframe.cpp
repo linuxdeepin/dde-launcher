@@ -86,17 +86,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_appItemDelegate(new AppItemDelegate),
 
     m_multiPagesView(new MultiPagesView()),
-    m_multiPagesInternetView(new MultiPagesView(AppsListModel::Internet)),
-    m_multiPagesChatView(new MultiPagesView(AppsListModel::Chat)),
-    m_multiPagesMusicView(new MultiPagesView(AppsListModel::Music)),
-    m_multiPagesVideoView(new MultiPagesView(AppsListModel::Video)),
-    m_multiPagesGraphicsView(new MultiPagesView(AppsListModel::Graphics)),
-    m_multiPagesGameView(new MultiPagesView(AppsListModel::Game)),
-    m_multiPagesOfficeView(new MultiPagesView(AppsListModel::Office)),
-    m_multiPagesReadingView(new MultiPagesView(AppsListModel::Reading)),
-    m_multiPagesDevelopmentView(new MultiPagesView(AppsListModel::Development)),
-    m_multiPageSystemView(new MultiPagesView(AppsListModel::System)),
-    m_multiPagesOthersView(new MultiPagesView(AppsListModel::Others)),
 
     m_internetBoxWidget(new BlurBoxWidget(AppsListModel::Internet, const_cast<char *>("Internet"))),
     m_chatBoxWidget(new BlurBoxWidget(AppsListModel::Chat, const_cast<char *>("Chat"))),
@@ -124,9 +113,9 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_othersModel(new AppsListModel(AppsListModel::Others)),
 
     m_topSpacing(new QFrame)
-    , m_bottomSpacing(new QFrame)
-    , m_contentFrame(new QFrame)
-    ,m_displayInter(new DBusDisplay(this))
+  , m_bottomSpacing(new QFrame)
+  , m_contentFrame(new QFrame)
+  ,m_displayInter(new DBusDisplay(this))
 {
     m_focusIndex = 0;
     //m_currentCategory = AppsListModel::Internet;
@@ -624,83 +613,30 @@ void FullScreenFrame::initUI()
     m_multiPagesView->updatePageCount(AppsListModel::All);
     m_multiPagesView->installEventFilter(this);
 
-    m_multiPagesInternetView->setAccessibleName("internet");
-    m_multiPagesInternetView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesInternetView->updatePageCount(AppsListModel::Internet);
-    m_internetBoxWidget->setCategory(AppsListModel::Internet);
-    m_multiPagesChatView->setAccessibleName("chat");
-    m_multiPagesChatView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesChatView->updatePageCount(AppsListModel::Chat);
-    m_chatBoxWidget->setCategory(AppsListModel::Chat);
-    m_multiPagesMusicView->setAccessibleName("music");
-    m_musicBoxWidget->setCategory(AppsListModel::Music);
-    m_multiPagesMusicView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesMusicView->updatePageCount(AppsListModel::Video);
-    m_multiPagesVideoView->setAccessibleName("video");
-    m_videoBoxWidget->setCategory(AppsListModel::Video);
-    m_multiPagesVideoView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesVideoView->updatePageCount(AppsListModel::Graphics);
-    m_multiPagesGraphicsView->setAccessibleName("graphics");
-    m_graphicsBoxWidget->setCategory(AppsListModel::Graphics);
-    m_multiPagesGraphicsView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesGraphicsView->updatePageCount(AppsListModel::Game);
-    m_multiPagesGameView->setAccessibleName("game");
-    m_gameBoxWidget->setCategory(AppsListModel::Game);
-    m_multiPagesGameView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesGameView->updatePageCount(AppsListModel::Office);
-    m_multiPagesOfficeView->setAccessibleName("office");
-    m_multiPagesOfficeView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesOfficeView->updatePageCount(AppsListModel::Office);
-    m_multiPagesReadingView->setAccessibleName("reading");
-    m_readingBoxWidget->setCategory(AppsListModel::Reading);
-    m_multiPagesReadingView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesReadingView->updatePageCount(AppsListModel::Development);
-    m_multiPagesDevelopmentView->setAccessibleName("development");
-    m_developmentBoxWidget->setCategory(AppsListModel::Development);
-    m_multiPagesDevelopmentView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesDevelopmentView->updatePageCount(AppsListModel::Development);
-    m_multiPageSystemView->setAccessibleName("system");
-    m_systemBoxWidget->setCategory(AppsListModel::System);
-    m_multiPageSystemView->setDataDelegate(m_appItemDelegate);
-    m_multiPageSystemView->updatePageCount(AppsListModel::System);
-    m_multiPagesOthersView->setAccessibleName("others");
-    m_othersBoxWidget->setCategory(AppsListModel::Others);
-    m_multiPagesOthersView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesOthersView->updatePageCount(AppsListModel::Others);
+    m_internetBoxWidget->setDataDelegate(m_appItemDelegate);
+    m_chatBoxWidget->setDataDelegate(m_appItemDelegate);
+    m_musicBoxWidget->setDataDelegate(m_appItemDelegate);
+    m_videoBoxWidget->setDataDelegate(m_appItemDelegate);
+    m_graphicsBoxWidget->setDataDelegate(m_appItemDelegate);
+    m_gameBoxWidget->setDataDelegate(m_appItemDelegate);
+    m_officeBoxWidget->setDataDelegate(m_appItemDelegate);
+    m_readingBoxWidget->setDataDelegate(m_appItemDelegate);
+    m_developmentBoxWidget->setDataDelegate(m_appItemDelegate);
+    m_systemBoxWidget->setDataDelegate(m_appItemDelegate);
+    m_othersBoxWidget->setDataDelegate(m_appItemDelegate);
 
     m_appsHbox->layout()->addWidget(m_multiPagesView);
 
-    m_internetBoxWidget->layout()->addWidget(m_multiPagesInternetView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Internet, m_internetBoxWidget);
-
-    m_chatBoxWidget->layout()->addWidget(m_multiPagesChatView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Chat, m_chatBoxWidget);
-
-    m_musicBoxWidget->layout()->addWidget(m_multiPagesMusicView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Music, m_musicBoxWidget);
-
-    m_videoBoxWidget->layout()->addWidget(m_multiPagesVideoView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Video, m_videoBoxWidget);
-
-    m_graphicsBoxWidget->layout()->addWidget(m_multiPagesGraphicsView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Graphics, m_graphicsBoxWidget);
-
-    m_gameBoxWidget->layout()->addWidget(m_multiPagesGameView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Game, m_gameBoxWidget);
-
-    m_officeBoxWidget->layout()->addWidget(m_multiPagesOfficeView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Office, m_officeBoxWidget);
-
-    m_readingBoxWidget->layout()->addWidget(m_multiPagesReadingView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Reading, m_readingBoxWidget);
-
-    m_developmentBoxWidget->layout()->addWidget(m_multiPagesDevelopmentView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Development, m_developmentBoxWidget);
-
-    m_systemBoxWidget->layout()->addWidget(m_multiPageSystemView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::System, m_systemBoxWidget);
-
-    m_othersBoxWidget->layout()->addWidget(m_multiPagesOthersView);
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + AppsListModel::Others, m_othersBoxWidget);
 
     m_appsHbox->layout()->addWidget(m_viewListPlaceholder);
@@ -764,19 +700,19 @@ MultiPagesView *FullScreenFrame::getCategoryGridViewList(const AppsListModel::Ap
     MultiPagesView *view = nullptr;
 
     switch (category) {
-    case AppsListModel::Internet:       view = m_multiPagesInternetView;      break;
-    case AppsListModel::Chat:           view = m_multiPagesChatView;          break;
-    case AppsListModel::Music:          view = m_multiPagesMusicView;         break;
-    case AppsListModel::Video:          view = m_multiPagesVideoView;         break;
-    case AppsListModel::Graphics:       view = m_multiPagesGraphicsView;      break;
-    case AppsListModel::Game:           view = m_multiPagesGameView;          break;
-    case AppsListModel::Office:         view = m_multiPagesOfficeView;        break;
-    case AppsListModel::Reading:        view = m_multiPagesReadingView;       break;
-    case AppsListModel::Development:    view = m_multiPagesDevelopmentView;   break;
-    case AppsListModel::System:         view = m_multiPageSystemView;        break;
-    case AppsListModel::Others:         view = m_multiPagesOthersView;        break;
-    //    case AppsListModel::All:            view = m_pageAppsViewList[m_pageCurrent];   break;
-    default:;
+    case AppsListModel::Internet:       view = m_internetBoxWidget->getMultiPagesView();      break;
+    case AppsListModel::Chat:           view = m_chatBoxWidget->getMultiPagesView();          break;
+    case AppsListModel::Music:          view = m_musicBoxWidget->getMultiPagesView();         break;
+    case AppsListModel::Video:          view = m_videoBoxWidget->getMultiPagesView();         break;
+    case AppsListModel::Graphics:       view = m_graphicsBoxWidget->getMultiPagesView();      break;
+    case AppsListModel::Game:           view = m_gameBoxWidget->getMultiPagesView();          break;
+    case AppsListModel::Office:         view = m_officeBoxWidget->getMultiPagesView();        break;
+    case AppsListModel::Reading:        view = m_readingBoxWidget->getMultiPagesView();       break;
+    case AppsListModel::Development:    view = m_developmentBoxWidget->getMultiPagesView();   break;
+    case AppsListModel::System:         view = m_systemBoxWidget->getMultiPagesView();        break;
+    case AppsListModel::Others:         view = m_othersBoxWidget->getMultiPagesView();        break;
+        //    case AppsListModel::All:            view = m_pageAppsViewList[m_pageCurrent];   break;
+    default:view = m_internetBoxWidget->getMultiPagesView();
     }
 
     return view;
@@ -799,7 +735,7 @@ BlurBoxWidget *FullScreenFrame::categoryBoxWidget(const AppsListModel::AppCatego
     case AppsListModel::Development:    view = m_developmentBoxWidget;   break;
     case AppsListModel::System:         view = m_systemBoxWidget;        break;
     case AppsListModel::Others:         view = m_othersBoxWidget;        break;
-    default:;
+    default: view = m_internetBoxWidget;
     }
 
     return view;
@@ -939,7 +875,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     switch (key) {
     case Qt::Key_Backtab:
     case Qt::Key_Left:      index = currentIndex.sibling(currentIndex.row() - 1, 0);        break;
-    //case Qt::Key_Tab: break;
+        //case Qt::Key_Tab: break;
     case Qt::Key_Right:    index = currentIndex.sibling(currentIndex.row() + 1, 0);        break;
     case Qt::Key_Up:        index = currentIndex.sibling(currentIndex.row() - column, 0);   break;
     case Qt::Key_Down:   index = currentIndex.sibling(currentIndex.row() + column, 0);   break;
@@ -1174,12 +1110,12 @@ void FullScreenFrame::reflashPageView(AppsListModel::AppCategory category)
 void FullScreenFrame::primaryScreenChanged()
 {
     //    qDebug() << Q_FUNC_INFO;
-        m_primaryRawRect = m_displayInter->primaryRect();
-        m_screenRawHeight = m_displayInter->screenHeight();
-        m_screenRawWidth = m_displayInter->screenWidth();
+    m_primaryRawRect = m_displayInter->primaryRect();
+    m_screenRawHeight = m_displayInter->screenHeight();
+    m_screenRawWidth = m_displayInter->screenWidth();
 
-        const int pos = m_appsManager->dockPosition();
-        m_calcUtil->calculateAppLayout(QSize(m_screenRawWidth - LEFT_PADDING + RIGHT_PADDING, m_screenRawHeight), pos);
+    const int pos = m_appsManager->dockPosition();
+    m_calcUtil->calculateAppLayout(QSize(m_screenRawWidth - LEFT_PADDING + RIGHT_PADDING, m_screenRawHeight), pos);
 }
 
 void FullScreenFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
@@ -1217,27 +1153,27 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     AppsListModel::AppCategory category = (m_displayMode == SEARCH) ? AppsListModel::Search : AppsListModel::All;
     m_multiPagesView->setModel(category);
 
-    m_multiPagesInternetView->setVisible(isCategoryMode);
+    m_internetBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
     m_internetBoxWidget->setVisible(isCategoryMode);
-    m_multiPagesChatView->setVisible(isCategoryMode);
+    m_chatBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
     m_chatBoxWidget->setVisible(isCategoryMode);
-    m_multiPagesMusicView->setVisible(isCategoryMode);
+    m_musicBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
     m_musicBoxWidget->setVisible(isCategoryMode);
-    m_multiPagesVideoView->setVisible(isCategoryMode);
+    m_videoBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
     m_videoBoxWidget->setVisible(isCategoryMode);
-    m_multiPagesGraphicsView->setVisible(isCategoryMode);
+    m_graphicsBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
     m_graphicsBoxWidget->setVisible(isCategoryMode);
-    m_multiPagesGameView->setVisible(isCategoryMode);
+    m_gameBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
     m_gameBoxWidget->setVisible(isCategoryMode);
-    m_multiPagesOfficeView->setVisible(isCategoryMode);
+    m_officeBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
     m_officeBoxWidget->setVisible(isCategoryMode);
-    m_multiPagesReadingView->setVisible(isCategoryMode);
+    m_readingBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
     m_readingBoxWidget->setVisible(isCategoryMode);
-    m_multiPagesDevelopmentView->setVisible(isCategoryMode);
+    m_developmentBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
     m_developmentBoxWidget->setVisible(isCategoryMode);
-    m_multiPageSystemView->setVisible(isCategoryMode);
+    m_systemBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
     m_systemBoxWidget->setVisible(isCategoryMode);
-    m_multiPagesOthersView->setVisible(isCategoryMode);
+    m_othersBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
     m_othersBoxWidget->setVisible(isCategoryMode);
 
     m_viewListPlaceholder->setVisible(isCategoryMode);
@@ -1262,27 +1198,27 @@ void FullScreenFrame::updateCurrentVisibleCategory()
         return;
 
     AppsListModel::AppCategory currentVisibleCategory;
-    if (!m_multiPagesInternetView->visibleRegion().isEmpty())
+    if (!m_internetBoxWidget->getMultiPagesView()->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Internet;
-    else if (!m_multiPagesChatView->visibleRegion().isEmpty())
+    else if (!m_chatBoxWidget->getMultiPagesView()->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Chat;
-    else if (!m_multiPagesMusicView->visibleRegion().isEmpty())
+    else if (!m_musicBoxWidget->getMultiPagesView()->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Music;
-    else if (!m_multiPagesVideoView->visibleRegion().isEmpty())
+    else if (!m_videoBoxWidget->getMultiPagesView()->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Video;
-    else if (!m_multiPagesGraphicsView->visibleRegion().isEmpty())
+    else if (!m_graphicsBoxWidget->getMultiPagesView()->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Graphics;
-    else if (!m_multiPagesGameView->visibleRegion().isEmpty())
+    else if (!m_gameBoxWidget->getMultiPagesView()->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Game;
-    else if (!m_multiPagesOfficeView->visibleRegion().isEmpty())
+    else if (!m_officeBoxWidget->getMultiPagesView()->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Office;
-    else if (!m_multiPagesReadingView->visibleRegion().isEmpty())
+    else if (!m_readingBoxWidget->getMultiPagesView()->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Reading;
-    else if (!m_multiPagesDevelopmentView->visibleRegion().isEmpty())
+    else if (!m_developmentBoxWidget->getMultiPagesView()->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Development;
-    else if (!m_multiPageSystemView->visibleRegion().isEmpty())
+    else if (!m_systemBoxWidget->getMultiPagesView()->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::System;
-    else if (!m_multiPagesOthersView->visibleRegion().isEmpty())
+    else if (!m_othersBoxWidget->getMultiPagesView()->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Others;
 
     if (m_currentCategory == currentVisibleCategory)
@@ -1406,26 +1342,26 @@ void FullScreenFrame::nextTabWidget(int key)
         update();
         m_navigationWidget->setCancelCurrentCategory(m_currentCategory);
     }
-    break;
+        break;
     case SearchEdit: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
         m_searchWidget->edit()->lineEdit()->setFocus();
     }
-    break;
+        break;
     case CategoryChangeBtn: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
         m_searchWidget->categoryBtn()->setFocus();
         m_navigationWidget->setCancelCurrentCategory(m_currentCategory);
 
     }
-    break;
+        break;
     case CategoryTital: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
         if (m_currentCategory < AppsListModel::Internet) m_currentCategory = AppsListModel::Internet;
         m_navigationWidget->setCurrentCategory(m_currentCategory);
         m_navigationWidget->button(m_currentCategory)->setFocus();
     }
-    break;
+        break;
     }
 }
 

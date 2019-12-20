@@ -30,7 +30,9 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     , m_vLayout(new QVBoxLayout(this))
     , m_maskLayer(new MaskQWidget(this))
     , m_calcUtil(CalculateUtil::instance())
-    , category(curCategory)
+    , m_category(curCategory)
+    , m_name(name)
+    , m_categoryMultiPagesView(new MultiPagesView(curCategory))
     , m_categoryTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", name)))
 {
     setMaskColor(LightColor);
@@ -43,6 +45,7 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     m_vLayout->setContentsMargins(0, 0, 0, 0);
     m_vLayout->setAlignment(Qt::AlignTop);
     layoutAddWidget(m_categoryTitle, m_calcUtil->getAppBoxSize().width() / 2, Qt::AlignHCenter);
+    m_vLayout->addWidget(m_categoryMultiPagesView);
 }
 
 void BlurBoxWidget::layoutAddWidget(QWidget *child)
@@ -53,6 +56,11 @@ void BlurBoxWidget::layoutAddWidget(QWidget *child)
 void BlurBoxWidget::layoutAddWidget(QWidget *child, int stretch, Qt::Alignment alignment)
 {
     m_vLayout->addWidget(child, stretch, alignment);
+}
+
+MultiPagesView *BlurBoxWidget::getMultiPagesView()
+{
+    return m_categoryMultiPagesView;
 }
 
 void BlurBoxWidget::mousePressEvent(QMouseEvent *e)
@@ -71,7 +79,7 @@ void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
         } else {
             nNext = -1;
         }
-        emit maskClick(getCategory(), nNext);
+        emit maskClick(m_category, nNext);
     }
 }
 
@@ -80,6 +88,13 @@ void BlurBoxWidget::setMaskSize(QSize size)
     m_maskLayer->setFixedSize(size);
     m_maskLayer->raise();
     m_maskLayer->move(0, -5);
+}
+
+void BlurBoxWidget::setDataDelegate(QAbstractItemDelegate *delegate)
+{
+    m_categoryMultiPagesView->setAccessibleName(m_name);
+    m_categoryMultiPagesView->setDataDelegate(delegate);
+    m_categoryMultiPagesView->updatePageCount(m_category);
 }
 
 void BlurBoxWidget::setMaskVisible(bool visible)

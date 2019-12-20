@@ -24,10 +24,12 @@
 
 #include <QMouseEvent>
 #include <QVBoxLayout>
+#include <QAbstractItemDelegate>
 
 #include "src/global_util/constants.h"
-#include  "src/global_util/calculate_util.h"
+#include "src/global_util/calculate_util.h"
 #include "src/widgets/categorytitlewidget.h"
+#include "src/view/multipagesview.h"
 #include "qapplication.h"
 #include "maskqwidget.h"
 
@@ -39,18 +41,18 @@ class BlurBoxWidget : public DBlurEffectWidget
 {
     Q_OBJECT
 public:
-    explicit BlurBoxWidget(AppsListModel::AppCategory category,char* name,QWidget *parent = nullptr);
-    Q_PROPERTY(AppsListModel::AppCategory category READ getCategory WRITE setCategory)
+    explicit BlurBoxWidget(AppsListModel::AppCategory m_category, char *name, QWidget *parent = nullptr);
 
     void setMaskVisible(bool visible);
     void setMaskSize(QSize size);
+    void setDataDelegate(QAbstractItemDelegate *delegate);
     void layoutAddWidget(QWidget *child);
     void layoutAddWidget(QWidget *, int stretch = 0, Qt::Alignment alignment = Qt::Alignment());
-    void setCategory(AppsListModel::AppCategory setcategory) {category = setcategory;}
-    AppsListModel::AppCategory getCategory() {return category;}
+    void setCategory(AppsListModel::AppCategory category) {m_category = category;}
+    MultiPagesView *getMultiPagesView();
 
 signals:
-    void maskClick(AppsListModel::AppCategory category, int nNext);
+    void maskClick(AppsListModel::AppCategory m_category, int nNext);
 
 protected:
     void mousePressEvent(QMouseEvent *e);
@@ -61,8 +63,11 @@ private:
     QVBoxLayout *m_vLayout ;
     MaskQWidget *m_maskLayer = nullptr;
     CalculateUtil *m_calcUtil;
-    AppsListModel::AppCategory category;
+    AppsListModel::AppCategory m_category;
+    QString m_name;
+    MultiPagesView *m_categoryMultiPagesView;
     CategoryTitleWidget *m_categoryTitle;
+
 };
 
 #endif // BLURBOXWIDGET_H

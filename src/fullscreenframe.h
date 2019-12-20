@@ -195,21 +195,8 @@ private:
 
     AppItemDelegate *m_appItemDelegate;
 
-    //    AppGridViewList m_pageAppsViewList;
     MultiPagesView *m_multiPagesView;
-    MultiPagesView *m_multiPagesInternetView;
-    MultiPagesView *m_multiPagesChatView;
-    MultiPagesView *m_multiPagesMusicView;
-    MultiPagesView *m_multiPagesVideoView;
-    MultiPagesView *m_multiPagesGraphicsView;
-    MultiPagesView *m_multiPagesGameView;
-    MultiPagesView *m_multiPagesOfficeView;
-    MultiPagesView *m_multiPagesReadingView;
-    MultiPagesView *m_multiPagesDevelopmentView;
-    MultiPagesView *m_multiPageSystemView;
-    MultiPagesView *m_multiPagesOthersView;
 
-    //    pageAppsModelist m_pageAppsModelList;
     BlurBoxWidget *m_internetBoxWidget;
     BlurBoxWidget *m_chatBoxWidget;
     BlurBoxWidget *m_musicBoxWidget;

@@ -25,6 +25,7 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 #include <QAbstractItemDelegate>
+#include <QGraphicsOpacityEffect>
 
 #include "src/global_util/constants.h"
 #include "src/global_util/calculate_util.h"
@@ -67,6 +68,8 @@ private:
     QString m_name;
     MultiPagesView *m_categoryMultiPagesView;
     CategoryTitleWidget *m_categoryTitle;
+    QGraphicsOpacityEffect* m_titleOpacityEffect;
+    QGraphicsOpacityEffect* m_pagesOpacityEffect;
 
 };
 

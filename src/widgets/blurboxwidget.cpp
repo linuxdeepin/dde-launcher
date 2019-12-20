@@ -34,6 +34,8 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     , m_name(name)
     , m_categoryMultiPagesView(new MultiPagesView(curCategory))
     , m_categoryTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", name)))
+    ,m_titleOpacityEffect(new QGraphicsOpacityEffect)
+    ,m_pagesOpacityEffect(new QGraphicsOpacityEffect)
 {
     setMaskColor(LightColor);
     setMaskAlpha(DLauncher::APPHBOX_ALPHA);
@@ -100,6 +102,18 @@ void BlurBoxWidget::setDataDelegate(QAbstractItemDelegate *delegate)
 void BlurBoxWidget::setMaskVisible(bool visible)
 {
     m_maskLayer->setVisible(visible);
+    double opacity = 0.3;
+    visible? opacity= 0.3:opacity= 0.99;
+
+    setMaskAlpha(DLauncher::APPHBOX_ALPHA*opacity);
+
+    m_titleOpacityEffect->setOpacity(opacity);
+    m_pagesOpacityEffect->setOpacity(opacity);
+    m_categoryTitle->setGraphicsEffect(m_titleOpacityEffect);
+   m_categoryMultiPagesView->setGraphicsEffect(m_pagesOpacityEffect);
+
+
+
 }
 
 

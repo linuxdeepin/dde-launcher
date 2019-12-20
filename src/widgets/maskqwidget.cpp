@@ -34,7 +34,7 @@ void MaskQWidget::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
-    painter.setBrush(QBrush(QColor(0, 0, 0, 67)));
+    painter.setBrush(QBrush(QColor(0, 0, 0, 0)));
     painter.setPen(Qt::transparent);
     QRect rect = this->rect();
     rect.setWidth(rect.width());

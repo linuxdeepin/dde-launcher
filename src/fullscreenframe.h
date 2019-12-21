@@ -228,9 +228,7 @@ private:
 
     QFrame *m_topSpacing;
     QFrame *m_bottomSpacing;
-
     QFrame *m_contentFrame;
-    DBusDisplay *m_displayInter;
 
     QVBoxLayout *m_mainLayout;
     FocusIndex m_nextFocusIndex;
@@ -254,5 +252,6 @@ private:
     QRect m_primaryRawRect;
     int m_screenRawHeight;
     int m_screenRawWidth;
+    DBusDisplay *m_displayInter;
 };
 #endif // MAINFRAME_H

@@ -122,10 +122,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 {
     m_focusIndex = 0;
     //m_currentCategory = AppsListModel::Internet;
-    m_primaryRawRect = m_displayInter->primaryRect();
-    m_screenRawHeight = m_displayInter->screenHeight();
-    m_screenRawWidth = m_displayInter->screenWidth();
-
     setFocusPolicy(Qt::NoFocus);
     setMouseTracking(true);
     m_mouse_press = false;
@@ -1167,13 +1163,8 @@ void FullScreenFrame::reflashPageView(AppsListModel::AppCategory category)
 
 void FullScreenFrame::primaryScreenChanged()
 {
-    //    qDebug() << Q_FUNC_INFO;
-    m_primaryRawRect = m_displayInter->primaryRect();
-    m_screenRawHeight = m_displayInter->screenHeight();
-    m_screenRawWidth = m_displayInter->screenWidth();
-
-    const int pos = m_appsManager->dockPosition();
-    m_calcUtil->calculateAppLayout(QSize(m_screenRawWidth - LEFT_PADDING + RIGHT_PADDING, m_screenRawHeight), pos);
+    setFixedSize(qApp->primaryScreen()->geometry().size());
+    updateDockPosition();
 }
 
 void FullScreenFrame::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
@@ -1505,6 +1496,8 @@ void FullScreenFrame::layoutChanged()
         boxSize = m_calcUtil->getAppBoxSize();
     }
 
+    m_searchWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.043);
+    m_navigationWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.083);
     m_appsHbox->setFixedHeight(m_appsArea->height());
 
     m_internetBoxWidget->setMaskSize(boxSize);

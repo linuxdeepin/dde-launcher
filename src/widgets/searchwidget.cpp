@@ -90,7 +90,8 @@ SearchWidget::SearchWidget(QWidget *parent) :
     setLayout(mainLayout);
 
     connect(m_searchEdit, &DSearchEdit::textChanged, [this] {
-        emit searchTextChanged(m_searchEdit->text());
+        auto searchStr = m_searchEdit->text();
+        emit searchTextChanged(searchStr.mid(0,1)+searchStr.mid(1).replace(" ", ""));
     });
     connect(m_toggleModeBtn, &DFloatingButton::clicked, this, [=] {
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))

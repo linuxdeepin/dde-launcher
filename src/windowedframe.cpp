@@ -885,7 +885,7 @@ void WindowedFrame::showTips(const QString &text)
 
     m_tipsLabel->setText(text);
 
-    const QPoint center = m_appsView->rect().center() - m_tipsLabel->rect().center();
+    const QPoint center = m_appsView->rect().center() - m_tipsLabel->rect().center()*0.75;
     m_tipsLabel->move(center);
     m_tipsLabel->setVisible(true);
     m_tipsLabel->raise();

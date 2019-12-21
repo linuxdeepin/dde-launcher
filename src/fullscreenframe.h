@@ -234,8 +234,5 @@ private:
     bool m_mouse_press;
 
     DBusDisplay *m_displayInter;
-    QRect m_primaryRawRect;
-    int m_screenRawHeight;
-    int m_screenRawWidth;
 };
 #endif // MAINFRAME_H

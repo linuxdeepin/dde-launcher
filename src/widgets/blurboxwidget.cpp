@@ -89,9 +89,9 @@ void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
 
 void BlurBoxWidget::setMaskSize(QSize size)
 {
+    setFixedWidth(size.width());
     m_maskLayer->setFixedSize(size);
     m_maskLayer->raise();
-    m_maskLayer->move(0, -5);
 }
 
 void BlurBoxWidget::setDataDelegate(QAbstractItemDelegate *delegate)

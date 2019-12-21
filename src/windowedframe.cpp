@@ -871,8 +871,8 @@ void WindowedFrame::searchText(const QString &text)
             m_searchModel->setDrawBackground(true);
             m_focusPos = Search;
         }
-
-        m_appsManager->searchApp(text.trimmed());
+        auto temp = text;
+        m_appsManager->searchApp(temp.replace(" ",""));
     }
 
     m_displayMode = All;

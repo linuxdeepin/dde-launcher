@@ -893,22 +893,27 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         //const int realColumn = currentIndex.row() % column;
 
         const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
+        int nAppIndex = 0;
 
         if (key == Qt::Key_Down || key == Qt::Key_Right) {
             int currentIndex = getCategoryGridViewList(m_currentCategory)->currentPage();
             if (m_appsManager->getPageCount(m_currentCategory) != (currentIndex + 1))
                 getCategoryGridViewList(m_currentCategory)->showCurrentPage(++currentIndex);
             else
-                scrollToCategory(nextCategoryModel(m_currentCategory), 1);
+                getCategoryGridViewList(m_currentCategory)->showCurrentPage(0);
 
+            nAppIndex = 0;
         } else if (key == Qt::Key_Up || key == Qt::Key_Left) {
             int currentIndex = getCategoryGridViewList(m_currentCategory)->currentPage();
             if (0 < currentIndex)
                 getCategoryGridViewList(m_currentCategory)->showCurrentPage(--currentIndex);
             else
-                scrollToCategory(prevCategoryModel(m_currentCategory), -1);
+                getCategoryGridViewList(m_currentCategory)->showCurrentPage(m_appsManager->getPageCount(m_currentCategory)-1);
+
+            currentIndex = getCategoryGridViewList(m_currentCategory)->currentPage();
+            nAppIndex = getCategoryGridViewList(m_currentCategory)->pageModel(currentIndex)->rowCount(QModelIndex()) - 1;
         }
-        index = getCategoryGridViewList(m_currentCategory)->getAppItem(0);
+        index = getCategoryGridViewList(m_currentCategory)->getAppItem(nAppIndex);
 
     } while (false);
 
@@ -1260,8 +1265,6 @@ void FullScreenFrame::updateDockPosition()
     default:
         break;
     }
-
-    qDebug("FullScreenFrame::updateDockPosition m_appsArea=%d  bottomMargin=%d", m_appsArea->height(), bottomMargin);
 
     m_calcUtil->calculateAppLayout(m_appsArea->size() - QSize(LEFT_PADDING + RIGHT_PADDING, bottomMargin),
                                    m_appsManager->dockPosition());

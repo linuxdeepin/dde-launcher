@@ -87,6 +87,9 @@ bool SharedEventFilter::handleKeyEvent(QKeyEvent *e)
             case Qt::Key_B:
                 m_frame->moveCurrentSelectApp(Qt::Key_Left);
                 return true;
+            case Qt::Key_Z:
+                m_frame->moveCurrentSelectApp(Qt::Key_Undo);
+                return true;
             default:
                 return false;
             }

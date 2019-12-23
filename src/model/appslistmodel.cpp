@@ -173,6 +173,10 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
     int nPageCount = nSize - pageCount * m_pageIndex;
     nPageCount = nPageCount > 0 ? nPageCount : 0;
 
+    if(m_category == AppsListModel::Custom){
+        return nSize;
+    }
+
     return qMin(pageCount, nPageCount);
 }
 
@@ -253,14 +257,16 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
 
 QVariant AppsListModel::data(const QModelIndex &index, int role) const
 {
+
     int nSize = m_appsManager->appsInfoList(m_category).size();
     int nFixCount = m_calcUtil->appPageItemCount(m_category);
     int pageCount = qMin(nFixCount, nSize - nFixCount * m_pageIndex);
+    if(m_category == AppsListModel::Custom) pageCount = nSize;
     if (!index.isValid() || index.row() >= pageCount)
         return QVariant();
 
-    int start = nFixCount * m_pageIndex;
-    const ItemInfo itemInfo = m_appsManager->appsInfoList(m_category)[start + index.row()];
+   int start = nFixCount * m_pageIndex;
+   const ItemInfo itemInfo = m_appsManager->appsInfoList(m_category)[start + index.row()];
 
     switch (role) {
     case AppRawItemInfoRole:

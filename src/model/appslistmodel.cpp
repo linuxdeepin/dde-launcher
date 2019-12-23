@@ -176,6 +176,10 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
     int nPageCount = nSize - pageCount * m_pageIndex;
     nPageCount = nPageCount > 0 ? nPageCount : 0;
 
+    if(m_category == AppsListModel::Custom){
+        return nSize;
+    }
+
     return qMin(pageCount, nPageCount);
 }
 
@@ -256,6 +260,7 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
 
 QVariant AppsListModel::data(const QModelIndex &index, int role) const
 {
+
     int nSize = m_appsManager->appsInfoList(m_category).size();
     int pageCount = qMin(m_calcUtil->appPageItemCount(), nSize - m_calcUtil->appPageItemCount() * m_pageIndex);
     if (!index.isValid() || index.row() >= pageCount)

@@ -861,6 +861,15 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         return;
     }
 
+    if(Qt::Key_Undo == key) {
+        auto  oldStr =  m_searchWidget->edit()->lineEdit()->text();
+        m_searchWidget->edit()->lineEdit()->undo();
+        if (!oldStr.isEmpty() && oldStr == m_searchWidget->edit()->lineEdit()->text()) {
+            m_searchWidget->edit()->lineEdit()->clear();
+        }
+        return;
+    }
+
     if (Qt::Key_Space == key) {
         if (m_searchWidget->categoryBtn()->hasFocus() || m_focusIndex == CategoryChangeBtn) {
             QMouseEvent btnPress(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);

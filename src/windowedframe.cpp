@@ -349,6 +349,15 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         return;
     }
 
+    if(Qt::Key_Undo == key) {
+        auto  oldStr =  m_searcherEdit->lineEdit()->text();
+        m_searcherEdit->lineEdit()->undo();
+        if (!oldStr.isEmpty() && oldStr == m_searcherEdit->lineEdit()->text()) {
+            m_searcherEdit->lineEdit()->clear();
+        }
+        return;
+    }
+
     const QModelIndex currentIdx = m_appsView->currentIndex();
     QModelIndex targetIndex;
 
@@ -679,6 +688,7 @@ void WindowedFrame::keyPressEvent(QKeyEvent *e)
         if (!clipboardText.isEmpty()) {
             m_searcherEdit->setText(clipboardText);
             m_searcherEdit->lineEdit()->setFocus();
+            m_searcherEdit->setFocus();
         }
     }
 }

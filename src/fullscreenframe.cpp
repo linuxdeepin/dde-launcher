@@ -542,7 +542,6 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
                || (o == m_appsArea && e->type() == QEvent::Scroll)) {
 
     } else if (o == m_appsArea->viewport() && e->type() == QEvent::Resize) {
-        qDebug("eventFilter");
         updateDockPosition();
         updatePlaceholderSize();
     }
@@ -1158,28 +1157,17 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     AppsListModel::AppCategory category = (m_displayMode == SEARCH) ? AppsListModel::Search : AppsListModel::All;
     m_multiPagesView->setModel(category);
 
-    m_internetBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
-    m_internetBoxWidget->setVisible(isCategoryMode);
-    m_chatBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
-    m_chatBoxWidget->setVisible(isCategoryMode);
-    m_musicBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
-    m_musicBoxWidget->setVisible(isCategoryMode);
-    m_videoBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
-    m_videoBoxWidget->setVisible(isCategoryMode);
-    m_graphicsBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
-    m_graphicsBoxWidget->setVisible(isCategoryMode);
-    m_gameBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
-    m_gameBoxWidget->setVisible(isCategoryMode);
-    m_officeBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
-    m_officeBoxWidget->setVisible(isCategoryMode);
-    m_readingBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
-    m_readingBoxWidget->setVisible(isCategoryMode);
-    m_developmentBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
-    m_developmentBoxWidget->setVisible(isCategoryMode);
-    m_systemBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
-    m_systemBoxWidget->setVisible(isCategoryMode);
-    m_othersBoxWidget->getMultiPagesView()->setVisible(isCategoryMode);
-    m_othersBoxWidget->setVisible(isCategoryMode);
+    m_internetBoxWidget->setVisible(isCategoryMode && m_appsManager->appNums(AppsListModel::Internet));
+    m_chatBoxWidget->setVisible(isCategoryMode && m_appsManager->appNums(AppsListModel::Chat));
+    m_musicBoxWidget->setVisible(isCategoryMode && m_appsManager->appNums(AppsListModel::Music));
+    m_videoBoxWidget->setVisible(isCategoryMode && m_appsManager->appNums(AppsListModel::Video));
+    m_graphicsBoxWidget->setVisible(isCategoryMode && m_appsManager->appNums(AppsListModel::Graphics));
+    m_gameBoxWidget->setVisible(isCategoryMode && m_appsManager->appNums(AppsListModel::Game));
+    m_officeBoxWidget->setVisible(isCategoryMode && m_appsManager->appNums(AppsListModel::Office));
+    m_readingBoxWidget->setVisible(isCategoryMode && m_appsManager->appNums(AppsListModel::Reading));
+    m_developmentBoxWidget->setVisible(isCategoryMode && m_appsManager->appNums(AppsListModel::Development));
+    m_systemBoxWidget->setVisible(isCategoryMode && m_appsManager->appNums(AppsListModel::System));
+    m_othersBoxWidget->setVisible(isCategoryMode && m_appsManager->appNums(AppsListModel::Others));
 
     m_viewListPlaceholder->setVisible(isCategoryMode);
     m_navigationWidget->setVisible(isCategoryMode);
@@ -1190,7 +1178,10 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     hideTips();
 
     if (m_displayMode == GROUP_BY_CATEGORY)
-        scrollToCategory(m_currentCategory);
+        QTimer::singleShot(200,this,[=]{
+             scrollToCategory(m_currentCategory);
+        });
+
     else
         m_appsArea->horizontalScrollBar()->setValue(0);
 
@@ -1438,7 +1429,6 @@ AppsListModel::AppCategory FullScreenFrame::prevCategoryModel(const AppsListMode
 
 void FullScreenFrame::layoutChanged()
 {
-    qDebug("FullScreenFrame::layoutChanged");
     QSize boxSize;
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
         const int appsContentWidth = (m_appsArea->width() - LEFT_PADDING - RIGHT_PADDING);
@@ -1450,8 +1440,9 @@ void FullScreenFrame::layoutChanged()
         boxSize = m_calcUtil->getAppBoxSize();
     }
 
-    m_searchWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.043);
-    m_navigationWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.083);
+    qreal scale = qApp->primaryScreen()->devicePixelRatio();
+    m_searchWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.043*scale);
+    m_navigationWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.083*scale);
     m_appsHbox->setFixedHeight(m_appsArea->height());
 
     m_internetBoxWidget->setMaskSize(boxSize);

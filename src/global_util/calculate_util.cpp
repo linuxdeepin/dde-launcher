@@ -132,7 +132,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 
         m_appItemSpacing = calc_categoryspacing;
         m_appItemSize = calc_categroyitem_width;
-        m_appItemFontSize = m_appItemSize <= 130 ? 6 : qApp->font().pointSize();
+        m_appItemFontSize = m_appItemSize <= 130 ? 8 : qApp->font().pointSize();
         m_gridListLeft = (getAppBoxSize().width() - calc_categroyitem_width * m_appColumnCount - calc_categoryspacing * m_appColumnCount * 2) / 2;
         emit layoutChanged();
         return;

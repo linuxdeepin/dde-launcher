@@ -162,7 +162,6 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
 
 void AppGridView::dragEnterEvent(QDragEnterEvent *e)
 {
-    qDebug("AppGridView::dragEnterEvent");
     const QModelIndex index = indexAt(e->pos());
 
     if (model()->canDropMimeData(e->mimeData(), e->dropAction(), index.row(), index.column(), QModelIndex())) {
@@ -337,7 +336,6 @@ bool AppGridView::eventFilter(QObject *o, QEvent *e)
 
 void AppGridView::enterEvent(QEvent *e)
 {
-    qDebug("AppGridView::enterEvent");
     QListView::enterEvent(e);
 
     // The coordinates of the entervent are incorrect after the menu is closed.
@@ -358,7 +356,6 @@ void AppGridView::fitToContent()
 
 void AppGridView::prepareDropSwap()
 {
-    qDebug("AppGridView::prepareDropSwap");
     if (m_lastFakeAni || m_dropThresholdTimer->isActive())
         return;
     const QModelIndex dropIndex = indexAt(m_dropToPos);

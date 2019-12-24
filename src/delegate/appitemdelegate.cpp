@@ -131,7 +131,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
    if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay))
     {
         const int radius = 10;
-        const QColor brushColor(0, 0, 0, 105);
+        const QColor brushColor(255, 255, 255, 105);
 
         painter->setPen(Qt::transparent);
         painter->setBrush(brushColor);

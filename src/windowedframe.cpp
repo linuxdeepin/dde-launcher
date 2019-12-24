@@ -875,7 +875,9 @@ void WindowedFrame::searchText(const QString &text)
     if (text.isEmpty()) {
         m_appsView->setModel(m_appsModel);
         hideTips();
+        m_switchBtn->setVisible(true);
     } else {
+        m_switchBtn->setVisible(false);
         if (m_appsView->model() != m_searchModel) {
             m_appsView->setModel(m_searchModel);
             m_searchModel->setDrawBackground(true);

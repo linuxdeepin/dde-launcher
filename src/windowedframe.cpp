@@ -342,12 +342,12 @@ bool WindowedFrame::visible()
 
 void WindowedFrame::moveCurrentSelectApp(const int key)
 {
-    if (m_appsView->model() == m_searchModel && m_focusPos == Search) {
-        m_appsView->setCurrentIndex(m_appsView->model()->index(0, 0));
-        m_appsView->setFocus();
-        m_focusPos = RightBottom;
-        return;
-    }
+//    if (m_appsView->model() == m_searchModel && m_focusPos == Search) {
+//        m_appsView->setCurrentIndex(m_appsView->model()->index(0, 0));
+ //       m_appsView->setFocus();
+//        m_focusPos = RightBottom;
+//        return;
+//  }
 
     if(Qt::Key_Undo == key) {
         auto  oldStr =  m_searcherEdit->lineEdit()->text();
@@ -438,7 +438,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         break;
     }
     case Qt::Key_Up: {
-        if (m_focusPos == Applist) {
+        if (m_focusPos == Applist || m_focusPos == Search) {
             targetIndex = currentIdx.sibling(row - 1, 0);
             if (!currentIdx.isValid() || !targetIndex.isValid()) {
                 targetIndex = m_appsView->model()->index(m_appsView->model()->rowCount() - 1, 0);
@@ -453,7 +453,7 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         break;
     }
     case Qt::Key_Down: {
-        if (m_focusPos == Applist) {
+        if (m_focusPos == Applist || m_focusPos == Search) {
             targetIndex = currentIdx.sibling(row + 1, 0);
             if (!currentIdx.isValid() || !targetIndex.isValid()) {
                 targetIndex = m_appsView->model()->index(0, 0);

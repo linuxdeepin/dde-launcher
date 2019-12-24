@@ -139,7 +139,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     auto compositeChanged = [ = ] {
         if (DWindowManagerHelper::instance()->windowManagerName() == DWindowManagerHelper::WMName::KWinWM)
         {
-            setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
+            setWindowFlags(Qt::FramelessWindowHint | Qt::Tool );
         } else
         {
             setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);

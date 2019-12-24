@@ -180,10 +180,6 @@ int FullScreenFrame::dockPosition()
 
 void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &category, int nNext)
 {
-    m_searchWidget->edit()->lineEdit()->clearFocus();
-    m_navigationWidget->setFocus();
-    m_focusIndex = CategoryTital;
-
     AppsListModel::AppCategory tempMode = category;
     if (tempMode < AppsListModel::Internet || tempMode > AppsListModel::Others)
         tempMode = AppsListModel::Internet ;
@@ -365,7 +361,7 @@ void FullScreenFrame::keyPressEvent(QKeyEvent *e)
 
         // support Ctrl+V shortcuts.
         if (!clipboardText.isEmpty()) {
-            m_searchWidget->edit()->setText(clipboardText);
+            m_searchWidget->edit()->lineEdit()->setText(clipboardText);
             m_searchWidget->edit()->lineEdit()->setFocus();
             m_searchWidget->edit()->setFocus();
             m_focusIndex = SearchEdit;
@@ -603,7 +599,7 @@ void FullScreenFrame::initUI()
     m_appsArea->viewport()->installEventFilter(this);
     m_appsArea->installEventFilter(this);
 
-    //m_searchWidget->edit()->lineEdit()->installEventFilter(m_eventFilter);
+    m_searchWidget->edit()->lineEdit()->installEventFilter(m_eventFilter);
     m_searchWidget->categoryBtn()->installEventFilter(m_eventFilter);
     m_searchWidget->installEventFilter(m_eventFilter);
     m_appItemDelegate->installEventFilter(m_eventFilter);
@@ -939,7 +935,8 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
 
 void FullScreenFrame::appendToSearchEdit(const char ch)
 {
-    m_searchWidget->edit()->setFocus(Qt::MouseFocusReason);
+    //m_searchWidget->edit()->setFocus(Qt::MouseFocusReason);
+    m_searchWidget->edit()->lineEdit()->setFocus();
 
     // -1 means backspace key pressed
     if (ch == -1) {
@@ -1482,6 +1479,11 @@ void FullScreenFrame::searchTextChanged(const QString &keywords)
         updateDisplayMode(m_calcUtil->displayMode());
     else
         updateDisplayMode(SEARCH);
+
+    if(m_searchWidget->edit()->lineEdit()->text().isEmpty())
+    {
+        m_searchWidget->edit()->lineEdit()->clearFocus();
+    }
 
     m_appsManager->searchApp(keywords.trimmed());
 }

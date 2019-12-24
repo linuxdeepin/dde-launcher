@@ -30,6 +30,14 @@
 
 #include "src/model/appsmanager.h"
 
+class DragPageDelegate
+{
+public:
+    virtual void mousePress(QMouseEvent *e) = 0;
+    virtual void mouseMove(QMouseEvent *e) = 0;
+    virtual void mouseRelease(QMouseEvent *e) = 0;
+};
+
 class CalculateUtil;
 class AppsListModel;
 class AppGridView : public QListView
@@ -45,13 +53,20 @@ public:
     void setContainerBox(const QWidget *container);
     void updateItemHiDPIFixHook(const QModelIndex &index);
 
+    void setDelegate(DragPageDelegate *pDelegate);
+    DragPageDelegate* getDelegate();
+
+    void dragOut(int pos);
+    void dragIn(const QModelIndex &index);
+    void flashDrag();
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
     void requestScrollUp() const;
     void requestScrollDown() const;
     void requestScrollStop() const;
-    void requestScrollLeft() const;
-    void requestScrollRight() const;
+    void requestScrollLeft(const QModelIndex &index) const;
+    void requestScrollRight(const QModelIndex &index) const;
+    void dragEnd();
 
 protected:
     void startDrag(const QModelIndex &index);
@@ -66,10 +81,10 @@ protected:
     bool eventFilter(QObject *o, QEvent *e);
 
 private slots:
+    void dropSwap();
     void fitToContent();
     void prepareDropSwap();
     void createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni = false);
-    void dropSwap();
 
 private:
     const QRect indexRect(const QModelIndex &index) const;

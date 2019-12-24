@@ -63,11 +63,20 @@ signals:
     void connectViewEvent(AppGridView* pView);
 
 private slots:
-
+    void dragToLeft(const QModelIndex &index);
+    void dragToRight(const QModelIndex &index);
+    void dragStop();
 protected:
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
     void InitUI();
 private:
+    bool m_bDragStart;
+
+    bool m_bMousePress;
+    int m_nMousePos;
+    int m_scrollValue;
+    int m_scrollStart;
+
     int m_pageCount;
     int m_pageIndex;
     AppsListModel::AppCategory m_category;
@@ -82,7 +91,7 @@ private:
     QHBoxLayout *m_pageLayout;
     pageControl *m_pageControl;
 
-    QPropertyAnimation *pageSwitchAnimation;
+    QPropertyAnimation *m_pageSwitchAnimation;
 
     QAbstractItemDelegate *m_delegate = nullptr;
 

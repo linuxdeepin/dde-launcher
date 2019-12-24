@@ -197,6 +197,10 @@ int FullScreenFrame::dockPosition()
 
 void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &category, int nNext)
 {
+    m_searchWidget->edit()->lineEdit()->clearFocus();
+    m_navigationWidget->setFocus();
+    m_focusIndex = CategoryTital;
+
     AppsListModel::AppCategory tempMode = category;
     if (tempMode < AppsListModel::Internet || tempMode > AppsListModel::Others)
         tempMode = AppsListModel::Internet ;
@@ -378,9 +382,10 @@ void FullScreenFrame::keyPressEvent(QKeyEvent *e)
 
         // support Ctrl+V shortcuts.
         if (!clipboardText.isEmpty()) {
-            m_searchWidget->edit()->lineEdit()->setText(clipboardText);
-            m_searchWidget->setFocus();
+            m_searchWidget->edit()->setText(clipboardText);
             m_searchWidget->edit()->lineEdit()->setFocus();
+            m_searchWidget->edit()->setFocus();
+            m_focusIndex = SearchEdit;
         }
     }
 }

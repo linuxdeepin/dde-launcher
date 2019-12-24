@@ -131,7 +131,6 @@ DragPageDelegate *AppGridView::getDelegate()
 
 void AppGridView::dropEvent(QDropEvent *e)
 {
-    qDebug("AppGridView::dropEvent");
     e->accept();
 
     m_enableDropInside = true;
@@ -142,7 +141,6 @@ void AppGridView::dropEvent(QDropEvent *e)
 
 void AppGridView::mousePressEvent(QMouseEvent *e)
 {
-    qDebug("AppGridView::mousePressEvent");
     if (e->button() == Qt::RightButton) {
         QPoint rightClickPoint = mapToGlobal(e->pos());
 
@@ -203,7 +201,6 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
 
 void AppGridView::dragOut(int pos)
 {
-    qDebug("AppGridView::dragOut");
     m_dropToPos = pos;
 
     prepareDropSwap();
@@ -212,8 +209,6 @@ void AppGridView::dragOut(int pos)
 
 void AppGridView::dragIn(const QModelIndex &index)
 {
-    qDebug("AppGridView::dragIn");
-
     m_dragStartPos = indexRect(index).center();
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     if (!listModel)
@@ -259,7 +254,6 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
 void AppGridView::mouseReleaseEvent(QMouseEvent *e)
 {
     // request main frame hide when click invalid area
-    qDebug("AppGridView::mouseReleaseEvent");
     if (e->button() != Qt::LeftButton)
         return;
 
@@ -271,7 +265,6 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
 
 void AppGridView::startDrag(const QModelIndex &index)
 {
-    qDebug("AppGridView::startDrag");
     if (!index.isValid())
         return;
 
@@ -325,12 +318,10 @@ void AppGridView::startDrag(const QModelIndex &index)
     }
 
     m_enableDropInside = false;
-    qDebug("AppGridView::startDrag end");
 }
 
 bool AppGridView::eventFilter(QObject *o, QEvent *e)
 {
-    //qDebug("AppGridView::eventFilter");
     return false;
 }
 
@@ -440,7 +431,6 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
 ///
 void AppGridView::dropSwap()
 {
-    qDebug("AppGridView::dropSwap");
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     if (!listModel)
         return;

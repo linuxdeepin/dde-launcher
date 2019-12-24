@@ -298,7 +298,6 @@ void MultiPagesView::mousePress(QMouseEvent *e)
 {
     m_bMousePress = true;
     m_nMousePos = e->x();
-    qDebug("mousePress: m_nMousePos=%d", m_nMousePos);
     m_scrollValue = m_appListArea->horizontalScrollBar()->value();
     m_scrollStart = m_scrollValue;
 }
@@ -306,7 +305,6 @@ void MultiPagesView::mousePress(QMouseEvent *e)
 void MultiPagesView::mouseMove(QMouseEvent *e)
 {
     int nDiff = m_nMousePos - e->x();
-    qDebug("mouseMove: e->x()=%d, nDiff=%d", e->x(), nDiff);
     m_scrollValue += nDiff;
     m_appListArea->horizontalScrollBar()->setValue(m_scrollValue);
 }
@@ -314,7 +312,6 @@ void MultiPagesView::mouseMove(QMouseEvent *e)
 void MultiPagesView::mouseRelease(QMouseEvent *e)
 {
     int nDiff = m_nMousePos - e->x();
-    qDebug("mouseRelease: e->x()=%d, nDiff=%d", e->x(), nDiff);
     if (nDiff > 0) {
         showCurrentPage(m_pageIndex + 1);
     } else if (nDiff < 0) {

@@ -167,8 +167,9 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
     m_dropThresholdTimer->stop();
 
     const QPoint pos = mapTo(m_containerBox, e->pos());
-    const QRect containerRect = m_containerBox->rect().marginsRemoved(QMargins(DLauncher::APPHBOX_SPACING, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
-                                                                               DLauncher::APPHBOX_SPACING, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
+    int nSpace = m_calcUtil->appItemSpacing() + m_calcUtil->gridListLeft();
+    const QRect containerRect = m_containerBox->rect().marginsRemoved(QMargins(nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
+                                                                               nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
     const QModelIndex dropStart = QListView::indexAt(m_dragStartPos);
     /*if (containerRect.contains(pos))
         return */m_dropThresholdTimer->start();

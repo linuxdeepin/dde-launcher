@@ -36,6 +36,8 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     , m_pageLayout(new QHBoxLayout)
     , m_pageControl(new pageControl)
 {
+    m_bDragStart = false;
+
     m_bMousePress = false;
     m_nMousePos = 0;
     m_scrollValue = 0;
@@ -53,8 +55,8 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_appListArea->installEventFilter(this);
 
     // 翻页按钮和动画
-    pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value");
-    pageSwitchAnimation->setEasingCurve(QEasingCurve::OutQuad);
+    m_pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value");
+    m_pageSwitchAnimation->setEasingCurve(QEasingCurve::OutQuad);
 
     connect(m_appListArea, &AppListArea::increaseIcon, this, [ = ] { m_calcUtil->increaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
     connect(m_appListArea, &AppListArea::decreaseIcon, this, [ = ] { m_calcUtil->decreaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
@@ -88,6 +90,10 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
 
             m_pageCount ++;
 
+            connect(pageView, &AppGridView::requestScrollLeft, this, &MultiPagesView::dragToLeft);
+            connect(pageView, &AppGridView::requestScrollRight, this, &MultiPagesView::dragToRight);
+            connect(pageView, &AppGridView::requestScrollStop, [this] {m_bDragStart = false;});
+            connect(pageView, &AppGridView::dragEnd, this, &MultiPagesView::dragStop);
             emit connectViewEvent(pageView);
         }
     } else {
@@ -104,6 +110,52 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
     }
 
     m_pageControl->setPageCount(m_pageCount > 1 ? pageCount : 0);
+}
+
+void MultiPagesView::dragToLeft(const QModelIndex &index)
+{
+    if (m_pageIndex <= 0)
+        return;
+
+    if (m_pageSwitchAnimation->state() == QPropertyAnimation::Running || m_bDragStart)
+        return;
+
+    m_appGridViewList[m_pageIndex]->dragOut(-1);
+
+    showCurrentPage(m_pageIndex - 1);
+
+    int lastApp = m_pageAppsModelList[m_pageIndex]->rowCount(QModelIndex());
+    QModelIndex firstModel = m_appGridViewList[m_pageIndex]->indexAt(lastApp - 1);
+    m_appGridViewList[m_pageIndex]->dragIn(firstModel);
+
+    m_bDragStart = true;
+}
+
+void MultiPagesView::dragToRight(const QModelIndex &index)
+{
+    if (m_pageIndex >= m_pageCount - 1)
+        return;
+
+    if (m_pageSwitchAnimation->state() == QPropertyAnimation::Running || m_bDragStart)
+        return;
+
+    int newPos = m_calcUtil->appPageItemCount(m_category);
+    m_appGridViewList[m_pageIndex]->dragOut(newPos);
+
+    showCurrentPage(m_pageIndex + 1);
+
+    QModelIndex firstModel = m_appGridViewList[m_pageIndex]->indexAt(0);
+    m_appGridViewList[m_pageIndex]->dragIn(firstModel);
+
+    m_bDragStart = true;
+}
+
+void MultiPagesView::dragStop()
+{
+    if (sender() == m_appGridViewList[m_pageIndex])
+        return;
+
+    m_appGridViewList[m_pageIndex]->flashDrag();
 }
 
 QModelIndex MultiPagesView::getAppItem(int index)
@@ -170,10 +222,10 @@ void MultiPagesView::showCurrentPage(int currentPage)
     m_pageIndex = currentPage > 0 ? (currentPage < m_pageCount ? currentPage : m_pageCount - 1) : 0;
     int endValue = m_appGridViewList[m_pageIndex]->x();
     int startValue = m_appListArea->horizontalScrollBar()->value();
-    pageSwitchAnimation->stop();
-    pageSwitchAnimation->setStartValue(startValue);
-    pageSwitchAnimation->setEndValue(endValue);
-    pageSwitchAnimation->start();
+    m_pageSwitchAnimation->stop();
+    m_pageSwitchAnimation->setStartValue(startValue);
+    m_pageSwitchAnimation->setEndValue(endValue);
+    m_pageSwitchAnimation->start();
 
     m_pageControl->setCurrent(m_pageIndex);
 }
@@ -226,7 +278,7 @@ void MultiPagesView::wheelEvent(QWheelEvent *e)
     if (AppsListModel::All != m_category)
         return;
 
-    if (pageSwitchAnimation->state() == QPropertyAnimation::Running)
+    if (m_pageSwitchAnimation->state() == QPropertyAnimation::Running)
         return;
 
     int page = m_pageIndex;

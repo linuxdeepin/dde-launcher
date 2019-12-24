@@ -173,7 +173,6 @@ void AppGridView::dragEnterEvent(QDragEnterEvent *e)
 
 void AppGridView::dragMoveEvent(QDragMoveEvent *e)
 {
-    qDebug("AppGridView::dragMoveEvent");
     Q_ASSERT(m_containerBox);
 
     if (m_lastFakeAni)
@@ -188,13 +187,13 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
     const QPoint pos = mapTo(m_containerBox, e->pos());
     const QRect containerRect = m_containerBox->rect().marginsRemoved(QMargins(DLauncher::APPHBOX_SPACING, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
                                                                                DLauncher::APPHBOX_SPACING, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
-
+    const QModelIndex dropStart = QListView::indexAt(m_dragStartPos);
     /*if (containerRect.contains(pos))
         return */m_dropThresholdTimer->start();
     if (pos.x() < containerRect.left())
-        emit requestScrollLeft();
+        emit requestScrollLeft(dropStart);
     else if (pos.x() > containerRect.right())
-        emit requestScrollRight();
+        emit requestScrollRight(dropStart);
     else if (pos.y() < containerRect.top())
         emit requestScrollUp();
     else if (pos.y() > containerRect.bottom())
@@ -203,18 +202,41 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
         emit requestScrollStop();
 }
 
+void AppGridView::dragOut(int pos)
+{
+    qDebug("AppGridView::dragOut");
+    m_dropToPos = pos;
+
+    prepareDropSwap();
+    dropSwap();
+}
+
+void AppGridView::dragIn(const QModelIndex &index)
+{
+    qDebug("AppGridView::dragIn");
+
+    m_dragStartPos = indexRect(index).center();
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel)
+        return;
+
+    listModel->setDraggingIndex(index);
+}
+
+void AppGridView::flashDrag()
+{
+    startDrag(indexAt(0));
+}
+
 void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 {
-    qDebug("AppGridView::dragLeaveEvent");
     e->accept();
 
     m_dropThresholdTimer->stop();
-    emit requestScrollStop();
 }
 
 void AppGridView::mouseMoveEvent(QMouseEvent *e)
 {
-    qDebug("AppGridView::mouseMoveEvent");
     e->accept();
 
     // disable qlistview default drag
@@ -285,9 +307,10 @@ void AppGridView::startDrag(const QModelIndex &index)
     // disable animation when finally dropped
     m_dropThresholdTimer->stop();
 
-    // disable auto scroll
-    emit requestScrollStop();
+    //send to next page
+    emit dragEnd();
 
+    // disable auto scroll
     if (listModel->category() != AppsListModel::All)
         return;
 
@@ -303,6 +326,7 @@ void AppGridView::startDrag(const QModelIndex &index)
     }
 
     m_enableDropInside = false;
+    qDebug("AppGridView::startDrag end");
 }
 
 bool AppGridView::eventFilter(QObject *o, QEvent *e)

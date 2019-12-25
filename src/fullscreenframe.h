@@ -228,6 +228,9 @@ private:
 
     QFrame *m_topSpacing;
     QFrame *m_bottomSpacing;
+
+    int m_padding;
+    QLayout *m_pHBoxLayout = nullptr;
     QFrame *m_contentFrame;
 
     QVBoxLayout *m_mainLayout;

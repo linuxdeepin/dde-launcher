@@ -54,7 +54,6 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_appListArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appListArea->viewport()->installEventFilter(this);
     m_appListArea->installEventFilter(this);
-//    m_appListArea->setStyleSheet("background-color:red");
 
     // 翻页按钮和动画
     m_pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value");
@@ -229,11 +228,11 @@ void MultiPagesView::updatePosition()
     m_viewBox->setFixedHeight(m_appListArea->height());
     if (m_category >= AppsListModel::Internet) {
         boxSize.setHeight(m_calcUtil->getAppBoxSize().height());
-        auto temp = m_pageControl->pos();
-        m_pageControl->move(temp.x(), temp.y() - 1);
     }
     for (auto *pView : m_appGridViewList)
         pView->setFixedSize(boxSize);
+
+    showCurrentPage(m_pageIndex);
 }
 
 void MultiPagesView::InitUI()

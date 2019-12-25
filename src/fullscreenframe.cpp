@@ -115,12 +115,12 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_systemModel(new AppsListModel(AppsListModel::System)),
     m_othersModel(new AppsListModel(AppsListModel::Others)),
     m_topSpacing(new QFrame)
-
     , m_bottomSpacing(new QFrame)
     , m_contentFrame(new QFrame)
     , m_displayInter(new DBusDisplay(this))
 {
     m_focusIndex = 0;
+    m_padding = 200;
     //m_currentCategory = AppsListModel::Internet;
     setFocusPolicy(Qt::NoFocus);
     setMouseTracking(true);
@@ -213,7 +213,7 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
     m_currentBox = m_currentCategory - 4;
 
-    const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  LEFT_PADDING * 2 - 20) / 2 ;
+    const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  m_padding * 2 - 20) / 2 ;
 
     m_scrollDest = dest;
     int endValue = dest->x() - temp;
@@ -237,7 +237,7 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category, int nNext)
     setCategoryIndex(m_currentCategory, nNext);
 
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
-    const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  LEFT_PADDING * 2 - 20) / 2 ;
+    const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  m_padding * 2 - 20) / 2 ;
     m_scrollDest = dest;
 
     m_scrollAnimation->stop();
@@ -676,11 +676,12 @@ void FullScreenFrame::initUI()
     scrollVLayout->setSpacing(0);
 
     QHBoxLayout *scrollHLayout = new QHBoxLayout;
-    scrollHLayout->setMargin(0);
+    QSize screen = m_calcUtil->getScreenSize();
+    m_padding = screen.width() / 10;
+    scrollHLayout->setContentsMargins(m_padding, 0, m_padding, 0);
     scrollHLayout->setSpacing(0);
-    scrollHLayout->addSpacing(LEFT_PADDING);
     scrollHLayout->addWidget(m_appsHbox, 0, Qt::AlignTop);
-    scrollHLayout->addSpacing(RIGHT_PADDING);
+    m_pHBoxLayout = scrollHLayout;
 
     scrollVLayout->addLayout(scrollHLayout);
 
@@ -733,8 +734,8 @@ MultiPagesView *FullScreenFrame::getCategoryGridViewList(const AppsListModel::Ap
     case AppsListModel::Development:    view = m_developmentBoxWidget->getMultiPagesView();   break;
     case AppsListModel::System:         view = m_systemBoxWidget->getMultiPagesView();        break;
     case AppsListModel::Others:         view = m_othersBoxWidget->getMultiPagesView();        break;
-        //    case AppsListModel::All:            view = m_pageAppsViewList[m_pageCurrent];   break;
-    default:view = m_internetBoxWidget->getMultiPagesView();
+    //    case AppsListModel::All:            view = m_pageAppsViewList[m_pageCurrent];   break;
+    default: view = m_internetBoxWidget->getMultiPagesView();
     }
 
     return view;
@@ -861,7 +862,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         return;
     }
 
-    if(Qt::Key_Undo == key) {
+    if (Qt::Key_Undo == key) {
         auto  oldStr =  m_searchWidget->edit()->lineEdit()->text();
         m_searchWidget->edit()->lineEdit()->undo();
         if (!oldStr.isEmpty() && oldStr == m_searchWidget->edit()->lineEdit()->text()) {
@@ -971,7 +972,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
             if (0 < currentIndex)
                 getCategoryGridViewList(m_currentCategory)->showCurrentPage(--currentIndex);
             else
-                getCategoryGridViewList(m_currentCategory)->showCurrentPage(m_appsManager->getPageCount(m_currentCategory)-1);
+                getCategoryGridViewList(m_currentCategory)->showCurrentPage(m_appsManager->getPageCount(m_currentCategory) - 1);
 
             currentIndex = getCategoryGridViewList(m_currentCategory)->currentPage();
             nAppIndex = getCategoryGridViewList(m_currentCategory)->pageModel(currentIndex)->rowCount(QModelIndex()) - 1;
@@ -1238,9 +1239,9 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     hideTips();
 
     if (m_displayMode == GROUP_BY_CATEGORY)
-        QTimer::singleShot(200,this,[=]{
-             scrollToCategory(m_currentCategory);
-        });
+        QTimer::singleShot(200, this, [ = ] {
+        scrollToCategory(m_currentCategory);
+    });
 
     else
         m_appsArea->horizontalScrollBar()->setValue(0);
@@ -1325,7 +1326,13 @@ void FullScreenFrame::updateDockPosition()
         break;
     }
 
-    m_calcUtil->calculateAppLayout(m_appsArea->size() - QSize(LEFT_PADDING + RIGHT_PADDING, bottomMargin),
+    int padding = m_calcUtil->getScreenSize().width() / 10;
+    if (m_pHBoxLayout && m_padding != padding) {
+        m_padding = padding;
+        m_pHBoxLayout->setContentsMargins(m_padding, 0, m_padding, 0);
+    }
+
+    m_calcUtil->calculateAppLayout(m_appsArea->size() - QSize(m_padding * 2, bottomMargin),
                                    m_appsManager->dockPosition());
 }
 
@@ -1401,26 +1408,26 @@ void FullScreenFrame::nextTabWidget(int key)
         update();
         m_navigationWidget->setCancelCurrentCategory(m_currentCategory);
     }
-        break;
+    break;
     case SearchEdit: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
         m_searchWidget->edit()->lineEdit()->setFocus();
     }
-        break;
+    break;
     case CategoryChangeBtn: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
         m_searchWidget->categoryBtn()->setFocus();
         m_navigationWidget->setCancelCurrentCategory(m_currentCategory);
 
     }
-        break;
+    break;
     case CategoryTital: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
         if (m_currentCategory < AppsListModel::Internet) m_currentCategory = AppsListModel::Internet;
         m_navigationWidget->setCurrentCategory(m_currentCategory);
         m_navigationWidget->button(m_currentCategory)->setFocus();
     }
-        break;
+    break;
     }
 }
 
@@ -1492,7 +1499,7 @@ void FullScreenFrame::layoutChanged()
 
     QPixmap pixmap = cachePixmap();
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
-        const int appsContentWidth = (m_appsArea->width() - LEFT_PADDING - RIGHT_PADDING);
+        const int appsContentWidth = (m_appsArea->width() - m_padding * 2);
         boxSize.setWidth(appsContentWidth);
         boxSize.setHeight(m_appsArea->height() - m_topSpacing->height());
         m_multiPagesView->setFixedSize(boxSize);

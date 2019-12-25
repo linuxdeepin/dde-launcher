@@ -142,9 +142,9 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     const int rows = m_appPageItemCount / columns;
 
     const int calc_item_width = int((double(containerSize.width()) - spacing * columns * 2) / columns + 0.5);
-    const int calc_spacing = int((double(containerSize.width()) - calc_item_width * columns) / (columns * 2));
+    const int calc_spacing = int((double(containerSize.width()) - calc_item_width * columns) / (columns * 2) - 0.5);
 
-    const int nRowSpace = int(double(containerSize.height() - calc_item_width * 4) / (4 * 2));
+    const int nRowSpace = int(double(containerSize.height() - calc_item_width * 4) / (4 * 2) - 0.5);
     int nSpace = qMin(calc_spacing, nRowSpace);
     m_gridListLeft = (containerSize.width() - calc_item_width * 7 - nSpace * 7 * 2) / 2;
 

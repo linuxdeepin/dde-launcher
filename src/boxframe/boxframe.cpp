@@ -64,6 +64,8 @@ void BoxFrame::setBackground(const QString &url)
         pix.load(DefaultBackground);
     }
 
+    QPainter painter(&pix);
+    painter.fillRect(pix.rect(), QColor(0, 15, 39, 0.7 * 255));
     m_pixmap = pix;
 
     updateBackground();
@@ -104,5 +106,5 @@ void BoxFrame::paintEvent(QPaintEvent *event)
                        QRect(tr.topLeft(),
                              tr.size() * m_cache.devicePixelRatioF()));
 
-    painter.fillRect(tr, QColor(0, 15, 39, 0.7 * 255));
+//    painter.fillRect(tr, QColor(0, 15, 39, 0.7 * 255));
 }

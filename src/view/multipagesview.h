@@ -34,7 +34,10 @@
 #include "../model/appslistmodel.h"
 #include "../model/appsmanager.h"
 #include "../global_util/calculate_util.h"
+#include "../widgets/gradientlabel.h"
+#include "../boxframe/boxframe.h"
 #include "pagecontrol.h"
+#include "src/global_util/constants.h"
 
 #include <dboxwidget.h>
 
@@ -59,6 +62,11 @@ public:
     void updatePosition();
 
     void ShowPageView(AppsListModel::AppCategory category);
+    void mousePress(QMouseEvent *e);
+    void mouseMove(QMouseEvent *e);
+    void mouseRelease(QMouseEvent *e);
+
+    void updateGradient(QPixmap& pixmap, QPoint startPoint, QPoint topRightImg);
 signals:
     void connectViewEvent(AppGridView* pView);
 
@@ -76,6 +84,9 @@ private:
     int m_nMousePos;
     int m_scrollValue;
     int m_scrollStart;
+
+    GradientLabel *m_pLeftGradient;
+    GradientLabel *m_pRightGradient;
 
     int m_pageCount;
     int m_pageIndex;

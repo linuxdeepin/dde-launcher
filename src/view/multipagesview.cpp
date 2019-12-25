@@ -34,6 +34,8 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     , m_viewBox(new DHBoxWidget)
     , m_pageLayout(new QHBoxLayout)
     , m_pageControl(new pageControl)
+    , m_pLeftGradient(new GradientLabel(this))
+    , m_pRightGradient(new GradientLabel(this))
 {
     m_bDragStart = false;
 
@@ -52,6 +54,8 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_appListArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appListArea->viewport()->installEventFilter(this);
     m_appListArea->installEventFilter(this);
+//    m_appListArea->setStyleSheet("background-color:red");
+
     // 翻页按钮和动画
     m_pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value");
     m_pageSwitchAnimation->setEasingCurve(QEasingCurve::OutQuad);
@@ -59,6 +63,40 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     connect(m_appListArea, &AppListArea::increaseIcon, this, [ = ] { m_calcUtil->increaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
     connect(m_appListArea, &AppListArea::decreaseIcon, this, [ = ] { m_calcUtil->decreaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
     connect(m_pageControl, &pageControl::onPageChanged, this, &MultiPagesView::showCurrentPage);
+}
+
+void MultiPagesView::updateGradient(QPixmap &pixmap, QPoint topLeftImg, QPoint topRightImg)
+{
+    m_pLeftGradient->setDirection(GradientLabel::LeftToRight);
+    m_pRightGradient->setDirection(GradientLabel::RightToLeft);
+
+    const qreal ratio = devicePixelRatioF();
+    pixmap.setDevicePixelRatio(1);
+
+    QSize gradientSize(DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT, m_appListArea->height());
+
+    QPoint topLeft = m_appListArea->mapTo(this, QPoint(0, 0));
+    QRect topRect(topLeftImg * ratio, gradientSize * ratio);
+    QPixmap topCache = pixmap.copy(topRect);
+    topCache.setDevicePixelRatio(ratio);
+
+    m_pLeftGradient->setPixmap(topCache);
+    m_pLeftGradient->resize(gradientSize);
+    m_pLeftGradient->move(topLeft);
+    m_pLeftGradient->show();
+    m_pLeftGradient->raise();
+
+    QPoint topRight(topLeft.x() + m_appListArea->width() - gradientSize.width(), topLeft.y());
+    QPoint imgTopRight(topRightImg.x() - gradientSize.width(), topRightImg.y());
+
+    QRect RightRect(imgTopRight * ratio, gradientSize * ratio);
+    QPixmap bottomCache = pixmap.copy(RightRect);
+
+    m_pRightGradient->setPixmap(bottomCache);
+    m_pRightGradient->resize(gradientSize);
+    m_pRightGradient->move(topRight);
+    m_pRightGradient->show();
+    m_pRightGradient->raise();
 }
 
 void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
@@ -287,3 +325,38 @@ void MultiPagesView::wheelEvent(QWheelEvent *e)
     if (page != m_pageIndex)
         showCurrentPage(page);
 }
+
+
+void MultiPagesView::mouseMove(QMouseEvent *e)
+{
+    if (!m_bMousePress)
+        return;
+    int nDiff = m_nMousePos - e->x();
+    m_scrollValue += nDiff;
+    m_appListArea->horizontalScrollBar()->setValue(m_scrollValue);
+}
+
+void MultiPagesView::mouseRelease(QMouseEvent *e)
+{
+    int nDiff = m_nMousePos - e->x();
+    if (nDiff > 0) {
+        showCurrentPage(m_pageIndex + 1);
+    } else if (nDiff < 0) {
+        showCurrentPage(m_pageIndex - 1);
+    } else {
+        int nScroll = m_appListArea->horizontalScrollBar()->value();
+        if (nScroll == m_scrollStart)
+            emit m_appGridViewList[m_pageIndex]->clicked(QModelIndex());
+        else if (nScroll - m_scrollStart > DLauncher::MOUSE_MOVE_TO_NEXT)
+            showCurrentPage(m_pageIndex + 1);
+        else if (nScroll - m_scrollStart < -DLauncher::MOUSE_MOVE_TO_NEXT)
+            showCurrentPage(m_pageIndex - 1);
+        else
+            showCurrentPage(m_pageIndex);
+    }
+    m_bMousePress = false;
+
+    m_pLeftGradient->hide();
+    m_pRightGradient->hide();
+}
+

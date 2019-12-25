@@ -1294,11 +1294,10 @@ void FullScreenFrame::updateDockPosition()
     // reset all spacing size
 
     const QRect dockGeometry = m_appsManager->dockGeometry();
-    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? DLauncher::VIEWLIST_BOTTOM_MARGIN : 0;
+    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? DLauncher::PAGEVIEW_BOTTOM_MARGIN : 0;
 
     m_topSpacing->setFixedHeight(30);
     m_bottomSpacing->setFixedHeight(bottomMargin);
-
 
     switch (m_appsManager->dockPosition()) {
     case DOCK_POS_TOP:
@@ -1499,9 +1498,9 @@ void FullScreenFrame::layoutChanged()
         boxSize = m_calcUtil->getAppBoxSize();
     }
 
-    qreal scale = qApp->primaryScreen()->devicePixelRatio();
-    m_searchWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.043*scale);
-    m_navigationWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.083*scale);
+    //qreal scale = qApp->primaryScreen()->devicePixelRatio();
+    //m_searchWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.043*scale);
+   // m_navigationWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.083*scale);
     m_appsHbox->setFixedHeight(m_appsArea->height());
 
     m_internetBoxWidget->setMaskSize(boxSize);

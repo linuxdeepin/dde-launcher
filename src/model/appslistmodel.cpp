@@ -69,7 +69,8 @@ const QStringList sysHoldPackages()
                << "dde-calendar"
                << "deepin-manual"
                << "deepin-terminal"
-               << "kwin-wm-multitaskingview";
+               << "kwin-wm-multitaskingview"
+               << "dde-printer";
 
     return holds_list;
 }

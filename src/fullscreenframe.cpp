@@ -1432,19 +1432,25 @@ AppsListModel::AppCategory FullScreenFrame::prevCategoryModel(const AppsListMode
 void FullScreenFrame::layoutChanged()
 {
     QSize boxSize;
+
+    QPixmap pixmap = cachePixmap();
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
         const int appsContentWidth = (m_appsArea->width() - LEFT_PADDING - RIGHT_PADDING);
         boxSize.setWidth(appsContentWidth);
         boxSize.setHeight(m_appsArea->height() - m_topSpacing->height());
         m_multiPagesView->setFixedSize(boxSize);
         m_multiPagesView->updatePosition();
+
+//        QPoint topLeft(200, 110);
+//        QPoint topRight(1720, 110);
+//        m_multiPagesView->updateGradient(pixmap, topLeft, topRight);
     } else {
         boxSize = m_calcUtil->getAppBoxSize();
     }
 
-    //qreal scale = qApp->primaryScreen()->devicePixelRatio();
-    //m_searchWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.043*scale);
-   // m_navigationWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.083*scale);
+    qreal scale = qApp->primaryScreen()->devicePixelRatio();
+//    m_searchWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.043*scale);
+//    m_navigationWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.083*scale);
     m_appsHbox->setFixedHeight(m_appsArea->height());
 
     m_internetBoxWidget->setMaskSize(boxSize);

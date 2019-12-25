@@ -47,13 +47,26 @@ void GradientLabel::setPixmap(QPixmap pixmap)
 
     pixPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
 
-    QLinearGradient gradient(pix.rect().topLeft(),
-                             pix.rect().bottomLeft());
+    QLinearGradient gradient;
 
     if (m_direction == TopToBottom) {
+        gradient.setStart(pix.rect().topLeft());
+        gradient.setFinalStop(pix.rect().bottomLeft());
         gradient.setColorAt(0, Qt::white);
         gradient.setColorAt(1, Qt::transparent);
     } else if (m_direction == BottomToTop) {
+        gradient.setStart(pix.rect().topLeft());
+        gradient.setFinalStop(pix.rect().bottomLeft());
+        gradient.setColorAt(0, Qt::transparent);
+        gradient.setColorAt(1, Qt::white);
+    } else if (m_direction == LeftToRight) {
+        gradient.setStart(pix.rect().topLeft());
+        gradient.setFinalStop(pix.rect().topRight());
+        gradient.setColorAt(0, Qt::white);
+        gradient.setColorAt(1, Qt::transparent);
+    } else if (m_direction == RightToLeft) {
+        gradient.setStart(pix.rect().topLeft());
+        gradient.setFinalStop(pix.rect().topRight());
         gradient.setColorAt(0, Qt::transparent);
         gradient.setColorAt(1, Qt::white);
     }

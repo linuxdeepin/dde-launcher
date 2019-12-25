@@ -35,7 +35,9 @@ public:
 
     enum Direction {
         TopToBottom,
-        BottomToTop
+        BottomToTop,
+        LeftToRight,
+        RightToLeft
     };
 
     void setText(const QString &);

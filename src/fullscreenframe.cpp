@@ -788,7 +788,7 @@ void FullScreenFrame::initConnection()
 
 void FullScreenFrame::showLauncher()
 {
-    m_focusIndex = 0;
+    m_focusIndex = 1;
     m_appItemDelegate->setCurrentIndex(QModelIndex());
     m_searchWidget->categoryBtn()->clearFocus();
     show();

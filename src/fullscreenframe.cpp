@@ -139,7 +139,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     auto compositeChanged = [ = ] {
         if (DWindowManagerHelper::instance()->windowManagerName() == DWindowManagerHelper::WMName::KWinWM)
         {
-            setWindowFlags(Qt::FramelessWindowHint | Qt::Tool );
+            setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
         } else
         {
             setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
@@ -231,7 +231,7 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category, int nNext)
 
     if (!dest)
         return;
-    m_focusIndex = CategoryTital;
+
     m_currentCategory =  AppsListModel::AppCategory(m_currentBox + 4);
 
     setCategoryIndex(m_currentCategory, nNext);
@@ -380,7 +380,6 @@ void FullScreenFrame::keyPressEvent(QKeyEvent *e)
         if (!clipboardText.isEmpty()) {
             m_searchWidget->edit()->lineEdit()->setText(clipboardText);
             m_searchWidget->edit()->lineEdit()->setFocus();
-            m_searchWidget->edit()->setFocus();
             m_focusIndex = SearchEdit;
         }
     }
@@ -822,6 +821,9 @@ void FullScreenFrame::showLauncher()
         hide();
         m_firstStart = false;
     }
+    m_focusIndex = 0;
+    m_appItemDelegate->setCurrentIndex(QModelIndex());
+    m_searchWidget->categoryBtn()->clearFocus();
     show();
     setFixedSize(QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height)/qApp->primaryScreen()->devicePixelRatio());
 }
@@ -892,7 +894,9 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
             scrollToCategory(nextCategoryModel(m_currentCategory), 1);
             return;
         }
-        case Qt::Key_Down:  m_focusIndex = FirstItem;  break;
+        case Qt::Key_Down: {
+            m_focusIndex = FirstItem;
+        } break;
         default:;
         }
     }
@@ -1377,19 +1381,21 @@ AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentMo
 void FullScreenFrame::nextTabWidget(int key)
 {
     if (Qt::Key_Backtab == key) {
-        m_focusIndex--;
+        -- m_focusIndex;
         if (m_displayMode == GROUP_BY_CATEGORY) {
             if (m_focusIndex < FirstItem) m_focusIndex = CategoryTital;
         } else {
             if (m_focusIndex < FirstItem) m_focusIndex = CategoryChangeBtn;
         }
     } else if (Qt::Key_Tab == key) {
-        m_focusIndex++;
+        ++ m_focusIndex;
         if (m_displayMode == GROUP_BY_CATEGORY) {
             if (m_focusIndex > CategoryTital) m_focusIndex = FirstItem;
         } else {
             if (m_focusIndex > CategoryChangeBtn) m_focusIndex = FirstItem;
         }
+    } else {
+        return;
     }
 
     switch (m_focusIndex) {
@@ -1553,9 +1559,7 @@ void FullScreenFrame::searchTextChanged(const QString &keywords)
     else
         updateDisplayMode(SEARCH);
 
-    m_appsManager->searchApp(tmpKeywords);
-    if(m_searchWidget->edit()->lineEdit()->text().isEmpty())
-    {
+    if (m_searchWidget->edit()->lineEdit()->text().isEmpty()) {
         m_searchWidget->edit()->lineEdit()->clearFocus();
     }
 

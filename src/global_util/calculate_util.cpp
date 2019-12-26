@@ -123,9 +123,12 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
         int calc_categroyitem_width = 0;
         int calc_categoryspacing = 0;
         if (pr.width() <= 1440) {
-            Catespacing = 60;
-            calc_categroyitem_width = (getAppBoxSize().height() - Catespacing * 3 * 2) / 3 + 0.5;
-            calc_categoryspacing  = (double(getAppBoxSize().height()) - calc_categroyitem_width * 3 - Catespacing * 2) / (3 * 2) - 8;
+            Catespacing = 20;
+            calc_categroyitem_width = (getAppBoxSize().width() - Catespacing *m_appColumnCount* 2) / m_appColumnCount+0.5;
+            int calc_categoryspacing_height  = (double(getAppBoxSize().height()) - calc_categroyitem_width * 3  - 60 ) / (3 * 2) -0.5;
+            if(calc_categroyitem_width > calc_categoryspacing_height )  calc_categroyitem_width = calc_categoryspacing_height;
+
+            calc_categoryspacing  = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount) / (m_appColumnCount * 2) -0.5;
         } else {
             calc_categroyitem_width = (getAppBoxSize().width() - Catespacing * m_appColumnCount * 2) / m_appColumnCount + 0.5;
             calc_categoryspacing = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount - Catespacing * 2) / (m_appColumnCount * 2) - 8;

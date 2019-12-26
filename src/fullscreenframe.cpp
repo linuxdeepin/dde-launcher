@@ -948,6 +948,7 @@ void FullScreenFrame::appendToSearchEdit(const char ch)
     if (!m_searchWidget->edit()->lineEdit()->selectedText().isEmpty()) {
         m_searchWidget->edit()->lineEdit()->backspace();
     }
+    m_focusIndex =  SearchEdit;
 
     m_searchWidget->edit()->lineEdit()->setText(m_searchWidget->edit()->lineEdit()->text() + ch);
 }

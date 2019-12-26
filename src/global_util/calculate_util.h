@@ -51,7 +51,8 @@ public:
     inline int appColumnCount() const {return m_appColumnCount;}
     inline int appItemFontSize() const {return m_appItemFontSize;}
     inline int appItemSpacing() const {return m_appItemSpacing;}
-    inline int gridListLeft() const {return m_gridListLeft;}
+    inline int appMarginLeft() const {return m_appMarginLeft;}
+    inline int appMarginTop() const {return m_appMarginTop;}
     inline int appPageItemCount(AppsListModel::AppCategory category) const {return category > AppsListModel::Category ? m_categoryAppPageItemCount : m_appPageItemCount;}
     inline int appCategoryCount() const {return m_categoryCount;}
     inline QSize appItemSize() const { return QSize(m_appItemSize, m_appItemSize); }
@@ -78,7 +79,8 @@ private:
 
     int m_appItemFontSize = 12;
     int m_appItemSpacing = 10;
-    int m_gridListLeft = 0;
+    int m_appMarginLeft = 0;
+    int m_appMarginTop = 0;
     int m_appItemSize = 130;
     int m_appColumnCount = 7;
     int m_navgationTextSize = 14;

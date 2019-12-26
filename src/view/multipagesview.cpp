@@ -234,7 +234,7 @@ void MultiPagesView::updatePosition()
     for (auto *pView : m_appGridViewList)
         pView->setFixedSize(boxSize);
 
-    showCurrentPage(m_pageIndex);
+    showCurrentPage(0);
 }
 
 void MultiPagesView::InitUI()

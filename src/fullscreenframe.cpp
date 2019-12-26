@@ -793,6 +793,7 @@ void FullScreenFrame::showLauncher()
     m_searchWidget->categoryBtn()->clearFocus();
     show();
     setFixedSize(qApp->primaryScreen()->geometry().size());
+    updateDockPosition();
 }
 
 void FullScreenFrame::hideLauncher()
@@ -1244,7 +1245,7 @@ void FullScreenFrame::updateDockPosition()
     // reset all spacing size
 
     const QRect dockGeometry = m_appsManager->dockGeometry();
-    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? DLauncher::PAGEVIEW_BOTTOM_MARGIN : 0;
+    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? DLauncher::PAGEVIEW_BOTTOM_MARGIN : 15;
 
     m_topSpacing->setFixedHeight(30);
     m_bottomSpacing->setFixedHeight(bottomMargin);

@@ -117,6 +117,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     // mini mode
     if (m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeCategory) {
 
+        m_appMarginTop = 0;
         m_appColumnCount = 4;
         int Catespacing = 54;
         int calc_categroyitem_width = 0;
@@ -136,7 +137,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
         m_appItemSpacing = calc_categoryspacing;
         m_appItemSize = calc_categroyitem_width;
         m_appItemFontSize = m_appItemSize <= 130 ? 8 : qApp->font().pointSize();
-        m_gridListLeft = (getAppBoxSize().width() - calc_categroyitem_width * m_appColumnCount - calc_categoryspacing * m_appColumnCount * 2) / 2;
+        m_appMarginLeft = (getAppBoxSize().width() - calc_categroyitem_width * m_appColumnCount - calc_categoryspacing * m_appColumnCount * 2) / 2;
         emit layoutChanged();
         return;
     }
@@ -147,9 +148,10 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     const int calc_item_width = int((double(containerSize.width()) - spacing * columns * 2) / columns + 0.5);
     const int calc_spacing = int((double(containerSize.width()) - calc_item_width * columns) / (columns * 2) - 0.5);
 
-    const int nRowSpace = int(double(containerSize.height() - calc_item_width * 4) / (4 * 2) - 0.5);
+    const int nRowSpace = int(double(containerSize.height() - calc_item_width * rows) / (rows * 2) - 0.5);
     int nSpace = qMin(calc_spacing, nRowSpace);
-    m_gridListLeft = (containerSize.width() - calc_item_width * 7 - nSpace * 7 * 2) / 2;
+    m_appMarginLeft = (containerSize.width() - calc_item_width * columns - nSpace * columns * 2) / 2;
+    m_appMarginTop = (containerSize.height() - calc_item_width * rows - nSpace * rows * 2) / 2 + nSpace;
 
     calculateTextSize(screenWidth);
 

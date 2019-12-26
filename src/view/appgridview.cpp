@@ -78,7 +78,9 @@ AppGridView::AppGridView(QWidget *parent)
     viewport()->setAutoFillBackground(false);
 
     // update item spacing
-    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] { setSpacing(m_calcUtil->appItemSpacing());  setViewportMargins(m_calcUtil->gridListLeft(),0,0,0);});
+    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] { setSpacing(m_calcUtil->appItemSpacing());
+                                                                      setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), 0, 0);
+                                                                    });
 
 #ifndef DISABLE_DRAG_ANIMATION
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::prepareDropSwap, Qt::QueuedConnection);
@@ -171,12 +173,11 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
     m_dropThresholdTimer->stop();
 
     const QPoint pos = mapTo(m_containerBox, e->pos());
-    int nSpace = m_calcUtil->appItemSpacing() + m_calcUtil->gridListLeft();
 
+    int nSpace = m_calcUtil->appItemSpacing() + m_calcUtil->appMarginLeft();
+    const QRect containerRect = m_containerBox->rect().marginsRemoved(QMargins(nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
+                                                                               nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
     const QModelIndex dropStart = QListView::indexAt(m_dragStartPos);
-
-    const QRect containerRect = m_containerBox->rect().marginsRemoved(QMargins(DLauncher::APPHBOX_SPACING, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
-                                                                               DLauncher::APPHBOX_SPACING, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
 
     /*if (containerRect.contains(pos))
         return */m_dropThresholdTimer->start();

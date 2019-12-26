@@ -177,7 +177,7 @@ void MultiPagesView::dragToRight(const QModelIndex &index)
     if (m_pageSwitchAnimation->state() == QPropertyAnimation::Running || m_bDragStart)
         return;
 
-    int newPos = m_calcUtil->appPageItemCount();
+    int newPos = m_calcUtil->appPageItemCount(m_category);
     m_appGridViewList[m_pageIndex]->dragOut(newPos);
 
     showCurrentPage(m_pageIndex + 1);
@@ -238,7 +238,7 @@ void MultiPagesView::updatePosition()
     for (auto *pView : m_appGridViewList)
         pView->setFixedSize(boxSize);
 
-    showCurrentPage(m_pageIndex);
+    showCurrentPage(0);
 }
 
 void MultiPagesView::InitUI()
@@ -277,7 +277,7 @@ QModelIndex MultiPagesView::selectApp(const int key)
     if (Qt::Key_Left == key || Qt::Key_Up == key) {
         if (page - 1 >= 0) {
             -- page;
-            itemSelect = m_calcUtil->appPageItemCount() - 1;
+            itemSelect = m_calcUtil->appPageItemCount(m_category) - 1;
         }
     } else {
         if (page + 1 < m_pageCount) {

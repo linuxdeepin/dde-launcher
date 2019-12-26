@@ -139,8 +139,8 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
 int AppsManager::getPageCount(const AppsListModel::AppCategory category)
 {
     int nSize = appsInfoList(category).size();
-    int page = nSize / m_calUtil->appPageItemCount();
-    page = nSize % m_calUtil->appPageItemCount() ? page + 1 : page;
+    int page = nSize / m_calUtil->appPageItemCount(category);
+    page = nSize % m_calUtil->appPageItemCount(category) ? page + 1 : page;
     return page;
 }
 

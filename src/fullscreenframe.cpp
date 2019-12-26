@@ -826,6 +826,7 @@ void FullScreenFrame::showLauncher()
     m_searchWidget->categoryBtn()->clearFocus();
     show();
     setFixedSize(QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height)/qApp->primaryScreen()->devicePixelRatio());
+    updateDockPosition();
 }
 
 void FullScreenFrame::hideLauncher()

@@ -294,6 +294,8 @@ void WindowedFrame::showLauncher()
         return;
     m_searcherEdit->clear();
     qApp->processEvents();
+	activateWindow();
+    setFocus(Qt::ActiveWindowFocusReason);
 
     // force refresh
     if (!m_appsManager->isVaild()) {

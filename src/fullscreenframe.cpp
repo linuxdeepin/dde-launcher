@@ -409,7 +409,7 @@ void FullScreenFrame::hideEvent(QHideEvent *e)
 
 void FullScreenFrame::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() != Qt::LeftButton)
+    if (e->button() != Qt::LeftButton || m_displayMode != GROUP_BY_CATEGORY)
         return;
     m_mouse_press = true;
     m_appsAreaHScrollBarValue = m_appsArea->horizontalScrollBar()->value();
@@ -432,7 +432,7 @@ void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
 
 void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() != Qt::LeftButton)
+    if (e->button() != Qt::LeftButton || m_displayMode != GROUP_BY_CATEGORY)
         return;
 
     if (m_mousePos == e->pos()) {
@@ -1455,15 +1455,11 @@ void FullScreenFrame::layoutChanged()
         boxSize.setHeight(m_appsArea->height() - m_topSpacing->height());
         m_multiPagesView->setFixedSize(boxSize);
         m_multiPagesView->updatePosition();
-
-//        QPoint topLeft(200, 110);
-//        QPoint topRight(1720, 110);
-//        m_multiPagesView->updateGradient(pixmap, topLeft, topRight);
     } else {
         boxSize = m_calcUtil->getAppBoxSize();
     }
 
-    qreal scale = qApp->primaryScreen()->devicePixelRatio();
+//    qreal scale = qApp->primaryScreen()->devicePixelRatio();
 //    m_searchWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.043*scale);
 //    m_navigationWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.083*scale);
     m_appsHbox->setFixedHeight(m_appsArea->height());

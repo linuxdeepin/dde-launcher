@@ -245,7 +245,7 @@ void MultiPagesView::InitUI()
     m_pageLayout->addWidget(m_pageControl, 0, Qt::AlignCenter);
 
     QVBoxLayout *layoutMain = new QVBoxLayout;
-    layoutMain->setMargin(0);
+    layoutMain->setContentsMargins(0, 0, 0, DLauncher::DRAG_THRESHOLD);
     layoutMain->setSpacing(0);
     layoutMain->addWidget(m_appListArea);
     layoutMain->addLayout(m_pageLayout);

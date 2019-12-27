@@ -1245,7 +1245,7 @@ void FullScreenFrame::updateDockPosition()
     // reset all spacing size
 
     const QRect dockGeometry = m_appsManager->dockGeometry();
-    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? DLauncher::PAGEVIEW_BOTTOM_MARGIN : 15;
+    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? DLauncher::PAGEVIEW_BOTTOM_MARGIN : 0;
 
     m_topSpacing->setFixedHeight(30);
     m_bottomSpacing->setFixedHeight(bottomMargin);

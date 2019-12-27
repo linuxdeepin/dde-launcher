@@ -148,10 +148,11 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     const int calc_item_width = int((double(containerSize.width()) - spacing * columns * 2) / columns + 0.5);
     const int calc_spacing = int((double(containerSize.width()) - calc_item_width * columns) / (columns * 2) - 0.5);
 
-    const int nRowSpace = int(double(containerSize.height() - calc_item_width * rows) / (rows * 2) - 0.5);
+    const int h = containerSize.height() - 35;//35为 图标：20 下边距：15
+    const int nRowSpace = int(double(h - calc_item_width * rows) / (rows * 2) - 0.5);
     int nSpace = qMin(calc_spacing, nRowSpace);
     m_appMarginLeft = (containerSize.width() - calc_item_width * columns - nSpace * columns * 2) / 2;
-    m_appMarginTop = (containerSize.height() - calc_item_width * rows - nSpace * rows * 2) / 2 + nSpace;
+    m_appMarginTop = (h - calc_item_width * rows - nSpace * rows * 2) / 2;
 
     calculateTextSize(screenWidth);
 

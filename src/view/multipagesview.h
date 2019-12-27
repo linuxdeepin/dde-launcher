@@ -66,7 +66,6 @@ public:
     void mouseMove(QMouseEvent *e);
     void mouseRelease(QMouseEvent *e);
 
-    void updateGradient(QPixmap& pixmap, QPoint startPoint, QPoint topRightImg);
 signals:
     void connectViewEvent(AppGridView* pView);
 
@@ -74,9 +73,13 @@ private slots:
     void dragToLeft(const QModelIndex &index);
     void dragToRight(const QModelIndex &index);
     void dragStop();
+
 protected:
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
     void InitUI();
+    void updateGradient();
+    void updateGradient(QPixmap& pixmap, QPoint startPoint, QPoint topRightImg);
+
 private:
     bool m_bDragStart;
 
@@ -105,7 +108,6 @@ private:
     QPropertyAnimation *m_pageSwitchAnimation;
 
     QAbstractItemDelegate *m_delegate = nullptr;
-
 };
 
 #endif // MULTIPAGESVIEW_H

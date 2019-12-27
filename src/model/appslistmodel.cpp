@@ -183,8 +183,6 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
 
 const QModelIndex AppsListModel::indexAt(const QString &appKey) const
 {
-    Q_ASSERT(m_category == All);
-
     int i = 0;
     const int count = rowCount(QModelIndex());
     while (i != count) {

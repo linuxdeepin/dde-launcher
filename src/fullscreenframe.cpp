@@ -1037,9 +1037,13 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
 
 void FullScreenFrame::uninstallApp(const QString &appKey)
 {
-    for (int i = 0; i < m_appsManager->getPageCount(AppsListModel::All); i++) {
-        uninstallApp(m_multiPagesView->pageModel(i)->indexAt(appKey));
-    }
+    if(m_displayMode != GROUP_BY_CATEGORY){
+        int currentPage = m_multiPagesView->currentPage();
+        uninstallApp(m_multiPagesView->pageModel(currentPage)->indexAt(appKey));
+     }else {
+        int currentPage =  categoryBoxWidget(m_currentCategory)->getMultiPagesView()->currentPage();
+        uninstallApp(categoryBoxWidget(m_currentCategory)->getMultiPagesView()->pageModel(currentPage)->indexAt(appKey));
+     }
 }
 
 void FullScreenFrame::uninstallApp(const QModelIndex &context)

@@ -249,6 +249,8 @@ void WindowedFrame::showLauncher()
         return;
 
     qApp->processEvents();
+	activateWindow();
+    setFocus(Qt::ActiveWindowFocusReason);
 
     // force refresh
     if (!m_appsManager->isVaild()) {

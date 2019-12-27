@@ -72,7 +72,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 #else
     const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
 #endif
-    const int fontPixelSize = index.data(AppsListModel::AppFontSizeRole).value<int>();
+    int fontPixelSize = index.data(AppsListModel::AppFontSizeRole).value<int>();
     const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();
     const bool is_current = CurrentIndex == index;
     const QRect ibr = itemBoundingRect(option.rect);
@@ -108,6 +108,10 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         double iconTopMargin = ibr.height() * .2 - iconSize.height() * .3;
         iconTopMargin = std::max(iconTopMargin, 1.);
         iconRect = QRect(br.topLeft() + QPoint(iconLeftMargins, iconTopMargin), iconSize);
+
+        const double scale = (double)iconRect.width() /82;
+        fontPixelSize = fontPixelSize*scale;
+        appNamefont.setPointSize(fontPixelSize);
 
         // calc text
         appNameRect = itemTextRect(br, iconRect, drawBlueDot);
@@ -216,7 +220,7 @@ const QRect AppItemDelegate::itemTextRect(const QRect &boundingRect, const QRect
 
     QRect result = boundingRect;
 
-    result.setTop(iconRect.bottom() + 15);
+    result.setTop(iconRect.bottom() + 2);
 
     return result.marginsRemoved(QMargins(widthMargin, heightMargin, widthMargin, heightMargin));
 }

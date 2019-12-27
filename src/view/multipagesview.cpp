@@ -342,7 +342,7 @@ void MultiPagesView::mousePress(QMouseEvent *e)
     m_scrollValue = m_appListArea->horizontalScrollBar()->value();
     m_scrollStart = m_scrollValue;
 
-    updateGradient();
+//    updateGradient();
 }
 
 void MultiPagesView::mouseMove(QMouseEvent *e)

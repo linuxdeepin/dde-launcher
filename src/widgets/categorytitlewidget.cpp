@@ -35,11 +35,11 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     m_title(new QLabel(this)),
     m_opacityAnimation(new QPropertyAnimation(this, "titleOpacity"))
 {
-    QLabel* whiteLine = new QLabel(this);
+    QLabel *whiteLine = new QLabel(this);
     whiteLine->setObjectName("CategoryWhiteLine");
     whiteLine->setFixedHeight(1);
 
-    QVBoxLayout* lineLayout = new QVBoxLayout;
+    QVBoxLayout *lineLayout = new QVBoxLayout;
     lineLayout->setMargin(0);
     lineLayout->setSpacing(0);
     lineLayout->addStretch();
@@ -69,6 +69,14 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
 
 void CategoryTitleWidget::setTextVisible(const bool visible, const bool animation)
 {
+    // FIXME: setTextVisible中设置的调色板对应颜色透明后，再次设置为白色却显示不出来
+    if (visible) {
+        setText(m_text);
+    } else {
+        m_title->clear();
+    }
+    return;
+
     m_opacityAnimation->stop();
 
     if (!animation) {
@@ -87,6 +95,8 @@ void CategoryTitleWidget::setTextVisible(const bool visible, const bool animatio
 
 void CategoryTitleWidget::setText(const QString &title)
 {
+    m_text = title;
+
     QFontMetrics fontMetric(m_title->font());
     const int width = fontMetric.width(title);
     m_title->setFixedWidth(width + 10);
@@ -102,7 +112,7 @@ void CategoryTitleWidget::setText(const QString &title)
 
 void CategoryTitleWidget::addTextShadow()
 {
-    QGraphicsDropShadowEffect* textDropShadow = new QGraphicsDropShadowEffect;
+    QGraphicsDropShadowEffect *textDropShadow = new QGraphicsDropShadowEffect;
     textDropShadow->setBlurRadius(4);
     textDropShadow->setColor(QColor(0, 0, 0, 128));
     textDropShadow->setOffset(0, 2);

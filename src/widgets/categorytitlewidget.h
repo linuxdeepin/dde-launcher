@@ -58,6 +58,7 @@ private slots:
 private:
     CalculateUtil *m_calcUtil;
     QLabel *m_title;
+    QString m_text;
 
     QPropertyAnimation *m_opacityAnimation;
     qreal m_titleOpacity;

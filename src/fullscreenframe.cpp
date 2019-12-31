@@ -409,7 +409,7 @@ void FullScreenFrame::hideEvent(QHideEvent *e)
 
 void FullScreenFrame::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() != Qt::LeftButton || m_displayMode != GROUP_BY_CATEGORY)
+    if (e->button() != Qt::LeftButton)
         return;
     m_mouse_press = true;
     m_appsAreaHScrollBarValue = m_appsArea->horizontalScrollBar()->value();
@@ -419,7 +419,7 @@ void FullScreenFrame::mousePressEvent(QMouseEvent *e)
 
 void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
 {
-    if (!m_mouse_press  || e->button() == Qt::RightButton) {
+    if (!m_mouse_press  || e->button() == Qt::RightButton || m_displayMode != GROUP_BY_CATEGORY) {
         return;
     }
 
@@ -432,7 +432,7 @@ void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
 
 void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() != Qt::LeftButton || m_displayMode != GROUP_BY_CATEGORY)
+    if (e->button() != Qt::LeftButton)
         return;
 
     if (m_mousePos == e->pos()) {
@@ -1252,12 +1252,16 @@ void FullScreenFrame::updateDockPosition()
 
     int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? m_calcUtil->getScreenSize().height() *0.064815 : 15;
 
-    m_topSpacing->setFixedHeight(30);
+    m_searchWidget->updateSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
+    m_navigationWidget->updateSize();
+    int topSearchSpace = m_searchWidget->sizeHint().height();
+
+    m_topSpacing->setFixedHeight(topSearchSpace);
     m_bottomSpacing->setFixedHeight(bottomMargin);
 
     switch (m_appsManager->dockPosition()) {
     case DOCK_POS_TOP:
-        m_topSpacing->setFixedHeight(30 + dockGeometry.height());
+        m_topSpacing->setFixedHeight(topSearchSpace + dockGeometry.height());
         bottomMargin = m_topSpacing->height() + 20;
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(0);
@@ -1288,6 +1292,7 @@ void FullScreenFrame::updateDockPosition()
 
     m_calcUtil->calculateAppLayout(m_appsArea->size() - QSize(m_padding * 2, bottomMargin),
                                    m_appsManager->dockPosition());
+
 }
 
 AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentModel)

@@ -48,6 +48,7 @@ public:
     void showToggle();
     void hideToggle();
 
+    void updateSize(double scaleX, double scaleY);
 public slots:
     void clearSearchContent();
 

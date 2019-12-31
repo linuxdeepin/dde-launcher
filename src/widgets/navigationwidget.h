@@ -41,6 +41,7 @@ public:
 
     CategoryButton *button(const AppsListModel::AppCategory category) const;
 
+    void updateSize();
 signals:
     void scrollToCategory(const AppsListModel::AppCategory category, int nNext) const;
     void mouseEntered();

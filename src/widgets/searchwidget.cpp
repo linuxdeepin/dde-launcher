@@ -31,11 +31,11 @@
 #include <dimagebutton.h>
 #include <DDBusSender>
 
-#define ICON_SIZE   20
+#define ICON_SIZE   24
 #define BTN_SIZE    40
 
 #define SEARCHEIT_WIDTH 350
-#define SEARCHEIT_HEIGHT 46
+#define SEARCHEIT_HEIGHT 30
 
 DWIDGET_USE_NAMESPACE
 
@@ -66,7 +66,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_searchEdit = new DSearchEdit(this);
     m_searchEdit->setAccessibleName("search-edit");
     m_searchEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    m_searchEdit->setFixedSize(SEARCHEIT_WIDTH, SEARCHEIT_HEIGHT);
+    m_searchEdit->lineEdit()->setFixedSize(SEARCHEIT_WIDTH, SEARCHEIT_HEIGHT);
 
     DStyle::setFocusRectVisible(m_searchEdit->lineEdit(), false);
     setFocusPolicy(Qt::NoFocus);
@@ -89,7 +89,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
 
     connect(m_searchEdit, &DSearchEdit::textChanged, [this] {
         auto searchStr = m_searchEdit->text();
-        emit searchTextChanged(searchStr.mid(0,1)+searchStr.mid(1).replace(" ", ""));
+        emit searchTextChanged(searchStr.mid(0, 1) + searchStr.mid(1).replace(" ", ""));
     });
 
     connect(m_toggleModeBtn, &DIconButton::clicked, this, [ = ] {
@@ -154,5 +154,15 @@ void SearchWidget::hideToggle()
 {
     m_toggleCategoryBtn->hide();
     m_toggleModeBtn->hide();
+}
+
+void SearchWidget::updateSize(double scaleX, double scaleY)
+{
+    m_searchEdit->lineEdit()->setFixedSize(SEARCHEIT_WIDTH * scaleX, SEARCHEIT_HEIGHT * scaleY);
+    double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
+    m_toggleCategoryBtn->setFixedSize(BTN_SIZE * scale, BTN_SIZE * scale);
+    m_toggleCategoryBtn->setIconSize(QSize(ICON_SIZE * scale, ICON_SIZE * scale));
+    m_toggleModeBtn->setIconSize(QSize(ICON_SIZE * scale, ICON_SIZE * scale));
+    m_toggleModeBtn->setFixedSize(BTN_SIZE * scale, BTN_SIZE * scale);
 }
 

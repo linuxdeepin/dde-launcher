@@ -59,6 +59,17 @@ QSize CalculateUtil::appIconSize() const
     return s * ratio;
 }
 
+double CalculateUtil::getScreenScaleX()
+{
+    int width = qApp->primaryScreen()->geometry().size().width();    
+    return double(width) / 1920;
+}
+
+double CalculateUtil::getScreenScaleY()
+{
+    int width = qApp->primaryScreen()->geometry().size().height();
+    return double(width) / 1080;
+}
 
 QSize CalculateUtil::getScreenSize() const
 {
@@ -124,11 +135,11 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
         int calc_categoryspacing = 0;
         if (pr.width() <= 1440) {
             Catespacing = 20;
-            calc_categroyitem_width = (getAppBoxSize().width() - Catespacing *m_appColumnCount* 2) / m_appColumnCount+0.5;
-            calc_categoryspacing  = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount) / (m_appColumnCount * 2) -0.5;
-            int calc_categoryspacing_height  = (double(containerSize.height()) - calc_categroyitem_width * 3  - 60 ) / (3 * 2) -0.5;
-            m_appMarginTop = (containerSize.height() - calc_categoryspacing_height*6 - calc_categroyitem_width*3)/2;
-            if(calc_categoryspacing > calc_categoryspacing_height )  calc_categoryspacing = calc_categoryspacing_height;
+            calc_categroyitem_width = (getAppBoxSize().width() - Catespacing * m_appColumnCount * 2) / m_appColumnCount + 0.5;
+            calc_categoryspacing  = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount) / (m_appColumnCount * 2) - 0.5;
+            int calc_categoryspacing_height  = (double(containerSize.height()) - calc_categroyitem_width * 3  - 60) / (3 * 2) - 0.5;
+            m_appMarginTop = (containerSize.height() - calc_categoryspacing_height * 6 - calc_categroyitem_width * 3) / 2;
+            if (calc_categoryspacing > calc_categoryspacing_height)  calc_categoryspacing = calc_categoryspacing_height;
         } else {
             calc_categroyitem_width = (getAppBoxSize().width() - Catespacing * m_appColumnCount * 2) / m_appColumnCount + 0.5;
             calc_categoryspacing = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount - Catespacing * 2) / (m_appColumnCount * 2) - 8;
@@ -148,7 +159,10 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     const int calc_item_width = int((double(containerSize.width()) - spacing * columns * 2) / columns + 0.5);
     const int calc_spacing = int((double(containerSize.width()) - calc_item_width * columns) / (columns * 2) - 0.5);
 
-    const int h = containerSize.height() - 35;//35为 图标：20 下边距：15
+    double scaleX = getScreenScaleX();
+    double scaleY = getScreenScaleY();
+    double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
+    const int h = containerSize.height() - 15 - scale * 20; //35为 图标：20 下边距：15
     const int nRowSpace = int(double(h - calc_item_width * rows) / (rows * 2) - 0.5);
     int nSpace = qMin(calc_spacing, nRowSpace);
     m_appMarginLeft = (containerSize.width() - calc_item_width * columns - nSpace * columns * 2) / 2;

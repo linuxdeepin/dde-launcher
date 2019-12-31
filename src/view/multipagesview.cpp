@@ -227,14 +227,13 @@ void MultiPagesView::setModel(AppsListModel::AppCategory category)
 
 void MultiPagesView::updatePosition()
 {
+    m_pageControl->UpdateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
     QSize boxSize;
     boxSize.setWidth(width());
     boxSize.setHeight(m_appListArea->height());
     m_viewBox->setFixedHeight(m_appListArea->height());
     if (m_category >= AppsListModel::Internet) {
         boxSize.setHeight(m_calcUtil->getAppBoxSize().height());
-        auto temp = m_pageControl->pos();
-        m_pageControl->move(temp.x(), temp.y() - 1);
     }
     for (auto *pView : m_appGridViewList)
         pView->setFixedSize(boxSize);

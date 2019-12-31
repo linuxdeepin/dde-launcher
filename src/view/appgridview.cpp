@@ -277,9 +277,6 @@ void AppGridView::startDrag(const QModelIndex &index)
     const qreal ratio = qApp->devicePixelRatio();
     QString appKey = index.data(AppsListModel::AppKeyRole).value<QString>();
 
-    if(appKey == "dde-trash")
-        return;
-
     QPixmap srcPix = index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
     srcPix = srcPix.scaled(m_calcUtil->appIconSize() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     srcPix.setDevicePixelRatio(ratio);

@@ -39,6 +39,7 @@ BackgroundManager::BackgroundManager(QObject *parent)
     : QObject(parent)
     , m_currentWorkspace(-1)
     , m_wmInter(new wm("com.deepin.wm", "/com/deepin/wm", QDBusConnection::sessionBus(), this))
+    , m_imageEffectInter(new ImageEffectInter("com.deepin.daemon.ImageEffect", "/com/deepin/daemon/ImageEffect", QDBusConnection::systemBus(), this))
     , m_appearanceInter(new AppearanceInter("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
 {
     m_appearanceInter->setSync(false, false);
@@ -57,7 +58,9 @@ void BackgroundManager::updateBackgrounds()
 {
     QString path = getLocalFile(m_wmInter->GetCurrentWorkspaceBackground());
 
-    m_background = QFile::exists(path) ? path : DefaultWallpaper;
+    QString filePath = QFile::exists(path) ? path : DefaultWallpaper;
+
+    m_background = m_imageEffectInter->Get("", filePath);
 
     emit currentWorkspaceBackgroundChanged(m_background);
 }

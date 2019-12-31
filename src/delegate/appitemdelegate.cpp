@@ -111,6 +111,9 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
         const double scale = (double)iconRect.width() /82;
         fontPixelSize = fontPixelSize*scale;
+        if(fontPixelSize < 11) {
+            fontPixelSize = 11;
+        }
         appNamefont.setPointSize(fontPixelSize);
 
         // calc text

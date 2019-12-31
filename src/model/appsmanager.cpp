@@ -33,17 +33,19 @@
 #include <QDataStream>
 #include <QIODevice>
 #include <QIcon>
+#include <QScopedPointer>
+#include <QIconEngine>
 
 #include <QGSettings>
-#include <DHiDPIHelper>
 #include <private/qguiapplication_p.h>
 #include <qpa/qplatformtheme.h>
-#include <qiconengine.h>
+#include <DHiDPIHelper>
 #include <DApplication>
-#include <QScopedPointer>
 #include <DGuiApplicationHelper>
+#include <DSysInfo>
 
 DWIDGET_USE_NAMESPACE
+DCORE_USE_NAMESPACE
 
 QPointer<AppsManager> AppsManager::INSTANCE = nullptr;
 
@@ -219,7 +221,7 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
 {
     const QString system_lang = QLocale::system().name();
 
-    QString key = "appsOrder";
+    QString key = IsDeepinServer() ? "appsOrderServer" : "appsOrder";
     for (const auto &item : system_lang.split('_')) {
         Q_ASSERT(!item.isEmpty());
 
@@ -229,12 +231,11 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
         key.append(k);
     }
 
-//    qDebug() << "preset order: " << key << APP_PRESET_SORTED_LIST.keys();
     QStringList preset;
     if (LAUNCHER_SETTINGS.keys().contains(key))
         preset = LAUNCHER_SETTINGS.get(key).toStringList();
     if (preset.isEmpty())
-        preset = LAUNCHER_SETTINGS.get("apps-order").toStringList();
+        preset = LAUNCHER_SETTINGS.get(IsDeepinServer() ? "apps-order-server" : "apps-order").toStringList();
 
     qSort(processList.begin(), processList.end(), [&preset](const ItemInfo & i1, const ItemInfo & i2) {
         int index1 = preset.indexOf(i1.m_key.toLower());
@@ -924,4 +925,9 @@ void AppsManager::refreshAppListIcon()
     }
 
     refreshCategoryInfoList();
+}
+
+bool AppsManager::IsDeepinServer()
+{
+    return DSysInfo::deepinType() == DSysInfo::DeepinType::DeepinServer;
 }

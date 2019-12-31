@@ -81,7 +81,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // process font
     QFont appNamefont(painter->font());
     appNamefont.setPointSize(fontPixelSize);
-    const QFontMetrics fm(appNamefont);
+   // const QFontMetrics fm(appNamefont);
 
     // Curve Fitting Result from MATLAB
 //    const int x = iconSize.width();
@@ -111,10 +111,11 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
         const double scale = (double)iconRect.width() /82;
         fontPixelSize = fontPixelSize*scale;
-        if(fontPixelSize < 11) {
-            fontPixelSize = 11;
+        if(fontPixelSize < 11*qApp->devicePixelRatio()) {
+            fontPixelSize = 11*qApp->devicePixelRatio();
         }
         appNamefont.setPointSize(fontPixelSize);
+        const QFontMetrics fm(appNamefont);
 
         // calc text
         appNameRect = itemTextRect(br, iconRect, drawBlueDot);
@@ -128,6 +129,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         adjust = true;
     } while (true);
 
+    const QFontMetrics fm(appNamefont);
 //    painter->fillRect(option.rect, Qt::gray);
 //    painter->fillRect(ibr, Qt::cyan);
 //    painter->fillRect(br, Qt::green);

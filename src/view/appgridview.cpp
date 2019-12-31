@@ -278,6 +278,7 @@ void AppGridView::startDrag(const QModelIndex &index)
     const QModelIndex &dragIndex = index;
     const qreal ratio = qApp->devicePixelRatio();
     QString appKey = index.data(AppsListModel::AppKeyRole).value<QString>();
+
 //    if(appKey == "dde-trash")
 //        return;
 

@@ -26,7 +26,8 @@
 
 DWIDGET_USE_NAMESPACE
 BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name, QWidget *parent)
-    : DBlurEffectWidget(parent)
+    : QWidget (parent)
+    ,m_bg(new MaskQWidget(this))
     , m_vLayout(new QVBoxLayout(this))
     , m_maskLayer(new MaskQWidget(this))
     , m_calcUtil(CalculateUtil::instance())
@@ -37,12 +38,6 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     ,m_titleOpacityEffect(new QGraphicsOpacityEffect)
     ,m_pagesOpacityEffect(new QGraphicsOpacityEffect)
 {
-    setMaskColor(LightColor);
-    setMaskAlpha(DLauncher::APPHBOX_ALPHA);
-    setBlurRectXRadius(DLauncher::APPHBOX_RADIUS);
-    setBlurRectYRadius(DLauncher::APPHBOX_RADIUS);
-    setFixedWidth(m_calcUtil->getAppBoxSize().width());
-
     setLayout(m_vLayout);
     m_vLayout->setContentsMargins(0, 0, 0, 0);
     m_vLayout->setAlignment(Qt::AlignTop);
@@ -50,6 +45,9 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     m_vLayout->addWidget(m_categoryMultiPagesView);
     m_categoryMultiPagesView->setGraphicsEffect(m_pagesOpacityEffect);
     m_categoryTitle->setGraphicsEffect(m_titleOpacityEffect);
+
+    m_bg->setFixedSize(m_calcUtil->getAppBoxSize());
+    m_bg->setColor(new QColor(255,255,255,20));
 }
 
 void BlurBoxWidget::layoutAddWidget(QWidget *child)
@@ -89,7 +87,8 @@ void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
 
 void BlurBoxWidget::setMaskSize(QSize size)
 {
-    setFixedWidth(size.width());
+    m_bg->setFixedSize(this->size());
+	setFixedWidth(size.width());
     m_maskLayer->setFixedSize(size);
     m_maskLayer->raise();
 }
@@ -106,8 +105,6 @@ void BlurBoxWidget::setMaskVisible(bool visible)
     m_maskLayer->setVisible(visible);
     double opacity = 0.3;
     visible? opacity= 0.3:opacity= 0.99;
-
-    setMaskAlpha(DLauncher::APPHBOX_ALPHA*opacity);
 
     m_titleOpacityEffect->setOpacity(opacity);
     m_pagesOpacityEffect->setOpacity(opacity);

@@ -34,11 +34,9 @@
 #include "qapplication.h"
 #include "maskqwidget.h"
 
-#include <DBlurEffectWidget>
-
 DWIDGET_USE_NAMESPACE
 
-class BlurBoxWidget : public DBlurEffectWidget
+class BlurBoxWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -56,11 +54,12 @@ signals:
     void maskClick(AppsListModel::AppCategory m_category, int nNext);
 
 protected:
-    void mousePressEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e)Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *e)Q_DECL_OVERRIDE;
 
 private:
     QPoint mousePos;
+    MaskQWidget* m_bg;
     QVBoxLayout *m_vLayout ;
     MaskQWidget *m_maskLayer = nullptr;
     CalculateUtil *m_calcUtil;
@@ -70,7 +69,6 @@ private:
     CategoryTitleWidget *m_categoryTitle;
     QGraphicsOpacityEffect* m_titleOpacityEffect;
     QGraphicsOpacityEffect* m_pagesOpacityEffect;
-
 };
 
 #endif // BLURBOXWIDGET_H

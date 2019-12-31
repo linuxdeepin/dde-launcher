@@ -27,18 +27,23 @@
 
 MaskQWidget::MaskQWidget(QWidget *parent) : QWidget(parent)
 {
+    m_color = new QColor(0,0,0,0);
+}
 
+void MaskQWidget::setColor(QColor *color)
+{
+    m_color = color;
 }
 
 void MaskQWidget::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);  // 反锯齿;
-    painter.setBrush(QBrush(QColor(0, 0, 0, 0)));
+    painter.setBrush(QBrush(*m_color));
     painter.setPen(Qt::transparent);
     QRect rect = this->rect();
     rect.setWidth(rect.width());
-    rect.setHeight(rect.height());
-    painter.drawRoundedRect(rect, DLauncher::APPHBOX_RADIUS+10, DLauncher::APPHBOX_RADIUS+9);
+    rect.setHeight(rect.height() - 7);
+    painter.drawRoundedRect(rect, DLauncher::APPHBOX_RADIUS, DLauncher::APPHBOX_RADIUS);
     QWidget::paintEvent(event);
 }

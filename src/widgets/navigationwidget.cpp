@@ -166,6 +166,19 @@ CategoryButton *NavigationWidget::button(const AppsListModel::AppCategory catego
     return nullptr;
 }
 
+void NavigationWidget::updateSize()
+{
+    double scaleX = m_calcUtil->getScreenScaleX();
+    double scaleY = m_calcUtil->getScreenScaleY();
+    double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
+    setFixedHeight(m_calcUtil->instance()->navigationHeight() * scale);
+    int btnSize = scale * DLauncher::NAVIGATION_BUTTON_SIZE;
+    for (auto btn : m_categoryGroup->buttons()) {
+        btn->setIconSize(QSize(btnSize / 2, btnSize / 2));
+        btn->setFixedSize(btnSize, btnSize);
+    }
+}
+
 void NavigationWidget::enterEvent(QEvent *e)
 {
     QFrame::enterEvent(e);

@@ -27,7 +27,8 @@
 #include <DFloatingButton>
 DWIDGET_USE_NAMESPACE
 
-#define     ICON_SPACE  10
+#define     PAGE_ICON_SPACE  10
+#define     PAGE_ICON_SIZE   20
 
 class pageControl : public QWidget
 {
@@ -37,6 +38,7 @@ public:
 
     void setPageCount(int count);
     void setCurrent(int pageIndex);
+    void UpdateIconSize(double scaleX, double scaleY);
 signals:
     void onPageChanged(int pageIndex);
 

@@ -67,6 +67,8 @@ public:
     inline int navigationHeight() { return 90; }
     QSize getAppBoxSize() ;
     QSize getScreenSize() const;
+    double getScreenScaleX();
+    double getScreenScaleY();
 public slots:
     void calculateAppLayout(const QSize &containerSize, const int dockPosition);
 

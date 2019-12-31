@@ -27,7 +27,7 @@ pageControl::pageControl(QWidget *parent) : QWidget(parent)
 {
     QHBoxLayout *layout = new QHBoxLayout();
     layout->setMargin(0);
-    layout->setSpacing(ICON_SPACE);
+    layout->setSpacing(PAGE_ICON_SPACE);
     setLayout(layout);
 
     m_iconActive = QIcon(":/widgets/images/page_indicator_active.svg");
@@ -57,12 +57,22 @@ void pageControl::setCurrent(int pageIndex)
     }
 }
 
+void pageControl::UpdateIconSize(double scaleX, double scaleY)
+{
+    double scale = qMax(scaleX, scaleY);
+    for (int i = 0; i < m_pageCount ; i++) {
+        DFloatingButton *pageButton = qobject_cast<DFloatingButton *>(layout()->itemAt(i)->widget());
+        pageButton->setIconSize(QSize(PAGE_ICON_SIZE * scale, PAGE_ICON_SIZE * scale));
+        pageButton->setFixedSize(QSize(PAGE_ICON_SIZE * scale, PAGE_ICON_SIZE * scale));
+    }
+}
+
 void pageControl::addButton()
 {
     DFloatingButton *pageButton = new DFloatingButton(this);
     pageButton->setIcon(m_iconNormal);
-    pageButton->setIconSize(QSize(20, 20));
-    pageButton->setFixedSize(QSize(20, 20));
+    pageButton->setIconSize(QSize(PAGE_ICON_SIZE, PAGE_ICON_SIZE));
+    pageButton->setFixedSize(QSize(PAGE_ICON_SIZE, PAGE_ICON_SIZE));
     pageButton->setBackgroundRole(DPalette::Button);
     pageButton->setAutoExclusive(true);
     pageButton->setFocusPolicy(Qt::NoFocus);

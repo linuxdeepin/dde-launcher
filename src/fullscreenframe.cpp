@@ -255,7 +255,6 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int
     else if (nNext == 0 && category < m_currentCategory)  isScrollLeft = false;
     else  if (nNext < 0) isScrollLeft = false;
 
-
     if (category < AppsListModel::Internet) category = AppsListModel::Internet;
 
     int categoryCount = m_calcUtil->appCategoryCount();
@@ -961,7 +960,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         // the column number of destination, when moving up/down, columns shouldn't be changed.
         //const int realColumn = currentIndex.row() % column;
 
-        const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
+       // const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
         int nAppIndex = 0;
 
         if (key == Qt::Key_Down || key == Qt::Key_Right) {
@@ -1489,7 +1488,7 @@ AppsListModel::AppCategory FullScreenFrame::nextCategoryModel(const AppsListMode
         nextCategory = nextCategoryModel(AppsListModel::AppCategory(nextCategory));
     }
 
-    return (AppsListModel::AppCategory)nextCategory;
+    return static_cast<AppsListModel::AppCategory>(nextCategory);
 }
 
 AppsListModel::AppCategory FullScreenFrame::prevCategoryModel(const AppsListModel::AppCategory category)

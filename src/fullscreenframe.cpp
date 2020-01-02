@@ -436,7 +436,7 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
 
     if (m_mousePos == e->pos()) {
         hide();
-    } else {
+    } else if (m_displayMode == GROUP_BY_CATEGORY){
         qint64 mouse_release_time =  QDateTime::currentDateTime().toMSecsSinceEpoch();
         int move_diff   = e->pos().x() - m_mousePos.x();
         //快速滑动

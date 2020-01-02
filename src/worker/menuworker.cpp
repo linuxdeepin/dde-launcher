@@ -111,16 +111,6 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
         connect(proxy, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
     }
 
-    const double scale_ratio = m_xsettings->get("scale-factor").toDouble();
-    if (!qFuzzyCompare(1.0, scale_ratio)) {
-        scale = new QAction(tr("Disable display scaling"), menu);
-        scale->setCheckable(true);
-        scale->setChecked(!m_isItemEnableScaling);
-        menu->addAction(scale);
-        signalMapper->setMapping(scale, SwitchScale);
-        connect(scale, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-    }
-
     dock->setEnabled(m_appKey != "dde-trash");
     uninstall->setEnabled(m_isRemovable);
 

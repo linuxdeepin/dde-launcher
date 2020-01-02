@@ -109,11 +109,11 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         iconTopMargin = std::max(iconTopMargin, 1.);
         iconRect = QRect(br.topLeft() + QPoint(iconLeftMargins, iconTopMargin), iconSize);
 
-        const double scale = (double)iconRect.width() /82;
-        fontPixelSize = fontPixelSize*scale;
-        if(fontPixelSize < 11*qApp->devicePixelRatio()) {
-            fontPixelSize = 11*qApp->devicePixelRatio();
+        fontPixelSize = fontPixelSize*qApp->devicePixelRatio();
+        if(fontPixelSize < 11) {
+            fontPixelSize = 11;
         }
+
         appNamefont.setPointSize(fontPixelSize);
         const QFontMetrics fm(appNamefont);
 

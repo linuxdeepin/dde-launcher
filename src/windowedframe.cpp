@@ -330,11 +330,11 @@ void WindowedFrame::hideLauncher()
 
     disconnect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition);
 
-    hide();
-    m_searcherEdit->clear();
-
+    m_searcherEdit->lineEdit()->clear();
     // clean all state
     recoveryAll();
+
+    hide();
 }
 
 bool WindowedFrame::visible()
@@ -688,9 +688,8 @@ void WindowedFrame::keyPressEvent(QKeyEvent *e)
 
         // support Ctrl+V shortcuts.
         if (!clipboardText.isEmpty()) {
-            m_searcherEdit->setText(clipboardText);
+            m_searcherEdit->lineEdit()->setText(clipboardText);
             m_searcherEdit->lineEdit()->setFocus();
-            m_searcherEdit->setFocus();
         }
     }
 }
@@ -731,7 +730,7 @@ void WindowedFrame::enterEvent(QEvent *e)
 void WindowedFrame::inputMethodEvent(QInputMethodEvent *e)
 {
     if (!e->commitString().isEmpty()) {
-        m_searcherEdit->setText(e->commitString());
+        m_searcherEdit->lineEdit()->setText(e->commitString());
         m_searcherEdit->lineEdit()->setFocus();
     }
 
@@ -915,7 +914,7 @@ void WindowedFrame::onSwitchBtnClicked()
     // each time press "switch btn" must hide tips label.
     hideTips();
 
-    m_searcherEdit->clear();
+    m_searcherEdit->lineEdit()->clear();
 }
 
 void WindowedFrame::onWMCompositeChanged()

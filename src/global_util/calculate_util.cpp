@@ -162,7 +162,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     double scaleX = getScreenScaleX();
     double scaleY = getScreenScaleY();
     double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
-    const int h = containerSize.height() - 15 - scale * 20; //35为 图标：20 下边距：15
+    const int h = containerSize.height() - 15 - scale * 12; //35为 图标：12 下边距：15
     const int nRowSpace = int(double(h - calc_item_width * rows) / (rows * 2) - 0.5);
     int nSpace = qMin(calc_spacing, nRowSpace);
     m_appMarginLeft = (containerSize.width() - calc_item_width * columns - nSpace * columns * 2) / 2;

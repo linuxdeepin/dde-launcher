@@ -235,6 +235,8 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category, int nNext)
     m_currentCategory =  AppsListModel::AppCategory(m_currentBox + 4);
 
     setCategoryIndex(m_currentCategory, nNext);
+    dest = categoryBoxWidget(m_currentCategory);
+    m_currentBox = m_currentCategory - 4;
 
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
     const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  m_padding * 2 - 20) / 2 ;

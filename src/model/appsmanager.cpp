@@ -534,7 +534,11 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
         return m_iconCache[tmpKey];
     }
 
-    const QPixmap &pixmap = getThemeIcon(info, size * qApp->devicePixelRatio());
+    int iconSize = size;
+    if(info.m_key == "dde-trash")
+        iconSize = size / qApp->devicePixelRatio();
+
+    const QPixmap &pixmap = getThemeIcon(info, iconSize);
 
     m_iconCache[tmpKey] = pixmap;
 

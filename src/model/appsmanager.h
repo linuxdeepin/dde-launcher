@@ -123,8 +123,6 @@ private:
     void refreshNotFoundIcon();
     void refreshAppListIcon();
 
-    bool IsDeepinServer();
-
 private slots:
     void onIconThemeChanged();
     void searchDone(const QStringList &resultList);

@@ -42,10 +42,8 @@
 #include <DHiDPIHelper>
 #include <DApplication>
 #include <DGuiApplicationHelper>
-#include <DSysInfo>
 
 DWIDGET_USE_NAMESPACE
-DCORE_USE_NAMESPACE
 
 QPointer<AppsManager> AppsManager::INSTANCE = nullptr;
 
@@ -221,7 +219,7 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
 {
     const QString system_lang = QLocale::system().name();
 
-    QString key = IsDeepinServer() ? "appsOrderServer" : "appsOrder";
+    QString key = "appsOrder";
     for (const auto &item : system_lang.split('_')) {
         Q_ASSERT(!item.isEmpty());
 
@@ -235,7 +233,7 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
     if (LAUNCHER_SETTINGS.keys().contains(key))
         preset = LAUNCHER_SETTINGS.get(key).toStringList();
     if (preset.isEmpty())
-        preset = LAUNCHER_SETTINGS.get(IsDeepinServer() ? "apps-order-server" : "apps-order").toStringList();
+        preset = LAUNCHER_SETTINGS.get("apps-order").toStringList();
 
     qSort(processList.begin(), processList.end(), [&preset](const ItemInfo & i1, const ItemInfo & i2) {
         int index1 = preset.indexOf(i1.m_key.toLower());
@@ -931,7 +929,3 @@ void AppsManager::refreshAppListIcon()
     refreshCategoryInfoList();
 }
 
-bool AppsManager::IsDeepinServer()
-{
-    return DSysInfo::deepinType() == DSysInfo::DeepinType::DeepinServer;
-}

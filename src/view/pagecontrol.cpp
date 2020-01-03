@@ -77,6 +77,7 @@ void pageControl::addButton()
     pageButton->setAutoExclusive(true);
     pageButton->setFocusPolicy(Qt::NoFocus);
     pageButton->setCheckable(true);
+    pageButton->setFlat(true);
 
     layout()->addWidget(pageButton);
 

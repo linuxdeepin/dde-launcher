@@ -28,7 +28,7 @@
 DWIDGET_USE_NAMESPACE
 
 #define     PAGE_ICON_SPACE  10
-#define     PAGE_ICON_SIZE   20
+#define     PAGE_ICON_SIZE   12
 
 class pageControl : public QWidget
 {

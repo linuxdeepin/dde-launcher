@@ -42,6 +42,8 @@
 #include <ddialog.h>
 #include <QScroller>
 
+#define     SIDES_SPACE_SCALE   0.10
+
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
 #include <DDBusSender>
 #else
@@ -677,7 +679,7 @@ void FullScreenFrame::initUI()
 
     QHBoxLayout *scrollHLayout = new QHBoxLayout;
     QSize screen = m_calcUtil->getScreenSize();
-    m_padding = screen.width() / 10;
+    m_padding = screen.width() * SIDES_SPACE_SCALE;
     scrollHLayout->setContentsMargins(m_padding, 0, m_padding, 0);
     scrollHLayout->setSpacing(0);
     scrollHLayout->addWidget(m_appsHbox, 0, Qt::AlignTop);
@@ -695,7 +697,7 @@ void FullScreenFrame::initUI()
 
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
-    m_mainLayout->addSpacing(0);
+    m_mainLayout->setSpacing(0);
     m_mainLayout->addWidget(m_topSpacing);
     m_mainLayout->addWidget(m_searchWidget);
     m_mainLayout->addWidget(m_navigationWidget, 0, Qt::AlignHCenter);
@@ -1308,18 +1310,17 @@ void FullScreenFrame::updateDockPosition()
 
     const QRect dockGeometry = m_appsManager->dockGeometry();
 
-    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? m_calcUtil->getScreenSize().height() *0.064815 : 15;
+    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? m_calcUtil->getScreenSize().height() *0.064815 : 0;
 
     m_searchWidget->updateSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
     m_navigationWidget->updateSize();
-    int topSearchSpace = m_searchWidget->sizeHint().height();
 
-    m_topSpacing->setFixedHeight(topSearchSpace);
+    m_topSpacing->setFixedHeight(30);
     m_bottomSpacing->setFixedHeight(bottomMargin);
 
     switch (m_appsManager->dockPosition()) {
     case DOCK_POS_TOP:
-        m_topSpacing->setFixedHeight(topSearchSpace + dockGeometry.height());
+        m_topSpacing->setFixedHeight(30 + dockGeometry.height());
         bottomMargin = m_topSpacing->height() + 20;
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(0);
@@ -1342,7 +1343,7 @@ void FullScreenFrame::updateDockPosition()
         break;
     }
 
-    int padding = m_calcUtil->getScreenSize().width() / 10;
+    int padding = m_calcUtil->getScreenSize().width() * SIDES_SPACE_SCALE;
     if (m_pHBoxLayout && m_padding != padding) {
         m_padding = padding;
         m_pHBoxLayout->setContentsMargins(m_padding, 0, m_padding, 0);

@@ -53,8 +53,6 @@
 #include <QDebug>
 
 #include <dboxwidget.h>
-#include <DFloatingButton>
-typedef QList<DFloatingButton *>  DFloatBtnList;
 
 #define CATEGORY_MAX 11
 
@@ -222,7 +220,6 @@ private:
     AppsListModel *m_systemModel;
     AppsListModel *m_othersModel;
 
-    DFloatBtnList m_floatBtnList;
     QIcon m_iconViewActive;
     QIcon m_iconView;
 

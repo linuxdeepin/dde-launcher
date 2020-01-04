@@ -147,7 +147,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 
         m_appItemSpacing = calc_categoryspacing;
         m_appItemSize = calc_categroyitem_width;
-        m_appItemFontSize = m_appItemSize <= 130 ? 8 : qApp->font().pointSize();
+        m_appItemFontSize = m_appItemSize <= 130 ? 8 : qApp->font().pointSize()+3;
         m_appMarginLeft = (getAppBoxSize().width() - calc_categroyitem_width * m_appColumnCount - calc_categoryspacing * m_appColumnCount * 2) / 2;
         emit layoutChanged();
         return;
@@ -175,7 +175,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     m_appColumnCount = columns;
 
     // calculate font size;
-    m_appItemFontSize = m_appItemSize <= 80 ? 8 : qApp->font().pointSize();
+    m_appItemFontSize = m_appItemSize <= 80 ? 8 : qApp->font().pointSize()+3;
     emit layoutChanged();
 }
 

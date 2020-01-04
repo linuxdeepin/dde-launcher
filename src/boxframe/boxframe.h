@@ -40,6 +40,9 @@ public:
     void setBackground(const QString &url);
     inline QPixmap cachePixmap() { return m_cache; }
 
+signals:
+    void backgroundImageChanged(const QPixmap & img);
+
 protected:
     void updateBackground();
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;

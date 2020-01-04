@@ -163,6 +163,8 @@ private:
     QPropertyAnimation *m_scrollAnimation;
 
     QWidget *m_scrollDest;
+    BlurBoxWidget *m_leftScrollDest;
+    BlurBoxWidget *m_rightScrollDest;
     QTimer *m_delayHideTimer;
     QTimer *m_autoScrollTimer;
     QTimer *m_clearCacheTimer;

@@ -135,6 +135,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_appNum = m_appsManager->GetAllAppNum();
 
     m_currentBox = 0;
+    m_leftScrollDest = nullptr;
+    m_rightScrollDest = nullptr;
 #if (DTK_VERSION <= DTK_VERSION_CHECK(2, 0, 9, 9))
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
 #else
@@ -292,6 +294,7 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int
             leftBlurBox->setMaskVisible(true);
             leftBlurBox->layout()->itemAt(0)->setAlignment(Qt::AlignRight);
             leftBlurBox->layout()->update();
+            m_leftScrollDest = leftBlurBox;
             break;
         }
     }
@@ -310,6 +313,7 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int
             rightBlurBox->setMaskVisible(true);
             rightBlurBox->layout()->itemAt(0)->setAlignment(Qt::AlignLeft);
             rightBlurBox->layout()->update();
+            m_rightScrollDest = rightBlurBox;
             break;
         }
     }
@@ -774,7 +778,9 @@ void FullScreenFrame::initConnection()
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &FullScreenFrame::updateGeometry, Qt::QueuedConnection);
 
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
-    //connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullScreenFrame::ensureScrollToDest);
+    connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullScreenFrame::ensureScrollToDest);
+    connect(m_appsArea->horizontalScrollBar(), &QScrollBar::valueChanged, this, &FullScreenFrame::ensureScrollToDest);
+
     connect(m_navigationWidget, &NavigationWidget::scrollToCategory, this, &FullScreenFrame::scrollToCategory);
 
     connect(this, &FullScreenFrame::currentVisibleCategoryChanged, m_navigationWidget, &NavigationWidget::setCurrentCategory);
@@ -796,6 +802,18 @@ void FullScreenFrame::initConnection()
     connect(m_developmentBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
     connect(m_systemBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
     connect(m_othersBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
+
+    connect(this, &BoxFrame::backgroundImageChanged, m_internetBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_chatBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_musicBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_videoBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_graphicsBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_gameBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_officeBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_readingBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_developmentBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_systemBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_othersBoxWidget, &BlurBoxWidget::updateBackgroundImage);
 
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
@@ -1146,18 +1164,16 @@ void FullScreenFrame::clickToCategory(const QModelIndex &index)
     qDebug() << "modeValue" <<  index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 }
 
-
+// 分类窗口滚动时更新背景模糊坐标
 void FullScreenFrame::ensureScrollToDest(const QVariant &value)
 {
     Q_UNUSED(value);
-
-    if (sender() != m_scrollAnimation)
-        return;
-
-    QPropertyAnimation *ani = qobject_cast<QPropertyAnimation *>(sender());
-
-    if (m_scrollDest->x() != ani->endValue())
-        ani->setEndValue(m_scrollDest->x());
+    BlurBoxWidget* blurbox = qobject_cast<BlurBoxWidget*>(m_scrollDest);
+    if(blurbox && m_leftScrollDest && m_rightScrollDest) {
+        blurbox->updateBackBlurPos(m_contentFrame->mapTo(window(), blurbox->pos())+QPoint(190*m_calcUtil->getScreenScaleX(),0));
+        m_leftScrollDest->updateBackBlurPos(QPoint(m_leftScrollDest->visibleRegion().boundingRect().width() - m_leftScrollDest->width() ,m_contentFrame->mapTo(window(),m_leftScrollDest->pos()).y()));
+        m_rightScrollDest->updateBackBlurPos(m_contentFrame->mapTo(window(),m_rightScrollDest->pos())+QPoint(190*m_calcUtil->getScreenScaleX(),0));
+     }
 }
 
 void FullScreenFrame::ensureItemVisible(const QModelIndex &index)

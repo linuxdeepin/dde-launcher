@@ -27,7 +27,6 @@
 DWIDGET_USE_NAMESPACE
 BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name, QWidget *parent)
     : QWidget (parent)
-    ,m_bg(new MaskQWidget(this))
     , m_vLayout(new QVBoxLayout(this))
     , m_maskLayer(new MaskQWidget(this))
     , m_calcUtil(CalculateUtil::instance())
@@ -37,8 +36,19 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     , m_categoryTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", name)))
     ,m_titleOpacityEffect(new QGraphicsOpacityEffect)
     ,m_pagesOpacityEffect(new QGraphicsOpacityEffect)
+    ,m_blurGroup(new  DBlurEffectGroup)
+    ,m_blurBackground(new DBlurEffectWidget(this))
+    ,m_bg(new MaskQWidget(this))
 {
     setLayout(m_vLayout);
+
+    m_blurBackground->setFixedSize(m_calcUtil->getAppBoxSize());
+    m_blurBackground->setMaskColor(DBlurEffectWidget::AutoColor);
+    m_blurBackground->setMaskAlpha(DLauncher::APPHBOX_ALPHA);
+    m_blurBackground->setBlurRectXRadius(DLauncher::APPHBOX_RADIUS);
+    m_blurBackground->setBlurRectYRadius(DLauncher::APPHBOX_RADIUS);
+    m_blurGroup->addWidget(m_blurBackground);
+
     m_vLayout->setContentsMargins(0, 0, 0, 0);
     m_vLayout->setAlignment(Qt::AlignTop);
     layoutAddWidget(m_categoryTitle, m_calcUtil->getAppBoxSize().width() / 2, Qt::AlignHCenter);
@@ -65,6 +75,16 @@ MultiPagesView *BlurBoxWidget::getMultiPagesView()
     return m_categoryMultiPagesView;
 }
 
+void BlurBoxWidget::updateBackBlurPos(QPoint p)
+{
+    m_blurGroup->addWidget(m_blurBackground,p);
+}
+
+void BlurBoxWidget::updateBackgroundImage(const QPixmap &img)
+{
+    m_blurGroup->setSourceImage(img.toImage(),40);
+}
+
 void BlurBoxWidget::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
@@ -87,10 +107,11 @@ void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
 
 void BlurBoxWidget::setMaskSize(QSize size)
 {
-    m_bg->setFixedSize(this->size());
+    m_bg->setFixedSize(this->size()+QSize(0,8));
 	setFixedWidth(size.width());
     m_maskLayer->setFixedSize(size);
     m_maskLayer->raise();
+    m_blurBackground->setFixedSize(this->size());
 }
 
 void BlurBoxWidget::setDataDelegate(QAbstractItemDelegate *delegate)

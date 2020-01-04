@@ -27,6 +27,8 @@
 #include <QAbstractItemDelegate>
 #include <QGraphicsOpacityEffect>
 
+#include <DBlurEffectWidget>
+
 #include "src/global_util/constants.h"
 #include "src/global_util/calculate_util.h"
 #include "src/widgets/categorytitlewidget.h"
@@ -49,6 +51,8 @@ public:
     void layoutAddWidget(QWidget *, int stretch = 0, Qt::Alignment alignment = Qt::Alignment());
     void setCategory(AppsListModel::AppCategory category) {m_category = category;}
     MultiPagesView *getMultiPagesView();
+    void updateBackBlurPos(QPoint p);
+    void updateBackgroundImage(const QPixmap & img);
 
 signals:
     void maskClick(AppsListModel::AppCategory m_category, int nNext);
@@ -59,7 +63,6 @@ protected:
 
 private:
     QPoint mousePos;
-    MaskQWidget* m_bg;
     QVBoxLayout *m_vLayout ;
     MaskQWidget *m_maskLayer = nullptr;
     CalculateUtil *m_calcUtil;
@@ -69,6 +72,9 @@ private:
     CategoryTitleWidget *m_categoryTitle;
     QGraphicsOpacityEffect* m_titleOpacityEffect;
     QGraphicsOpacityEffect* m_pagesOpacityEffect;
+    DBlurEffectGroup* m_blurGroup;
+    DBlurEffectWidget *m_blurBackground;
+    MaskQWidget* m_bg;
 };
 
 #endif // BLURBOXWIDGET_H

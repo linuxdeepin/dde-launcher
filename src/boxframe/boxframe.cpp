@@ -82,6 +82,8 @@ const QPixmap BoxFrame::backgroundPixmap() {
     cache = cache.copy(copyRect);
     cache.setDevicePixelRatio(devicePixelRatioF());
 
+    emit backgroundImageChanged(cache);
+
     return cache;
 }
 

@@ -80,7 +80,8 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     // process font
     QFont appNamefont(painter->font());
-    appNamefont.setPointSize(fontPixelSize);
+   // appNamefont.setPointSize(fontPixelSize);
+    appNamefont.setPixelSize(fontPixelSize);
    // const QFontMetrics fm(appNamefont);
 
     // Curve Fitting Result from MATLAB
@@ -109,12 +110,11 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         iconTopMargin = std::max(iconTopMargin, 1.);
         iconRect = QRect(br.topLeft() + QPoint(iconLeftMargins, iconTopMargin), iconSize);
 
-        fontPixelSize = fontPixelSize*qApp->devicePixelRatio();
         if(fontPixelSize < 11) {
             fontPixelSize = 11;
         }
 
-        appNamefont.setPointSize(fontPixelSize);
+        appNamefont.setPixelSize(fontPixelSize);
         const QFontMetrics fm(appNamefont);
 
         // calc text

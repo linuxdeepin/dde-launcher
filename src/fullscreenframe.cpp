@@ -201,6 +201,7 @@ int FullScreenFrame::dockPosition()
 
 void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &category, int nNext)
 {
+    m_focusIndex = CategoryTital;
     AppsListModel::AppCategory tempMode = category;
     if (tempMode < AppsListModel::Internet || tempMode > AppsListModel::Others)
         tempMode = AppsListModel::Internet ;
@@ -1267,8 +1268,9 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     hideTips();
 
     if (m_displayMode == GROUP_BY_CATEGORY)
-        QTimer::singleShot(200, this, [ = ] {
+        QTimer::singleShot(100, this, [ = ] {
         scrollToCategory(m_currentCategory);
+         m_focusIndex = CategoryChangeBtn;
     });
 
     else

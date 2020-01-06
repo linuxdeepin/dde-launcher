@@ -776,6 +776,18 @@ void FullScreenFrame::initConnection()
     connect(m_systemBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
     connect(m_othersBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::scrollToCategory);
 
+    connect(m_internetBoxWidget, &BlurBoxWidget::hideLauncher, this, &FullScreenFrame::hideLauncher);
+    connect(m_chatBoxWidget, &BlurBoxWidget::hideLauncher, this, &FullScreenFrame::hideLauncher);
+    connect(m_musicBoxWidget, &BlurBoxWidget::hideLauncher, this, &FullScreenFrame::hideLauncher);
+    connect(m_videoBoxWidget, &BlurBoxWidget::hideLauncher, this, &FullScreenFrame::hideLauncher);
+    connect(m_graphicsBoxWidget, &BlurBoxWidget::hideLauncher, this, &FullScreenFrame::hideLauncher);
+    connect(m_gameBoxWidget, &BlurBoxWidget::hideLauncher, this, &FullScreenFrame::hideLauncher);
+    connect(m_officeBoxWidget, &BlurBoxWidget::hideLauncher, this, &FullScreenFrame::hideLauncher);
+    connect(m_readingBoxWidget, &BlurBoxWidget::hideLauncher, this, &FullScreenFrame::hideLauncher);
+    connect(m_developmentBoxWidget, &BlurBoxWidget::hideLauncher, this, &FullScreenFrame::hideLauncher);
+    connect(m_systemBoxWidget, &BlurBoxWidget::hideLauncher, this, &FullScreenFrame::hideLauncher);
+    connect(m_othersBoxWidget, &BlurBoxWidget::hideLauncher, this, &FullScreenFrame::hideLauncher);
+
     connect(this, &BoxFrame::backgroundImageChanged, m_internetBoxWidget, &BlurBoxWidget::updateBackgroundImage);
     connect(this, &BoxFrame::backgroundImageChanged, m_chatBoxWidget, &BlurBoxWidget::updateBackgroundImage);
     connect(this, &BoxFrame::backgroundImageChanged, m_musicBoxWidget, &BlurBoxWidget::updateBackgroundImage);

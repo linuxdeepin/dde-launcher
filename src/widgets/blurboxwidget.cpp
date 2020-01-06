@@ -96,10 +96,14 @@ void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton && e->pos() == mousePos) {
         int nNext = 0;
-        if (m_calcUtil->getScreenSize().width() / 2 < e->globalX()) {
+
+        if (m_calcUtil->getScreenSize().width() * 3 / 4 < e->globalX()) {
             nNext = 1;
-        } else {
+        } else if (m_calcUtil->getScreenSize().width() / 4 > e->globalX()){
             nNext = -1;
+        } else {
+            emit hideLauncher();
+            return;
         }
         emit maskClick(m_category, nNext);
     }

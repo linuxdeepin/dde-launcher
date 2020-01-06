@@ -56,6 +56,7 @@ public:
 
 signals:
     void maskClick(AppsListModel::AppCategory m_category, int nNext);
+    void hideLauncher();
 
 protected:
     void mousePressEvent(QMouseEvent *e)Q_DECL_OVERRIDE;

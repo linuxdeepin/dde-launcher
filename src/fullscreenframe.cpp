@@ -1225,7 +1225,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     hideTips();
 
     if (m_displayMode == GROUP_BY_CATEGORY)
-        QTimer::singleShot(1, this, [ = ] {
+        QTimer::singleShot(100, this, [ = ] {
         scrollToCategory(m_currentCategory);
          m_focusIndex = CategoryChangeBtn;
     });

@@ -56,6 +56,7 @@ public:
     inline int appPageItemCount(AppsListModel::AppCategory category) const {return category > AppsListModel::Category ? m_categoryAppPageItemCount : m_appPageItemCount;}
     inline int appCategoryCount() const {return m_categoryCount;}
     inline QSize appItemSize() const { return QSize(m_appItemSize, m_appItemSize); }
+    inline bool fullscreen() const {return m_launcherInter->fullscreen();}
     QSize appIconSize() const;
     int displayMode() const;
     void setDisplayMode(const int mode);

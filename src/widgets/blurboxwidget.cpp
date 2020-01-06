@@ -57,7 +57,7 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     m_categoryTitle->setGraphicsEffect(m_titleOpacityEffect);
 
     m_bg->setFixedSize(m_calcUtil->getAppBoxSize());
-    m_bg->setColor(new QColor(255,255,255,20));
+    m_bg->setColor(new QColor(255,255,255,25));
 }
 
 void BlurBoxWidget::layoutAddWidget(QWidget *child)

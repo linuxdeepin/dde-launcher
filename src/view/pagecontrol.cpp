@@ -59,7 +59,7 @@ void pageControl::setCurrent(int pageIndex)
 
 void pageControl::UpdateIconSize(double scaleX, double scaleY)
 {
-    double scale = qMax(scaleX, scaleY);
+    double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
     for (int i = 0; i < m_pageCount ; i++) {
         DFloatingButton *pageButton = qobject_cast<DFloatingButton *>(layout()->itemAt(i)->widget());
         pageButton->setIconSize(QSize(PAGE_ICON_SIZE * scale, PAGE_ICON_SIZE * scale));

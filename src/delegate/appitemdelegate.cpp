@@ -36,6 +36,11 @@
 
 DGUI_USE_NAMESPACE
 
+#define  ICONTOLETF  12
+#define  ICONTOTOP  6
+#define TEXTTOICON  8
+#define TEXTTOLEFT  10
+
 QModelIndex AppItemDelegate::CurrentIndex = QModelIndex();
 
 AppItemDelegate::AppItemDelegate(QObject *parent) :
@@ -98,6 +103,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QRectF appNameRect;
     QString appNameResolved;
     bool adjust = false;
+    bool TextSecond = false;
     do {
         // adjust
         if (adjust)
@@ -106,8 +112,8 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
         // calc icon rect
         const int iconLeftMargins = (br.width() - iconSize.width()) / 2;
-        double iconTopMargin = ibr.height() * .2 - iconSize.height() * .3;
-        iconTopMargin = std::max(iconTopMargin, 1.);
+        int  iconTopMargin = ICONTOTOP;// ibr.height() * .2 - iconSize.height() * .3;
+        //iconTopMargin = 6; //std::max(iconTopMargin, 1.);
         iconRect = QRect(br.topLeft() + QPoint(iconLeftMargins, iconTopMargin), iconSize);
 
         if(fontPixelSize < 11) {
@@ -136,13 +142,24 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 //    painter->fillRect(appNameRect, Qt::blue);
 //    painter->fillRect(iconRect, Qt::magenta);
 
+    br.setHeight(ICONTOTOP+iconRect.height()+TEXTTOICON+fm.height()+fontPixelSize*TextSecond+TEXTTOLEFT);
     // draw focus background
    if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay))
     {
         const int radius = 18;
-        const QColor brushColor(255, 255, 255, 105);
+        const QColor brushColor(255, 255, 255, 0.2*255);
+
         painter->setPen(Qt::transparent);
         painter->setBrush(brushColor);
+        int drawBlueDotWidth = 0;
+        if(drawBlueDot) {
+            drawBlueDotWidth = m_blueDotPixmap.width()* qApp->devicePixelRatio();
+        }
+
+        if(iconSize.width() > (fm.width(appNameResolved) + drawBlueDotWidth)) {
+            br.setX(iconRect.x()-ICONTOLETF);
+            br.setWidth(iconSize.width()+ICONTOLETF*2);
+        }
         painter->drawRoundedRect(br, radius, radius);
     }
 
@@ -151,6 +168,8 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     appNameOption.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     appNameOption.setWrapMode(QTextOption::WordWrap);
 
+
+    appNameRect.setY(br.y() + br.height()  - TEXTTOLEFT - fm.height() - fontPixelSize*TextSecond);
     painter->setFont(appNamefont);
     painter->setBrush(QBrush(Qt::transparent));
     painter->setPen(QColor(0, 0, 0, 80));
@@ -220,8 +239,8 @@ const QRect AppItemDelegate::itemBoundingRect(const QRect &itemRect) const
 ///
 const QRect AppItemDelegate::itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool extraWidthMargin) const
 {
-    const int widthMargin = extraWidthMargin ? 16 : 2;
-    const int heightMargin = 2;
+    const int widthMargin = 10;//extraWidthMargin ? 16 : 2;
+    const int heightMargin = TEXTTOICON;
 
     QRect result = boundingRect;
 

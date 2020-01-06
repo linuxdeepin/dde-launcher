@@ -178,7 +178,7 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
     int nPageCount = nSize - pageCount * m_pageIndex;
     nPageCount = nPageCount > 0 ? nPageCount : 0;
 
-    if(!m_calcUtil->fullscreen() && m_category != AppsListModel::All && m_category != AppsListModel::Search){
+    if(!m_calcUtil->fullscreen()){
         return nSize;
     }
 
@@ -267,6 +267,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     int pageCount = qMin(m_calcUtil->appPageItemCount(m_category), nSize - m_calcUtil->appPageItemCount(m_category) * m_pageIndex);
     int nFixCount = m_calcUtil->appPageItemCount(m_category);
     if(!m_calcUtil->fullscreen() && m_category != AppsListModel::All && m_category != AppsListModel::Search) pageCount = nSize;
+
     if (!index.isValid() || index.row() >= pageCount)
         return QVariant();
 

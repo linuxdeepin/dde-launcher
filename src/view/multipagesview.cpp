@@ -57,7 +57,6 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_appListArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appListArea->viewport()->installEventFilter(this);
     m_appListArea->installEventFilter(this);
-    m_appListArea->setStyleSheet("background-color:red");
 
     // 翻页按钮和动画
     m_pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value");

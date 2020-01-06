@@ -112,6 +112,8 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     setMaskColor(DBlurEffectWidget::AutoColor);
     setBlendMode(DBlurEffectWidget::InWindowBlend);
     m_appearanceInter->setSync(false, false);
+    setBlurRectXRadius(18);
+    setBlurRectYRadius(18);
 
     QPalette pal = m_maskBg->palette();
     if( DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType){
@@ -623,13 +625,13 @@ void WindowedFrame::switchToCategory(const QModelIndex &index)
 
 QPainterPath WindowedFrame::getCornerPath(AnchoredCornor direction)
 {
+     QPainterPath path;
+     return path;
     const QRect rect = this->rect();
     const QPoint topLeft = rect.topLeft();
     const QPoint topRight = rect.topRight();
     const QPoint bottomLeft = rect.bottomLeft();
     const QPoint bottomRight = rect.bottomRight();
-
-    QPainterPath path;
 
     switch (direction) {
     case TopLeft:
@@ -822,7 +824,7 @@ void WindowedFrame::adjustPosition()
     const QRect &r = m_dockInter->frontendRect();
     QRect dockRect = QRect(scaledPosition(r.topLeft()), r.size() / ratio);
 
-    const int dockSpacing = 0;
+    const int dockSpacing = 8;
     const int screenSpacing = 0;
     const auto &s = size();
     QPoint p;

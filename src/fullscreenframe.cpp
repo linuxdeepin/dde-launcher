@@ -137,6 +137,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_currentBox = 0;
     m_leftScrollDest = nullptr;
     m_rightScrollDest = nullptr;
+    m_scrollDest = nullptr;
 #if (DTK_VERSION <= DTK_VERSION_CHECK(2, 0, 9, 9))
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
 #else
@@ -1168,6 +1169,7 @@ void FullScreenFrame::clickToCategory(const QModelIndex &index)
 void FullScreenFrame::ensureScrollToDest(const QVariant &value)
 {
     Q_UNUSED(value);
+    if(m_scrollDest == nullptr) return;
     BlurBoxWidget* blurbox = qobject_cast<BlurBoxWidget*>(m_scrollDest);
     if(blurbox && m_leftScrollDest && m_rightScrollDest) {
         blurbox->updateBackBlurPos(m_contentFrame->mapTo(window(), blurbox->pos())+QPoint(190*m_calcUtil->getScreenScaleX(),0));

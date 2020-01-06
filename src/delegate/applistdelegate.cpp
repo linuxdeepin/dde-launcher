@@ -134,7 +134,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     // draw app name.
     painter->setPen(QPen(QPalette().brightText(), 1));
-    if (option.state.testFlag(QStyle::State_Selected)) {
+    if (option.state.testFlag(QStyle::State_Selected) && index.data(AppsListModel::DrawBackgroundRole).toBool()) {
         if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType())
             painter->setPen(QPen(DGuiApplicationHelper::standardPalette(DGuiApplicationHelper::LightType).brightText(), 1));
         else

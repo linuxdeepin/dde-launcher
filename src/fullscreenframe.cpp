@@ -825,9 +825,9 @@ void FullScreenFrame::showLauncher()
     m_focusIndex = 1;
     m_appItemDelegate->setCurrentIndex(QModelIndex());
     m_searchWidget->categoryBtn()->clearFocus();
-    show();
     setFixedSize(qApp->primaryScreen()->geometry().size());
     updateDockPosition();
+    show();
 }
 
 void FullScreenFrame::hideLauncher()
@@ -1135,22 +1135,22 @@ void FullScreenFrame::ensureScrollToDest(const QVariant &value)
 
 void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
 {
-    MultiPagesView *view = nullptr;
-    const AppsListModel::AppCategory category = index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
+//    MultiPagesView *view = nullptr;
+//    const AppsListModel::AppCategory category = index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 
-    //   if (m_displayMode == SEARCH || m_displayMode == ALL_APPS)
-    //        view = m_pageAppsViewList[m_pageCurrent];
-    //    else
-    if (m_displayMode == GROUP_BY_CATEGORY)
-        view = getCategoryGridViewList(category);
+//    //   if (m_displayMode == SEARCH || m_displayMode == ALL_APPS)
+//    //        view = m_pageAppsViewList[m_pageCurrent];
+//    //    else
+//    if (m_displayMode == GROUP_BY_CATEGORY)
+//        view = getCategoryGridViewList(category);
 
-    if (!view)
-        return;
+//    if (!view)
+//        return;
 
-    updateCurrentVisibleCategory();
-    if (category != m_currentCategory) {
-        scrollToCategory(category);
-    }
+//    updateCurrentVisibleCategory();
+//    if (category != m_currentCategory) {
+//        scrollToCategory(category);
+//    }
 }
 
 
@@ -1225,7 +1225,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     hideTips();
 
     if (m_displayMode == GROUP_BY_CATEGORY)
-        QTimer::singleShot(100, this, [ = ] {
+        QTimer::singleShot(1, this, [ = ] {
         scrollToCategory(m_currentCategory);
          m_focusIndex = CategoryChangeBtn;
     });

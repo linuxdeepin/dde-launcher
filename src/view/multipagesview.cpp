@@ -237,8 +237,7 @@ void MultiPagesView::updatePosition()
     for (auto *pView : m_appGridViewList)
         pView->setFixedSize(boxSize);
 
-//    showCurrentPage(0);
-    m_appListArea->horizontalScrollBar()->setValue(0);
+    showCurrentPage(0);
 }
 
 void MultiPagesView::InitUI()
@@ -340,8 +339,6 @@ void MultiPagesView::mousePress(QMouseEvent *e)
     m_nMousePos = e->x();
     m_scrollValue = m_appListArea->horizontalScrollBar()->value();
     m_scrollStart = m_scrollValue;
-
-//    updateGradient();
 }
 
 void MultiPagesView::mouseMove(QMouseEvent *e)

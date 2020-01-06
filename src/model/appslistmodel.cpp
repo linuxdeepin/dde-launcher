@@ -33,6 +33,7 @@
 #include <QSettings>
 #include <DHiDPIHelper>
 #include <DGuiApplicationHelper>
+#include <DFontSizeManager>
 
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
@@ -315,7 +316,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppIconSizeRole:
         return m_calcUtil->appIconSize();
     case AppFontSizeRole:
-        return m_calcUtil->appItemFontSize();
+        return DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6);
     case AppItemIsDraggingRole:
         return indexDragging(index);
     case CategoryEnterIconRole:

@@ -38,6 +38,7 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     QAbstractButton(parent)
     , m_calcUtil(CalculateUtil::instance())
     , m_category(category)
+    , m_fScale(1)
 {
     setObjectName("CategoryButton");
     setCheckable(true);
@@ -61,6 +62,12 @@ void CategoryButton::setChecked(bool isChecked)
         updateState(Normal);
 
     QAbstractButton::setChecked(isChecked);
+}
+
+void CategoryButton::setScreenScale(double fScale)
+{
+    m_fScale = fScale;
+    setInfoByCategory();
 }
 
 void CategoryButton::setInfoByCategory()
@@ -90,15 +97,9 @@ void CategoryButton::setInfoByCategory()
         m_iconName = "others";                      break;
     }
 
-
-    const auto ratio = devicePixelRatioF();
-
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
-        m_systemTheme = "_dark";
-    } else {
-        m_systemTheme = "";
-    }
-    m_icon = loadSvg(QString(":/icons/skin/icons/category_%1%2.svg").arg(m_iconName, m_systemTheme), DLauncher::NAVIGATION_ICON_SIZE * ratio);
+//    const auto ratio = devicePixelRatioF();
+    m_systemTheme = "_dark";
+    m_icon = loadSvg(QString(":/icons/skin/icons/category_%1%2.svg").arg(m_iconName, m_systemTheme), DLauncher::NAVIGATION_ICON_SIZE * m_fScale);
     m_icon.setDevicePixelRatio(qApp->devicePixelRatio());
 }
 

@@ -46,6 +46,7 @@ public:
 
 public slots:
     void setChecked(bool isChecked);
+    void setScreenScale(double fScale);
     AppsListModel::AppCategory category() const;
 
 protected:
@@ -62,6 +63,7 @@ private:
     QString m_iconName;
     QString m_systemTheme;
     QPixmap m_icon;
+    double m_fScale;
 };
 
 #endif // CATEGORYBUTTON_H

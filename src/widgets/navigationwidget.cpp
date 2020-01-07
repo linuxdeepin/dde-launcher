@@ -174,8 +174,8 @@ void NavigationWidget::updateSize()
     setFixedHeight(m_calcUtil->instance()->navigationHeight() * scale);
     int btnSize = scale * DLauncher::NAVIGATION_BUTTON_SIZE;
     for (auto btn : m_categoryGroup->buttons()) {
-        btn->setIconSize(QSize(btnSize / 2, btnSize / 2));
         btn->setFixedSize(btnSize, btnSize);
+        static_cast<CategoryButton*>(btn)->setScreenScale(scale);
     }
 }
 

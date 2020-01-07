@@ -29,6 +29,8 @@
 #include "datetimewidget.h"
 #include "avatar.h"
 
+#include <DFloatingButton>
+
 DWIDGET_USE_NAMESPACE
 
 class MiniFrameButton;
@@ -68,7 +70,7 @@ private slots:
     void updateSize();
 
 private:
-    DImageButton *m_modeToggleBtn;
+    DFloatingButton *m_modeToggleBtn;
     DatetimeWidget *m_datetimeWidget;
     Avatar *m_avatar;
     int m_currentIndex;

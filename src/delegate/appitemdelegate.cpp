@@ -38,7 +38,7 @@ DGUI_USE_NAMESPACE
 
 #define  ICONTOLETF  12
 #define  ICONTOTOP  6
-#define TEXTTOICON  8
+#define TEXTTOICON  2
 #define TEXTTOLEFT  10
 
 QModelIndex AppItemDelegate::CurrentIndex = QModelIndex();
@@ -77,7 +77,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 #else
     const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
 #endif
-    int fontPixelSize = index.data(AppsListModel::AppFontSizeRole).value<int>();
+    const int fontPixelSize = index.data(AppsListModel::AppFontSizeRole).value<int>();
     const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();
     const bool is_current = CurrentIndex == index;
     const QRect ibr = itemBoundingRect(option.rect);
@@ -85,15 +85,14 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     // process font
     QFont appNamefont(painter->font());
-   // appNamefont.setPointSize(fontPixelSize);
     appNamefont.setPixelSize(fontPixelSize);
-   // const QFontMetrics fm(appNamefont);
+    const QFontMetrics fm(appNamefont);
 
     // Curve Fitting Result from MATLAB
 //    const int x = iconSize.width();
 //    const int margin = -0.000004236988913209739*x*x*x*x+0.0016406743692943455*x*x*x-0.22885856605074573*x*x+13.187308932617098*x-243.2646393941108;
-    const double x1 = 0.26418192;
-    const double x2 = -0.38890932;
+    const static double x1 = 0.26418192;
+    const static double x2 = -0.38890932;
     const double result = x1 * ibr.width() + x2 * iconSize.width();
     int margin = result > 0 ? result * 0.71 : 1;
 
@@ -116,13 +115,6 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         //iconTopMargin = 6; //std::max(iconTopMargin, 1.);
         iconRect = QRect(br.topLeft() + QPoint(iconLeftMargins, iconTopMargin), iconSize);
 
-        if(fontPixelSize < 11) {
-            fontPixelSize = 11;
-        }
-
-        appNamefont.setPixelSize(fontPixelSize);
-        const QFontMetrics fm(appNamefont);
-
         // calc text
         appNameRect = itemTextRect(br, iconRect, drawBlueDot);
         const QPair<QString, bool> appTextResolvedInfo = holdTextInRect(fm, itemInfo.m_name, appNameRect.toRect());
@@ -134,8 +126,6 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         // we need adjust again!
         adjust = true;
     } while (true);
-
-    const QFontMetrics fm(appNamefont);
 //    painter->fillRect(option.rect, Qt::gray);
 //    painter->fillRect(ibr, Qt::cyan);
 //    painter->fillRect(br, Qt::green);
@@ -153,7 +143,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         painter->setBrush(brushColor);
         int drawBlueDotWidth = 0;
         if(drawBlueDot) {
-            drawBlueDotWidth = m_blueDotPixmap.width()* qApp->devicePixelRatio();
+            drawBlueDotWidth = m_blueDotPixmap.width();
         }
 
         if(iconSize.width() > (fm.width(appNameResolved) + drawBlueDotWidth)) {

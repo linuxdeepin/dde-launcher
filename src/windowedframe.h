@@ -132,12 +132,12 @@ private:
     DPlatformWindowHandle m_windowHandle;
     DWindowManagerHelper *m_wmHelper;
 
+    QWidget *m_maskBg;
     AppsManager *m_appsManager;
     AppListView *m_appsView;
     AppsListModel *m_appsModel;
     AppsListModel *m_usedModel;
     AppsListModel *m_searchModel;
-
     SearchLineEdit *m_searchWidget;
     QWidget *m_leftWidget;
     MiniFrameRightBar *m_rightBar;

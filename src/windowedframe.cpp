@@ -82,6 +82,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_eventFilter(new SharedEventFilter(this))
     , m_windowHandle(this, this)
     , m_wmHelper(DWindowManagerHelper::instance())
+    , m_maskBg(new QWidget(this))
     , m_appsManager(AppsManager::instance())
     , m_appsView(new AppListView)
     , m_appsModel(new AppsListModel(AppsListModel::Custom))
@@ -100,6 +101,12 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     setBlendMode(DBlurEffectWidget::InWindowBlend);
 
     m_appearanceInter->setSync(false, false);
+
+    QPalette pal = m_maskBg->palette();
+    pal.setColor(QPalette::Background, QColor(0,0,0,0.3*255));
+    m_maskBg->setAutoFillBackground(true);
+    m_maskBg->setPalette(pal);
+    m_maskBg->setFixedSize(size());
 
     m_windowHandle.setShadowRadius(60);
     m_windowHandle.setBorderWidth(0);
@@ -699,6 +706,7 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_rightBar && event->type() == QEvent::Resize) {
         setFixedSize(m_leftWidget->width() + m_rightBar->width(), 502);
+        m_maskBg->setFixedSize( size());
     }
 
     return QWidget::eventFilter(watched, event);

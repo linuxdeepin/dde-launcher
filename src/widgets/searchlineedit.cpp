@@ -78,7 +78,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     centralLayout->addStretch();
     centralLayout->addWidget(m_clear);
     centralLayout->setSpacing(0);
-    centralLayout->setContentsMargins(0, 0, 5, 0);
+    centralLayout->setContentsMargins(0, 0, 0, 0);
 
     setLayout(centralLayout);
     setContextMenuPolicy(Qt::NoContextMenu);

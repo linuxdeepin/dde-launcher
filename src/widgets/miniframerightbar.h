@@ -70,7 +70,7 @@ private slots:
     void updateSize();
 
 private:
-    DFloatingButton *m_modeToggleBtn;
+    DImageButton *m_modeToggleBtn;
     DatetimeWidget *m_datetimeWidget;
     Avatar *m_avatar;
     int m_currentIndex;

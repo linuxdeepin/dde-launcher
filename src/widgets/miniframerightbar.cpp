@@ -42,12 +42,14 @@ DGUI_USE_NAMESPACE
 MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     : QWidget(parent)
 
-    , m_modeToggleBtn(new DFloatingButton(this))
+    , m_modeToggleBtn(new DImageButton(this))
     , m_datetimeWidget(new DatetimeWidget)
     , m_avatar(new Avatar)
     , m_currentIndex(0)
 {
-    m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_normal.png"));
+    m_modeToggleBtn->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
+    m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
+    m_modeToggleBtn->setPressPic(":/icons/skin/icons/fullscreen_press.png");
     m_modeToggleBtn->setFixedSize(24, 24);
     m_modeToggleBtn->setBackgroundRole(DPalette::Button);
 
@@ -103,6 +105,14 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
         }
     });
 
+    if (DGuiApplicationHelper::LightType ==DGuiApplicationHelper::instance()->themeType()) {
+        m_settingsBtn->setIcon(QIcon(":/widgets/images/settings-dark.svg"));
+        m_powerBtn->setIcon(QIcon(":/widgets/images/power-dark.svg"));
+    } else {
+        m_settingsBtn->setIcon(QIcon(":/widgets/images/settings.svg"));
+        m_powerBtn->setIcon(QIcon(":/widgets/images/power.svg"));
+    }
+
     bottomLayout->addWidget(m_settingsBtn);
     bottomLayout->addWidget(m_powerBtn);
 
@@ -145,7 +155,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
         updateSize();
     });
 
-    connect(m_modeToggleBtn, &DFloatingButton::clicked, this, &MiniFrameRightBar::modeToggleBtnClicked);
+    connect(m_modeToggleBtn, &DImageButton::clicked, this, &MiniFrameRightBar::modeToggleBtnClicked);
     connect(computerBtn, &QPushButton::clicked, this, [this] { openDirectory("computer:///"); });
     connect(documentBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DocumentsLocation); });
     connect(videoBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::MoviesLocation); });
@@ -365,5 +375,5 @@ void MiniFrameRightBar::updateSize()
     }
 
     setFixedWidth(frameWidth);
-    m_modeToggleBtn->move(frameWidth - 24 - 5, 12);
+    m_modeToggleBtn->move(frameWidth - 24-12 , 12);
 }

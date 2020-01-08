@@ -48,6 +48,14 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
         m_textLabel->setPalette(pa);
     });
 
+    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
+        m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all-dark.svg", QSize(24, 24)));
+        m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal-dark.svg", QSize(20, 20)));
+    } else {
+        m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all.svg", QSize(24, 24)));
+        m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal.svg", QSize(20, 20)));
+    }
+
     m_enterIcon->setFixedSize(20, 20);
     m_enterIcon->setVisible(false);
 

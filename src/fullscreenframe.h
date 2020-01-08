@@ -76,6 +76,7 @@ public:
     void updateDisplayMode(const int mode);
 
     void nextTabWidget(int key);
+    void timeOutUpdateAppsArea();
 signals:
     void visibleChanged(bool visible);
     void displayModeChanged(const int mode);
@@ -154,6 +155,7 @@ private:
     int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
     int m_displayMode = SEARCH;
     double rightMarginRation = 1;
+    int m_currentBlurBoxWidgetX = 0;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
     std::unique_ptr<MenuWorker> m_menuWorker;
     SharedEventFilter *m_eventFilter;

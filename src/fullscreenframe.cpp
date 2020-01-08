@@ -1283,12 +1283,9 @@ void FullScreenFrame::updateDisplayMode(const int mode)
 
     hideTips();
 
+    m_currentBlurBoxWidgetX = categoryBoxWidget(m_currentCategory)->x();
     if (m_displayMode == GROUP_BY_CATEGORY)
-        QTimer::singleShot(100, this, [ = ] {
-        scrollToCategory(m_currentCategory);
-         m_focusIndex = CategoryChangeBtn;
-    });
-
+        timeOutUpdateAppsArea();
     else
         m_appsArea->horizontalScrollBar()->setValue(0);
 
@@ -1482,6 +1479,19 @@ void FullScreenFrame::nextTabWidget(int key)
     }
     break;
     }
+}
+
+void FullScreenFrame::timeOutUpdateAppsArea()
+{
+    QTimer::singleShot(100, this, [ = ] {
+        if(m_currentBlurBoxWidgetX == categoryBoxWidget(m_currentCategory)->x()){
+            timeOutUpdateAppsArea();
+        }else{
+            m_currentBlurBoxWidgetX = -1;
+            scrollToCategory(m_currentCategory);
+            m_focusIndex = CategoryChangeBtn;
+        }
+    });
 }
 
 AppsListModel *FullScreenFrame::prevCategoryModel(const AppsListModel *currentModel)

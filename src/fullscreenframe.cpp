@@ -980,7 +980,7 @@ void FullScreenFrame::appendToSearchEdit(const char ch)
     m_searchWidget->edit()->lineEdit()->setFocus();
 
     // -1 means backspace key pressed
-    if (ch == -1) {
+    if (ch == static_cast<const char>(-1)) {
         //        m_searchWidget->edit()->backspace();
         m_searchWidget->edit()->lineEdit()->backspace();
         return;

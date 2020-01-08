@@ -47,7 +47,6 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     , m_avatar(new Avatar)
     , m_currentIndex(0)
 {
-    m_modeToggleBtn->setNormalPic(":/icons/skin/icons/fullscreen_normal.png");
     m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
     m_modeToggleBtn->setPressPic(":/icons/skin/icons/fullscreen_press.png");
     m_modeToggleBtn->setFixedSize(24, 24);
@@ -97,9 +96,11 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
         if (DGuiApplicationHelper::LightType == themeType) {
+            m_modeToggleBtn->setNormalPic(":/widgets/images/fullscreen.svg");
             m_settingsBtn->setIcon(QIcon(":/widgets/images/settings-dark.svg"));
             m_powerBtn->setIcon(QIcon(":/widgets/images/power-dark.svg"));
         } else {
+            m_modeToggleBtn->setNormalPic(":/widgets/images/fullscreen_dark.svg");
             m_settingsBtn->setIcon(QIcon(":/widgets/images/settings.svg"));
             m_powerBtn->setIcon(QIcon(":/widgets/images/power.svg"));
         }

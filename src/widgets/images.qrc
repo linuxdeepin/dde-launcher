@@ -9,5 +9,7 @@
         <file>images/enter_details_normal.svg</file>
         <file>images/enter_details_normal-dark.svg</file>
         <file>images/drag_indicator.svg</file>
+        <file>images/fullscreen.svg</file>
+        <file>images/fullscreen_dark.svg</file>
     </qresource>
 </RCC>

@@ -23,6 +23,12 @@ MiniFrameButton::MiniFrameButton(const QString &text, QWidget *parent)
         pa.setColor(QPalette::All, QPalette::Highlight, QColor(21, 21, 21, 102));
         setPalette(pa);
     });
+
+    QPalette pa = palette();
+    pa.setBrush(QPalette::ButtonText, pa.brightText());
+    pa.setBrush(QPalette::HighlightedText, pa.brightText());
+    pa.setColor(QPalette::All, QPalette::Highlight, QColor(21, 21, 21, 102));
+    setPalette(pa);
 }
 
 MiniFrameButton::~MiniFrameButton()

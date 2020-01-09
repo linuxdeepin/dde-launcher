@@ -53,6 +53,14 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
         m_currentDateLabel->setPalette(pa);
     });
 
+    QPalette pa = m_currentTimeLabel->palette();
+    pa.setBrush(QPalette::WindowText, pa.brightText());
+    m_currentTimeLabel->setPalette(pa);
+
+    pa = m_currentDateLabel->palette();
+    pa.setBrush(QPalette::WindowText, pa.brightText());
+    m_currentDateLabel->setPalette(pa);
+
     DFontSizeManager::instance()->bind(m_currentDateLabel, DFontSizeManager::T8);
 
     QVBoxLayout *layout = new QVBoxLayout;

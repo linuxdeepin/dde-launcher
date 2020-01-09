@@ -103,9 +103,13 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_appearanceInter->setSync(false, false);
 
     QPalette pal = m_maskBg->palette();
-    pal.setColor(QPalette::Background, QColor(0,0,0,0.3*255));
-    m_maskBg->setAutoFillBackground(true);
+    if( DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType){
+        pal.setColor(QPalette::Background, QColor(0,0,0,0.3*255));
+    }else{
+        pal.setColor(QPalette::Background, QColor(255,255,255,0.3*255));
+    }
     m_maskBg->setPalette(pal);
+    m_maskBg->setAutoFillBackground(true);
     m_maskBg->setFixedSize(size());
 
     m_windowHandle.setShadowRadius(60);
@@ -125,11 +129,23 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setFixedSize(500, 50);
     m_tipsLabel->setVisible(false);
+    QPalette pa = m_tipsLabel->palette();
+    pa.setBrush(QPalette::WindowText, pa.brightText());
+    m_tipsLabel->setPalette(pa);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
         QPalette pa = m_tipsLabel->palette();
         pa.setBrush(QPalette::WindowText, pa.brightText());
         m_tipsLabel->setPalette(pa);
+
+         QPalette pal = m_maskBg->palette();
+        if(themeType == DGuiApplicationHelper::DarkType){
+            pal.setColor(QPalette::Background, QColor(0,0,0,0.3*255));
+        }else{
+            pal.setColor(QPalette::Background, QColor(255,255,255,0.3*255));
+        }
+        m_maskBg->setPalette(pal);
+
     });
 
     m_delayHideTimer->setInterval(200);

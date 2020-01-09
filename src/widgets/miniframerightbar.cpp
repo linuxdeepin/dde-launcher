@@ -105,9 +105,11 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     });
 
     if (DGuiApplicationHelper::LightType ==DGuiApplicationHelper::instance()->themeType()) {
+        m_modeToggleBtn->setNormalPic(":/widgets/images/fullscreen.svg");
         m_settingsBtn->setIcon(QIcon(":/widgets/images/settings-dark.svg"));
         m_powerBtn->setIcon(QIcon(":/widgets/images/power-dark.svg"));
     } else {
+        m_modeToggleBtn->setNormalPic(":/widgets/images/fullscreen_dark.svg");
         m_settingsBtn->setIcon(QIcon(":/widgets/images/settings.svg"));
         m_powerBtn->setIcon(QIcon(":/widgets/images/power.svg"));
     }

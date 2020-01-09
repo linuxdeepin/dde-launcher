@@ -47,8 +47,6 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     , m_avatar(new Avatar)
     , m_currentIndex(0)
 {
-    m_modeToggleBtn->setHoverPic(":/icons/skin/icons/fullscreen_hover.png");
-    m_modeToggleBtn->setPressPic(":/icons/skin/icons/fullscreen_press.png");
     m_modeToggleBtn->setFixedSize(24, 24);
     m_modeToggleBtn->setBackgroundRole(DPalette::Button);
 

@@ -48,13 +48,13 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_toggleCategoryBtn = new DFloatingButton(this);
     m_toggleCategoryBtn->setAccessibleName("mode-toggle-button");
     m_toggleCategoryBtn->setIcon(QIcon(":/icons/skin/icons/category_normal_22px.png"));
-    m_toggleCategoryBtn->setIconSize(QSize(BTN_WIDTH, BTN_HEIGHT));
+    m_toggleCategoryBtn->setIconSize(QSize(24, 24));
     m_toggleCategoryBtn->setFixedSize(QSize(BTN_WIDTH, BTN_HEIGHT));
     m_toggleCategoryBtn->setBackgroundRole(DPalette::Button);
 
     m_toggleModeBtn = new DFloatingButton(this);
     m_toggleModeBtn->setIcon(QIcon(":/icons/skin/icons/unfullscreen_normal.png"));
-    m_toggleModeBtn->setIconSize(QSize(BTN_WIDTH, BTN_HEIGHT));
+    m_toggleModeBtn->setIconSize(QSize(24, 24));
     m_toggleModeBtn->setFixedSize(QSize(BTN_WIDTH, BTN_HEIGHT));
     m_toggleModeBtn->setBackgroundRole(DPalette::Button);
 

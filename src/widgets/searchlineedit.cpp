@@ -81,6 +81,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     centralLayout->setContentsMargins(0, 0, 0, 0);
 
     setLayout(centralLayout);
+    m_clear->setStyleSheet("QWidget{background:red}");
     setContextMenuPolicy(Qt::NoContextMenu);
     setFocusPolicy(Qt::ClickFocus);
     setFixedHeight(30);

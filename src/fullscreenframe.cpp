@@ -412,7 +412,8 @@ void FullScreenFrame::initUI()
 
     //    m_othersView->installEventFilter(this);
     //    m_navigationWidget->installEventFilter(this);
-    m_searchWidget->edit()->installEventFilter(this);
+    m_searchWidget->edit()->installEventFilter(m_eventFilter);
+    m_searchWidget->m_toggleCategoryBtn->installEventFilter(m_eventFilter);
     //    qApp->installEventFilter(this);
 
     m_allAppsView->setAccessibleName("all");
@@ -1395,7 +1396,9 @@ void FullScreenFrame::nextTabWidget(int key)
     if (key == Qt::Key_Tab) {
         switch (m_nextFocusIndex) {
         case Applist: {
-            m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? m_internetView->indexAt(0) : m_allAppsView->indexAt(0));
+            m_searchWidget->m_toggleCategoryBtn->clearFocus();
+            if(m_displayMode == GROUP_BY_CATEGORY && (m_currentCategory < AppsListModel::Internet || m_currentCategory > AppsListModel::Others )) m_currentCategory = AppsListModel::Internet;
+            m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? categoryView(m_currentCategory)->indexAt(0) : m_allAppsView->indexAt(0));
             update();
             m_searchWidget->m_searchEdit->normalMode();
             m_currentFocusIndex = m_nextFocusIndex;
@@ -1412,6 +1415,7 @@ void FullScreenFrame::nextTabWidget(int key)
         break;
         case Search: {
 //            m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Normal);
+            m_searchWidget->m_toggleCategoryBtn->clearFocus();
             m_searchWidget->edit()->setFocus();
             m_searchWidget->m_searchEdit->editMode();
             m_currentFocusIndex = m_nextFocusIndex;
@@ -1420,6 +1424,7 @@ void FullScreenFrame::nextTabWidget(int key)
         break;
         case Default: {
             m_searchWidget->edit()->clearFocus();
+            m_searchWidget->m_toggleCategoryBtn->clearFocus();
             m_searchWidget->m_searchEdit->normalMode();
 //            m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Normal);
             m_appItemDelegate->setCurrentIndex(QModelIndex());
@@ -1431,9 +1436,11 @@ void FullScreenFrame::nextTabWidget(int key)
     } else {
         switch (m_nextFocusIndex) {
         case Applist: {
-            m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? m_internetView->indexAt(0) : m_allAppsView->indexAt(0));
+            if(m_displayMode == GROUP_BY_CATEGORY && (m_currentCategory < AppsListModel::Internet || m_currentCategory > AppsListModel::Others )) m_currentCategory = AppsListModel::Internet;
+            m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? categoryView(m_currentCategory)->indexAt(0) : m_allAppsView->indexAt(0));
 //            m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Normal);
             update();
+            m_searchWidget->m_toggleCategoryBtn->clearFocus();
             m_currentFocusIndex = m_nextFocusIndex;
             m_nextFocusIndex = Default;
         }
@@ -1448,6 +1455,7 @@ void FullScreenFrame::nextTabWidget(int key)
         break;
         case Search: {
             m_searchWidget->edit()->setFocus();
+            m_searchWidget->m_toggleCategoryBtn->clearFocus();
             m_appItemDelegate->setCurrentIndex(QModelIndex());
             m_currentFocusIndex = m_nextFocusIndex;
             m_nextFocusIndex = Category;
@@ -1457,6 +1465,7 @@ void FullScreenFrame::nextTabWidget(int key)
             m_searchWidget->edit()->clearFocus();
 //            m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Normal);
             m_searchWidget->m_searchEdit->normalMode();
+            m_searchWidget->m_toggleCategoryBtn->clearFocus();
             m_appItemDelegate->setCurrentIndex(QModelIndex());
             m_currentFocusIndex = m_nextFocusIndex;
             m_nextFocusIndex = Search;

@@ -189,11 +189,17 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
-    connect(m_iconRefreshTimer.get(), &QTimer::timeout, this, &AppsManager::refreshNotFoundIcon);
+//    connect(m_iconRefreshTimer.get(), &QTimer::timeout, this, &AppsManager::refreshNotFoundIcon);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         refreshAppListIcon();
     });
 
+    DrawIconThread *drawIconThread = new DrawIconThread;
+    drawIconThread->start();
+
+    connect(drawIconThread, &DrawIconThread::finished, this, [ = ] {
+        emit iconLoadFinished();
+    });
 }
 
 void AppsManager::appendSearchResult(const QString &appKey)
@@ -527,20 +533,39 @@ bool AppsManager::appIsEnableScaling(const QString &desktop)
 const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
 {
     QPair<QString, int> tmpKey { info.m_iconKey, size };
+    if (m_catchlock) {
+        return getThemeIcon(info, 32);
+    }
 
     if (m_iconCache.contains(tmpKey) && !m_iconCache[tmpKey].isNull()) {
         return m_iconCache[tmpKey];
+    } else {
+        int fitSize = qBound(16, size, 256);
+        do {
+            QPair<QString, int> tmp1 { info.m_iconKey, fitSize };
+            if (m_iconCache.contains(tmp1) && !m_iconCache[tmp1].isNull()) {
+                return m_iconCache[tmp1];
+            }
+
+            fitSize += 1;
+        } while (fitSize < 257);
+
+        fitSize = qBound(16, size, 256);
+        do {
+            QPair<QString, int> tmp1 { info.m_iconKey, fitSize };
+            if (m_iconCache.contains(tmp1) && !m_iconCache[tmp1].isNull()) {
+                return m_iconCache[tmp1];
+            }
+
+            fitSize -= 1;
+        } while (fitSize > 15);
+
+
     }
+//    const QPixmap& pixmap = getThemeIcon(info, size);
+//    m_iconCache[tmpKey] = pixmap;
 
-    int iconSize = size;
-    if(info.m_key == "dde-trash")
-        iconSize = size / qApp->devicePixelRatio();
-
-    const QPixmap &pixmap = getThemeIcon(info, iconSize);
-
-    m_iconCache[tmpKey] = pixmap;
-
-    return pixmap;
+    return QPixmap();
 }
 
 void AppsManager::refreshCategoryInfoList()
@@ -753,7 +778,6 @@ void AppsManager::generateCategoryMap()
 
 int AppsManager::appNums(const AppsListModel::AppCategory &category) const
 {
-//    return appsInfoList(category, m_pageIndex[category]).size();
     return appsInfoList(category).size();
 }
 
@@ -917,7 +941,29 @@ void AppsManager::refreshAppListIcon()
                 << QString(":/icons/skin/icons/category_system.svg")
                 << QString(":/icons/skin/icons/category_others.svg");
     }
-
-    refreshCategoryInfoList();
 }
 
+void AppsManager::pushPixmap()
+{
+    const int s = 8;
+    const int l[s] = { 16, 24, 32, 48, 64, 96, 128, 256 };
+
+    m_catchlock = true;
+    for (auto itemInfo : m_allAppInfoList) {
+        for (int i = 0; i < s; i++) {
+            const QPixmap &pixmap = getThemeIcon(itemInfo, l[i]);
+            if (!pixmap.isNull()) {
+                QPair<QString, int> tmpKey { itemInfo.m_iconKey, l[i]};
+                m_iconCache[tmpKey] = pixmap;
+            }
+        }
+    }
+
+    m_catchlock = false;
+}
+
+void DrawIconThread::run()
+{
+    AppsManager *appManager = AppsManager::instance();
+    appManager->pushPixmap();
+}

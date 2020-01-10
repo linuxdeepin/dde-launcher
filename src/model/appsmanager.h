@@ -42,6 +42,8 @@
 #include <QDBusArgument>
 #include <QList>
 #include <memory>
+#include <QThread>
+#include <QMutex>
 
 #define DOCK_POS_RIGHT  1
 #define DOCK_POS_BOTTOM 2
@@ -54,6 +56,12 @@
 #define MAX_VIEW_NUM    255
 #define CATEGORY_COUNT    11
 
+
+class DrawIconThread : public QThread
+{
+protected:
+    void run();
+};
 
 class CalculateUtil;
 class AppsManager : public QObject
@@ -77,6 +85,7 @@ public:
     const QPixmap getThemeIcon(const ItemInfo &itemInfo, const int size);
     int getPageCount(const AppsListModel::AppCategory category);
 
+    void pushPixmap();
 signals:
     void itemDataChanged(const ItemInfo &info) const;
     void dataChanged(const AppsListModel::AppCategory category) const;
@@ -86,6 +95,10 @@ signals:
     void requestHideTips() const;
     void categoryListChanged() const;
     void dockGeometryChanged() const;
+
+    void itemRedraw(const QModelIndex &index);
+
+    void iconLoadFinished();
 
 public slots:
     void saveUserSortedList();
@@ -165,6 +178,7 @@ private:
     std::map<std::pair<ItemInfo, int>, int> m_notExistIconMap;
     QStringList m_categoryTs;
     QStringList m_categoryIcon;
+    bool m_catchlock = false;
 };
 
 #endif // APPSMANAGER_H

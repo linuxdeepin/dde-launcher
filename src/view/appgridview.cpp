@@ -87,6 +87,10 @@ AppGridView::AppGridView(QWidget *parent)
 #else
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::dropSwap);
 #endif
+
+    connect(m_appManager,&AppsManager::iconLoadFinished,this,[=]{
+        QListView::update();
+    });
 }
 
 const QModelIndex AppGridView::indexAt(const int index) const

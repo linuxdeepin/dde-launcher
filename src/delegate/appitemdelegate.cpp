@@ -170,6 +170,9 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     // draw app icon
     const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+    if (QPixmap() == iconPix)
+        return;
+
     painter->drawPixmap(iconRect, iconPix, iconPix.rect());
 
     // draw icon if app is auto startup

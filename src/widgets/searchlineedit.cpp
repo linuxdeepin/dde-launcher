@@ -38,7 +38,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     , m_icon(new DIconButton(this))
     , m_clear(new DIconButton(this))
 {
-    setTextMargins(20, 0, 5, 0);
+    setTextMargins(20, 0, 15, 0);
     m_icon->setIconSize(QSize(16, 16));
     m_icon->setFixedSize(16, 16);
     m_icon->setFlat(true);
@@ -78,7 +78,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     centralLayout->addStretch();
     centralLayout->addWidget(m_clear);
     centralLayout->setSpacing(0);
-    centralLayout->setContentsMargins(0, 0, 0, 0);
+    centralLayout->setContentsMargins(0, 0, 5, 0);
 
     setLayout(centralLayout);
     setContextMenuPolicy(Qt::NoContextMenu);

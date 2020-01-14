@@ -248,7 +248,7 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
         return;
 
     if (indexAt(m_dragStartPos).isValid())
-        return startDrag(QListView::indexAt(e->pos()));
+        return startDrag(QListView::indexAt(m_dragStartPos));
 
     if (m_pDelegate)
         m_pDelegate->mouseMove(e);

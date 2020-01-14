@@ -157,7 +157,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_rightBar->installEventFilter(m_eventFilter);
     m_rightBar->installEventFilter(this);
 
-    m_searchWidget->setFixedWidth(290);
+    //m_searchWidget->setFixedWidth(290*qApp->devicePixelRatio());
 
     QHBoxLayout *searchLayout = new QHBoxLayout;
     searchLayout->addSpacing(10);

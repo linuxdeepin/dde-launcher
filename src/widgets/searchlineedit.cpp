@@ -70,7 +70,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     floatLayout->setSpacing(0);
     floatLayout->setMargin(0);
 
-    m_floatWidget->setFixedHeight(30);
+    //m_floatWidget->setFixedHeight(30);
     m_floatWidget->setFixedWidth(m_icon->width() + m_placeholderText->width() + 5);
     m_floatWidget->setLayout(floatLayout);
 
@@ -83,9 +83,11 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     setLayout(centralLayout);
     setContextMenuPolicy(Qt::NoContextMenu);
     setFocusPolicy(Qt::ClickFocus);
-    setFixedHeight(30);
+    //setFixedHeight(30);
     setObjectName("SearchEdit");
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     setStyle(m_editStyle);
+
     m_icon->setFocusPolicy(Qt::NoFocus);
     m_clear->setFocusPolicy(Qt::NoFocus);
 
@@ -143,6 +145,9 @@ void SearchLineEdit::resizeEvent(QResizeEvent *e)
     QLineEdit::resizeEvent(e);
 
     QTimer::singleShot(1, this, &SearchLineEdit::moveFloatWidget);
+
+    m_floatWidget->setFixedHeight(30* qApp->devicePixelRatio());
+    setFixedHeight(30* qApp->devicePixelRatio());
 }
 
 void SearchLineEdit::normalMode()
@@ -152,9 +157,11 @@ void SearchLineEdit::normalMode()
     clearFocus();
 
     m_placeholderText->show();
+    m_clear->setVisible(false);
+    m_editStyle->hideCursor = true;
 
 #ifndef ARCH_MIPSEL
-    m_floatAni->setEndValue(rect().center() - m_floatWidget->rect().center());
+    m_floatAni->setEndValue(QPoint(rect().center().x() - m_floatWidget->rect().center().x(),0));
     if (m_floatAni->state() == QPropertyAnimation::Running)
         return;
     m_floatAni->setStartValue(m_floatWidget->pos());
@@ -173,6 +180,7 @@ void SearchLineEdit::editMode()
     m_floatAni->setStartValue(m_floatWidget->pos());
     m_floatAni->setEndValue(QPoint(5, 0));
     m_floatAni->start();
+    m_clear->setVisible(true);
 
     m_editStyle->hideCursor = true;
     QTimer::singleShot(m_floatAni->duration(), this, [ = ] {
@@ -185,7 +193,6 @@ void SearchLineEdit::editMode()
 
 void SearchLineEdit::onTextChanged()
 {
-    m_clear->setVisible(!text().isEmpty());
     if (!this->text().isEmpty()) {
         this->setFocus();
     }
@@ -219,9 +226,14 @@ void SearchLineEdit::themeChanged()
     QPalette pa = palette();
     pa.setBrush(QPalette::Text, pa.brightText());
     pa.setBrush(QPalette::Foreground, pa.brightText());
-    pa.setColor(QPalette::Button, Qt::transparent); // 背景
+    //pa.setColor(QPalette::Button, Qt::transparent); // 背景
     pa.setColor(QPalette::Highlight, Qt::transparent); // 激活后的边框
     setPalette(pa);
+}
+
+void SearchLineEdit::focusOutEvent(QFocusEvent *)
+{
+    normalMode();
 }
 
 SearchLineeditStyle::SearchLineeditStyle(QStyle *style)

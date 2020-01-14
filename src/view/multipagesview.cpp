@@ -75,7 +75,8 @@ void MultiPagesView::updateGradient(QPixmap &pixmap, QPoint topLeftImg, QPoint t
     const qreal ratio = devicePixelRatioF();
     pixmap.setDevicePixelRatio(1);
 
-    QSize gradientSize(DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT, height());
+    int nWidth = DLauncher::TOP_BOTTOM_GRADIENT_HEIGHT * m_calcUtil->getScreenScaleX();
+    QSize gradientSize(nWidth, height());
 
     QPoint topLeft = mapTo(this, QPoint(0, 0));
     QRect topRect(topLeftImg * ratio, gradientSize * ratio);
@@ -339,6 +340,8 @@ void MultiPagesView::mousePress(QMouseEvent *e)
     m_nMousePos = e->x();
     m_scrollValue = m_appListArea->horizontalScrollBar()->value();
     m_scrollStart = m_scrollValue;
+
+    updateGradient();
 }
 
 void MultiPagesView::mouseMove(QMouseEvent *e)
@@ -367,6 +370,9 @@ void MultiPagesView::mouseRelease(QMouseEvent *e)
             showCurrentPage(m_pageIndex);
     }
     m_bMousePress = false;
+
+    m_pLeftGradient->hide();
+    m_pRightGradient->hide();
 }
 
 // 更新边框渐变，在屏幕变化时需要更新，类别拖动时需要隐藏

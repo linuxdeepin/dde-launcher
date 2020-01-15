@@ -83,6 +83,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_eventFilter(new SharedEventFilter(this))
     , m_windowHandle(this, this)
     , m_wmHelper(DWindowManagerHelper::instance())
+    , m_maskBg(new QWidget(this))
     , m_appsManager(AppsManager::instance())
     , m_appsView(new AppListView)
     , m_appsModel(new AppsListModel(AppsListModel::Custom))
@@ -103,6 +104,16 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_appearanceInter->setSync(false, false);
     setBlurRectXRadius(18);
     setBlurRectYRadius(18);
+
+    QPalette pal = m_maskBg->palette();
+    if( DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType){
+        pal.setColor(QPalette::Background, QColor(0,0,0,0.3*255));
+    }else{
+        pal.setColor(QPalette::Background, QColor(255,255,255,0.3*255));
+    }
+    m_maskBg->setPalette(pal);
+    m_maskBg->setAutoFillBackground(true);
+    m_maskBg->setFixedSize(size());
 
     m_windowHandle.setShadowRadius(60);
     m_windowHandle.setBorderWidth(0);
@@ -129,6 +140,14 @@ WindowedFrame::WindowedFrame(QWidget *parent)
             m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_normal.svg"));
         else
              m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_dark.svg"));
+
+       QPalette pal = m_maskBg->palette();
+       if(themeType == DGuiApplicationHelper::DarkType){
+           pal.setColor(QPalette::Background, QColor(0,0,0,0.3*255));
+       }else{
+           pal.setColor(QPalette::Background, QColor(255,255,255,0.3*255));
+       }
+       m_maskBg->setPalette(pal);
     });
 
     m_delayHideTimer->setInterval(200);
@@ -730,6 +749,7 @@ void WindowedFrame::resizeEvent(QResizeEvent *event)
         initAnchoredCornor();
         m_cornerPath = getCornerPath(m_anchoredCornor);
         m_windowHandle.setClipPath(m_cornerPath);
+        m_maskBg->setFixedSize(event->size());
     });
 
     return DBlurEffectWidget::resizeEvent(event);

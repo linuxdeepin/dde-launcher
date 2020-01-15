@@ -136,6 +136,7 @@ private:
     DPlatformWindowHandle m_windowHandle;
     DWindowManagerHelper *m_wmHelper;
 
+    QWidget *m_maskBg;
     AppsManager *m_appsManager;
     AppListView *m_appsView;
     AppsListModel *m_appsModel;

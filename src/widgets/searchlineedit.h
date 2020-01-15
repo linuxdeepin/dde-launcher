@@ -67,7 +67,6 @@ protected:
     bool event(QEvent *e)override;
     void resizeEvent(QResizeEvent *e)override;
     void themeChanged();
-    void focusOutEvent(QFocusEvent *) override;
 
 private:
     DIconButton *m_icon;

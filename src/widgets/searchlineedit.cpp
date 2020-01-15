@@ -231,11 +231,6 @@ void SearchLineEdit::themeChanged()
     setPalette(pa);
 }
 
-void SearchLineEdit::focusOutEvent(QFocusEvent *)
-{
-    normalMode();
-}
-
 SearchLineeditStyle::SearchLineeditStyle(QStyle *style)
     : QProxyStyle(style)
     , hideCursor(false)

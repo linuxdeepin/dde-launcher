@@ -83,7 +83,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     setLayout(centralLayout);
     setContextMenuPolicy(Qt::NoContextMenu);
     setFocusPolicy(Qt::ClickFocus);
-    //setFixedHeight(30);
+    setFixedHeight(fm.height()+10);
     setObjectName("SearchEdit");
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     setStyle(m_editStyle);
@@ -145,9 +145,6 @@ void SearchLineEdit::resizeEvent(QResizeEvent *e)
     QLineEdit::resizeEvent(e);
 
     QTimer::singleShot(1, this, &SearchLineEdit::moveFloatWidget);
-
-    m_floatWidget->setFixedHeight(30* qApp->devicePixelRatio());
-    setFixedHeight(30* qApp->devicePixelRatio());
 }
 
 void SearchLineEdit::normalMode()

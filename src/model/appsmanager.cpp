@@ -136,7 +136,7 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
 
 int AppsManager::getPageCount(const AppsListModel::AppCategory category)
 {
-    int nSize = appsInfoList(category).size();
+    int nSize = appsInfoListSize(category);
     int pageCount = m_calUtil->appPageItemCount(category);
     int page = nSize / pageCount;
     page = nSize % pageCount ? page + 1 : page;
@@ -490,14 +490,40 @@ const ItemInfo AppsManager::createOfCategory(qlonglong category)
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const
 {
     switch (category) {
-    case AppsListModel::Custom:    return m_userSortedList;        break;
-    case AppsListModel::All:       return m_usedSortedList;       break;
-    case AppsListModel::Search:     return m_appSearchResultList;       break;
-    case AppsListModel::Category:   return m_categoryList;          break;
+    case AppsListModel::Custom:    return m_userSortedList;
+    case AppsListModel::All:       return m_usedSortedList;
+    case AppsListModel::Search:     return m_appSearchResultList;
+    case AppsListModel::Category:   return m_categoryList;
     default:;
     }
 
     return m_appInfos[category];
+}
+
+int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category) const
+{
+    switch (category) {
+    case AppsListModel::Custom:    return m_userSortedList.size();
+    case AppsListModel::All:       return m_usedSortedList.size();
+    case AppsListModel::Search:     return m_appSearchResultList.size();
+    case AppsListModel::Category:   return m_categoryList.size();
+    default:;
+    }
+
+    return m_appInfos[category].size();
+}
+
+const ItemInfo AppsManager::appsInfoListIndex(const AppsListModel::AppCategory &category, const int index) const
+{
+    switch (category) {
+    case AppsListModel::Custom:    return m_userSortedList[index];
+    case AppsListModel::All:       return m_usedSortedList[index];
+    case AppsListModel::Search:     return m_appSearchResultList[index];
+    case AppsListModel::Category:   return m_categoryList[index];
+    default:;
+    }
+
+    return m_appInfos[category][index];
 }
 
 bool AppsManager::appIsNewInstall(const QString &key)
@@ -778,7 +804,7 @@ void AppsManager::generateCategoryMap()
 
 int AppsManager::appNums(const AppsListModel::AppCategory &category) const
 {
-    return appsInfoList(category).size();
+    return appsInfoListSize(category);
 }
 
 void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &desktpFilePath)

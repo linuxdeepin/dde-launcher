@@ -429,7 +429,7 @@ void FullScreenFrame::hideEvent(QHideEvent *e)
 
     QTimer::singleShot(1, this, [ = ] { emit visibleChanged(false); });
 
-    m_clearCacheTimer->start();
+//    m_clearCacheTimer->start();
 }
 
 void FullScreenFrame::mousePressEvent(QMouseEvent *e)
@@ -985,7 +985,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     }
 
     //to next page
-    if (m_displayMode == ALL_APPS && !index.isValid()) {
+    if (m_displayMode != GROUP_BY_CATEGORY && !index.isValid()) {
         index = m_multiPagesView->selectApp(key);
         index = index.isValid() ? index : currentIndex;
     }

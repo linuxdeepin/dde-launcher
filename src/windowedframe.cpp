@@ -150,7 +150,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
         pa.setBrush(QPalette::WindowText, pa.brightText());
         m_tipsLabel->setPalette(pa);
 
-         QPalette pal = m_maskBg->palette();
+        QPalette pal = m_maskBg->palette();
         if(themeType == DGuiApplicationHelper::DarkType){
             pal.setColor(QPalette::Background, QColor(0,0,0,0.3*255));
         }else{
@@ -162,14 +162,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
             m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_normal.svg"));
         else
              m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_dark.svg"));
-
-       QPalette pal = m_maskBg->palette();
-       if(themeType == DGuiApplicationHelper::DarkType){
-           pal.setColor(QPalette::Background, QColor(0,0,0,0.3*255));
-       }else{
-           pal.setColor(QPalette::Background, QColor(255,255,255,0.3*255));
-       }
-       m_maskBg->setPalette(pal);
     });
 
     m_delayHideTimer->setInterval(200);

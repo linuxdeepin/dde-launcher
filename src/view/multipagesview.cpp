@@ -211,10 +211,13 @@ void MultiPagesView::setDataDelegate(QAbstractItemDelegate *delegate)
 void MultiPagesView::ShowPageView(AppsListModel::AppCategory category)
 {
     int pageCount = m_appsManager->getPageCount(category);
-    for (int i = 0; i < m_pageCount; i++) {
+    for (int i = 0; i < qMax(pageCount, m_pageCount); i++) {
         m_appGridViewList[i]->setVisible(i < pageCount);
+        m_pageAppsModelList[i]->setCategory(category);
     }
     m_pageControl->setPageCount(pageCount > 1 ? pageCount : 0);
+    m_pageCount = pageCount;
+    m_category = category;
 }
 
 void MultiPagesView::setModel(AppsListModel::AppCategory category)

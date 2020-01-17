@@ -47,6 +47,7 @@ LauncherSys::LauncherSys(QObject *parent)
     , m_regionMonitor(new DRegionMonitor(this))
     , m_autoExitTimer(new QTimer(this))
     , m_ignoreRepeatVisibleChangeTimer(new QTimer(this))
+    , m_calcUtil(CalculateUtil::instance())
 {
     m_regionMonitor->setCoordinateType(DRegionMonitor::Original);
 
@@ -112,7 +113,7 @@ void LauncherSys::displayModeChanged()
 {
     LauncherInterface* lastLauncher = m_launcherInter;
 
-    if (m_dbusLauncherInter->fullscreen()) {
+   if (m_calcUtil->fullscreen()) {
         if (!m_fullLauncher) {
             m_fullLauncher = new FullScreenFrame;
             m_fullLauncher->installEventFilter(this);

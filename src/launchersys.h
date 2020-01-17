@@ -25,6 +25,7 @@
 #define LAUNCHERSYS_H
 
 #include "dbusinterface/dbuslauncher.h"
+#include "src/global_util/calculate_util.h"
 
 #include <QObject>
 #include <QTimer>
@@ -76,6 +77,7 @@ private:
     QTimer *m_autoExitTimer;
     QTimer *m_ignoreRepeatVisibleChangeTimer;
     QMetaObject::Connection m_regionMonitorConnect;
+    CalculateUtil* m_calcUtil;
 };
 
 #endif // LAUNCHERSYS_H

@@ -525,13 +525,21 @@ int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category) co
 const ItemInfo AppsManager::appsInfoListIndex(const AppsListModel::AppCategory &category, const int index) const
 {
     switch (category) {
-    case AppsListModel::Custom:    return m_userSortedList[index];
-    case AppsListModel::All:       return m_usedSortedList[index];
-    case AppsListModel::Search:     return m_appSearchResultList[index];
-    case AppsListModel::Category:   return m_categoryList[index];
+    case AppsListModel::Custom:
+        Q_ASSERT(m_userSortedList.size() > index);
+        return m_userSortedList[index];
+    case AppsListModel::All:
+        Q_ASSERT(m_usedSortedList.size() > index);
+        return m_usedSortedList[index];
+    case AppsListModel::Search:
+        Q_ASSERT(m_appSearchResultList.size() > index);
+        return m_appSearchResultList[index];
+    case AppsListModel::Category:
+        Q_ASSERT(m_categoryList.size() > index);
+        return m_categoryList[index];
     default:;
     }
-
+    Q_ASSERT(m_appInfos[category].size() > index);
     return m_appInfos[category][index];
 }
 

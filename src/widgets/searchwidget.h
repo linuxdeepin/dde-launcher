@@ -23,7 +23,7 @@
 
 #ifndef SEARCHWIDGET_H
 #define SEARCHWIDGET_H
-
+#include "src/global_util/calculate_util.h"
 #include "searchlineedit.h"
 #include <dimagebutton.h>
 #include <QWidget>
@@ -65,6 +65,7 @@ private:
     DFloatingButton *m_toggleModeBtn;
     DFloatingButton *m_toggleCategoryBtn;
     DSearchEdit* m_searchEdit;
+    CalculateUtil* m_calcUtil;
 };
 
 #endif // SEARCHWIDGET_H

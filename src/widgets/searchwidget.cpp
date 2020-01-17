@@ -47,6 +47,8 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_leftSpacing = new QFrame(this);
     m_rightSpacing = new QFrame(this);
 
+    m_calcUtil = CalculateUtil::instance();
+
     m_leftSpacing->setFixedWidth(0);
     m_rightSpacing->setFixedWidth(0);
 
@@ -94,6 +96,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
         emit searchTextChanged(searchStr.mid(0, 1) + searchStr.mid(1).replace(" ", ""));
     });
     connect(m_toggleModeBtn, &DFloatingButton::clicked, this, [=] {
+        m_calcUtil->setFullScreen(false);
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
         DDBusSender()
         .service("com.deepin.dde.daemon.Launcher")

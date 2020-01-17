@@ -117,7 +117,7 @@ protected:
     void regionMonitorPoint(const QPoint &point) Q_DECL_OVERRIDE;
     bool eventFilter(QObject *watched, QEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
-    void paintEvent(QPaintEvent *e);
+    void paintEvent(QPaintEvent *e) override;
 
 private slots:
     void initAnchoredCornor();
@@ -163,6 +163,7 @@ private:
 
     int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
     int m_radius = 0;
+    CalculateUtil *m_calcUtil;
     AnchoredCornor m_anchoredCornor = Normal;
     QPainterPath m_cornerPath;
     FocusPosition m_focusPos;

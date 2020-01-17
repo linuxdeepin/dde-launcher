@@ -23,7 +23,7 @@
 
 #ifndef SEARCHWIDGET_H
 #define SEARCHWIDGET_H
-
+#include "src/global_util/calculate_util.h"
 #include "searchlineedit.h"
 #include <dimagebutton.h>
 #include <QWidget>
@@ -62,6 +62,7 @@ private:
     QFrame *m_rightSpacing;
     DFloatingButton *m_toggleCategoryBtn;
     DFloatingButton *m_toggleModeBtn;
+    CalculateUtil* m_calcUtil;
 };
 
 #endif // SEARCHWIDGET_H

@@ -95,6 +95,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_autoScrollTimer(new QTimer)
     , m_appearanceInter(new Appearance("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
     , m_displayMode(All)
+    , m_calcUtil(CalculateUtil::instance())
     , m_focusPos(Applist)
     , m_modeToggleBtn(new DToolButton(this))
     ,m_searcherEdit(new DSearchEdit)
@@ -840,6 +841,7 @@ void WindowedFrame::adjustPosition()
 
 void WindowedFrame::onToggleFullScreen()
 {
+    m_calcUtil->setFullScreen(true);
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
     .service("com.deepin.dde.daemon.Launcher")

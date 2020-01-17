@@ -186,6 +186,7 @@ CalculateUtil::CalculateUtil(QObject *parent)
                                          "/com/deepin/dde/launcher/", this))
 {
     m_launcherInter = new DBusLauncher(this);
+    isFullScreen = m_launcherInter->fullscreen();
 }
 
 void CalculateUtil::calculateTextSize(const int screenWidth)

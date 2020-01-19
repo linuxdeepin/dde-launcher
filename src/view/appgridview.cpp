@@ -158,7 +158,7 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
     if (e->buttons() == Qt::LeftButton && !m_lastFakeAni)
         m_dragStartPos = e->pos();
 
-    if (m_pDelegate)
+    if (!indexAt(m_dragStartPos).isValid() && m_pDelegate)
         m_pDelegate->mousePress(e);
 
     QListView::mousePressEvent(e);

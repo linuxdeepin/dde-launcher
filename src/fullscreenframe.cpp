@@ -1351,7 +1351,7 @@ void FullScreenFrame::updateDockPosition()
     switch (m_appsManager->dockPosition()) {
     case DOCK_POS_TOP:
         m_topSpacing->setFixedHeight(30 + dockGeometry.height());
-        bottomMargin = m_topSpacing->height() + 20;
+        bottomMargin = m_topSpacing->height() + DLauncher::APPS_AREA_TOP_MARGIN;
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(0);
         break;
@@ -1564,7 +1564,7 @@ void FullScreenFrame::layoutChanged()
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
         const int appsContentWidth = (m_appsArea->width() - m_padding * 2);
         boxSize.setWidth(appsContentWidth);
-        boxSize.setHeight(m_appsArea->height() - m_topSpacing->height());
+        boxSize.setHeight(m_appsArea->height() - DLauncher::APPS_AREA_TOP_MARGIN);
         m_multiPagesView->setFixedSize(boxSize);
         m_multiPagesView->updatePosition();
     } else {

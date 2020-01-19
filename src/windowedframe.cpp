@@ -103,8 +103,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     setMaskColor(DBlurEffectWidget::AutoColor);
     setBlendMode(DBlurEffectWidget::InWindowBlend);
     m_appearanceInter->setSync(false, false);
-    setBlurRectXRadius(18);
-    setBlurRectYRadius(18);
 
     QPalette pal = m_maskBg->palette();
     if( DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType){

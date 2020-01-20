@@ -917,12 +917,14 @@ void AppsManager::searchDone(const QStringList &resultList)
 
 void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber)
 {
+    Q_UNUSED(categoryNumber);
     if (operation == "created") {
         ItemInfo info = appInfo;
 
         m_allAppInfoList.append(info);
         m_usedSortedList.append(info);
         m_userSortedList.append(info);
+        pushPixmap(appInfo);
     } else if (operation == "deleted") {
 
         m_allAppInfoList.removeOne(appInfo);
@@ -979,20 +981,24 @@ void AppsManager::refreshAppListIcon()
 
 void AppsManager::pushPixmap()
 {
+    for (auto itemInfo : m_allAppInfoList) {
+       pushPixmap(itemInfo);
+    }
+}
+
+void AppsManager::pushPixmap(const ItemInfo &itemInfo)
+{
     const int s = 8;
     const int l[s] = { 16, 24, 32, 48, 64, 96, 128, 256 };
 
     m_catchlock = true;
-    for (auto itemInfo : m_allAppInfoList) {
-        for (int i = 0; i < s; i++) {
-            const QPixmap &pixmap = getThemeIcon(itemInfo, l[i]);
-            if (!pixmap.isNull()) {
-                QPair<QString, int> tmpKey { itemInfo.m_iconKey, l[i]};
-                m_iconCache[tmpKey] = pixmap;
-            }
+    for (int i = 0; i < s; i++) {
+        const QPixmap &pixmap = getThemeIcon(itemInfo, l[i]);
+        if (!pixmap.isNull()) {
+            QPair<QString, int> tmpKey { itemInfo.m_iconKey, l[i]};
+            m_iconCache[tmpKey] = pixmap;
         }
     }
-
     m_catchlock = false;
 }
 

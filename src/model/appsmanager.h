@@ -86,6 +86,7 @@ public:
     int getPageCount(const AppsListModel::AppCategory category);
 
     void pushPixmap();
+    void pushPixmap(const ItemInfo &itemInfo);
 signals:
     void itemDataChanged(const ItemInfo &info) const;
     void dataChanged(const AppsListModel::AppCategory category) const;

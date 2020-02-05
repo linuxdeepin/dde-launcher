@@ -70,7 +70,7 @@ void AppListArea::wheelEvent(QWheelEvent *e)
 //        } else {
 //            QScrollArea::wheelEvent(e);
 //        }
-        QScrollArea::wheelEvent(e);
+        //QScrollArea::wheelEvent(e);
     }
 }
 

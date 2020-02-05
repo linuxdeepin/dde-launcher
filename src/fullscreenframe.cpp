@@ -483,12 +483,11 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
 
 void FullScreenFrame::wheelEvent(QWheelEvent *e)
 {
-
     if (m_displayMode == GROUP_BY_CATEGORY) {
         if (m_scrollAnimation->state() == m_scrollAnimation->Running) return;
         int nNext = 0;
         static int  wheelTime = 0;
-        if (e->angleDelta().y() < 0) {
+        if (e->angleDelta().y() < 0 ||  e-> angleDelta().x() < 0) {
             wheelTime++;
             nNext = 1;
         } else {

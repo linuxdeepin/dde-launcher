@@ -349,6 +349,8 @@ void MultiPagesView::mousePress(QMouseEvent *e)
 
 void MultiPagesView::mouseMove(QMouseEvent *e)
 {
+    if (!m_bMousePress)
+        return;
     int nDiff = m_nMousePos - e->x();
     m_scrollValue += nDiff;
     m_appListArea->horizontalScrollBar()->setValue(m_scrollValue);

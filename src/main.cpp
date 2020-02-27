@@ -21,6 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "fullscreenframe.h"
 #include "src/dbusinterface/dbuslauncherframe.h"
 #include "model/appsmanager.h"

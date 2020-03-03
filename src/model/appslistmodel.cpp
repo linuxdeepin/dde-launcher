@@ -73,6 +73,7 @@ const QStringList sysHoldPackages()
                << "dde-calendar"
                << "deepin-manual"
                << "deepin-terminal"
+               << "deepin-defender"
                << "kwin-wm-multitaskingview"
                << "dde-printer";
 

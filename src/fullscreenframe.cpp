@@ -133,6 +133,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 {
     setFocusPolicy(Qt::ClickFocus);
     setAttribute(Qt::WA_InputMethodEnabled, true);
+    m_nextFocusIndex = Applist;
+    m_currentFocusIndex = m_nextFocusIndex;
 
 #if (DTK_VERSION <= DTK_VERSION_CHECK(2, 0, 9, 9))
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
@@ -273,8 +275,6 @@ void FullScreenFrame::showEvent(QShowEvent *e)
         m_appsManager->refreshAllList();
     }
 
-    m_nextFocusIndex = Applist;
-    m_currentFocusIndex = m_nextFocusIndex;
     QFrame::showEvent(e);
 
     QTimer::singleShot(0, this, [this]() {

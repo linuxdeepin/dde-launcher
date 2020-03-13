@@ -117,7 +117,8 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
         return;
     }
 
-    const QRect pr = qApp->primaryScreen()->geometry();
+//    const QRect pr = qApp->primaryScreen()->geometry();
+    const QRect pr = m_displayInter->primaryRect();
     const int screenWidth = pr.width();
     const int remain_width = screenWidth - calculateBesidePadding(screenWidth) * 2;
 
@@ -146,6 +147,12 @@ CalculateUtil::CalculateUtil(QObject *parent)
                                          "/com/deepin/dde/launcher/", this))
 {
     m_launcherInter = new DBusLauncher(this);
+    m_displayInter = new DBusDisplay(this);
+
+    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &CalculateUtil::layoutChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &CalculateUtil::layoutChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &CalculateUtil::layoutChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &CalculateUtil::layoutChanged, Qt::QueuedConnection);
 }
 
 void CalculateUtil::calculateTextSize(const int screenWidth)

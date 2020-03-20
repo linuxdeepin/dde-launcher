@@ -22,10 +22,12 @@
  */
 
 #include "backgroundmanager.h"
+#include "../global_util/constants.h"
 
 using namespace com::deepin;
 
 static const QString DefaultWallpaper = "/usr/share/backgrounds/default_background.jpg";
+static const QString DefaultWallpaper2 = "/usr/share/wallpapers/deepin/desktop.bmp";
 
 static QString getLocalFile(const QString &file) {
     const QUrl url(file);
@@ -74,11 +76,17 @@ void BackgroundManager::updateBackgrounds()
 {
     QString path = getLocalFile(m_wmInter->GetCurrentWorkspaceBackground());
 
-    path = QFile::exists(path) ? path : DefaultWallpaper;
+    if(!QFile::exists(path)) {
+        if(DLauncher::IsServerSystem){
+            path = DefaultWallpaper2;
+        }else{
+            path = DefaultWallpaper;
+        }
+    }
 
     const QString &file = m_blurInter->Get(path);
 
-    m_background = file.isEmpty() ? path : file;
+    m_background = file.contains('/',Qt::CaseSensitivity::CaseSensitive) ?  file : path;
 
     emit currentWorkspaceBackgroundChanged(m_background);
 }

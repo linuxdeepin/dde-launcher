@@ -23,6 +23,11 @@
 
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
+#include <QString>
+
+#include <DSysInfo>
+
+DCORE_USE_NAMESPACE
 
 namespace DLauncher {
 
@@ -54,6 +59,13 @@ static const int APPS_AREA_AUTO_SCROLL_STEP = 130;
 static const int APPS_AREA_AUTO_SCROLL_TIMER = 15;
 
 static const int CLEAR_CACHE_TIMER = 60;
+
+const QString SystemTypeName = DSysInfo::deepinTypeDisplayName(QLocale::c());
+
+const DSysInfo::DeepinType DeepinType = DSysInfo::deepinType();
+const bool IsServerSystem = (DSysInfo::DeepinServer == DeepinType);
+const bool IsDesktopSystem = DSysInfo::isCommunityEdition();
+const bool IsProfessionalSystem = (DSysInfo::DeepinProfessional == DeepinType);
 
 }
 

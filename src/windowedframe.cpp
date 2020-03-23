@@ -41,7 +41,9 @@
 #include <QScreen>
 #include <QEvent>
 #include <QTimer>
+#include <QScroller>
 #include <QDebug>
+
 #include <DWindowManagerHelper>
 #include <DForeignWindow>
 #include <qpa/qplatformwindow.h>
@@ -206,6 +208,12 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     initAnchoredCornor();
     installEventFilter(m_eventFilter);
 
+    QScroller::grabGesture(m_appsView->viewport(), QScroller::LeftMouseButtonGesture);
+    QScroller *scroller = QScroller::scroller(m_appsView->viewport());
+    QScrollerProperties sp;
+    sp.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    scroller->setScrollerProperties(sp);
+
     // auto scroll when drag to app list box border
     connect(m_appsView, &AppListView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
     connect(m_autoScrollTimer, &QTimer::timeout, [this] {
@@ -255,6 +263,10 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
 WindowedFrame::~WindowedFrame()
 {
+    QScroller *scroller = QScroller::scroller(m_appsView->viewport());
+    if (scroller) {
+        scroller->stop();
+    }
     m_eventFilter->deleteLater();
 }
 

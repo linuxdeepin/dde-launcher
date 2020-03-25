@@ -39,6 +39,7 @@
 #include "worker/menuworker.h"
 #include "widgets/applistarea.h"
 #include "boxframe/boxframe.h"
+#include "src/dbusinterface/dbusdisplay.h"
 
 #include <memory>
 
@@ -216,6 +217,7 @@ private:
     QFrame *m_bottomSpacing;
 
     QFrame *m_contentFrame;
+    DBusDisplay *m_displayInter;
 
     QVBoxLayout *m_mainLayout;
     FocusIndex m_nextFocusIndex;

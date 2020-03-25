@@ -72,7 +72,7 @@ AppGridView::AppGridView(QWidget *parent)
     setFrameStyle(QFrame::NoFrame);
 
     // init origin size
-    setFixedSize(qApp->primaryScreen()->geometry().size());
+    setFixedSize(qApp->primaryScreen()->size());
 
     setStyleSheet("background-color: transparent;");
 

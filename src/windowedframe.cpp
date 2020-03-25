@@ -48,6 +48,7 @@
 #include <DForeignWindow>
 #include <qpa/qplatformwindow.h>
 #include <DGuiApplicationHelper>
+#include <com_deepin_daemon_display_monitor.h>
 
 #define DOCK_TOP        0
 #define DOCK_RIGHT      1
@@ -59,14 +60,17 @@
 
 DGUI_USE_NAMESPACE
 
+using MonitorInter = com::deepin::daemon::display::Monitor;
+
 extern const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w);
 
-inline const QPoint scaledPosition(const QPoint &xpos)
+const QPoint WindowedFrame::scaledPosition(const QPoint &xpos)
 {
     const auto ratio = qApp->devicePixelRatio();
-    QRect g = qApp->primaryScreen()->geometry();
-    for (auto *screen : qApp->screens()) {
-        const QRect &sg = screen->geometry();
+    QRect g = m_displayInter->primaryRect();
+    for (auto screen : m_displayInter->monitors()) {
+        MonitorInter *monitor = new MonitorInter("com.deepin.daemon.Display", screen.path(), QDBusConnection::sessionBus());
+        const QRect &sg = QRect(monitor->x(), monitor->y(), monitor->width(), monitor->height());
         const QRect &rg = QRect(sg.topLeft(), sg.size() * ratio);
         if (rg.contains(xpos)) {
             g = rg;
@@ -98,6 +102,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_appearanceInter(new Appearance("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
     , m_displayMode(All)
     , m_focusPos(Default)
+    , m_displayInter(new DBusDisplay(this))
 {
     setMaskColor(DBlurEffectWidget::AutoColor);
     setBlendMode(DBlurEffectWidget::InWindowBlend);
@@ -793,7 +798,7 @@ void WindowedFrame::adjustPosition()
 
     // extra spacing for efficient mode
     if (m_dockInter->displayMode() == DOCK_EFFICIENT) {
-        const QRect primaryRect = qApp->primaryScreen()->geometry();
+        const QRect primaryRect = m_displayInter->primaryRect();
 
         switch (dockPos) {
         case DOCK_TOP:

@@ -37,6 +37,7 @@ static const QString DefaultBackground = "/usr/share/backgrounds/default_backgro
 BoxFrame::BoxFrame(QWidget *parent)
     : QLabel(parent)
     , m_bgManager(new BackgroundManager(this))
+    , m_displayInter(new DBusDisplay(this))
 {
     connect(m_bgManager, &BackgroundManager::currentWorkspaceBackgroundChanged, this, &BoxFrame::setBackground);
 }
@@ -69,7 +70,7 @@ void BoxFrame::setBackground(const QString &url)
 }
 
 const QPixmap BoxFrame::backgroundPixmap() {
-    const QSize &size = qApp->primaryScreen()->size() * qApp->primaryScreen()->devicePixelRatio();
+    const QSize &size = QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height) * qApp->primaryScreen()->devicePixelRatio();
 
     QPixmap cache = m_pixmap.scaled(size,
                                     Qt::KeepAspectRatioByExpanding,
@@ -98,8 +99,7 @@ void BoxFrame::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
 
-    QScreen const *s = qApp->primaryScreen();
-    const QRect &geom = s->geometry();
+    const QRect &geom = m_displayInter->primaryRect();
     QRect tr(QPoint(0, 0), geom.size());
 
     painter.drawPixmap(tr,

@@ -34,6 +34,8 @@
 #include "widgets/miniframerightbar.h"
 #include "widgets/miniframeswitchbtn.h"
 #include "global_util/constants.h"
+#include "global_util/calculate_util.h"
+#include "src/dbusinterface/dbusdisplay.h"
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
@@ -124,6 +126,7 @@ private slots:
     void prepareHideLauncher();
     void recoveryAll();
     void onOpacityChanged(const double value);
+    const QPoint scaledPosition(const QPoint &xpos);
 
 private:
     DBusDock *m_dockInter;
@@ -147,6 +150,7 @@ private:
     QTimer *m_autoScrollTimer;
     Appearance *m_appearanceInter;
     DisplayMode m_displayMode;
+    DBusDisplay *m_displayInter;
 
     int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
     int m_radius = 10;

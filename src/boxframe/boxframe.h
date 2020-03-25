@@ -25,6 +25,8 @@
 #define BOXFRAME_H
 
 #include <QLabel>
+#include "../global_util/calculate_util.h"
+#include "src/dbusinterface/dbusdisplay.h"
 
 class QPixmap;
 class BackgroundManager;
@@ -54,6 +56,7 @@ private:
     QPixmap m_pixmap;
     QPixmap m_cache;
     BackgroundManager *m_bgManager;
+    DBusDisplay *m_displayInter;
 };
 
 #endif // BOXFRAME_H

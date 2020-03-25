@@ -130,6 +130,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     , m_topSpacing(new QFrame)
     , m_bottomSpacing(new QFrame)
     , m_contentFrame(new QFrame)
+    , m_displayInter(new DBusDisplay(this))
 {
     setFocusPolicy(Qt::ClickFocus);
     setAttribute(Qt::WA_InputMethodEnabled, true);
@@ -739,6 +740,8 @@ void FullScreenFrame::initConnection()
 
     connect(qApp, &QApplication::primaryScreenChanged, this, &FullScreenFrame::updateGeometry);
     connect(qApp->primaryScreen(), &QScreen::geometryChanged, this, &FullScreenFrame::updateGeometry);
+    connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &FullScreenFrame::updateGeometry, Qt::QueuedConnection);
+    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &FullScreenFrame::updateGeometry, Qt::QueuedConnection);
 
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
 
@@ -855,7 +858,7 @@ void FullScreenFrame::initConnection()
 void FullScreenFrame::showLauncher()
 {
     show();
-    setFixedSize(qApp->primaryScreen()->geometry().size());
+    setFixedSize(QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height));
 }
 
 void FullScreenFrame::hideLauncher()
@@ -870,7 +873,7 @@ bool FullScreenFrame::visible()
 
 void FullScreenFrame::updateGeometry()
 {
-    const QRect rect = qApp->primaryScreen()->geometry();
+    const QRect rect = m_displayInter->primaryRect();
 
     setGeometry(rect);
 

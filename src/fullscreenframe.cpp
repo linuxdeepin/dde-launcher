@@ -858,7 +858,7 @@ void FullScreenFrame::initConnection()
 void FullScreenFrame::showLauncher()
 {
     show();
-    setFixedSize(QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height));
+    setFixedSize(QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height)/qApp->primaryScreen()->devicePixelRatio());
 }
 
 void FullScreenFrame::hideLauncher()

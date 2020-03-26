@@ -30,7 +30,6 @@
 #include <QGSettings>
 
 #include "src/dbusinterface/dbuslauncher.h"
-#include "src/dbusinterface/dbusdisplay.h"
 
 #define ALL_APPS            0
 #define GROUP_BY_CATEGORY   1
@@ -81,7 +80,6 @@ private:
     int m_navgationTextSize = 14;
     int m_titleTextSize = 15;
 
-    DBusDisplay *m_displayInter;
     DBusLauncher *m_launcherInter;
     QGSettings *m_launcherGsettings;
 };

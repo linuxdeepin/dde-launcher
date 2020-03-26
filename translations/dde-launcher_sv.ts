@@ -47,7 +47,7 @@
     </message>
     <message>
         <source>Other</source>
-        <translation>Andra</translation>
+        <translation>Övrigt</translation>
     </message>
 </context>
 <context>
@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Är du säker du vill avinstallera %1 ?</translation>
     </message>
 </context>
 <context>
@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation>Inaktivera skärmskalning</translation>
     </message>
     <message>
         <source>Open</source>
@@ -89,30 +89,30 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation>Placera på skrivbordet</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation>Fäst i dockan</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation>Inaktivera automatisk uppstart</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation>Starta automatiskt vid uppstart</translation>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>Använd proxy</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation>Alla Appar</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -156,7 +156,15 @@
     </message>
     <message>
         <source>Others</source>
-        <translation>Andra</translation>
+        <translation>Övrigt</translation>
+    </message>
+    <message>
+        <source>Games</source>
+        <translation>Spel</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Övrigt</translation>
     </message>
 </context>
 <context>
@@ -167,11 +175,11 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokument</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Videos</translation>
     </message>
     <message>
         <source>Music</source>
@@ -179,7 +187,7 @@
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Bilder</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -207,7 +215,7 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Återgå</translation>
     </message>
 </context>
 <context>
@@ -242,19 +250,19 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Återgå</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokument</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Videos</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Bilder</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -277,7 +285,7 @@
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manuell</translation>
+        <translation>Manual</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -285,15 +293,15 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation>Videos</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation>Bilder</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation>Dokument</translation>
     </message>
     <message>
         <source>Power</source>
@@ -304,11 +312,11 @@
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation>Alla kategorier</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Återgå</translation>
     </message>
 </context>
 <context>
@@ -330,7 +338,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Är du säker du vill avinstallera %1 ?</translation>
     </message>
 </context>
 </TS>

@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>Annet</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>Spill</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Andre</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>

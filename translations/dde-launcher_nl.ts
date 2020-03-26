@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>Overigen</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>Spellen</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Overig</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>

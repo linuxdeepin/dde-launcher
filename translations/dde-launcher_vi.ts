@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>Khác</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>Trò chơi</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>

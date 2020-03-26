@@ -35,7 +35,7 @@
     </message>
     <message>
         <source>Development</source>
-        <translation>Kūrimas</translation>
+        <translation>Plėtojimas</translation>
     </message>
     <message>
         <source>System</source>
@@ -148,7 +148,7 @@
     </message>
     <message>
         <source>Development</source>
-        <translation>Kūrimas</translation>
+        <translation>Plėtojimas</translation>
     </message>
     <message>
         <source>System</source>
@@ -156,6 +156,14 @@
     </message>
     <message>
         <source>Others</source>
+        <translation>Kita</translation>
+    </message>
+    <message>
+        <source>Games</source>
+        <translation>Žaidimai</translation>
+    </message>
+    <message>
+        <source>Other</source>
         <translation>Kita</translation>
     </message>
 </context>

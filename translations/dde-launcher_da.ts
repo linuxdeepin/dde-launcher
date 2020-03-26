@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>Brug en proxy</translation>
     </message>
 </context>
 <context>
@@ -156,6 +156,14 @@
     </message>
     <message>
         <source>Others</source>
+        <translation>Andre</translation>
+    </message>
+    <message>
+        <source>Games</source>
+        <translation>Spil</translation>
+    </message>
+    <message>
+        <source>Other</source>
         <translation>Andre</translation>
     </message>
 </context>

@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>Diğerleri</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>Oyunlar</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Diğer</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>

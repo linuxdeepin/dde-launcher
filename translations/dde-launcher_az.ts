@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>Oyunlar</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Digər</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>

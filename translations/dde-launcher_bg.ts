@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>Други</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>Игри</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Други</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>

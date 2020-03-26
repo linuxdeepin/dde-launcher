@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>ອື່ນໆ</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>

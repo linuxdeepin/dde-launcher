@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Sigur doriți să dezinstalați %1 ?</translation>
     </message>
 </context>
 <context>
@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>Utilizează proxz</translation>
     </message>
 </context>
 <context>
@@ -157,6 +157,14 @@
     <message>
         <source>Others</source>
         <translation>Alții</translation>
+    </message>
+    <message>
+        <source>Games</source>
+        <translation>Jocuri</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Altul</translation>
     </message>
 </context>
 <context>
@@ -330,7 +338,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Sigur doriți să dezinstalați %1 ?</translation>
     </message>
 </context>
 </TS>

@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>Poista näytön skaalaus käytöstä</translation>
+        <translation>Näytön skaalaus pois</translation>
     </message>
     <message>
         <source>Open</source>
@@ -89,11 +89,11 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation>Lähetä työpöydälle</translation>
+        <translation>Kiinnitä työpöydälle</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>Lähetä telakkaan</translation>
+        <translation>Kiinnitä telakkaan</translation>
     </message>
     <message>
         <source>Remove from startup</source>
@@ -156,6 +156,14 @@
     </message>
     <message>
         <source>Others</source>
+        <translation>Muut</translation>
+    </message>
+    <message>
+        <source>Games</source>
+        <translation>Pelit</translation>
+    </message>
+    <message>
+        <source>Other</source>
         <translation>Muut</translation>
     </message>
 </context>

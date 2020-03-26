@@ -31,7 +31,7 @@
     </message>
     <message>
         <source>Reading</source>
-        <translation>خواندن</translation>
+        <translation>خواندنی</translation>
     </message>
     <message>
         <source>Development</source>
@@ -47,7 +47,7 @@
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>سایر</translation>
     </message>
 </context>
 <context>
@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>آیا اطمینان دارید که می خواهید حذف کنید %1 ؟</translation>
     </message>
 </context>
 <context>
@@ -93,7 +93,7 @@
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>بفرست به لنگرگاه</translation>
+        <translation>بفرست به داک</translation>
     </message>
     <message>
         <source>Remove from startup</source>
@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>استفاده از پروکسی</translation>
     </message>
 </context>
 <context>
@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>دیگران</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>بازی‌ها</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>سایر</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
@@ -183,11 +191,11 @@
     </message>
     <message>
         <source>Downloads</source>
-        <translation>بارگیری</translation>
+        <translation>دانلودها</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>قفل کردن</translation>
+        <translation>قفل</translation>
     </message>
     <message>
         <source>Logout</source>
@@ -226,7 +234,7 @@
     </message>
     <message>
         <source>Lock</source>
-        <translation>قفل کردن</translation>
+        <translation>قفل</translation>
     </message>
     <message>
         <source>Logout</source>
@@ -258,7 +266,7 @@
     </message>
     <message>
         <source>Downloads</source>
-        <translation>بارگیری</translation>
+        <translation>دانلودها</translation>
     </message>
 </context>
 <context>
@@ -277,7 +285,7 @@
     </message>
     <message>
         <source>Manual</source>
-        <translation>دستی</translation>
+        <translation>راهنما</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -322,7 +330,7 @@
     <name>WindowedFrame</name>
     <message>
         <source>Cancel</source>
-        <translation>انصراف</translation>
+        <translation>لغو</translation>
     </message>
     <message>
         <source>Confirm</source>
@@ -330,7 +338,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>آیا اطمینان دارید که می خواهید حذف کنید %1 ؟</translation>
     </message>
 </context>
 </TS>

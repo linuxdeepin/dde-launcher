@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>باشقىلار</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
@@ -281,7 +289,7 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>تەڭشەك</translation>
     </message>
     <message>
         <source>Videos</source>

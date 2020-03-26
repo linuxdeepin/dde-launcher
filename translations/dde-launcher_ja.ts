@@ -62,18 +62,18 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>%1 をアンインストールしてもよろしいですか？</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation>デスクトップから移動</translation>
+        <translation>デスクトップから削除</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Dock から削除</translation>
+        <translation>ドックから削除</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -93,7 +93,7 @@
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>Dockへ送る</translation>
+        <translation>ドックへ送る</translation>
     </message>
     <message>
         <source>Remove from startup</source>
@@ -105,14 +105,14 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>プロキシを使う</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>全てのアプリ</translation>
+        <translation>すべてのアプリ</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -158,12 +158,20 @@
         <source>Others</source>
         <translation>その他</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>ゲーム</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>その他</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>コンピュータ</translation>
+        <translation>コンピューター</translation>
     </message>
     <message>
         <source>Documents</source>
@@ -214,7 +222,7 @@
     <name>MiniFrameNavigation</name>
     <message>
         <source>Computer</source>
-        <translation>コンピュータ</translation>
+        <translation>コンピューター</translation>
     </message>
     <message>
         <source>Music</source>
@@ -265,7 +273,7 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>コンピュータ</translation>
+        <translation>コンピューター</translation>
     </message>
     <message>
         <source>Music</source>
@@ -297,14 +305,14 @@
     </message>
     <message>
         <source>Power</source>
-        <translation>パワー</translation>
+        <translation>電源</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation>全てのカテゴリ</translation>
+        <translation>すべてのカテゴリ</translation>
     </message>
     <message>
         <source>Back</source>
@@ -330,7 +338,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>%1 をアンインストールしてもよろしいですか？</translation>
     </message>
 </context>
 </TS>

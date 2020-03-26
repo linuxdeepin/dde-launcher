@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation>Utilitza un servidor intermediari</translation>
+        <translation>Usa un servidor intermediari</translation>
     </message>
 </context>
 <context>
@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>Altres</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>Jocs</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Altres</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
@@ -203,7 +211,7 @@
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Atura</translation>
+        <translation>Atura&apos;t</translation>
     </message>
     <message>
         <source>Back</source>
@@ -222,7 +230,7 @@
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Atura</translation>
+        <translation>Atura&apos;t</translation>
     </message>
     <message>
         <source>Lock</source>

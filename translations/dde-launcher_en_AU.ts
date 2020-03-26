@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation>No search results</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -47,7 +47,7 @@
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation>Other</translation>
     </message>
 </context>
 <context>
@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>Games</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Other</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
@@ -195,7 +203,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Reboot</translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -234,7 +242,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation>Reboot</translation>
     </message>
     <message>
         <source>Suspend</source>

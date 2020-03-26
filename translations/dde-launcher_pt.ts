@@ -73,7 +73,7 @@
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Remover da dock</translation>
+        <translation>Remover da doca</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -93,7 +93,7 @@
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>Enviar para a dock</translation>
+        <translation>Enviar para a doca</translation>
     </message>
     <message>
         <source>Remove from startup</source>
@@ -157,6 +157,14 @@
     <message>
         <source>Others</source>
         <translation>Outros</translation>
+    </message>
+    <message>
+        <source>Games</source>
+        <translation>Jogos</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Outro</translation>
     </message>
 </context>
 <context>

@@ -69,7 +69,7 @@
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation>Eliminar del escritorio</translation>
+        <translation>Quitar del escritorio</translation>
     </message>
     <message>
         <source>Remove from dock</source>
@@ -97,7 +97,7 @@
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation>Eliminar del arranque</translation>
+        <translation>Quitar del arranque</translation>
     </message>
     <message>
         <source>Add to startup</source>
@@ -120,7 +120,7 @@
     </message>
     <message>
         <source>Chat</source>
-        <translation>Conversación</translation>
+        <translation>Mensajería</translation>
     </message>
     <message>
         <source>Music</source>
@@ -156,6 +156,14 @@
     </message>
     <message>
         <source>Others</source>
+        <translation>Otros</translation>
+    </message>
+    <message>
+        <source>Games</source>
+        <translation>Juegos</translation>
+    </message>
+    <message>
+        <source>Other</source>
         <translation>Otros</translation>
     </message>
 </context>
@@ -304,7 +312,7 @@
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation>Todas las Categorias</translation>
+        <translation>Todas las categorias</translation>
     </message>
     <message>
         <source>Back</source>

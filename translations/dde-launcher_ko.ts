@@ -58,7 +58,7 @@
     </message>
     <message>
         <source>Confirm</source>
-        <translation>확인</translation>
+        <translation>확정</translation>
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
@@ -69,11 +69,11 @@
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation>바탕 화면에서 제거</translation>
+        <translation>바탕화면에서 제거</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>도크(dock)에서 제거</translation>
+        <translation>도구집에서 제거</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -93,7 +93,7 @@
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>도크(dock)로 보내기</translation>
+        <translation>도구집으로 보내기</translation>
     </message>
     <message>
         <source>Remove from startup</source>
@@ -156,6 +156,14 @@
     </message>
     <message>
         <source>Others</source>
+        <translation>기타</translation>
+    </message>
+    <message>
+        <source>Games</source>
+        <translation>게임</translation>
+    </message>
+    <message>
+        <source>Other</source>
         <translation>기타</translation>
     </message>
 </context>

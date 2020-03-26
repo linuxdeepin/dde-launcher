@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>其他</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>游戲娛樂</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>其它</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>

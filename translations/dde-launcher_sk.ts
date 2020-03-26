@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>Iné</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>Hry</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Ostatné</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>

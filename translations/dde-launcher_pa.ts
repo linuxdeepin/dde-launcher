@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>ਹੋਰ</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>ਖੇਡਾਂ</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>ਹੋਰ</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>

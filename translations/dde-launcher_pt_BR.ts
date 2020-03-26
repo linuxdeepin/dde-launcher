@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>Nenhum resultado para a pesquisa</translation>
+        <translation>Nenhum resultado</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -62,18 +62,18 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Deseja desinstalar %1?</translation>
+        <translation>Desinstalar %1?</translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation>Remover da área de trabalho</translation>
+        <translation>Remover da Área de Trabalho</translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation>Remover da dock</translation>
+        <translation>Remover da Dock</translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>Desativar a escala de exibição</translation>
+        <translation>Desativar Escala de Exibição</translation>
     </message>
     <message>
         <source>Open</source>
@@ -89,11 +89,11 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation>Enviar para a área de trabalho</translation>
+        <translation>Enviar para Área de Trabalho</translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>Enviar para a dock</translation>
+        <translation>Enviar para à Dock</translation>
     </message>
     <message>
         <source>Remove from startup</source>
@@ -101,11 +101,11 @@
     </message>
     <message>
         <source>Add to startup</source>
-        <translation>Adicionar para a inicialização</translation>
+        <translation>Adicionar à inicialização</translation>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation>Usar um proxy</translation>
+        <translation>Usar Proxy</translation>
     </message>
 </context>
 <context>
@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>Outros</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>Jogos</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Outro</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
@@ -167,23 +175,23 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation>Documentos</translation>
+        <translation>Documento</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Vídeos</translation>
+        <translation>Vídeo</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Músicas</translation>
+        <translation>Música</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Fotos</translation>
+        <translation>Imagem</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Downloads</translation>
+        <translation>Download</translation>
     </message>
     <message>
         <source>Lock</source>
@@ -218,7 +226,7 @@
     </message>
     <message>
         <source>Music</source>
-        <translation>Música</translation>
+        <translation>Músicas</translation>
     </message>
     <message>
         <source>Shutdown</source>
@@ -246,19 +254,19 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation>Documentos</translation>
+        <translation>Documento</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Vídeos</translation>
+        <translation>Vídeo</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Fotos</translation>
+        <translation>Imagem</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Downloads</translation>
+        <translation>Download</translation>
     </message>
 </context>
 <context>
@@ -273,7 +281,7 @@
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Downloads</translation>
+        <translation>Download</translation>
     </message>
     <message>
         <source>Manual</source>
@@ -285,19 +293,19 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation>Vídeos</translation>
+        <translation>Vídeo</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Fotos</translation>
+        <translation>Imagem</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Documentos</translation>
+        <translation>Documento</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Sair</translation>
+        <translation>Sessão</translation>
     </message>
 </context>
 <context>
@@ -330,7 +338,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Deseja desinstalar %1?</translation>
+        <translation>Desinstalar %1?</translation>
     </message>
 </context>
 </TS>

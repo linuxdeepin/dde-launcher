@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>Egyéb</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>Játékok</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Egyéb</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>

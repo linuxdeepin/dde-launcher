@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>Anzeigenskalierung deaktivieren</translation>
+        <translation>Anzeigeskalierung deaktivieren</translation>
     </message>
     <message>
         <source>Open</source>
@@ -93,7 +93,7 @@
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>Zum Dock senden</translation>
+        <translation>Zum Dock hinzufügen</translation>
     </message>
     <message>
         <source>Remove from startup</source>
@@ -132,7 +132,7 @@
     </message>
     <message>
         <source>Graphics</source>
-        <translation>Grafiken</translation>
+        <translation>Grafik</translation>
     </message>
     <message>
         <source>Game</source>
@@ -156,6 +156,14 @@
     </message>
     <message>
         <source>Others</source>
+        <translation>Andere</translation>
+    </message>
+    <message>
+        <source>Games</source>
+        <translation>Spiele</translation>
+    </message>
+    <message>
+        <source>Other</source>
         <translation>Andere</translation>
     </message>
 </context>
@@ -199,7 +207,7 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Ruhezustand</translation>
+        <translation>Bereitschaftszustand</translation>
     </message>
     <message>
         <source>Shutdown</source>
@@ -238,7 +246,7 @@
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Ruhezustand</translation>
+        <translation>Bereitschaftszustand</translation>
     </message>
     <message>
         <source>Back</source>

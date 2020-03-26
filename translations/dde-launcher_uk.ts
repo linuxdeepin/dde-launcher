@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>Інші</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>Ігри</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Інше</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
@@ -297,7 +305,7 @@
     </message>
     <message>
         <source>Power</source>
-        <translation>Акумулятор</translation>
+        <translation>Живлення</translation>
     </message>
 </context>
 <context>

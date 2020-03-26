@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>Lainnya</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>Permainan</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Lainnya</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>

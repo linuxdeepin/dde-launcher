@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>هل أنت متأكد من إلغاء تثبيت %1 ؟</translation>
     </message>
 </context>
 <context>
@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>استخدم proxy</translation>
     </message>
 </context>
 <context>
@@ -157,6 +157,14 @@
     <message>
         <source>Others</source>
         <translation>غير ذلك</translation>
+    </message>
+    <message>
+        <source>Games</source>
+        <translation>العاب</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>أخرى</translation>
     </message>
 </context>
 <context>
@@ -304,7 +312,7 @@
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation>كافة التصنيفات</translation>
     </message>
     <message>
         <source>Back</source>
@@ -330,7 +338,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>هل أنت متأكد من إلغاء تثبيت %1 ؟</translation>
     </message>
 </context>
 </TS>

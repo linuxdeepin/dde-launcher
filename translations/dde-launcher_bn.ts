@@ -158,6 +158,14 @@
         <source>Others</source>
         <translation>অন্যান্য</translation>
     </message>
+    <message>
+        <source>Games</source>
+        <translation>গেম সমুহ</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>অন্যান্য</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>

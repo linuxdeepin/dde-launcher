@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Jeste li sigurni da želite deinstalirati %1 ?</translation>
     </message>
 </context>
 <context>
@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>Koristi proxy</translation>
     </message>
 </context>
 <context>
@@ -156,6 +156,14 @@
     </message>
     <message>
         <source>Others</source>
+        <translation>Ostalo</translation>
+    </message>
+    <message>
+        <source>Games</source>
+        <translation>Igre</translation>
+    </message>
+    <message>
+        <source>Other</source>
         <translation>Ostalo</translation>
     </message>
 </context>
@@ -330,7 +338,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <translation>Jeste li sigurni da želite deinstalirati %1 ?</translation>
     </message>
 </context>
 </TS>

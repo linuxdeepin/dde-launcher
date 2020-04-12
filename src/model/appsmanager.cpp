@@ -111,6 +111,11 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
                     }
 
                     icon = QIcon::fromTheme("application-x-desktop");
+                     pixmap = icon.pixmap(QSize(s, s));
+                     if (!pixmap.isNull())
+                     {
+                          icon = QIcon::fromTheme("deepinwine-"+iconName, QIcon::fromTheme("application-x-desktop"));
+                     }
                 }
             } else {
                 icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));

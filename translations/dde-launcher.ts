@@ -307,6 +307,14 @@
         <source>Power</source>
         <translation>Power</translation>
     </message>
+    <message>
+        <source>Record</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>NetworkNeighbor</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>

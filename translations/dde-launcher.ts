@@ -308,11 +308,11 @@
         <translation>Power</translation>
     </message>
     <message>
-        <source>Record</source>
+        <source>Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>NetworkNeighbor</source>
+        <source>Computers in LAN</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

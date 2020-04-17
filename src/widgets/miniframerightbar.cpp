@@ -62,8 +62,8 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     MiniFrameButton *pictureBtn   = new MiniFrameButton(tr("Pictures"));
     MiniFrameButton *documentBtn  = new MiniFrameButton(tr("Documents"));
     MiniFrameButton *downloadBtn  = new MiniFrameButton(tr("Downloads"));
-    MiniFrameButton *recordBtn = new MiniFrameButton(tr("Record"));
-    MiniFrameButton *networkNeighborBtn  = new MiniFrameButton(tr("NetworkNeighbor"));
+    MiniFrameButton *recordBtn = new MiniFrameButton(tr("Recent"));
+    MiniFrameButton *networkNeighborBtn  = new MiniFrameButton(tr("Computers in LAN"));
     MiniFrameButton *manualBtn    = new MiniFrameButton(tr("Manual"));
     m_settingsBtn                 = new MiniFrameButton(tr("Settings"));
     m_powerBtn                    = new MiniFrameButton(tr("Power"));

@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>Desativar Escala de Exibição</translation>
+        <translation>Desativar a escala de exibição</translation>
     </message>
     <message>
         <source>Open</source>
@@ -93,15 +93,15 @@
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>Enviar para à Dock</translation>
+        <translation>Enviar para Dock</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation>Remover da inicialização</translation>
+        <translation>Remover da Inicialização</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation>Adicionar à inicialização</translation>
+        <translation>Adicionar à Inicialização</translation>
     </message>
     <message>
         <source>Use a proxy</source>
@@ -277,7 +277,7 @@
     </message>
     <message>
         <source>Music</source>
-        <translation>Música</translation>
+        <translation>Músicas</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -306,6 +306,14 @@
     <message>
         <source>Power</source>
         <translation>Sessão</translation>
+    </message>
+    <message>
+        <source>Recent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Computers in LAN</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

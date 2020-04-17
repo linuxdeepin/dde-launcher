@@ -309,11 +309,11 @@
     </message>
     <message>
         <source>Recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Recent</translation>
     </message>
     <message>
         <source>Computers in LAN</source>
-        <translation type="unfinished"></translation>
+        <translation>Computers in LAN</translation>
     </message>
 </context>
 <context>

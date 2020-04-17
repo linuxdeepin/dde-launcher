@@ -307,6 +307,14 @@
         <source>Power</source>
         <translation>Enerxía</translation>
     </message>
+    <message>
+        <source>Recent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Computers in LAN</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>

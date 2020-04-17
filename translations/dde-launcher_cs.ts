@@ -3,7 +3,7 @@
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation>Žádné výsledky hledání</translation>
+        <translation>Nic nenalezeno</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -11,7 +11,7 @@
     </message>
     <message>
         <source>Chat</source>
-        <translation>Rozhovor</translation>
+        <translation>Chat</translation>
     </message>
     <message>
         <source>Music</source>
@@ -19,7 +19,7 @@
     </message>
     <message>
         <source>Video</source>
-        <translation>Obraz</translation>
+        <translation>Video</translation>
     </message>
     <message>
         <source>Graphics</source>
@@ -47,14 +47,14 @@
     </message>
     <message>
         <source>Other</source>
-        <translation>Jiné</translation>
+        <translation>Ostatní</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Storno</translation>
     </message>
     <message>
         <source>Confirm</source>
@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Opravdu chcete odinstalovat %1?</translation>
+        <translation>Opravdu chcete %1 odinstalovat?</translation>
     </message>
 </context>
 <context>
@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>Zakázat měřítko zobrazení</translation>
+        <translation>Neměnit měřítko zobrazení</translation>
     </message>
     <message>
         <source>Open</source>
@@ -112,7 +112,7 @@
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation>Všechny programy</translation>
+        <translation>Všechny aplikace</translation>
     </message>
     <message>
         <source>Internet</source>
@@ -120,7 +120,7 @@
     </message>
     <message>
         <source>Chat</source>
-        <translation>Rozhovor</translation>
+        <translation>Chat</translation>
     </message>
     <message>
         <source>Music</source>
@@ -128,7 +128,7 @@
     </message>
     <message>
         <source>Video</source>
-        <translation>Obraz</translation>
+        <translation>Video</translation>
     </message>
     <message>
         <source>Graphics</source>
@@ -156,7 +156,7 @@
     </message>
     <message>
         <source>Others</source>
-        <translation>Jiné</translation>
+        <translation>Ostatní</translation>
     </message>
     <message>
         <source>Games</source>
@@ -164,7 +164,7 @@
     </message>
     <message>
         <source>Other</source>
-        <translation>Jiné</translation>
+        <translation>Ostatní</translation>
     </message>
 </context>
 <context>
@@ -179,7 +179,7 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation>Obrazy</translation>
+        <translation>Videa</translation>
     </message>
     <message>
         <source>Music</source>
@@ -258,7 +258,7 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation>Obrazy</translation>
+        <translation>Videa</translation>
     </message>
     <message>
         <source>Pictures</source>
@@ -293,7 +293,7 @@
     </message>
     <message>
         <source>Videos</source>
-        <translation>Obrazy</translation>
+        <translation>Videa</translation>
     </message>
     <message>
         <source>Pictures</source>
@@ -306,6 +306,14 @@
     <message>
         <source>Power</source>
         <translation>Napájení</translation>
+    </message>
+    <message>
+        <source>Recent</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Computers in LAN</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -330,7 +338,7 @@
     <name>WindowedFrame</name>
     <message>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Storno</translation>
     </message>
     <message>
         <source>Confirm</source>
@@ -338,7 +346,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Opravdu chcete odinstalovat %1?</translation>
+        <translation>Opravdu chcete %1 odinstalovat?</translation>
     </message>
 </context>
 </TS>

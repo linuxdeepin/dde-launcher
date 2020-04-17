@@ -307,6 +307,14 @@
         <source>Power</source>
         <translation>电源</translation>
     </message>
+    <message>
+        <source>Recent</source>
+        <translation>最近使用</translation>
+    </message>
+    <message>
+        <source>Computers in LAN</source>
+        <translation>网络邻居</translation>
+    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>

@@ -70,7 +70,8 @@ const QStringList sysHoldPackages()
                              << "deepin-manual"
                              << "deepin-terminal"
                              << "deepin-defender"
-                             << "kwin-wm-multitaskingview";
+                             << "kwin-wm-multitaskingview"
+                             << "dde-printer";
 
     return holds_list;
 }

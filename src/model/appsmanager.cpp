@@ -577,7 +577,7 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
 {
     QPair<QString, int> tmpKey { info.m_iconKey, size };
     if (m_catchlock) {
-        return getThemeIcon(info, 32);
+        return getThemeIcon(info, 128);
     }
 
     if (m_iconCache.contains(tmpKey) && !m_iconCache[tmpKey].isNull()) {

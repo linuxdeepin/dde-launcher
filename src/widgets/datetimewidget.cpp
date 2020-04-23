@@ -18,6 +18,7 @@
  */
 
 #include "datetimewidget.h"
+#include "../global_util/datetimehelper.h"
 #include <QVBoxLayout>
 #include <QDateTime>
 #include <QMouseEvent>
@@ -26,6 +27,11 @@
 #include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
+
+#define USE_24_HOUR_FORMAT "Use24HourFormat"
+#define SHORT_DATE_FORMAT  "ShortDateFormat"
+#define SHORT_TIME_FORMAT  "ShortTimeFormat"
+#define WEEKDAY_FORMAT     "WeekdayFormat"
 
 DatetimeWidget::DatetimeWidget(QWidget *parent)
     : QWidget(parent),
@@ -99,11 +105,17 @@ void DatetimeWidget::mouseReleaseEvent(QMouseEvent *e)
 void DatetimeWidget::updateTime()
 {
     const QDateTime dateTime = QDateTime::currentDateTime();
-    QString format;
-    if (m_24HourFormatInter->property("Use24HourFormat").toBool())
-        format = "hh:mm";
-    else
-        format = "hh:mm AP";
-    m_currentTimeLabel->setText(dateTime.toString(format));
-    m_currentDateLabel->setText(dateTime.date().toString(Qt::SystemLocaleLongDate));
+
+    bool use24HourFormat = m_24HourFormatInter->property(USE_24_HOUR_FORMAT).toBool();
+    int shortDateFormat = m_24HourFormatInter->property(SHORT_DATE_FORMAT).toInt();
+    int shortTimeFormat = m_24HourFormatInter->property(SHORT_TIME_FORMAT).toInt();
+    int weekdayFormat = m_24HourFormatInter->property(WEEKDAY_FORMAT).toInt();
+
+    QString timeFormat = DateTimeHelper::ShortTimeFormatString(shortTimeFormat);
+    if (!use24HourFormat)
+        timeFormat += " ap";
+    QString dateFormat = DateTimeHelper::ShortDateFormatString(shortDateFormat) + " " + DateTimeHelper::WeekDayFormatString(weekdayFormat);
+
+    m_currentDateLabel->setText(dateTime.toString(dateFormat));
+    m_currentTimeLabel->setText(dateTime.toString(timeFormat));
 }

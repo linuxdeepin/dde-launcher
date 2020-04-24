@@ -23,7 +23,6 @@
 
 #include "fullscreenframe.h"
 #include "global_util/constants.h"
-#include "global_util/xcb_misc.h"
 #include "src/boxframe/backgroundmanager.h"
 
 #include <QApplication>
@@ -274,7 +273,7 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     m_searchWidget->clearSearchContent();
     updateCurrentVisibleCategory();
     // TODO: Do we need this in showEvent ???
-    XcbMisc::instance()->set_deepin_override(winId());
+    //XcbMisc::instance()->set_deepin_override(winId());
     // To make sure the window is placed at the right position.
     updateGeometry();
     updateBackground();

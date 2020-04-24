@@ -59,7 +59,6 @@ void dump_user_apss_preset_order_list()
 
 int main(int argv, char *args[])
 {
-    DApplication::loadDXcbPlugin();
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
     DGuiApplicationHelper::setColorCompositingEnabled(true);
     DApplication app(argv, args);

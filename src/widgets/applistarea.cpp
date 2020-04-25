@@ -119,7 +119,7 @@ bool AppListArea::eventFilter(QObject *watched, QEvent *e)
 
                     if (m_updateEnableSelectionByMouseTimer && m_updateEnableSelectionByMouseTimer->isActive()) {
                         const QPoint difference_pos = event->pos() - m_lastTouchBeginPos;
-                        if (qAbs(difference_pos.x()) > touchTapDistance || qAbs(difference_pos.y()) > touchTapDistance) {
+                        if (qAbs(difference_pos.x()) < touchTapDistance && qAbs(difference_pos.y()) > touchTapDistance) {
                             QScroller::grabGesture(this);
                             QScroller *scroller = QScroller::scroller(this);
 
@@ -133,8 +133,9 @@ bool AppListArea::eventFilter(QObject *watched, QEvent *e)
                                     QScroller::scroller(this)->deleteLater();
                                 }
                             });
+                            return true;
                         }
-                        return true;
+                        return false;
                     }
                     break;
                 default: break;

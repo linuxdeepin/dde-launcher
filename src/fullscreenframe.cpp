@@ -166,11 +166,11 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     updateDisplayMode(m_calcUtil->displayMode());
     updateDockPosition();
 
-    QScroller::grabGesture(m_appsArea->viewport(), QScroller::LeftMouseButtonGesture);
-    QScroller *scroller = QScroller::scroller(m_appsArea->viewport());
-    QScrollerProperties sp;
-    sp.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
-    scroller->setScrollerProperties(sp);
+//    QScroller::grabGesture(m_appsArea->viewport(), QScroller::TouchGesture);
+//    QScroller *scroller = QScroller::scroller(m_appsArea->viewport());
+//    QScrollerProperties sp;
+//    sp.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+//    scroller->setScrollerProperties(sp);
 }
 
 FullScreenFrame::~FullScreenFrame()

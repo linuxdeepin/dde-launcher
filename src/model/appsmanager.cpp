@@ -142,7 +142,9 @@ AppsManager::AppsManager(QObject *parent) :
     m_iconRefreshTimer(std::make_unique<QTimer>(new QTimer)),
     m_calUtil(CalculateUtil::instance()),
     m_searchTimer(new QTimer(this)),
-    m_delayRefreshTimer(new QTimer(this))
+    m_delayRefreshTimer(new QTimer(this)),
+    m_RefreshCalendarIconTimer(new QTimer(this)),
+    m_lastShowDate(0)
 {
     m_iconRefreshTimer->setInterval(10 * 1000);
     m_iconRefreshTimer->setSingleShot(false);
@@ -181,6 +183,9 @@ AppsManager::AppsManager(QObject *parent) :
     m_delayRefreshTimer->setSingleShot(true);
     m_delayRefreshTimer->setInterval(500);
 
+    m_RefreshCalendarIconTimer->setInterval(1000);
+    m_RefreshCalendarIconTimer->setSingleShot(false);
+
     connect(qApp, &DApplication::iconThemeChanged, this, &AppsManager::onIconThemeChanged, Qt::QueuedConnection);
     connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
@@ -193,6 +198,18 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
     connect(m_iconRefreshTimer.get(), &QTimer::timeout, this, &AppsManager::refreshNotFoundIcon);
+    connect(m_RefreshCalendarIconTimer, &QTimer::timeout, this,  [=](){
+               m_curDate =QDate::currentDate();
+               if(m_lastShowDate != m_curDate.day()){
+                    delayRefreshData();
+                    m_lastShowDate = m_curDate.day();
+               }
+    });
+
+    if(!m_RefreshCalendarIconTimer->isActive()){
+        m_RefreshCalendarIconTimer->start();
+    }
+
 }
 
 void AppsManager::appendSearchResult(const QString &appKey)

@@ -30,7 +30,7 @@
 #include <QSize>
 #include <QDebug>
 #include <QPixmap>
-#include <QSettings>
+#include <QGSettings>
 #include <DHiDPIHelper>
 #include <DGuiApplicationHelper>
 
@@ -53,8 +53,11 @@ static QMap<int, AppsListModel::AppCategory> CateGoryMap {
 
 const QStringList sysHoldPackages()
 {
-    const QSettings settings("/etc/deepin-installer.conf", QSettings::IniFormat);
-    const auto holds_list = settings.value("dde_launcher_hold_packages").toStringList();
+    if (!QGSettings::isSchemaInstalled("com.deepin.dde.launcher"))
+           return QStringList();
+
+    const QGSettings  gsettings ("com.deepin.dde.launcher","/com/deepin/dde/launcher/");
+    const auto holds_list = gsettings.get("apps-hold-list").toStringList();
 
     if (holds_list.isEmpty() ||
         (holds_list.size() == 1 && holds_list.first().isEmpty()))
@@ -275,6 +278,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIsOnDesktop(itemInfo.m_key);
     case AppIsOnDockRole:
         return m_appsManager->appIsOnDock(itemInfo.m_desktop);
+    //判返回系统预装列表
     case AppIsRemovableRole:
         return !m_holdPackages.contains(itemInfo.m_key);
     case AppIsProxyRole:

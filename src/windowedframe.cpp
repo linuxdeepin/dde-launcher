@@ -292,8 +292,8 @@ void WindowedFrame::showLauncher()
     m_appsView->setCurrentIndex(QModelIndex());
 
     adjustSize(); // right widget need calculate width based on font
-    adjustPosition();
     show();
+    adjustPosition();
 
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition, Qt::UniqueConnection);
 }
@@ -673,6 +673,7 @@ void WindowedFrame::showEvent(QShowEvent *e)
         setFocus();
         emit visibleChanged(true);
     });
+
     m_focusPos = Default;
 }
 

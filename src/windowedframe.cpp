@@ -528,8 +528,7 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
     unInstallDialog.setWindowModality(Qt::WindowModal);
 
     const QString appKey = context.data(AppsListModel::AppKeyRole).toString();
-    QString appName = context.data(AppsListModel::AppNameRole).toString();
-    unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall %1 ?")).arg(appName));
+    unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall?")));
     QPixmap appIcon = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
     unInstallDialog.setIconPixmap(appIcon);
 

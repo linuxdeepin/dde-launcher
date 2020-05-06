@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="en">
 <context>
     <name>AppsManager</name>
     <message>
@@ -64,6 +64,10 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="vanished">Are you sure you want to uninstall %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -348,6 +352,10 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="vanished">Are you sure you want to uninstall %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

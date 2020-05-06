@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>您确定要卸载 %1 吗？</translation>
+        <translation type="vanished">您确定要卸载 %1 吗？</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation>您确定要卸载吗？</translation>
     </message>
 </context>
 <context>
@@ -338,7 +344,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>您确定要卸载 %1 吗？</translation>
+        <translation type="vanished">您确定要卸载 %1 吗？</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation>您确定要卸载吗？</translation>
     </message>
 </context>
 </TS>

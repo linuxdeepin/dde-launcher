@@ -68,7 +68,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
+        <translation>Are you sure you want to uninstall?</translation>
     </message>
 </context>
 <context>
@@ -348,7 +348,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
+        <translation>Are you sure you want to uninstall?</translation>
     </message>
 </context>
 </TS>

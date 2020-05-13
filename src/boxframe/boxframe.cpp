@@ -40,6 +40,7 @@ BoxFrame::BoxFrame(QWidget *parent)
     , m_displayInter(new DBusDisplay(this))
 {
     connect(m_bgManager, &BackgroundManager::currentWorkspaceBackgroundChanged, this, &BoxFrame::setBackground);
+    connect(m_bgManager, &BackgroundManager::currentWorkspaceBlurBackgroundChanged, this, &BoxFrame::setBlurBackground);
 }
 
 BoxFrame::~BoxFrame()
@@ -69,28 +70,69 @@ void BoxFrame::setBackground(const QString &url)
     updateBackground();
 }
 
-const QPixmap BoxFrame::backgroundPixmap() {
-    const QSize &size = QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height) * qApp->primaryScreen()->devicePixelRatio();
-    QPixmap cache = m_pixmap.scaled(size,
+void BoxFrame::setBlurBackground(const QString &url)
+{
+    if (m_lastBlurUrl == url) return;
+
+    m_lastBlurUrl = url;
+
+    QPixmap pix(url);
+
+    if (pix.isNull()) {
+        pix.load(DefaultBackground);
+    }
+
+    const QSize &size = qApp->primaryScreen()->size() ;//* qApp->primaryScreen()->devicePixelRatio();
+
+    QPixmap cache = pix.scaled(size,
                                     Qt::KeepAspectRatioByExpanding,
                                     Qt::SmoothTransformation);
-
     QRect copyRect((cache.width() - size.width()) / 2,
                    (cache.height() - size.height()) / 2,
                    size.width(), size.height());
-
     cache = cache.copy(copyRect);
     cache.setDevicePixelRatio(devicePixelRatioF());
-
     emit backgroundImageChanged(cache);
+}
 
+const QPixmap BoxFrame::backgroundPixmap()
+{
+    const QSize &size = qApp->primaryScreen()->size() * qApp->primaryScreen()->devicePixelRatio();
+    QPixmap cache = m_pixmap.scaled(size,
+                                    Qt::KeepAspectRatioByExpanding,
+                                    Qt::SmoothTransformation);
+    QRect copyRect((cache.width() - size.width()) / 2,
+                   (cache.height() - size.height()) / 2,
+                   size.width(), size.height());
+    cache = cache.copy(copyRect);
+    cache.setDevicePixelRatio(devicePixelRatioF());
     return cache;
+}
+
+void BoxFrame::updateBlurBackground()
+{
+    QPixmap pix(m_lastBlurUrl);
+
+    if (pix.isNull()) {
+        pix.load(DefaultBackground);
+    }
+
+    const QSize &size = qApp->primaryScreen()->size() ;//* qApp->primaryScreen()->devicePixelRatio();
+
+    QPixmap cache = pix.scaled(size,
+                                    Qt::KeepAspectRatioByExpanding,
+                                    Qt::SmoothTransformation);
+    QRect copyRect((cache.width() - size.width()) / 2,
+                   (cache.height() - size.height()) / 2,
+                   size.width(), size.height());
+    cache = cache.copy(copyRect);
+    cache.setDevicePixelRatio(devicePixelRatioF());
+    emit backgroundImageChanged(cache);
 }
 
 void BoxFrame::updateBackground()
 {
     m_cache = backgroundPixmap();
-
     update();
 }
 

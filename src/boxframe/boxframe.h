@@ -40,12 +40,14 @@ public:
     ~BoxFrame();
 
     void setBackground(const QString &url);
+    void setBlurBackground(const QString &url);
     inline QPixmap cachePixmap() { return m_cache; }
 
 signals:
     void backgroundImageChanged(const QPixmap & img);
 
 protected:
+    void updateBlurBackground();
     void updateBackground();
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
@@ -54,6 +56,7 @@ private:
 
 private:
     QString m_lastUrl;
+    QString m_lastBlurUrl;
     QPixmap m_pixmap;
     QPixmap m_cache;
     BackgroundManager *m_bgManager;

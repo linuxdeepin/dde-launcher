@@ -143,7 +143,7 @@ void NavigationWidget::buttonClicked()
     if (!btn)
         return;
 
-    emit scrollToCategory(btn->category(), 0);
+    emit scrollToCategory(btn->category(),  AppsListModel::NavigationChangeShow);
 }
 
 CategoryButton *NavigationWidget::button(const AppsListModel::AppCategory category) const

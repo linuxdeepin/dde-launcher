@@ -28,8 +28,10 @@
 
 #include <com_deepin_wm.h>
 #include <com_deepin_daemon_imageeffect.h>
+#include <com_deepin_daemon_imageblur.h>
 #include <com_deepin_daemon_appearance.h>
 
+using ImageEffeblur = com::deepin::daemon::ImageBlur;
 using ImageEffectInter = com::deepin::daemon::ImageEffect;
 using AppearanceInter = com::deepin::daemon::Appearance;
 
@@ -41,16 +43,19 @@ public:
 
 signals:
     void currentWorkspaceBackgroundChanged(const QString &background);
+    void currentWorkspaceBlurBackgroundChanged(const QString &background);
 
 private slots:
     void updateBackgrounds();
 
 private:
     int m_currentWorkspace;
+    mutable QString m_blurBackground;
     mutable QString m_background;
 
     com::deepin::wm *m_wmInter;
     ImageEffectInter *m_imageEffectInter;
+    ImageEffeblur      *m_imageblur;
     AppearanceInter *m_appearanceInter;
 };
 

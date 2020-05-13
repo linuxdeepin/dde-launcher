@@ -54,8 +54,9 @@ public:
     void updateBackBlurPos(QPoint p);
     void updateBackgroundImage(const QPixmap & img);
 
+    void setBlurBgVisible(bool visible);
 signals:
-    void maskClick(AppsListModel::AppCategory m_category, int nNext);
+    void maskClick(AppsListModel::AppCategory m_category, AppsListModel::scrollType nType);
     void hideLauncher();
 
 protected:

@@ -43,7 +43,7 @@ public:
 
     void updateSize();
 signals:
-    void scrollToCategory(const AppsListModel::AppCategory category, int nNext) const;
+    void scrollToCategory(const AppsListModel::AppCategory category, AppsListModel::scrollType nType) const;
     void mouseEntered();
 
 public slots:

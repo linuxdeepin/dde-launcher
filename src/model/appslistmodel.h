@@ -85,6 +85,7 @@ public:
         Others,
     };
 
+    enum scrollType {FirstShow,ScrollLeft,ScrollRight,NavigationChangeShow,CategoryChangeShow,WidghtSizeChangeShow};
 public:
     explicit AppsListModel(const AppCategory& category, QObject *parent = nullptr);
     void setPageIndex(int pageIndex){m_pageIndex = pageIndex;}

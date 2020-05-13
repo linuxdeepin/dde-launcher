@@ -181,7 +181,7 @@ private:
     std::map<std::pair<ItemInfo, int>, int> m_notExistIconMap;
     QStringList m_categoryTs;
     QStringList m_categoryIcon;
-    bool m_catchlock = false;
+    bool m_catchlock = true;
 };
 
 #endif // APPSMANAGER_H

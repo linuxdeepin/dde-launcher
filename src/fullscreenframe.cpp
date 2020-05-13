@@ -161,7 +161,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     initConnection();
 
     updateDisplayMode(m_calcUtil->displayMode());
-    updateDockPosition();
+    //updateDockPosition();
 }
 
 FullScreenFrame::~FullScreenFrame()
@@ -184,7 +184,7 @@ int FullScreenFrame::dockPosition()
     return m_appsManager->dockPosition();
 }
 
-void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &category, int nNext)
+void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &category, AppsListModel::scrollType nType)
 {
     m_focusIndex = CategoryTital;
     AppsListModel::AppCategory tempMode = category;
@@ -192,7 +192,7 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
         tempMode = AppsListModel::Internet ;
 
     if (category != m_currentCategory || category == 0) {
-        setCategoryIndex(tempMode, nNext);
+        setCategoryIndex(tempMode, nType);
     }
 
     QWidget *dest = categoryBoxWidget(tempMode);
@@ -210,12 +210,20 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
     m_scrollAnimation->stop();
     m_scrollAnimation->setStartValue(m_appsArea->horizontalScrollBar()->value());
     m_scrollAnimation->setEndValue(endValue);
-    m_scrollAnimation->start();
+
+    if(nType ==AppsListModel::ScrollLeft || nType == AppsListModel::ScrollRight  || nType == AppsListModel::NavigationChangeShow)
+        m_scrollAnimation->start();
+    else{
+        QTimer::singleShot(100, this, [ = ] {
+            m_appsArea->horizontalScrollBar()->setValue(endValue);
+        });
+    }
+
 
     emit currentVisibleCategoryChanged(m_currentCategory);
 }
 
-void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category, int nNext)
+void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category, AppsListModel::scrollType nType)
 {
     QWidget *dest = category;
 
@@ -224,7 +232,7 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category, int nNext)
 
     m_currentCategory =  AppsListModel::AppCategory(m_currentBox + 4);
 
-    setCategoryIndex(m_currentCategory, nNext);
+    setCategoryIndex(m_currentCategory, nType);
     dest = categoryBoxWidget(m_currentCategory);
     m_currentBox = m_currentCategory - 4;
 
@@ -240,18 +248,25 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category, int nNext)
     emit currentVisibleCategoryChanged(m_currentCategory);
 }
 
-void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int nNext)
+void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, AppsListModel::scrollType nType)
 {
     bool isScrollLeft = true;
-    if (nNext > 0) isScrollLeft = true;
-    else if (nNext == 0 && category < m_currentCategory)  isScrollLeft = false;
-    else  if (nNext < 0) isScrollLeft = false;
+    if (nType == AppsListModel::ScrollRight) isScrollLeft = true;
+    else  if (nType == AppsListModel::ScrollLeft) isScrollLeft = false;
+    else if (category < m_currentCategory)  isScrollLeft = false;
 
     if (category < AppsListModel::Internet) category = AppsListModel::Internet;
 
     int categoryCount = m_calcUtil->appCategoryCount();
+
+    for (int i = 0; i < categoryCount; i++){
+        if (m_appsManager->appNums(AppsListModel::AppCategory(i+4))) {
+            categoryBoxWidget(AppsListModel::AppCategory(i+4))->setBlurBgVisible(false);
+        }
+    }
+
     for (int type = category, i = 0; i < categoryCount; i++, isScrollLeft ? type++ : type--) {
-        if (nNext != 0) {
+        if (nType != 0) {
             if (type < AppsListModel::Internet && !isScrollLeft)
                 category = AppsListModel::Others;
             else if (type > AppsListModel::Others) {
@@ -278,6 +293,7 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int
         if (m_appsManager->appNums(AppsListModel::AppCategory(type))) {
             m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX, leftBlurBox);
             leftBlurBox->setMaskVisible(true);
+            leftBlurBox->setBlurBgVisible(true);
             leftBlurBox->layout()->itemAt(0)->setAlignment(Qt::AlignRight);
             leftBlurBox->layout()->update();
             m_leftScrollDest = leftBlurBox;
@@ -287,6 +303,7 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int
 
     m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + 1, dest);
     dest->setMaskVisible(false);
+    dest->setBlurBgVisible(true);
     dest->layout()->itemAt(0)->setAlignment(Qt::AlignHCenter);
     dest->layout()->update();
 
@@ -297,6 +314,7 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, int
         if (m_appsManager->appNums(AppsListModel::AppCategory(type))) {
             m_appsHbox->layout()->insertWidget(DLauncher::APPS_AREA_CATEGORY_INDEX + 2, rightBlurBox);
             rightBlurBox->setMaskVisible(true);
+            rightBlurBox->setBlurBgVisible(true);
             rightBlurBox->layout()->itemAt(0)->setAlignment(Qt::AlignLeft);
             rightBlurBox->layout()->update();
             m_rightScrollDest = rightBlurBox;
@@ -342,10 +360,10 @@ void FullScreenFrame::hideTips()
 
 void FullScreenFrame::resizeEvent(QResizeEvent *e)
 {
-    QTimer::singleShot(0, this, [ = ] {
-        updateBackground();
-        updateDockPosition();
-    });
+//    QTimer::singleShot(0, this, [ = ] {
+//        //updateBackground();
+//        //updateDockPosition();
+//    });
 
     QFrame::resizeEvent(e);
 }
@@ -387,7 +405,7 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     XcbMisc::instance()->set_deepin_override(winId());
     // To make sure the window is placed at the right position.
     updateGeometry();
-    updateBackground();
+    //updateBackground();
     updateDockPosition();
 
     // force refresh
@@ -455,26 +473,26 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
                 //快速长距离滑动
                 if (move_diff > DLauncher::MOUSE_MOVE_TO_NEXT * 2) {
                     int targetCategory = prevCategoryModel(prevCategoryModel(m_currentCategory));
-                    scrollToCategory(AppsListModel::AppCategory(targetCategory), -1);
+                    scrollToCategory(AppsListModel::AppCategory(targetCategory), AppsListModel::ScrollLeft);
                 } else {
-                    scrollToCategory(prevCategoryModel(m_currentCategory), -1);
+                    scrollToCategory(prevCategoryModel(m_currentCategory), AppsListModel::ScrollLeft);
                 }
             } else {
                 if (move_diff < -DLauncher::MOUSE_MOVE_TO_NEXT * 2) {
                     int targetCategory = nextCategoryModel(nextCategoryModel(m_currentCategory));
-                    scrollToCategory(AppsListModel::AppCategory(targetCategory), 1);
+                    scrollToCategory(AppsListModel::AppCategory(targetCategory), AppsListModel::ScrollRight);
                 } else {
-                    scrollToCategory(nextCategoryModel(m_currentCategory), 1);
+                    scrollToCategory(nextCategoryModel(m_currentCategory), AppsListModel::ScrollRight);
                 }
             }
         } else {
 
             if (move_diff > DLauncher::MOUSE_MOVE_TO_NEXT) {
-                scrollToCategory(prevCategoryModel(m_currentCategory), -1);
+                scrollToCategory(prevCategoryModel(m_currentCategory), AppsListModel::ScrollLeft);
             } else if (move_diff < -DLauncher::MOUSE_MOVE_TO_NEXT) {
-                scrollToCategory(nextCategoryModel(m_currentCategory), 1);
+                scrollToCategory(nextCategoryModel(m_currentCategory), AppsListModel::ScrollRight);
             } else {
-                scrollToCategory((m_currentCategory), move_diff > 0 ? 1 : -1);
+                scrollToCategory((m_currentCategory), move_diff > 0 ? AppsListModel::ScrollRight :AppsListModel::ScrollLeft);
             }
         }
     }
@@ -485,14 +503,14 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
 {
     if (m_displayMode == GROUP_BY_CATEGORY) {
         if (m_scrollAnimation->state() == m_scrollAnimation->Running) return;
-        int nNext = 0;
+        AppsListModel::scrollType nType;
         static int  wheelTime = 0;
         if (e->angleDelta().y() < 0 ||  e-> angleDelta().x() < 0) {
             wheelTime++;
-            nNext = 1;
+            nType = AppsListModel::ScrollRight;
         } else {
             wheelTime--;
-            nNext = -1;
+            nType = AppsListModel::ScrollLeft;
         }
 
         if (wheelTime >= DLauncher::WHOOLTIME_TO_SCROOL || wheelTime <= -DLauncher::WHOOLTIME_TO_SCROOL) {
@@ -523,7 +541,7 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
                 }
             }
 
-            scrollToBlurBoxWidget(m_BoxWidget[m_currentBox], nNext);
+            scrollToBlurBoxWidget(m_BoxWidget[m_currentBox], nType);
             wheelTime = 0;
         }
         return;
@@ -826,7 +844,6 @@ void FullScreenFrame::showLauncher()
     m_appItemDelegate->setCurrentIndex(QModelIndex());
     m_searchWidget->categoryBtn()->clearFocus();
     setFixedSize(qApp->primaryScreen()->geometry().size());
-    updateDockPosition();
     show();
 }
 
@@ -886,11 +903,11 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         switch (key) {
         case Qt::Key_Backtab:
         case Qt::Key_Left: {
-            scrollToCategory(prevCategoryModel(m_currentCategory), -1);
+            scrollToCategory(prevCategoryModel(m_currentCategory), AppsListModel::ScrollLeft);
             return;
         }
         case Qt::Key_Right: {
-            scrollToCategory(nextCategoryModel(m_currentCategory), 1);
+            scrollToCategory(nextCategoryModel(m_currentCategory), AppsListModel::ScrollRight);
             return;
         }
         case Qt::Key_Down: {
@@ -1165,6 +1182,8 @@ void FullScreenFrame::reflashPageView(AppsListModel::AppCategory category)
 
 void FullScreenFrame::primaryScreenChanged()
 {
+    updateBackground();
+    updateBlurBackground();
     setFixedSize(qApp->primaryScreen()->geometry().size());
     updateDockPosition();
 }
@@ -1297,7 +1316,7 @@ void FullScreenFrame::updateDockPosition()
         m_searchWidget->setRightSpacing(0);
         break;
     case DOCK_POS_BOTTOM:
-        bottomMargin += dockGeometry.height();
+        bottomMargin += dockGeometry.height()/qApp->devicePixelRatio();
         m_bottomSpacing->setFixedHeight(bottomMargin);
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(0);
@@ -1429,8 +1448,10 @@ void FullScreenFrame::timeOutUpdateAppsArea()
             timeOutUpdateAppsArea();
         }else{
             m_currentBlurBoxWidgetX = -1;
-            scrollToCategory(m_currentCategory);
-            m_focusIndex = CategoryChangeBtn;
+            if (m_scrollAnimation->state() != m_scrollAnimation->Running){
+                scrollToCategory(m_currentCategory,AppsListModel::CategoryChangeShow);
+                m_focusIndex = CategoryChangeBtn;
+            }
         }
     });
 }
@@ -1539,7 +1560,9 @@ void FullScreenFrame::layoutChanged()
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
         m_appsArea->horizontalScrollBar()->setValue(0);
     } else {
-        scrollToCategory(m_currentCategory);
+        if (m_scrollAnimation->state() != m_scrollAnimation->Running){
+            scrollToCategory(m_currentCategory,AppsListModel::WidghtSizeChangeShow);
+        }
     }
 }
 

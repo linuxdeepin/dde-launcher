@@ -82,7 +82,7 @@ void BlurBoxWidget::updateBackBlurPos(QPoint p)
 
 void BlurBoxWidget::updateBackgroundImage(const QPixmap &img)
 {
-    m_blurGroup->setSourceImage(img.toImage(),40);
+    m_blurGroup->setSourceImage(img.toImage(),0);
 }
 
 void BlurBoxWidget::mousePressEvent(QMouseEvent *e)
@@ -95,17 +95,17 @@ void BlurBoxWidget::mousePressEvent(QMouseEvent *e)
 void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton && e->pos() == mousePos) {
-        int nNext = 0;
+        AppsListModel::scrollType nType = AppsListModel::FirstShow;
 
         if (m_calcUtil->getScreenSize().width() * 3 / 4 < e->globalX()) {
-            nNext = 1;
+            nType = AppsListModel::ScrollRight;
         } else if (m_calcUtil->getScreenSize().width() / 4 > e->globalX()){
-            nNext = -1;
+            nType = AppsListModel::ScrollLeft;
         } else {
             emit hideLauncher();
             return;
         }
-        emit maskClick(m_category, nNext);
+        emit maskClick(m_category, nType);
     }
 }
 
@@ -125,12 +125,16 @@ void BlurBoxWidget::setDataDelegate(QAbstractItemDelegate *delegate)
     m_categoryMultiPagesView->updatePageCount(m_category);
 }
 
+void BlurBoxWidget::setBlurBgVisible(bool visible)
+{
+    m_blurBackground->setVisible(visible);
+}
+
 void BlurBoxWidget::setMaskVisible(bool visible)
 {
     m_maskLayer->setVisible(visible);
     double opacity = 0.3;
     visible? opacity= 0.3:opacity= 0.99;
-
     m_titleOpacityEffect->setOpacity(opacity);
     m_pagesOpacityEffect->setOpacity(opacity);
 }

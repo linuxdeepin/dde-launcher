@@ -833,6 +833,7 @@ void WindowedFrame::adjustPosition()
         }
     }
 
+    qDebug() << "currentWindowedFrame Position:"<< p;
     initAnchoredCornor();
     move(p);
 }

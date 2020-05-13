@@ -85,12 +85,12 @@ signals:
     void scrollChanged(const AppsListModel::AppCategory &category);
 
 public slots:
-    void scrollToCategory(const AppsListModel::AppCategory &category, int nNext = 0);
-    void scrollToBlurBoxWidget(BlurBoxWidget *category,int nNext = 0);
+    void scrollToCategory(const AppsListModel::AppCategory &category, AppsListModel::scrollType type = AppsListModel::FirstShow);
+    void scrollToBlurBoxWidget(BlurBoxWidget *category,AppsListModel::scrollType type = AppsListModel::FirstShow);
     void clickToCategory(const QModelIndex &index);
     void showTips(const QString &tips);
     void hideTips();
-    void setCategoryIndex(AppsListModel::AppCategory &category, int nNext = 0);
+    void setCategoryIndex(AppsListModel::AppCategory &category,AppsListModel::scrollType type = AppsListModel::FirstShow);
     void addViewEvent(AppGridView *pView);
 protected:
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;

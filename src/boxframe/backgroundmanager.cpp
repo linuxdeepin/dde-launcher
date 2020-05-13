@@ -38,6 +38,7 @@ BackgroundManager::BackgroundManager(QObject *parent)
     , m_currentWorkspace(-1)
     , m_wmInter(new wm("com.deepin.wm", "/com/deepin/wm", QDBusConnection::sessionBus(), this))
     , m_imageEffectInter(new ImageEffectInter("com.deepin.daemon.ImageEffect", "/com/deepin/daemon/ImageEffect", QDBusConnection::systemBus(), this))
+    , m_imageblur(new ImageEffeblur("com.deepin.daemon.ImageEffect", "/com/deepin/daemon/ImageBlur", QDBusConnection::systemBus(), this))
     , m_appearanceInter(new AppearanceInter("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
 {
     m_appearanceInter->setSync(false, false);
@@ -58,7 +59,9 @@ void BackgroundManager::updateBackgrounds()
 
     QString filePath = QFile::exists(path) ? path : DefaultWallpaper;
 
+    m_blurBackground = m_imageblur->Get( filePath);
     m_background = m_imageEffectInter->Get("", filePath);
 
     emit currentWorkspaceBackgroundChanged(m_background);
+    emit currentWorkspaceBlurBackgroundChanged(m_blurBackground);
 }

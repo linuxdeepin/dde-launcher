@@ -55,11 +55,11 @@ static constexpr int USER_SORT_UNIT_TIME = 3600; // 1 hours
 
 int perfectIconSize(const int size)
 {
-    const int s = 8;
-    const int l[s] = { 16, 24, 32, 48, 64, 96, 128, 256 };
+    const int s = 6;
+    const int l[s] = { 16, 32, 64, 96, 128, 256 };
 
     for (int i(0); i != s; ++i)
-        if (size < l[i])
+        if (size <= l[i])
             return l[i];
 
     return 256;
@@ -131,6 +131,9 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
         pixmap.setDevicePixelRatio(ratio);
     }
 
+    QPair<QString, int> tmpKey { itemInfo.m_iconKey, s};
+    if(m_iconCache[tmpKey].isNull())
+        m_iconCache[tmpKey] = pixmap;
     return pixmap;
 }
 
@@ -596,8 +599,9 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
 
 
     }
-//    const QPixmap& pixmap = getThemeIcon(info, size);
-//    m_iconCache[tmpKey] = pixmap;
+    const QPixmap& pixmap = getThemeIcon(info, size);
+    if(m_iconCache[tmpKey].isNull())
+        m_iconCache[tmpKey] = pixmap;
 
     return QPixmap();
 }
@@ -988,15 +992,17 @@ void AppsManager::pushPixmap()
 
 void AppsManager::pushPixmap(const ItemInfo &itemInfo)
 {
-    const int s = 8;
-    const int l[s] = { 16, 24, 32, 48, 64, 96, 128, 256 };
+    const int s = 6;
+    const int l[s] = { 16, 32, 64, 96, 128, 256 };
 
     m_catchlock = true;
     for (int i = 0; i < s; i++) {
-        const QPixmap &pixmap = getThemeIcon(itemInfo, l[i]);
-        if (!pixmap.isNull()) {
-            QPair<QString, int> tmpKey { itemInfo.m_iconKey, l[i]};
-            m_iconCache[tmpKey] = pixmap;
+        QPair<QString, int> tmpKey { itemInfo.m_iconKey, l[i]};
+        if(m_iconCache[tmpKey].isNull()){
+            const QPixmap &pixmap = getThemeIcon(itemInfo, l[i]);
+            if (!pixmap.isNull()) {
+                m_iconCache[tmpKey] = pixmap;
+            }
         }
     }
     m_catchlock = false;

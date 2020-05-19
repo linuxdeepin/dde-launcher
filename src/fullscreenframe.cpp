@@ -590,6 +590,7 @@ void FullScreenFrame::inputMethodEvent(QInputMethodEvent *e)
     if (!e->commitString().isEmpty()) {
         m_searchWidget->edit()->lineEdit()->setText(e->commitString());
         m_searchWidget->edit()->lineEdit()->setFocus();
+        m_focusIndex =  SearchEdit;
     }
 
     QWidget::inputMethodEvent(e);
@@ -1060,11 +1061,10 @@ void FullScreenFrame::appendToSearchEdit(const char ch)
 
 void FullScreenFrame::launchCurrentApp()
 {
-
     if (m_currentFocusIndex == Category) {
         emit m_searchWidget->categoryBtn()->clicked();
     }
-    if (m_searchWidget->categoryBtn()->hasFocus() ||  m_focusIndex == CategoryChangeBtn) {
+    if (m_searchWidget->edit()->lineEdit()->text().isEmpty() && ( m_searchWidget->categoryBtn()->hasFocus() ||  m_focusIndex == CategoryChangeBtn)) {
         QMouseEvent btnPress(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
         QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnPress);
         QMouseEvent btnRelease(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
@@ -1354,7 +1354,6 @@ void FullScreenFrame::updateDockPosition()
 
     int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? m_calcUtil->getScreenSize().height() *0.064815 : 0;
 
-    m_searchWidget->updateSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
     m_navigationWidget->updateSize();
 
     m_topSpacing->setFixedHeight(30);

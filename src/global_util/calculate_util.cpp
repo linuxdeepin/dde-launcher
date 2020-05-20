@@ -167,8 +167,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     const int nRowSpace = int(double(h - calc_item_width * rows) / (rows * 2) - 0.5);
     int nSpace = qMin(calc_spacing, nRowSpace);
     m_appMarginLeft = (containerSize.width() - calc_item_width * columns - nSpace * columns * 2) / 2;
-    m_appMarginTop = (h - calc_item_width * rows - nSpace * rows * 2);
-
+    m_appMarginTop = (h - calc_item_width * rows - nSpace * rows * 2)/2;
 
     calculateTextSize(screenWidth);
 
@@ -200,3 +199,4 @@ void CalculateUtil::calculateTextSize(const int screenWidth)
         m_titleTextSize = 38;
     }
 }
+

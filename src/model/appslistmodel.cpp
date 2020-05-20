@@ -55,11 +55,9 @@ static QMap<int, AppsListModel::AppCategory> CateGoryMap {
 const QStringList sysHoldPackages()
 {
     const QSettings settings("/etc/deepin-installer.conf", QSettings::IniFormat);
-    const auto holds_list = settings.value("dde_launcher_hold_packages").toStringList();
+    auto holds_list = settings.value("dde_launcher_hold_packages").toStringList();
 
-    if (holds_list.isEmpty() ||
-            (holds_list.size() == 1 && holds_list.first().isEmpty()))
-        return QStringList() << "dde-control-center"
+    holds_list<< "dde-control-center"
                << "dde-computer"
                << "dde-trash"
                << "dde-file-manager"

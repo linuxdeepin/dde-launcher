@@ -626,7 +626,6 @@ void FullScreenFrame::initUI()
     m_appsArea->viewport()->installEventFilter(this);
     m_appsArea->installEventFilter(this);
 
-    m_searchWidget->edit()->lineEdit()->installEventFilter(m_eventFilter);
     m_searchWidget->categoryBtn()->installEventFilter(m_eventFilter);
     m_searchWidget->installEventFilter(m_eventFilter);
     m_appItemDelegate->installEventFilter(m_eventFilter);

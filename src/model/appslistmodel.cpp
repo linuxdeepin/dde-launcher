@@ -57,12 +57,12 @@ const QStringList sysHoldPackages()
     if (!QGSettings::isSchemaInstalled("com.deepin.dde.launcher"))
            return QStringList();
 
-    const QGSettings  gsettings ("com.deepin.dde.launcher","/com/deepin/dde/launcher/");
-    const auto holds_list = gsettings.get("apps-hold-list").toStringList();
+    const QSettings settings("/etc/deepin-installer.conf", QSettings::IniFormat);
+    auto holds_list = settings.value("dde_launcher_hold_packages").toStringList();
 
     if (holds_list.isEmpty() ||
             (holds_list.size() == 1 && holds_list.first().isEmpty()))
-        return QStringList() << "dde-control-center"
+        holds_list << "dde-control-center"
                << "dde-computer"
                << "dde-trash"
                << "dde-file-manager"

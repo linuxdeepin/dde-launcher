@@ -42,8 +42,6 @@
 #include <QDBusArgument>
 #include <QList>
 #include <memory>
-#include <QThread>
-#include <QMutex>
 
 #define DOCK_POS_RIGHT  1
 #define DOCK_POS_BOTTOM 2
@@ -55,13 +53,6 @@
 
 #define MAX_VIEW_NUM    255
 #define CATEGORY_COUNT    11
-
-
-class DrawIconThread : public QThread
-{
-protected:
-    void run();
-};
 
 class CalculateUtil;
 class AppsManager : public QObject
@@ -185,7 +176,6 @@ private:
     std::map<std::pair<ItemInfo, int>, int> m_notExistIconMap;
     QStringList m_categoryTs;
     QStringList m_categoryIcon;
-    bool m_catchlock = true;
 };
 
 #endif // APPSMANAGER_H

@@ -202,13 +202,6 @@ AppsManager::AppsManager(QObject *parent) :
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         refreshAppListIcon();
     });
-
-    DrawIconThread *drawIconThread = new DrawIconThread;
-    drawIconThread->start();
-
-    connect(drawIconThread, &DrawIconThread::finished, this, [ = ] {
-        emit iconLoadFinished();
-    });
 }
 
 void AppsManager::appendSearchResult(const QString &appKey)
@@ -576,9 +569,6 @@ bool AppsManager::appIsEnableScaling(const QString &desktop)
 const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
 {
     QPair<QString, int> tmpKey { info.m_iconKey, size };
-    if (m_catchlock) {
-        return getThemeIcon(info, 128);
-    }
 
     if (m_iconCache.contains(tmpKey) && !m_iconCache[tmpKey].isNull()) {
         return m_iconCache[tmpKey];
@@ -1001,7 +991,6 @@ void AppsManager::pushPixmap(const ItemInfo &itemInfo)
     const int s = 6;
     const int l[s] = { 16, 32, 64, 96, 128, 256 };
 
-    m_catchlock = true;
     for (int i = 0; i < s; i++) {
         QPair<QString, int> tmpKey { itemInfo.m_iconKey, l[i]};
         if (m_iconCache[tmpKey].isNull()) {
@@ -1011,11 +1000,5 @@ void AppsManager::pushPixmap(const ItemInfo &itemInfo)
             }
         }
     }
-    m_catchlock = false;
 }
 
-void DrawIconThread::run()
-{
-    AppsManager *appManager = AppsManager::instance();
-    appManager->pushPixmap();
-}

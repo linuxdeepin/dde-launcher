@@ -79,6 +79,8 @@ private:
     MiniFrameButton *m_pictureBtn;
     MiniFrameButton *m_documentBtn;
     MiniFrameButton *m_downloadBtn;
+    MiniFrameButton *m_recordBtn;
+    MiniFrameButton *m_networkNeighborBtn;
 };
 
 #endif // MINIFRAMERIGHTBAR_H

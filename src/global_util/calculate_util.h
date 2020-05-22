@@ -66,11 +66,14 @@ public:
     bool decreaseIconSize();
     inline void increaseItemSize() { m_appItemSize += 16; }
     inline void decreaseItemSize() { m_appItemSize -= 16; }
+
     inline int navigationHeight() { return 90; }
     QSize getAppBoxSize() ;
     QSize getScreenSize() const;
     double getScreenScaleX();
     double getScreenScaleY();
+
+    QStringList calendarSelectIcon() const;
 public slots:
     void calculateAppLayout(const QSize &containerSize, const int dockPosition);
 

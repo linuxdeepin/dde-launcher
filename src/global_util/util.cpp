@@ -109,3 +109,18 @@ QCursor* loadQCursorFromX11Cursor(const char* theme, const char* cursorName, int
     delete images;
     return cursor;
 }
+
+const QPixmap loadSvg(const QString &fileName, const QSize &size)
+{
+    QPixmap pixmap(size);
+    QSvgRenderer renderer(fileName);
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter;
+    painter.begin(&pixmap);
+    renderer.render(&painter);
+    painter.end();
+
+    return pixmap;
+}
+

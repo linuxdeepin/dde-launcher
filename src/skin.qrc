@@ -209,5 +209,56 @@
         <file>skin/icons/category_video.svg</file>
         <file>skin/icons/category_game.svg</file>
         <file>skin/icons/category_game_dark.svg</file>
+        <file>skin/icons/calendar_week/week5.svg</file>
+        <file>skin/icons/calendar_week/week1.svg</file>
+        <file>skin/icons/calendar_week/week2.svg</file>
+        <file>skin/icons/calendar_week/week3.svg</file>
+        <file>skin/icons/calendar_week/week4.svg</file>
+        <file>skin/icons/calendar_week/week6.svg</file>
+        <file>skin/icons/calendar_week/week7.svg</file>
+        <file>skin/icons/calendar_bg.svg</file>
+        <file>skin/icons/calendar_day/day7.svg</file>
+        <file>skin/icons/calendar_day/day1.svg</file>
+        <file>skin/icons/calendar_day/day2.svg</file>
+        <file>skin/icons/calendar_day/day3.svg</file>
+        <file>skin/icons/calendar_day/day4.svg</file>
+        <file>skin/icons/calendar_day/day5.svg</file>
+        <file>skin/icons/calendar_day/day6.svg</file>
+        <file>skin/icons/calendar_day/day8.svg</file>
+        <file>skin/icons/calendar_day/day9.svg</file>
+        <file>skin/icons/calendar_day/day10.svg</file>
+        <file>skin/icons/calendar_day/day11.svg</file>
+        <file>skin/icons/calendar_day/day12.svg</file>
+        <file>skin/icons/calendar_day/day13.svg</file>
+        <file>skin/icons/calendar_day/day14.svg</file>
+        <file>skin/icons/calendar_day/day15.svg</file>
+        <file>skin/icons/calendar_day/day16.svg</file>
+        <file>skin/icons/calendar_day/day17.svg</file>
+        <file>skin/icons/calendar_day/day18.svg</file>
+        <file>skin/icons/calendar_day/day19.svg</file>
+        <file>skin/icons/calendar_day/day20.svg</file>
+        <file>skin/icons/calendar_day/day21.svg</file>
+        <file>skin/icons/calendar_day/day22.svg</file>
+        <file>skin/icons/calendar_day/day23.svg</file>
+        <file>skin/icons/calendar_day/day24.svg</file>
+        <file>skin/icons/calendar_day/day25.svg</file>
+        <file>skin/icons/calendar_day/day26.svg</file>
+        <file>skin/icons/calendar_day/day27.svg</file>
+        <file>skin/icons/calendar_day/day28.svg</file>
+        <file>skin/icons/calendar_day/day29.svg</file>
+        <file>skin/icons/calendar_day/day30.svg</file>
+        <file>skin/icons/calendar_day/day31.svg</file>
+        <file>skin/icons/calendar_month/month6.svg</file>
+        <file>skin/icons/calendar_month/month1.svg</file>
+        <file>skin/icons/calendar_month/month2.svg</file>
+        <file>skin/icons/calendar_month/month3.svg</file>
+        <file>skin/icons/calendar_month/month4.svg</file>
+        <file>skin/icons/calendar_month/month5.svg</file>
+        <file>skin/icons/calendar_month/month7.svg</file>
+        <file>skin/icons/calendar_month/month8.svg</file>
+        <file>skin/icons/calendar_month/month9.svg</file>
+        <file>skin/icons/calendar_month/month10.svg</file>
+        <file>skin/icons/calendar_month/month11.svg</file>
+        <file>skin/icons/calendar_month/month12.svg</file>
     </qresource>
 </RCC>

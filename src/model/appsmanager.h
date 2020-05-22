@@ -171,6 +171,10 @@ private:
     CalculateUtil *m_calUtil;
     QTimer *m_searchTimer;
     QTimer *m_delayRefreshTimer;
+    QTimer *m_RefreshCalendarIconTimer;
+
+    QDate m_curDate;
+    int m_lastShowDate;
 
     static QPointer<AppsManager> INSTANCE;
     static QGSettings LAUNCHER_SETTINGS;

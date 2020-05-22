@@ -230,6 +230,15 @@ AppsManager::AppsManager(QObject *parent) :
                }
     });
 
+    connect(m_iconRefreshTimer.get(), &QTimer::timeout, this, &AppsManager::refreshNotFoundIcon);
+    connect(m_RefreshCalendarIconTimer, &QTimer::timeout, this,  [=](){
+               m_curDate =QDate::currentDate();
+               if(m_lastShowDate != m_curDate.day()){
+                    delayRefreshData();
+                    m_lastShowDate = m_curDate.day();
+               }
+    });
+
     if(!m_RefreshCalendarIconTimer->isActive()){
         m_RefreshCalendarIconTimer->start();
     }

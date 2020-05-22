@@ -614,38 +614,18 @@ bool AppsManager::appIsEnableScaling(const QString &desktop)
 
 const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
 {
-    QPair<QString, int> tmpKey { info.m_iconKey, size };
+    const int s = perfectIconSize(size);
+    QPair<QString, int> tmpKey { info.m_iconKey, s };
 
     if (m_iconCache.contains(tmpKey) && !m_iconCache[tmpKey].isNull()) {
         return m_iconCache[tmpKey];
     } else {
-        int fitSize = qBound(16, size, 256);
-        do {
-            QPair<QString, int> tmp1 { info.m_iconKey, fitSize };
-            if (m_iconCache.contains(tmp1) && !m_iconCache[tmp1].isNull()) {
-                return m_iconCache[tmp1];
-            }
-
-            fitSize += 1;
-        } while (fitSize < 257);
-
-        fitSize = qBound(16, size, 256);
-        do {
-            QPair<QString, int> tmp1 { info.m_iconKey, fitSize };
-            if (m_iconCache.contains(tmp1) && !m_iconCache[tmp1].isNull()) {
-                return m_iconCache[tmp1];
-            }
-
-            fitSize -= 1;
-        } while (fitSize > 15);
-
-
+        const QPixmap &pixmap = getThemeIcon(info, size);
+        if (m_iconCache[tmpKey].isNull()){
+            m_iconCache[tmpKey] = pixmap;
+        }
+        return pixmap;
     }
-    const QPixmap &pixmap = getThemeIcon(info, size);
-    if (m_iconCache[tmpKey].isNull())
-        m_iconCache[tmpKey] = pixmap;
-
-    return QPixmap();
 }
 
 void AppsManager::refreshCategoryInfoList()

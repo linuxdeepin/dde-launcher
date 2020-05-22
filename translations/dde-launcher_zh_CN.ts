@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>您确定要卸载 %1 吗？</translation>
+        <translation type="vanished">您确定要卸载 %1 吗？</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation>您确定要卸载吗？</translation>
     </message>
 </context>
 <context>
@@ -81,7 +87,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>禁用屏幕缩放</translation>
+        <translation type="vanished">禁用屏幕缩放</translation>
     </message>
     <message>
         <source>Open</source>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>计算机</translation>
+        <translation type="vanished">计算机</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>音乐</translation>
+        <translation type="vanished">音乐</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>下载</translation>
+        <translation type="vanished">下载</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>帮助手册</translation>
+        <translation type="vanished">帮助手册</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>设置</translation>
+        <translation type="vanished">设置</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>视频</translation>
+        <translation type="vanished">视频</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>图片</translation>
+        <translation type="vanished">图片</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>文档</translation>
+        <translation type="vanished">文档</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>电源</translation>
+        <translation type="vanished">电源</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>您确定要卸载 %1 吗？</translation>
+        <translation type="vanished">您确定要卸载 %1 吗？</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation>您确定要卸载吗？</translation>
     </message>
 </context>
 </TS>

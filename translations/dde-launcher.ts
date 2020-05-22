@@ -63,7 +63,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
+        <source>Are you sure you want to uninstall?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -79,10 +79,6 @@
     </message>
     <message>
         <source>Uninstall</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disable display scaling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -264,45 +260,6 @@
     </message>
 </context>
 <context>
-    <name>MiniFrameRightBar</name>
-    <message>
-        <source>Computer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Power</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
@@ -331,7 +288,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
+        <source>Are you sure you want to uninstall?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

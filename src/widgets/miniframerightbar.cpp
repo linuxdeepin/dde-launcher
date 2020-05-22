@@ -62,6 +62,10 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     m_documentBtn->setFixedSize(m_size);
     m_downloadBtn = new MiniFrameButton(tr(""));
     m_downloadBtn->setFixedSize(m_size);
+    m_recordBtn = new MiniFrameButton(tr(""));
+    m_recordBtn->setFixedSize(m_size);
+    m_networkNeighborBtn = new MiniFrameButton(tr(""));
+    m_networkNeighborBtn->setFixedSize(m_size);
     m_settingsBtn = new MiniFrameButton(tr(""));
     m_settingsBtn->setFixedSize(m_size);
     m_powerBtn = new MiniFrameButton(tr(""));
@@ -75,6 +79,8 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     m_btns[index++] = m_musicBtn;
     m_btns[index++] = m_videoBtn;
     m_btns[index++] =m_downloadBtn;
+    m_btns[index++] =m_recordBtn;
+    m_btns[index++] =m_networkNeighborBtn;
     m_btns[index++] = m_settingsBtn;
     m_btns[index++] = m_powerBtn;
 
@@ -110,6 +116,8 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     center_layout->addWidget(m_musicBtn, 0, Qt::AlignCenter);
     center_layout->addWidget(m_videoBtn, 0, Qt::AlignCenter);
     center_layout->addWidget(m_downloadBtn, 0, Qt::AlignCenter);
+    center_layout->addWidget(m_recordBtn, 0, Qt::AlignCenter);
+    center_layout->addWidget(m_networkNeighborBtn, 0, Qt::AlignCenter);
 
     QWidget *bottom_widget = new QWidget;
     QVBoxLayout *bottom_layout = new QVBoxLayout;
@@ -128,6 +136,8 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     connect(m_musicBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::MusicLocation); });
     connect(m_pictureBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::PicturesLocation); });
     connect(m_downloadBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DownloadLocation); });
+    connect(m_recordBtn, &QPushButton::clicked, this, [this] { openDirectory("recent:///");  });
+    connect(m_networkNeighborBtn, &QPushButton::clicked, this, [this] { openDirectory("network:///"); });
     connect(m_settingsBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showSettings);
     connect(m_powerBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showShutdown);
     connect(m_avatar, &Avatar::clicked, this, &MiniFrameRightBar::handleAvatarClicked);
@@ -311,6 +321,8 @@ void MiniFrameRightBar::updateIcon()
         m_pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic_dark"));
         m_documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic_dark"));
         m_downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic_dark"));
+        m_recordBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic_dark"));
+        m_networkNeighborBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic_dark"));
     } else {
         m_settingsBtn->setIcon(QIcon(":/widgets/images/setting.svg"));
         m_powerBtn->setIcon(QIcon(":/widgets/images/shutdown.svg"));
@@ -320,6 +332,8 @@ void MiniFrameRightBar::updateIcon()
         m_pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic"));
         m_documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic"));
         m_downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic"));
+        m_recordBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic_dark"));
+        m_networkNeighborBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic_dark"));
     }
 
 }

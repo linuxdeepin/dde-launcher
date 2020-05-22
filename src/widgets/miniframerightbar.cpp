@@ -321,8 +321,8 @@ void MiniFrameRightBar::updateIcon()
         m_pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic_dark"));
         m_documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic_dark"));
         m_downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic_dark"));
-        m_recordBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic_dark"));
-        m_networkNeighborBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic_dark"));
+        m_recordBtn->setIcon(QIcon(":/widgets/images/folder_record_symbolic_dark"));
+        m_networkNeighborBtn->setIcon(QIcon(":/widgets/images/folder_networkNeighbor_symbolic_dark"));
     } else {
         m_settingsBtn->setIcon(QIcon(":/widgets/images/setting.svg"));
         m_powerBtn->setIcon(QIcon(":/widgets/images/shutdown.svg"));
@@ -332,8 +332,8 @@ void MiniFrameRightBar::updateIcon()
         m_pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic"));
         m_documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic"));
         m_downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic"));
-        m_recordBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic_dark"));
-        m_networkNeighborBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic_dark"));
+        m_recordBtn->setIcon(QIcon(":/widgets/images/folder_record_symbolic"));
+        m_networkNeighborBtn->setIcon(QIcon(":/widgets/images/folder_networkNeighbor_symbolic"));
     }
 
 }

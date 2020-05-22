@@ -87,3 +87,16 @@ const QPixmap renderSVG(const QString &path, const QSize &size) {
 
     return pixmap;
 }
+const QPixmap loadSvg(const QString &fileName, const QSize &size)
+{
+    QPixmap pixmap(size);
+    QSvgRenderer renderer(fileName);
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter;
+    painter.begin(&pixmap);
+    renderer.render(&painter);
+    painter.end();
+
+    return pixmap;
+}

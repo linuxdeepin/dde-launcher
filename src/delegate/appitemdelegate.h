@@ -40,6 +40,7 @@ public:
     void setCurrentIndex(const QModelIndex &index);
     const QModelIndex &currentIndex() const {return CurrentIndex;}
 
+
 signals:
     void requestUpdate(const QModelIndex &idx) const;
 

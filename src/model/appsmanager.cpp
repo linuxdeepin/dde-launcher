@@ -160,7 +160,9 @@ AppsManager::AppsManager(QObject *parent) :
     m_iconRefreshTimer(std::make_unique<QTimer>(new QTimer)),
     m_calUtil(CalculateUtil::instance()),
     m_searchTimer(new QTimer(this)),
-    m_delayRefreshTimer(new QTimer(this))
+    m_delayRefreshTimer(new QTimer(this)),
+    m_RefreshCalendarIconTimer(new QTimer(this)),
+    m_lastShowDate(0)
 {
     m_iconRefreshTimer->setInterval(10 * 1000);
     m_iconRefreshTimer->setSingleShot(false);
@@ -178,7 +180,19 @@ AppsManager::AppsManager(QObject *parent) :
             << tr("System")
             << tr("Other");
 
-    refreshAppListIcon();
+    m_categoryIcon
+            << QString(":/icons/skin/icons/internet_normal_22px.svg")
+            << QString(":/icons/skin/icons/chat_normal_22px.svg")
+            << QString(":/icons/skin/icons/music_normal_22px.svg")
+            << QString(":/icons/skin/icons/multimedia_normal_22px.svg")
+            << QString(":/icons/skin/icons/graphics_normal_22px.svg")
+            << QString(":/icons/skin/icons/game_normal_22px.svg")
+            << QString(":/icons/skin/icons/office_normal_22px.svg")
+            << QString(":/icons/skin/icons/reading_normal_22px.svg")
+            << QString(":/icons/skin/icons/development_normal_22px.svg")
+            << QString(":/icons/skin/icons/system_normal_22px.svg")
+            << QString(":/icons/skin/icons/others_normal_22px.svg");
+
     refreshAllList();
     refreshAppAutoStartCache();
 
@@ -186,6 +200,9 @@ AppsManager::AppsManager(QObject *parent) :
     m_searchTimer->setInterval(150);
     m_delayRefreshTimer->setSingleShot(true);
     m_delayRefreshTimer->setInterval(500);
+
+    m_RefreshCalendarIconTimer->setInterval(1000);
+    m_RefreshCalendarIconTimer->setSingleShot(false);
 
     connect(qApp, &DApplication::iconThemeChanged, this, &AppsManager::onIconThemeChanged, Qt::QueuedConnection);
     connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
@@ -198,10 +215,24 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
-//    connect(m_iconRefreshTimer.get(), &QTimer::timeout, this, &AppsManager::refreshNotFoundIcon);
+
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         refreshAppListIcon();
     });
+
+    connect(m_iconRefreshTimer.get(), &QTimer::timeout, this, &AppsManager::refreshNotFoundIcon);
+    connect(m_RefreshCalendarIconTimer, &QTimer::timeout, this,  [=](){
+               m_curDate =QDate::currentDate();
+               if(m_lastShowDate != m_curDate.day()){
+                    delayRefreshData();
+                    m_lastShowDate = m_curDate.day();
+               }
+    });
+
+    if(!m_RefreshCalendarIconTimer->isActive()){
+        m_RefreshCalendarIconTimer->start();
+    }
+
 }
 
 void AppsManager::appendSearchResult(const QString &appKey)

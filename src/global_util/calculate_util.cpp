@@ -78,6 +78,47 @@ bool CalculateUtil::increaseIconSize()
     m_launcherGsettings->set("apps-icon-ratio", ratio);
     return true;
 }
+QStringList CalculateUtil::calendarSelectIcon() const
+{
+    QStringList iconList;
+    iconList.clear();
+    iconList.append(QString(":/icons/skin/icons/calendar_bg.svg"));
+    int month_num = QDate::currentDate().month();
+    switch(month_num)
+    {
+    case 1 ... 12:
+        iconList.append(QString(":/icons/skin/icons/calendar_month/month%1.svg").arg(month_num));
+        break;
+    default:
+        //default , if month is invalid
+        iconList.append(QString(":/icons/skin/icons/calendar_month/month4.svg"));
+        break;
+    }
+    int day_num = QDate::currentDate().day();
+    switch(day_num)
+    {
+    case 1 ... 31:
+        iconList.append(QString(":/icons/skin/icons/calendar_day/day%1.svg").arg(day_num));
+        break;
+    default:
+        //default , if day is invalid
+        iconList.append(QString(":/icons/skin/icons/calendar_day/day23.svg"));
+        break;
+    }
+    int week_num = QDate::currentDate().dayOfWeek();
+    switch(week_num)
+    {
+    case 1 ... 7:
+        iconList.append(QString(":/icons/skin/icons/calendar_week/week%1.svg").arg(week_num));
+        break;
+    default:
+        //default , if week is invalid
+        iconList.append(QString(":/icons/skin/icons/calendar_week/week4.svg"));
+        break;
+    }
+    return iconList;
+}
+
 
 bool CalculateUtil::decreaseIconSize()
 {

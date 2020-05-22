@@ -26,6 +26,7 @@
 
 #include <QAbstractItemDelegate>
 
+class CalculateUtil;
 class AppListDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
@@ -42,6 +43,7 @@ public slots:
 
 private:
     bool m_actived;
+    CalculateUtil *m_calcUtil;
     QPixmap m_blueDotPixmap;
     QPixmap m_autoStartPixmap;
 };

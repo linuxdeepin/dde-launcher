@@ -23,7 +23,9 @@
 
 #include "applistdelegate.h"
 #include "src/model/appslistmodel.h"
+#include "src/global_util/calculate_util.h"
 #include "../global_util/util.h"
+#include "src/dbusinterface/dbusvariant/iteminfo.h"
 
 #include <QPixmap>
 #include <QPainter>
@@ -36,8 +38,8 @@ QT_END_NAMESPACE
 
 AppListDelegate::AppListDelegate(QObject *parent)
     : QAbstractItemDelegate(parent),
-
-      m_actived(false)
+      m_actived(false),
+      m_calcUtil(CalculateUtil::instance())
 {
     m_blueDotPixmap = renderSVG(":/skin/images/new_install_indicator.svg", QSize(10, 10));
     m_autoStartPixmap = renderSVG(":/skin/images/emblem-autostart.svg", QSize(16, 16));
@@ -95,7 +97,41 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     const int iconX = rect.x() + 10;
     const int iconY = rect.y() + (rect.height() - iconPixmap.height() / ratio) / 2;
-    painter->drawPixmap(iconX, iconY, iconPixmap);
+
+    ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
+    if("dde-calendar"==itemInfo.m_key)
+    {
+        //根据不同日期显示不同日历图表
+        int tw = iconSize.width();
+        int th = iconSize.height();
+        int tx = iconX;
+        int ty = iconY;
+
+        QStringList calIconList = m_calcUtil->calendarSelectIcon();
+        auto bg_pmap = loadSvg(calIconList.at(0),iconSize.width());
+        bg_pmap = bg_pmap.scaled(QSize(tw,th),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        bg_pmap.setDevicePixelRatio(ratio);
+        painter->drawPixmap(tx,ty,bg_pmap);
+
+        auto month_pmap = loadSvg(calIconList.at(1),iconSize.width());
+        month_pmap = month_pmap.scaled(QSize(tw/2,th/6),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        month_pmap.setDevicePixelRatio(ratio);
+        painter->drawPixmap(tx+tw/4,ty+th/8,month_pmap);
+
+        auto day_pmap = loadSvg(calIconList.at(2),iconSize.width());
+        day_pmap = day_pmap.scaled(QSize(tw/2,th/2),Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        day_pmap.setDevicePixelRatio(ratio);
+        painter->drawPixmap(tx+tw/4,ty+th/4,day_pmap);
+
+        auto week_pmap = loadSvg(calIconList.at(3),iconSize.width());
+        week_pmap = week_pmap.scaled(QSize(tw/2,th/8),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        week_pmap.setDevicePixelRatio(ratio);
+        painter->drawPixmap(tx+tw/4,ratio==1.0?ty+(th/6)*5-1:ty+(th/6)*4-1,week_pmap);
+
+    }else {
+        painter->drawPixmap(iconX, iconY, iconPixmap);
+    }
+
 
     // draw icon if app is auto startup
     if (index.data(AppsListModel::AppAutoStartRole).toBool()) {
@@ -121,7 +157,6 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, fm.elidedText(appName, Qt::ElideRight, textRect.width()));
 
     // draw category right icon
-
     if (isCategoryList) {
         const QPixmap &pixmap = index.data(AppsListModel::CategoryEnterIconRole).value<QPixmap>();
         painter->drawPixmap(rect.right() - pixmap.width() / ratio,

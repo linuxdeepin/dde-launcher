@@ -63,6 +63,7 @@ public:
     inline void increaseItemSize() { m_appItemSize += 16; }
     inline void decreaseItemSize() { m_appItemSize -= 16; }
 
+    QStringList calendarSelectIcon() const;
 public slots:
     void calculateAppLayout(const QSize &containerSize, const int dockPosition);
 

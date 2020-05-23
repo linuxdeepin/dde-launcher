@@ -148,8 +148,7 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
         Q_EMIT entered(index);
     else
         Q_EMIT entered(QModelIndex());
-
-    if (e->button() != Qt::LeftButton)
+    if (e->buttons() != Qt::LeftButton)
         return;
 
     if (qAbs(pos.x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
@@ -317,8 +316,8 @@ void AppListView::startDrag(const QModelIndex &index)
         return;
 
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
-    if (!listModel || listModel->category() != AppsListModel::All)
-        return;
+    if (!listModel)
+       return;
 
     const QModelIndex &dragIndex = index;
     const QRect index_rect = visualRect(index);

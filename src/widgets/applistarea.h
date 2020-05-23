@@ -41,8 +41,8 @@ signals:
     void decreaseIcon();
 
 protected:
-    void wheelEvent(QWheelEvent *e);
-    void enterEvent(QEvent *e);
+    void wheelEvent(QWheelEvent *e)override;
+    void enterEvent(QEvent *e)override;
     bool eventFilter(QObject *watched, QEvent *e) override;
 
 private:

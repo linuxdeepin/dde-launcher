@@ -541,7 +541,7 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
 
     UNINSTALL_DIALOG_SHOWN = true;
     DTK_WIDGET_NAMESPACE::DDialog unInstallDialog;
-    unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
+    unInstallDialog.setWindowFlags(Qt::WindowStaysOnTopHint | unInstallDialog.windowFlags());
     unInstallDialog.setWindowModality(Qt::WindowModal);
 
     const QString appKey = context.data(AppsListModel::AppKeyRole).toString();

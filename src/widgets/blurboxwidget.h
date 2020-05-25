@@ -38,6 +38,12 @@
 
 DWIDGET_USE_NAMESPACE
 
+enum OperationType {
+    otNone  = 0,
+    otLeft  = 1,
+    otRight = 2
+};
+
 class BlurBoxWidget : public QWidget
 {
     Q_OBJECT
@@ -55,6 +61,7 @@ public:
     void updateBackgroundImage(const QPixmap & img);
 
     void setBlurBgVisible(bool visible);
+    void setOperationType(OperationType operType) { m_operationType = operType;}
 signals:
     void maskClick(AppsListModel::AppCategory m_category, AppsListModel::scrollType nType);
     void hideLauncher();
@@ -77,6 +84,7 @@ private:
     DBlurEffectGroup* m_blurGroup;
     DBlurEffectWidget *m_blurBackground;
     MaskQWidget* m_bg;
+    OperationType m_operationType = otNone;
 };
 
 #endif // BLURBOXWIDGET_H

@@ -97,14 +97,15 @@ void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton && e->pos() == mousePos) {
         AppsListModel::scrollType nType = AppsListModel::FirstShow;
 
-        if (m_calcUtil->getScreenSize().width() * 3 / 4 < e->globalX()) {
-            nType = AppsListModel::ScrollRight;
-        } else if (m_calcUtil->getScreenSize().width() / 4 > e->globalX()){
+        if (m_operationType == otLeft) {
             nType = AppsListModel::ScrollLeft;
+        } else if ( m_operationType == otRight) {
+            nType = AppsListModel::ScrollRight;
         } else {
             emit hideLauncher();
             return;
         }
+
         emit maskClick(m_category, nType);
     }
 }

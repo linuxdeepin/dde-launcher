@@ -141,7 +141,7 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
     setState(NoState);
     blockSignals(false);
 
-    const QModelIndex &index = indexAt(e->pos());
+    const QModelIndex &index = indexAt(m_dragStartPos);
     const QPoint pos = e->pos();
 
     if (index.isValid() && !m_enableDropInside)
@@ -153,7 +153,7 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
 
     if (qAbs(pos.x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
         qAbs(pos.y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
-        m_dragStartPos = e->pos();
+        m_dragStartPos = m_dragStartPos;
         m_dragStartRow = index.row();
         return startDrag(index);
     }

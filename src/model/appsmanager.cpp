@@ -837,6 +837,17 @@ void AppsManager::refreshNotFoundIcon() {
     }
 }
 
+void AppsManager::removeAppIconCache(const ItemInfo &appInfo)
+{
+    for (auto item = m_iconCache.begin(); item != m_iconCache.end();) {
+        if (item.key().first == appInfo.m_key) {
+            item = m_iconCache.erase(item);
+        } else {
+            ++item;
+        }
+    }
+}
+
 void AppsManager::onIconThemeChanged()
 {
     m_iconCache.clear();
@@ -879,11 +890,10 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
         Q_ASSERT(m_allAppInfoList.contains(appInfo));
 
         // update item info
-        for (auto &item : m_allAppInfoList)
-        {
-            if (item == appInfo)
-            {
+        for (ItemInfo &item : m_allAppInfoList) {
+            if (item == appInfo) {
                 item.updateInfo(appInfo);
+                removeAppIconCache(item);
                 break;
             }
         }

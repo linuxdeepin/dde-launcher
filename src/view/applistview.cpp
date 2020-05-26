@@ -141,21 +141,25 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
     setState(NoState);
     blockSignals(false);
 
-    const QModelIndex &index = indexAt(m_dragStartPos);
+    const QModelIndex &index = indexAt(e->pos());
     const QPoint pos = e->pos();
 
     if (index.isValid() && !m_enableDropInside)
         Q_EMIT entered(index);
     else
         Q_EMIT entered(QModelIndex());
-    if (e->buttons() != Qt::LeftButton)
+    const bool isCategoryList = qobject_cast<AppsListModel*>(model())->category() == AppsListModel::Category;
+    if (e->buttons() != Qt::LeftButton || isCategoryList)
         return;
+
+
 
     if (qAbs(pos.x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
         qAbs(pos.y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
         m_dragStartPos = m_dragStartPos;
-        m_dragStartRow = index.row();
-        return startDrag(index);
+        auto dragIndex = indexAt(m_dragStartPos);
+        m_dragStartRow = indexAt(m_dragStartPos).row();
+        return startDrag(dragIndex);
     }
 
     QListView::mouseMoveEvent(e);

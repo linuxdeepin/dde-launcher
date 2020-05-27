@@ -47,7 +47,7 @@
     </message>
     <message>
         <source>Other</source>
-        <translation>Khác</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Bạn có chắc chắn muốn gỡ cài đặt %1 không?</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -81,8 +81,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation>Vô hiệu hóa tỷ lệ hiển thị
-</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Open</source>
@@ -90,23 +89,23 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation>Gửi ra Desktop</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>Gửi ra Dock</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation>Xóa khỏi trình khởi động cùng hệ thống</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation>Thêm vào trình khởi động cùng hệ thống</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation>Sử dụng proxy</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -157,14 +156,6 @@
     </message>
     <message>
         <source>Others</source>
-        <translation>Khác</translation>
-    </message>
-    <message>
-        <source>Games</source>
-        <translation>Trò chơi</translation>
-    </message>
-    <message>
-        <source>Other</source>
         <translation>Khác</translation>
     </message>
 </context>
@@ -308,20 +299,12 @@
         <source>Power</source>
         <translation>Năng lượng</translation>
     </message>
-    <message>
-        <source>Recent</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Computers in LAN</source>
-        <translation type="unfinished"/>
-    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation>Tất cả các danh mục</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Back</source>
@@ -347,8 +330,7 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Bạn có chắc chắn muốn gỡ cài đặt %1 không?
-</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

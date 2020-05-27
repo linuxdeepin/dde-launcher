@@ -93,19 +93,19 @@
     </message>
     <message>
         <source>Send to dock</source>
-        <translation>Enviar para Dock</translation>
+        <translation>Enviar para a dock</translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation>Remover da Inicialização</translation>
+        <translation>Remover da inicialização</translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation>Adicionar à Inicialização</translation>
+        <translation>Adicionar para a inicialização</translation>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation>Usar Proxy</translation>
+        <translation>Usar um proxy</translation>
     </message>
 </context>
 <context>
@@ -269,7 +269,7 @@
     </message>
     <message>
         <source>Music</source>
-        <translation>Músicas</translation>
+        <translation>Música</translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -298,14 +298,6 @@
     <message>
         <source>Power</source>
         <translation>Sair</translation>
-    </message>
-    <message>
-        <source>Recent</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Computers in LAN</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>

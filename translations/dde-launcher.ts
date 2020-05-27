@@ -305,22 +305,6 @@
         <source>Power</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Record</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>NetworkNeighbor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Recent</source>
-        <translation>Recent</translation>
-    </message>
-    <message>
-        <source>Computers in LAN</source>
-        <translation>Computers in LAN</translation>
-    </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>

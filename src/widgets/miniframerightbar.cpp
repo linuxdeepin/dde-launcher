@@ -62,8 +62,6 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     MiniFrameButton *pictureBtn   = new MiniFrameButton(tr("Pictures"));
     MiniFrameButton *documentBtn  = new MiniFrameButton(tr("Documents"));
     MiniFrameButton *downloadBtn  = new MiniFrameButton(tr("Downloads"));
-    MiniFrameButton *recordBtn = new MiniFrameButton(tr("Recent"));
-    MiniFrameButton *networkNeighborBtn  = new MiniFrameButton(tr("Computers in LAN"));
     MiniFrameButton *manualBtn    = new MiniFrameButton(tr("Manual"));
     m_settingsBtn                 = new MiniFrameButton(tr("Settings"));
     m_powerBtn                    = new MiniFrameButton(tr("Power"));
@@ -77,8 +75,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     m_btns[index++] = pictureBtn;
     m_btns[index++] = documentBtn;
     m_btns[index++] = downloadBtn;
-    m_btns[index++] = recordBtn;
-    m_btns[index++] = networkNeighborBtn;
+
     if (hasManual) {
         m_btns[index++] = manualBtn;
     }
@@ -137,8 +134,6 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     center_layout->addWidget(pictureBtn);
     center_layout->addWidget(documentBtn);
     center_layout->addWidget(downloadBtn);
-    center_layout->addWidget(recordBtn);
-    center_layout->addWidget(networkNeighborBtn);
     center_layout->addWidget(manualBtn);
 
     QWidget *bottom_widget = new QWidget;
@@ -168,8 +163,6 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     connect(musicBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::MusicLocation); });
     connect(pictureBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::PicturesLocation); });
     connect(downloadBtn, &QPushButton::clicked, this, [this] { openStandardDirectory(QStandardPaths::DownloadLocation); });
-     connect(recordBtn, &QPushButton::clicked, this, [this] { openDirectory("recent:///");  });
-      connect(networkNeighborBtn, &QPushButton::clicked, this, [this] { openDirectory("network:///"); });
     connect(manualBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showManual);
     connect(m_settingsBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showSettings);
     connect(m_powerBtn, &QPushButton::clicked, this, &MiniFrameRightBar::showShutdown);

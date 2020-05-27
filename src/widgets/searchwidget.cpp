@@ -30,6 +30,8 @@
 #include <QKeyEvent>
 #include <dimagebutton.h>
 #include <DDBusSender>
+#include <DFloatingButton>
+#include <DSearchEdit>
 
 #define BTN_WIDTH   40
 #define BTN_HEIGHT  40
@@ -58,7 +60,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_toggleModeBtn->setFixedSize(QSize(BTN_WIDTH, BTN_HEIGHT));
     m_toggleModeBtn->setBackgroundRole(DPalette::Button);
 
-    m_searchEdit = new SearchLineEdit(this);
+    m_searchEdit = new DSearchEdit(this);
     m_searchEdit->setAccessibleName("search-edit");
     m_searchEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_searchEdit->setFixedWidth(290);
@@ -79,7 +81,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
 
     setLayout(mainLayout);
 
-    connect(m_searchEdit, &SearchLineEdit::textChanged, [this] {
+    connect(m_searchEdit, &DSearchEdit::textChanged, [this] {
         emit searchTextChanged(m_searchEdit->text());
     });
     connect(m_toggleModeBtn, &DFloatingButton::clicked, this, [=] {
@@ -107,15 +109,19 @@ SearchWidget::SearchWidget(QWidget *parent) :
     connect(m_toggleCategoryBtn, &DFloatingButton::clicked, this, &SearchWidget::toggleMode);
 }
 
-QLineEdit *SearchWidget::edit()
+DSearchEdit *SearchWidget::edit()
 {
     return m_searchEdit;
 }
 
+DFloatingButton *SearchWidget::categoryBtn()
+{
+    return m_toggleCategoryBtn;
+}
+
 void SearchWidget::clearSearchContent()
 {
-    m_searchEdit->normalMode();
-    m_searchEdit->moveFloatWidget();
+    m_searchEdit->clearEdit();
 }
 
 void SearchWidget::setLeftSpacing(int spacing)

@@ -30,7 +30,6 @@
 #include "model/appsmanager.h"
 #include "worker/menuworker.h"
 #include "delegate/applistdelegate.h"
-#include "widgets/searchlineedit.h"
 #include "widgets/miniframerightbar.h"
 #include "widgets/miniframeswitchbtn.h"
 #include "global_util/constants.h"
@@ -44,9 +43,11 @@
 #include <QLabel>
 #include <memory>
 
-DWIDGET_USE_NAMESPACE
-
 using Appearance = com::deepin::daemon::Appearance;
+
+DWIDGET_BEGIN_NAMESPACE
+class DSearchEdit;
+DWIDGET_END_NAMESPACE
 
 class WindowedFrame : public DBlurEffectWidget, public LauncherInterface
 {
@@ -138,7 +139,7 @@ private:
     AppsListModel *m_appsModel;
     AppsListModel *m_usedModel;
     AppsListModel *m_searchModel;
-    SearchLineEdit *m_searchWidget;
+    DSearchEdit *m_searchWidget;
     QWidget *m_leftWidget;
     MiniFrameRightBar *m_rightBar;
     MiniFrameSwitchBtn *m_switchBtn;

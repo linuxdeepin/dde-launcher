@@ -206,6 +206,11 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
     const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  m_padding * 2 - 20) / 2 ;
 
     m_scrollDest = dest;
+
+    BlurBoxWidget* blurbox = qobject_cast<BlurBoxWidget*>(m_scrollDest);
+    if (blurbox)
+        blurbox->setOperationType(otNone);
+
     int endValue = dest->x() - temp;
     m_scrollAnimation->stop();
     m_scrollAnimation->setStartValue(m_appsArea->horizontalScrollBar()->value());
@@ -238,7 +243,11 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category, AppsListMod
 
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
     const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  m_padding * 2 - 20) / 2 ;
+
     m_scrollDest = dest;
+    BlurBoxWidget* blurbox = qobject_cast<BlurBoxWidget*>(m_scrollDest);
+    if (blurbox)
+       blurbox->setOperationType(otNone);
 
     m_scrollAnimation->stop();
     m_scrollAnimation->setStartValue(m_appsArea->horizontalScrollBar()->value());
@@ -297,6 +306,7 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, App
             leftBlurBox->layout()->itemAt(0)->setAlignment(Qt::AlignRight);
             leftBlurBox->layout()->update();
             m_leftScrollDest = leftBlurBox;
+            m_leftScrollDest->setOperationType(otLeft);
             break;
         }
     }
@@ -318,6 +328,7 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, App
             rightBlurBox->layout()->itemAt(0)->setAlignment(Qt::AlignLeft);
             rightBlurBox->layout()->update();
             m_rightScrollDest = rightBlurBox;
+            m_rightScrollDest->setOperationType(otRight);
             break;
         }
     }
@@ -1143,10 +1154,6 @@ void FullScreenFrame::ensureScrollToDest(const QVariant &value)
     if(m_scrollDest == nullptr) return;
     BlurBoxWidget* blurbox = qobject_cast<BlurBoxWidget*>(m_scrollDest);
     if(blurbox && m_leftScrollDest && m_rightScrollDest) {
-        blurbox->setOperationType(otNone);
-        m_leftScrollDest->setOperationType(otLeft);
-        m_rightScrollDest->setOperationType(otRight);
-
         blurbox->updateBackBlurPos(m_contentFrame->mapTo(window(), blurbox->pos())+QPoint(190*m_calcUtil->getScreenScaleX(),0));
         m_leftScrollDest->updateBackBlurPos(QPoint(m_leftScrollDest->visibleRegion().boundingRect().width() - m_leftScrollDest->width() ,m_contentFrame->mapTo(window(),m_leftScrollDest->pos()).y()));
         m_rightScrollDest->updateBackBlurPos(m_contentFrame->mapTo(window(),m_rightScrollDest->pos())+QPoint(190*m_calcUtil->getScreenScaleX(),0));

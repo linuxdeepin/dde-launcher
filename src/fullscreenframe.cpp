@@ -414,7 +414,7 @@ void FullScreenFrame::initUI()
 
     //    m_othersView->installEventFilter(this);
     //    m_navigationWidget->installEventFilter(this);
-    m_searchWidget->edit()->installEventFilter(m_eventFilter);
+    m_searchWidget->edit()->lineEdit()->installEventFilter(m_eventFilter);
     m_searchWidget->categoryBtn()->installEventFilter(m_eventFilter);
     //    qApp->installEventFilter(this);
 

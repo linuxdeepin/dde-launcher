@@ -848,6 +848,16 @@ void AppsManager::removeAppIconCache(const ItemInfo &appInfo)
     }
 }
 
+void AppsManager::updateItemInfo(const ItemInfo &appInfo, ItemInfoList &itemList)
+{
+    for (ItemInfo& item : itemList) {
+        if (item == appInfo) {
+            item.updateInfo(appInfo);
+            return;
+        }
+    }
+}
+
 void AppsManager::onIconThemeChanged()
 {
     m_iconCache.clear();
@@ -876,27 +886,19 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
 
     if (operation == "created") {
         ItemInfo info = appInfo;
-
         m_allAppInfoList.append(info);
         m_usedSortedList.append(info);
         m_userSortedList.append(info);
     } else if (operation == "deleted") {
-
         m_allAppInfoList.removeOne(appInfo);
         m_usedSortedList.removeOne(appInfo);
         m_userSortedList.removeOne(appInfo);
     } else if (operation == "updated") {
-
-        Q_ASSERT(m_allAppInfoList.contains(appInfo));
-
-        // update item info
-        for (ItemInfo &item : m_allAppInfoList) {
-            if (item == appInfo) {
-                item.updateInfo(appInfo);
-                removeAppIconCache(item);
-                break;
-            }
-        }
+        removeAppIconCache(appInfo);
+        updateItemInfo(appInfo, m_allAppInfoList);
+        updateItemInfo(appInfo, m_userSortedList);
+        updateItemInfo(appInfo, m_usedSortedList);
+        updateItemInfo(appInfo, m_stashList);
     }
 
     m_delayRefreshTimer->start();

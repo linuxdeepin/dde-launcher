@@ -118,6 +118,7 @@ private:
     void onSearchTimeOut();
     void refreshNotFoundIcon();
     void removeAppIconCache(const ItemInfo &appInfo);
+    void updateItemInfo(const ItemInfo &appInfo, ItemInfoList& itemList);
 
 private slots:
     void onIconThemeChanged();

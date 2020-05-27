@@ -110,10 +110,24 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
                         m_iconRefreshTimer->start();
                     }
 
-                    icon = QIcon::fromTheme("application-x-desktop");
+                    icon = QIcon::fromTheme(iconName);
+                    if (icon.isNull()) {
+                        icon = QIcon::fromTheme("deepinwine-" + iconName);
+                    }
+
+                    if (icon.isNull()) {
+                        icon = QIcon::fromTheme("deepin.com." + iconName, QIcon::fromTheme("application-x-desktop"));
+                    }
                 }
             } else {
-                icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));
+                icon = QIcon::fromTheme(iconName);
+                if (icon.isNull()) {
+                    icon = QIcon::fromTheme("deepinwine-" + iconName);
+                }
+
+                if (icon.isNull()) {
+                    icon = QIcon::fromTheme("deepin.com." + iconName, QIcon::fromTheme("application-x-desktop"));
+                }
             }
         }
 

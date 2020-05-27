@@ -165,20 +165,11 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     updateDisplayMode(m_calcUtil->displayMode());
     updateDockPosition();
-
-//    QScroller::grabGesture(m_appsArea->viewport(), QScroller::TouchGesture);
-//    QScroller *scroller = QScroller::scroller(m_appsArea->viewport());
-//    QScrollerProperties sp;
-//    sp.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
-//    scroller->setScrollerProperties(sp);
 }
 
 FullScreenFrame::~FullScreenFrame()
 {
-    QScroller *scroller = QScroller::scroller(m_appsArea->viewport());
-    if (scroller) {
-        scroller->stop();
-    }
+
 }
 
 void FullScreenFrame::exit()
@@ -422,11 +413,9 @@ void FullScreenFrame::initUI()
     m_appsArea->viewport()->installEventFilter(this);
     m_appsArea->installEventFilter(this);
 
-    //    m_othersView->installEventFilter(this);
-    //    m_navigationWidget->installEventFilter(this);
     m_searchWidget->edit()->lineEdit()->installEventFilter(m_eventFilter);
     m_searchWidget->categoryBtn()->installEventFilter(m_eventFilter);
-    //    qApp->installEventFilter(this);
+
 
     m_allAppsView->setAccessibleName("all");
     m_allAppsView->setModel(m_allAppsModel);
@@ -1421,16 +1410,13 @@ void FullScreenFrame::nextTabWidget(int key)
         break;
         case Category: {
             m_searchWidget->categoryBtn()->setFocus();
-//            m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Hover);
             m_appItemDelegate->setCurrentIndex(QModelIndex());
             m_currentFocusIndex = m_nextFocusIndex;
             m_nextFocusIndex = Search;
         }
         break;
         case Search: {
-//            m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Normal);
             m_searchWidget->categoryBtn()->clearFocus();
-//            m_searchWidget->edit()->setFocus();
             m_searchWidget->edit()->lineEdit()->setFocus();
             m_currentFocusIndex = m_nextFocusIndex;
             m_nextFocusIndex = Default;
@@ -1439,8 +1425,6 @@ void FullScreenFrame::nextTabWidget(int key)
         case Default: {
             m_searchWidget->edit()->lineEdit()->clearFocus();
             m_searchWidget->categoryBtn()->clearFocus();
-//            m_searchWidget->m_searchEdit->normalMode();
-//            m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Normal);
             m_appItemDelegate->setCurrentIndex(QModelIndex());
             m_currentFocusIndex = m_nextFocusIndex;
             m_nextFocusIndex = Applist;
@@ -1452,7 +1436,6 @@ void FullScreenFrame::nextTabWidget(int key)
         case Applist: {
             if(m_displayMode == GROUP_BY_CATEGORY && (m_currentCategory < AppsListModel::Internet || m_currentCategory > AppsListModel::Others )) m_currentCategory = AppsListModel::Internet;
             m_appItemDelegate->setCurrentIndex(m_displayMode == GROUP_BY_CATEGORY ? categoryView(m_currentCategory)->indexAt(0) : m_allAppsView->indexAt(0));
-//            m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Normal);
             update();
             m_searchWidget->categoryBtn()->clearFocus();
             m_currentFocusIndex = m_nextFocusIndex;
@@ -1461,7 +1444,6 @@ void FullScreenFrame::nextTabWidget(int key)
         break;
         case Category: {
             m_searchWidget->categoryBtn()->setFocus();
-//            m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Hover);
             m_searchWidget->edit()->lineEdit()->clearFocus();
             m_currentFocusIndex = m_nextFocusIndex;
             m_nextFocusIndex = Applist;
@@ -1477,8 +1459,6 @@ void FullScreenFrame::nextTabWidget(int key)
         break;
         case Default: {
             m_searchWidget->edit()->lineEdit()->clearFocus();
-//            m_searchWidget->m_toggleCategoryBtn->setState(DImageButton::Normal);
-//            m_searchWidget->m_searchEdit->normalMode();
             m_searchWidget->categoryBtn()->clearFocus();
             m_appItemDelegate->setCurrentIndex(QModelIndex());
             m_currentFocusIndex = m_nextFocusIndex;

@@ -162,6 +162,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     updateDisplayMode(m_calcUtil->displayMode());
     updateDockPosition();
+    setFixedSize(QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height)/qApp->primaryScreen()->devicePixelRatio());
 
 //    QScroller::grabGesture(m_appsArea->viewport(), QScroller::TouchGesture);
 //    QScroller *scroller = QScroller::scroller(m_appsArea->viewport());
@@ -856,6 +857,11 @@ void FullScreenFrame::initConnection()
 
 void FullScreenFrame::showLauncher()
 {
+    if (m_firstStart && qApp->primaryScreen()->devicePixelRatio() != 1) {
+        show();
+        hide();
+        m_firstStart = false;
+    }
     show();
     setFixedSize(QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height)/qApp->primaryScreen()->devicePixelRatio());
 }
@@ -873,6 +879,7 @@ bool FullScreenFrame::visible()
 void FullScreenFrame::updateGeometry()
 {
     const QRect rect = m_displayInter->primaryRect();
+    qDebug()<<rect;
 
     setGeometry(rect);
 

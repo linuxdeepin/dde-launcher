@@ -222,6 +222,7 @@ private:
     QVBoxLayout *m_mainLayout;
     FocusIndex m_nextFocusIndex;
     FocusIndex m_currentFocusIndex;
+    bool m_firstStart{true};
 };
 
 #endif // MAINFRAME_H

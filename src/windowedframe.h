@@ -157,6 +157,7 @@ private:
     AnchoredCornor m_anchoredCornor = Normal;
     QPainterPath m_cornerPath;
     FocusPosition m_focusPos;
+    bool m_firstStart{true};
 };
 
 #endif // WINDOWEDFRAME_H

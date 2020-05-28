@@ -89,6 +89,7 @@ public slots:
     void launchApp(const QModelIndex &index);
     void uninstallApp(const QString &appKey);
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
+    ItemInfoList& appInfoList(const AppsListModel::AppCategory &category);
 
     bool appIsNewInstall(const QString &key);
     bool appIsAutoStart(const QString &desktop);

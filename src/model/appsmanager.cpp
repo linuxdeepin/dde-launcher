@@ -504,6 +504,19 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     return m_appInfos[category];
 }
 
+ItemInfoList& AppsManager::appInfoList(const AppsListModel::AppCategory &category)
+{
+    switch (category) {
+    case AppsListModel::Custom:    return m_userSortedList;        break;
+    case AppsListModel::All:       return m_usedSortedList;        break;
+    case AppsListModel::Search:     return m_appSearchResultList;   break;
+    case AppsListModel::Category:   return m_categoryList;          break;
+    default:;
+    }
+
+    return m_appInfos[category];
+}
+
 bool AppsManager::appIsNewInstall(const QString &key)
 {
     return m_newInstalledAppsList.contains(key);
@@ -899,6 +912,9 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
         updateItemInfo(appInfo, m_userSortedList);
         updateItemInfo(appInfo, m_usedSortedList);
         updateItemInfo(appInfo, m_stashList);
+        for (auto& itemList : m_appInfos) {
+            updateItemInfo(appInfo, itemList);
+        }
     }
 
     m_delayRefreshTimer->start();

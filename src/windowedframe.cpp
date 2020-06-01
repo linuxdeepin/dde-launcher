@@ -381,12 +381,12 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
         case Computer:
             m_focusPos = Setting;
             m_leftBar->hideAllHoverState();
-            m_leftBar->setCurrentIndex(8);
+            m_leftBar->setCurrentIndex(6);
             break;
         case Setting:
             m_focusPos = Power;
             m_leftBar->hideAllHoverState();
-            m_leftBar->setCurrentIndex(9);
+            m_leftBar->setCurrentIndex(7);
             break;
         case Power:
             m_focusPos = Search;

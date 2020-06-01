@@ -170,7 +170,8 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
                                                                                    0, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
 
     /*if (containerRect.contains(pos))
-        return */m_dropThresholdTimer->start();
+        return */
+    m_dropThresholdTimer->start();
 
     if (pos.y() < containerRect.top())
         emit requestScrollUp();
@@ -225,6 +226,8 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
 
 void AppGridView::startDrag(const QModelIndex &index)
 {
+    m_enableAnimation = true;
+
     if (!index.isValid())
         return;
 
@@ -265,6 +268,8 @@ void AppGridView::startDrag(const QModelIndex &index)
 
     if (!m_lastFakeAni)
     {
+        m_enableAnimation = false;
+
         if (m_enableDropInside)
             listModel->dropSwap(m_dropToPos);
         else
@@ -310,7 +315,7 @@ void AppGridView::fitToContent()
 
 void AppGridView::prepareDropSwap()
 {
-    if (m_lastFakeAni || m_dropThresholdTimer->isActive())
+    if (m_lastFakeAni || m_dropThresholdTimer->isActive() || !m_enableAnimation)
         return;
     const QModelIndex dropIndex = indexAt(m_dropToPos);
     if (!dropIndex.isValid())

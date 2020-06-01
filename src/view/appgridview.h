@@ -75,6 +75,7 @@ private:
 private:
     int m_dropToPos;
     bool m_enableDropInside = false;
+    bool m_enableAnimation = true;
     QPoint m_dragStartPos;
 
     const QWidget *m_containerBox = nullptr;

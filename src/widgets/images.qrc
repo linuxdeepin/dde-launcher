@@ -27,9 +27,5 @@
         <file>images/shutdown_dark.svg</file>
         <file>images/page_indicator.svg</file>
         <file>images/page_indicator_active.svg</file>
-        <file>images/folder_record_symbolic.svg</file>
-        <file>images/folder_record_symbolic_dark.svg</file>
-        <file>images/folder_networkNeighbor_symbolic.svg</file>
-        <file>images/folder_networkNeighbor_symbolic_dark.svg</file>
     </qresource>
 </RCC>

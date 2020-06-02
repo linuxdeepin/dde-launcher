@@ -36,7 +36,6 @@ QT_END_NAMESPACE
 
 AppListDelegate::AppListDelegate(QObject *parent)
     : QAbstractItemDelegate(parent),
-
       m_actived(false)
 {
     m_blueDotPixmap = renderSVG(":/skin/images/new_install_indicator.svg", QSize(10, 10));
@@ -49,6 +48,9 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         !(option.features & QStyleOptionViewItem::HasDisplay)) {
         return;
     }
+
+    if (!m_actived)
+        return;
 
     const qreal ratio = qApp->devicePixelRatio();
     const QRect rect = option.rect;

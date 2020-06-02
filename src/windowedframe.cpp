@@ -667,6 +667,11 @@ void WindowedFrame::keyPressEvent(QKeyEvent *e)
 
 void WindowedFrame::showEvent(QShowEvent *e)
 {
+    AppListDelegate * delegate = static_cast<AppListDelegate *>(m_appsView->itemDelegate());
+    if (delegate) {
+        delegate->setActived(true);
+    }
+
     QWidget::showEvent(e);
 
     QTimer::singleShot(1, this, [this]() {
@@ -843,6 +848,11 @@ void WindowedFrame::adjustPosition()
 
 void WindowedFrame::onToggleFullScreen()
 {
+    AppListDelegate * delegate = static_cast<AppListDelegate *>(m_appsView->itemDelegate());
+    if (delegate) {
+        delegate->setActived(false);
+    }
+
 #if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
     .service("com.deepin.dde.daemon.Launcher")

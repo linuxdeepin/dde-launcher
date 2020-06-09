@@ -253,8 +253,10 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
     if (e->buttons() != Qt::LeftButton)
         return;
 
-    if (indexAt(m_dragStartPos).isValid())
+    if (qAbs(e->x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
+        qAbs(e->y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
         return startDrag(QListView::indexAt(m_dragStartPos));
+    }
 
     if (m_pDelegate)
         m_pDelegate->mouseMove(e);

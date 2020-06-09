@@ -24,6 +24,7 @@
 #include "appgridview.h"
 #include "src/global_util/constants.h"
 #include "src/global_util/calculate_util.h"
+#include "src/global_util/util.h"
 #include "src/model/appslistmodel.h"
 
 #include <QDebug>
@@ -37,6 +38,7 @@
 #include <QLabel>
 #include <QPainter>
 #include <QScrollBar>
+#include <QVBoxLayout>
 
 QPointer<AppsManager> AppGridView::m_appManager = nullptr;
 QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
@@ -286,7 +288,57 @@ void AppGridView::startDrag(const QModelIndex &index)
 //    if(appKey == "dde-trash")
 //        return;
 
-    QPixmap srcPix = index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
+    QPixmap srcPix;
+    if (appKey== "dde-calendar") {
+        const  auto  s = m_calcUtil->appIconSize();
+        const double  iconZoom =  s.width() /64.0;
+        QStringList calIconList = m_calcUtil->calendarSelectIcon();
+
+        auto calendar = new QWidget() ;
+        calendar->setFixedSize(s);
+
+        calendar->setAutoFillBackground(true);
+        QPalette palette = calendar->palette();
+        palette.setBrush(QPalette::Window,
+                         QBrush(QPixmap(calIconList.at(0)).scaled(
+                                    calendar->size(),
+                                    Qt::IgnoreAspectRatio,
+                                    Qt::SmoothTransformation)));
+        calendar->setPalette(palette);
+
+        QVBoxLayout *layout = new QVBoxLayout;
+        layout->setSpacing(0);
+        auto month = new QLabel();
+        auto monthPix = loadSvg(calIconList.at(1), QSize(20,10)*iconZoom);
+        month->setPixmap(monthPix.scaled(monthPix.width(),monthPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        month->setFixedHeight(monthPix.height());
+        month->setAlignment(Qt::AlignCenter);
+        month->setFixedWidth(s.width() - 5 * iconZoom);
+        layout->addWidget(month, Qt::AlignVCenter);
+
+        auto day = new QLabel();
+        auto dayPix = loadSvg(calIconList.at(2), QSize(28,26)*iconZoom);
+        day->setPixmap(dayPix.scaled(dayPix.width(),dayPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        day->setAlignment(Qt::AlignCenter);
+        day->setFixedHeight(day->pixmap()->height());
+        day->raise();
+        layout->addWidget(day, Qt::AlignVCenter);
+
+        auto week = new QLabel();
+        auto weekPix = loadSvg(calIconList.at(3), QSize(14,6)*iconZoom);
+        week->setPixmap(weekPix.scaled(weekPix.width(),weekPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        week->setFixedHeight(week->pixmap()->height());
+        week->setAlignment(Qt::AlignCenter);
+        week->setFixedWidth(s.width() + 5 * iconZoom);
+        layout->addWidget(week, Qt::AlignVCenter);
+        layout->setSpacing(0);
+        layout->setContentsMargins(0, 10 * iconZoom, 0, 10 * iconZoom);
+        calendar->setLayout(layout);
+        srcPix = calendar->grab(calendar->rect());
+    }else{
+         srcPix = index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
+    }
+
     srcPix = srcPix.scaled(m_calcUtil->appIconSize() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     srcPix.setDevicePixelRatio(ratio);
 

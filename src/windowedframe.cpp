@@ -727,7 +727,6 @@ void WindowedFrame::enterEvent(QEvent *e)
 
     raise();
     activateWindow();
-    setFocus();
 }
 
 void WindowedFrame::inputMethodEvent(QInputMethodEvent *e)

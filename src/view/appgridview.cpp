@@ -200,10 +200,10 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
         emit requestScrollLeft(dropStart);
     else if (pos.x() > containerRect.right())
         emit requestScrollRight(dropStart);
-    else if (pos.y() < containerRect.top())
-        emit requestScrollUp();
-    else if (pos.y() > containerRect.bottom())
-        emit requestScrollDown();
+//    else if (pos.y() < containerRect.top())
+//        emit requestScrollUp();
+//    else if (pos.y() > containerRect.bottom())
+//        emit requestScrollDown();
     else
         emit requestScrollStop();
 }

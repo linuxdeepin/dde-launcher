@@ -290,8 +290,8 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
         preset = LAUNCHER_SETTINGS.get("apps-order").toStringList();
 
     qSort(processList.begin(), processList.end(), [&preset](const ItemInfo & i1, const ItemInfo & i2) {
-        int index1 = preset.indexOf(i1.m_key.toLower());
-        int index2 = preset.indexOf(i2.m_key.toLower());
+        int index1 = preset.indexOf(i1.m_key);
+        int index2 = preset.indexOf(i2.m_key);
         if (index1 == index2) {
             // If both of them don't exist in the preset list,
             // fallback to comparing their name.

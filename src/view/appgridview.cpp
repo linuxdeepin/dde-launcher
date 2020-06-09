@@ -485,7 +485,7 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     connect(ani, &QPropertyAnimation::finished, floatLabel, &QLabel::deleteLater);
     if (isLastAni) {
         m_lastFakeAni = ani;
-        connect(ani, &QPropertyAnimation::finished, this, &AppGridView::dropSwap, Qt::QueuedConnection);
+        connect(ani, &QPropertyAnimation::finished, this, &AppGridView::dropSwap);
         connect(ani, &QPropertyAnimation::valueChanged, m_dropThresholdTimer, &QTimer::stop);
     }
 

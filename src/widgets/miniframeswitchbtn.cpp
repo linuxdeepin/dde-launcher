@@ -57,9 +57,9 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     setObjectName("MiniFrameSwitchBtn");
     setFixedSize(300, 36);
 
-    mainLayout->setContentsMargins(20, 0, 0, 0);
+    mainLayout->setContentsMargins(10, 0, 0, 0);
     mainLayout->addWidget(m_allIconLabel);
-    mainLayout->addSpacing(12);
+    mainLayout->addSpacing(22);
     mainLayout->addWidget(m_textLabel);
     mainLayout->addWidget(m_enterIcon);
 }

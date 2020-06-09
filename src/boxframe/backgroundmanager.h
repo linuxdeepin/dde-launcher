@@ -47,6 +47,7 @@ signals:
 
 private slots:
     void updateBackgrounds();
+    void updateBlurBackgrounds();
 
 private:
     int m_currentWorkspace;
@@ -57,6 +58,7 @@ private:
     ImageEffectInter *m_imageEffectInter;
     ImageEffeblur      *m_imageblur;
     AppearanceInter *m_appearanceInter;
+    QTimer *m_timerUpdateBlurbg;
 };
 
 #endif // BACKGROUNDMANAGER_H

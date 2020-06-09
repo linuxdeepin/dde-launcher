@@ -42,6 +42,7 @@ BackgroundManager::BackgroundManager(QObject *parent)
     , m_imageEffectInter(new ImageEffectInter("com.deepin.daemon.ImageEffect", "/com/deepin/daemon/ImageEffect", QDBusConnection::systemBus(), this))
     , m_imageblur(new ImageEffeblur("com.deepin.daemon.ImageEffect", "/com/deepin/daemon/ImageBlur", QDBusConnection::systemBus(), this))
     , m_appearanceInter(new AppearanceInter("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
+    , m_timerUpdateBlurbg(new QTimer)
 {
     m_appearanceInter->setSync(false, false);
 
@@ -52,18 +53,30 @@ BackgroundManager::BackgroundManager(QObject *parent)
         }
     });
 
+    m_timerUpdateBlurbg->setSingleShot(false);
+    m_timerUpdateBlurbg->setInterval(1000);
+    connect(m_timerUpdateBlurbg,&QTimer::timeout,this,&BackgroundManager::updateBlurBackgrounds);
     QTimer::singleShot(0, this, &BackgroundManager::updateBackgrounds);
 }
 
 void BackgroundManager::updateBackgrounds()
 {
+    if(!m_timerUpdateBlurbg->isActive()){
+        m_timerUpdateBlurbg->start(0);
+    }
+}
+
+void BackgroundManager::updateBlurBackgrounds()
+{
+    m_timerUpdateBlurbg->setInterval(1000);
     QString path = getLocalFile(m_wmInter->GetCurrentWorkspaceBackground());
-
     QString filePath = QFile::exists(path) ? path : DefaultWallpaper;
-
-    m_blurBackground = m_imageblur->Get( filePath);
+    m_blurBackground = m_imageblur->Get(filePath);
     m_background = m_imageEffectInter->Get("", filePath);
 
-    emit currentWorkspaceBackgroundChanged(m_background);
-    emit currentWorkspaceBlurBackgroundChanged(m_blurBackground);
+    if(m_blurBackground != "" && m_background != ""){
+        emit currentWorkspaceBlurBackgroundChanged(m_blurBackground);
+        emit currentWorkspaceBackgroundChanged(m_background);
+        m_timerUpdateBlurbg->stop();
+    }
 }

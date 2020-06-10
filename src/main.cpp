@@ -25,6 +25,7 @@
 #include "src/dbusinterface/dbuslauncherframe.h"
 #include "model/appsmanager.h"
 #include "dbusservices/dbuslauncherservice.h"
+#include "accessible.h"
 
 #include <QCommandLineParser>
 #include <QTranslator>
@@ -35,6 +36,7 @@
 #include <dapplication.h>
 #include <DGuiApplicationHelper>
 #include <DLog>
+#include <QAccessible>
 
 DWIDGET_USE_NAMESPACE
 #ifdef DCORE_NAMESPACE
@@ -70,6 +72,9 @@ int main(int argv, char *args[])
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     DLogManager::registerConsoleAppender();
+    // 加载 Accessible 插件 测试使用 用sniff查看效果
+    QAccessible::installFactory(accessibleFactory);
+
 #ifndef QT_DEBUG
     DLogManager::registerFileAppender();
 #endif

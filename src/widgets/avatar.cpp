@@ -38,6 +38,7 @@ Avatar::Avatar(QWidget *parent)
                                 QString("/com/deepin/daemon/Accounts/User%1").arg(getuid()),
                                 QDBusConnection::systemBus(), this);
 
+    this->setAccessibleDescription("This is the head image of the Launcher, which can quickly access the account in the control center");
     setFixedSize(32, 32);
     setFilePath(m_userInter->iconFile());
 

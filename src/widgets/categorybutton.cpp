@@ -40,6 +40,7 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     , m_category(category)
     , m_fScale(1)
 {
+    setAccessibleName("Btn-Category");
     setObjectName("CategoryButton");
     setCheckable(true);
     setAutoExclusive(true);

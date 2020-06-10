@@ -42,6 +42,10 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
 {
     setLayout(m_vLayout);
 
+    m_blurBackground->setAccessibleName(QString("%1 blurBackground").arg(m_name));
+    m_bg->setAccessibleName(QString("%1 maskBackground").arg(m_name));
+    m_maskLayer->setAccessibleName(QString("%1 maskLayer").arg(m_name));
+
     m_blurBackground->setFixedSize(m_calcUtil->getAppBoxSize());
     m_blurBackground->setMaskColor(DBlurEffectWidget::AutoColor);
     m_blurBackground->setMaskAlpha(DLauncher::APPHBOX_ALPHA);

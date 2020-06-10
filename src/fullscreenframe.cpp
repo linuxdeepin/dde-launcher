@@ -119,6 +119,32 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     , m_contentFrame(new QFrame)
     , m_displayInter(new DBusDisplay(this))
 {
+    // accessible.h 中使用
+    setAccessibleName("FullScrreenFrame");
+    m_topSpacing->setAccessibleName("topspacing");
+    m_bottomSpacing->setAccessibleName("BottomSpacing");
+    m_appsHbox->setAccessibleName("apphbox");
+    m_navigationWidget->setAccessibleName("navigationWidget");
+    m_searchWidget->setAccessibleName("searchWidget");
+    m_viewListPlaceholder->setAccessibleName("viewListPlaceholder");
+    m_tipsLabel->setAccessibleName("tipsLabel");
+    m_appItemDelegate->setObjectName("appItemDelegate");
+    m_internetBoxWidget->setAccessibleName("internetBoxWidget");
+    m_chatBoxWidget->setAccessibleName("chatBoxWidget");
+    m_musicBoxWidget->setAccessibleName("musicBoxWidget");
+    m_videoBoxWidget->setAccessibleName("videoBoxWidget");
+    m_graphicsBoxWidget->setAccessibleName("graphicsBoxWidget");
+    m_gameBoxWidget->setAccessibleName("gameBoxWidget");
+    m_officeBoxWidget->setAccessibleName("officeBoxWidget");
+    m_readingBoxWidget->setAccessibleName("readingBoxWidget");
+    m_developmentBoxWidget->setAccessibleName("developmentBoxWidget");
+    m_systemBoxWidget->setAccessibleName("systemBoxWidget");
+    m_othersBoxWidget->setAccessibleName("othersBoxWidget");
+    m_appsArea->setAccessibleName("AppsArea");
+    m_searchWidget->categoryBtn()->setAccessibleName("search_categoryBtn");
+    m_contentFrame->setAccessibleName("ContentFrame");
+    m_appsArea->horizontalScrollBar()->setAccessibleName("horizontalScrollBar");
+
     m_focusIndex = 0;
     m_padding = 200;
     //m_currentCategory = AppsListModel::Internet;
@@ -1123,6 +1149,7 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
     unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall?")));
     QPixmap appIcon = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
     unInstallDialog.setIconPixmap(appIcon);
+    unInstallDialog.setAccessibleName("Imge-unInstallDialog");
 
     QStringList buttons;
     buttons << tr("Cancel") << tr("Confirm");

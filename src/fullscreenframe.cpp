@@ -1215,6 +1215,14 @@ void FullScreenFrame::reflashPageView(AppsListModel::AppCategory category)
     } else {
         m_multiPagesView->updatePageCount(category);
     }
+
+    BlurBoxWidget * widget = static_cast<BlurBoxWidget *>(m_scrollDest);
+    if (category != AppsListModel::Search && widget && !widget->isVisible()) {
+        AppsListModel::AppCategory  tmpcategory = prevCategoryModel(widget->category());
+        QTimer::singleShot(100,this,[ = ] {
+            scrollToCategory(tmpcategory,AppsListModel::NavigationChangeShow);
+        });
+    }
 }
 
 void FullScreenFrame::primaryScreenChanged()

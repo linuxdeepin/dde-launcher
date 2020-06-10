@@ -320,7 +320,7 @@ AppsListModel *MultiPagesView::pageModel(int pageIndex)
 
 void MultiPagesView::wheelEvent(QWheelEvent *e)
 {
-    if (AppsListModel::All != m_category)
+    if (AppsListModel::All > m_category || AppsListModel::Category < m_category)
         return;
 
     if (m_pageSwitchAnimation->state() == QPropertyAnimation::Running)

@@ -61,7 +61,7 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     setLayout(mainLayout);
     setFixedHeight(DLauncher::CATEGORY_TITLE_WIDGET_HEIGHT);
 
-    addTextShadow();
+    //addTextShadow();
 
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &CategoryTitleWidget::relayout);
 }

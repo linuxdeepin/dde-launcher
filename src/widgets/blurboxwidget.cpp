@@ -49,7 +49,7 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     m_blurBackground->setBlurRectYRadius(DLauncher::APPHBOX_RADIUS);
     m_blurGroup->addWidget(m_blurBackground);
 
-    m_vLayout->setContentsMargins(0, 0, 0, 0);
+    m_vLayout->setContentsMargins(0, 24, 0, 0);
     m_vLayout->setAlignment(Qt::AlignTop);
     layoutAddWidget(m_categoryTitle, m_calcUtil->getAppBoxSize().width() / 2, Qt::AlignHCenter);
     m_vLayout->addWidget(m_categoryMultiPagesView);

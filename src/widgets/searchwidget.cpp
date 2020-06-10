@@ -44,6 +44,7 @@ DWIDGET_USE_NAMESPACE
 SearchWidget::SearchWidget(QWidget *parent) :
     QFrame(parent)
 {
+    setAccessibleName("From_Search");
     m_leftSpacing = new QFrame(this);
     m_rightSpacing = new QFrame(this);
 
@@ -51,6 +52,8 @@ SearchWidget::SearchWidget(QWidget *parent) :
 
     m_leftSpacing->setFixedWidth(0);
     m_rightSpacing->setFixedWidth(0);
+    m_leftSpacing->setAccessibleName("LeftSpacing");
+    m_rightSpacing->setAccessibleName("RightSpacing");
 
     m_toggleCategoryBtn = new DFloatingButton(this);
     m_toggleCategoryBtn->setAccessibleName("mode-toggle-button");
@@ -66,6 +69,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_toggleModeBtn->setFixedSize(QSize(BTN_SIZE, BTN_SIZE));
     m_toggleModeBtn->setAutoExclusive(true);
     m_toggleModeBtn->setBackgroundRole(DPalette::Button);
+    m_toggleModeBtn->setAccessibleName("Btn-ToggleMode");
 
     m_searchEdit = new DSearchEdit(this);
     m_searchEdit->setAccessibleName("search-edit");

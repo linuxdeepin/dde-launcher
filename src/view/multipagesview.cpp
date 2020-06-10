@@ -46,6 +46,12 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_nMousePos = 0;
     m_scrollValue = 0;
     m_scrollStart = 0;
+
+    // 测试用
+    m_pRightGradient->setAccessibleName("thisRightGradient");
+    m_pLeftGradient->setAccessibleName("thisLeftGradient");
+    m_pageControl->setAccessibleName("pageControl");
+
     // 滚动区域
     m_appListArea->setObjectName("MultiPageBox");
     m_appListArea->viewport()->setAutoFillBackground(false);

@@ -110,6 +110,11 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_searcherEdit(new DSearchEdit)
     , m_modeToggleBtn(new DToolButton(this))
 {
+    m_searcherEdit->setAccessibleName("searcherEdit");
+    m_maskBg->setAccessibleName("MaskBg");
+    m_switchBtn->setAccessibleName("switchBtn");
+    m_modeToggleBtn->setAccessibleName("modeToggleBtn");
+
     setMaskColor(DBlurEffectWidget::AutoColor);
     setBlendMode(DBlurEffectWidget::InWindowBlend);
     m_appearanceInter->setSync(false, false);
@@ -205,6 +210,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_rightWidget = new QWidget;
     m_rightWidget->setLayout(containLayout);
     m_rightWidget->setFixedWidth(320);
+    m_rightWidget->setAccessibleName("rightWidget");
 
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->addWidget(m_leftBar);

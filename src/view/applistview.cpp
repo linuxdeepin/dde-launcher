@@ -48,6 +48,7 @@ AppListView::AppListView(QWidget *parent)
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_updateEnableSelectionByMouseTimer(nullptr)
 {
+    this->setAccessibleName("Form_AppList");
     viewport()->setAutoFillBackground(false);
     m_scrollAni->setEasingCurve(QEasingCurve::OutQuint);
     m_scrollAni->setDuration(800);

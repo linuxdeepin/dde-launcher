@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
  *
  * Author:     sbw <sbw@sbw.so>
@@ -122,6 +122,30 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     , m_contentFrame(new QFrame)
     , m_displayInter(new DBusDisplay(this))
 {
+    setAccessibleName("FullScrreenFrame");
+    m_topSpacing->setAccessibleName("topspacing");
+    m_bottomSpacing->setAccessibleName("BottomSpacing");
+    m_appsHbox->setAccessibleName("apphbox");
+    m_navigationWidget->setAccessibleName("navigationWidget");
+    m_searchWidget->setAccessibleName("searchWidget");
+    m_viewListPlaceholder->setAccessibleName("viewListPlaceholder");
+    m_tipsLabel->setAccessibleName("tipsLabel");
+    m_appItemDelegate->setObjectName("appItemDelegate");
+    m_internetBoxWidget->setAccessibleName("internetBoxWidget");
+    m_chatBoxWidget->setAccessibleName("chatBoxWidget");
+    m_musicBoxWidget->setAccessibleName("musicBoxWidget");
+    m_videoBoxWidget->setAccessibleName("videoBoxWidget");
+    m_graphicsBoxWidget->setAccessibleName("graphicsBoxWidget");
+    m_gameBoxWidget->setAccessibleName("gameBoxWidget");
+    m_officeBoxWidget->setAccessibleName("officeBoxWidget");
+    m_readingBoxWidget->setAccessibleName("readingBoxWidget");
+    m_developmentBoxWidget->setAccessibleName("developmentBoxWidget");
+    m_systemBoxWidget->setAccessibleName("systemBoxWidget");
+    m_othersBoxWidget->setAccessibleName("othersBoxWidget");
+    m_appsArea->setAccessibleName("AppsArea");
+    m_searchWidget->categoryBtn()->setAccessibleName("search_categoryBtn");
+    m_contentFrame->setAccessibleName("ContentFrame");
+    m_appsArea->horizontalScrollBar()->setAccessibleName("horizontalScrollBar");
     m_focusIndex = 0;
     m_padding = 200;
     //m_currentCategory = AppsListModel::Internet;
@@ -217,6 +241,10 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
     const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  m_padding * 2 - 20) / 2 ;
 
     m_scrollDest = dest;
+    BlurBoxWidget* blurbox = qobject_cast<BlurBoxWidget*>(m_scrollDest);
+        if (blurbox)
+            blurbox->setOperationType(otNone);
+
     int endValue = dest->x() - temp;
     m_scrollAnimation->stop();
     m_scrollAnimation->setStartValue(m_appsArea->horizontalScrollBar()->value());
@@ -229,6 +257,7 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
             m_appsArea->horizontalScrollBar()->setValue(endValue);
         });
     }
+
 
 
     emit currentVisibleCategoryChanged(m_currentCategory);
@@ -308,6 +337,7 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, App
             leftBlurBox->layout()->itemAt(0)->setAlignment(Qt::AlignRight);
             leftBlurBox->layout()->update();
             m_leftScrollDest = leftBlurBox;
+            m_leftScrollDest->setOperationType(otLeft);
             break;
         }
     }
@@ -329,6 +359,7 @@ void FullScreenFrame::setCategoryIndex(AppsListModel::AppCategory &category, App
             rightBlurBox->layout()->itemAt(0)->setAlignment(Qt::AlignLeft);
             rightBlurBox->layout()->update();
             m_rightScrollDest = rightBlurBox;
+            m_rightScrollDest->setOperationType(otRight);
             break;
         }
     }

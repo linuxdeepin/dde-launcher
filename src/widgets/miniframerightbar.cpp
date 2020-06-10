@@ -84,26 +84,36 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     setFixedWidth(60);
     QSize m_size(36, 36);
 //    m_modeToggleBtn->raise();
+    // 测试
+    m_avatar->setAccessibleName("useravatat");
 
     QVBoxLayout *    layout       = new QVBoxLayout(this);
     QVBoxLayout *    bottomLayout = new QVBoxLayout;
     m_computerBtn  = new MiniFrameButton(tr(""));
     m_computerBtn->setFixedSize(m_size);
+    m_computerBtn->setAccessibleName("computerbtn");
     m_videoBtn = new MiniFrameButton(tr(""));
     m_videoBtn->setFixedSize(m_size);
+    m_videoBtn->setAccessibleName("videobtn");
     m_musicBtn = new MiniFrameButton(tr(""));
     m_musicBtn->setFixedSize(m_size);
+    m_musicBtn->setAccessibleName("musicbtn");
     m_pictureBtn = new MiniFrameButton(tr(""));
     m_pictureBtn->setFixedSize(m_size);
+    m_pictureBtn->setAccessibleName("picturebtn");
     m_documentBtn = new MiniFrameButton(tr(""));
     m_documentBtn->setFixedSize(m_size);
+    m_documentBtn->setAccessibleName("documentbtn");
     m_downloadBtn = new MiniFrameButton(tr(""));
     m_downloadBtn->setFixedSize(m_size);
+    m_downloadBtn->setAccessibleName("downloadbtn");
     m_settingsBtn = new MiniFrameButton(tr(""));
     m_settingsBtn->setFixedSize(m_size);
+    m_settingsBtn->setAccessibleName("settingsbtn");
     m_powerBtn = new MiniFrameButton(tr(""));
     m_powerBtn->setFixedSize(m_size);
     m_powerBtn->setIconSize(QSize(20, 20));
+    m_powerBtn->setAccessibleName("powerbtn");
 
     uint index = 0;
     m_btns[index++] = m_computerBtn;
@@ -151,6 +161,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     QWidget *center_widget = new QWidget;
     QVBoxLayout *center_layout = new QVBoxLayout;
+    center_widget->setAccessibleName("centerwidget");
     center_layout->setMargin(0);
     center_widget->setLayout(center_layout);
     center_layout->setSpacing(10);
@@ -164,6 +175,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     center_layout->addWidget(m_downloadBtn, 0, Qt::AlignCenter);
 
     QWidget *bottom_widget = new QWidget;
+    bottom_widget->setAccessibleName("bottonwidget");
     QVBoxLayout *bottom_layout = new QVBoxLayout;
     bottom_layout->setMargin(0);
     bottom_layout->addLayout(bottomLayout);

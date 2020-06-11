@@ -139,6 +139,7 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             connect(pageView, &AppGridView::requestScrollRight, this, &MultiPagesView::dragToRight);
             connect(pageView, &AppGridView::requestScrollStop, [this] {m_bDragStart = false;});
             connect(pageView, &AppGridView::dragEnd, this, &MultiPagesView::dragStop);
+            connect(m_pageSwitchAnimation, &QPropertyAnimation::finished,pageView,&AppGridView::setDragAnimationEnable);
             emit connectViewEvent(pageView);
         }
     } else {

@@ -59,6 +59,8 @@ public:
     void dragOut(int pos);
     void dragIn(const QModelIndex &index);
     void flashDrag();
+public slots:
+    void setDragAnimationEnable() {m_enableAnimation = true;}
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
     void requestScrollUp() const;
@@ -92,6 +94,7 @@ private:
 private:
     int m_dropToPos;
     bool m_enableDropInside = false;
+    bool m_enableAnimation = true;
     QPoint m_dragStartPos;
 
     const QWidget *m_containerBox = nullptr;

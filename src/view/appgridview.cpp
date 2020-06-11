@@ -85,7 +85,7 @@ AppGridView::AppGridView(QWidget *parent)
                                                                     });
 
 #ifndef DISABLE_DRAG_ANIMATION
-    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::prepareDropSwap, Qt::QueuedConnection);
+    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::prepareDropSwap);
 #else
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::dropSwap);
 #endif
@@ -173,39 +173,41 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
     qDebug("AppGridView::dragMoveEvent");
     Q_ASSERT(m_containerBox);
 
+    m_dropThresholdTimer->stop();
     if (m_lastFakeAni)
         return;
 
-    const QModelIndex dropIndex = QListView::indexAt(e->pos());
-    if (dropIndex.isValid())
+    const QPoint pos = mapFromGlobal(QCursor::pos());
+    const QRect containerRect = this->rect();
+
+    const QModelIndex dropIndex = QListView::indexAt(pos);
+    if (dropIndex.isValid()){
         m_dropToPos = dropIndex.row();
+    } else if ( containerRect.contains(pos)) {
+        AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+        if (listModel) {
+            int lastRow = listModel->rowCount(QModelIndex()) - 1;
 
-    m_dropThresholdTimer->stop();
+            QModelIndex lastIndex = listModel->index(lastRow);
 
-    const QPoint pos = mapTo(m_containerBox, e->pos());
+            if (lastIndex.isValid()){
+                QPoint lastPos = indexRect(lastIndex).center();
+                if ( pos.x() > lastPos.x() && pos.y() > lastPos.y() )
+                    m_dropToPos = lastIndex.row();
+            }
+        }
+    }
 
-    int nSpace = m_calcUtil->appItemSpacing() + m_calcUtil->appMarginLeft();
-    const QRect containerRect = m_containerBox->rect().marginsRemoved(QMargins(nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
-                                                                               nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
-    const QModelIndex dropStart = QListView::indexAt(m_dragStartPos);
+    emit requestScrollStop();
 
-    /*if (containerRect.contains(pos))
-        return */m_dropThresholdTimer->start();
-    if (pos.x() < containerRect.left())
-        emit requestScrollLeft(dropStart);
-    else if (pos.x() > containerRect.right())
-        emit requestScrollRight(dropStart);
-//    else if (pos.y() < containerRect.top())
-//        emit requestScrollUp();
-//    else if (pos.y() > containerRect.bottom())
-//        emit requestScrollDown();
-    else
-        emit requestScrollStop();
+    if (m_enableAnimation)
+        m_dropThresholdTimer->start();
 }
 
 void AppGridView::dragOut(int pos)
 {
     qDebug("AppGridView::dragOut");
+    m_enableAnimation = false;
     m_dropToPos = pos;
 
     prepareDropSwap();
@@ -216,6 +218,7 @@ void AppGridView::dragIn(const QModelIndex &index)
 {
     qDebug("AppGridView::dragIn");
 
+    m_enableAnimation = false;
     m_dragStartPos = indexRect(index).center();
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     if (!listModel)
@@ -233,8 +236,24 @@ void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 {
     qDebug("AppGridView::dragLeaveEvent");
     e->accept();
+    Q_ASSERT(m_containerBox);
 
     m_dropThresholdTimer->stop();
+
+    const QPoint pos = m_containerBox->mapFromGlobal(QCursor::pos());
+
+    int nSpace = m_calcUtil->appItemSpacing() + m_calcUtil->appMarginLeft();
+    const QRect containerRect = m_containerBox->rect().marginsRemoved(QMargins(nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
+                                                                               nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
+
+    const QModelIndex dropStart = QListView::indexAt(m_dragStartPos);
+
+    if (pos.x() > containerRect.right())
+        emit requestScrollRight(dropStart);
+    else if (pos.x() < containerRect.left())
+        emit requestScrollLeft(dropStart);
+
+    QListView ::dragLeaveEvent(e);
 }
 
 void AppGridView::mouseMoveEvent(QMouseEvent *e)
@@ -414,8 +433,7 @@ void AppGridView::fitToContent()
 
 void AppGridView::prepareDropSwap()
 {
-    qDebug("AppGridView::prepareDropSwap");
-    if (m_lastFakeAni || m_dropThresholdTimer->isActive())
+    if (m_lastFakeAni || m_dropThresholdTimer->isActive() || !m_enableAnimation)
         return;
     const QModelIndex dropIndex = indexAt(m_dropToPos);
     if (!dropIndex.isValid())

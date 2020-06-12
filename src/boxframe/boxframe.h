@@ -34,8 +34,8 @@ class BoxFrame : public QLabel
     Q_OBJECT
 
 public:
-    explicit BoxFrame(QWidget* parent = 0);
-    ~BoxFrame();
+    explicit BoxFrame(QWidget* parent = nullptr);
+    ~BoxFrame() Q_DECL_OVERRIDE;
 
     void setBackground(const QString &url);
     void setBlurBackground(const QString &url);

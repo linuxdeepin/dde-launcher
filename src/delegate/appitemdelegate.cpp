@@ -142,7 +142,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
    if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay))
     {
         const int radius = 18;
-        const QColor brushColor(255, 255, 255, 0.2*255);
+        const QColor brushColor(255, 255, 255, 51);
 
         painter->setPen(Qt::transparent);
         painter->setBrush(brushColor);
@@ -258,6 +258,7 @@ const QRect AppItemDelegate::itemBoundingRect(const QRect &itemRect) const
 ///
 const QRect AppItemDelegate::itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool extraWidthMargin) const
 {
+    Q_UNUSED(extraWidthMargin);
     const int widthMargin = 10;//extraWidthMargin ? 16 : 2;
     const int heightMargin = TEXTTOICON;
 

@@ -39,7 +39,7 @@ class BackgroundManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit BackgroundManager(QObject *parent = 0);
+    explicit BackgroundManager(QObject *parent = nullptr);
 
 signals:
     void currentWorkspaceBackgroundChanged(const QString &background);

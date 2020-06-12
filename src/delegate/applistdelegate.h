@@ -32,7 +32,7 @@ class AppListDelegate : public QAbstractItemDelegate
     Q_OBJECT
 
 public:
-    explicit AppListDelegate(QObject *parent = 0);
+    explicit AppListDelegate(QObject *parent = nullptr);
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;

@@ -1148,7 +1148,7 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
     const QString appKey = context.data(AppsListModel::AppKeyRole).toString();
     unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall?")));
     QPixmap appIcon = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
-    unInstallDialog.setIconPixmap(appIcon);
+    unInstallDialog.setIcon(appIcon);
     unInstallDialog.setAccessibleName("Imge-unInstallDialog");
 
     QStringList buttons;
@@ -1325,6 +1325,8 @@ void FullScreenFrame::updateCurrentVisibleCategory()
         currentVisibleCategory = AppsListModel::System;
     else if (!m_othersBoxWidget->getMultiPagesView()->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Others;
+    else
+        currentVisibleCategory = AppsListModel::Internet;
 
     if (m_currentCategory == currentVisibleCategory)
         return;

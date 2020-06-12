@@ -28,6 +28,8 @@
 
 MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget *parent)
     : QWidget(parent)
+    , m_pLeftGradient(new GradientLabel(this))
+    , m_pRightGradient(new GradientLabel(this))
     , m_pageCount(0)
     , m_pageIndex(0)
     , m_category(categoryModel)
@@ -37,8 +39,6 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     , m_viewBox(new DHBoxWidget)
     , m_pageLayout(new QHBoxLayout)
     , m_pageControl(new pageControl)
-    , m_pLeftGradient(new GradientLabel(this))
-    , m_pRightGradient(new GradientLabel(this))
 {
     m_bDragStart = false;
 
@@ -159,6 +159,7 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
 
 void MultiPagesView::dragToLeft(const QModelIndex &index)
 {
+    Q_UNUSED(index);
     if (m_pageIndex <= 0)
         return;
 
@@ -178,6 +179,7 @@ void MultiPagesView::dragToLeft(const QModelIndex &index)
 
 void MultiPagesView::dragToRight(const QModelIndex &index)
 {
+    Q_UNUSED(index);
     if (m_pageIndex >= m_pageCount - 1)
         return;
 

@@ -62,9 +62,9 @@ public:
 
     void ShowPageView(AppsListModel::AppCategory category);
 
-    void mousePress(QMouseEvent *e);
-    void mouseMove(QMouseEvent *e);
-    void mouseRelease(QMouseEvent *e);
+    void mousePress(QMouseEvent *e)override;
+    void mouseMove(QMouseEvent *e)override;
+    void mouseRelease(QMouseEvent *e)override;
 
 signals:
     void connectViewEvent(AppGridView* pView);
@@ -103,11 +103,11 @@ private:
 
     DHBoxWidget *m_viewBox;
     QHBoxLayout *m_pageLayout;
-    pageControl *m_pageControl;
 
     QPropertyAnimation *m_pageSwitchAnimation;
 
     QAbstractItemDelegate *m_delegate = nullptr;
+    pageControl *m_pageControl;
 };
 
 #endif // MULTIPAGESVIEW_H

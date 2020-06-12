@@ -138,6 +138,7 @@ void BoxFrame::updateBackground()
 
 void BoxFrame::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
     QPainter painter(this);
 
     QScreen const *s = qApp->primaryScreen();

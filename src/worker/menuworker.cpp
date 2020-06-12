@@ -72,7 +72,6 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
     QAction *dock;
     QAction *startup;
     QAction *proxy;
-    QAction *scale;
     QAction *uninstall;
 
     open = new QAction(tr("Open"), menu);

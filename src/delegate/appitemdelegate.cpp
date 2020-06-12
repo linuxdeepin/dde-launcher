@@ -138,6 +138,10 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 //    painter->fillRect(iconRect, Qt::magenta);
 
     br.setHeight(ICONTOTOP+iconRect.height()+TEXTTOICON+fm.height()+fontPixelSize*TextSecond+TEXTTOLEFT);
+    if (br.height() > ibr.height()) {
+        br.setHeight(ibr.height() - 1);
+    }
+
     // draw focus background
    if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay))
     {

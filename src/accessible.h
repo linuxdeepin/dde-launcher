@@ -19,7 +19,6 @@
 #include "./widgets/gradientlabel.h"
 #include "./widgets/hseparator.h"
 #include "./widgets/minicategorywidget.h"
-#include "./widgets/miniframebottombar.h"
 #include "./widgets/miniframebutton.h"
 #include "./widgets/miniframenavigation.h"
 #include "./widgets/miniframerightbar.h"

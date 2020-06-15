@@ -474,7 +474,13 @@ void FullScreenFrame::hideEvent(QHideEvent *e)
 void FullScreenFrame::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton)
+       return;
+    //鼠标在分类中间是无法滑动的
+    auto sysBoxWidgetGlobalY = m_contentFrame->mapTo(window(), m_systemBoxWidget->pos()).y();
+    if ((e->globalY() > sysBoxWidgetGlobalY && e->globalY() < (sysBoxWidgetGlobalY + m_systemBoxWidget->height())))
+    {
         return;
+    }
     m_mouse_press = true;
     m_appsAreaHScrollBarValue = m_appsArea->horizontalScrollBar()->value();
     m_mouse_press_time =  QDateTime::currentDateTime().toMSecsSinceEpoch();
@@ -484,6 +490,12 @@ void FullScreenFrame::mousePressEvent(QMouseEvent *e)
 void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
 {
     if (!m_mouse_press  || e->button() == Qt::RightButton || m_displayMode != GROUP_BY_CATEGORY) {
+        return;
+    }
+    //鼠标在分类中间是无法滑动和点击的
+    auto sysBoxWidgetGlobalY = m_contentFrame->mapTo(window(), m_systemBoxWidget->pos()).y();
+    if((e->globalY() > sysBoxWidgetGlobalY && e->globalY() < (sysBoxWidgetGlobalY + m_systemBoxWidget->height())))
+    {
         return;
     }
 
@@ -496,7 +508,8 @@ void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
 
 void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() != Qt::LeftButton)
+
+    if (e->button() != Qt::LeftButton || !m_mouse_press)
         return;
 
     if (m_mousePos == e->pos()) {

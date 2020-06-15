@@ -752,7 +752,9 @@ void WindowedFrame::resizeEvent(QResizeEvent *event)
         initAnchoredCornor();
         m_cornerPath = getCornerPath(m_anchoredCornor);
         m_windowHandle.setClipPath(m_cornerPath);
-        m_maskBg->setFixedSize(event->size());
+        //event.size() 第一次启动有时候会很大或者很小的负数,直接用固定的size
+        m_maskBg->setFixedSize(size());
+        m_maskBg->move(0,0);
     });
 
     return DBlurEffectWidget::resizeEvent(event);

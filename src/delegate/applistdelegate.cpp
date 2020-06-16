@@ -48,15 +48,15 @@ AppListDelegate::AppListDelegate(QObject *parent)
     m_blueDotPixmap = renderSVG(":/skin/images/new_install_indicator.svg", QSize(10, 10));
     m_autoStartPixmap = renderSVG(":/skin/images/emblem-autostart.svg", QSize(16, 16));
     if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
-        m_color.setRgb(255, 255, 255, 25);
+        m_color.setRgb(120, 120, 120, 102);
     } else {
-        m_color.setRgb(0, 0, 0, 25);
+        m_color.setRgb(21, 21, 21, 60);
     }
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
         if (DGuiApplicationHelper::DarkType == themeType) {
-            m_color.setRgb(255, 255, 255, 25);
+            m_color.setRgb(120, 120, 120, 102);
         } else {
-            m_color.setRgb(0, 0, 0, 25);
+            m_color.setRgb(21, 21, 21, 60);
         }
     });
 }
@@ -74,7 +74,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const bool isDragItem = option.features & QStyleOptionViewItem::Alternate;
     const bool isCategoryList(static_cast<AppsListModel::AppCategory>(index.data(AppsListModel::AppGroupRole).toInt()) == AppsListModel::Category);
 
-    QSize iconSize = isCategoryList ? QSize(24, 24) * ratio : index.data(AppsListModel::AppIconSizeRole).value<QSize>();
+    QSize iconSize = isCategoryList ? QSize(18, 18) * ratio : index.data(AppsListModel::AppIconSizeRole).value<QSize>();
 
     QPixmap iconPixmap = index.data(AppsListModel::AppIconRole).value<QPixmap>();
     iconPixmap = iconPixmap.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -170,13 +170,11 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     // draw app name.
     painter->setPen(QPen(QPalette().brightText(), 1));
-    if (option.state.testFlag(QStyle::State_Selected) && index.data(AppsListModel::DrawBackgroundRole).toBool()) {
-        if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType())
-            painter->setPen(QPen(DGuiApplicationHelper::standardPalette(DGuiApplicationHelper::LightType).brightText(), 1));
-        else
-            painter->setPen(QPen(DGuiApplicationHelper::standardPalette(DGuiApplicationHelper::DarkType).brightText(), 1));
-    }
 
+    if (isCategoryList) {
+        textRect.setX(textRect.x() - 13);
+        textRect.setY(textRect.y() - 2);
+    }
     painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, fm.elidedText(appName, Qt::ElideRight, textRect.width()));
 
     // draw category right icon

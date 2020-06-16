@@ -29,12 +29,15 @@
 #include <QtCore>
 #include <QGSettings>
 
+#include <DSysInfo>
+
 #include "src/dbusinterface/dbuslauncher.h"
 
 #define ALL_APPS            0
 #define GROUP_BY_CATEGORY   1
 #define SEARCH              2
 
+DCORE_USE_NAMESPACE
 class CalculateUtil : public QObject
 {
     Q_OBJECT
@@ -66,6 +69,8 @@ public:
     bool decreaseIconSize();
     inline void increaseItemSize() { m_appItemSize += 16; }
     inline void decreaseItemSize() { m_appItemSize -= 16; }
+    const DSysInfo::DeepinType DeepinType = DSysInfo::deepinType();
+    const bool IsServerSystem = (DSysInfo::DeepinServer == DeepinType);
 
     inline int navigationHeight() { return 90; }
     QSize getAppBoxSize() ;

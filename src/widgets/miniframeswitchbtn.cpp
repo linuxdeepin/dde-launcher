@@ -39,15 +39,10 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     m_allIconLabel->setAccessibleName("AllIcon");
     m_textLabel->setAccessibleName("Text");
     m_textLabel->setAccessibleDescription("This refers to the label with 'all categories'. Since this control will become 'return', it uses 'text' instead");
+    DFontSizeManager::instance()->bind(m_textLabel, DFontSizeManager::T6);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         updateIcon();
-        QPalette pa = m_textLabel->palette();
-        pa.setBrush(QPalette::WindowText, pa.brightText());
-        m_textLabel->setPalette(pa);
-        QFont font;
-        font.setWeight(QFont::Bold);
-        m_textLabel->setFont(font);
         update();
     });
 
@@ -63,7 +58,7 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
 
     mainLayout->setContentsMargins(10, 0, 0, 0);
     mainLayout->addWidget(m_allIconLabel);
-    mainLayout->addSpacing(22);
+    mainLayout->addSpacing(10);
     mainLayout->addWidget(m_textLabel);
     mainLayout->addWidget(m_enterIcon);
 }
@@ -128,12 +123,12 @@ void MiniFrameSwitchBtn::updateIcon()
 {
     if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
         m_color.setRgb(255, 255, 255, 25);
-        m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all-dark.svg", QSize(24, 24)));
+        m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all.svg", QSize(20, 20)));
         m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal.svg", QSize(16, 16)));
 
     } else {
         m_color.setRgb(0, 0, 0, 25);
-        m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all.svg", QSize(24, 24)));
+        m_allIconLabel->setPixmap(renderSVG(":/widgets/images/all-dark.svg", QSize(20, 20)));
         m_enterIcon->setPixmap(renderSVG(":/widgets/images/enter_details_normal-dark.svg", QSize(16, 16)));
     }
 

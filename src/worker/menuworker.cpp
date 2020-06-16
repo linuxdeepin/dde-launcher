@@ -36,7 +36,7 @@ MenuWorker::MenuWorker(QObject *parent) : QObject(parent)
     m_startManagerInterface = new DBusStartManager(this);
     m_launcherInterface = new DBusLauncher(this);
     m_appManager = AppsManager::instance();
-
+    m_calcUtil = CalculateUtil::instance();
     initConnect();
 }
 
@@ -72,6 +72,7 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
     QAction *dock;
     QAction *startup;
     QAction *proxy;
+    QAction *scale;
     QAction *uninstall;
 
     open = new QAction(tr("Open"), menu);
@@ -108,6 +109,18 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
         menu->addAction(proxy);
         signalMapper->setMapping(proxy, Proxy);
         connect(proxy, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+    }
+
+    if (!m_calcUtil->IsServerSystem) {
+        const double scale_ratio = m_xsettings->get("scale-factor").toDouble();
+        if (!qFuzzyCompare(1.0, scale_ratio)) {
+            scale = new QAction(tr("Disable display scaling"), menu);
+            scale->setCheckable(true);
+            scale->setChecked(!m_isItemEnableScaling);
+            menu->addAction(scale);
+            signalMapper->setMapping(scale, SwitchScale);
+            connect(scale, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        }
     }
 
     dock->setEnabled(m_appKey != "dde-trash");

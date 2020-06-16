@@ -93,6 +93,7 @@ private:
     DBusDock* m_dockAppManagerInterface;
     DBusLauncher* m_launcherInterface;
     DBusStartManager* m_startManagerInterface;
+    CalculateUtil *m_calcUtil;
 
     AppsManager *m_appManager;
 

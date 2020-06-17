@@ -121,31 +121,6 @@ bool AppListArea::eventFilter(QObject *watched, QEvent *e)
                     return true;
                 }
                 break;
-            case QMouseEvent::MouseMove:
-                if (QScroller::hasScroller(this)) {
-                    return true;
-                }
-
-                if (m_updateEnableSelectionByMouseTimer && m_updateEnableSelectionByMouseTimer->isActive()) {
-                    const QPoint difference_pos = event->pos() - m_lastTouchBeginPos;
-                    if (qAbs(difference_pos.x()) > touchTapDistance || qAbs(difference_pos.y()) > touchTapDistance) {
-                        QScroller::grabGesture(this);
-                        QScroller *scroller = QScroller::scroller(this);
-
-                        const QPointF point = view->mapTo(this, event->localPos().toPoint());
-
-                        scroller->handleInput(QScroller::InputPress, point, event->timestamp());
-                        scroller->handleInput(QScroller::InputMove, point, event->timestamp());
-
-                        connect(scroller, &QScroller::stateChanged, this, [ = ](QScroller::State newstate) {
-                            if (newstate == QScroller::Inactive) {
-                                QScroller::scroller(this)->deleteLater();
-                            }
-                        });
-                    }
-                    return true;
-                }
-                break;
             default: break;
             }
         }

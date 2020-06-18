@@ -82,7 +82,7 @@ const QPoint WindowedFrame::scaledPosition(const QPoint &xpos)
         }
     }
 
-    return g.topLeft() + (xpos - g.topLeft()) / ratio;
+    return g.topLeft() + (xpos - g.topLeft()) /*/ ratio*/;
 }
 
 WindowedFrame::WindowedFrame(QWidget *parent)
@@ -326,7 +326,7 @@ void WindowedFrame::showLauncher()
     m_windowHandle.setClipPath(m_cornerPath);
     show();
 
-    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition, Qt::UniqueConnection);
+    connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &WindowedFrame::hideLauncher);
 }
 
 void WindowedFrame::hideLauncher()
@@ -337,7 +337,7 @@ void WindowedFrame::hideLauncher()
 
     m_delayHideTimer->stop();
 
-    disconnect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition);
+    disconnect(m_appsManager, &AppsManager::dockGeometryChanged, this, &WindowedFrame::hideLauncher);
 
     m_searcherEdit->lineEdit()->clear();
     // clean all state
@@ -801,7 +801,6 @@ void WindowedFrame::resizeEvent(QResizeEvent *event)
 void WindowedFrame::initAnchoredCornor()
 {
     if (m_wmHelper->hasComposite()) {
-
         const int dockPos = m_dockInter->position();
 
         switch (dockPos) {
@@ -818,7 +817,6 @@ void WindowedFrame::initAnchoredCornor()
             m_anchoredCornor = BottomLeft;
             break;
         }
-
     } else {
         m_anchoredCornor = Normal;
     }
@@ -830,14 +828,11 @@ void WindowedFrame::adjustPosition()
 {
     const auto ratio = devicePixelRatioF();
     const int dockPos = m_dockInter->position();
-    const QRect &r = m_dockInter->frontendRect();
-    QRect dockRect = QRect(scaledPosition(r.topLeft()), r.size() / ratio);
-
+    QRect dockRect =  m_appsManager->dockGeometry();
     const int dockSpacing = 8;
     const int screenSpacing = 0;
     const auto &s = size();
     QPoint p;
-
     // extra spacing for efficient mode
     if (m_dockInter->displayMode() == DOCK_EFFICIENT) {
         const QRect primaryRect = m_displayInter->primaryRect();

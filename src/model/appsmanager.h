@@ -29,6 +29,7 @@
 #include "src/dbusinterface/dbusfileinfo.h"
 #include "src/dbusinterface/dbustartmanager.h"
 #include "src/dbusinterface/dbusdock.h"
+#include "src/dbusinterface/dbusdockinterface.h"
 #include "src/dbusinterface/dbusdisplay.h"
 #include "src/global_util/calculate_util.h"
 
@@ -78,6 +79,8 @@ public:
 
     void pushPixmap();
     void pushPixmap(const ItemInfo &itemInfo);
+
+    const QScreen * currentScreen();
 signals:
     void itemDataChanged(const ItemInfo &info) const;
     void dataChanged(const AppsListModel::AppCategory category) const;
@@ -86,6 +89,7 @@ signals:
     void newInstallListChanged() const;
     void requestHideTips() const;
     void categoryListChanged() const;
+    void IconSizeChanged() const;
     void dockGeometryChanged() const;
 
     void itemRedraw(const QModelIndex &index);
@@ -144,6 +148,7 @@ private:
     DBusLauncher *m_launcherInter;
     DBusStartManager *m_startManagerInter;
     DBusDock *m_dockInter;
+    DBusDockInterface *m_dockInterface;
     std::unique_ptr<QTimer> m_iconRefreshTimer;
 
     QString m_searchText;

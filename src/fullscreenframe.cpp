@@ -480,6 +480,11 @@ void FullScreenFrame::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton)
         return;
+    auto sysBoxWidgetGlobalY = m_contentFrame->mapTo(window(), m_systemBoxWidget->pos()).y();
+    if ((e->globalY() > sysBoxWidgetGlobalY && e->globalY() < (sysBoxWidgetGlobalY + m_systemBoxWidget->height())))
+    {
+        return;
+    }
     m_mouse_press = true;
     m_appsAreaHScrollBarValue = m_appsArea->horizontalScrollBar()->value();
     m_mouse_press_time =  QDateTime::currentDateTime().toMSecsSinceEpoch();
@@ -489,6 +494,12 @@ void FullScreenFrame::mousePressEvent(QMouseEvent *e)
 void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
 {
     if (!m_mouse_press  || e->button() == Qt::RightButton || m_displayMode != GROUP_BY_CATEGORY) {
+        return;
+    }
+    //鼠标在分类中间是无法滑动的
+    auto sysBoxWidgetGlobalY = m_contentFrame->mapTo(window(), m_systemBoxWidget->pos()).y();
+    if ((e->globalY() > sysBoxWidgetGlobalY && e->globalY() < (sysBoxWidgetGlobalY + m_systemBoxWidget->height())))
+    {
         return;
     }
 
@@ -1364,6 +1375,8 @@ void FullScreenFrame::updateCurrentVisibleCategory()
         currentVisibleCategory = AppsListModel::System;
     else if (!m_othersBoxWidget->getMultiPagesView()->visibleRegion().isEmpty())
         currentVisibleCategory = AppsListModel::Others;
+    else
+        currentVisibleCategory = AppsListModel::Internet;
 
     if (m_currentCategory == currentVisibleCategory)
         return;
@@ -1599,6 +1612,11 @@ AppsListModel::AppCategory FullScreenFrame::prevCategoryModel(const AppsListMode
     }
 
     return (AppsListModel::AppCategory)nextCategory;
+}
+
+const QScreen *FullScreenFrame::currentScreen()
+{
+    return m_appsManager->currentScreen();
 }
 
 void FullScreenFrame::layoutChanged()

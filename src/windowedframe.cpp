@@ -305,6 +305,7 @@ void WindowedFrame::hideLauncher()
     disconnect(m_appsManager, &AppsManager::dockGeometryChanged, this, &WindowedFrame::hideLauncher);
 
     m_searcherEdit->lineEdit()->clear();
+    m_searcherEdit->clearEdit();
     // clean all state
     recoveryAll();
 

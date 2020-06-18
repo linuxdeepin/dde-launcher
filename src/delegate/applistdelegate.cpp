@@ -125,7 +125,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
         QStringList calIconList = m_calcUtil->calendarSelectIcon();
         auto bg_pmap = loadSvg(calIconList.at(0),iconSize.width());
-        bg_pmap = bg_pmap.scaled(QSize(tw,th),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        bg_pmap = bg_pmap.scaled(QSize(tw,th),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
         bg_pmap.setDevicePixelRatio(ratio);
         painter->drawPixmap(tx,ty,bg_pmap);
 
@@ -135,7 +135,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         painter->drawPixmap(tx+tw/4/ratio,ty+th/8/ratio,month_pmap);
 
         auto day_pmap = loadSvg(calIconList.at(2),iconSize.width());
-        day_pmap = day_pmap.scaled(QSize(tw/2,th/2),Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        day_pmap = day_pmap.scaled(QSize(tw/2,th/2),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         day_pmap.setDevicePixelRatio(ratio);
         painter->drawPixmap(tx+tw/4/ratio,ty+th/4/ratio,day_pmap);
 

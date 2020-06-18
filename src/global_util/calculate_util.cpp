@@ -26,7 +26,6 @@
 #include "src/dbusinterface/dbusdisplay.h"
 
 #include <QDebug>
-#include <QScreen>
 #include <QDesktopWidget>
 #include <QApplication>
 
@@ -61,27 +60,25 @@ QSize CalculateUtil::appIconSize() const
 
 double CalculateUtil::getScreenScaleX()
 {
-    int width = qApp->primaryScreen()->geometry().size().width();    
+    int width  = currentScreen()->geometry().width();
     return double(width) / 1920;
 }
 
 double CalculateUtil::getScreenScaleY()
 {
-    int width = qApp->primaryScreen()->geometry().size().height();
+    int width = currentScreen()->geometry().height();
     return double(width) / 1080;
 }
 
 QSize CalculateUtil::getScreenSize() const
 {
-    int width = qApp->primaryScreen()->geometry().size().width();
-    int height = qApp->primaryScreen()->geometry().size().height();
-    return  QSize(width, height);
+    return currentScreen()->geometry().size();
 }
 
 QSize CalculateUtil::getAppBoxSize()
 {
-    int width = qApp->primaryScreen()->geometry().size().width() * 0.51;
-    int height = qApp->primaryScreen()->geometry().size().height() * 0.69;
+    int height = currentScreen()->geometry().height() * 0.69;
+    int width = currentScreen()->geometry().width() * 0.51;
     return  QSize(width, height);
 }
 
@@ -163,7 +160,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 {
     Q_UNUSED(dockPosition);
 
-    const QRect pr = qApp->primaryScreen()->geometry();
+    QRect pr = currentScreen()->geometry();
     const int screenWidth = pr.width();
     const int spacing = pr.width() <= 1440 ? 10 : 28;
     // mini mode
@@ -224,6 +221,8 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 
 CalculateUtil::CalculateUtil(QObject *parent)
     : QObject(parent),
+      m_dockInter(new DBusDock(this)),
+      m_dockInterface(new DBusDockInterface(this)),
       m_launcherGsettings(new QGSettings("com.deepin.dde.launcher",
                                          "/com/deepin/dde/launcher/", this))
 {
@@ -240,4 +239,29 @@ void CalculateUtil::calculateTextSize(const int screenWidth)
         m_navgationTextSize = 11;
         m_titleTextSize = 38;
     }
+}
+
+QScreen *CalculateUtil::currentScreen() const
+{
+    QRect dockRect;
+    QScreen * s = qApp->primaryScreen();
+
+    if (m_dockInterface && m_dockInterface->isValid()) {
+        dockRect = m_dockInterface->geometry();
+    } else {
+        dockRect = m_dockInter->frontendRect();
+    }
+
+    const auto ratio = qApp->devicePixelRatio();
+
+    for (auto *screen : qApp->screens()) {
+        const QRect &sg = screen->geometry();
+        const QRect &rg = QRect(sg.topLeft(), sg.size() * ratio);
+        if (rg.contains(dockRect.topLeft())) {
+            s = screen;
+            break;
+        }
+    }
+
+    return  s;
 }

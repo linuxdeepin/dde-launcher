@@ -81,7 +81,7 @@ void BoxFrame::setBlurBackground(const QString &url)
         pix.load(DefaultBackground);
     }
 
-    const QSize &size = qApp->primaryScreen()->size() ;//* qApp->primaryScreen()->devicePixelRatio();
+    const QSize &size = currentScreen()->size() ;//* currentScreen()->devicePixelRatio();
 
     QPixmap cache = pix.scaled(size,
                                     Qt::KeepAspectRatioByExpanding,
@@ -96,7 +96,7 @@ void BoxFrame::setBlurBackground(const QString &url)
 
 const QPixmap BoxFrame::backgroundPixmap()
 {
-    const QSize &size = qApp->primaryScreen()->size() * qApp->primaryScreen()->devicePixelRatio();
+    const QSize &size = currentScreen()->size() * currentScreen()->devicePixelRatio();
 
     QPixmap cache = m_pixmap.scaled(size,
                                     Qt::KeepAspectRatioByExpanding,
@@ -109,6 +109,11 @@ const QPixmap BoxFrame::backgroundPixmap()
     return cache;
 }
 
+const QScreen *BoxFrame::currentScreen()
+{
+    return qApp->primaryScreen();
+}
+
 void BoxFrame::updateBlurBackground()
 {
     QPixmap pix(m_lastBlurUrl);
@@ -117,7 +122,7 @@ void BoxFrame::updateBlurBackground()
         pix.load(DefaultBackground);
     }
 
-    const QSize &size = qApp->primaryScreen()->size() ;//* qApp->primaryScreen()->devicePixelRatio();
+    const QSize &size = currentScreen()->size() ;//* currentScreen()->devicePixelRatio();
 
     QPixmap cache = pix.scaled(size,
                                     Qt::KeepAspectRatioByExpanding,
@@ -141,7 +146,7 @@ void BoxFrame::paintEvent(QPaintEvent *event)
     Q_UNUSED(event);
     QPainter painter(this);
 
-    QScreen const *s = qApp->primaryScreen();
+    QScreen const *s = currentScreen();
     const QRect &geom = s->geometry();
     QRect tr(QPoint(0, 0), geom.size());
 

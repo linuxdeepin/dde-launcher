@@ -165,6 +165,7 @@ AppsManager::AppsManager(QObject *parent) :
     m_launcherInter(new DBusLauncher(this)),
     m_startManagerInter(new DBusStartManager(this)),
     m_dockInter(new DBusDock(this)),
+    m_dockInterface(new DBusDockInterface(this)),
     m_iconRefreshTimer(std::make_unique<QTimer>(new QTimer)),
     m_calUtil(CalculateUtil::instance()),
     m_searchTimer(new QTimer(this)),
@@ -218,8 +219,8 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_launcherInter, &DBusLauncher::UninstallSuccess, this, &AppsManager::abandonStashedItem);
     connect(m_launcherInter, &DBusLauncher::UninstallFailed, [this](const QString & appKey) { restoreItem(appKey); emit dataChanged(AppsListModel::All); });
     connect(m_launcherInter, &DBusLauncher::ItemChanged, this, &AppsManager::handleItemChanged);
-    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &AppsManager::dockGeometryChanged);
-    connect(m_dockInter, &DBusDock::IconSizeChanged, this, &AppsManager::dockGeometryChanged);
+    connect(m_dockInter, &DBusDock::IconSizeChanged, this, &AppsManager::IconSizeChanged, Qt::QueuedConnection);
+    connect(m_dockInterface, &DBusDockInterface::geometryChanged, this, &AppsManager::dockGeometryChanged, Qt::QueuedConnection);
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
@@ -398,12 +399,16 @@ int AppsManager::dockPosition() const
 
 int AppsManager::dockWidth() const
 {
-    return QRect(m_dockInter->frontendRect()).width();
+    return dockGeometry().width();
 }
 
 QRect AppsManager::dockGeometry() const
 {
-    return std::move(m_dockInter->frontendRect());
+    if (m_dockInterface && m_dockInterface->isValid()) {
+        return m_dockInterface->geometry();
+    } else {
+        return QRect(m_dockInter->frontendRect());
+    }
 }
 
 bool AppsManager::isVaild()
@@ -1017,6 +1022,20 @@ void AppsManager::pushPixmap(const ItemInfo &itemInfo)
             if (!pixmap.isNull()) {
                 m_iconCache[tmpKey] = pixmap;
             }
+        }
+    }
+}
+
+const QScreen *AppsManager::currentScreen()
+{
+    QRect dockRect = dockGeometry();
+
+    const auto ratio = qApp->devicePixelRatio();
+    for (auto *screen : qApp->screens()) {
+        const QRect &sg = screen->geometry();
+        const QRect &rg = QRect(sg.topLeft(), sg.size() * ratio);
+        if (rg.contains(dockRect.topLeft())) {
+            return  screen;
         }
     }
 }

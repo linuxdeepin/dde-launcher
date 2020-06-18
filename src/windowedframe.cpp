@@ -73,7 +73,7 @@ inline const QPoint scaledPosition(const QPoint &xpos)
         }
     }
 
-    return g.topLeft() + (xpos - g.topLeft()) / ratio;
+    return g.topLeft() + (xpos - g.topLeft()) /*/ ratio*/;
 }
 
 WindowedFrame::WindowedFrame(QWidget *parent)
@@ -291,7 +291,7 @@ void WindowedFrame::showLauncher()
     m_windowHandle.setClipPath(m_cornerPath);
     show();
 
-    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition, Qt::UniqueConnection);
+    connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &WindowedFrame::hideLauncher);
 }
 
 void WindowedFrame::hideLauncher()
@@ -302,7 +302,7 @@ void WindowedFrame::hideLauncher()
 
     m_delayHideTimer->stop();
 
-    disconnect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::adjustPosition);
+    disconnect(m_appsManager, &AppsManager::dockGeometryChanged, this, &WindowedFrame::hideLauncher);
 
     m_searcherEdit->lineEdit()->clear();
     // clean all state
@@ -763,7 +763,6 @@ void WindowedFrame::resizeEvent(QResizeEvent *event)
 void WindowedFrame::initAnchoredCornor()
 {
     if (m_wmHelper->hasComposite()) {
-
         const int dockPos = m_dockInter->position();
 
         switch (dockPos) {
@@ -780,7 +779,6 @@ void WindowedFrame::initAnchoredCornor()
             m_anchoredCornor = BottomLeft;
             break;
         }
-
     } else {
         m_anchoredCornor = Normal;
     }
@@ -792,51 +790,26 @@ void WindowedFrame::adjustPosition()
 {
     const auto ratio = devicePixelRatioF();
     const int dockPos = m_dockInter->position();
-    const QRect &r = m_dockInter->frontendRect();
-    QRect dockRect = QRect(scaledPosition(r.topLeft()), r.size() / ratio);
-
+    QRect dockRect =  m_appsManager->dockGeometry();
     const int dockSpacing = 8;
-    const int screenSpacing = 0;
     const auto &s = size();
     QPoint p;
 
-    // extra spacing for efficient mode
-    if (m_dockInter->displayMode() == DOCK_EFFICIENT) {
-        const QRect primaryRect = qApp->primaryScreen()->geometry();
-
-        switch (dockPos) {
-        case DOCK_TOP:
-            p = QPoint(primaryRect.left() + screenSpacing, dockRect.bottom() + dockSpacing + 1);
-            break;
-        case DOCK_BOTTOM:
-            p = QPoint(primaryRect.left() + screenSpacing, dockRect.top() - s.height() - dockSpacing + 1);
-            break;
-        case DOCK_LEFT:
-            p = QPoint(dockRect.right() + dockSpacing + 1, primaryRect.top() + screenSpacing);
-            break;
-        case DOCK_RIGHT:
-            p = QPoint(dockRect.left() - s.width() - dockSpacing + 1, primaryRect.top() + screenSpacing);
-            break;
-        default:
-            Q_UNREACHABLE_IMPL();
-        }
-    } else {
-        switch (dockPos) {
-        case DOCK_TOP:
-            p = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
-            break;
-        case DOCK_BOTTOM:
-            p = QPoint(dockRect.left(), dockRect.top() - s.height() - dockSpacing);
-            break;
-        case DOCK_LEFT:
-            p = QPoint(dockRect.right() + dockSpacing + 1, dockRect.top());
-            break;
-        case DOCK_RIGHT:
-            p = QPoint(dockRect.left() - s.width() - dockSpacing, dockRect.top());
-            break;
-        default:
-            Q_UNREACHABLE_IMPL();
-        }
+    switch (dockPos) {
+    case DOCK_TOP:
+        p = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
+        break;
+    case DOCK_BOTTOM:
+        p = QPoint(dockRect.left(), dockRect.top() - s.height() - dockSpacing);
+        break;
+    case DOCK_LEFT:
+        p = QPoint(dockRect.right() + dockSpacing + 1, dockRect.top());
+        break;
+    case DOCK_RIGHT:
+        p = QPoint(dockRect.left() - s.width() - dockSpacing, dockRect.top());
+        break;
+    default:
+        Q_UNREACHABLE_IMPL();
     }
 
     qDebug() << "currentWindowedFrame Position:"<< p;

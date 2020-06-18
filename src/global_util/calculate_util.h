@@ -28,10 +28,12 @@
 #include <QSize>
 #include <QtCore>
 #include <QGSettings>
-
+#include <QScreen>
 #include <DSysInfo>
 
 #include "src/dbusinterface/dbuslauncher.h"
+#include "src/dbusinterface/dbusdock.h"
+#include "src/dbusinterface/dbusdockinterface.h"
 
 #define ALL_APPS            0
 #define GROUP_BY_CATEGORY   1
@@ -85,7 +87,7 @@ public slots:
 private:
     explicit CalculateUtil(QObject *parent);
     void calculateTextSize(const int screenWidth);
-
+    QScreen *currentScreen() const;
 private:
     static QPointer<CalculateUtil> INSTANCE;
 
@@ -103,6 +105,9 @@ private:
     bool isFullScreen;
 
     DBusLauncher *m_launcherInter;
+    DBusDock *m_dockInter;
+    DBusDockInterface *m_dockInterface;
+
     QGSettings *m_launcherGsettings;
 };
 

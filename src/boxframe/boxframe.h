@@ -28,6 +28,7 @@
 
 class QPixmap;
 class BackgroundManager;
+class QScreen;
 
 class BoxFrame : public QLabel
 {
@@ -51,7 +52,7 @@ protected:
 
 private:
     const QPixmap backgroundPixmap();
-
+    virtual const QScreen * currentScreen();
 private:
     QString m_lastUrl;
     QString m_lastBlurUrl;

@@ -67,7 +67,7 @@ class FullScreenFrame : public BoxFrame, public LauncherInterface
 
 public:
     enum tabFocus {FirstItem, SearchEdit, CategoryChangeBtn, CategoryTital};
-    explicit FullScreenFrame(QWidget *parent = 0);
+    explicit FullScreenFrame(QWidget *parent = nullptr);
     ~FullScreenFrame();
 
     void exit();
@@ -135,6 +135,7 @@ private:
     AppsListModel::AppCategory nextCategoryModel(const AppsListModel::AppCategory category);
     AppsListModel::AppCategory prevCategoryModel(const AppsListModel::AppCategory category);
 
+    virtual const QScreen *currentScreen() override;
 private slots:
     void layoutChanged();
     void searchTextChanged(const QString &keywords);

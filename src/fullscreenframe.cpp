@@ -229,7 +229,7 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &categor
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
     m_currentBox = m_currentCategory - 4;
 
-    const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  m_padding * 2 - 20) / 2 ;
+    const int temp = (m_appsManager->currentScreen()->geometry().size().width() / 2 - m_padding * 2 - 20) / 2;
 
     m_scrollDest = dest;
 
@@ -268,7 +268,7 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category, AppsListMod
     m_currentBox = m_currentCategory - 4;
 
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
-    const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  m_padding * 2 - 20) / 2 ;
+    const int temp = (m_appsManager->currentScreen()->geometry().size().width() / 2 - m_padding * 2 - 20) / 2;
 
     m_scrollDest = dest;
     BlurBoxWidget* blurbox = qobject_cast<BlurBoxWidget*>(m_scrollDest);
@@ -442,7 +442,7 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     XcbMisc::instance()->set_deepin_override(winId());
     // To make sure the window is placed at the right position.
     updateGeometry();
-    //updateBackground();
+    updateBackground();
     updateDockPosition();
 
     // force refresh
@@ -816,8 +816,8 @@ BlurBoxWidget *FullScreenFrame::categoryBoxWidget(const AppsListModel::AppCatego
 
 void FullScreenFrame::initConnection()
 {
-    connect(qApp, &QApplication::primaryScreenChanged, this, &FullScreenFrame::updateGeometry);
-    connect(qApp->primaryScreen(), &QScreen::geometryChanged, this, &FullScreenFrame::updateGeometry);
+//    connect(qApp, &QApplication::primaryScreenChanged, this, &FullScreenFrame::updateGeometry);
+//    connect(qApp->primaryScreen(), &QScreen::geometryChanged, this, &FullScreenFrame::updateGeometry);
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
     connect(m_scrollAnimation, &QPropertyAnimation::valueChanged, this, &FullScreenFrame::ensureScrollToDest);
     connect(m_appsArea->horizontalScrollBar(), &QScrollBar::valueChanged, this, &FullScreenFrame::ensureScrollToDest);
@@ -828,6 +828,7 @@ void FullScreenFrame::initConnection()
     connect(this, &FullScreenFrame::categoryAppNumsChanged, m_navigationWidget, &NavigationWidget::refershCategoryVisible);
     connect(this, &FullScreenFrame::categoryAppNumsChanged, this, &FullScreenFrame::refershCategoryVisible);
     connect(this, &FullScreenFrame::displayModeChanged, this, &FullScreenFrame::checkCategoryVisible);
+
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
     connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hide, Qt::QueuedConnection);
     connect(m_clearCacheTimer, &QTimer::timeout, m_appsManager, &AppsManager::clearCache);
@@ -879,7 +880,7 @@ void FullScreenFrame::initConnection()
     connect(m_appsManager, &AppsManager::categoryListChanged, this, &FullScreenFrame::checkCategoryVisible);
     connect(m_appsManager, &AppsManager::requestTips, this, &FullScreenFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
-    connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::updateDockPosition);
+    connect(m_appsManager, &AppsManager::IconSizeChanged, this, &FullScreenFrame::updateDockPosition);
     connect(m_appsManager, &AppsManager::dataChanged, this, &FullScreenFrame::reflashPageView);
 
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &FullScreenFrame::primaryScreenChanged, Qt::QueuedConnection);
@@ -893,12 +894,21 @@ void FullScreenFrame::showLauncher()
     m_focusIndex = 1;
     m_appItemDelegate->setCurrentIndex(QModelIndex());
     m_searchWidget->categoryBtn()->clearFocus();
-    setFixedSize(qApp->primaryScreen()->geometry().size());
+    setFixedSize(m_appsManager->currentScreen()->geometry().size());
+
+    if (m_displayMode == GROUP_BY_CATEGORY)
+        timeOutUpdateAppsArea();
+
     show();
+    connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::hideLauncher);
 }
 
 void FullScreenFrame::hideLauncher()
 {
+    if (!isVisible()) {
+        return;
+    }
+    disconnect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::hideLauncher);
     hide();
 }
 
@@ -909,7 +919,7 @@ bool FullScreenFrame::visible()
 
 void FullScreenFrame::updateGeometry()
 {
-    const QRect rect = qApp->primaryScreen()->geometry();
+    QRect rect = m_appsManager->currentScreen()->geometry();
 
     setGeometry(rect);
 
@@ -1202,6 +1212,7 @@ void FullScreenFrame::ensureScrollToDest(const QVariant &value)
 
 void FullScreenFrame::ensureItemVisible(const QModelIndex &index)
 {
+    Q_UNUSED(index);
 //    MultiPagesView *view = nullptr;
 //    const AppsListModel::AppCategory category = index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 
@@ -1242,7 +1253,7 @@ void FullScreenFrame::primaryScreenChanged()
 {
     updateBackground();
     updateBlurBackground();
-    setFixedSize(qApp->primaryScreen()->geometry().size());
+    setFixedSize(m_appsManager->currentScreen()->size());
     updateDockPosition();
 }
 
@@ -1375,7 +1386,7 @@ void FullScreenFrame::updateDockPosition()
         m_searchWidget->setRightSpacing(0);
         break;
     case DOCK_POS_BOTTOM:
-        bottomMargin += dockGeometry.height()/qApp->devicePixelRatio();
+        bottomMargin += dockGeometry.height();
         m_bottomSpacing->setFixedHeight(bottomMargin);
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(0);
@@ -1577,6 +1588,11 @@ AppsListModel::AppCategory FullScreenFrame::prevCategoryModel(const AppsListMode
     return (AppsListModel::AppCategory)nextCategory;
 }
 
+const QScreen *FullScreenFrame::currentScreen()
+{
+    return m_appsManager->currentScreen();
+}
+
 void FullScreenFrame::layoutChanged()
 {
     QSize boxSize;
@@ -1592,7 +1608,7 @@ void FullScreenFrame::layoutChanged()
         boxSize = m_calcUtil->getAppBoxSize();
     }
 
-//    qreal scale = qApp->primaryScreen()->devicePixelRatio();
+//    qreal scale = m_appsManager->currentScreen()->devicePixelRatio();
 //    m_searchWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.043*scale);
 //    m_navigationWidget->setFixedHeight(m_calcUtil->getScreenSize().height()*0.083*scale);
     m_appsHbox->setFixedHeight(m_appsArea->height());

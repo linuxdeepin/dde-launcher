@@ -77,7 +77,7 @@ AppGridView::AppGridView(QWidget *parent)
     setViewportMargins(0, 0, 0, 0);
 
     // init origin size
-    setFixedSize(qApp->primaryScreen()->geometry().size());
+    setFixedSize(m_appManager->currentScreen()->size());
 
     viewport()->setAutoFillBackground(false);
 

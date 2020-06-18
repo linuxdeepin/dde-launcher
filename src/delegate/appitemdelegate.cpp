@@ -186,19 +186,23 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         int th = iconRect.height();
         int tx = iconRect.x();
         int ty = iconRect.y();
-        const float  iconZoom =  iconRect.width() /64.0;
+        const double  iconZoom =  iconRect.width() /256.0;
 
         QStringList calIconList = m_calcUtil->calendarSelectIcon();
-        auto bg_pmap = loadSvg(calIconList.at(0),iconSize.width()*iconZoom);
+        auto bg_pmap = loadSvg(calIconList.at(0),256);
+        bg_pmap.setDevicePixelRatio(1/iconZoom);
         painter->drawPixmap(iconRect, bg_pmap, bg_pmap.rect());
 
-        auto month_pmap = loadSvg(calIconList.at(1),QSize(20,10)*iconZoom);
+        auto month_pmap = loadSvg(calIconList.at(1),QSize(80,40));
+        month_pmap.setDevicePixelRatio(1/iconZoom);
         painter->drawPixmap(tx+(tw/3.6),ty+(th/7),month_pmap);
 
-        auto day_pmap = loadSvg(calIconList.at(2),QSize(28,26)*iconZoom);
+        auto day_pmap = loadSvg(calIconList.at(2),QSize(112,104));
+        day_pmap.setDevicePixelRatio(1/iconZoom);
         painter->drawPixmap(tx+(tw/4),ty+th/3.6,day_pmap);
 
-        auto week_pmap = loadSvg(calIconList.at(3),QSize(14,6)*iconZoom);
+        auto week_pmap = loadSvg(calIconList.at(3),QSize(56,24));
+        week_pmap.setDevicePixelRatio(1/iconZoom);
         painter->drawPixmap(tx+(tw/2.5),ty+((th/4)*2.8),week_pmap);
     }else {
         const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();

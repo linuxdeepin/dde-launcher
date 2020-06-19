@@ -29,7 +29,6 @@
 #include "src/dbusinterface/dbusfileinfo.h"
 #include "src/dbusinterface/dbustartmanager.h"
 #include "src/dbusinterface/dbusdock.h"
-#include "src/dbusinterface/dbusdockinterface.h"
 #include "src/dbusinterface/dbusdisplay.h"
 #include "src/global_util/calculate_util.h"
 
@@ -148,7 +147,6 @@ private:
     DBusLauncher *m_launcherInter;
     DBusStartManager *m_startManagerInter;
     DBusDock *m_dockInter;
-    DBusDockInterface *m_dockInterface;
     std::unique_ptr<QTimer> m_iconRefreshTimer;
 
     QString m_searchText;

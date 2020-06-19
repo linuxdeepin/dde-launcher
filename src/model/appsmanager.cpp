@@ -164,7 +164,6 @@ AppsManager::AppsManager(QObject *parent) :
     m_launcherInter(new DBusLauncher(this)),
     m_startManagerInter(new DBusStartManager(this)),
     m_dockInter(new DBusDock(this)),
-    m_dockInterface(new DBusDockInterface(this)),
     m_iconRefreshTimer(std::make_unique<QTimer>(new QTimer)),
     m_calUtil(CalculateUtil::instance()),
     m_searchTimer(new QTimer(this)),
@@ -219,7 +218,7 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_launcherInter, &DBusLauncher::UninstallFailed, [this](const QString & appKey) { restoreItem(appKey); emit dataChanged(AppsListModel::All); });
     connect(m_launcherInter, &DBusLauncher::ItemChanged, this, &AppsManager::handleItemChanged);
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &AppsManager::IconSizeChanged, Qt::QueuedConnection);
-    connect(m_dockInterface, &DBusDockInterface::geometryChanged, this, &AppsManager::dockGeometryChanged, Qt::QueuedConnection);
+    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &AppsManager::dockGeometryChanged, Qt::QueuedConnection);
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
@@ -419,11 +418,7 @@ int AppsManager::dockWidth() const
 
 QRect AppsManager::dockGeometry() const
 {
-    if (m_dockInterface && m_dockInterface->isValid()) {
-        return m_dockInterface->geometry();
-    } else {
-        return QRect(m_dockInter->frontendRect());
-    }
+    return QRect(m_dockInter->frontendRect());
 }
 
 bool AppsManager::isVaild()

@@ -33,7 +33,6 @@
 
 #include "src/dbusinterface/dbuslauncher.h"
 #include "src/dbusinterface/dbusdock.h"
-#include "src/dbusinterface/dbusdockinterface.h"
 
 #define ALL_APPS            0
 #define GROUP_BY_CATEGORY   1
@@ -106,7 +105,6 @@ private:
 
     DBusLauncher *m_launcherInter;
     DBusDock *m_dockInter;
-    DBusDockInterface *m_dockInterface;
 
     QGSettings *m_launcherGsettings;
 };

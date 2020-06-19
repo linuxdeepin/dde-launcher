@@ -222,7 +222,6 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
 CalculateUtil::CalculateUtil(QObject *parent)
     : QObject(parent),
       m_dockInter(new DBusDock(this)),
-      m_dockInterface(new DBusDockInterface(this)),
       m_launcherGsettings(new QGSettings("com.deepin.dde.launcher",
                                          "/com/deepin/dde/launcher/", this))
 {
@@ -243,15 +242,8 @@ void CalculateUtil::calculateTextSize(const int screenWidth)
 
 QScreen *CalculateUtil::currentScreen() const
 {
-    QRect dockRect;
     QScreen * s = qApp->primaryScreen();
-
-    if (m_dockInterface && m_dockInterface->isValid()) {
-        dockRect = m_dockInterface->geometry();
-    } else {
-        dockRect = m_dockInter->frontendRect();
-    }
-
+    const QRect dockRect = m_dockInter->frontendRect();
     const auto ratio = qApp->devicePixelRatio();
 
     for (auto *screen : qApp->screens()) {

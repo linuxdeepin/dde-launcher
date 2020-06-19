@@ -73,7 +73,7 @@ inline const QPoint scaledPosition(const QPoint &xpos)
         }
     }
 
-    return g.topLeft() + (xpos - g.topLeft()) /*/ ratio*/;
+    return g.topLeft() + (xpos - g.topLeft()) / ratio;
 }
 
 WindowedFrame::WindowedFrame(QWidget *parent)
@@ -291,7 +291,7 @@ void WindowedFrame::showLauncher()
     m_windowHandle.setClipPath(m_cornerPath);
     show();
 
-    connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &WindowedFrame::hideLauncher);
+    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::hideLauncher);
 }
 
 void WindowedFrame::hideLauncher()
@@ -302,7 +302,7 @@ void WindowedFrame::hideLauncher()
 
     m_delayHideTimer->stop();
 
-    disconnect(m_appsManager, &AppsManager::dockGeometryChanged, this, &WindowedFrame::hideLauncher);
+    disconnect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::hideLauncher);
 
     m_searcherEdit->lineEdit()->clear();
     m_searcherEdit->clearEdit();
@@ -789,9 +789,11 @@ void WindowedFrame::initAnchoredCornor()
 
 void WindowedFrame::adjustPosition()
 {
-    const auto ratio = devicePixelRatioF();
     const int dockPos = m_dockInter->position();
-    QRect dockRect =  m_appsManager->dockGeometry();
+    qreal ratio = qApp->devicePixelRatio();
+    QRect r =  m_dockInter->frontendRect();
+    QRect dockRect = QRect(scaledPosition(r.topLeft()),r.size() * ratio);
+
     const int dockSpacing = 8;
     const auto &s = size();
     QPoint p;

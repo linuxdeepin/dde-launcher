@@ -62,9 +62,9 @@ public:
 
     void ShowPageView(AppsListModel::AppCategory category);
 
-    void mousePress(QMouseEvent *e)override;
-    void mouseMove(QMouseEvent *e)override;
-    void mouseRelease(QMouseEvent *e)override;
+    void mousePress(QMouseEvent *e) override;
+    void mouseMove(QMouseEvent *e) override;
+    void mouseRelease(QMouseEvent *e) override;
 
 signals:
     void connectViewEvent(AppGridView* pView);

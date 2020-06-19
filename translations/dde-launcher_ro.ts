@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ro" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ro">
 <context>
     <name>AppsManager</name>
     <message>
@@ -61,8 +63,8 @@
         <translation>Confirmă</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -105,7 +107,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +165,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Computer</translation>
+        <translation type="vanished">Computer</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Documente</translation>
+        <translation type="vanished">Documente</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videoclipuri</translation>
+        <translation type="vanished">Videoclipuri</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Muzică</translation>
+        <translation type="vanished">Muzică</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Imagini</translation>
+        <translation type="vanished">Imagini</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Descărcări</translation>
+        <translation type="vanished">Descărcări</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Blocare</translation>
+        <translation type="vanished">Blocare</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Deconectare</translation>
+        <translation type="vanished">Deconectare</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Repornire</translation>
+        <translation type="vanished">Repornire</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspendare</translation>
+        <translation type="vanished">Suspendare</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Închidere</translation>
+        <translation type="vanished">Închidere</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Înapoi</translation>
+        <translation type="vanished">Înapoi</translation>
     </message>
 </context>
 <context>
@@ -265,39 +267,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Computer</translation>
+        <translation type="vanished">Computer</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Muzică</translation>
+        <translation type="vanished">Muzică</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Descărcări</translation>
+        <translation type="vanished">Descărcări</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manual</translation>
+        <translation type="vanished">Manual</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Setări</translation>
+        <translation type="vanished">Setări</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videoclipuri</translation>
+        <translation type="vanished">Videoclipuri</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Imagini</translation>
+        <translation type="vanished">Imagini</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Documente</translation>
+        <translation type="vanished">Documente</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Energie</translation>
+        <translation type="vanished">Energie</translation>
     </message>
 </context>
 <context>
@@ -329,8 +331,8 @@
         <translation>Confirmare</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

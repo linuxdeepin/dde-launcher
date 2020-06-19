@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ko" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ko">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>%1을(를) 제거하시겠습니까?</translation>
+        <translation type="vanished">%1을(를) 제거하시겠습니까?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>컴퓨터</translation>
+        <translation type="vanished">컴퓨터</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>문서</translation>
+        <translation type="vanished">문서</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>비디오</translation>
+        <translation type="vanished">비디오</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>음악</translation>
+        <translation type="vanished">음악</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>사진</translation>
+        <translation type="vanished">사진</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>다운로드</translation>
+        <translation type="vanished">다운로드</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>잠그기</translation>
+        <translation type="vanished">잠그기</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>로그아웃</translation>
+        <translation type="vanished">로그아웃</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>다시 시작</translation>
+        <translation type="vanished">다시 시작</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>일시 정지</translation>
+        <translation type="vanished">일시 정지</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>전원 종료</translation>
+        <translation type="vanished">전원 종료</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>뒤로 가기</translation>
+        <translation type="vanished">뒤로 가기</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>컴퓨터</translation>
+        <translation type="vanished">컴퓨터</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>음악</translation>
+        <translation type="vanished">음악</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>다운로드</translation>
+        <translation type="vanished">다운로드</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>수동</translation>
+        <translation type="vanished">수동</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>설정 </translation>
+        <translation type="vanished">설정 </translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>비디오</translation>
+        <translation type="vanished">비디오</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>사진</translation>
+        <translation type="vanished">사진</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>문서</translation>
+        <translation type="vanished">문서</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>전원</translation>
+        <translation type="vanished">전원</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>%1을(를) 제거하시겠습니까?</translation>
+        <translation type="vanished">%1을(를) 제거하시겠습니까?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

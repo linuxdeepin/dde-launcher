@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="mn" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="mn">
 <context>
     <name>AppsManager</name>
     <message>
@@ -43,11 +45,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -61,8 +63,8 @@
         <translation>Батлах</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -105,7 +107,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +165,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Компьютер</translation>
+        <translation type="vanished">Компьютер</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Бичиг баримт</translation>
+        <translation type="vanished">Бичиг баримт</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Видео</translation>
+        <translation type="vanished">Видео</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Хөгжим</translation>
+        <translation type="vanished">Хөгжим</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Зураг</translation>
+        <translation type="vanished">Зураг</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Татац</translation>
+        <translation type="vanished">Татац</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Түгжих</translation>
+        <translation type="vanished">Түгжих</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Гарах</translation>
+        <translation type="vanished">Гарах</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Дахин ачааллах</translation>
+        <translation type="vanished">Дахин ачааллах</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Түр зогсоох</translation>
+        <translation type="vanished">Түр зогсоох</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Унтраах</translation>
+        <translation type="vanished">Унтраах</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Буцах</translation>
+        <translation type="vanished">Буцах</translation>
     </message>
 </context>
 <context>
@@ -265,39 +267,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Компьютер</translation>
+        <translation type="vanished">Компьютер</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Хөгжим</translation>
+        <translation type="vanished">Хөгжим</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Татац</translation>
+        <translation type="vanished">Татац</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Гар арга</translation>
+        <translation type="vanished">Гар арга</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Тохиргоо</translation>
+        <translation type="vanished">Тохиргоо</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Видео</translation>
+        <translation type="vanished">Видео</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Зураг</translation>
+        <translation type="vanished">Зураг</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Бичиг баримтууд</translation>
+        <translation type="vanished">Бичиг баримтууд</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Цэнэг</translation>
+        <translation type="vanished">Цэнэг</translation>
     </message>
 </context>
 <context>
@@ -329,8 +331,8 @@
         <translation>Батлах</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

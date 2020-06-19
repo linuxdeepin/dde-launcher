@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="bn" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="bn">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>আপনি কি নিশ্চিত যে আপনি %1 আনইন্সটল করেতে চান?</translation>
+        <translation type="vanished">আপনি কি নিশ্চিত যে আপনি %1 আনইন্সটল করেতে চান?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>কম্পিউটার</translation>
+        <translation type="vanished">কম্পিউটার</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>ডকুমেন্ট সমূহ</translation>
+        <translation type="vanished">ডকুমেন্ট সমূহ</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>ভিডিও সমূহ</translation>
+        <translation type="vanished">ভিডিও সমূহ</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>সঙ্গীত</translation>
+        <translation type="vanished">সঙ্গীত</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>ছবি সমূহ</translation>
+        <translation type="vanished">ছবি সমূহ</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>ডাউনলোড</translation>
+        <translation type="vanished">ডাউনলোড</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>লক করুন</translation>
+        <translation type="vanished">লক করুন</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>লগ আউট করুন</translation>
+        <translation type="vanished">লগ আউট করুন</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>পুনঃরায় চালু করুন</translation>
+        <translation type="vanished">পুনঃরায় চালু করুন</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>সাময়িক ভাবে বন্ধ করুন</translation>
+        <translation type="vanished">সাময়িক ভাবে বন্ধ করুন</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>বন্ধ করুন</translation>
+        <translation type="vanished">বন্ধ করুন</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>ফিরে যান</translation>
+        <translation type="vanished">ফিরে যান</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>কম্পিউটার</translation>
+        <translation type="vanished">কম্পিউটার</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>সঙ্গীত</translation>
+        <translation type="vanished">সঙ্গীত</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>ডাউনলোড</translation>
+        <translation type="vanished">ডাউনলোড</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>ম্যানুয়াল</translation>
+        <translation type="vanished">ম্যানুয়াল</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>সেটিংস</translation>
+        <translation type="vanished">সেটিংস</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>ভিডিও সমূহ</translation>
+        <translation type="vanished">ভিডিও সমূহ</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>ছবি সমূহ</translation>
+        <translation type="vanished">ছবি সমূহ</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>ডকুমেন্ট সমূহ</translation>
+        <translation type="vanished">ডকুমেন্ট সমূহ</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>পাওয়ার</translation>
+        <translation type="vanished">পাওয়ার</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>আপনি কি নিশ্চিত যে আপনি %1 আনইন্সটল করেতে চান?</translation>
+        <translation type="vanished">আপনি কি নিশ্চিত যে আপনি %1 আনইন্সটল করেতে চান?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

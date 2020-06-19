@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_TW" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_TW">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>確定解除安裝 %1？</translation>
+        <translation type="vanished">確定解除安裝 %1？</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>電腦</translation>
+        <translation type="vanished">電腦</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>文件</translation>
+        <translation type="vanished">文件</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>影片</translation>
+        <translation type="vanished">影片</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>音樂</translation>
+        <translation type="vanished">音樂</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>圖片</translation>
+        <translation type="vanished">圖片</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>下載</translation>
+        <translation type="vanished">下載</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>鎖定</translation>
+        <translation type="vanished">鎖定</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>登出</translation>
+        <translation type="vanished">登出</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>重新啟動</translation>
+        <translation type="vanished">重新啟動</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>待機</translation>
+        <translation type="vanished">待機</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>關機</translation>
+        <translation type="vanished">關機</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>返回</translation>
+        <translation type="vanished">返回</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>電腦</translation>
+        <translation type="vanished">電腦</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>音樂</translation>
+        <translation type="vanished">音樂</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>下載</translation>
+        <translation type="vanished">下載</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>手冊</translation>
+        <translation type="vanished">手冊</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>設定</translation>
+        <translation type="vanished">設定</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>影片</translation>
+        <translation type="vanished">影片</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>圖片</translation>
+        <translation type="vanished">圖片</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>文件</translation>
+        <translation type="vanished">文件</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>電源</translation>
+        <translation type="vanished">電源</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>確定解除安裝 %1？</translation>
+        <translation type="vanished">確定解除安裝 %1？</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

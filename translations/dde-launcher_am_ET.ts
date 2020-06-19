@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="am_ET" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="am_ET">
 <context>
     <name>AppsManager</name>
     <message>
@@ -43,7 +45,7 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Other</source>
@@ -61,8 +63,8 @@
         <translation>ማረጋገጫ</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -89,23 +91,23 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +165,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>ኮምፒዩተር</translation>
+        <translation type="vanished">ኮምፒዩተር</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>ሰነዶች</translation>
+        <translation type="vanished">ሰነዶች</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>ቪዲዮዎች</translation>
+        <translation type="vanished">ቪዲዮዎች</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>ሙዚቃ</translation>
+        <translation type="vanished">ሙዚቃ</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>ስእሎች</translation>
+        <translation type="vanished">ስእሎች</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>የወረዱ</translation>
+        <translation type="vanished">የወረዱ</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>መቆለፊያ</translation>
+        <translation type="vanished">መቆለፊያ</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>መውጫ</translation>
+        <translation type="vanished">መውጫ</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>እንደገና ማስነሻ</translation>
+        <translation type="vanished">እንደገና ማስነሻ</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>ማገጃ</translation>
+        <translation type="vanished">ማገጃ</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>ማጥፊያ</translation>
+        <translation type="vanished">ማጥፊያ</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>ወደ ኋላ</translation>
+        <translation type="vanished">ወደ ኋላ</translation>
     </message>
 </context>
 <context>
@@ -265,46 +267,46 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>ኮምፒዩተር</translation>
+        <translation type="vanished">ኮምፒዩተር</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>ሙዚቃ</translation>
+        <translation type="vanished">ሙዚቃ</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>የወረዱ</translation>
+        <translation type="vanished">የወረዱ</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>በ እጅ</translation>
+        <translation type="vanished">በ እጅ</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>ማሰናጃዎች</translation>
+        <translation type="vanished">ማሰናጃዎች</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>ቪዲዮዎች</translation>
+        <translation type="vanished">ቪዲዮዎች</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>ስእሎች</translation>
+        <translation type="vanished">ስእሎች</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>ሰነዶች</translation>
+        <translation type="vanished">ሰነዶች</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>ሐይል</translation>
+        <translation type="vanished">ሐይል</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Back</source>
@@ -329,8 +331,8 @@
         <translation>ማረጋገጫ</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

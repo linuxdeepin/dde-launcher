@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ms" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ms">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Anda pasti mahu menyahpasang %1 ?</translation>
+        <translation type="vanished">Anda pasti mahu menyahpasang %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Komputer</translation>
+        <translation type="vanished">Komputer</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumen</translation>
+        <translation type="vanished">Dokumen</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Video</translation>
+        <translation type="vanished">Video</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Muzik</translation>
+        <translation type="vanished">Muzik</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Gambar</translation>
+        <translation type="vanished">Gambar</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Muat Turun</translation>
+        <translation type="vanished">Muat Turun</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Kunci</translation>
+        <translation type="vanished">Kunci</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Daftar Keluar</translation>
+        <translation type="vanished">Daftar Keluar</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>But Semula</translation>
+        <translation type="vanished">But Semula</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Tangguh</translation>
+        <translation type="vanished">Tangguh</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Matikan</translation>
+        <translation type="vanished">Matikan</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Undur</translation>
+        <translation type="vanished">Undur</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Komputer</translation>
+        <translation type="vanished">Komputer</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Muzik</translation>
+        <translation type="vanished">Muzik</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Muat Turun</translation>
+        <translation type="vanished">Muat Turun</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manual</translation>
+        <translation type="vanished">Manual</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Tetapan</translation>
+        <translation type="vanished">Tetapan</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Video</translation>
+        <translation type="vanished">Video</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Gambar</translation>
+        <translation type="vanished">Gambar</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumen</translation>
+        <translation type="vanished">Dokumen</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Kuasa</translation>
+        <translation type="vanished">Kuasa</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Anda pasti mahu menyahpasang %1 ?</translation>
+        <translation type="vanished">Anda pasti mahu menyahpasang %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

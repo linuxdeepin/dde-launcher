@@ -1,9 +1,11 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_HK" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_HK">
 <context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Internet</source>
@@ -61,8 +63,8 @@
         <translation>確定</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -81,7 +83,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open</source>
@@ -89,30 +91,30 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Internet</source>
@@ -163,51 +165,35 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>電腦</translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">電腦</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>音樂</translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">音樂</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>下載</translation>
+        <translation type="vanished">下載</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>鎖定</translation>
+        <translation type="vanished">鎖定</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>登出</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">登出</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>暫停</translation>
+        <translation type="vanished">暫停</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>關機</translation>
+        <translation type="vanished">關機</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>返回</translation>
+        <translation type="vanished">返回</translation>
     </message>
 </context>
 <context>
@@ -234,7 +220,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -246,15 +232,15 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -265,46 +251,34 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>電腦</translation>
+        <translation type="vanished">電腦</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>音樂</translation>
+        <translation type="vanished">音樂</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>下載</translation>
+        <translation type="vanished">下載</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>手動</translation>
+        <translation type="vanished">手動</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>設置</translation>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">設置</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>電源</translation>
+        <translation type="vanished">電源</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Back</source>
@@ -329,8 +303,8 @@
         <translation>確定</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

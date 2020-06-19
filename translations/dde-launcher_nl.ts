@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="nl">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Weet u zeker dat u %1 wilt deïnstalleren?</translation>
+        <translation type="vanished">Weet u zeker dat u %1 wilt deïnstalleren?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Computer</translation>
+        <translation type="vanished">Computer</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Documenten</translation>
+        <translation type="vanished">Documenten</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Video&apos;s</translation>
+        <translation type="vanished">Video&apos;s</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Muziek</translation>
+        <translation type="vanished">Muziek</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Afbeeldingen</translation>
+        <translation type="vanished">Afbeeldingen</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Downloads</translation>
+        <translation type="vanished">Downloads</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Vergrendelen</translation>
+        <translation type="vanished">Vergrendelen</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Uitloggen</translation>
+        <translation type="vanished">Uitloggen</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Herstarten</translation>
+        <translation type="vanished">Herstarten</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Onderbreken</translation>
+        <translation type="vanished">Onderbreken</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Afsluiten</translation>
+        <translation type="vanished">Afsluiten</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Terug</translation>
+        <translation type="vanished">Terug</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Computer</translation>
+        <translation type="vanished">Computer</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Muziek</translation>
+        <translation type="vanished">Muziek</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Downloads</translation>
+        <translation type="vanished">Downloads</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Handmatig</translation>
+        <translation type="vanished">Handmatig</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Instellingen</translation>
+        <translation type="vanished">Instellingen</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Video&apos;s</translation>
+        <translation type="vanished">Video&apos;s</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Afbeeldingen</translation>
+        <translation type="vanished">Afbeeldingen</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Documenten</translation>
+        <translation type="vanished">Documenten</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Energie</translation>
+        <translation type="vanished">Energie</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Weet u zeker dat u %1 wilt deïnstalleren?</translation>
+        <translation type="vanished">Weet u zeker dat u %1 wilt deïnstalleren?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

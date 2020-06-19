@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="el" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="el">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Είστε σίγουροι ότι θέλετε να απεγκαταστήσετε το %1 ;</translation>
+        <translation type="vanished">Είστε σίγουροι ότι θέλετε να απεγκαταστήσετε το %1 ;</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Υπολογιστής</translation>
+        <translation type="vanished">Υπολογιστής</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Έγγραφα</translation>
+        <translation type="vanished">Έγγραφα</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Βίντεο</translation>
+        <translation type="vanished">Βίντεο</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Μουσική</translation>
+        <translation type="vanished">Μουσική</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Εικόνες</translation>
+        <translation type="vanished">Εικόνες</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Λήψεις</translation>
+        <translation type="vanished">Λήψεις</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Κλείδωμα</translation>
+        <translation type="vanished">Κλείδωμα</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Αποσύνδεση</translation>
+        <translation type="vanished">Αποσύνδεση</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Επανεκκίνηση</translation>
+        <translation type="vanished">Επανεκκίνηση</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Αναστολή</translation>
+        <translation type="vanished">Αναστολή</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Τερματισμός λειτουργίας</translation>
+        <translation type="vanished">Τερματισμός λειτουργίας</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Πίσω</translation>
+        <translation type="vanished">Πίσω</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Υπολογιστής</translation>
+        <translation type="vanished">Υπολογιστής</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Μουσική</translation>
+        <translation type="vanished">Μουσική</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Λήψεις</translation>
+        <translation type="vanished">Λήψεις</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Μη αυτόματα</translation>
+        <translation type="vanished">Μη αυτόματα</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Ρυθμίσεις</translation>
+        <translation type="vanished">Ρυθμίσεις</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Βίντεο</translation>
+        <translation type="vanished">Βίντεο</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Εικόνες</translation>
+        <translation type="vanished">Εικόνες</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Έγγραφα</translation>
+        <translation type="vanished">Έγγραφα</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Ενέργεια</translation>
+        <translation type="vanished">Ενέργεια</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Είστε σίγουροι ότι θέλετε να απεγκαταστήσετε το %1 ;</translation>
+        <translation type="vanished">Είστε σίγουροι ότι θέλετε να απεγκαταστήσετε το %1 ;</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

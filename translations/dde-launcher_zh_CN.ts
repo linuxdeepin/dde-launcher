@@ -87,7 +87,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="vanished">禁用屏幕缩放</translation>
+        <translation>禁用屏幕缩放</translation>
     </message>
     <message>
         <source>Open</source>
@@ -169,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>计算机</translation>
+        <translation type="vanished">计算机</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>文档</translation>
+        <translation type="vanished">文档</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>视频</translation>
+        <translation type="vanished">视频</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>音乐</translation>
+        <translation type="vanished">音乐</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>图片</translation>
+        <translation type="vanished">图片</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>下载</translation>
+        <translation type="vanished">下载</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>锁定</translation>
+        <translation type="vanished">锁定</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>注销</translation>
+        <translation type="vanished">注销</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>重启</translation>
+        <translation type="vanished">重启</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>待机</translation>
+        <translation type="vanished">待机</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>关机</translation>
+        <translation type="vanished">关机</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>返回</translation>
+        <translation type="vanished">返回</translation>
     </message>
 </context>
 <context>

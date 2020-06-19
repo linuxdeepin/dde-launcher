@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="fi">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Haluatko varmasti poistaa %1 ?</translation>
+        <translation type="vanished">Haluatko varmasti poistaa %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Tietokone</translation>
+        <translation type="vanished">Tietokone</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Asiakirjat</translation>
+        <translation type="vanished">Asiakirjat</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videot</translation>
+        <translation type="vanished">Videot</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Musiikki</translation>
+        <translation type="vanished">Musiikki</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Kuvat</translation>
+        <translation type="vanished">Kuvat</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Lataukset</translation>
+        <translation type="vanished">Lataukset</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Lukitse</translation>
+        <translation type="vanished">Lukitse</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Poistu</translation>
+        <translation type="vanished">Poistu</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Käynnistä</translation>
+        <translation type="vanished">Käynnistä</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Valmiustila</translation>
+        <translation type="vanished">Valmiustila</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Sammuta</translation>
+        <translation type="vanished">Sammuta</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Takaisin</translation>
+        <translation type="vanished">Takaisin</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Tietokone</translation>
+        <translation type="vanished">Tietokone</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Musiikki</translation>
+        <translation type="vanished">Musiikki</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Lataukset</translation>
+        <translation type="vanished">Lataukset</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Ohjeet</translation>
+        <translation type="vanished">Ohjeet</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Asetukset</translation>
+        <translation type="vanished">Asetukset</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videot</translation>
+        <translation type="vanished">Videot</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Kuvat</translation>
+        <translation type="vanished">Kuvat</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Asiakirjat</translation>
+        <translation type="vanished">Asiakirjat</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Virta</translation>
+        <translation type="vanished">Virta</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Haluatko varmasti poistaa %1 ?</translation>
+        <translation type="vanished">Haluatko varmasti poistaa %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

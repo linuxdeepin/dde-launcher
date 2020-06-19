@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="lt" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="lt">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Ar tikrai norite pašalinti %1 ?</translation>
+        <translation type="vanished">Ar tikrai norite pašalinti %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Kompiuteris</translation>
+        <translation type="vanished">Kompiuteris</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumentai</translation>
+        <translation type="vanished">Dokumentai</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Vaizdo įrašai</translation>
+        <translation type="vanished">Vaizdo įrašai</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Muzika</translation>
+        <translation type="vanished">Muzika</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Paveikslai</translation>
+        <translation type="vanished">Paveikslai</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Atsiuntimai</translation>
+        <translation type="vanished">Atsiuntimai</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Užrakinti</translation>
+        <translation type="vanished">Užrakinti</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Atsijungti</translation>
+        <translation type="vanished">Atsijungti</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Paleisti iš naujo</translation>
+        <translation type="vanished">Paleisti iš naujo</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Pristabdyti</translation>
+        <translation type="vanished">Pristabdyti</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Išjungti</translation>
+        <translation type="vanished">Išjungti</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Atgal</translation>
+        <translation type="vanished">Atgal</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Kompiuteris</translation>
+        <translation type="vanished">Kompiuteris</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Muzika</translation>
+        <translation type="vanished">Muzika</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Atsiuntimai</translation>
+        <translation type="vanished">Atsiuntimai</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Rankinis</translation>
+        <translation type="vanished">Rankinis</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Nustatymai</translation>
+        <translation type="vanished">Nustatymai</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Vaizdo įrašai</translation>
+        <translation type="vanished">Vaizdo įrašai</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Paveikslai</translation>
+        <translation type="vanished">Paveikslai</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumentai</translation>
+        <translation type="vanished">Dokumentai</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Energija</translation>
+        <translation type="vanished">Energija</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Ar tikrai norite pašalinti %1 ?</translation>
+        <translation type="vanished">Ar tikrai norite pašalinti %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

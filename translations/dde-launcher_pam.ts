@@ -1,17 +1,19 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pam" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="pam">
 <context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Music</source>
@@ -19,35 +21,35 @@
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -61,27 +63,27 @@
         <translation>Kumpirman</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open</source>
@@ -89,38 +91,38 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Internet</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Chat</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Music</source>
@@ -128,86 +130,50 @@
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Office</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reading</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Development</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>System</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Computer</translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Computer</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Musika</translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Musika</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Downloads</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Downloads</translation>
     </message>
 </context>
 <context>
@@ -222,39 +188,39 @@
     </message>
     <message>
         <source>Shutdown</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -265,50 +231,26 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Computer</translation>
+        <translation type="vanished">Computer</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Musika</translation>
+        <translation type="vanished">Musika</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Downloads</translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Power</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Downloads</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -329,8 +271,8 @@
         <translation>Kumpirman</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

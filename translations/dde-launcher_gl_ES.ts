@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="gl_ES" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="gl_ES">
 <context>
     <name>AppsManager</name>
     <message>
@@ -61,8 +63,8 @@
         <translation>Confirmar</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -81,7 +83,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open</source>
@@ -89,30 +91,30 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Internet</source>
@@ -163,51 +165,39 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Computador</translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Computador</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Música</translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Música</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Descargas</translation>
+        <translation type="vanished">Descargas</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Bloquear</translation>
+        <translation type="vanished">Bloquear</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Saír da sesión</translation>
+        <translation type="vanished">Saír da sesión</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Reiniciar</translation>
+        <translation type="vanished">Reiniciar</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspender</translation>
+        <translation type="vanished">Suspender</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Apagar</translation>
+        <translation type="vanished">Apagar</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Volver</translation>
+        <translation type="vanished">Volver</translation>
     </message>
 </context>
 <context>
@@ -246,15 +236,15 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -265,46 +255,34 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Computador</translation>
+        <translation type="vanished">Computador</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Música</translation>
+        <translation type="vanished">Música</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Descargas</translation>
+        <translation type="vanished">Descargas</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manual</translation>
+        <translation type="vanished">Manual</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Configuración</translation>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Configuración</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Enerxía</translation>
+        <translation type="vanished">Enerxía</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Back</source>
@@ -329,8 +307,8 @@
         <translation>Confirmar</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="nb" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="nb">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Er du sikker på at du vil avinstallere %1 ?</translation>
+        <translation type="vanished">Er du sikker på at du vil avinstallere %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Datamaskin</translation>
+        <translation type="vanished">Datamaskin</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumenter</translation>
+        <translation type="vanished">Dokumenter</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videoer</translation>
+        <translation type="vanished">Videoer</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Musikk</translation>
+        <translation type="vanished">Musikk</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Bilder</translation>
+        <translation type="vanished">Bilder</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Nedlastinger</translation>
+        <translation type="vanished">Nedlastinger</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Lås</translation>
+        <translation type="vanished">Lås</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Logg ut</translation>
+        <translation type="vanished">Logg ut</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Omstart</translation>
+        <translation type="vanished">Omstart</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspendere </translation>
+        <translation type="vanished">Suspendere </translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Avslutte</translation>
+        <translation type="vanished">Avslutte</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Tilbake</translation>
+        <translation type="vanished">Tilbake</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Datamaskin</translation>
+        <translation type="vanished">Datamaskin</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Musikk</translation>
+        <translation type="vanished">Musikk</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Nedlastinger</translation>
+        <translation type="vanished">Nedlastinger</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manuell</translation>
+        <translation type="vanished">Manuell</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Instillinger</translation>
+        <translation type="vanished">Instillinger</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videoer</translation>
+        <translation type="vanished">Videoer</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Bilder</translation>
+        <translation type="vanished">Bilder</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumenter</translation>
+        <translation type="vanished">Dokumenter</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Strøm</translation>
+        <translation type="vanished">Strøm</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Er du sikker på at du vil avinstallere %1 ?</translation>
+        <translation type="vanished">Er du sikker på at du vil avinstallere %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

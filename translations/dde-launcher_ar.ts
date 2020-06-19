@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ar" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ar">
 <context>
     <name>AppsManager</name>
     <message>
@@ -61,8 +63,8 @@
         <translation>تأكيد</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -105,7 +107,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +165,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>الحاسوب</translation>
+        <translation type="vanished">الحاسوب</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>المستندات</translation>
+        <translation type="vanished">المستندات</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>الفيديوهات</translation>
+        <translation type="vanished">الفيديوهات</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>موسيقى</translation>
+        <translation type="vanished">موسيقى</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>الصور</translation>
+        <translation type="vanished">الصور</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>‫التنزيلات</translation>
+        <translation type="vanished">‫التنزيلات</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>قفل</translation>
+        <translation type="vanished">قفل</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>تسجيل خروج</translation>
+        <translation type="vanished">تسجيل خروج</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>إعادة التشغيل</translation>
+        <translation type="vanished">إعادة التشغيل</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>تعليق</translation>
+        <translation type="vanished">تعليق</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>إيقاف تشغيل</translation>
+        <translation type="vanished">إيقاف تشغيل</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>العودة</translation>
+        <translation type="vanished">العودة</translation>
     </message>
 </context>
 <context>
@@ -265,46 +267,46 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>الحاسوب</translation>
+        <translation type="vanished">الحاسوب</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>موسيقى</translation>
+        <translation type="vanished">موسيقى</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>‫التنزيلات</translation>
+        <translation type="vanished">‫التنزيلات</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>يدوي</translation>
+        <translation type="vanished">يدوي</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>إعدادات</translation>
+        <translation type="vanished">إعدادات</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>الفيديوهات </translation>
+        <translation type="vanished">الفيديوهات </translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>الصور </translation>
+        <translation type="vanished">الصور </translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>المستندات</translation>
+        <translation type="vanished">المستندات</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>الطاقة</translation>
+        <translation type="vanished">الطاقة</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Back</source>
@@ -329,8 +331,8 @@
         <translation>تأكيد</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

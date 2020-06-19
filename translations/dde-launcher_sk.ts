@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sk" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="sk">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Naozaj chcete odinštalovať %1 ?</translation>
+        <translation type="vanished">Naozaj chcete odinštalovať %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -105,7 +111,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Počítač</translation>
+        <translation type="vanished">Počítač</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumenty</translation>
+        <translation type="vanished">Dokumenty</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videá</translation>
+        <translation type="vanished">Videá</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Hudba</translation>
+        <translation type="vanished">Hudba</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Obrázky</translation>
+        <translation type="vanished">Obrázky</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Stiahnuté</translation>
+        <translation type="vanished">Stiahnuté</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Zamknúť</translation>
+        <translation type="vanished">Zamknúť</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Odhlásiť</translation>
+        <translation type="vanished">Odhlásiť</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Reštart</translation>
+        <translation type="vanished">Reštart</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Uspať</translation>
+        <translation type="vanished">Uspať</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Vypnúť</translation>
+        <translation type="vanished">Vypnúť</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Späť</translation>
+        <translation type="vanished">Späť</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Počítač</translation>
+        <translation type="vanished">Počítač</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Hudba</translation>
+        <translation type="vanished">Hudba</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Stiahnuté</translation>
+        <translation type="vanished">Stiahnuté</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Ručné</translation>
+        <translation type="vanished">Ručné</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Nastavenia</translation>
+        <translation type="vanished">Nastavenia</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videá</translation>
+        <translation type="vanished">Videá</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Obrázky</translation>
+        <translation type="vanished">Obrázky</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumenty</translation>
+        <translation type="vanished">Dokumenty</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Napájanie</translation>
+        <translation type="vanished">Napájanie</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Naozaj chcete odinštalovať %1 ?</translation>
+        <translation type="vanished">Naozaj chcete odinštalovať %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

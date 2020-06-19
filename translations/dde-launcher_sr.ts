@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sr" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="sr">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Заиста желите да уклоните %1 ?</translation>
+        <translation type="vanished">Заиста желите да уклоните %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Рачунар</translation>
+        <translation type="vanished">Рачунар</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Документи</translation>
+        <translation type="vanished">Документи</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Видео</translation>
+        <translation type="vanished">Видео</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Музика</translation>
+        <translation type="vanished">Музика</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Слике</translation>
+        <translation type="vanished">Слике</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Преузимања</translation>
+        <translation type="vanished">Преузимања</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Закључај</translation>
+        <translation type="vanished">Закључај</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Одјави се</translation>
+        <translation type="vanished">Одјави се</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Поново покрени</translation>
+        <translation type="vanished">Поново покрени</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Обустави</translation>
+        <translation type="vanished">Обустави</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Искључи</translation>
+        <translation type="vanished">Искључи</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Назад</translation>
+        <translation type="vanished">Назад</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Рачунар</translation>
+        <translation type="vanished">Рачунар</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Музика</translation>
+        <translation type="vanished">Музика</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Преузимања</translation>
+        <translation type="vanished">Преузимања</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Приручник</translation>
+        <translation type="vanished">Приручник</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Подeшавања</translation>
+        <translation type="vanished">Подeшавања</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Видео</translation>
+        <translation type="vanished">Видео</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Слике</translation>
+        <translation type="vanished">Слике</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Документи</translation>
+        <translation type="vanished">Документи</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Напајање</translation>
+        <translation type="vanished">Напајање</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Заиста желите да уклоните %1 ?</translation>
+        <translation type="vanished">Заиста желите да уклоните %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="tr">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
+        <translation type="vanished">%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Bilgisayar</translation>
+        <translation type="vanished">Bilgisayar</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Belgeler</translation>
+        <translation type="vanished">Belgeler</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videolar</translation>
+        <translation type="vanished">Videolar</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Müzik</translation>
+        <translation type="vanished">Müzik</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Resimler</translation>
+        <translation type="vanished">Resimler</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>İndirilenler</translation>
+        <translation type="vanished">İndirilenler</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Kilitle</translation>
+        <translation type="vanished">Kilitle</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Oturumu Kapat</translation>
+        <translation type="vanished">Oturumu Kapat</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Yeniden Başlat</translation>
+        <translation type="vanished">Yeniden Başlat</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Askıya Al</translation>
+        <translation type="vanished">Askıya Al</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Kapat</translation>
+        <translation type="vanished">Kapat</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Geri</translation>
+        <translation type="vanished">Geri</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Bilgisayar</translation>
+        <translation type="vanished">Bilgisayar</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Müzik</translation>
+        <translation type="vanished">Müzik</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>İndirilenler</translation>
+        <translation type="vanished">İndirilenler</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Kılavuz</translation>
+        <translation type="vanished">Kılavuz</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Ayarlar</translation>
+        <translation type="vanished">Ayarlar</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videolar</translation>
+        <translation type="vanished">Videolar</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Resimler</translation>
+        <translation type="vanished">Resimler</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Belgeler</translation>
+        <translation type="vanished">Belgeler</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Güç</translation>
+        <translation type="vanished">Güç</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
+        <translation type="vanished">%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ug" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ug">
 <context>
     <name>AppsManager</name>
     <message>
@@ -43,11 +45,11 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -61,27 +63,27 @@
         <translation>جەزىملەشتۈرۈش</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Uninstall</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open</source>
@@ -89,30 +91,30 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Internet</source>
@@ -162,59 +164,35 @@
 <context>
     <name>MiniFrameBottomBar</name>
     <message>
-        <source>Computer</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Music</source>
-        <translation>مۇزىكا</translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">مۇزىكا</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>چۈشۈرۈش</translation>
+        <translation type="vanished">چۈشۈرۈش</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>قۇلۇپلاش</translation>
+        <translation type="vanished">قۇلۇپلاش</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>ھېساباتتىن چېكىنىش</translation>
+        <translation type="vanished">ھېساباتتىن چېكىنىش</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>قايتا قوزغىتىش</translation>
+        <translation type="vanished">قايتا قوزغىتىش</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>ئېسىپ قويۇش</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">ئېسىپ قويۇش</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
         <source>Computer</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Music</source>
@@ -222,7 +200,7 @@
     </message>
     <message>
         <source>Shutdown</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Lock</source>
@@ -242,19 +220,19 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -264,51 +242,27 @@
 <context>
     <name>MiniFrameRightBar</name>
     <message>
-        <source>Computer</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <source>Music</source>
-        <translation>مۇزىكا</translation>
+        <translation type="vanished">مۇزىكا</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>چۈشۈرۈش</translation>
+        <translation type="vanished">چۈشۈرۈش</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>قولدا</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Power</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">قولدا</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -329,8 +283,8 @@
         <translation>جەزملەشتۈرۈش</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

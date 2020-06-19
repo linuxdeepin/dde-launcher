@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sv" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="sv">
 <context>
     <name>AppsManager</name>
     <message>
@@ -61,8 +63,8 @@
         <translation>Bekräfta</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -81,7 +83,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open</source>
@@ -89,30 +91,30 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Internet</source>
@@ -163,51 +165,35 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Dator</translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Dator</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Musik</translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Musik</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Hämtningar</translation>
+        <translation type="vanished">Hämtningar</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Lås</translation>
+        <translation type="vanished">Lås</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Logga ut</translation>
+        <translation type="vanished">Logga ut</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Starta om</translation>
+        <translation type="vanished">Starta om</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Vänteläge</translation>
+        <translation type="vanished">Vänteläge</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Stäng av</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Stäng av</translation>
     </message>
 </context>
 <context>
@@ -242,19 +228,19 @@
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -265,50 +251,38 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Dator</translation>
+        <translation type="vanished">Dator</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Musik</translation>
+        <translation type="vanished">Musik</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Hämtningar</translation>
+        <translation type="vanished">Hämtningar</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manuell</translation>
+        <translation type="vanished">Manuell</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Inställningar</translation>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Inställningar</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Styrka</translation>
+        <translation type="vanished">Styrka</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -329,8 +303,8 @@
         <translation>Bekräfta</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

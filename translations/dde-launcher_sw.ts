@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sw" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="sw">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Ni kweli unataka kutoa %1 ?</translation>
+        <translation type="vanished">Ni kweli unataka kutoa %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -81,7 +87,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open</source>
@@ -97,15 +103,15 @@
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,47 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Kichakato</translation>
+        <translation type="vanished">Kichakato</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Nyaraka</translation>
+        <translation type="vanished">Nyaraka</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Mavideo</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Mavideo</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Picha</translation>
+        <translation type="vanished">Picha</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Mapakua</translation>
+        <translation type="vanished">Mapakua</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Funga skrini</translation>
+        <translation type="vanished">Funga skrini</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Toka</translation>
+        <translation type="vanished">Toka</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Washa upya</translation>
+        <translation type="vanished">Washa upya</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Ahirisha</translation>
+        <translation type="vanished">Ahirisha</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Zima</translation>
+        <translation type="vanished">Zima</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Rudi</translation>
+        <translation type="vanished">Rudi</translation>
     </message>
 </context>
 <context>
@@ -265,39 +267,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Kichakato</translation>
+        <translation type="vanished">Kichakato</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Muziki</translation>
+        <translation type="vanished">Muziki</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Mapakua</translation>
+        <translation type="vanished">Mapakua</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Mwongozo</translation>
+        <translation type="vanished">Mwongozo</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Sifa</translation>
+        <translation type="vanished">Sifa</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Mavideo</translation>
+        <translation type="vanished">Mavideo</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Picha</translation>
+        <translation type="vanished">Picha</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Nyaraka</translation>
+        <translation type="vanished">Nyaraka</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Kiwashio</translation>
+        <translation type="vanished">Kiwashio</translation>
     </message>
 </context>
 <context>
@@ -330,7 +332,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Ni kweli unataka kutoa %1 ?</translation>
+        <translation type="vanished">Ni kweli unataka kutoa %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

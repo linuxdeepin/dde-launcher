@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ja" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ja">
 <context>
     <name>AppsManager</name>
     <message>
@@ -61,8 +63,8 @@
         <translation>確認</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -105,7 +107,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +165,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>コンピュータ</translation>
+        <translation type="vanished">コンピュータ</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>ドキュメント</translation>
+        <translation type="vanished">ドキュメント</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>ビデオ</translation>
+        <translation type="vanished">ビデオ</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>ミュージック</translation>
+        <translation type="vanished">ミュージック</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>ピクチャー</translation>
+        <translation type="vanished">ピクチャー</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>ダウンロード</translation>
+        <translation type="vanished">ダウンロード</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>ロック</translation>
+        <translation type="vanished">ロック</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>ログアウト</translation>
+        <translation type="vanished">ログアウト</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>再起動</translation>
+        <translation type="vanished">再起動</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>サスペンド</translation>
+        <translation type="vanished">サスペンド</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>シャットダウン</translation>
+        <translation type="vanished">シャットダウン</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>戻る</translation>
+        <translation type="vanished">戻る</translation>
     </message>
 </context>
 <context>
@@ -265,39 +267,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>コンピュータ</translation>
+        <translation type="vanished">コンピュータ</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>ミュージック</translation>
+        <translation type="vanished">ミュージック</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>ダウンロード</translation>
+        <translation type="vanished">ダウンロード</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>マニュアル</translation>
+        <translation type="vanished">マニュアル</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>設定</translation>
+        <translation type="vanished">設定</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>ビデオ</translation>
+        <translation type="vanished">ビデオ</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>ピクチャー</translation>
+        <translation type="vanished">ピクチャー</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>ドキュメント</translation>
+        <translation type="vanished">ドキュメント</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>パワー</translation>
+        <translation type="vanished">パワー</translation>
     </message>
 </context>
 <context>
@@ -329,8 +331,8 @@
         <translation>確認</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

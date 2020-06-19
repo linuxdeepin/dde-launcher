@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fa" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="fa">
 <context>
     <name>AppsManager</name>
     <message>
@@ -47,7 +49,7 @@
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -61,8 +63,8 @@
         <translation>تایید</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -105,7 +107,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +165,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>رایانه</translation>
+        <translation type="vanished">رایانه</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>اسناد</translation>
+        <translation type="vanished">اسناد</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>ویدیوها</translation>
+        <translation type="vanished">ویدیوها</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>موسیقی</translation>
+        <translation type="vanished">موسیقی</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>تصاویر</translation>
+        <translation type="vanished">تصاویر</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>بارگیری</translation>
+        <translation type="vanished">بارگیری</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>قفل کردن</translation>
+        <translation type="vanished">قفل کردن</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>خروج</translation>
+        <translation type="vanished">خروج</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>راه اندازی مجدد</translation>
+        <translation type="vanished">راه اندازی مجدد</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>معلق کردن</translation>
+        <translation type="vanished">معلق کردن</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>خاموش کردن</translation>
+        <translation type="vanished">خاموش کردن</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>بازگشت </translation>
+        <translation type="vanished">بازگشت </translation>
     </message>
 </context>
 <context>
@@ -265,39 +267,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>رایانه</translation>
+        <translation type="vanished">رایانه</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>موسیقی</translation>
+        <translation type="vanished">موسیقی</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>بارگیری</translation>
+        <translation type="vanished">بارگیری</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>دستی</translation>
+        <translation type="vanished">دستی</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>تنظیمات</translation>
+        <translation type="vanished">تنظیمات</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>ویدیوها</translation>
+        <translation type="vanished">ویدیوها</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>تصاویر</translation>
+        <translation type="vanished">تصاویر</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>اسناد</translation>
+        <translation type="vanished">اسناد</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>منبع قدرت</translation>
+        <translation type="vanished">منبع قدرت</translation>
     </message>
 </context>
 <context>
@@ -329,8 +331,8 @@
         <translation>تایید</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

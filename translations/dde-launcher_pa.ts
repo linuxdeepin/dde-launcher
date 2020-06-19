@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pa" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="pa">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>ਕੀ ਤੁਸੀਂ %1 ਨੂੰ ਅਣ-ਇੰਸਟਾਲ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?</translation>
+        <translation type="vanished">ਕੀ ਤੁਸੀਂ %1 ਨੂੰ ਅਣ-ਇੰਸਟਾਲ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>ਕੰਪਿਊਟਰ</translation>
+        <translation type="vanished">ਕੰਪਿਊਟਰ</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>ਦਸਤਾਵੇਜ਼</translation>
+        <translation type="vanished">ਦਸਤਾਵੇਜ਼</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>ਵੀਡਿਓ</translation>
+        <translation type="vanished">ਵੀਡਿਓ</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>ਸੰਗੀਤ</translation>
+        <translation type="vanished">ਸੰਗੀਤ</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>ਤਸਵੀਰਾਂ</translation>
+        <translation type="vanished">ਤਸਵੀਰਾਂ</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>ਡਾਊਨਲੋਡ</translation>
+        <translation type="vanished">ਡਾਊਨਲੋਡ</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>ਲਾਕ ਕਰੋ</translation>
+        <translation type="vanished">ਲਾਕ ਕਰੋ</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>ਲਾਗ ਆਉਟ</translation>
+        <translation type="vanished">ਲਾਗ ਆਉਟ</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>ਮੁੜ-ਚਾਲੂ ਕਰੋ</translation>
+        <translation type="vanished">ਮੁੜ-ਚਾਲੂ ਕਰੋ</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>ਸਸਪੈਂਡ ਕਰੋ</translation>
+        <translation type="vanished">ਸਸਪੈਂਡ ਕਰੋ</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>ਬੰਦ ਕਰੋ</translation>
+        <translation type="vanished">ਬੰਦ ਕਰੋ</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>ਪਿੱਛੇ</translation>
+        <translation type="vanished">ਪਿੱਛੇ</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>ਕੰਪਿਊਟਰ</translation>
+        <translation type="vanished">ਕੰਪਿਊਟਰ</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>ਸੰਗੀਤ</translation>
+        <translation type="vanished">ਸੰਗੀਤ</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>ਡਾਊਨਲੋਡ</translation>
+        <translation type="vanished">ਡਾਊਨਲੋਡ</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>ਦਸਤੀ</translation>
+        <translation type="vanished">ਦਸਤੀ</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>ਸੈਟਿੰਗਾਂ</translation>
+        <translation type="vanished">ਸੈਟਿੰਗਾਂ</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>ਵੀਡਿਓ</translation>
+        <translation type="vanished">ਵੀਡਿਓ</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>ਤਸਵੀਰਾਂ</translation>
+        <translation type="vanished">ਤਸਵੀਰਾਂ</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>ਦਸਤਾਵੇਜ਼</translation>
+        <translation type="vanished">ਦਸਤਾਵੇਜ਼</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>ਊਰਜਾ</translation>
+        <translation type="vanished">ਊਰਜਾ</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>ਕੀ ਤੁਸੀਂ %1 ਨੂੰ ਅਣ-ਇੰਸਟਾਲ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?</translation>
+        <translation type="vanished">ਕੀ ਤੁਸੀਂ %1 ਨੂੰ ਅਣ-ਇੰਸਟਾਲ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hi_IN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="hi_IN">
 <context>
     <name>AppsManager</name>
     <message>
@@ -43,7 +45,7 @@
     </message>
     <message>
         <source>Games</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Other</source>
@@ -61,8 +63,8 @@
         <translation>पुष्टि करें </translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -105,7 +107,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +165,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>कंप्यूटर</translation>
+        <translation type="vanished">कंप्यूटर</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>दस्तावेज़</translation>
+        <translation type="vanished">दस्तावेज़</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>वीडियो</translation>
+        <translation type="vanished">वीडियो</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>संगीत</translation>
+        <translation type="vanished">संगीत</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>चित्र</translation>
+        <translation type="vanished">चित्र</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>डाउनलोड</translation>
+        <translation type="vanished">डाउनलोड</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>लॉक स्क्रीन</translation>
+        <translation type="vanished">लॉक स्क्रीन</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>लॉग आउट करें </translation>
+        <translation type="vanished">लॉग आउट करें </translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>पुनः आरंभ करें</translation>
+        <translation type="vanished">पुनः आरंभ करें</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>निलंबित</translation>
+        <translation type="vanished">निलंबित</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>शटडाउन </translation>
+        <translation type="vanished">शटडाउन </translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>वापस</translation>
+        <translation type="vanished">वापस</translation>
     </message>
 </context>
 <context>
@@ -265,39 +267,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>कंप्यूटर</translation>
+        <translation type="vanished">कंप्यूटर</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>संगीत</translation>
+        <translation type="vanished">संगीत</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>डाउनलोड</translation>
+        <translation type="vanished">डाउनलोड</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>मैनुअल </translation>
+        <translation type="vanished">मैनुअल </translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>सेटिंग्स</translation>
+        <translation type="vanished">सेटिंग्स</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>वीडियो</translation>
+        <translation type="vanished">वीडियो</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>चित्र</translation>
+        <translation type="vanished">चित्र</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>दस्तावेज़</translation>
+        <translation type="vanished">दस्तावेज़</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>पॉवर</translation>
+        <translation type="vanished">पॉवर</translation>
     </message>
 </context>
 <context>
@@ -329,8 +331,8 @@
         <translation>पुष्टि करें </translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

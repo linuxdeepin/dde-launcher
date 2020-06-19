@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sl" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="sl">
 <context>
     <name>AppsManager</name>
     <message>
@@ -61,8 +63,8 @@
         <translation>Potrdi</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -105,7 +107,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +165,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Računalnik</translation>
+        <translation type="vanished">Računalnik</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumenti</translation>
+        <translation type="vanished">Dokumenti</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videi</translation>
+        <translation type="vanished">Videi</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Glasba</translation>
+        <translation type="vanished">Glasba</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Slike</translation>
+        <translation type="vanished">Slike</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Prenosi</translation>
+        <translation type="vanished">Prenosi</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Zakleni</translation>
+        <translation type="vanished">Zakleni</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Odjava</translation>
+        <translation type="vanished">Odjava</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Ponovni zagon</translation>
+        <translation type="vanished">Ponovni zagon</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>V način mirovanja</translation>
+        <translation type="vanished">V način mirovanja</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Ugasni</translation>
+        <translation type="vanished">Ugasni</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Nazaj</translation>
+        <translation type="vanished">Nazaj</translation>
     </message>
 </context>
 <context>
@@ -265,46 +267,46 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Računalnik</translation>
+        <translation type="vanished">Računalnik</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Glasba</translation>
+        <translation type="vanished">Glasba</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Prenosi</translation>
+        <translation type="vanished">Prenosi</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Ročno</translation>
+        <translation type="vanished">Ročno</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Nastavitve</translation>
+        <translation type="vanished">Nastavitve</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Videi</translation>
+        <translation type="vanished">Videi</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Slike</translation>
+        <translation type="vanished">Slike</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumenti</translation>
+        <translation type="vanished">Dokumenti</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Napajanje</translation>
+        <translation type="vanished">Napajanje</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Back</source>
@@ -329,8 +331,8 @@
         <translation>Potrdi</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

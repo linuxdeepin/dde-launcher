@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="vi" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="vi">
 <context>
     <name>AppsManager</name>
     <message>
@@ -47,7 +49,7 @@
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -61,8 +63,8 @@
         <translation>Xác nhận</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -81,7 +83,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open</source>
@@ -89,23 +91,23 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +165,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Máy tính</translation>
+        <translation type="vanished">Máy tính</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Tài liệu</translation>
+        <translation type="vanished">Tài liệu</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Phim</translation>
+        <translation type="vanished">Phim</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Âm nhạc</translation>
+        <translation type="vanished">Âm nhạc</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Hình ảnh</translation>
+        <translation type="vanished">Hình ảnh</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Tải xuống</translation>
+        <translation type="vanished">Tải xuống</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Khóa</translation>
+        <translation type="vanished">Khóa</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Đăng xuất</translation>
+        <translation type="vanished">Đăng xuất</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Khởi động lại</translation>
+        <translation type="vanished">Khởi động lại</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Dừng</translation>
+        <translation type="vanished">Dừng</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Tắt</translation>
+        <translation type="vanished">Tắt</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Trở lại</translation>
+        <translation type="vanished">Trở lại</translation>
     </message>
 </context>
 <context>
@@ -265,46 +267,46 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Máy tính</translation>
+        <translation type="vanished">Máy tính</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Âm nhạc</translation>
+        <translation type="vanished">Âm nhạc</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Tải xuống</translation>
+        <translation type="vanished">Tải xuống</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Tự chỉnh</translation>
+        <translation type="vanished">Tự chỉnh</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Cài đặt</translation>
+        <translation type="vanished">Cài đặt</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Phim</translation>
+        <translation type="vanished">Phim</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Hình ảnh</translation>
+        <translation type="vanished">Hình ảnh</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Tài liệu</translation>
+        <translation type="vanished">Tài liệu</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Năng lượng</translation>
+        <translation type="vanished">Năng lượng</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Back</source>
@@ -329,8 +331,8 @@
         <translation>Xác nhận</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="it">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Sicuro di voler disinstallare %1 ?</translation>
+        <translation type="vanished">Sicuro di voler disinstallare %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Computer</translation>
+        <translation type="vanished">Computer</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Documenti</translation>
+        <translation type="vanished">Documenti</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Video</translation>
+        <translation type="vanished">Video</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Musica</translation>
+        <translation type="vanished">Musica</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Immagini</translation>
+        <translation type="vanished">Immagini</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Download</translation>
+        <translation type="vanished">Download</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Blocca</translation>
+        <translation type="vanished">Blocca</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Logout</translation>
+        <translation type="vanished">Logout</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Riavvia</translation>
+        <translation type="vanished">Riavvia</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Sospendi</translation>
+        <translation type="vanished">Sospendi</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Spegni</translation>
+        <translation type="vanished">Spegni</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Indietro</translation>
+        <translation type="vanished">Indietro</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Computer</translation>
+        <translation type="vanished">Computer</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Musica</translation>
+        <translation type="vanished">Musica</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Download</translation>
+        <translation type="vanished">Download</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Manuale</translation>
+        <translation type="vanished">Manuale</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Impostazioni</translation>
+        <translation type="vanished">Impostazioni</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Video</translation>
+        <translation type="vanished">Video</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Immagini</translation>
+        <translation type="vanished">Immagini</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Documenti</translation>
+        <translation type="vanished">Documenti</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Alimentazione</translation>
+        <translation type="vanished">Alimentazione</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Sicuro di voler disinstallare %1 ?</translation>
+        <translation type="vanished">Sicuro di voler disinstallare %1 ?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

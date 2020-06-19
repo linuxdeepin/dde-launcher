@@ -1,9 +1,11 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="he" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="he">
 <context>
     <name>AppsManager</name>
     <message>
         <source>No search results</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Internet</source>
@@ -61,19 +63,19 @@
         <translation>אימות</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
         <source>Remove from desktop</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove from dock</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Uninstall</source>
@@ -81,7 +83,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open</source>
@@ -89,30 +91,30 @@
     </message>
     <message>
         <source>Send to desktop</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove from startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add to startup</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
         <source>All Apps</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Internet</source>
@@ -163,51 +165,35 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>מחשב</translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">מחשב</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>מוזיקה</translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">מוזיקה</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>הורדות</translation>
+        <translation type="vanished">הורדות</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>נעילה</translation>
+        <translation type="vanished">נעילה</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>התנתקות</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">התנתקות</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>השהיה</translation>
+        <translation type="vanished">השהיה</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>כיבוי</translation>
+        <translation type="vanished">כיבוי</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>חזרה</translation>
+        <translation type="vanished">חזרה</translation>
     </message>
 </context>
 <context>
@@ -234,7 +220,7 @@
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Suspend</source>
@@ -246,15 +232,15 @@
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Downloads</source>
@@ -265,46 +251,34 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>מחשב</translation>
+        <translation type="vanished">מחשב</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>מוזיקה</translation>
+        <translation type="vanished">מוזיקה</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>הורדות</translation>
+        <translation type="vanished">הורדות</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>ידני</translation>
+        <translation type="vanished">ידני</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>הגדרות</translation>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">הגדרות</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>צריכת חשמל</translation>
+        <translation type="vanished">צריכת חשמל</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Back</source>
@@ -329,8 +303,8 @@
         <translation>אימות</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

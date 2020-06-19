@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="bg" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="bg">
 <context>
     <name>AppsManager</name>
     <message>
@@ -62,7 +64,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Наистина ли искате да деинсталирате %1?</translation>
+        <translation type="vanished">Наистина ли искате да деинсталирате %1?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +169,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Компютър</translation>
+        <translation type="vanished">Компютър</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Документи</translation>
+        <translation type="vanished">Документи</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Видеа</translation>
+        <translation type="vanished">Видеа</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Музика</translation>
+        <translation type="vanished">Музика</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Картини</translation>
+        <translation type="vanished">Картини</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Свалени</translation>
+        <translation type="vanished">Свалени</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>3аключване</translation>
+        <translation type="vanished">3аключване</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Изход</translation>
+        <translation type="vanished">Изход</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Рестартиране</translation>
+        <translation type="vanished">Рестартиране</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Приспиване</translation>
+        <translation type="vanished">Приспиване</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Изключване</translation>
+        <translation type="vanished">Изключване</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Връщане</translation>
+        <translation type="vanished">Връщане</translation>
     </message>
 </context>
 <context>
@@ -265,39 +271,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Компютър</translation>
+        <translation type="vanished">Компютър</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Музика</translation>
+        <translation type="vanished">Музика</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Свалени</translation>
+        <translation type="vanished">Свалени</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Ръчно</translation>
+        <translation type="vanished">Ръчно</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Настройки</translation>
+        <translation type="vanished">Настройки</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Видеа</translation>
+        <translation type="vanished">Видеа</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Картини</translation>
+        <translation type="vanished">Картини</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Документи</translation>
+        <translation type="vanished">Документи</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Захранване</translation>
+        <translation type="vanished">Захранване</translation>
     </message>
 </context>
 <context>
@@ -330,7 +336,11 @@
     </message>
     <message>
         <source>Are you sure you want to uninstall %1 ?</source>
-        <translation>Наистина ли искате да деинсталирате %1?</translation>
+        <translation type="vanished">Наистина ли искате да деинсталирате %1?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

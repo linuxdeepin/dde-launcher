@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hr" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="hr">
 <context>
     <name>AppsManager</name>
     <message>
@@ -61,8 +63,8 @@
         <translation>Potvrdi</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -81,7 +83,7 @@
     </message>
     <message>
         <source>Disable display scaling</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open</source>
@@ -93,7 +95,7 @@
     </message>
     <message>
         <source>Send to dock</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove from startup</source>
@@ -105,7 +107,7 @@
     </message>
     <message>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -163,51 +165,51 @@
     <name>MiniFrameBottomBar</name>
     <message>
         <source>Computer</source>
-        <translation>Računalo</translation>
+        <translation type="vanished">Računalo</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumenti</translation>
+        <translation type="vanished">Dokumenti</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Video datoteke</translation>
+        <translation type="vanished">Video datoteke</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Glazba</translation>
+        <translation type="vanished">Glazba</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Slike</translation>
+        <translation type="vanished">Slike</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Preuzimanja</translation>
+        <translation type="vanished">Preuzimanja</translation>
     </message>
     <message>
         <source>Lock</source>
-        <translation>Zaključaj</translation>
+        <translation type="vanished">Zaključaj</translation>
     </message>
     <message>
         <source>Logout</source>
-        <translation>Odjava</translation>
+        <translation type="vanished">Odjava</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Ponovno podigni sustav</translation>
+        <translation type="vanished">Ponovno podigni sustav</translation>
     </message>
     <message>
         <source>Suspend</source>
-        <translation>Suspendiraj</translation>
+        <translation type="vanished">Suspendiraj</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Isključi</translation>
+        <translation type="vanished">Isključi</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>Natrag</translation>
+        <translation type="vanished">Natrag</translation>
     </message>
 </context>
 <context>
@@ -265,39 +267,39 @@
     <name>MiniFrameRightBar</name>
     <message>
         <source>Computer</source>
-        <translation>Računalo</translation>
+        <translation type="vanished">Računalo</translation>
     </message>
     <message>
         <source>Music</source>
-        <translation>Glazba</translation>
+        <translation type="vanished">Glazba</translation>
     </message>
     <message>
         <source>Downloads</source>
-        <translation>Preuzimanja</translation>
+        <translation type="vanished">Preuzimanja</translation>
     </message>
     <message>
         <source>Manual</source>
-        <translation>Ručno</translation>
+        <translation type="vanished">Ručno</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Postavke</translation>
+        <translation type="vanished">Postavke</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation>Video datoteke</translation>
+        <translation type="vanished">Video datoteke</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Slike</translation>
+        <translation type="vanished">Slike</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation>Dokumenti</translation>
+        <translation type="vanished">Dokumenti</translation>
     </message>
     <message>
         <source>Power</source>
-        <translation>Energija</translation>
+        <translation type="vanished">Energija</translation>
     </message>
 </context>
 <context>
@@ -329,8 +331,8 @@
         <translation>Potvrdi</translation>
     </message>
     <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="unfinished"/>
+        <source>Are you sure you want to uninstall?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

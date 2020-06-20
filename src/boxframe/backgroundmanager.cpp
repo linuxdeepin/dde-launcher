@@ -47,6 +47,7 @@ BackgroundManager::BackgroundManager(QObject *parent)
     m_appearanceInter->setSync(false, false);
 
     connect(m_wmInter, &__wm::WorkspaceSwitched, this, &BackgroundManager::updateBackgrounds);
+    connect(m_wmInter, &__wm::WorkspaceBackgroundChanged, this, &BackgroundManager::updateBackgrounds);
     connect(m_appearanceInter, &AppearanceInter::Changed, this, [ = ](const QString & type, const QString &) {
         if (type == "background") {
             updateBackgrounds();
@@ -55,13 +56,13 @@ BackgroundManager::BackgroundManager(QObject *parent)
 
     m_timerUpdateBlurbg->setSingleShot(false);
     m_timerUpdateBlurbg->setInterval(1000);
-    connect(m_timerUpdateBlurbg,&QTimer::timeout,this,&BackgroundManager::updateBlurBackgrounds);
+    connect(m_timerUpdateBlurbg, &QTimer::timeout, this, &BackgroundManager::updateBlurBackgrounds);
     QTimer::singleShot(0, this, &BackgroundManager::updateBackgrounds);
 }
 
 void BackgroundManager::updateBackgrounds()
 {
-    if(!m_timerUpdateBlurbg->isActive()){
+    if (!m_timerUpdateBlurbg->isActive()) {
         m_timerUpdateBlurbg->start(0);
     }
 }
@@ -76,7 +77,7 @@ void BackgroundManager::updateBlurBackgrounds()
         m_blurBackground = m_imageEffectInter->Get("", m_imageblur->Get(filePath));
     m_background = m_imageEffectInter->Get("", filePath);
 
-    if(m_blurBackground != "" && m_background != ""){
+    if (m_blurBackground != "" && m_background != "") {
         emit currentWorkspaceBlurBackgroundChanged(m_blurBackground);
         emit currentWorkspaceBackgroundChanged(m_background);
         m_timerUpdateBlurbg->stop();

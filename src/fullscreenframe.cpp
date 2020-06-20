@@ -1113,7 +1113,10 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
         m_appsManager->uninstallApp(appKey);
     });
 
+    unInstallDialog.show();
+    unInstallDialog.moveToCenter();
     unInstallDialog.exec();
+
     //    unInstallDialog.deleteLater();
     m_isConfirmDialogShown = false;
 }

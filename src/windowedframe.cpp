@@ -570,6 +570,8 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
     // hide frame
     QTimer::singleShot(1, this, &WindowedFrame::hideLauncher);
 
+    unInstallDialog.show();
+    unInstallDialog.moveToCenter();
     unInstallDialog.exec();
     UNINSTALL_DIALOG_SHOWN = false;
 }

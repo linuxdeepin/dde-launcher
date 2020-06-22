@@ -878,6 +878,8 @@ void FullScreenFrame::showLauncher()
     m_focusIndex = 1;
     m_appItemDelegate->setCurrentIndex(QModelIndex());
     m_searchWidget->categoryBtn()->clearFocus();
+    m_searchWidget->edit()->clearEdit();
+    m_searchWidget->edit()->clear();
     setFixedSize(m_appsManager->currentScreen()->geometry().size());
 
     if (m_displayMode == GROUP_BY_CATEGORY)

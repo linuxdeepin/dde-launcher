@@ -279,6 +279,9 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category, AppsListMod
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
     const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  m_padding * 2 - 20) / 2 ;
     m_scrollDest = dest;
+    BlurBoxWidget* blurbox = qobject_cast<BlurBoxWidget*>(m_scrollDest);
+    if (blurbox)
+        blurbox->setOperationType(otNone);
 
     m_scrollAnimation->stop();
     m_scrollAnimation->setStartValue(m_appsArea->horizontalScrollBar()->value());
@@ -922,6 +925,10 @@ void FullScreenFrame::showLauncher()
 
 void FullScreenFrame::hideLauncher()
 {
+    if (!isVisible()) {
+        return;
+    }
+    disconnect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::hideLauncher);
     hide();
 }
 

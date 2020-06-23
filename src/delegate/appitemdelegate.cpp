@@ -114,7 +114,13 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         const int iconLeftMargins = (br.width() - iconSize.width()) / 2;
         int  iconTopMargin = ICONTOTOP;// ibr.height() * .2 - iconSize.height() * .3;
         //iconTopMargin = 6; //std::max(iconTopMargin, 1.);
-        iconRect = QRect(br.topLeft() + QPoint(iconLeftMargins, iconTopMargin), iconSize);
+        iconRect = QRect(br.topLeft() + QPoint(iconLeftMargins, iconTopMargin - 2), iconSize);
+
+        //31是字体设置20的时候的高度
+        br.setHeight(ICONTOTOP + iconRect.height() + TEXTTOICON + 31 + fontPixelSize * TextSecond + TEXTTOLEFT);
+        if (br.height() > ibr.height()) {
+            br.setHeight(ibr.height() - 1);
+        }
 
         // calc text
         appNameRect = itemTextRect(br, iconRect, drawBlueDot);
@@ -137,10 +143,6 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 //    painter->fillRect(appNameRect, Qt::blue);
 //    painter->fillRect(iconRect, Qt::magenta);
 
-    br.setHeight(ICONTOTOP+iconRect.height()+TEXTTOICON+fm.height()+fontPixelSize*TextSecond+TEXTTOLEFT);
-    if (br.height() > ibr.height()) {
-        br.setHeight(ibr.height() - 1);
-    }
 
     // draw focus background
    if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay))
@@ -168,7 +170,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     appNameOption.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     appNameOption.setWrapMode(QTextOption::WordWrap);
 
-    appNameRect.setY(br.y() + br.height()  - TEXTTOLEFT - fm.height() - fontPixelSize*TextSecond);
+    appNameRect.setY(br.y() + br.height()  - TEXTTOLEFT + (fm.height() >= 28 ? 2 : 0)- fm.height() - fontPixelSize*TextSecond);
 
     painter->setFont(appNamefont);
     painter->setBrush(QBrush(Qt::transparent));
@@ -267,14 +269,10 @@ const QRect AppItemDelegate::itemBoundingRect(const QRect &itemRect) const
 const QRect AppItemDelegate::itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool extraWidthMargin) const
 {
     Q_UNUSED(extraWidthMargin);
-    const int widthMargin = 10;//extraWidthMargin ? 16 : 2;
-    const int heightMargin = TEXTTOICON;
 
     QRect result = boundingRect;
-
-    result.setTop(iconRect.bottom() + 2);
-
-    return result.marginsRemoved(QMargins(widthMargin, heightMargin, widthMargin, heightMargin));
+    result.setTop(iconRect.bottom());
+    return result;
 }
 
 const QPair<QString, bool> AppItemDelegate::holdTextInRect(const QFontMetrics &fm, const QString &text, const QRect &rect) const

@@ -70,6 +70,7 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
     const QString &iconName = itemInfo.m_iconKey;
     const auto ratio = qApp->devicePixelRatio();
     const int s = perfectIconSize(size);
+    bool findIcon = true;
     QPlatformTheme *const platformTheme = QGuiApplicationPrivate::platformTheme();
 
     QPixmap pixmap;
@@ -117,7 +118,7 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
                     }
 
                     if (icon.isNull()) {
-                        icon = QIcon::fromTheme("deepin.com." + iconName, QIcon::fromTheme("application-x-desktop"));
+                        icon = QIcon::fromTheme("deepin.com." + iconName);
                     }
                 }
             } else {
@@ -127,17 +128,18 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
                 }
 
                 if (icon.isNull()) {
-                    icon = QIcon::fromTheme("deepin.com." + iconName, QIcon::fromTheme("application-x-desktop"));
+                    icon = QIcon::fromTheme("deepin.com." + iconName);
                 }
             }
+        }
+        if (icon.isNull()) {
+            icon = QIcon::fromTheme("application-x-desktop");
+            findIcon = false;
         }
 
         pixmap = icon.pixmap(QSize(s, s));
         if (!pixmap.isNull())
             break;
-
-        pixmap = loadSvg(":/skin/images/application-default-icon.svg", s * ratio);
-        Q_ASSERT(!pixmap.isNull());
     } while (false);
 
     if (qFuzzyCompare(pixmap.devicePixelRatioF(), 1.)) {
@@ -146,7 +148,7 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
     }
 
     QPair<QString, int> tmpKey { itemInfo.m_iconKey, s};
-    if (m_iconCache[tmpKey].isNull())
+    if (m_iconCache[tmpKey].isNull() && findIcon )
         m_iconCache[tmpKey] = pixmap;
     return pixmap;
 }
@@ -614,9 +616,6 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
         return m_iconCache[tmpKey];
     } else {
         const QPixmap &pixmap = getThemeIcon(info, size);
-        if (m_iconCache[tmpKey].isNull()){
-            m_iconCache[tmpKey] = pixmap;
-        }
         return pixmap;
     }
 }
@@ -1013,10 +1012,7 @@ void AppsManager::pushPixmap(const ItemInfo &itemInfo)
     for (int i = 0; i < s; i++) {
         QPair<QString, int> tmpKey { itemInfo.m_iconKey, l[i]};
         if (m_iconCache[tmpKey].isNull()) {
-            const QPixmap &pixmap = getThemeIcon(itemInfo, l[i]);
-            if (!pixmap.isNull()) {
-                m_iconCache[tmpKey] = pixmap;
-            }
+            getThemeIcon(itemInfo, l[i]);
         }
     }
 }

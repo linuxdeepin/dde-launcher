@@ -53,7 +53,6 @@ BackgroundManager::BackgroundManager(QObject *parent)
     });
 
     m_timerUpdateBlurbg->setSingleShot(false);
-    m_timerUpdateBlurbg->setInterval(1000);
     connect(m_timerUpdateBlurbg, &QTimer::timeout, this, &BackgroundManager::updateBlurBackgrounds);
     QTimer::singleShot(0, this, &BackgroundManager::updateBackgrounds);
 }
@@ -71,13 +70,21 @@ void BackgroundManager::updateBlurBackgrounds()
     QString path = getLocalFile(m_wmInter->GetCurrentWorkspaceBackground());
     QString filePath = QFile::exists(path) ? path : DefaultWallpaper;
 
-    if (m_imageblur->Get(filePath) != "")
+    if (m_imageblur->Get(filePath) != "") {
         m_blurBackground = m_imageEffectInter->Get("", m_imageblur->Get(filePath));
+    }
+
     m_background = m_imageEffectInter->Get("", filePath);
 
-    if (m_blurBackground != "" && m_background != "") {
-        emit currentWorkspaceBlurBackgroundChanged(m_blurBackground);
+    if (m_background != "") {
         emit currentWorkspaceBackgroundChanged(m_background);
+    }
+
+    if (m_blurBackground != "") {
+        emit currentWorkspaceBlurBackgroundChanged(m_blurBackground);
+    }
+
+    if (m_blurBackground != "" && m_background != "") {
         m_timerUpdateBlurbg->stop();
     }
 }

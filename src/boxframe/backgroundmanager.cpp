@@ -56,7 +56,8 @@ BackgroundManager::BackgroundManager(QObject *parent)
 
     m_timerUpdateBlurbg->setSingleShot(false);
     connect(m_timerUpdateBlurbg, &QTimer::timeout, this, &BackgroundManager::updateBlurBackgrounds);
-    QTimer::singleShot(0, this, &BackgroundManager::updateBackgrounds);
+    //QTimer::singleShot(0, this, &BackgroundManager::updateBackgrounds);
+    updateBackgrounds();
 }
 
 void BackgroundManager::updateBackgrounds()

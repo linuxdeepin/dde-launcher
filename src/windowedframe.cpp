@@ -832,43 +832,23 @@ void WindowedFrame::adjustPosition()
     QRect r =  m_dockInter->frontendRect();
     QRect dockRect = QRect(scaledPosition(r.topLeft()),r.size() * ratio);
 
-    const int dockSpacing = 8;
-    const int screenSpacing = 0;
     const auto &s = size();
     QPoint p;
     // extra spacing for efficient mode
     if (m_dockInter->displayMode() == DOCK_EFFICIENT) {
         const QRect primaryRect = m_displayInter->primaryRect();
-
         switch (dockPos) {
         case DOCK_TOP:
-            p = QPoint(primaryRect.left() + screenSpacing, dockRect.bottom() + dockSpacing + 1);
+            p = QPoint(dockRect.left(), dockRect.bottom() + 1);
             break;
         case DOCK_BOTTOM:
-            p = QPoint(primaryRect.left() + screenSpacing, dockRect.top() - s.height() - dockSpacing + 1);
+            p = QPoint(dockRect.left(), dockRect.top() - s.height());
             break;
         case DOCK_LEFT:
-            p = QPoint(dockRect.right() + dockSpacing + 1, primaryRect.top() + screenSpacing);
+            p = QPoint(dockRect.right() + 1, dockRect.top());
             break;
         case DOCK_RIGHT:
-            p = QPoint(dockRect.left() - s.width() - dockSpacing + 1, primaryRect.top() + screenSpacing);
-            break;
-        default:
-            Q_UNREACHABLE_IMPL();
-        }
-    } else {
-        switch (dockPos) {
-        case DOCK_TOP:
-            p = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
-            break;
-        case DOCK_BOTTOM:
-            p = QPoint(dockRect.left(), dockRect.top() - s.height() - dockSpacing);
-            break;
-        case DOCK_LEFT:
-            p = QPoint(dockRect.right() + dockSpacing + 1, dockRect.top());
-            break;
-        case DOCK_RIGHT:
-            p = QPoint(dockRect.left() - s.width() - dockSpacing, dockRect.top());
+            p = QPoint(dockRect.left() - s.width(), dockRect.top());
             break;
         default:
             Q_UNREACHABLE_IMPL();

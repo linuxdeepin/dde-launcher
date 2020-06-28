@@ -35,7 +35,7 @@ class AppItemDelegate : public QAbstractItemDelegate
     Q_OBJECT
 
 public:
-    explicit AppItemDelegate(QObject *parent = 0);
+    explicit AppItemDelegate(QObject *parent = nullptr);
 
     void setCurrentIndex(const QModelIndex &index);
     const QModelIndex &currentIndex() const {return CurrentIndex;}

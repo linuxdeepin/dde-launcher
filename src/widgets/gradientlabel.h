@@ -31,7 +31,7 @@ class GradientLabel : public QLabel
 {
     Q_OBJECT
 public:
-    explicit GradientLabel(QWidget *parent = 0);
+    explicit GradientLabel(QWidget *parent = nullptr);
 
     enum Direction {
         TopToBottom,

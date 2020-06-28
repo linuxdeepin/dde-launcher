@@ -112,6 +112,7 @@ void CategoryButton::updateState(const CategoryButton::State state)
 
 void CategoryButton::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
     if (m_state == Checked) {

@@ -25,7 +25,7 @@
 #include <QWidget>
 #include <QLabel>
 
-#include <dimagebutton.h>
+#include <diconbutton.h>
 #include "avatar.h"
 
 #include <DFloatingButton>
@@ -39,7 +39,7 @@ class MiniFrameRightBar : public QWidget
 
 public:
     explicit MiniFrameRightBar(QWidget *parent = nullptr);
-    ~MiniFrameRightBar();
+    ~MiniFrameRightBar() override;
 
     void setCurrentCheck(bool checked) const;
     void setCurrentIndex(int index) { m_currentIndex = index; };

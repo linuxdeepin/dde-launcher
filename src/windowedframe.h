@@ -41,7 +41,6 @@
 #include <dblureffectwidget.h>
 #include <dregionmonitor.h>
 #include <com_deepin_daemon_appearance.h>
-#include <dimagebutton.h>
 #include <DSearchEdit>
 #include <DToolButton>
 
@@ -60,7 +59,7 @@ class WindowedFrame : public DBlurEffectWidget, public LauncherInterface
 
 public:
     explicit WindowedFrame(QWidget *parent = nullptr);
-    ~WindowedFrame();
+    ~WindowedFrame() override;
 
     enum DisplayMode
     {

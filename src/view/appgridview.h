@@ -45,7 +45,7 @@ class AppGridView : public QListView
     Q_OBJECT
 
 public:
-    explicit AppGridView(QWidget *parent = 0);
+    explicit AppGridView(QWidget *parent = nullptr);
 
     using QListView::indexAt;
     const QModelIndex indexAt(const int index) const;
@@ -72,15 +72,15 @@ signals:
 
 protected:
     void startDrag(const QModelIndex &index);
-    void dragEnterEvent(QDragEnterEvent *e);
-    void dragMoveEvent(QDragMoveEvent *e);
-    void dragLeaveEvent(QDragLeaveEvent *e);
-    void dropEvent(QDropEvent *e);
-    void enterEvent(QEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void mouseMoveEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    bool eventFilter(QObject *o, QEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void dragMoveEvent(QDragMoveEvent *e) override;
+    void dragLeaveEvent(QDragLeaveEvent *e) override;
+    void dropEvent(QDropEvent *e) override;
+    void enterEvent(QEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    bool eventFilter(QObject *o, QEvent *e) override;
 
 private slots:
     void dropSwap();

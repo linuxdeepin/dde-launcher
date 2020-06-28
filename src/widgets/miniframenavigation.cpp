@@ -44,7 +44,7 @@ DUTIL_USE_NAMESPACE
 #endif
 
 UserButton::UserButton(QWidget *parent) :
-    DImageButton(parent),
+    DIconButton(parent),
     m_accounts(new com::deepin::daemon::Accounts("com.deepin.daemon.Accounts",
                                                  "/com/deepin/daemon/Accounts",
                                                  QDBusConnection::systemBus(), this)),
@@ -53,19 +53,6 @@ UserButton::UserButton(QWidget *parent) :
     setFixedSize(60, 60);
 
     initUser();
-}
-
-void UserButton::paintEvent(QPaintEvent *e)
-{
-    Q_UNUSED(e);
-
-    QPainterPath path;
-    path.addRoundedRect(0, 0, 60, 60, 30, 30);
-
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setClipPath(path);
-    painter.drawPixmap(0, 0, *pixmap());
 }
 
 void UserButton::initUser()
@@ -93,7 +80,7 @@ void UserButton::setUserIconURL(const QString &iconUrl)
 
     const QString path = QUrl(iconUrl).toLocalFile();
 
-    setNormalPic(path);
+    setIcon(QIcon(path));
 }
 
 NavigationButton::NavigationButton(const QString &title, QWidget *parent) :

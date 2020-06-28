@@ -29,12 +29,12 @@
 
 #include "xcb_misc.h"
 
-static XcbMisc * _xcb_misc_instance = NULL;
+static XcbMisc * _xcb_misc_instance = nullptr;
 
 XcbMisc::XcbMisc()
 {
     xcb_intern_atom_cookie_t * cookie = xcb_ewmh_init_atoms(QX11Info::connection(), &m_ewmh_connection);
-    xcb_ewmh_init_atoms_replies(&m_ewmh_connection, cookie, NULL);
+    xcb_ewmh_init_atoms_replies(&m_ewmh_connection, cookie, nullptr);
 }
 
 XcbMisc::~XcbMisc()
@@ -44,7 +44,7 @@ XcbMisc::~XcbMisc()
 
 XcbMisc * XcbMisc::instance()
 {
-    if (_xcb_misc_instance == NULL) {
+    if (_xcb_misc_instance == nullptr) {
         _xcb_misc_instance = new XcbMisc;
     }
 
@@ -123,7 +123,7 @@ void XcbMisc::set_deepin_override(xcb_window_t winId)
 
     xcb_intern_atom_reply_t *reply = xcb_intern_atom_reply(connection,
                                                            cookie,
-                                                           NULL);
+                                                           nullptr);
     if (reply) {
         xcb_atom_t atom = reply->atom;
         free (reply);

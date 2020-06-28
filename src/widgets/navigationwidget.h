@@ -35,7 +35,7 @@ class NavigationWidget : public QFrame
     Q_OBJECT
 
 public:
-    explicit NavigationWidget(QWidget *parent = 0);
+    explicit NavigationWidget(QWidget *parent = nullptr);
 
     void setButtonsVisible(const bool visible);
 

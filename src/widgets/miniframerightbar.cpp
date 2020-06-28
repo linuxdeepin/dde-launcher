@@ -32,6 +32,7 @@
 #include <QDesktopWidget>
 #include <DGuiApplicationHelper>
 #include <QGSettings>
+#include <DImageButton>
 
 DGUI_USE_NAMESPACE
 
@@ -45,7 +46,7 @@ DGUI_USE_NAMESPACE
 class ButtonWithThemeCursor : public DImageButton
 {
 public:
-    ButtonWithThemeCursor(QWidget *parent = 0): DImageButton(parent) {
+    ButtonWithThemeCursor(QWidget *parent = nullptr): DImageButton(parent) {
     }
 
 protected:

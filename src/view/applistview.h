@@ -38,7 +38,7 @@ class AppListView : public QListView
     Q_OBJECT
 
 public:
-    explicit AppListView(QWidget *parent = 0);
+    explicit AppListView(QWidget *parent = nullptr);
 
     using QListView::indexAt;
     const QModelIndex indexAt(const int index) const;

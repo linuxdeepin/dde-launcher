@@ -25,7 +25,6 @@
 
 #include <QTimer>
 #include <QFile>
-#include <QDebug>
 
 RecentlyUsed::RecentlyUsed(QObject *parent)
     : QObject(parent),

@@ -33,7 +33,7 @@ class SharedEventFilter : public QObject
 {
     Q_OBJECT
 public:
-    explicit SharedEventFilter(QObject *parent = 0);
+    explicit SharedEventFilter(QObject *parent = nullptr);
 
     bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 

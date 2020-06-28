@@ -117,7 +117,7 @@ public slots:
     void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
 
 private:
-    explicit AppsManager(QObject *parent = 0);
+    explicit AppsManager(QObject *parent = nullptr);
 
     void appendSearchResult(const QString &appKey);
     void sortCategory(const AppsListModel::AppCategory category);

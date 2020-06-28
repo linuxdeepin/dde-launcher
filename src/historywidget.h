@@ -34,7 +34,7 @@ class HistoryWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit HistoryWidget(QWidget *parent = 0);
+    explicit HistoryWidget(QWidget *parent = nullptr);
 
 private slots:
     void onItemClicked(const QModelIndex &index);

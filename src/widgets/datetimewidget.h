@@ -31,7 +31,7 @@ class DatetimeWidget : public QWidget
 
 public:
     DatetimeWidget(QWidget *parent = nullptr);
-    ~DatetimeWidget();
+    ~DatetimeWidget() override;
 
     int getDateTextWidth();
 

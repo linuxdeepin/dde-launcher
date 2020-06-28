@@ -28,7 +28,6 @@
 #include <QEvent>
 #include <QDebug>
 #include <QKeyEvent>
-#include <dimagebutton.h>
 #include <DDBusSender>
 
 #define ICON_SIZE   24

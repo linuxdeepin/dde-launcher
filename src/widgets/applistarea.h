@@ -32,7 +32,7 @@ class AppListArea : public QScrollArea
     Q_OBJECT
 
 public:
-    explicit AppListArea(QWidget *parent = 0);
+    explicit AppListArea(QWidget *parent = nullptr);
     void addWidget(QWidget * view);
 
 signals:
@@ -41,8 +41,8 @@ signals:
     void decreaseIcon();
 
 protected:
-    void wheelEvent(QWheelEvent *e);
-    void enterEvent(QEvent *e);
+    void wheelEvent(QWheelEvent *e) override;
+    void enterEvent(QEvent *e) override;
     bool eventFilter(QObject *watched, QEvent *e) override;
 
 private:

@@ -44,7 +44,7 @@ class MiniCategoryWidget : public QWidget
     Q_PROPERTY(bool active READ active NOTIFY activeChanged)
 
 public:
-    explicit MiniCategoryWidget(QWidget *parent = 0);
+    explicit MiniCategoryWidget(QWidget *parent = nullptr);
 
     inline bool active() const { return m_active; }
     inline AppsListModel::AppCategory currentCategory() const { return m_currentCategory; }

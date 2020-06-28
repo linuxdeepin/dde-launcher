@@ -9,7 +9,7 @@ class MiniFrameButton : public QPushButton
 
 public:
     explicit MiniFrameButton(const QString &text, QWidget *parent = nullptr);
-    ~MiniFrameButton();
+    ~MiniFrameButton() override;
 
 signals:
     void entered() const;

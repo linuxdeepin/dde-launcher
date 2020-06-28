@@ -890,8 +890,8 @@ void AppsManager::refreshNotFoundIcon()
             for (auto iconIt = m_iconCache.begin(); iconIt != m_iconCache.end(); ++iconIt) {
                 if (iconIt.key().first == itemPair.first.m_iconKey && iconIt.key().second / ratio == itemPair.second) {
                     const QPair<QString, int> iconPair{ itemPair.first.m_iconKey, iconIt.key().second };
-                    const QPixmap            &pixmap = getThemeIcon(itemPair.first, itemPair.second);
-                    m_iconCache[iconPair]            = pixmap;
+                    const QPixmap &pixmap = getThemeIcon(itemPair.first, itemPair.second);
+                    m_iconCache[iconPair] = pixmap;
                     emit itemDataChanged(itemPair.first);
                     it = m_notExistIconMap.erase(it);
                     break;
@@ -1029,5 +1029,6 @@ const QScreen *AppsManager::currentScreen()
             return  screen;
         }
     }
+    return nullptr;
 }
 

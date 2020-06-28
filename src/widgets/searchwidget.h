@@ -25,7 +25,6 @@
 #define SEARCHWIDGET_H
 #include "src/global_util/calculate_util.h"
 #include "searchlineedit.h"
-#include <dimagebutton.h>
 #include <QWidget>
 #include <DFloatingButton>
 #include <DSearchEdit>
@@ -37,7 +36,7 @@ class SearchWidget : public QFrame
     Q_OBJECT
 
 public:
-    explicit SearchWidget(QWidget *parent = 0);
+    explicit SearchWidget(QWidget *parent = nullptr);
 
     DSearchEdit *edit();
     DFloatingButton *categoryBtn();

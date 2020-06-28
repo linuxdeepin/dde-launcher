@@ -43,6 +43,7 @@ SharedEventFilter::SharedEventFilter(QObject *parent)
 
 bool SharedEventFilter::eventFilter(QObject *watched, QEvent *event)
 {
+    Q_UNUSED(watched);
     if (event->type() == QEvent::KeyPress)
         return handleKeyEvent(static_cast<QKeyEvent *>(event));
 

@@ -37,7 +37,7 @@ class CategoryTitleWidget : public QFrame
     Q_OBJECT
 
 public:
-    explicit CategoryTitleWidget(const QString &title, QWidget *parent = 0);
+    explicit CategoryTitleWidget(const QString &title, QWidget *parent = nullptr);
 
     Q_PROPERTY(qreal titleOpacity READ titleOpacity WRITE setTitleOpacity)
 

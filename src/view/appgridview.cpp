@@ -178,6 +178,7 @@ void AppGridView::dragEnterEvent(QDragEnterEvent *e)
 
 void AppGridView::dragMoveEvent(QDragMoveEvent *e)
 {
+    Q_UNUSED(e);
     m_dropThresholdTimer->stop();
 
     if (m_lastFakeAni)
@@ -403,6 +404,8 @@ void AppGridView::startDrag(const QModelIndex &index)
 
 bool AppGridView::eventFilter(QObject *o, QEvent *e)
 {
+    Q_UNUSED(o);
+    Q_UNUSED(e);
     return false;
 }
 

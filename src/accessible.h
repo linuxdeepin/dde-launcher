@@ -1,7 +1,7 @@
 
 #include "accessibledefine.h"
 
-#include <DImageButton>
+#include <DIconButton>
 #include <DSwitchButton>
 #include <DPushButton>
 
@@ -39,7 +39,7 @@ DWIDGET_USE_NAMESPACE
 
 // 添加accessible
 
-SET_BUTTON_ACCESSIBLE(DImageButton,m_w->objectName())
+SET_BUTTON_ACCESSIBLE(DIconButton,m_w->objectName())
 SET_BUTTON_ACCESSIBLE(DSwitchButton,m_w->text())
 SET_FORM_ACCESSIBLE(AppGridView,"AppGridView")
 SET_BUTTON_ACCESSIBLE(MiniFrameButton,m_w->accessibleName())
@@ -82,7 +82,7 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname,MiniFrameRightBar);
     USE_ACCESSIBLE(classname,MiniFrameSwitchBtn);
     USE_ACCESSIBLE(classname,RoundedButton);
-    USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DImageButton, object->objectName());
+    USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DIconButton, object->objectName());
     USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DSwitchButton, object->objectName());
     USE_ACCESSIBLE(classname,QWidget);
     USE_ACCESSIBLE(classname,QFrame);

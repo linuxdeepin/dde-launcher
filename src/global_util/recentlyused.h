@@ -34,7 +34,7 @@ class RecentlyUsed : public QObject
     Q_OBJECT
 
 public:
-    explicit RecentlyUsed(QObject *parent = 0);
+    explicit RecentlyUsed(QObject *parent = nullptr);
 
     const QList<QString> history() const { return m_history; }
 

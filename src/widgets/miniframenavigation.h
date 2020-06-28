@@ -29,22 +29,19 @@
 #include <QStackedLayout>
 #include <QStandardPaths>
 
-#include <dimagebutton.h>
+#include <diconbutton.h>
 
 #include <com_deepin_daemon_accounts.h>
 #include <com_deepin_daemon_accounts_user.h>
 
 DWIDGET_USE_NAMESPACE
 
-class UserButton : public DImageButton
+class UserButton : public DIconButton
 {
     Q_OBJECT
 
 public:
     explicit UserButton(QWidget *parent = Q_NULLPTR);
-
-private:
-    void paintEvent(QPaintEvent *e);
 
 private:
     com::deepin::daemon::Accounts *m_accounts;
@@ -68,7 +65,7 @@ class MiniFrameNavigation : public QWidget
     Q_OBJECT
 
 public:
-    explicit MiniFrameNavigation(QWidget *parent = 0);
+    explicit MiniFrameNavigation(QWidget *parent = nullptr);
 
 private slots:
     void openDirectory(const QString &dir);

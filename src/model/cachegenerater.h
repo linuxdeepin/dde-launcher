@@ -30,7 +30,7 @@ class CacheGenerater : public QObject
 {
     Q_OBJECT
 public:
-    explicit CacheGenerater(QObject *parent = 0);
+    explicit CacheGenerater(QObject *parent = nullptr);
 
 signals:
 

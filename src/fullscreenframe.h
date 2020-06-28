@@ -68,7 +68,7 @@ class FullScreenFrame : public BoxFrame, public LauncherInterface
 public:
     enum tabFocus {FirstItem, SearchEdit, CategoryChangeBtn, CategoryTital};
     explicit FullScreenFrame(QWidget *parent = nullptr);
-    ~FullScreenFrame();
+    ~FullScreenFrame() override;
 
     void exit();
     void showByMode(const qlonglong mode);

@@ -41,27 +41,29 @@ void GradientLabel::setPixmap(QPixmap pixmap)
     pix.fill(Qt::transparent);
 
     QPainter pixPainter;
-    pixPainter.begin(&pix);
-    pixPainter.drawPixmap(0, 0, pixmap);
-    pix.setDevicePixelRatio(devicePixelRatioF());
+    if (pixPainter.isActive()) {
+        pixPainter.begin(&pix);
+        pixPainter.drawPixmap(0, 0, pixmap);
+        pix.setDevicePixelRatio(devicePixelRatioF());
 
-    pixPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        pixPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
 
-    QLinearGradient gradient(pix.rect().topLeft(),
-                             pix.rect().bottomLeft());
 
-    if (m_direction == TopToBottom) {
-        gradient.setColorAt(0, Qt::white);
-        gradient.setColorAt(1, Qt::transparent);
-    } else if (m_direction == BottomToTop) {
-        gradient.setColorAt(0, Qt::transparent);
-        gradient.setColorAt(1, Qt::white);
+        QLinearGradient gradient(pix.rect().topLeft(),
+                                 pix.rect().bottomLeft());
+
+        if (m_direction == TopToBottom) {
+            gradient.setColorAt(0, Qt::white);
+            gradient.setColorAt(1, Qt::transparent);
+        } else if (m_direction == BottomToTop) {
+            gradient.setColorAt(0, Qt::transparent);
+            gradient.setColorAt(1, Qt::white);
+        }
+
+        pixPainter.fillRect(pix.rect(), gradient);
+
+        pixPainter.end();
     }
-
-    pixPainter.fillRect(pix.rect(), gradient);
-
-    pixPainter.end();
-
     m_pixmap = pix;
 }
 

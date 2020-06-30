@@ -72,6 +72,7 @@ void BoxFrame::setBackground(const QString &url)
 const QPixmap BoxFrame::backgroundPixmap() {
     const QSize &size = QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height) * qApp->primaryScreen()->devicePixelRatio();
 
+    if (m_pixmap.isNull()) return QPixmap();
     QPixmap cache = m_pixmap.scaled(size,
                                     Qt::KeepAspectRatioByExpanding,
                                     Qt::SmoothTransformation);

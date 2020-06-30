@@ -138,6 +138,7 @@ void SearchWidget::clearSearchContent()
 //    m_searchEdit->normalMode();
 //    m_searchEdit->moveFloatWidget();
     m_searchEdit->clear();
+    m_searchEdit->clearEdit();
 }
 
 void SearchWidget::setLeftSpacing(int spacing)

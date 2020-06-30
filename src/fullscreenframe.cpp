@@ -209,6 +209,7 @@ int FullScreenFrame::dockPosition()
 
 void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &category, AppsListModel::scrollType nType)
 {
+    m_searchWidget->clearSearchContent();
     m_focusIndex = CategoryTital;
     AppsListModel::AppCategory tempMode = category;
     if (tempMode < AppsListModel::Internet || tempMode > AppsListModel::Others)
@@ -895,6 +896,7 @@ void FullScreenFrame::hideLauncher()
         return;
     }
     disconnect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::hideLauncher);
+    m_searchWidget->clearSearchContent();
     hide();
 }
 

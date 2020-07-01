@@ -833,26 +833,29 @@ void WindowedFrame::adjustPosition()
     QRect dockRect = QRect(scaledPosition(r.topLeft()),r.size() * ratio);
 
     const auto &s = size();
+    int dockSpacing = 0;
+    if (m_dockInter->displayMode() == DOCK_FASHION) {
+        dockSpacing = 8;
+    }
+
     QPoint p;
-    // extra spacing for efficient mode
-    if (m_dockInter->displayMode() == DOCK_EFFICIENT) {
-        const QRect primaryRect = m_displayInter->primaryRect();
-        switch (dockPos) {
-        case DOCK_TOP:
-            p = QPoint(dockRect.left(), dockRect.bottom() + 1);
-            break;
-        case DOCK_BOTTOM:
-            p = QPoint(dockRect.left(), dockRect.top() - s.height());
-            break;
-        case DOCK_LEFT:
-            p = QPoint(dockRect.right() + 1, dockRect.top());
-            break;
-        case DOCK_RIGHT:
-            p = QPoint(dockRect.left() - s.width(), dockRect.top());
-            break;
-        default:
-            Q_UNREACHABLE_IMPL();
-        }
+
+    // The position of the launcher is different in different modes
+    switch (dockPos) {
+    case DOCK_TOP:
+        p = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
+        break;
+    case DOCK_BOTTOM:
+        p = QPoint(dockRect.left(), dockRect.top() - s.height() - dockSpacing);
+        break;
+    case DOCK_LEFT:
+        p = QPoint(dockRect.right() + dockSpacing + 1, dockRect.top());
+        break;
+    case DOCK_RIGHT:
+        p = QPoint(dockRect.left() - s.width() - dockSpacing, dockRect.top());
+        break;
+    default:
+        Q_UNREACHABLE_IMPL();
     }
 
     qDebug() << "currentWindowedFrame Position:"<< p;

@@ -27,18 +27,21 @@
 #include "searchlineedit.h"
 #include <dimagebutton.h>
 #include <QWidget>
-#include <DFloatingButton>
 
-DWIDGET_USE_NAMESPACE
+DWIDGET_BEGIN_NAMESPACE
+class DSearchEdit;
+class DFloatingButton;
+DWIDGET_END_NAMESPACE
 
 class SearchWidget : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit SearchWidget(QWidget *parent = 0);
+    explicit SearchWidget(QWidget *parent = Q_NULLPTR);
 
-    QLineEdit *edit();
+    DSearchEdit *edit();
+    DFloatingButton *categoryBtn();
 
     void setLeftSpacing(int spacing);
     void setRightSpacing(int spacing);
@@ -53,13 +56,12 @@ signals:
     void searchTextChanged(const QString &text) const;
     void toggleMode();
 
-  private:
+private:
     QFrame *m_leftSpacing;
     QFrame *m_rightSpacing;
     DFloatingButton *m_toggleModeBtn;
-public:
     DFloatingButton *m_toggleCategoryBtn;
-    SearchLineEdit* m_searchEdit;
+    DSearchEdit* m_searchEdit;
 };
 
 #endif // SEARCHWIDGET_H

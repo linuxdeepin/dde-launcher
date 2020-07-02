@@ -40,7 +40,7 @@ public:
     ~MiniFrameRightBar() override;
 
     void setCurrentCheck(bool checked) const;
-    void setCurrentIndex(int index) { m_currentIndex = index; };
+    void setCurrentIndex(int index) { m_currentIndex = index; }
     void moveUp();
     void moveDown();
     void execCurrent();

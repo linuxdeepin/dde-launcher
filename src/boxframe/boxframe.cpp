@@ -98,6 +98,9 @@ const QPixmap BoxFrame::backgroundPixmap()
 {
     const QSize &size = currentScreen()->size() * currentScreen()->devicePixelRatio();
 
+    if (m_pixmap.isNull())
+        return QPixmap();
+
     QPixmap cache = m_pixmap.scaled(size,
                                     Qt::KeepAspectRatioByExpanding,
                                     Qt::SmoothTransformation);

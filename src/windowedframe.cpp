@@ -354,13 +354,6 @@ bool WindowedFrame::visible()
 
 void WindowedFrame::moveCurrentSelectApp(const int key)
 {
-//    if (m_appsView->model() == m_searchModel && m_focusPos == Search) {
-//        m_appsView->setCurrentIndex(m_appsView->model()->index(0, 0));
- //       m_appsView->setFocus();
-//        m_focusPos = RightBottom;
-//        return;
-//  }
-
     if(Qt::Key_Undo == key) {
         auto  oldStr =  m_searcherEdit->lineEdit()->text();
         m_searcherEdit->lineEdit()->undo();
@@ -714,7 +707,7 @@ void WindowedFrame::showEvent(QShowEvent *e)
         setFocus();
         emit visibleChanged(true);
     });
-    m_focusPos = Default;
+    m_focusPos = Applist;
 }
 
 void WindowedFrame::hideEvent(QHideEvent *e)
@@ -990,7 +983,7 @@ void WindowedFrame::recoveryAll()
     m_switchBtn->updateStatus(All);
     hideTips();
 
-    m_focusPos = Computer;
+    m_focusPos = Applist;
     m_leftBar->setCurrentCheck(false);
 }
 

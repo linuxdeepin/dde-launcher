@@ -402,6 +402,6 @@ void MultiPagesView::updateGradient()
     QPoint left = mapToGlobal(rc.topLeft());
     QPoint right = mapToGlobal(rc.topRight());
 
-    QPixmap background = QPixmap::grabWidget(backgroundWidget);
+    QPixmap background = backgroundWidget->grab();
     updateGradient(background, left, right);
 }

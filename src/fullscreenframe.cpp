@@ -1501,7 +1501,7 @@ void FullScreenFrame::nextTabWidget(int key)
 
 void FullScreenFrame::timeOutUpdateAppsArea()
 {
-    QTimer::singleShot(100, this, [ = ] {
+    QTimer::singleShot(200, this, [ = ] {
         if(m_currentBlurBoxWidgetX == categoryBoxWidget(m_currentCategory)->x()){
             timeOutUpdateAppsArea();
         }else{

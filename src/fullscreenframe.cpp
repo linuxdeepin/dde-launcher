@@ -221,6 +221,7 @@ int FullScreenFrame::dockPosition()
 
 void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory &category, AppsListModel::scrollType nType)
 {
+    m_searchWidget->clearSearchContent();
     m_focusIndex = CategoryTital;
     AppsListModel::AppCategory tempMode = category;
     if (tempMode < AppsListModel::Internet || tempMode > AppsListModel::Others)
@@ -277,7 +278,7 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category, AppsListMod
     m_currentBox = m_currentCategory - 4;
 
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
-    const int  temp = (qApp->primaryScreen()->geometry().size().width() / 2 -  m_padding * 2 - 20) / 2 ;
+    const int temp = (m_appsManager->currentScreen()->geometry().size().width() / 2 - m_padding * 2 - 20) / 2;
     m_scrollDest = dest;
     BlurBoxWidget* blurbox = qobject_cast<BlurBoxWidget*>(m_scrollDest);
     if (blurbox)

@@ -68,6 +68,8 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         return;
     }
 
+    if (!m_actived) return;
+
     const qreal ratio = qApp->devicePixelRatio();
     const QRect rect = option.rect;
     const bool isDrawTips = index.data(AppsListModel::AppNewInstallRole).toBool();

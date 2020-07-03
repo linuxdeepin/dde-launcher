@@ -1153,6 +1153,7 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
     m_isConfirmDialogShown = true;
 
     DTK_WIDGET_NAMESPACE::DDialog unInstallDialog;
+    unInstallDialog.setWindowState(unInstallDialog.windowState() & ~Qt::WindowFullScreen);
     unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
     unInstallDialog.setWindowModality(Qt::WindowModal);
 

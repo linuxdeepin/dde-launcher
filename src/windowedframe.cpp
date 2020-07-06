@@ -589,8 +589,10 @@ void WindowedFrame::switchToCategory(const QModelIndex &index)
 
 QPainterPath WindowedFrame::getCornerPath(AnchoredCornor direction)
 {
-     QPainterPath path;
-     return path;
+    QPainterPath path;
+    if (m_dockInter->displayMode() == DOCK_FASHION) {
+       return path;
+    }
     const QRect rect = this->rect();
     const QPoint topLeft = rect.topLeft();
     const QPoint topRight = rect.topRight();

@@ -32,10 +32,8 @@
 #include <QPixmap>
 #include <QVariant>
 #include <QApplication>
+#include <QSvgRenderer>
 
-#include <DSvgRenderer>
-
-DGUI_USE_NAMESPACE
 
 #define  ICONTOLETF  12
 #define  ICONTOTOP  6
@@ -184,21 +182,18 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         const double  iconZoom =  iconRect.width() /256.0;
 
         QStringList calIconList = m_calcUtil->calendarSelectIcon();
-        auto bg_pmap = loadSvg(calIconList.at(0),256);
-        bg_pmap.setDevicePixelRatio(1/iconZoom);
-        painter->drawPixmap(iconRect, bg_pmap, bg_pmap.rect());
-
-        auto month_pmap = loadSvg(calIconList.at(1),QSize(80,40));
-        month_pmap.setDevicePixelRatio(1/iconZoom);
-        painter->drawPixmap(tx+(tw/3.6),ty+(th/7),month_pmap);
-
-        auto day_pmap = loadSvg(calIconList.at(2),QSize(112,104));
-        day_pmap.setDevicePixelRatio(1/iconZoom);
-        painter->drawPixmap(tx+(tw/4),ty+th/3.6,day_pmap);
-
-        auto week_pmap = loadSvg(calIconList.at(3),QSize(56,24));
-        week_pmap.setDevicePixelRatio(1/iconZoom);
-        painter->drawPixmap(tx+(tw/2.5),ty+((th/4)*2.8),week_pmap);
+         //绘制背景
+        QSvgRenderer renderer_bg(calIconList.at(0));
+        renderer_bg.render(painter, iconRect);
+        //绘制月份
+        QSvgRenderer renderer_month(calIconList.at(1));
+        renderer_month.render(painter, QRect(tx + (tw / 3.6), ty + (th / 7), 80 * iconZoom, 40 * iconZoom));
+        //绘制日
+        QSvgRenderer renderer_day(calIconList.at(2));
+        renderer_day.render(painter, QRect(tx + (tw / 4), ty + th / 3.6, 112 * iconZoom, 104 * iconZoom));
+        //绘制周
+        QSvgRenderer renderer_week(calIconList.at(3));
+        renderer_week.render(painter, QRect(tx + (tw / 2.5), ty + ((th / 4) * 2.8), 56 * iconZoom, 24 * iconZoom));
     }else {
         const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
         painter->drawPixmap(iconRect, iconPix, iconPix.rect());

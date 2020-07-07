@@ -114,6 +114,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_maskBg->setAccessibleName("MaskBg");
     m_switchBtn->setAccessibleName("switchBtn");
     m_modeToggleBtn->setAccessibleName("modeToggleBtn");
+    m_searcherEdit->setAccessibleName("WindowedSearcherEdit");
 
     setMaskColor(DBlurEffectWidget::AutoColor);
     setBlendMode(DBlurEffectWidget::InWindowBlend);

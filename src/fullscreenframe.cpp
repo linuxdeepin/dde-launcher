@@ -146,6 +146,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_searchWidget->categoryBtn()->setAccessibleName("search_categoryBtn");
     m_contentFrame->setAccessibleName("ContentFrame");
     m_appsArea->horizontalScrollBar()->setAccessibleName("horizontalScrollBar");
+    m_searchWidget->edit()->setAccessibleName("FullScreenSearchEdit");
+
     m_focusIndex = 0;
     m_padding = 200;
     //m_currentCategory = AppsListModel::Internet;
@@ -922,6 +924,7 @@ void FullScreenFrame::showLauncher()
     setFixedSize(QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height)/qApp->primaryScreen()->devicePixelRatio());
     updateDockPosition();
     show();
+    connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::hideLauncher);
 }
 
 void FullScreenFrame::hideLauncher()
@@ -930,6 +933,7 @@ void FullScreenFrame::hideLauncher()
         return;
     }
     disconnect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::hideLauncher);
+    m_searchWidget->clearSearchContent();
     hide();
 }
 
@@ -1207,6 +1211,7 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
     m_isConfirmDialogShown = true;
 
     DTK_WIDGET_NAMESPACE::DDialog unInstallDialog;
+    unInstallDialog.setWindowState(unInstallDialog.windowState() & ~Qt::WindowFullScreen);
     unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
     unInstallDialog.setWindowModality(Qt::WindowModal);
 

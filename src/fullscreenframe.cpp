@@ -144,6 +144,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_searchWidget->categoryBtn()->setAccessibleName("search_categoryBtn");
     m_contentFrame->setAccessibleName("ContentFrame");
     m_appsArea->horizontalScrollBar()->setAccessibleName("horizontalScrollBar");
+    m_searchWidget->edit()->setAccessibleName("FullScreenSearchEdit");
 
     m_focusIndex = 0;
     m_padding = 200;
@@ -665,7 +666,7 @@ void FullScreenFrame::initUI()
     m_searchWidget->installEventFilter(m_eventFilter);
     m_appItemDelegate->installEventFilter(m_eventFilter);
 
-    m_multiPagesView->setAccessibleName("all");
+    m_multiPagesView->setAccessibleName("allAppPagesView");
     m_multiPagesView->setDataDelegate(m_appItemDelegate);
     m_multiPagesView->updatePageCount(AppsListModel::All);
     m_multiPagesView->installEventFilter(this);

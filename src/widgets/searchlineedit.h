@@ -69,6 +69,10 @@ protected:
     void themeChanged();
 
 private:
+    //根据光前cursor theme更新edit的光标
+    void updateEditCursor();
+
+private:
     DIconButton *m_icon;
     DIconButton *m_clear;
     QLabel *m_placeholderText;

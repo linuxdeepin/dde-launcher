@@ -22,6 +22,7 @@
  */
 
 #include "searchlineedit.h"
+#include "../global_util/util.h"
 
 #include <QDebug>
 #include <QHBoxLayout>
@@ -30,6 +31,7 @@
 #include <QResizeEvent>
 #include <QGuiApplication>
 #include <DGuiApplicationHelper>
+#include <QGSettings>
 
 DGUI_USE_NAMESPACE
 
@@ -133,6 +135,9 @@ bool SearchLineEdit::event(QEvent *e)
         }
     }
     break;
+    case QEvent::Enter:
+        updateEditCursor();
+    break;
     //    case QEvent::FocusOut:      normalMode();       break;
     default:;
     }
@@ -226,6 +231,27 @@ void SearchLineEdit::themeChanged()
     //pa.setColor(QPalette::Button, Qt::transparent); // 背景
     pa.setColor(QPalette::Highlight, Qt::transparent); // 激活后的边框
     setPalette(pa);
+}
+
+void SearchLineEdit::updateEditCursor()
+{
+    static QCursor *lastArrowCursor = nullptr;
+    static QString  lastCursorTheme;
+    int lastCursorSize = 0;
+    QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
+    QString theme = gsetting.get("gtk-cursor-theme-name").toString();
+    int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
+    if (theme != lastCursorTheme || cursorSize != lastCursorSize)
+    {
+        QCursor *cursor = loadQCursorFromX11Cursor(theme.toStdString().c_str(), "xterm", cursorSize);
+        lastCursorTheme = theme;
+        lastCursorSize = cursorSize;
+        setCursor(*cursor);
+        if (lastArrowCursor != nullptr)
+            delete lastArrowCursor;
+
+        lastArrowCursor = cursor;
+    }
 }
 
 SearchLineeditStyle::SearchLineeditStyle(QStyle *style)

@@ -22,6 +22,7 @@
 #include "miniframerightbar.h"
 #include "miniframebutton.h"
 #include "avatar.h"
+#include "../global_util/util.h"
 
 #include <DDesktopServices>
 #include <QVBoxLayout>
@@ -30,6 +31,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <DGuiApplicationHelper>
+#include <QGSettings>
 
 DGUI_USE_NAMESPACE
 
@@ -39,10 +41,44 @@ DGUI_USE_NAMESPACE
 #include <QProcess>
 #endif
 
+//光标跟随主题的DImageButton,临时解决wayland下光标不跟随主题的bug
+class ButtonWithThemeCursor : public DImageButton
+{
+public:
+    ButtonWithThemeCursor(QWidget *parent = 0): DImageButton(parent) {
+    }
+
+protected:
+    void enterEvent(QEvent *event) Q_DECL_OVERRIDE {
+        DImageButton::enterEvent(event);
+        updateButtonCursor();
+    }
+    void updateButtonCursor()
+    {
+        static QCursor *lastArrowCursor = nullptr;
+        static QString  lastCursorTheme;
+        int lastCursorSize = 0;
+        QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
+        QString theme = gsetting.get("gtk-cursor-theme-name").toString();
+        int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
+        if (theme != lastCursorTheme || cursorSize != lastCursorSize)
+        {
+            QCursor *cursor = loadQCursorFromX11Cursor(theme.toStdString().c_str(), "hand", cursorSize);
+            lastCursorTheme = theme;
+            lastCursorSize = cursorSize;
+            setCursor(*cursor);
+            if (lastArrowCursor != nullptr)
+                delete lastArrowCursor;
+
+            lastArrowCursor = cursor;
+        }
+    }
+};
+
 MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     : QWidget(parent)
 
-    , m_modeToggleBtn(new DImageButton(this))
+    , m_modeToggleBtn(new ButtonWithThemeCursor(this))
     , m_datetimeWidget(new DatetimeWidget)
     , m_avatar(new Avatar)
     , m_currentIndex(0)

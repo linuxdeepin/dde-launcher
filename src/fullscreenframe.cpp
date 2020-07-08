@@ -395,6 +395,12 @@ QVariant FullScreenFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
     return QWidget::inputMethodQuery(prop);
 }
 
+void FullScreenFrame::enterEvent(QEvent* event)
+{
+    updateFrameCursor();
+    BoxFrame::enterEvent(event);
+}
+
 void FullScreenFrame::initUI()
 {
     m_searchWidget->showToggle();
@@ -1514,3 +1520,24 @@ void FullScreenFrame::nextTabWidget(int key)
     }
 }
 
+
+void FullScreenFrame::updateFrameCursor()
+{
+    static QCursor *lastArrowCursor = nullptr;
+    static QString  lastCursorTheme;
+    int lastCursorSize = 0;
+    QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
+    QString theme = gsetting.get("gtk-cursor-theme-name").toString();
+    int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
+    if (theme != lastCursorTheme || cursorSize != lastCursorSize)
+    {
+        QCursor *cursor = loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
+        lastCursorTheme = theme;
+        lastCursorSize = cursorSize;
+        setCursor(*cursor);
+        if (lastArrowCursor != nullptr)
+            delete lastArrowCursor;
+
+        lastArrowCursor = cursor;
+    }
+}

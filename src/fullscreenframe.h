@@ -96,6 +96,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
     bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
+    void enterEvent(QEvent*) override;
 
     // input method
     void inputMethodEvent(QInputMethodEvent *e) override;
@@ -143,6 +144,9 @@ private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
     AppGridView *categoryView(const AppsListModel::AppCategory category) const;
     AppGridView *lastVisibleView() const;
+
+    //根据光前cursor theme更新frame的光标
+    void updateFrameCursor();
 
 private:
     bool m_isConfirmDialogShown = false;

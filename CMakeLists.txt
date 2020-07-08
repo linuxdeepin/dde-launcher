@@ -53,7 +53,7 @@ find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(Qt5Svg REQUIRED)
 
-pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11)
+pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11 xcursor)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 

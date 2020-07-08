@@ -16,7 +16,8 @@ Build-Depends:
  libdtkwidget-dev,
  libdframeworkdbus-dev,
  qtbase5-private-dev,
- libdtkgui-dev
+ libdtkgui-dev,
+ libxcursor-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 

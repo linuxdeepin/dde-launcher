@@ -43,6 +43,8 @@
 #include <QTimer>
 #include <QScroller>
 #include <QDebug>
+#include <QCursor>
+#include <QGSettings>
 
 #include <DSearchEdit>
 #include <DWindowManagerHelper>
@@ -694,6 +696,7 @@ void WindowedFrame::hideEvent(QHideEvent *e)
 
 void WindowedFrame::enterEvent(QEvent *e)
 {
+    updateFrameCursor();
     QWidget::enterEvent(e);
 
     m_delayHideTimer->stop();
@@ -972,4 +975,25 @@ void WindowedFrame::recoveryAll()
 void WindowedFrame::onOpacityChanged(const double value)
 {
     setMaskAlpha(value * 255);
+}
+
+void WindowedFrame::updateFrameCursor()
+{
+    static QCursor *lastArrowCursor = nullptr;
+    static QString  lastCursorTheme;
+    int lastCursorSize = 0;
+    QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
+    QString theme = gsetting.get("gtk-cursor-theme-name").toString();
+    int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
+    if (theme != lastCursorTheme || cursorSize != lastCursorSize)
+    {
+        QCursor *cursor = loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
+        lastCursorTheme = theme;
+        lastCursorSize = cursorSize;
+        setCursor(*cursor);
+        if (lastArrowCursor != nullptr)
+            delete lastArrowCursor;
+
+        lastArrowCursor = cursor;
+    }
 }

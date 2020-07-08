@@ -129,6 +129,9 @@ private slots:
     void onOpacityChanged(const double value);
     const QPoint scaledPosition(const QPoint &xpos);
 
+    //根据光前cursor theme更新frame的光标
+    void updateFrameCursor();
+
 private:
     DBusDock *m_dockInter;
     std::unique_ptr<MenuWorker> m_menuWorker;

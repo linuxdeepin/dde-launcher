@@ -32,5 +32,9 @@ QString getThumbnailsPath();
 QString getCategoryNames(QString text);
 const QPixmap loadSvg(const QString &fileName, const int size);
 const QPixmap renderSVG(const QString &path, const QSize &size);
+
+//根据主题加载系统中的x11光标为QCursor
+QCursor* loadQCursorFromX11Cursor(const char* theme, const char* cursorName, int cursorSize);
+
 #endif // UTIL_H
 

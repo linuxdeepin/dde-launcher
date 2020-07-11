@@ -116,6 +116,8 @@ void LauncherSys::displayModeChanged()
         if (!m_fullLauncher) {
             m_fullLauncher = new FullScreenFrame;
             m_fullLauncher->installEventFilter(this);
+            m_fullLauncher->setAttribute(Qt::WA_NativeWindow);
+            m_fullLauncher->windowHandle()->setProperty("_d_dwayland_window-type", "launcher");
             connect(m_fullLauncher, &FullScreenFrame::visibleChanged, this, &LauncherSys::onVisibleChanged);
             connect(m_fullLauncher, &FullScreenFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
         }
@@ -125,6 +127,8 @@ void LauncherSys::displayModeChanged()
         if (!m_windowLauncher) {
             m_windowLauncher = new WindowedFrame;
             m_windowLauncher->installEventFilter(this);
+            m_windowLauncher->setAttribute(Qt::WA_NativeWindow);
+            m_windowLauncher->windowHandle()->setProperty("_d_dwayland_window-type", "launcher");
             connect(m_windowLauncher, &WindowedFrame::visibleChanged, this, &LauncherSys::onVisibleChanged);
             connect(m_windowLauncher, &WindowedFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
         }

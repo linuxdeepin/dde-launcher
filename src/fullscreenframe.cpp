@@ -1428,12 +1428,15 @@ void FullScreenFrame::layoutChanged()
 
 void FullScreenFrame::searchTextChanged(const QString &keywords)
 {
-    if (keywords.isEmpty())
+    QString tmpKeywords = keywords;
+    //删除搜索字符串中的空格
+    tmpKeywords.remove(QChar(' '));
+    if (tmpKeywords.isEmpty())
         updateDisplayMode(m_calcUtil->displayMode());
     else
         updateDisplayMode(SEARCH);
 
-    m_appsManager->searchApp(keywords.trimmed());
+    m_appsManager->searchApp(tmpKeywords);
 }
 
 void FullScreenFrame::nextTabWidget(int key)

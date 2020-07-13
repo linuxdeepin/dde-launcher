@@ -903,7 +903,10 @@ void WindowedFrame::onWMCompositeChanged()
 
 void WindowedFrame::searchText(const QString &text)
 {
-    if (text.isEmpty()) {
+    QString tmpText = text;
+    //删除其中的空格
+    tmpText.remove(QChar(' '));
+    if (tmpText.isEmpty()) {
         m_appsView->setModel(m_appsModel);
         hideTips();
     } else {
@@ -913,7 +916,7 @@ void WindowedFrame::searchText(const QString &text)
             m_focusPos = Search;
         }
 
-        m_appsManager->searchApp(text.trimmed());
+        m_appsManager->searchApp(tmpText);
     }
 
     m_displayMode = All;

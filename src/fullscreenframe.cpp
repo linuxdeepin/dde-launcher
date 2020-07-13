@@ -50,6 +50,8 @@
 
 #include "sharedeventfilter.h"
 
+#define FIRST_APP_INDEX 0
+
 DGUI_USE_NAMESPACE
 
 static const QString WallpaperKey = "pictureUri";
@@ -137,6 +139,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     setAttribute(Qt::WA_InputMethodEnabled, true);
     m_nextFocusIndex = Applist;
     m_currentFocusIndex = m_nextFocusIndex;
+    m_appNum = m_appsManager->GetAllAppNum();
 
 #if (DTK_VERSION <= DTK_VERSION_CHECK(2, 0, 9, 9))
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
@@ -897,6 +900,9 @@ void FullScreenFrame::updateGeometry()
 ///
 void FullScreenFrame::moveCurrentSelectApp(const int key)
 {
+    //Prevent the application from being added or uninstalled. Each time you go to get the total number
+    m_appNum = m_appsManager->GetAllAppNum();
+
     if (Qt::Key_Tab == key || Qt::Key_Backtab == key) {
         nextTabWidget(key);
         return;
@@ -913,15 +919,32 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
 
     const int column = m_calcUtil->appColumnCount();
     QModelIndex index;
-
     // calculate destination sibling by keys, it may cause an invalid position.
     switch (key) {
     case Qt::Key_Backtab:
-    case Qt::Key_Left:      index = currentIndex.sibling(currentIndex.row() - 1, 0);        break;
+    // When it is in the first one, another operation will let you select the last app
+    case Qt::Key_Left:      index = currentIndex.sibling((currentIndex.row() == FIRST_APP_INDEX ? m_appNum : currentIndex.row()) - 1, 0);       break;
     case Qt::Key_Tab:
-    case Qt::Key_Right:     index = currentIndex.sibling(currentIndex.row() + 1, 0);        break;
-    case Qt::Key_Up:        index = currentIndex.sibling(currentIndex.row() - column, 0);   break;
-    case Qt::Key_Down:      index = currentIndex.sibling(currentIndex.row() + column, 0);   break;
+    //When it is at the end, another operation will let you select the first app
+    case Qt::Key_Right:     index = currentIndex.sibling( (currentIndex.row() + 1) == m_appNum ? FIRST_APP_INDEX : currentIndex.row() + 1, 0);        break;
+    case Qt::Key_Up:
+        if( currentIndex.row() - column < 0 && currentIndex.row() > FIRST_APP_INDEX ) {
+            index = currentIndex.sibling(FIRST_APP_INDEX, 0);
+        } else if( currentIndex.row() == FIRST_APP_INDEX ) {
+            index = currentIndex.sibling(m_appNum - 1, 0);
+        } else {
+            index = currentIndex.sibling(currentIndex.row() - column, 0);
+        }
+        break;
+    case Qt::Key_Down:
+        if( currentIndex.row() + column > m_appNum - 1 && currentIndex.row() < m_appNum - 1 ) {
+            index = currentIndex.sibling(m_appNum - 1, 0);
+        } else if(currentIndex.row() == m_appNum - 1) {
+            index = currentIndex.sibling(FIRST_APP_INDEX, 0);
+        } else {
+            index = currentIndex.sibling(currentIndex.row() + column, 0);
+        }
+        break;
     default:;
     }
 

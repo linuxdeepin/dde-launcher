@@ -149,6 +149,9 @@ private:
     bool m_refershCategoryTextVisible = false;
     int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
     int m_displayMode = SEARCH;
+    
+    //Record the total number of apps
+    int m_appNum;
     double rightMarginRation = 1;
     AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
     std::unique_ptr<MenuWorker> m_menuWorker;

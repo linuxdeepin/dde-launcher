@@ -262,6 +262,12 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
     });
 }
 
+//Return the number of all applications
+int AppsManager::GetAllAppNum() const
+{
+    return m_allAppInfoList.size();
+}
+
 void AppsManager::sortByInstallTimeOrder(ItemInfoList &processList)
 {
     qSort(processList.begin(), processList.end(), [&](const ItemInfo & i1, const ItemInfo & i2) {

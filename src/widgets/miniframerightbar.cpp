@@ -63,10 +63,11 @@ protected:
         int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
         if (theme != lastCursorTheme || cursorSize != lastCursorSize)
         {
-            QCursor *cursor = loadQCursorFromX11Cursor(theme.toStdString().c_str(), "hand", cursorSize);
+            QCursor *cursor = loadQCursorFromX11Cursor(theme.toStdString().c_str(), "hand2", cursorSize);
             lastCursorTheme = theme;
             lastCursorSize = cursorSize;
-            setCursor(*cursor);
+            if(cursor != nullptr)
+                setCursor(*cursor);
             if (lastArrowCursor != nullptr)
                 delete lastArrowCursor;
 

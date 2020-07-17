@@ -76,6 +76,7 @@ signals:
 public slots:
     void showMenuByAppItem(QPoint pos, const QModelIndex &index);
 
+    void UpdateMenuCursor(QWidget *menu_win);
     void handleOpen();
     void handleToDesktop();
     void handleToDock();

@@ -23,6 +23,8 @@
 
 #include "menuworker.h"
 
+#include "src/global_util/util.h"
+
 #include <QMenu>
 #include <QSignalMapper>
 
@@ -64,6 +66,7 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
     qDebug() << "appKey" << m_appKey;
 
     QMenu *menu = new QMenu;
+    UpdateMenuCursor(menu);//临时解决，启动器右键菜单时，光标变大，item被点击时，更新一次cursor image
 
     QSignalMapper *signalMapper = new QSignalMapper(menu);
 
@@ -149,6 +152,28 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
     m_menuIsShown = true;
     m_menuGeometry = menu->geometry();
     menu->exec();
+}
+
+void MenuWorker::UpdateMenuCursor(QWidget *menu_win)
+{
+    static QCursor *lastArrowCursor = nullptr;
+    static QString  lastCursorTheme;
+    int lastCursorSize = 0;
+    QGSettings gsetting("com.deepin.xsettings", "/com/deepin/xsettings/");
+    QString theme = gsetting.get("gtk-cursor-theme-name").toString();
+    int cursorSize = gsetting.get("gtk-cursor-theme-size").toInt();
+    if (theme != lastCursorTheme || cursorSize != lastCursorSize)
+    {
+        QCursor *cursor = loadQCursorFromX11Cursor(theme.toStdString().c_str(), "left_ptr", cursorSize);
+        lastCursorTheme = theme;
+        lastCursorSize = cursorSize;
+        if (menu_win)
+            menu_win->setCursor(*cursor);
+        if (lastArrowCursor != nullptr)
+            delete lastArrowCursor;
+
+        lastArrowCursor = cursor;
+    }
 }
 
 void MenuWorker::handleOpen()

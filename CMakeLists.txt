@@ -25,6 +25,8 @@ endif ()
 
 set(BIN_NAME dde-launcher)
 
+add_subdirectory("unittest")
+
 # Sources files
 file(GLOB_RECURSE SRCS "src/*.h" "src/*.cpp")
 

@@ -71,6 +71,7 @@ void pageControl::addButton()
 {
     DFloatingButton *pageButton = new DFloatingButton(this);
     pageButton->setIcon(m_iconNormal);
+    pageButton->setAccessibleName("thisPageButton");
     pageButton->setIconSize(QSize(PAGE_ICON_SIZE, PAGE_ICON_SIZE));
     pageButton->setFixedSize(QSize(PAGE_ICON_SIZE, PAGE_ICON_SIZE));
     pageButton->setBackgroundRole(DPalette::Button);
@@ -90,6 +91,7 @@ void pageControl::pageBtnClicked(bool checked)
     if (!pageButton)
         return;
 
+    pageButton->setAccessibleName("addPageBtn");
     pageButton->setIcon(checked ?  m_iconActive : m_iconNormal);
 
     if (checked)

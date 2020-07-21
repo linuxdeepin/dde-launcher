@@ -159,51 +159,51 @@ int CalculateUtil::displayMode() const
 void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int dockPosition)
 {
     Q_UNUSED(dockPosition);
+    double scaleX = getScreenScaleX();
+    double scaleY = getScreenScaleY();
+    double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
 
     QRect pr = currentScreen()->geometry();
     const int screenWidth = pr.width();
     const int spacing = pr.width() <= 1440 ? 10 : 28;
     // mini mode
     if (m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeCategory) {
+        QSize appBoxSize =  QSize(getAppBoxSize().width(), containerSize.height()) - QSize(0,115 + scale * 12);
 
         m_appMarginTop = 0;
         m_appColumnCount = 4;
-        int Catespacing = 54;
+        int calc_categoryspacing = 40;
+        if (pr.width() <= 1440)
+            calc_categoryspacing = 20;
+
         int calc_categroyitem_width = 0;
-        int calc_categoryspacing = 0;
-        if (pr.width() <= 1440) {
-            Catespacing = 20;
-            calc_categroyitem_width = (getAppBoxSize().width() - Catespacing * m_appColumnCount * 2) / m_appColumnCount + 0.5;
-            calc_categoryspacing  = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount) / (m_appColumnCount * 2) - 0.5;
-            int calc_categoryspacing_height  = (double(containerSize.height()) - calc_categroyitem_width * 3  - 84) / (3 * 2) + 0.5;
-            if(calc_categoryspacing_height < 0) calc_categoryspacing_height = 0;
-            m_appMarginTop = (containerSize.height() - calc_categoryspacing_height * 6 - calc_categroyitem_width * 3) / 2;
-            if (calc_categoryspacing > calc_categoryspacing_height)  calc_categoryspacing = calc_categoryspacing_height;
-        } else {
-            calc_categroyitem_width = (getAppBoxSize().width() - Catespacing * m_appColumnCount * 2) / m_appColumnCount + 0.5;
-            calc_categoryspacing = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount - Catespacing * 2) / (m_appColumnCount * 2) - 8;
+
+        calc_categroyitem_width = (appBoxSize.width() - calc_categoryspacing * m_appColumnCount * 2) / m_appColumnCount + 0.5;
+        calc_categoryspacing = (double(appBoxSize.width()) - calc_categroyitem_width * m_appColumnCount) / (m_appColumnCount * 2) - 0.5;
+        int calc_categoryspacing_height = (double(appBoxSize.height()) - calc_categroyitem_width * 3 - 84) / (3 * 2) + 0.5;
+
+        calc_categoryspacing_height = qMin(calc_categoryspacing_height,calc_categoryspacing);
+        if(calc_categoryspacing_height < 20) {
+            calc_categoryspacing_height = 20;
+            calc_categroyitem_width = (appBoxSize.height() - calc_categoryspacing_height * 3 * 2) / 3 + 0.5;
         }
 
-        m_appItemSpacing = calc_categoryspacing;
+        m_appItemSpacing = calc_categoryspacing_height;
         m_appItemSize = calc_categroyitem_width;
-        m_appItemFontSize = m_appItemSize <= 130 ? 8 : qApp->font().pointSize()+3;
-        m_appMarginLeft = (getAppBoxSize().width() - calc_categroyitem_width * m_appColumnCount - calc_categoryspacing * m_appColumnCount * 2) / 2;
+        m_appItemFontSize = m_appItemSize <= 80 ? 8 : qApp->font().pointSize()+3;
+        m_appMarginTop = (appBoxSize.height() - calc_categoryspacing_height * 6 - calc_categroyitem_width * 3) / 2;
+        m_appMarginLeft = (appBoxSize.width() - calc_categroyitem_width * 4 - calc_categoryspacing_height * 8) / 2;
         emit layoutChanged();
         return;
     }
 
     const int columns = 7;
     const int rows = m_appPageItemCount / columns;
-
     const int calc_item_width = int((double(containerSize.width()) - spacing * columns * 2) / columns + 0.5);
     const int calc_spacing = int((double(containerSize.width()) - calc_item_width * columns) / (columns * 2) - 0.5);
-
-    double scaleX = getScreenScaleX();
-    double scaleY = getScreenScaleY();
-    double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
-    const int h = containerSize.height() - 15 - scale * 12; //35为 图标：12 下边距：15
-
+    const int h = containerSize.height() - 35 - scale * 12; //图标：12 下边距：15 上边距 20
     const int nRowSpace = int(double(h - calc_item_width * rows) / (rows * 2) - 0.5);
+
     int nSpace = qMin(calc_spacing, nRowSpace);
     m_appMarginLeft = (containerSize.width() - calc_item_width * columns - nSpace * columns * 2) / 2;
     m_appMarginTop = (h - calc_item_width * rows - nSpace * rows * 2)/2;

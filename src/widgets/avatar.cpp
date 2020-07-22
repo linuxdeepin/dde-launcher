@@ -23,6 +23,7 @@
 
 #include <QPaintEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QDebug>
 
 #include <unistd.h>

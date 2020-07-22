@@ -27,6 +27,7 @@
 #include <QProcess>
 #include <QSignalMapper>
 #include <QPainter>
+#include <QPainterPath>
 
 #include <DDesktopServices>
 

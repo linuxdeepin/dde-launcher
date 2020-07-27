@@ -41,6 +41,7 @@
 #include <qiconengine.h>
 #include <DApplication>
 #include <QScopedPointer>
+#include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -197,6 +198,12 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
+    connect(m_iconRefreshTimer.get(), &QTimer::timeout, this, &AppsManager::refreshNotFoundIcon);
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        refreshAppListIcon();
+        delayRefreshData();
+    });
     connect(m_iconRefreshTimer.get(), &QTimer::timeout, this, &AppsManager::refreshNotFoundIcon);
 }
 
@@ -840,6 +847,38 @@ void AppsManager::refreshNotFoundIcon() {
 
     if (m_notExistIconMap.size() == 0) {
         return m_iconRefreshTimer->stop();
+    }
+}
+
+void AppsManager::refreshAppListIcon()
+{
+    m_categoryIcon.clear();
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+        m_categoryIcon
+                << QString(":/icons/skin/icons/category_network_dark.svg")
+                << QString(":/icons/skin/icons/category_chat_dark.svg")
+                << QString(":/icons/skin/icons/category_music_dark.svg")
+                << QString(":/icons/skin/icons/category_video_dark.svg")
+                << QString(":/icons/skin/icons/category_graphic_dark.svg")
+                << QString(":/icons/skin/icons/category_game_dark.svg")
+                << QString(":/icons/skin/icons/category_office_dark.svg")
+                << QString(":/icons/skin/icons/category_reading_dark.svg")
+                << QString(":/icons/skin/icons/category_develop_dark.svg")
+                << QString(":/icons/skin/icons/category_system_dark.svg")
+                << QString(":/icons/skin/icons/category_others_dark.svg");
+    } else {
+        m_categoryIcon
+                << QString(":/icons/skin/icons/category_network.svg")
+                << QString(":/icons/skin/icons/category_chat.svg")
+                << QString(":/icons/skin/icons/category_music.svg")
+                << QString(":/icons/skin/icons/category_video.svg")
+                << QString(":/icons/skin/icons/category_graphic.svg")
+                << QString(":/icons/skin/icons/category_game.svg")
+                << QString(":/icons/skin/icons/category_office.svg")
+                << QString(":/icons/skin/icons/category_reading.svg")
+                << QString(":/icons/skin/icons/category_develop.svg")
+                << QString(":/icons/skin/icons/category_system.svg")
+                << QString(":/icons/skin/icons/category_others.svg");
     }
 }
 

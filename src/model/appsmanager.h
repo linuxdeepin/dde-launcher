@@ -118,6 +118,7 @@ private:
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
     void onSearchTimeOut();
     void refreshNotFoundIcon();
+    void refreshAppListIcon();
 
 private slots:
     void onIconThemeChanged();

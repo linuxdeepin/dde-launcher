@@ -282,7 +282,7 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
     if (preset.isEmpty())
         preset = LAUNCHER_SETTINGS.get("apps-order").toStringList();
 
-    qSort(processList.begin(), processList.end(), [&preset](const ItemInfo & i1, const ItemInfo & i2) {
+    std::sort(processList.begin(), processList.end(), [&preset](const ItemInfo & i1, const ItemInfo & i2) {
         int index1 = preset.indexOf(i1.m_key);
         int index2 = preset.indexOf(i2.m_key);
         if (index1 == index2) {
@@ -307,7 +307,7 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
 
 void AppsManager::sortByInstallTimeOrder(ItemInfoList &processList)
 {
-    qSort(processList.begin(), processList.end(), [&](const ItemInfo & i1, const ItemInfo & i2) {
+    std::sort(processList.begin(), processList.end(), [&](const ItemInfo & i1, const ItemInfo & i2) {
 
         if (i1.m_installedTime == i2.m_installedTime && i1.m_installedTime != 0) {
             // If both of them don't exist in the preset list,

@@ -28,7 +28,11 @@
 #include <QSize>
 #include <QLabel>
 
+#include <com_deepin_daemon_gesture.h>
+
 #include "src/model/appsmanager.h"
+
+using Gesture = com::deepin::daemon::Gesture;
 
 class DragPageDelegate
 {
@@ -105,6 +109,10 @@ private:
     static QPointer<CalculateUtil> m_calcUtil;
 
     DragPageDelegate *m_pDelegate;
+
+    // 保存触控屏是否可拖拽状态
+    static bool m_longPressed;
+    static Gesture* m_gestureInter;
 };
 
 typedef QList<AppGridView*> AppGridViewList;

@@ -43,6 +43,12 @@
 QPointer<AppsManager> AppGridView::m_appManager = nullptr;
 QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
 
+bool AppGridView::m_longPressed = false;
+Gesture *AppGridView::m_gestureInter = new Gesture("com.deepin.daemon.Gesture"
+                                      , "/com/deepin/daemon/Gesture"
+                                      , QDBusConnection::systemBus()
+                                      , nullptr);
+
 AppGridView::AppGridView(QWidget *parent)
     : QListView(parent)
     , m_dropThresholdTimer(new QTimer(this))
@@ -95,6 +101,14 @@ AppGridView::AppGridView(QWidget *parent)
     connect(m_appManager,&AppsManager::iconLoadFinished,this,[=]{
         QListView::update();
     });
+
+    // 根据后端延迟触屏信号控制是否可进行图标拖动，收到延迟触屏信号可拖动，没有收到延迟触屏信号、点击松开就不可拖动
+    connect(m_gestureInter, &Gesture::TouchSinglePressTimeout, m_gestureInter, []{
+        m_longPressed = true;
+    }, Qt::UniqueConnection);
+    connect(m_gestureInter, &Gesture::TouchUpOrCancel, m_gestureInter, []{
+        m_longPressed = false;
+    }, Qt::UniqueConnection);
 }
 
 const QModelIndex AppGridView::indexAt(const int index) const
@@ -272,6 +286,11 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
 
     if (e->buttons() != Qt::LeftButton)
         return;
+
+    // 如果是触屏事件转换而来并且没有收到后端的延时触屏消息，不进行拖拽
+    if (e->source() == Qt::MouseEventSynthesizedByQt && !m_longPressed) {
+        return;
+    }
 
     if (qAbs(e->x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
         qAbs(e->y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {

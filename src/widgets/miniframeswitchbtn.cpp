@@ -105,7 +105,7 @@ void MiniFrameSwitchBtn::paintEvent(QPaintEvent *event)
     if (hasFocus() || m_hover) {
         QPainterPath path;
         path.addRoundedRect(rect(), 4, 4);
-        p.fillPath(path, QColor(21, 21, 21, 102));
+        p.fillPath(path, QColor(96, 96, 96, 160));
     }
 }
 

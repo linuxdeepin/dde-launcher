@@ -78,7 +78,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     if (option.state.testFlag(QStyle::State_Selected)) {
         // hover background color.
-        painter->setBrush(QColor(21, 21, 21, 102));
+        painter->setBrush(QColor(96, 96, 96, 160));
     } else if (isDragItem) {
         // drag item background color.
         painter->setBrush(QColor(255, 255, 255, 255 * 0.4));

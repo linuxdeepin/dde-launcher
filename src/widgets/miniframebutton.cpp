@@ -20,14 +20,14 @@ MiniFrameButton::MiniFrameButton(const QString &text, QWidget *parent)
         QPalette pa = palette();
         pa.setBrush(QPalette::ButtonText, pa.brightText());
         pa.setBrush(QPalette::HighlightedText, pa.brightText());
-        pa.setColor(QPalette::All, QPalette::Highlight, QColor(21, 21, 21, 102));
+        pa.setColor(QPalette::All, QPalette::Highlight, QColor(96, 96, 96, 160));
         setPalette(pa);
     });
 
     QPalette pa = palette();
     pa.setBrush(QPalette::ButtonText, pa.brightText());
     pa.setBrush(QPalette::HighlightedText, pa.brightText());
-    pa.setColor(QPalette::All, QPalette::Highlight, QColor(21, 21, 21, 102));
+    pa.setColor(QPalette::All, QPalette::Highlight, QColor(96, 96, 96, 160));
     setPalette(pa);
 }
 
@@ -80,7 +80,7 @@ void MiniFrameButton::paintEvent(QPaintEvent *event)
     if (isChecked()) {
         QPainterPath path;
         path.addRoundedRect(rect(), 4, 4);
-        painter.fillPath(path, QColor(21, 21, 21, 102));
+        painter.fillPath(path, QColor(96, 96, 96, 160));
     }
 
     int leftMargin = 5;

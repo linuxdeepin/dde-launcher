@@ -82,7 +82,7 @@ private:
     QPropertyAnimation *m_scrollAni;
     QGraphicsOpacityEffect *m_opacityEffect;
     DWindowManagerHelper *m_wmHelper;
-    double m_speedTime = 2.0;
+    double m_speedTime = 1.0;
 
     QTimer *m_updateEnableSelectionByMouseTimer;
     QPoint m_lastTouchBeginPos;

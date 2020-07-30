@@ -166,33 +166,35 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     QRect pr = currentScreen()->geometry();
     const int screenWidth = pr.width();
     const int spacing = pr.width() <= 1440 ? 10 : 28;
-    // mini mode
+    // 启动器全屏分组模式小窗
     if (m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeCategory) {
-        QSize appBoxSize =  QSize(getAppBoxSize().width(), containerSize.height()) - QSize(0,115 + scale * 12);
-
         m_appMarginTop = 0;
         m_appColumnCount = 4;
-        int calc_categoryspacing = 40;
-        if (pr.width() <= 1440)
-            calc_categoryspacing = 20;
-
+        int Catespacing = 44;
         int calc_categroyitem_width = 0;
-
-        calc_categroyitem_width = (appBoxSize.width() - calc_categoryspacing * m_appColumnCount * 2) / m_appColumnCount + 0.5;
-        calc_categoryspacing = (double(appBoxSize.width()) - calc_categroyitem_width * m_appColumnCount) / (m_appColumnCount * 2) - 0.5;
-        int calc_categoryspacing_height = (double(appBoxSize.height()) - calc_categroyitem_width * 3 - 84) / (3 * 2) + 0.5;
-
-        calc_categoryspacing_height = qMin(calc_categoryspacing_height,calc_categoryspacing);
-        if(calc_categoryspacing_height < 20) {
-            calc_categoryspacing_height = 20;
-            calc_categroyitem_width = (appBoxSize.height() - calc_categoryspacing_height * 3 * 2) / 3 + 0.5;
+        int calc_categoryspacing = 0;
+        // 对低分辨率进行处理
+        if (pr.width() <= 1440) {
+            Catespacing = 20;
+            // 计算图标四个方向的间距
+            calc_categroyitem_width = (getAppBoxSize().width() - Catespacing * m_appColumnCount * 2 - 24) / m_appColumnCount + 0.5;
+            calc_categoryspacing  = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount) / (m_appColumnCount * 2) - 0.5;
+            int calc_categoryspacing_height  = (double(getAppBoxSize().height()) - calc_categroyitem_width * 3 - 14) / (3 * 2) + 0.5;
+            // 计算图标顶部空间 防止在低分辨率下应用分辨率过高造成应用显示异常
+            if(calc_categoryspacing_height < 0)
+                calc_categoryspacing_height = 0;
+            m_appMarginTop = (containerSize.height() - calc_categoryspacing_height * 6 - calc_categroyitem_width * 3) / 2;
+            if (calc_categoryspacing > calc_categoryspacing_height)
+                calc_categoryspacing = calc_categoryspacing_height;
+        } else {
+            calc_categroyitem_width = (getAppBoxSize().width() - Catespacing * m_appColumnCount * 2) / m_appColumnCount + 0.5;
+            calc_categoryspacing = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount - Catespacing * 2) / (m_appColumnCount * 2) - 8;
         }
 
-        m_appItemSpacing = calc_categoryspacing_height;
+        m_appItemSpacing = calc_categoryspacing;
         m_appItemSize = calc_categroyitem_width;
         m_appItemFontSize = m_appItemSize <= 80 ? 8 : qApp->font().pointSize()+3;
-        m_appMarginTop = (appBoxSize.height() - calc_categoryspacing_height * 6 - calc_categroyitem_width * 3) / 2;
-        m_appMarginLeft = (appBoxSize.width() - calc_categroyitem_width * 4 - calc_categoryspacing_height * 8) / 2;
+        m_appMarginLeft = (getAppBoxSize().width() - calc_categroyitem_width * m_appColumnCount - calc_categoryspacing * m_appColumnCount * 2) / 2;
         emit layoutChanged();
         return;
     }

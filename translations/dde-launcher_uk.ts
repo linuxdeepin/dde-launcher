@@ -1,318 +1,317 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="uk">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="uk" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
-        <source>No search results</source>
-        <translation>Немає результатів пошуку</translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="181"/>
         <source>Internet</source>
         <translation>Інтернет</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="182"/>
         <source>Chat</source>
         <translation>Спілкування</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="183"/>
         <source>Music</source>
         <translation>Музика</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="184"/>
         <source>Video</source>
         <translation>Відео</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="185"/>
         <source>Graphics</source>
         <translation>Графіка</translation>
     </message>
     <message>
-        <source>Office</source>
-        <translation>Офіс</translation>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation>Читання</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation>Розробка</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Система</translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="186"/>
         <source>Games</source>
         <translation>Ігри</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="187"/>
+        <source>Office</source>
+        <translation>Офіс</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="188"/>
+        <source>Reading</source>
+        <translation>Читання</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="189"/>
+        <source>Development</source>
+        <translation>Розробка</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="190"/>
+        <source>System</source>
+        <translation>Система</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="191"/>
         <source>Other</source>
         <translation>Інше</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="931"/>
+        <source>No search results</source>
+        <translation>Немає результатів пошуку</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
+        <location filename="../src/fullscreenframe.cpp" line="1162"/>
+        <source>Are you sure you want to uninstall it?</source>
+        <translation>Ви справді хочете її вилучити?</translation>
+    </message>
+    <message>
+        <location filename="../src/fullscreenframe.cpp" line="1168"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
+        <location filename="../src/fullscreenframe.cpp" line="1168"/>
         <source>Confirm</source>
         <translation>Підтвердити</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="vanished">Ви впевнені, що хочете видалити %1 ?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Remove from desktop</source>
-        <translation>Видалити з стільниці</translation>
-    </message>
-    <message>
-        <source>Remove from dock</source>
-        <translation>Видалити з док-панелі</translation>
-    </message>
-    <message>
-        <source>Uninstall</source>
-        <translation>Видалити</translation>
-    </message>
-    <message>
-        <source>Disable display scaling</source>
-        <translation>Вимкнути масштабування дисплею</translation>
-    </message>
-    <message>
+        <location filename="../src/worker/menuworker.cpp" line="78"/>
         <source>Open</source>
         <translation>Відкрити</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="81"/>
+        <source>Remove from desktop</source>
+        <translation>Видалити з стільниці</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="82"/>
         <source>Send to desktop</source>
         <translation>Надіслати на стільницю</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="86"/>
+        <source>Remove from dock</source>
+        <translation>Видалити з док-панелі</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="87"/>
         <source>Send to dock</source>
         <translation>Надіслати на панель</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="91"/>
         <source>Remove from startup</source>
         <translation>Вилучити із запуску</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="92"/>
         <source>Add to startup</source>
         <translation>Додати до запуску</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="96"/>
+        <source>Uninstall</source>
+        <translation>Видалити</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="106"/>
         <source>Use a proxy</source>
         <translation>Використовувати проксі</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="117"/>
+        <source>Disable display scaling</source>
+        <translation>Вимкнути масштабування дисплею</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="46"/>
         <source>All Apps</source>
         <translation>Усі додатки</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="47"/>
         <source>Internet</source>
         <translation>Інтернет</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="48"/>
         <source>Chat</source>
-        <translation>Чат</translation>
+        <translation>Спілкування</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="49"/>
         <source>Music</source>
         <translation>Музика</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="50"/>
         <source>Video</source>
         <translation>Відео</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="51"/>
         <source>Graphics</source>
         <translation>Графіка</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Гра</translation>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="52"/>
+        <source>Games</source>
+        <translation>Ігри</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="53"/>
         <source>Office</source>
         <translation>Офіс</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="54"/>
         <source>Reading</source>
         <translation>Читання</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="55"/>
         <source>Development</source>
         <translation>Розробка</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="56"/>
         <source>System</source>
         <translation>Система</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>Інші</translation>
-    </message>
-</context>
-<context>
-    <name>MiniFrameBottomBar</name>
-    <message>
-        <source>Computer</source>
-        <translation type="vanished">Комп&apos;ютер</translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="vanished">Документи</translation>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="vanished">Відео</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation type="vanished">Музика</translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="vanished">Зображення</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">Завантаження</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation type="vanished">Заблокувати</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation type="vanished">Вийти</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="vanished">Перезавантажити</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">Призупинити</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation type="vanished">Вимкнення</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">Назад</translation>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="57"/>
+        <source>Other</source>
+        <translation>Інше</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="99"/>
         <source>Computer</source>
         <translation>Комп&apos;ютер</translation>
     </message>
     <message>
-        <source>Music</source>
-        <translation>Музика</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation>Вимкнення</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation>Заблокувати</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation>Вийти</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation>Перезавантажити</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation>Призупинити</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation>Назад</translation>
-    </message>
-    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="100"/>
         <source>Documents</source>
         <translation>Документи</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="101"/>
         <source>Videos</source>
         <translation>Відео</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="102"/>
+        <source>Music</source>
+        <translation>Музика</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="103"/>
         <source>Pictures</source>
         <translation>Зображення</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="104"/>
         <source>Downloads</source>
         <translation>Завантаження</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="105"/>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="124"/>
+        <source>Shut down</source>
+        <translation>Вимкнути</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="120"/>
+        <source>Lock</source>
+        <translation>Заблокувати</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="121"/>
+        <source>Log out</source>
+        <translation>Вихід</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="122"/>
+        <source>Reboot</source>
+        <translation>Перезавантажити</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="123"/>
+        <source>Suspend</source>
+        <translation>Призупинити</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="125"/>
+        <source>Back</source>
+        <translation>Назад</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="55"/>
         <source>Computer</source>
-        <translation type="vanished">Комп&apos;ютер</translation>
+        <translation>Комп&apos;ютер</translation>
     </message>
     <message>
-        <source>Music</source>
-        <translation type="vanished">Музика</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">Завантаження</translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="vanished">Інструкція</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Налаштування</translation>
-    </message>
-    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="58"/>
         <source>Videos</source>
-        <translation type="vanished">Відео</translation>
+        <translation>Відео</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="61"/>
+        <source>Music</source>
+        <translation>Музика</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="64"/>
         <source>Pictures</source>
-        <translation type="vanished">Зображення</translation>
+        <translation>Зображення</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="67"/>
         <source>Documents</source>
-        <translation type="vanished">Документи</translation>
+        <translation>Документи</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="70"/>
+        <source>Downloads</source>
+        <translation>Завантаження</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="73"/>
+        <source>Control Center</source>
+        <translation>Центр керування</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="76"/>
         <source>Power</source>
-        <translation type="vanished">Акумулятор</translation>
+        <translation>Живлення</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="73"/>
         <source>All Categories</source>
         <translation>Усі категорії</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="76"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
@@ -320,6 +319,7 @@
 <context>
     <name>SearchLineEdit</name>
     <message>
+        <location filename="../src/widgets/searchlineedit.cpp" line="57"/>
         <source>Search</source>
         <translation>Пошук</translation>
     </message>
@@ -327,20 +327,19 @@
 <context>
     <name>WindowedFrame</name>
     <message>
+        <location filename="../src/windowedframe.cpp" line="550"/>
+        <source>Are you sure you want to uninstall it?</source>
+        <translation>Ви справді хочете її вилучити?</translation>
+    </message>
+    <message>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Confirm</source>
         <translation>Підтвердити</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="vanished">Ви впевнені, що хочете видалити %1 ?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

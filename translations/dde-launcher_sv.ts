@@ -1,293 +1,325 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sv" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
-        <source>No search results</source>
-        <translation>Inga sökresultat</translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="181"/>
         <source>Internet</source>
         <translation>Internet</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="182"/>
         <source>Chat</source>
         <translation>Chatta</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="183"/>
         <source>Music</source>
         <translation>Musik</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="184"/>
         <source>Video</source>
         <translation>Video</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="185"/>
         <source>Graphics</source>
         <translation>Grafik</translation>
     </message>
     <message>
-        <source>Office</source>
-        <translation>Kontor</translation>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation>Läser</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation>Utveckling</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>System</translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="186"/>
         <source>Games</source>
         <translation>Spel</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="187"/>
+        <source>Office</source>
+        <translation>Kontor</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="188"/>
+        <source>Reading</source>
+        <translation>Läser</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="189"/>
+        <source>Development</source>
+        <translation>Utveckling</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="190"/>
+        <source>System</source>
+        <translation>System</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="191"/>
         <source>Other</source>
-        <translation>Andra</translation>
+        <translation>Övrigt</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="931"/>
+        <source>No search results</source>
+        <translation>Inga sökresultat</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
+        <location filename="../src/fullscreenframe.cpp" line="1162"/>
+        <source>Are you sure you want to uninstall it?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/fullscreenframe.cpp" line="1168"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
     <message>
+        <location filename="../src/fullscreenframe.cpp" line="1168"/>
         <source>Confirm</source>
         <translation>Bekräfta</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Remove from desktop</source>
-        <translation>Ta bort från skrivbordet</translation>
-    </message>
-    <message>
-        <source>Remove from dock</source>
-        <translation>Ta bort från docka</translation>
-    </message>
-    <message>
-        <source>Uninstall</source>
-        <translation>Avinstallera</translation>
-    </message>
-    <message>
-        <source>Disable display scaling</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../src/worker/menuworker.cpp" line="78"/>
         <source>Open</source>
         <translation>Öppna</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="81"/>
+        <source>Remove from desktop</source>
+        <translation>Ta bort från skrivbordet</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="82"/>
         <source>Send to desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Placera på skrivbordet</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="86"/>
+        <source>Remove from dock</source>
+        <translation>Ta bort från docka</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="87"/>
         <source>Send to dock</source>
-        <translation type="unfinished"></translation>
+        <translation>Fäst i dockan</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="91"/>
         <source>Remove from startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Inaktivera automatisk uppstart</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="92"/>
         <source>Add to startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Starta automatiskt vid uppstart</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="96"/>
+        <source>Uninstall</source>
+        <translation>Avinstallera</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="106"/>
         <source>Use a proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>Använd proxy</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="117"/>
+        <source>Disable display scaling</source>
+        <translation>Inaktivera skärmskalning</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="46"/>
         <source>All Apps</source>
-        <translation type="unfinished"></translation>
+        <translation>Alla Appar</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="47"/>
         <source>Internet</source>
         <translation>Internet</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="48"/>
         <source>Chat</source>
         <translation>Chatta</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="49"/>
         <source>Music</source>
         <translation>Musik</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="50"/>
         <source>Video</source>
         <translation>Video</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="51"/>
         <source>Graphics</source>
         <translation>Grafik</translation>
     </message>
     <message>
-        <source>Game</source>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="52"/>
+        <source>Games</source>
         <translation>Spel</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="53"/>
         <source>Office</source>
         <translation>Kontor</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="54"/>
         <source>Reading</source>
         <translation>Läser</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="55"/>
         <source>Development</source>
         <translation>Utveckling</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="56"/>
         <source>System</source>
-        <translation>Systemverktyg</translation>
+        <translation>System</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>Andra</translation>
-    </message>
-</context>
-<context>
-    <name>MiniFrameBottomBar</name>
-    <message>
-        <source>Computer</source>
-        <translation type="vanished">Dator</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation type="vanished">Musik</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">Hämtningar</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation type="vanished">Lås</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation type="vanished">Logga ut</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="vanished">Starta om</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">Vänteläge</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation type="vanished">Stäng av</translation>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="57"/>
+        <source>Other</source>
+        <translation>Övrigt</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="99"/>
         <source>Computer</source>
         <translation>Dator</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="100"/>
+        <source>Documents</source>
+        <translation>Dokument</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="101"/>
+        <source>Videos</source>
+        <translation>Videos</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="102"/>
         <source>Music</source>
         <translation>Musik</translation>
     </message>
     <message>
-        <source>Shutdown</source>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="103"/>
+        <source>Pictures</source>
+        <translation>Bilder</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="104"/>
+        <source>Downloads</source>
+        <translation>Hämtningar</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="105"/>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="124"/>
+        <source>Shut down</source>
         <translation>Stäng av</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="120"/>
         <source>Lock</source>
         <translation>Lås</translation>
     </message>
     <message>
-        <source>Logout</source>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="121"/>
+        <source>Log out</source>
         <translation>Logga ut</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="122"/>
         <source>Reboot</source>
         <translation>Starta om</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="123"/>
         <source>Suspend</source>
         <translation>Vänteläge</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="125"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation>Hämtningar</translation>
+        <translation>Återgå</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="55"/>
         <source>Computer</source>
-        <translation type="vanished">Dator</translation>
+        <translation>Dator</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="58"/>
+        <source>Videos</source>
+        <translation>Videos</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="61"/>
         <source>Music</source>
-        <translation type="vanished">Musik</translation>
+        <translation>Musik</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="64"/>
+        <source>Pictures</source>
+        <translation>Bilder</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="67"/>
+        <source>Documents</source>
+        <translation>Dokument</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="70"/>
         <source>Downloads</source>
-        <translation type="vanished">Hämtningar</translation>
+        <translation>Hämtningar</translation>
     </message>
     <message>
-        <source>Manual</source>
-        <translation type="vanished">Manuell</translation>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="73"/>
+        <source>Control Center</source>
+        <translation>Kontrollcenter</translation>
     </message>
     <message>
-        <source>Settings</source>
-        <translation type="vanished">Inställningar</translation>
-    </message>
-    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="76"/>
         <source>Power</source>
-        <translation type="vanished">Styrka</translation>
+        <translation>Stäng av</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="73"/>
         <source>All Categories</source>
-        <translation type="unfinished"></translation>
+        <translation>Alla kategorier</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="76"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Återgå</translation>
     </message>
 </context>
 <context>
     <name>SearchLineEdit</name>
     <message>
+        <location filename="../src/widgets/searchlineedit.cpp" line="57"/>
         <source>Search</source>
         <translation>Sök</translation>
     </message>
@@ -295,16 +327,19 @@
 <context>
     <name>WindowedFrame</name>
     <message>
+        <location filename="../src/windowedframe.cpp" line="550"/>
+        <source>Are you sure you want to uninstall it?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
     <message>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Confirm</source>
         <translation>Bekräfta</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

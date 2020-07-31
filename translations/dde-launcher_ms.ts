@@ -1,318 +1,317 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ms">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ms" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
-        <source>No search results</source>
-        <translation>Tiada keputusan gelintar</translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="181"/>
         <source>Internet</source>
         <translation>Internet</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="182"/>
         <source>Chat</source>
         <translation>Sembang</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="183"/>
         <source>Music</source>
         <translation>Muzik</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="184"/>
         <source>Video</source>
         <translation>Video</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="185"/>
         <source>Graphics</source>
         <translation>Grafik</translation>
     </message>
     <message>
-        <source>Office</source>
-        <translation>Pejabat</translation>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation>Pembacaan</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation>Pembangunan</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Sistem</translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="186"/>
         <source>Games</source>
         <translation>Permainan</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="187"/>
+        <source>Office</source>
+        <translation>Pejabat</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="188"/>
+        <source>Reading</source>
+        <translation>Pembacaan</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="189"/>
+        <source>Development</source>
+        <translation>Pembangunan</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="190"/>
+        <source>System</source>
+        <translation>Sistem</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="191"/>
         <source>Other</source>
         <translation>Lain-lain</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="931"/>
+        <source>No search results</source>
+        <translation>Tiada keputusan gelintar</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
+        <location filename="../src/fullscreenframe.cpp" line="1162"/>
+        <source>Are you sure you want to uninstall it?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/fullscreenframe.cpp" line="1168"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
+        <location filename="../src/fullscreenframe.cpp" line="1168"/>
         <source>Confirm</source>
         <translation>Sahkan</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="vanished">Anda pasti mahu menyahpasang %1 ?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Remove from desktop</source>
-        <translation>Buang dari desktop</translation>
-    </message>
-    <message>
-        <source>Remove from dock</source>
-        <translation>Buang dari labuh</translation>
-    </message>
-    <message>
-        <source>Uninstall</source>
-        <translation>Nyahpasang</translation>
-    </message>
-    <message>
-        <source>Disable display scaling</source>
-        <translation>Lumpuhkan penskalaan paparan</translation>
-    </message>
-    <message>
+        <location filename="../src/worker/menuworker.cpp" line="78"/>
         <source>Open</source>
         <translation>Buka</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="81"/>
+        <source>Remove from desktop</source>
+        <translation>Buang dari desktop</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="82"/>
         <source>Send to desktop</source>
         <translation>Hantar ke desktop</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="86"/>
+        <source>Remove from dock</source>
+        <translation>Buang dari labuh</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="87"/>
         <source>Send to dock</source>
         <translation>Hantar ke labuh</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="91"/>
         <source>Remove from startup</source>
         <translation>Buang dari permulaan</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="92"/>
         <source>Add to startup</source>
         <translation>Tambah ke permulaan</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="96"/>
+        <source>Uninstall</source>
+        <translation>Nyahpasang</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="106"/>
         <source>Use a proxy</source>
         <translation>Guna satu proksi</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="117"/>
+        <source>Disable display scaling</source>
+        <translation>Lumpuhkan penskalaan paparan</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="46"/>
         <source>All Apps</source>
         <translation>Semua Apl</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="47"/>
         <source>Internet</source>
         <translation>Internet</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="48"/>
         <source>Chat</source>
         <translation>Sembang</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="49"/>
         <source>Music</source>
         <translation>Muzik</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="50"/>
         <source>Video</source>
         <translation>Video</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="51"/>
         <source>Graphics</source>
         <translation>Grafik</translation>
     </message>
     <message>
-        <source>Game</source>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="52"/>
+        <source>Games</source>
         <translation>Permainan</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="53"/>
         <source>Office</source>
         <translation>Pejabat</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="54"/>
         <source>Reading</source>
         <translation>Pembacaan</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="55"/>
         <source>Development</source>
         <translation>Pembangunan</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="56"/>
         <source>System</source>
         <translation>Sistem</translation>
     </message>
     <message>
-        <source>Others</source>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="57"/>
+        <source>Other</source>
         <translation>Lain-lain</translation>
-    </message>
-</context>
-<context>
-    <name>MiniFrameBottomBar</name>
-    <message>
-        <source>Computer</source>
-        <translation type="vanished">Komputer</translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="vanished">Dokumen</translation>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="vanished">Video</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation type="vanished">Muzik</translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="vanished">Gambar</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">Muat Turun</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation type="vanished">Kunci</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation type="vanished">Daftar Keluar</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="vanished">But Semula</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">Tangguh</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation type="vanished">Matikan</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">Undur</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="99"/>
         <source>Computer</source>
         <translation>Komputer</translation>
     </message>
     <message>
-        <source>Music</source>
-        <translation>Muzik</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation>Matikan</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation>Kunci</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation>Daftar Keluar</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation>But Semula</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation>Tangguh</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation>Undur</translation>
-    </message>
-    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="100"/>
         <source>Documents</source>
         <translation>Dokumen</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="101"/>
         <source>Videos</source>
         <translation>Video</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="102"/>
+        <source>Music</source>
+        <translation>Muzik</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="103"/>
         <source>Pictures</source>
         <translation>Gambar</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="104"/>
         <source>Downloads</source>
         <translation>Muat Turun</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="105"/>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="124"/>
+        <source>Shut down</source>
+        <translation>Matikan</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="120"/>
+        <source>Lock</source>
+        <translation>Kunci</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="121"/>
+        <source>Log out</source>
+        <translation>Daftar  keluar</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="122"/>
+        <source>Reboot</source>
+        <translation>But semula</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="123"/>
+        <source>Suspend</source>
+        <translation>Tangguh</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="125"/>
+        <source>Back</source>
+        <translation>Undur</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="55"/>
         <source>Computer</source>
-        <translation type="vanished">Komputer</translation>
+        <translation>Komputer</translation>
     </message>
     <message>
-        <source>Music</source>
-        <translation type="vanished">Muzik</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">Muat Turun</translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="vanished">Manual</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Tetapan</translation>
-    </message>
-    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="58"/>
         <source>Videos</source>
-        <translation type="vanished">Video</translation>
+        <translation>Video</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="61"/>
+        <source>Music</source>
+        <translation>Muzik</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="64"/>
         <source>Pictures</source>
-        <translation type="vanished">Gambar</translation>
+        <translation>Gambar</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="67"/>
         <source>Documents</source>
-        <translation type="vanished">Dokumen</translation>
+        <translation>Dokumen</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="70"/>
+        <source>Downloads</source>
+        <translation>Muat Turun</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="73"/>
+        <source>Control Center</source>
+        <translation>Pusat Kawalan</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="76"/>
         <source>Power</source>
-        <translation type="vanished">Kuasa</translation>
+        <translation>Kuasa</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="73"/>
         <source>All Categories</source>
         <translation>Semua Kategori</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="76"/>
         <source>Back</source>
         <translation>Undur</translation>
     </message>
@@ -320,6 +319,7 @@
 <context>
     <name>SearchLineEdit</name>
     <message>
+        <location filename="../src/widgets/searchlineedit.cpp" line="57"/>
         <source>Search</source>
         <translation>Gelintar</translation>
     </message>
@@ -327,20 +327,19 @@
 <context>
     <name>WindowedFrame</name>
     <message>
+        <location filename="../src/windowedframe.cpp" line="550"/>
+        <source>Are you sure you want to uninstall it?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Confirm</source>
         <translation>Sahkan</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="vanished">Anda pasti mahu menyahpasang %1 ?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

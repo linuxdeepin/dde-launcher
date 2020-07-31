@@ -34,3 +34,4 @@ build*
 *.user
 .vscode
 .transifexrc
+lupdate.sh

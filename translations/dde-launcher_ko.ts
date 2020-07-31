@@ -1,325 +1,325 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ko">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ko" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
-        <source>No search results</source>
-        <translation>검색결과가 없습니다.</translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="181"/>
         <source>Internet</source>
         <translation>인터넷</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="182"/>
         <source>Chat</source>
         <translation>채팅</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="183"/>
         <source>Music</source>
         <translation>음악</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="184"/>
         <source>Video</source>
-        <translation>비디오</translation>
+        <translation>동영상</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="185"/>
         <source>Graphics</source>
         <translation>그래픽</translation>
     </message>
     <message>
-        <source>Office</source>
-        <translation>오피스</translation>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation>읽기</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation>개발</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>시스템</translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="186"/>
         <source>Games</source>
         <translation>게임</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="187"/>
+        <source>Office</source>
+        <translation>오피스</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="188"/>
+        <source>Reading</source>
+        <translation>읽기</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="189"/>
+        <source>Development</source>
+        <translation>개발</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="190"/>
+        <source>System</source>
+        <translation>시스템</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="191"/>
         <source>Other</source>
         <translation>기타</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="931"/>
+        <source>No search results</source>
+        <translation>검색결과가 없습니다.</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
+        <location filename="../src/fullscreenframe.cpp" line="1162"/>
+        <source>Are you sure you want to uninstall it?</source>
+        <translation>제거하시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../src/fullscreenframe.cpp" line="1168"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
+        <location filename="../src/fullscreenframe.cpp" line="1168"/>
         <source>Confirm</source>
         <translation>확인</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="vanished">%1을(를) 제거하시겠습니까?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Remove from desktop</source>
-        <translation>바탕 화면에서 제거</translation>
-    </message>
-    <message>
-        <source>Remove from dock</source>
-        <translation>도크(dock)에서 제거</translation>
-    </message>
-    <message>
-        <source>Uninstall</source>
-        <translation>제거</translation>
-    </message>
-    <message>
-        <source>Disable display scaling</source>
-        <translation>디스플레이 크기 조정 해제하기</translation>
-    </message>
-    <message>
+        <location filename="../src/worker/menuworker.cpp" line="78"/>
         <source>Open</source>
         <translation>열기</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="81"/>
+        <source>Remove from desktop</source>
+        <translation>바탕화면에서 제거</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="82"/>
         <source>Send to desktop</source>
         <translation>바탕화면으로 보내기</translation>
     </message>
     <message>
-        <source>Send to dock</source>
-        <translation>도크(dock)로 보내기</translation>
+        <location filename="../src/worker/menuworker.cpp" line="86"/>
+        <source>Remove from dock</source>
+        <translation>도구집에서 제거</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="87"/>
+        <source>Send to dock</source>
+        <translation>도구집으로 보내기</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="91"/>
         <source>Remove from startup</source>
         <translation>시작에서 제거하기</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="92"/>
         <source>Add to startup</source>
         <translation>시작에 추가하기</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="96"/>
+        <source>Uninstall</source>
+        <translation>제거</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="106"/>
         <source>Use a proxy</source>
         <translation>프록시 사용</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="117"/>
+        <source>Disable display scaling</source>
+        <translation>디스플레이 크기 조정 해제하기</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="46"/>
         <source>All Apps</source>
         <translation>모든 앱</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="47"/>
         <source>Internet</source>
         <translation>인터넷</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="48"/>
         <source>Chat</source>
         <translation>채팅</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="49"/>
         <source>Music</source>
         <translation>음악</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="50"/>
         <source>Video</source>
-        <translation>비디오</translation>
+        <translation>동영상</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="51"/>
         <source>Graphics</source>
         <translation>그래픽</translation>
     </message>
     <message>
-        <source>Game</source>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="52"/>
+        <source>Games</source>
         <translation>게임</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="53"/>
         <source>Office</source>
         <translation>오피스</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="54"/>
         <source>Reading</source>
         <translation>읽기</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="55"/>
         <source>Development</source>
         <translation>개발</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="56"/>
         <source>System</source>
         <translation>시스템</translation>
     </message>
     <message>
-        <source>Others</source>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="57"/>
+        <source>Other</source>
         <translation>기타</translation>
-    </message>
-</context>
-<context>
-    <name>MiniFrameBottomBar</name>
-    <message>
-        <source>Computer</source>
-        <translation type="vanished">컴퓨터</translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="vanished">문서</translation>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="vanished">비디오</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation type="vanished">음악</translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="vanished">사진</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">다운로드</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation type="vanished">잠그기</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation type="vanished">로그아웃</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="vanished">다시 시작</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">일시 정지</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation type="vanished">전원 종료</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">뒤로 가기</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="99"/>
         <source>Computer</source>
         <translation>컴퓨터</translation>
     </message>
     <message>
-        <source>Music</source>
-        <translation>음악</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation>전원 종료</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation>잠그기</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation>로그아웃</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation>다시 시작</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation>일시 정지</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation>뒤로 가기</translation>
-    </message>
-    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="100"/>
         <source>Documents</source>
         <translation>문서</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="101"/>
         <source>Videos</source>
         <translation>비디오</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="102"/>
+        <source>Music</source>
+        <translation>음악</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="103"/>
         <source>Pictures</source>
         <translation>사진</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="104"/>
         <source>Downloads</source>
         <translation>다운로드</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="105"/>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="124"/>
+        <source>Shut down</source>
+        <translation>컴퓨터 끄기</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="120"/>
+        <source>Lock</source>
+        <translation>잠금</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="121"/>
+        <source>Log out</source>
+        <translation>로그아웃</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="122"/>
+        <source>Reboot</source>
+        <translation>재부팅</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="123"/>
+        <source>Suspend</source>
+        <translation>대기모드</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="125"/>
+        <source>Back</source>
+        <translation>뒤로</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="55"/>
         <source>Computer</source>
-        <translation type="vanished">컴퓨터</translation>
+        <translation>컴퓨터</translation>
     </message>
     <message>
-        <source>Music</source>
-        <translation type="vanished">음악</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">다운로드</translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="vanished">수동</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">설정 </translation>
-    </message>
-    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="58"/>
         <source>Videos</source>
-        <translation type="vanished">비디오</translation>
+        <translation>비디오</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="61"/>
+        <source>Music</source>
+        <translation>음악</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="64"/>
         <source>Pictures</source>
-        <translation type="vanished">사진</translation>
+        <translation>사진</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="67"/>
         <source>Documents</source>
-        <translation type="vanished">문서</translation>
+        <translation>문서</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="70"/>
+        <source>Downloads</source>
+        <translation>다운로드</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="73"/>
+        <source>Control Center</source>
+        <translation>제어 센터</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="76"/>
         <source>Power</source>
-        <translation type="vanished">전원</translation>
+        <translation>전원</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="73"/>
         <source>All Categories</source>
         <translation>모든 카테고리</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="76"/>
         <source>Back</source>
-        <translation>뒤로 가기</translation>
+        <translation>뒤로</translation>
     </message>
 </context>
 <context>
     <name>SearchLineEdit</name>
     <message>
+        <location filename="../src/widgets/searchlineedit.cpp" line="57"/>
         <source>Search</source>
         <translation>찾기</translation>
     </message>
@@ -327,20 +327,19 @@
 <context>
     <name>WindowedFrame</name>
     <message>
+        <location filename="../src/windowedframe.cpp" line="550"/>
+        <source>Are you sure you want to uninstall it?</source>
+        <translation>제거하시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Confirm</source>
         <translation>확인</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="vanished">%1을(를) 제거하시겠습니까?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

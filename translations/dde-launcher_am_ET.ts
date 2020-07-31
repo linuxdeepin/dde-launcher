@@ -1,314 +1,317 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="am_ET">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="am_ET" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
-        <source>No search results</source>
-        <translation>ምንም መፈለጊያ የለም</translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="181"/>
         <source>Internet</source>
         <translation>ኢንተርኔት</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="182"/>
         <source>Chat</source>
         <translation>ውይይት</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="183"/>
         <source>Music</source>
         <translation>ሙዚቃ</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="184"/>
         <source>Video</source>
         <translation>ቪዲዮ</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="185"/>
         <source>Graphics</source>
         <translation>ንድፎች</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="186"/>
+        <source>Games</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="187"/>
         <source>Office</source>
         <translation>ቢሮ</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="188"/>
         <source>Reading</source>
         <translation>ማንበቢያ</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="189"/>
         <source>Development</source>
         <translation>አበልጻጊ</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="190"/>
         <source>System</source>
         <translation>ስርአት</translation>
     </message>
     <message>
-        <source>Games</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="191"/>
         <source>Other</source>
         <translation>ለላ</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="931"/>
+        <source>No search results</source>
+        <translation>ምንም መፈለጊያ የለም</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
+        <location filename="../src/fullscreenframe.cpp" line="1162"/>
+        <source>Are you sure you want to uninstall it?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/fullscreenframe.cpp" line="1168"/>
         <source>Cancel</source>
         <translation>መሰረዣ</translation>
     </message>
     <message>
+        <location filename="../src/fullscreenframe.cpp" line="1168"/>
         <source>Confirm</source>
         <translation>ማረጋገጫ</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Remove from desktop</source>
-        <translation>ከ ዴስክቶፕ ላይ ማስወገጃ</translation>
-    </message>
-    <message>
-        <source>Remove from dock</source>
-        <translation>ከ ዶከ ላይ ማስወገጃ</translation>
-    </message>
-    <message>
-        <source>Uninstall</source>
-        <translation>ማጥፊያ</translation>
-    </message>
-    <message>
-        <source>Disable display scaling</source>
-        <translation>የ መመልከቻ መመጠኛ ማሰናከያ</translation>
-    </message>
-    <message>
+        <location filename="../src/worker/menuworker.cpp" line="78"/>
         <source>Open</source>
         <translation>መክፈቻ</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="81"/>
+        <source>Remove from desktop</source>
+        <translation>ከ ዴስክቶፕ ላይ ማስወገጃ</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="82"/>
         <source>Send to desktop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="86"/>
+        <source>Remove from dock</source>
+        <translation>ከ ዶከ ላይ ማስወገጃ</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="87"/>
         <source>Send to dock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="91"/>
         <source>Remove from startup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="92"/>
         <source>Add to startup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="96"/>
+        <source>Uninstall</source>
+        <translation>ማጥፊያ</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="106"/>
         <source>Use a proxy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="117"/>
+        <source>Disable display scaling</source>
+        <translation>የ መመልከቻ መመጠኛ ማሰናከያ</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="46"/>
         <source>All Apps</source>
         <translation>ሁሉንም መተግበሪያ</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="47"/>
         <source>Internet</source>
         <translation>ኢንተርኔት</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="48"/>
         <source>Chat</source>
         <translation>ውይይት</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="49"/>
         <source>Music</source>
         <translation>ሙዚቃ</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="50"/>
         <source>Video</source>
         <translation>ቪዲዮ</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="51"/>
         <source>Graphics</source>
         <translation>ንድፎች</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>ጨዋታ</translation>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="52"/>
+        <source>Games</source>
+        <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="53"/>
         <source>Office</source>
         <translation>ቢሮ</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="54"/>
         <source>Reading</source>
         <translation>ማንበቢያ</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="55"/>
         <source>Development</source>
         <translation>አበልጻጊ</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="56"/>
         <source>System</source>
         <translation>ስርአት</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>ሌሎች</translation>
-    </message>
-</context>
-<context>
-    <name>MiniFrameBottomBar</name>
-    <message>
-        <source>Computer</source>
-        <translation type="vanished">ኮምፒዩተር</translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="vanished">ሰነዶች</translation>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="vanished">ቪዲዮዎች</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation type="vanished">ሙዚቃ</translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="vanished">ስእሎች</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">የወረዱ</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation type="vanished">መቆለፊያ</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation type="vanished">መውጫ</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="vanished">እንደገና ማስነሻ</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">ማገጃ</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation type="vanished">ማጥፊያ</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">ወደ ኋላ</translation>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="57"/>
+        <source>Other</source>
+        <translation>ለላ</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="99"/>
         <source>Computer</source>
         <translation>ኮምፒዩተር</translation>
     </message>
     <message>
-        <source>Music</source>
-        <translation>ሙዚቃ</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation>ማጥፊያ</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation>መቆለፊያ</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation>መውጫ</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation>እንደገና ማስነሻ</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation>ማገጃ</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation>ወደ ኋላ</translation>
-    </message>
-    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="100"/>
         <source>Documents</source>
         <translation>ሰነዶች</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="101"/>
         <source>Videos</source>
         <translation>ቪዲዮዎች</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="102"/>
+        <source>Music</source>
+        <translation>ሙዚቃ</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="103"/>
         <source>Pictures</source>
         <translation>ስእሎች</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="104"/>
         <source>Downloads</source>
         <translation>የወረዱ</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="105"/>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="124"/>
+        <source>Shut down</source>
+        <translation>ማጥፊያ</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="120"/>
+        <source>Lock</source>
+        <translation>መቆለፊያ</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="121"/>
+        <source>Log out</source>
+        <translation>መውጫ</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="122"/>
+        <source>Reboot</source>
+        <translation>እንደገና ማስነሻ</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="123"/>
+        <source>Suspend</source>
+        <translation>ማገጃ</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="125"/>
+        <source>Back</source>
+        <translation>ወደ ኋላ</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="55"/>
         <source>Computer</source>
-        <translation type="vanished">ኮምፒዩተር</translation>
+        <translation>ኮምፒዩተር</translation>
     </message>
     <message>
-        <source>Music</source>
-        <translation type="vanished">ሙዚቃ</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">የወረዱ</translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="vanished">በ እጅ</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">ማሰናጃዎች</translation>
-    </message>
-    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="58"/>
         <source>Videos</source>
-        <translation type="vanished">ቪዲዮዎች</translation>
+        <translation>ቪዲዮዎች</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="61"/>
+        <source>Music</source>
+        <translation>ሙዚቃ</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="64"/>
         <source>Pictures</source>
-        <translation type="vanished">ስእሎች</translation>
+        <translation>ስእሎች</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="67"/>
         <source>Documents</source>
-        <translation type="vanished">ሰነዶች</translation>
+        <translation>ሰነዶች</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="70"/>
+        <source>Downloads</source>
+        <translation>የወረዱ</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="73"/>
+        <source>Control Center</source>
+        <translation>መቆጣጠሪያ ማእከል</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="76"/>
         <source>Power</source>
-        <translation type="vanished">ሐይል</translation>
+        <translation>ሐይል</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="73"/>
         <source>All Categories</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="76"/>
         <source>Back</source>
         <translation>ወደ ኋላ</translation>
     </message>
@@ -316,6 +319,7 @@
 <context>
     <name>SearchLineEdit</name>
     <message>
+        <location filename="../src/widgets/searchlineedit.cpp" line="57"/>
         <source>Search</source>
         <translation>መፈለጊያ</translation>
     </message>
@@ -323,16 +327,19 @@
 <context>
     <name>WindowedFrame</name>
     <message>
+        <location filename="../src/windowedframe.cpp" line="550"/>
+        <source>Are you sure you want to uninstall it?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Cancel</source>
         <translation>መሰረዣ</translation>
     </message>
     <message>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Confirm</source>
         <translation>ማረጋገጫ</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

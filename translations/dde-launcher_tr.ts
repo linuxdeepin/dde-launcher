@@ -1,318 +1,317 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="tr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
-        <source>No search results</source>
-        <translation>Arama sonucu bulunamadı</translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="181"/>
         <source>Internet</source>
         <translation>İnternet</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="182"/>
         <source>Chat</source>
         <translation>Sohbet</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="183"/>
         <source>Music</source>
         <translation>Müzik</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="184"/>
         <source>Video</source>
         <translation>Video</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="185"/>
         <source>Graphics</source>
         <translation>Grafik</translation>
     </message>
     <message>
-        <source>Office</source>
-        <translation>Ofis</translation>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation>Okuma</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation>Geliştirme</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Sistem</translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="186"/>
         <source>Games</source>
         <translation>Oyunlar</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="187"/>
+        <source>Office</source>
+        <translation>Ofis</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="188"/>
+        <source>Reading</source>
+        <translation>Okuma</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="189"/>
+        <source>Development</source>
+        <translation>Geliştirme</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="190"/>
+        <source>System</source>
+        <translation>Sistem</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="191"/>
         <source>Other</source>
         <translation>Diğer</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="931"/>
+        <source>No search results</source>
+        <translation>Arama sonucu bulunamadı</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
+        <location filename="../src/fullscreenframe.cpp" line="1162"/>
+        <source>Are you sure you want to uninstall it?</source>
+        <translation>Kaldırmak istediğinizden emin misiniz?</translation>
+    </message>
+    <message>
+        <location filename="../src/fullscreenframe.cpp" line="1168"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
+        <location filename="../src/fullscreenframe.cpp" line="1168"/>
         <source>Confirm</source>
         <translation>Onayla</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="vanished">%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Remove from desktop</source>
-        <translation>Masaüstünden kaldır</translation>
-    </message>
-    <message>
-        <source>Remove from dock</source>
-        <translation>Görev çubuğundan kaldır</translation>
-    </message>
-    <message>
-        <source>Uninstall</source>
-        <translation>Kaldır</translation>
-    </message>
-    <message>
-        <source>Disable display scaling</source>
-        <translation>Ekran ölçeklendirmeyi devre dışı bırak</translation>
-    </message>
-    <message>
+        <location filename="../src/worker/menuworker.cpp" line="78"/>
         <source>Open</source>
         <translation>Aç</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="81"/>
+        <source>Remove from desktop</source>
+        <translation>Masaüstünden kaldır</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="82"/>
         <source>Send to desktop</source>
         <translation>Masaüstüne gönder</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="86"/>
+        <source>Remove from dock</source>
+        <translation>Görev çubuğundan kaldır</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="87"/>
         <source>Send to dock</source>
         <translation>Görev çubuğuna gönder</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="91"/>
         <source>Remove from startup</source>
         <translation>Başlangıçtan kaldır</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="92"/>
         <source>Add to startup</source>
         <translation>Başlangıca ekle</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="96"/>
+        <source>Uninstall</source>
+        <translation>Kaldır</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="106"/>
         <source>Use a proxy</source>
         <translation>Vekil sunucu kullan</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="117"/>
+        <source>Disable display scaling</source>
+        <translation>Ekran ölçeklendirmeyi devre dışı bırak</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="46"/>
         <source>All Apps</source>
         <translation>Tüm Uygulamalar</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="47"/>
         <source>Internet</source>
         <translation>İnternet</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="48"/>
         <source>Chat</source>
         <translation>Sohbet</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="49"/>
         <source>Music</source>
         <translation>Müzik</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="50"/>
         <source>Video</source>
         <translation>Video</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="51"/>
         <source>Graphics</source>
         <translation>Grafik</translation>
     </message>
     <message>
-        <source>Game</source>
-        <translation>Oyun</translation>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="52"/>
+        <source>Games</source>
+        <translation>Oyunlar</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="53"/>
         <source>Office</source>
         <translation>Ofis</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="54"/>
         <source>Reading</source>
         <translation>Okuma</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="55"/>
         <source>Development</source>
         <translation>Geliştirme</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="56"/>
         <source>System</source>
         <translation>Sistem</translation>
     </message>
     <message>
-        <source>Others</source>
-        <translation>Diğerleri</translation>
-    </message>
-</context>
-<context>
-    <name>MiniFrameBottomBar</name>
-    <message>
-        <source>Computer</source>
-        <translation type="vanished">Bilgisayar</translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="vanished">Belgeler</translation>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="vanished">Videolar</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation type="vanished">Müzik</translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="vanished">Resimler</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">İndirilenler</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation type="vanished">Kilitle</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation type="vanished">Oturumu Kapat</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="vanished">Yeniden Başlat</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">Askıya Al</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation type="vanished">Kapat</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">Geri</translation>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="57"/>
+        <source>Other</source>
+        <translation>Diğer</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="99"/>
         <source>Computer</source>
         <translation>Bilgisayar</translation>
     </message>
     <message>
-        <source>Music</source>
-        <translation>Müzik</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation>Kapat</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation>Kilitle</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation>Oturumu Kapat</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation>Yeniden Başlat</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation>Askıya Al</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation>Geri</translation>
-    </message>
-    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="100"/>
         <source>Documents</source>
         <translation>Belgeler</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="101"/>
         <source>Videos</source>
         <translation>Videolar</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="102"/>
+        <source>Music</source>
+        <translation>Müzik</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="103"/>
         <source>Pictures</source>
         <translation>Resimler</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="104"/>
         <source>Downloads</source>
         <translation>İndirilenler</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="105"/>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="124"/>
+        <source>Shut down</source>
+        <translation>Kapat</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="120"/>
+        <source>Lock</source>
+        <translation>Kilitle</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="121"/>
+        <source>Log out</source>
+        <translation>Oturumu kapat</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="122"/>
+        <source>Reboot</source>
+        <translation>Yeniden başlat</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="123"/>
+        <source>Suspend</source>
+        <translation>Askıya al</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="125"/>
+        <source>Back</source>
+        <translation>Geri</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="55"/>
         <source>Computer</source>
-        <translation type="vanished">Bilgisayar</translation>
+        <translation>Bilgisayar</translation>
     </message>
     <message>
-        <source>Music</source>
-        <translation type="vanished">Müzik</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">İndirilenler</translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="vanished">Kılavuz</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Ayarlar</translation>
-    </message>
-    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="58"/>
         <source>Videos</source>
-        <translation type="vanished">Videolar</translation>
+        <translation>Videolar</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="61"/>
+        <source>Music</source>
+        <translation>Müzik</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="64"/>
         <source>Pictures</source>
-        <translation type="vanished">Resimler</translation>
+        <translation>Resimler</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="67"/>
         <source>Documents</source>
-        <translation type="vanished">Belgeler</translation>
+        <translation>Belgeler</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="70"/>
+        <source>Downloads</source>
+        <translation>İndirilenler</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="73"/>
+        <source>Control Center</source>
+        <translation>Kontrol Merkezi</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="76"/>
         <source>Power</source>
-        <translation type="vanished">Güç</translation>
+        <translation>Güç</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="73"/>
         <source>All Categories</source>
         <translation>Tüm Kategoriler</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="76"/>
         <source>Back</source>
         <translation>Geri</translation>
     </message>
@@ -320,6 +319,7 @@
 <context>
     <name>SearchLineEdit</name>
     <message>
+        <location filename="../src/widgets/searchlineedit.cpp" line="57"/>
         <source>Search</source>
         <translation>Ara</translation>
     </message>
@@ -327,20 +327,19 @@
 <context>
     <name>WindowedFrame</name>
     <message>
+        <location filename="../src/windowedframe.cpp" line="550"/>
+        <source>Are you sure you want to uninstall it?</source>
+        <translation>Kaldırmak istediğinizden emin misiniz?</translation>
+    </message>
+    <message>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Confirm</source>
         <translation>Onayla</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall %1 ?</source>
-        <translation type="vanished">%1 uygulamasını kaldırmak istediğinize emin misiniz?</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

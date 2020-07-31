@@ -1,314 +1,318 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="vi">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="vi" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
-        <source>No search results</source>
-        <translation>Không có kết quả tìm kiếm nào</translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="181"/>
         <source>Internet</source>
         <translation>Internet</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="182"/>
         <source>Chat</source>
         <translation>Trò chuyện</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="183"/>
         <source>Music</source>
         <translation>Âm nhạc</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="184"/>
         <source>Video</source>
         <translation>Phim ảnh</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="185"/>
         <source>Graphics</source>
         <translation>Đồ họa</translation>
     </message>
     <message>
-        <source>Office</source>
-        <translation>Văn phòng</translation>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation>Đọc</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation>Phát triển</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>Hệ thống</translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="186"/>
         <source>Games</source>
         <translation>Trò chơi</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="187"/>
+        <source>Office</source>
+        <translation>Văn phòng</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="188"/>
+        <source>Reading</source>
+        <translation>Đọc</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="189"/>
+        <source>Development</source>
+        <translation>Phát triển</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="190"/>
+        <source>System</source>
+        <translation>Hệ thống</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="191"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Khác</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="931"/>
+        <source>No search results</source>
+        <translation>Không có kết quả tìm kiếm nào</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
+        <location filename="../src/fullscreenframe.cpp" line="1162"/>
+        <source>Are you sure you want to uninstall it?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/fullscreenframe.cpp" line="1168"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
+        <location filename="../src/fullscreenframe.cpp" line="1168"/>
         <source>Confirm</source>
         <translation>Xác nhận</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Remove from desktop</source>
-        <translation>Xóa khỏi cửa sổ trang đầu.</translation>
-    </message>
-    <message>
-        <source>Remove from dock</source>
-        <translation>Xóa khỏi trạm</translation>
-    </message>
-    <message>
-        <source>Uninstall</source>
-        <translation>Gỡ bỏ</translation>
-    </message>
-    <message>
-        <source>Disable display scaling</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../src/worker/menuworker.cpp" line="78"/>
         <source>Open</source>
         <translation>Mở</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="81"/>
+        <source>Remove from desktop</source>
+        <translation>Xóa khỏi cửa sổ trang đầu.</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="82"/>
         <source>Send to desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Gửi ra Desktop</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="86"/>
+        <source>Remove from dock</source>
+        <translation>Xóa khỏi trạm</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="87"/>
         <source>Send to dock</source>
-        <translation type="unfinished"></translation>
+        <translation>Gửi ra Dock</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="91"/>
         <source>Remove from startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Xóa khỏi trình khởi động cùng hệ thống</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="92"/>
         <source>Add to startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Thêm vào trình khởi động cùng hệ thống</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="96"/>
+        <source>Uninstall</source>
+        <translation>Gỡ bỏ</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="106"/>
         <source>Use a proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>Sử dụng proxy</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="117"/>
+        <source>Disable display scaling</source>
+        <translation>Vô hiệu hóa tỷ lệ hiển thị
+</translation>
     </message>
 </context>
 <context>
     <name>MiniCategoryWidget</name>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="46"/>
         <source>All Apps</source>
         <translation>Tất cả Ứng dụng</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="47"/>
         <source>Internet</source>
         <translation>Internet</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="48"/>
         <source>Chat</source>
         <translation>Trò chuyện</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="49"/>
         <source>Music</source>
         <translation>Âm nhạc</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="50"/>
         <source>Video</source>
         <translation>Phim ảnh</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="51"/>
         <source>Graphics</source>
         <translation>Đồ họa</translation>
     </message>
     <message>
-        <source>Game</source>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="52"/>
+        <source>Games</source>
         <translation>Trò chơi</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="53"/>
         <source>Office</source>
         <translation>Văn phòng</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="54"/>
         <source>Reading</source>
         <translation>Đọc</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="55"/>
         <source>Development</source>
         <translation>Phát triển</translation>
     </message>
     <message>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="56"/>
         <source>System</source>
         <translation>Hệ thống</translation>
     </message>
     <message>
-        <source>Others</source>
+        <location filename="../src/widgets/minicategorywidget.cpp" line="57"/>
+        <source>Other</source>
         <translation>Khác</translation>
-    </message>
-</context>
-<context>
-    <name>MiniFrameBottomBar</name>
-    <message>
-        <source>Computer</source>
-        <translation type="vanished">Máy tính</translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="vanished">Tài liệu</translation>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="vanished">Phim</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation type="vanished">Âm nhạc</translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="vanished">Hình ảnh</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">Tải xuống</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation type="vanished">Khóa</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation type="vanished">Đăng xuất</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="vanished">Khởi động lại</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">Dừng</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation type="vanished">Tắt</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">Trở lại</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="99"/>
         <source>Computer</source>
         <translation>Máy tính</translation>
     </message>
     <message>
-        <source>Music</source>
-        <translation>Âm nhạc</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation>Tắt</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation>Khóa</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation>Đăng xuất</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation>Khởi động lại</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation>Dừng</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation>Trở lại</translation>
-    </message>
-    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="100"/>
         <source>Documents</source>
         <translation>Tài liệu</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="101"/>
         <source>Videos</source>
         <translation>Phim</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="102"/>
+        <source>Music</source>
+        <translation>Âm nhạc</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="103"/>
         <source>Pictures</source>
         <translation>Hình ảnh</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="104"/>
         <source>Downloads</source>
         <translation>Tải xuống</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="105"/>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="124"/>
+        <source>Shut down</source>
+        <translation>Tắt máy</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="120"/>
+        <source>Lock</source>
+        <translation>Khóa</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="121"/>
+        <source>Log out</source>
+        <translation>Thoát ra</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="122"/>
+        <source>Reboot</source>
+        <translation>Khởi động lại</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="123"/>
+        <source>Suspend</source>
+        <translation>Dừng</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="125"/>
+        <source>Back</source>
+        <translation>Trở lại</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="55"/>
         <source>Computer</source>
-        <translation type="vanished">Máy tính</translation>
+        <translation>Máy tính</translation>
     </message>
     <message>
-        <source>Music</source>
-        <translation type="vanished">Âm nhạc</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">Tải xuống</translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="vanished">Tự chỉnh</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Cài đặt</translation>
-    </message>
-    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="58"/>
         <source>Videos</source>
-        <translation type="vanished">Phim</translation>
+        <translation>Phim</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="61"/>
+        <source>Music</source>
+        <translation>Âm nhạc</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="64"/>
         <source>Pictures</source>
-        <translation type="vanished">Hình ảnh</translation>
+        <translation>Hình ảnh</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="67"/>
         <source>Documents</source>
-        <translation type="vanished">Tài liệu</translation>
+        <translation>Tài liệu</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="70"/>
+        <source>Downloads</source>
+        <translation>Tải xuống</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="73"/>
+        <source>Control Center</source>
+        <translation>Trung tâm kiểm soát</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="76"/>
         <source>Power</source>
-        <translation type="vanished">Năng lượng</translation>
+        <translation>Năng lượng</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="73"/>
         <source>All Categories</source>
-        <translation type="unfinished"></translation>
+        <translation>Tất cả các danh mục</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="76"/>
         <source>Back</source>
         <translation>Trở lại</translation>
     </message>
@@ -316,6 +320,7 @@
 <context>
     <name>SearchLineEdit</name>
     <message>
+        <location filename="../src/widgets/searchlineedit.cpp" line="57"/>
         <source>Search</source>
         <translation>Tìm kiếm</translation>
     </message>
@@ -323,16 +328,19 @@
 <context>
     <name>WindowedFrame</name>
     <message>
+        <location filename="../src/windowedframe.cpp" line="550"/>
+        <source>Are you sure you want to uninstall it?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Confirm</source>
         <translation>Xác nhận</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

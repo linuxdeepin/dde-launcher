@@ -102,7 +102,7 @@ MiniFrameNavigation::MiniFrameNavigation(QWidget *parent)
     m_music = new NavigationButton(tr("Music"));
     m_picture = new NavigationButton(tr("Pictures"));
     m_download = new NavigationButton(tr("Downloads"));
-    m_toShutdown = new NavigationButton(tr("Shutdown"));
+    m_toShutdown = new NavigationButton(tr("Shut down"));
 
     QVBoxLayout *navigationLayout = new QVBoxLayout;
     navigationLayout->addWidget(m_computer);
@@ -118,10 +118,10 @@ MiniFrameNavigation::MiniFrameNavigation(QWidget *parent)
     m_navigationPanel->setLayout(navigationLayout);
 
     m_lock = new NavigationButton(tr("Lock"));
-    m_logout = new NavigationButton(tr("Logout"));
+    m_logout = new NavigationButton(tr("Log out"));
     m_reboot = new NavigationButton(tr("Reboot"));
     m_suspend = new NavigationButton(tr("Suspend"));
-    m_shutdown = new NavigationButton(tr("Shutdown"));
+    m_shutdown = new NavigationButton(tr("Shut down"));
     m_toNavigation = new NavigationButton(tr("Back"));
 
     QVBoxLayout *shutdownLayout = new QVBoxLayout;

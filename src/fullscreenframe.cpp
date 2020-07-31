@@ -1159,7 +1159,7 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
     unInstallDialog.setWindowModality(Qt::WindowModal);
 
     const QString appKey = context.data(AppsListModel::AppKeyRole).toString();
-    unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall?")));
+    unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall it?")));
     QPixmap appIcon = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
     unInstallDialog.setIcon(appIcon);
     unInstallDialog.setAccessibleName("Imge-unInstallDialog");

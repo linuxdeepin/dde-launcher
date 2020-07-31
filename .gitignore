@@ -33,3 +33,4 @@ build*
 *.qm
 *.user
 .vscode
+.transifexrc

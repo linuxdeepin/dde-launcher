@@ -49,12 +49,12 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     m_music = new MiniCategoryItem(tr("Music"));
     m_video = new MiniCategoryItem(tr("Video"));
     m_graphics = new MiniCategoryItem(tr("Graphics"));
-    m_game = new MiniCategoryItem(tr("Game"));
+    m_game = new MiniCategoryItem(tr("Games"));
     m_office = new MiniCategoryItem(tr("Office"));
     m_reading = new MiniCategoryItem(tr("Reading"));
     m_development = new MiniCategoryItem(tr("Development"));
     m_system = new MiniCategoryItem(tr("System"));
-    m_others = new MiniCategoryItem(tr("Others"));
+    m_others = new MiniCategoryItem(tr("Other"));
 
     m_items << m_allApps << m_internet << m_chat << m_music << m_video;
     m_items << m_graphics << m_game << m_office << m_reading << m_development;

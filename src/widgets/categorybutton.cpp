@@ -33,6 +33,7 @@
 #include <QPainter>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QMouseEvent>
 
 CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidget *parent) :
     QAbstractButton(parent)
@@ -110,17 +111,60 @@ void CategoryButton::updateState(const CategoryButton::State state)
     update();
 }
 
+void CategoryButton::enterEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    updateState(Hover);
+}
+
+void CategoryButton::leaveEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    if (isChecked())
+        updateState(Checked);
+    else
+        updateState(Normal);
+}
+
+void CategoryButton::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton) {
+        updateState(Press);
+    }
+}
+
+void CategoryButton::mouseReleaseEvent(QMouseEvent *e)
+{
+    QWidget::mouseReleaseEvent(e);
+    if (isChecked())
+        updateState(Checked);
+    else
+        updateState(Normal);
+    emit clicked(true);
+}
+
 void CategoryButton::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     QPainter p(this);
     p.setRenderHint(QPainter::Antialiasing);
-    if (m_state == Checked) {
-        p.setPen(Qt::NoPen);
+    p.setPen(Qt::NoPen);
+
+    switch (m_state) {
+    case Hover:
+        p.setBrush(QBrush(QColor(255, 255, 255, 0.2 * 255)));
+        break;
+    case Checked:
         p.setBrush(QBrush(QColor(255, 255, 255, 0.3 * 255)));
-        p.drawEllipse(rect());
+        break;
+    case Press:
+        p.setBrush(QBrush(QColor(255, 255, 255, 0.1 * 255)));
+        break;
+    default:
+        break;
     }
 
+    p.drawEllipse(rect());
     const auto ratio = devicePixelRatioF();
     const QRectF &rf = QRectF(rect());
     const QRectF &rfp = QRectF(m_icon.rect());

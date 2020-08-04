@@ -1399,9 +1399,8 @@ void FullScreenFrame::updateDockPosition()
         m_pHBoxLayout->setContentsMargins(m_padding, 0, m_padding, 0);
     }
 
-    m_calcUtil->calculateAppLayout(m_appsArea->size() - QSize(m_padding * 2, bottomMargin),
+    m_calcUtil->calculateAppLayout(m_appsArea->size() - QSize(m_padding * 2, DLauncher::APPS_AREA_TOP_MARGIN),
                                    m_appsManager->dockPosition());
-
 }
 
 AppsListModel *FullScreenFrame::nextCategoryModel(const AppsListModel *currentModel)

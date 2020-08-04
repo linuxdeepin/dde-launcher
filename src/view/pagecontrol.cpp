@@ -20,6 +20,7 @@
  */
 
 #include "pagecontrol.h"
+#include "src/global_util/util.h"
 
 #include <QBoxLayout>
 
@@ -30,8 +31,8 @@ pageControl::pageControl(QWidget *parent) : QWidget(parent)
     layout->setSpacing(PAGE_ICON_SPACE);
     setLayout(layout);
 
-    m_iconActive = QIcon(":/widgets/images/page_indicator_active.svg");
-    m_iconNormal = QIcon(":/widgets/images/page_indicator.svg");
+    m_iconActive = loadSvg(":/widgets/images/page_indicator_active.svg",PAGE_ICON_SIZE);
+    m_iconNormal = loadSvg(":/widgets/images/page_indicator.svg",PAGE_ICON_SIZE);
 }
 
 void pageControl::setPageCount(int count)
@@ -40,7 +41,7 @@ void pageControl::setPageCount(int count)
         addButton();
 
     for (int i = count; i < m_pageCount ; i++) {
-        DFloatingButton *pageButton = qobject_cast<DFloatingButton *>(layout()->takeAt(0)->widget());
+        DIconButton *pageButton = qobject_cast<DIconButton *>(layout()->takeAt(0)->widget());
         pageButton->deleteLater();
     }
 
@@ -52,7 +53,7 @@ void pageControl::setPageCount(int count)
 void pageControl::setCurrent(int pageIndex)
 {
     if (pageIndex < layout()->count()) {
-        DFloatingButton *pageButton = qobject_cast<DFloatingButton *>(layout()->itemAt(pageIndex)->widget());
+        DIconButton *pageButton = qobject_cast<DIconButton *>(layout()->itemAt(pageIndex)->widget());
         pageButton->setChecked(true);
     }
 }
@@ -61,15 +62,15 @@ void pageControl::UpdateIconSize(double scaleX, double scaleY)
 {
     double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
     for (int i = 0; i < m_pageCount ; i++) {
-        DFloatingButton *pageButton = qobject_cast<DFloatingButton *>(layout()->itemAt(i)->widget());
+        DIconButton *pageButton = qobject_cast<DIconButton *>(layout()->itemAt(i)->widget());
         pageButton->setIconSize(QSize(PAGE_ICON_SIZE * scale, PAGE_ICON_SIZE * scale));
-        pageButton->setFixedSize(QSize(PAGE_ICON_SIZE * scale, PAGE_ICON_SIZE * scale));
+        pageButton->setFixedSize(QSize(PAGE_BUTTON_SIZE * scale, PAGE_BUTTON_SIZE * scale));
     }
 }
 
 void pageControl::addButton()
 {
-    DFloatingButton *pageButton = new DFloatingButton(this);
+    DIconButton *pageButton = new DIconButton(this);
     pageButton->setIcon(m_iconNormal);
     pageButton->setAccessibleName("thisPageButton");
     pageButton->setIconSize(QSize(PAGE_ICON_SIZE, PAGE_ICON_SIZE));
@@ -82,12 +83,12 @@ void pageControl::addButton()
 
     layout()->addWidget(pageButton);
 
-    connect(pageButton, &DFloatingButton::toggled, this, &pageControl::pageBtnClicked);
+    connect(pageButton, &DIconButton::toggled, this, &pageControl::pageBtnClicked);
 }
 
 void pageControl::pageBtnClicked(bool checked)
 {
-    DFloatingButton *pageButton = qobject_cast<DFloatingButton *>(sender());
+    DIconButton *pageButton = qobject_cast<DIconButton *>(sender());
     if (!pageButton)
         return;
 

@@ -55,12 +55,12 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_rightSpacing->setAccessibleName("RightSpacing");
 
     m_toggleCategoryBtn = new DFloatingButton(this);
-    m_toggleCategoryBtn->setAccessibleName("mode-toggle-button");
-    m_toggleCategoryBtn->setIcon(QIcon(":/icons/skin/icons/category_normal_22px.png"));
-    m_toggleCategoryBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
+    updateCurrentCategoryBtnIcon();
+
     m_toggleCategoryBtn->setFixedSize(QSize(BTN_SIZE, BTN_SIZE));
     m_toggleCategoryBtn->setAutoExclusive(true);
     m_toggleCategoryBtn->setBackgroundRole(DPalette::Button);
+    m_toggleCategoryBtn->setAccessibleName("mode-toggle-button");
 
     m_toggleModeBtn = new DFloatingButton(this);
     m_toggleModeBtn->setIcon(QIcon(":/icons/skin/icons/unfullscreen_normal.png"));
@@ -74,7 +74,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_searchEdit->setAccessibleName("search-edit");
     m_searchEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_searchEdit->lineEdit()->setFixedSize(SEARCHEIT_WIDTH, SEARCHEIT_HEIGHT);
-
+    this->setMouseTracking(true);
     DStyle::setFocusRectVisible(m_searchEdit->lineEdit(), false);
     setFocusPolicy(Qt::NoFocus);
 
@@ -121,7 +121,12 @@ SearchWidget::SearchWidget(QWidget *parent) :
         QProcess::startDetached("dbus-send", args);
 #endif
     });
-    connect(m_toggleCategoryBtn, &DFloatingButton::clicked, this, &SearchWidget::toggleMode);
+
+    connect(m_toggleCategoryBtn, &DFloatingButton::clicked, this, [ = ] {
+        emit toggleMode();
+        // 点击分组按钮，切换分组模式，更新分组图标
+        updateCurrentCategoryBtnIcon();
+    });
 }
 
 DSearchEdit *SearchWidget::edit()
@@ -172,4 +177,17 @@ void SearchWidget::updateSize(double scaleX, double scaleY)
     m_toggleModeBtn->setIconSize(QSize(ICON_SIZE * scale, ICON_SIZE * scale));
     m_toggleModeBtn->setFixedSize(BTN_SIZE * scale, BTN_SIZE * scale);
 }
+
+void SearchWidget::updateCurrentCategoryBtnIcon()
+{
+    if (m_calcUtil->displayMode() == ALL_APPS) {
+        m_toggleCategoryBtn->setIcon(QIcon(":/icons/skin/icons/category_normal_22px.png"));
+        m_toggleCategoryBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
+    } else {
+        m_toggleCategoryBtn->setIcon(QIcon(":/icons/skin/icons/category_hover_22pxnew.svg"));
+        m_toggleCategoryBtn->setIconSize(QSize(ICON_SIZE -  10, ICON_SIZE - 10));
+    }
+}
+
+
 

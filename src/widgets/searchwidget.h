@@ -51,6 +51,8 @@ public:
     void hideToggle();
 
     void updateSize(double scaleX, double scaleY);
+    void updateCurrentCategoryBtnIcon();
+
 public slots:
     void clearSearchContent();
 

@@ -59,6 +59,7 @@
         <file>skin/images/emblem-autostart.svg</file>
         <file>skin/images/new_install_indicator.svg</file>
         <file>skin/images/search-dark.svg</file>
+        <file>skin/icons/category_hover_22pxnew.svg</file>
     </qresource>
     <qresource prefix="/icons">
         <file>skin/icons/category_active_16px.svg</file>
@@ -260,5 +261,6 @@
         <file>skin/icons/calendar_month/month10.svg</file>
         <file>skin/icons/calendar_month/month11.svg</file>
         <file>skin/icons/calendar_month/month12.svg</file>
+        <file>skin/icons/category_hover_22pxnew.svg</file>
     </qresource>
 </RCC>

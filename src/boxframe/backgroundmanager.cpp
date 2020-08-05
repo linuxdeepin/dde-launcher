@@ -23,6 +23,9 @@
 
 #include "backgroundmanager.h"
 
+#include <QGuiApplication>
+#include <QScreen>
+
 using namespace com::deepin;
 
 static const QString DefaultWallpaper = "/usr/share/backgrounds/default_background.jpg";
@@ -68,7 +71,9 @@ void BackgroundManager::updateBackgrounds()
 void BackgroundManager::updateBlurBackgrounds()
 {
     m_timerUpdateBlurbg->setInterval(1000);
-    QString path = getLocalFile(m_wmInter->GetCurrentWorkspaceBackground());
+    QScreen *screen = QGuiApplication::primaryScreen();
+    const QString strMonitorName = screen->name();
+    QString path = getLocalFile(m_wmInter->GetCurrentWorkspaceBackgroundForMonitor(strMonitorName));
     QString filePath = QFile::exists(path) ? path : DefaultWallpaper;
 
     if (m_imageblur->Get(filePath) != "") {

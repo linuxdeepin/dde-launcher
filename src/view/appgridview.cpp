@@ -44,16 +44,20 @@ QPointer<AppsManager> AppGridView::m_appManager = nullptr;
 QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
 
 bool AppGridView::m_longPressed = false;
-Gesture *AppGridView::m_gestureInter = new Gesture("com.deepin.daemon.Gesture"
-                                      , "/com/deepin/daemon/Gesture"
-                                      , QDBusConnection::systemBus()
-                                      , nullptr);
+Gesture *AppGridView::m_gestureInter = nullptr;
 
 AppGridView::AppGridView(QWidget *parent)
     : QListView(parent)
     , m_dropThresholdTimer(new QTimer(this))
 {
     m_pDelegate = nullptr;
+
+    if (!m_gestureInter) {
+        m_gestureInter = new Gesture("com.deepin.daemon.Gesture"
+                                              , "/com/deepin/daemon/Gesture"
+                                              , QDBusConnection::systemBus()
+                                              , nullptr);
+    }
 
     if (!m_appManager)
         m_appManager = AppsManager::instance();

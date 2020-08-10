@@ -138,7 +138,16 @@ void LauncherSys::displayModeChanged()
     lastLauncher = lastLauncher ? lastLauncher : m_launcherInter;
 
     if (lastLauncher->visible()) {
-        m_launcherInter->showLauncher();
+        //+ 在第一次全屏显示时添加延时，防止出现白屏现象 task33580；
+        static int firstClick = 0;
+        if (0 == firstClick) {
+            QTimer::singleShot(100, this, [=] {
+                m_launcherInter->showLauncher();
+                firstClick++;
+            });
+        } else {
+            m_launcherInter->showLauncher();
+        }
     }
     else {
         m_launcherInter->hideLauncher();

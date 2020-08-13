@@ -169,6 +169,8 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::RightButton) {
         QPoint rightClickPoint = mapToGlobal(e->pos());
+        //菜单整体向下偏移
+        rightClickPoint.setY(rightClickPoint.y() + 10);
 
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
         if (clickedIndex.isValid())

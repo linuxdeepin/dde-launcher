@@ -174,6 +174,16 @@ AppsManager::AppsManager(QObject *parent) :
     m_RefreshCalendarIconTimer(new QTimer(this)),
     m_lastShowDate(0)
 {
+    if (QGSettings::isSchemaInstalled("com.deepin.dde.Launcher")) {
+        m_filterSetting = new QGSettings("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher/");
+        connect(m_filterSetting, &QGSettings::changed, this, [ & ] (const QString & keyName) {
+            if (keyName != "filter-keys" && keyName != "filterKeys") {
+                return;
+            }
+            refreshAllList();
+        });
+    }
+
     m_iconRefreshTimer->setInterval(10 * 1000);
     m_iconRefreshTimer->setSingleShot(false);
 
@@ -307,7 +317,7 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
 
 void AppsManager::sortByInstallTimeOrder(ItemInfoList &processList)
 {
-    qSort(processList.begin(), processList.end(), [&](const ItemInfo & i1, const ItemInfo & i2) {
+    qSort(processList.begin(), processList.end(), [ & ](const ItemInfo & i1, const ItemInfo & i2) {
 
         if (i1.m_installedTime == i2.m_installedTime && i1.m_installedTime != 0) {
             // If both of them don't exist in the preset list,
@@ -522,6 +532,24 @@ void AppsManager::delayRefreshData()
     emit dataChanged(AppsListModel::All);
 }
 
+/**
+ * @brief 模糊匹配，反向查询key是否包含list任一个元素
+ * 
+ * @param list 关键字列表
+ * @param key 要模糊匹配的关键词
+ * @return true 表示匹配成功
+ * @return false 表示匹配失败
+ */
+bool AppsManager::fuzzyMatching(const QStringList& list, const QString& key) 
+{
+    for (const QString& l : list) {
+        if (key.indexOf(l, Qt::CaseInsensitive) != -1) {
+            return true;
+        }
+    }
+    return false;
+}
+
 const ItemInfo AppsManager::createOfCategory(qlonglong category)
 {
     ItemInfo info;
@@ -630,15 +658,28 @@ void AppsManager::refreshCategoryInfoList()
         qApp->quit();
     }
 
+    QStringList filters;
+    if (m_filterSetting != nullptr) {
+        filters = m_filterSetting->get("filter-keys").toStringList();
+    }
+
     QByteArray readBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
     QDataStream in(&readBuf, QIODevice::ReadOnly);
     in >> m_usedSortedList;
+
+    for(const ItemInfo& used : m_usedSortedList) {
+        bool bContains = fuzzyMatching(filters, used.m_key);
+        if (bContains) {
+            m_usedSortedList.removeOne(used);
+        }
+    }
 
     const ItemInfoList &datas = reply.value();
     m_allAppInfoList.clear();
     m_allAppInfoList.reserve(datas.size());
     for (const auto &it : datas) {
-        if (!m_stashList.contains(it)) {
+        bool bContains = fuzzyMatching(filters, it.m_key);
+        if (!m_stashList.contains(it) && !bContains) {
             m_allAppInfoList.append(it);
         }
     }
@@ -721,6 +762,17 @@ void AppsManager::refreshUserInfoList()
                     m_userSortedList.append(*it);
                 }
             }
+        }
+    }
+
+    //从启动器小屏应用列表移除被限制使用的应用
+    QStringList filters;
+    if (m_filterSetting != nullptr) {
+        filters = m_filterSetting->get("filter-keys").toStringList();
+    }
+    for (auto it=m_userSortedList.begin(); it!=m_userSortedList.end(); it++) {
+        if (fuzzyMatching(filters, it->m_key)) {
+            m_userSortedList.erase(it);
         }
     }
 
@@ -923,7 +975,18 @@ void AppsManager::searchDone(const QStringList &resultList)
 {
     m_appSearchResultList.clear();
 
-    for (const QString &key : resultList)
+    QStringList resultCopy = resultList;
+    if (m_filterSetting != nullptr) {
+        QStringList filters = m_filterSetting->get("filter-keys").toStringList();
+        for (const QString& result : resultCopy) {
+            bool bContains = fuzzyMatching(filters, result);
+            if (bContains) {
+                resultCopy.removeAll(result);
+            }
+        }
+    }
+
+    for (const QString &key : resultCopy)
         appendSearchResult(key);
 
     emit dataChanged(AppsListModel::Search);
@@ -939,6 +1002,14 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
     Q_UNUSED(categoryNumber);
     if (operation == "created") {
         ItemInfo info = appInfo;
+
+        QStringList filters;
+        if (m_filterSetting != nullptr) {
+            filters = m_filterSetting->get("filter-keys").toStringList();
+        }
+        if (fuzzyMatching(filters, appInfo.m_key)) {
+            return;
+        }
 
         m_allAppInfoList.append(info);
         m_usedSortedList.append(info);

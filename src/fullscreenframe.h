@@ -41,9 +41,11 @@
 #include "boxframe/boxframe.h"
 #include "widgets/blurboxwidget.h"
 #include "view/multipagesview.h"
+#include "widgets/scrollwidgetagent.h"
 
 #include <memory>
 
+#include <QWidget>
 #include <QFrame>
 #include <QScrollArea>
 #include <QPropertyAnimation>
@@ -52,8 +54,6 @@
 #include <QDebug>
 
 #include <dboxwidget.h>
-
-#define CATEGORY_MAX 11
 
 DWIDGET_USE_NAMESPACE
 
@@ -64,7 +64,6 @@ class FullScreenFrame : public BoxFrame, public LauncherInterface
 {
     Q_OBJECT
     Q_PROPERTY(int dockPosition READ dockPosition DESIGNABLE true)
-
 public:
     enum tabFocus {FirstItem, SearchEdit, CategoryChangeBtn, CategoryTital};
     explicit FullScreenFrame(QWidget *parent = nullptr);
@@ -74,9 +73,8 @@ public:
     void showByMode(const qlonglong mode);
     int dockPosition();
     void updateDisplayMode(const int mode);
-
     void nextTabWidget(int key);
-    void timeOutUpdateAppsArea();
+
 signals:
     void visibleChanged(bool visible);
     void displayModeChanged(const int mode);
@@ -85,15 +83,18 @@ signals:
     void scrollChanged(const AppsListModel::AppCategory &category);
 
 public slots:
-    void scrollToCategory(const AppsListModel::AppCategory &category, AppsListModel::scrollType type = AppsListModel::FirstShow);
-    void scrollToBlurBoxWidget(BlurBoxWidget *category,AppsListModel::scrollType type = AppsListModel::FirstShow);
+    void scrollToCategory(const AppsListModel::AppCategory oldCategory, const AppsListModel::AppCategory newCategory);
+    void blurBoxWidgetMaskClick(const AppsListModel::AppCategory appCategory);
+    void scrollPrev();
+    void scrollNext();
+    void scrollCurrent();
     void clickToCategory(const QModelIndex &index);
     void showTips(const QString &tips);
     void hideTips();
-    void setCategoryIndex(AppsListModel::AppCategory &category,AppsListModel::scrollType type = AppsListModel::FirstShow);
     void addViewEvent(AppGridView *pView);
+    void scrollBlurBoxWidget(ScrollWidgetAgent * widgetAgent);
+
 protected:
-    void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
     void hideEvent(QHideEvent *e) Q_DECL_OVERRIDE;
@@ -110,7 +111,6 @@ protected:
 private:
     void initUI();
     void initConnection();
-    void initTimer();
 
     void uninstallApp(const QString &appKey) Q_DECL_OVERRIDE;
     void uninstallApp(const QModelIndex &context);
@@ -124,65 +124,69 @@ private:
     void regionMonitorPoint(const QPoint &point) Q_DECL_OVERRIDE;
 
     void updateGeometry();
-    void checkCategoryVisible();
+    void categoryListChanged();
     void showPopupMenu(const QPoint &pos, const QModelIndex &context);
-    void updateCurrentVisibleCategory();
-    void updatePlaceholderSize();
     void updateDockPosition();
 
-    AppsListModel *nextCategoryModel(const AppsListModel *currentModel);
-    AppsListModel *prevCategoryModel(const AppsListModel *currentModel);
-    AppsListModel::AppCategory nextCategoryModel(const AppsListModel::AppCategory category);
-    AppsListModel::AppCategory prevCategoryModel(const AppsListModel::AppCategory category);
+    AppsListModel::AppCategory nextCategoryType(const AppsListModel::AppCategory category);
+    AppsListModel::AppCategory prevCategoryType(const AppsListModel::AppCategory category);
 
     virtual const QScreen *currentScreen() override;
+
 private slots:
     void layoutChanged();
     void searchTextChanged(const QString &keywords);
-    void ensureScrollToDest(const QVariant &value);
-    void ensureItemVisible(const QModelIndex &index);
-    void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
-    void refreshTitleVisible();
     void reflashPageView(const AppsListModel::AppCategory category);
     void primaryScreenChanged();
+
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
     MultiPagesView *getCategoryGridViewList(const AppsListModel::AppCategory category);
-    BlurBoxWidget  *categoryBoxWidget(const AppsListModel::AppCategory category) const;
+    BlurBoxWidget  *getCategoryBoxWidget(const AppsListModel::AppCategory category) const;
+
+    void checkCurrentCategoryVisible();
+    void showCategoryBoxWidget(AppsListModel::AppCategory appCategory);
+    void hideCategoryBoxWidget();
+    void scrollToCategoryFinish();
+    ScrollWidgetAgent *getScrollWidgetAgent(PosType type);
+    BlurBoxWidget  *getCategoryBoxWidgetByPostType(PosType posType, AppsListModel::AppCategory appCategory);
+    int nearestCategory(const AppsListModel::AppCategory oldCategory, const AppsListModel::AppCategory newCategory);
 
 private:
     bool m_isConfirmDialogShown = false;
-    bool m_refershCategoryTextVisible = false;
-    int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
     int m_displayMode = SEARCH;
-    double rightMarginRation = 1;
-    int m_currentBlurBoxWidgetX = 0;
-    AppsListModel::AppCategory m_currentCategory = AppsListModel::All;
+    int m_focusIndex;
+    int m_currentIndex = 0;
+    //鼠标单击位置
+    QPoint m_mouse_move_pos;
+    QPoint m_mouse_press_pos;
+    qint64 m_mouse_press_time;
+    bool m_mouse_press;
+    bool m_mouse_move;
+
+    AppsListModel::AppCategory m_currentCategory;
+
     std::unique_ptr<MenuWorker> m_menuWorker;
     SharedEventFilter *m_eventFilter;
 
     CalculateUtil *m_calcUtil;
     AppsManager *m_appsManager;
-    QPropertyAnimation *m_scrollAnimation;
 
-    QWidget *m_scrollDest;
-    BlurBoxWidget *m_leftScrollDest;
-    BlurBoxWidget *m_rightScrollDest;
     QTimer *m_delayHideTimer;
-    QTimer *m_autoScrollTimer;
     QTimer *m_clearCacheTimer;
 
     NavigationWidget *m_navigationWidget;
     SearchWidget *m_searchWidget;
-    AppListArea *m_appsArea;    // app 滚动区域
-    DHBoxWidget *m_appsHbox;    // app 分组
+
+    QFrame *m_contentFrame;
+    DHBoxWidget *m_appsIconBox;
+    DHBoxWidget *m_appsItemBox;    // app 分组
+    MaskQWidget *m_appsItemSeizeBox; // app 分组点位
     QHBoxLayout *m_iconHLayout;
 
-    QWidget *m_viewListPlaceholder;
     QLabel *m_tipsLabel;
 
     AppItemDelegate *m_appItemDelegate;
-
     MultiPagesView *m_multiPagesView;
 
     BlurBoxWidget *m_internetBoxWidget;
@@ -197,47 +201,13 @@ private:
     BlurBoxWidget *m_systemBoxWidget;
     BlurBoxWidget *m_othersBoxWidget;
 
-    AppsListModel *m_searchResultModel;
-    AppsListModel *m_internetModel;
-    AppsListModel *m_chatModel;
-    AppsListModel *m_musicModel;
-    AppsListModel *m_videoModel;
-    AppsListModel *m_graphicsModel;
-    AppsListModel *m_gameModel;
-    AppsListModel *m_officeModel;
-    AppsListModel *m_readingModel;
-    AppsListModel *m_developmentModel;
-    AppsListModel *m_systemModel;
-    AppsListModel *m_othersModel;
-
-    QIcon m_iconViewActive;
-    QIcon m_iconView;
-
     QFrame *m_topSpacing;
     QFrame *m_bottomSpacing;
-
-    int m_padding;
     QLayout *m_pHBoxLayout = nullptr;
-
-    QFrame *m_contentFrame;
-
     QVBoxLayout *m_mainLayout;
 
-    //总共的分类
-    BlurBoxWidget *m_BoxWidget[CATEGORY_MAX]   =  {m_internetBoxWidget, m_chatBoxWidget, m_musicBoxWidget, m_videoBoxWidget, m_graphicsBoxWidget, m_gameBoxWidget
-                                                   , m_officeBoxWidget, m_readingBoxWidget, m_developmentBoxWidget, m_systemBoxWidget, m_othersBoxWidget
-                                                  };
-    //当前处在第几个分类
-    int m_boxWidgetPageCurrent[CATEGORY_MAX] = {0};
-    int m_currentBox ;
-    int m_focusIndex;
-
-    //鼠标单击位置
-    QPoint m_mousePos;
-    qint64 m_mouse_press_time;
-    int m_appsAreaHScrollBarValue;
-    bool m_mouse_press;
-
+    QList<ScrollWidgetAgent *> m_widgetAgentList;
+    ScrollParallelAnimationGroup *m_animationGroup;
     DBusDisplay *m_displayInter;
 };
 #endif // MAINFRAME_H

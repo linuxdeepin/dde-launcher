@@ -54,7 +54,7 @@ public:
     AppGridView *pageView(int pageIndex);
     AppsListModel *pageModel(int pageIndex);
     int currentPage(){return m_pageIndex;}
-
+    int pageCount() { return m_pageCount;}
     QModelIndex getAppItem(int index);
     void setDataDelegate(QAbstractItemDelegate *delegate);
     void setModel(AppsListModel::AppCategory category);
@@ -102,7 +102,6 @@ private:
     pageAppsModelist m_pageAppsModelList;
 
     DHBoxWidget *m_viewBox;
-    QHBoxLayout *m_pageLayout;
 
     QPropertyAnimation *m_pageSwitchAnimation;
 

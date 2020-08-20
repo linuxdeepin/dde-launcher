@@ -29,6 +29,8 @@
 #include <QDesktopWidget>
 #include <QApplication>
 
+#include "src/global_util/constants.h"
+
 static const QString DisplayModeKey = "display-mode";
 static const QString DisplayModeFree = "free";
 static const QString DisplayModeCategory = "category";
@@ -163,61 +165,46 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     double scaleY = getScreenScaleY();
     double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
 
-    QRect pr = currentScreen()->geometry();
-    const int screenWidth = pr.width();
-    const int spacing = pr.width() <= 1440 ? 10 : 28;
-    // 启动器全屏分组模式小窗
-    if (m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeCategory) {
-        m_appMarginTop = 0;
-        m_appColumnCount = 4;
-        int Catespacing = 44;
-        int calc_categroyitem_width = 0;
-        int calc_categoryspacing = 0;
-        // 对低分辨率进行处理
-        if (pr.width() <= 1440) {
-            Catespacing = 20;
-            // 计算图标四个方向的间距
-            calc_categroyitem_width = (getAppBoxSize().width() - Catespacing * m_appColumnCount * 2 - 24) / m_appColumnCount + 0.5;
-            calc_categoryspacing  = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount) / (m_appColumnCount * 2) - 0.5;
-            int calc_categoryspacing_height  = (double(getAppBoxSize().height()) - calc_categroyitem_width * 3 - 14) / (3 * 2) + 0.5;
-            // 计算图标顶部空间 防止在低分辨率下应用分辨率过高造成应用显示异常
-            if(calc_categoryspacing_height < 0)
-                calc_categoryspacing_height = 0;
-            m_appMarginTop = (containerSize.height() - calc_categoryspacing_height * 6 - calc_categroyitem_width * 3) / 2;
-            if (calc_categoryspacing > calc_categoryspacing_height)
-                calc_categoryspacing = calc_categoryspacing_height;
-        } else {
-            calc_categroyitem_width = (getAppBoxSize().width() - Catespacing * m_appColumnCount * 2) / m_appColumnCount + 0.5;
-            calc_categoryspacing = (double(getAppBoxSize().width()) - calc_categroyitem_width * m_appColumnCount - Catespacing * 2) / (m_appColumnCount * 2) - 8;
-        }
+    calculateTextSize();
 
-        m_appItemSpacing = calc_categoryspacing;
-        m_appItemSize = calc_categroyitem_width;
-        m_appItemFontSize = m_appItemSize <= 80 ? 8 : qApp->font().pointSize()+3;
-        m_appMarginLeft = (getAppBoxSize().width() - calc_categroyitem_width * m_appColumnCount - calc_categoryspacing * m_appColumnCount * 2) / 2;
-        emit layoutChanged();
-        return;
+    int rows = 1;
+    int containerW = containerSize.width();
+    int containerH = containerSize.height();
+
+    if (m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeCategory) {
+        m_appColumnCount = 4;
+        rows = 3;
+
+        containerW = getAppBoxSize().width();
+        //BlurBoxWidget上边距24,　分组标题高度70 ,　MultiPagesView页面切换按钮高度20 * scale;
+        containerH = containerSize.height() - 24 - 60 - 20 * scale - DLauncher::DRAG_THRESHOLD;
+    } else {
+        m_appColumnCount = 7;
+        rows = 4;
+
+        containerW = containerSize.width();
+        containerH = containerSize.height() - 20 * scale - DLauncher::DRAG_THRESHOLD;
     }
 
-    const int columns = 7;
-    const int rows = m_appPageItemCount / columns;
-    const int calc_item_width = int((double(containerSize.width()) - spacing * columns * 2) / columns + 0.5);
-    const int calc_spacing = int((double(containerSize.width()) - calc_item_width * columns) / (columns * 2) - 0.5);
-    const int h = containerSize.height() - 35 - scale * 12; //图标：12 下边距：15 上边距 20
-    const int nRowSpace = int(double(h - calc_item_width * rows) / (rows * 2) - 0.5);
+    //计算每个Item区域的宽高,为免计算时小数产生的偏差而造成显示异常，保留至少有一个像素的左边距和上边距，因此宽高分别减少行列个数
+    int perItemWidth  = (containerW - m_appColumnCount) / m_appColumnCount;
+    int perItemHeight = (containerH - rows) / rows;
+    //因为每个Item是一个正方形的，所以取宽高中最小的值
+    int perItemSize = qMin(perItemHeight,perItemWidth);
 
-    int nSpace = qMin(calc_spacing, nRowSpace);
-    m_appMarginLeft = (containerSize.width() - calc_item_width * columns - nSpace * columns * 2) / 2;
-    m_appMarginTop = (h - calc_item_width * rows - nSpace * rows * 2)/2;
+    //图标大小取区域的4 / 5
+    m_appItemSize = perItemSize * 4 / 5;
+    //其他区域为间隔区域
+    m_appItemSpacing = (perItemSize - m_appItemSize) / 2;
+    //用间隔区域反算下图标大小
+    m_appItemSize = perItemSize - m_appItemSpacing * 2;
+    //计算左边距
+    m_appMarginLeft = (containerW - m_appItemSize * m_appColumnCount - m_appItemSpacing * m_appColumnCount * 2) / 2;
+    //计算上边距
+    m_appMarginTop =  (containerH - m_appItemSize * rows - m_appItemSpacing * rows * 2) / 2;
+    //计算字体大小
+    m_appItemFontSize = m_appItemSize <= 80 ? 8 : qApp->font().pointSize() + 3;
 
-    calculateTextSize(screenWidth);
-
-    m_appItemSpacing = nSpace;
-    m_appItemSize = calc_item_width;
-    m_appColumnCount = columns;
-
-    // calculate font size;
-    m_appItemFontSize = m_appItemSize <= 80 ? 8 : qApp->font().pointSize()+3;
     emit layoutChanged();
 }
 
@@ -231,9 +218,9 @@ CalculateUtil::CalculateUtil(QObject *parent)
     isFullScreen = m_launcherInter->fullscreen();
 }
 
-void CalculateUtil::calculateTextSize(const int screenWidth)
+void CalculateUtil::calculateTextSize()
 {
-    if (screenWidth > 1366) {
+    if (currentScreen()->geometry().width() > 1366) {
         m_navgationTextSize = 14;
         m_titleTextSize = 40;
     } else {

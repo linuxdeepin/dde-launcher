@@ -64,6 +64,7 @@ void NavigationWidget::setButtonsVisible(const bool visible)
 
 void NavigationWidget::setCurrentCategory(const AppsListModel::AppCategory category)
 {
+    m_currentCategory = category;
     CategoryButton *btn = button(category);
 
     if (btn)
@@ -78,12 +79,14 @@ void NavigationWidget::setCancelCurrentCategory(const AppsListModel::AppCategory
         btn->setChecked(false);
 }
 
-void NavigationWidget::refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums)
+void NavigationWidget::refershCategoryVisible(const AppsListModel::AppCategory category, const bool visible)
 {
     QAbstractButton *btn = button(category);
 
     if (btn)
-        btn->setVisible(appNums);
+        btn->setVisible(visible);
+
+    update();
 }
 
 void NavigationWidget::initUI()
@@ -143,7 +146,7 @@ void NavigationWidget::buttonClicked()
     if (!btn)
         return;
 
-    emit scrollToCategory(btn->category(),  AppsListModel::NavigationChangeShow);
+    emit scrollToCategory(m_currentCategory, btn->category());
 }
 
 CategoryButton *NavigationWidget::button(const AppsListModel::AppCategory category) const

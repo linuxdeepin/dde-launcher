@@ -34,18 +34,10 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     QFrame(parent),
     m_calcUtil(CalculateUtil::instance()),
     m_title(new QLabel(this)),
-    m_opacityAnimation(new QPropertyAnimation(this, "titleOpacity"))
+    m_opacityAnimation(new QPropertyAnimation(this, "titleOpacity")),
+    m_titleOpacity(0)
 {
-    QLabel *whiteLine = new QLabel(this);
-    whiteLine->setObjectName("CategoryWhiteLine");
-    whiteLine->setFixedHeight(1);
-
-    QVBoxLayout *lineLayout = new QVBoxLayout;
-    lineLayout->setMargin(0);
-    lineLayout->setSpacing(0);
-    lineLayout->addStretch();
-    lineLayout->addWidget(whiteLine);
-    lineLayout->addStretch();
+    m_title->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     setAccessibleName(title);
     setText(title);
@@ -53,17 +45,10 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     setTitleOpacity(1);  // update the style of this widget by force.
     m_opacityAnimation->setDuration(300);
 
-    QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addSpacing(DLauncher::APPS_CATEGORY_TITLE_SPACING);
-    mainLayout->addWidget(m_title);
-    mainLayout->addSpacing(DLauncher::APPS_CATEGORY_TITLE_SPACING);
-
     setAccessibleName(title);
-    setLayout(mainLayout);
     setFixedHeight(DLauncher::CATEGORY_TITLE_WIDGET_HEIGHT);
 
     //addTextShadow();
-
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &CategoryTitleWidget::relayout);
 }
 
@@ -100,6 +85,31 @@ void CategoryTitleWidget::addTextShadow()
     textDropShadow->setColor(QColor(0, 0, 0, 128));
     textDropShadow->setOffset(0, 2);
     m_title->setGraphicsEffect(textDropShadow);
+}
+
+void CategoryTitleWidget::updatePosition(const QPoint pos, int w, int posType)
+{
+    int x = width() / 2 - m_title->width() / 2 + DLauncher::APPS_CATEGORY_TITLE_SPACING;
+
+    if (posType == 2 || posType == 1) {
+        x = width() - m_title->width() - DLauncher::APPS_CATEGORY_TITLE_SPACING;
+    } else if (posType == 4 || posType == 5) {
+        x = DLauncher::APPS_CATEGORY_TITLE_SPACING;
+    } else if (posType == 3 && w > 0) {
+        int titleWidth = width() - m_title->width() - DLauncher::APPS_CATEGORY_TITLE_SPACING * 2;
+
+        double movedDiff = pos.x() - w / 2 + m_calcUtil->getAppBoxSize().width();
+        movedDiff = movedDiff < 0 ? 0 : movedDiff;
+        movedDiff = movedDiff > m_calcUtil->getAppBoxSize().width() ? m_calcUtil->getAppBoxSize().width() : movedDiff;
+
+        double rate = movedDiff / m_calcUtil->getAppBoxSize().width();
+
+        x = titleWidth - int(rate * titleWidth) + DLauncher::APPS_CATEGORY_TITLE_SPACING;
+    }
+
+    QPoint p(x, 0);
+    m_title->move(p);
+    update();
 }
 
 void CategoryTitleWidget::relayout()

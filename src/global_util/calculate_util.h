@@ -85,7 +85,7 @@ public slots:
 
 private:
     explicit CalculateUtil(QObject *parent);
-    void calculateTextSize(const int screenWidth);
+    void calculateTextSize();
     QScreen *currentScreen() const;
 private:
     static QPointer<CalculateUtil> INSTANCE;

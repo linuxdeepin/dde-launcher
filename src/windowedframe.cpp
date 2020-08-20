@@ -791,7 +791,6 @@ void WindowedFrame::initAnchoredCornor()
 void WindowedFrame::adjustPosition()
 {
     const int dockPos = m_dockInter->position();
-    qreal ratio = qApp->devicePixelRatio();
     QRect r =  m_dockInter->frontendRect();
     QRect dockRect = QRect(scaledPosition(r.topLeft()),scaledPosition(r.bottomRight()));
 
@@ -821,7 +820,6 @@ void WindowedFrame::adjustPosition()
         Q_UNREACHABLE_IMPL();
     }
 
-    qDebug() << "currentWindowedFrame Position:"<< p;
     initAnchoredCornor();
     move(p);
 }

@@ -61,7 +61,6 @@ class AppsManager : public QObject
 
 public:
     static AppsManager *instance();
-
     void stashItem(const QModelIndex &index);
     void stashItem(const QString &appKey);
     void abandonStashedItem(const QString &appKey);
@@ -74,11 +73,11 @@ public:
     void refreshAllList();
     const QPixmap getThemeIcon(const ItemInfo &itemInfo, const int size);
     int getPageCount(const AppsListModel::AppCategory category);
-
     void pushPixmap();
     void pushPixmap(const ItemInfo &itemInfo);
-
     const QScreen * currentScreen();
+    int getVisibleCategoryCount();
+
 signals:
     void itemDataChanged(const ItemInfo &info) const;
     void dataChanged(const AppsListModel::AppCategory category) const;

@@ -924,6 +924,7 @@ void FullScreenFrame::updateGeometry()
 ///
 void FullScreenFrame::moveCurrentSelectApp(const int key)
 {
+    m_searchWidget->edit()->lineEdit()->clearFocus();
     if (Qt::Key_Tab == key || Qt::Key_Backtab == key) {
         nextTabWidget(key);
         return;

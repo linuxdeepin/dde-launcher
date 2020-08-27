@@ -394,7 +394,13 @@ void FullScreenFrame::showTips(const QString &tips)
         return;
 
     m_tipsLabel->setText(tips);
-    m_tipsLabel->setStyleSheet("color: rgba(255, 255, 255, 0.5);font-size: 30px");
+    QPalette palette;
+    QColor color(255, 255, 255, 0.5 * 255);
+    QFont font;
+    font.setPointSize(30);
+    palette.setColor(QPalette::WindowText,color);
+    m_tipsLabel->setPalette(palette);
+    m_tipsLabel->setFont(font);
 
     const QPoint center = rect().center() - m_tipsLabel->rect().center();
     m_tipsLabel->move(center);

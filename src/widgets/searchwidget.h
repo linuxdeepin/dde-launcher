@@ -40,6 +40,7 @@ public:
 
     DSearchEdit *edit();
     DFloatingButton *categoryBtn();
+    DFloatingButton *toggleModeBtn();
 
     void setLeftSpacing(int spacing);
     void setRightSpacing(int spacing);

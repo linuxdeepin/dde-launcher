@@ -382,6 +382,7 @@ void FullScreenFrame::showTips(const QString &tips)
         return;
 
     m_tipsLabel->setText(tips);
+    m_tipsLabel->setStyleSheet("color: rgba(255, 255, 255, 0.5);font-size: 30px");
 
     const QPoint center = rect().center() - m_tipsLabel->rect().center();
     m_tipsLabel->move(center);

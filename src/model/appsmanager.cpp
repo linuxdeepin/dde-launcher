@@ -51,6 +51,7 @@ QGSettings AppsManager::LAUNCHER_SETTINGS("com.deepin.dde.launcher", "", nullptr
 QSet<QString> AppsManager::APP_AUTOSTART_CACHE;
 QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
 QSettings AppsManager::APP_USED_SORTED_LIST("deepin", "dde-launcher-app-used-sorted-list");
+QSettings AppsManager::APP_CATEGORY_USED_SORTED_LIST("deepin","dde-launcher-app-category-used-sorted-list");
 static constexpr int USER_SORT_UNIT_TIME = 3600; // 1 hours
 
 int perfectIconSize(const int size)
@@ -355,6 +356,7 @@ void AppsManager::stashItem(const QString &appKey)
             generateCategoryMap();
             refreshUsedInfoList();
             refreshUserInfoList();
+            refreshCategoryUsedInfoList();
 
             return;
         }
@@ -381,12 +383,17 @@ void AppsManager::restoreItem(const QString &appKey, const int pos)
             // if pos is valid
             if (pos != -1) {
 //                int itemIndex = m_pageIndex[AppsListModel::All] * m_calUtil->appPageItemCount() + pos;
-                m_usedSortedList.insert(pos, m_stashList[i]);
+                if (m_calUtil->displayMode() == ALL_APPS)
+                    m_usedSortedList.insert(pos, m_stashList[i]);
+
+                if (m_calUtil->displayMode() == GROUP_BY_CATEGORY)
+                    m_appInfos[m_stashList[i].category()].insert(pos, m_stashList[i]);
             }
             m_allAppInfoList.append(m_stashList[i]);
             m_stashList.removeAt(i);
 
             generateCategoryMap();
+            refreshCategoryUsedInfoList();
 
             return saveUsedSortedList();
         }
@@ -419,6 +426,7 @@ void AppsManager::refreshAllList()
 
     refreshCategoryInfoList();
     refreshUsedInfoList();
+    refreshCategoryUsedInfoList();
     refreshUserInfoList();
 }
 
@@ -633,6 +641,17 @@ void AppsManager::refreshCategoryInfoList()
     QDataStream in(&readBuf, QIODevice::ReadOnly);
     in >> m_usedSortedList;
 
+    // 从配置文件中读取全屏分类下的应用
+    int beginCategoryIndex = int(AppsListModel::AppCategory::Internet);
+    int endCategoryIndex = int(AppsListModel::AppCategory::Others);
+    for (; beginCategoryIndex < endCategoryIndex; beginCategoryIndex++) {
+        ItemInfoList itemInfoList;
+        QByteArray readCategoryBuf = APP_CATEGORY_USED_SORTED_LIST.value(QString("%1").arg(beginCategoryIndex)).toByteArray();
+        QDataStream categoryIn(&readCategoryBuf, QIODevice::ReadOnly);
+        categoryIn >> itemInfoList;
+        m_appInfos.insert(AppsListModel::AppCategory(beginCategoryIndex), itemInfoList);
+    }
+
     const ItemInfoList &datas = reply.value();
     m_allAppInfoList.clear();
     m_allAppInfoList.reserve(datas.size());
@@ -681,6 +700,19 @@ void AppsManager::refreshUsedInfoList()
     saveUsedSortedList();
 }
 
+void AppsManager::refreshCategoryUsedInfoList()
+{
+    // 保存排序信息
+    QMap<AppsListModel::AppCategory, ItemInfoList>::iterator categoryAppsIter = m_appInfos.begin();
+    for (; categoryAppsIter != m_appInfos.end(); categoryAppsIter++) {
+        int category = categoryAppsIter.key();
+
+        QByteArray writeBuf;
+        QDataStream out(&writeBuf, QIODevice::WriteOnly);
+        out << categoryAppsIter.value();
+        APP_CATEGORY_USED_SORTED_LIST.setValue(QString("%1").arg(category), writeBuf);
+    }
+}
 void AppsManager::refreshUserInfoList()
 {
     if (m_userSortedList.isEmpty()) {
@@ -761,7 +793,6 @@ void AppsManager::updateUsedListInfo()
 
 void AppsManager::generateCategoryMap()
 {
-    m_appInfos.clear();
     m_categoryList.clear();
     sortByPresetOrder(m_allAppInfoList);
 
@@ -782,9 +813,18 @@ void AppsManager::generateCategoryMap()
         if (!m_appInfos.contains(category))
             m_appInfos.insert(category, ItemInfoList());
 
-        //m_appInfos[category].append(info);
+        // 将已有应用保存到 m_appInfos， 新添加应用保存到 newInstallAppList
         if (!m_newInstalledAppsList.contains(info.m_key)) {
-            m_appInfos[category].append(info);
+            // 检查应用是否已经存在
+            const int idx = m_appInfos[category].indexOf(info);
+            if (idx == -1) {
+                m_appInfos[category].append(info);
+            } else {
+                // 更新一下已有应用信息
+                qlonglong openCount = m_appInfos[category][idx].m_openCount;
+                m_appInfos[category][idx].updateInfo(info);
+                m_appInfos[category][idx].m_openCount = openCount;
+            }
         } else {
             newInstallAppList.append(info);
         }
@@ -794,14 +834,46 @@ void AppsManager::generateCategoryMap()
     sortByInstallTimeOrder(newInstallAppList);
     if (!newInstallAppList.isEmpty()) {
         for (const ItemInfo &info : newInstallAppList) {
-            m_appInfos[info.category()].append(info);
+            if (!m_appInfos[info.category()].contains(info)) {
+                m_appInfos[info.category()].append(info);
+            } else {
+                // 更新一下新应用信息
+                const int idx = m_appInfos[info.category()].indexOf(info);
+                qlonglong openCount = m_appInfos[info.category()][idx].m_openCount;
+                m_appInfos[info.category()][idx].updateInfo(info);
+                m_appInfos[info.category()][idx].m_openCount = openCount;
+            }
+        }
+    }
+
+
+    // 移除 m_appInfos 中已经不存在的应用
+    QMap<AppsListModel::AppCategory, ItemInfoList>::iterator categoryAppsIter = m_appInfos.begin();
+    for (; categoryAppsIter != m_appInfos.end(); categoryAppsIter++) {
+        ItemInfoList &item = categoryAppsIter.value();
+        for (auto it(item.begin()); it != item.end();) {
+            int idx = m_allAppInfoList.indexOf(*it);
+
+            // 在全屏自由排序模式下，m_allAppInfoList 中不存在的应用，可能缓存到 m_stashList 里面了，需要查一下
+            // 检查是为了不更新 m_appInfos
+            if (idx == -1 && (m_calUtil->displayMode() == ALL_APPS))
+                idx = m_stashList.indexOf(*it);
+
+            if (idx == -1)
+                it = item.erase(it);
+            else
+                it++;
         }
     }
 
     // remove uninstalled app item
     for (auto it(m_usedSortedList.begin()); it != m_usedSortedList.end();) {
-        const int idx = m_allAppInfoList.indexOf(*it);
+        int idx = m_allAppInfoList.indexOf(*it);
 
+        // 如果是分类模式，那么再查一下 m_stashList，为了不要更新 m_usedSortedList
+        if (idx == -1 && (m_calUtil->displayMode() == GROUP_BY_CATEGORY)) {
+            idx = m_stashList.indexOf(*it);
+        }
         if (idx == -1)
             it = m_usedSortedList.erase(it);
         else

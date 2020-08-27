@@ -395,10 +395,8 @@ void AppGridView::startDrag(const QModelIndex &index)
     drag->setHotSpot(srcPix.rect().center() / ratio);
 
     // request remove current item.
-    if (listModel->category() == AppsListModel::All) {
-        m_dropToPos = index.row();
-        listModel->setDraggingIndex(index);
-    }
+    m_dropToPos = index.row();
+    listModel->setDraggingIndex(index);
 
     setState(DraggingState);
     drag->exec(Qt::MoveAction);
@@ -409,9 +407,6 @@ void AppGridView::startDrag(const QModelIndex &index)
     //send to next page
     emit dragEnd();
 
-    // disable auto scroll
-    if (listModel->category() != AppsListModel::All)
-        return;
 
     if (!m_lastFakeAni) {
         if (m_enableDropInside)

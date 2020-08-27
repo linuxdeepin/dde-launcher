@@ -125,6 +125,7 @@ private:
     void sortByInstallTimeOrder(ItemInfoList &processList);
     void refreshCategoryInfoList();
     void refreshUsedInfoList();
+    void refreshCategoryUsedInfoList();
     void refreshUserInfoList();
     void updateUsedListInfo();
     void generateCategoryMap();
@@ -156,7 +157,7 @@ private:
     ItemInfoList m_appSearchResultList;
     ItemInfoList m_stashList;
     ItemInfoList m_categoryList;
-    QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfos;
+    QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfos; // 全屏分类模式下保存的应用
 
     ItemInfo m_unInstallItem = ItemInfo();
     ItemInfo m_beDragedItem = ItemInfo();
@@ -174,6 +175,7 @@ private:
     static QSet<QString> APP_AUTOSTART_CACHE;
     static QSettings APP_USER_SORTED_LIST;
     static QSettings APP_USED_SORTED_LIST;
+    static QSettings APP_CATEGORY_USED_SORTED_LIST;
     QMap<QPair<QString, int>, QPixmap> m_iconCache;
     std::map<std::pair<ItemInfo, int>, int> m_notExistIconMap;
     QStringList m_categoryTs;

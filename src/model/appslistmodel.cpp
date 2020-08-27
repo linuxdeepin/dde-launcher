@@ -230,9 +230,6 @@ bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action
     if (data->data("RequestDock").isEmpty())
         return false;
 
-    if (m_category != All)
-        return false;
-
     return true;
 }
 

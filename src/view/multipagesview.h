@@ -43,7 +43,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class MultiPagesView : public QWidget
+class MultiPagesView : public QWidget, DragPageDelegate
 {
     Q_OBJECT
 public:

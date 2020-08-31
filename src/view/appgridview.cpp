@@ -46,6 +46,7 @@ QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
 AppGridView::AppGridView(QWidget *parent)
     : QListView(parent)
     , m_dropThresholdTimer(new QTimer(this))
+    , m_pDelegate(nullptr)
 {
     if (!m_appManager)
         m_appManager = AppsManager::instance();
@@ -151,10 +152,15 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
         m_dragStartPos = e->pos();
 
 
-    if (!indexAt(m_dragStartPos).isValid() && m_pDelegate)
+    if (!indexAt(m_dragStartPos).isValid() && m_pDelegate != nullptr)
         m_pDelegate->mousePress(e);
 
     QListView::mousePressEvent(e);
+}
+
+void AppGridView::setDelegate(DragPageDelegate *pDelegate)
+{
+   m_pDelegate = pDelegate;
 }
 
 void AppGridView::dragEnterEvent(QDragEnterEvent *e)

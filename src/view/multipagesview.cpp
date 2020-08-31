@@ -128,6 +128,7 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             pageView->setItemDelegate(m_delegate);
             pageView->setContainerBox(m_appListArea);
             pageView->installEventFilter(this);
+            pageView->setDelegate(this);
             m_appGridViewList.push_back(pageView);
 
             m_viewBox->layout()->insertWidget(m_pageCount, pageView);

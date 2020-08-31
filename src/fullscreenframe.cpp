@@ -545,13 +545,12 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
                 }
             }
         } else {
-
             if (move_diff > DLauncher::MOUSE_MOVE_TO_NEXT) {
-                scrollToCategory(prevCategoryModel(m_currentCategory), AppsListModel::ScrollLeft);
+                scrollToCategory(m_currentCategory, AppsListModel::ScrollLeft);
             } else if (move_diff < -DLauncher::MOUSE_MOVE_TO_NEXT) {
-                scrollToCategory(nextCategoryModel(m_currentCategory), AppsListModel::ScrollRight);
+                scrollToCategory(m_currentCategory, AppsListModel::ScrollRight);
             } else {
-                scrollToCategory((m_currentCategory), move_diff > 0 ? AppsListModel::ScrollRight :AppsListModel::ScrollLeft);
+                scrollToCategory(m_currentCategory, move_diff > 0 ? AppsListModel::ScrollRight :AppsListModel::ScrollLeft);
             }
         }
     }

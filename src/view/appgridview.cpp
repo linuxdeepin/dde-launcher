@@ -258,7 +258,7 @@ void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 
 void AppGridView::mouseMoveEvent(QMouseEvent *e)
 {
-    qDebug("AppGridView::mouseMoveEvent");
+    //qDebug("AppGridView::mouseMoveEvent");
     e->accept();
 
     // disable qlistview default drag

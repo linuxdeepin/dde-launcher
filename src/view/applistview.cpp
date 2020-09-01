@@ -151,7 +151,12 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
     else
         Q_EMIT entered(QModelIndex());
 
-    if (e->button() != Qt::LeftButton)
+    if (e->buttons() != Qt::LeftButton)
+        return;
+
+    // 如果是分类，禁止拖拽
+    AppsListModel::AppCategory isCategoryList = qobject_cast<AppsListModel*>(model())->category();
+    if (isCategoryList == AppsListModel::Category)
         return;
 
     if (qAbs(pos.x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
@@ -319,48 +324,19 @@ void AppListView::startDrag(const QModelIndex &index)
         return;
 
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
-    if (!listModel || listModel->category() != AppsListModel::All)
-        return;
 
     const QModelIndex &dragIndex = index;
-    const QRect index_rect = visualRect(index);
-    const auto ratio = devicePixelRatioF();
-    const QSize rectSize = index_rect.size();
 
-    // QPoint(50, 42) is shadow radius
-    const QPoint hotSpot = m_dragStartPos - index_rect.topLeft() + QPoint(50, 42)  / ratio;
-
-    QPixmap dropPixmap;
-    QImage sourcePixmap(rectSize * ratio, QImage::Format_ARGB32_Premultiplied);
-    sourcePixmap.fill(Qt::transparent);
-    sourcePixmap.setDevicePixelRatio(ratio);
-
-    QPainter painter(&sourcePixmap);
-    QStyleOptionViewItem item;
-    item.rect = QRect(QPoint(0, 0), rectSize);
-    item.features |= QStyleOptionViewItem::Alternate;
-
-    itemDelegate()->paint(&painter, item, index);
-    dropPixmap = QPixmap::fromImage(sourcePixmap);
-
-    // wm support transparent to draw a shadow effect.
-    if (m_wmHelper->hasComposite()) {
-        QColor shadowColor("#2CA7F8");
-        shadowColor.setAlpha(180);
-        dropPixmap = AppListDelegate::dropShadow(dropPixmap, 50, shadowColor, QPoint(0, 8));
-        dropPixmap.setDevicePixelRatio(ratio);
-    }
-
+    const QPixmap dropPixmap = index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
+    QPoint hotSpot = dropPixmap.rect().center();
     QDrag *drag = new QDrag(this);
     drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
     drag->setPixmap(dropPixmap);
     drag->setHotSpot(hotSpot);
 
     // request remove current item.
-    if (listModel->category() == AppsListModel::All) {
-        m_dropToRow = index.row();
-        listModel->setDraggingIndex(index);
-    }
+    m_dropToRow = index.row();
+    listModel->setDraggingIndex(index);
 
     setState(DraggingState);
     drag->exec(Qt::MoveAction);
@@ -371,8 +347,6 @@ void AppListView::startDrag(const QModelIndex &index)
     // disable auto scroll
     Q_EMIT requestScrollStop();
 
-    if (listModel->category() != AppsListModel::All)
-        return;
 
     if (!m_lastFakeAni) {
         if (m_enableDropInside)

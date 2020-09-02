@@ -62,6 +62,7 @@ AppListView::AppListView(QWidget *parent)
     setSelectionMode(SingleSelection);
     setSpacing(0);
     setContentsMargins(0, 0, 0, 0);
+    setViewportMargins(0, 0, 12, 0);
     setMouseTracking(true);
     setFixedWidth(300);
     verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);

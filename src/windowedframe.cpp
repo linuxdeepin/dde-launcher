@@ -739,7 +739,7 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point)
 bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_leftBar && event->type() == QEvent::Resize) {
-        setFixedSize(m_rightWidget->width() + m_leftBar->width(), 538);
+        setFixedSize(m_rightWidget->width() + m_leftBar->width() - 8, 538);
     }
 
     return QWidget::eventFilter(watched, event);

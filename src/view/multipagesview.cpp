@@ -269,15 +269,18 @@ void MultiPagesView::InitUI()
 
 void MultiPagesView::showCurrentPage(int currentPage)
 {
-    m_pageIndex = currentPage;
-    int endValue = m_appGridViewList[currentPage]->x();
+    //如果切换的页为前一页，则切换到（当前页-1）页
+    int temPageCount = currentPage < m_pageCount ? currentPage : m_pageCount - 1;
+    //如果当前为第一页，则无法再切换
+    m_pageIndex = currentPage > 0 ? temPageCount : 0;
+    int endValue = m_appGridViewList[m_pageIndex]->x();
     int startValue = m_appListArea->horizontalScrollBar()->value();
     m_pageSwitchAnimation->stop();
     m_pageSwitchAnimation->setStartValue(startValue);
     m_pageSwitchAnimation->setEndValue(endValue);
     m_pageSwitchAnimation->start();
 
-    m_pageControl->setCurrent(currentPage);
+    m_pageControl->setCurrent(m_pageIndex);
 }
 
 QModelIndex MultiPagesView::selectApp(const int key)

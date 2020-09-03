@@ -139,6 +139,15 @@ private slots:
     void searchDone(const QStringList &resultList);
     void markLaunched(QString appKey);
     void delayRefreshData();
+    /**
+     * @brief 模糊匹配，反向查询key是否包含list任一个元素
+     * 
+     * @param list 关键字列表
+     * @param key 要模糊匹配的关键词
+     * @return true 表示匹配成功
+     * @return false 表示匹配失败
+     */
+    bool fuzzyMatching(const QStringList& list, const QString& key);
 
 private:
     const ItemInfo createOfCategory(qlonglong category);
@@ -180,6 +189,7 @@ private:
     std::map<std::pair<ItemInfo, int>, int> m_notExistIconMap;
     QStringList m_categoryTs;
     QStringList m_categoryIcon;
+    QGSettings* m_filterSetting = nullptr;
 };
 
 #endif // APPSMANAGER_H

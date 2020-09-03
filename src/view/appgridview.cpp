@@ -152,7 +152,7 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
         m_dragStartPos = e->pos();
 
 
-    if (!indexAt(m_dragStartPos).isValid() && m_pDelegate != nullptr)
+    if (m_pDelegate != nullptr)
         m_pDelegate->mousePress(e);
 
     QListView::mousePressEvent(e);

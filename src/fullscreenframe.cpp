@@ -498,7 +498,9 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton || !m_mouse_press)
         return;
 
-    if (m_mousePos == e->pos()) {
+    int diff_x = qAbs(e->pos().x() - m_mousePos.x());
+    int diff_y = qAbs(e->pos().y() - m_mousePos.y());
+    if (diff_x < 5 && diff_y < 5) { // 小范围位置变化，当作没有变化，针对触摸屏
         hide();
     } else if (m_displayMode == GROUP_BY_CATEGORY){
         qint64 mouse_release_time =  QDateTime::currentDateTime().toMSecsSinceEpoch();

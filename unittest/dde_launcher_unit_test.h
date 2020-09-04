@@ -51,6 +51,8 @@ private slots:
     void case8_testStartManagerDBus();
     //第九个测试单元 测试MonitorInterface
     void case9_testMonitorInterface();
+
+    void checkDbusStartUp();
 };
 
 #endif // LauncherUnitTest_H

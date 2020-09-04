@@ -255,4 +255,24 @@ void LauncherUnitTest::case9_testMonitorInterface()
     qDebug() << QString("Test monitorInterface y:%1").arg(y);
 }
 
+/**
+ * @brief LauncherUnitTest::checkDbusStartUp
+ * 检查启动器通过dbus能否直接启动
+ * 过程先杀掉启动器进程，然后dbus命令显示启动器，再根据进程执行返回值判断是否启动成功
+ * 可以测出问题 dde-launcher 5.3.0.2-1 杀掉启动器进程之后需要按两次super才能打开启动器
+ * bug:https://pms.uniontech.com/zentao/bug-view-41679.html
+ */
+void LauncherUnitTest::checkDbusStartUp()
+{
+    int killCode = QProcess::execute("killall", QStringList() << "dde-launcher");
+
+    int dbusCode = QProcess::execute("dbus-send", QStringList() << "--print-reply"
+                      << "--dest=com.deepin.dde.Launcher"
+                      << "/com/deepin/dde/Launcher" << "com.deepin.dde.Launcher.Toggle");
+
+    qDebug() << "kill code:" << killCode << ", dbus code:" << dbusCode;
+
+    QCOMPARE(dbusCode, 0);
+}
+
 QTEST_MAIN(LauncherUnitTest)

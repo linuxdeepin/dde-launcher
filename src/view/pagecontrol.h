@@ -27,8 +27,9 @@
 #include <DFloatingButton>
 DWIDGET_USE_NAMESPACE
 
-#define     PAGE_ICON_SPACE  10
-#define     PAGE_ICON_SIZE   12
+#define     PAGE_ICON_SPACE  0
+#define     PAGE_ICON_SIZE   10
+#define     PAGE_BUTTON_SIZE 20
 
 class pageControl : public QWidget
 {

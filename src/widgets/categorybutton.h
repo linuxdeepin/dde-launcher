@@ -39,6 +39,7 @@ public:
         Normal,
         Hover,
         Checked,
+        Press,
     };
 
 public:
@@ -51,6 +52,10 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent *event);
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
 
 private:
     void setInfoByCategory();

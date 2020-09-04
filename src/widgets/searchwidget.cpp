@@ -138,6 +138,11 @@ DFloatingButton *SearchWidget::categoryBtn()
     return m_toggleCategoryBtn;
 }
 
+DFloatingButton *SearchWidget::toggleModeBtn()
+{
+    return m_toggleModeBtn;
+}
+
 void SearchWidget::clearSearchContent()
 {
 //    m_searchEdit->normalMode();

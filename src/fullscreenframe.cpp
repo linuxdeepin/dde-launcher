@@ -159,6 +159,18 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_leftScrollDest = nullptr;
     m_rightScrollDest = nullptr;
     m_scrollDest = nullptr;
+
+    QPalette palette;
+    QColor colorButton(255, 255, 255, 0.15 * 255);
+    QColor colorText(255, 255, 255);
+    palette.setColor(QPalette::Button, colorButton);
+    palette.setColor(QPalette::Text,colorText);
+    palette.setColor(QPalette::ButtonText,colorText);
+
+    m_searchWidget->edit()->lineEdit()->setPalette(palette);
+    m_searchWidget->categoryBtn()->setPalette(palette);
+    m_searchWidget->toggleModeBtn()->setPalette(palette);
+
 #if (DTK_VERSION <= DTK_VERSION_CHECK(2, 0, 9, 9))
     setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
 #else
@@ -382,6 +394,13 @@ void FullScreenFrame::showTips(const QString &tips)
         return;
 
     m_tipsLabel->setText(tips);
+    QPalette palette;
+    QColor color(255, 255, 255, 0.5 * 255);
+    QFont font;
+    font.setPointSize(30);
+    palette.setColor(QPalette::WindowText,color);
+    m_tipsLabel->setPalette(palette);
+    m_tipsLabel->setFont(font);
 
     const QPoint center = rect().center() - m_tipsLabel->rect().center();
     m_tipsLabel->move(center);

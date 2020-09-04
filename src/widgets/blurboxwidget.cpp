@@ -92,13 +92,14 @@ void BlurBoxWidget::updateBackgroundImage(const QPixmap &img)
 void BlurBoxWidget::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
-        mousePos = e->pos();
+        mousePos = QCursor::pos();
     }
+    QWidget::mousePressEvent(e);
 }
 
 void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton && e->pos() == mousePos) {
+    if (e->button() == Qt::LeftButton &&  QCursor::pos() == mousePos) {
         AppsListModel::scrollType nType = AppsListModel::FirstShow;
 
         if (m_operationType == otLeft) {
@@ -112,6 +113,7 @@ void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
 
         emit maskClick(m_category, nType);
     }
+    QWidget::mouseReleaseEvent(e);
 }
 
 void BlurBoxWidget::setMaskSize(QSize size)

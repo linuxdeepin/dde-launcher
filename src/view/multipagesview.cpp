@@ -354,6 +354,9 @@ void MultiPagesView::mousePress(QMouseEvent *e)
     m_scrollStart = m_scrollValue;
 
     updateGradient();
+
+    if(m_pageCount == 1)
+        QWidget::mousePressEvent(e);
 }
 
 void MultiPagesView::mouseMove(QMouseEvent *e)
@@ -363,6 +366,9 @@ void MultiPagesView::mouseMove(QMouseEvent *e)
     int nDiff = m_nMousePos - e->x();
     m_scrollValue += nDiff;
     m_appListArea->horizontalScrollBar()->setValue(m_scrollValue);
+
+    if(m_pageCount == 1)
+        QWidget::mouseMoveEvent(e);
 }
 
 void MultiPagesView::mouseRelease(QMouseEvent *e)
@@ -374,7 +380,8 @@ void MultiPagesView::mouseRelease(QMouseEvent *e)
         showCurrentPage(m_pageIndex - 1);
     } else {
         int nScroll = m_appListArea->horizontalScrollBar()->value();
-        if (nScroll == m_scrollStart)
+        //多个分页是点击直接隐藏
+        if (nScroll == m_scrollStart && m_pageCount != 1)
             emit m_appGridViewList[m_pageIndex]->clicked(QModelIndex());
         else if (nScroll - m_scrollStart > DLauncher::MOUSE_MOVE_TO_NEXT)
             showCurrentPage(m_pageIndex + 1);
@@ -387,6 +394,9 @@ void MultiPagesView::mouseRelease(QMouseEvent *e)
 
     m_pLeftGradient->hide();
     m_pRightGradient->hide();
+
+    if(m_pageCount == 1)
+        QWidget::mouseReleaseEvent(e);
 }
 
 // 更新边框渐变，在屏幕变化时需要更新，类别拖动时需要隐藏

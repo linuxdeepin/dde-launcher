@@ -501,7 +501,7 @@ void FullScreenFrame::mousePressEvent(QMouseEvent *e)
 
 void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
 {
-    if (!m_mouse_press  || e->button() == Qt::RightButton || m_displayMode != GROUP_BY_CATEGORY) {
+    if (!m_mouse_press  || e->button() == Qt::RightButton) {
         return;
     }
 

@@ -186,9 +186,14 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
         containerH = containerSize.height() - 20 * scale - DLauncher::DRAG_THRESHOLD;
     }
 
-    //计算每个Item区域的宽高,为免计算时小数产生的偏差而造成显示异常，保留至少有一个像素的左边距和上边距，因此宽高分别减少行列个数
-    int perItemWidth  = (containerW - m_appColumnCount) / m_appColumnCount;
-    int perItemHeight = (containerH - rows) / rows;
+    //默认边距保留最小５像素
+    m_appMarginLeft = 5;
+    m_appMarginTop = 5;
+
+    //去年默认边距后，计算每个Item区域的宽高
+    int perItemWidth  = (containerW - m_appMarginLeft * 2) / m_appColumnCount;
+    int perItemHeight = (containerH - m_appMarginTop) / rows;
+
     //因为每个Item是一个正方形的，所以取宽高中最小的值
     int perItemSize = qMin(perItemHeight,perItemWidth);
 
@@ -196,12 +201,11 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     m_appItemSize = perItemSize * 4 / 5;
     //其他区域为间隔区域
     m_appItemSpacing = (perItemSize - m_appItemSize) / 2;
-    //用间隔区域反算下图标大小
-    m_appItemSize = perItemSize - m_appItemSpacing * 2;
-    //计算左边距
-    m_appMarginLeft = (containerW - m_appItemSize * m_appColumnCount - m_appItemSpacing * m_appColumnCount * 2) / 2;
-    //计算上边距
+
+    //重新计算左右上边距
+    m_appMarginLeft = (containerW - m_appItemSize * m_appColumnCount - m_appItemSpacing * m_appColumnCount * 2) / 2 - 1;
     m_appMarginTop =  (containerH - m_appItemSize * rows - m_appItemSpacing * rows * 2) / 2;
+
     //计算字体大小
     m_appItemFontSize = m_appItemSize <= 80 ? 8 : qApp->font().pointSize() + 3;
 

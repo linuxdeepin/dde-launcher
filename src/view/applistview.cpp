@@ -276,8 +276,8 @@ void AppListView::dragMoveEvent(QDragMoveEvent *e)
     } else {
         Q_EMIT requestScrollStop();
 
-        // rolling without swapping.
-        m_dropThresholdTimer->start();
+        //窗口模式拖动交换位置
+        //m_dropThresholdTimer->start();
     }
 
     // drag move does not allow to have selected effect.

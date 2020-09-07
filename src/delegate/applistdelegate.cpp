@@ -182,6 +182,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // draw category right icon
     if (isCategoryList) {
         const QPixmap &pixmap = index.data(AppsListModel::CategoryEnterIconRole).value<QPixmap>();
+        painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
         painter->drawPixmap(rect.right() - pixmap.width() / ratio,
                             rect.y() + (rect.height() - pixmap.height() / ratio) / 2,
                             pixmap.width() /  ratio,

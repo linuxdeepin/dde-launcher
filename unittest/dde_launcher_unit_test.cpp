@@ -275,4 +275,35 @@ void LauncherUnitTest::checkDbusStartUp()
     QCOMPARE(dbusCode, 0);
 }
 
+/**
+ * @brief LauncherUnitTest::case10_testLauncher
+ * 检查Lanucher接口是否正常，Show,Hide,IsVisible和UninstallApp是否正常
+ */
+void LauncherUnitTest::case10_testLauncher()
+{
+    QDBusInterface inter("com.deepin.dde.Lanucher",
+                         "/com/deepin/dde/Lanucher",
+                         "com.deepin.dde.Lanucher",
+                         QDBusConnection::sessionBus());
+    QVERIFY(inter.isValid());
+
+    inter.call("Hide");
+    QDBusReply<bool> replyHide = inter.call("IsVisible");
+    bool hideVal = replyHide.value();
+    QCOMPARE(hideVal, false);
+
+    inter.call("Show");
+    QDBusReply<bool> replyShow = inter.call("IsVisible");
+    bool showVal = replyShow.value();
+    QCOMPARE(showVal, true);
+
+    inter.call("UninstallApp", "deepin-music");
+    DBusLauncher launcherInterface(this);
+    QVERIFY(launcherInterface.isValid());
+    connect(&launcherInterface, &DBusLauncher::UninstallSuccess, this, [=] (const QString &app) {
+        qDebug() << "uninstall: " << app;
+        QCOMPARE(app, "deepin-music");
+    });
+}
+
 QTEST_MAIN(LauncherUnitTest)

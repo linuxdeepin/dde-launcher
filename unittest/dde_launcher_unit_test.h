@@ -53,6 +53,8 @@ private slots:
     void case9_testMonitorInterface();
 
     void checkDbusStartUp();
+    //测试dde-lanucher接口
+    void case10_testLauncher();
 };
 
 #endif // LauncherUnitTest_H

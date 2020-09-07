@@ -41,7 +41,7 @@
 #include <qpa/qplatformtheme.h>
 
 AppListView::AppListView(QWidget *parent)
-    : QListView(parent)
+    : DListView(parent)
     , m_dropThresholdTimer(new QTimer(this))
     , m_scrollAni(new QPropertyAnimation(verticalScrollBar(), "value"))
     , m_opacityEffect(new QGraphicsOpacityEffect(this))
@@ -220,6 +220,11 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 void AppListView::mouseReleaseEvent(QMouseEvent *e)
 {
     if (QScroller::hasScroller(this)) {
+        int offset = m_lastTouchBeginPos.y() - e->pos().y();
+        m_scrollAni->stop();
+        m_scrollAni->setStartValue(verticalScrollBar()->value());
+        m_scrollAni->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
+        m_scrollAni->start();
         QScroller::scroller(this)->deleteLater();
         return;
     }

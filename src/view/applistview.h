@@ -28,19 +28,20 @@
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
 #include <DWindowManagerHelper>
+#include <DListView>
 
 #define DRAG_SCROLL_THRESHOLD 25
 
 DGUI_USE_NAMESPACE
 
-class AppListView : public QListView
+class AppListView : public Dtk::Widget::DListView
 {
     Q_OBJECT
 
 public:
     explicit AppListView(QWidget *parent = nullptr);
 
-    using QListView::indexAt;
+    using DListView::indexAt;
     const QModelIndex indexAt(const int index) const;
 
 signals:

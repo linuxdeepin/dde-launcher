@@ -453,7 +453,7 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     //XcbMisc::instance()->set_deepin_override(winId());
     // To make sure the window is placed at the right position.
     updateGeometry();
-    //updateBackground();
+    updateBackground();
     updateDockPosition();
 
     // force refresh

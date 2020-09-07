@@ -97,7 +97,7 @@ void BoxFrame::setBlurBackground(const QString &url)
 
 const QPixmap BoxFrame::backgroundPixmap()
 {
-    const QSize &size = qApp->primaryScreen()->size() * qApp->primaryScreen()->devicePixelRatio();
+    const QSize &size = QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height) * qApp->primaryScreen()->devicePixelRatio();
 
     if (m_pixmap.isNull())
         return QPixmap();

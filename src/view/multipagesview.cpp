@@ -374,9 +374,9 @@ void MultiPagesView::mouseMove(QMouseEvent *e)
 void MultiPagesView::mouseRelease(QMouseEvent *e)
 {
     int nDiff = m_nMousePos - e->x();
-    if (nDiff > 0) {
+    if (nDiff > 5) { // 加大范围来避免手指点击触摸屏抖动问题
         showCurrentPage(m_pageIndex + 1);
-    } else if (nDiff < 0) {
+    } else if (nDiff < -5) { // 加大范围来避免手指点击触摸屏抖动问题
         showCurrentPage(m_pageIndex - 1);
     } else {
         int nScroll = m_appListArea->horizontalScrollBar()->value();

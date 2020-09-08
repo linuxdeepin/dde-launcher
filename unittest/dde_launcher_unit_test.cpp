@@ -306,4 +306,22 @@ void LauncherUnitTest::case10_testLauncher()
     });
 }
 
+/**
+ * @brief LauncherUnitTest::checkSendToDesktop
+ * 测试发送到桌面是否正常显示
+ */
+void LauncherUnitTest::checkSendToDesktop()
+{
+   DBusLauncher launcher(this);
+   QString appName = "deepin-music";
+   launcher.RequestSendToDesktop(appName);
+   QTest::qWait(50);
+   bool value = launcher.IsItemOnDesktop(appName);
+   QCOMPARE(value, true);
+   launcher.RequestRemoveFromDesktop(appName);
+   QTest::qWait(50);
+   value = launcher.IsItemOnDesktop(appName);
+   QCOMPARE(value, false);
+}
+
 QTEST_MAIN(LauncherUnitTest)

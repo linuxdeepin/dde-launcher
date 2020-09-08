@@ -55,6 +55,8 @@ private slots:
     void checkDbusStartUp();
     //测试dde-lanucher接口
     void case10_testLauncher();
+    //测试发送到桌面是否正常显示
+    void checkSendToDesktop();
 };
 
 #endif // LauncherUnitTest_H

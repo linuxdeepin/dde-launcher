@@ -52,6 +52,9 @@ signals:
     void requestSwitchToCategory(const QModelIndex &index) const;
     void requestEnter(bool enter) const;
 
+public slots:
+    void menuHide();
+
 protected:
     void wheelEvent(QWheelEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;

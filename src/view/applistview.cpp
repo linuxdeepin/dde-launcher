@@ -486,3 +486,13 @@ void AppListView::dropSwap()
 
     setState(NoState);
 }
+
+void AppListView::menuHide()
+{
+    const QPoint pos = mapFromGlobal(QCursor::pos());
+    const QModelIndex &index = indexAt(pos);
+    if (index.isValid())
+        Q_EMIT entered(index);
+    else
+        Q_EMIT entered(QModelIndex());
+}

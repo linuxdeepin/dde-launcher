@@ -194,7 +194,7 @@ void LauncherUnitTest::case5_testLauncherDBus()
 
 void LauncherUnitTest::case6_testMenuDBus()
 {
-    DBusMenu menuInterface("com.deepin.menu.Menu","/com/deepin/menu/Menu",QDBusConnection::sessionBus(),this);
+    DBusMenu menuInterface("com.deepin.menu.Menu", "/com/deepin/menu/Menu", QDBusConnection::sessionBus(), this);
     QVERIFY(menuInterface.isValid());
 }
 
@@ -212,7 +212,7 @@ void LauncherUnitTest::case8_testStartManagerDBus()
 
 void LauncherUnitTest::case9_testMonitorInterface()
 {
-    MonitorInterface monitorInterface("/com/deepin/daemon/Display",this);
+    MonitorInterface monitorInterface("/com/deepin/daemon/Display", this);
     QVERIFY(monitorInterface.isValid());
 
     MonitorMode bestMode = monitorInterface.bestMode();
@@ -255,6 +255,39 @@ void LauncherUnitTest::case9_testMonitorInterface()
     qDebug() << QString("Test monitorInterface y:%1").arg(y);
 }
 
+
+/**
+ * @brief LauncherUnitTest::case10_testMonitorInterface
+ * 测试启动器的位置是否正确,有时候启动器不知道在哪里
+ *
+ */
+void LauncherUnitTest::case10_testMonitorInterface()
+{
+    DBusDock dockInterface(this);
+    QRect r = dockInterface.frontendRect();
+    qDebug() << "frontendRect:" << r;
+    //时尚模式
+    if (dockInterface.position() != 1) {
+        if (dockInterface.displayMode() == 1) {
+            QCOMPARE(r.x(), 0);
+        } else {
+            QCOMPARE(r.x(), 10);
+        }
+    } else {
+        //dock右侧
+        if (dockInterface.displayMode() == 1) {
+            QCOMPARE(r.y(), 0);
+        } else {
+            QCOMPARE(r.y(), 10);
+        }
+    }
+
+    if (r == QRect(0, 0, 0, 0)) {
+        QFAIL("dock pos error");
+    }
+
+}
+
 /**
  * @brief LauncherUnitTest::checkDbusStartUp
  * 检查启动器通过dbus能否直接启动
@@ -267,8 +300,8 @@ void LauncherUnitTest::checkDbusStartUp()
     int killCode = QProcess::execute("killall", QStringList() << "dde-launcher");
 
     int dbusCode = QProcess::execute("dbus-send", QStringList() << "--print-reply"
-                      << "--dest=com.deepin.dde.Launcher"
-                      << "/com/deepin/dde/Launcher" << "com.deepin.dde.Launcher.Toggle");
+                                     << "--dest=com.deepin.dde.Launcher"
+                                     << "/com/deepin/dde/Launcher" << "com.deepin.dde.Launcher.Toggle");
 
     qDebug() << "kill code:" << killCode << ", dbus code:" << dbusCode;
 

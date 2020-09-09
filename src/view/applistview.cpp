@@ -161,9 +161,7 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
 
     if (qAbs(pos.x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
         qAbs(pos.y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
-        m_dragStartPos = e->pos();
-        m_dragStartRow = index.row();
-        return startDrag(index);
+        return startDrag(indexAt(m_dragStartPos));
     }
 
     QListView::mouseMoveEvent(e);
@@ -171,9 +169,10 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
 
 void AppListView::mousePressEvent(QMouseEvent *e)
 {
-    if (e->source() == Qt::MouseEventSynthesizedByQt) {
-        m_lastTouchBeginPos = e->pos();
+    m_lastTouchBeginPos = e->pos();
+    m_dragStartPos = e->pos();
 
+    if (e->source() == Qt::MouseEventSynthesizedByQt) {
         if (m_updateEnableSelectionByMouseTimer) {
             m_updateEnableSelectionByMouseTimer->stop();
         }
@@ -209,7 +208,6 @@ void AppListView::mousePressEvent(QMouseEvent *e)
         if (isCategoryList) {
             return;
         } else {
-            m_dragStartPos = e->pos();
             m_dragStartRow = indexAt(e->pos()).row();
         }
     }

@@ -1627,6 +1627,7 @@ void FullScreenFrame::layoutChanged()
         for (int i = AppsListModel::Internet; i <= AppsListModel::Others; i++) {
             AppsListModel::AppCategory appCategory = AppsListModel::AppCategory(i);
             BlurBoxWidget * boxWidget = getCategoryBoxWidget(appCategory);
+            getCategoryGridViewList(AppsListModel::AppCategory(i))->updatePageCount(AppsListModel::AppCategory(i));
             boxWidget->setFixedSize(boxSize);
         }
 

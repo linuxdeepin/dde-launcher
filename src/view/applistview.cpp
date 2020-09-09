@@ -115,6 +115,7 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
 {
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         if (QScroller::hasScroller(this)) {
+            emit requestEnter(false);
             return;
         }
 
@@ -173,6 +174,7 @@ void AppListView::mousePressEvent(QMouseEvent *e)
     m_dragStartPos = e->pos();
 
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
+        emit requestEnter(true);
         if (m_updateEnableSelectionByMouseTimer) {
             m_updateEnableSelectionByMouseTimer->stop();
         }
@@ -381,8 +383,7 @@ void AppListView::handleScrollFinished()
 {
     blockSignals(false);
 
-    QPoint pos = mapFromGlobal(QCursor::pos());
-    emit entered(indexAt(pos));
+    emit requestEnter(false);
 }
 
 void AppListView::prepareDropSwap()

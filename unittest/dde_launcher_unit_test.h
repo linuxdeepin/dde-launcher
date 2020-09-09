@@ -59,6 +59,8 @@ private slots:
     void case10_testLauncher();
     //测试发送到桌面是否正常显示
     void checkSendToDesktop();
+    //测试gsetting配置的默认值，需要新建账户或重装镜像进行测试
+    void check_gsettings_default();
 };
 
 #endif // LauncherUnitTest_H

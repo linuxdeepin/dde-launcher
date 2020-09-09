@@ -25,6 +25,7 @@
 #include <QDBusMetaType>
 #include <QDBusMessage>
 #include <QDBusArgument>
+#include <QGSettings>
 
 #include "src/dbusinterface/dbuslauncherframe.h"
 #include "src/dbusinterface/dbusdisplay.h"
@@ -333,7 +334,7 @@ void LauncherUnitTest::case10_testLauncher()
     inter.call("UninstallApp", "deepin-music");
     DBusLauncher launcherInterface(this);
     QVERIFY(launcherInterface.isValid());
-    connect(&launcherInterface, &DBusLauncher::UninstallSuccess, this, [=] (const QString &app) {
+    connect(&launcherInterface, &DBusLauncher::UninstallSuccess, this, [ = ](const QString & app) {
         qDebug() << "uninstall: " << app;
         QCOMPARE(app, "deepin-music");
     });
@@ -345,16 +346,42 @@ void LauncherUnitTest::case10_testLauncher()
  */
 void LauncherUnitTest::checkSendToDesktop()
 {
-   DBusLauncher launcher(this);
-   QString appName = "deepin-music";
-   launcher.RequestSendToDesktop(appName);
-   QTest::qWait(50);
-   bool value = launcher.IsItemOnDesktop(appName);
-   QCOMPARE(value, true);
-   launcher.RequestRemoveFromDesktop(appName);
-   QTest::qWait(50);
-   value = launcher.IsItemOnDesktop(appName);
-   QCOMPARE(value, false);
+    DBusLauncher launcher(this);
+    QString appName = "deepin-music";
+    launcher.RequestSendToDesktop(appName);
+    QTest::qWait(50);
+    bool value = launcher.IsItemOnDesktop(appName);
+    QCOMPARE(value, true);
+    launcher.RequestRemoveFromDesktop(appName);
+    QTest::qWait(50);
+    value = launcher.IsItemOnDesktop(appName);
+    QCOMPARE(value, false);
 }
 
+/**
+ * @brief LauncherUnitTest::check_gsettings_default
+ * 验证启动器的默认配置值是否正确，后续如果还有类似验证，应一并放到这里
+ * 1.图标默认大小比例为0.5
+ * 2.全屏模式的排序模式：默认为free自由排序模式
+ * 3.显示模式：默认为false窗口模式
+ */
+void LauncherUnitTest::check_gsettings_default()
+{
+    QGSettings setting("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
+    if (setting.keys().contains("appsIconRatio")) {
+        double ratio = setting.get("apps-icon-ratio").toDouble();
+        QVERIFY(qAbs(ratio - 0.5) < 0.000001);
+    }
+
+    // 0 free, 1 category
+    if (setting.keys().contains("displayMode")) {
+        double ratio = setting.get("display-mode").toInt();
+        QCOMPARE(ratio, 0);
+    }
+
+    if (setting.keys().contains("fullscreen")) {
+        double ratio = setting.get("fullscreen").toBool();
+        QCOMPARE(ratio, false);
+    }
+}
 QTEST_MAIN(LauncherUnitTest)

@@ -29,7 +29,6 @@
 #include <QMouseEvent>
 #include "src/global_util/calculate_util.h"
 
-
 class QPropertyAnimation;
 
 class CategoryTitleWidget : public QFrame
@@ -45,6 +44,7 @@ public:
 
     qreal titleOpacity() const;
     void setTitleOpacity(const qreal &titleOpacity);
+    void updatePosition(const QPoint pos, int w, int posType);
 
 public slots:
     void setTextVisible(const bool visible, const bool animation = false);

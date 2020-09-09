@@ -66,6 +66,7 @@ void pageControl::UpdateIconSize(double scaleX, double scaleY)
         pageButton->setIconSize(QSize(PAGE_ICON_SIZE * scale, PAGE_ICON_SIZE * scale));
         pageButton->setFixedSize(QSize(PAGE_BUTTON_SIZE * scale, PAGE_BUTTON_SIZE * scale));
     }
+    setFixedHeight(PAGE_BUTTON_SIZE * scale);
 }
 
 void pageControl::addButton()
@@ -74,7 +75,7 @@ void pageControl::addButton()
     pageButton->setIcon(m_iconNormal);
     pageButton->setAccessibleName("thisPageButton");
     pageButton->setIconSize(QSize(PAGE_ICON_SIZE, PAGE_ICON_SIZE));
-    pageButton->setFixedSize(QSize(PAGE_ICON_SIZE, PAGE_ICON_SIZE));
+    pageButton->setFixedSize(QSize(PAGE_BUTTON_SIZE, PAGE_BUTTON_SIZE));
     pageButton->setBackgroundRole(DPalette::Button);
     pageButton->setAutoExclusive(true);
     pageButton->setFocusPolicy(Qt::NoFocus);

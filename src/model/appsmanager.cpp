@@ -1171,6 +1171,22 @@ const QScreen *AppsManager::currentScreen()
             return  screen;
         }
     }
-    return nullptr;
+
+    return qApp->primaryScreen();
+}
+
+int AppsManager::getVisibleCategoryCount()
+{
+    int ret = 0;
+
+    for (int i = AppsListModel::Internet; i <= AppsListModel::Others; i++) {
+        AppsListModel::AppCategory appCategory = AppsListModel::AppCategory(i);
+
+        if (appsInfoListSize(appCategory) > 0) {
+            ret++;
+        }
+    }
+
+    return ret;
 }
 

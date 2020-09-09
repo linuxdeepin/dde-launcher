@@ -43,13 +43,13 @@ public:
 
     void updateSize();
 signals:
-    void scrollToCategory(const AppsListModel::AppCategory category, AppsListModel::scrollType nType) const;
+    void scrollToCategory(const AppsListModel::AppCategory oldCategory, const AppsListModel::AppCategory newCategory) const;
     void mouseEntered();
 
 public slots:
     void setCurrentCategory(const AppsListModel::AppCategory category);
     void setCancelCurrentCategory(const AppsListModel::AppCategory category);
-    void refershCategoryVisible(const AppsListModel::AppCategory category, const int appNums);
+    void refershCategoryVisible(const AppsListModel::AppCategory category, const bool visible);
 
 protected:
     void enterEvent(QEvent *e);
@@ -76,6 +76,7 @@ private:
     CategoryButton *m_developmentBtn;
     CategoryButton *m_systemBtn;
     CategoryButton *m_othersBtn;
+    AppsListModel::AppCategory m_currentCategory;
 };
 
 #endif // NAVIGATIONWIDGET_H

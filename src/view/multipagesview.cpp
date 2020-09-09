@@ -37,7 +37,6 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     , m_calcUtil(CalculateUtil::instance())
     , m_appListArea(new AppListArea)
     , m_viewBox(new DHBoxWidget)
-    , m_pageLayout(new QHBoxLayout)
     , m_pageControl(new pageControl)
 {
     m_bDragStart = false;
@@ -67,6 +66,8 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     // 翻页按钮和动画
     m_pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value");
     m_pageSwitchAnimation->setEasingCurve(QEasingCurve::OutQuad);
+
+    InitUI();
 
     connect(m_appListArea, &AppListArea::increaseIcon, this, [ = ] { m_calcUtil->increaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
     connect(m_appListArea, &AppListArea::decreaseIcon, this, [ = ] { m_calcUtil->decreaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
@@ -214,7 +215,6 @@ QModelIndex MultiPagesView::getAppItem(int index)
 void MultiPagesView::setDataDelegate(QAbstractItemDelegate *delegate)
 {
     m_delegate = delegate;
-    InitUI();
 }
 
 void MultiPagesView::ShowPageView(AppsListModel::AppCategory category)
@@ -240,15 +240,11 @@ void MultiPagesView::setModel(AppsListModel::AppCategory category)
 void MultiPagesView::updatePosition()
 {
     m_pageControl->UpdateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
-    QSize boxSize;
-    boxSize.setWidth(width());
-    boxSize.setHeight(m_appListArea->height() - m_pageControl->height());
-    m_viewBox->setFixedHeight(m_appListArea->height() - m_pageControl->height());
-    if (m_category >= AppsListModel::Internet) {
-        boxSize.setHeight(m_calcUtil->getAppBoxSize().height());
-    }
+    QSize tmpSize = size() - QSize(0,m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
+    m_appListArea->setFixedSize(tmpSize);
+    m_viewBox->setFixedHeight(tmpSize.height());
     for (auto *pView : m_appGridViewList)
-        pView->setFixedSize(boxSize);
+        pView->setFixedSize(tmpSize);
 
     showCurrentPage(0);
 }
@@ -258,13 +254,13 @@ void MultiPagesView::InitUI()
     m_viewBox->setAttribute(Qt::WA_TranslucentBackground);
     m_appListArea->setWidget(m_viewBox);
 
-    m_pageLayout->addWidget(m_pageControl, 0, Qt::AlignCenter);
+    m_pageControl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     QVBoxLayout *layoutMain = new QVBoxLayout;
     layoutMain->setContentsMargins(0, 0, 0, DLauncher::DRAG_THRESHOLD);
     layoutMain->setSpacing(0);
-    layoutMain->addWidget(m_appListArea);
-    layoutMain->addLayout(m_pageLayout);
+    layoutMain->addWidget(m_appListArea,0,Qt::AlignHCenter);
+    layoutMain->addWidget(m_pageControl,0,Qt::AlignHCenter);
 
     setLayout(layoutMain);
 }

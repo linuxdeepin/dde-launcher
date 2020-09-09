@@ -51,17 +51,22 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     m_blurBackground->setMaskAlpha(DLauncher::APPHBOX_ALPHA);
     m_blurBackground->setBlurRectXRadius(DLauncher::APPHBOX_RADIUS);
     m_blurBackground->setBlurRectYRadius(DLauncher::APPHBOX_RADIUS);
+    m_blurBackground->raise();
     m_blurGroup->addWidget(m_blurBackground);
+
+    m_categoryTitle->setGraphicsEffect(m_titleOpacityEffect);
+    m_categoryTitle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_categoryTitle->setFixedHeight(60);
 
     m_vLayout->setContentsMargins(0, 24, 0, 0);
     m_vLayout->setAlignment(Qt::AlignTop);
     layoutAddWidget(m_categoryTitle, m_calcUtil->getAppBoxSize().width() / 2, Qt::AlignHCenter);
     m_vLayout->addWidget(m_categoryMultiPagesView);
     m_categoryMultiPagesView->setGraphicsEffect(m_pagesOpacityEffect);
-    m_categoryTitle->setGraphicsEffect(m_titleOpacityEffect);
 
     m_bg->setFixedSize(m_calcUtil->getAppBoxSize());
     m_bg->setColor(new QColor(255,255,255,25));
+    m_bg->lower();
 }
 
 void BlurBoxWidget::layoutAddWidget(QWidget *child)
@@ -100,29 +105,18 @@ void BlurBoxWidget::mousePressEvent(QMouseEvent *e)
 void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton &&  QCursor::pos() == mousePos) {
-        AppsListModel::scrollType nType = AppsListModel::FirstShow;
-
-        if (m_operationType == otLeft) {
-            nType = AppsListModel::ScrollLeft;
-        } else if ( m_operationType == otRight) {
-            nType = AppsListModel::ScrollRight;
-        } else {
-            emit hideLauncher();
-            return;
-        }
-
-        emit maskClick(m_category, nType);
+        emit maskClick(m_category);
     }
+
     QWidget::mouseReleaseEvent(e);
 }
 
 void BlurBoxWidget::setMaskSize(QSize size)
 {
-    m_bg->setFixedSize(this->size()+QSize(0,8));
-	setFixedWidth(size.width());
+    m_bg->setFixedSize(size);
     m_maskLayer->setFixedSize(size);
     m_maskLayer->raise();
-    m_blurBackground->setFixedSize(this->size());
+    m_blurBackground->setFixedSize(size);
 }
 
 void BlurBoxWidget::setDataDelegate(QAbstractItemDelegate *delegate)
@@ -137,13 +131,25 @@ void BlurBoxWidget::setBlurBgVisible(bool visible)
     m_blurBackground->setVisible(visible);
 }
 
+void BlurBoxWidget::setFixedSize(const QSize &size)
+{
+    QWidget::setFixedSize(size);
+    setMaskSize(size);
+    m_categoryTitle->setFixedWidth(size.width());
+    m_categoryMultiPagesView->setFixedSize(size - QSize(0,m_categoryTitle->height() + 24));
+    m_categoryMultiPagesView->updatePosition();
+}
+
 void BlurBoxWidget::setMaskVisible(bool visible)
 {
-    m_maskLayer->setVisible(visible);
     double opacity = 0.3;
     visible? opacity= 0.3:opacity= 0.99;
     m_titleOpacityEffect->setOpacity(opacity);
     m_pagesOpacityEffect->setOpacity(opacity);
+
+    if (visible) {
+        m_maskLayer->raise();
+    } else {
+        m_maskLayer->lower();
+    }
 }
-
-

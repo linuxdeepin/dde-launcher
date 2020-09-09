@@ -190,7 +190,7 @@ void SearchWidget::updateCurrentCategoryBtnIcon()
         m_toggleCategoryBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     } else {
         m_toggleCategoryBtn->setIcon(QIcon(":/icons/skin/icons/category_hover_22pxnew.svg"));
-        m_toggleCategoryBtn->setIconSize(QSize(ICON_SIZE -  10, ICON_SIZE - 10));
+        m_toggleCategoryBtn->setIconSize(QSize(ICON_SIZE - 10, ICON_SIZE - 10));
     }
 }
 

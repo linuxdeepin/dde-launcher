@@ -315,22 +315,22 @@ void MiniFrameRightBar::hideAllHoverState() const
 void MiniFrameRightBar::updateIcon()
 {
     if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
-        m_settingsBtn->setIcon(QIcon(":/widgets/images/setting_dark.svg"));
-        m_powerBtn->setIcon(QIcon(":/widgets/images/shutdown_dark.svg"));
-        m_computerBtn->setIcon(QIcon(":/widgets/images/computer-symbolic_dark.svg"));
-        m_videoBtn->setIcon(QIcon(":/widgets/images/folder-videos-symbolic_dark.svg"));
-        m_musicBtn->setIcon(QIcon(":/widgets/images/folder-music-symbolic_dark.svg"));
-        m_pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic_dark.svg"));
-        m_documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic_dark.svg"));
-        m_downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic_dark.svg"));
-    } else {
-        m_settingsBtn->setIcon(QIcon(":/widgets/images/setting.svg"));
-        m_powerBtn->setIcon(QIcon(":/widgets/images/shutdown.svg"));
-        m_computerBtn->setIcon(QIcon(":/widgets/images/computer-symbolic.svg"));
-        m_videoBtn->setIcon(QIcon(":/widgets/images/folder-videos-symbolic.svg"));
-        m_musicBtn->setIcon(QIcon(":/widgets/images/folder-music-symbolic.svg"));
-        m_pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic.svg"));
-        m_documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic.svg"));
-        m_downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic.svg"));
-    }
+         m_settingsBtn->setIcon(QIcon(":/widgets/images/setting_dark.svg"));
+         m_powerBtn->setIcon(QIcon(":/widgets/images/shutdown_dark.svg"));
+         m_computerBtn->setIcon(QIcon(":/widgets/images/computer-symbolic_dark.svg"));
+         m_videoBtn->setIcon(QIcon(":/widgets/images/folder-videos-symbolic_dark.svg"));
+         m_musicBtn->setIcon(QIcon(":/widgets/images/folder-music-symbolic_dark.svg"));
+         m_pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic_dark.svg"));
+         m_documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic_dark.svg"));
+         m_downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic_dark.svg"));
+     } else {
+         m_settingsBtn->setIcon(QIcon(":/widgets/images/setting.svg"));
+         m_powerBtn->setIcon(QIcon(":/widgets/images/shutdown.svg"));
+         m_computerBtn->setIcon(QIcon(":/widgets/images/computer-symbolic.svg"));
+         m_videoBtn->setIcon(QIcon(":/widgets/images/folder-videos-symbolic.svg"));
+         m_musicBtn->setIcon(QIcon(":/widgets/images/folder-music-symbolic.svg"));
+         m_pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic.svg"));
+         m_documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic.svg"));
+         m_downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic.svg"));
+     }
 }

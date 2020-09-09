@@ -60,16 +60,17 @@ public:
     MultiPagesView *getMultiPagesView();
     void updateBackBlurPos(QPoint p);
     void updateBackgroundImage(const QPixmap & img);
-
     void setBlurBgVisible(bool visible);
     void setOperationType(OperationType operType) { m_operationType = operType;}
+    void setFixedSize(const QSize &size);
+    CategoryTitleWidget *categoryTitle() { return m_categoryTitle;}
+
 signals:
-    void maskClick(AppsListModel::AppCategory m_category, AppsListModel::scrollType nType);
-    void hideLauncher();
+    void maskClick(AppsListModel::AppCategory appCategory);
 
 protected:
-    void mousePressEvent(QMouseEvent *e)Q_DECL_OVERRIDE;
-    void mouseReleaseEvent(QMouseEvent *e)Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
 
 private:
     QPoint mousePos;

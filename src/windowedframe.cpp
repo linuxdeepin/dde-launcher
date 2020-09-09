@@ -821,7 +821,6 @@ void WindowedFrame::adjustPosition()
         Q_UNREACHABLE_IMPL();
     }
 
-    qDebug() << "currentWindowedFrame Position:"<< p;
     initAnchoredCornor();
     move(p);
 }

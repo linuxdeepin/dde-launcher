@@ -92,9 +92,10 @@ AppGridView::AppGridView(QWidget *parent)
     viewport()->setAutoFillBackground(false);
 
     // update item spacing
-    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] { setSpacing(m_calcUtil->appItemSpacing());
-                                                                      setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), 0, 0);
-                                                                    });
+    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] { 
+        setSpacing(m_calcUtil->appItemSpacing());
+        setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), m_calcUtil->appMarginLeft(), 0);
+    });
 
 #ifndef DISABLE_DRAG_ANIMATION
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::prepareDropSwap);

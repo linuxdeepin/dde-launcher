@@ -220,10 +220,16 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 void AppListView::mouseReleaseEvent(QMouseEvent *e)
 {
     if (QScroller::hasScroller(this)) {
+        QDBusInterface inPutInter("com.deepin.daemon.InputDevices",
+                             "/com/deepin/daemon/InputDevices",
+                             "com.deepin.daemon.InputDevices",
+                             QDBusConnection::sessionBus() ,this);
+
+        const auto wheelSpeed = inPutInter.property("WheelSpeed").toInt();
         int offset = m_lastTouchBeginPos.y() - e->pos().y();
         m_scrollAni->stop();
         m_scrollAni->setStartValue(verticalScrollBar()->value());
-        m_scrollAni->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
+        m_scrollAni->setEndValue(verticalScrollBar()->value() + offset * wheelSpeed);
         m_scrollAni->start();
         QScroller::scroller(this)->deleteLater();
         return;

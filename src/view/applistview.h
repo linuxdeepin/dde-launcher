@@ -27,6 +27,7 @@
 #include <QListView>
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
+#include <QDBusInterface>
 #include <DWindowManagerHelper>
 #include <DListView>
 

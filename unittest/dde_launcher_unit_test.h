@@ -61,6 +61,11 @@ private slots:
     void checkSendToDesktop();
     //测试gsetting配置的默认值，需要新建账户或重装镜像进行测试
     void check_gsettings_default();
+    /**
+     * @brief check_toggleLauncher
+     * 测试切换窗口模式
+     */
+    void check_toggleLauncher();
 };
 
 #endif // LauncherUnitTest_H

@@ -384,4 +384,34 @@ void LauncherUnitTest::check_gsettings_default()
         QCOMPARE(ratio, false);
     }
 }
+
+void LauncherUnitTest::check_toggleLauncher()
+{
+    QDBusInterface launcherBusInter("com.deepin.dde.daemon.Launcher"
+                            ,"/com/deepin/dde/daemon/Launcher"
+                            ,"org.freedesktop.DBus.Properties"
+                            ,QDBusConnection::sessionBus(), this);
+
+    QDBusReply<QVariant> reply = launcherBusInter.call("Get", "com.deepin.dde.daemon.Launcher", "Fullscreen");
+
+    bool fullScreen = QVariant(reply).toBool();
+    if (fullScreen == false) {
+        launcherBusInter.call("Set", "com.deepin.dde.daemon.Launcher", "Fullscreen", true);
+        QTest::qWait(100);
+
+        QDBusReply<QVariant> replyGetFullscreen = launcherBusInter.call("Get", "com.deepin.dde.daemon.Launcher", "Fullscreen");
+        fullScreen = QVariant(replyGetFullscreen).toBool();
+
+        QCOMPARE(fullScreen, true);
+    } else {
+        launcherBusInter.call("Set", "com.deepin.dde.daemon.Launcher", "Fullscreen", false);
+        QTest::qWait(100);
+
+        QDBusReply<QVariant> replyGetFullscreen = launcherBusInter.call("Get", "com.deepin.dde.daemon.Launcher", "Fullscreen");
+        fullScreen = QVariant(replyGetFullscreen).toBool();
+
+        QCOMPARE(fullScreen, false);
+    }
+}
+
 QTEST_MAIN(LauncherUnitTest)

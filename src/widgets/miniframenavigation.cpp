@@ -27,6 +27,7 @@
 #include <QProcess>
 #include <QSignalMapper>
 #include <QPainter>
+#include <QPainterPath>
 
 #include <DDesktopServices>
 
@@ -37,6 +38,7 @@
 #endif
 
 #include <unistd.h>
+
 
 DWIDGET_USE_NAMESPACE
 #ifdef DUTIL_NAMESPACE

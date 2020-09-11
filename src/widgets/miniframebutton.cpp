@@ -6,6 +6,7 @@
 #include <QDesktopWidget>
 #include <DGuiApplicationHelper>
 #include <QPainter>
+#include <QPainterPath>
 
 DGUI_USE_NAMESPACE
 

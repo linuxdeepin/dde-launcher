@@ -43,11 +43,11 @@
 AppListView::AppListView(QWidget *parent)
     : DListView(parent)
     , m_dropThresholdTimer(new QTimer(this))
+    , m_touchMoveFlag(false)
     , m_scrollAni(new QPropertyAnimation(verticalScrollBar(), "value"))
     , m_opacityEffect(new QGraphicsOpacityEffect(this))
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_updateEnableSelectionByMouseTimer(nullptr)
-    , m_touchMoveFlag(false)
 {
     this->setAccessibleName("Form_AppList");
     viewport()->setAutoFillBackground(false);

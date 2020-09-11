@@ -644,7 +644,7 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
     int diff_x = qAbs(e->pos().x() - m_mouse_press_pos.x());
     int diff_y = qAbs(e->pos().y() - m_mouse_press_pos.y());
     // 小范围位置变化，当作没有变化，针对触摸屏
-    if (diff_x < 5 && diff_y < 5 && !m_scrollBox) {
+    if (diff_x < DLauncher::TOUCH_DIFF_THRESH && diff_y < DLauncher::TOUCH_DIFF_THRESH && !m_scrollBox) {
         hide();
     } else if (m_displayMode == GROUP_BY_CATEGORY){
         qint64 mouse_release_time =  QDateTime::currentDateTime().toMSecsSinceEpoch();

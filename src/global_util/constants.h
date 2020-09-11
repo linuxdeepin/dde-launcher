@@ -73,6 +73,7 @@ static const int MOUSE_PRESS_TIME_DIFF = 300;
 
 static const int MOUSE_MOVE_TO_NEXT= 200;
 
+static const int TOUCH_DIFF_THRESH = 15;
 }
 
 #endif // CONSTANTS_H

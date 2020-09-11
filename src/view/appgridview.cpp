@@ -171,7 +171,10 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::RightButton) {
         QPoint rightClickPoint = mapToGlobal(e->pos());
         //菜单整体向下偏移
-        rightClickPoint.setY(rightClickPoint.y() + 10);
+        if (e->source() == Qt::MouseEventSynthesizedByQt) // 处理触摸屏右键菜单
+            rightClickPoint.setY(rightClickPoint.y() + 30);
+        else
+            rightClickPoint.setY(rightClickPoint.y() + 10); // 鼠标右键菜单
 
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
         if (clickedIndex.isValid())

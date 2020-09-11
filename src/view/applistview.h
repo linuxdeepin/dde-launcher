@@ -82,6 +82,7 @@ private:
     QPoint m_dragStartPos;
     QTimer *m_dropThresholdTimer;
     bool m_enableDropInside = false;
+    bool m_touchMoveFlag; // 代表触摸屏移动操作
 
     QPropertyAnimation *m_lastFakeAni = nullptr;
     QPropertyAnimation *m_scrollAni;

@@ -47,6 +47,7 @@ AppListView::AppListView(QWidget *parent)
     , m_opacityEffect(new QGraphicsOpacityEffect(this))
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_updateEnableSelectionByMouseTimer(nullptr)
+    , m_touchMoveFlag(false)
 {
     this->setAccessibleName("Form_AppList");
     viewport()->setAutoFillBackground(false);
@@ -114,8 +115,8 @@ void AppListView::wheelEvent(QWheelEvent *e)
 void AppListView::mouseMoveEvent(QMouseEvent *e)
 {
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
+        m_touchMoveFlag = true;
         if (QScroller::hasScroller(this)) {
-            emit requestEnter(false);
             return;
         }
 
@@ -139,6 +140,9 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
             }
             return;
         }
+    } else {
+        if (m_touchMoveFlag == false)
+            emit requestEnter(true);
     }
 
     setState(NoState);
@@ -175,6 +179,7 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         emit requestEnter(true);
+        m_scrollAni->stop();
         if (m_updateEnableSelectionByMouseTimer) {
             m_updateEnableSelectionByMouseTimer->stop();
         }
@@ -375,6 +380,9 @@ void AppListView::startDrag(const QModelIndex &index)
 
 void AppListView::handleScrollValueChanged()
 {
+    if (m_touchMoveFlag)
+        emit requestEnter(false);
+
     QScrollBar *vscroll = verticalScrollBar();
 
     if (vscroll->value() == vscroll->maximum() ||
@@ -388,8 +396,10 @@ void AppListView::handleScrollValueChanged()
 void AppListView::handleScrollFinished()
 {
     blockSignals(false);
-
-    emit requestEnter(false);
+    if (m_touchMoveFlag) {
+        emit requestEnter(false);
+        m_touchMoveFlag = false;
+    }
 }
 
 void AppListView::prepareDropSwap()

@@ -960,8 +960,6 @@ void FullScreenFrame::updateGeometry()
 ///
 void FullScreenFrame::moveCurrentSelectApp(const int key)
 {
-    //Prevent the application from being added or uninstalled. Each time you go to get the total number
-    m_appNum = m_appsManager->GetAllAppNum();
     if (Qt::Key_Tab == key || Qt::Key_Backtab == key) {
         nextTabWidget(key);
         return;
@@ -1006,9 +1004,6 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     const QModelIndex currentIndex = m_appItemDelegate->currentIndex();
     // move operation should be start from a valid location, if not, just init it.
     if (!currentIndex.isValid()) {
-        if (m_currentCategory < AppsListModel::Internet)
-            m_currentCategory = AppsListModel::Internet;
-
         if (m_displayMode == GROUP_BY_CATEGORY)
             m_appItemDelegate->setCurrentIndex(getCategoryGridViewList(m_currentCategory)->getAppItem(0));
         else
@@ -1020,32 +1015,14 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
 
     const int column = m_calcUtil->appColumnCount();
     QModelIndex index;
+
     // calculate destination sibling by keys, it may cause an invalid position.
     switch (key) {
     case Qt::Key_Backtab:
-    // When it is in the first one, another operation will let you select the last app
-    case Qt::Key_Left:      index = currentIndex.sibling((currentIndex.row() == FIRST_APP_INDEX ? m_appNum : currentIndex.row()) - 1, 0);       break;
-    case Qt::Key_Tab:
-    //When it is at the end, another operation will let you select the first app
-    case Qt::Key_Right:     index = currentIndex.sibling( (currentIndex.row() + 1) == m_appNum ? FIRST_APP_INDEX : currentIndex.row() + 1, 0);        break;
-    case Qt::Key_Up:
-        if( currentIndex.row() - column < 0 && currentIndex.row() > FIRST_APP_INDEX ) {
-            index = currentIndex.sibling(FIRST_APP_INDEX, 0);
-        } else if( currentIndex.row() == FIRST_APP_INDEX ) {
-            index = currentIndex.sibling(m_appNum - 1, 0);
-        } else {
-            index = currentIndex.sibling(currentIndex.row() - column, 0);
-        }
-        break;
-    case Qt::Key_Down:
-        if( currentIndex.row() + column > m_appNum - 1 && currentIndex.row() < m_appNum - 1 ) {
-            index = currentIndex.sibling(m_appNum - 1, 0);
-        } else if(currentIndex.row() == m_appNum - 1) {
-            index = currentIndex.sibling(FIRST_APP_INDEX, 0);
-        } else {
-            index = currentIndex.sibling(currentIndex.row() + column, 0);
-        }
-        break;
+    case Qt::Key_Left:      index = currentIndex.sibling(currentIndex.row() - 1, 0); break;
+    case Qt::Key_Right:    index = currentIndex.sibling(currentIndex.row() + 1, 0); break;
+    case Qt::Key_Up:        index = currentIndex.sibling(currentIndex.row() - column, 0); break;
+    case Qt::Key_Down:   index = currentIndex.sibling(currentIndex.row() + column, 0); break;
     default:;
     }
 
@@ -1060,10 +1037,6 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         if (index.isValid())
             break;
 
-        // the column number of destination, when moving up/down, columns shouldn't be changed.
-        //const int realColumn = currentIndex.row() % column;
-
-       // const AppsListModel *model = static_cast<const AppsListModel *>(currentIndex.model());
         int nAppIndex = 0;
 
         if (key == Qt::Key_Down || key == Qt::Key_Right) {
@@ -1091,7 +1064,6 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     // valid verify and UI adjustment.
     const QModelIndex selectedIndex = index.isValid() ? index : currentIndex;
     m_appItemDelegate->setCurrentIndex(selectedIndex);
-    //    ensureItemVisible(selectedIndex);
     update();
 }
 

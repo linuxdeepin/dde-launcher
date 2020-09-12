@@ -291,6 +291,9 @@ QModelIndex MultiPagesView::selectApp(const int key)
         if (page - 1 >= 0) {
             -- page;
             itemSelect = m_calcUtil->appPageItemCount(m_category) - 1;
+        } else {
+            page = m_pageCount - 1;
+            itemSelect = m_pageAppsModelList[page]->rowCount(QModelIndex()) - 1;
         }
     } else {
         if (page + 1 < m_pageCount) {

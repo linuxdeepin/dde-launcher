@@ -104,11 +104,24 @@ void BlurBoxWidget::mousePressEvent(QMouseEvent *e)
 
 void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton &&  QCursor::pos() == mousePos) {
-        emit maskClick(m_category);
+    if (e->button() == Qt::LeftButton) {
+        QPoint fullscreenPoint = QCursor::pos();
+        if (e->source() == Qt::MouseEventSynthesizedByQt) {
+            int diff_x = qAbs(fullscreenPoint.x() - mousePos.x());
+            int diff_y = qAbs(fullscreenPoint.y() - mousePos.y());
+            if (diff_x < DLauncher::TOUCH_DIFF_THRESH && diff_y < DLauncher::TOUCH_DIFF_THRESH) {
+                emit maskClick(m_category); // 处理触屏点击事件
+            } else {
+                QWidget::mouseReleaseEvent(e); // 处理触屏拖拽事件
+            }
+        } else if (fullscreenPoint == mousePos) {
+            emit maskClick(m_category); // 处理鼠标左键点击事件
+        } else {
+            QWidget::mouseReleaseEvent(e); // 处理鼠标拖拽移动事件
+        }
+    } else {
+        QWidget::mouseReleaseEvent(e);
     }
-
-    QWidget::mouseReleaseEvent(e);
 }
 
 void BlurBoxWidget::setMaskSize(QSize size)

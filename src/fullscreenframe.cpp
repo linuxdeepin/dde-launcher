@@ -654,10 +654,10 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
             abs(move_diff) > DLauncher::MOUSE_MOVE_TO_NEXT) {
 
             if (move_diff > 0) {
-                AppsListModel::AppCategory targetCategory = prevCategoryType(prevCategoryType(m_currentCategory));
+                AppsListModel::AppCategory targetCategory = prevCategoryType(m_currentCategory);
                 scrollToCategory(m_currentCategory, targetCategory);
             } else {
-                AppsListModel::AppCategory targetCategory = nextCategoryType(nextCategoryType(m_currentCategory));
+                AppsListModel::AppCategory targetCategory = nextCategoryType(m_currentCategory);
                 scrollToCategory(m_currentCategory, targetCategory);
             }
         } else {

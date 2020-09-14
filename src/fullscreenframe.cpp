@@ -210,6 +210,7 @@ int FullScreenFrame::dockPosition()
 
 void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory oldCategory, const AppsListModel::AppCategory newCategory)
 {
+    m_searchWidget->clearSearchContent();
     if (m_animationGroup->state() == m_animationGroup->Running) return;
 
     int spaceCount = nearestCategory(oldCategory, newCategory);
@@ -548,7 +549,6 @@ void FullScreenFrame::showEvent(QShowEvent *e)
 {
     m_delayHideTimer->stop();
     m_searchWidget->clearSearchContent();
-
     XcbMisc::instance()->set_deepin_override(winId());
     // To make sure the window is placed at the right position.
     updateGeometry();
@@ -584,6 +584,7 @@ void FullScreenFrame::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton)
        return;
+    m_searchWidget->clearSearchContent();
     m_mouse_press = true;
     m_mouse_press_time =  QDateTime::currentDateTime().toMSecsSinceEpoch();
     m_mouse_move_pos = e->pos();

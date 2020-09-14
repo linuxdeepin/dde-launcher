@@ -519,9 +519,9 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     floatLabel->setPixmap(pixmap);
     floatLabel->show();
 
-    ani->setStartValue(indexRect(index).topLeft());
-    ani->setEndValue(indexRect(indexAt(moveNext ? pos - 1 : pos + 1)).topLeft());
-    ani->setEasingCurve(QEasingCurve::OutQuad);
+    ani->setStartValue(indexRect(index).topLeft() - QPoint(0, -6));
+    ani->setEndValue(indexRect(indexAt(moveNext ? pos - 1 : pos + 1)).topLeft() - QPoint(0, -6));
+    ani->setEasingCurve(QEasingCurve::Linear);
     ani->setDuration(300);
 
     connect(ani, &QPropertyAnimation::finished, floatLabel, &QLabel::deleteLater);

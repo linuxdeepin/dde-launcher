@@ -317,7 +317,9 @@ void AppListView::dropEvent(QDropEvent *e)
 
     // restore opacity.
     m_opacityEffect->setOpacity(1);
-    m_enableDropInside = true;
+
+    //窗口模式禁止拖动交换排序
+    m_enableDropInside = false;
 }
 
 void AppListView::enterEvent(QEvent *event)
@@ -362,7 +364,6 @@ void AppListView::startDrag(const QModelIndex &index)
 
     // disable auto scroll
     Q_EMIT requestScrollStop();
-
 
     if (!m_lastFakeAni) {
         if (m_enableDropInside)

@@ -165,9 +165,8 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_leftBar->installEventFilter(this);
 
     QHBoxLayout *searchLayout = new QHBoxLayout;
-    searchLayout->setContentsMargins(0, 0, 5, 0);
+    searchLayout->setContentsMargins(0, 0, 10, 0);
     searchLayout->addSpacing(10);
-    searchLayout->setSpacing(12);
     searchLayout->addWidget(m_searcherEdit);
     DStyle::setFocusRectVisible(m_searcherEdit->lineEdit(), false);
     searchLayout->addWidget(m_modeToggleBtn);

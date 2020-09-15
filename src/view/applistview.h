@@ -80,6 +80,7 @@ private:
     int m_dropToRow;
     int m_dragStartRow;
     QPoint m_dragStartPos;
+    QPoint m_fullscreenStartPos;
     QTimer *m_dropThresholdTimer;
     bool m_enableDropInside = false;
     bool m_touchMoveFlag; // 代表触摸屏移动操作
@@ -91,6 +92,7 @@ private:
     double m_speedTime = 1.0;
 
     QTimer *m_updateEnableSelectionByMouseTimer;
+    QTimer *m_updateEnableShowSelectionByMouseTimer; // 检测按压是否现实选择灰色背景
     QPoint m_lastTouchBeginPos;
     int touchTapDistance = -1;
 };

@@ -48,6 +48,7 @@ AppListView::AppListView(QWidget *parent)
     , m_opacityEffect(new QGraphicsOpacityEffect(this))
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_updateEnableSelectionByMouseTimer(nullptr)
+    , m_updateEnableShowSelectionByMouseTimer(nullptr)
 {
     this->setAccessibleName("Form_AppList");
     viewport()->setAutoFillBackground(false);
@@ -176,10 +177,32 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 {
     m_lastTouchBeginPos = e->pos();
     m_dragStartPos = e->pos();
+    m_fullscreenStartPos = QCursor::pos();
 
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
-        emit requestEnter(true);
+        emit requestEnter(false);
         m_scrollAni->stop();
+
+        if (m_updateEnableShowSelectionByMouseTimer) {
+            m_updateEnableShowSelectionByMouseTimer->stop();
+        } else {
+            m_updateEnableShowSelectionByMouseTimer = new QTimer(this);
+            m_updateEnableShowSelectionByMouseTimer->setSingleShot(true);
+            m_updateEnableShowSelectionByMouseTimer->setInterval(100);
+
+            connect(m_updateEnableShowSelectionByMouseTimer, &QTimer::timeout, this, [=] {
+                QPoint currentPos = QCursor::pos();
+                int diff_x = qAbs(currentPos.x() - m_fullscreenStartPos.x());
+                int diff_y = qAbs(currentPos.y() - m_fullscreenStartPos.y());
+                if (diff_x < 5 && diff_y < 5) // 触摸按压抖动限制范围
+                    emit requestEnter(true);
+                    
+                m_updateEnableShowSelectionByMouseTimer->deleteLater();
+                m_updateEnableShowSelectionByMouseTimer = nullptr;
+            });
+        }
+        m_updateEnableShowSelectionByMouseTimer->start();
+
         if (m_updateEnableSelectionByMouseTimer) {
             m_updateEnableSelectionByMouseTimer->stop();
         }

@@ -235,6 +235,10 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory oldCateg
 
 void FullScreenFrame::blurBoxWidgetMaskClick(const AppsListModel::AppCategory appCategory)
 {
+    if (m_mouse_press) {
+        m_scrollBox = true;
+    }
+
     if (m_animationGroup->state() == m_animationGroup->Running) {
         return;
     }
@@ -361,6 +365,9 @@ void FullScreenFrame::addViewEvent(AppGridView *pView)
     connect(pView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(pView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
     connect(pView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(pView, &AppGridView::requestMouseRelease,this,  [ = ]() {
+            m_mouse_press = false;
+    });
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
 }
 
@@ -916,10 +923,6 @@ void FullScreenFrame::scrollToCategoryFinish()
 
     ScrollWidgetAgent * widgetAgent = getScrollWidgetAgent(Pos_M);
     m_currentCategory = widgetAgent->blurBoxWidget()->category();
-
-    if (m_mouse_press) {
-        m_scrollBox = true;
-    }
 
     emit currentVisibleCategoryChanged(m_currentCategory);
 }

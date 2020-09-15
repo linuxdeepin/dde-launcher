@@ -27,7 +27,7 @@
 namespace DLauncher {
 
 static const int APP_DRAG_ICON_SIZE = 48;
-static const int APP_DRAG_SWAP_THRESHOLD = 80;
+static const int APP_DRAG_SWAP_THRESHOLD = 10;
 static const int APP_DRAG_SCROLL_THRESHOLD = 150;
 
 static const int DRAG_THRESHOLD = 15;

@@ -104,24 +104,21 @@ void BlurBoxWidget::mousePressEvent(QMouseEvent *e)
 
 void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton) {
-        QPoint fullscreenPoint = QCursor::pos();
-        if (e->source() == Qt::MouseEventSynthesizedByQt) {
-            int diff_x = qAbs(fullscreenPoint.x() - mousePos.x());
-            int diff_y = qAbs(fullscreenPoint.y() - mousePos.y());
-            if (diff_x < DLauncher::TOUCH_DIFF_THRESH && diff_y < DLauncher::TOUCH_DIFF_THRESH) {
-                emit maskClick(m_category); // 处理触屏点击事件
-            } else {
-                QWidget::mouseReleaseEvent(e); // 处理触屏拖拽事件
-            }
-        } else if (fullscreenPoint == mousePos) {
-            emit maskClick(m_category); // 处理鼠标左键点击事件
-        } else {
-            QWidget::mouseReleaseEvent(e); // 处理鼠标拖拽移动事件
+    QPoint fullscreenPoint = QCursor::pos();
+    //单击事件
+    if( (e->button() == Qt::LeftButton && fullscreenPoint == mousePos)) {
+        emit maskClick(m_category);
+    } else  if ( e->button() == Qt::LeftButton && e->source() == Qt::MouseEventSynthesizedByQt) {
+        // 处理触屏点击事件
+        int diff_x = qAbs(fullscreenPoint.x() - mousePos.x());
+        int diff_y = qAbs(fullscreenPoint.y() - mousePos.y());
+        if (diff_x < DLauncher::TOUCH_DIFF_THRESH && diff_y < DLauncher::TOUCH_DIFF_THRESH) {
+            emit maskClick(m_category); //处理触屏点击事件
         }
-    } else {
-        QWidget::mouseReleaseEvent(e);
     }
+    //把事件往下传,fullscreenfra处理
+    QWidget::mouseReleaseEvent(e);
+
 }
 
 void BlurBoxWidget::setMaskSize(QSize size)

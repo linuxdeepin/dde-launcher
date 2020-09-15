@@ -302,14 +302,14 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
     if (e->buttons() != Qt::LeftButton)
         return;
 
+    //当点击的位置在图标上就不把消息往下传(listview 滚动效果)
+    if (!idx.isValid() && m_pDelegate && !m_longPressed)
+        m_pDelegate->mouseMove(e);
+
     // 如果是触屏事件转换而来并且没有收到后端的延时触屏消息，不进行拖拽
     if (e->source() == Qt::MouseEventSynthesizedByQt && !m_longPressed) {
         return;
     }
-
-    //当点击的位置在图标上就不把消息往下传(listview 滚动效果)
-    if (!idx.isValid() && m_pDelegate)
-        m_pDelegate->mouseMove(e);
 
     if (qAbs(e->x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
         qAbs(e->y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
@@ -328,8 +328,6 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
 
     if (m_pDelegate)
         m_pDelegate->mouseRelease(e);
-
-    QListView::mouseReleaseEvent(e);
 }
 
 void AppGridView::startDrag(const QModelIndex &index)

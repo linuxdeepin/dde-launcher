@@ -171,10 +171,15 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::RightButton) {
         QPoint rightClickPoint = mapToGlobal(e->pos());
         //菜单整体向下偏移
-        if (e->source() == Qt::MouseEventSynthesizedByQt) // 处理触摸屏右键菜单
-            rightClickPoint.setY(rightClickPoint.y() + 30);
-        else
-            rightClickPoint.setY(rightClickPoint.y() + 10); // 鼠标右键菜单
+        //判断当前是什么模式//全屏自由0,搜索2,全屏分类其他///mapToGlobal转换的坐标貌似不太对
+        AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+        if(listModel->category() == 0) {
+           rightClickPoint += QPoint(30, 10);
+        } else if(listModel->category() == 2) {
+           rightClickPoint += QPoint(10, 30);
+        } else {
+           rightClickPoint += QPoint(80, 10);
+        }
 
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
         if (clickedIndex.isValid())
@@ -302,11 +307,15 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
         return;
     }
 
-    if (m_pDelegate)
+    //当点击的位置在图标上就不把消息往下传(listview 滚动效果)
+    if (!idx.isValid() && m_pDelegate)
         m_pDelegate->mouseMove(e);
 
     if (qAbs(e->x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
         qAbs(e->y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
+        //开始拖拽后,导致fullscreenframe只收到mousePress事件,收不到mouseRelease事件,需要处理一下异常
+        if(idx.isValid())
+            emit requestMouseRelease();
         return startDrag(QListView::indexAt(m_dragStartPos));
     }
 }

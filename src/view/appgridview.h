@@ -73,6 +73,7 @@ signals:
     void requestScrollLeft(const QModelIndex &index) const;
     void requestScrollRight(const QModelIndex &index) const;
     void dragEnd();
+    void requestMouseRelease() const;
 
 protected:
     void startDrag(const QModelIndex &index);

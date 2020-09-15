@@ -186,7 +186,7 @@ void AppListView::mousePressEvent(QMouseEvent *e)
         else {
             m_updateEnableSelectionByMouseTimer = new QTimer(this);
             m_updateEnableSelectionByMouseTimer->setSingleShot(true);
-            m_updateEnableSelectionByMouseTimer->setInterval(500);
+            m_updateEnableSelectionByMouseTimer->setInterval(200); // 拖拽应用允许的最短时间
 
             connect(m_updateEnableSelectionByMouseTimer, &QTimer::timeout, this, [=] {
                 m_updateEnableSelectionByMouseTimer->deleteLater();

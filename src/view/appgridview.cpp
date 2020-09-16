@@ -328,6 +328,13 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
 
     if (m_pDelegate)
         m_pDelegate->mouseRelease(e);
+
+    int diff_x = qAbs(e->pos().x() - m_dragStartPos.x());
+    int diff_y = qAbs(e->pos().y() - m_dragStartPos.y());
+    // 小范围位置变化，当作没有变化，针对触摸屏
+    if (diff_x < DLauncher::TOUCH_DIFF_THRESH && diff_y < DLauncher::TOUCH_DIFF_THRESH) {
+        QListView::mouseReleaseEvent(e);
+    }
 }
 
 void AppGridView::startDrag(const QModelIndex &index)

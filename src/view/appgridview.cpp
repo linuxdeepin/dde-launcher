@@ -169,21 +169,9 @@ void AppGridView::dropEvent(QDropEvent *e)
 void AppGridView::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::RightButton) {
-        QPoint rightClickPoint = mapToGlobal(e->pos());
-        //菜单整体向下偏移
-        //判断当前是什么模式//全屏自由0,搜索2,全屏分类其他///mapToGlobal转换的坐标貌似不太对
-        AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
-        if(listModel->category() == 0) {
-           rightClickPoint += QPoint(30, 10);
-        } else if(listModel->category() == 2) {
-           rightClickPoint += QPoint(10, 30);
-        } else {
-           rightClickPoint += QPoint(80, 10);
-        }
-
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
         if (clickedIndex.isValid())
-            emit popupMenuRequested(rightClickPoint, clickedIndex);
+            emit popupMenuRequested(QCursor::pos(), clickedIndex);
     }
 
     if (e->buttons() == Qt::LeftButton && !m_lastFakeAni)

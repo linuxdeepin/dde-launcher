@@ -69,9 +69,9 @@ static const int APPS_AREA_CATEGORY_INDEX = 255;
 
 static const int APPS_CATEGORY_TITLE_SPACING = 60;
 
-static const int MOUSE_PRESS_TIME_DIFF = 300;
+static const int MOUSE_PRESS_TIME_DIFF = 600;
 
-static const int MOUSE_MOVE_TO_NEXT= 200;
+static const int MOUSE_MOVE_TO_NEXT= 100;
 
 static const int TOUCH_DIFF_THRESH = 15;
 }

@@ -213,7 +213,7 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
     if (m_lastFakeAni)
         return;
 
-    const QPoint pos = mapFromGlobal(QCursor::pos());
+    const QPoint pos = e->pos();
     const QRect containerRect = this->rect();
 
     const QModelIndex dropIndex = QListView::indexAt(pos);

@@ -183,6 +183,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     initUI();
     initConnection();
+
+    updateDisplayMode(m_calcUtil->displayMode());
 }
 
 FullScreenFrame::~FullScreenFrame()
@@ -540,8 +542,6 @@ void FullScreenFrame::keyPressEvent(QKeyEvent *e)
             m_searchWidget->edit()->lineEdit()->setFocus();
             m_focusIndex = SearchEdit;
         }
-    } else if (e->key() == Qt::Key_F10 && e->modifiers().testFlag(Qt::ControlModifier)) {
-        qDebug() << QApplication::widgetAt(QCursor::pos());
     }
 }
 
@@ -554,9 +554,10 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     updateGeometry();
     updateBackground();
 
-    m_appsManager->refreshAllList();
+    if (!m_appsManager->isVaild()) {
+        m_appsManager->refreshAllList();
+    }
 
-    updateDisplayMode(m_calcUtil->displayMode());
     updateDockPosition();
 
     QFrame::showEvent(e);
@@ -569,6 +570,8 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     });
 
     m_clearCacheTimer->stop();
+
+    m_canResizeDockPosition = true;
 }
 
 void FullScreenFrame::hideEvent(QHideEvent *e)
@@ -694,7 +697,7 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
             qApp->postEvent(this, event);
             return true;
         }
-    } else if (o == m_contentFrame && e->type() == QEvent::Resize) {
+    } else if (o == m_contentFrame && e->type() == QEvent::Resize && m_canResizeDockPosition) {
         updateDockPosition();
     }
 
@@ -772,15 +775,26 @@ void FullScreenFrame::initUI()
     m_othersBoxWidget->setDataDelegate(m_appItemDelegate);
 
     //m_appsItemBox->installEventFilter(this);
+    m_appsItemBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_appsItemBox->layout()->setMargin(0);
     m_appsItemBox->layout()->setSpacing(0);
     m_appsItemBox->layout()->addWidget(m_appsItemSeizeBox);
     m_appsItemSeizeBox->lower();
 
-    //自由排序模式
+    //自由排序模式，设置大小调整方式为固定方式
+    m_appsIconBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_appsIconBox->layout()->setSpacing(0);
     m_appsIconBox->layout()->addWidget(m_multiPagesView, 0, Qt::AlignCenter);
     m_pHBoxLayout = m_appsIconBox->layout();
+
+    //启动时默认按屏幕大小设置自由排序widget的大小
+    int padding = m_calcUtil->getScreenSize().width() * SIDES_SPACE_SCALE;
+    QSize boxSize;
+    const int appsContentWidth = (m_calcUtil->getScreenSize().width() - padding * 2);
+    const int appsContentHeight = (m_calcUtil->getScreenSize().height() - DLauncher::APPS_AREA_TOP_MARGIN);
+    boxSize.setWidth(appsContentWidth);
+    boxSize.setHeight(appsContentHeight);
+    m_appsIconBox->setFixedSize(boxSize);
 
     QVBoxLayout *scrollVLayout = new QVBoxLayout;
     scrollVLayout->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN, 0, 0);
@@ -1434,19 +1448,35 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     m_othersBoxWidget->setVisible(false);
 
     if (m_displayMode == GROUP_BY_CATEGORY) {
+        //隐藏自由模式显示
         m_appsIconBox->setVisible(false);
         AppsListModel::AppCategory category = (m_displayMode == SEARCH) ? AppsListModel::Search : AppsListModel::All;
         m_multiPagesView->setModel(category);
+        //再显示分类模式
         m_navigationWidget->setVisible(true);
         m_appsItemBox->setVisible(true);
     } else {
-        m_navigationWidget->setVisible(false);
-        m_appsItemBox->setVisible(false);
-
-        QThread::msleep(100);
+        //先刷新后端数据
         AppsListModel::AppCategory category = (m_displayMode == SEARCH) ? AppsListModel::Search : AppsListModel::All;
         m_multiPagesView->setModel(category);
 
+        //设置自由模式wdiget大小
+        QSize boxSize;
+        int padding = m_calcUtil->getScreenSize().width() * SIDES_SPACE_SCALE;
+        const int appsContentWidth = (m_contentFrame->width() - padding * 2);
+        const int appsContentHeight = (m_contentFrame->height() - DLauncher::APPS_AREA_TOP_MARGIN);
+        boxSize.setWidth(appsContentWidth);
+        boxSize.setHeight(appsContentHeight);
+
+        //隐藏分类模式显示
+        m_appsIconBox->setFixedSize(boxSize);
+        m_multiPagesView->setFixedSize(boxSize);
+        m_multiPagesView->updatePosition();
+
+        m_navigationWidget->setVisible(false);
+        m_appsItemBox->setVisible(false);
+
+        //再显示自由显示模式
         m_appsIconBox->setVisible(true);
     }
 

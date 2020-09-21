@@ -209,5 +209,7 @@ private:
     QList<ScrollWidgetAgent *> m_widgetAgentList;
     ScrollParallelAnimationGroup *m_animationGroup;
     DBusDisplay *m_displayInter;
+    //只有窗口在完全显示出来后，才允许自动调整各部件位置
+    bool m_canResizeDockPosition = false;
 };
 #endif // MAINFRAME_H

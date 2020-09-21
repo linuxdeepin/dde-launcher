@@ -54,9 +54,9 @@ AppGridView::AppGridView(QWidget *parent)
 
     if (!m_gestureInter) {
         m_gestureInter = new Gesture("com.deepin.daemon.Gesture"
-                                              , "/com/deepin/daemon/Gesture"
-                                              , QDBusConnection::systemBus()
-                                              , nullptr);
+                                     , "/com/deepin/daemon/Gesture"
+                                     , QDBusConnection::systemBus()
+                                     , nullptr);
     }
 
     if (!m_appManager)
@@ -92,7 +92,7 @@ AppGridView::AppGridView(QWidget *parent)
     viewport()->setAutoFillBackground(false);
 
     // update item spacing
-    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] { 
+    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
         setSpacing(m_calcUtil->appItemSpacing());
         setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), m_calcUtil->appMarginLeft(), 0);
     });
@@ -103,15 +103,15 @@ AppGridView::AppGridView(QWidget *parent)
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::dropSwap);
 #endif
 
-    connect(m_appManager,&AppsManager::iconLoadFinished,this,[=]{
+    connect(m_appManager, &AppsManager::iconLoadFinished, this, [ = ] {
         QListView::update();
     });
 
     // 根据后端延迟触屏信号控制是否可进行图标拖动，收到延迟触屏信号可拖动，没有收到延迟触屏信号、点击松开就不可拖动
-    connect(m_gestureInter, &Gesture::TouchSinglePressTimeout, m_gestureInter, []{
+    connect(m_gestureInter, &Gesture::TouchSinglePressTimeout, m_gestureInter, [] {
         m_longPressed = true;
     }, Qt::UniqueConnection);
-    connect(m_gestureInter, &Gesture::TouchUpOrCancel, m_gestureInter, []{
+    connect(m_gestureInter, &Gesture::TouchUpOrCancel, m_gestureInter, [] {
         m_longPressed = false;
     }, Qt::UniqueConnection);
 }
@@ -170,8 +170,25 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::RightButton) {
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
-        if (clickedIndex.isValid())
-            emit popupMenuRequested(QCursor::pos(), clickedIndex);
+
+        if (clickedIndex.isValid()) {
+            QPoint rightClickPoint = QCursor::pos();
+            //触控屏右键
+            if (e->source() == Qt::MouseEventSynthesizedByQt) {
+                AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+                QPoint indexPoint = mapToGlobal(indexRect(clickedIndex).center());
+
+                if (listModel->category() == 0) {
+                    rightClickPoint.setX(indexPoint.x() + indexRect(clickedIndex).width() - 58 * m_calcUtil->getScreenScaleX());
+                } else if (listModel->category() == 2) {
+                    rightClickPoint.setX(indexPoint.x() + indexRect(clickedIndex).width()  - 90 * m_calcUtil->getScreenScaleX());
+                } else {
+                    rightClickPoint.setX(indexPoint.x() + indexRect(clickedIndex).width() - 3 * m_calcUtil->getScreenScaleX());
+                }
+            }
+
+            emit popupMenuRequested(rightClickPoint, clickedIndex);
+        }
     }
 
     if (e->buttons() == Qt::LeftButton && !m_lastFakeAni)
@@ -205,18 +222,18 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
     const QRect containerRect = this->rect();
 
     const QModelIndex dropIndex = QListView::indexAt(pos);
-    if (dropIndex.isValid()){
+    if (dropIndex.isValid()) {
         m_dropToPos = dropIndex.row();
-    } else if ( containerRect.contains(pos)) {
+    } else if (containerRect.contains(pos)) {
         AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
         if (listModel) {
             int lastRow = listModel->rowCount(QModelIndex()) - 1;
 
             QModelIndex lastIndex = listModel->index(lastRow);
 
-            if (lastIndex.isValid()){
+            if (lastIndex.isValid()) {
                 QPoint lastPos = indexRect(lastIndex).center();
-                if ( pos.x() > lastPos.x() && pos.y() > lastPos.y() )
+                if (pos.x() > lastPos.x() && pos.y() > lastPos.y())
                     m_dropToPos = lastIndex.row();
             }
         }
@@ -300,9 +317,9 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
     }
 
     if (qAbs(e->x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
-        qAbs(e->y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
+            qAbs(e->y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
         //开始拖拽后,导致fullscreenframe只收到mousePress事件,收不到mouseRelease事件,需要处理一下异常
-        if(idx.isValid())
+        if (idx.isValid())
             emit requestMouseRelease();
         return startDrag(QListView::indexAt(m_dragStartPos));
     }
@@ -342,9 +359,9 @@ void AppGridView::startDrag(const QModelIndex &index)
 //        return;
 
     QPixmap srcPix;
-    if (appKey== "dde-calendar") {
+    if (appKey == "dde-calendar") {
         const  auto  s = m_calcUtil->appIconSize();
-        const double  iconZoom =  s.width() /64.0;
+        const double  iconZoom =  s.width() / 64.0;
         QStringList calIconList = m_calcUtil->calendarSelectIcon();
 
         auto calendar = new QWidget() ;
@@ -362,24 +379,24 @@ void AppGridView::startDrag(const QModelIndex &index)
         QVBoxLayout *layout = new QVBoxLayout;
         layout->setSpacing(0);
         auto month = new QLabel();
-        auto monthPix = loadSvg(calIconList.at(1), QSize(20,10)*iconZoom);
-        month->setPixmap(monthPix.scaled(monthPix.width(),monthPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        auto monthPix = loadSvg(calIconList.at(1), QSize(20, 10) * iconZoom);
+        month->setPixmap(monthPix.scaled(monthPix.width(), monthPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         month->setFixedHeight(monthPix.height());
         month->setAlignment(Qt::AlignCenter);
         month->setFixedWidth(s.width() - 5 * iconZoom);
         layout->addWidget(month, Qt::AlignVCenter);
 
         auto day = new QLabel();
-        auto dayPix = loadSvg(calIconList.at(2), QSize(28,26)*iconZoom);
-        day->setPixmap(dayPix.scaled(dayPix.width(),dayPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        auto dayPix = loadSvg(calIconList.at(2), QSize(28, 26) * iconZoom);
+        day->setPixmap(dayPix.scaled(dayPix.width(), dayPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         day->setAlignment(Qt::AlignCenter);
         day->setFixedHeight(day->pixmap()->height());
         day->raise();
         layout->addWidget(day, Qt::AlignVCenter);
 
         auto week = new QLabel();
-        auto weekPix = loadSvg(calIconList.at(3), QSize(14,6)*iconZoom);
-        week->setPixmap(weekPix.scaled(weekPix.width(),weekPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        auto weekPix = loadSvg(calIconList.at(3), QSize(14, 6) * iconZoom);
+        week->setPixmap(weekPix.scaled(weekPix.width(), weekPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         week->setFixedHeight(week->pixmap()->height());
         week->setAlignment(Qt::AlignCenter);
         week->setFixedWidth(s.width() + 5 * iconZoom);
@@ -388,8 +405,8 @@ void AppGridView::startDrag(const QModelIndex &index)
         layout->setContentsMargins(0, 10 * iconZoom, 0, 10 * iconZoom);
         calendar->setLayout(layout);
         srcPix = calendar->grab(calendar->rect());
-    }else{
-         srcPix = index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
+    } else {
+        srcPix = index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
     }
 
     srcPix = srcPix.scaled(m_calcUtil->appIconSize() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);

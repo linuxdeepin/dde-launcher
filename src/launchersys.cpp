@@ -134,15 +134,15 @@ void LauncherSys::displayModeChanged()
 
     lastLauncher = lastLauncher ? lastLauncher : m_launcherInter;
 
-    if (lastLauncher->visible()) {
+    if (lastLauncher != m_launcherInter) {
+        lastLauncher->hideLauncher();
+    }
+
+    if (!lastLauncher->visible()) {
         m_launcherInter->showLauncher();
     }
     else {
         m_launcherInter->hideLauncher();
-    }
-
-    if (lastLauncher != m_launcherInter) {
-        lastLauncher->hideLauncher();
     }
 
     QTimer::singleShot(0, this, [=] {

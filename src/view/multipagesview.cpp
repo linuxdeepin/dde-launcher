@@ -25,6 +25,7 @@
 #include "../widgets/blurboxwidget.h"
 
 #include <QHBoxLayout>
+#define     SIDES_SPACE_SCALE   0.10
 
 MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget *parent)
     : QWidget(parent)
@@ -401,8 +402,16 @@ void MultiPagesView::updateGradient()
     }
 
     QRect rc = rect();
-    QPoint left = mapToGlobal(rc.topLeft());
-    QPoint right = mapToGlobal(rc.topRight());
+    // 获取当前屏幕的高度
+    QScreen *screen = QGuiApplication::primaryScreen();
+    int screen_height = screen->availableGeometry().height();
+    // 计算过渡动画开始的位置 区分左右位置与上下位置
+    int paddingL = m_calcUtil->getScreenSize().width() * SIDES_SPACE_SCALE;
+    int paddingR = m_calcUtil->getScreenSize().width() - paddingL - 1;
+    int topPos = mapToGlobal(rect().topLeft()).y() > screen_height ? mapToGlobal(rect().topLeft()).y() - screen_height : mapToGlobal(rect().topLeft()).y();
+
+    QPoint left(paddingL,topPos);
+    QPoint right(paddingR,topPos);
 
     QPixmap background = backgroundWidget->grab();
     updateGradient(background, left, right);

@@ -212,6 +212,7 @@ int FullScreenFrame::dockPosition()
 
 void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory oldCategory, const AppsListModel::AppCategory newCategory)
 {
+    m_searchWidget->clearSearchContent();
     if (m_animationGroup->state() == m_animationGroup->Running) return;
 
     int spaceCount = nearestCategory(oldCategory, newCategory);
@@ -563,7 +564,6 @@ void FullScreenFrame::showEvent(QShowEvent *e)
 {
     m_delayHideTimer->stop();
     m_searchWidget->clearSearchContent();
-
     XcbMisc::instance()->set_deepin_override(winId());
     // To make sure the window is placed at the right position.
     updateGeometry();
@@ -602,6 +602,7 @@ void FullScreenFrame::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton)
        return;
+    m_searchWidget->clearSearchContent();
     m_mouse_press = true;
     m_mouse_press_time =  QDateTime::currentDateTime().toMSecsSinceEpoch();
     m_mouse_move_pos = e->pos();
@@ -1168,12 +1169,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     }
 
     if (Qt::Key_Space == key) {
-        if (m_searchWidget->categoryBtn()->hasFocus() || m_focusIndex == CategoryChangeBtn) {
-            QMouseEvent btnPress(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-            QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnPress);
-            QMouseEvent btnRelease(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-            QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnRelease);
-        }
+        m_searchWidget->categoryBtn()->setFocus();
         return;
     }
 

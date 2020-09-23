@@ -239,6 +239,7 @@ AppsManager::AppsManager(QObject *parent) :
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         refreshAppListIcon();
+        generateCategoryMap();
     });
 
     connect(m_iconRefreshTimer.get(), &QTimer::timeout, this, &AppsManager::refreshNotFoundIcon);
@@ -541,13 +542,13 @@ void AppsManager::delayRefreshData()
 
 /**
  * @brief 模糊匹配，反向查询key是否包含list任一个元素
- * 
+ *
  * @param list 关键字列表
  * @param key 要模糊匹配的关键词
  * @return true 表示匹配成功
  * @return false 表示匹配失败
  */
-bool AppsManager::fuzzyMatching(const QStringList& list, const QString& key) 
+bool AppsManager::fuzzyMatching(const QStringList& list, const QString& key)
 {
     for (const QString& l : list) {
         if (key.indexOf(l, Qt::CaseInsensitive) != -1) {
@@ -1189,4 +1190,3 @@ int AppsManager::getVisibleCategoryCount()
 
     return ret;
 }
-

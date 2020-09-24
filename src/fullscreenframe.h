@@ -162,7 +162,6 @@ private:
     QPoint m_mouse_press_pos;
     qint64 m_mouse_press_time;
     bool m_mouse_press;
-    bool m_scrollBox;
 
     AppsListModel::AppCategory m_currentCategory;
 

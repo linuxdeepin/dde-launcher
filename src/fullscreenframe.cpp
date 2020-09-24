@@ -133,7 +133,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     setFocusPolicy(Qt::NoFocus);
     setMouseTracking(true);
     m_mouse_press = false;
-    m_scrollBox = false;
     m_mouse_press_time = 0;
     setAttribute(Qt::WA_InputMethodEnabled, true);
 
@@ -239,7 +238,7 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory oldCateg
 void FullScreenFrame::blurBoxWidgetMaskClick(const AppsListModel::AppCategory appCategory)
 {
     if (m_mouse_press) {
-        m_scrollBox = true;
+        m_mouse_press = false;
     }
 
     if (m_animationGroup->state() == m_animationGroup->Running) {
@@ -655,7 +654,8 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
     int diff_x = qAbs(e->pos().x() - m_mouse_press_pos.x());
     int diff_y = qAbs(e->pos().y() - m_mouse_press_pos.y());
     // 小范围位置变化，当作没有变化，针对触摸屏
-    if (diff_x < DLauncher::TOUCH_DIFF_THRESH && diff_y < DLauncher::TOUCH_DIFF_THRESH && !m_scrollBox) {
+    if ((e->source() == Qt::MouseEventSynthesizedByQt && diff_x < DLauncher::TOUCH_DIFF_THRESH && diff_y < DLauncher::TOUCH_DIFF_THRESH)
+            || (e->source() != Qt::MouseEventSynthesizedByQt && e->pos() == m_mouse_press_pos )) {
         hide();
     } else if (m_displayMode == GROUP_BY_CATEGORY){
         qint64 mouse_release_time =  QDateTime::currentDateTime().toMSecsSinceEpoch();
@@ -676,7 +676,6 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
         }
     }
     m_mouse_press = false;
-    m_scrollBox = false;
 }
 
 void FullScreenFrame::wheelEvent(QWheelEvent *e)

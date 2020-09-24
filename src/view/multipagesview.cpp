@@ -268,7 +268,7 @@ void MultiPagesView::InitUI()
 void MultiPagesView::showCurrentPage(int currentPage)
 {
     m_pageIndex = currentPage > 0 ? (currentPage < m_pageCount ? currentPage : m_pageCount - 1) : 0;
-    int endValue = m_appGridViewList[m_pageIndex]->x();
+    int endValue = m_pageIndex == 0 ? 0 : m_appGridViewList[m_pageIndex]->x();
     int startValue = m_appListArea->horizontalScrollBar()->value();
     m_pageSwitchAnimation->stop();
     m_pageSwitchAnimation->setStartValue(startValue);

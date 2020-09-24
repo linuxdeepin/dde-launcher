@@ -351,7 +351,7 @@ void MultiPagesView::mousePress(QMouseEvent *e)
 
     updateGradient();
 
-    if(m_pageCount == 1)
+    if(m_pageCount == 1 && m_category != AppsListModel::Search)
         QWidget::mousePressEvent(e);
 }
 

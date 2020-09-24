@@ -230,6 +230,11 @@ bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action
     if (data->data("RequestDock").isEmpty())
         return false;
 
+    // 全屏搜索模式不支持拖拽
+    if (m_category == Search) {
+        return  false;
+    }
+
     return true;
 }
 

@@ -89,22 +89,37 @@ void CategoryTitleWidget::addTextShadow()
 
 void CategoryTitleWidget::updatePosition(const QPoint pos, int w, int posType)
 {
-    int x = width() / 2 - m_title->width() / 2 + DLauncher::APPS_CATEGORY_TITLE_SPACING;
+    int x = width() / 2 - m_title->width() / 2;
 
-    if (posType == 2 || posType == 1) {
+    int boxWidth = m_calcUtil->getAppBoxSize().width();
+    int canMoveWidth = boxWidth / 2 - m_title->width() / 2 - DLauncher::APPS_CATEGORY_TITLE_SPACING;
+
+    int leftX  = w / 2 - boxWidth / 2 - DLauncher::APPHBOX_SPACING;
+    int rightX = w / 2 + boxWidth / 2 + DLauncher::APPHBOX_SPACING;
+
+    //因为单元循环引用冲突，没有直接引用scrollwidgetagent.h 单元中的枚举PosType
+    //其中0 = Pos_None,1 = Pos_LL, 2 = Pos_L,3 = Pos_M,4 = Pos_R,5 = Pos_RR
+    if (posType == 1) {
         x = width() - m_title->width() - DLauncher::APPS_CATEGORY_TITLE_SPACING;
-    } else if (posType == 4 || posType == 5) {
-        x = DLauncher::APPS_CATEGORY_TITLE_SPACING;
-    } else if (posType == 3 && w > 0) {
-        int titleWidth = width() - m_title->width() - DLauncher::APPS_CATEGORY_TITLE_SPACING * 2;
+    } else if (posType == 2) {
+        x = width() - m_title->width() - DLauncher::APPS_CATEGORY_TITLE_SPACING;
 
-        double movedDiff = pos.x() - w / 2 + m_calcUtil->getAppBoxSize().width();
+        int movedDiff = pos.x() + boxWidth - leftX;
+
         movedDiff = movedDiff < 0 ? 0 : movedDiff;
-        movedDiff = movedDiff > m_calcUtil->getAppBoxSize().width() ? m_calcUtil->getAppBoxSize().width() : movedDiff;
+        movedDiff = movedDiff > canMoveWidth ? canMoveWidth : movedDiff;
 
-        double rate = movedDiff / m_calcUtil->getAppBoxSize().width();
+        x = x - movedDiff;
+    } else if (posType == 4) {
+        x = DLauncher::APPS_CATEGORY_TITLE_SPACING;
 
-        x = titleWidth - int(rate * titleWidth) + DLauncher::APPS_CATEGORY_TITLE_SPACING;
+        int movedDiff = pos.x() - rightX;
+        movedDiff = movedDiff > 0 ? 0 : movedDiff;
+        movedDiff = movedDiff < -canMoveWidth ? -canMoveWidth : movedDiff;
+
+        x = x - movedDiff;
+    } else if (posType == 5) {
+        x = DLauncher::APPS_CATEGORY_TITLE_SPACING;
     }
 
     QPoint p(x, 0);

@@ -6,7 +6,6 @@
 #include "blurboxwidget.h"
 #include "../global_util/calculate_util.h"
 
-
 enum PosType {
     Pos_None,
     Pos_LL,

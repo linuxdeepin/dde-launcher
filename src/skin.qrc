@@ -262,5 +262,7 @@
         <file>skin/icons/calendar_month/month11.svg</file>
         <file>skin/icons/calendar_month/month12.svg</file>
         <file>skin/icons/category_hover_22pxnew.svg</file>
+        <file>skin/icons/search_36px.svg</file>
+        <file>skin/icons/clear_36px.svg</file>
     </qresource>
 </RCC>

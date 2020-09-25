@@ -26,6 +26,7 @@
 
 #include <QHBoxLayout>
 #include <QEvent>
+#include <QAction>
 #include <QDebug>
 #include <QKeyEvent>
 #include <DDBusSender>
@@ -70,10 +71,16 @@ SearchWidget::SearchWidget(QWidget *parent) :
 
     m_searchEdit = new DSearchEdit(this);
     m_searchEdit->setAccessibleName("search-edit");
+    // 添加launcher搜索框图标
+    QAction *leftaction = m_searchEdit->findChild<QAction *>("_d_search_leftAction");
+    leftaction->setIcon(QIcon(":/icons/skin/icons/search_36px.svg"));
+    QAction *clearAction = m_searchEdit->findChild<QAction *>(QLatin1String("_q_qlineeditclearaction"));
+    clearAction->setIcon(QIcon(":/icons/skin/icons/clear_36px.svg"));
+
     m_searchEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_searchEdit->lineEdit()->setFixedSize(SEARCHEIT_WIDTH, SEARCHEIT_HEIGHT);
     this->setMouseTracking(true);
-    DStyle::setFocusRectVisible(m_searchEdit->lineEdit(), false);
+    DStyle::setFocusRectVisible(m_searchEdit->lineEdit(), true);
     setFocusPolicy(Qt::NoFocus);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;

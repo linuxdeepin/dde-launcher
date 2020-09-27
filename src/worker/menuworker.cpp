@@ -27,6 +27,7 @@
 
 #include <QMenu>
 #include <QSignalMapper>
+#include <QWindow>
 
 static QString ChainsProxy_path = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first()
         + "/deepin/proxychains.conf";
@@ -66,8 +67,9 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
     qDebug() << "appKey" << m_appKey;
 
     QMenu *menu = new QMenu;
+    menu->setAttribute(Qt::WA_NativeWindow);
+    menu->windowHandle()->setProperty("_d_dwayland_window-type", "session-shell");
     UpdateMenuCursor(menu);//临时解决，启动器右键菜单时，光标变大，item被点击时，更新一次cursor image
-
     QSignalMapper *signalMapper = new QSignalMapper(menu);
 
     QAction *open;

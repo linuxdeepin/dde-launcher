@@ -109,6 +109,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     setMaskColor(DBlurEffectWidget::AutoColor);
     setBlendMode(DBlurEffectWidget::InWindowBlend);
     m_appearanceInter->setSync(false, false);
+    m_searcherEdit->installEventFilter(this);
 
     QPalette pal = m_maskBg->palette();
     if( DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType){
@@ -744,6 +745,9 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
     if (watched == m_leftBar && event->type() == QEvent::Resize) {
         setFixedSize(m_rightWidget->width() + m_leftBar->width() - 8, 538);
     }
+
+    if (watched == m_searcherEdit && event->type() == QEvent::Enter)
+        m_searcherEdit->lineEdit()->setFocus();
 
     return QWidget::eventFilter(watched, event);
 }

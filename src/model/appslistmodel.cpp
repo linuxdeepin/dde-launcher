@@ -54,10 +54,18 @@ static QMap<int, AppsListModel::AppCategory> CateGoryMap {
 
 const QStringList sysHoldPackages()
 {
+    //从先/etc/deepin-installer.conf读取不可卸载软件列表
     const QSettings settings("/etc/deepin-installer.conf", QSettings::IniFormat);
     auto holds_list = settings.value("dde_launcher_hold_packages").toStringList();
 
-    holds_list<< "dde-control-center"
+    //再从gschema读取不可卸载软件列表
+    QGSettings setting("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
+    if (setting.keys().contains("apps-hold-list")) {
+        holds_list << setting.get("apps-hold-list").toStringList();
+    }
+
+    //然后代码中补充固定的不可卸载软件列表
+    holds_list << "dde-control-center"
                << "dde-computer"
                << "dde-trash"
                << "dde-file-manager"

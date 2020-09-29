@@ -194,13 +194,13 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         renderer_bg.render(painter, iconRect);
         //绘制月份
         QSvgRenderer renderer_month(calIconList.at(1));
-        renderer_month.render(painter, QRect(tx + (tw / 3.6), ty + (th / 7), 80 * iconZoom, 40 * iconZoom));
+        renderer_month.render(painter, QRect(tx + (tw / 3.4), ty + (th / 5.4), 80 * iconZoom, 40 * iconZoom));
         //绘制日
         QSvgRenderer renderer_day(calIconList.at(2));
-        renderer_day.render(painter, QRect(tx + (tw / 4), ty + th / 3.6, 112 * iconZoom, 104 * iconZoom));
+        renderer_day.render(painter, QRect(tx + (tw / 3.5), ty + th / 3.1, 112 * iconZoom, 104 * iconZoom));
         //绘制周
         QSvgRenderer renderer_week(calIconList.at(3));
-        renderer_week.render(painter, QRect(tx + (tw / 2.5), ty + ((th / 4) * 2.8), 56 * iconZoom, 24 * iconZoom));
+        renderer_week.render(painter, QRect(tx + (tw / 2.3), ty + ((th / 3.9) * 2.8), 56 * iconZoom, 24 * iconZoom));
     }else {
         const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
         painter->drawPixmap(iconRect, iconPix, iconPix.rect());

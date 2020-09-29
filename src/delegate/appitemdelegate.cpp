@@ -38,7 +38,7 @@
 #define  ICONTOLETF  12
 #define  ICONTOTOP  6
 #define TEXTTOICON  2
-#define TEXTTOLEFT  10
+#define TEXTTOLEFT  30
 
 QModelIndex AppItemDelegate::CurrentIndex = QModelIndex();
 

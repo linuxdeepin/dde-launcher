@@ -60,7 +60,7 @@ const QStringList sysHoldPackages()
 
     //再从gschema读取不可卸载软件列表
     QGSettings setting("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
-    if (setting.keys().contains("apps-hold-list")) {
+    if (setting.keys().contains("appsHoldList")) {
         holds_list << setting.get("apps-hold-list").toStringList();
     }
 

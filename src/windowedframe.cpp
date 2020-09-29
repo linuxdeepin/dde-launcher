@@ -99,6 +99,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_focusPos(Applist)
     , m_modeToggleBtn(new DToolButton(this))
     , m_searcherEdit(new DSearchEdit)
+    , m_enterSearchEdit(false)
 {
     m_searcherEdit->setAccessibleName("searcherEdit");
     m_maskBg->setAccessibleName("MaskBg");
@@ -110,6 +111,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     setBlendMode(DBlurEffectWidget::InWindowBlend);
     m_appearanceInter->setSync(false, false);
     m_searcherEdit->installEventFilter(this);
+    qApp->installEventFilter(this);
 
     QPalette pal = m_maskBg->palette();
     if( DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType){
@@ -746,8 +748,16 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
         setFixedSize(m_rightWidget->width() + m_leftBar->width() - 8, 538);
     }
 
-    if (watched == m_searcherEdit && event->type() == QEvent::Enter)
-        m_searcherEdit->lineEdit()->setFocus();
+    if (m_enterSearchEdit && watched->objectName() == QString("MiniFrameWindow")) {
+        if (event->type()== QEvent::TouchBegin) {
+            m_searcherEdit->lineEdit()->setFocus();
+            m_enterSearchEdit = false;
+        }
+    }
+
+    if (watched == m_searcherEdit && event->type() == QEvent::Enter) {
+        m_enterSearchEdit = true;
+    }
 
     return QWidget::eventFilter(watched, event);
 }

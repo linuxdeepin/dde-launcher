@@ -160,6 +160,7 @@ private:
     FocusPosition m_focusPos;
     DToolButton *m_modeToggleBtn;
     DSearchEdit *m_searcherEdit;
+    bool m_enterSearchEdit;
 };
 
 #endif // WINDOWEDFRAME_H

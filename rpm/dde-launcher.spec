@@ -41,7 +41,7 @@ Header files and libraries for %{sname}.
 sed -i 's|lrelease|lrelease-qt5|' translate_generation.sh
 
 %build
-%cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} .
+%cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DWITHOUT_UNINSTALL_APP=1 .
 %make_build
 
 %install

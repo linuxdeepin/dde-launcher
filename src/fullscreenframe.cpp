@@ -486,11 +486,7 @@ void FullScreenFrame::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton)
         return;
-    auto sysBoxWidgetGlobalY = m_contentFrame->mapTo(window(), m_systemBoxWidget->pos()).y();
-    if ((e->globalY() > sysBoxWidgetGlobalY && e->globalY() < (sysBoxWidgetGlobalY + m_systemBoxWidget->height())))
-    {
-        return;
-    }
+
     m_mouse_press = true;
     m_appsAreaHScrollBarValue = m_appsArea->horizontalScrollBar()->value();
     m_mouse_press_time =  QDateTime::currentDateTime().toMSecsSinceEpoch();

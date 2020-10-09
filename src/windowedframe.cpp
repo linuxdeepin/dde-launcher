@@ -898,14 +898,11 @@ void WindowedFrame::onSwitchBtnClicked()
     if (m_displayMode == All) {
         m_appsModel->setCategory(AppsListModel::Category);
         m_displayMode = Category;
-        m_focusPos = RightBottom;
     } else if (m_displayMode == Category && m_appsModel->category() != AppsListModel::Category) {
-        m_focusPos = RightBottom;
         m_appsModel->setCategory(AppsListModel::Category);
     } else {
         m_displayMode = All;
         m_appsModel->setCategory(AppsListModel::Custom);
-        m_focusPos = Applist;
     }
 
     m_switchBtn->updateStatus(m_displayMode);
@@ -913,7 +910,6 @@ void WindowedFrame::onSwitchBtnClicked()
 
     // each time press "switch btn" must hide tips label.
     hideTips();
-
     m_searcherEdit->lineEdit()->clear();
 }
 

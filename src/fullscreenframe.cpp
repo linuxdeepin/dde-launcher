@@ -1087,11 +1087,14 @@ void FullScreenFrame::launchCurrentApp()
         emit m_searchWidget->categoryBtn()->clicked();
     }
     if (m_searchWidget->edit()->lineEdit()->text().isEmpty() && ( m_searchWidget->categoryBtn()->hasFocus() ||  m_focusIndex == CategoryChangeBtn)) {
-        QMouseEvent btnPress(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-        QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnPress);
-        QMouseEvent btnRelease(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-        QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnRelease);
-        return;
+        //焦点在categoryBtn按钮上，判断光标是否是在选中应用，是否有效
+        if (!m_appItemDelegate->currentIndex().isValid()) {
+            QMouseEvent btnPress(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+            QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnPress);
+            QMouseEvent btnRelease(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+            QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnRelease);
+            return;
+        }
     }
 
     const QModelIndex &index = m_appItemDelegate->currentIndex();

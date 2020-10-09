@@ -840,6 +840,11 @@ void WindowedFrame::adjustPosition()
 
 void WindowedFrame::onToggleFullScreen()
 {
+    //后台没有启动,切换全屏会造成后台默认数据和前台数据不统一,造成显示问题
+    if(!m_appsManager->appNums(AppsListModel::All)) {
+        return;
+    }
+
     AppListDelegate * delegate = static_cast<AppListDelegate *>(m_appsView->itemDelegate());
     if (delegate) {
         delegate->setActived(false);

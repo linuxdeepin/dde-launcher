@@ -1531,9 +1531,9 @@ void FullScreenFrame::updateDockPosition()
     int padding = m_calcUtil->getScreenSize().width() * SIDES_SPACE_SCALE;
 
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
-        m_calcUtil->calculateAppLayout(m_contentFrame->size() - QSize(padding * 2, DLauncher::APPS_AREA_TOP_MARGIN), m_appsManager->dockPosition());
+        m_calcUtil->calculateAppLayout(m_contentFrame->size() - QSize(padding * 2, DLauncher::APPS_AREA_TOP_MARGIN), m_displayMode);
     } else {
-        m_calcUtil->calculateAppLayout(m_contentFrame->size() - QSize(0, DLauncher::APPS_AREA_TOP_MARGIN + 12), m_appsManager->dockPosition());
+        m_calcUtil->calculateAppLayout(m_contentFrame->size() - QSize(0, DLauncher::APPS_AREA_TOP_MARGIN + 12), m_displayMode);
     }
 }
 

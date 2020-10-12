@@ -158,9 +158,8 @@ int CalculateUtil::displayMode() const
     return ALL_APPS;
 }
 
-void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int dockPosition)
+void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int currentmode)
 {
-    Q_UNUSED(dockPosition);
     double scaleX = getScreenScaleX();
     double scaleY = getScreenScaleY();
     double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
@@ -171,19 +170,19 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int doc
     int containerW = containerSize.width();
     int containerH = containerSize.height();
 
-    if (m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeCategory) {
+    if (m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeFree || currentmode == SEARCH) {
+        m_appColumnCount = 7;
+        rows = 4;
+
+        containerW = containerSize.width();
+        containerH = containerSize.height() - 20 * scale - DLauncher::DRAG_THRESHOLD;
+    } else {
         m_appColumnCount = 4;
         rows = 3;
 
         containerW = getAppBoxSize().width();
         //BlurBoxWidget上边距24,　分组标题高度70 ,　MultiPagesView页面切换按钮高度20 * scale;
         containerH = containerSize.height() - 24 - 60 - 20 * scale - DLauncher::DRAG_THRESHOLD;
-    } else {
-        m_appColumnCount = 7;
-        rows = 4;
-
-        containerW = containerSize.width();
-        containerH = containerSize.height() - 20 * scale - DLauncher::DRAG_THRESHOLD;
     }
 
     //默认边距保留最小５像素

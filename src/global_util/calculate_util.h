@@ -81,7 +81,7 @@ public:
 
     QStringList calendarSelectIcon() const;
 public slots:
-    void calculateAppLayout(const QSize &containerSize, const int dockPosition);
+    void calculateAppLayout(const QSize &containerSize, const int currentmode);
 
 private:
     explicit CalculateUtil(QObject *parent);

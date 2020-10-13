@@ -54,7 +54,7 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     QHBoxLayout *mainLayout = new QHBoxLayout;
     setLayout(mainLayout);
     setObjectName("MiniFrameSwitchBtn");
-    setFixedSize(300, 36);
+    setFixedSize(300, 39);
 
     mainLayout->setContentsMargins(10, 0, 0, 0);
     mainLayout->addWidget(m_allIconLabel);

@@ -411,7 +411,6 @@ void MultiPagesView::updateGradient()
         backgroundWidget = backgroundWidget->parentWidget();
     }
 
-    QRect rc = rect();
     // 获取当前屏幕的高度
     QScreen *screen = QGuiApplication::primaryScreen();
     int screen_height = screen->availableGeometry().height();

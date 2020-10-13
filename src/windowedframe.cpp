@@ -265,7 +265,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
         m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_normal.svg"));
     else
-         m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_dark.svg"));
+        m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_dark.svg"));
 }
 
 WindowedFrame::~WindowedFrame()

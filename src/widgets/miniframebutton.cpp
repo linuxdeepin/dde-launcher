@@ -15,6 +15,8 @@ MiniFrameButton::MiniFrameButton(const QString &text, QWidget *parent)
     setFocusPolicy(Qt::NoFocus);
     setObjectName("MiniFrameButton");
     setFlat(true);
+    setToolTip(text);
+    setToolTipDuration(1000);
 
     if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()){
          m_color.setRgb(255, 255, 255, 25);

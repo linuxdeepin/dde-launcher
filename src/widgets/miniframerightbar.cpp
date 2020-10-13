@@ -50,30 +50,30 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     // 测试
     m_avatar->setAccessibleName("useravatat");
 
-    QVBoxLayout *    layout       = new QVBoxLayout(this);
-    QVBoxLayout *    bottomLayout = new QVBoxLayout;
-    m_computerBtn  = new MiniFrameButton(tr(""));
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout* bottomLayout = new QVBoxLayout;
+    m_computerBtn  = new MiniFrameButton(tr("Computer"));
     m_computerBtn->setFixedSize(m_size);
     m_computerBtn->setAccessibleName("computerbtn");
-    m_videoBtn = new MiniFrameButton(tr(""));
+    m_videoBtn = new MiniFrameButton(tr("Videos"));
     m_videoBtn->setFixedSize(m_size);
     m_videoBtn->setAccessibleName("videobtn");
-    m_musicBtn = new MiniFrameButton(tr(""));
+    m_musicBtn = new MiniFrameButton(tr("Music"));
     m_musicBtn->setFixedSize(m_size);
     m_musicBtn->setAccessibleName("musicbtn");
-    m_pictureBtn = new MiniFrameButton(tr(""));
+    m_pictureBtn = new MiniFrameButton(tr("Pictures"));
     m_pictureBtn->setFixedSize(m_size);
     m_pictureBtn->setAccessibleName("picturebtn");
-    m_documentBtn = new MiniFrameButton(tr(""));
+    m_documentBtn = new MiniFrameButton(tr("Documents"));
     m_documentBtn->setFixedSize(m_size);
     m_documentBtn->setAccessibleName("documentbtn");
-    m_downloadBtn = new MiniFrameButton(tr(""));
+    m_downloadBtn = new MiniFrameButton(tr("Downloads"));
     m_downloadBtn->setFixedSize(m_size);
     m_downloadBtn->setAccessibleName("downloadbtn");
-    m_settingsBtn = new MiniFrameButton(tr(""));
+    m_settingsBtn = new MiniFrameButton(tr("Control Center"));
     m_settingsBtn->setFixedSize(m_size);
     m_settingsBtn->setAccessibleName("settingsbtn");
-    m_powerBtn = new MiniFrameButton(tr(""));
+    m_powerBtn = new MiniFrameButton(tr("Power"));
     m_powerBtn->setFixedSize(m_size);
     m_powerBtn->setIconSize(QSize(20, 20));
     m_powerBtn->setAccessibleName("powerbtn");
@@ -84,7 +84,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     m_btns[index++] = m_pictureBtn;
     m_btns[index++] = m_musicBtn;
     m_btns[index++] = m_videoBtn;
-    m_btns[index++] =m_downloadBtn;
+    m_btns[index++] = m_downloadBtn;
     m_btns[index++] = m_settingsBtn;
     m_btns[index++] = m_powerBtn;
 

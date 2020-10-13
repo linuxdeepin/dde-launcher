@@ -1097,9 +1097,7 @@ void FullScreenFrame::initConnection()
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
     connect(m_searchWidget, &SearchWidget::toggleMode, [this] {
-        m_searchWidget->clearFocus();
-        m_searchWidget->clearSearchContent();
-        updateDisplayMode(m_displayMode == GROUP_BY_CATEGORY ? ALL_APPS : GROUP_BY_CATEGORY);
+        updateDisplayMode(m_calcUtil->displayMode() == GROUP_BY_CATEGORY ? ALL_APPS : GROUP_BY_CATEGORY);
     });
 
     connect(m_appsManager, &AppsManager::categoryListChanged, this, &FullScreenFrame::categoryListChanged);
@@ -1666,6 +1664,8 @@ void FullScreenFrame::layoutChanged()
 
 void FullScreenFrame::searchTextChanged(const QString &keywords)
 {
+    if (!m_searchWidget->edit()->lineEdit()->hasFocus()) return;
+
     if (keywords.isEmpty())
         updateDisplayMode(m_calcUtil->displayMode());
     else

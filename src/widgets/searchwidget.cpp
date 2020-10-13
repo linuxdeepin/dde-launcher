@@ -129,7 +129,11 @@ SearchWidget::SearchWidget(QWidget *parent) :
     });
 
     connect(m_toggleCategoryBtn, &DIconButton::clicked, this, [ = ] {
+        m_searchEdit->lineEdit()->clearFocus();
+        clearSearchContent();
+
         emit toggleMode();
+
         // 点击分组按钮，切换分组模式，更新分组图标
         updateCurrentCategoryBtnIcon();
     });

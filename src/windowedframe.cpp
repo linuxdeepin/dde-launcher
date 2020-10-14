@@ -780,7 +780,10 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point)
 bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_leftBar && event->type() == QEvent::Resize) {
-        setFixedSize(m_rightWidget->width() + m_leftBar->width(), 538);
+        //使用setfixedsize，可能会导致qplatformwindow的geometry没有更新, 第一次显示的时候窗口大小错误
+        resize(m_rightWidget->width() + m_leftBar->width(), 538);
+        this->layout()->update();
+        adjustPosition();
     }
 
     return QWidget::eventFilter(watched, event);

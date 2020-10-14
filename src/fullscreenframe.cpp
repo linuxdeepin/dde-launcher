@@ -36,6 +36,7 @@
 #include <QKeyEvent>
 #include <QGraphicsEffect>
 #include <QProcess>
+#include <QtGui/private/qhighdpiscaling_p.h>
 #include <DWindowManagerHelper>
 #include <DSearchEdit>
 #include <DFloatingButton>
@@ -195,7 +196,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     updateDisplayMode(m_calcUtil->displayMode());
     updateDockPosition();
-    setFixedSize(QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height)/qApp->primaryScreen()->devicePixelRatio());
+    //m_displayInter->primaryRect()这个rect为主屏幕实际尺寸，所以在设置size的时候需要通过缩放比转换
+    resize(QHighDpi::fromNativePixels(QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height), qApp->primaryScreen()));
 }
 
 FullScreenFrame::~FullScreenFrame()
@@ -916,8 +918,10 @@ void FullScreenFrame::showLauncher()
     m_focusIndex = 1;
     m_appItemDelegate->setCurrentIndex(QModelIndex());
     m_searchWidget->categoryBtn()->clearFocus();
-    setFixedSize(QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height)/qApp->primaryScreen()->devicePixelRatio());
     updateDockPosition();
+    //m_displayInter->primaryRect()这个rect为主屏幕实际尺寸，所以在设置size的时候需要通过缩放比转换
+    //这里不能用setfixedsize，可能会导致qplatformwindow的geometry没有更新。导致第一次显示的时候尺寸错误。
+    setGeometry(QRect(QPoint(0, 0), QHighDpi::fromNativePixels(QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height), qApp->primaryScreen())));
     show();
     connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::hideLauncher);
 }
@@ -939,10 +943,11 @@ bool FullScreenFrame::visible()
 
 void FullScreenFrame::updateGeometry()
 {
-    const QRect rect = m_displayInter->primaryRect();
-    qDebug()<<rect;
+    //m_displayInter->primaryRect()这个rect为主屏幕实际尺寸，所以在设置size的时候需要通过缩放比转换
+    qDebug()<<"xxxxxxxxxxxxxx"<<QRect(m_displayInter->primaryRect())
 
-    setGeometry(rect);
+           <<QHighDpi::fromNativePixels(QRect(m_displayInter->primaryRect()), qApp->primaryScreen());
+    setGeometry(QHighDpi::fromNativePixels(QRect(m_displayInter->primaryRect()), qApp->primaryScreen()));
 
     QFrame::updateGeometry();
 }
@@ -1262,7 +1267,8 @@ void FullScreenFrame::primaryScreenChanged()
 {
     updateBackground();
     updateBlurBackground();
-    setFixedSize(qApp->primaryScreen()->geometry().size());
+    //这个地方不需要进行缩放转换，primaryScreen的geometry已经是转换后的尺寸
+    resize(qApp->primaryScreen()->geometry().size());
     updateDockPosition();
 }
 

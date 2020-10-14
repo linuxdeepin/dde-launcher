@@ -94,6 +94,7 @@ public:
     void setDragDropIndex(const QModelIndex &index);
     void dropInsert(const QString &appKey, const int pos);
     void dropSwap(const int nextPos);
+    inline QModelIndex dragDropIndex() const {return m_dragDropIndex;}
 
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
     const QModelIndex indexAt(const QString &appKey) const;

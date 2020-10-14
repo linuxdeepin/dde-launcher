@@ -267,7 +267,9 @@ void AppGridView::dragIn(const QModelIndex &index)
 
 void AppGridView::flashDrag()
 {
-    startDrag(indexAt(0));
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    int dragDropRow = listModel->dragDropIndex().row();
+    startDrag(indexAt(dragDropRow));
 }
 
 void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)

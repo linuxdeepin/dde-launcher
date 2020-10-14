@@ -1405,6 +1405,12 @@ void FullScreenFrame::reflashPageView(AppsListModel::AppCategory category)
         m_multiPagesView->updatePageCount(category);
     }
 
+    if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY) {
+        for (int i = AppsListModel::Internet; i <= AppsListModel::Others; i++) {
+            getCategoryGridViewList(AppsListModel::AppCategory(i))->updatePageCount(AppsListModel::AppCategory(i));
+        }
+    }
+
     if (m_displayMode == GROUP_BY_CATEGORY && AppsListModel::Search == category) {
         checkCurrentCategoryVisible();
         hideCategoryBoxWidget();

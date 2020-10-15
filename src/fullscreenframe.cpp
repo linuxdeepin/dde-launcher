@@ -1670,6 +1670,8 @@ void FullScreenFrame::layoutChanged()
 
 void FullScreenFrame::searchTextChanged(const QString &keywords)
 {
+    m_appsManager->searchApp(keywords.trimmed());
+
     if (!m_searchWidget->edit()->lineEdit()->hasFocus()) return;
 
     if (keywords.isEmpty())
@@ -1680,7 +1682,5 @@ void FullScreenFrame::searchTextChanged(const QString &keywords)
     if (m_searchWidget->edit()->lineEdit()->text().isEmpty()) {
         m_searchWidget->edit()->lineEdit()->clearFocus();
     }
-
-    m_appsManager->searchApp(keywords.trimmed());
 }
 

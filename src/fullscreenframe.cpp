@@ -1119,6 +1119,8 @@ void FullScreenFrame::showLauncher()
     m_searchWidget->categoryBtn()->clearFocus();
     m_searchWidget->edit()->clearEdit();
     m_searchWidget->edit()->clear();
+    updateDisplayMode(m_calcUtil->displayMode());
+    m_searchWidget->edit()->lineEdit()->clearFocus();
     setFixedSize(m_appsManager->currentScreen()->geometry().size());
     show();
     connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::hideLauncher);

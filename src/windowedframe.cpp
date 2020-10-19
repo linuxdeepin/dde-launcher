@@ -168,11 +168,13 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_leftBar->installEventFilter(this);
 
     QHBoxLayout *searchLayout = new QHBoxLayout;
-    searchLayout->setContentsMargins(0, 0, 10, 0);
+    searchLayout->setContentsMargins(0, 0, 5, 0);
     searchLayout->addSpacing(10);
+    searchLayout->setSpacing(12);
     searchLayout->addWidget(m_searcherEdit);
     DStyle::setFocusRectVisible(m_searcherEdit->lineEdit(), false);
     searchLayout->addWidget(m_modeToggleBtn);
+    searchLayout->addSpacing(10);
 
     QHBoxLayout *appsLayout = new QHBoxLayout;
     appsLayout->addWidget(m_appsView);
@@ -745,7 +747,7 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point)
 bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_leftBar && event->type() == QEvent::Resize) {
-        setFixedSize(m_rightWidget->width() + m_leftBar->width() - 8, 538);
+        setFixedSize(m_rightWidget->width() + m_leftBar->width(), 538);
     }
 
     if (m_enterSearchEdit && watched->objectName() == QString("MiniFrameWindow")) {

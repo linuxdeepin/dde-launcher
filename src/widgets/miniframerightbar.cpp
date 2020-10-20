@@ -274,7 +274,8 @@ void MiniFrameRightBar::handleAvatarClicked()
 
 void MiniFrameRightBar::showShutdown()
 {
-    QProcess::startDetached("dde-shutdown");
+    QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
+    emit requestFrameHide();
 }
 
 void MiniFrameRightBar::showSettings()

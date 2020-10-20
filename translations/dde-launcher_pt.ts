@@ -2,80 +2,80 @@
 <context>
     <name>AppsManager</name>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="181"/>
+        <location filename="../src/model/appsmanager.cpp" line="192"/>
         <source>Internet</source>
         <translation>Internet</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="182"/>
+        <location filename="../src/model/appsmanager.cpp" line="193"/>
         <source>Chat</source>
         <translation>Conversação</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="183"/>
+        <location filename="../src/model/appsmanager.cpp" line="194"/>
         <source>Music</source>
         <translation>Música</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="184"/>
+        <location filename="../src/model/appsmanager.cpp" line="195"/>
         <source>Video</source>
         <translation>Vídeo</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="185"/>
+        <location filename="../src/model/appsmanager.cpp" line="196"/>
         <source>Graphics</source>
         <translation>Gráficos</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="186"/>
+        <location filename="../src/model/appsmanager.cpp" line="197"/>
         <source>Games</source>
         <translation>Jogos</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="187"/>
+        <location filename="../src/model/appsmanager.cpp" line="198"/>
         <source>Office</source>
         <translation>Escritório</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="188"/>
+        <location filename="../src/model/appsmanager.cpp" line="199"/>
         <source>Reading</source>
         <translation>Leitura</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="189"/>
+        <location filename="../src/model/appsmanager.cpp" line="200"/>
         <source>Development</source>
         <translation>Desenvolvimento</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="190"/>
+        <location filename="../src/model/appsmanager.cpp" line="201"/>
         <source>System</source>
         <translation>Sistema</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="191"/>
+        <location filename="../src/model/appsmanager.cpp" line="202"/>
         <source>Other</source>
-        <translation>Outro</translation>
+        <translation>Outros</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="931"/>
+        <location filename="../src/model/appsmanager.cpp" line="1066"/>
         <source>No search results</source>
-        <translation>Sem resultados</translation>
+        <translation>Sem resultados de pesquisa</translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1162"/>
+        <location filename="../src/fullscreenframe.cpp" line="1375"/>
         <source>Are you sure you want to uninstall it?</source>
-        <translation>Tem a certeza de que deseja desinstalá-lo?</translation>
+        <translation>Tem a certeza que deseja desinstalá-lo?</translation>
     </message>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1168"/>
+        <location filename="../src/fullscreenframe.cpp" line="1381"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1168"/>
+        <location filename="../src/fullscreenframe.cpp" line="1381"/>
         <source>Confirm</source>
         <translation>Confirmar</translation>
     </message>
@@ -125,12 +125,12 @@
     <message>
         <location filename="../src/worker/menuworker.cpp" line="106"/>
         <source>Use a proxy</source>
-        <translation>Usar um proxy</translation>
+        <translation>Utilizar um proxy</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="117"/>
         <source>Disable display scaling</source>
-        <translation>Desativar escala de visualização</translation>
+        <translation>Desativar a escala de visualização</translation>
     </message>
 </context>
 <context>
@@ -138,7 +138,7 @@
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="46"/>
         <source>All Apps</source>
-        <translation>Todas as aplicações</translation>
+        <translation>Todas as Aplicações</translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="47"/>
@@ -193,7 +193,7 @@
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="57"/>
         <source>Other</source>
-        <translation>Outro</translation>
+        <translation>Outros</translation>
     </message>
 </context>
 <context>
@@ -257,7 +257,7 @@
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="125"/>
         <source>Back</source>
-        <translation>Voltar</translation>
+        <translation>Anterior</translation>
     </message>
 </context>
 <context>
@@ -308,12 +308,12 @@
     <message>
         <location filename="../src/widgets/miniframeswitchbtn.cpp" line="73"/>
         <source>All Categories</source>
-        <translation>Todas as categorias</translation>
+        <translation>Todas as Categorias</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframeswitchbtn.cpp" line="76"/>
         <source>Back</source>
-        <translation>Voltar</translation>
+        <translation>Anterior</translation>
     </message>
 </context>
 <context>
@@ -327,17 +327,17 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <location filename="../src/windowedframe.cpp" line="550"/>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Are you sure you want to uninstall it?</source>
-        <translation>Tem a certeza de que deseja desinstalá-lo?</translation>
+        <translation>Tem a certeza que deseja desinstalá-lo?</translation>
     </message>
     <message>
-        <location filename="../src/windowedframe.cpp" line="555"/>
+        <location filename="../src/windowedframe.cpp" line="560"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../src/windowedframe.cpp" line="555"/>
+        <location filename="../src/windowedframe.cpp" line="560"/>
         <source>Confirm</source>
         <translation>Confirmar</translation>
     </message>

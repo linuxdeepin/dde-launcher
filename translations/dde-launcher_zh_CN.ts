@@ -2,62 +2,62 @@
 <context>
     <name>AppsManager</name>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="181"/>
+        <location filename="../src/model/appsmanager.cpp" line="192"/>
         <source>Internet</source>
         <translation>网络应用</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="182"/>
+        <location filename="../src/model/appsmanager.cpp" line="193"/>
         <source>Chat</source>
         <translation>社交沟通</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="183"/>
+        <location filename="../src/model/appsmanager.cpp" line="194"/>
         <source>Music</source>
         <translation>音乐欣赏</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="184"/>
+        <location filename="../src/model/appsmanager.cpp" line="195"/>
         <source>Video</source>
         <translation>视频播放</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="185"/>
+        <location filename="../src/model/appsmanager.cpp" line="196"/>
         <source>Graphics</source>
         <translation>图形图像</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="186"/>
+        <location filename="../src/model/appsmanager.cpp" line="197"/>
         <source>Games</source>
         <translation>游戏娱乐</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="187"/>
+        <location filename="../src/model/appsmanager.cpp" line="198"/>
         <source>Office</source>
         <translation>办公学习</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="188"/>
+        <location filename="../src/model/appsmanager.cpp" line="199"/>
         <source>Reading</source>
         <translation>阅读翻译</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="189"/>
+        <location filename="../src/model/appsmanager.cpp" line="200"/>
         <source>Development</source>
         <translation>编程开发</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="190"/>
+        <location filename="../src/model/appsmanager.cpp" line="201"/>
         <source>System</source>
         <translation>系统管理</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="191"/>
+        <location filename="../src/model/appsmanager.cpp" line="202"/>
         <source>Other</source>
         <translation>其他应用</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="931"/>
+        <location filename="../src/model/appsmanager.cpp" line="1066"/>
         <source>No search results</source>
         <translation>无搜索结果</translation>
     </message>
@@ -65,17 +65,17 @@
 <context>
     <name>FullScreenFrame</name>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1162"/>
+        <location filename="../src/fullscreenframe.cpp" line="1375"/>
         <source>Are you sure you want to uninstall it?</source>
         <translation>您确定要卸载吗？</translation>
     </message>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1168"/>
+        <location filename="../src/fullscreenframe.cpp" line="1381"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1168"/>
+        <location filename="../src/fullscreenframe.cpp" line="1381"/>
         <source>Confirm</source>
         <translation>确定</translation>
     </message>
@@ -327,17 +327,17 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <location filename="../src/windowedframe.cpp" line="550"/>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Are you sure you want to uninstall it?</source>
         <translation>您确定要卸载吗？</translation>
     </message>
     <message>
-        <location filename="../src/windowedframe.cpp" line="555"/>
+        <location filename="../src/windowedframe.cpp" line="560"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/windowedframe.cpp" line="555"/>
+        <location filename="../src/windowedframe.cpp" line="560"/>
         <source>Confirm</source>
         <translation>确定</translation>
     </message>

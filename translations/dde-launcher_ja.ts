@@ -2,62 +2,62 @@
 <context>
     <name>AppsManager</name>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="181"/>
+        <location filename="../src/model/appsmanager.cpp" line="192"/>
         <source>Internet</source>
         <translation>インターネット</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="182"/>
+        <location filename="../src/model/appsmanager.cpp" line="193"/>
         <source>Chat</source>
         <translation>チャット</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="183"/>
+        <location filename="../src/model/appsmanager.cpp" line="194"/>
         <source>Music</source>
         <translation>ミュージック</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="184"/>
+        <location filename="../src/model/appsmanager.cpp" line="195"/>
         <source>Video</source>
         <translation>ビデオ</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="185"/>
+        <location filename="../src/model/appsmanager.cpp" line="196"/>
         <source>Graphics</source>
         <translation>グラフィックス</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="186"/>
+        <location filename="../src/model/appsmanager.cpp" line="197"/>
         <source>Games</source>
         <translation>ゲーム</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="187"/>
+        <location filename="../src/model/appsmanager.cpp" line="198"/>
         <source>Office</source>
         <translation>オフィス</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="188"/>
+        <location filename="../src/model/appsmanager.cpp" line="199"/>
         <source>Reading</source>
         <translation>文書</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="189"/>
+        <location filename="../src/model/appsmanager.cpp" line="200"/>
         <source>Development</source>
         <translation>開発</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="190"/>
+        <location filename="../src/model/appsmanager.cpp" line="201"/>
         <source>System</source>
         <translation>システム</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="191"/>
+        <location filename="../src/model/appsmanager.cpp" line="202"/>
         <source>Other</source>
         <translation>その他</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="931"/>
+        <location filename="../src/model/appsmanager.cpp" line="1066"/>
         <source>No search results</source>
         <translation>検索結果なし</translation>
     </message>
@@ -65,17 +65,17 @@
 <context>
     <name>FullScreenFrame</name>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1162"/>
+        <location filename="../src/fullscreenframe.cpp" line="1375"/>
         <source>Are you sure you want to uninstall it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1168"/>
+        <location filename="../src/fullscreenframe.cpp" line="1381"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1168"/>
+        <location filename="../src/fullscreenframe.cpp" line="1381"/>
         <source>Confirm</source>
         <translation>確認</translation>
     </message>
@@ -327,17 +327,17 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <location filename="../src/windowedframe.cpp" line="550"/>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Are you sure you want to uninstall it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/windowedframe.cpp" line="555"/>
+        <location filename="../src/windowedframe.cpp" line="560"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../src/windowedframe.cpp" line="555"/>
+        <location filename="../src/windowedframe.cpp" line="560"/>
         <source>Confirm</source>
         <translation>確認</translation>
     </message>

@@ -2,62 +2,62 @@
 <context>
     <name>AppsManager</name>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="181"/>
+        <location filename="../src/model/appsmanager.cpp" line="192"/>
         <source>Internet</source>
         <translation>Internet</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="182"/>
+        <location filename="../src/model/appsmanager.cpp" line="193"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="183"/>
+        <location filename="../src/model/appsmanager.cpp" line="194"/>
         <source>Music</source>
         <translation>Muziek</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="184"/>
+        <location filename="../src/model/appsmanager.cpp" line="195"/>
         <source>Video</source>
         <translation>Video</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="185"/>
+        <location filename="../src/model/appsmanager.cpp" line="196"/>
         <source>Graphics</source>
         <translation>Grafisch</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="186"/>
+        <location filename="../src/model/appsmanager.cpp" line="197"/>
         <source>Games</source>
         <translation>Spellen</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="187"/>
+        <location filename="../src/model/appsmanager.cpp" line="198"/>
         <source>Office</source>
         <translation>Kantoor</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="188"/>
+        <location filename="../src/model/appsmanager.cpp" line="199"/>
         <source>Reading</source>
         <translation>Lezen</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="189"/>
+        <location filename="../src/model/appsmanager.cpp" line="200"/>
         <source>Development</source>
         <translation>Ontwikkeling</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="190"/>
+        <location filename="../src/model/appsmanager.cpp" line="201"/>
         <source>System</source>
         <translation>Systeem</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="191"/>
+        <location filename="../src/model/appsmanager.cpp" line="202"/>
         <source>Other</source>
         <translation>Overige</translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="931"/>
+        <location filename="../src/model/appsmanager.cpp" line="1066"/>
         <source>No search results</source>
         <translation>Geen zoekresultaten</translation>
     </message>
@@ -65,17 +65,17 @@
 <context>
     <name>FullScreenFrame</name>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1162"/>
+        <location filename="../src/fullscreenframe.cpp" line="1375"/>
         <source>Are you sure you want to uninstall it?</source>
         <translation>Weet je zeker dat je het wilt deïnstalleren?</translation>
     </message>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1168"/>
+        <location filename="../src/fullscreenframe.cpp" line="1381"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1168"/>
+        <location filename="../src/fullscreenframe.cpp" line="1381"/>
         <source>Confirm</source>
         <translation>Bevestigen</translation>
     </message>
@@ -95,17 +95,17 @@
     <message>
         <location filename="../src/worker/menuworker.cpp" line="82"/>
         <source>Send to desktop</source>
-        <translation>Versturen naar bureaublad</translation>
+        <translation>Bureaubladsnelkoppeling maken</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="86"/>
         <source>Remove from dock</source>
-        <translation>Verwijderen uit dock</translation>
+        <translation>Losmaken van dock</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="87"/>
         <source>Send to dock</source>
-        <translation>Versturen naar dock</translation>
+        <translation>Vastmaken aan dock</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="91"/>
@@ -125,12 +125,12 @@
     <message>
         <location filename="../src/worker/menuworker.cpp" line="106"/>
         <source>Use a proxy</source>
-        <translation>gebruik een proxy</translation>
+        <translation>Proxy gebruiken</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="117"/>
         <source>Disable display scaling</source>
-        <translation>Beeldgrootte uitschakelen</translation>
+        <translation>Aanpassen aan beeldgrootte uitschakelen</translation>
     </message>
 </context>
 <context>
@@ -138,7 +138,7 @@
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="46"/>
         <source>All Apps</source>
-        <translation>Alle Apps</translation>
+        <translation>Alle programma&apos;s</translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="47"/>
@@ -327,19 +327,19 @@
 <context>
     <name>WindowedFrame</name>
     <message>
-        <location filename="../src/windowedframe.cpp" line="550"/>
+        <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Are you sure you want to uninstall it?</source>
         <translation>Weet je zeker dat je het wilt deïnstalleren?</translation>
     </message>
     <message>
-        <location filename="../src/windowedframe.cpp" line="555"/>
+        <location filename="../src/windowedframe.cpp" line="560"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
     <message>
-        <location filename="../src/windowedframe.cpp" line="555"/>
+        <location filename="../src/windowedframe.cpp" line="560"/>
         <source>Confirm</source>
-        <translation>Bevestigen</translation>
+        <translation>Ja</translation>
     </message>
 </context>
 </TS>

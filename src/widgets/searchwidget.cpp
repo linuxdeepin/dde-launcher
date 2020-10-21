@@ -100,6 +100,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     setLayout(mainLayout);
 
     connect(m_searchEdit, &DSearchEdit::textChanged, [this] {
+        m_searchEdit->lineEdit()->setFocus();
         auto searchStr = m_searchEdit->text();
         emit searchTextChanged(searchStr.mid(0, 1) + searchStr.mid(1).replace(" ", ""));
     });

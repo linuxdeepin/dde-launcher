@@ -122,23 +122,7 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
         }
 
         if (m_updateEnableSelectionByMouseTimer && m_updateEnableSelectionByMouseTimer->isActive()) {
-            const QPoint difference_pos = e->pos() - m_lastTouchBeginPos;
-            if (qAbs(difference_pos.x()) > touchTapDistance || qAbs(difference_pos.y()) > touchTapDistance) {
-                QScroller::grabGesture(this);
-                QScroller *scroller = QScroller::scroller(this);
-                QScrollerProperties sp;
-                sp.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
-                scroller->setScrollerProperties(sp);
-
-                scroller->handleInput(QScroller::InputPress, e->localPos(), e->timestamp());
-                scroller->handleInput(QScroller::InputMove, e->localPos(), e->timestamp());
-
-                connect(scroller, &QScroller::stateChanged, this, [=](QScroller::State newstate) {
-                    if (newstate == QScroller::Inactive) {
-                        QScroller::scroller(this)->deleteLater();
-                    }
-                });
-            }
+            QListView::mouseMoveEvent(e);
             return;
         }
     } else {
@@ -205,8 +189,7 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 
         if (m_updateEnableSelectionByMouseTimer) {
             m_updateEnableSelectionByMouseTimer->stop();
-        }
-        else {
+        } else {
             m_updateEnableSelectionByMouseTimer = new QTimer(this);
             m_updateEnableSelectionByMouseTimer->setSingleShot(true);
             m_updateEnableSelectionByMouseTimer->setInterval(200); // 拖拽应用允许的最短时间
@@ -217,6 +200,7 @@ void AppListView::mousePressEvent(QMouseEvent *e)
             });
         }
         m_updateEnableSelectionByMouseTimer->start();
+        QListView::mousePressEvent(e);
         return;
     }
 

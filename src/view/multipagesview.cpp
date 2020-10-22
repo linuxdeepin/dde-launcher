@@ -142,6 +142,9 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             connect(pageView, &AppGridView::requestScrollStop, [this] {m_bDragStart = false;});
             connect(pageView, &AppGridView::dragEnd, this, &MultiPagesView::dragStop);
             connect(m_pageSwitchAnimation, &QPropertyAnimation::finished,pageView,&AppGridView::setDragAnimationEnable);
+            connect(m_pageSwitchAnimation, &QPropertyAnimation::finished,this, [ = ]{
+                    setGradientVisible(false);
+            });
             emit connectViewEvent(pageView);
         }
     } else {
@@ -177,6 +180,8 @@ void MultiPagesView::dragToLeft(const QModelIndex &index)
     QModelIndex firstModel = m_appGridViewList[m_pageIndex]->indexAt(lastApp - 1);
     m_appGridViewList[m_pageIndex]->dragIn(firstModel);
 
+    setGradientVisible(false);
+
     m_bDragStart = true;
 }
 
@@ -196,6 +201,8 @@ void MultiPagesView::dragToRight(const QModelIndex &index)
 
     QModelIndex firstModel = m_appGridViewList[m_pageIndex]->indexAt(0);
     m_appGridViewList[m_pageIndex]->dragIn(firstModel);
+
+    setGradientVisible(false);
 
     m_bDragStart = true;
 }
@@ -389,11 +396,16 @@ void MultiPagesView::mouseRelease(QMouseEvent *e)
     }
     m_bMousePress = false;
 
-    m_pLeftGradient->hide();
-    m_pRightGradient->hide();
+    setGradientVisible(false);
 
     if(m_pageCount == 1)
         QWidget::mouseReleaseEvent(e);
+}
+
+void MultiPagesView::setGradientVisible(bool visible)
+{
+    m_pLeftGradient->setVisible(visible);
+    m_pRightGradient->setVisible(visible);
 }
 
 // 更新边框渐变，在屏幕变化时需要更新，类别拖动时需要隐藏

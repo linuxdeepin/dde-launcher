@@ -93,7 +93,6 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
                             dragIndicator);
     }
 
-    painter->setRenderHint(QPainter::Antialiasing);
     painter->setPen(Qt::NoPen);
 
     if (option.state.testFlag(QStyle::State_Selected)) {
@@ -182,7 +181,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // draw category right icon
     if (isCategoryList) {
         const QPixmap &pixmap = index.data(AppsListModel::CategoryEnterIconRole).value<QPixmap>();
-        painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+        painter->setRenderHints(QPainter::SmoothPixmapTransform);
         painter->drawPixmap(rect.right() - pixmap.width() / ratio,
                             rect.y() + (rect.height() - pixmap.height() / ratio) / 2,
                             pixmap.width() /  ratio,

@@ -168,24 +168,25 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_leftBar->installEventFilter(this);
 
     QHBoxLayout *searchLayout = new QHBoxLayout;
-    searchLayout->setContentsMargins(0, 0, 10, 0);
-    searchLayout->addSpacing(10);
+    searchLayout->setContentsMargins(DLauncher::MINI_FRAME_LAYOUT_SPACE1, 0, DLauncher::MINI_FRAME_LAYOUT_SPACE2, 0);
     searchLayout->addWidget(m_searcherEdit);
     DStyle::setFocusRectVisible(m_searcherEdit->lineEdit(), false);
+    searchLayout->setSpacing(8);
     searchLayout->addWidget(m_modeToggleBtn);
 
     QHBoxLayout *appsLayout = new QHBoxLayout;
+    appsLayout->addSpacing(DLauncher::MINI_FRAME_LAYOUT_SPACE1);
     appsLayout->addWidget(m_appsView);
-    appsLayout->setContentsMargins(0, 0, 0, 0);
 
     QHBoxLayout *switchLayout = new QHBoxLayout;
+    switchLayout->setContentsMargins(DLauncher::MINI_FRAME_LAYOUT_SPACE1, 0, DLauncher::MINI_FRAME_LAYOUT_SPACE1, 0);
     switchLayout->addWidget(m_switchBtn);
 
     QVBoxLayout *containLayout = new QVBoxLayout;
     containLayout->setSpacing(0);
     containLayout->setMargin(0);
 
-    containLayout->addSpacing(6);
+    containLayout->addSpacing(DLauncher::MINI_FRAME_LAYOUT_SPACE2);
     containLayout->addLayout(searchLayout);
     //containLayout->addWidget(new HSeparator);
     containLayout->addSpacing(6);
@@ -745,7 +746,7 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point)
 bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_leftBar && event->type() == QEvent::Resize) {
-        setFixedSize(m_rightWidget->width() + m_leftBar->width() - 8, 538);
+        setFixedSize(m_rightWidget->width() + m_leftBar->width(), 538);
     }
 
     if (m_enterSearchEdit && watched->objectName() == QString("MiniFrameWindow")) {

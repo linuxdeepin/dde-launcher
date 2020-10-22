@@ -66,6 +66,8 @@ public:
     void mouseMove(QMouseEvent *e) override;
     void mouseRelease(QMouseEvent *e) override;
 
+    void setGradientVisible(bool visible);
+
 signals:
     void connectViewEvent(AppGridView* pView);
 

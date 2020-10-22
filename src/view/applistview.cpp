@@ -63,10 +63,8 @@ AppListView::AppListView(QWidget *parent)
     setVerticalScrollMode(ScrollPerPixel);
     setSelectionMode(SingleSelection);
     setSpacing(0);
-    setContentsMargins(0, 0, 0, 0);
-    setViewportMargins(0, 0, 12, 0);
+    setViewportMargins(0, 0, DLauncher::MINI_FRAME_LAYOUT_SPACE1, 0);
     setMouseTracking(true);
-    setFixedWidth(300);
     verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
 
     // support drag and drop.

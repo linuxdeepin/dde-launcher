@@ -699,7 +699,6 @@ void WindowedFrame::enterEvent(QEvent *e)
 
     m_delayHideTimer->stop();
 
-    raise();
     activateWindow();
 }
 
@@ -707,7 +706,6 @@ void WindowedFrame::inputMethodEvent(QInputMethodEvent *e)
 {
     if (!e->commitString().isEmpty()) {
         m_searcherEdit->lineEdit()->setText(e->commitString());
-        m_searcherEdit->lineEdit()->setFocus();
     }
 
     QWidget::inputMethodEvent(e);
@@ -747,6 +745,10 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_leftBar && event->type() == QEvent::Resize) {
         setFixedSize(m_rightWidget->width() + m_leftBar->width(), 538);
+    }
+
+    if(watched == m_appsView && event->type() == QEvent::Wheel) {
+        m_searcherEdit->lineEdit()->clearFocus();
     }
 
     if (m_enterSearchEdit && watched->objectName() == QString("MiniFrameWindow")) {

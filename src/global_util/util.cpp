@@ -65,6 +65,7 @@ const QPixmap loadSvg(const QString &fileName, const int size)
 
     QPainter painter;
     painter.begin(&pixmap);
+    painter.setRenderHint(QPainter::Antialiasing, true);
     renderer.render(&painter);
     painter.end();
 

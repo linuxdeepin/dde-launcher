@@ -263,9 +263,9 @@ const QRect AppItemDelegate::itemBoundingRect(const QRect &itemRect) const
 ///
 const QRect AppItemDelegate::itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool extraWidthMargin) const
 {
-    Q_UNUSED(extraWidthMargin);
-
     QRect result = boundingRect;
+    //名字宽度需要考虑到未打开应用的小蓝点标识
+    if(extraWidthMargin) result.setWidth(result.width() + m_blueDotPixmap.width());
     result.setTop(iconRect.bottom());
     return result;
 }

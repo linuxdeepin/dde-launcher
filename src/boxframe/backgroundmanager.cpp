@@ -67,12 +67,24 @@ void BackgroundManager::updateBackgrounds()
 
 void BackgroundManager::updateBlurBackgrounds()
 {
-    m_timerUpdateBlurbg->setInterval(1000);
+    m_timerUpdateBlurbg->setInterval(2000);
     QString path = getLocalFile(m_wmInter->GetCurrentWorkspaceBackground());
     QString filePath = QFile::exists(path) ? path : DefaultWallpaper;
 
+    auto call = m_imageblur->Get(filePath);
+    call.waitForFinished();
+    if (call.isError()) {
+        qDebug() << "call com.deepin.daemon.ImageBlur Get Error : " << call.error();
+        m_timerUpdateBlurbg->stop();
+        return;
+    }
     if (m_imageblur->Get(filePath) != "") {
         m_blurBackground = m_imageEffectInter->Get("", m_imageblur->Get(filePath));
+    } else {
+        connect(m_imageblur, &ImageEffeblur::BlurDone, this, &BackgroundManager::backgroudBlurDone);
+        qDebug() << "Wait for ImageEffeblur BlurDone signal";
+        m_timerUpdateBlurbg->stop();
+        return;
     }
 
     m_background = m_imageEffectInter->Get("", filePath);
@@ -87,5 +99,20 @@ void BackgroundManager::updateBlurBackgrounds()
 
     if (m_blurBackground != "" && m_background != "") {
         m_timerUpdateBlurbg->stop();
+        qDebug() << "updateBlurBackgrounds Done: " << m_background << "," << m_blurBackground;
+    }
+}
+
+void BackgroundManager::backgroudBlurDone(const QString &inputPath, const QString &outputPath, bool isSucess)
+{
+    qDebug() << "in:" << inputPath << "out:" << outputPath << ":" << isSucess;
+    m_background =m_imageEffectInter->Get("", inputPath);
+    if (m_background != "") {
+        emit currentWorkspaceBackgroundChanged(m_background);
+    }
+
+    m_blurBackground = m_imageEffectInter->Get("", outputPath);
+    if (m_blurBackground != "") {
+        emit currentWorkspaceBlurBackgroundChanged(m_blurBackground);
     }
 }

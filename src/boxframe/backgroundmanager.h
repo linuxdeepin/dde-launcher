@@ -48,7 +48,7 @@ signals:
 private slots:
     void updateBackgrounds();
     void updateBlurBackgrounds();
-
+    void backgroudBlurDone(const QString &inputPath, const QString &outputPath, bool isSucess);
 private:
     int m_currentWorkspace;
     mutable QString m_blurBackground;

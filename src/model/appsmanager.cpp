@@ -72,7 +72,6 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
     const auto ratio = qApp->devicePixelRatio();
     const int s = perfectIconSize(size);
     bool findIcon = true;
-    QPlatformTheme *const platformTheme = QGuiApplicationPrivate::platformTheme();
 
     QPixmap pixmap;
     do {
@@ -95,46 +94,13 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
                 break;
         }
 
-        QScopedPointer<QIconEngine> engine(platformTheme->createIconEngine(iconName));
-        QIcon icon;
+        QIcon icon = QIcon::fromTheme(iconName);
 
-        if (!engine.isNull()) {
-            if (engine->isNull()) {
-                auto iterator =
-                    std::find_if(m_notExistIconMap.begin(), m_notExistIconMap.end(),
-                [ = ](const std::pair<std::pair<ItemInfo, int>, int> value) {
-                    return value.first.first.m_iconKey == iconName && value.first.second == size;
-                });
-
-                if (iterator == m_notExistIconMap.end()) {
-                    if (!iconName.isEmpty()) {
-                        const std::pair<ItemInfo, int> pair{ itemInfo, size };
-                        m_notExistIconMap[pair] = 0;
-                        m_iconRefreshTimer->start();
-                    }
-
-                    icon = QIcon::fromTheme(iconName);
-                    if (icon.isNull()) {
-                        icon = QIcon::fromTheme("deepinwine-" + iconName);
-                    }
-
-                    if (icon.isNull()) {
-                        icon = QIcon::fromTheme("deepin.com." + iconName);
-                    }
-                }
-            } else {
-                icon = QIcon::fromTheme(iconName);
-                if (icon.isNull()) {
-                    icon = QIcon::fromTheme("deepinwine-" + iconName);
-                }
-
-                if (icon.isNull()) {
-                    icon = QIcon::fromTheme("deepin.com." + iconName);
-                }
-            }
-        }
         if (icon.isNull()) {
             icon = QIcon::fromTheme("application-x-desktop");
+            //手动更新缓存
+            system("gtk-update-icon-cache /usr/share/icons/hicolor/");
+
             findIcon = false;
         }
 

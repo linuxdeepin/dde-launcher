@@ -94,7 +94,6 @@ void MultiPagesView::updateGradient(QPixmap &pixmap, QPoint topLeftImg, QPoint t
     m_pLeftGradient->setPixmap(topCache);
     m_pLeftGradient->resize(gradientSize);
     m_pLeftGradient->move(topLeft);
-    m_pLeftGradient->show();
     m_pLeftGradient->raise();
 
     QPoint topRight(topLeft.x() + width() - gradientSize.width(), topLeft.y());
@@ -106,8 +105,8 @@ void MultiPagesView::updateGradient(QPixmap &pixmap, QPoint topLeftImg, QPoint t
     m_pRightGradient->setPixmap(bottomCache);
     m_pRightGradient->resize(gradientSize);
     m_pRightGradient->move(topRight);
-    m_pRightGradient->show();
     m_pRightGradient->raise();
+    setGradientVisible(true);
 }
 
 void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
@@ -139,7 +138,10 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
 
             connect(pageView, &AppGridView::requestScrollLeft, this, &MultiPagesView::dragToLeft);
             connect(pageView, &AppGridView::requestScrollRight, this, &MultiPagesView::dragToRight);
-            connect(pageView, &AppGridView::requestScrollStop, [this] {m_bDragStart = false;});
+            connect(pageView, &AppGridView::requestScrollStop, [this] {
+                m_bDragStart = false;
+                setGradientVisible(false);
+            });
             connect(pageView, &AppGridView::dragEnd, this, &MultiPagesView::dragStop);
             connect(m_pageSwitchAnimation, &QPropertyAnimation::finished,pageView,&AppGridView::setDragAnimationEnable);
             connect(m_pageSwitchAnimation, &QPropertyAnimation::finished,this, [ = ]{
@@ -180,8 +182,6 @@ void MultiPagesView::dragToLeft(const QModelIndex &index)
     QModelIndex firstModel = m_appGridViewList[m_pageIndex]->indexAt(lastApp - 1);
     m_appGridViewList[m_pageIndex]->dragIn(firstModel);
 
-    setGradientVisible(false);
-
     m_bDragStart = true;
 }
 
@@ -201,8 +201,6 @@ void MultiPagesView::dragToRight(const QModelIndex &index)
 
     QModelIndex firstModel = m_appGridViewList[m_pageIndex]->indexAt(0);
     m_appGridViewList[m_pageIndex]->dragIn(firstModel);
-
-    setGradientVisible(false);
 
     m_bDragStart = true;
 }

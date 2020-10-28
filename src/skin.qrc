@@ -264,5 +264,6 @@
         <file>skin/icons/category_hover_22pxnew.svg</file>
         <file>skin/icons/search_36px.svg</file>
         <file>skin/icons/clear_36px.svg</file>
+        <file>skin/icons/exit_fullscreen.svg</file>
     </qresource>
 </RCC>

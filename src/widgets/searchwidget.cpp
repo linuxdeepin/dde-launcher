@@ -62,7 +62,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_toggleCategoryBtn->setAccessibleName("mode-toggle-button");
 
     m_toggleModeBtn = new DFloatingButton(this);
-    m_toggleModeBtn->setIcon(QIcon(":/icons/skin/icons/unfullscreen_normal.png"));
+    m_toggleModeBtn->setIcon(QIcon(":/icons/skin/icons/exit_fullscreen.svg"));
     m_toggleModeBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_toggleModeBtn->setFixedSize(QSize(BTN_SIZE, BTN_SIZE));
     m_toggleModeBtn->setAutoExclusive(true);

@@ -168,33 +168,33 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_leftBar->installEventFilter(this);
 
     QHBoxLayout *searchLayout = new QHBoxLayout;
-    searchLayout->setContentsMargins(DLauncher::MINI_FRAME_LAYOUT_SPACE1, 0, DLauncher::MINI_FRAME_LAYOUT_SPACE2, 0);
+    searchLayout->setContentsMargins(9, 0, DLauncher::MINI_FRAME_LAYOUT_SPACE2, 0);
     searchLayout->addWidget(m_searcherEdit);
     DStyle::setFocusRectVisible(m_searcherEdit->lineEdit(), false);
-    searchLayout->setSpacing(8);
+    searchLayout->setSpacing(6);
     searchLayout->addWidget(m_modeToggleBtn);
 
     QHBoxLayout *appsLayout = new QHBoxLayout;
-    appsLayout->addSpacing(DLauncher::MINI_FRAME_LAYOUT_SPACE1);
+    appsLayout->setContentsMargins(DLauncher::MINI_FRAME_LAYOUT_SPACE1, 0, 0, 0);
     appsLayout->addWidget(m_appsView);
 
     QHBoxLayout *switchLayout = new QHBoxLayout;
-    switchLayout->setContentsMargins(DLauncher::MINI_FRAME_LAYOUT_SPACE1, 0, DLauncher::MINI_FRAME_LAYOUT_SPACE1, 0);
+    switchLayout->setContentsMargins(DLauncher::MINI_FRAME_LAYOUT_SPACE1, 0, 11, 0);
     switchLayout->addWidget(m_switchBtn);
 
     QVBoxLayout *containLayout = new QVBoxLayout;
     containLayout->setSpacing(0);
     containLayout->setMargin(0);
 
-    containLayout->addSpacing(DLauncher::MINI_FRAME_LAYOUT_SPACE2);
+    containLayout->setContentsMargins(0, 7, 0, 15);
     containLayout->addLayout(searchLayout);
     //containLayout->addWidget(new HSeparator);
     containLayout->addSpacing(6);
     containLayout->addLayout(appsLayout);
     containLayout->addLayout(switchLayout);
-    containLayout->addSpacing(15);
 
     m_rightWidget = new QWidget;
+    m_rightWidget->setContentsMargins(0, 0, 0, 0);
     m_rightWidget->setLayout(containLayout);
     m_rightWidget->setFixedWidth(320);
     m_rightWidget->setAccessibleName("rightWidget");

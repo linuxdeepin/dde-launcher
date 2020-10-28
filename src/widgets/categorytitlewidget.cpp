@@ -26,8 +26,6 @@
 #include "src/global_util/util.h"
 #include <DFontSizeManager>
 #include <QHBoxLayout>
-#include <QGraphicsDropShadowEffect>
-#include <QGraphicsOpacityEffect>
 
 DWIDGET_USE_NAMESPACE
 CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) :
@@ -76,15 +74,6 @@ void CategoryTitleWidget::setText(const QString &title)
     const int width = fontMetric.width(title);
     m_title->setFixedWidth(width + 10);
     m_title->setText(title);
-}
-
-void CategoryTitleWidget::addTextShadow()
-{
-    QGraphicsDropShadowEffect *textDropShadow = new QGraphicsDropShadowEffect;
-    textDropShadow->setBlurRadius(4);
-    textDropShadow->setColor(QColor(0, 0, 0, 128));
-    textDropShadow->setOffset(0, 2);
-    m_title->setGraphicsEffect(textDropShadow);
 }
 
 void CategoryTitleWidget::updatePosition(const QPoint pos, int w, int posType)

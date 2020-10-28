@@ -50,9 +50,6 @@ public slots:
     void setTextVisible(const bool visible, const bool animation = false);
     void setText(const QString &title);
 
-private:
-    void addTextShadow();
-
 private slots:
     void relayout();
 

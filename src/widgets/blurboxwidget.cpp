@@ -34,8 +34,6 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     , m_name(name)
     , m_categoryMultiPagesView(new MultiPagesView(curCategory))
     , m_categoryTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", name)))
-    ,m_titleOpacityEffect(new QGraphicsOpacityEffect)
-    ,m_pagesOpacityEffect(new QGraphicsOpacityEffect)
     ,m_blurGroup(new  DBlurEffectGroup)
     ,m_blurBackground(new DBlurEffectWidget(this))
     ,m_bg(new MaskQWidget(this))
@@ -55,7 +53,6 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     m_blurBackground->raise();
     m_blurGroup->addWidget(m_blurBackground);
 
-    m_categoryTitle->setGraphicsEffect(m_titleOpacityEffect);
     m_categoryTitle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_categoryTitle->setFixedHeight(60);
 
@@ -63,7 +60,6 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     m_vLayout->setAlignment(Qt::AlignTop);
     layoutAddWidget(m_categoryTitle, m_calcUtil->getAppBoxSize().width() / 2, Qt::AlignHCenter);
     m_vLayout->addWidget(m_categoryMultiPagesView);
-    m_categoryMultiPagesView->setGraphicsEffect(m_pagesOpacityEffect);
 
     m_bg->setFixedSize(m_calcUtil->getAppBoxSize());
     m_bg->setColor(new QColor(255,255,255,25));
@@ -154,11 +150,6 @@ void BlurBoxWidget::setFixedSize(const QSize &size)
 
 void BlurBoxWidget::setMaskVisible(bool visible)
 {
-    double opacity = 0.3;
-    visible? opacity= 0.3:opacity= 0.99;
-    m_titleOpacityEffect->setOpacity(opacity);
-    m_pagesOpacityEffect->setOpacity(opacity);
-
     if (visible) {
         m_maskLayer->raise();
     } else {

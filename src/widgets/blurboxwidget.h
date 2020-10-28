@@ -25,7 +25,6 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 #include <QAbstractItemDelegate>
-#include <QGraphicsOpacityEffect>
 
 #include <DBlurEffectWidget>
 
@@ -81,8 +80,6 @@ private:
     QString m_name;
     MultiPagesView *m_categoryMultiPagesView;
     CategoryTitleWidget *m_categoryTitle;
-    QGraphicsOpacityEffect* m_titleOpacityEffect;
-    QGraphicsOpacityEffect* m_pagesOpacityEffect;
     DBlurEffectGroup* m_blurGroup;
     DBlurEffectWidget *m_blurBackground;
     MaskQWidget* m_bg;

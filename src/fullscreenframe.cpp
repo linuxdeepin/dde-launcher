@@ -34,7 +34,6 @@
 #include <QDebug>
 #include <QScrollBar>
 #include <QKeyEvent>
-#include <QGraphicsEffect>
 #include <QProcess>
 #include <DWindowManagerHelper>
 

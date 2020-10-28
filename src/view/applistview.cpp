@@ -45,7 +45,6 @@ AppListView::AppListView(QWidget *parent)
     , m_dropThresholdTimer(new QTimer(this))
     , m_touchMoveFlag(false)
     , m_scrollAni(new QPropertyAnimation(verticalScrollBar(), "value"))
-    , m_opacityEffect(new QGraphicsOpacityEffect(this))
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_updateEnableSelectionByMouseTimer(nullptr)
     , m_updateEnableShowSelectionByMouseTimer(nullptr)
@@ -71,10 +70,6 @@ AppListView::AppListView(QWidget *parent)
     setDragDropMode(QAbstractItemView::DragDrop);
     setMovement(QListView::Free);
     setDragEnabled(true);
-
-    // init opacity effect.
-    m_opacityEffect->setOpacity(1);
-    setGraphicsEffect(m_opacityEffect);
 
     // init drop threshold timer.
     m_dropThresholdTimer->setInterval(DLauncher::APP_DRAG_SWAP_THRESHOLD);
@@ -269,9 +264,6 @@ void AppListView::dragEnterEvent(QDragEnterEvent *e)
     const QModelIndex index = indexAt(e->pos());
 
     if (model()->canDropMimeData(e->mimeData(), e->dropAction(), index.row(), index.column(), QModelIndex())) {
-        // to enable transparent.
-        m_opacityEffect->setOpacity(0.5);
-
         return e->accept();
     }
 }
@@ -310,7 +302,6 @@ void AppListView::dragLeaveEvent(QDragLeaveEvent *e)
     e->accept();
 
     // drag leave will also restore opacity.
-    m_opacityEffect->setOpacity(1);
     m_dropThresholdTimer->stop();
 
     Q_EMIT requestScrollStop();
@@ -319,9 +310,6 @@ void AppListView::dragLeaveEvent(QDragLeaveEvent *e)
 void AppListView::dropEvent(QDropEvent *e)
 {
     e->accept();
-
-    // restore opacity.
-    m_opacityEffect->setOpacity(1);
 
     //窗口模式禁止拖动交换排序
     m_enableDropInside = false;

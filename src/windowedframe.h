@@ -166,7 +166,6 @@ private:
     AnchoredCornor m_anchoredCornor = Normal;
     QPainterPath m_cornerPath;
     FocusPosition m_focusPos;
-    bool m_firstStart{true};
     DToolButton *m_modeToggleBtn;
     DSearchEdit *m_searcherEdit;
 };

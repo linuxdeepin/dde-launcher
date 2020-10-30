@@ -313,12 +313,6 @@ void WindowedFrame::showLauncher()
     }
 
     m_appsView->setCurrentIndex(QModelIndex());
-
-    if (m_firstStart && qApp->primaryScreen()->devicePixelRatio() != 1.0) {
-        show();
-        hide();
-        m_firstStart = false;
-    }
     show();
     adjustSize(); // right widget need calculate width based on font
     adjustPosition();

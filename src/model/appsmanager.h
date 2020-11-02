@@ -32,7 +32,7 @@
 #include "src/dbusinterface/dbusdisplay.h"
 #include "src/global_util/calculate_util.h"
 
-#include <QMap>
+#include <QHash>
 #include <QSettings>
 #include <QPixmap>
 #include <QTimer>
@@ -60,6 +60,11 @@ class AppsManager : public QObject
     Q_OBJECT
 
 public:
+    enum CacheType {
+        TextType,
+        ImageType
+    };
+
     static AppsManager *instance();
     void stashItem(const QModelIndex &index);
     void stashItem(const QString &appKey);
@@ -110,8 +115,9 @@ public slots:
     bool appIsProxy(const QString &desktop);
     bool appIsEnableScaling(const QString &desktop);
     const QPixmap appIcon(const ItemInfo &info, const int size);
+    const QString appName(const ItemInfo &info, const int size);
     int appNums(const AppsListModel::AppCategory &category) const;
-    inline void clearCache() { m_iconCache.clear(); }
+    inline void clearCache() { m_CacheData.clear(); }
 
     void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
 
@@ -132,6 +138,7 @@ private:
     void onSearchTimeOut();
     void refreshNotFoundIcon();
     void refreshAppListIcon();
+    QString cacheKey(const ItemInfo &itemInfo, CacheType size);
 
 private slots:
     void onIconThemeChanged();
@@ -165,7 +172,7 @@ private:
     ItemInfoList m_appSearchResultList;
     ItemInfoList m_stashList;
     ItemInfoList m_categoryList;
-    QMap<AppsListModel::AppCategory, ItemInfoList> m_appInfos; // 全屏分类模式下保存的应用
+    QHash<AppsListModel::AppCategory, ItemInfoList> m_appInfos; // 全屏分类模式下保存的应用
 
     ItemInfo m_unInstallItem = ItemInfo();
     ItemInfo m_beDragedItem = ItemInfo();
@@ -184,7 +191,7 @@ private:
     static QSettings APP_USER_SORTED_LIST;
     static QSettings APP_USED_SORTED_LIST;
     static QSettings APP_CATEGORY_USED_SORTED_LIST;
-    QMap<QPair<QString, int>, QPixmap> m_iconCache;
+    QHash<QPair<QString, int>, QVariant> m_CacheData;
     std::map<std::pair<ItemInfo, int>, int> m_notExistIconMap;
     QStringList m_categoryTs;
     QStringList m_categoryIcon;

@@ -275,13 +275,13 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
    int start = nFixCount * m_pageIndex;
-   const ItemInfo itemInfo = m_appsManager->appsInfoListIndex(m_category,start + index.row());
+   const ItemInfo &itemInfo = m_appsManager->appsInfoListIndex(m_category,start + index.row());
 
     switch (role) {
     case AppRawItemInfoRole:
         return QVariant::fromValue(itemInfo);
     case AppNameRole:
-        return itemInfo.m_name;
+        return m_appsManager->appName(itemInfo, 240);
     case AppDesktopRole:
         return itemInfo.m_desktop;
     case AppKeyRole:
@@ -320,6 +320,11 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIcon(itemInfo, 36 * qApp->devicePixelRatio());
     case AppDragIconRole:
         return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize().width() * 1.2);
+    case AppListIconRole: {
+        const qreal ratio = qApp->devicePixelRatio();
+        QSize iconSize = (static_cast<AppsListModel::AppCategory>(m_category) == AppsListModel::Category) ? QSize(18, 18) * ratio : m_calcUtil->appIconSize();
+        return m_appsManager->appIcon(itemInfo, iconSize.width());
+    }
     case ItemSizeHintRole:
         return m_calcUtil->appItemSize();
     case AppIconSizeRole:

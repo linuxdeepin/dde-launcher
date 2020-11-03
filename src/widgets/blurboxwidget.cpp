@@ -156,4 +156,5 @@ void BlurBoxWidget::setMaskVisible(bool visible)
     } else {
        m_categoryTitle->setTitleOpacity(1);
     }
+    m_maskLayer->setVisible(visible);
 }

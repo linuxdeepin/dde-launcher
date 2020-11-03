@@ -256,11 +256,6 @@ void AppListView::mouseReleaseEvent(QMouseEvent *e)
         return;
     }
 
-    if (e->source() == Qt::MouseEventSynthesizedByQt) {
-        // reissue event
-        emit clicked(index);
-    }
-
     QListView::mouseReleaseEvent(e);
 }
 

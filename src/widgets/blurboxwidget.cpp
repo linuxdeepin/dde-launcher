@@ -34,9 +34,9 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     , m_name(name)
     , m_categoryMultiPagesView(new MultiPagesView(curCategory))
     , m_categoryTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", name)))
-    ,m_blurGroup(new  DBlurEffectGroup)
-    ,m_blurBackground(new DBlurEffectWidget(this))
-    ,m_bg(new MaskQWidget(this))
+    , m_blurGroup(new  DBlurEffectGroup)
+    , m_blurBackground(new DBlurEffectWidget(this))
+    , m_bg(new MaskQWidget(this))
 {
     setLayout(m_vLayout);
 
@@ -116,7 +116,7 @@ void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
         }
     }
     //把事件往下传fullscreenframe处理
-   QWidget::mouseReleaseEvent(e);
+    QWidget::mouseReleaseEvent(e);
 }
 
 void BlurBoxWidget::setMaskSize(QSize size)
@@ -150,9 +150,10 @@ void BlurBoxWidget::setFixedSize(const QSize &size)
 
 void BlurBoxWidget::setMaskVisible(bool visible)
 {
+    //设置标题的文本的透明度，icon还需要在deegate中设置
     if (visible) {
-        m_maskLayer->raise();
+       m_categoryTitle->setTitleOpacity(0.3);
     } else {
-        m_maskLayer->lower();
+       m_categoryTitle->setTitleOpacity(1);
     }
 }

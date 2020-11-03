@@ -86,6 +86,12 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QFont appNamefont(painter->font());
     appNamefont.setPixelSize(fontPixelSize);
     const QFontMetrics fm(appNamefont);
+    //分类模式且不是当前的分类就设置透明度
+    if( index.data(AppsListModel::AppGroupRole).toInt() >= 4 && index.data(AppsListModel::AppCategoryRole).toInt() != m_calcUtil->currentCategory()) {
+        painter->setOpacity(0.3);
+    } else {
+        painter->setOpacity(1);
+    }
 
     // Curve Fitting Result from MATLAB
 //    const int x = iconSize.width();

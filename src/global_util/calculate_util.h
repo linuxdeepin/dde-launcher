@@ -61,6 +61,8 @@ public:
     inline int appCategoryCount() const {return m_categoryCount;}
     inline QSize appItemSize() const { return QSize(m_appItemSize, m_appItemSize); }
     inline bool fullscreen() const {return isFullScreen;}
+    inline int currentCategory() const {return m_currentCategory;}
+    void setCurrentCategory(int category){m_currentCategory = category;}
     void setFullScreen(bool bFullScreen){isFullScreen = bFullScreen;}
     QSize appIconSize() const;
     int displayMode() const;
@@ -101,6 +103,7 @@ private:
     int m_titleTextSize = 40;
     int m_categoryAppPageItemCount = 12;
     int m_categoryCount = 11;
+    int m_currentCategory = 4;
     bool isFullScreen;
 
     DBusLauncher *m_launcherInter;

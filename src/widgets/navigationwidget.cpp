@@ -65,6 +65,7 @@ void NavigationWidget::setButtonsVisible(const bool visible)
 void NavigationWidget::setCurrentCategory(const AppsListModel::AppCategory category)
 {
     m_currentCategory = category;
+    m_calcUtil->setCurrentCategory(category);
     CategoryButton *btn = button(category);
 
     if (btn)

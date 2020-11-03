@@ -23,6 +23,8 @@
 
 #include "backgroundmanager.h"
 
+#include <QApplication>
+
 using namespace com::deepin;
 
 static const QString DefaultWallpaper = "/usr/share/backgrounds/default_background.jpg";
@@ -40,9 +42,12 @@ BackgroundManager::BackgroundManager(QObject *parent)
     , m_imageEffectInter(new ImageEffectInter("com.deepin.daemon.ImageEffect", "/com/deepin/daemon/ImageEffect", QDBusConnection::systemBus(), this))
     , m_imageblur(new ImageEffeblur("com.deepin.daemon.ImageEffect", "/com/deepin/daemon/ImageBlur", QDBusConnection::systemBus(), this))
     , m_appearanceInter(new AppearanceInter("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
+    , m_displayInter(new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
     , m_timerUpdateBlurbg(new QTimer)
 {
     m_appearanceInter->setSync(false, false);
+
+    m_displayMode = m_displayInter->GetRealDisplayMode();
 
     connect(m_wmInter, &__wm::WorkspaceSwitched, this, &BackgroundManager::updateBackgrounds);
     connect(m_wmInter, &__wm::WorkspaceBackgroundChanged, this, &BackgroundManager::updateBackgrounds);
@@ -51,10 +56,15 @@ BackgroundManager::BackgroundManager(QObject *parent)
             updateBackgrounds();
         }
     });
+    connect(m_displayInter, &DisplayInter::DisplayModeChanged, this, [=](uchar) {
+        m_displayMode = m_displayInter->GetRealDisplayMode();
+    });
 
+    m_timerUpdateBlurbg->setInterval(1000);
     m_timerUpdateBlurbg->setSingleShot(false);
     connect(m_timerUpdateBlurbg, &QTimer::timeout, this, &BackgroundManager::updateBlurBackgrounds);
-    //QTimer::singleShot(0, this, &BackgroundManager::updateBackgrounds);
+    connect(m_displayInter, &DisplayInter::DisplayModeChanged, this, &BackgroundManager::updateBackgrounds);
+
     updateBackgrounds();
 }
 
@@ -67,8 +77,19 @@ void BackgroundManager::updateBackgrounds()
 
 void BackgroundManager::updateBlurBackgrounds()
 {
-    m_timerUpdateBlurbg->setInterval(1000);
-    QString path = getLocalFile(m_wmInter->GetCurrentWorkspaceBackground());
+    QString screenName = qApp->primaryScreen()->name();
+
+    if (m_displayMode != MERGE_MODE) {
+        QWidget *parentWidget =qobject_cast<QWidget *>(parent());
+        QDesktopWidget *desktopwidget = QApplication::desktop();
+        int screenIndex = desktopwidget->screenNumber(parentWidget);
+        QList<QScreen *> screens = qApp->screens();
+        screenName = screens[screenIndex]->name();
+    }
+
+    qDebug() << "current screen name:" << screenName;
+
+    QString path = getLocalFile(m_wmInter->GetCurrentWorkspaceBackgroundForMonitor(screenName));
     QString filePath = QFile::exists(path) ? path : DefaultWallpaper;
 
     if (m_imageblur->Get(filePath) != "") {

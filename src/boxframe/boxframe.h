@@ -49,6 +49,7 @@ protected:
     void updateBlurBackground();
     void updateBackground();
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void moveEvent(QMoveEvent *event) Q_DECL_OVERRIDE;
 
 private:
     const QPixmap backgroundPixmap();

@@ -114,6 +114,17 @@ const QPixmap BoxFrame::backgroundPixmap()
 
 const QScreen *BoxFrame::currentScreen()
 {
+    if (m_bgManager->dispalyMode() == MERGE_MODE)
+        return qApp->primaryScreen();
+
+    QDesktopWidget *desktopwidget = QApplication::desktop();
+    int screenIndex = desktopwidget->screenNumber(this);
+    QList<QScreen *> screens = qApp->screens();
+    if (screenIndex < screens.count()) {
+        return screens[screenIndex];
+    }
+
+    qDebug() << "index out of bound in BoxFrame::currentScreen method";
     return qApp->primaryScreen();
 }
 
@@ -158,4 +169,10 @@ void BoxFrame::paintEvent(QPaintEvent *event)
                        QRect(tr.topLeft(),
                              tr.size() * m_cache.devicePixelRatioF()));
 
+}
+
+void BoxFrame::moveEvent(QMoveEvent *event)
+{
+    m_bgManager->updateBackgrounds();
+    QLabel::moveEvent(event);
 }

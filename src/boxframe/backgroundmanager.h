@@ -25,15 +25,24 @@
 #define BACKGROUNDMANAGER_H
 
 #include <QObject>
+#include <QDesktopWidget>
+#include <QScreen>
 
 #include <com_deepin_wm.h>
 #include <com_deepin_daemon_imageeffect.h>
 #include <com_deepin_daemon_imageblur.h>
 #include <com_deepin_daemon_appearance.h>
+#include <com_deepin_daemon_display.h>
+
+#define CUSTOM_MODE     0
+#define MERGE_MODE      1
+#define EXTEND_MODE     2
+#define SINGLE_MODE     3
 
 using ImageEffeblur = com::deepin::daemon::ImageBlur;
 using ImageEffectInter = com::deepin::daemon::ImageEffect;
 using AppearanceInter = com::deepin::daemon::Appearance;
+using DisplayInter = com::deepin::daemon::Display;
 
 class BackgroundManager : public QObject
 {
@@ -41,11 +50,12 @@ class BackgroundManager : public QObject
 public:
     explicit BackgroundManager(QObject *parent = nullptr);
 
+    int dispalyMode() const { return m_displayMode; }
 signals:
     void currentWorkspaceBackgroundChanged(const QString &background);
     void currentWorkspaceBlurBackgroundChanged(const QString &background);
 
-private slots:
+public slots:
     void updateBackgrounds();
     void updateBlurBackgrounds();
 
@@ -58,7 +68,9 @@ private:
     ImageEffectInter *m_imageEffectInter;
     ImageEffeblur      *m_imageblur;
     AppearanceInter *m_appearanceInter;
+    DisplayInter *m_displayInter;
     QTimer *m_timerUpdateBlurbg;
+    int m_displayMode;
 };
 
 #endif // BACKGROUNDMANAGER_H

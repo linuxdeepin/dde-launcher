@@ -454,14 +454,6 @@ bool AppGridView::eventFilter(QObject *o, QEvent *e)
     return false;
 }
 
-void AppGridView::enterEvent(QEvent *e)
-{
-    QListView::enterEvent(e);
-
-    // The coordinates of the entervent are incorrect after the menu is closed.
-    emit entered(indexAt(mapFromGlobal(QCursor::pos())));
-}
-
 ///
 /// \brief AppListView::fitToContent change view size to fit viewport content
 ///

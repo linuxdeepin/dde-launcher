@@ -74,10 +74,10 @@ const QPoint WindowedFrame::scaledPosition(const QPoint &xpos)
     QRect g = m_displayInter->primaryRect();
     for (auto screen : m_displayInter->monitors()) {
         MonitorInter *monitor = new MonitorInter("com.deepin.daemon.Display", screen.path(), QDBusConnection::sessionBus());
+        // 这里取屏幕的物理尺寸进行比较
         const QRect &sg = QRect(monitor->x(), monitor->y(), monitor->width(), monitor->height());
-        const QRect &rg = QRect(sg.topLeft(), sg.size() * ratio);
-        if (rg.contains(xpos)) {
-            g = rg;
+        if (sg.contains(xpos)) {
+            g = sg;
             break;
         }
     }

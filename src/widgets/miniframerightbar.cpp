@@ -192,6 +192,26 @@ void MiniFrameRightBar::showEvent(QShowEvent *event) {
     return QWidget::showEvent(event);
 }
 
+void MiniFrameRightBar::paintEvent(QPaintEvent *event)
+{
+    QWidget::paintEvent(event);
+
+    // 初始化绘制工具
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    // 绘制背景颜色
+    QColor backgroundColor;
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+        backgroundColor = QColor(0, 0, 0); // 浅色模式为#000000 透明度0.1%
+        backgroundColor.setAlphaF(0.1);
+    } else {
+        backgroundColor = QColor(255, 255, 255); // 深色模式为#FFFFFF 透明度0.08%
+        backgroundColor.setAlphaF(0.08);
+    }
+    painter.fillRect(rect(), backgroundColor);
+}
+
 void MiniFrameRightBar::openDirectory(const QString &dir)
 {
     DDesktopServices::showFolder(QUrl(dir));

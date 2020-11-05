@@ -113,13 +113,8 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_searcherEdit->installEventFilter(this);
     qApp->installEventFilter(this);
 
-    QPalette pal = m_maskBg->palette();
-    if( DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType){
-        pal.setColor(QPalette::Background, QColor(0,0,0,0.3*255));
-    }else{
-        pal.setColor(QPalette::Background, QColor(255,255,255,0.3*255));
-    }
-    m_maskBg->setPalette(pal);
+    // 重置控件样式
+    resetWidgetStyle();
     m_maskBg->setAutoFillBackground(true);
     m_maskBg->setFixedSize(size());
 
@@ -140,23 +135,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_tipsLabel->setFixedSize(500, 50);
     m_tipsLabel->setVisible(false);
 
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
-        QPalette pa = m_tipsLabel->palette();
-        pa.setBrush(QPalette::WindowText, pa.brightText());
-        m_tipsLabel->setPalette(pa);
-        if (themeType == DGuiApplicationHelper::LightType)
-            m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_normal.svg"));
-        else
-             m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_dark.svg"));
-
-       QPalette pal = m_maskBg->palette();
-       if(themeType == DGuiApplicationHelper::DarkType){
-           pal.setColor(QPalette::Background, QColor(0,0,0,0.3*255));
-       }else{
-           pal.setColor(QPalette::Background, QColor(255,255,255,0.3*255));
-       }
-       m_maskBg->setPalette(pal);
-    });
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &WindowedFrame::resetWidgetStyle);
 
     m_delayHideTimer->setInterval(200);
     m_delayHideTimer->setSingleShot(true);
@@ -642,6 +621,42 @@ QPainterPath WindowedFrame::getCornerPath(AnchoredCornor direction)
     return path;
 }
 
+void WindowedFrame::resetWidgetStyle()
+{
+    QPalette palette = m_tipsLabel->palette();
+    palette.setBrush(QPalette::WindowText, palette.brightText());
+    m_tipsLabel->setPalette(palette);
+
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType)
+        m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_dark.svg"));
+    else
+        m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_normal.svg"));
+
+    palette = m_maskBg->palette();
+    if( DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType){
+        palette.setColor(QPalette::Background, QColor(0,0,0,0.3*255));
+    }else{
+        palette.setColor(QPalette::Background, QColor(255,255,255,0.3*255));
+    }
+    m_maskBg->setPalette(palette);
+
+    // 设置搜索框样式
+    palette = m_searcherEdit->lineEdit()->palette();
+    QColor textColor; // 文本颜色
+    QColor backgroundColor; // 背景颜色
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+        textColor = QColor("#FFFFFF"); // 深色模式为#FFFFFF
+        backgroundColor = QColor(255, 255, 255); // 深色模式为#FFFFFF
+    } else {
+        textColor = QColor("#000000"); // 浅色模式为#000000
+        backgroundColor = QColor(0, 0, 0); // 浅色模式为#000000
+    }
+    backgroundColor.setAlphaF(0.12); // 背景颜色透明度12%
+    palette.setColor(QPalette::Text, textColor);
+    palette.setColor(QPalette::Button, backgroundColor);
+    m_searcherEdit->lineEdit()->setPalette(palette);
+}
+
 void WindowedFrame::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
@@ -983,6 +998,7 @@ void WindowedFrame:: paintEvent(QPaintEvent *e)
 {
     DBlurEffectWidget::paintEvent(e);
 
-    QPainter painter(this);
-    painter.fillRect(m_leftBar->geometry(), QColor(0, 0, 0, 25));
+    // 由于主窗口会根据控制中心设置的透明度改变而变化,
+    // 所有左侧工具栏背景绘制应该在左侧工具中
+    // 不然绘制出的背景会重新附上透明度达不到想要的效果
 }

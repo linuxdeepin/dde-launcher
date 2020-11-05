@@ -1,0 +1,8 @@
+[Desktop Entry]
+Comment=Deepin Launcher
+Exec=/usr/bin/dde-launcher
+Name=Deepin Launcher
+OnlyShowIn=''
+Type=Application
+X-Deepin-TurboType=dtkwidget
+X-Deepin-Vendor=user-custom

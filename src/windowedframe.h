@@ -31,6 +31,7 @@
 #include "worker/menuworker.h"
 #include "delegate/applistdelegate.h"
 #include "widgets/searchlineedit.h"
+#include "widgets/modetogglebutton.h"
 #include "widgets/miniframerightbar.h"
 #include "widgets/miniframeswitchbtn.h"
 #include "global_util/constants.h"
@@ -160,7 +161,7 @@ private:
     AnchoredCornor m_anchoredCornor = Normal;
     QPainterPath m_cornerPath;
     FocusPosition m_focusPos;
-    DToolButton *m_modeToggleBtn;
+    ModeToggleButton *m_modeToggleBtn;
     DSearchEdit *m_searcherEdit;
     bool m_enterSearchEdit;
 };

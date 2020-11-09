@@ -97,7 +97,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_displayMode(All)
     , m_calcUtil(CalculateUtil::instance())
     , m_focusPos(Applist)
-    , m_modeToggleBtn(new DToolButton(this))
+    , m_modeToggleBtn(new ModeToggleButton(this))
     , m_searcherEdit(new DSearchEdit)
     , m_enterSearchEdit(false)
 {
@@ -112,11 +112,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_appearanceInter->setSync(false, false);
     m_searcherEdit->installEventFilter(this);
     qApp->installEventFilter(this);
-
-    // 重置控件样式
-    resetWidgetStyle();
-    m_maskBg->setAutoFillBackground(true);
-    m_maskBg->setFixedSize(size());
 
     m_windowHandle.setShadowRadius(60);
     m_windowHandle.setBorderWidth(0);
@@ -242,10 +237,11 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_modeToggleBtn->setIconSize(QSize(32,32));
     m_modeToggleBtn->setFixedSize(40, 40);
     m_modeToggleBtn->setFocusPolicy(Qt::NoFocus);
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
-        m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_normal.svg"));
-    else
-        m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_dark.svg"));
+
+    // 重置控件样式
+    resetWidgetStyle();
+    m_maskBg->setAutoFillBackground(true);
+    m_maskBg->setFixedSize(size());
 }
 
 WindowedFrame::~WindowedFrame()
@@ -626,11 +622,6 @@ void WindowedFrame::resetWidgetStyle()
     QPalette palette = m_tipsLabel->palette();
     palette.setBrush(QPalette::WindowText, palette.brightText());
     m_tipsLabel->setPalette(palette);
-
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType)
-        m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_dark.svg"));
-    else
-        m_modeToggleBtn->setIcon(QIcon(":/icons/skin/icons/fullscreen_normal.svg"));
 
     palette = m_maskBg->palette();
     if( DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType){

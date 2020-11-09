@@ -99,6 +99,8 @@ private:
     int m_dropToPos;
     bool m_enableDropInside = false;
     bool m_enableAnimation = true;
+    //GridView的mouseMove事件是否结束
+    bool m_moveGridView = false;
     QPoint m_dragStartPos;
 
     const QWidget *m_containerBox = nullptr;

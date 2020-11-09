@@ -46,7 +46,7 @@ static const int APPHBOX_ALPHA = 30;
 
 static const int APPHBOX_RADIUS = 36;
 
-static const int TOP_BOTTOM_GRADIENT_HEIGHT = 60;
+static const int TOP_BOTTOM_GRADIENT_HEIGHT = 30;
 
 static const int APPS_AREA_TOP_MARGIN = 20;
 static const int APPS_AREA_BOTTOM_MARGIN = 20;

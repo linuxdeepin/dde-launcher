@@ -170,8 +170,7 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::RightButton) {
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
-
-        if (clickedIndex.isValid()) {
+        if (clickedIndex.isValid() && !m_moveGridView) {
             QPoint rightClickPoint = QCursor::pos();
             //触控屏右键
             if (e->source() == Qt::MouseEventSynthesizedByQt) {
@@ -320,6 +319,7 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
 
     if (qAbs(e->x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
             qAbs(e->y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
+        m_moveGridView = true;
         //开始拖拽后,导致fullscreenframe只收到mousePress事件,收不到mouseRelease事件,需要处理一下异常
         if (idx.isValid())
             emit requestMouseRelease();
@@ -333,6 +333,7 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
+    m_moveGridView = false;
     if (m_pDelegate)
         m_pDelegate->mouseRelease(e);
 
@@ -348,7 +349,7 @@ void AppGridView::startDrag(const QModelIndex &index)
 {
     if (!index.isValid())
         return;
-
+    m_moveGridView = false;
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     if (!listModel)
         return;

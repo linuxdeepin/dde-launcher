@@ -82,7 +82,6 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QSize iconSize = isCategoryList ? QSize(18, 18) * ratio : index.data(AppsListModel::AppIconSizeRole).value<QSize>();
 
     QPixmap iconPixmap = index.data(AppsListModel::AppListIconRole).value<QPixmap>();
-    iconPixmap.setDevicePixelRatio(ratio);
 
     if (isDragItem) {
         iconSize = iconSize * 1.1;

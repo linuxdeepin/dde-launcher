@@ -314,14 +314,19 @@ void AppListView::enterEvent(QEvent *event)
 {
     QListView::leaveEvent(event);
 
-    emit requestEnter(true);
+    // QScroller::hasScroller用于判断listview是否处于滑动状态，滑动状态不触发paint相关操作，否则滑动动画异常
+    if (!QScroller::hasScroller(this)) {
+        emit requestEnter(true);
+    }
 }
 
 void AppListView::leaveEvent(QEvent *event)
 {
     QListView::leaveEvent(event);
 
-    emit requestEnter(false);
+    if (!QScroller::hasScroller(this)) {
+        emit requestEnter(false);
+    }
 }
 
 void AppListView::startDrag(const QModelIndex &index)

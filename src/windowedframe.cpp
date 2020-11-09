@@ -38,6 +38,7 @@
 #include <QKeyEvent>
 #include <QResizeEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QScreen>
 #include <QEvent>
 #include <QTimer>

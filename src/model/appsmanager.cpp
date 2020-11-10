@@ -586,7 +586,7 @@ bool AppsManager::appIsNewInstall(const QString &key)
 bool AppsManager::appIsAutoStart(const QString &desktop)
 {
     int index = desktop.lastIndexOf('/');
-    return APP_AUTOSTART_CACHE.contains(index > 0 ? desktop.right(desktop.size() - index) : desktop);
+    return APP_AUTOSTART_CACHE.contains(index > 0 ? desktop.right(desktop.size() - index - 1) : desktop);
 }
 
 bool AppsManager::appIsOnDock(const QString &desktop)

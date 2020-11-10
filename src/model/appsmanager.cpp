@@ -143,10 +143,8 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
             break;
     } while (false);
 
-    if (qFuzzyCompare(pixmap.devicePixelRatioF(), 1.)) {
-        pixmap = pixmap.scaled(QSize(s, s) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        pixmap.setDevicePixelRatio(ratio);
-    }
+    pixmap = pixmap.scaled(QSize(s, s) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    pixmap.setDevicePixelRatio(ratio);
 
     QPair<QString, int> tmpKey { itemInfo.m_iconKey, s};
     if (m_iconCache[tmpKey].isNull() && findIcon )

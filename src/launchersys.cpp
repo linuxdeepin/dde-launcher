@@ -113,6 +113,11 @@ void LauncherSys::displayModeChanged()
 {
     LauncherInterface* lastLauncher = m_launcherInter;
 
+    // 后端启动器FullScreen变化,更新m_calcUtil
+    if (m_launcherInter && m_dbusLauncherInter) {
+        m_calcUtil->setFullScreen(m_dbusLauncherInter->fullscreen());
+    }
+
    if (m_calcUtil->fullscreen()) {
         if (!m_fullLauncher) {
             m_fullLauncher = new FullScreenFrame;

@@ -202,7 +202,10 @@ void LauncherSys::unRegisterRegion() {
     m_regionMonitor->unregisterRegion();
     disconnect(m_regionMonitorConnect);
 }
+
 void LauncherSys::onDisplayModeChanged()
 {
-    m_fullLauncher->updateDisplayMode(m_dbusLauncherInter->displaymode());
+    if (m_fullLauncher) {
+        m_fullLauncher->updateDisplayMode(m_dbusLauncherInter->displaymode());
+    }
 }

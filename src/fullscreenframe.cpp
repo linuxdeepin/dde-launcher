@@ -1275,7 +1275,7 @@ void FullScreenFrame::appendToSearchEdit(const char ch)
 
 void FullScreenFrame::launchCurrentApp()
 {
-    if (m_searchWidget->edit()->lineEdit()->text().isEmpty() && ( m_searchWidget->categoryBtn()->hasFocus() ||  m_focusIndex == CategoryChangeBtn)) {
+    if (m_searchWidget->edit()->lineEdit()->text().simplified().isEmpty() && ( m_searchWidget->categoryBtn()->hasFocus() ||  m_focusIndex == CategoryChangeBtn)) {
         QMouseEvent btnPress(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
         QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnPress);
         QMouseEvent btnRelease(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);

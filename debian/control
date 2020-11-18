@@ -23,7 +23,7 @@ Homepage: http://www.deepin.org/
 Package: dde-launcher
 Architecture: any
 Depends:
- deepin-desktop-schemas (>= 3.1.11),
+ deepin-desktop-schemas (>= 5.8.0.33),
  lastore-daemon,
  ${misc:Depends},
  ${shlibs:Depends},

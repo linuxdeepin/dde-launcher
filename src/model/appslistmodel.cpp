@@ -64,22 +64,6 @@ const QStringList sysHoldPackages()
         holds_list << setting.get("apps-hold-list").toStringList();
     }
 
-    //然后代码中补充固定的不可卸载软件列表
-    holds_list << "dde-control-center"
-               << "dde-computer"
-               << "dde-trash"
-               << "dde-file-manager"
-               << "deepin-appstore"
-               << "deepin-app-store"
-               << "deepin-toggle-desktop"
-               << "deepin-wm-multitaskingview"
-               << "dde-calendar"
-               << "deepin-manual"
-               << "deepin-terminal"
-               << "deepin-defender"
-               << "kwin-wm-multitaskingview"
-               << "dde-printer";
-
     return holds_list;
 }
 

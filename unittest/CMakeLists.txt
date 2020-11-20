@@ -22,6 +22,7 @@ find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(Qt5 COMPONENTS Test REQUIRED)
+find_package(GTest REQUIRED)
 
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
@@ -50,4 +51,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
     ${Qt5DBus_LIBRARIES}
     ${QGSettings_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
+    ${GTEST_LIBRARIES}
+    -lpthread
+    -lm
 )

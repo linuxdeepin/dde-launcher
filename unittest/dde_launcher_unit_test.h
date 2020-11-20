@@ -23,49 +23,17 @@
 #define LauncherUnitTest_H
 
 #include <QObject>
+#include <gtest/gtest.h>
 
-class LauncherUnitTest : public QObject
+class LauncherUnitTest : public QObject, public testing::Test
 {
     Q_OBJECT
 public:
-    explicit LauncherUnitTest(QObject *parent = nullptr);
-    ~LauncherUnitTest();
-    void initTestCase();
-    void cleanupTestCase();
-private slots:
-    //第一个测试单元
-    void case1_test();
-    //第二个测试单元 测试DBusDisplay 接口
-    void case2_testDisplayDBus();
-    //第三个测试单元 测试DBusDock
-    void case3_testDockDBus();
-    //第四个测试单元 测试DBusFileInfo
-    void case4_testFileInfoDBus();
-    //第五个测试单元 测试DBusLauncher
-    void case5_testLauncherDBus();
-    //第六个测试单元 测试DBusMenu
-    void case6_testMenuDBus();
-    //第七个测试单元 测试DBusMenuManager
-    void case7_testMenuManagerDBus();
-    //第八个测试单元 测试DBusStartManager
-    void case8_testStartManagerDBus();
-    //第九个测试单元 测试MonitorInterface
-    void case9_testMonitorInterface();
-    //第十个测试单元 测试启动器的位置
-    void case10_testMonitorInterface();
+    LauncherUnitTest() {}
+    virtual ~LauncherUnitTest() {}
 
-    void checkDbusStartUp();
-    //测试dde-lanucher接口
-    void case10_testLauncher();
-    //测试发送到桌面是否正常显示
-    void checkSendToDesktop();
-    //测试gsetting配置的默认值，需要新建账户或重装镜像进行测试
-    void check_gsettings_default();
-    /**
-     * @brief check_toggleLauncher
-     * 测试切换窗口模式
-     */
-    void check_toggleLauncher();
+    virtual void SetUp() {}
+    virtual void TearDown() {}
 };
 
 #endif // LauncherUnitTest_H

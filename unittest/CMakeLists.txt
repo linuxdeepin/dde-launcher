@@ -6,6 +6,9 @@ set(BIN_NAME dde_launcher_unit_test)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+# 用于测试覆盖率的编译条件
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -lgcov")
+
 # 源文件
 file(GLOB_RECURSE SRCS "*.h" "*.cpp")
 file(GLOB INTERFACES "../src/dbusinterface/*.h" "../src/dbusinterface/*.cpp")

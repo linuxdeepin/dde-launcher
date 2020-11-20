@@ -84,7 +84,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, QLineEdit);
     USE_ACCESSIBLE(classname, DatetimeWidget);
     USE_ACCESSIBLE(classname, Avatar);
-    USE_ACCESSIBLE(classname, QMenu);
     USE_ACCESSIBLE(classname, WindowedFrame);
     USE_ACCESSIBLE(classname, HSeparator);
     USE_ACCESSIBLE(classname, MiniFrameRightBar);
@@ -102,7 +101,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, MaskQWidget);
     USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DHBoxWidget);
     USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DBoxWidget);
-
 
     if (!interface && object->inherits("QWidget") && !ignoreLst.contains(classname)) {
         QWidget *w = static_cast<QWidget *>(object);

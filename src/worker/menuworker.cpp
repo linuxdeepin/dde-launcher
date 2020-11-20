@@ -64,6 +64,7 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
     qDebug() << "appKey" << m_appKey;
 
     QMenu *menu = new QMenu;
+    menu->setAccessibleName("popmenu");
 
     QSignalMapper *signalMapper = new QSignalMapper(menu);
 

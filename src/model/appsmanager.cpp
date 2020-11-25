@@ -789,6 +789,16 @@ void AppsManager::refreshUserInfoList()
     const qint64 currentTime = QDateTime::currentMSecsSinceEpoch() / 1000;
     // If the first run time is less than the current time, I am not sure can maintain the correct results.
     std::stable_sort(m_userSortedList.begin(), m_userSortedList.end(), [ = ](const ItemInfo & a, const ItemInfo & b) {
+        const bool ANewInsatll = m_newInstalledAppsList.contains(a.m_key);
+        const bool BNewInsatll = m_newInstalledAppsList.contains(b.m_key);
+        if(ANewInsatll|| BNewInsatll) {
+            if(ANewInsatll && BNewInsatll)
+                return a.m_installedTime > b.m_installedTime;
+
+            if(ANewInsatll) return true;
+            if(BNewInsatll) return false;
+        }
+
         const auto AFirstRunTime = a.m_firstRunTime;
         const auto BFirstRunTime = b.m_firstRunTime;
 
@@ -1063,7 +1073,7 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
 
         m_allAppInfoList.append(info);
         m_usedSortedList.append(info);
-        m_userSortedList.append(info);
+        m_userSortedList.push_front(info);
         pushPixmap(appInfo);
     } else if (operation == "deleted") {
 

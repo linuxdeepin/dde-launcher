@@ -51,12 +51,15 @@ public:
     explicit BackgroundManager(QObject *parent = nullptr);
 
     int dispalyMode() const { return m_displayMode; }
+
+private:
+    void getImageDataFromDbus(const QString &filePath);
+
 signals:
     void currentWorkspaceBackgroundChanged(const QString &background);
     void currentWorkspaceBlurBackgroundChanged(const QString &background);
 
 public slots:
-    void updateBackgrounds();
     void updateBlurBackgrounds();
 
 private:
@@ -69,7 +72,6 @@ private:
     ImageEffeblur      *m_imageblur;
     AppearanceInter *m_appearanceInter;
     DisplayInter *m_displayInter;
-    QTimer *m_timerUpdateBlurbg;
     int m_displayMode;
 };
 

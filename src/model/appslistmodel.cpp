@@ -75,7 +75,11 @@ const QStringList sysHoldPackages()
                << "deepin-terminal"
                << "deepin-defender"
                << "kwin-wm-multitaskingview"
-               << "dde-printer";
+               << "dde-printer"
+               << "com.deepin.dmcw"
+               << "aisbdfz"
+               << "aisuninstall"
+               << "com.ais.esm";
 
     return holds_list;
 }

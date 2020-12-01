@@ -107,8 +107,8 @@ QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo &info)
 QDataStream &operator<<(QDataStream &argument, const ItemInfo &info)
 {
     argument << info.m_desktop << info.m_openCount;
-//    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
-//    argument << info.m_categoryId << info.m_installedTime;
+    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
+    argument << info.m_categoryId << info.m_installedTime << info.m_firstRunTime;
 
     return argument;
 }
@@ -116,8 +116,8 @@ QDataStream &operator<<(QDataStream &argument, const ItemInfo &info)
 const QDataStream &operator>>(QDataStream &argument, ItemInfo &info)
 {
     argument >> info.m_desktop >> info.m_openCount;
-//    argument >> info.m_desktop >> info.m_name >> info.m_key >> info.m_iconKey;
-//    argument >> info.m_categoryId >> info.m_installedTime;
+    argument >> info.m_desktop >> info.m_name >> info.m_key >> info.m_iconKey;
+    argument >> info.m_categoryId >> info.m_installedTime >> info.m_firstRunTime;
 
     return argument;
 }

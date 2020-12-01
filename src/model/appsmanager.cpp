@@ -410,7 +410,6 @@ void AppsManager::saveUserSortedList()
     QByteArray writeBuf;
     QDataStream out(&writeBuf, QIODevice::WriteOnly);
     out << m_userSortedList;
-
     APP_USER_SORTED_LIST.setValue("list", writeBuf);
 }
 
@@ -487,6 +486,8 @@ void AppsManager::markLaunched(QString appKey)
 
     m_newInstalledAppsList.removeOne(appKey);
     m_launcherInter->MarkLaunched(appKey);
+
+    refreshUserInfoList();
 
     emit newInstallListChanged();
 }
@@ -748,18 +749,7 @@ void AppsManager::refreshUserInfoList()
             // check used list isvaild
             for (QList<ItemInfo>::iterator it = m_userSortedList.begin(); it != m_userSortedList.end();) {
                 int idx = m_allAppInfoList.indexOf(*it);
-
                 if (idx >= 0) {
-                    // 更新app的其它信息（sort list中可能未保存app的所有信息）
-                    const int openCount = it->m_openCount;
-                    it->updateInfo(m_allAppInfoList.at(idx));
-                    it->m_openCount = openCount;
-
-                    if (it->m_openCount > 0 && it->m_firstRunTime == 0) {
-                        // 对于未曾记录过第一次运行时间的应用（但是确保打开过），假定其单位小时打开次数为1，以此为根据给它一个有效的firstRunTime
-                        it->m_firstRunTime = QDateTime::currentMSecsSinceEpoch() / 1000 - it->m_openCount * USER_SORT_UNIT_TIME;
-                    }
-
                     it++;
                 } else {
                     it = m_userSortedList.erase(it);
@@ -813,7 +803,6 @@ void AppsManager::refreshUserInfoList()
         // Average number of starts
         return (static_cast<double>(a.m_openCount) / hours_diff_a) > (static_cast<double>(b.m_openCount) / hours_diff_b);
     });
-//    ReflashSortList();
 
     saveUserSortedList();
 }

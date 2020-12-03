@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 # 用于测试覆盖率的编译条件
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -lgcov")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -lgcov")
 
 # 源文件
 file(GLOB_RECURSE SRCS "*.h" "*.cpp")
@@ -58,3 +58,11 @@ target_link_libraries(${BIN_NAME} PRIVATE
     -lpthread
     -lm
 )
+
+add_custom_target(check)
+
+add_custom_command(TARGET check
+    COMMAND ./${BIN_NAME}
+    )
+
+add_dependencies(check ${BIN_NAME})

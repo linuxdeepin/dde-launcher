@@ -86,6 +86,10 @@ install(FILES ${QM_FILES} DESTINATION share/dde-launcher/translations)
 ## dev files
 install (FILES ${INTERFACES} DESTINATION include/dde-launcher)
 
+## desktop file
+install(FILES dde-launcher.desktop DESTINATION share/applications/)
+install(FILES dde-launcher-wapper DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
 ## services files
 install(FILES src/dbusservices/com.deepin.dde.Launcher.service DESTINATION /usr/share/dbus-1/services)
 

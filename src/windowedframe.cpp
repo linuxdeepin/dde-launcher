@@ -38,6 +38,7 @@
 #include <QKeyEvent>
 #include <QResizeEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QScreen>
 #include <QEvent>
 #include <QTimer>
@@ -630,22 +631,6 @@ void WindowedFrame::resetWidgetStyle()
         palette.setColor(QPalette::Background, QColor(255,255,255,0.3*255));
     }
     m_maskBg->setPalette(palette);
-
-    // 设置搜索框样式
-    palette = m_searcherEdit->lineEdit()->palette();
-    QColor textColor; // 文本颜色
-    QColor backgroundColor; // 背景颜色
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
-        textColor = QColor("#FFFFFF"); // 深色模式为#FFFFFF
-        backgroundColor = QColor(255, 255, 255); // 深色模式为#FFFFFF
-    } else {
-        textColor = QColor("#000000"); // 浅色模式为#000000
-        backgroundColor = QColor(0, 0, 0); // 浅色模式为#000000
-    }
-    backgroundColor.setAlphaF(0.12); // 背景颜色透明度12%
-    palette.setColor(QPalette::Text, textColor);
-    palette.setColor(QPalette::Button, backgroundColor);
-    m_searcherEdit->lineEdit()->setPalette(palette);
 }
 
 void WindowedFrame::mousePressEvent(QMouseEvent *e)
@@ -705,7 +690,6 @@ void WindowedFrame::enterEvent(QEvent *e)
 
     m_delayHideTimer->stop();
 
-    raise();
     activateWindow();
 }
 
@@ -713,7 +697,6 @@ void WindowedFrame::inputMethodEvent(QInputMethodEvent *e)
 {
     if (!e->commitString().isEmpty()) {
         m_searcherEdit->lineEdit()->setText(e->commitString());
-        m_searcherEdit->lineEdit()->setFocus();
     }
 
     QWidget::inputMethodEvent(e);
@@ -753,6 +736,10 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_leftBar && event->type() == QEvent::Resize) {
         setFixedSize(m_rightWidget->width() + m_leftBar->width(), 538);
+    }
+
+    if(watched == m_appsView && event->type() == QEvent::Wheel) {
+        m_searcherEdit->lineEdit()->clearFocus();
     }
 
     if (m_enterSearchEdit && watched->objectName() == QString("MiniFrameWindow")) {

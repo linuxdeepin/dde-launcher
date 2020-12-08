@@ -45,6 +45,7 @@ public:
         // custom role start
         AppRawItemInfoRole,
         AppDialogIconRole,
+        AppListIconRole,
         AppKeyRole,
         AppIconKeyRole,
         AppDesktopRole,

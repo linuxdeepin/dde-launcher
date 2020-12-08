@@ -6,6 +6,9 @@ set(BIN_NAME dde_launcher_unit_test)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+# 用于测试覆盖率的编译条件
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -lgcov")
+
 # 源文件
 file(GLOB_RECURSE SRCS "*.h" "*.cpp")
 file(GLOB INTERFACES "../src/dbusinterface/*.h" "../src/dbusinterface/*.cpp")
@@ -22,6 +25,7 @@ find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(Qt5 COMPONENTS Test REQUIRED)
+find_package(GTest REQUIRED)
 
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
@@ -50,4 +54,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
     ${Qt5DBus_LIBRARIES}
     ${QGSettings_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
+    ${GTEST_LIBRARIES}
+    -lpthread
+    -lm
 )

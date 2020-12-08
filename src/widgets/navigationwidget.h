@@ -42,6 +42,7 @@ public:
     CategoryButton *button(const AppsListModel::AppCategory category) const;
 
     void updateSize();
+    QButtonGroup * buttonGroup() { return m_categoryGroup;}
 signals:
     void scrollToCategory(const AppsListModel::AppCategory oldCategory, const AppsListModel::AppCategory newCategory) const;
     void mouseEntered();

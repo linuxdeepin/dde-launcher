@@ -25,7 +25,6 @@
 #define APPLISTVIEW_H
 
 #include <QListView>
-#include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
 #include <QDBusInterface>
 #include <DWindowManagerHelper>
@@ -87,7 +86,6 @@ private:
 
     QPropertyAnimation *m_lastFakeAni = nullptr;
     QPropertyAnimation *m_scrollAni;
-    QGraphicsOpacityEffect *m_opacityEffect;
     DWindowManagerHelper *m_wmHelper;
     double m_speedTime = 1.0;
 

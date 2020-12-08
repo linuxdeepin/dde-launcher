@@ -27,7 +27,6 @@
 
 #include <QHBoxLayout>
 #include <QDebug>
-#include <QGraphicsDropShadowEffect>
 #include <QApplication>
 #include <QSvgRenderer>
 #include <QPainter>

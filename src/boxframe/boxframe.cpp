@@ -173,6 +173,6 @@ void BoxFrame::paintEvent(QPaintEvent *event)
 
 void BoxFrame::moveEvent(QMoveEvent *event)
 {
-    m_bgManager->updateBackgrounds();
+    m_bgManager->updateBlurBackgrounds();
     QLabel::moveEvent(event);
 }

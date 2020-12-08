@@ -56,8 +56,8 @@ static constexpr int USER_SORT_UNIT_TIME = 3600; // 1 hours
 
 int perfectIconSize(const int size)
 {
-    const int s = 6;
-    const int l[s] = { 16, 32, 64, 96, 128, 256 };
+    const int s = 8;
+    const int l[s] = { 16, 18, 24, 32, 64, 96, 128, 256 };
 
     for (int i(0); i != s; ++i)
         if (size <= l[i])
@@ -72,7 +72,6 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
     const auto ratio = qApp->devicePixelRatio();
     const int s = perfectIconSize(size);
     bool findIcon = true;
-    QPlatformTheme *const platformTheme = QGuiApplicationPrivate::platformTheme();
 
     QPixmap pixmap;
     do {
@@ -95,46 +94,13 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
                 break;
         }
 
-        QScopedPointer<QIconEngine> engine(platformTheme->createIconEngine(iconName));
-        QIcon icon;
+        QIcon icon = QIcon::fromTheme(iconName);
 
-        if (!engine.isNull()) {
-            if (engine->isNull()) {
-                auto iterator =
-                    std::find_if(m_notExistIconMap.begin(), m_notExistIconMap.end(),
-                [ = ](const std::pair<std::pair<ItemInfo, int>, int> value) {
-                    return value.first.first.m_iconKey == iconName && value.first.second == size;
-                });
-
-                if (iterator == m_notExistIconMap.end()) {
-                    if (!iconName.isEmpty()) {
-                        const std::pair<ItemInfo, int> pair{ itemInfo, size };
-                        m_notExistIconMap[pair] = 0;
-                        m_iconRefreshTimer->start();
-                    }
-
-                    icon = QIcon::fromTheme(iconName);
-                    if (icon.isNull()) {
-                        icon = QIcon::fromTheme("deepinwine-" + iconName);
-                    }
-
-                    if (icon.isNull()) {
-                        icon = QIcon::fromTheme("deepin.com." + iconName);
-                    }
-                }
-            } else {
-                icon = QIcon::fromTheme(iconName);
-                if (icon.isNull()) {
-                    icon = QIcon::fromTheme("deepinwine-" + iconName);
-                }
-
-                if (icon.isNull()) {
-                    icon = QIcon::fromTheme("deepin.com." + iconName);
-                }
-            }
-        }
         if (icon.isNull()) {
             icon = QIcon::fromTheme("application-x-desktop");
+            //手动更新缓存
+            system("gtk-update-icon-cache /usr/share/icons/hicolor/");
+
             findIcon = false;
         }
 
@@ -147,8 +113,8 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
     pixmap.setDevicePixelRatio(ratio);
 
     QPair<QString, int> tmpKey { itemInfo.m_iconKey, s};
-    if (m_iconCache[tmpKey].isNull() && findIcon )
-        m_iconCache[tmpKey] = pixmap;
+    if (m_CacheData[tmpKey].isNull() && findIcon )
+        m_CacheData[tmpKey] = pixmap;
     return pixmap;
 }
 
@@ -444,7 +410,6 @@ void AppsManager::saveUserSortedList()
     QByteArray writeBuf;
     QDataStream out(&writeBuf, QIODevice::WriteOnly);
     out << m_userSortedList;
-
     APP_USER_SORTED_LIST.setValue("list", writeBuf);
 }
 
@@ -521,6 +486,8 @@ void AppsManager::markLaunched(QString appKey)
 
     m_newInstalledAppsList.removeOne(appKey);
     m_launcherInter->MarkLaunched(appKey);
+
+    refreshUserInfoList();
 
     emit newInstallListChanged();
 }
@@ -646,13 +613,27 @@ bool AppsManager::appIsEnableScaling(const QString &desktop)
 const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
 {
     const int s = perfectIconSize(size);
-    QPair<QString, int> tmpKey { info.m_iconKey, s };
+    QPair<QString, int> tmpKey { cacheKey(info, CacheType::ImageType) , s};
 
-    if (m_iconCache.contains(tmpKey) && !m_iconCache[tmpKey].isNull()) {
-        return m_iconCache[tmpKey];
+    if (m_CacheData.contains(tmpKey) && !m_CacheData[tmpKey].isNull()) {
+        return m_CacheData[tmpKey].value<QPixmap>();
     } else {
         const QPixmap &pixmap = getThemeIcon(info, size);
         return pixmap;
+    }
+}
+
+const QString AppsManager::appName(const ItemInfo &info, const int size)
+{
+    QPair<QString, int> tmpKey { cacheKey(info, CacheType::TextType) , size };
+
+    if (m_CacheData.contains(tmpKey) && !m_CacheData[tmpKey].isNull()) {
+        return m_CacheData[tmpKey].toString();
+    } else {
+        const QFontMetrics fm = qApp->fontMetrics();
+        QString fm_string = fm.elidedText(info.m_name, Qt::ElideRight, size);
+        m_CacheData[tmpKey] = fm_string;
+        return fm_string;
     }
 }
 
@@ -743,7 +724,7 @@ void AppsManager::refreshUsedInfoList()
 void AppsManager::refreshCategoryUsedInfoList()
 {
     // 保存排序信息
-    QMap<AppsListModel::AppCategory, ItemInfoList>::iterator categoryAppsIter = m_appInfos.begin();
+    QHash<AppsListModel::AppCategory, ItemInfoList>::iterator categoryAppsIter = m_appInfos.begin();
     for (; categoryAppsIter != m_appInfos.end(); categoryAppsIter++) {
         int category = categoryAppsIter.key();
 
@@ -768,18 +749,7 @@ void AppsManager::refreshUserInfoList()
             // check used list isvaild
             for (QList<ItemInfo>::iterator it = m_userSortedList.begin(); it != m_userSortedList.end();) {
                 int idx = m_allAppInfoList.indexOf(*it);
-
                 if (idx >= 0) {
-                    // 更新app的其它信息（sort list中可能未保存app的所有信息）
-                    const int openCount = it->m_openCount;
-                    it->updateInfo(m_allAppInfoList.at(idx));
-                    it->m_openCount = openCount;
-
-                    if (it->m_openCount > 0 && it->m_firstRunTime == 0) {
-                        // 对于未曾记录过第一次运行时间的应用（但是确保打开过），假定其单位小时打开次数为1，以此为根据给它一个有效的firstRunTime
-                        it->m_firstRunTime = QDateTime::currentMSecsSinceEpoch() / 1000 - it->m_openCount * USER_SORT_UNIT_TIME;
-                    }
-
                     it++;
                 } else {
                     it = m_userSortedList.erase(it);
@@ -809,6 +779,16 @@ void AppsManager::refreshUserInfoList()
     const qint64 currentTime = QDateTime::currentMSecsSinceEpoch() / 1000;
     // If the first run time is less than the current time, I am not sure can maintain the correct results.
     std::stable_sort(m_userSortedList.begin(), m_userSortedList.end(), [ = ](const ItemInfo & a, const ItemInfo & b) {
+        const bool ANewInsatll = m_newInstalledAppsList.contains(a.m_key);
+        const bool BNewInsatll = m_newInstalledAppsList.contains(b.m_key);
+        if(ANewInsatll|| BNewInsatll) {
+            if(ANewInsatll && BNewInsatll)
+                return a.m_installedTime > b.m_installedTime;
+
+            if(ANewInsatll) return true;
+            if(BNewInsatll) return false;
+        }
+
         const auto AFirstRunTime = a.m_firstRunTime;
         const auto BFirstRunTime = b.m_firstRunTime;
 
@@ -823,7 +803,6 @@ void AppsManager::refreshUserInfoList()
         // Average number of starts
         return (static_cast<double>(a.m_openCount) / hours_diff_a) > (static_cast<double>(b.m_openCount) / hours_diff_b);
     });
-//    ReflashSortList();
 
     saveUserSortedList();
 }
@@ -899,7 +878,7 @@ void AppsManager::generateCategoryMap()
 
 
     // 移除 m_appInfos 中已经不存在的应用
-    QMap<AppsListModel::AppCategory, ItemInfoList>::iterator categoryAppsIter = m_appInfos.begin();
+    QHash<AppsListModel::AppCategory, ItemInfoList>::iterator categoryAppsIter = m_appInfos.begin();
     for (; categoryAppsIter != m_appInfos.end(); categoryAppsIter++) {
         ItemInfoList &item = categoryAppsIter.value();
         for (auto it(item.begin()); it != item.end();) {
@@ -1010,11 +989,11 @@ void AppsManager::refreshNotFoundIcon()
         // QIcon have cache, cannot use QIcon::fromTheme or QIcon::hasThemeIcon
         QScopedPointer<QIconEngine> engine(platformTheme->createIconEngine(itemPair.first.m_iconKey));
         if (!engine.isNull() && !engine->isNull()) {
-            for (auto iconIt = m_iconCache.begin(); iconIt != m_iconCache.end(); ++iconIt) {
-                if (iconIt.key().first == itemPair.first.m_iconKey && iconIt.key().second / ratio == itemPair.second) {
-                    const QPair<QString, int> iconPair{ itemPair.first.m_iconKey, iconIt.key().second };
+            for (auto iconIt = m_CacheData.begin(); iconIt != m_CacheData.end(); ++iconIt) {
+                if (iconIt.key().first == cacheKey(itemPair.first, CacheType::ImageType) && iconIt.key().second / ratio == itemPair.second) {
+                    const QPair<QString, int> iconPair{ cacheKey(itemPair.first, CacheType::ImageType), iconIt.key().second };
                     const QPixmap &pixmap = getThemeIcon(itemPair.first, itemPair.second);
-                    m_iconCache[iconPair] = pixmap;
+                    m_CacheData[iconPair] = pixmap;
                     emit itemDataChanged(itemPair.first);
                     it = m_notExistIconMap.erase(it);
                     break;
@@ -1036,7 +1015,7 @@ void AppsManager::refreshNotFoundIcon()
 
 void AppsManager::onIconThemeChanged()
 {
-    m_iconCache.clear();
+    m_CacheData.clear();
 
     emit dataChanged(AppsListModel::All);
 }
@@ -1083,7 +1062,7 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
 
         m_allAppInfoList.append(info);
         m_usedSortedList.append(info);
-        m_userSortedList.append(info);
+        m_userSortedList.push_front(info);
         pushPixmap(appInfo);
     } else if (operation == "deleted") {
 
@@ -1148,12 +1127,12 @@ void AppsManager::pushPixmap()
 
 void AppsManager::pushPixmap(const ItemInfo &itemInfo)
 {
-    const int s = 6;
-    const int l[s] = { 16, 32, 64, 96, 128, 256 };
+    const int s = 8;
+    const int l[s] = { 16, 18, 24, 32, 64, 96, 128, 256 };
 
     for (int i = 0; i < s; i++) {
-        QPair<QString, int> tmpKey { itemInfo.m_iconKey, l[i]};
-        if (m_iconCache[tmpKey].isNull()) {
+        QPair<QString, int> tmpKey { cacheKey(itemInfo, CacheType::ImageType), l[i]};
+        if (m_CacheData[tmpKey].isNull()) {
             getThemeIcon(itemInfo, l[i]);
         }
     }
@@ -1188,4 +1167,10 @@ int AppsManager::getVisibleCategoryCount()
     }
 
     return ret;
+}
+
+QString AppsManager::cacheKey(const ItemInfo &info, CacheType type)
+{
+    QString key = info.m_name + info.m_iconKey + QString::number(type);
+    return key;
 }

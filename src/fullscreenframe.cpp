@@ -34,7 +34,6 @@
 #include <QDebug>
 #include <QScrollBar>
 #include <QKeyEvent>
-#include <QGraphicsEffect>
 #include <QProcess>
 #include <DWindowManagerHelper>
 
@@ -704,13 +703,28 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
 }
 
 bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
-{
+{   
+    QKeyEvent *keyPress = static_cast<QKeyEvent *>(e);
+    if (m_displayMode == GROUP_BY_CATEGORY && e->type() == QEvent::KeyPress && keyPress->key() == Qt::Key_Tab) {
+        foreach (QAbstractButton * button, m_navigationWidget->buttonGroup()->buttons()) {
+            if (button == o ) {
+                m_focusIndex = CategoryTital;
+                nextTabWidget(Qt::Key_Tab);
+                return true;
+            }
+        }
+    }
+
     // we filter some key events from LineEdit, to implements cursor move.
     if (o == m_searchWidget->edit()->lineEdit() && e->type() == QEvent::KeyPress) {
         QKeyEvent *keyPress = static_cast<QKeyEvent *>(e);
         if (keyPress->key() == Qt::Key_Left || keyPress->key() == Qt::Key_Right) {
             QKeyEvent *event = new QKeyEvent(keyPress->type(), keyPress->key(), keyPress->modifiers());
             qApp->postEvent(this, event);
+            return true;
+        } else if (keyPress->key() == Qt::Key_Tab) {
+            m_focusIndex = SearchEdit;
+            moveCurrentSelectApp(Qt::Key_Tab);
             return true;
         }
     } else if (o == m_contentFrame && e->type() == QEvent::Resize && m_canResizeDockPosition) {
@@ -758,6 +772,7 @@ void FullScreenFrame::initUI()
     m_clearCacheTimer->setInterval(DLauncher::CLEAR_CACHE_TIMER * 1000);
 
     m_searchWidget->categoryBtn()->installEventFilter(m_eventFilter);
+    m_searchWidget->edit()->lineEdit()->installEventFilter(this);
     m_searchWidget->installEventFilter(m_eventFilter);
     m_appItemDelegate->installEventFilter(m_eventFilter);
 
@@ -765,6 +780,14 @@ void FullScreenFrame::initUI()
     m_multiPagesView->setDataDelegate(m_appItemDelegate);
     m_multiPagesView->updatePageCount(AppsListModel::All);
     m_multiPagesView->installEventFilter(this);
+
+    foreach (QAbstractButton * button, m_navigationWidget->buttonGroup()->buttons()) {
+        if (button) {
+            button->installEventFilter(m_eventFilter);
+        }
+    }
+
+
 
     m_internetBoxWidget->setVisible(false);
     m_chatBoxWidget->setVisible(false);

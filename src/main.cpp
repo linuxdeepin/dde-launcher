@@ -58,17 +58,17 @@ void dump_user_apss_preset_order_list()
     qDebug().noquote() << '[' << buf.join(", ") << ']';
 }
 
-int main(int argv, char *args[])
+int main(int argc, char *argv[])
 {
     DGuiApplicationHelper::setUseInactiveColorGroup(false);
     DGuiApplicationHelper::setColorCompositingEnabled(true);
-    DApplication app(argv, args);
-    app.setQuitOnLastWindowClosed(false);
-    app.setOrganizationName("deepin");
-    app.setApplicationName("dde-launcher");
-    app.setApplicationVersion("3.0");
-    app.loadTranslator();
-    app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+    DApplication *app = DApplication::globalApplication(argc, argv);
+    app->setQuitOnLastWindowClosed(false);
+    app->setOrganizationName("deepin");
+    app->setApplicationName("dde-launcher");
+    app->setApplicationVersion("3.0");
+    app->loadTranslator();
+    app->setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     DLogManager::registerConsoleAppender();
     // 加载 Accessible 插件 测试使用 用sniff查看效果
@@ -78,7 +78,7 @@ int main(int argv, char *args[])
     DLogManager::registerFileAppender();
 #endif
 
-    bool quit = !app.setSingleInstance(QString("dde-launcher_%1").arg(getuid()));
+    bool quit = !app->setSingleInstance(QString("dde-launcher_%1").arg(getuid()));
 
     QCommandLineOption showOption(QStringList() << "s" << "show", "show launcher(hide for default.)");
     QCommandLineOption toggleOption(QStringList() << "t" << "toggle", "toggle launcher visible.");
@@ -91,7 +91,7 @@ int main(int argv, char *args[])
     cmdParser.addOption(showOption);
     cmdParser.addOption(toggleOption);
     cmdParser.addOption(dumpPresetOrder);
-    cmdParser.process(app);
+    cmdParser.process(*app);
 
     if (cmdParser.isSet(dumpPresetOrder))
     {
@@ -133,5 +133,5 @@ int main(int argv, char *args[])
 #endif
         QTimer::singleShot(1, &launcher, &LauncherSys::showLauncher);
 
-    return app.exec();
+    return app->exec();
 }

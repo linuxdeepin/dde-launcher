@@ -81,9 +81,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     QSize iconSize = isCategoryList ? QSize(18, 18) * ratio : index.data(AppsListModel::AppIconSizeRole).value<QSize>();
 
-    QPixmap iconPixmap = index.data(AppsListModel::AppIconRole).value<QPixmap>();
-    iconPixmap = iconPixmap.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    iconPixmap.setDevicePixelRatio(ratio);
+    QPixmap iconPixmap = index.data(AppsListModel::AppListIconRole).value<QPixmap>();
 
     if (isDragItem) {
         iconSize = iconSize * 1.1;
@@ -159,8 +157,6 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     }
 
     QRect textRect = rect.marginsRemoved(QMargins(60, 1, 1, 1));
-    QString appName = index.data(AppsListModel::AppNameRole).toString();
-    const QFontMetrics fm = painter->fontMetrics();
 
     if (isDrawTips) {
         textRect.setWidth(textRect.width() - 90);
@@ -179,7 +175,8 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         textRect.setX(textRect.x() - 13);
         textRect.setY(textRect.y() - 2);
     }
-    painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, fm.elidedText(appName, Qt::ElideRight, textRect.width()));
+
+    painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, index.data(AppsListModel::AppNameRole).toString());
 
     // draw category right icon
     if (isCategoryList) {
@@ -205,6 +202,7 @@ QSize AppListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
 {
     Q_UNUSED(option);
     Q_UNUSED(index);
+
 
     return QSize(0, 36);
 }

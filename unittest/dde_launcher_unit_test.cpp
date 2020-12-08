@@ -20,13 +20,6 @@
  */
 
 #include "dde_launcher_unit_test.h"
-#include <QtTest/QtTest>
-#include <QDBusInterface>
-#include <QDBusMetaType>
-#include <QDBusMessage>
-#include <QDBusArgument>
-#include <QGSettings>
-
 #include "src/dbusinterface/dbuslauncherframe.h"
 #include "src/dbusinterface/dbusdisplay.h"
 #include "src/dbusinterface/dbusfileinfo.h"
@@ -37,37 +30,18 @@
 #include "src/dbusinterface/dbusdock.h"
 #include "src/dbusinterface/dbuslauncher.h"
 
-LauncherUnitTest::LauncherUnitTest(QObject *parent)
-    : QObject(parent)
+#include <QtTest/QtTest>
+#include <QDBusInterface>
+#include <QDBusMetaType>
+#include <QDBusMessage>
+#include <QDBusArgument>
+#include <QGSettings>
+
+/**
+ * @brief LauncherUnitTest::testDisplayDBus 测试显示Dbus服务
+ */
+TEST_F(LauncherUnitTest, testDisplayDBus)
 {
-
-}
-
-LauncherUnitTest::~LauncherUnitTest()
-{
-
-}
-
-void LauncherUnitTest::initTestCase()
-{
-
-}
-
-void LauncherUnitTest::cleanupTestCase()
-{
-
-}
-
-void LauncherUnitTest::case1_test()
-{
-    QBENCHMARK_ONCE;
-
-}
-
-void LauncherUnitTest::case2_testDisplayDBus()
-{
-    QBENCHMARK_ONCE;
-
     DBusDisplay displayInterface(this);
     QVERIFY(displayInterface.isValid());
 
@@ -99,10 +73,11 @@ void LauncherUnitTest::case2_testDisplayDBus()
     qDebug() << QString("Test displayInterface ScreenWidth:%1").arg(screenWidth);
 }
 
-void LauncherUnitTest::case3_testDockDBus()
+/**
+ * @brief LauncherUnitTest::testDockDBus 测试任务栏Dbus服务
+ */
+TEST_F(LauncherUnitTest, testDockDBus)
 {
-    QBENCHMARK_ONCE;
-
     DBusDock dockInterface(this);
     QVERIFY(dockInterface.isValid());
 
@@ -131,7 +106,10 @@ void LauncherUnitTest::case3_testDockDBus()
     qDebug() << QString("Test dockInterface frontendRect:(%1,%2,%3,%4").arg(frontendRect.left()).arg(frontendRect.top()).arg(frontendRect.right()).arg(frontendRect.bottom());
 }
 
-void LauncherUnitTest::case4_testFileInfoDBus()
+/**
+ * @brief LauncherUnitTest::testFileInfoDBus 测试文件信息Dbus服务
+ */
+TEST_F(LauncherUnitTest, testFileInfoDBus)
 {
     DBusFileInfo fileInfoInteface(this);
     QVERIFY(fileInfoInteface.isValid());
@@ -177,11 +155,12 @@ void LauncherUnitTest::case4_testFileInfoDBus()
 
     QString fileAttributeEtagValue = fileInfoInteface.fileAttributeEtagValue();
     qDebug() << QString("Test fileInfoInteface fileAttributeEtagValue:%1").arg(fileAttributeEtagValue);
-
-    //to-do
 }
 
-void LauncherUnitTest::case5_testLauncherDBus()
+/**
+ * @brief LauncherUnitTest::testLauncherDBus 测试启动器Dbus服务
+ */
+TEST_F(LauncherUnitTest, testLauncherDBus)
 {
     DBusLauncher launcherInterface(this);
     QVERIFY(launcherInterface.isValid());
@@ -193,25 +172,37 @@ void LauncherUnitTest::case5_testLauncherDBus()
     qDebug() << QString("Test launcherInterface displaymode:%1").arg(displaymode);
 }
 
-void LauncherUnitTest::case6_testMenuDBus()
+/**
+ * @brief LauncherUnitTest::testMenuDBus 测试菜单Dbus服务
+ */
+TEST_F(LauncherUnitTest, testMenuDBus)
 {
     DBusMenu menuInterface("com.deepin.menu.Menu", "/com/deepin/menu/Menu", QDBusConnection::sessionBus(), this);
     QVERIFY(menuInterface.isValid());
 }
 
-void LauncherUnitTest::case7_testMenuManagerDBus()
+/**
+ * @brief LauncherUnitTest::testMenuManagerDBus 测试菜单管理器Dbus服务
+ */
+TEST_F(LauncherUnitTest, testMenuManagerDBus)
 {
     DBusMenuManager menuManagerInterface(this);
     QVERIFY(menuManagerInterface.isValid());
 }
 
-void LauncherUnitTest::case8_testStartManagerDBus()
+/**
+ * @brief LauncherUnitTest::testStartManagerDBus  测试StartManagerDBus
+ */
+TEST_F(LauncherUnitTest, testStartManagerDBus)
 {
-    DBusStartManager startManagerInterface(this);
-    QVERIFY(startManagerInterface.isValid());
+        DBusStartManager startManagerInterface(this);
+        QVERIFY(startManagerInterface.isValid());
 }
 
-void LauncherUnitTest::case9_testMonitorInterface()
+/**
+ * @brief LauncherUnitTest::testMonitorInterface 测试显示Dbus服务
+ */
+TEST_F(LauncherUnitTest, testMonitorInterface)
 {
     MonitorInterface monitorInterface("/com/deepin/daemon/Display", this);
     QVERIFY(monitorInterface.isValid());
@@ -256,13 +247,12 @@ void LauncherUnitTest::case9_testMonitorInterface()
     qDebug() << QString("Test monitorInterface y:%1").arg(y);
 }
 
-
 /**
- * @brief LauncherUnitTest::case10_testMonitorInterface
+ * @brief LauncherUnitTest::testDockPos
  * 测试启动器的位置是否正确,有时候启动器不知道在哪里
  *
  */
-void LauncherUnitTest::case10_testMonitorInterface()
+TEST_F(LauncherUnitTest, testDockPos)
 {
     DBusDock dockInterface(this);
     QRect r = dockInterface.frontendRect();
@@ -296,7 +286,7 @@ void LauncherUnitTest::case10_testMonitorInterface()
  * 可以测出问题 dde-launcher 5.3.0.2-1 杀掉启动器进程之后需要按两次super才能打开启动器
  * bug:https://pms.uniontech.com/zentao/bug-view-41679.html
  */
-void LauncherUnitTest::checkDbusStartUp()
+TEST_F(LauncherUnitTest, checkDbusStartUp)
 {
     int killCode = QProcess::execute("killall", QStringList() << "dde-launcher");
 
@@ -313,7 +303,7 @@ void LauncherUnitTest::checkDbusStartUp()
  * @brief LauncherUnitTest::case10_testLauncher
  * 检查Lanucher接口是否正常，Show,Hide,IsVisible和UninstallApp是否正常
  */
-void LauncherUnitTest::case10_testLauncher()
+TEST_F(LauncherUnitTest, testLauncher)
 {
     QDBusInterface inter("com.deepin.dde.Lanucher",
                          "/com/deepin/dde/Lanucher",
@@ -344,7 +334,7 @@ void LauncherUnitTest::case10_testLauncher()
  * @brief LauncherUnitTest::checkSendToDesktop
  * 测试发送到桌面是否正常显示
  */
-void LauncherUnitTest::checkSendToDesktop()
+TEST_F(LauncherUnitTest, checkSendToDesktop)
 {
     DBusLauncher launcher(this);
     QString appName = "deepin-music";
@@ -365,7 +355,7 @@ void LauncherUnitTest::checkSendToDesktop()
  * 2.全屏模式的排序模式：默认为free自由排序模式
  * 3.显示模式：默认为false窗口模式
  */
-void LauncherUnitTest::check_gsettings_default()
+TEST_F(LauncherUnitTest, check_gsettings_default)
 {
     QGSettings setting("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
     if (setting.keys().contains("appsIconRatio")) {
@@ -385,7 +375,7 @@ void LauncherUnitTest::check_gsettings_default()
     }
 }
 
-void LauncherUnitTest::check_toggleLauncher()
+TEST_F(LauncherUnitTest, check_toggleLauncher)
 {
     QDBusInterface launcherBusInter("com.deepin.dde.daemon.Launcher"
                             ,"/com/deepin/dde/daemon/Launcher"
@@ -413,5 +403,3 @@ void LauncherUnitTest::check_toggleLauncher()
         QCOMPARE(fullScreen, false);
     }
 }
-
-QTEST_MAIN(LauncherUnitTest)

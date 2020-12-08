@@ -64,22 +64,6 @@ const QStringList sysHoldPackages()
         holds_list << setting.get("apps-hold-list").toStringList();
     }
 
-    //然后代码中补充固定的不可卸载软件列表
-    holds_list << "dde-control-center"
-               << "dde-computer"
-               << "dde-trash"
-               << "dde-file-manager"
-               << "deepin-appstore"
-               << "deepin-app-store"
-               << "deepin-toggle-desktop"
-               << "deepin-wm-multitaskingview"
-               << "dde-calendar"
-               << "deepin-manual"
-               << "deepin-terminal"
-               << "deepin-defender"
-               << "kwin-wm-multitaskingview"
-               << "dde-printer";
-
     return holds_list;
 }
 
@@ -275,13 +259,13 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
    int start = nFixCount * m_pageIndex;
-   const ItemInfo itemInfo = m_appsManager->appsInfoListIndex(m_category,start + index.row());
+   const ItemInfo &itemInfo = m_appsManager->appsInfoListIndex(m_category,start + index.row());
 
     switch (role) {
     case AppRawItemInfoRole:
         return QVariant::fromValue(itemInfo);
     case AppNameRole:
-        return itemInfo.m_name;
+        return m_appsManager->appName(itemInfo, 240);
     case AppDesktopRole:
         return itemInfo.m_desktop;
     case AppKeyRole:
@@ -320,6 +304,11 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIcon(itemInfo, 36 * qApp->devicePixelRatio());
     case AppDragIconRole:
         return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize().width() * 1.2);
+    case AppListIconRole: {
+        const qreal ratio = qApp->devicePixelRatio();
+        QSize iconSize = (static_cast<AppsListModel::AppCategory>(m_category) == AppsListModel::Category) ? QSize(18, 18) * ratio : m_calcUtil->appIconSize();
+        return m_appsManager->appIcon(itemInfo, iconSize.width());
+    }
     case ItemSizeHintRole:
         return m_calcUtil->appItemSize();
     case AppIconSizeRole:

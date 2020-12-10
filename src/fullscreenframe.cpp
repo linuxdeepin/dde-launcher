@@ -1191,7 +1191,9 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     }
 
     if (Qt::Key_Space == key) {
-        m_searchWidget->categoryBtn()->setFocus();
+        if (m_searchWidget->categoryBtn()->hasFocus()) {
+            m_searchWidget->categoryBtn()->click();
+        }
         return;
     }
 

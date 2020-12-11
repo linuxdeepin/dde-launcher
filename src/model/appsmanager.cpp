@@ -668,6 +668,7 @@ QStringList AppsManager::getFilterList()
     if (m_filterSetting != nullptr) {
         return m_filterSetting->get("filter-keys").toStringList();
     }
+    return QStringList();
 }
 
 void AppsManager::refreshCategoryInfoList()

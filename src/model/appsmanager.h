@@ -139,6 +139,9 @@ private slots:
     void searchDone(const QStringList &resultList);
     void markLaunched(QString appKey);
     void delayRefreshData();
+    QIcon getIconFromDir(QString dirName, QString subdirName, QString iconName, int fakeSize = 32);
+    QIcon manualGetAppIcon(QString iconName, int fakeSize = 32);
+
     /**
      * @brief 模糊匹配，反向查询key是否包含list任一个元素
      * 

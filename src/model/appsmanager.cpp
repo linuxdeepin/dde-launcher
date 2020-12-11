@@ -43,6 +43,9 @@
 #include <DApplication>
 #include <DGuiApplicationHelper>
 
+#define APPICONPATH1 "/usr/share/icons/hicolor/"
+#define APPICONPATH2 "/usr/share/icons/"
+
 DWIDGET_USE_NAMESPACE
 
 QPointer<AppsManager> AppsManager::INSTANCE = nullptr;
@@ -63,6 +66,99 @@ int perfectIconSize(const int size)
             return l[i];
 
     return 256;
+}
+
+QIcon AppsManager::getIconFromDir(QString dirName, QString subdirName, QString iconName, int fakeSize)
+{
+    QIcon icon;
+    QString filename;
+
+    if (subdirName.isEmpty()) {
+        filename.clear();
+        filename = dirName;
+        filename.append(iconName);
+        if (QFile::exists(filename)) {
+            icon.addFile(filename,QSize(fakeSize,fakeSize));
+        }
+        return icon;
+    }
+
+    int iconIndex = 0;
+    int sizelist[] = {16,24,32,48,64,96,128,256,512};
+    int sl = 9;
+
+    //往比图片fakeSize大的路径上找图片
+    for (int i = 0; i < sl; i++) {
+
+        if (fakeSize == sizelist[i]) {
+            iconIndex = i;
+        }
+
+        if (fakeSize <= sizelist[i]) {
+            filename.clear();
+            filename = dirName;
+            filename.append(QString::number(sizelist[i]) + 'x' + QString::number(sizelist[i]));
+            filename.append(subdirName);
+            filename.append(iconName);
+            if (!QFile::exists(filename)) {
+                continue;
+            } else {
+                icon.addFile(filename,QSize(sizelist[i],sizelist[i]));
+                break;
+            }
+        }
+    }
+
+    if (icon.isNull()) {
+        //如果未找到图片，往比图片fakeSize小的路径上找,取fakeSize最近数值size的图片
+        for (int i = iconIndex - 1; i >= 0 && i < iconIndex; i--) {
+            filename.clear();
+            filename = dirName;
+            filename.append(QString::number(sizelist[i]) + 'x' + QString::number(sizelist[i]));
+            filename.append(subdirName);
+            filename.append(iconName);
+            if (!QFile::exists(filename)) {
+                continue;
+            } else {
+                icon.addFile(filename,QSize(sizelist[i],sizelist[i]));
+                break;
+            }
+        }
+    }
+
+    return icon;
+}
+
+//手动查找第三方应用的图标
+QIcon AppsManager::manualGetAppIcon(QString iconName,int fakeSize)
+{
+    QIcon icon;
+
+    if (iconName.isEmpty()) {
+        qDebug() << "-->Get Icon is Empty";
+        return icon;
+    }
+
+    iconName.append(".png");
+
+    //例在/usr/share/icons/hicolor/48x48/apps/目录下查找图片
+    //例在/usr/share/icons/hicolor/48x48/mimetypes/目录下查找图片
+    //例在/usr/share/icons/目录下查找图片
+    icon = getIconFromDir(APPICONPATH1,"/apps/",iconName,fakeSize);
+    if (icon.isNull()) {
+        icon = getIconFromDir(APPICONPATH1,"/mimetypes/",iconName,fakeSize);
+        if (icon.isNull()) {
+            icon = getIconFromDir(APPICONPATH2,"",iconName,fakeSize);
+        }
+    }
+
+    if (icon.isNull()) {
+        qDebug() << "-->Cannot find:"<< iconName << ", used default icon :application-x-desktop";
+    } else {
+        qDebug() << "-->Find:"<< iconName << ", and setSize=" << fakeSize;
+    }
+
+    return icon;
 }
 
 const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size)
@@ -99,11 +195,10 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
 
         if (!engine.isNull()) {
             if (engine->isNull()) {
-                auto iterator =
-                    std::find_if(m_notExistIconMap.begin(), m_notExistIconMap.end(),
-                [ = ](const std::pair<std::pair<ItemInfo, int>, int> value) {
-                    return value.first.first.m_iconKey == iconName && value.first.second == size;
-                });
+                auto iterator = std::find_if(m_notExistIconMap.begin(), m_notExistIconMap.end(),
+                    [ = ](const std::pair<std::pair<ItemInfo, int>, int> value) {
+                        return value.first.first.m_iconKey == iconName && value.first.second == size;
+                    });
 
                 if (iterator == m_notExistIconMap.end()) {
                     if (!iconName.isEmpty()) {
@@ -132,8 +227,12 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
             }
         }
         if (icon.isNull()) {
-            icon = QIcon::fromTheme("application-x-desktop");
-            findIcon = false;
+            qDebug() << "-->Qt Function Cannot Find Icon:" << iconName << ":size=" << s;
+            icon = manualGetAppIcon(iconName, s);
+            if (icon.isNull()) {
+                icon = QIcon::fromTheme("application-x-desktop");
+                findIcon = false;
+            }
         }
 
         pixmap = icon.pixmap(QSize(s, s));

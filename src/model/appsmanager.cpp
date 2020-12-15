@@ -750,6 +750,10 @@ void AppsManager::refreshUserInfoList()
             for (QList<ItemInfo>::iterator it = m_userSortedList.begin(); it != m_userSortedList.end();) {
                 int idx = m_allAppInfoList.indexOf(*it);
                 if (idx >= 0) {
+
+                    // 更换语言的时候更新语言
+                    it->updateInfo(m_allAppInfoList.at(idx));
+
                     it++;
                 } else {
                     it = m_userSortedList.erase(it);

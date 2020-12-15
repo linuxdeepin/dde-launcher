@@ -60,17 +60,17 @@ AppsListModel::AppCategory ItemInfo::category() const
 {
     switch (m_categoryId)
     {
-    case 0:     return AppsListModel::Internet;         break;
-    case 1:     return AppsListModel::Chat;             break;
-    case 2:     return AppsListModel::Music;            break;
-    case 3:     return AppsListModel::Video;            break;
-    case 4:     return AppsListModel::Graphics;         break;
-    case 5:     return AppsListModel::Game;             break;
-    case 6:     return AppsListModel::Office;           break;
-    case 7:     return AppsListModel::Reading;          break;
-    case 8:     return AppsListModel::Development;      break;
-    case 9:     return AppsListModel::System;           break;
-    case 10:    return AppsListModel::Others;           break;
+    case 0:     return AppsListModel::Internet;
+    case 1:     return AppsListModel::Chat;
+    case 2:     return AppsListModel::Music;
+    case 3:     return AppsListModel::Video;
+    case 4:     return AppsListModel::Graphics;
+    case 5:     return AppsListModel::Game;
+    case 6:     return AppsListModel::Office;
+    case 7:     return AppsListModel::Reading;
+    case 8:     return AppsListModel::Development;
+    case 9:     return AppsListModel::System;
+    case 10:    return AppsListModel::Others;
     default:;
     }
 
@@ -83,7 +83,7 @@ void ItemInfo::updateInfo(const ItemInfo &info)
     if (!this->operator==(info))
         return;
 
-    *this = info;
+    m_name = info.m_name;
 }
 
 QDebug operator<<(QDebug argument, const ItemInfo &info)

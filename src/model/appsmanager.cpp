@@ -718,7 +718,6 @@ void AppsManager::refreshUsedInfoList()
         updateUsedListInfo();
     }
 
-    saveUserSortedList();
     saveUsedSortedList();
 }
 

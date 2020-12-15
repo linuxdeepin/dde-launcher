@@ -23,21 +23,17 @@
 #include "miniframebutton.h"
 #include "avatar.h"
 
-#include <DDesktopServices>
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QEvent>
 #include <QApplication>
 #include <QDesktopWidget>
+
+#include <DDesktopServices>
 #include <DGuiApplicationHelper>
+#include <DDBusSender>
 
 DGUI_USE_NAMESPACE
-
-#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
-#include <DDBusSender>
-#else
-#include <QProcess>
-#endif
 
 MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     : QWidget(parent)
@@ -229,26 +225,18 @@ void MiniFrameRightBar::openStandardDirectory(const QStandardPaths::StandardLoca
 
 void MiniFrameRightBar::handleShutdownAction(const QString &action)
 {
-#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.shutdownFront")
             .interface("com.deepin.dde.shutdownFront")
             .path("/com/deepin/dde/shutdownFront")
             .method(action)
             .call();
-#else
-    const QString command = QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront " \
-                                    "/com/deepin/dde/shutdownFront " \
-                                    "com.deepin.dde.shutdownFront.%1").arg(action);
 
-    QProcess::startDetached(command);
-#endif
     emit requestFrameHide();
 }
 
 void MiniFrameRightBar::handleTimedateOpen()
 {
-#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.ControlCenter")
             .interface("com.deepin.dde.ControlCenter")
@@ -256,22 +244,12 @@ void MiniFrameRightBar::handleTimedateOpen()
             .method(QStringLiteral("ShowModule"))
             .arg(QStringLiteral("datetime"))
             .call();
-#else
-    const QString command("dbus-send "
-                          "--type=method_call "
-                          "--dest=com.deepin.dde.ControlCenter "
-                          "/com/deepin/dde/ControlCenter "
-                          "com.deepin.dde.ControlCenter.ShowModule "
-                          "string:datetime");
 
-    QProcess::startDetached(command);
-#endif
     emit requestFrameHide();
 }
 
 void MiniFrameRightBar::handleAvatarClicked()
 {
-#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.ControlCenter")
             .interface("com.deepin.dde.ControlCenter")
@@ -279,42 +257,30 @@ void MiniFrameRightBar::handleAvatarClicked()
             .method(QStringLiteral("ShowModule"))
             .arg(QStringLiteral("accounts"))
             .call();
-#else
-    const QString command("dbus-send "
-                          "--type=method_call "
-                          "--dest=com.deepin.dde.ControlCenter "
-                          "/com/deepin/dde/ControlCenter "
-                          "com.deepin.dde.ControlCenter.ShowModule "
-                          "string:accounts");
 
-    QProcess::startDetached(command);
-#endif
     emit requestFrameHide();
 }
 
 void MiniFrameRightBar::showShutdown()
 {
-    QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
+    DDBusSender()
+            .service("com.deepin.dde.shutdownFront")
+            .interface("com.deepin.dde.shutdownFront")
+            .path("/com/deepin/dde/shutdownFront")
+            .method("Show")
+            .call();
+
     emit requestFrameHide();
 }
 
 void MiniFrameRightBar::showSettings()
 {
-#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.ControlCenter")
             .interface("com.deepin.dde.ControlCenter")
             .path("/com/deepin/dde/ControlCenter")
             .method(QString("Toggle"))
             .call();
-#else
-    const QString command("dbus-send "
-                          "--type=method_call "
-                          "--dest=com.deepin.dde.ControlCenter "
-                          "/com/deepin/dde/ControlCenter "
-                          "com.deepin.dde.ControlCenter.Toggle");
-    QProcess::startDetached(command);
-#endif
 
     emit requestFrameHide();
 }

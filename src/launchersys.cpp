@@ -189,6 +189,9 @@ bool LauncherSys::eventFilter(QObject *watched, QEvent *event)
         m_regionMonitor->unregisterRegion();
         disconnect(m_regionMonitorConnect);
         m_autoExitTimer->start();
+        if (!m_regionMonitor->registered() && (watched == m_fullLauncher)) {
+            registerRegion();
+        }
     }
 
     return QObject::eventFilter(watched, event);

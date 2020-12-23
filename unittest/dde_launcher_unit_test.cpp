@@ -29,6 +29,7 @@
 #include "src/dbusinterface/monitorinterface.h"
 #include "src/dbusinterface/dbusdock.h"
 #include "src/dbusinterface/dbuslauncher.h"
+#include "src/global_util/calculate_util.h"
 
 #include <QtTest/QtTest>
 #include <QDBusInterface>
@@ -188,6 +189,16 @@ TEST_F(LauncherUnitTest, testMenuManagerDBus)
 {
     DBusMenuManager menuManagerInterface(this);
     QVERIFY(menuManagerInterface.isValid());
+}
+
+
+TEST_F(LauncherUnitTest, CalculateUtil)
+{
+    auto m_calculateUtil = CalculateUtil::instance();
+
+    m_calculateUtil->getAppBoxSize();
+    m_calculateUtil->setFullScreen(false);
+    m_calculateUtil->setDisplayMode(1);
 }
 
 /**

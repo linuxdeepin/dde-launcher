@@ -10,7 +10,17 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -lgcov")
 
 # 源文件
-file(GLOB_RECURSE SRCS "*.h" "*.cpp")
+file(GLOB_RECURSE SRCS "../src/global_util/*.h"
+                       "../src/global_util/*.cpp"
+                       "../src/boxframe/*.h"
+                       "../src/boxframe/*.cpp"
+                       "../src/worker/*.h"
+                       "../src/worker/*.cpp"
+                       "../src/model/*.h"
+                       "../src/model/*.cpp"
+#                       "../src/widgets/*.h"
+#                       "../src/widgets/*.cpp"
+                       "*.h" "*.cpp" )
 file(GLOB INTERFACES "../src/dbusinterface/*.h" "../src/dbusinterface/*.cpp")
 file(GLOB DBusVariant "../src/dbusinterface/dbusvariant/*.h" "../src/dbusinterface/dbusvariant/*.cpp")
 
@@ -33,7 +43,7 @@ pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11)
 
 # 添加执行文件信息
 #${LAUNCHER}
-add_executable(${BIN_NAME} ${SRCS}  ${INTERFACES} ${DBusVariant})
+add_executable(${BIN_NAME} ${SRCS}  ${INTERFACES} ${DBusVariant} )
 
 target_include_directories(${BIN_NAME} PUBLIC
     ${DtkWidget_INCLUDE_DIRS}

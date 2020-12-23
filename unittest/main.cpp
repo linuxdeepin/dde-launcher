@@ -15,9 +15,9 @@ int main(int argc, char **argv)
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
-    qDebug() << "start dde-clipboard test cases ..............";
+    qDebug() << "start dde-launcher test cases ..............";
     ::testing::InitGoogleTest(&argc, argv);
     int ret = RUN_ALL_TESTS();
-    qDebug() << "end dde-clipboard test cases ..............";
+    qDebug() << "end dde-launcher test cases ..............";
     return ret;
 }

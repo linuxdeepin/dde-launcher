@@ -92,7 +92,6 @@ void MultiPagesView::updateGradient(QPixmap &pixmap, QPoint topLeftImg, QPoint t
     m_pLeftGradient->setPixmap(topCache);
     m_pLeftGradient->resize(gradientSize);
     m_pLeftGradient->move(topLeft);
-    m_pLeftGradient->show();
     m_pLeftGradient->raise();
 
     QPoint topRight(topLeft.x() + width() - gradientSize.width(), topLeft.y());
@@ -104,8 +103,8 @@ void MultiPagesView::updateGradient(QPixmap &pixmap, QPoint topLeftImg, QPoint t
     m_pRightGradient->setPixmap(bottomCache);
     m_pRightGradient->resize(gradientSize);
     m_pRightGradient->move(topRight);
-    m_pRightGradient->show();
     m_pRightGradient->raise();
+    setGradientVisible(true);
 }
 
 void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
@@ -137,9 +136,15 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
 
             connect(pageView, &AppGridView::requestScrollLeft, this, &MultiPagesView::dragToLeft);
             connect(pageView, &AppGridView::requestScrollRight, this, &MultiPagesView::dragToRight);
-            connect(pageView, &AppGridView::requestScrollStop, [this] {m_bDragStart = false;});
+            connect(pageView, &AppGridView::requestScrollStop, [this] {
+                m_bDragStart = false;
+                setGradientVisible(false);
+            });
             connect(pageView, &AppGridView::dragEnd, this, &MultiPagesView::dragStop);
             connect(m_pageSwitchAnimation, &QPropertyAnimation::finished,pageView,&AppGridView::setDragAnimationEnable);
+            connect(m_pageSwitchAnimation, &QPropertyAnimation::finished,this, [ = ]{
+                    setGradientVisible(false);
+            });
             emit connectViewEvent(pageView);
         }
     } else {
@@ -213,6 +218,12 @@ void MultiPagesView::setDataDelegate(QAbstractItemDelegate *delegate)
 {
     m_delegate = delegate;
     InitUI();
+}
+
+void MultiPagesView::setGradientVisible(bool visible)
+{
+    m_pLeftGradient->setVisible(visible);
+    m_pRightGradient->setVisible(visible);
 }
 
 void MultiPagesView::ShowPageView(AppsListModel::AppCategory category)
@@ -354,7 +365,7 @@ void MultiPagesView::mousePress(QMouseEvent *e)
     m_scrollValue = m_appListArea->horizontalScrollBar()->value();
     m_scrollStart = m_scrollValue;
 
-    updateGradient();
+    if(e->button() != Qt::RightButton) updateGradient();
 }
 
 void MultiPagesView::mouseMove(QMouseEvent *e)
@@ -386,8 +397,7 @@ void MultiPagesView::mouseRelease(QMouseEvent *e)
     }
     m_bMousePress = false;
 
-    m_pLeftGradient->hide();
-    m_pRightGradient->hide();
+    setGradientVisible(false);
 }
 
 // 更新边框渐变，在屏幕变化时需要更新，类别拖动时需要隐藏

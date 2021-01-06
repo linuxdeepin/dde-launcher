@@ -144,7 +144,7 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
         QPoint rightClickPoint = mapToGlobal(e->pos());
 
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
-        if (clickedIndex.isValid())
+        if (clickedIndex.isValid() && !m_moveGridView)
             emit popupMenuRequested(rightClickPoint, clickedIndex);
     }
 
@@ -280,6 +280,7 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
 
     if (qAbs(e->x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
         qAbs(e->y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
+        m_moveGridView = true;
         return startDrag(QListView::indexAt(m_dragStartPos));
     }
 
@@ -294,6 +295,7 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
+    m_moveGridView = false;
     if (m_pDelegate)
         m_pDelegate->mouseRelease(e);
 
@@ -305,7 +307,7 @@ void AppGridView::startDrag(const QModelIndex &index)
     qDebug("AppGridView::startDrag");
     if (!index.isValid())
         return;
-
+    m_moveGridView = false;
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     if (!listModel)
         return;

@@ -61,6 +61,7 @@ public:
     void setModel(AppsListModel::AppCategory category);
     void updatePosition();
 
+    void setGradientVisible(bool visible);
     void ShowPageView(AppsListModel::AppCategory category);
     void mousePress(QMouseEvent *e);
     void mouseMove(QMouseEvent *e);

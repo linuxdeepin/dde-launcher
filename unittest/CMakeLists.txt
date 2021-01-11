@@ -43,7 +43,7 @@ pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11)
 
 # 添加执行文件信息
 #${LAUNCHER}
-add_executable(${BIN_NAME} ${SRCS}  ${INTERFACES} ${DBusVariant} )
+add_executable(${BIN_NAME} ${SRCS}  ${INTERFACES} ${DBusVariant})
 
 target_include_directories(${BIN_NAME} PUBLIC
     ${DtkWidget_INCLUDE_DIRS}

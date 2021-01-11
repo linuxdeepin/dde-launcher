@@ -25,6 +25,7 @@
 #include "global_util/constants.h"
 #include "global_util/xcb_misc.h"
 #include "src/boxframe/backgroundmanager.h"
+#include "sharedeventfilter.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -35,20 +36,14 @@
 #include <QScrollBar>
 #include <QKeyEvent>
 #include <QProcess>
-#include <DWindowManagerHelper>
-
-#include <ddialog.h>
 #include <QScroller>
 
-#define     SIDES_SPACE_SCALE   0.10
-
-#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
+#include <DWindowManagerHelper>
 #include <DDBusSender>
-#else
-#include <QProcess>
-#endif
 
-#include "sharedeventfilter.h"
+#include <ddialog.h>
+
+#define     SIDES_SPACE_SCALE   0.10
 
 DGUI_USE_NAMESPACE
 
@@ -1191,7 +1186,9 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     }
 
     if (Qt::Key_Space == key) {
-        m_searchWidget->categoryBtn()->setFocus();
+        if (m_searchWidget->categoryBtn()->hasFocus()) {
+            m_searchWidget->categoryBtn()->click();
+        }
         return;
     }
 

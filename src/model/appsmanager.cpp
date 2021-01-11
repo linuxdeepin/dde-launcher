@@ -112,7 +112,7 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
     pixmap = pixmap.scaled(QSize(s, s) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pixmap.setDevicePixelRatio(ratio);
 
-    QPair<QString, int> tmpKey { cacheKey(itemInfo, CacheType::ImageType), s};
+    QPair<QString, int> tmpKey { itemInfo.m_iconKey, s};
     if (m_CacheData[tmpKey].isNull() && findIcon )
         m_CacheData[tmpKey] = pixmap;
     return pixmap;

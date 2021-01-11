@@ -37,7 +37,7 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
 {
     m_title->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    setAccessibleName(title);
+    m_title->setAccessibleName(title);
     setText(title);
     DFontSizeManager::instance()->bind(m_title, DFontSizeManager::T1);
     setTitleOpacity(1);  // update the style of this widget by force.

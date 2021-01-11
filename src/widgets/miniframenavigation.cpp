@@ -30,12 +30,7 @@
 #include <QPainterPath>
 
 #include <DDesktopServices>
-
-#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
 #include <DDBusSender>
-#else
-#include <QProcess>
-#endif
 
 #include <unistd.h>
 
@@ -188,36 +183,21 @@ void MiniFrameNavigation::openStandardDirectory(const QStandardPaths::StandardLo
 
 void MiniFrameNavigation::handleShutdownAction(const QString &action)
 {
-#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.shutdownFront")
             .interface("com.deepin.dde.shutdownFront")
             .path("/com/deepin/dde/shutdownFront")
             .method(action)
             .call();
-#else
-    const QString command = QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront " \
-                                    "/com/deepin/dde/shutdownFront " \
-                                    "com.deepin.dde.shutdownFront.%1").arg(action);
 
-    QProcess::startDetached(command);
-#endif
 }
 
 void MiniFrameNavigation::handleLockAction()
 {
-#if (DTK_VERSION >= DTK_VERSION_CHECK(2, 0, 8, 0))
     DDBusSender()
             .service("com.deepin.dde.lockFront")
             .interface("com.deepin.dde.lockFront")
             .path("/com/deepin/dde/lockFront")
             .method(QString())
             .call();
-#else
-    const QString command = QString("dbus-send --print-reply --dest=com.deepin.dde.lockFront " \
-                                    "/com/deepin/dde/lockFront " \
-                                    "com.deepin.dde.lockFront");
-
-    QProcess::startDetached(command);
-#endif
 }

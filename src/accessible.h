@@ -70,8 +70,9 @@ SET_FORM_ACCESSIBLE(DBoxWidget, "DBoxWidget")
 
 QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
 {
-    // 自动化标记确定不需要的控件，方可加入忽略列表
-    const static QStringList ignoreLst = {"QLineEditIconButton"};
+    // 自动化标记确定不需要的控件，方可加入忽略列表,QLabel目前DTK没有修改完成，导致部分QLabel没有设置AccessName,导致过不了Q_ASSERT_X
+    // TO_DO dtk完善DSearchEdit设置AccessName内容
+    const static QStringList ignoreLst = {"QLineEditIconButton","QLabel"};
 
     QAccessibleInterface *interface = nullptr;
     USE_ACCESSIBLE(classname, AppGridView);

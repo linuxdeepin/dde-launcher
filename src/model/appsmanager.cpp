@@ -1073,6 +1073,7 @@ void AppsManager::locateFolders(){
 
 
 void AppsManager::locateFolders(QString path, QString filter){
+    ItemInfoList list;
     if(path.endsWith('/')){
         QDirIterator it(path, QDirIterator::FollowSymlinks);
         while (it.hasNext()) {
@@ -1091,7 +1092,7 @@ void AppsManager::locateFolders(QString path, QString filter){
             else {
                 item.m_iconKey = getMime(element);
             }
-            m_appSearchResultList.append(item);
+            list.append(item);
         }
     }else if(QFileInfo::exists(path)&&filter.isEmpty()){
         ItemInfo item;
@@ -1103,6 +1104,15 @@ void AppsManager::locateFolders(QString path, QString filter){
         else {
             item.m_iconKey = getMime(path);
         }
+        list.append(item);
+    }
+
+    m_appSearchResultList.append(list);
+    if(list.size()==1){
+        ItemInfo item;
+        item.m_name = tr("Show in folder");
+        item.m_key = "dde-file-manager --show-item "+list.at(0).m_key.section(' ', -1);
+        item.m_iconKey = "folder-open";
         m_appSearchResultList.append(item);
     }
 }

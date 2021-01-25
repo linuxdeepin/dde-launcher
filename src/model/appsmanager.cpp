@@ -112,7 +112,7 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
     pixmap = pixmap.scaled(QSize(s, s) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pixmap.setDevicePixelRatio(ratio);
 
-    QPair<QString, int> tmpKey { cacheKey(itemInfo, CacheType::ImageType), s};
+    QPair<QString, int> tmpKey { itemInfo.m_iconKey, s};
     if (m_CacheData[tmpKey].isNull() && findIcon )
         m_CacheData[tmpKey] = pixmap;
     return pixmap;
@@ -454,6 +454,9 @@ void AppsManager::launchApp(const QModelIndex &index)
 
     if (!appDesktop.isEmpty())
         m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
+    else {
+        system(index.data(AppsListModel::AppKeyRole).toString().toUtf8());
+    }
 }
 
 void AppsManager::uninstallApp(const QString &appKey)
@@ -1042,12 +1045,85 @@ void AppsManager::searchDone(const QStringList &resultList)
     for (const QString &key : resultCopy)
         appendSearchResult(key);
 
+    locateFolders();
+
     emit dataChanged(AppsListModel::Search);
 
     if (m_appSearchResultList.isEmpty())
         emit requestTips(tr("No search results"));
     else
         emit requestHideTips();
+}
+
+void AppsManager::locateFolders(){
+    QString path = m_searchText;
+    if(path.startsWith('~'))
+        path = path.replace('~', QDir::homePath());
+    if(!path.startsWith('/')){
+        path = QDir::homePath()+'/'+path;
+    }
+    if(QFileInfo::exists(path)){
+        locateFolders(path);
+    }else {
+        path = QFileInfo(path).absoluteDir().path();
+        if(QFileInfo::exists(path))
+           locateFolders(path+'/', m_searchText.section('/', -1));
+    }
+}
+
+
+void AppsManager::locateFolders(QString path, QString filter){
+    if(path.endsWith('/')){
+        QDirIterator it(path, QDirIterator::FollowSymlinks);
+        while (it.hasNext()) {
+            QString element = it.next();
+            QString name = element.section('/', -1);
+
+            if ((!filter.isEmpty() && !name.startsWith(filter))
+                    || name == ".." || name == ".")
+                continue;
+
+            ItemInfo item;
+            item.m_name = name;
+            item.m_key = "dde-open "+element;
+            if(QFileInfo(element).isDir())
+                item.m_iconKey = "inode-directory";
+            else {
+                item.m_iconKey = getMime(element);
+            }
+            m_appSearchResultList.append(item);
+        }
+    }else if(QFileInfo::exists(path)&&filter.isEmpty()){
+        ItemInfo item;
+        QString name = path.section('/', -1);
+        item.m_name = name;
+        item.m_key = "dde-open "+path;
+        if(QFileInfo(path).isDir())
+            item.m_iconKey = "inode-directory";
+        else {
+            item.m_iconKey = getMime(path);
+        }
+        m_appSearchResultList.append(item);
+    }
+}
+
+///
+/// TODO Buscar mejor manera para hacer esto
+/// no se si DTK tiene algo como para esto
+/// \brief AppsManager::getMime
+/// \param path
+/// \return
+///
+QString AppsManager::getMime(QString path){
+    QString mime;
+    QProcess p;
+    p.setProcessChannelMode(QProcess::MergedChannels);
+    p.start("mimetype "+path);
+    p.waitForReadyRead();
+    QString r = p.readAllStandardOutput();
+    mime= r.split(':')[1].simplified();
+    p.kill();
+    return mime.replace('/','-');
 }
 
 void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber)

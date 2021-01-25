@@ -143,6 +143,8 @@ private:
 private slots:
     void onIconThemeChanged();
     void searchDone(const QStringList &resultList);
+    void locateFolders();
+    void locateFolders(QString path, QString filter ="");
     void markLaunched(QString appKey);
     void delayRefreshData();
     /**
@@ -155,6 +157,7 @@ private slots:
      */
     bool fuzzyMatching(const QStringList& list, const QString& key);
 
+    QString getMime(QString path);
 private:
     const ItemInfo createOfCategory(qlonglong category);
 

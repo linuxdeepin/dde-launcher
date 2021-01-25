@@ -93,6 +93,10 @@ install(FILES dde-launcher-wapper DESTINATION bin PERMISSIONS OWNER_READ OWNER_W
 ## services files
 install(FILES src/dbusservices/com.deepin.dde.Launcher.service DESTINATION /usr/share/dbus-1/services)
 
+#schemas
+install(FILES gschema/com.deepin.dde.launcher.gschema.xml DESTINATION share/glib-2.0/schemas)
+install(CODE "execute_process(COMMAND glib-compile-schemas ${CMAKE_INSTALL_PREFIX}/share/glib-2.0/schemas)")
+
 ## icon
 install(FILES data/deepin-launcher.svg DESTINATION /usr/share/icons/hicolor/scalable/apps)
 

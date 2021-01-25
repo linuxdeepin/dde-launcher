@@ -31,5 +31,6 @@ Depends:
  ${shlibs:Depends},
 Conflicts:
  dde-workspace (<< 2.90.5),
-Description: deepin desktop-environment - launcher module
- Deepin desktop environment 2015 - launcher module.
+Description:deepin desktop-environment - dde-launcher module
+ Deepin desktop environment 2015 - dde-launcher module.
+ Display all installation programs, and provide access to open, uninstall, boot and start, which is convenient for users to operate quickly

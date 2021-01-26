@@ -1062,13 +1062,9 @@ void AppsManager::locateFolders(){
     if(!path.startsWith('/')){
         path = QDir::homePath()+'/'+path;
     }
-    if(QFileInfo::exists(path)){
-        locateFolders(path);
-    }else {
-        path = QFileInfo(path).absoluteDir().path();
-        if(QFileInfo::exists(path))
-           locateFolders(path+'/', m_searchText.section('/', -1));
-    }
+    path = QFileInfo(path).absoluteDir().path();
+    if(QFileInfo::exists(path))
+       locateFolders(path+'/', m_searchText.section('/', -1));
 }
 
 

@@ -68,6 +68,8 @@ public:
 
     void setGradientVisible(bool visible);
 
+    QPropertyAnimation::State getPageSwitchAnimationState();
+
 signals:
     void connectViewEvent(AppGridView* pView);
 

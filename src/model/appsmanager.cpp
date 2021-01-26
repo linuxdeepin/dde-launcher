@@ -1105,11 +1105,45 @@ void AppsManager::locateFolders(QString path, QString filter){
 
     m_appSearchResultList.append(list);
     if(list.size()==1){
-        ItemInfo item;
-        item.m_name = tr("Show in folder");
-        item.m_key = "dde-file-manager --show-item "+list.at(0).m_key.section(' ', -1);
-        item.m_iconKey = "folder-open";
-        m_appSearchResultList.append(item);
+        QString path = list.at(0).m_key.section(' ', -1);
+        ItemInfo showInFolderAction;
+        showInFolderAction.m_name = tr("Show in folder");
+        showInFolderAction.m_key = "dde-file-manager --show-item "+path;
+        showInFolderAction.m_iconKey = "folder-open";
+        m_appSearchResultList.append(showInFolderAction);
+
+        ItemInfo openWithAction;
+        openWithAction.m_name = tr("Open with");
+        openWithAction.m_key = "dde-file-manager -o "+path;
+        openWithAction.m_iconKey = "folder-open";
+        m_appSearchResultList.append(openWithAction);
+
+
+        QFileInfo info(path);
+        ItemInfo showTerminalAction;
+        QString workingDir,
+                command,
+                text;
+        if (info.isDir()) {
+           workingDir = path;
+           command = "ls -la";
+           text = "Show in terminal";
+       }else if(info.isExecutable()){
+            workingDir = QDir::homePath();
+            command = "'" + path + "'";
+            text = "Run in terminal";
+        }else{
+            workingDir = info.absoluteDir().path();
+            command = "ls -la '"+info.fileName()+"'";
+            text = "Show in terminal";
+        }
+
+        showInFolderAction.m_name = tr(text.toUtf8());
+        showInFolderAction.m_key = "deepin-terminal --keep-open "
+           /*  set working dir */  " -w \"" + workingDir + "\""+
+           /*  set run command */  " -C \"" + command + "\"" ;
+        showInFolderAction.m_iconKey = "deepin-terminal";
+        m_appSearchResultList.append(showInFolderAction);
     }
 }
 

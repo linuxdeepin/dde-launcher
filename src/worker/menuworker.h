@@ -58,7 +58,11 @@ public:
         Startup = 4,
         Proxy = 5,
         SwitchScale = 6,
-        Uninstall = 7
+        Uninstall = 7,
+        ShowInShell = 8,
+        OpenWith = 9,
+        ShowProperties = 10,
+        ShowInFolder = 11,
     };
 
     void initConnect();
@@ -88,6 +92,10 @@ public slots:
     const QModelIndex getCurrentModelIndex();
     void handleMenuAction(int index);
 
+    void handleOpenWith();
+    void handleShowInFolder();
+    void handleShowInShell();
+    void handleShowProperties();
 private:
     QGSettings *m_xsettings;
     DBusDock* m_dockAppManagerInterface;

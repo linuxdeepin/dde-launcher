@@ -158,6 +158,7 @@ private slots:
     bool fuzzyMatching(const QStringList& list, const QString& key);
 
     QString getMime(QString path);
+    void addSearchWith();
 private:
     const ItemInfo createOfCategory(qlonglong category);
 

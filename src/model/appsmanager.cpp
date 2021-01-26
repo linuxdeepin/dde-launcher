@@ -1046,6 +1046,7 @@ void AppsManager::searchDone(const QStringList &resultList)
         appendSearchResult(key);
 
     locateFolders();
+    addSearchWith();
 
     emit dataChanged(AppsListModel::Search);
 
@@ -1053,6 +1054,16 @@ void AppsManager::searchDone(const QStringList &resultList)
         emit requestTips(tr("No search results"));
     else
         emit requestHideTips();
+}
+
+void AppsManager::addSearchWith(){
+    //todo read setting search with(google, bind, etc)
+    QString searcher = "'http://google.com/search?q={query}'";
+    ItemInfo search;
+    search.m_name = tr("Search in web");
+    search.m_iconKey = "web-browser";
+    search.m_key = "dde-open " + searcher.replace("{query}", m_searchText);
+    m_appSearchResultList.append(search);
 }
 
 void AppsManager::locateFolders(){

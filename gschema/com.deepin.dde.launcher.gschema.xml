@@ -20,7 +20,7 @@
 			<default>0.5</default>
 		</key>
 		<key name='apps-hold-list' type='as'>
-			<default>['dde-file-manager','deepin-appstore','deepin-app-store','deepin-terminal','deepin-manual','dde-computer','dde-trash','deepin-defender','dde-control-center','fcitx-config-gtk3','fcitx-configtool','deepin-system-monitor','deepin-devicemanager','dde-printer','dde-calendar','uos-service-support','deepin-toggle-desktop','deepin-wm-multitaskingview','kwin-wm-multitaskingview']</default>
+			<default>['dde-file-manager','deepin-appstore','deepin-app-store','deepin-terminal','deepin-manual','dde-computer','dde-trash','deepin-defender','dde-control-center','fcitx-config-gtk3','fcitx-configtool','deepin-system-monitor','deepin-devicemanager','dde-printer','dde-calendar','uos-service-support','deepin-toggle-desktop','deepin-wm-multitaskingview','kwin-wm-multitaskingview','com.deepin.store.intranet']</default>
 			<summary>apps not allowed to uninstall</summary>
 			<description>apps not allowed to uninstall</description>
 		</key>

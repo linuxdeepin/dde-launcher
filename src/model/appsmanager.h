@@ -159,6 +159,7 @@ private slots:
 
     QString getMime(QString path);
     void addSearchWith();
+    void addRunInShell();
 private:
     const ItemInfo createOfCategory(qlonglong category);
 
@@ -169,6 +170,7 @@ private:
     std::unique_ptr<QTimer> m_iconRefreshTimer;
 
     QString m_searchText;
+    QString m_rawSearchText;
     QStringList m_newInstalledAppsList;
     ItemInfoList m_allAppInfoList;
     ItemInfoList m_usedSortedList; // FullScreen

@@ -424,8 +424,10 @@ void AppsManager::saveUsedSortedList()
 
 void AppsManager::searchApp(const QString &keywords)
 {
+    QString text(keywords);
     m_searchTimer->start();
-    m_searchText = keywords;
+    m_rawSearchText = text;
+    m_searchText = text.remove(" ");
 }
 
 void AppsManager::launchApp(const QModelIndex &index)
@@ -1046,6 +1048,7 @@ void AppsManager::searchDone(const QStringList &resultList)
         appendSearchResult(key);
 
     locateFolders();
+    addRunInShell();
     addSearchWith();
 
     emit dataChanged(AppsListModel::Search);
@@ -1056,34 +1059,63 @@ void AppsManager::searchDone(const QStringList &resultList)
         emit requestHideTips();
 }
 
+void AppsManager::addRunInShell(){
+    //todo read setting if run in shell is enabled
+    QUrl url(m_rawSearchText);
+    if(url.scheme() != "file" && !url.scheme().isEmpty())
+        return;//avoid to show with links
+
+    ItemInfo run;
+    run.m_name = tr("Run in terminal");
+    run.m_iconKey = "utilities-terminal";
+    run.m_key = "deepin-terminal "
+                "--keep-open "                      ///todo read setting to keep open
+                " -w '" + QDir::homePath() + "'"+   ///  set working dir
+                " -C '" + m_rawSearchText + "'" ;   ///  set run command
+    m_appSearchResultList.append(run);
+}
+
 void AppsManager::addSearchWith(){
+    ///todo read setting if search in web is enabled
+
+    QUrl url(m_rawSearchText);
+    if(url.scheme() == "file")
+        return;
+    bool doOpen = !url.scheme().isEmpty();
     //todo read setting search with(google, bind, etc)
     QString searcher = "'http://google.com/search?q={query}'";
     ItemInfo search;
-    search.m_name = tr("Search in web");
-    search.m_iconKey = "web-browser";
-    search.m_key = "dde-open " + searcher.replace("{query}", m_searchText);
+    search.m_name = tr(doOpen?(url.scheme() == "mailto"
+                               ? "Write email"
+                               : "Open in browser")
+                            :"Search in web");
+    search.m_iconKey = url.scheme() == "mailto"
+                            ? "internet-mail"
+                            : "internet-web-browser";
+    search.m_key = "dde-open '" + (doOpen ? m_rawSearchText : searcher.replace("{query}", m_rawSearchText)) + "'";
     m_appSearchResultList.append(search);
 }
 
 void AppsManager::locateFolders(){
-    QString path = m_searchText;
+    QString path = m_rawSearchText;
     if(path.startsWith('~'))
         path = path.replace('~', QDir::homePath());
+    if(path.startsWith("file://"))
+        path.remove("file://");
     if(!path.startsWith('/')){
         path = QDir::homePath()+'/'+path;
     }
     path = QFileInfo(path).absoluteDir().path();
     if(QFileInfo::exists(path))
-       locateFolders(path+'/', m_searchText.section('/', -1));
+       locateFolders(path+'/', m_rawSearchText.section('/', -1));
 
     //read folders to location setting
-    locateFolders(QDir::homePath()+"/Desktop/", m_searchText);
-    locateFolders(QDir::homePath()+"/Documents/", m_searchText);
-    locateFolders(QDir::homePath()+"/Videos/", m_searchText);
-    locateFolders(QDir::homePath()+"/Music/", m_searchText);
-    locateFolders(QDir::homePath()+"/Downloads/", m_searchText);
-    locateFolders(QDir::homePath()+"/Pictures/", m_searchText);
+    locateFolders(QDir::homePath()+"/Desktop/", m_rawSearchText);
+    locateFolders(QDir::homePath()+"/Documents/", m_rawSearchText);
+    locateFolders(QDir::homePath()+"/Videos/", m_rawSearchText);
+    locateFolders(QDir::homePath()+"/Music/", m_rawSearchText);
+    locateFolders(QDir::homePath()+"/Downloads/", m_rawSearchText);
+    locateFolders(QDir::homePath()+"/Pictures/", m_rawSearchText);
 }
 
 

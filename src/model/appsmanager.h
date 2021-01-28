@@ -159,7 +159,8 @@ private slots:
 
     QString getMime(QString path);
     void addSearchWith();
-    void addRunInShell();
+    bool addRunInShell();
+    bool addArithmetic();
 private:
     const ItemInfo createOfCategory(qlonglong category);
 

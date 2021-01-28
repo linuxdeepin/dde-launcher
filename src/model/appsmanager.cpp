@@ -1048,8 +1048,11 @@ void AppsManager::searchDone(const QStringList &resultList)
         appendSearchResult(key);
 
     locateFolders();
-    addRunInShell();
-    addSearchWith();
+
+    if(!addArithmetic()){// if not arithmetic operation
+        addRunInShell();    //add item to run in shell as cmd
+        addSearchWith();    //add item to search/open in web
+    }
 
     emit dataChanged(AppsListModel::Search);
 
@@ -1059,11 +1062,38 @@ void AppsManager::searchDone(const QStringList &resultList)
         emit requestHideTips();
 }
 
-void AppsManager::addRunInShell(){
-    //todo read setting if run in shell is enabled
+bool AppsManager::addArithmetic(){
+    ///todo read setting to be enabled
+    QProcess sh;
+    sh.start("sh", QStringList() << "-c" << "awk \"BEGIN {print ("+m_rawSearchText+")}\"");
+    sh.waitForFinished();
+    QString output = sh.readAllStandardOutput();
+    sh.close();
+
+    for(int i =0; i < m_rawSearchText.size(); i++){
+        if(m_rawSearchText.at(i) == '.' || m_rawSearchText.at(i) == ',')
+            continue;
+        if(QChar(m_rawSearchText.at(i)).isLetter())
+            return false;
+    }
+
+    if( output.isEmpty() || QString(output).contains("error", Qt::CaseInsensitive))
+        return false;
+
+    ItemInfo run;
+    run.m_name = tr("Result: ")+output;
+    run.m_iconKey = "accessories-calculator";
+    run.m_key = "deepin-calculator '" + m_rawSearchText + "'" ;
+    m_appSearchResultList.append(run);
+    return true;
+
+}
+
+bool AppsManager::addRunInShell(){
+    ///todo read setting if run in shell is enabled
     QUrl url(m_rawSearchText);
     if(url.scheme() != "file" && !url.scheme().isEmpty())
-        return;//avoid to show with links
+        return false;//avoid to show with links
 
     ItemInfo run;
     run.m_name = tr("Run in terminal");
@@ -1073,6 +1103,7 @@ void AppsManager::addRunInShell(){
                 " -w '" + QDir::homePath() + "'"+   ///  set working dir
                 " -C '" + m_rawSearchText + "'" ;   ///  set run command
     m_appSearchResultList.append(run);
+    return true;
 }
 
 void AppsManager::addSearchWith(){
@@ -1172,7 +1203,7 @@ QString AppsManager::getMime(QString path){
     p.waitForReadyRead();
     QString r = p.readAllStandardOutput();
     mime= r.split(':')[1].simplified();
-    p.kill();
+    p.close();
     return mime.replace('/','-');
 }
 

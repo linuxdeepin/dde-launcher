@@ -454,6 +454,9 @@ void AppsManager::launchApp(const QModelIndex &index)
 
     if (!appDesktop.isEmpty())
         m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
+    else {
+        system(index.data(AppsListModel::AppKeyRole).toString().toUtf8());
+    }
 }
 
 void AppsManager::uninstallApp(const QString &appKey)
@@ -1042,12 +1045,103 @@ void AppsManager::searchDone(const QStringList &resultList)
     for (const QString &key : resultCopy)
         appendSearchResult(key);
 
+    locateFolders();
+    addSearchWith();
+
     emit dataChanged(AppsListModel::Search);
 
     if (m_appSearchResultList.isEmpty())
         emit requestTips(tr("No search results"));
     else
         emit requestHideTips();
+}
+
+void AppsManager::addSearchWith(){
+    //todo read setting search with(google, bind, etc)
+    QString searcher = "'http://google.com/search?q={query}'";
+    ItemInfo search;
+    search.m_name = tr("Search in web");
+    search.m_iconKey = "web-browser";
+    search.m_key = "dde-open " + searcher.replace("{query}", m_searchText);
+    m_appSearchResultList.append(search);
+}
+
+void AppsManager::locateFolders(){
+    QString path = m_searchText;
+    if(path.startsWith('~'))
+        path = path.replace('~', QDir::homePath());
+    if(!path.startsWith('/')){
+        path = QDir::homePath()+'/'+path;
+    }
+    path = QFileInfo(path).absoluteDir().path();
+    if(QFileInfo::exists(path))
+       locateFolders(path+'/', m_searchText.section('/', -1));
+
+    //read folders to location setting
+    locateFolders(QDir::homePath()+"/Desktop/", m_searchText);
+    locateFolders(QDir::homePath()+"/Documents/", m_searchText);
+    locateFolders(QDir::homePath()+"/Videos/", m_searchText);
+    locateFolders(QDir::homePath()+"/Music/", m_searchText);
+    locateFolders(QDir::homePath()+"/Downloads/", m_searchText);
+    locateFolders(QDir::homePath()+"/Pictures/", m_searchText);
+}
+
+
+void AppsManager::locateFolders(QString path, QString filter){
+    ItemInfoList list;
+    if(path.endsWith('/')){
+        QDirIterator it(path, QDirIterator::FollowSymlinks);
+        while (it.hasNext()) {
+            QString element = it.next();
+            QString name = element.section('/', -1);
+
+            if ((!filter.isEmpty() && !name.startsWith(filter))
+                    || name == ".." || name == ".")
+                continue;
+
+            ItemInfo item;
+            item.m_name = name;
+            item.m_key = "dde-open "+element;
+            if(QFileInfo(element).isDir())
+                item.m_iconKey = "inode-directory";
+            else {
+                item.m_iconKey = getMime(element);
+            }
+            list.append(item);
+        }
+    }else if(QFileInfo::exists(path)&&filter.isEmpty()){
+        ItemInfo item;
+        QString name = path.section('/', -1);
+        item.m_name = name;
+        item.m_key = "dde-open "+path;
+        if(QFileInfo(path).isDir())
+            item.m_iconKey = "inode-directory";
+        else {
+            item.m_iconKey = getMime(path);
+        }
+        list.append(item);
+    }
+
+    m_appSearchResultList.append(list);
+}
+
+///
+/// TODO Buscar mejor manera para hacer esto
+/// no se si DTK tiene algo como para esto
+/// \brief AppsManager::getMime
+/// \param path
+/// \return
+///
+QString AppsManager::getMime(QString path){
+    QString mime;
+    QProcess p;
+    p.setProcessChannelMode(QProcess::MergedChannels);
+    p.start("mimetype "+path);
+    p.waitForReadyRead();
+    QString r = p.readAllStandardOutput();
+    mime= r.split(':')[1].simplified();
+    p.kill();
+    return mime.replace('/','-');
 }
 
 void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber)

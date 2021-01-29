@@ -52,8 +52,8 @@ MenuWorker::~MenuWorker()
 void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
     setCurrentModelIndex(index);
 
-    m_appKey = m_currentModelIndex.data(AppsListModel::AppKeyRole).toString();
     m_appDesktop = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
+    m_appKey = m_currentModelIndex.data(AppsListModel::AppKeyRole).toString();
     m_isItemOnDesktop = m_currentModelIndex.data(AppsListModel::AppIsOnDesktopRole).toBool();
     m_isItemOnDock = m_currentModelIndex.data(AppsListModel::AppIsOnDockRole).toBool();
     m_isItemStartup = m_currentModelIndex.data(AppsListModel::AppAutoStartRole).toBool();
@@ -68,81 +68,123 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
 
     QSignalMapper *signalMapper = new QSignalMapper(menu);
 
+
     QAction *open;
-    QAction *desktop;
-    QAction *dock;
-    QAction *startup;
-    QAction *proxy;
-    QAction *scale;
-    QAction *uninstall;
+
 
     open = new QAction(tr("Open"), menu);
 
-    desktop = new QAction(m_isItemOnDesktop ?
-                              tr("Remove from desktop") :
-                              tr("Send to desktop"),
-                          menu);
-
-    dock = new QAction(m_isItemOnDock ?
-                           tr("Remove from dock") :
-                           tr("Send to dock"),
-                       menu);
-
-    startup = new QAction(m_isItemStartup ?
-                              tr("Remove from startup") :
-                              tr("Add to startup"),
-                          menu);
-
-
-    uninstall = new QAction(tr("Uninstall"), menu);
-
     menu->addAction(open);
     menu->addSeparator();
-    menu->addAction(desktop);
-    menu->addAction(dock);
-    menu->addSeparator();
-    menu->addAction(startup);
 
-    if (QFile::exists(ChainsProxy_path)) {
-        proxy = new QAction(tr("Use a proxy"), menu);
-        proxy->setCheckable(true);
-        proxy->setChecked(m_isItemProxy);
-        menu->addAction(proxy);
-        signalMapper->setMapping(proxy, Proxy);
-        connect(proxy, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-    }
+    if (!m_appDesktop.isEmpty()) { //Elementos generados con busqueda no tienen el dato desktop
+        QAction *desktop;
+        QAction *dock;
+        QAction *startup;
+        QAction *proxy;
+        QAction *scale;
+        QAction *uninstall;
 
-    if (!m_calcUtil->IsServerSystem) {
-        const double scale_ratio = m_xsettings->get("scale-factor").toDouble();
-        if (!qFuzzyCompare(1.0, scale_ratio)) {
-            scale = new QAction(tr("Disable display scaling"), menu);
-            scale->setCheckable(true);
-            scale->setChecked(!m_isItemEnableScaling);
-            menu->addAction(scale);
-            signalMapper->setMapping(scale, SwitchScale);
-            connect(scale, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        desktop = new QAction(m_isItemOnDesktop ?
+                                  tr("Remove from desktop") :
+                                  tr("Send to desktop"),
+                              menu);
+
+        dock = new QAction(m_isItemOnDock ?
+                               tr("Remove from dock") :
+                               tr("Send to dock"),
+                           menu);
+
+        startup = new QAction(m_isItemStartup ?
+                                  tr("Remove from startup") :
+                                  tr("Add to startup"),
+                              menu);
+
+
+        uninstall = new QAction(tr("Uninstall"), menu);
+
+        menu->addAction(desktop);
+        menu->addAction(dock);
+        menu->addSeparator();
+        menu->addAction(startup);
+
+        if (QFile::exists(ChainsProxy_path)) {
+            proxy = new QAction(tr("Use a proxy"), menu);
+            proxy->setCheckable(true);
+            proxy->setChecked(m_isItemProxy);
+            menu->addAction(proxy);
+            signalMapper->setMapping(proxy, Proxy);
+            connect(proxy, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        }
+
+        if (!m_calcUtil->IsServerSystem) {
+            const double scale_ratio = m_xsettings->get("scale-factor").toDouble();
+            if (!qFuzzyCompare(1.0, scale_ratio)) {
+                scale = new QAction(tr("Disable display scaling"), menu);
+                scale->setCheckable(true);
+                scale->setChecked(!m_isItemEnableScaling);
+                menu->addAction(scale);
+                signalMapper->setMapping(scale, SwitchScale);
+                connect(scale, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+            }
+        }
+
+        dock->setEnabled(m_appKey != "dde-trash");
+        uninstall->setEnabled(m_isRemovable);
+
+    #ifndef WITHOUT_UNINSTALL_APP
+        menu->addAction(uninstall);
+    #endif
+        connect(desktop, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(dock, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(startup, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+
+        connect(uninstall, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+
+        signalMapper->setMapping(desktop, Desktop);
+        signalMapper->setMapping(dock, Dock);
+        signalMapper->setMapping(startup, Startup);
+        signalMapper->setMapping(uninstall, Uninstall);
+    }else{
+        QString path = m_appKey.section(' ', -1);
+        QFileInfo info(path);
+        if (info.exists()) {//is local or accesible file
+            QAction *showInFolderAction = new QAction(tr("Show in folder"), menu);
+            QAction *openWithAction = new QAction(tr("Open with"), menu);
+            QString text;
+            if (info.isDir()) {
+               text = "Show in terminal";
+           }else if(info.isExecutable()){
+                text = "Run in terminal";
+            }else{
+                text = "Show in terminal";
+            }
+            QAction *showInShellAction = new QAction(tr(text.toUtf8()), menu);
+            QAction *showPropertiesAction = new QAction(tr("Properties"), menu);
+
+            menu->addAction(openWithAction);
+            menu->addSeparator();
+            menu->addAction(showInFolderAction);
+            menu->addAction(showInShellAction);
+            menu->addSeparator();
+            menu->addAction(showPropertiesAction);
+
+            connect(showInFolderAction, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+            connect(showInShellAction, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+            connect(openWithAction, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+            connect(showPropertiesAction, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+
+
+            signalMapper->setMapping(showInFolderAction, ShowInFolder);
+            signalMapper->setMapping(showInShellAction, ShowInShell);
+            signalMapper->setMapping(openWithAction, OpenWith);
+            signalMapper->setMapping(showPropertiesAction, ShowProperties);
         }
     }
 
-    dock->setEnabled(m_appKey != "dde-trash");
-    uninstall->setEnabled(m_isRemovable);
-
-#ifndef WITHOUT_UNINSTALL_APP
-    menu->addAction(uninstall);
-#endif
 
     connect(open, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-    connect(desktop, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-    connect(dock, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-    connect(startup, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-
-    connect(uninstall, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-
     signalMapper->setMapping(open, Open);
-    signalMapper->setMapping(desktop, Desktop);
-    signalMapper->setMapping(dock, Dock);
-    signalMapper->setMapping(startup, Startup);
-    signalMapper->setMapping(uninstall, Uninstall);
 
     connect(signalMapper, static_cast<void (QSignalMapper::*)(const int)>(&QSignalMapper::mapped), this, &MenuWorker::handleMenuAction);
     connect(menu, &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);
@@ -198,6 +240,18 @@ void MenuWorker::handleMenuAction(int index)
     case SwitchScale:
         handleSwitchScaling();
         break;
+    case OpenWith:
+        handleOpenWith();
+        break;
+    case ShowInFolder:
+        handleShowInFolder();
+        break;
+    case ShowInShell:
+        handleShowInShell();
+        break;
+    case ShowProperties:
+        handleShowProperties();
+        break;
     case Uninstall:
         emit unInstallApp(m_currentModelIndex);
         break;
@@ -205,6 +259,52 @@ void MenuWorker::handleMenuAction(int index)
         break;
     }
 }
+
+void MenuWorker::handleOpenWith(){
+    QString path = m_appKey.section(' ', -1);
+    system("dde-file-manager -o "+path.toUtf8());
+
+    emit appLaunched();
+}
+
+void MenuWorker::handleShowInFolder(){
+    QString path = m_appKey.section(' ', -1);
+    system("dde-file-manager --show-item "+path.toUtf8());
+
+    emit appLaunched();
+}
+
+void MenuWorker::handleShowProperties(){
+    QString path = m_appKey.section(' ', -1);
+    system("dde-file-manager -p "+path.toUtf8());
+
+    emit appLaunched();
+}
+
+void MenuWorker::handleShowInShell(){
+    QString path = m_appKey.section(' ', -1);
+
+    QFileInfo info(path);
+    QString workingDir,
+            command;
+    if (info.isDir()) {
+       workingDir = path;
+       command = "ls -la";
+    }else if(info.isExecutable()){
+        workingDir = QDir::homePath();
+        command = "'" + path + "'";
+    }else{
+        workingDir = info.absoluteDir().path();
+        command = "ls -la '"+info.fileName()+"'";
+    }
+    system("deepin-terminal --keep-open "
+       /*  set working dir */  " -w \"" + workingDir.toUtf8() + "\""+
+       /*  set run command */  " -C \"" + command.toUtf8() + "\"" );
+
+
+    emit appLaunched();
+}
+
 
 void MenuWorker::handleToDesktop(){
     qDebug() << "handleToDesktop" << m_appKey;

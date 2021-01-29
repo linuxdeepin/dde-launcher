@@ -894,7 +894,7 @@ void WindowedFrame::searchText(const QString &text)
             m_focusPos = Search;
         }
         auto temp = text;
-        m_appsManager->searchApp(temp.replace(" ",""));
+        m_appsManager->searchApp(temp.trimmed());
     }
 
     m_displayMode = All;

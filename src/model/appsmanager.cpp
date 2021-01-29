@@ -424,8 +424,10 @@ void AppsManager::saveUsedSortedList()
 
 void AppsManager::searchApp(const QString &keywords)
 {
+    QString text(keywords);
     m_searchTimer->start();
-    m_searchText = keywords;
+    m_rawSearchText = text;
+    m_searchText = text.remove(" ");
 }
 
 void AppsManager::launchApp(const QModelIndex &index)
@@ -454,6 +456,9 @@ void AppsManager::launchApp(const QModelIndex &index)
 
     if (!appDesktop.isEmpty())
         m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
+    else {
+        system(index.data(AppsListModel::AppKeyRole).toString().toUtf8());
+    }
 }
 
 void AppsManager::uninstallApp(const QString &appKey)
@@ -1042,12 +1047,164 @@ void AppsManager::searchDone(const QStringList &resultList)
     for (const QString &key : resultCopy)
         appendSearchResult(key);
 
+    locateFolders();
+
+    if(!addArithmetic()){// if not arithmetic operation
+        addRunInShell();    //add item to run in shell as cmd
+        addSearchWith();    //add item to search/open in web
+    }
+
     emit dataChanged(AppsListModel::Search);
 
     if (m_appSearchResultList.isEmpty())
         emit requestTips(tr("No search results"));
     else
         emit requestHideTips();
+}
+
+bool AppsManager::addArithmetic(){
+    ///todo read setting to be enabled
+    QProcess sh;
+    sh.start("sh", QStringList() << "-c" << "awk \"BEGIN {print ("+m_rawSearchText+")}\"");
+    sh.waitForFinished();
+    QString output = sh.readAllStandardOutput();
+    sh.close();
+
+    for(int i =0; i < m_rawSearchText.size(); i++){
+        if(m_rawSearchText.at(i) == '.' || m_rawSearchText.at(i) == ',')
+            continue;
+        if(QChar(m_rawSearchText.at(i)).isLetter())
+            return false;
+    }
+
+    if( output.isEmpty() || QString(output).contains("error", Qt::CaseInsensitive))
+        return false;
+
+    ItemInfo run;
+    run.m_name = tr("Result: ")+output;
+    run.m_iconKey = "accessories-calculator";
+    run.m_key = "deepin-calculator '" + m_rawSearchText + "'" ;
+    m_appSearchResultList.append(run);
+    return true;
+
+}
+
+bool AppsManager::addRunInShell(){
+    ///todo read setting if run in shell is enabled
+    QUrl url(m_rawSearchText);
+    if(url.scheme() != "file" && !url.scheme().isEmpty())
+        return false;//avoid to show with links
+
+    ItemInfo run;
+    run.m_name = tr("Run in terminal");
+    run.m_iconKey = "utilities-terminal";
+    run.m_key = "deepin-terminal "
+                "--keep-open "                      ///todo read setting to keep open
+                " -w '" + QDir::homePath() + "'"+   ///  set working dir
+                " -C '" + m_rawSearchText + "'" ;   ///  set run command
+    m_appSearchResultList.append(run);
+    return true;
+}
+
+void AppsManager::addSearchWith(){
+    ///todo read setting if search in web is enabled
+
+    QUrl url(m_rawSearchText);
+    if(url.scheme() == "file")
+        return;
+    bool doOpen = !url.scheme().isEmpty();
+    //todo read setting search with(google, bind, etc)
+    QString searcher = "'http://google.com/search?q={query}'";
+    ItemInfo search;
+    search.m_name = tr(doOpen?(url.scheme() == "mailto"
+                               ? "Write email"
+                               : "Open in browser")
+                            :"Search in web");
+    search.m_iconKey = url.scheme() == "mailto"
+                            ? "internet-mail"
+                            : "internet-web-browser";
+    search.m_key = "dde-open '" + (doOpen ? m_rawSearchText : searcher.replace("{query}", m_rawSearchText)) + "'";
+    m_appSearchResultList.append(search);
+}
+
+void AppsManager::locateFolders(){
+    QString path = m_rawSearchText;
+    if(path.startsWith('~'))
+        path = path.replace('~', QDir::homePath());
+    if(path.startsWith("file://"))
+        path.remove("file://");
+    if(!path.startsWith('/')){
+        path = QDir::homePath()+'/'+path;
+    }
+    path = QFileInfo(path).absoluteDir().path();
+    if(QFileInfo::exists(path))
+       locateFolders(path+'/', m_rawSearchText.section('/', -1));
+
+    //read folders to location setting
+    locateFolders(QDir::homePath()+"/Desktop/", m_rawSearchText);
+    locateFolders(QDir::homePath()+"/Documents/", m_rawSearchText);
+    locateFolders(QDir::homePath()+"/Videos/", m_rawSearchText);
+    locateFolders(QDir::homePath()+"/Music/", m_rawSearchText);
+    locateFolders(QDir::homePath()+"/Downloads/", m_rawSearchText);
+    locateFolders(QDir::homePath()+"/Pictures/", m_rawSearchText);
+}
+
+
+void AppsManager::locateFolders(QString path, QString filter){
+    ItemInfoList list;
+    if(path.endsWith('/')){
+        QDirIterator it(path, QDirIterator::FollowSymlinks);
+        while (it.hasNext()) {
+            QString element = it.next();
+            QString name = element.section('/', -1);
+
+            if ((!filter.isEmpty() && !name.startsWith(filter))
+                    || name == ".." || name == ".")
+                continue;
+
+            ItemInfo item;
+            item.m_name = name;
+            item.m_key = "dde-open "+element;
+            if(QFileInfo(element).isDir())
+                item.m_iconKey = "inode-directory";
+            else {
+                item.m_iconKey = getMime(element);
+            }
+            list.append(item);
+        }
+    }else if(QFileInfo::exists(path)&&filter.isEmpty()){
+        ItemInfo item;
+        QString name = path.section('/', -1);
+        item.m_name = name;
+        item.m_key = "dde-open "+path;
+        if(QFileInfo(path).isDir())
+            item.m_iconKey = "inode-directory";
+        else {
+            item.m_iconKey = getMime(path);
+        }
+        list.append(item);
+    }
+
+    m_appSearchResultList.append(list);
+}
+
+///
+/// TODO Buscar mejor manera para hacer esto
+/// no se si DTK tiene algo como para esto
+/// \brief AppsManager::getMime
+/// \param path
+/// \return
+///
+QString AppsManager::getMime(QString path){
+    QString mime;
+    QProcess p;
+    p.setProcessChannelMode(QProcess::MergedChannels);
+    p.start("mimetype "+path);
+    p.waitForReadyRead();
+    QString r = p.readAllStandardOutput();
+    mime= r.split(':')[1].simplified();
+    p.close();
+    return mime.replace('/','-');
 }
 
 void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber)

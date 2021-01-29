@@ -1,0 +1,6 @@
+{
+    "api": "1.0.0",
+    "depends-daemon-dbus-service": {
+        "session": ["com.deepin.dde.daemon.launcher"]
+    }
+}

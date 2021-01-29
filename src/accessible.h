@@ -97,7 +97,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, GradientLabel);
     USE_ACCESSIBLE(classname, QPushButton);
     USE_ACCESSIBLE(classname, QToolButton);
-    USE_ACCESSIBLE(classname, QLabel);
     USE_ACCESSIBLE(classname, MaskQWidget);
     USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DHBoxWidget);
     USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DBoxWidget);

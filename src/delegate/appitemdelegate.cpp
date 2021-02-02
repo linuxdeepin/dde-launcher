@@ -130,7 +130,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         const QPair<QString, bool> appTextResolvedInfo = holdTextInRect(fm, itemInfo.m_name, appNameRect.toRect());
         appNameResolved = appTextResolvedInfo.first;
 
-        if(fm.width(appNameResolved) > appNameRect.width()){
+        if((fm.width(appNameResolved) + m_blueDotPixmap.width() + 10) > appNameRect.width()){
            TextSecond = 1;
         }
 
@@ -174,6 +174,11 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     appNameOption.setWrapMode(QTextOption::WordWrap);
 
     appNameRect.setY(br.y() + br.height()  - TEXTTOLEFT + (fm.height() >= 28 ? 2 : 0)- fm.height() - fontPixelSize*TextSecond);
+
+    if(drawBlueDot){
+        appNameRect.setX(appNameRect.x() + m_blueDotPixmap.width()/2 + 5);
+        appNameRect.setWidth(appNameRect.width() - m_blueDotPixmap.width());
+    }
 
     painter->setFont(appNamefont);
     painter->setBrush(QBrush(Qt::transparent));

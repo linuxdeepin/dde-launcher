@@ -302,6 +302,31 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
     QListView::mouseReleaseEvent(e);
 }
 
+void AppGridView::NotifyDragEnd()
+{
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel)
+        return;
+
+    if (listModel->category() != AppsListModel::All)
+        return;
+
+    m_dropThresholdTimer->stop();
+
+    if (!m_lastFakeAni) {
+        if (m_enableDropInside)
+            listModel->dropSwap(m_dropToPos);
+        else
+            listModel->dropSwap(indexAt(m_dragStartPos).row());
+
+        listModel->clearDraggingIndex();
+    } else {
+        connect(m_lastFakeAni, &QPropertyAnimation::finished, listModel, &AppsListModel::clearDraggingIndex);
+    }
+
+    m_enableDropInside = false;
+}
+
 void AppGridView::startDrag(const QModelIndex &index)
 {
     qDebug("AppGridView::startDrag");

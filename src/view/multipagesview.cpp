@@ -206,7 +206,7 @@ void MultiPagesView::dragStop()
     if (sender() == m_appGridViewList[m_pageIndex])
         return;
 
-    m_appGridViewList[m_pageIndex]->flashDrag();
+    m_appGridViewList[m_pageIndex]->NotifyDragEnd();
 }
 
 QModelIndex MultiPagesView::getAppItem(int index)

@@ -59,6 +59,8 @@ public:
     void dragOut(int pos);
     void dragIn(const QModelIndex &index);
     void flashDrag();
+    void NotifyDragEnd();
+
 public slots:
     void setDragAnimationEnable() {m_enableAnimation = true;}
 signals:

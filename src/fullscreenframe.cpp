@@ -1187,7 +1187,8 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
 
     DTK_WIDGET_NAMESPACE::DDialog unInstallDialog;
     unInstallDialog.setWindowState(unInstallDialog.windowState() & ~Qt::WindowFullScreen);
-    unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
+    //TODO: 这里由于需求文档未明确定义需要翻译标题栏，所以将dialog标题栏移除
+    unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags() | Qt::FramelessWindowHint);
     unInstallDialog.setWindowModality(Qt::WindowModal);
 
     const QString appKey = context.data(AppsListModel::AppKeyRole).toString();

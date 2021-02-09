@@ -572,7 +572,8 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
 
     UNINSTALL_DIALOG_SHOWN = true;
     DTK_WIDGET_NAMESPACE::DDialog unInstallDialog;
-    unInstallDialog.setWindowFlags(Qt::WindowStaysOnTopHint | unInstallDialog.windowFlags());
+    //TODO: 这里由于需求文档未明确定义需要翻译标题栏，所以将dialog标题栏移除
+    unInstallDialog.setWindowFlags(Qt::WindowStaysOnTopHint | unInstallDialog.windowFlags() | Qt::FramelessWindowHint);
     unInstallDialog.setWindowModality(Qt::WindowModal);
 
     const QString appKey = context.data(AppsListModel::AppKeyRole).toString();

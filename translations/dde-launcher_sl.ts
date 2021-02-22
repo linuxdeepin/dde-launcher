@@ -19,7 +19,7 @@
     <message>
         <location filename="../src/model/appsmanager.cpp" line="195"/>
         <source>Video</source>
-        <translation>Videoposnetek</translation>
+        <translation>Video</translation>
     </message>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="196"/>
@@ -67,7 +67,7 @@
     <message>
         <location filename="../src/fullscreenframe.cpp" line="1375"/>
         <source>Are you sure you want to uninstall it?</source>
-        <translation type="unfinished"/>
+        <translation>Ste prepričani, da  želite to odstraniti?</translation>
     </message>
     <message>
         <location filename="../src/fullscreenframe.cpp" line="1381"/>
@@ -125,7 +125,7 @@
     <message>
         <location filename="../src/worker/menuworker.cpp" line="106"/>
         <source>Use a proxy</source>
-        <translation type="unfinished"/>
+        <translation>Uporabi posrednika</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="117"/>
@@ -232,7 +232,7 @@
         <location filename="../src/widgets/miniframenavigation.cpp" line="105"/>
         <location filename="../src/widgets/miniframenavigation.cpp" line="124"/>
         <source>Shut down</source>
-        <translation>Zaustavitev sistema</translation>
+        <translation>Zaustavi</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="120"/>
@@ -242,7 +242,7 @@
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="121"/>
         <source>Log out</source>
-        <translation>Izpis</translation>
+        <translation>Odjava</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="122"/>
@@ -252,7 +252,7 @@
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="123"/>
         <source>Suspend</source>
-        <translation>V način mirovanja</translation>
+        <translation>Mirovanje</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="125"/>
@@ -308,7 +308,7 @@
     <message>
         <location filename="../src/widgets/miniframeswitchbtn.cpp" line="73"/>
         <source>All Categories</source>
-        <translation type="unfinished"/>
+        <translation>Vse kategorije</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframeswitchbtn.cpp" line="76"/>
@@ -329,7 +329,7 @@
     <message>
         <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Are you sure you want to uninstall it?</source>
-        <translation type="unfinished"/>
+        <translation>Ste prepričani, da želite to odstraniti?</translation>
     </message>
     <message>
         <location filename="../src/windowedframe.cpp" line="560"/>

@@ -67,7 +67,7 @@
     <message>
         <location filename="../src/fullscreenframe.cpp" line="1375"/>
         <source>Are you sure you want to uninstall it?</source>
-        <translation type="unfinished"/>
+        <translation>Anda pasti mahu menyahpasangkannya?</translation>
     </message>
     <message>
         <location filename="../src/fullscreenframe.cpp" line="1381"/>
@@ -90,12 +90,12 @@
     <message>
         <location filename="../src/worker/menuworker.cpp" line="81"/>
         <source>Remove from desktop</source>
-        <translation>Buang dari desktop</translation>
+        <translation>Buang dari atas meja</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="82"/>
         <source>Send to desktop</source>
-        <translation>Hantar ke desktop</translation>
+        <translation>Hantar ke atas meja</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="86"/>
@@ -329,7 +329,7 @@
     <message>
         <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Are you sure you want to uninstall it?</source>
-        <translation type="unfinished"/>
+        <translation>Anda pasti mahu menyahpasangkannya?</translation>
     </message>
     <message>
         <location filename="../src/windowedframe.cpp" line="560"/>

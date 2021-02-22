@@ -100,12 +100,12 @@
     <message>
         <location filename="../src/worker/menuworker.cpp" line="86"/>
         <source>Remove from dock</source>
-        <translation>Eltávolítás a dokkról</translation>
+        <translation>Eltávolítás a Dokkolóról</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="87"/>
         <source>Send to dock</source>
-        <translation>Küldés a dokkra</translation>
+        <translation>Küldés a Dokkolóra</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="91"/>
@@ -252,7 +252,7 @@
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="123"/>
         <source>Suspend</source>
-        <translation>Felfüggesztés</translation>
+        <translation>Alvó állapot</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="125"/>

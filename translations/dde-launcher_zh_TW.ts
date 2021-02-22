@@ -77,7 +77,7 @@
     <message>
         <location filename="../src/fullscreenframe.cpp" line="1381"/>
         <source>Confirm</source>
-        <translation>確認</translation>
+        <translation>確定</translation>
     </message>
 </context>
 <context>
@@ -339,7 +339,7 @@
     <message>
         <location filename="../src/windowedframe.cpp" line="560"/>
         <source>Confirm</source>
-        <translation>確認</translation>
+        <translation>確定</translation>
     </message>
 </context>
 </TS>

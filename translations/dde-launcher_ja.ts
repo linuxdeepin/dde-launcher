@@ -67,7 +67,7 @@
     <message>
         <location filename="../src/fullscreenframe.cpp" line="1375"/>
         <source>Are you sure you want to uninstall it?</source>
-        <translation type="unfinished"/>
+        <translation>アンインストールしてもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../src/fullscreenframe.cpp" line="1381"/>
@@ -329,7 +329,7 @@
     <message>
         <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Are you sure you want to uninstall it?</source>
-        <translation type="unfinished"/>
+        <translation>アンインストールしてもよろしいですか？</translation>
     </message>
     <message>
         <location filename="../src/windowedframe.cpp" line="560"/>

@@ -216,7 +216,7 @@
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="102"/>
         <source>Music</source>
-        <translation>音乐</translation>
+        <translation>音樂</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="103"/>
@@ -275,7 +275,7 @@
     <message>
         <location filename="../src/widgets/miniframerightbar.cpp" line="61"/>
         <source>Music</source>
-        <translation>音乐</translation>
+        <translation>音樂</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframerightbar.cpp" line="64"/>

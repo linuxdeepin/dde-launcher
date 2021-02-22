@@ -1,65 +1,65 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="kab" version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="192"/>
         <source>Internet</source>
-        <translation>Интернет</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="193"/>
         <source>Chat</source>
-        <translation>Ћаскање</translation>
+        <translation>Ameslay</translation>
     </message>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="194"/>
         <source>Music</source>
-        <translation>Музика</translation>
+        <translation>Aẓawan</translation>
     </message>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="195"/>
         <source>Video</source>
-        <translation>Видео</translation>
+        <translation>Avidyu</translation>
     </message>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="196"/>
         <source>Graphics</source>
-        <translation>Графика</translation>
+        <translation>Udlifen</translation>
     </message>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="197"/>
         <source>Games</source>
-        <translation>Игре</translation>
+        <translation>Uraren</translation>
     </message>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="198"/>
         <source>Office</source>
-        <translation>Канцеларија</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="199"/>
         <source>Reading</source>
-        <translation>Читање</translation>
+        <translation>Taɣuri</translation>
     </message>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="200"/>
         <source>Development</source>
-        <translation>Развој</translation>
+        <translation>Asnefli</translation>
     </message>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="201"/>
         <source>System</source>
-        <translation>Систем</translation>
+        <translation>Anagraw</translation>
     </message>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="202"/>
         <source>Other</source>
-        <translation>Остало</translation>
+        <translation>Wayeḍ</translation>
     </message>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="1066"/>
         <source>No search results</source>
-        <translation>Нема резултата претраге</translation>
+        <translation>Ulac igmaḍ n unadi</translation>
     </message>
 </context>
 <context>
@@ -67,17 +67,17 @@
     <message>
         <location filename="../src/fullscreenframe.cpp" line="1375"/>
         <source>Are you sure you want to uninstall it?</source>
-        <translation>Заиста желите да уклоните?</translation>
+        <translation>D tidet tebɣiḍ ad t-tekkseḍ ?</translation>
     </message>
     <message>
         <location filename="../src/fullscreenframe.cpp" line="1381"/>
         <source>Cancel</source>
-        <translation>Откажи</translation>
+        <translation>Sefsex</translation>
     </message>
     <message>
         <location filename="../src/fullscreenframe.cpp" line="1381"/>
         <source>Confirm</source>
-        <translation>Потврди</translation>
+        <translation>Sentem</translation>
     </message>
 </context>
 <context>
@@ -85,52 +85,52 @@
     <message>
         <location filename="../src/worker/menuworker.cpp" line="78"/>
         <source>Open</source>
-        <translation>Покрени</translation>
+        <translation>Ldi</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="81"/>
         <source>Remove from desktop</source>
-        <translation>Уклони са радне површине</translation>
+        <translation>Kkes si tnarit</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="82"/>
         <source>Send to desktop</source>
-        <translation>Пошаљи на радну површину</translation>
+        <translation>Azen ɣer tnarit</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="86"/>
         <source>Remove from dock</source>
-        <translation>Уклони са дока</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="87"/>
         <source>Send to dock</source>
-        <translation>Пошаљи на док</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="91"/>
         <source>Remove from startup</source>
-        <translation>Уклони из почетних</translation>
+        <translation>Kkes seg usekker</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="92"/>
         <source>Add to startup</source>
-        <translation>Додај у почетне</translation>
+        <translation>Rnu ɣer usekker</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="96"/>
         <source>Uninstall</source>
-        <translation>Деинсталирај</translation>
+        <translation>Kkes</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="106"/>
         <source>Use a proxy</source>
-        <translation>Користи посредника</translation>
+        <translation>Seqdec apṛuksi</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="117"/>
         <source>Disable display scaling</source>
-        <translation>Онемогући скалирање приказа</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -138,62 +138,62 @@
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="46"/>
         <source>All Apps</source>
-        <translation>Сви програми</translation>
+        <translation>Akk isnasen</translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="47"/>
         <source>Internet</source>
-        <translation>Интернет</translation>
+        <translation>Internet</translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="48"/>
         <source>Chat</source>
-        <translation>Ћаскање</translation>
+        <translation>Ameslay</translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="49"/>
         <source>Music</source>
-        <translation>Музика</translation>
+        <translation>Aẓawan</translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="50"/>
         <source>Video</source>
-        <translation>Видео</translation>
+        <translation>Avidyu</translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="51"/>
         <source>Graphics</source>
-        <translation>Графика</translation>
+        <translation>Udlifen</translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="52"/>
         <source>Games</source>
-        <translation>Игре</translation>
+        <translation>Uraren</translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="53"/>
         <source>Office</source>
-        <translation>Канцеларија</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="54"/>
         <source>Reading</source>
-        <translation>Читање</translation>
+        <translation>Taɣuri</translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="55"/>
         <source>Development</source>
-        <translation>Развој</translation>
+        <translation>Asnefli</translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="56"/>
         <source>System</source>
-        <translation>Систем</translation>
+        <translation>Anagraw</translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="57"/>
         <source>Other</source>
-        <translation>Остало</translation>
+        <translation>Wayeḍ</translation>
     </message>
 </context>
 <context>
@@ -201,63 +201,63 @@
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="99"/>
         <source>Computer</source>
-        <translation>Рачунар</translation>
+        <translation>Aselkim</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="100"/>
         <source>Documents</source>
-        <translation>Документи</translation>
+        <translation>Isemliyen</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="101"/>
         <source>Videos</source>
-        <translation>Видео</translation>
+        <translation>Tividyutin</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="102"/>
         <source>Music</source>
-        <translation>Музика</translation>
+        <translation>Aẓawan</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="103"/>
         <source>Pictures</source>
-        <translation>Слике</translation>
+        <translation>Tugniwin</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="104"/>
         <source>Downloads</source>
-        <translation>Преузимања</translation>
+        <translation>Isidar</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="105"/>
         <location filename="../src/widgets/miniframenavigation.cpp" line="124"/>
         <source>Shut down</source>
-        <translation>Искључи</translation>
+        <translation>Sens</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="120"/>
         <source>Lock</source>
-        <translation>Закључај</translation>
+        <translation>Sekkeṛ</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="121"/>
         <source>Log out</source>
-        <translation>Одјави се</translation>
+        <translation>Kkes asekkeṛ</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="122"/>
         <source>Reboot</source>
-        <translation>Поново покрени</translation>
+        <translation>Ales asekker</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="123"/>
         <source>Suspend</source>
-        <translation>Обустави</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="125"/>
         <source>Back</source>
-        <translation>Назад</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -265,42 +265,42 @@
     <message>
         <location filename="../src/widgets/miniframerightbar.cpp" line="55"/>
         <source>Computer</source>
-        <translation>Рачунар</translation>
+        <translation>Aselkim</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframerightbar.cpp" line="58"/>
         <source>Videos</source>
-        <translation>Видео</translation>
+        <translation>Tividyutin</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframerightbar.cpp" line="61"/>
         <source>Music</source>
-        <translation>Музика</translation>
+        <translation>Aẓawan</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframerightbar.cpp" line="64"/>
         <source>Pictures</source>
-        <translation>Слике</translation>
+        <translation>Tugniwin</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframerightbar.cpp" line="67"/>
         <source>Documents</source>
-        <translation>Документи</translation>
+        <translation>Isemliyen</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframerightbar.cpp" line="70"/>
         <source>Downloads</source>
-        <translation>Преузимања</translation>
+        <translation>Isidar</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframerightbar.cpp" line="73"/>
         <source>Control Center</source>
-        <translation>Контролни Центар</translation>
+        <translation>Ammas n usenqed</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframerightbar.cpp" line="76"/>
         <source>Power</source>
-        <translation>Напајање</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -308,12 +308,12 @@
     <message>
         <location filename="../src/widgets/miniframeswitchbtn.cpp" line="73"/>
         <source>All Categories</source>
-        <translation>Све категорије</translation>
+        <translation>Akk taggayin</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframeswitchbtn.cpp" line="76"/>
         <source>Back</source>
-        <translation>Назад</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -321,7 +321,7 @@
     <message>
         <location filename="../src/widgets/searchlineedit.cpp" line="57"/>
         <source>Search</source>
-        <translation>Претражи</translation>
+        <translation>Nadi</translation>
     </message>
 </context>
 <context>
@@ -329,17 +329,17 @@
     <message>
         <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Are you sure you want to uninstall it?</source>
-        <translation>Заиста желите да уклоните?</translation>
+        <translation>D tidet tebɣiḍ ad t-tekkseḍ ?</translation>
     </message>
     <message>
         <location filename="../src/windowedframe.cpp" line="560"/>
         <source>Cancel</source>
-        <translation>Откажи</translation>
+        <translation>Sefsex</translation>
     </message>
     <message>
         <location filename="../src/windowedframe.cpp" line="560"/>
         <source>Confirm</source>
-        <translation>Потврди</translation>
+        <translation>Sentem</translation>
     </message>
 </context>
 </TS>

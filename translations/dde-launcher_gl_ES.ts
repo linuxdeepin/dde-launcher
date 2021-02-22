@@ -29,7 +29,7 @@
     <message>
         <location filename="../src/model/appsmanager.cpp" line="197"/>
         <source>Games</source>
-        <translation>Games</translation>
+        <translation>Xogos</translation>
     </message>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="198"/>
@@ -67,7 +67,7 @@
     <message>
         <location filename="../src/fullscreenframe.cpp" line="1375"/>
         <source>Are you sure you want to uninstall it?</source>
-        <translation>Estás seguro de que queres desinstalalo?</translation>
+        <translation>Tes a certeza de querer desinstalalo?</translation>
     </message>
     <message>
         <location filename="../src/fullscreenframe.cpp" line="1381"/>
@@ -105,12 +105,12 @@
     <message>
         <location filename="../src/worker/menuworker.cpp" line="87"/>
         <source>Send to dock</source>
-        <translation>Enviar ao peirao</translation>
+        <translation>Enviar á doca</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="91"/>
         <source>Remove from startup</source>
-        <translation>Eliminar desde o inicio</translation>
+        <translation>Eliminar do inicio</translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="92"/>
@@ -138,7 +138,7 @@
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="46"/>
         <source>All Apps</source>
-        <translation>Todos os aplicativos</translation>
+        <translation>Todos as aplicacións</translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="47"/>
@@ -168,7 +168,7 @@
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="52"/>
         <source>Games</source>
-        <translation>Games</translation>
+        <translation>Xogos</translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="53"/>
@@ -242,7 +242,7 @@
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="121"/>
         <source>Log out</source>
-        <translation>Pechar a sesión</translation>
+        <translation>Pechar sesión</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="122"/>
@@ -321,7 +321,7 @@
     <message>
         <location filename="../src/widgets/searchlineedit.cpp" line="57"/>
         <source>Search</source>
-        <translation>Buscar</translation>
+        <translation>Procurar</translation>
     </message>
 </context>
 <context>
@@ -329,7 +329,7 @@
     <message>
         <location filename="../src/windowedframe.cpp" line="555"/>
         <source>Are you sure you want to uninstall it?</source>
-        <translation>Estás seguro de que queres desinstalalo?</translation>
+        <translation>Tes a certeza de querer desinstalalo?</translation>
     </message>
     <message>
         <location filename="../src/windowedframe.cpp" line="560"/>

@@ -232,7 +232,7 @@
         <location filename="../src/widgets/miniframenavigation.cpp" line="105"/>
         <location filename="../src/widgets/miniframenavigation.cpp" line="124"/>
         <source>Shut down</source>
-        <translation>Éteindre</translation>
+        <translation>Arrêter</translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="120"/>

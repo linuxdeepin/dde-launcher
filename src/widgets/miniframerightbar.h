@@ -71,6 +71,13 @@ private slots:
 private:
     Avatar *m_avatar;
     int m_currentIndex;
+    QStringList m_hideList;
+    bool m_hasCompterIcon;
+    bool m_hasDocumentIcon;
+    bool m_hasPictureIcon;
+    bool m_hasMusicIcon;
+    bool m_hasVideoIcon;
+    bool m_hasDownloadIcon;
     QMap<uint, MiniFrameButton*> m_btns;
     MiniFrameButton *m_settingsBtn;
     MiniFrameButton *m_powerBtn;

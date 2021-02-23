@@ -62,7 +62,16 @@ public:
         AppItemIsDraggingRole,
         AppDragIconRole,
         CategoryEnterIconRole,
-        DrawBackgroundRole
+        DrawBackgroundRole,
+        AppHideOpenRole,
+        AppHideSendToDesktopRole,
+        AppHideSendToDockRole,
+        AppHideStartUpRole,
+        AppHideUninstallRole,
+        AppCanOpenRole,
+        AppCanSendToDesktopRole,
+        AppCanSendToDockRole,
+        AppCanStartUpRole
     };
 
     enum AppCategory {
@@ -125,6 +134,16 @@ private:
 
     QList<ItemInfo> m_itemList;
 
+    QStringList m_hideOpenPackages;
+    QStringList m_hideSendToDesktopPackages;
+    QStringList m_hideSendToDockPackages;
+    QStringList m_hideStartUpPackages;
+    QStringList m_hideUninstallPackages;
+
+    QStringList m_cantOpenPackages;
+    QStringList m_cantSendToDesktopPackages;
+    QStringList m_cantSendToDockPackages;
+    QStringList m_cantStartUpPackages;
     QStringList m_holdPackages;
 
     QModelIndex m_dragStartIndex = QModelIndex();

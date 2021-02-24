@@ -305,8 +305,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppDragIconRole:
         return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize().width() * 1.2);
     case AppListIconRole: {
-        const qreal ratio = qApp->devicePixelRatio();
-        QSize iconSize = (static_cast<AppsListModel::AppCategory>(m_category) == AppsListModel::Category) ? QSize(18, 18) * ratio : m_calcUtil->appIconSize();
+        QSize iconSize = (static_cast<AppsListModel::AppCategory>(m_category) == AppsListModel::Category) ? QSize(18, 18) : m_calcUtil->appIconSize();
         return m_appsManager->appIcon(itemInfo, iconSize.width());
     }
     case ItemSizeHintRole:

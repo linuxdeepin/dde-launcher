@@ -130,7 +130,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         const QPair<QString, bool> appTextResolvedInfo = holdTextInRect(fm, itemInfo.m_name, appNameRect.toRect());
         appNameResolved = appTextResolvedInfo.first;
 
-        if((fm.width(appNameResolved) + m_blueDotPixmap.width() + 10) > appNameRect.width()){
+        if((fm.width(appNameResolved) + (drawBlueDot?(m_blueDotPixmap.width()+ 10) : 0) ) > appNameRect.width()){
            TextSecond = 1;
         }
 

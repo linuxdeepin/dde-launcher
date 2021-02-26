@@ -120,8 +120,8 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     if("dde-calendar"==itemInfo.m_key)
     {
         //根据不同日期显示不同日历图表
-        int tw = iconSize.width();
-        int th = iconSize.height();
+        int tw = iconSize.width()*ratio;
+        int th = iconSize.height()*ratio;
         int tx = iconX;
         int ty = iconY;
 

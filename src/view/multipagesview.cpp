@@ -329,9 +329,6 @@ AppsListModel *MultiPagesView::pageModel(int pageIndex)
 
 void MultiPagesView::wheelEvent(QWheelEvent *e)
 {
-    if (AppsListModel::All > m_category || AppsListModel::Category < m_category)
-        return;
-
     if (m_pageSwitchAnimation->state() == QPropertyAnimation::Running)
         return;
 
@@ -404,6 +401,11 @@ void MultiPagesView::setGradientVisible(bool visible)
 {
     m_pLeftGradient->setVisible(visible);
     m_pRightGradient->setVisible(visible);
+}
+
+QPropertyAnimation::State MultiPagesView::getPageSwitchAnimationState()
+{
+    return m_pageSwitchAnimation->state();
 }
 
 // 更新边框渐变，在屏幕变化时需要更新，类别拖动时需要隐藏

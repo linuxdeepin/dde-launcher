@@ -346,6 +346,8 @@ void AppsManager::abandonStashedItem(const QString &appKey)
             break;
         }
     }
+    //重新获取分类数据，类似wps一个appkey对应对个desktop文件的时候,有可能会导致漏掉
+    refreshCategoryInfoList();
 
     emit dataChanged(AppsListModel::All);
 }

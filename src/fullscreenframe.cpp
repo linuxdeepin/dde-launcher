@@ -676,6 +676,9 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
 {
     if (m_displayMode == GROUP_BY_CATEGORY) {
         if (m_animationGroup->state() == m_animationGroup->Running) return;
+        //优先MultiPagesView中的滑动事件，如果MultiPagesView中动画在运行，外层滑动鼠标就不处理
+        if( getCategoryBoxWidget(m_currentCategory)->getMultiPagesView()->getPageSwitchAnimationState() == QPropertyAnimation::Running) return;
+
         static int  wheelTime = 0;
         if (e->angleDelta().y() < 0 ||  e-> angleDelta().x() < 0) {
             wheelTime++;

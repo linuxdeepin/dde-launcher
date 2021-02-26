@@ -32,7 +32,6 @@
 #include <QPixmap>
 #include <QVariant>
 #include <QApplication>
-#include <QSvgRenderer>
 
 
 #define  ICONTOLETF  12
@@ -131,7 +130,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         const QPair<QString, bool> appTextResolvedInfo = holdTextInRect(fm, itemInfo.m_name, appNameRect.toRect());
         appNameResolved = appTextResolvedInfo.first;
 
-        if(fm.width(appNameResolved) > appNameRect.width()){
+        if((fm.width(appNameResolved) + (drawBlueDot?(m_blueDotPixmap.width()+ 10) : 0) ) > appNameRect.width()){
            TextSecond = 1;
         }
 
@@ -176,6 +175,11 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     appNameRect.setY(br.y() + br.height()  - TEXTTOLEFT + (fm.height() >= 28 ? 2 : 0)- fm.height() - fontPixelSize*TextSecond);
 
+    if(drawBlueDot){
+        appNameRect.setX(appNameRect.x() + m_blueDotPixmap.width()/2 + 5);
+        appNameRect.setWidth(appNameRect.width() - m_blueDotPixmap.width());
+    }
+
     painter->setFont(appNamefont);
     painter->setBrush(QBrush(Qt::transparent));
     painter->setPen(QColor(0, 0, 0, 80));
@@ -195,18 +199,17 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         const double  iconZoom =  iconRect.width() /256.0;
 
         QStringList calIconList = m_calcUtil->calendarSelectIcon();
-         //绘制背景
-        QSvgRenderer renderer_bg(calIconList.at(0));
-        renderer_bg.render(painter, iconRect);
+        //绘制背景
+        painter->drawPixmap(iconRect, renderSVG(calIconList.at(0), iconRect.size()));
         //绘制月份
-        QSvgRenderer renderer_month(calIconList.at(1));
-        renderer_month.render(painter, QRect(tx + (tw / 3.4), ty + (th / 5.4), 80 * iconZoom, 40 * iconZoom));
+        QRectF rcMonth(tx + (tw / 3.4), ty + (th / 5.4), 80 * iconZoom, 40 * iconZoom);
+        painter->drawPixmap(rcMonth.topLeft(), renderSVG(calIconList.at(1), rcMonth.size().toSize()));
         //绘制日
-        QSvgRenderer renderer_day(calIconList.at(2));
-        renderer_day.render(painter, QRect(tx + (tw / 3.5), ty + th / 3.1, 112 * iconZoom, 104 * iconZoom));
+        QRectF rcDay(tx + (tw / 3.5), ty + th / 3.1, 112 * iconZoom, 104 * iconZoom);
+        painter->drawPixmap(rcDay.topLeft(), renderSVG(calIconList.at(2), rcDay.size().toSize()));
         //绘制周
-        QSvgRenderer renderer_week(calIconList.at(3));
-        renderer_week.render(painter, QRect(tx + (tw / 2.3), ty + ((th / 3.9) * 2.8), 56 * iconZoom, 24 * iconZoom));
+        QRectF rcWeek(tx + (tw / 2.3), ty + ((th / 3.9) * 2.8), 56 * iconZoom, 24 * iconZoom);
+        painter->drawPixmap(rcWeek.topLeft(), renderSVG(calIconList.at(3), rcWeek.size().toSize()));
     }else {
         const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
         painter->drawPixmap(iconRect, iconPix, iconPix.rect());

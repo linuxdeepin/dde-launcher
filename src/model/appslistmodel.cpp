@@ -52,6 +52,107 @@ static QMap<int, AppsListModel::AppCategory> CateGoryMap {
     { 10, AppsListModel::Others      }
 };
 
+static QGSettings *gSetting = new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
+
+const QStringList sysHideOpenPackages()
+{
+    QStringList hideOpen_list;
+    //从gschema读取隐藏打开功能软件列表
+    if (gSetting->keys().contains("appsHideOpenList")) {
+        hideOpen_list << gSetting->get("apps-hide-open-list").toStringList();
+    }
+
+    return hideOpen_list;
+}
+
+const QStringList sysHideSendToDesktopPackages()
+{
+    QStringList hideSendToDesktop_list;
+    //从gschema读取隐藏发送到桌面功能软件列表
+    if (gSetting->keys().contains("appsHideSendToDesktopList")) {
+        hideSendToDesktop_list << gSetting->get("apps-hide-send-to-desktop-list").toStringList();
+    }
+
+    return hideSendToDesktop_list;
+}
+
+const QStringList sysHideSendToDockPackages()
+{
+    QStringList hideSendToDock_list;
+    //从gschema读取隐藏发送到Ｄock功能软件列表
+    if (gSetting->keys().contains("appsHideSendToDockList")) {
+        hideSendToDock_list << gSetting->get("apps-hide-send-to-dock-list").toStringList();
+    }
+
+    return hideSendToDock_list;
+}
+
+const QStringList sysHideStartUpPackages()
+{
+    QStringList hideStartUp_list;
+    //从gschema读取隐藏开机启动功能软件列表
+    if (gSetting->keys().contains("appsHideStartUpList")) {
+        hideStartUp_list << gSetting->get("apps-hide-start-up-list").toStringList();
+    }
+
+    return hideStartUp_list;
+}
+
+const QStringList sysHideUninstallPackages()
+{
+    QStringList hideUninstall_list;
+    //从gschema读取隐藏开机启动功能软件列表
+    if (gSetting->keys().contains("appsHideUninstallList")) {
+        hideUninstall_list << gSetting->get("apps-hide-uninstall-list").toStringList();
+    }
+
+    return hideUninstall_list;
+}
+
+const QStringList sysCantOpenPackages()
+{
+    QStringList cantOpen_list;
+    //从gschema读取不可打开软件列表
+    if (gSetting->keys().contains("appsCanNotOpenList")) {
+        cantOpen_list << gSetting->get("apps-can-not-open-list").toStringList();
+    }
+
+    return cantOpen_list;
+}
+
+const QStringList sysCantSendToDesktopPackages()
+{
+    QStringList cantSendToDesktop_list;
+    //从gschema读取不可发送到桌面软件列表
+    if (gSetting->keys().contains("appsCanNotSendToDesktopList")) {
+        cantSendToDesktop_list << gSetting->get("apps-can-not-send-to-desktop-list").toStringList();
+    }
+
+    return cantSendToDesktop_list;
+}
+
+const QStringList sysCantSendToDockPackages()
+{
+    QStringList cantSendToDock_list;
+    //从gschema读取不可发送到Dock软件列表
+    if (gSetting->keys().contains("appsCanNotSendToDockList")) {
+        cantSendToDock_list << gSetting->get("apps-can-not-send-to-dock-list").toStringList();
+    }
+
+    return cantSendToDock_list;
+}
+
+const QStringList sysCantStartUpPackages()
+{
+    QStringList cantStartUp_list;
+    //从gschema读取不可自动启动软件列表
+    if (gSetting->keys().contains("appsCanNotStartUpList")) {
+        cantStartUp_list << gSetting->get("apps-can-not-start-up-list").toStringList();
+    }
+
+    return cantStartUp_list;
+}
+
 const QStringList sysHoldPackages()
 {
     //从先/etc/deepin-installer.conf读取不可卸载软件列表
@@ -71,6 +172,15 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent)
     : QAbstractListModel(parent)
     , m_appsManager(AppsManager::instance())
     , m_calcUtil(CalculateUtil::instance())
+    , m_hideOpenPackages(sysHideOpenPackages())
+    , m_hideSendToDesktopPackages(sysHideSendToDesktopPackages())
+    , m_hideSendToDockPackages(sysHideSendToDockPackages())
+    , m_hideStartUpPackages(sysHideStartUpPackages())
+    , m_hideUninstallPackages(sysHideUninstallPackages())
+    , m_cantOpenPackages(sysCantOpenPackages())
+    , m_cantSendToDesktopPackages(sysCantSendToDesktopPackages())
+    , m_cantSendToDockPackages(sysCantSendToDockPackages())
+    , m_cantStartUpPackages(sysCantStartUpPackages())
     , m_holdPackages(sysHoldPackages())
     , m_category(category)
     , m_drawBackground(true)
@@ -104,8 +214,8 @@ void AppsListModel::setDragDropIndex(const QModelIndex &index)
 {
     if (m_dragDropIndex == index)
         return;
-//    if (m_dragDropIndex == m_dragStartIndex)
-//        return;
+    //    if (m_dragDropIndex == m_dragStartIndex)
+    //        return;
 
     m_dragDropIndex = index;
 
@@ -258,8 +368,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     if (!index.isValid() || index.row() >= pageCount)
         return QVariant();
 
-   int start = nFixCount * m_pageIndex;
-   const ItemInfo &itemInfo = m_appsManager->appsInfoListIndex(m_category,start + index.row());
+    int start = nFixCount * m_pageIndex;
+    const ItemInfo &itemInfo = m_appsManager->appsInfoListIndex(m_category,start + index.row());
 
     switch (role) {
     case AppRawItemInfoRole:
@@ -324,6 +434,24 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         }
     case DrawBackgroundRole:
         return m_drawBackground;
+    case AppHideOpenRole:
+        return m_hideOpenPackages.contains(itemInfo.m_key);
+    case AppHideSendToDesktopRole:
+        return m_hideSendToDesktopPackages.contains(itemInfo.m_key);
+    case AppHideSendToDockRole:
+        return m_hideSendToDockPackages.contains(itemInfo.m_key);
+    case AppHideStartUpRole:
+        return m_hideStartUpPackages.contains(itemInfo.m_key);
+    case AppHideUninstallRole:
+        return m_hideUninstallPackages.contains(itemInfo.m_key);
+    case AppCanOpenRole:
+        return !m_cantOpenPackages.contains(itemInfo.m_key);
+    case AppCanSendToDesktopRole:
+        return !m_cantSendToDesktopPackages.contains(itemInfo.m_key);
+    case AppCanSendToDockRole:
+        return !m_cantSendToDockPackages.contains(itemInfo.m_key);
+    case AppCanStartUpRole:
+        return !m_cantStartUpPackages.contains(itemInfo.m_key);
     default:;
     }
 
@@ -348,7 +476,7 @@ void AppsListModel::dataChanged(const AppCategory category)
 {
     if (category == All || category == m_category)
         emit QAbstractItemModel::layoutChanged();
-//        emit QAbstractItemModel::dataChanged(index(0), index(rowCount(QModelIndex())));
+    //        emit QAbstractItemModel::dataChanged(index(0), index(rowCount(QModelIndex())));
 }
 
 ///
@@ -371,7 +499,7 @@ bool AppsListModel::indexDragging(const QModelIndex &index) const
     const int current = index.row();
 
     return (start <= end && current >= start && current <= end) ||
-           (start >= end && current <= start && current >= end);
+            (start >= end && current <= start && current >= end);
 }
 
 void AppsListModel::itemDataChanged(const ItemInfo &info)

@@ -60,6 +60,15 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
     m_isRemovable = m_currentModelIndex.data(AppsListModel::AppIsRemovableRole).toBool();
     m_isItemProxy = m_currentModelIndex.data(AppsListModel::AppIsProxyRole).toBool();
     m_isItemEnableScaling = m_currentModelIndex.data(AppsListModel::AppEnableScalingRole).toBool();
+    m_hideOpen = m_currentModelIndex.data(AppsListModel::AppHideOpenRole).toBool();
+    m_hideSendToDesktop = m_currentModelIndex.data(AppsListModel::AppHideSendToDesktopRole).toBool();
+    m_hideSendToDock = m_currentModelIndex.data(AppsListModel::AppHideSendToDockRole).toBool();
+    m_hideStartUp = m_currentModelIndex.data(AppsListModel::AppHideStartUpRole).toBool();
+    m_hideUninstall = m_currentModelIndex.data(AppsListModel::AppHideUninstallRole).toBool();
+    m_canOpen = m_currentModelIndex.data(AppsListModel::AppCanOpenRole).toBool();
+    m_canSendToDesktop = m_currentModelIndex.data(AppsListModel::AppCanSendToDesktopRole).toBool();
+    m_canSendToDock = m_currentModelIndex.data(AppsListModel::AppCanSendToDockRole).toBool();
+    m_canStartUp = m_currentModelIndex.data(AppsListModel::AppCanStartUpRole).toBool();
 
     qDebug() << "appKey" << m_appKey;
 
@@ -96,12 +105,30 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
 
     uninstall = new QAction(tr("Uninstall"), menu);
 
-    menu->addAction(open);
-    menu->addSeparator();
-    menu->addAction(desktop);
-    menu->addAction(dock);
-    menu->addSeparator();
-    menu->addAction(startup);
+    if (!m_hideOpen)
+        menu->addAction(open);
+
+    // 分割线绘制的必要条件是，在打开功能之后，还有其他的功能选项
+    if (!m_hideOpen
+            && (!m_hideSendToDesktop || !m_hideSendToDock
+                || !m_hideStartUp || QFile::exists(ChainsProxy_path)
+                || !m_calcUtil->IsServerSystem || !m_hideUninstall))
+        menu->addSeparator();
+
+    if (!m_hideSendToDesktop)
+        menu->addAction(desktop);
+
+    if (!m_hideSendToDock)
+        menu->addAction(dock);
+
+    // 分割线绘制的必要条件是，在发送到桌面或者发送到任务栏功能之后，还有其他的功能选项
+    if ((!m_hideSendToDesktop || !m_hideSendToDock)
+            && (!m_hideStartUp || QFile::exists(ChainsProxy_path)
+                || !m_calcUtil->IsServerSystem || !m_hideUninstall))
+        menu->addSeparator();
+
+    if (!m_hideStartUp)
+        menu->addAction(startup);
 
     if (QFile::exists(ChainsProxy_path)) {
         proxy = new QAction(tr("Use a proxy"), menu);
@@ -124,25 +151,38 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
         }
     }
 
-    dock->setEnabled(m_appKey != "dde-trash");
+    open->setEnabled(m_canOpen);
+    desktop->setEnabled(m_canSendToDesktop);
+    dock->setEnabled(m_appKey != "dde-trash" && m_canSendToDock);
+    startup->setEnabled(m_canStartUp);
     uninstall->setEnabled(m_isRemovable);
 
 #ifndef WITHOUT_UNINSTALL_APP
-    menu->addAction(uninstall);
+    if (!m_hideUninstall)
+        menu->addAction(uninstall);
 #endif
 
-    connect(open, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-    connect(desktop, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-    connect(dock, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-    connect(startup, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+    if (!m_hideOpen)
+        connect(open, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+    if (!m_hideSendToDesktop)
+        connect(desktop, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+    if (!m_hideSendToDock)
+        connect(dock, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+    if (!m_hideStartUp)
+        connect(startup, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+    if (!m_hideUninstall)
+        connect(uninstall, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
 
-    connect(uninstall, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-
-    signalMapper->setMapping(open, Open);
-    signalMapper->setMapping(desktop, Desktop);
-    signalMapper->setMapping(dock, Dock);
-    signalMapper->setMapping(startup, Startup);
-    signalMapper->setMapping(uninstall, Uninstall);
+    if (!m_hideOpen)
+        signalMapper->setMapping(open, Open);
+    if (!m_hideSendToDesktop)
+        signalMapper->setMapping(desktop, Desktop);
+    if (!m_hideSendToDock)
+        signalMapper->setMapping(dock, Dock);
+    if (!m_hideStartUp)
+        signalMapper->setMapping(startup, Startup);
+    if (!m_hideUninstall)
+        signalMapper->setMapping(uninstall, Uninstall);
 
     connect(signalMapper, static_cast<void (QSignalMapper::*)(const int)>(&QSignalMapper::mapped), this, &MenuWorker::handleMenuAction);
     connect(menu, &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);

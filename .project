@@ -1,0 +1,8 @@
+{
+       "type": "homebrew",
+       "3rdparty": [],
+       "ignore": ["./translations", "./debian", "*.svg","*.qm","*.png","*.ts"],
+       "license": ["GPLv3"],
+       "importantFile": ["src/view/*.cpp","src/view/*.h", "CMakeLists.txt", "src/model/*.cpp","src/model/*.h","src/delegate/*.cpp"，"src/delegate/*.h"，"src/launchersys.cpp"，"src/launchersys.h"，"src/sharedeventfilter.cpp","src/sharedeventfilter.h"]
+}
+

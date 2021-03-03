@@ -22,7 +22,7 @@
  */
 
 #include "searchwidget.h"
-#include "src/global_util/util.h"
+#include "util.h"
 
 #include <QHBoxLayout>
 #include <QEvent>

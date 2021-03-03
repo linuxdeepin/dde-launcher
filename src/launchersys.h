@@ -25,7 +25,7 @@
 #define LAUNCHERSYS_H
 
 #include "dbusinterface/dbuslauncher.h"
-#include "src/global_util/calculate_util.h"
+#include "calculate_util.h"
 
 #include <QObject>
 #include <QTimer>

@@ -22,11 +22,11 @@
  */
 
 #include "appitemdelegate.h"
-#include "src/global_util/constants.h"
-#include "src/global_util/calculate_util.h"
-#include "src/global_util/util.h"
-#include "src/model/appslistmodel.h"
-#include "src/dbusinterface/dbusvariant/iteminfo.h"
+#include "constants.h"
+#include "calculate_util.h"
+#include "util.h"
+#include "appslistmodel.h"
+#include "iteminfo.h"
 
 #include <QDebug>
 #include <QPixmap>

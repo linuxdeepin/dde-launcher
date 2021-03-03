@@ -22,9 +22,9 @@
  */
 
 #include "fullscreenframe.h"
-#include "src/dbusinterface/dbuslauncherframe.h"
+#include "dbuslauncherframe.h"
 #include "model/appsmanager.h"
-#include "dbusservices/dbuslauncherservice.h"
+#include "dbuslauncherservice.h"
 #include "accessible.h"
 
 #include <QCommandLineParser>

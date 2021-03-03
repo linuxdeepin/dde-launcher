@@ -30,7 +30,7 @@
 
 #include <com_deepin_daemon_gesture.h>
 
-#include "src/model/appsmanager.h"
+#include "appsmanager.h"
 
 using Gesture = com::deepin::daemon::Gesture;
 

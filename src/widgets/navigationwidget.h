@@ -25,7 +25,7 @@
 #define NAVIGATIONWIDGET_H
 
 #include "categorybutton.h"
-#include "src/global_util/calculate_util.h"
+#include "calculate_util.h"
 
 #include <QFrame>
 #include <QButtonGroup>

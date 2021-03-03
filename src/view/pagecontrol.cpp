@@ -20,7 +20,7 @@
  */
 
 #include "pagecontrol.h"
-#include "src/global_util/util.h"
+#include "util.h"
 
 #include <QBoxLayout>
 

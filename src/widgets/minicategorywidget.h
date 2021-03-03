@@ -27,7 +27,7 @@
 #include <QWidget>
 #include <QPushButton>
 
-#include "src/model/appslistmodel.h"
+#include "appslistmodel.h"
 
 class MiniCategoryItem : public QPushButton
 {

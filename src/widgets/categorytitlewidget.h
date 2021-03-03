@@ -27,7 +27,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QMouseEvent>
-#include "src/global_util/calculate_util.h"
+#include "calculate_util.h"
 
 class QPropertyAnimation;
 

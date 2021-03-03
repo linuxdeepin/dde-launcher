@@ -20,16 +20,16 @@
  */
 
 #include "dde_launcher_unit_test.h"
-#include "src/dbusinterface/dbuslauncherframe.h"
-#include "src/dbusinterface/dbusdisplay.h"
-#include "src/dbusinterface/dbusfileinfo.h"
-#include "src/dbusinterface/dbusmenu.h"
-#include "src/dbusinterface/dbusmenumanager.h"
-#include "src/dbusinterface/dbustartmanager.h"
-#include "src/dbusinterface/monitorinterface.h"
-#include "src/dbusinterface/dbusdock.h"
-#include "src/dbusinterface/dbuslauncher.h"
-#include "src/global_util/calculate_util.h"
+#include "dbuslauncherframe.h"
+#include "dbusdisplay.h"
+#include "dbusfileinfo.h"
+#include "dbusmenu.h"
+#include "dbusmenumanager.h"
+#include "dbustartmanager.h"
+#include "monitorinterface.h"
+#include "dbusdock.h"
+#include "dbuslauncher.h"
+#include "calculate_util.h"
 
 #include <QtTest/QtTest>
 #include <QDBusInterface>

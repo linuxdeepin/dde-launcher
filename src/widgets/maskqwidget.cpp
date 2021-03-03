@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "maskqwidget.h"
-#include "src/global_util/constants.h"
+#include "constants.h"
 
 #include <QPainter>
 

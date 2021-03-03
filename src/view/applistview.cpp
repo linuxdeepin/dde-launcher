@@ -22,9 +22,9 @@
  */
 
 #include "applistview.h"
-#include "src/global_util/constants.h"
-#include "src/delegate/applistdelegate.h"
-#include "src/model/appslistmodel.h"
+#include "constants.h"
+#include "applistdelegate.h"
+#include "appslistmodel.h"
 
 #include <QStyleOptionViewItem>
 #include <QPropertyAnimation>

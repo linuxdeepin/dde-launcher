@@ -23,7 +23,7 @@
 
 #ifndef SEARCHWIDGET_H
 #define SEARCHWIDGET_H
-#include "src/global_util/calculate_util.h"
+#include "calculate_util.h"
 #include "searchlineedit.h"
 #include <QWidget>
 #include <DFloatingButton>

@@ -59,13 +59,58 @@ pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 
-add_executable(${BIN_NAME} ${SRCS} ${INTERFACES} src/skin.qrc src/widgets/images.qrc)
-target_include_directories(${BIN_NAME} PUBLIC ${DtkWidget_INCLUDE_DIRS}
-                                              ${XCB_EWMH_INCLUDE_DIRS}
-                                              ${DFrameworkDBus_INCLUDE_DIRS}
-                                              ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
-                                              ${QGSettings_INCLUDE_DIRS}
-                                              ${PROJECT_BINARY_DIR})
+include_directories(
+    src
+    src/boxframe
+    src/dbusinterface
+    src/dbusinterface/dbusvariant
+    src/dbusservices
+    src/delegate
+    src/global_util
+    src/model
+    src/skin
+    src/view
+    src/widgets
+    src/worker
+)
+
+aux_source_directory(src SRC)
+aux_source_directory(src/boxframe BOXFRAME)
+aux_source_directory(src/dbusinterface DBUSINTERFACE)
+aux_source_directory(src/dbusinterface/dbusvariant DBUSVARIANT)
+aux_source_directory(src/dbusservices DBUSSERVICES)
+aux_source_directory(src/delegate DELEGATE)
+aux_source_directory(src/global_util GLOBAL_UTIL)
+aux_source_directory(src/model MODEL)
+aux_source_directory(src/skin SKIN)
+aux_source_directory(src/view VIEW)
+aux_source_directory(src/widgets WIDGETS)
+aux_source_directory(src/worker WORKER)
+
+file(GLOB SRC_PATH
+    ${SRC}
+    ${BOXFRAME}
+    ${DBUSINTERFACE}
+    ${DBUSVARIANT}
+    ${DBUSSERVICES}
+    ${DELEGATE}
+    ${GLOBAL_UTIL}
+    ${MODEL}
+    ${SKIN}
+    ${VIEW}
+    ${WIDGETS}
+    ${WORKER}
+)
+
+add_executable(${BIN_NAME}  ${SRCS} ${SRC_PATH} ${INTERFACES} src/skin.qrc src/widgets/images.qrc)
+target_include_directories(${BIN_NAME} PUBLIC
+    ${DtkWidget_INCLUDE_DIRS}
+    ${XCB_EWMH_INCLUDE_DIRS}
+    ${DFrameworkDBus_INCLUDE_DIRS}
+    ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
+    ${QGSettings_INCLUDE_DIRS}
+    ${PROJECT_BINARY_DIR}
+)
 
 target_link_libraries(${BIN_NAME} PRIVATE
     ${XCB_EWMH_LIBRARIES}

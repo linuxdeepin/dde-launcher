@@ -20,7 +20,7 @@
 #include <QtCore/QVariant>
 #include <QtDBus/QtDBus>
 
-#include "dbusvariant/dockrect.h"
+#include "dockrect.h"
 #include <QDebug>
 
 /*

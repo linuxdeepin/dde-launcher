@@ -22,7 +22,7 @@
  */
 
 #include "navigationwidget.h"
-#include "src/global_util/constants.h"
+#include "constants.h"
 
 #include <QVBoxLayout>
 #include <QDebug>

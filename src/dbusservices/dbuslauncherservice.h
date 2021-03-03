@@ -12,7 +12,7 @@
 #ifndef DBUSLAUNCHERSERVICE_H_1458107102
 #define DBUSLAUNCHERSERVICE_H_1458107102
 
-#include "../launchersys.h"
+#include "launchersys.h"
 
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>

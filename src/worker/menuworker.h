@@ -36,11 +36,11 @@
 #include <QModelIndex>
 #include <QGSettings>
 
-#include "src/dbusinterface/dbusdock.h"
-#include "src/dbusinterface/dbuslauncher.h"
-#include "src/dbusinterface/dbustartmanager.h"
-#include "src/model/appsmanager.h"
-#include "src/model/appslistmodel.h"
+#include "dbusdock.h"
+#include "dbuslauncher.h"
+#include "dbustartmanager.h"
+#include "appsmanager.h"
+#include "appslistmodel.h"
 
 class MenuWorker : public QObject
 {

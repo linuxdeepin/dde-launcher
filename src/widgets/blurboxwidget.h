@@ -28,10 +28,10 @@
 
 #include <DBlurEffectWidget>
 
-#include "src/global_util/constants.h"
-#include "src/global_util/calculate_util.h"
-#include "src/widgets/categorytitlewidget.h"
-#include "src/view/multipagesview.h"
+#include "constants.h"
+#include "calculate_util.h"
+#include "categorytitlewidget.h"
+#include "multipagesview.h"
 #include "qapplication.h"
 #include "maskqwidget.h"
 

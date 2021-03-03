@@ -20,7 +20,7 @@
  */
 
 #include "blurboxwidget.h"
-#include "src/global_util/calculate_util.h"
+#include "calculate_util.h"
 
 #include <QPainter>
 

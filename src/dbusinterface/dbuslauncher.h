@@ -20,10 +20,10 @@
 #include <QtCore/QVariant>
 #include <QtDBus/QtDBus>
 
-#include "dbusvariant/categoryinfo.h"
-#include "dbusvariant/frequencyinfo.h"
-#include "dbusvariant/iteminfo.h"
-#include "dbusvariant/installedtimeinfo.h"
+#include "categoryinfo.h"
+#include "frequencyinfo.h"
+#include "iteminfo.h"
+#include "installedtimeinfo.h"
 
 /*
  * Proxy class for interface com.deepin.dde.daemon.Launcher

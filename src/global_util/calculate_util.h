@@ -31,8 +31,8 @@
 #include <QScreen>
 #include <DSysInfo>
 
-#include "src/dbusinterface/dbuslauncher.h"
-#include "src/dbusinterface/dbusdock.h"
+#include "dbuslauncher.h"
+#include "dbusdock.h"
 
 #define ALL_APPS            0
 #define GROUP_BY_CATEGORY   1

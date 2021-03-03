@@ -22,8 +22,8 @@
  */
 
 #include "categorybutton.h"
-#include "src/global_util/constants.h"
-#include "src/global_util/util.h"
+#include "constants.h"
+#include "util.h"
 
 #include <QHBoxLayout>
 #include <QDebug>

@@ -24,8 +24,8 @@
 #ifndef CATEGORYBUTTON_H
 #define CATEGORYBUTTON_H
 
-#include "../model/appslistmodel.h"
-#include "src/global_util/calculate_util.h"
+#include "appslistmodel.h"
+#include "calculate_util.h"
 
 #include <QAbstractButton>
 #include <QIcon>

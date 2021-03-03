@@ -22,10 +22,10 @@
  */
 
 #include "applistdelegate.h"
-#include "src/model/appslistmodel.h"
-#include "src/global_util/calculate_util.h"
-#include "../global_util/util.h"
-#include "src/dbusinterface/dbusvariant/iteminfo.h"
+#include "appslistmodel.h"
+#include "calculate_util.h"
+#include "util.h"
+#include "iteminfo.h"
 
 #include <DGuiApplicationHelper>
 

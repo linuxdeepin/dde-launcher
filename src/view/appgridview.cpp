@@ -22,10 +22,10 @@
  */
 
 #include "appgridview.h"
-#include "src/global_util/constants.h"
-#include "src/global_util/calculate_util.h"
-#include "src/global_util/util.h"
-#include "src/model/appslistmodel.h"
+#include "constants.h"
+#include "calculate_util.h"
+#include "util.h"
+#include "appslistmodel.h"
 
 #include <QDebug>
 #include <QWheelEvent>

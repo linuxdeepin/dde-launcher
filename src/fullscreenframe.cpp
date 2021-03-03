@@ -22,9 +22,9 @@
  */
 
 #include "fullscreenframe.h"
-#include "global_util/constants.h"
-#include "global_util/xcb_misc.h"
-#include "src/boxframe/backgroundmanager.h"
+#include "constants.h"
+#include "xcb_misc.h"
+#include "backgroundmanager.h"
 #include "sharedeventfilter.h"
 
 #include <QApplication>

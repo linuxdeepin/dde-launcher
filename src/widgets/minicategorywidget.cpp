@@ -22,7 +22,7 @@
  */
 
 #include "minicategorywidget.h"
-#include "src/model/appsmanager.h"
+#include "appsmanager.h"
 
 #include <QVBoxLayout>
 #include <QButtonGroup>

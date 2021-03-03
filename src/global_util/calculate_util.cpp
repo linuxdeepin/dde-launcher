@@ -22,14 +22,14 @@
  */
 
 #include "calculate_util.h"
-#include "src/dbusinterface/monitorinterface.h"
-#include "src/dbusinterface/dbusdisplay.h"
+#include "monitorinterface.h"
+#include "dbusdisplay.h"
 
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QApplication>
 
-#include "src/global_util/constants.h"
+#include "constants.h"
 
 static const QString DisplayModeKey = "display-mode";
 static const QString DisplayModeFree = "free";

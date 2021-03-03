@@ -23,9 +23,9 @@
 
 #include "appslistmodel.h"
 #include "appsmanager.h"
-#include "src/global_util/calculate_util.h"
-#include "src/global_util/constants.h"
-#include "src/dbusinterface/dbusvariant/iteminfo.h"
+#include "calculate_util.h"
+#include "constants.h"
+#include "dbusvariant/iteminfo.h"
 
 #include <QSize>
 #include <QDebug>

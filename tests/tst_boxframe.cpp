@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include <QPixmap>
 
-#include "../src/boxframe/boxframe.h"
-#include "../src/boxframe/backgroundmanager.h"
+#include "boxframe.h"
+#include "backgroundmanager.h"
 
 
 class Tst_Boxframe : public testing::Test
@@ -27,4 +27,24 @@ public:
 TEST_F(Tst_Boxframe, frame)
 {
 
+}
+
+TEST_F(Tst_Boxframe, set_background_test)
+{
+    m_frame->setBackground(":/test_res/test.jpg");
+}
+
+TEST_F(Tst_Boxframe, invalid_dbackground_test)
+{
+    m_frame->setBackground("invalid");
+}
+
+TEST_F(Tst_Boxframe, set_blurbackground_test)
+{
+    m_frame->setBlurBackground(":/test_res/test.jpg");
+}
+
+TEST_F(Tst_Boxframe, invalid_blurbackground_test)
+{
+    m_frame->setBlurBackground("invalid");
 }

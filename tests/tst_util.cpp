@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <QPixmap>
 
-#include "../src/global_util/util.h"
+#include "util.h"
 
 
 class Tst_Util : public testing::Test

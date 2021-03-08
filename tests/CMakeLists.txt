@@ -10,7 +10,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -lgcov")
 
 # 源文件
-file(GLOB_RECURSE SRCS "*.h" "*.cpp")
+file(GLOB_RECURSE SRCS "*.h" "*.cpp" test_res.qrc ${CMAKE_CURRENT_SOURCE_DIR}/../src/skin.qrc)
 
 # 查找依赖库
 find_package(PkgConfig REQUIRED)

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <QPixmap>
+#include <QtTest/QtTest>
 
 #include "../src/global_util/calculate_util.h"
 
@@ -29,4 +30,13 @@ public:
 TEST_F(Tst_calculate, calculate)
 {
 
+}
+TEST_F(Tst_calculate, calendarSelectIcon_test)
+{
+    QStringList iconList = m_calculate->calendarSelectIcon();
+    QVERIFY(iconList.size() == 4);
+    QVERIFY(iconList[0] == ":/icons/skin/icons/calendar_bg.svg");
+    QVERIFY(iconList[1] == ":/icons/skin/icons/calendar_month/month3.svg");
+    QVERIFY(iconList[2] == ":/icons/skin/icons/calendar_day/day4.svg");
+    QVERIFY(iconList[3] == ":/icons/skin/icons/calendar_week/week4.svg");
 }

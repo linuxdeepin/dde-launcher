@@ -29,3 +29,4 @@ TEST_F(Tst_MenuWorker, util)
     //m_menuWorker->isItemOnDock("dde-control-center");
     //m_menuWorker->handleToDesktop();
 }
+

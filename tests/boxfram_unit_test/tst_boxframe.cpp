@@ -1,5 +1,8 @@
 #include <gtest/gtest.h>
 #include <QPixmap>
+#include <QApplication>
+#include <QMoveEvent>
+#include <QPoint>
 
 #include "boxframe.h"
 #include "backgroundmanager.h"
@@ -13,6 +16,7 @@ public:
         m_frame = new BoxFrame(nullptr);
         m_frame->setBackground("");
         m_frame->setBlurBackground("");
+        m_bgManager = new BackgroundManager(m_frame);
     }
 
     void TearDown() override
@@ -21,30 +25,16 @@ public:
     }
 
 public:
-    BoxFrame* m_frame;
+    BoxFrame* m_frame = nullptr;
+    BackgroundManager* m_bgManager = nullptr;
 };
 
 TEST_F(Tst_Boxframe, frame)
 {
+    QMoveEvent event(QPoint(0, 0), QPoint(0, 1));
+    QApplication::sendEvent(m_frame, &event);
 
+    QPaintEvent event1(QRect(QPoint(0, 0), QPoint(0, 1)));
+    QApplication::sendEvent(m_frame, &event1);
 }
 
-TEST_F(Tst_Boxframe, set_background_test)
-{
-    m_frame->setBackground(":/test_res/test.jpg");
-}
-
-TEST_F(Tst_Boxframe, invalid_dbackground_test)
-{
-    m_frame->setBackground("invalid");
-}
-
-TEST_F(Tst_Boxframe, set_blurbackground_test)
-{
-    m_frame->setBlurBackground(":/test_res/test.jpg");
-}
-
-TEST_F(Tst_Boxframe, invalid_blurbackground_test)
-{
-    m_frame->setBlurBackground("invalid");
-}

@@ -1,0 +1,99 @@
+#include <gtest/gtest.h>
+
+#define private public
+#include "windowedframe.h"
+#undef private
+
+class Tst_Windowedframe : public testing::Test
+{
+public:
+    void SetUp() override
+    {
+        m_windowedframe = new WindowedFrame(nullptr);
+    }
+
+    void TearDown() override
+    {
+        delete m_windowedframe;
+        m_windowedframe = nullptr;
+    }
+
+public:
+    WindowedFrame* m_windowedframe;
+};
+
+TEST_F(Tst_Windowedframe, privateMethod_test)
+{
+    m_windowedframe->moveCurrentSelectApp(Qt::Key_Undo);
+    // 循环切换
+    for (int count = 0; count < 6; count++) {
+        m_windowedframe->moveCurrentSelectApp(Qt::Key_Tab);
+    }
+    // 循环回退
+    for (int count = 0; count < 6; count++) {
+        m_windowedframe->moveCurrentSelectApp(Qt::Key_Backtab);
+    }
+    m_windowedframe->moveCurrentSelectApp(Qt::Key_Up);
+    m_windowedframe->moveCurrentSelectApp(Qt::Key_Down);
+    m_windowedframe->moveCurrentSelectApp(Qt::Key_Left);
+    m_windowedframe->moveCurrentSelectApp(Qt::Key_Right);
+
+    const QModelIndex index;
+    m_windowedframe->switchToCategory(index);
+
+    m_windowedframe->getCornerPath(WindowedFrame::AnchoredCornor::TopLeft);
+    m_windowedframe->getCornerPath(WindowedFrame::AnchoredCornor::TopRight);
+    m_windowedframe->getCornerPath(WindowedFrame::AnchoredCornor::BottomLeft);
+    m_windowedframe->getCornerPath(WindowedFrame::AnchoredCornor::BottomRight);
+
+    m_windowedframe->resetWidgetStyle();
+    m_windowedframe->hideLauncher();
+}
+
+TEST_F(Tst_Windowedframe, privateSlots_test)
+{
+    m_windowedframe->adjustPosition();
+    m_windowedframe->onToggleFullScreen();
+
+    const double value = 0.5;
+    m_windowedframe->onOpacityChanged(value);
+    // display model switch
+    m_windowedframe->onSwitchBtnClicked();
+    m_windowedframe->onSwitchBtnClicked();
+
+    m_windowedframe->onWMCompositeChanged();
+
+    m_windowedframe->searchText("");
+    m_windowedframe->searchText("test");
+
+    m_windowedframe->showTips("test");
+    m_windowedframe->prepareHideLauncher();
+    m_windowedframe->recoveryAll();
+}
+
+TEST_F(Tst_Windowedframe, eventFilter_test)
+{
+    QEvent *event = new QEvent(QEvent::Type::None);
+    m_windowedframe->m_eventFilter->eventFilter(nullptr, event);
+
+    QEvent *event1 = new QEvent(QEvent::Type::KeyPress);
+    QKeyEvent *keyPress = static_cast<QKeyEvent *>(event1);
+
+    QKeyEvent *keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_F1, static_cast<QKeyEvent *>(keyPress)->modifiers());
+    m_windowedframe->m_eventFilter->eventFilter(nullptr, keyEvent);
+
+    keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_Return, static_cast<QKeyEvent *>(keyPress)->modifiers());
+    m_windowedframe->m_eventFilter->eventFilter(nullptr, keyEvent);
+
+    keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_Escape, static_cast<QKeyEvent *>(keyPress)->modifiers());
+    m_windowedframe->m_eventFilter->eventFilter(nullptr, keyEvent);
+
+    keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_Space, static_cast<QKeyEvent *>(keyPress)->modifiers());
+    m_windowedframe->m_eventFilter->eventFilter(nullptr, keyEvent);
+
+    keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_Tab, static_cast<QKeyEvent *>(keyPress)->modifiers());
+    m_windowedframe->m_eventFilter->eventFilter(nullptr, keyEvent);
+
+    keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_Backspace, static_cast<QKeyEvent *>(keyPress)->modifiers());
+    m_windowedframe->m_eventFilter->eventFilter(nullptr, keyEvent);
+}

@@ -368,6 +368,11 @@ TEST_F(LauncherUnitTest, checkSendToDesktop)
  */
 TEST_F(LauncherUnitTest, check_gsettings_default)
 {
+    // 服务器环境没有gsetting配置，加检验防止崩溃
+    if (!QGSettings::isSchemaInstalled("com.deepin.dde.launcher")) {
+        return;
+    }
+
     QGSettings setting("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
     if (setting.keys().contains("appsIconRatio")) {
         double ratio = setting.get("apps-icon-ratio").toDouble();
@@ -376,12 +381,12 @@ TEST_F(LauncherUnitTest, check_gsettings_default)
 
     // 0 free, 1 category
     if (setting.keys().contains("displayMode")) {
-        double ratio = setting.get("display-mode").toInt();
+        int ratio = setting.get("display-mode").toInt();
         QCOMPARE(ratio, 0);
     }
 
     if (setting.keys().contains("fullscreen")) {
-        double ratio = setting.get("fullscreen").toBool();
+        bool ratio = setting.get("fullscreen").toBool();
         QCOMPARE(ratio, false);
     }
 }

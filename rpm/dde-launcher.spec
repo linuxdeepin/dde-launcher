@@ -6,7 +6,7 @@ Name:           %{sname}
 %else
 Name:           %{repo}
 %endif
-Version:        5.3.0.27
+Version:        5.4.4
 Release:        1%{?fedora:%dist}
 Summary:        Deepin desktop-environment - Launcher module
 License:        GPLv3
@@ -29,6 +29,7 @@ BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  gtest-devel
 BuildRequires:  qt5-qtbase-private-devel
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 Requires:       deepin-menu

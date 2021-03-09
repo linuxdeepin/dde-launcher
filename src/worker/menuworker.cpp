@@ -49,9 +49,8 @@ MenuWorker::~MenuWorker()
 {
 }
 
-void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
-    setCurrentModelIndex(index);
-
+void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
+{
     m_appKey = m_currentModelIndex.data(AppsListModel::AppKeyRole).toString();
     m_appDesktop = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
     m_isItemOnDesktop = m_currentModelIndex.data(AppsListModel::AppIsOnDesktopRole).toBool();
@@ -71,11 +70,6 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
     m_canStartUp = m_currentModelIndex.data(AppsListModel::AppCanStartUpRole).toBool();
 
     qDebug() << "appKey" << m_appKey;
-
-    QMenu *menu = new QMenu;
-    menu->setAccessibleName("popmenu");
-
-    QSignalMapper *signalMapper = new QSignalMapper(menu);
 
     QAction *open;
     QAction *desktop;
@@ -183,6 +177,17 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
         signalMapper->setMapping(startup, Startup);
     if (!m_hideUninstall)
         signalMapper->setMapping(uninstall, Uninstall);
+}
+
+void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
+    setCurrentModelIndex(index);
+
+    QMenu *menu = new QMenu;
+    menu->setAccessibleName("popmenu");
+
+    QSignalMapper *signalMapper = new QSignalMapper(menu);
+
+    creatMenuByAppItem(menu, signalMapper);
 
     connect(signalMapper, static_cast<void (QSignalMapper::*)(const int)>(&QSignalMapper::mapped), this, &MenuWorker::handleMenuAction);
     connect(menu, &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);

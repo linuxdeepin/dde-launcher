@@ -42,6 +42,7 @@
 #include "appsmanager.h"
 #include "appslistmodel.h"
 
+class QMenu;
 class MenuWorker : public QObject
 {
     Q_OBJECT
@@ -67,6 +68,7 @@ public:
     bool isItemOnDesktop(QString appKey);
     bool isItemStartup(QString appKey);
     QRect menuGeometry() const {return m_menuGeometry;}
+    void creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper);
 
 signals:
     void appLaunched();

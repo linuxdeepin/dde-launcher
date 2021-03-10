@@ -345,23 +345,10 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-void AppGridView::startDrag(const QModelIndex &index)
+QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey)
 {
-    if (!index.isValid())
-        return;
-    m_moveGridView = false;
-    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
-    if (!listModel)
-        return;
-
-    const QModelIndex &dragIndex = index;
-    const qreal ratio = qApp->devicePixelRatio();
-    QString appKey = index.data(AppsListModel::AppKeyRole).value<QString>();
-
-//    if(appKey == "dde-trash")
-//        return;
-
     QPixmap srcPix;
+
     if (appKey == "dde-calendar") {
         const  auto  s = m_calcUtil->appIconSize();
         const double  iconZoom =  s.width() / 64.0;
@@ -411,6 +398,27 @@ void AppGridView::startDrag(const QModelIndex &index)
     } else {
         srcPix = index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
     }
+
+    return srcPix;
+}
+
+void AppGridView::startDrag(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return;
+    m_moveGridView = false;
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel)
+        return;
+
+    const QModelIndex &dragIndex = index;
+    const qreal ratio = qApp->devicePixelRatio();
+    QString appKey = index.data(AppsListModel::AppKeyRole).value<QString>();
+
+//    if(appKey == "dde-trash")
+//        return;
+
+    QPixmap srcPix = creatSrcPix(index, appKey);
 
     srcPix = srcPix.scaled(m_calcUtil->appIconSize() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     srcPix.setDevicePixelRatio(ratio);

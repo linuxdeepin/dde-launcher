@@ -63,6 +63,7 @@ public:
     void dragOut(int pos);
     void dragIn(const QModelIndex &index);
     void flashDrag();
+    QPixmap creatSrcPix(const QModelIndex &index, const QString &appKey);
 public slots:
     void setDragAnimationEnable() {m_enableAnimation = true;}
 signals:

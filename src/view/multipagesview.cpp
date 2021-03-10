@@ -408,8 +408,7 @@ QPropertyAnimation::State MultiPagesView::getPageSwitchAnimationState()
     return m_pageSwitchAnimation->state();
 }
 
-// 更新边框渐变，在屏幕变化时需要更新，类别拖动时需要隐藏
-void MultiPagesView::updateGradient()
+QWidget* MultiPagesView::getParentWidget()
 {
     // 找到背景widget
     QWidget *backgroundWidget = parentWidget();
@@ -418,11 +417,15 @@ void MultiPagesView::updateGradient()
             break;
 
         if (qobject_cast<BlurBoxWidget *>(backgroundWidget))
-            return;
+            return nullptr;
 
         backgroundWidget = backgroundWidget->parentWidget();
     }
+    return backgroundWidget;
+}
 
+QPoint MultiPagesView::calculPadding(MultiPagesView::Direction dir)
+{
     // 获取当前屏幕的高度
     QScreen *screen = QGuiApplication::primaryScreen();
     int screen_height = screen->availableGeometry().height();
@@ -431,9 +434,18 @@ void MultiPagesView::updateGradient()
     int paddingR = m_calcUtil->getScreenSize().width() - paddingL - 1;
     int topPos = mapToGlobal(rect().topLeft()).y() > screen_height ? mapToGlobal(rect().topLeft()).y() - screen_height : mapToGlobal(rect().topLeft()).y();
 
-    QPoint left(paddingL,topPos);
-    QPoint right(paddingR,topPos);
+    QPoint padding(((dir == MultiPagesView::Left) ? paddingL : paddingR), topPos);
+
+    return padding;
+}
+
+// 更新边框渐变，在屏幕变化时需要更新，类别拖动时需要隐藏
+void MultiPagesView::updateGradient()
+{
+    QWidget *backgroundWidget = getParentWidget();
+    if (!backgroundWidget)
+        return;
 
     QPixmap background = backgroundWidget->grab();
-    updateGradient(background, left, right);
+    updateGradient(background, calculPadding(MultiPagesView::Left), calculPadding(MultiPagesView::Right));
 }

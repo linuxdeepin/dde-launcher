@@ -46,6 +46,11 @@ class MultiPagesView : public QWidget, public DragPageDelegate
 {
     Q_OBJECT
 public:
+    enum Direction {
+        Left,
+        Right
+    };
+
     explicit MultiPagesView(AppsListModel::AppCategory categoryModel = AppsListModel::All, QWidget *parent = nullptr);
 
     void updatePageCount(AppsListModel::AppCategory category = AppsListModel::All);
@@ -69,6 +74,8 @@ public:
     void setGradientVisible(bool visible);
 
     QPropertyAnimation::State getPageSwitchAnimationState();
+    QWidget* getParentWidget();
+    QPoint calculPadding(MultiPagesView::Direction dir);
 
 signals:
     void connectViewEvent(AppGridView* pView);

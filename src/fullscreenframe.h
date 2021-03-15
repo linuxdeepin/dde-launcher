@@ -144,7 +144,6 @@ private:
     AppsListModel::AppCategory nextCategoryModel(const AppsListModel::AppCategory category);
     AppsListModel::AppCategory prevCategoryModel(const AppsListModel::AppCategory category);
 
-    virtual const QScreen *currentScreen() override;
 private slots:
     void layoutChanged();
     void searchTextChanged(const QString &keywords);

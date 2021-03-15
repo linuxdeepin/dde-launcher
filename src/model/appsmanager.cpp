@@ -1198,18 +1198,4 @@ void AppsManager::pushPixmap(const ItemInfo &itemInfo)
     }
 }
 
-const QScreen *AppsManager::currentScreen()
-{
-    QRect dockRect = dockGeometry();
-
-    const auto ratio = qApp->devicePixelRatio();
-    for (auto *screen : qApp->screens()) {
-        const QRect &sg = screen->geometry();
-        const QRect &rg = QRect(sg.topLeft(), sg.size() * ratio);
-        if (rg.contains(dockRect.topLeft())) {
-            return  screen;
-        }
-    }
-    return nullptr;
-}
 

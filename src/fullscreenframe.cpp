@@ -282,7 +282,7 @@ void FullScreenFrame::scrollToBlurBoxWidget(BlurBoxWidget *category, AppsListMod
     m_currentBox = m_currentCategory - 4;
 
     m_navigationWidget->button(m_currentCategory)->installEventFilter(m_eventFilter);
-    const int temp = (m_appsManager->currentScreen()->geometry().size().width() / 2 - m_padding * 2 - 20) / 2;
+    const int temp = (qApp->primaryScreen()->size().width() / 2 - m_padding * 2 - 20) / 2;
     m_scrollDest = dest;
     BlurBoxWidget* blurbox = qobject_cast<BlurBoxWidget*>(m_scrollDest);
     if (blurbox)
@@ -1602,11 +1602,6 @@ AppsListModel::AppCategory FullScreenFrame::prevCategoryModel(const AppsListMode
     }
 
     return (AppsListModel::AppCategory)nextCategory;
-}
-
-const QScreen *FullScreenFrame::currentScreen()
-{
-    return m_appsManager->currentScreen();
 }
 
 void FullScreenFrame::layoutChanged()

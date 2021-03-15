@@ -126,7 +126,7 @@ void BoxFrame::updateBlurBackground()
         pix.load(DefaultBackground);
     }
 
-    const QSize &size = currentScreen()->size() ;//* currentScreen()->devicePixelRatio();
+    const QSize &size = currentScreen()->size();//* currentScreen()->devicePixelRatio();
 
     QPixmap cache = pix.scaled(size,
                                     Qt::KeepAspectRatioByExpanding,

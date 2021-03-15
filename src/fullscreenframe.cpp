@@ -949,6 +949,7 @@ void FullScreenFrame::updateGeometry()
            <<QHighDpi::fromNativePixels(QRect(m_displayInter->primaryRect()), qApp->primaryScreen());
     setGeometry(QHighDpi::fromNativePixels(QRect(m_displayInter->primaryRect()), qApp->primaryScreen()));
 
+    layoutChanged();
     QFrame::updateGeometry();
 }
 
@@ -1228,9 +1229,9 @@ void FullScreenFrame::ensureScrollToDest(const QVariant &value)
     if(m_scrollDest == nullptr) return;
     BlurBoxWidget* blurbox = qobject_cast<BlurBoxWidget*>(m_scrollDest);
     if(blurbox && m_leftScrollDest && m_rightScrollDest) {
-        blurbox->updateBackBlurPos(m_contentFrame->mapTo(window(), blurbox->pos())+QPoint(190*m_calcUtil->getScreenScaleX(),0));
-        m_leftScrollDest->updateBackBlurPos(QPoint(m_leftScrollDest->visibleRegion().boundingRect().width() - m_leftScrollDest->width() ,m_contentFrame->mapTo(window(),m_leftScrollDest->pos()).y()));
-        m_rightScrollDest->updateBackBlurPos(m_contentFrame->mapTo(window(),m_rightScrollDest->pos())+QPoint(190*m_calcUtil->getScreenScaleX(),0));
+        blurbox->updateBackBlurPos(m_scrollDest->geometry().topLeft());
+        m_leftScrollDest->updateBackBlurPos(m_leftScrollDest->geometry().topLeft());
+        m_rightScrollDest->updateBackBlurPos(m_rightScrollDest->geometry().topLeft());
      }
 }
 

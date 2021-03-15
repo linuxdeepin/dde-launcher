@@ -81,7 +81,7 @@ MultiPagesView *BlurBoxWidget::getMultiPagesView()
 
 void BlurBoxWidget::updateBackBlurPos(QPoint p)
 {
-    m_blurGroup->addWidget(m_blurBackground,p);
+    m_blurGroup->addWidget(m_blurBackground, p);
 }
 
 void BlurBoxWidget::updateBackgroundImage(const QPixmap &img)

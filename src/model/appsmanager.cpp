@@ -57,6 +57,9 @@ QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-l
 QSettings AppsManager::APP_USED_SORTED_LIST("deepin", "dde-launcher-app-used-sorted-list");
 QSettings AppsManager::APP_CATEGORY_USED_SORTED_LIST("deepin","dde-launcher-app-category-used-sorted-list");
 static constexpr int USER_SORT_UNIT_TIME = 3600; // 1 hours
+const QString TrashDir = QDir::homePath() + "/.local/share/Trash";
+const QString TrashDirFiles = TrashDir + "/files";
+const QDir::Filters ItemsShouldCount = QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot;
 
 QReadWriteLock AppsManager::m_cacheDataLock;
 QReadWriteLock AppsManager::m_appInfoLock;
@@ -80,7 +83,9 @@ AppsManager::AppsManager(QObject *parent) :
     m_tryNums(0),
     m_itemInfo(ItemInfo()),
     m_filterSetting(nullptr),
-    m_iconValid(true)
+    m_iconValid(true),
+    m_trashIsEmpty(false),
+    m_fsWatcher(new QFileSystemWatcher(this))
 {
     if (QGSettings::isSchemaInstalled("com.deepin.dde.launcher")) {
         m_filterSetting = new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
@@ -113,6 +118,7 @@ AppsManager::AppsManager(QObject *parent) :
     m_categoryIcon.append(QString(":/icons/skin/icons/system_normal_22px.svg"));
     m_categoryIcon.append(QString(":/icons/skin/icons/others_normal_22px.svg"));
 
+    updateTrashState();
     refreshAllList();
     refreshAppAutoStartCache();
 
@@ -135,6 +141,7 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
     connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
+    connect(m_fsWatcher, &QFileSystemWatcher::directoryChanged, this, &AppsManager::updateTrashState, Qt::QueuedConnection);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppsManager::onThemeTypeChanged);
     connect(m_RefreshCalendarIconTimer, &QTimer::timeout, this, &AppsManager::onRefreshCalendarTimer);
@@ -746,6 +753,13 @@ void AppsManager::refreshCategoryInfoList()
     for (const auto &it : datas) {
         bool bContains = fuzzyMatching(filters, it.m_key);
         if (!m_stashList.contains(it) && !bContains) {
+            if (it.m_key == "dde-trash") {
+                ItemInfo trashItem = it;
+                trashItem.m_iconKey = m_trashIsEmpty ? "user-trash" : "user-trash-full";
+                m_allAppInfoList.append(trashItem);
+                continue;
+            }
+
             m_allAppInfoList.append(it);
         }
     }
@@ -842,6 +856,14 @@ void AppsManager::refreshUserInfoList()
                     m_userSortedList.append(*it);
                 }
             }
+        }
+    } else {
+        for (QList<ItemInfo>::iterator it = m_userSortedList.begin(); it != m_userSortedList.end();) {
+            int idx = m_allAppInfoList.indexOf(*it);
+            if (idx >= 0 && it->m_key == "dde-trash")
+                it->updateInfo(m_allAppInfoList[idx]);
+
+            it++;
         }
     }
 
@@ -1326,4 +1348,22 @@ int AppsManager::getVisibleCategoryCount()
     }
 
     return ret;
+}
+
+void AppsManager::updateTrashState()
+{
+    int trashItemsCount = 0;
+    m_fsWatcher->addPath(TrashDir);
+    if (QDir(TrashDirFiles).exists()) {
+        m_fsWatcher->addPath(TrashDirFiles);
+        trashItemsCount = QDir(TrashDirFiles).entryList(ItemsShouldCount).count();
+    }
+
+    if (m_trashIsEmpty == !trashItemsCount)
+        return;
+
+    m_trashIsEmpty = !trashItemsCount;
+    refreshAllList();
+
+    emit dataChanged(AppsListModel::All);
 }

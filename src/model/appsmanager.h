@@ -139,6 +139,7 @@ private slots:
     void markLaunched(QString appKey);
     void delayRefreshData();
     void refreshIcon();
+    void updateTrashState();
     bool fuzzyMatching(const QStringList& list, const QString& key);
     void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
     void onRefreshCalendarTimer();
@@ -189,6 +190,9 @@ private:
     QGSettings *m_filterSetting;
 
     bool m_iconValid;                                                       // 获取图标状态标示
+
+    bool m_trashIsEmpty;
+    QFileSystemWatcher *m_fsWatcher;
 };
 
 #endif // APPSMANAGER_H

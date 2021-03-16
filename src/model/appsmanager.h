@@ -145,6 +145,7 @@ private slots:
     void searchDone(const QStringList &resultList);
     void markLaunched(QString appKey);
     void delayRefreshData();
+    void updateTrashState();
     /**
      * @brief 模糊匹配，反向查询key是否包含list任一个元素
      * 
@@ -184,6 +185,7 @@ private:
 
     QDate m_curDate;
     int m_lastShowDate;
+    bool m_trashIsEmpty;
 
     static QPointer<AppsManager> INSTANCE;
     static QGSettings LAUNCHER_SETTINGS;
@@ -196,6 +198,7 @@ private:
     QStringList m_categoryTs;
     QStringList m_categoryIcon;
     QGSettings* m_filterSetting = nullptr;
+    QFileSystemWatcher *m_fsWatcher;
 };
 
 #endif // APPSMANAGER_H

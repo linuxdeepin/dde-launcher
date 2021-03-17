@@ -109,6 +109,17 @@ const QStringList sysHideUninstallPackages()
     return hideUninstall_list;
 }
 
+const QStringList sysHideUseProxyPackages()
+{
+    QStringList hideUseProxy_list;
+    //从gschema读取隐藏使用代理功能软件列表
+    if (gSetting->keys().contains("appsHideUseProxyList")) {
+        hideUseProxy_list << gSetting->get("apps-hide-use-proxy-list").toStringList();
+    }
+
+    return hideUseProxy_list;
+}
+
 const QStringList sysCantOpenPackages()
 {
     QStringList cantOpen_list;
@@ -177,6 +188,7 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent)
     , m_hideSendToDockPackages(sysHideSendToDockPackages())
     , m_hideStartUpPackages(sysHideStartUpPackages())
     , m_hideUninstallPackages(sysHideUninstallPackages())
+    , m_hideUseProxyPackages(sysHideUseProxyPackages())
     , m_cantOpenPackages(sysCantOpenPackages())
     , m_cantSendToDesktopPackages(sysCantSendToDesktopPackages())
     , m_cantSendToDockPackages(sysCantSendToDockPackages())
@@ -444,6 +456,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_hideStartUpPackages.contains(itemInfo.m_key);
     case AppHideUninstallRole:
         return m_hideUninstallPackages.contains(itemInfo.m_key);
+    case AppHideUseProxyRole:
+        return m_hideUseProxyPackages.contains(itemInfo.m_key);
     case AppCanOpenRole:
         return !m_cantOpenPackages.contains(itemInfo.m_key);
     case AppCanSendToDesktopRole:

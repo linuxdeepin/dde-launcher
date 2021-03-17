@@ -108,18 +108,8 @@ private:
     bool m_isItemOnDesktop;
     bool m_isItemOnDock;
     bool m_isItemStartup;
-    bool m_isRemovable;
     bool m_isItemProxy;
     bool m_isItemEnableScaling;
-    bool m_hideOpen;
-    bool m_hideSendToDesktop;
-    bool m_hideSendToDock;
-    bool m_hideStartUp;
-    bool m_hideUninstall;
-    bool m_canOpen;
-    bool m_canSendToDesktop;
-    bool m_canSendToDock;
-    bool m_canStartUp;
 
     bool m_menuIsShown = false;
 };

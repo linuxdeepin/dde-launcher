@@ -1,136 +1,138 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1">
 <context>
     <name>AppsManager</name>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="192"/>
+        <location filename="../src/model/appsmanager.cpp" line="156"/>
         <source>Internet</source>
-        <translation>Internet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="193"/>
+        <location filename="../src/model/appsmanager.cpp" line="157"/>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="194"/>
+        <location filename="../src/model/appsmanager.cpp" line="158"/>
         <source>Music</source>
-        <translation>Music</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="195"/>
+        <location filename="../src/model/appsmanager.cpp" line="159"/>
         <source>Video</source>
-        <translation>Video</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="196"/>
+        <location filename="../src/model/appsmanager.cpp" line="160"/>
         <source>Graphics</source>
-        <translation>Graphics</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="197"/>
+        <location filename="../src/model/appsmanager.cpp" line="161"/>
         <source>Games</source>
-        <translation>Games</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="198"/>
+        <location filename="../src/model/appsmanager.cpp" line="162"/>
         <source>Office</source>
-        <translation>Office</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="199"/>
+        <location filename="../src/model/appsmanager.cpp" line="163"/>
         <source>Reading</source>
-        <translation>Reading</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="200"/>
+        <location filename="../src/model/appsmanager.cpp" line="164"/>
         <source>Development</source>
-        <translation>Development</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="201"/>
+        <location filename="../src/model/appsmanager.cpp" line="165"/>
         <source>System</source>
-        <translation>System</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="202"/>
+        <location filename="../src/model/appsmanager.cpp" line="166"/>
         <source>Other</source>
-        <translation>Other</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/model/appsmanager.cpp" line="1066"/>
+        <location filename="../src/model/appsmanager.cpp" line="1052"/>
         <source>No search results</source>
-        <translation>No search results</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>FullScreenFrame</name>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1375"/>
+        <location filename="../src/fullscreenframe.cpp" line="1398"/>
         <source>Are you sure you want to uninstall it?</source>
-        <translation>Are you sure you want to uninstall it?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1381"/>
+        <location filename="../src/fullscreenframe.cpp" line="1404"/>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/fullscreenframe.cpp" line="1381"/>
+        <location filename="../src/fullscreenframe.cpp" line="1404"/>
         <source>Confirm</source>
-        <translation>Confirm</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
-        <location filename="../src/worker/menuworker.cpp" line="78"/>
-        <source>Open</source>
-        <translation>Open</translation>
-    </message>
-    <message>
-        <location filename="../src/worker/menuworker.cpp" line="81"/>
-        <source>Remove from desktop</source>
-        <translation>Remove from desktop</translation>
-    </message>
-    <message>
         <location filename="../src/worker/menuworker.cpp" line="82"/>
-        <source>Send to desktop</source>
-        <translation>Send to desktop</translation>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="85"/>
+        <source>Remove from desktop</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="86"/>
-        <source>Remove from dock</source>
-        <translation>Remove from dock</translation>
+        <source>Send to desktop</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/worker/menuworker.cpp" line="87"/>
-        <source>Send to dock</source>
-        <translation>Send to dock</translation>
+        <location filename="../src/worker/menuworker.cpp" line="90"/>
+        <source>Remove from dock</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="91"/>
-        <source>Remove from startup</source>
-        <translation>Remove from startup</translation>
+        <source>Send to dock</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/worker/menuworker.cpp" line="92"/>
-        <source>Add to startup</source>
-        <translation>Add to startup</translation>
+        <location filename="../src/worker/menuworker.cpp" line="95"/>
+        <source>Remove from startup</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/worker/menuworker.cpp" line="96"/>
+        <source>Add to startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="100"/>
         <source>Uninstall</source>
-        <translation>Uninstall</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/worker/menuworker.cpp" line="106"/>
+        <location filename="../src/worker/menuworker.cpp" line="128"/>
         <source>Use a proxy</source>
-        <translation>Use a proxy</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/worker/menuworker.cpp" line="117"/>
+        <location filename="../src/worker/menuworker.cpp" line="139"/>
         <source>Disable display scaling</source>
-        <translation>Disable display scaling</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -138,169 +140,169 @@
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="46"/>
         <source>All Apps</source>
-        <translation>All Apps</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="47"/>
         <source>Internet</source>
-        <translation>Internet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="48"/>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="49"/>
         <source>Music</source>
-        <translation>Music</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="50"/>
         <source>Video</source>
-        <translation>Video</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="51"/>
         <source>Graphics</source>
-        <translation>Graphics</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="52"/>
         <source>Games</source>
-        <translation>Games</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="53"/>
         <source>Office</source>
-        <translation>Office</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="54"/>
         <source>Reading</source>
-        <translation>Reading</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="55"/>
         <source>Development</source>
-        <translation>Development</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="56"/>
         <source>System</source>
-        <translation>System</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/minicategorywidget.cpp" line="57"/>
         <source>Other</source>
-        <translation>Other</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MiniFrameNavigation</name>
     <message>
-        <location filename="../src/widgets/miniframenavigation.cpp" line="99"/>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="94"/>
         <source>Computer</source>
-        <translation>Computer</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="95"/>
+        <source>Documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="96"/>
+        <source>Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="97"/>
+        <source>Music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="98"/>
+        <source>Pictures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="99"/>
+        <source>Downloads</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="100"/>
-        <source>Documents</source>
-        <translation>Documents</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/miniframenavigation.cpp" line="101"/>
-        <source>Videos</source>
-        <translation>Videos</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/miniframenavigation.cpp" line="102"/>
-        <source>Music</source>
-        <translation>Music</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/miniframenavigation.cpp" line="103"/>
-        <source>Pictures</source>
-        <translation>Pictures</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/miniframenavigation.cpp" line="104"/>
-        <source>Downloads</source>
-        <translation>Downloads</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/miniframenavigation.cpp" line="105"/>
-        <location filename="../src/widgets/miniframenavigation.cpp" line="124"/>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="119"/>
         <source>Shut down</source>
-        <translation>Shut down</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="115"/>
+        <source>Lock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="116"/>
+        <source>Log out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="117"/>
+        <source>Reboot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframenavigation.cpp" line="118"/>
+        <source>Suspend</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframenavigation.cpp" line="120"/>
-        <source>Lock</source>
-        <translation>Lock</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/miniframenavigation.cpp" line="121"/>
-        <source>Log out</source>
-        <translation>Log out</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/miniframenavigation.cpp" line="122"/>
-        <source>Reboot</source>
-        <translation>Reboot</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/miniframenavigation.cpp" line="123"/>
-        <source>Suspend</source>
-        <translation>Suspend</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/miniframenavigation.cpp" line="125"/>
         <source>Back</source>
-        <translation>Back</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
-        <location filename="../src/widgets/miniframerightbar.cpp" line="55"/>
-        <source>Computer</source>
-        <translation>Computer</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/miniframerightbar.cpp" line="58"/>
-        <source>Videos</source>
-        <translation>Videos</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/miniframerightbar.cpp" line="61"/>
-        <source>Music</source>
-        <translation>Music</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/miniframerightbar.cpp" line="64"/>
-        <source>Pictures</source>
-        <translation>Pictures</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/miniframerightbar.cpp" line="67"/>
-        <source>Documents</source>
-        <translation>Documents</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/miniframerightbar.cpp" line="70"/>
-        <source>Downloads</source>
-        <translation>Downloads</translation>
-    </message>
-    <message>
         <location filename="../src/widgets/miniframerightbar.cpp" line="73"/>
-        <source>Control Center</source>
-        <translation>Control Center</translation>
+        <source>Computer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/miniframerightbar.cpp" line="76"/>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="80"/>
+        <source>Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="87"/>
+        <source>Music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="94"/>
+        <source>Pictures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="101"/>
+        <source>Documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="108"/>
+        <source>Downloads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="114"/>
+        <source>Control Center</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="117"/>
         <source>Power</source>
-        <translation>Power</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -308,12 +310,70 @@
     <message>
         <location filename="../src/widgets/miniframeswitchbtn.cpp" line="73"/>
         <source>All Categories</source>
-        <translation>All Categories</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/widgets/miniframeswitchbtn.cpp" line="76"/>
         <source>Back</source>
-        <translation>Back</translation>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NavigationWidget</name>
+    <message>
+        <location filename="../src/widgets/navigationwidget.cpp" line="34"/>
+        <source>Internet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/navigationwidget.cpp" line="35"/>
+        <source>Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/navigationwidget.cpp" line="36"/>
+        <source>Music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/navigationwidget.cpp" line="37"/>
+        <source>Video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/navigationwidget.cpp" line="38"/>
+        <source>Graphics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/navigationwidget.cpp" line="39"/>
+        <source>Games</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/navigationwidget.cpp" line="40"/>
+        <source>Office</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/navigationwidget.cpp" line="41"/>
+        <source>Reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/navigationwidget.cpp" line="42"/>
+        <source>Development</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/navigationwidget.cpp" line="43"/>
+        <source>System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/navigationwidget.cpp" line="44"/>
+        <source>Other</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -321,25 +381,25 @@
     <message>
         <location filename="../src/widgets/searchlineedit.cpp" line="57"/>
         <source>Search</source>
-        <translation>Search</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WindowedFrame</name>
     <message>
-        <location filename="../src/windowedframe.cpp" line="555"/>
+        <location filename="../src/windowedframe.cpp" line="524"/>
         <source>Are you sure you want to uninstall it?</source>
-        <translation>Are you sure you want to uninstall it?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/windowedframe.cpp" line="560"/>
+        <location filename="../src/windowedframe.cpp" line="529"/>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/windowedframe.cpp" line="560"/>
+        <location filename="../src/windowedframe.cpp" line="529"/>
         <source>Confirm</source>
-        <translation>Confirm</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

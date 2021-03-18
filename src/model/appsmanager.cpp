@@ -126,7 +126,6 @@ AppsManager::AppsManager(QObject *parent) :
 
     connect(qApp, &DApplication::iconThemeChanged, this, &AppsManager::onIconThemeChanged, Qt::QueuedConnection);
     connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
-    connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
     connect(m_launcherInter, &DBusLauncher::UninstallSuccess, this, &AppsManager::abandonStashedItem);
     connect(m_launcherInter, &DBusLauncher::UninstallFailed, [this](const QString & appKey) { restoreItem(appKey); emit dataChanged(AppsListModel::All); });
     connect(m_launcherInter, &DBusLauncher::ItemChanged, this, &AppsManager::handleItemChanged);
@@ -135,6 +134,7 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
+    connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppsManager::onThemeTypeChanged);
     connect(m_RefreshCalendarIconTimer, &QTimer::timeout, this, &AppsManager::onRefreshCalendarTimer);
@@ -407,7 +407,7 @@ void AppsManager::launchApp(const QModelIndex &index)
         m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
 }
 
-void AppsManager::uninstallApp(const QString &appKey)
+void AppsManager::uninstallApp(const QString &appKey, const int displayMode)
 {
     // 遍历应用列表,存在则从列表中移除
     for (const ItemInfo &info : m_allAppInfoList) {
@@ -425,8 +425,9 @@ void AppsManager::uninstallApp(const QString &appKey)
     // 刷新各列表的分页信息
     emit dataChanged(AppsListModel::All);
 
-    // 重置下搜索结果
-    m_searchTimer->start();
+    // 重置下搜索结果,触发searchdone更新
+    if (displayMode != ALL_APPS)
+        m_searchTimer->start();
 }
 
 void AppsManager::markLaunched(QString appKey)

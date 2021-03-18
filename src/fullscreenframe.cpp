@@ -1125,7 +1125,7 @@ void FullScreenFrame::initConnection()
     connect(m_appsManager, &AppsManager::requestTips, this, &FullScreenFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
     connect(m_appsManager, &AppsManager::IconSizeChanged, this, &FullScreenFrame::updateDockPosition);
-    connect(m_appsManager, &AppsManager::dataChanged, this, &FullScreenFrame::reflashPageView);
+    connect(m_appsManager, &AppsManager::dataChanged, this, &FullScreenFrame::refreshPageView);
 
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &FullScreenFrame::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &FullScreenFrame::primaryScreenChanged, Qt::QueuedConnection);
@@ -1422,7 +1422,7 @@ void FullScreenFrame::clickToCategory(const QModelIndex &index)
     qDebug() << "modeValue" <<  index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 }
 
-void FullScreenFrame::reflashPageView(AppsListModel::AppCategory category)
+void FullScreenFrame::refreshPageView(AppsListModel::AppCategory category)
 {
     if (AppsListModel::Search == category) {
         m_multiPagesView->ShowPageView(AppsListModel::AppCategory(m_displayMode));

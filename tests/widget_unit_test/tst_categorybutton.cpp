@@ -14,7 +14,7 @@ class Tst_Categorybutton : public testing::Test
 public:
     void SetUp() override
     {
-        widget = new CategoryButton(AppsListModel::Others);
+        widget = new CategoryButton(AppsListModel::Others, "Other");
     }
 
     void TearDown() override

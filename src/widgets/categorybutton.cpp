@@ -34,7 +34,7 @@
 #include <QDesktopWidget>
 #include <QMouseEvent>
 
-CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidget *parent) :
+CategoryButton::CategoryButton(const AppsListModel::AppCategory category, const QString &text, QWidget *parent) :
     QAbstractButton(parent)
     , m_calcUtil(CalculateUtil::instance())
     , m_category(category)
@@ -47,6 +47,8 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     setFocusPolicy(Qt::NoFocus);
     setFixedSize(QSize(DLauncher::NAVIGATION_BUTTON_SIZE, DLauncher::NAVIGATION_BUTTON_SIZE));
     setInfoByCategory();
+    setToolTip(text);
+    setToolTipDuration(1000);
     connect(this, &CategoryButton::toggled, this, &CategoryButton::setChecked);
 }
 

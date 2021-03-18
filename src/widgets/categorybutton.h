@@ -43,7 +43,7 @@ public:
     };
 
 public:
-    explicit CategoryButton(const AppsListModel::AppCategory category, QWidget *parent = nullptr);
+    explicit CategoryButton(const AppsListModel::AppCategory category, const QString &text, QWidget *parent = nullptr);
 
 public slots:
     void setChecked(bool isChecked);

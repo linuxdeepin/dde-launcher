@@ -31,17 +31,17 @@ NavigationWidget::NavigationWidget(QWidget *parent) :
     QFrame(parent),
     m_calcUtil(CalculateUtil::instance()),
     m_categoryGroup(new QButtonGroup(this)),
-    m_internetBtn(new CategoryButton(AppsListModel::Internet, this)),
-    m_chatBtn(new CategoryButton(AppsListModel::Chat, this)),
-    m_musicBtn(new CategoryButton(AppsListModel::Music, this)),
-    m_videoBtn(new CategoryButton(AppsListModel::Video, this)),
-    m_graphicsBtn(new CategoryButton(AppsListModel::Graphics, this)),
-    m_gameBtn(new CategoryButton(AppsListModel::Game, this)),
-    m_officeBtn(new CategoryButton(AppsListModel::Office, this)),
-    m_readingBtn(new CategoryButton(AppsListModel::Reading, this)),
-    m_developmentBtn(new CategoryButton(AppsListModel::Development, this)),
-    m_systemBtn(new CategoryButton(AppsListModel::System, this)),
-    m_othersBtn(new CategoryButton(AppsListModel::Others, this))
+    m_internetBtn(new CategoryButton(AppsListModel::Internet, tr("Internet"), this)),
+    m_chatBtn(new CategoryButton(AppsListModel::Chat, tr("Chat"), this)),
+    m_musicBtn(new CategoryButton(AppsListModel::Music, tr("Music"), this)),
+    m_videoBtn(new CategoryButton(AppsListModel::Video, tr("Video"), this)),
+    m_graphicsBtn(new CategoryButton(AppsListModel::Graphics, tr("Graphics"), this)),
+    m_gameBtn(new CategoryButton(AppsListModel::Game, tr("Games"), this)),
+    m_officeBtn(new CategoryButton(AppsListModel::Office, tr("Office"), this)),
+    m_readingBtn(new CategoryButton(AppsListModel::Reading, tr("Reading"), this)),
+    m_developmentBtn(new CategoryButton(AppsListModel::Development, tr("Development"), this)),
+    m_systemBtn(new CategoryButton(AppsListModel::System, tr("System"), this)),
+    m_othersBtn(new CategoryButton(AppsListModel::Others, tr("Other"), this))
 {
     initUI();
     initConnection();

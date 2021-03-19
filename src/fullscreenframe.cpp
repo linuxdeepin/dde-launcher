@@ -43,7 +43,7 @@
 
 #include <ddialog.h>
 
-#define     SIDES_SPACE_SCALE   0.10
+#define     SIDES_SPACE_SCALE   0
 
 DGUI_USE_NAMESPACE
 

@@ -69,6 +69,7 @@ AppGridView::AppGridView(QWidget *parent)
 
     viewport()->installEventFilter(this);
     viewport()->setAcceptDrops(true);
+    this->installEventFilter(this);
 
     setUniformItemSizes(true);
     setMouseTracking(true);
@@ -460,6 +461,35 @@ bool AppGridView::eventFilter(QObject *o, QEvent *e)
 {
     Q_UNUSED(o);
     Q_UNUSED(e);
+    // 当前只支持自由排序拓宽滑动范围
+    if (m_calcUtil->displayMode() != ALL_APPS)
+        return false;
+
+    QMouseEvent *global_event = dynamic_cast<QMouseEvent *>(e);
+    if (!global_event)
+        return false;
+
+    QMouseEvent event(*global_event);
+    QPoint globalPos = this->mapToGlobal(global_event->pos());
+    QPoint localPos = viewport()->mapFromGlobal(globalPos);
+    // 将gridview坐标转换为viewport坐标，防止出现异常拖拽
+    event.setLocalPos(localPos);
+
+    if (o==this) {
+        switch (e->type()) {
+        case QEvent::MouseButtonPress:
+            this->mousePressEvent(&event);
+            break;
+        case QEvent::MouseButtonRelease:
+            this->mouseReleaseEvent(&event);
+            break;
+        case QEvent::MouseMove:
+            this->mouseMoveEvent(&event);
+            break;
+        default: break;
+        }
+    }
+
     return false;
 }
 

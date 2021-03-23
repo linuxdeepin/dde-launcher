@@ -73,7 +73,7 @@ list(REMOVE_ITEM SRC_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../src/main.cpp)
 
 # 添加执行文件信息
 #${LAUNCHER}
-add_executable(${BIN_NAME} ${SRCS} ${SRC_PATH})
+add_executable(${BIN_NAME} ${SRCS} ${SRC_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../src/widgets/images.qrc)
 
 target_include_directories(${BIN_NAME} PUBLIC
     ${DtkWidget_INCLUDE_DIRS}

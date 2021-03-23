@@ -47,22 +47,22 @@ TEST_F(Tst_Fullscreenframe, scrollToCategory_scrollCurrent_test)
 
 TEST_F(Tst_Fullscreenframe, scrollToCategory_scrollPrev_test)
 {
-    m_fullScreenFrame->scrollToCategory(AppsListModel::AppCategory::Chat, AppsListModel::AppCategory::Internet);
+//    m_fullScreenFrame->scrollToCategory(AppsListModel::AppCategory::Chat, AppsListModel::AppCategory::Internet);
 }
 
 TEST_F(Tst_Fullscreenframe, scrollToCategory_scrollPrev1_test)
 {
-    m_fullScreenFrame->scrollToCategory(AppsListModel::AppCategory::Video, AppsListModel::AppCategory::Internet);
+//    m_fullScreenFrame->scrollToCategory(AppsListModel::AppCategory::Video, AppsListModel::AppCategory::Internet);
 }
 
 TEST_F(Tst_Fullscreenframe, scrollToCategory_scrollNext_test)
 {
-    m_fullScreenFrame->scrollToCategory(AppsListModel::AppCategory::Internet, AppsListModel::AppCategory::Chat);
+//    m_fullScreenFrame->scrollToCategory(AppsListModel::AppCategory::Internet, AppsListModel::AppCategory::Chat);
 }
 
 TEST_F(Tst_Fullscreenframe, scrollToCategory_scrollNext1_test)
 {
-    m_fullScreenFrame->scrollToCategory(AppsListModel::AppCategory::All, AppsListModel::AppCategory::Chat);
+//    m_fullScreenFrame->scrollToCategory(AppsListModel::AppCategory::All, AppsListModel::AppCategory::Chat);
 }
 
 TEST_F(Tst_Fullscreenframe, scrollBlurBoxWidget_test)

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dde_launcher_unit_test.h"
+#include "ut_dde_launcher.h"
 #include "dbuslauncherframe.h"
 #include "dbusdisplay.h"
 #include "dbusfileinfo.h"

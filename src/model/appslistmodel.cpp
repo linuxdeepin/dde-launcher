@@ -31,6 +31,8 @@
 #include <QDebug>
 #include <QPixmap>
 #include <QSettings>
+#include <QGSettings>
+
 #include <DHiDPIHelper>
 #include <DGuiApplicationHelper>
 #include <DFontSizeManager>
@@ -182,6 +184,7 @@ const QStringList sysHoldPackages()
 AppsListModel::AppsListModel(const AppCategory &category, QObject *parent)
     : QAbstractListModel(parent)
     , m_appsManager(AppsManager::instance())
+    , m_actionSettings(new QGSettings("com.deepin.dde.launcher.menu", "/com/deepin/dde/launcher/menu/", this))
     , m_calcUtil(CalculateUtil::instance())
     , m_hideOpenPackages(sysHideOpenPackages())
     , m_hideSendToDesktopPackages(sysHideSendToDesktopPackages())
@@ -372,7 +375,6 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
 
 QVariant AppsListModel::data(const QModelIndex &index, int role) const
 {
-
     int nSize = m_appsManager->appsInfoListSize(m_category);
     int nFixCount = m_calcUtil->appPageItemCount(m_category);
     int pageCount = qMin(nFixCount, nSize - nFixCount * m_pageIndex);
@@ -447,17 +449,17 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case DrawBackgroundRole:
         return m_drawBackground;
     case AppHideOpenRole:
-        return m_hideOpenPackages.contains(itemInfo.m_key);
+        return !m_actionSettings->get("open").toBool() || m_hideOpenPackages.contains(itemInfo.m_key);
     case AppHideSendToDesktopRole:
-        return m_hideSendToDesktopPackages.contains(itemInfo.m_key);
+        return !m_actionSettings->get("send-to-desktop").toBool() || m_hideSendToDesktopPackages.contains(itemInfo.m_key);
     case AppHideSendToDockRole:
-        return m_hideSendToDockPackages.contains(itemInfo.m_key);
+        return !m_actionSettings->get("send-to-dock").toBool() || m_hideSendToDockPackages.contains(itemInfo.m_key);
     case AppHideStartUpRole:
-        return m_hideStartUpPackages.contains(itemInfo.m_key);
+        return !m_actionSettings->get("auto-start").toBool() || m_hideStartUpPackages.contains(itemInfo.m_key);
     case AppHideUninstallRole:
-        return m_hideUninstallPackages.contains(itemInfo.m_key);
+        return !m_actionSettings->get("uninstall").toBool() || m_hideUninstallPackages.contains(itemInfo.m_key);
     case AppHideUseProxyRole:
-        return m_hideUseProxyPackages.contains(itemInfo.m_key);
+        return !m_actionSettings->get("use-proxy").toBool() || m_hideUseProxyPackages.contains(itemInfo.m_key);
     case AppCanOpenRole:
         return !m_cantOpenPackages.contains(itemInfo.m_key);
     case AppCanSendToDesktopRole:

@@ -119,4 +119,36 @@
 			<description>icons not allowed to show on mini frame right bar</description>
 		</key>
 	</schema>
+  	<schema path="/com/deepin/dde/launcher/menu/" id="com.deepin.dde.launcher.menu" gettext-domain="DDE">
+		<key name="open" type='b'>
+			<default>true</default>
+			<summary>enable open menu action</summary>
+			<description></description>
+		</key>
+		<key name="send-to-desktop" type='b'>
+			<default>true</default>
+			<summary>enable send-to-desktop menu action</summary>
+			<description></description>
+		</key>
+		<key name="send-to-dock" type='b'>
+			<default>true</default>
+			<summary>enable send-to-dock menu action</summary>
+			<description></description>
+		</key>
+		<key name="auto-start" type='b'>
+			<default>true</default>
+			<summary>enable auto-start menu action</summary>
+			<description></description>
+		</key>
+		<key name="uninstall" type='b'>
+			<default>true</default>
+			<summary>enable uninstall menu action</summary>
+			<description></description>
+		</key>
+		<key name="use-proxy" type='b'>
+			<default>false</default>
+			<summary>enable use-proxy menu action</summary>
+			<description></description>
+		</key>
+	</schema>
 </schemalist>

@@ -31,6 +31,7 @@
 class AppsManager;
 class CalculateUtil;
 class ItemInfo;
+class QGSettings;
 class AppsListModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -132,6 +133,7 @@ private:
 
 private:
     AppsManager *m_appsManager;
+    QGSettings *m_actionSettings;
     CalculateUtil *m_calcUtil;
 
     QList<ItemInfo> m_itemList;

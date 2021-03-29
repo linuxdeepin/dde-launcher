@@ -24,6 +24,7 @@
 #include "calculate_util.h"
 #include "monitorinterface.h"
 #include "dbusdisplay.h"
+#include "util.h"
 
 #include <QDebug>
 #include <QDesktopWidget>
@@ -47,7 +48,8 @@ CalculateUtil *CalculateUtil::instance()
 
 void CalculateUtil::setDisplayMode(const int mode)
 {
-    m_launcherGsettings->set(DisplayModeKey, mode == ALL_APPS ? DisplayModeFree : DisplayModeCategory);
+    if (m_launcherGsettings)
+        m_launcherGsettings->set(DisplayModeKey, mode == ALL_APPS ? DisplayModeFree : DisplayModeCategory);
 }
 
 QSize CalculateUtil::appIconSize() const
@@ -56,7 +58,7 @@ QSize CalculateUtil::appIconSize() const
         return QSize(24, 24);
 
     QSize s(m_appItemSize, m_appItemSize);
-    const double ratio = m_launcherGsettings->get("apps-icon-ratio").toDouble();
+    double ratio = m_launcherGsettings ? m_launcherGsettings->get("apps-icon-ratio").toDouble() : 0.6;
     return s * ratio;
 }
 
@@ -86,6 +88,9 @@ QSize CalculateUtil::getAppBoxSize()
 
 bool CalculateUtil::increaseIconSize()
 {
+    if (!m_launcherGsettings)
+        return false;
+
     const double value = m_launcherGsettings->get("apps-icon-ratio").toDouble();
     const double ratio = std::min(0.6, value + 0.1);
 
@@ -138,6 +143,9 @@ QStringList CalculateUtil::calendarSelectIcon() const
 
 bool CalculateUtil::decreaseIconSize()
 {
+    if (!m_launcherGsettings)
+        return false;
+
     const double value = m_launcherGsettings->get("apps-icon-ratio").toDouble();
     const double ratio = std::max(0.2, value - 0.1);
 
@@ -149,6 +157,9 @@ bool CalculateUtil::decreaseIconSize()
 
 int CalculateUtil::displayMode() const
 {
+    if (!m_launcherGsettings)
+        return ALL_APPS;
+
     const QString displayMode = m_launcherGsettings->get(DisplayModeKey).toString();
 
     if (displayMode == DisplayModeCategory) {
@@ -170,7 +181,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int cur
     int containerW = containerSize.width();
     int containerH = containerSize.height();
 
-    if (m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeFree || currentmode == SEARCH) {
+    if (!m_launcherGsettings || ((m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeFree) || currentmode == SEARCH)) {
         m_appColumnCount = 7;
         rows = 4;
 
@@ -212,10 +223,9 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int cur
 }
 
 CalculateUtil::CalculateUtil(QObject *parent)
-    : QObject(parent),
-      m_dockInter(new DBusDock(this)),
-      m_launcherGsettings(new QGSettings("com.deepin.dde.launcher",
-                                         "/com/deepin/dde/launcher/", this))
+    : QObject(parent)
+    , m_dockInter(new DBusDock(this))
+    , m_launcherGsettings(SettingsPtr("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", this))
 {
     m_launcherInter = new DBusLauncher(this);
     isFullScreen = m_launcherInter->fullscreen();

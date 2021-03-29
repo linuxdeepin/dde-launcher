@@ -22,18 +22,19 @@
  */
 
 #include "menuworker.h"
+#include "util.h"
 
 #include <QMenu>
 #include <QSignalMapper>
 
-MenuWorker::MenuWorker(QObject *parent) : QObject(parent)
+MenuWorker::MenuWorker(QObject *parent)
+    : QObject(parent)
+    , m_dockAppManagerInterface(new DBusDock(this))
+    , m_launcherInterface(new DBusLauncher(this))
+    , m_startManagerInterface(new DBusStartManager(this))
+    , m_calcUtil(CalculateUtil::instance())
+    , m_appManager(AppsManager::instance())
 {
-    m_xsettings = new QGSettings("com.deepin.xsettings", QByteArray(), this);
-    m_dockAppManagerInterface = new DBusDock(this);
-    m_startManagerInterface = new DBusStartManager(this);
-    m_launcherInterface = new DBusLauncher(this);
-    m_appManager = AppsManager::instance();
-    m_calcUtil = CalculateUtil::instance();
     initConnect();
 }
 
@@ -55,7 +56,7 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
     m_isItemProxy = m_currentModelIndex.data(AppsListModel::AppIsProxyRole).toBool();
     m_isItemEnableScaling = m_currentModelIndex.data(AppsListModel::AppEnableScalingRole).toBool();
 
-    const double scale_ratio = m_xsettings->get("scale-factor").toDouble();
+    const double scale_ratio = SettingValue("com.deepin.xsettings", QByteArray(), "scale-factor", 1.0).toDouble();;
 
     const bool isRemovable = m_currentModelIndex.data(AppsListModel::AppIsRemovableRole).toBool();
     const bool hideOpen = m_currentModelIndex.data(AppsListModel::AppHideOpenRole).toBool();

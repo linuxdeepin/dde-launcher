@@ -70,8 +70,8 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
 
     InitUI();
 
-    connect(m_appListArea, &AppListArea::increaseIcon, this, [ = ] { m_calcUtil->increaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
-    connect(m_appListArea, &AppListArea::decreaseIcon, this, [ = ] { m_calcUtil->decreaseIconSize(); emit m_appsManager->layoutChanged(AppsListModel::All); });
+    connect(m_appListArea, &AppListArea::increaseIcon, this, [ = ] { if (m_calcUtil->increaseIconSize()) emit m_appsManager->layoutChanged(AppsListModel::All); });
+    connect(m_appListArea, &AppListArea::decreaseIcon, this, [ = ] { if (m_calcUtil->decreaseIconSize()) emit m_appsManager->layoutChanged(AppsListModel::All); });
     connect(m_pageControl, &pageControl::onPageChanged, this, &MultiPagesView::showCurrentPage);
 }
 

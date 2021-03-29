@@ -34,7 +34,6 @@
 #include <QDBusPendingReply>
 #include <QtCore>
 #include <QModelIndex>
-#include <QGSettings>
 
 #include "dbusdock.h"
 #include "dbuslauncher.h"
@@ -91,12 +90,10 @@ public slots:
     void handleMenuAction(int index);
 
 private:
-    QGSettings *m_xsettings;
     DBusDock* m_dockAppManagerInterface;
     DBusLauncher* m_launcherInterface;
     DBusStartManager* m_startManagerInterface;
     CalculateUtil *m_calcUtil;
-
     AppsManager *m_appManager;
 
     QModelIndex m_currentModelIndex = QModelIndex();

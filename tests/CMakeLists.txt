@@ -99,10 +99,10 @@ target_link_libraries(${BIN_NAME} PRIVATE
     -lm
 )
 
-#add_custom_target(check)
+add_custom_target(check)
 
-#add_custom_command(TARGET check
-#    COMMAND ./${BIN_NAME}
-#    )
+add_custom_command(TARGET check
+    COMMAND ./${BIN_NAME}
+    )
 
-#add_dependencies(check ${BIN_NAME})
+add_dependencies(check ${BIN_NAME})

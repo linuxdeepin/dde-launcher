@@ -36,7 +36,6 @@
 #include <QScopedPointer>
 #include <QIconEngine>
 
-#include <QGSettings>
 #include <private/qguiapplication_p.h>
 #include <qpa/qplatformtheme.h>
 #include <DHiDPIHelper>
@@ -47,7 +46,7 @@ DWIDGET_USE_NAMESPACE
 
 QPointer<AppsManager> AppsManager::INSTANCE = nullptr;
 
-QGSettings AppsManager::LAUNCHER_SETTINGS("com.deepin.dde.launcher", "", nullptr);
+QGSettings *AppsManager::m_launcherSettings = SettingsPtr("com.deepin.dde.launcher", "", nullptr);
 QSet<QString> AppsManager::APP_AUTOSTART_CACHE;
 QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
 QSettings AppsManager::APP_USED_SORTED_LIST("deepin", "dde-launcher-app-used-sorted-list");
@@ -253,10 +252,10 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
     }
 
     QStringList preset;
-    if (LAUNCHER_SETTINGS.keys().contains(key))
-        preset = LAUNCHER_SETTINGS.get(key).toStringList();
-    if (preset.isEmpty())
-        preset = LAUNCHER_SETTINGS.get("apps-order").toStringList();
+    if (m_launcherSettings && m_launcherSettings->keys().contains(key))
+        preset = m_launcherSettings->get(key).toStringList();
+    if (m_launcherSettings && preset.isEmpty())
+        preset = m_launcherSettings->get("apps-order").toStringList();
 
     std::sort(processList.begin(), processList.end(), [&preset](const ItemInfo & i1, const ItemInfo & i2) {
         int index1 = preset.indexOf(i1.m_key);

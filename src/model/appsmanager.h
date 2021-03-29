@@ -41,6 +41,7 @@
 #include <QScreen>
 #include <QDBusArgument>
 #include <QList>
+
 #include <memory>
 
 #define DOCK_POS_RIGHT  1
@@ -186,7 +187,7 @@ private:
     int m_lastShowDate;
 
     static QPointer<AppsManager> INSTANCE;
-    static QGSettings LAUNCHER_SETTINGS;
+    static QGSettings *m_launcherSettings;
     static QSet<QString> APP_AUTOSTART_CACHE;
     static QSettings APP_USER_SORTED_LIST;
     static QSettings APP_USED_SORTED_LIST;

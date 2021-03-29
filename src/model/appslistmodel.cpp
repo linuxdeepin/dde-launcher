@@ -26,6 +26,7 @@
 #include "calculate_util.h"
 #include "constants.h"
 #include "dbusvariant/iteminfo.h"
+#include "util.h"
 
 #include <QSize>
 #include <QDebug>
@@ -54,13 +55,14 @@ static QMap<int, AppsListModel::AppCategory> CateGoryMap {
     { 10, AppsListModel::Others      }
 };
 
-static QGSettings *gSetting = new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
+
+static QGSettings *gSetting = SettingsPtr("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
 
 const QStringList sysHideOpenPackages()
 {
     QStringList hideOpen_list;
     //从gschema读取隐藏打开功能软件列表
-    if (gSetting->keys().contains("appsHideOpenList")) {
+    if (gSetting && gSetting->keys().contains("appsHideOpenList")) {
         hideOpen_list << gSetting->get("apps-hide-open-list").toStringList();
     }
 
@@ -71,7 +73,7 @@ const QStringList sysHideSendToDesktopPackages()
 {
     QStringList hideSendToDesktop_list;
     //从gschema读取隐藏发送到桌面功能软件列表
-    if (gSetting->keys().contains("appsHideSendToDesktopList")) {
+    if (gSetting && gSetting->keys().contains("appsHideSendToDesktopList")) {
         hideSendToDesktop_list << gSetting->get("apps-hide-send-to-desktop-list").toStringList();
     }
 
@@ -82,7 +84,7 @@ const QStringList sysHideSendToDockPackages()
 {
     QStringList hideSendToDock_list;
     //从gschema读取隐藏发送到Ｄock功能软件列表
-    if (gSetting->keys().contains("appsHideSendToDockList")) {
+    if (gSetting && gSetting->keys().contains("appsHideSendToDockList")) {
         hideSendToDock_list << gSetting->get("apps-hide-send-to-dock-list").toStringList();
     }
 
@@ -93,7 +95,7 @@ const QStringList sysHideStartUpPackages()
 {
     QStringList hideStartUp_list;
     //从gschema读取隐藏开机启动功能软件列表
-    if (gSetting->keys().contains("appsHideStartUpList")) {
+    if (gSetting && gSetting->keys().contains("appsHideStartUpList")) {
         hideStartUp_list << gSetting->get("apps-hide-start-up-list").toStringList();
     }
 
@@ -104,7 +106,7 @@ const QStringList sysHideUninstallPackages()
 {
     QStringList hideUninstall_list;
     //从gschema读取隐藏开机启动功能软件列表
-    if (gSetting->keys().contains("appsHideUninstallList")) {
+    if (gSetting && gSetting->keys().contains("appsHideUninstallList")) {
         hideUninstall_list << gSetting->get("apps-hide-uninstall-list").toStringList();
     }
 
@@ -115,7 +117,7 @@ const QStringList sysHideUseProxyPackages()
 {
     QStringList hideUseProxy_list;
     //从gschema读取隐藏使用代理功能软件列表
-    if (gSetting->keys().contains("appsHideUseProxyList")) {
+    if (gSetting && gSetting->keys().contains("appsHideUseProxyList")) {
         hideUseProxy_list << gSetting->get("apps-hide-use-proxy-list").toStringList();
     }
 
@@ -126,7 +128,7 @@ const QStringList sysCantOpenPackages()
 {
     QStringList cantOpen_list;
     //从gschema读取不可打开软件列表
-    if (gSetting->keys().contains("appsCanNotOpenList")) {
+    if (gSetting && gSetting->keys().contains("appsCanNotOpenList")) {
         cantOpen_list << gSetting->get("apps-can-not-open-list").toStringList();
     }
 
@@ -137,7 +139,7 @@ const QStringList sysCantSendToDesktopPackages()
 {
     QStringList cantSendToDesktop_list;
     //从gschema读取不可发送到桌面软件列表
-    if (gSetting->keys().contains("appsCanNotSendToDesktopList")) {
+    if (gSetting && gSetting->keys().contains("appsCanNotSendToDesktopList")) {
         cantSendToDesktop_list << gSetting->get("apps-can-not-send-to-desktop-list").toStringList();
     }
 
@@ -148,7 +150,7 @@ const QStringList sysCantSendToDockPackages()
 {
     QStringList cantSendToDock_list;
     //从gschema读取不可发送到Dock软件列表
-    if (gSetting->keys().contains("appsCanNotSendToDockList")) {
+    if (gSetting && gSetting->keys().contains("appsCanNotSendToDockList")) {
         cantSendToDock_list << gSetting->get("apps-can-not-send-to-dock-list").toStringList();
     }
 
@@ -159,7 +161,7 @@ const QStringList sysCantStartUpPackages()
 {
     QStringList cantStartUp_list;
     //从gschema读取不可自动启动软件列表
-    if (gSetting->keys().contains("appsCanNotStartUpList")) {
+    if (gSetting &&gSetting->keys().contains("appsCanNotStartUpList")) {
         cantStartUp_list << gSetting->get("apps-can-not-start-up-list").toStringList();
     }
 
@@ -173,9 +175,8 @@ const QStringList sysHoldPackages()
     auto holds_list = settings.value("dde_launcher_hold_packages").toStringList();
 
     //再从gschema读取不可卸载软件列表
-    QGSettings setting("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
-    if (setting.keys().contains("appsHoldList")) {
-        holds_list << setting.get("apps-hold-list").toStringList();
+    if (gSetting && gSetting->keys().contains("appsHoldList")) {
+        holds_list << gSetting->get("apps-hold-list").toStringList();
     }
 
     return holds_list;
@@ -184,7 +185,7 @@ const QStringList sysHoldPackages()
 AppsListModel::AppsListModel(const AppCategory &category, QObject *parent)
     : QAbstractListModel(parent)
     , m_appsManager(AppsManager::instance())
-    , m_actionSettings(new QGSettings("com.deepin.dde.launcher.menu", "/com/deepin/dde/launcher/menu/", this))
+    , m_actionSettings(SettingsPtr("com.deepin.dde.launcher.menu", "/com/deepin/dde/launcher/menu/", this))
     , m_calcUtil(CalculateUtil::instance())
     , m_hideOpenPackages(sysHideOpenPackages())
     , m_hideSendToDesktopPackages(sysHideSendToDesktopPackages())
@@ -449,17 +450,17 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case DrawBackgroundRole:
         return m_drawBackground;
     case AppHideOpenRole:
-        return !m_actionSettings->get("open").toBool() || m_hideOpenPackages.contains(itemInfo.m_key);
+        return (m_actionSettings && !m_actionSettings->get("open").toBool()) || m_hideOpenPackages.contains(itemInfo.m_key);
     case AppHideSendToDesktopRole:
-        return !m_actionSettings->get("send-to-desktop").toBool() || m_hideSendToDesktopPackages.contains(itemInfo.m_key);
+        return (m_actionSettings && !m_actionSettings->get("send-to-desktop").toBool()) || m_hideSendToDesktopPackages.contains(itemInfo.m_key);
     case AppHideSendToDockRole:
-        return !m_actionSettings->get("send-to-dock").toBool() || m_hideSendToDockPackages.contains(itemInfo.m_key);
+        return (m_actionSettings && !m_actionSettings->get("send-to-dock").toBool()) || m_hideSendToDockPackages.contains(itemInfo.m_key);
     case AppHideStartUpRole:
-        return !m_actionSettings->get("auto-start").toBool() || m_hideStartUpPackages.contains(itemInfo.m_key);
+        return (m_actionSettings && !m_actionSettings->get("auto-start").toBool()) || m_hideStartUpPackages.contains(itemInfo.m_key);
     case AppHideUninstallRole:
-        return !m_actionSettings->get("uninstall").toBool() || m_hideUninstallPackages.contains(itemInfo.m_key);
+        return (m_actionSettings && !m_actionSettings->get("uninstall").toBool()) || m_hideUninstallPackages.contains(itemInfo.m_key);
     case AppHideUseProxyRole:
-        return !m_actionSettings->get("use-proxy").toBool() || m_hideUseProxyPackages.contains(itemInfo.m_key);
+        return (m_actionSettings && !m_actionSettings->get("use-proxy").toBool()) || m_hideUseProxyPackages.contains(itemInfo.m_key);
     case AppCanOpenRole:
         return !m_cantOpenPackages.contains(itemInfo.m_key);
     case AppCanSendToDesktopRole:

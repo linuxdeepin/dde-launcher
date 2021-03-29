@@ -22,13 +22,13 @@
 #include "miniframerightbar.h"
 #include "miniframebutton.h"
 #include "avatar.h"
+#include "util.h"
 
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QEvent>
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QGSettings>
 
 #include <DDesktopServices>
 #include <DGuiApplicationHelper>
@@ -36,23 +36,11 @@
 
 DGUI_USE_NAMESPACE
 
-static QGSettings *gSetting = new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
-
-const QStringList miniFrameRightBarHideList()
-{
-    QStringList hideList;
-    if (gSetting->keys().contains("miniFrameRightBarHideList")) {
-        hideList << gSetting->get("mini-frame-right-bar-hide-list").toStringList();
-    }
-
-    return hideList;
-}
-
 MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     : QWidget(parent)
-    , m_avatar(new Avatar)
+    , m_avatar(new Avatar(this))
     , m_currentIndex(0)
-    , m_hideList(miniFrameRightBarHideList())
+    , m_hideList(SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "mini-frame-right-bar-hide-list", QStringList()).toStringList())
     , m_hasCompterIcon(false)
     , m_hasDocumentIcon(false)
     , m_hasPictureIcon(false)

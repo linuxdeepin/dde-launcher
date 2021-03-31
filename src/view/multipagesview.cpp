@@ -194,13 +194,18 @@ void MultiPagesView::dragToRight(const QModelIndex &index)
     if (m_pageSwitchAnimation->state() == QPropertyAnimation::Running || m_bDragStart)
         return;
 
+    // 当前页面准备空出最后一个图标
     int newPos = m_calcUtil->appPageItemCount(m_category);
-    m_appGridViewList[m_pageIndex]->dragOut(newPos);
+    // 下一页的末尾位置
+    m_appGridViewList[m_pageIndex]->dragOut(newPos * 2 - 1);
 
+    // 展开下一页
     showCurrentPage(m_pageIndex + 1);
 
-    QModelIndex firstModel = m_appGridViewList[m_pageIndex]->indexAt(0);
-    m_appGridViewList[m_pageIndex]->dragIn(firstModel);
+    // 将最后一个App'挤走'
+    int lastApp = m_pageAppsModelList[m_pageIndex]->rowCount(QModelIndex());
+    QModelIndex lastModel = m_appGridViewList[m_pageIndex]->indexAt(lastApp - 1);
+    m_appGridViewList[m_pageIndex]->dragIn(lastModel);
 
     m_bDragStart = true;
 }

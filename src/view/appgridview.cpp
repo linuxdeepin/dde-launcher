@@ -46,6 +46,10 @@ QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
 bool AppGridView::m_longPressed = false;
 Gesture *AppGridView::m_gestureInter = nullptr;
 
+/** 全屏模式下 单个应用分类的视图列表或者所有应用的视图列表
+ * @brief AppGridView::AppGridView
+ * @param parent
+ */
 AppGridView::AppGridView(QWidget *parent)
     : QListView(parent)
     , m_dropThresholdTimer(new QTimer(this))

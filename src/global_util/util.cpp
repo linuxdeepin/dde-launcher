@@ -72,6 +72,12 @@ const QPixmap loadSvg(const QString &fileName, const int size)
     return pixmap;
 }
 
+/** 根据实体屏幕像素特征渲染图片
+ * @brief renderSVG
+ * @param path
+ * @param size
+ * @return
+ */
 const QPixmap renderSVG(const QString &path, const QSize &size) {
     QImageReader reader;
     QPixmap pixmap;
@@ -88,6 +94,7 @@ const QPixmap renderSVG(const QString &path, const QSize &size) {
 
     return pixmap;
 }
+
 const QPixmap loadSvg(const QString &fileName, const QSize &size)
 {
     QPixmap pixmap(size);

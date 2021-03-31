@@ -73,10 +73,10 @@ private:
 
     WindowedFrame *m_windowLauncher;
     FullScreenFrame *m_fullLauncher;
-    DRegionMonitor *m_regionMonitor;
+    DRegionMonitor *m_regionMonitor;// deepin tool kit 中core中的内容
     QTimer *m_autoExitTimer;
-    QTimer *m_ignoreRepeatVisibleChangeTimer;
-    QMetaObject::Connection m_regionMonitorConnect;
+    QTimer *m_ignoreRepeatVisibleChangeTimer;// 添加200ms延时操作，避开重复显示、隐藏启动器
+    QMetaObject::Connection m_regionMonitorConnect;// 信号和槽连接返回的对象
     CalculateUtil* m_calcUtil;
 };
 

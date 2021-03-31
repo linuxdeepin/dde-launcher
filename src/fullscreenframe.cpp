@@ -157,6 +157,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     setObjectName("LauncherFrame");
 
+    // 全局键盘按键事件处理、搜索框字符输入处理
     installEventFilter(m_eventFilter);
 
     connect(m_multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
@@ -355,6 +356,10 @@ void FullScreenFrame::scrollCurrent()
     m_animationGroup->start();
 }
 
+/** 处理全屏模式下视图中的鼠标事件
+ * @brief FullScreenFrame::addViewEvent
+ * @param pView
+ */
 void FullScreenFrame::addViewEvent(AppGridView *pView)
 {
     connect(pView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
@@ -865,6 +870,11 @@ MultiPagesView *FullScreenFrame::getCategoryGridViewList(const AppsListModel::Ap
     return widget->getMultiPagesView();
 }
 
+/** 获取单个分类应用控件 BlurBoxWidget
+ * @brief FullScreenFrame::getCategoryBoxWidget
+ * @param category
+ * @return
+ */
 BlurBoxWidget *FullScreenFrame::getCategoryBoxWidget(const AppsListModel::AppCategory category) const
 {
     BlurBoxWidget *view = nullptr;
@@ -1559,6 +1569,7 @@ void FullScreenFrame::updateDockPosition()
 
     int padding = m_calcUtil->getScreenSize().width() * SIDES_SPACE_SCALE;
 
+    // 全屏App模式或者正在搜索
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
         m_calcUtil->calculateAppLayout(m_contentFrame->size() - QSize(padding * 2, DLauncher::APPS_AREA_TOP_MARGIN), m_displayMode);
     } else {
@@ -1636,6 +1647,11 @@ AppsListModel::AppCategory FullScreenFrame::nextCategoryType(const AppsListModel
     return nextCategory;
 }
 
+/** 若当前分类下app数为0,，则自动显示上一个分类app
+ * @brief FullScreenFrame::prevCategoryType
+ * @param category
+ * @return
+ */
 AppsListModel::AppCategory FullScreenFrame::prevCategoryType(const AppsListModel::AppCategory category)
 {
     AppsListModel::AppCategory prevCategory = AppsListModel::AppCategory(category - 1);

@@ -53,6 +53,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_leftSpacing->setAccessibleName("LeftSpacing");
     m_rightSpacing->setAccessibleName("RightSpacing");
 
+    // 所有App模式 和 分类app模式切换按钮（左上侧）
     m_toggleCategoryBtn = new DFloatingButton(this);
     updateCurrentCategoryBtnIcon();
 
@@ -61,6 +62,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_toggleCategoryBtn->setBackgroundRole(DPalette::Button);
     m_toggleCategoryBtn->setAccessibleName("mode-toggle-button");
 
+    // 全屏模式下收起按钮(右上)
     m_toggleModeBtn = new DFloatingButton(this);
     m_toggleModeBtn->setIcon(QIcon(":/icons/skin/icons/exit_fullscreen.svg"));
     m_toggleModeBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
@@ -175,16 +177,24 @@ void SearchWidget::hideToggle()
     m_toggleModeBtn->hide();
 }
 
+/** 根据屏幕比例(相较于1920*1080分辨率的屏幕)设置控件大小
+ * @brief SearchWidget::updateSize
+ * @param scaleX 屏幕宽度比
+ * @param scaleY 屏幕高度比
+ */
 void SearchWidget::updateSize(double scaleX, double scaleY)
 {
-    m_searchEdit->lineEdit()->setFixedSize(SEARCHEIT_WIDTH * scaleX, SEARCHEIT_HEIGHT * scaleY);
+    m_searchEdit->lineEdit()->setFixedSize(int(SEARCHEIT_WIDTH * scaleX), int(SEARCHEIT_HEIGHT * scaleY));
     double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
-    m_toggleCategoryBtn->setFixedSize(BTN_SIZE * scale, BTN_SIZE * scale);
-    m_toggleCategoryBtn->setIconSize(QSize(ICON_SIZE * scale, ICON_SIZE * scale));
-    m_toggleModeBtn->setIconSize(QSize(ICON_SIZE * scale, ICON_SIZE * scale));
-    m_toggleModeBtn->setFixedSize(BTN_SIZE * scale, BTN_SIZE * scale);
+    m_toggleCategoryBtn->setFixedSize(int(BTN_SIZE * scale), int(BTN_SIZE * scale));
+    m_toggleCategoryBtn->setIconSize(QSize(int(ICON_SIZE * scale), int(ICON_SIZE * scale)));
+    m_toggleModeBtn->setIconSize(QSize(int(ICON_SIZE * scale), int(ICON_SIZE * scale)));
+    m_toggleModeBtn->setFixedSize(int(BTN_SIZE * scale), int(BTN_SIZE * scale));
 }
 
+/** 全屏模式下app列表和分类后的列表 切换按钮样式
+ * @brief SearchWidget::updateCurrentCategoryBtnIcon
+ */
 void SearchWidget::updateCurrentCategoryBtnIcon()
 {
     if (m_calcUtil->displayMode() == ALL_APPS) {

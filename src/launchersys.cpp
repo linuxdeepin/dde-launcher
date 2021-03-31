@@ -36,6 +36,10 @@
 #define SessionManagerService "com.deepin.SessionManager"
 #define SessionManagerPath "/com/deepin/SessionManager"
 
+/** 启动器全局界面
+ * @brief LauncherSys::LauncherSys
+ * @param parent
+ */
 LauncherSys::LauncherSys(QObject *parent)
     : QObject(parent)
     , m_launcherInter(nullptr)
@@ -139,7 +143,7 @@ void LauncherSys::displayModeChanged()
     lastLauncher = lastLauncher ? lastLauncher : m_launcherInter;
 
     if (lastLauncher->visible()) {
-        m_launcherInter->showLauncher();
+        m_launcherInter->showLauncher();// 多态 晚绑定
     }
     else {
         m_launcherInter->hideLauncher();

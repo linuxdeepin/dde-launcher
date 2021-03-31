@@ -189,8 +189,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->drawText(appNameRect, appNameResolved, appNameOption);
 
     // draw app icon
-    if("dde-calendar"==itemInfo.m_key)
-    {
+    if("dde-calendar"==itemInfo.m_key) {
         //根据不同日期显示不同日历图表
         int tw = iconRect.width();
         int th = iconRect.height();
@@ -210,7 +209,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         //绘制周
         QRectF rcWeek(tx + (tw / 2.3), ty + ((th / 3.9) * 2.8), 56 * iconZoom, 24 * iconZoom);
         painter->drawPixmap(rcWeek.topLeft(), renderSVG(calIconList.at(3), rcWeek.size().toSize()));
-    }else {
+    } else {
         const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
         painter->drawPixmap(iconRect, iconPix, iconPix.rect());
     }

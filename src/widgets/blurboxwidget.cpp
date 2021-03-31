@@ -76,6 +76,10 @@ void BlurBoxWidget::layoutAddWidget(QWidget *child, int stretch, Qt::Alignment a
     m_vLayout->addWidget(child, stretch, alignment);
 }
 
+/** 获取单个应用类别控件下的视图控件
+ * @brief BlurBoxWidget::getMultiPagesView
+ * @return
+ */
 MultiPagesView *BlurBoxWidget::getMultiPagesView()
 {
     return m_categoryMultiPagesView;
@@ -127,6 +131,10 @@ void BlurBoxWidget::setMaskSize(QSize size)
     m_blurBackground->setFixedSize(size);
 }
 
+/** 单个类别分类中的视图设置代理
+ * @brief BlurBoxWidget::setDataDelegate
+ * @param delegate
+ */
 void BlurBoxWidget::setDataDelegate(QAbstractItemDelegate *delegate)
 {
     m_categoryMultiPagesView->setAccessibleName(m_name);

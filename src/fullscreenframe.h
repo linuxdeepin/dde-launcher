@@ -166,7 +166,7 @@ private:
     AppsListModel::AppCategory m_currentCategory;
 
     std::unique_ptr<MenuWorker> m_menuWorker;
-    SharedEventFilter *m_eventFilter;
+    SharedEventFilter *m_eventFilter; // 事件过滤类
 
     CalculateUtil *m_calcUtil;
     AppsManager *m_appsManager;
@@ -174,18 +174,18 @@ private:
     QTimer *m_delayHideTimer;
     QTimer *m_clearCacheTimer;
 
-    NavigationWidget *m_navigationWidget;
-    SearchWidget *m_searchWidget;
+    NavigationWidget *m_navigationWidget;// 全屏模式下导航栏(搜索控件正下方)
+    SearchWidget *m_searchWidget;// 全屏模式下搜索控件（顶部）
 
     QFrame *m_contentFrame;
     DHBoxWidget *m_appsIconBox;
-    DHBoxWidget *m_appsItemBox;    // app 分组
+    DHBoxWidget *m_appsItemBox;    // 分类后容纳app列表的控件
     MaskQWidget *m_appsItemSeizeBox; // app 分组点位
     QHBoxLayout *m_iconHLayout;
 
     QLabel *m_tipsLabel;
 
-    AppItemDelegate *m_appItemDelegate;
+    AppItemDelegate *m_appItemDelegate; // 全屏模式下listview视图代理
     MultiPagesView *m_multiPagesView;
 
     BlurBoxWidget *m_internetBoxWidget;

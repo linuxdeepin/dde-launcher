@@ -62,12 +62,20 @@ QSize CalculateUtil::appIconSize() const
     return s * ratio;
 }
 
+/** 获取屏幕宽度为1920的倍数
+ * @brief CalculateUtil::getScreenScaleX
+ * @return
+ */
 double CalculateUtil::getScreenScaleX()
 {
     int width  = currentScreen()->geometry().width();
     return double(width) / 1920;
 }
 
+/** 取屏幕高度为1080的倍数
+ * @brief CalculateUtil::getScreenScaleY
+ * @return
+ */
 double CalculateUtil::getScreenScaleY()
 {
     int width = currentScreen()->geometry().height();
@@ -99,6 +107,11 @@ bool CalculateUtil::increaseIconSize()
     m_launcherGsettings->set("apps-icon-ratio", ratio);
     return true;
 }
+
+/** 根据系统时间设置日历app的月、周、日样式
+ * @brief CalculateUtil::calendarSelectIcon
+ * @return
+ */
 QStringList CalculateUtil::calendarSelectIcon() const
 {
     QStringList iconList;
@@ -140,7 +153,6 @@ QStringList CalculateUtil::calendarSelectIcon() const
     return iconList;
 }
 
-
 bool CalculateUtil::decreaseIconSize()
 {
     if (!m_launcherGsettings)
@@ -155,6 +167,11 @@ bool CalculateUtil::decreaseIconSize()
     return true;
 }
 
+/** 获取当前视图的展示模式
+ *  两种模式: 全屏app自由模式、全屏app分类模式
+ * @brief CalculateUtil::displayMode
+ * @return
+ */
 int CalculateUtil::displayMode() const
 {
     if (!m_launcherGsettings)
@@ -169,6 +186,11 @@ int CalculateUtil::displayMode() const
     return ALL_APPS;
 }
 
+/** 计算app列表布局中控件大小参数
+ * @brief CalculateUtil::calculateAppLayout
+ * @param containerSize 容器大小
+ * @param currentmode 列表展示模式
+ */
 void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int currentmode)
 {
     double scaleX = getScreenScaleX();
@@ -181,6 +203,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int cur
     int containerW = containerSize.width();
     int containerH = containerSize.height();
 
+    // 全屏App模式或者正在搜索列表以4行7列模式排布，全屏分类模式以4行3列模式排布
     if (!m_launcherGsettings || ((m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeFree) || currentmode == SEARCH)) {
         m_appColumnCount = 7;
         rows = 4;
@@ -222,6 +245,10 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int cur
     emit layoutChanged();
 }
 
+/** 计算屏幕、应用列表布局、日历app等大小、间隔等
+ * @brief CalculateUtil::CalculateUtil
+ * @param parent
+ */
 CalculateUtil::CalculateUtil(QObject *parent)
     : QObject(parent)
     , m_dockInter(new DBusDock(this))

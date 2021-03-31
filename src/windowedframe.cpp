@@ -228,6 +228,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
     onOpacityChanged(m_appearanceInter->opacity());
 
+    // 状态切换
     m_switchBtn->updateStatus(All);
     m_modeToggleBtn->setIconSize(QSize(32,32));
     m_modeToggleBtn->setFixedSize(40, 40);

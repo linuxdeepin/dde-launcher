@@ -23,8 +23,6 @@
 
 #include <QPainter>
 
-
-
 MaskQWidget::MaskQWidget(QWidget *parent) : QWidget(parent)
 {
     m_color = new QColor(0,0,0,0);

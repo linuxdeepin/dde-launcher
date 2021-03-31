@@ -40,6 +40,10 @@
 #include <private/qguiapplication_p.h>
 #include <qpa/qplatformtheme.h>
 
+/** 启动器左侧小窗口列表
+ * @brief AppListView::AppListView
+ * @param parent
+ */
 AppListView::AppListView(QWidget *parent)
     : DListView(parent)
     , m_dropThresholdTimer(new QTimer(this))

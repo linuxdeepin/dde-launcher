@@ -39,6 +39,10 @@
 
 DWIDGET_USE_NAMESPACE
 
+/**
+ * @brief SearchWidget::SearchWidget 顶部搜索控件
+ * @param parent
+ */
 SearchWidget::SearchWidget(QWidget *parent) :
     QFrame(parent)
 {
@@ -177,8 +181,8 @@ void SearchWidget::hideToggle()
     m_toggleModeBtn->hide();
 }
 
-/** 根据屏幕比例(相较于1920*1080分辨率的屏幕)设置控件大小
- * @brief SearchWidget::updateSize
+/**
+ * @brief SearchWidget::updateSize 根据屏幕比例(相较于1920*1080分辨率的屏幕)设置控件大小
  * @param scaleX 屏幕宽度比
  * @param scaleY 屏幕高度比
  */
@@ -192,8 +196,8 @@ void SearchWidget::updateSize(double scaleX, double scaleY)
     m_toggleModeBtn->setFixedSize(int(BTN_SIZE * scale), int(BTN_SIZE * scale));
 }
 
-/** 全屏模式下app列表和分类后的列表 切换按钮样式
- * @brief SearchWidget::updateCurrentCategoryBtnIcon
+/**
+ * @brief SearchWidget::updateCurrentCategoryBtnIcon 全屏模式下app列表和分类后的列表 切换按钮样式
  */
 void SearchWidget::updateCurrentCategoryBtnIcon()
 {

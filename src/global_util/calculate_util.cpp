@@ -62,9 +62,10 @@ QSize CalculateUtil::appIconSize() const
     return s * ratio;
 }
 
-/** 获取屏幕宽度为1920的倍数
+/**
  * @brief CalculateUtil::getScreenScaleX
- * @return
+ * 获取屏幕宽度为1920的倍数
+ * @return 获取屏幕宽度为1920的倍数
  */
 double CalculateUtil::getScreenScaleX()
 {
@@ -72,9 +73,10 @@ double CalculateUtil::getScreenScaleX()
     return double(width) / 1920;
 }
 
-/** 取屏幕高度为1080的倍数
+/**
  * @brief CalculateUtil::getScreenScaleY
- * @return
+ * 取屏幕高度为1080的倍数
+ * @return 取屏幕高度为1080的倍数
  */
 double CalculateUtil::getScreenScaleY()
 {
@@ -89,8 +91,8 @@ QSize CalculateUtil::getScreenSize() const
 
 QSize CalculateUtil::getAppBoxSize()
 {
-    int height = currentScreen()->geometry().height() * 0.69;
-    int width = currentScreen()->geometry().width() * 0.51;
+    int height = int(currentScreen()->geometry().height() * 0.69);
+    int width = int(currentScreen()->geometry().width() * 0.51);
     return  QSize(width, height);
 }
 
@@ -108,9 +110,10 @@ bool CalculateUtil::increaseIconSize()
     return true;
 }
 
-/** 根据系统时间设置日历app的月、周、日样式
+/**
  * @brief CalculateUtil::calendarSelectIcon
- * @return
+ * 根据系统时间设置日历app的月、周、日样式
+ * @return 返回日历app的月、周、日资源路径list
  */
 QStringList CalculateUtil::calendarSelectIcon() const
 {
@@ -167,9 +170,9 @@ bool CalculateUtil::decreaseIconSize()
     return true;
 }
 
-/** 获取当前视图的展示模式
- *  两种模式: 全屏app自由模式、全屏app分类模式
- * @brief CalculateUtil::displayMode
+/**
+ * @brief CalculateUtil::displayMode 获取当前视图的展示模式
+ * 两种模式: 全屏app自由模式、全屏app分类模式
  * @return
  */
 int CalculateUtil::displayMode() const
@@ -186,10 +189,11 @@ int CalculateUtil::displayMode() const
     return ALL_APPS;
 }
 
-/** 计算app列表布局中控件大小参数
+/**
  * @brief CalculateUtil::calculateAppLayout
- * @param containerSize 容器大小
- * @param currentmode 列表展示模式
+ * 计算app列表布局中控件大小参数
+ * @param containerSize 控件存放的容器大小
+ * @param currentmode 列表展示的模式
  */
 void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int currentmode)
 {
@@ -219,34 +223,35 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int cur
         containerH = containerSize.height() - 24 - 60 - 20 * scale - DLauncher::DRAG_THRESHOLD;
     }
 
-    //默认边距保留最小５像素
+    // 默认边距保留最小５像素
     m_appMarginLeft = 5;
     m_appMarginTop = 5;
 
-    //去年默认边距后，计算每个Item区域的宽高
+    // 去年默认边距后，计算每个Item区域的宽高
     int perItemWidth  = (containerW - m_appMarginLeft * 2) / m_appColumnCount;
     int perItemHeight = (containerH - m_appMarginTop) / rows;
 
-    //因为每个Item是一个正方形的，所以取宽高中最小的值
+    // 因为每个Item是一个正方形的，所以取宽高中最小的值
     int perItemSize = qMin(perItemHeight,perItemWidth);
 
-    //图标大小取区域的4 / 5
+    // 图标大小取区域的4 / 5
     m_appItemSize = perItemSize * 4 / 5;
-    //其他区域为间隔区域
+    // 其他区域为间隔区域
     m_appItemSpacing = (perItemSize - m_appItemSize) / 2;
 
-    //重新计算左右上边距
+    // 重新计算左右上边距
     m_appMarginLeft = (containerW - m_appItemSize * m_appColumnCount - m_appItemSpacing * m_appColumnCount * 2) / 2 - 1;
     m_appMarginTop =  (containerH - m_appItemSize * rows - m_appItemSpacing * rows * 2) / 2;
 
-    //计算字体大小
+    // 计算字体大小
     m_appItemFontSize = m_appItemSize <= 80 ? 8 : qApp->font().pointSize() + 3;
 
     emit layoutChanged();
 }
 
-/** 计算屏幕、应用列表布局、日历app等大小、间隔等
+/**
  * @brief CalculateUtil::CalculateUtil
+ * 计算屏幕、应用列表布局、日历app等大小、间隔等
  * @param parent
  */
 CalculateUtil::CalculateUtil(QObject *parent)

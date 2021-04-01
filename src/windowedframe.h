@@ -82,7 +82,7 @@ public:
         Power,
         Search,
         Applist,
-        Default //确保首次切换都切换到所有分类
+        Default      //确保首次切换都切换到所有分类
     };
 
 signals:
@@ -142,12 +142,12 @@ private:
     QWidget *m_maskBg;
     AppsManager *m_appsManager;
     AppListView *m_appsView;
-    AppsListModel *m_appsModel; // 小窗口列表
+    AppsListModel *m_appsModel;          // 小窗口列表
     AppsListModel *m_usedModel;
-    AppsListModel *m_searchModel;// 小窗口搜索后的列表
+    AppsListModel *m_searchModel;        // 小窗口搜索后的列表
 
     QWidget *m_rightWidget;
-    MiniFrameRightBar *m_leftBar; // 左侧分类按钮组
+    MiniFrameRightBar *m_leftBar;        // 左侧分类按钮组
     MiniFrameSwitchBtn *m_switchBtn;
     QLabel *m_tipsLabel;
     QTimer *m_delayHideTimer;

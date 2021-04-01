@@ -157,7 +157,7 @@ private:
     int m_displayMode = SEARCH;
     int m_focusIndex;
     int m_currentIndex = 0;
-    //鼠标单击位置
+    // 鼠标单击位置
     QPoint m_mouse_move_pos;
     QPoint m_mouse_press_pos;
     qint64 m_mouse_press_time;
@@ -166,7 +166,7 @@ private:
     AppsListModel::AppCategory m_currentCategory;
 
     std::unique_ptr<MenuWorker> m_menuWorker;
-    SharedEventFilter *m_eventFilter; // 事件过滤类
+    SharedEventFilter *m_eventFilter;        // 事件过滤类
 
     CalculateUtil *m_calcUtil;
     AppsManager *m_appsManager;
@@ -174,18 +174,18 @@ private:
     QTimer *m_delayHideTimer;
     QTimer *m_clearCacheTimer;
 
-    NavigationWidget *m_navigationWidget;// 全屏模式下导航栏(搜索控件正下方)
-    SearchWidget *m_searchWidget;// 全屏模式下搜索控件（顶部）
+    NavigationWidget *m_navigationWidget;    // 全屏模式下导航栏(搜索控件正下方)
+    SearchWidget *m_searchWidget;            // 全屏模式下搜索控件（顶部）
 
     QFrame *m_contentFrame;
     DHBoxWidget *m_appsIconBox;
-    DHBoxWidget *m_appsItemBox;    // 分类后容纳app列表的控件
-    MaskQWidget *m_appsItemSeizeBox; // app 分组点位
+    DHBoxWidget *m_appsItemBox;              // 分类后容纳app列表的控件
+    MaskQWidget *m_appsItemSeizeBox;         // app 分组点位
     QHBoxLayout *m_iconHLayout;
 
     QLabel *m_tipsLabel;
 
-    AppItemDelegate *m_appItemDelegate; // 全屏模式下listview视图代理
+    AppItemDelegate *m_appItemDelegate;      // 全屏模式下listview视图代理
     MultiPagesView *m_multiPagesView;
 
     BlurBoxWidget *m_internetBoxWidget;
@@ -208,7 +208,7 @@ private:
     QList<ScrollWidgetAgent *> m_widgetAgentList;
     ScrollParallelAnimationGroup *m_animationGroup;
     DBusDisplay *m_displayInter;
-    //只有窗口在完全显示出来后，才允许自动调整各部件位置
+    // 只有窗口在完全显示出来后，才允许自动调整各部件位置
     bool m_canResizeDockPosition = false;
 };
 #endif // MAINFRAME_H

@@ -36,8 +36,8 @@
 
 DGUI_USE_NAMESPACE
 
-/** 启动器小窗口模式最左侧按钮组
- * @brief MiniFrameRightBar::MiniFrameRightBar
+/**
+ * @brief MiniFrameRightBar::MiniFrameRightBar 启动器小窗口模式最左侧按钮组
  * @param parent
  */
 MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)

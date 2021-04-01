@@ -27,8 +27,8 @@
 #include <QVBoxLayout>
 #include <QDebug>
 
-/** 全屏模式下应用分类按钮组控件
- * @brief NavigationWidget::NavigationWidget
+/**
+ * @brief NavigationWidget::NavigationWidget 全屏模式下应用分类按钮组控件
  * @param parent
  */
 NavigationWidget::NavigationWidget(QWidget *parent) :

@@ -40,8 +40,8 @@
 #include <private/qguiapplication_p.h>
 #include <qpa/qplatformtheme.h>
 
-/** 启动器左侧小窗口列表
- * @brief AppListView::AppListView
+/**
+ * @brief AppListView::AppListView 启动器左侧小窗口列表
  * @param parent
  */
 AppListView::AppListView(QWidget *parent)
@@ -100,6 +100,10 @@ const QModelIndex AppListView::indexAt(const int index) const
     return model()->index(index, 0, QModelIndex());
 }
 
+/**
+ * @brief AppListView::wheelEvent 鼠标滑轮事件触发滑动区域控件动画
+ * @param e 鼠标滑轮事件指针对象
+ */
 void AppListView::wheelEvent(QWheelEvent *e)
 {
     int offset = -e->delta();
@@ -114,10 +118,13 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
 {
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         m_touchMoveFlag = true;
+
+        // 在滑动时禁止拖拽
         if (QScroller::hasScroller(this)) {
             return;
         }
 
+        // 拖拽时间少于200ms 禁止拖拽
         if (m_updateEnableSelectionByMouseTimer && m_updateEnableSelectionByMouseTimer->isActive()) {
             QListView::mouseMoveEvent(e);
             return;
@@ -133,6 +140,7 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
     const QModelIndex &index = indexAt(e->pos());
     const QPoint pos = e->pos();
 
+    // 全屏模式下保存当前拖动的item的模型索引
     if (index.isValid() && !m_enableDropInside)
         Q_EMIT entered(index);
     else
@@ -216,11 +224,11 @@ void AppListView::mousePressEvent(QMouseEvent *e)
     }
 
     if (e->button() == Qt::LeftButton) {
-        if (isCategoryList) {
+        // 小窗口模式下，当列表处于分类模式时，禁止鼠标拖动
+        if (isCategoryList)
             return;
-        } else {
+        else
             m_dragStartRow = indexAt(e->pos()).row();
-        }
     }
 
     QListView::mousePressEvent(e);
@@ -250,6 +258,7 @@ void AppListView::mouseReleaseEvent(QMouseEvent *e)
         return;
     }
 
+    // 小窗口模式时，左键释放时切换模型到对应的分类列表中
     if (qobject_cast<AppsListModel*>(model())->category() == AppsListModel::Category && e->button() == Qt::LeftButton) {
         emit requestSwitchToCategory(index);
         return;
@@ -258,6 +267,10 @@ void AppListView::mouseReleaseEvent(QMouseEvent *e)
     QListView::mouseReleaseEvent(e);
 }
 
+/**
+ * @brief AppListView::dragEnterEvent 在除搜索模式和无效的拖动模式下接收处理拖动进入事件
+ * @param e 鼠标拖动进入事件指针对象
+ */
 void AppListView::dragEnterEvent(QDragEnterEvent *e)
 {
     const QModelIndex index = indexAt(e->pos());
@@ -266,6 +279,7 @@ void AppListView::dragEnterEvent(QDragEnterEvent *e)
         return e->accept();
     }
 }
+
 
 void AppListView::dragMoveEvent(QDragMoveEvent *e)
 {
@@ -281,6 +295,7 @@ void AppListView::dragMoveEvent(QDragMoveEvent *e)
     const QPoint pos = e->pos();
     const QRect rect = this->rect();
 
+    // 小窗口模式下 拖动item移动触发列表上下滑动
     if (pos.y() < DRAG_SCROLL_THRESHOLD) {
         Q_EMIT requestScrollUp();
     } else if (pos.y() > rect.height() - DRAG_SCROLL_THRESHOLD) {
@@ -333,11 +348,16 @@ void AppListView::leaveEvent(QEvent *event)
     }
 }
 
+/**
+ * @brief AppListView::startDrag 当前页的拖动处理
+ * @param index 拖动item的对应的模型索引
+ */
 void AppListView::startDrag(const QModelIndex &index)
 {
     if (!index.isValid())
         return;
 
+    // 获取当前页视图列表对应的模型
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
 
     const QModelIndex &dragIndex = index;
@@ -354,7 +374,7 @@ void AppListView::startDrag(const QModelIndex &index)
     listModel->setDraggingIndex(index);
 
     setState(DraggingState);
-    drag->exec(Qt::MoveAction);
+    drag->exec(Qt::MoveAction);// 开启拖动item的子事件循环
 
     // disable animation when finally dropped
     m_dropThresholdTimer->stop();

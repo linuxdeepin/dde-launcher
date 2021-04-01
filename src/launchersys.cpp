@@ -36,8 +36,8 @@
 #define SessionManagerService "com.deepin.SessionManager"
 #define SessionManagerPath "/com/deepin/SessionManager"
 
-/** 启动器全局界面
- * @brief LauncherSys::LauncherSys
+/**
+ * @brief LauncherSys::LauncherSys 启动器界面实现及逻辑处理类
  * @param parent
  */
 LauncherSys::LauncherSys(QObject *parent)

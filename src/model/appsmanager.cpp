@@ -117,6 +117,11 @@ const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size
     return pixmap;
 }
 
+/**
+ * @brief AppsManager::getPageCount 获取应用分类下列表中的item分页后的总页数
+ * @param category 应用分类类型
+ * @return 返回应用分类下列表中的item分页后的总页数
+ */
 int AppsManager::getPageCount(const AppsListModel::AppCategory category)
 {
     int nSize = appsInfoListSize(category);

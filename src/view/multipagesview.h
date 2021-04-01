@@ -106,18 +106,18 @@ private:
     int m_pageIndex;
     AppsListModel::AppCategory m_category;
 
-    AppsManager *m_appsManager;
-    CalculateUtil *m_calcUtil;
-    AppListArea *m_appListArea;
-    AppGridViewList m_appGridViewList;
-    pageAppsModelist m_pageAppsModelList;
+    AppsManager *m_appsManager;                         // 应用管理类
+    CalculateUtil *m_calcUtil;                          // 界面布局计算类
+    AppListArea *m_appListArea;                         // 滑动区域控件
+    AppGridViewList m_appGridViewList;                  // 多视图列表
+    pageAppsModelist m_pageAppsModelList;               // 多视图模型列表
 
     DHBoxWidget *m_viewBox;
 
-    QPropertyAnimation *m_pageSwitchAnimation;
+    QPropertyAnimation *m_pageSwitchAnimation;          // 分页切换动画
 
-    QAbstractItemDelegate *m_delegate = nullptr;
-    pageControl *m_pageControl;
+    QAbstractItemDelegate *m_delegate = nullptr;        // 视图代理基类
+    pageControl *m_pageControl;                         // 分页控件
 };
 
 #endif // MULTIPAGESVIEW_H

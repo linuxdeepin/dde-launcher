@@ -27,6 +27,11 @@
 #include <QHBoxLayout>
 #define     SIDES_SPACE_SCALE   0.10
 
+/**
+ * @brief MultiPagesView::MultiPagesView 全屏模式下多页列表控件类
+ * @param categoryModel 应用分类类型
+ * @param parent 父控件指针对象
+ */
 MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget *parent)
     : QWidget(parent)
     , m_pLeftGradient(new GradientLabel(this))
@@ -109,6 +114,10 @@ void MultiPagesView::updateGradient(QPixmap &pixmap, QPoint topLeftImg, QPoint t
     setGradientVisible(true);
 }
 
+/**
+ * @brief MultiPagesView::updatePageCount 更新分页控件信息
+ * @param category 应用分类类型
+ */
 void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
 {
     int pageCount = m_appsManager->getPageCount(category == AppsListModel::All ? m_category : category);
@@ -165,6 +174,10 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
     m_pageControl->setPageCount(m_pageCount > 1 ? pageCount : 0);
 }
 
+/**
+ * @brief MultiPagesView::dragToLeft 在当前列表页向左拖动item
+ * @param index 拖动item对应的模型索引
+ */
 void MultiPagesView::dragToLeft(const QModelIndex &index)
 {
     Q_UNUSED(index);
@@ -185,6 +198,10 @@ void MultiPagesView::dragToLeft(const QModelIndex &index)
     m_bDragStart = true;
 }
 
+/**
+ * @brief MultiPagesView::dragToRight  在当前列表页向右拖动item
+ * @param index 拖动item对应的模型索引
+ */
 void MultiPagesView::dragToRight(const QModelIndex &index)
 {
     Q_UNUSED(index);
@@ -210,6 +227,9 @@ void MultiPagesView::dragToRight(const QModelIndex &index)
     m_bDragStart = true;
 }
 
+/**
+ * @brief MultiPagesView::dragStop 当前视图中拖拽item触发分页才执行flashDrag()
+ */
 void MultiPagesView::dragStop()
 {
     if (sender() == m_appGridViewList[m_pageIndex])
@@ -218,16 +238,29 @@ void MultiPagesView::dragStop()
     m_appGridViewList[m_pageIndex]->flashDrag();
 }
 
+/**
+ * @brief MultiPagesView::getAppItem 获取item的模型索引
+ * @param index item所在行数
+ * @return 返回item对应的模型索引
+ */
 QModelIndex MultiPagesView::getAppItem(int index)
 {
     return m_appGridViewList[m_pageIndex]->indexAt(index);
 }
 
+/**
+ * @brief MultiPagesView::setDataDelegate 初始化当前视图代理
+ * @param delegate
+ */
 void MultiPagesView::setDataDelegate(QAbstractItemDelegate *delegate)
 {
     m_delegate = delegate;
 }
 
+/**
+ * @brief MultiPagesView::ShowPageView 展现分类应用下视图分页数据
+ * @param category 应用分类类型
+ */
 void MultiPagesView::ShowPageView(AppsListModel::AppCategory category)
 {
     int pageCount = m_appsManager->getPageCount(category);
@@ -240,6 +273,10 @@ void MultiPagesView::ShowPageView(AppsListModel::AppCategory category)
     m_category = category;
 }
 
+/**
+ * @brief MultiPagesView::setModel 给视图设置模型
+ * @param category 应用分类类型
+ */
 void MultiPagesView::setModel(AppsListModel::AppCategory category)
 {
     for (int i = 0; i < m_pageCount; i++) {
@@ -270,8 +307,8 @@ void MultiPagesView::InitUI()
     QVBoxLayout *layoutMain = new QVBoxLayout;
     layoutMain->setContentsMargins(0, 0, 0, DLauncher::DRAG_THRESHOLD);
     layoutMain->setSpacing(0);
-    layoutMain->addWidget(m_appListArea,0,Qt::AlignHCenter); // 滑动区域控件
-    layoutMain->addWidget(m_pageControl,0,Qt::AlignHCenter); // 分页控件
+    layoutMain->addWidget(m_appListArea,0,Qt::AlignHCenter);
+    layoutMain->addWidget(m_pageControl,0,Qt::AlignHCenter);
 
     setLayout(layoutMain);
 }

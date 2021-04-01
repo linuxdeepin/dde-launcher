@@ -55,7 +55,7 @@ private:
 
 private:
     CalculateUtil *m_calcUtil;
-    QPixmap m_blueDotPixmap; // 新安装的app样式
+    QPixmap m_blueDotPixmap;   // 新安装的app样式
     QPixmap m_autoStartPixmap; // 自启动的app样式
 
     static QModelIndex CurrentIndex;

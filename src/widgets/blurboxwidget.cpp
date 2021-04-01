@@ -131,9 +131,9 @@ void BlurBoxWidget::setMaskSize(QSize size)
     m_blurBackground->setFixedSize(size);
 }
 
-/** 单个类别分类中的视图设置代理
- * @brief BlurBoxWidget::setDataDelegate
- * @param delegate
+/**
+ * @brief BlurBoxWidget::setDataDelegate 应用分类下视图设置代理
+ * @param delegate 视图代理
  */
 void BlurBoxWidget::setDataDelegate(QAbstractItemDelegate *delegate)
 {

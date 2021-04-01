@@ -72,11 +72,11 @@ const QPixmap loadSvg(const QString &fileName, const int size)
     return pixmap;
 }
 
-/** 根据实体屏幕像素特征渲染图片
- * @brief renderSVG
- * @param path
- * @param size
- * @return
+/**
+ * @brief renderSVG 根据实体屏幕渲染指定路径、指定大小的图片
+ * @param path 渲染图片的路径
+ * @param size 渲染图片的大小
+ * @return 返回渲染后的pixmap
  */
 const QPixmap renderSVG(const QString &path, const QSize &size) {
     QImageReader reader;
@@ -108,12 +108,13 @@ const QPixmap loadSvg(const QString &fileName, const QSize &size)
 
     return pixmap;
 }
+
 /**
  * @brief SettingsPtr 根据给定信息返回一个QGSettings指针
  * @param schema_id The id of the schema
  * @param path If non-empty, specifies the path for a relocatable schema
  * @param parent 创建指针的付对象
- * @return
+ * @return 返回QGSetting 指针对象
  */
 QGSettings *SettingsPtr(const QString &schema_id, const QByteArray &path, QObject *parent) {
     if (QGSettings::isSchemaInstalled(schema_id.toUtf8())) {

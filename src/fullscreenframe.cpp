@@ -63,6 +63,11 @@ const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w)
     return offset;
 }
 
+/**
+ * @brief FullScreenFrame::FullScreenFrame
+ * 全屏模式下的界面类
+ * @param parent
+ */
 FullScreenFrame::FullScreenFrame(QWidget *parent) :
     BoxFrame(parent),
     m_menuWorker(new MenuWorker),
@@ -356,9 +361,10 @@ void FullScreenFrame::scrollCurrent()
     m_animationGroup->start();
 }
 
-/** 处理全屏模式下视图中的鼠标事件
+/** 
  * @brief FullScreenFrame::addViewEvent
- * @param pView
+ * 处理全屏模式下视图中的鼠标事件
+  * @param pView 当前列表视图
  */
 void FullScreenFrame::addViewEvent(AppGridView *pView)
 {
@@ -870,10 +876,11 @@ MultiPagesView *FullScreenFrame::getCategoryGridViewList(const AppsListModel::Ap
     return widget->getMultiPagesView();
 }
 
-/** 获取单个分类应用控件 BlurBoxWidget
+/**
  * @brief FullScreenFrame::getCategoryBoxWidget
- * @param category
- * @return
+ * 获取当前分类应用对应的控件
+ * @param category 应用分类类型
+ * @return 分类控件
  */
 BlurBoxWidget *FullScreenFrame::getCategoryBoxWidget(const AppsListModel::AppCategory category) const
 {
@@ -1647,10 +1654,11 @@ AppsListModel::AppCategory FullScreenFrame::nextCategoryType(const AppsListModel
     return nextCategory;
 }
 
-/** 若当前分类下app数为0,，则自动显示上一个分类app
+/**
  * @brief FullScreenFrame::prevCategoryType
- * @param category
- * @return
+ * 若当前分类下app数为0,，则自动显示上一个分类app
+ * @param category 当前分类类型
+ * @return 应用分类类型
  */
 AppsListModel::AppCategory FullScreenFrame::prevCategoryType(const AppsListModel::AppCategory category)
 {

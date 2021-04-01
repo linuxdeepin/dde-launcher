@@ -214,10 +214,10 @@ void AppsListModel::setCategory(const AppsListModel::AppCategory category)
     emit QAbstractListModel::layoutChanged();
 }
 
-///
-/// \brief AppsListModel::setDraggingIndex mark current item as dragging item
-/// \param index item index
-///
+/**
+ * @brief AppsListModel::setDraggingIndex 保存当前拖动的item对应的模型索引
+ * @param index 拖动的item对应的模型索引
+ */
 void AppsListModel::setDraggingIndex(const QModelIndex &index)
 {
     m_dragStartIndex = index;
@@ -243,6 +243,12 @@ void AppsListModel::setDragDropIndex(const QModelIndex &index)
 /// \param appKey item token in stash list
 /// \param pos insert position, if pos is negetive, insert into front
 ///
+///
+/**
+ * @brief AppsListModel::dropInsert 插入拖拽后的item
+ * @param appKey item应用对应的key值
+ * @param pos item 拖拽释放后所在的行数
+ */
 void AppsListModel::dropInsert(const QString &appKey, const int pos)
 {
     beginInsertRows(QModelIndex(), pos, pos);
@@ -251,10 +257,10 @@ void AppsListModel::dropInsert(const QString &appKey, const int pos)
     endInsertRows();
 }
 
-///
-/// \brief AppsListModel::dropSwap drop m_draingIndex to nextPos
-/// \param nextPos m_draggingIndex insert position
-///
+/**
+ * @brief AppsListModel::dropSwap 拖拽释放后删除被拖拽的item，插入移动到新位置的item
+ * @param nextPos 拖拽释放后的位置
+ */
 void AppsListModel::dropSwap(const int nextPos)
 {
     if (!m_dragStartIndex.isValid())
@@ -270,9 +276,10 @@ void AppsListModel::dropSwap(const int nextPos)
     m_dragStartIndex = m_dragDropIndex = index(nextPos);
 }
 
-///
-/// \brief AppsListModel::clearDraggingIndex reset dragging item record
-///
+/**
+ * @brief AppsListModel::clearDraggingIndex
+ * 重置拖拽过程中的模型索引并触发更新列表数据信号
+ */
 void AppsListModel::clearDraggingIndex()
 {
     const QModelIndex startIndex = m_dragStartIndex;
@@ -283,6 +290,13 @@ void AppsListModel::clearDraggingIndex()
     emit QAbstractItemModel::dataChanged(startIndex, endIndex);
 }
 
+
+/**
+ * @brief AppsListModel::rowCount
+ * 全屏时返回当前页面item的个数
+ * @param parent 父节点模式索引
+ * @return 返回当前页面item的个数
+ */
 int AppsListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
@@ -299,6 +313,11 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
     return qMin(pageCount, nPageCount);
 }
 
+/**
+ * @brief AppsListModel::indexAt 根据appkey值返回app所在的模型索引
+ * @param appKey app key
+ * @return 根据appkey值,返回app对应的模型索引
+ */
 const QModelIndex AppsListModel::indexAt(const QString &appKey) const
 {
     int i = 0;
@@ -321,6 +340,13 @@ void AppsListModel::setDrawBackground(bool draw)
     emit QAbstractItemModel::dataChanged(QModelIndex(), QModelIndex());
 }
 
+/**
+ * @brief AppsListModel::removeRows 从模式中移除1个item
+ * @param row item所在的行
+ * @param count 移除的item个数
+ * @param parent 父节点的模型索引
+ * @return 返回移除状态标识
+ */
 bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     Q_UNUSED(row)
@@ -337,6 +363,15 @@ bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
+/**
+ * @brief AppsListModel::canDropMimeData 在搜索模式和无效的拖动模式下item不支持拖拽
+ * @param data 当前拖拽的item的mime类型数据
+ * @param action 拖拽实现的动作
+ * @param row 当前拖拽的item所在行
+ * @param column 当前拖拽的item所在列
+ * @param parent 当前拖拽的item父节点模型索引
+ * @return 返回是否item是否支持拖动的标识
+ */
 bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const
 {
     Q_UNUSED(action)
@@ -356,6 +391,11 @@ bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action
     return true;
 }
 
+/**
+ * @brief AppsListModel::mimeData 给拖动的item设置mine类型数据
+ * @param indexes 拖动的item对应的模型索引
+ * @return 返回拖动的item的mine类型数据
+ */
 QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
 {
     // only allow drag 1 item
@@ -374,6 +414,12 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
     return mime;
 }
 
+/**
+ * @brief AppsListModel::data 获取给定模型索引和数据角色的item数据
+ * @param index item对应的模型索引
+ * @param role item对应的数据角色
+ * @return 返回item相关的数据
+ */
 QVariant AppsListModel::data(const QModelIndex &index, int role) const
 {
     int nSize = m_appsManager->appsInfoListSize(m_category);
@@ -475,6 +521,11 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+/**
+ * @brief AppsListModel::flags 获取给定模型索引的item的属性
+ * @param index item对应的模型索引
+ * @return 返回模型索引对应的item的属性信息
+ */
 Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const
 {
     const Qt::ItemFlags defaultFlags = QAbstractListModel::flags(index);
@@ -506,6 +557,11 @@ void AppsListModel::layoutChanged(const AppsListModel::AppCategory category)
         emit QAbstractItemModel::dataChanged(QModelIndex(), QModelIndex());
 }
 
+/**
+ * @brief AppsListModel::indexDragging 区分无效拖动和有效拖动
+ * @param index 拖动的item对应的模型索引
+ * @return 返回item拖动有效性的标识
+ */
 bool AppsListModel::indexDragging(const QModelIndex &index) const
 {
     if (!m_dragStartIndex.isValid() || !m_dragDropIndex.isValid())
@@ -519,6 +575,10 @@ bool AppsListModel::indexDragging(const QModelIndex &index) const
             (start >= end && current <= start && current >= end);
 }
 
+/**
+ * @brief AppsListModel::itemDataChanged item数据变化时触发模型内部信号
+ * @param info 数据发生变化的item信息
+ */
 void AppsListModel::itemDataChanged(const ItemInfo &info)
 {
     int i = 0;

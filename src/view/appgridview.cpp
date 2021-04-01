@@ -46,8 +46,9 @@ QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
 bool AppGridView::m_longPressed = false;
 Gesture *AppGridView::m_gestureInter = nullptr;
 
-/** 全屏模式下 单个应用分类的视图列表或者所有应用的视图列表
+/**
  * @brief AppGridView::AppGridView
+ * 全屏模式下 单个应用分类的视图列表或者所有应用的视图列表
  * @param parent
  */
 AppGridView::AppGridView(QWidget *parent)
@@ -125,11 +126,11 @@ const QModelIndex AppGridView::indexAt(const int index) const
     return model()->index(index, 0, QModelIndex());
 }
 
-///
-/// \brief AppListView::indexYOffset return item Y offset of current view
-/// \param index item index
-/// \return pixel of Y offset
-///
+/**
+ * @brief AppGridView::indexYOffset
+ * @param index item index
+ * @return item Y offset of current view
+ */
 int AppGridView::indexYOffset(const QModelIndex &index) const
 {
     return indexRect(index).y();
@@ -176,7 +177,7 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
         if (clickedIndex.isValid() && !m_moveGridView) {
             QPoint rightClickPoint = QCursor::pos();
-            //触控屏右键
+            // 触控屏右键
             if (e->source() == Qt::MouseEventSynthesizedByQt) {
                 AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
                 QPoint indexPoint = mapToGlobal(indexRect(clickedIndex).center());
@@ -312,7 +313,7 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
     if (e->buttons() != Qt::LeftButton)
         return;
 
-    //当点击的位置在图标上就不把消息往下传(listview 滚动效果)
+    // 当点击的位置在图标上就不把消息往下传(listview 滚动效果)
     if (!idx.isValid() && m_pDelegate && !m_longPressed)
         m_pDelegate->mouseMove(e);
 
@@ -324,7 +325,7 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
     if (qAbs(e->x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
             qAbs(e->y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
         m_moveGridView = true;
-        //开始拖拽后,导致fullscreenframe只收到mousePress事件,收不到mouseRelease事件,需要处理一下异常
+        // 开始拖拽后,导致fullscreenframe只收到mousePress事件,收不到mouseRelease事件,需要处理一下异常
         if (idx.isValid())
             emit requestMouseRelease();
         return startDrag(QListView::indexAt(m_dragStartPos));
@@ -442,7 +443,7 @@ void AppGridView::startDrag(const QModelIndex &index)
     // disable animation when finally dropped
     m_dropThresholdTimer->stop();
 
-    //send to next page
+    // send to next page
     emit dragEnd();
 
 
@@ -467,9 +468,10 @@ bool AppGridView::eventFilter(QObject *o, QEvent *e)
     return false;
 }
 
-///
-/// \brief AppListView::fitToContent change view size to fit viewport content
-///
+/**
+ * @brief AppGridView::fitToContent
+ * change view size to fit viewport content
+ */
 void AppGridView::fitToContent()
 {
     const QSize size { contentsRect().width(), contentsSize().height() };
@@ -479,13 +481,18 @@ void AppGridView::fitToContent()
     setFixedSize(size);
 }
 
+/**
+ * @brief AppGridView::prepareDropSwap 创建移动item的动画
+ */
 void AppGridView::prepareDropSwap()
 {
     if (m_lastFakeAni || m_dropThresholdTimer->isActive() || !m_enableAnimation)
         return;
+
     const QModelIndex dropIndex = indexAt(m_dropToPos);
     if (!dropIndex.isValid())
         return;
+
     const QModelIndex dragStartIndex = indexAt(m_dragStartPos);
     if (dragStartIndex == dropIndex)
         return;
@@ -520,6 +527,12 @@ void AppGridView::prepareDropSwap()
     m_dragStartPos = indexRect(dropIndex).center();
 }
 
+/**
+ * @brief AppGridView::createFakeAnimation 创建列表中item移动的动画效果
+ * @param pos 需要移动的item当前所在的行数
+ * @param moveNext item是否移动的标识
+ * @param isLastAni 是最后的那个item移动的动画标识
+ */
 void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni)
 {
     const QModelIndex index(indexAt(pos));
@@ -560,9 +573,10 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     ani->start(QPropertyAnimation::DeleteWhenStopped);
 }
 
-///
-/// \brief AppListView::dropSwap swap current item and drag out item
-///
+/**
+ * @brief AppGridView::dropSwap
+ * 删除拖动前item所在位置的item，插入拖拽的item到新位置
+ */
 void AppGridView::dropSwap()
 {
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());

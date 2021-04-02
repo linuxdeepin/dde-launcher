@@ -12,12 +12,15 @@ class Tst_Minicategorywidget : public testing::Test
 public:
     void SetUp() override
     {
-        m_miniCategoryWidget = new MiniCategoryWidget();
+        m_miniCategoryWidget = new MiniCategoryWidget;
     }
 
     void TearDown() override
     {
-
+        if (m_miniCategoryWidget) {
+            delete m_miniCategoryWidget;
+            m_miniCategoryWidget = nullptr;
+        }
     }
 
 public:

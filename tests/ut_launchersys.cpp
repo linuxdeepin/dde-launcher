@@ -14,7 +14,10 @@ public:
 
     void TearDown() override
     {
-
+        if (m_launcherSys) {
+            delete m_launcherSys;
+            m_launcherSys = nullptr;
+        }
     }
 
 public:

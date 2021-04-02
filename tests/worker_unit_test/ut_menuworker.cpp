@@ -17,8 +17,10 @@ public:
 
     void TearDown() override
     {
-        delete obj;
-        obj = nullptr;
+        if (obj) {
+            delete obj;
+            obj = nullptr;
+        }
     }
 
 public:

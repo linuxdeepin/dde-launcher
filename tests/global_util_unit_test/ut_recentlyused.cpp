@@ -14,7 +14,10 @@ public:
 
     void TearDown() override
     {
-
+        if (m_recentlyUsed) {
+            delete m_recentlyUsed;
+            m_recentlyUsed = nullptr;
+        }
     }
 
 public:

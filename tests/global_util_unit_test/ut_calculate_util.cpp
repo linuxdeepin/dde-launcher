@@ -20,17 +20,16 @@ public:
 
     void TearDown() override
     {
-
+        if (m_calculate) {
+            delete m_calculate;
+            m_calculate = nullptr;
+        }
     }
 
 public:
     CalculateUtil* m_calculate;
 };
 
-TEST_F(Tst_calculate, calculate)
-{
-
-}
 TEST_F(Tst_calculate, calendarSelectIcon_test)
 {
     QStringList iconList = m_calculate->calendarSelectIcon();

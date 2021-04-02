@@ -15,7 +15,15 @@ public:
 
     void TearDown() override
     {
+        if (m_userButton) {
+            delete m_userButton;
+            m_userButton = nullptr;
+        }
 
+        if (m_miniFrameNavigation) {
+            delete m_miniFrameNavigation;
+            m_miniFrameNavigation = nullptr;
+        }
     }
 
 public:

@@ -14,8 +14,10 @@ public:
 
     void TearDown() override
     {
-        delete m_windowedframe;
-        m_windowedframe = nullptr;
+        if (m_windowedframe) {
+            delete m_windowedframe;
+            m_windowedframe = nullptr;
+        }
     }
 
 public:

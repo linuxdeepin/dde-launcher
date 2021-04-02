@@ -14,8 +14,10 @@ public:
 
     void TearDown() override
     {
-        delete m_searchLineEdit;
-        m_searchLineEdit = nullptr;
+        if (m_searchLineEdit) {
+            delete m_searchLineEdit;
+            m_searchLineEdit = nullptr;
+        }
     }
 
 public:

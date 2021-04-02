@@ -67,17 +67,17 @@ private:
     void unRegisterRegion();
 
 private:
-    LauncherInterface *m_launcherInter;
-    DBusLauncher *m_dbusLauncherInter;
-    com::deepin::SessionManager *m_sessionManagerInter;
+    LauncherInterface *m_launcherInter;                     // 启动器界面处理基类
+    DBusLauncher *m_dbusLauncherInter;                      // dbus访问远程服务类 数据初始化
+    com::deepin::SessionManager *m_sessionManagerInter;     // dbus访问远程服务类 业务逻辑处理
 
-    WindowedFrame *m_windowLauncher;
-    FullScreenFrame *m_fullLauncher;
-    DRegionMonitor *m_regionMonitor;                 // deepin tool kit中core模块的内容
+    WindowedFrame *m_windowLauncher;                        // 启动器小窗口界面处理类
+    FullScreenFrame *m_fullLauncher;                        // 启动器全屏界面处理类
+    DRegionMonitor *m_regionMonitor;                        // deepin tool kit中core模块的内容
     QTimer *m_autoExitTimer;
-    QTimer *m_ignoreRepeatVisibleChangeTimer;        // 添加200ms延时操作，避开重复显示、隐藏启动器
-    QMetaObject::Connection m_regionMonitorConnect;  // 信号和槽连接返回的对象
-    CalculateUtil* m_calcUtil;
+    QTimer *m_ignoreRepeatVisibleChangeTimer;               // 添加200ms延时操作，避开重复显示、隐藏启动器
+    QMetaObject::Connection m_regionMonitorConnect;         // 信号和槽连接返回的对象
+    CalculateUtil* m_calcUtil;                              // 界面布局计算处理类
 };
 
 #endif // LAUNCHERSYS_H

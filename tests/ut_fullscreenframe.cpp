@@ -16,8 +16,10 @@ public:
 
     void TearDown() override
     {
-        delete m_fullScreenFrame;
-        m_fullScreenFrame = nullptr;
+        if (m_fullScreenFrame) {
+            delete m_fullScreenFrame;
+            m_fullScreenFrame = nullptr;
+        }
     }
 
 public:

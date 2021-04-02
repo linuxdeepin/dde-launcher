@@ -2,9 +2,10 @@
 
 #include <QApplication>
 #include <QWheelEvent>
+#include <QSignalSpy>
+#include <QTest>
 
 #include "avatar.h"
-
 
 class Tst_Avatar : public testing::Test
 {
@@ -16,8 +17,10 @@ public:
 
     void TearDown() override
     {
-        widget = nullptr;
-        delete widget;
+        if (widget) {
+            delete widget;
+            widget = nullptr;
+        }
     }
 
 public:
@@ -26,10 +29,15 @@ public:
 
 TEST_F(Tst_Avatar, avatar_test)
 {
-    QMouseEvent event(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
+    QMouseEvent event(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     QApplication::sendEvent(widget, &event);
 
-    QPaintEvent event1(QRect(10, 10, 10, 10));
+    QTest::qWait(10);
+
+    QSignalSpy spy(widget, SIGNAL(clicked()));
+    QCOMPARE(spy.count(), 1);
+
+    QPaintEvent event1(QRect(0, 0, 32, 32));
     QApplication::sendEvent(widget, &event1);
 }
 

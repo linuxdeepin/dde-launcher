@@ -17,8 +17,10 @@ public:
 
     void TearDown() override
     {
-        widget = nullptr;
-        delete widget;
+        if (widget) {
+            delete widget;
+            widget = nullptr;
+        }
     }
 
 public:

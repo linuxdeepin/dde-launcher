@@ -29,7 +29,6 @@ public:
 
 TEST_F(Tst_Miniframebutton, miniFrameButton_test)
 {
-
     QEvent event(QEvent::Enter);
     QApplication::sendEvent(widget, &event);
 

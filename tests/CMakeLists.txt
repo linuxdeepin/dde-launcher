@@ -10,8 +10,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -lgcov")
 
 # 源文件
-file(GLOB_RECURSE SRCS "*.h" "*.cpp" "/widget_unit_test/*.cpp" "/view_unit_test/*.cpp" "/worker_unit_test/*.cpp" "/global_util_unit_test/*cpp" "/boxfram_unit_test/*.cpp" test_res.qrc ${CMAKE_CURRENT_SOURCE_DIR}/../src/skin.qrc)
-
+file(GLOB_RECURSE SRCS "*.h" "*.cpp" "/widget_unit_test/*.cpp" "/view_unit_test/*.cpp" "/worker_unit_test/*.cpp" "/global_util_unit_test/*cpp" "/boxfram_unit_test/*.cpp" "/dbusinterface_unit_test/*.cpp" test_res.qrc ${CMAKE_CURRENT_SOURCE_DIR}/../src/skin.qrc)
 # 查找依赖库
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
@@ -20,6 +19,7 @@ find_package(Qt5X11Extras REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(Qt5Svg REQUIRED)
+#QTest 依赖库
 find_package(Qt5 COMPONENTS Test REQUIRED)
 find_package(GTest REQUIRED)
 

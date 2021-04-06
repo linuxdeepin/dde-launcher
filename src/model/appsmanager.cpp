@@ -1087,6 +1087,14 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
         for (auto &item : m_allAppInfoList) {
             if (item == appInfo) {
                 item.updateInfo(appInfo);
+
+                for (QList<ItemInfo>::iterator it = m_userSortedList.begin(); it != m_userSortedList.end();) {
+                    if (*it == appInfo)
+                        it->updateInfo(appInfo);
+
+                    it++;
+                }
+
                 break;
             }
         }

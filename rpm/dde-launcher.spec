@@ -1,7 +1,7 @@
 %global sname dde-launcher
 
 Name:           dde-launcher
-Version:        5.4.8
+Version:        5.4.7.2
 Release:        1
 Summary:        dde desktop-environment - Launcher module
 License:        GPLv3
@@ -62,5 +62,5 @@ sed -i 's|lrelease|lrelease-qt5|' translate_generation.sh
 %{_includedir}/%{name}/
 
 %changelog
-* Tue Apr 6 2021 uoser <uoser@uniontech.com> - 5.4.8-1
-- Update to 5.4.8
+* Tue Apr 6 2021 uoser <uoser@uniontech.com> - 5.4.7.1-1
+- Update to 5.4.7.2

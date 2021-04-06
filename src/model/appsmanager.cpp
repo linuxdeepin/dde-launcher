@@ -775,7 +775,7 @@ void AppsManager::refreshUserInfoList()
         }
     }
 
-    //从启动器小屏应用列表移除被限制使用的应用
+    // 从启动器小屏应用列表移除被限制使用的应用
     QStringList filters;
     if (m_filterSetting != nullptr) {
         filters = m_filterSetting->get("filter-keys").toStringList();

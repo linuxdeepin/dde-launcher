@@ -27,6 +27,11 @@
 
 DGUI_USE_NAMESPACE
 
+/**
+ * @brief MiniFrameSwitchBtn::MiniFrameSwitchBtn
+ * 小窗口模式下 底部所有分类和返回按钮相关的控件
+ * @param parent
+ */
 MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     : QWidget(parent)
     , m_textLabel(new QLabel)

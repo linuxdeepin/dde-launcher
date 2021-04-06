@@ -74,6 +74,7 @@ AppListView::AppListView(QWidget *parent)
     setDragDropMode(QAbstractItemView::DragDrop);
     setMovement(QListView::Free);
     setDragEnabled(true);
+    setDropIndicatorShown(false);// 解决拖拽释放前有小黑点出现的问题
 
     // init drop threshold timer.
     m_dropThresholdTimer->setInterval(DLauncher::APP_DRAG_SWAP_THRESHOLD);

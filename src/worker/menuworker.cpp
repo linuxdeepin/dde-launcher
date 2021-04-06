@@ -177,6 +177,7 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
 }
 
 void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
+
     setCurrentModelIndex(index);
 
     QMenu *menu = new QMenu;

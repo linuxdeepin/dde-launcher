@@ -71,6 +71,11 @@ inline const QPoint scaledPosition(const QPoint &xpos)
     return g.topLeft() + (xpos - g.topLeft()) / ratio;
 }
 
+/**
+ * @brief WindowedFrame::WindowedFrame
+ * 启动器小窗口模式下 界面处理类
+ * @param parent
+ */
 WindowedFrame::WindowedFrame(QWidget *parent)
     : DBlurEffectWidget(parent)
     , m_dockInter(new DBusDock(this))

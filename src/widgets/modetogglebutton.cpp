@@ -29,6 +29,11 @@
 DGUI_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
+/**
+ * @brief ModeToggleButton::ModeToggleButton
+ * 启动器小窗口和全屏窗口切换控件
+ * @param parent
+ */
 ModeToggleButton::ModeToggleButton(QWidget *parent)
     : DToolButton(parent)
 {

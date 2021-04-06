@@ -142,13 +142,13 @@ private:
     QWidget *m_maskBg;
     AppsManager *m_appsManager;
     AppListView *m_appsView;
-    AppsListModel *m_appsModel;          // 小窗口列表
+    AppsListModel *m_appsModel;          // 应用列表
     AppsListModel *m_usedModel;
-    AppsListModel *m_searchModel;        // 小窗口搜索后的列表
+    AppsListModel *m_searchModel;        // 搜索后的应用列表
 
     QWidget *m_rightWidget;
     MiniFrameRightBar *m_leftBar;        // 左侧分类按钮组
-    MiniFrameSwitchBtn *m_switchBtn;
+    MiniFrameSwitchBtn *m_switchBtn;     // 底部所有分类和返回切换控件
     QLabel *m_tipsLabel;
     QTimer *m_delayHideTimer;
     QTimer *m_autoScrollTimer;
@@ -161,8 +161,8 @@ private:
     AnchoredCornor m_anchoredCornor = Normal;
     QPainterPath m_cornerPath;
     FocusPosition m_focusPos;
-    ModeToggleButton *m_modeToggleBtn;
-    DSearchEdit *m_searcherEdit;
+    ModeToggleButton *m_modeToggleBtn;   // 小窗口右上角窗口模式切换按钮
+    DSearchEdit *m_searcherEdit;         // 搜索控件
     bool m_enterSearchEdit;
 };
 

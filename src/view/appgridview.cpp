@@ -77,6 +77,7 @@ AppGridView::AppGridView(QWidget *parent)
     setWrapping(true);
     setFocusPolicy(Qt::NoFocus);
     setDragDropMode(QAbstractItemView::DragDrop);
+    setDropIndicatorShown(false);// 解决拖拽释放前有小黑点出现的问题
     setMovement(QListView::Free);
     setFlow(QListView::LeftToRight);
     setLayoutMode(QListView::Batched);

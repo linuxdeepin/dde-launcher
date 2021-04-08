@@ -41,6 +41,9 @@
 DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
+static QString ChainsProxy_path = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first()
+        + "/deepin/proxychains.conf";
+
 static QMap<int, AppsListModel::AppCategory> CateGoryMap {
     { 0,  AppsListModel::Internet    },
     { 1,  AppsListModel::Chat        },
@@ -54,7 +57,6 @@ static QMap<int, AppsListModel::AppCategory> CateGoryMap {
     { 9,  AppsListModel::System      },
     { 10, AppsListModel::Others      }
 };
-
 
 static QGSettings *gSetting = SettingsPtr("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
 
@@ -506,7 +508,10 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppHideUninstallRole:
         return (m_actionSettings && !m_actionSettings->get("uninstall").toBool()) || m_hideUninstallPackages.contains(itemInfo.m_key);
     case AppHideUseProxyRole:
-        return (m_actionSettings && !m_actionSettings->get("use-proxy").toBool()) || m_hideUseProxyPackages.contains(itemInfo.m_key);
+    {
+        bool hideUse = ((m_actionSettings && !m_actionSettings->get("use-proxy").toBool()) || m_hideUseProxyPackages.contains(itemInfo.m_key));
+        return DSysInfo::isCommunityEdition() ? hideUse : (QFile::exists(ChainsProxy_path) && !hideUse);
+    }
     case AppCanOpenRole:
         return !m_cantOpenPackages.contains(itemInfo.m_key);
     case AppCanSendToDesktopRole:

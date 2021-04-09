@@ -510,7 +510,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppHideUseProxyRole:
     {
         bool hideUse = ((m_actionSettings && !m_actionSettings->get("use-proxy").toBool()) || m_hideUseProxyPackages.contains(itemInfo.m_key));
-        return DSysInfo::isCommunityEdition() ? hideUse : (QFile::exists(ChainsProxy_path) && !hideUse);
+        return DSysInfo::isCommunityEdition() ? hideUse : (!QFile::exists(ChainsProxy_path) || hideUse);
     }
     case AppCanOpenRole:
         return !m_cantOpenPackages.contains(itemInfo.m_key);

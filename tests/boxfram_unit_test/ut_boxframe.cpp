@@ -13,30 +13,32 @@ class Tst_Boxframe : public testing::Test
 public:
     void SetUp() override
     {
-        std::shared_ptr<BoxFrame> frame(new BoxFrame);
-        m_frame = frame;
+        m_frame = new BoxFrame;
+        m_bgManager = new BackgroundManager(m_frame);
         m_frame->setBackground("");
         m_frame->setBlurBackground("");
-
-        std::shared_ptr<BackgroundManager> bgManager(new BackgroundManager);
-        m_bgManager = bgManager;
     }
 
     void TearDown() override
     {
+        if (m_frame) {
+            delete  m_frame;
+            m_frame = nullptr;
+        }
     }
 
 public:
-    std::shared_ptr<BoxFrame> m_frame;
-    std::shared_ptr<BackgroundManager> m_bgManager;
+    BoxFrame *m_frame;
+    BackgroundManager *m_bgManager;
 };
+
 
 TEST_F(Tst_Boxframe, frame)
 {
     QMoveEvent event(QPoint(0, 0), QPoint(0, 1));
-    QApplication::sendEvent(m_frame.get(), &event);
+    QApplication::sendEvent(m_frame, &event);
 
     QPaintEvent event1(QRect(QPoint(0, 0), QPoint(0, 1)));
-    QApplication::sendEvent(m_frame.get(), &event1);
+    QApplication::sendEvent(m_frame, &event1);
 }
 

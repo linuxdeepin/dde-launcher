@@ -33,6 +33,9 @@
 
 QString getQssFromFile(QString filename)
 {
+    if (!QFileInfo::exists(filename))
+        return QString();
+
     QFile f(filename);
     QString qss = "";
     if (f.open(QFile::ReadOnly))
@@ -43,25 +46,27 @@ QString getQssFromFile(QString filename)
     return qss;
 }
 
-QString joinPath(const QString& path, const QString& fileName){
+QString joinPath(const QString& path, const QString& fileName)
+{
     QString separator(QDir::separator());
     return QString("%1%2%3").arg(path, separator, fileName);
 }
 
-QString getThumbnailsPath(){
+QString getThumbnailsPath()
+{
     QString cachePath = QStandardPaths::standardLocations(QStandardPaths::CacheLocation).at(0);
     QString thumbnailPath = joinPath(cachePath, "thumbnails");
     if (!QDir(thumbnailPath).exists()){
         QDir(thumbnailPath).mkpath(thumbnailPath);
     }
+
     return thumbnailPath;
 }
 
 const QPixmap loadSvg(const QString &fileName, const int size)
 {
-    if (!QFileInfo::exists(fileName)) {
+    if (!QFileInfo::exists(fileName))
         return QPixmap();
-    }
 
     QPixmap pixmap(size, size);
     QSvgRenderer renderer(fileName);
@@ -82,7 +87,11 @@ const QPixmap loadSvg(const QString &fileName, const int size)
  * @param size 渲染图片的大小
  * @return 返回渲染后的pixmap
  */
-const QPixmap renderSVG(const QString &path, const QSize &size) {
+const QPixmap renderSVG(const QString &path, const QSize &size)
+{
+    if (!QFileInfo::exists(path))
+        return QPixmap();
+
     QImageReader reader;
     QPixmap pixmap;
     reader.setFileName(path);
@@ -101,6 +110,9 @@ const QPixmap renderSVG(const QString &path, const QSize &size) {
 
 const QPixmap loadSvg(const QString &fileName, const QSize &size)
 {
+    if (!QFileInfo::exists(fileName))
+         return QPixmap();
+
     QPixmap pixmap(size);
     QSvgRenderer renderer(fileName);
     pixmap.fill(Qt::transparent);
@@ -120,7 +132,8 @@ const QPixmap loadSvg(const QString &fileName, const QSize &size)
  * @param parent 创建指针的付对象
  * @return 返回QGSetting指针对象
  */
-QGSettings *SettingsPtr(const QString &schema_id, const QByteArray &path, QObject *parent) {
+QGSettings *SettingsPtr(const QString &schema_id, const QByteArray &path, QObject *parent)
+{
     if (QGSettings::isSchemaInstalled(schema_id.toUtf8())) {
         QGSettings *settings = new QGSettings(schema_id.toUtf8(), path, parent);
         return settings;
@@ -136,7 +149,8 @@ QGSettings *SettingsPtr(const QString &schema_id, const QByteArray &path, QObjec
  * @param parent 创建指针的付对象
  * @return
  */
-QGSettings *ModuleSettingsPtr(const QString &module, const QByteArray &path, QObject *parent) {
+QGSettings *ModuleSettingsPtr(const QString &module, const QByteArray &path, QObject *parent)
+{
     return SettingsPtr("com.deepin.dde.dock.module." + module, path, parent);
 }
 
@@ -172,14 +186,15 @@ QString qtify_name(const char *name)
  * @param fallback 如果找不到信息，返回此默认值
  * @return
  */
-QVariant SettingValue(const QString &schema_id, const QByteArray &path, const QString &key, const QVariant &fallback) {
+QVariant SettingValue(const QString &schema_id, const QByteArray &path, const QString &key, const QVariant &fallback)
+{
     const QGSettings *settings = SettingsPtr(schema_id, path);
 
     if (settings && ((settings->keys().contains(key)) || settings->keys().contains(qtify_name(key.toUtf8().data())))) {
         QVariant v = settings->get(key);
         delete settings;
         return v;
-    } else{
+    } else {
         qDebug() << "Cannot find gsettings, schema_id:" << schema_id
                  << " path:" << path << " key:" << key
                  << "Use fallback value:" << fallback;

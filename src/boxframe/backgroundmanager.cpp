@@ -80,6 +80,8 @@ void BackgroundManager::getImageDataFromDbus(const QString &filePath)
         blurReply.waitForFinished();
         if (blurReply.value() != "")
         {
+            if (!m_imageEffectInter)
+                return QString();
             QDBusPendingReply<QString> effectInterReply = m_imageEffectInter->Get("", blurReply.value());
             effectInterReply.waitForFinished();
             if (effectInterReply.isError()) {
@@ -122,10 +124,10 @@ void BackgroundManager::updateBlurBackgrounds()
         QDesktopWidget *desktopwidget = QApplication::desktop();
         int screenIndex = desktopwidget->screenNumber(parentWidget);
         QList<QScreen *> screens = qApp->screens();
-        screenName = screens[screenIndex]->name();
-    }
 
-    qDebug() << "current screen name:" << screenName;
+        if (screenIndex != -1)
+            screenName = screens[screenIndex]->name();
+    }
 
     QString path = getLocalFile(m_wmInter->GetCurrentWorkspaceBackgroundForMonitor(screenName));
     QString filePath = QFile::exists(path) ? path : DefaultWallpaper;

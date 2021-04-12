@@ -68,8 +68,8 @@ private:
     mutable QString m_background;
 
     com::deepin::wm *m_wmInter;
-    ImageEffectInter *m_imageEffectInter;
-    ImageEffeblur      *m_imageblur;
+    QPointer<ImageEffectInter> m_imageEffectInter;
+    ImageEffeblur *m_imageblur;
     AppearanceInter *m_appearanceInter;
     DisplayInter *m_displayInter;
     int m_displayMode;

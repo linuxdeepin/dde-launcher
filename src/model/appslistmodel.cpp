@@ -33,6 +33,7 @@
 #include <QPixmap>
 #include <QSettings>
 #include <QGSettings>
+#include <QVariant>
 
 #include <DHiDPIHelper>
 #include <DGuiApplicationHelper>
@@ -240,12 +241,6 @@ void AppsListModel::setDragDropIndex(const QModelIndex &index)
     emit QAbstractListModel::dataChanged(m_dragStartIndex, index);
 }
 
-///
-/// \brief AppsListModel::dropInsert restore item from appsManager stash list
-/// \param appKey item token in stash list
-/// \param pos insert position, if pos is negetive, insert into front
-///
-///
 /**
  * @brief AppsListModel::dropInsert 插入拖拽后的item
  * @param appKey item应用对应的key值

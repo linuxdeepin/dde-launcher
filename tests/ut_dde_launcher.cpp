@@ -191,11 +191,9 @@ TEST_F(LauncherUnitTest, testMenuManagerDBus)
     QVERIFY(menuManagerInterface.isValid());
 }
 
-
 TEST_F(LauncherUnitTest, CalculateUtil)
 {
     auto m_calculateUtil = CalculateUtil::instance();
-
     m_calculateUtil->getAppBoxSize();
     m_calculateUtil->setFullScreen(false);
     m_calculateUtil->setDisplayMode(1);
@@ -206,8 +204,8 @@ TEST_F(LauncherUnitTest, CalculateUtil)
  */
 TEST_F(LauncherUnitTest, testStartManagerDBus)
 {
-        DBusStartManager startManagerInterface(this);
-        QVERIFY(startManagerInterface.isValid());
+    DBusStartManager startManagerInterface(this);
+    QVERIFY(startManagerInterface.isValid());
 }
 
 /**
@@ -266,6 +264,8 @@ TEST_F(LauncherUnitTest, testMonitorInterface)
 TEST_F(LauncherUnitTest, testDockPos)
 {
     DBusDock dockInterface(this);
+    QVERIFY(dockInterface.isValid());
+
     QRect r = dockInterface.frontendRect();
     qDebug() << "frontendRect:" << r;
     //时尚模式
@@ -321,13 +321,15 @@ TEST_F(LauncherUnitTest, testLauncher)
     });
 }
 
-/**
+/** 
  * @brief LauncherUnitTest::checkSendToDesktop
  * 测试发送到桌面是否正常显示
  */
 TEST_F(LauncherUnitTest, checkSendToDesktop)
 {
     DBusLauncher launcher(this);
+    QVERIFY(launcher.isValid());
+
     QString appName = "deepin-music";
     launcher.RequestSendToDesktop(appName);
     QTest::qWait(50);
@@ -339,7 +341,7 @@ TEST_F(LauncherUnitTest, checkSendToDesktop)
     QCOMPARE(value, false);
 }
 
-/**
+/** 
  * @brief LauncherUnitTest::check_gsettings_default
  * 验证启动器的默认配置值是否正确，后续如果还有类似验证，应一并放到这里
  * 1.图标默认大小比例为0.5
@@ -377,6 +379,7 @@ TEST_F(LauncherUnitTest, check_toggleLauncher)
                             ,"/com/deepin/dde/daemon/Launcher"
                             ,"org.freedesktop.DBus.Properties"
                             ,QDBusConnection::sessionBus(), this);
+    QVERIFY(launcherBusInter.isValid());
 
     QDBusReply<QVariant> reply = launcherBusInter.call("Get", "com.deepin.dde.daemon.Launcher", "Fullscreen");
 

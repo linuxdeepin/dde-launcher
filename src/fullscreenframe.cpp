@@ -712,14 +712,16 @@ void FullScreenFrame::wheelEvent(QWheelEvent *e)
 }
 
 bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
-{   
-    QKeyEvent *keyPress = static_cast<QKeyEvent *>(e);
-    if (m_displayMode == GROUP_BY_CATEGORY && e->type() == QEvent::KeyPress && keyPress->key() == Qt::Key_Tab) {
-        foreach (QAbstractButton * button, m_navigationWidget->buttonGroup()->buttons()) {
-            if (button == o ) {
-                m_focusIndex = CategoryTital;
-                nextTabWidget(Qt::Key_Tab);
-                return true;
+{
+    if (m_displayMode == GROUP_BY_CATEGORY && e->type() == QEvent::KeyPress) {
+        QKeyEvent *keyPress = static_cast<QKeyEvent *>(e);
+        if (keyPress && keyPress->key() == Qt::Key_Tab) {
+            foreach (QAbstractButton * button, m_navigationWidget->buttonGroup()->buttons()) {
+                if (button == o) {
+                    m_focusIndex = CategoryTital;
+                    nextTabWidget(Qt::Key_Tab);
+                    return true;
+                }
             }
         }
     }

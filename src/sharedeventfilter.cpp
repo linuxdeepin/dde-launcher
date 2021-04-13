@@ -50,6 +50,11 @@ bool SharedEventFilter::eventFilter(QObject *watched, QEvent *event)
     return false;
 }
 
+/**
+ * @brief SharedEventFilter::handleKeyEvent 处理系统键盘事件
+ * @param e 键盘事件指针对象
+ * @return 返回true,阻断事件传播,返回false继续向子类对象传递
+ */
 bool SharedEventFilter::handleKeyEvent(QKeyEvent *e)
 {
     bool ctrlPressed = e->modifiers() & Qt::ControlModifier;

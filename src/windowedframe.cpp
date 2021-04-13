@@ -298,6 +298,10 @@ bool WindowedFrame::visible()
     return isVisible();
 }
 
+/**
+ * @brief WindowedFrame::moveCurrentSelectApp 处理键盘事件
+ * @param key 键盘按键名
+ */
 void WindowedFrame::moveCurrentSelectApp(const int key)
 {
     if(Qt::Key_Undo == key) {
@@ -751,6 +755,13 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
 
     if (watched == m_searcherEdit && event->type() == QEvent::Enter) {
         m_enterSearchEdit = true;
+    }
+
+    // 清除行编辑器的焦点(已被dtk封装了)
+    if (event->type() == QEvent::KeyPress && m_searcherEdit->lineEdit()->hasFocus()) {
+        QKeyEvent *keyPress = static_cast<QKeyEvent *>(event);
+        if (keyPress && keyPress->key() == Qt::Key_Tab)
+            m_searcherEdit->clearEdit();
     }
 
     return QWidget::eventFilter(watched, event);

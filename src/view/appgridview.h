@@ -98,15 +98,15 @@ private:
 
 private:
     int m_dropToPos;
-    bool m_enableDropInside = false;
-    bool m_enableAnimation = true;
-    // GridView的mouseMove事件是否结束
-    bool m_moveGridView = false;
+    bool m_enableDropInside = false;                     // 拖拽释放后鼠标所在位置是否在listview范围内的标识
+    bool m_enableAnimation = true;                       // app交换动画执行标识
+
+    bool m_moveGridView = false;                         // GridView的mouseMove事件是否结束
     QPoint m_dragStartPos;
 
     const QWidget *m_containerBox = nullptr;
-    QTimer *m_dropThresholdTimer;
-    QPropertyAnimation *m_lastFakeAni = nullptr;
+    QTimer *m_dropThresholdTimer;                        // 推拽过程中app交互动画定时器对象
+    QPropertyAnimation *m_lastFakeAni = nullptr;         // 推拽过程中app交换动画对象
 
     static QPointer<AppsManager> m_appManager;
     static QPointer<CalculateUtil> m_calcUtil;

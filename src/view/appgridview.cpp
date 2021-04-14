@@ -46,6 +46,11 @@ QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
 bool AppGridView::m_longPressed = false;
 Gesture *AppGridView::m_gestureInter = nullptr;
 
+/**
+ * @brief AppGridView::AppGridView
+ * 全屏模式下 应用网格视图，主要处理全屏图标的拖拽事件及分组切换的动画效果
+ * @param parent
+ */
 AppGridView::AppGridView(QWidget *parent)
     : QListView(parent)
     , m_dropThresholdTimer(new QTimer(this))
@@ -122,11 +127,11 @@ const QModelIndex AppGridView::indexAt(const int index) const
     return model()->index(index, 0, QModelIndex());
 }
 
-///
-/// \brief AppListView::indexYOffset return item Y offset of current view
-/// \param index item index
-/// \return pixel of Y offset
-///
+/**
+ * @brief AppGridView::indexYOffset
+ * @param index item index
+ * @return item Y offset of current view
+ */
 int AppGridView::indexYOffset(const QModelIndex &index) const
 {
     return indexRect(index).y();
@@ -239,8 +244,10 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
         }
     }
 
+    // 分页切换后隐藏label过渡效果
     emit requestScrollStop();
 
+    // 释放前执行app交换动画
     if (m_enableAnimation)
         m_dropThresholdTimer->start();
 }
@@ -272,6 +279,10 @@ void AppGridView::flashDrag()
     startDrag(indexAt(dragDropRow));
 }
 
+/**
+ * @brief AppGridView::dragLeaveEvent 离开listview时触发分页
+ * @param e 拖动离开事件指针对象
+ */
 void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 {
     Q_ASSERT(m_containerBox);
@@ -298,18 +309,18 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
 {
     e->accept();
 
-    // disable qlistview default drag
     setState(NoState);
 
     const QModelIndex &idx = indexAt(e->pos());
 
+    // 鼠标在app上划过时实现选中效果
     if (idx.isValid())
         emit entered(idx);
 
     if (e->buttons() != Qt::LeftButton)
         return;
 
-    //当点击的位置在图标上就不把消息往下传(listview 滚动效果)
+    // 当点击的位置在图标上就不把消息往下传(listview 滚动效果)
     if (!idx.isValid() && m_pDelegate && !m_longPressed)
         m_pDelegate->mouseMove(e);
 
@@ -321,7 +332,7 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
     if (qAbs(e->x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
             qAbs(e->y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
         m_moveGridView = true;
-        //开始拖拽后,导致fullscreenframe只收到mousePress事件,收不到mouseRelease事件,需要处理一下异常
+        // 开始拖拽后,导致fullscreenframe只收到mousePress事件,收不到mouseRelease事件,需要处理一下异常
         if (idx.isValid())
             emit requestMouseRelease();
         return startDrag(QListView::indexAt(m_dragStartPos));
@@ -346,23 +357,10 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-void AppGridView::startDrag(const QModelIndex &index)
+QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey)
 {
-    if (!index.isValid())
-        return;
-    m_moveGridView = false;
-    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
-    if (!listModel)
-        return;
-
-    const QModelIndex &dragIndex = index;
-    const qreal ratio = qApp->devicePixelRatio();
-    QString appKey = index.data(AppsListModel::AppKeyRole).value<QString>();
-
-//    if(appKey == "dde-trash")
-//        return;
-
     QPixmap srcPix;
+
     if (appKey == "dde-calendar") {
         const  auto  s = m_calcUtil->appIconSize();
         const double  iconZoom =  s.width() / 64.0;
@@ -413,6 +411,29 @@ void AppGridView::startDrag(const QModelIndex &index)
         srcPix = index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
     }
 
+    return srcPix;
+}
+
+/**
+ * @brief AppGridView::startDrag 处理listview中app的拖动操作
+ * @param index 被拖动app的对应的模型索引
+ */
+void AppGridView::startDrag(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return;
+
+    m_moveGridView = false;
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel)
+        return;
+
+    const QModelIndex &dragIndex = index;
+    const qreal ratio = qApp->devicePixelRatio();
+    QString appKey = index.data(AppsListModel::AppKeyRole).value<QString>();
+
+    QPixmap srcPix = creatSrcPix(index, appKey);
+
     srcPix = srcPix.scaled(m_calcUtil->appIconSize() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     srcPix.setDevicePixelRatio(ratio);
 
@@ -421,29 +442,25 @@ void AppGridView::startDrag(const QModelIndex &index)
     drag->setPixmap(srcPix);
     drag->setHotSpot(srcPix.rect().center() / ratio);
 
-    // request remove current item.
     m_dropToPos = index.row();
     listModel->setDraggingIndex(index);
 
     setState(DraggingState);
-    drag->exec(Qt::MoveAction);
+    drag->exec(Qt::MoveAction);// 阻塞子事件循环
 
-    // disable animation when finally dropped
-    m_dropThresholdTimer->stop();
+    m_dropThresholdTimer->stop();// 拖拽操作完成后暂停app移动动画
 
-    //send to next page
-    emit dragEnd();
-
+    emit dragEnd(); // 未触发分页则直接返回,触发分页则执行分页后操作
 
     if (!m_lastFakeAni) {
         if (m_enableDropInside)
-            listModel->dropSwap(m_dropToPos);
+            listModel->dropSwap(m_dropToPos);// 无动画时,在listview内释放鼠标
         else
-            listModel->dropSwap(indexAt(m_dragStartPos).row());
+            listModel->dropSwap(indexAt(m_dragStartPos).row());// 无动画时,listview之外释放鼠标
 
         listModel->clearDraggingIndex();
     } else {
-        connect(m_lastFakeAni, &QPropertyAnimation::finished, listModel, &AppsListModel::clearDraggingIndex);
+        connect(m_lastFakeAni, &QPropertyAnimation::finished, listModel, &AppsListModel::clearDraggingIndex);// 动画执行结束后清理拖拽数据
     }
 
     m_enableDropInside = false;
@@ -456,25 +473,31 @@ bool AppGridView::eventFilter(QObject *o, QEvent *e)
     return false;
 }
 
-///
-/// \brief AppListView::fitToContent change view size to fit viewport content
-///
+/**
+ * @brief AppGridView::fitToContent
+ * change view size to fit viewport content
+ */
 void AppGridView::fitToContent()
 {
     const QSize size { contentsRect().width(), contentsSize().height() };
-
-    if (size == rect().size()) return;
-
+    if (size == rect().size())
+    return;
+    
     setFixedSize(size);
 }
 
+/**
+ * @brief AppGridView::prepareDropSwap 创建移动item的动画
+ */
 void AppGridView::prepareDropSwap()
 {
     if (m_lastFakeAni || m_dropThresholdTimer->isActive() || !m_enableAnimation)
         return;
+
     const QModelIndex dropIndex = indexAt(m_dropToPos);
     if (!dropIndex.isValid())
         return;
+
     const QModelIndex dragStartIndex = indexAt(m_dragStartPos);
     if (dragStartIndex == dropIndex)
         return;
@@ -509,9 +532,15 @@ void AppGridView::prepareDropSwap()
     m_dragStartPos = indexRect(dropIndex).center();
 }
 
+/**
+ * @brief AppGridView::createFakeAnimation 创建列表中item移动的动画效果
+ * @param pos 需要移动的item当前所在的行数
+ * @param moveNext item是否移动的标识
+ * @param isLastAni 是最后的那个item移动的动画标识
+ */
 void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni)
 {
-    const QModelIndex index(indexAt(pos));
+    const QModelIndex index(indexAt(pos));// listview n行1列,肉眼所及的都是app自动换行后的效果
 
     QLabel *floatLabel = new QLabel(this);
     QPropertyAnimation *ani = new QPropertyAnimation(floatLabel, "pos", floatLabel);
@@ -534,9 +563,10 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     floatLabel->setPixmap(pixmap);
     floatLabel->show();
 
-    ani->setStartValue(indexRect(index).topLeft() - QPoint(0, -6));
-    ani->setEndValue(indexRect(indexAt(moveNext ? pos - 1 : pos + 1)).topLeft() - QPoint(0, -6));
-    ani->setEasingCurve(QEasingCurve::Linear);
+    int topMargin = m_calcUtil->appMarginTop();
+    ani->setStartValue(indexRect(index).topLeft() - QPoint(0, -topMargin));
+    ani->setEndValue(indexRect(indexAt(moveNext ? pos - 1 : pos + 1)).topLeft() - QPoint(0, -topMargin));
+    ani->setEasingCurve(QEasingCurve::Linear);// 描述起点矩形到终点矩形的速度曲线
     ani->setDuration(300);
 
     connect(ani, &QPropertyAnimation::finished, floatLabel, &QLabel::deleteLater);
@@ -549,9 +579,10 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     ani->start(QPropertyAnimation::DeleteWhenStopped);
 }
 
-///
-/// \brief AppListView::dropSwap swap current item and drag out item
-///
+/**
+ * @brief AppGridView::dropSwap
+ * 删除拖动前item所在位置的item，插入拖拽的item到新位置
+ */
 void AppGridView::dropSwap()
 {
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());

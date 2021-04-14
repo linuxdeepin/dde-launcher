@@ -1540,6 +1540,9 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     emit displayModeChanged(m_displayMode);
 }
 
+/**
+ * @brief FullScreenFrame::updateDockPosition 更新任务栏在桌面上的位置
+ */
 void FullScreenFrame::updateDockPosition()
 {
     const QRect dockGeometry = m_appsManager->dockGeometry();

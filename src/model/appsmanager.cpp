@@ -225,6 +225,10 @@ AppsManager::AppsManager(QObject *parent) :
 
 }
 
+/**
+ * @brief AppsManager::appendSearchResult 搜索到的数据写入搜索列表
+ * @param appKey 应用名
+ */
 void AppsManager::appendSearchResult(const QString &appKey)
 {
     for (const ItemInfo &info : m_allAppInfoList)
@@ -341,6 +345,10 @@ void AppsManager::stashItem(const QString &appKey)
     }
 }
 
+/**
+ * @brief AppsManager::abandonStashedItem 卸载应用更新列表
+ * @param appKey 应用的key
+ */
 void AppsManager::abandonStashedItem(const QString &appKey)
 {
     //qDebug() << "bana" << appKey;
@@ -350,7 +358,7 @@ void AppsManager::abandonStashedItem(const QString &appKey)
             break;
         }
     }
-    //重新获取分类数据，类似wps一个appkey对应对个desktop文件的时候,有可能会导致漏掉
+    //重新获取分类数据，类似wps一个appkey对应多个desktop文件的时候,有可能会导致漏掉
     refreshCategoryInfoList();
 
     emit dataChanged(AppsListModel::All);
@@ -498,6 +506,9 @@ void AppsManager::markLaunched(QString appKey)
     emit newInstallListChanged();
 }
 
+/**
+ * @brief AppsManager::delayRefreshData 延迟刷新安装的应用列表,保存用户操作后的应用排序
+ */
 void AppsManager::delayRefreshData()
 {
     // refresh new installed apps
@@ -945,6 +956,11 @@ int AppsManager::appNums(const AppsListModel::AppCategory &category) const
     return appsInfoListSize(category);
 }
 
+/**
+ * @brief AppsManager::refreshAppAutoStartCache 刷新自启动应用集
+ * @param type 操作类型
+ * @param desktpFilePath 应用路径
+ */
 void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &desktpFilePath)
 {
     if (type.isEmpty()) {
@@ -973,6 +989,9 @@ void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &d
     }
 }
 
+/**
+ * @brief AppsManager::onSearchTimeOut 搜索超时错误提示
+ */
 void AppsManager::onSearchTimeOut()
 {
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(m_launcherInter->Search(m_searchText), this);
@@ -1030,6 +1049,10 @@ void AppsManager::onIconThemeChanged()
     emit dataChanged(AppsListModel::All);
 }
 
+/**
+ * @brief AppsManager::searchDone 搜索完成
+ * @param resultList 搜索后接口返回的结果列表
+ */
 void AppsManager::searchDone(const QStringList &resultList)
 {
     m_appSearchResultList.clear();
@@ -1056,6 +1079,12 @@ void AppsManager::searchDone(const QStringList &resultList)
         emit requestHideTips();
 }
 
+/**
+ * @brief AppsManager::handleItemChanged
+ * @param operation 操作类型
+ * @param appInfo 操作的应用对象信息
+ * @param categoryNumber 暂时没有用
+ */
 void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber)
 {
     Q_UNUSED(categoryNumber);
@@ -1083,20 +1112,16 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
 
         Q_ASSERT(m_allAppInfoList.contains(appInfo));
 
-        // update item info
-        for (auto &item : m_allAppInfoList) {
-            if (item == appInfo) {
-                item.updateInfo(appInfo);
+        // 更新所有应用列表
+        int appIndex = m_allAppInfoList.indexOf(appInfo);
+        if (appIndex != -1) {
+            m_allAppInfoList[appIndex].updateInfo(appInfo);
+        }
 
-                for (QList<ItemInfo>::iterator it = m_userSortedList.begin(); it != m_userSortedList.end();) {
-                    if (*it == appInfo)
-                        it->updateInfo(appInfo);
-
-                    it++;
-                }
-
-                break;
-            }
+        // 更新按照最近使用顺序排序的列表
+        int sortAppIndex = m_usedSortedList.indexOf(appInfo);
+        if (sortAppIndex != -1) {
+            m_usedSortedList[sortAppIndex].updateInfo(appInfo);
         }
     }
 //    ReflashSortList();

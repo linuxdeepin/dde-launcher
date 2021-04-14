@@ -170,7 +170,7 @@ private:
     ItemInfoList m_allAppInfoList;
     ItemInfoList m_usedSortedList; // FullScreen
     ItemInfoList m_userSortedList; // Mini
-    ItemInfoList m_appSearchResultList;
+    ItemInfoList m_appSearchResultList;                         // 搜索结果列表
     ItemInfoList m_stashList;
     ItemInfoList m_categoryList;
     QHash<AppsListModel::AppCategory, ItemInfoList> m_appInfos; // 全屏分类模式下保存的应用
@@ -180,7 +180,7 @@ private:
 
     CalculateUtil *m_calUtil;
     QTimer *m_searchTimer;
-    QTimer *m_delayRefreshTimer;
+    QTimer *m_delayRefreshTimer;                                // 延迟刷新应用列表定时器指针对象
     QTimer *m_RefreshCalendarIconTimer;
 
     QDate m_curDate;

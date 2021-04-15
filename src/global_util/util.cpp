@@ -129,7 +129,7 @@ const QPixmap loadSvg(const QString &fileName, const QSize &size)
  * @brief SettingsPtr 根据给定信息返回一个QGSettings指针
  * @param schema_id The id of the schema
  * @param path If non-empty, specifies the path for a relocatable schema
- * @param parent 创建指针的付对象
+ * @param parent 创建指针的父对象
  * @return 返回QGSetting指针对象
  */
 QGSettings *SettingsPtr(const QString &schema_id, const QByteArray &path, QObject *parent)

@@ -212,17 +212,15 @@ AppsManager::AppsManager(QObject *parent) :
 
     connect(m_iconRefreshTimer.get(), &QTimer::timeout, this, &AppsManager::refreshNotFoundIcon);
     connect(m_RefreshCalendarIconTimer, &QTimer::timeout, this,  [=](){
-               m_curDate =QDate::currentDate();
+               m_curDate = QDate::currentDate();
                if(m_lastShowDate != m_curDate.day()){
                     delayRefreshData();
                     m_lastShowDate = m_curDate.day();
                }
     });
 
-    if(!m_RefreshCalendarIconTimer->isActive()){
+    if (!m_RefreshCalendarIconTimer->isActive())
         m_RefreshCalendarIconTimer->start();
-    }
-
 }
 
 /**
@@ -246,6 +244,10 @@ void AppsManager::sortCategory(const AppsListModel::AppCategory category)
     }
 }
 
+/**
+ * @brief AppsManager::sortByPresetOrder app应用按照schemas文件中的预装应用列表顺序进行排序
+ * @param processList 系统所有应用软件的信息
+ */
 void AppsManager::sortByPresetOrder(ItemInfoList &processList)
 {
     const QString system_lang = QLocale::system().name();
@@ -289,6 +291,10 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
     });
 }
 
+/**
+ * @brief AppsManager::sortByInstallTimeOrder app应用按照应用安装的时间先后排序
+ * @param processList 系统所有应用软件的信息
+ */
 void AppsManager::sortByInstallTimeOrder(ItemInfoList &processList)
 {
     std::sort(processList.begin(), processList.end(), [&](const ItemInfo & i1, const ItemInfo & i2) {
@@ -427,6 +433,9 @@ void AppsManager::saveUserSortedList()
     APP_USER_SORTED_LIST.setValue("list", writeBuf);
 }
 
+/**
+ * @brief AppsManager::saveUsedSortedList 保存应用使用排序(时间上的先后)列表
+ */
 void AppsManager::saveUsedSortedList()
 {
     QByteArray writeBuf;
@@ -562,6 +571,11 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
     return m_appInfos[category];
 }
 
+/**
+ * @brief AppsManager::appsInfoListSize 获取自定义模式,自由模式,搜索模式,多应用分类模式,单个分类模式下app数量
+ * @param category 场景模式
+ * @return
+ */
 int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category) const
 {
     switch (category) {
@@ -575,6 +589,12 @@ int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category) co
     return m_appInfos[category].size();
 }
 
+/**
+ * @brief AppsManager::appsInfoListIndex 获取具体场景模式下app信息
+ * @param category 场景模式
+ * @param index app在列表中的索引
+ * @return 返回单个应用信息
+ */
 const ItemInfo AppsManager::appsInfoListIndex(const AppsListModel::AppCategory &category, const int index) const
 {
     switch (category) {
@@ -627,6 +647,12 @@ bool AppsManager::appIsEnableScaling(const QString &desktop)
     return !m_launcherInter->GetDisableScaling(desktop);
 }
 
+/**
+ * @brief AppsManager::appIcon 从缓存中获取app图片
+ * @param info app信息
+ * @param size app的长宽
+ * @return 图片对象
+ */
 const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
 {
     const int s = perfectIconSize(size);
@@ -640,6 +666,12 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
     }
 }
 
+/**
+ * @brief AppsManager::appName 从缓存获取app名称
+ * @param info app信息
+ * @param size app的长宽
+ * @return app名称
+ */
 const QString AppsManager::appName(const ItemInfo &info, const int size)
 {
     QPair<QString, int> tmpKey { cacheKey(info, CacheType::TextType) , size };
@@ -654,6 +686,9 @@ const QString AppsManager::appName(const ItemInfo &info, const int size)
     }
 }
 
+/**
+ * @brief AppsManager::refreshCategoryInfoList 更新所有应用信息
+ */
 void AppsManager::refreshCategoryInfoList()
 {
     QDBusPendingReply<ItemInfoList> reply = m_launcherInter->GetAllItemInfos();
@@ -702,6 +737,9 @@ void AppsManager::refreshCategoryInfoList()
     generateCategoryMap();
 }
 
+/**
+ * @brief AppsManager::refreshUsedInfoList 更新使用过的应用列表
+ */
 void AppsManager::refreshUsedInfoList()
 {
     // init data if used sorted list is empty.
@@ -738,6 +776,9 @@ void AppsManager::refreshUsedInfoList()
     saveUsedSortedList();
 }
 
+/**
+ * @brief AppsManager::refreshCategoryUsedInfoList 保存全屏分类排序数据
+ */
 void AppsManager::refreshCategoryUsedInfoList()
 {
     // 保存排序信息
@@ -751,6 +792,10 @@ void AppsManager::refreshCategoryUsedInfoList()
         APP_CATEGORY_USED_SORTED_LIST.setValue(QString("%1").arg(category), writeBuf);
     }
 }
+
+/**
+ * @brief AppsManager::refreshUserInfoList app安装时间排序
+ */
 void AppsManager::refreshUserInfoList()
 {
     if (m_userSortedList.isEmpty()) {
@@ -788,13 +833,12 @@ void AppsManager::refreshUserInfoList()
 
     // 从启动器小屏应用列表移除被限制使用的应用
     QStringList filters;
-    if (m_filterSetting != nullptr) {
+    if (m_filterSetting != nullptr)
         filters = m_filterSetting->get("filter-keys").toStringList();
-    }
-    for (auto it=m_userSortedList.begin(); it!=m_userSortedList.end(); it++) {
-        if (fuzzyMatching(filters, it->m_key)) {
+
+    for (auto it = m_userSortedList.begin(); it != m_userSortedList.end(); it++) {
+        if (fuzzyMatching(filters, it->m_key))
             m_userSortedList.erase(it);
-        }
     }
 
     const qint64 currentTime = QDateTime::currentMSecsSinceEpoch() / 1000;
@@ -802,7 +846,7 @@ void AppsManager::refreshUserInfoList()
     std::stable_sort(m_userSortedList.begin(), m_userSortedList.end(), [ = ](const ItemInfo & a, const ItemInfo & b) {
         const bool ANewInsatll = m_newInstalledAppsList.contains(a.m_key);
         const bool BNewInsatll = m_newInstalledAppsList.contains(b.m_key);
-        if(ANewInsatll|| BNewInsatll) {
+        if (ANewInsatll || BNewInsatll) {
             if(ANewInsatll && BNewInsatll)
                 return a.m_installedTime > b.m_installedTime;
 
@@ -828,6 +872,9 @@ void AppsManager::refreshUserInfoList()
     saveUserSortedList();
 }
 
+/**
+ * @brief AppsManager::updateUsedListInfo 更新应用信息
+ */
 void AppsManager::updateUsedListInfo()
 {
     for (const ItemInfo &info : m_allAppInfoList) {
@@ -842,6 +889,9 @@ void AppsManager::updateUsedListInfo()
 //    ReflashSortList();
 }
 
+/**
+ * @brief AppsManager::generateCategoryMap 加入新装的app到列表,从列表中移除卸载的app
+ */
 void AppsManager::generateCategoryMap()
 {
     m_categoryList.clear();
@@ -931,6 +981,7 @@ void AppsManager::generateCategoryMap()
             ++it;
     }
 
+    // swt question?
     std::list<qlonglong> categoryID;
     for (const ItemInfo &it : m_allAppInfoList) {
         if (std::find(categoryID.begin(), categoryID.end(), it.m_categoryId) == categoryID.end()) {

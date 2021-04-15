@@ -277,7 +277,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_appearanceInter, &Appearance::OpacityChanged, this, &WindowedFrame::onOpacityChanged);
     connect(m_modeToggleBtn, &DToolButton::clicked, m_leftBar, &MiniFrameRightBar::modeToggleBtnClicked);
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
-    onOpacityChanged(m_appearanceInter->opacity());
 
     m_switchBtn->updateStatus(All);
     m_modeToggleBtn->setIconSize(QSize(32,32));
@@ -313,15 +312,19 @@ void WindowedFrame::showLauncher()
     }
 
     m_appsView->setCurrentIndex(QModelIndex());
-    show();
+
     adjustSize(); // right widget need calculate width based on font
     adjustPosition();
 
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
-    show();
 
-    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::hideLauncher);
+    //防止dock位置无效导致 按start造成launcher坐标透明度问题
+    if (m_isDockPosition) {
+       onOpacityChanged(m_appearanceInter->opacity());
+       show();
+       connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::hideLauncher);
+    }
 }
 
 void WindowedFrame::hideLauncher()
@@ -829,6 +832,10 @@ void WindowedFrame::adjustPosition()
     const int dockPos = m_dockInter->position();
     qreal ratio = qApp->devicePixelRatio();
     QRect r =  m_dockInter->frontendRect();
+    if (r.isNull()) {
+        return;
+    }
+    m_isDockPosition = true;
     QRect dockRect = QRect(scaledPosition(r.topLeft()),scaledPosition(r.bottomRight()));
 
     const auto &s = size();

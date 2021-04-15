@@ -41,6 +41,9 @@ public:
     virtual bool windowDeactiveEvent() = 0;
 
     virtual void uninstallApp(const QString &appKey) = 0;
+
+protected:
+    bool m_isDockPosition{false};
 };
 
 

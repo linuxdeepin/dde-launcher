@@ -921,9 +921,11 @@ void FullScreenFrame::showLauncher()
     updateDockPosition();
     //m_displayInter->primaryRect()这个rect为主屏幕实际尺寸，所以在设置size的时候需要通过缩放比转换
     //这里不能用setfixedsize，可能会导致qplatformwindow的geometry没有更新。导致第一次显示的时候尺寸错误。
-    setGeometry(QRect(QPoint(0, 0), QHighDpi::fromNativePixels(QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height), qApp->primaryScreen())));
-    show();
-    connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::hideLauncher);
+    if (m_isDockPosition) {
+        setGeometry(QRect(QPoint(0, 0), QHighDpi::fromNativePixels(QSize(m_displayInter->primaryRect().width, m_displayInter->primaryRect().height), qApp->primaryScreen())));
+        show();
+        connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::hideLauncher);
+    }
 }
 
 void FullScreenFrame::hideLauncher()
@@ -1387,7 +1389,10 @@ void FullScreenFrame::updateDockPosition()
     // reset all spacing size
 
     const QRect dockGeometry = m_appsManager->dockGeometry();
-
+    if (dockGeometry.isNull()) {
+        return;
+    }
+    m_isDockPosition = true;
     int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? m_calcUtil->getScreenSize().height() *0.064815 : 0;
 
     m_navigationWidget->updateSize();

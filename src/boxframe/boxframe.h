@@ -25,6 +25,7 @@
 #define BOXFRAME_H
 
 #include <QLabel>
+#include <QPixmapCache>
 
 class QPixmap;
 class BackgroundManager;
@@ -59,6 +60,7 @@ private:
     QString m_lastBlurUrl;
     QPixmap m_pixmap;
     QPixmap m_cache;
+    QPixmapCache::Key m_cacheKey;
     BackgroundManager *m_bgManager;
 };
 

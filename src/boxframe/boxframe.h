@@ -60,6 +60,7 @@ private:
     QString m_lastBlurUrl;
     QPixmap m_pixmap;
     QPixmap m_cache;
+    QString m_defaultBg;
     QPixmapCache::Key m_cacheKey;
     BackgroundManager *m_bgManager;
 };

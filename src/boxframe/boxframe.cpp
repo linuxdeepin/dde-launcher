@@ -32,10 +32,9 @@
 #include <QPainter>
 #include <QPaintEvent>
 
-static const QString DefaultBackground = "/usr/share/backgrounds/default_background.jpg";
-
 BoxFrame::BoxFrame(QWidget *parent)
     : QLabel(parent)
+    , m_defaultBg("/usr/share/backgrounds/default_background.jpg")
     , m_bgManager(new BackgroundManager(this))
 {
     QPixmapCache::setCacheLimit(10240000);
@@ -62,7 +61,7 @@ void BoxFrame::setBackground(const QString &url)
 
     m_pixmap = QPixmap(url);
     if (m_pixmap.isNull())
-        m_pixmap.load(DefaultBackground);
+        m_pixmap.load(m_defaultBg);
 
     updateBackground();
 }
@@ -76,7 +75,7 @@ void BoxFrame::setBlurBackground(const QString &url)
 
     QPixmap pix(url);
     if (pix.isNull())
-        pix.load(DefaultBackground);
+        pix.load(m_defaultBg);
 
     const QSize &size = currentScreen()->size() ;//* currentScreen()->devicePixelRatio();
 
@@ -143,7 +142,7 @@ void BoxFrame::updateBlurBackground()
     QPixmap pix(m_lastBlurUrl);
 
     if (pix.isNull()) {
-        pix.load(DefaultBackground);
+        pix.load(m_defaultBg);
     }
 
     const QSize &size = currentScreen()->size() ;//* currentScreen()->devicePixelRatio();

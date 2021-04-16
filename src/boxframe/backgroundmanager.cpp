@@ -76,12 +76,13 @@ void BackgroundManager::getImageDataFromDbus(const QString &filePath)
             emit currentWorkspaceBlurBackgroundChanged(m_blurBackground);
     });
     QFuture<QString> imageblurFuture = QtConcurrent::run([this, filePath]() ->QString {
+        if (!m_imageblur || !m_imageEffectInter)
+            return QString();
+
         QDBusPendingReply<QString> blurReply = m_imageblur->Get(filePath);
         blurReply.waitForFinished();
         if (blurReply.value() != "")
         {
-            if (!m_imageEffectInter)
-                return QString();
             QDBusPendingReply<QString> effectInterReply = m_imageEffectInter->Get("", blurReply.value());
             effectInterReply.waitForFinished();
             if (effectInterReply.isError()) {
@@ -104,6 +105,9 @@ void BackgroundManager::getImageDataFromDbus(const QString &filePath)
             emit currentWorkspaceBackgroundChanged(m_background);
     });
     QFuture<QString> effectInterFuture = QtConcurrent::run([this, filePath]() ->QString {
+        if (!m_imageEffectInter)
+            return QString();
+
         QDBusPendingReply<QString> effectInterReply = m_imageEffectInter->Get("", filePath);
         effectInterReply.waitForFinished();
         if (effectInterReply.isError()) {

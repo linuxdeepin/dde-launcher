@@ -69,9 +69,9 @@ private:
 
     com::deepin::wm *m_wmInter;
     QPointer<ImageEffectInter> m_imageEffectInter;
-    ImageEffeblur *m_imageblur;
-    AppearanceInter *m_appearanceInter;
-    DisplayInter *m_displayInter;
+    QPointer<ImageEffeblur> m_imageblur;
+    QPointer<AppearanceInter> m_appearanceInter;
+    QPointer<DisplayInter> m_displayInter;
     int m_displayMode;
 };
 

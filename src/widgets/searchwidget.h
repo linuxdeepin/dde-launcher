@@ -62,8 +62,8 @@ private:
     DSearchEdit *m_searchEdit;
     QFrame *m_leftSpacing;
     QFrame *m_rightSpacing;
-    DFloatingButton *m_toggleCategoryBtn;
-    DFloatingButton *m_toggleModeBtn;
+    DFloatingButton *m_toggleCategoryBtn;                // 所有App模式 和 分类app模式切换按钮（左上侧）
+    DFloatingButton *m_toggleModeBtn;                    // 全屏模式下收起按钮(右上)
     CalculateUtil* m_calcUtil;
 };
 

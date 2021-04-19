@@ -136,7 +136,7 @@ private:
 private slots:
     void layoutChanged();
     void searchTextChanged(const QString &keywords);
-    void reflashPageView(const AppsListModel::AppCategory category);
+    void refreshPageView(const AppsListModel::AppCategory category);
     void primaryScreenChanged();
 
 private:
@@ -157,7 +157,7 @@ private:
     int m_displayMode = SEARCH;
     int m_focusIndex;
     int m_currentIndex = 0;
-    //鼠标单击位置
+    // 鼠标单击位置
     QPoint m_mouse_move_pos;
     QPoint m_mouse_press_pos;
     qint64 m_mouse_press_time;
@@ -166,7 +166,7 @@ private:
     AppsListModel::AppCategory m_currentCategory;
 
     std::unique_ptr<MenuWorker> m_menuWorker;
-    SharedEventFilter *m_eventFilter;
+    SharedEventFilter *m_eventFilter;        // 事件过滤类
 
     CalculateUtil *m_calcUtil;
     AppsManager *m_appsManager;
@@ -174,8 +174,8 @@ private:
     QTimer *m_delayHideTimer;
     QTimer *m_clearCacheTimer;
 
-    NavigationWidget *m_navigationWidget;
-    SearchWidget *m_searchWidget;
+    NavigationWidget *m_navigationWidget;    // 全屏模式下导航栏(搜索控件正下方)
+    SearchWidget *m_searchWidget;            // 顶部水平方向控件 (全屏模式下搜索, 左上模式切换按钮,右上全屏和小窗口模式切换按钮)
 
     QFrame *m_contentFrame;
     DHBoxWidget *m_appsIconBox;
@@ -208,7 +208,7 @@ private:
     QList<ScrollWidgetAgent *> m_widgetAgentList;
     ScrollParallelAnimationGroup *m_animationGroup;
     DBusDisplay *m_displayInter;
-    //只有窗口在完全显示出来后，才允许自动调整各部件位置
+    // 只有窗口在完全显示出来后，才允许自动调整各部件位置
     bool m_canResizeDockPosition = false;
 };
 #endif // MAINFRAME_H

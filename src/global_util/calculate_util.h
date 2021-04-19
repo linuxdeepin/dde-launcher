@@ -34,9 +34,9 @@
 #include "src/dbusinterface/dbuslauncher.h"
 #include "src/dbusinterface/dbusdock.h"
 
-#define ALL_APPS            0
-#define GROUP_BY_CATEGORY   1
-#define SEARCH              2
+#define ALL_APPS            0       // 全屏自由模式
+#define GROUP_BY_CATEGORY   1       // 全屏分类模式
+#define SEARCH              2       // 全屏搜索模式
 
 DCORE_USE_NAMESPACE
 class CalculateUtil : public QObject

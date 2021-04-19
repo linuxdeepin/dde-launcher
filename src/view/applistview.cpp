@@ -359,6 +359,11 @@ void AppListView::startDrag(const QModelIndex &index)
     // disable auto scroll
     Q_EMIT requestScrollStop();
 
+
+    // 小窗口不允许拖动交换位置, 重置模型索引,使dropSwap直接返回
+    if (qobject_cast<AppsListModel*>(model())->category())
+        listModel->clearDraggingIndex();
+
     if (!m_lastFakeAni) {
         if (m_enableDropInside)
             listModel->dropSwap(m_dropToRow);

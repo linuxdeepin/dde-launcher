@@ -1127,7 +1127,7 @@ void FullScreenFrame::initConnection()
     connect(m_appsManager, &AppsManager::requestTips, this, &FullScreenFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
     connect(m_appsManager, &AppsManager::IconSizeChanged, this, &FullScreenFrame::updateDockPosition);
-    connect(m_appsManager, &AppsManager::dataChanged, this, &FullScreenFrame::reflashPageView);
+    connect(m_appsManager, &AppsManager::dataChanged, this, &FullScreenFrame::refreshPageView);
 
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &FullScreenFrame::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &FullScreenFrame::primaryScreenChanged, Qt::QueuedConnection);
@@ -1347,6 +1347,9 @@ void FullScreenFrame::regionMonitorPoint(const QPoint &point)
     }
 }
 
+/**
+ * @brief FullScreenFrame::categoryListChanged 处理全屏分类模式下各个分类逻辑
+ */
 void FullScreenFrame::categoryListChanged()
 {
     if (m_displayMode != GROUP_BY_CATEGORY)
@@ -1424,7 +1427,7 @@ void FullScreenFrame::clickToCategory(const QModelIndex &index)
     qDebug() << "modeValue" <<  index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 }
 
-void FullScreenFrame::reflashPageView(AppsListModel::AppCategory category)
+void FullScreenFrame::refreshPageView(AppsListModel::AppCategory category)
 {
     if (AppsListModel::Search == category) {
         m_multiPagesView->ShowPageView(AppsListModel::AppCategory(m_displayMode));
@@ -1453,6 +1456,10 @@ void FullScreenFrame::primaryScreenChanged()
     updateDockPosition();
 }
 
+/**
+ * @brief FullScreenFrame::updateDisplayMode 处理全屏模式切换
+ * @param mode 全屏自由模式或者全屏分类模式
+ */
 void FullScreenFrame::updateDisplayMode(const int mode)
 {
     if (m_displayMode == mode)
@@ -1460,6 +1467,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
 
     m_displayMode = mode;
 
+    // 切换全屏应用列表展现模式, 修改对应的schemaid = com.deepin.dde.launcherd的xml文件
     switch (m_displayMode) {
     case ALL_APPS:
         m_calcUtil->setDisplayMode(ALL_APPS);
@@ -1484,19 +1492,19 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     m_othersBoxWidget->setVisible(false);
 
     if (m_displayMode == GROUP_BY_CATEGORY) {
-        //隐藏自由模式显示
+        // 隐藏自由模式显示
         m_appsIconBox->setVisible(false);
         AppsListModel::AppCategory category = (m_displayMode == SEARCH) ? AppsListModel::Search : AppsListModel::All;
         m_multiPagesView->setModel(category);
-        //再显示分类模式
+        // 再显示分类模式
         m_navigationWidget->setVisible(true);
         m_appsItemBox->setVisible(true);
     } else {
-        //先刷新后端数据
+        // 先刷新后端数据
         AppsListModel::AppCategory category = (m_displayMode == SEARCH) ? AppsListModel::Search : AppsListModel::All;
         m_multiPagesView->setModel(category);
 
-        //设置自由模式wdiget大小
+        // 设置自由模式widget大小
         QSize boxSize;
         int padding = m_calcUtil->getScreenSize().width() * SIDES_SPACE_SCALE;
         const int appsContentWidth = (m_contentFrame->width() - padding * 2);
@@ -1504,7 +1512,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         boxSize.setWidth(appsContentWidth);
         boxSize.setHeight(appsContentHeight);
 
-        //隐藏分类模式显示
+        // 隐藏分类模式显示
         m_appsIconBox->setFixedSize(boxSize);
         m_multiPagesView->setFixedSize(boxSize);
         m_multiPagesView->updatePosition();
@@ -1512,7 +1520,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         m_navigationWidget->setVisible(false);
         m_appsItemBox->setVisible(false);
 
-        //再显示自由显示模式
+        // 再显示自由显示模式
         m_appsIconBox->setVisible(true);
     }
 

@@ -57,7 +57,6 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_leftSpacing->setAccessibleName("LeftSpacing");
     m_rightSpacing->setAccessibleName("RightSpacing");
 
-    // 所有App模式 和 分类app模式切换按钮（左上侧）
     m_toggleCategoryBtn = new DFloatingButton(this);
     updateCurrentCategoryBtnIcon();
 
@@ -66,7 +65,6 @@ SearchWidget::SearchWidget(QWidget *parent) :
     m_toggleCategoryBtn->setBackgroundRole(DPalette::Button);
     m_toggleCategoryBtn->setAccessibleName("mode-toggle-button");
 
-    // 全屏模式下收起按钮(右上)
     m_toggleModeBtn = new DFloatingButton(this);
     m_toggleModeBtn->setIcon(QIcon(":/icons/skin/icons/exit_fullscreen.svg"));
     m_toggleModeBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));

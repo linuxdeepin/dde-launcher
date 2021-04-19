@@ -845,18 +845,21 @@ void WindowedFrame::adjustPosition()
 
 void WindowedFrame::onToggleFullScreen()
 {
-    //后台没有启动,切换全屏会造成后台默认数据和前台数据不统一,造成显示问题
+    // 后台没有启动,切换全屏会造成后台默认数据和前台数据不统一,造成显示问题
     if(!m_appsManager->appNums(AppsListModel::All)) {
         return;
     }
 
+    // 切换到全屏就不绘制小窗口列表中的item
     AppListDelegate * delegate = static_cast<AppListDelegate *>(m_appsView->itemDelegate());
     if (delegate) {
         delegate->setActived(false);
     }
-
+    
+    // 全屏状态标识
     m_calcUtil->setFullScreen(true);
 
+    // 同步本地当前是全屏的状态
     DDBusSender()
     .service("com.deepin.dde.daemon.Launcher")
     .interface("com.deepin.dde.daemon.Launcher")

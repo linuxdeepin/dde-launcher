@@ -46,6 +46,10 @@ CalculateUtil *CalculateUtil::instance()
     return INSTANCE;
 }
 
+/**
+ * @brief CalculateUtil::setDisplayMode 处理全屏自由模式和全屏分类模式切换
+ * @param mode 分类模式
+ */
 void CalculateUtil::setDisplayMode(const int mode)
 {
     if (m_launcherGsettings)

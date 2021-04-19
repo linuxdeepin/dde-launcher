@@ -175,7 +175,7 @@ private:
     QTimer *m_clearCacheTimer;
 
     NavigationWidget *m_navigationWidget;    // 全屏模式下导航栏(搜索控件正下方)
-    SearchWidget *m_searchWidget;            // 全屏模式下搜索控件（顶部）
+    SearchWidget *m_searchWidget;            // 顶部水平方向控件 (全屏模式下搜索, 左上模式切换按钮,右上全屏和小窗口模式切换按钮)
 
     QFrame *m_contentFrame;
     DHBoxWidget *m_appsIconBox;

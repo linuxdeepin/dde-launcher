@@ -141,7 +141,6 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
     const QModelIndex &index = indexAt(e->pos());
     const QPoint pos = e->pos();
 
-    // 全屏模式下保存当前拖动的item的模型索引
     if (index.isValid() && !m_enableDropInside)
         Q_EMIT entered(index);
     else
@@ -382,6 +381,12 @@ void AppListView::startDrag(const QModelIndex &index)
 
     // disable auto scroll
     Q_EMIT requestScrollStop();
+
+
+    // 小窗口不允许拖动交换位置, 重置模型索引,使dropSwap直接返回
+    if (qobject_cast<AppsListModel*>(model())->category()) {
+        listModel->clearDraggingIndex();
+    }
 
     if (!m_lastFakeAni) {
         if (m_enableDropInside)

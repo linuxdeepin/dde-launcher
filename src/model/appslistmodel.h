@@ -79,21 +79,21 @@ public:
 
     enum AppCategory {
         All,
-        Custom,
-        Search,
-        Category,
+        Custom,                 // 自定义的排序模式
+        Search,                 // 搜索模式
+        Category,               // 分类模式
 
         // apps category
-        Internet,
-        Chat,
-        Music,
-        Video,
-        Graphics,
-        Game,
-        Office,
-        Reading,
-        Development,
-        System,
+        Internet,               // 网络模式
+        Chat,                   // 社交模式
+        Music,                  // 音乐模式
+        Video,                  // 视频模式
+        Graphics,               // 图形图像
+        Game,                   //
+        Office,                 // 办公模式
+        Reading,                // 阅读模式
+        Development,            // 编程开发模式
+        System,                 // 系统管理模式
         Others,
     };
 

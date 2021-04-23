@@ -37,6 +37,7 @@
 #include <QIconEngine>
 
 #include <private/qguiapplication_p.h>
+#include <private/qiconloader_p.h>
 #include <qpa/qplatformtheme.h>
 #include <DHiDPIHelper>
 #include <DApplication>
@@ -65,56 +66,85 @@ int perfectIconSize(const int size)
     return 256;
 }
 
-const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size)
+/**
+ * @brief AppsManager::getThemeIcon 获取主题资源
+ * @param pix 图片对象
+ * @param itemInfo 应用信息
+ * @param size 图片大小
+ * @param reObtain 是否重新获取的标识
+ * @return 返回true,获取到了主题资源,否则获取系统默认资源
+ */
+bool AppsManager::getThemeIcon(QPixmap &pix, const ItemInfo &itemInfo, const int size, bool reObtain)
 {
     const QString &iconName = itemInfo.m_iconKey;
     const auto ratio = qApp->devicePixelRatio();
     const int s = perfectIconSize(size);
-    bool findIcon = true;
 
-    QPixmap pixmap;
+    QIcon icon;
+    bool ret = true;
+
     do {
         if (iconName.startsWith("data:image/")) {
             const QStringList strs = iconName.split("base64,");
             if (strs.size() == 2)
-                pixmap.loadFromData(QByteArray::fromBase64(strs.at(1).toLatin1()));
+                pix.loadFromData(QByteArray::fromBase64(strs.at(1).toLatin1()));
 
-            if (!pixmap.isNull())
+            if (!pix.isNull())
                 break;
         }
 
         if (QFile::exists(iconName)) {
             if (iconName.endsWith(".svg"))
-                pixmap = loadSvg(iconName, s * ratio);
+                pix = loadSvg(iconName, s * ratio);
             else
-                pixmap = DHiDPIHelper::loadNxPixmap(iconName);
+                pix = DHiDPIHelper::loadNxPixmap(iconName);
 
-            if (!pixmap.isNull())
+            if (!pix.isNull())
                 break;
         }
 
-        QIcon icon = QIcon::fromTheme(iconName);
+        if (reObtain)
+            icon = getIcon(iconName);
+        else
+            icon = QIcon::fromTheme(iconName);
 
         if (icon.isNull()) {
             icon = QIcon::fromTheme("application-x-desktop");
-            //手动更新缓存
-            system("gtk-update-icon-cache /usr/share/icons/hicolor/");
-
-            findIcon = false;
+            ret = false;
         }
 
-        pixmap = icon.pixmap(QSize(s, s));
-        if (!pixmap.isNull())
+        pix = icon.pixmap(QSize(s, s));
+        if (!pix.isNull())
             break;
     } while (false);
 
-    pixmap = pixmap.scaled(QSize(s, s) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    pixmap.setDevicePixelRatio(ratio);
+    pix = pix.scaled(QSize(s, s) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    pix.setDevicePixelRatio(ratio);
 
     QPair<QString, int> tmpKey { itemInfo.m_iconKey, s};
-    if (m_CacheData[tmpKey].isNull() && findIcon )
-        m_CacheData[tmpKey] = pixmap;
-    return pixmap;
+    if (m_CacheData[tmpKey].isNull() && ret)
+        m_CacheData[tmpKey] = pix;
+
+    return ret;
+}
+
+/**
+ * @brief AppsManager::getIcon 根据传入的\a name 参数重新从系统主题中获取一次图标
+ * @param name 图标名
+ * @return 获取到的图标
+ * @note 之所以不使用QIcon::fromTheme是因为这个函数中有缓存机制，获取系统主题中的图标的时候，第一次获取不到，下一次也是获取不到
+ */
+QIcon AppsManager::getIcon(const QString &name)
+{
+    QPlatformTheme * const platformTheme = QGuiApplicationPrivate::platformTheme();
+    bool hasUserTheme = QIconLoader::instance()->hasUserTheme();
+
+    if (!platformTheme || hasUserTheme)
+        return QIcon::fromTheme(name);
+
+    QIconEngine * const engine = platformTheme->createIconEngine(name);
+    QIcon *cachedIcon  = new QIcon(engine);
+    return *cachedIcon;
 }
 
 /**
@@ -136,7 +166,6 @@ AppsManager::AppsManager(QObject *parent) :
     m_launcherInter(new DBusLauncher(this)),
     m_startManagerInter(new DBusStartManager(this)),
     m_dockInter(new DBusDock(this)),
-    m_iconRefreshTimer(std::make_unique<QTimer>(new QTimer)),
     m_calUtil(CalculateUtil::instance()),
     m_searchTimer(new QTimer(this)),
     m_delayRefreshTimer(new QTimer(this)),
@@ -153,9 +182,7 @@ AppsManager::AppsManager(QObject *parent) :
         });
     }
 
-    m_iconRefreshTimer->setInterval(10 * 1000);
-    m_iconRefreshTimer->setSingleShot(false);
-
+    // 分类目录名称
     m_categoryTs
             << tr("Internet")
             << tr("Chat")
@@ -169,6 +196,7 @@ AppsManager::AppsManager(QObject *parent) :
             << tr("System")
             << tr("Other");
 
+    // 分类目录图标
     m_categoryIcon
             << QString(":/icons/skin/icons/internet_normal_22px.svg")
             << QString(":/icons/skin/icons/chat_normal_22px.svg")
@@ -209,8 +237,6 @@ AppsManager::AppsManager(QObject *parent) :
         refreshAppListIcon();
         generateCategoryMap();
     });
-
-    connect(m_iconRefreshTimer.get(), &QTimer::timeout, this, &AppsManager::refreshNotFoundIcon);
     connect(m_RefreshCalendarIconTimer, &QTimer::timeout, this,  [=](){
                m_curDate = QDate::currentDate();
                if(m_lastShowDate != m_curDate.day()){
@@ -334,6 +360,10 @@ void AppsManager::stashItem(const QModelIndex &index)
     return stashItem(key);
 }
 
+/**
+ * @brief AppsManager::stashItem 从所有应用列表中删除卸载的应用,并更新各个分类列表数据
+ * @param appKey 应用的key
+ */
 void AppsManager::stashItem(const QString &appKey)
 {
     for (int i(0); i != m_allAppInfoList.size(); ++i) {
@@ -481,24 +511,26 @@ void AppsManager::launchApp(const QModelIndex &index)
 
 void AppsManager::uninstallApp(const QString &appKey)
 {
-    // refersh auto start cache
+    // 遍历应用列表,存在则从列表中移除
     for (const ItemInfo &info : m_allAppInfoList) {
         if (info.m_key == appKey) {
             APP_AUTOSTART_CACHE.remove(info.m_desktop);
             break;
         }
     }
-
-    // begin uninstall, remove icon first.
+    // 从应用列表中删除该应用信息
     stashItem(appKey);
+
     //卸载前，将应用从任务栏移除
     m_dockInter->RequestUndock(appKey);
-    // request backend
+
+    // 向后端发起卸载请求
     m_launcherInter->RequestUninstall(appKey, false);
 
+    // 刷新各列表的分页信息
     emit dataChanged(AppsListModel::All);
 
-    // refersh search result
+    // 重置下搜索结果
     m_searchTimer->start();
 }
 
@@ -549,6 +581,11 @@ bool AppsManager::fuzzyMatching(const QStringList& list, const QString& key)
     return false;
 }
 
+/**
+ * @brief AppsManager::createOfCategory 创建分类目录信息
+ * @param category 目录类型
+ * @return 应用软件信息
+ */
 const ItemInfo AppsManager::createOfCategory(qlonglong category)
 {
     ItemInfo info;
@@ -661,8 +698,19 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
     if (m_CacheData.contains(tmpKey) && !m_CacheData[tmpKey].isNull()) {
         return m_CacheData[tmpKey].value<QPixmap>();
     } else {
-        const QPixmap &pixmap = getThemeIcon(info, size);
-        return pixmap;
+        // 缓存中找不到就从系统主题中查找
+        QPixmap pix;
+        bool iconValid = getThemeIcon(pix, info, size, true);
+        // 5次获取
+        if (!iconValid) {
+            ++m_retryTimes;
+            if (m_retryTimes % 5 == 0) {
+                appIcon(info, size);
+            }
+        }
+
+        m_retryTimes = 0;
+        return pix;
     }
 }
 
@@ -742,26 +790,23 @@ void AppsManager::refreshCategoryInfoList()
  */
 void AppsManager::refreshUsedInfoList()
 {
-    // init data if used sorted list is empty.
     if (m_usedSortedList.isEmpty()) {
-        // first reads the config file.
         QByteArray readBuffer = APP_USED_SORTED_LIST.value("list").toByteArray();
         QDataStream in(&readBuffer, QIODevice::ReadOnly);
         in >> m_usedSortedList;
 
-        // if data cache file is empty.
         if (m_usedSortedList.isEmpty()) {
             m_usedSortedList = m_allAppInfoList;
         }
 
-        // add new additions
+        // 没有使用的插入到后面
         for (QList<ItemInfo>::ConstIterator it = m_allAppInfoList.constBegin(); it != m_allAppInfoList.constEnd(); ++it) {
             if (!m_usedSortedList.contains(*it)) {
                 m_usedSortedList.append(*it);
             }
         }
 
-        // check used list isvaild
+        // 使用的应用列表是否也存在于所有应用列表中,不存在就删除掉
         for (QList<ItemInfo>::iterator it = m_usedSortedList.begin(); it != m_usedSortedList.end();) {
             if (m_allAppInfoList.contains(*it)) {
                 it++;
@@ -773,6 +818,7 @@ void AppsManager::refreshUsedInfoList()
         updateUsedListInfo();
     }
 
+    // 保存到gsetting配置文件
     saveUsedSortedList();
 }
 
@@ -822,7 +868,7 @@ void AppsManager::refreshUserInfoList()
                 }
             }
 
-            // add new additions
+            // m_userSortedList没有的插入到后面
             for (QList<ItemInfo>::Iterator it = m_allAppInfoList.begin(); it != m_allAppInfoList.end(); ++it) {
                 if (!m_userSortedList.contains(*it)) {
                     m_userSortedList.append(*it);
@@ -842,7 +888,6 @@ void AppsManager::refreshUserInfoList()
     }
 
     const qint64 currentTime = QDateTime::currentMSecsSinceEpoch() / 1000;
-    // If the first run time is less than the current time, I am not sure can maintain the correct results.
     std::stable_sort(m_userSortedList.begin(), m_userSortedList.end(), [ = ](const ItemInfo & a, const ItemInfo & b) {
         const bool ANewInsatll = m_newInstalledAppsList.contains(a.m_key);
         const bool BNewInsatll = m_newInstalledAppsList.contains(b.m_key);
@@ -890,7 +935,7 @@ void AppsManager::updateUsedListInfo()
 }
 
 /**
- * @brief AppsManager::generateCategoryMap 加入新装的app到列表,从列表中移除卸载的app
+ * @brief AppsManager::generateCategoryMap 重新生成/更新应用分类目录信息以及所有应用信息
  */
 void AppsManager::generateCategoryMap()
 {
@@ -901,7 +946,6 @@ void AppsManager::generateCategoryMap()
     for (const ItemInfo &info : m_allAppInfoList) {
 
         const int userIdx = m_usedSortedList.indexOf(info);
-        // append new installed app to user sorted list
         if (userIdx == -1) {
             m_usedSortedList.append(info);
         } else {
@@ -931,8 +975,9 @@ void AppsManager::generateCategoryMap()
         }
     }
 
-
+    // 新安装的应用以安装时间先后排序(升序),并对安装的应用做分类保存或者更新该应用信息
     sortByInstallTimeOrder(newInstallAppList);
+
     if (!newInstallAppList.isEmpty()) {
         for (const ItemInfo &info : newInstallAppList) {
             if (!m_appInfos[info.category()].contains(info)) {
@@ -946,7 +991,6 @@ void AppsManager::generateCategoryMap()
             }
         }
     }
-
 
     // 移除 m_appInfos 中已经不存在的应用
     QHash<AppsListModel::AppCategory, ItemInfoList>::iterator categoryAppsIter = m_appInfos.begin();
@@ -975,13 +1019,17 @@ void AppsManager::generateCategoryMap()
         if (idx == -1 && (m_calUtil->displayMode() == GROUP_BY_CATEGORY)) {
             idx = m_stashList.indexOf(*it);
         }
-        if (idx == -1)
+
+        // 多个应用被移除这里会出现迭代器失效问题
+        if (idx == -1) {
             it = m_usedSortedList.erase(it);
+            break;
+        }
         else
             ++it;
     }
 
-    // swt question?
+    // 从所有应用中获取所有分类目录类型id,存放到临时列表categoryID中
     std::list<qlonglong> categoryID;
     for (const ItemInfo &it : m_allAppInfoList) {
         if (std::find(categoryID.begin(), categoryID.end(), it.m_categoryId) == categoryID.end()) {
@@ -989,16 +1037,19 @@ void AppsManager::generateCategoryMap()
         }
     }
 
+    // 根据分类目录类型id,生成分类目录图标等信息
     for (auto it = categoryID.begin(); it != categoryID.end(); ++it) {
         m_categoryList << createOfCategory(*it);
     }
 
+    // 按照分类目录的id大小对分类目录里列表进行排序
     std::sort(m_categoryList.begin(),
               m_categoryList.end(),
     [ = ](const ItemInfo & info1, const ItemInfo & info2) {
         return info1.m_categoryId < info2.m_categoryId;
     });
 
+    // 更新各个分类下应用的数量
     emit categoryListChanged();
 }
 
@@ -1051,46 +1102,6 @@ void AppsManager::onSearchTimeOut()
 
         w->deleteLater();
     });
-}
-
-void AppsManager::refreshNotFoundIcon()
-{
-    QPlatformTheme *const platformTheme = QGuiApplicationPrivate::platformTheme();
-    const qreal ratio = qApp->devicePixelRatio();
-
-    for (auto it = m_notExistIconMap.begin(); it != m_notExistIconMap.end();) {
-        // The number of retries is 6
-        if (it->second > 6) {
-            it = m_notExistIconMap.erase(it);
-            continue;
-        }
-
-        const std::pair<ItemInfo, int> itemPair = it->first;
-        // QIcon have cache, cannot use QIcon::fromTheme or QIcon::hasThemeIcon
-        QScopedPointer<QIconEngine> engine(platformTheme->createIconEngine(itemPair.first.m_iconKey));
-        if (!engine.isNull() && !engine->isNull()) {
-            for (auto iconIt = m_CacheData.begin(); iconIt != m_CacheData.end(); ++iconIt) {
-                if (iconIt.key().first == cacheKey(itemPair.first, CacheType::ImageType) && iconIt.key().second / ratio == itemPair.second) {
-                    const QPair<QString, int> iconPair{ cacheKey(itemPair.first, CacheType::ImageType), iconIt.key().second };
-                    const QPixmap &pixmap = getThemeIcon(itemPair.first, itemPair.second);
-                    m_CacheData[iconPair] = pixmap;
-                    emit itemDataChanged(itemPair.first);
-                    it = m_notExistIconMap.erase(it);
-                    break;
-                }
-            }
-        }
-
-        // Maybe map only have one data
-        if (it != m_notExistIconMap.end()) {
-            it->second += 1;
-            ++it;
-        }
-    }
-
-    if (m_notExistIconMap.size() == 0) {
-        return m_iconRefreshTimer->stop();
-    }
 }
 
 void AppsManager::onIconThemeChanged()
@@ -1146,6 +1157,7 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
         if (m_filterSetting != nullptr) {
             filters = m_filterSetting->get("filter-keys").toStringList();
         }
+
         if (fuzzyMatching(filters, appInfo.m_key)) {
             return;
         }
@@ -1153,12 +1165,24 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
         m_allAppInfoList.append(info);
         m_usedSortedList.append(info);
         m_userSortedList.push_front(info);
+
+        // 更新该应用的icon信息
         pushPixmap(appInfo);
     } else if (operation == "deleted") {
 
         m_allAppInfoList.removeOne(appInfo);
         m_usedSortedList.removeOne(appInfo);
         m_userSortedList.removeOne(appInfo);
+
+        // 从缓存中清理带该应用的缓存
+        QPair<QString, int> tmpKey { appInfo.m_iconKey, 0};
+        if (!m_CacheData.keys().isEmpty()) {
+            int index = m_CacheData.keys().indexOf(tmpKey);
+            if (index != -1) {
+                QPair<QString, int> iconInfo = m_CacheData.keys().at(index);
+                m_CacheData.remove(iconInfo);
+            }
+        }
     } else if (operation == "updated") {
 
         Q_ASSERT(m_allAppInfoList.contains(appInfo));
@@ -1227,7 +1251,17 @@ void AppsManager::pushPixmap(const ItemInfo &itemInfo)
     for (int i = 0; i < s; i++) {
         QPair<QString, int> tmpKey { cacheKey(itemInfo, CacheType::ImageType), l[i]};
         if (m_CacheData[tmpKey].isNull()) {
-            getThemeIcon(itemInfo, l[i]);
+            QPixmap pix;
+            bool iconValid = getThemeIcon(pix, itemInfo, l[i], true);
+            // 5次获取
+            if (!iconValid) {
+                ++m_retryTimes;
+                if (m_retryTimes % 5 == 0) {
+                    pushPixmap(itemInfo);
+                }
+            }
+
+            m_retryTimes = 0;
         }
     }
 }

@@ -32,6 +32,10 @@
 #include <QPainter>
 #include <QPaintEvent>
 
+/**
+ * @brief BoxFrame::BoxFrame 桌面背景类
+ * @param parent 父对象
+ */
 BoxFrame::BoxFrame(QWidget *parent)
     : QLabel(parent)
     , m_defaultBg("/usr/share/backgrounds/default_background.jpg")

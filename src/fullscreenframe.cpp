@@ -172,6 +172,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
         connect(multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
     }
 
+    // 全屏分类模式下共用这5个控件
     for (int i = 0; i < 5; i++) {
         ScrollWidgetAgent *widgetAgent = new ScrollWidgetAgent(this);
         widgetAgent->setControlWidget(m_appsItemBox);
@@ -797,8 +798,6 @@ void FullScreenFrame::initUI()
             button->installEventFilter(m_eventFilter);
         }
     }
-
-
 
     m_internetBoxWidget->setVisible(false);
     m_chatBoxWidget->setVisible(false);

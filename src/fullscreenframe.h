@@ -186,19 +186,19 @@ private:
     QLabel *m_tipsLabel;
 
     AppItemDelegate *m_appItemDelegate;      // 全屏模式下listview视图代理
-    MultiPagesView *m_multiPagesView;
+    MultiPagesView *m_multiPagesView;        // 全屏分类模式下控件类（listview + 分页控件））
 
-    BlurBoxWidget *m_internetBoxWidget;
-    BlurBoxWidget *m_chatBoxWidget;
-    BlurBoxWidget *m_musicBoxWidget;
-    BlurBoxWidget *m_videoBoxWidget;
-    BlurBoxWidget *m_graphicsBoxWidget;
-    BlurBoxWidget *m_gameBoxWidget;
-    BlurBoxWidget *m_officeBoxWidget;
-    BlurBoxWidget *m_readingBoxWidget;
-    BlurBoxWidget *m_developmentBoxWidget;
-    BlurBoxWidget *m_systemBoxWidget;
-    BlurBoxWidget *m_othersBoxWidget;
+    BlurBoxWidget *m_internetBoxWidget;      // 全屏应用分类下网络应用控件
+    BlurBoxWidget *m_chatBoxWidget;          // 全屏应用分类下社交沟通控件
+    BlurBoxWidget *m_musicBoxWidget;         // 全屏应用分类下音乐欣赏控件
+    BlurBoxWidget *m_videoBoxWidget;         // 全屏应用分类下视频播放控件
+    BlurBoxWidget *m_graphicsBoxWidget;      // 全屏应用分类下图形图像控件
+    BlurBoxWidget *m_gameBoxWidget;          // 全屏应用分类下游戏娱乐控件
+    BlurBoxWidget *m_officeBoxWidget;        // 全屏应用分类下办公学习控件
+    BlurBoxWidget *m_readingBoxWidget;       // 全屏应用分类下阅读翻译控件
+    BlurBoxWidget *m_developmentBoxWidget;   // 全屏应用分类下编程开发控件
+    BlurBoxWidget *m_systemBoxWidget;        // 全屏应用分类下系统管理控件
+    BlurBoxWidget *m_othersBoxWidget;        // 全屏应用分类下其他分类控件
 
     QFrame *m_topSpacing;
     QFrame *m_bottomSpacing;

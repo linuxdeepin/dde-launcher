@@ -25,6 +25,13 @@
 #include <QPainter>
 
 DWIDGET_USE_NAMESPACE
+
+/**
+ * @brief BlurBoxWidget::BlurBoxWidget 单个分类应用的内容控件（标题+MultiPagesView）
+ * @param curCategory 分类类别枚举值
+ * @param name 设置的对象名
+ * @param parent 父对象
+ */
 BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name, QWidget *parent)
     : QWidget (parent)
     , m_vLayout(new QVBoxLayout(this))
@@ -58,7 +65,11 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
 
     m_vLayout->setContentsMargins(0, 24, 0, 0);
     m_vLayout->setAlignment(Qt::AlignTop);
+
+    // 应用分类标题
     layoutAddWidget(m_categoryTitle, m_calcUtil->getAppBoxSize().width() / 2, Qt::AlignHCenter);
+
+    // 单个应用分类控件
     m_vLayout->addWidget(m_categoryMultiPagesView);
 
     m_bg->setFixedSize(m_calcUtil->getAppBoxSize());

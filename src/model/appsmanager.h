@@ -77,7 +77,8 @@ public:
     bool isHaveNewInstall() const { return !m_newInstalledAppsList.isEmpty(); }
     bool isVaild();
     void refreshAllList();
-    const QPixmap getThemeIcon(const ItemInfo &itemInfo, const int size);
+    bool getThemeIcon(QPixmap &pix, const ItemInfo &itemInfo, const int size, bool reObtain = false);
+    QIcon getIcon(const QString &name);
     int getPageCount(const AppsListModel::AppCategory category);
     void pushPixmap();
     void pushPixmap(const ItemInfo &itemInfo);
@@ -137,7 +138,6 @@ private:
     void generateCategoryMap();
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
     void onSearchTimeOut();
-    void refreshNotFoundIcon();
     void refreshAppListIcon();
     QString cacheKey(const ItemInfo &itemInfo, CacheType size);
 
@@ -163,16 +163,15 @@ private:
     DBusLauncher *m_launcherInter;
     DBusStartManager *m_startManagerInter;
     DBusDock *m_dockInter;
-    std::unique_ptr<QTimer> m_iconRefreshTimer;
 
     QString m_searchText;
-    QStringList m_newInstalledAppsList;
-    ItemInfoList m_allAppInfoList;
-    ItemInfoList m_usedSortedList; // FullScreen
-    ItemInfoList m_userSortedList; // Mini
+    QStringList m_newInstalledAppsList;                         // 新安装应用列表
+    ItemInfoList m_allAppInfoList;                              // 所有app信息列表
+    ItemInfoList m_usedSortedList; // FullScreen                // 按照最近使用的时间顺序排序后的应用列表
+    ItemInfoList m_userSortedList; // Mini                      // 分类后的应用列表
     ItemInfoList m_appSearchResultList;                         // 搜索结果列表
     ItemInfoList m_stashList;
-    ItemInfoList m_categoryList;
+    ItemInfoList m_categoryList;                                // 小窗口应用分类目录列表
     QHash<AppsListModel::AppCategory, ItemInfoList> m_appInfos; // 全屏分类模式下保存的应用
 
     ItemInfo m_unInstallItem = ItemInfo();
@@ -185,6 +184,7 @@ private:
 
     QDate m_curDate;
     int m_lastShowDate;
+    int m_retryTimes;
 
     static QPointer<AppsManager> INSTANCE;
     static QGSettings *m_launcherSettings;
@@ -193,7 +193,6 @@ private:
     static QSettings APP_USED_SORTED_LIST;
     static QSettings APP_CATEGORY_USED_SORTED_LIST;
     QHash<QPair<QString, int>, QVariant> m_CacheData;
-    std::map<std::pair<ItemInfo, int>, int> m_notExistIconMap;
     QStringList m_categoryTs;
     QStringList m_categoryIcon;
     QGSettings* m_filterSetting = nullptr;

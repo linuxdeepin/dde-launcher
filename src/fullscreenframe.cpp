@@ -579,7 +579,7 @@ void FullScreenFrame::showEvent(QShowEvent *e)
 
     updateDockPosition();
 
-    QFrame::showEvent(e);
+    BoxFrame::showEvent(e);
 
     QTimer::singleShot(0, this, [this]() {
         raise();
@@ -1187,7 +1187,7 @@ void FullScreenFrame::updateGeometry()
 
     setGeometry(rect);
 
-    QFrame::updateGeometry();
+    BoxFrame::updateGeometry();
 }
 
 void FullScreenFrame::moveCurrentSelectApp(const int key)

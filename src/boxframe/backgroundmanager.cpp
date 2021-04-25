@@ -45,6 +45,14 @@ BackgroundManager::BackgroundManager(QObject *parent)
     , m_appearanceInter(new AppearanceInter("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
     , m_displayInter(new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
 {
+    m_gsettings = new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", this);
+
+    auto gsettingsChanged = [this](const QString& key) {
+        if (key == "useWorkspaceWallpaper") {
+            return setUseWorkSpaceWallpaper(m_gsettings->get(key).toBool());
+        }
+    };
+
     m_appearanceInter->setSync(false, false);
 
     m_displayMode = m_displayInter->GetRealDisplayMode();
@@ -61,8 +69,10 @@ BackgroundManager::BackgroundManager(QObject *parent)
     });
 
     connect(m_displayInter, &DisplayInter::DisplayModeChanged, this, &BackgroundManager::updateBlurBackgrounds);
+    connect(m_gsettings, &QGSettings::changed, this, gsettingsChanged);
 
     updateBlurBackgrounds();
+    gsettingsChanged("useWorkspaceWallpaper");
 }
 
 void BackgroundManager::getImageDataFromDbus(const QString &filePath)
@@ -140,4 +150,15 @@ void BackgroundManager::updateBlurBackgrounds()
     QString filePath = QFile::exists(path) ? path : DefaultWallpaper;
 
     getImageDataFromDbus(filePath);
+}
+
+void BackgroundManager::setUseWorkSpaceWallpaper(bool useWorkspaceWallpaper)
+{
+    if (useWorkspaceWallpaper == m_useWorkSpaceWallpaper) {
+        return;
+    }
+
+    m_useWorkSpaceWallpaper = useWorkspaceWallpaper;
+
+    emit useWorkSpaceWallpaperChanged(useWorkspaceWallpaper);
 }

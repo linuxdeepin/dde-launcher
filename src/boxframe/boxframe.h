@@ -26,12 +26,15 @@
 
 #include <QLabel>
 #include <QPixmapCache>
+#include <DBlurEffectWidget>
 
 class QPixmap;
 class BackgroundManager;
 class QScreen;
 
-class BoxFrame : public QLabel
+DWIDGET_USE_NAMESPACE
+
+class BoxFrame : public DBlurEffectWidget
 {
     Q_OBJECT
 
@@ -42,6 +45,8 @@ public:
     void setBackground(const QString &url);
     void setBlurBackground(const QString &url);
     inline QPixmap cachePixmap() { return m_cache; }
+
+    QString text() const; // for accessible.h
 
 signals:
     void backgroundImageChanged(const QPixmap & img);

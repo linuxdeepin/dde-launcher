@@ -27,6 +27,7 @@
 #include <QObject>
 #include <QDesktopWidget>
 #include <QScreen>
+#include <QGSettings>
 
 #include <com_deepin_wm.h>
 #include <com_deepin_daemon_imageeffect.h>
@@ -52,15 +53,23 @@ public:
 
     int dispalyMode() const { return m_displayMode; }
 
+    inline bool useWorkSpaceWallpaper() const {
+        return m_useWorkSpaceWallpaper;
+    }
+
 private:
     void getImageDataFromDbus(const QString &filePath);
 
 signals:
     void currentWorkspaceBackgroundChanged(const QString &background);
     void currentWorkspaceBlurBackgroundChanged(const QString &background);
+    void useWorkSpaceWallpaperChanged(bool useWorkspaceWallpaper);
 
 public slots:
     void updateBlurBackgrounds();
+
+private:
+    void setUseWorkSpaceWallpaper(bool useWorkSpaceWallpaper);
 
 private:
     int m_currentWorkspace;
@@ -72,7 +81,9 @@ private:
     QPointer<ImageEffeblur> m_imageblur;
     QPointer<AppearanceInter> m_appearanceInter;
     QPointer<DisplayInter> m_displayInter;
+    QPointer<QGSettings> m_gsettings;
     int m_displayMode;
+    bool m_useWorkSpaceWallpaper;
 };
 
 #endif // BACKGROUNDMANAGER_H

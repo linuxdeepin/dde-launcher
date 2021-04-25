@@ -33,13 +33,14 @@
 #include <QPaintEvent>
 
 BoxFrame::BoxFrame(QWidget *parent)
-    : QLabel(parent)
+    : DBlurEffectWidget(parent)
     , m_defaultBg("/usr/share/backgrounds/default_background.jpg")
     , m_bgManager(new BackgroundManager(this))
 {
     QPixmapCache::setCacheLimit(10240000);
     connect(m_bgManager, &BackgroundManager::currentWorkspaceBackgroundChanged, this, &BoxFrame::setBackground);
     connect(m_bgManager, &BackgroundManager::currentWorkspaceBlurBackgroundChanged, this, &BoxFrame::setBlurBackground);
+    connect(m_bgManager, &BackgroundManager::useWorkSpaceWallpaperChanged, this,  &BoxFrame::updateBackground);
 }
 
 BoxFrame::~BoxFrame()
@@ -89,6 +90,11 @@ void BoxFrame::setBlurBackground(const QString &url)
     cache = cache.copy(copyRect);
     cache.setDevicePixelRatio(devicePixelRatioF());
     emit backgroundImageChanged(cache);
+}
+
+QString BoxFrame::text() const
+{
+    return "LauncherFrame";
 }
 
 /**
@@ -160,13 +166,20 @@ void BoxFrame::updateBlurBackground()
 
 void BoxFrame::updateBackground()
 {
+    if (!m_bgManager->useWorkSpaceWallpaper()) {
+        return update();
+    }
+
     m_cache = backgroundPixmap();
     update();
 }
 
 void BoxFrame::paintEvent(QPaintEvent *event)
 {
-    Q_UNUSED(event);
+    if (!m_bgManager->useWorkSpaceWallpaper()) {
+        return DBlurEffectWidget::paintEvent(event);
+    }
+
     QPainter painter(this);
 
     QScreen const *s = currentScreen();
@@ -181,6 +194,9 @@ void BoxFrame::paintEvent(QPaintEvent *event)
 
 void BoxFrame::moveEvent(QMoveEvent *event)
 {
-    m_bgManager->updateBlurBackgrounds();
-    QLabel::moveEvent(event);
+    if (m_bgManager->useWorkSpaceWallpaper()) {
+        m_bgManager->updateBlurBackgrounds();
+    }
+
+    DBlurEffectWidget::moveEvent(event);
 }

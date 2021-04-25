@@ -118,6 +118,11 @@
 			<summary>icons not allowed to show on mini frame right bar</summary>
 			<description>icons not allowed to show on mini frame right bar</description>
 		</key>
+		<key name="use-workspace-wallpaper" type='b'>
+			<default>true</default>
+			<summary>use workspace wallpaper, otherwise, a blur window will be used</summary>
+			<description></description>
+		</key>
 	</schema>
   	<schema path="/com/deepin/dde/launcher/menu/" id="com.deepin.dde.launcher.menu" gettext-domain="DDE">
 		<key name="open" type='b'>

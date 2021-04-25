@@ -38,9 +38,10 @@ public:
     bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    LauncherInterface *m_frame;
-
     bool handleKeyEvent(QKeyEvent *event);
+
+private:
+    LauncherInterface *m_frame;
 };
 
 #endif // SHAREDEVENTFILTER_H

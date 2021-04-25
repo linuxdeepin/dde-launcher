@@ -66,66 +66,56 @@ int perfectIconSize(const int size)
     return 256;
 }
 
-/**
- * @brief AppsManager::getThemeIcon 获取主题资源
- * @param pix 图片对象
- * @param itemInfo 应用信息
- * @param size 图片大小
- * @param reObtain 是否重新获取的标识
- * @return 返回true,获取到了主题资源,否则获取系统默认资源
- */
-bool AppsManager::getThemeIcon(QPixmap &pix, const ItemInfo &itemInfo, const int size, bool reObtain)
+const QPixmap AppsManager::getThemeIcon(const ItemInfo &itemInfo, const int size)
 {
     const QString &iconName = itemInfo.m_iconKey;
     const auto ratio = qApp->devicePixelRatio();
     const int s = perfectIconSize(size);
+    bool findIcon = true;
 
-    QIcon icon;
-    bool ret = true;
-
+    QPixmap pixmap;
     do {
         if (iconName.startsWith("data:image/")) {
             const QStringList strs = iconName.split("base64,");
             if (strs.size() == 2)
-                pix.loadFromData(QByteArray::fromBase64(strs.at(1).toLatin1()));
+                pixmap.loadFromData(QByteArray::fromBase64(strs.at(1).toLatin1()));
 
-            if (!pix.isNull())
+            if (!pixmap.isNull())
                 break;
         }
 
         if (QFile::exists(iconName)) {
             if (iconName.endsWith(".svg"))
-                pix = loadSvg(iconName, s * ratio);
+                pixmap = loadSvg(iconName, s * ratio);
             else
-                pix = DHiDPIHelper::loadNxPixmap(iconName);
+                pixmap = DHiDPIHelper::loadNxPixmap(iconName);
 
-            if (!pix.isNull())
+            if (!pixmap.isNull())
                 break;
         }
 
-        if (reObtain)
-            icon = getIcon(iconName);
-        else
-            icon = QIcon::fromTheme(iconName);
+        QIcon icon = QIcon::fromTheme(iconName);
 
         if (icon.isNull()) {
             icon = QIcon::fromTheme("application-x-desktop");
-            ret = false;
+            //手动更新缓存
+            system("gtk-update-icon-cache /usr/share/icons/hicolor/");
+
+            findIcon = false;
         }
 
-        pix = icon.pixmap(QSize(s, s));
-        if (!pix.isNull())
+        pixmap = icon.pixmap(QSize(s, s));
+        if (!pixmap.isNull())
             break;
     } while (false);
 
-    pix = pix.scaled(QSize(s, s) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    pix.setDevicePixelRatio(ratio);
+    pixmap = pixmap.scaled(QSize(s, s) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    pixmap.setDevicePixelRatio(ratio);
 
     QPair<QString, int> tmpKey { itemInfo.m_iconKey, s};
-    if (m_CacheData[tmpKey].isNull() && ret)
-        m_CacheData[tmpKey] = pix;
-
-    return ret;
+    if (m_CacheData[tmpKey].isNull() && findIcon )
+        m_CacheData[tmpKey] = pixmap;
+    return pixmap;
 }
 
 /**
@@ -698,19 +688,8 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
     if (m_CacheData.contains(tmpKey) && !m_CacheData[tmpKey].isNull()) {
         return m_CacheData[tmpKey].value<QPixmap>();
     } else {
-        // 缓存中找不到就从系统主题中查找
-        QPixmap pix;
-        bool iconValid = getThemeIcon(pix, info, size, true);
-        // 5次获取
-        if (!iconValid) {
-            ++m_retryTimes;
-            if (m_retryTimes % 5 == 0) {
-                appIcon(info, size);
-            }
-        }
-
-        m_retryTimes = 0;
-        return pix;
+        const QPixmap &pixmap = getThemeIcon(info, size);
+        return pixmap;
     }
 }
 
@@ -1173,16 +1152,6 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
         m_allAppInfoList.removeOne(appInfo);
         m_usedSortedList.removeOne(appInfo);
         m_userSortedList.removeOne(appInfo);
-
-        // 从缓存中清理带该应用的缓存
-        QPair<QString, int> tmpKey { appInfo.m_iconKey, 0};
-        if (!m_CacheData.keys().isEmpty()) {
-            int index = m_CacheData.keys().indexOf(tmpKey);
-            if (index != -1) {
-                QPair<QString, int> iconInfo = m_CacheData.keys().at(index);
-                m_CacheData.remove(iconInfo);
-            }
-        }
     } else if (operation == "updated") {
 
         Q_ASSERT(m_allAppInfoList.contains(appInfo));
@@ -1251,17 +1220,7 @@ void AppsManager::pushPixmap(const ItemInfo &itemInfo)
     for (int i = 0; i < s; i++) {
         QPair<QString, int> tmpKey { cacheKey(itemInfo, CacheType::ImageType), l[i]};
         if (m_CacheData[tmpKey].isNull()) {
-            QPixmap pix;
-            bool iconValid = getThemeIcon(pix, itemInfo, l[i], true);
-            // 5次获取
-            if (!iconValid) {
-                ++m_retryTimes;
-                if (m_retryTimes % 5 == 0) {
-                    pushPixmap(itemInfo);
-                }
-            }
-
-            m_retryTimes = 0;
+            getThemeIcon(itemInfo, l[i]);
         }
     }
 }

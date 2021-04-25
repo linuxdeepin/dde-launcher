@@ -185,6 +185,27 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     initConnection();
 
     updateDisplayMode(m_calcUtil->displayMode());
+
+    // 支持全屏空白区域切换分页
+    connect(this, &FullScreenFrame::changePage, [&](bool isNext) {
+        int curPage = m_multiPagesView->currentPage();
+        int pageCount = m_multiPagesView->pageCount();
+
+        if (isNext) {
+            if (curPage >= pageCount - 1)
+                return;
+
+            m_multiPagesView->showCurrentPage(curPage + 1);
+            m_multiPagesView->setGradientVisible(true);
+        }
+        else {
+            if (curPage <= 0)
+                return;
+
+            m_multiPagesView->showCurrentPage(curPage - 1);
+            m_multiPagesView->setGradientVisible(true);
+        }
+    });
 }
 
 FullScreenFrame::~FullScreenFrame()
@@ -606,29 +627,29 @@ void FullScreenFrame::hideEvent(QHideEvent *e)
 void FullScreenFrame::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton)
-       return;
+        return;
+
     m_searchWidget->clearSearchContent();
     m_mouse_press = true;
     m_mouse_press_time =  QDateTime::currentDateTime().toMSecsSinceEpoch();
     m_mouse_move_pos = e->pos();
     m_mouse_press_pos = e->pos();
+
+    m_startPoint = e->globalPos();
 }
 
 void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
 {
-    if (!m_mouse_press  || e->button() == Qt::RightButton) {
+    if (!m_mouse_press || e->button() == Qt::RightButton)
         return;
-    }
 
-    if (m_animationGroup->state() == m_animationGroup->Running) {
+    if (m_animationGroup->state() == m_animationGroup->Running)
         return;
-    }
 
     int categoryCount = m_appsManager->getVisibleCategoryCount();
 
-    if (categoryCount <= 2) {
+    if (categoryCount <= 2)
         return;
-    }
 
     qint64 mouse_release_time =  QDateTime::currentDateTime().toMSecsSinceEpoch();
 
@@ -663,12 +684,12 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
     if ((e->source() == Qt::MouseEventSynthesizedByQt && diff_x < DLauncher::TOUCH_DIFF_THRESH && diff_y < DLauncher::TOUCH_DIFF_THRESH)
             || (e->source() != Qt::MouseEventSynthesizedByQt && e->pos() == m_mouse_press_pos )) {
         hide();
-    } else if (m_displayMode == GROUP_BY_CATEGORY){
+    } else if (m_displayMode == GROUP_BY_CATEGORY) {
         qint64 mouse_release_time =  QDateTime::currentDateTime().toMSecsSinceEpoch();
         int move_diff   = e->pos().x() - m_mouse_press_pos.x();
         //快速滑动
         if (mouse_release_time - m_mouse_press_time <= DLauncher::MOUSE_PRESS_TIME_DIFF &&
-            abs(move_diff) > DLauncher::MOUSE_MOVE_TO_NEXT) {
+                abs(move_diff) > DLauncher::MOUSE_MOVE_TO_NEXT) {
 
             if (move_diff > 0) {
                 AppsListModel::AppCategory targetCategory = prevCategoryType(m_currentCategory);
@@ -682,6 +703,18 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
         }
     }
     m_mouse_press = false;
+
+    // 全屏分类模式才支持鼠标拖动触发分页的操作，鼠标小范围移动不触发分页
+    if ((CalculateUtil::instance()->displayMode() != ALL_APPS) || (abs(e->globalX() - m_startPoint.x()) < 10))
+        return;
+
+    // 向左滑动翻页
+    if ((e->globalX() - m_startPoint.x()) > DLauncher::SLIDE_DIFF_THRESH)
+        emit changePage(false);
+
+    // 向右滑动翻页
+    if ((e->globalX() - m_startPoint.x() )< -DLauncher::SLIDE_DIFF_THRESH)
+        emit changePage(true);
 }
 
 void FullScreenFrame::wheelEvent(QWheelEvent *e)

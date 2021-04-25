@@ -77,7 +77,7 @@ public:
     bool isHaveNewInstall() const { return !m_newInstalledAppsList.isEmpty(); }
     bool isVaild();
     void refreshAllList();
-    bool getThemeIcon(QPixmap &pix, const ItemInfo &itemInfo, const int size, bool reObtain = false);
+    const QPixmap getThemeIcon(const ItemInfo &itemInfo, const int size);
     QIcon getIcon(const QString &name);
     int getPageCount(const AppsListModel::AppCategory category);
     void pushPixmap();
@@ -184,7 +184,6 @@ private:
 
     QDate m_curDate;
     int m_lastShowDate;
-    int m_retryTimes;
 
     static QPointer<AppsManager> INSTANCE;
     static QGSettings *m_launcherSettings;

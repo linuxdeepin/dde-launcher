@@ -81,6 +81,7 @@ signals:
     void categoryAppNumsChanged(const AppsListModel::AppCategory category, const int appNums);
     void currentVisibleCategoryChanged(const AppsListModel::AppCategory currentVisibleCategory) const;
     void scrollChanged(const AppsListModel::AppCategory &category);
+    void changePage(bool isNext = true);
 
 public slots:
     void scrollToCategory(const AppsListModel::AppCategory oldCategory, const AppsListModel::AppCategory newCategory);
@@ -157,16 +158,17 @@ private:
     int m_displayMode = SEARCH;
     int m_focusIndex;
     int m_currentIndex = 0;
-    // 鼠标单击位置
+
     QPoint m_mouse_move_pos;
     QPoint m_mouse_press_pos;
     qint64 m_mouse_press_time;
     bool m_mouse_press;
+    QPoint m_startPoint;                                // 鼠标拖动起点坐标
 
     AppsListModel::AppCategory m_currentCategory;
 
     std::unique_ptr<MenuWorker> m_menuWorker;
-    SharedEventFilter *m_eventFilter;        // 事件过滤类
+    SharedEventFilter *m_eventFilter;                   // 事件过滤类
 
     CalculateUtil *m_calcUtil;
     AppsManager *m_appsManager;
@@ -174,31 +176,31 @@ private:
     QTimer *m_delayHideTimer;
     QTimer *m_clearCacheTimer;
 
-    NavigationWidget *m_navigationWidget;    // 全屏模式下导航栏(搜索控件正下方)
-    SearchWidget *m_searchWidget;            // 顶部水平方向控件 (全屏模式下搜索, 左上模式切换按钮,右上全屏和小窗口模式切换按钮)
+    NavigationWidget *m_navigationWidget;               // 全屏模式下导航栏(搜索控件正下方)
+    SearchWidget *m_searchWidget;                       // 顶部水平方向控件 (全屏模式下搜索, 左上模式切换按钮,右上全屏和小窗口模式切换按钮)
 
     QFrame *m_contentFrame;
     DHBoxWidget *m_appsIconBox;
-    DHBoxWidget *m_appsItemBox;              // 分类后容纳app列表的控件
-    MaskQWidget *m_appsItemSeizeBox;         // app 分组点位
+    DHBoxWidget *m_appsItemBox;                         // 分类后容纳app列表的控件
+    MaskQWidget *m_appsItemSeizeBox;                    // app 分组点位
     QHBoxLayout *m_iconHLayout;
 
     QLabel *m_tipsLabel;
 
-    AppItemDelegate *m_appItemDelegate;      // 全屏模式下listview视图代理
-    MultiPagesView *m_multiPagesView;        // 全屏分类模式下控件类（listview + 分页控件））
+    AppItemDelegate *m_appItemDelegate;                 // 全屏模式下listview视图代理
+    MultiPagesView *m_multiPagesView;                   // 全屏分类模式下控件类（listview + 分页控件））
 
-    BlurBoxWidget *m_internetBoxWidget;      // 全屏应用分类下网络应用控件
-    BlurBoxWidget *m_chatBoxWidget;          // 全屏应用分类下社交沟通控件
-    BlurBoxWidget *m_musicBoxWidget;         // 全屏应用分类下音乐欣赏控件
-    BlurBoxWidget *m_videoBoxWidget;         // 全屏应用分类下视频播放控件
-    BlurBoxWidget *m_graphicsBoxWidget;      // 全屏应用分类下图形图像控件
-    BlurBoxWidget *m_gameBoxWidget;          // 全屏应用分类下游戏娱乐控件
-    BlurBoxWidget *m_officeBoxWidget;        // 全屏应用分类下办公学习控件
-    BlurBoxWidget *m_readingBoxWidget;       // 全屏应用分类下阅读翻译控件
-    BlurBoxWidget *m_developmentBoxWidget;   // 全屏应用分类下编程开发控件
-    BlurBoxWidget *m_systemBoxWidget;        // 全屏应用分类下系统管理控件
-    BlurBoxWidget *m_othersBoxWidget;        // 全屏应用分类下其他分类控件
+    BlurBoxWidget *m_internetBoxWidget;                 // 全屏应用分类下网络应用控件
+    BlurBoxWidget *m_chatBoxWidget;                     // 全屏应用分类下社交沟通控件
+    BlurBoxWidget *m_musicBoxWidget;                    // 全屏应用分类下音乐欣赏控件
+    BlurBoxWidget *m_videoBoxWidget;                    // 全屏应用分类下视频播放控件
+    BlurBoxWidget *m_graphicsBoxWidget;                 // 全屏应用分类下图形图像控件
+    BlurBoxWidget *m_gameBoxWidget;                     // 全屏应用分类下游戏娱乐控件
+    BlurBoxWidget *m_officeBoxWidget;                   // 全屏应用分类下办公学习控件
+    BlurBoxWidget *m_readingBoxWidget;                  // 全屏应用分类下阅读翻译控件
+    BlurBoxWidget *m_developmentBoxWidget;              // 全屏应用分类下编程开发控件
+    BlurBoxWidget *m_systemBoxWidget;                   // 全屏应用分类下系统管理控件
+    BlurBoxWidget *m_othersBoxWidget;                   // 全屏应用分类下其他分类控件
 
     QFrame *m_topSpacing;
     QFrame *m_bottomSpacing;
@@ -208,7 +210,7 @@ private:
     QList<ScrollWidgetAgent *> m_widgetAgentList;
     ScrollParallelAnimationGroup *m_animationGroup;
     DBusDisplay *m_displayInter;
-    // 只有窗口在完全显示出来后，才允许自动调整各部件位置
-    bool m_canResizeDockPosition = false;
+
+    bool m_canResizeDockPosition = false;               // 只有窗口在完全显示出来后，才允许自动调整各部件位置
 };
 #endif // MAINFRAME_H

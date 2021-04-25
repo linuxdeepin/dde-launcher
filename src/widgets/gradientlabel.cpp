@@ -27,6 +27,10 @@
 
 #include "gradientlabel.h"
 
+/**
+ * @brief GradientLabel::GradientLabel 分页时listview左右背景特效控件
+ * @param parent 父对象
+ */
 GradientLabel::GradientLabel(QWidget *parent) :
     QLabel(parent),
     m_direction(GradientLabel::TopToBottom)

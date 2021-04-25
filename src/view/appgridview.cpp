@@ -480,9 +480,9 @@ bool AppGridView::eventFilter(QObject *o, QEvent *e)
 void AppGridView::fitToContent()
 {
     const QSize size { contentsRect().width(), contentsSize().height() };
-
-    if (size == rect().size()) return;
-
+    if (size == rect().size())
+    	return;
+    
     setFixedSize(size);
 }
 

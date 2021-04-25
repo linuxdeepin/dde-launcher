@@ -64,6 +64,7 @@ public:
     void dragIn(const QModelIndex &index);
     void flashDrag();
     QPixmap creatSrcPix(const QModelIndex &index, const QString &appKey);
+
 public slots:
     void setDragAnimationEnable() {m_enableAnimation = true;}
 signals:
@@ -100,7 +101,6 @@ private:
     int m_dropToPos;
     bool m_enableDropInside = false;                     // 拖拽释放后鼠标所在位置是否在listview范围内的标识
     bool m_enableAnimation = true;                       // app交换动画执行标识
-
     bool m_moveGridView = false;                         // GridView的mouseMove事件是否结束
     QPoint m_dragStartPos;
 

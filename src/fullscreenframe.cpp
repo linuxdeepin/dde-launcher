@@ -72,7 +72,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     BoxFrame(parent),
     m_menuWorker(new MenuWorker),
     m_eventFilter(new SharedEventFilter(this)),
-
     m_calcUtil(CalculateUtil::instance()),
     m_appsManager(AppsManager::instance()),
     m_delayHideTimer(new QTimer(this)),
@@ -383,7 +382,7 @@ void FullScreenFrame::scrollCurrent()
     m_animationGroup->start();
 }
 
-/** 
+/**
  * @brief FullScreenFrame::addViewEvent
  * 处理全屏模式下视图中的鼠标事件
   * @param pView 当前列表视图

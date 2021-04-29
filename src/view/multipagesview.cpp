@@ -195,6 +195,10 @@ void MultiPagesView::dragToLeft(const QModelIndex &index)
     QModelIndex firstModel = m_appGridViewList[m_pageIndex]->indexAt(lastApp - 1);
     m_appGridViewList[m_pageIndex]->dragIn(firstModel);
 
+    // 保存向左拖拽后item回归的终点位置
+    const QPoint &dropCursorPoint = m_appGridViewList[m_pageIndex]->appIconRect(firstModel).topLeft();
+    m_appGridViewList[m_pageIndex]->setDropAndLastPos(dropCursorPoint);
+
     m_bDragStart = true;
 }
 
@@ -223,6 +227,10 @@ void MultiPagesView::dragToRight(const QModelIndex &index)
     int lastApp = m_pageAppsModelList[m_pageIndex]->rowCount(QModelIndex());
     QModelIndex lastModel = m_appGridViewList[m_pageIndex]->indexAt(lastApp - 1);
     m_appGridViewList[m_pageIndex]->dragIn(lastModel);
+
+    // 保存向右拖拽后item回归的终点位置
+    const QPoint &dropCursorPoint = m_appGridViewList[m_pageIndex]->appIconRect(lastModel).topLeft();
+    m_appGridViewList[m_pageIndex]->setDropAndLastPos(dropCursorPoint);
 
     m_bDragStart = true;
 }
@@ -318,6 +326,8 @@ void MultiPagesView::showCurrentPage(int currentPage)
     m_pageIndex = currentPage > 0 ? (currentPage < m_pageCount ? currentPage : m_pageCount - 1) : 0;
     int endValue = m_pageIndex == 0 ? 0 : m_appGridViewList[m_pageIndex]->x();
     int startValue = m_appListArea->horizontalScrollBar()->value();
+    m_appListArea->setProperty("curPage", m_pageIndex);
+
     m_pageSwitchAnimation->stop();
     m_pageSwitchAnimation->setStartValue(startValue);
     m_pageSwitchAnimation->setEndValue(endValue);

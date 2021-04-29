@@ -62,8 +62,12 @@ public:
 
     void dragOut(int pos);
     void dragIn(const QModelIndex &index);
+    void setDropAndLastPos(const QPoint& itemPos);
     void flashDrag();
     QPixmap creatSrcPix(const QModelIndex &index, const QString &appKey);
+
+    QRect appIconRect(const QModelIndex &index);
+    const QRect indexRect(const QModelIndex &index) const;
 
 public slots:
     void setDragAnimationEnable() {m_enableAnimation = true;}
@@ -95,27 +99,24 @@ private slots:
     void createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni = false);
 
 private:
-    const QRect indexRect(const QModelIndex &index) const;
-
-private:
     int m_dropToPos;
     bool m_enableDropInside = false;                     // 拖拽释放后鼠标所在位置是否在listview范围内的标识
     bool m_enableAnimation = true;                       // app交换动画执行标识
     bool m_moveGridView = false;                         // GridView的mouseMove事件是否结束
-    QPoint m_dragStartPos;
 
     const QWidget *m_containerBox = nullptr;
     QTimer *m_dropThresholdTimer;                        // 推拽过程中app交互动画定时器对象
     QPropertyAnimation *m_lastFakeAni = nullptr;         // 推拽过程中app交换动画对象
+    static Gesture *m_gestureInter;
+    DragPageDelegate *m_pDelegate;
 
     static QPointer<AppsManager> m_appManager;
     static QPointer<CalculateUtil> m_calcUtil;
+    static bool m_longPressed;                           // 保存触控屏是否可拖拽状态
 
-    DragPageDelegate *m_pDelegate;
-
-    // 保存触控屏是否可拖拽状态
-    static bool m_longPressed;
-    static Gesture* m_gestureInter;
+    QTime m_dragLastTime;                                // 拖拽开始到结束的持续时间(ms)
+    QPoint m_dropPoint;                                  // 过度动画的终点坐标
+    QPoint m_dragStartPos;                               // 拖拽起点坐标
 };
 
 typedef QList<AppGridView*> AppGridViewList;

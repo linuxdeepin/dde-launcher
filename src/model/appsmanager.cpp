@@ -553,6 +553,7 @@ void AppsManager::restoreItem(const QString &appKey, const int pos)
                 if (m_calUtil->displayMode() == GROUP_BY_CATEGORY)
                     m_appInfos[m_stashList[i].category()].insert(pos, m_stashList[i]);
             }
+
             m_allAppInfoList.append(m_stashList[i]);
             m_stashList.removeAt(i);
 

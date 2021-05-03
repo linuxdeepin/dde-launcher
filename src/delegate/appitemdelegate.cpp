@@ -189,30 +189,8 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->drawText(appNameRect, appNameResolved, appNameOption);
 
     // draw app icon
-    if("dde-calendar"==itemInfo.m_key) {
-        //根据不同日期显示不同日历图表
-        int tw = iconRect.width();
-        int th = iconRect.height();
-        int tx = iconRect.x();
-        int ty = iconRect.y();
-        const double  iconZoom =  iconRect.width() /256.0;
-
-        QStringList calIconList = m_calcUtil->calendarSelectIcon();
-        //绘制背景
-        painter->drawPixmap(iconRect, renderSVG(calIconList.at(0), iconRect.size()));
-        //绘制月份
-        QRectF rcMonth(tx + (tw / 3.4), ty + (th / 5.4), 80 * iconZoom, 40 * iconZoom);
-        painter->drawPixmap(rcMonth.topLeft(), renderSVG(calIconList.at(1), rcMonth.size().toSize()));
-        //绘制日
-        QRectF rcDay(tx + (tw / 3.5), ty + th / 3.1, 112 * iconZoom, 104 * iconZoom);
-        painter->drawPixmap(rcDay.topLeft(), renderSVG(calIconList.at(2), rcDay.size().toSize()));
-        //绘制周
-        QRectF rcWeek(tx + (tw / 2.3), ty + ((th / 3.9) * 2.8), 56 * iconZoom, 24 * iconZoom);
-        painter->drawPixmap(rcWeek.topLeft(), renderSVG(calIconList.at(3), rcWeek.size().toSize()));
-    } else {
-        const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
-        painter->drawPixmap(iconRect, iconPix, iconPix.rect());
-    }
+    const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+    painter->drawPixmap(iconRect, iconPix, iconPix.rect());
 
     // draw icon if app is auto startup
     const QPoint autoStartIconPos = iconRect.bottomLeft()

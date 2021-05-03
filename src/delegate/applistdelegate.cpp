@@ -117,38 +117,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const int iconY = rect.y() + (rect.height() - iconPixmap.height() / ratio) / 2;
 
     ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
-    if("dde-calendar"==itemInfo.m_key)
-    {
-        //根据不同日期显示不同日历图表
-        int tw = iconSize.width()*ratio;
-        int th = iconSize.height()*ratio;
-        int tx = iconX;
-        int ty = iconY;
-
-        QStringList calIconList = m_calcUtil->calendarSelectIcon();
-        auto bg_pmap = loadSvg(calIconList.at(0),iconSize.width());
-        bg_pmap = bg_pmap.scaled(QSize(tw,th),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-        bg_pmap.setDevicePixelRatio(ratio);
-        painter->drawPixmap(tx,ty,bg_pmap);
-
-        auto month_pmap = loadSvg(calIconList.at(1),iconSize.width());
-        month_pmap = month_pmap.scaled(QSize(tw/2,th/6),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        month_pmap.setDevicePixelRatio(ratio);
-        painter->drawPixmap(tx+tw/4/ratio,ty+th/8/ratio,month_pmap);
-
-        auto day_pmap = loadSvg(calIconList.at(2),iconSize.width());
-        day_pmap = day_pmap.scaled(QSize(tw/2,th/2),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        day_pmap.setDevicePixelRatio(ratio);
-        painter->drawPixmap(tx+tw/4/ratio,ty+th/4/ratio,day_pmap);
-
-        auto week_pmap = loadSvg(calIconList.at(3),iconSize.width());
-        week_pmap = week_pmap.scaled(QSize(tw/2,th/8),Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        week_pmap.setDevicePixelRatio(ratio);
-        painter->drawPixmap(tx+tw/4/ratio,ty+((th/6)*4.5)/ratio -1,week_pmap);
-
-    }else {
-        painter->drawPixmap(iconX, iconY, iconPixmap);
-    }
+    painter->drawPixmap(iconX, iconY, iconPixmap);
 
 
     // draw icon if app is auto startup

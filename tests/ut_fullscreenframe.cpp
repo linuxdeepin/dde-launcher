@@ -2,6 +2,7 @@
 
 #define private public
 #include "fullscreenframe.h"
+#include "multipagesview.h"
 #undef private
 
 #include "../src/model/appslistmodel.h"
@@ -23,7 +24,7 @@ public:
     }
 
 public:
-    FullScreenFrame* m_fullScreenFrame;
+    FullScreenFrame *m_fullScreenFrame;
 };
 
 TEST_F(Tst_Fullscreenframe, fullScreenFrame)
@@ -69,7 +70,7 @@ TEST_F(Tst_Fullscreenframe, scrollToCategory_scrollNext1_test)
 
 TEST_F(Tst_Fullscreenframe, scrollBlurBoxWidget_test)
 {
-    BlurBoxWidget* blueBox = new BlurBoxWidget(AppsListModel::AppCategory::Internet, nullptr);
+    BlurBoxWidget *blueBox = new BlurBoxWidget(AppsListModel::AppCategory::Internet, nullptr);
     ScrollWidgetAgent* scrollWidgetAgent = new ScrollWidgetAgent;
     scrollWidgetAgent->setPosType(Pos_M);
     scrollWidgetAgent->setBlurBoxWidget(blueBox);
@@ -126,4 +127,27 @@ TEST_F(Tst_Fullscreenframe, privateMethod_test)
     m_fullScreenFrame->appendToSearchEdit(static_cast<const char>(0));
 
     m_fullScreenFrame->hideLauncher();
+}
+
+TEST_F(Tst_Fullscreenframe, parentWidget_test)
+{
+    AppGridView *gridView = nullptr;
+    gridView = m_fullScreenFrame->m_multiPagesView->m_appGridViewList[m_fullScreenFrame->m_multiPagesView->m_pageIndex];
+
+    ASSERT_TRUE(gridView);
+
+    FullScreenFrame *fullscreenFrame = nullptr;
+    if (CalculateUtil::instance()->displayMode() == GROUP_BY_CATEGORY) {
+        fullscreenFrame = (qobject_cast<FullScreenFrame*>)(
+                    gridView->parentWidget()->parentWidget()->parentWidget()->parentWidget()
+                    ->parentWidget()->parentWidget()->parentWidget()->parentWidget());
+    } else {
+        fullscreenFrame = (qobject_cast<FullScreenFrame*>)(
+                    gridView->parentWidget()->parentWidget()->parentWidget()->parentWidget()
+                    ->parentWidget()->parentWidget()->parentWidget());
+    }
+
+    ASSERT_TRUE(fullscreenFrame);
+
+    gridView->flashDrag();
 }

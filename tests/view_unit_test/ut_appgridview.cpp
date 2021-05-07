@@ -27,7 +27,7 @@ public:
     }
 
 public:
-    AppGridView* widget = nullptr;
+    AppGridView *widget = nullptr;
 };
 
 TEST_F(Tst_Appgridview, appGridView_test)
@@ -52,7 +52,6 @@ TEST_F(Tst_Appgridview, appGridView_test)
     QMouseEvent event2(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::RightButton, Qt::RightButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
     QApplication::sendEvent(widget->viewport(), &event2);
 
-
     QMimeData *data = new QMimeData();
     data->setData("RequestDock","test");
     QDragEnterEvent event3(QPoint(0, 1), Qt::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
@@ -63,7 +62,6 @@ TEST_F(Tst_Appgridview, appGridView_test)
 
     widget->dragOut(-1);
     widget->dragIn(widget->indexAt(0));
-    widget->flashDrag();
 
     QDragLeaveEvent event5;
     QApplication::sendEvent(widget->viewport(), &event5);
@@ -75,6 +73,4 @@ TEST_F(Tst_Appgridview, appGridView_test)
     QApplication::sendEvent(widget->viewport(), &event7);
 
     widget->fitToContent();
-
 }
-

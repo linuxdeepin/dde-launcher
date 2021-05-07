@@ -225,10 +225,12 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 
     if (e->button() == Qt::LeftButton) {
         // 小窗口模式下，当列表处于分类模式时，禁止鼠标拖动
-        if (isCategoryList)
+        if (isCategoryList) {
+            QListView::mousePressEvent(e);
             return;
-        else
+        } else {
             m_dragStartRow = indexAt(e->pos()).row();
+        }
     }
 
     QListView::mousePressEvent(e);
@@ -331,7 +333,7 @@ void AppListView::dropEvent(QDropEvent *e)
 
 void AppListView::enterEvent(QEvent *event)
 {
-    QListView::leaveEvent(event);
+    QListView::enterEvent(event);
 
     // QScroller::hasScroller用于判断listview是否处于滑动状态，滑动状态不触发paint相关操作，否则滑动动画异常
     if (!QScroller::hasScroller(this)) {

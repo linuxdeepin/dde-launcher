@@ -855,7 +855,7 @@ void WindowedFrame::onToggleFullScreen()
     if (delegate) {
         delegate->setActived(false);
     }
-    
+
     // 全屏状态标识
     m_calcUtil->setFullScreen(true);
 
@@ -873,6 +873,7 @@ void WindowedFrame::onSwitchBtnClicked()
     if (m_displayMode == All) {
         m_appsModel->setCategory(AppsListModel::Category);
         m_displayMode = Category;
+        m_focusPos = Applist;
     } else if (m_displayMode == Category && m_appsModel->category() != AppsListModel::Category) {
         m_appsModel->setCategory(AppsListModel::Category);
     } else {

@@ -24,8 +24,15 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include "iteminfo.h"
+
 #include <QtCore>
 #include <QGSettings>
+
+enum CacheType {
+    TextType,
+    ImageType
+};
 
 QString getQssFromFile(QString filename);
 QString joinPath(const QString& path, const QString& fileName);
@@ -38,5 +45,10 @@ QGSettings *SettingsPtr(const QString &schema_id, const QByteArray &path = QByte
 QGSettings *ModuleSettingsPtr(const QString &module, const QByteArray &path = QByteArray(), QObject *parent = nullptr);
 QString qtify_name(const char *name);
 QVariant SettingValue(const QString &schema_id, const QByteArray &path = QByteArray(), const QString &key = QString(), const QVariant &fallback = QVariant());
+bool createCalendarIcon(const QString &fileName);
+int perfectIconSize(const int size);
+QString cacheKey(const ItemInfo &itemInfo, CacheType type);
+bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, bool reObtain);
+QIcon getIcon(const QString &name);
 #endif // UTIL_H
 

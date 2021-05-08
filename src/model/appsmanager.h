@@ -31,6 +31,7 @@
 #include "dbusdock.h"
 #include "dbusdisplay.h"
 #include "calculate_util.h"
+#include "AppIconFreshThread.h"
 
 #include <QHash>
 #include <QSettings>
@@ -61,11 +62,6 @@ class AppsManager : public QObject
     Q_OBJECT
 
 public:
-    enum CacheType {
-        TextType,
-        ImageType
-    };
-
     static AppsManager *instance();
     void stashItem(const QModelIndex &index);
     void stashItem(const QString &appKey);
@@ -77,11 +73,8 @@ public:
     bool isHaveNewInstall() const { return !m_newInstalledAppsList.isEmpty(); }
     bool isVaild();
     void refreshAllList();
-    const QPixmap getThemeIcon(const ItemInfo &itemInfo, const int size);
-    QIcon getIcon(const QString &name);
-    int getPageCount(const AppsListModel::AppCategory category);
-    void pushPixmap();
     void pushPixmap(const ItemInfo &itemInfo);
+    int getPageCount(const AppsListModel::AppCategory category);
     const QScreen * currentScreen();
     int getVisibleCategoryCount();
 
@@ -97,7 +90,6 @@ signals:
     void dockGeometryChanged() const;
 
     void itemRedraw(const QModelIndex &index);
-
     void iconLoadFinished();
 
 public slots:
@@ -119,7 +111,7 @@ public slots:
     const QPixmap appIcon(const ItemInfo &info, const int size);
     const QString appName(const ItemInfo &info, const int size);
     int appNums(const AppsListModel::AppCategory &category) const;
-    inline void clearCache() { m_CacheData.clear(); }
+    void clearCache();
 
     void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
 
@@ -139,16 +131,15 @@ private:
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
     void onSearchTimeOut();
     void refreshAppListIcon();
-    QString cacheKey(const ItemInfo &itemInfo, CacheType size);
 
 private slots:
     void onIconThemeChanged();
     void searchDone(const QStringList &resultList);
     void markLaunched(QString appKey);
     void delayRefreshData();
+    void refreshIcon();
     /**
      * @brief 模糊匹配，反向查询key是否包含list任一个元素
-     * 
      * @param list 关键字列表
      * @param key 要模糊匹配的关键词
      * @return true 表示匹配成功
@@ -158,6 +149,9 @@ private slots:
 
 private:
     const ItemInfo createOfCategory(qlonglong category);
+
+public:
+    static QHash<QPair<QString, int>, QVariant> m_CacheData;
 
 private:
     DBusLauncher *m_launcherInter;
@@ -185,13 +179,17 @@ private:
     QDate m_curDate;
     int m_lastShowDate;
 
+    int m_tryNums;                                              // 获取应用图标时尝试的次数
+    ItemInfo m_itemInfo;                                        // 当前需要更新的应用信息
+
+    QPointer<AppIconFreshThread> m_appIconFreshThread;          // 新装应用处理线程
+
     static QPointer<AppsManager> INSTANCE;
     static QGSettings *m_launcherSettings;
     static QSet<QString> APP_AUTOSTART_CACHE;
     static QSettings APP_USER_SORTED_LIST;
     static QSettings APP_USED_SORTED_LIST;
     static QSettings APP_CATEGORY_USED_SORTED_LIST;
-    QHash<QPair<QString, int>, QVariant> m_CacheData;
     QStringList m_categoryTs;
     QStringList m_categoryIcon;
     QGSettings* m_filterSetting = nullptr;

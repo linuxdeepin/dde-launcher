@@ -3,32 +3,37 @@ Section: x11
 Priority: optional
 Maintainer: Deepin Packages Builder <packages@deepin.com>
 Build-Depends:
- cmake,
  debhelper-compat (= 11),
- libdframeworkdbus-dev,
- libdtkcore-dev,
- libdtkgui-dev,
- libdtkwidget-dev,
- libgsettings-qt-dev,
- libqt5svg5-dev,
- libqt5x11extras5-dev,
- libxcb-ewmh-dev,
  pkg-config,
+ cmake,
  qtbase5-dev,
  qtbase5-private-dev,
  qttools5-dev-tools,
- libgtest-dev
+ libqt5svg5-dev,
+ libqt5x11extras5-dev,
+ libxcb-ewmh-dev,
+ libdframeworkdbus-dev (>=5.4.6),
+ libdtkwidget-dev (>=5.4.19),
+ libdtkcore-dev (>=5.4.14),
+ libdtkgui-dev (>=5.4.13),
+ libgsettings-qt-dev,
+ libgtest-dev,
+ libgmock-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 
 Package: dde-launcher
 Architecture: any
 Depends:
- deepin-desktop-schemas (>= 5.9.3),
- libdframeworkdbus2 (>= 5.3.0.24),
- dde-daemon (>=5.12.48),
- startdde (>=5.6.0.34),
  qtxdg-dev-tools,
+ deepin-desktop-schemas (>=5.9.14),
+ libdtkwidget5 (>=5.4.19),
+ libdtkcore5 (>=5.4.14),
+ libdtkgui5 (>=5.4.13),
+ libdframeworkdbus2 (>=5.4.6),
+ dde-daemon (>=5.13.12),
+ startdde (>=5.8.9),
+ lastore-daemon (>=5.2.9),
  ${misc:Depends},
  ${shlibs:Depends},
 Conflicts:

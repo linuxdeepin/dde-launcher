@@ -137,15 +137,9 @@ TEST_F(Tst_Fullscreenframe, parentWidget_test)
     ASSERT_TRUE(gridView);
 
     FullScreenFrame *fullscreenFrame = nullptr;
-    if (CalculateUtil::instance()->displayMode() == GROUP_BY_CATEGORY) {
-        fullscreenFrame = (qobject_cast<FullScreenFrame*>)(
-                    gridView->parentWidget()->parentWidget()->parentWidget()->parentWidget()
-                    ->parentWidget()->parentWidget()->parentWidget()->parentWidget());
-    } else {
-        fullscreenFrame = (qobject_cast<FullScreenFrame*>)(
-                    gridView->parentWidget()->parentWidget()->parentWidget()->parentWidget()
-                    ->parentWidget()->parentWidget()->parentWidget());
-    }
+    fullscreenFrame = (qobject_cast<FullScreenFrame*>)(
+                gridView->parentWidget()->parentWidget()->parentWidget()->parentWidget()
+                ->parentWidget()->parentWidget()->parentWidget());
 
     ASSERT_TRUE(fullscreenFrame);
 

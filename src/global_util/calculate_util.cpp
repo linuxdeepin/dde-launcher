@@ -111,6 +111,7 @@ bool CalculateUtil::increaseIconSize()
     if (qFuzzyCompare(value, ratio)) return false;
 
     m_launcherGsettings->set("apps-icon-ratio", ratio);
+
     return true;
 }
 
@@ -171,6 +172,7 @@ bool CalculateUtil::decreaseIconSize()
     if (qFuzzyCompare(value, ratio)) return false;
 
     m_launcherGsettings->set("apps-icon-ratio", ratio);
+
     return true;
 }
 

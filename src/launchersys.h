@@ -38,6 +38,7 @@ DGUI_USE_NAMESPACE
 class LauncherInterface;
 class WindowedFrame;
 class FullScreenFrame;
+class IconFreshThread;
 class LauncherSys : public QObject
 {
     Q_OBJECT
@@ -77,7 +78,8 @@ private:
     QTimer *m_autoExitTimer;
     QTimer *m_ignoreRepeatVisibleChangeTimer;               // 添加200ms延时操作，避开重复显示、隐藏启动器
     QMetaObject::Connection m_regionMonitorConnect;         // 信号和槽连接返回的对象
-    CalculateUtil* m_calcUtil;                              // 界面布局计算处理类
+    CalculateUtil *m_calcUtil;                              // 界面布局计算处理类
+    QPointer<IconFreshThread> m_appIconFreshThread;         // 缓存应用图标和文本处理线程
 };
 
 #endif // LAUNCHERSYS_H

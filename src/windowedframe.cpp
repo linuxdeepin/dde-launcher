@@ -259,7 +259,7 @@ void WindowedFrame::showLauncher()
 	activateWindow();
     setFocus(Qt::ActiveWindowFocusReason);
 
-    // force refresh
+    // 初始化所有应用数据
     if (!m_appsManager->isVaild()) {
         m_appsManager->refreshAllList();
     }

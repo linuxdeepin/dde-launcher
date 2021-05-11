@@ -388,7 +388,7 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
     }
 
     const auto ratio = qApp->devicePixelRatio();
-    const int s = perfectIconSize(size);
+    const int iconSize = perfectIconSize(size);
 
     do {
         if (iconName.startsWith("data:image/")) {
@@ -402,7 +402,7 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
 
         if (QFile::exists(iconName)) {
             if (iconName.endsWith(".svg"))
-                pixmap = loadSvg(iconName, s * ratio);
+                pixmap = loadSvg(iconName, iconSize * ratio);
             else
                 pixmap = DHiDPIHelper::loadNxPixmap(iconName);
 
@@ -426,17 +426,18 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
             findIcon = false;
         }
 
-        pixmap = icon.pixmap(QSize(s, s));
+        pixmap = icon.pixmap(QSize(iconSize, iconSize));
         if (!pixmap.isNull())
             break;
     } while (false);
 
-    pixmap = pixmap.scaled(QSize(s, s) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    pixmap = pixmap.scaled(QSize(iconSize, iconSize) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pixmap.setDevicePixelRatio(ratio);
 
-    QPair<QString, int> tmpKey { itemInfo.m_iconKey, s};
-    if (AppsManager::m_CacheData[tmpKey].isNull() && findIcon)
-        AppsManager::m_CacheData[tmpKey] = pixmap;
+    QPair<QString, int> tmpKey { cacheKey(itemInfo, CacheType::ImageType) , iconSize};
+
+    if (!AppsManager::existInCache(tmpKey) && findIcon)
+        AppsManager::cachePixData(tmpKey, pixmap);
 
     return findIcon;
 }

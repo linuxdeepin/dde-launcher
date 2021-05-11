@@ -31,7 +31,6 @@
 #include "dbusdock.h"
 #include "dbusdisplay.h"
 #include "calculate_util.h"
-#include "AppIconFreshThread.h"
 
 #include <QHash>
 #include <QSettings>
@@ -42,8 +41,6 @@
 #include <QScreen>
 #include <QDBusArgument>
 #include <QList>
-
-#include <memory>
 
 #define DOCK_POS_RIGHT  1
 #define DOCK_POS_BOTTOM 2
@@ -73,7 +70,6 @@ public:
     bool isHaveNewInstall() const { return !m_newInstalledAppsList.isEmpty(); }
     bool isVaild();
     void refreshAllList();
-    void pushPixmap(const ItemInfo &itemInfo);
     int getPageCount(const AppsListModel::AppCategory category);
     const QScreen * currentScreen();
     int getVisibleCategoryCount();
@@ -99,8 +95,8 @@ public slots:
     void launchApp(const QModelIndex &index);
     void uninstallApp(const QString &appKey);
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
-    int appsInfoListSize(const AppsListModel::AppCategory &category) const;
-    const ItemInfo appsInfoListIndex(const AppsListModel::AppCategory &category,const int index) const;
+    static int appsInfoListSize(const AppsListModel::AppCategory &category);
+    static const ItemInfo appsInfoListIndex(const AppsListModel::AppCategory &category,const int index);
 
     bool appIsNewInstall(const QString &key);
     bool appIsAutoStart(const QString &desktop);
@@ -108,12 +104,19 @@ public slots:
     bool appIsOnDesktop(const QString &desktop);
     bool appIsProxy(const QString &desktop);
     bool appIsEnableScaling(const QString &desktop);
-    const QPixmap appIcon(const ItemInfo &info, const int size);
+    const QPixmap appIcon(const ItemInfo &info, const int size = 0);
     const QString appName(const ItemInfo &info, const int size);
     int appNums(const AppsListModel::AppCategory &category) const;
     void clearCache();
 
     void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
+    static void cachePixData(QPair<QString, int> &tmpKey, const QPixmap &pix);
+    static void cacheStrData(QPair<QString, int> &tmpKey, QString &str);
+    static bool existInCache(QPair<QString, int> &tmpKey);
+    static void getPixFromCache(QPair<QString, int> &tmpKey, QPixmap &pix);
+    static QString getStrFromCache(QPair<QString, int> &tmpKey);
+    static void removePixFromCache(const ItemInfo &info);
+    static QHash<AppsListModel::AppCategory, ItemInfoList> getAllAppInfo();
 
 private:
     explicit AppsManager(QObject *parent = nullptr);
@@ -131,6 +134,7 @@ private:
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
     void onSearchTimeOut();
     void refreshAppListIcon();
+    const ItemInfo createOfCategory(qlonglong category);
 
 private slots:
     void onIconThemeChanged();
@@ -138,20 +142,13 @@ private slots:
     void markLaunched(QString appKey);
     void delayRefreshData();
     void refreshIcon();
-    /**
-     * @brief 模糊匹配，反向查询key是否包含list任一个元素
-     * @param list 关键字列表
-     * @param key 要模糊匹配的关键词
-     * @return true 表示匹配成功
-     * @return false 表示匹配失败
-     */
     bool fuzzyMatching(const QStringList& list, const QString& key);
 
-private:
-    const ItemInfo createOfCategory(qlonglong category);
-
 public:
-    static QHash<QPair<QString, int>, QVariant> m_CacheData;
+    static QReadWriteLock m_cacheDataLock;
+    static QReadWriteLock m_appInfoLock;
+    static QHash<QPair<QString, int>, QVariant> m_CacheData;                // 缓存应用图标和应用名称
+    static QHash<AppsListModel::AppCategory, ItemInfoList> m_appInfos;      // 全屏分类模式下保存的应用
 
 private:
     DBusLauncher *m_launcherInter;
@@ -159,30 +156,27 @@ private:
     DBusDock *m_dockInter;
 
     QString m_searchText;
-    QStringList m_newInstalledAppsList;                         // 新安装应用列表
-    ItemInfoList m_allAppInfoList;                              // 所有app信息列表
-    ItemInfoList m_usedSortedList; // FullScreen                // 按照最近使用的时间顺序排序后的应用列表
-    ItemInfoList m_userSortedList; // Mini                      // 分类后的应用列表
-    ItemInfoList m_appSearchResultList;                         // 搜索结果列表
+    QStringList m_newInstalledAppsList;                                     // 新安装应用列表
+    ItemInfoList m_allAppInfoList;                                          // 所有app信息列表
+    static ItemInfoList m_usedSortedList; // FullScreen                     // 按照最近使用的时间顺序排序后的应用列表
+    static ItemInfoList m_userSortedList; // Mini                           // 分类后的应用列表
+    static ItemInfoList m_appSearchResultList;                              // 搜索结果列表
     ItemInfoList m_stashList;
-    ItemInfoList m_categoryList;                                // 小窗口应用分类目录列表
-    QHash<AppsListModel::AppCategory, ItemInfoList> m_appInfos; // 全屏分类模式下保存的应用
+    static ItemInfoList m_categoryList;                                     // 小窗口应用分类目录列表
 
     ItemInfo m_unInstallItem = ItemInfo();
     ItemInfo m_beDragedItem = ItemInfo();
 
     CalculateUtil *m_calUtil;
     QTimer *m_searchTimer;
-    QTimer *m_delayRefreshTimer;                                // 延迟刷新应用列表定时器指针对象
+    QTimer *m_delayRefreshTimer;                                            // 延迟刷新应用列表定时器指针对象
     QTimer *m_RefreshCalendarIconTimer;
 
     QDate m_curDate;
     int m_lastShowDate;
 
-    int m_tryNums;                                              // 获取应用图标时尝试的次数
-    ItemInfo m_itemInfo;                                        // 当前需要更新的应用信息
-
-    QPointer<AppIconFreshThread> m_appIconFreshThread;          // 新装应用处理线程
+    int m_tryNums;                                                          // 获取应用图标时尝试的次数
+    ItemInfo m_itemInfo;                                                    // 当前需要更新的应用信息
 
     static QPointer<AppsManager> INSTANCE;
     static QGSettings *m_launcherSettings;
@@ -192,7 +186,9 @@ private:
     static QSettings APP_CATEGORY_USED_SORTED_LIST;
     QStringList m_categoryTs;
     QStringList m_categoryIcon;
-    QGSettings* m_filterSetting = nullptr;
+    QGSettings *m_filterSetting = nullptr;
+
+    bool m_iconValid;                                                       // 获取图标状态标示
 };
 
 #endif // APPSMANAGER_H

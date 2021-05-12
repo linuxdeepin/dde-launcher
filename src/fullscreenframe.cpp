@@ -831,17 +831,7 @@ void FullScreenFrame::initUI()
         }
     }
 
-    m_internetBoxWidget->setVisible(false);
-    m_chatBoxWidget->setVisible(false);
-    m_musicBoxWidget->setVisible(false);
-    m_videoBoxWidget->setVisible(false);
-    m_graphicsBoxWidget->setVisible(false);
-    m_gameBoxWidget->setVisible(false);
-    m_officeBoxWidget->setVisible(false);
-    m_readingBoxWidget->setVisible(false);
-    m_developmentBoxWidget->setVisible(false);
-    m_systemBoxWidget->setVisible(false);
-    m_othersBoxWidget->setVisible(false);
+    setBlurWidgetVisible(false);
 
     m_internetBoxWidget->setDataDelegate(m_appItemDelegate);
     m_chatBoxWidget->setDataDelegate(m_appItemDelegate);
@@ -1527,17 +1517,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         break;
     }
 
-    m_internetBoxWidget->setVisible(false);
-    m_chatBoxWidget->setVisible(false);
-    m_musicBoxWidget->setVisible(false);
-    m_videoBoxWidget->setVisible(false);
-    m_graphicsBoxWidget->setVisible(false);
-    m_gameBoxWidget->setVisible(false);
-    m_officeBoxWidget->setVisible(false);
-    m_readingBoxWidget->setVisible(false);
-    m_developmentBoxWidget->setVisible(false);
-    m_systemBoxWidget->setVisible(false);
-    m_othersBoxWidget->setVisible(false);
+    setBlurWidgetVisible(false);
 
     if (m_displayMode == GROUP_BY_CATEGORY) {
         // 隐藏自由模式显示
@@ -1552,19 +1532,9 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         AppsListModel::AppCategory category = (m_displayMode == SEARCH) ? AppsListModel::Search : AppsListModel::All;
         m_multiPagesView->setModel(category);
 
-        // 设置自由模式widget大小
-        QSize boxSize;
-        int padding = m_calcUtil->getScreenSize().width() * SIDES_SPACE_SCALE;
-        const int appsContentWidth = (m_contentFrame->width() - padding * 2);
-        const int appsContentHeight = (m_contentFrame->height() - DLauncher::APPS_AREA_TOP_MARGIN);
-        boxSize.setWidth(appsContentWidth);
-        boxSize.setHeight(appsContentHeight);
-
-        // 隐藏分类模式显示
-        m_appsIconBox->setFixedSize(boxSize);
-        m_multiPagesView->setFixedSize(boxSize);
         m_multiPagesView->updatePosition();
 
+        // 隐藏分类模式显示
         m_navigationWidget->setVisible(false);
         m_appsItemBox->setVisible(false);
 
@@ -1683,6 +1653,21 @@ void FullScreenFrame::nextTabWidget(int key)
     }
     break;
     }
+}
+
+void FullScreenFrame::setBlurWidgetVisible(bool state)
+{
+    m_internetBoxWidget->setVisible(state);
+    m_chatBoxWidget->setVisible(state);
+    m_musicBoxWidget->setVisible(state);
+    m_videoBoxWidget->setVisible(state);
+    m_graphicsBoxWidget->setVisible(state);
+    m_gameBoxWidget->setVisible(state);
+    m_officeBoxWidget->setVisible(state);
+    m_readingBoxWidget->setVisible(state);
+    m_developmentBoxWidget->setVisible(state);
+    m_systemBoxWidget->setVisible(state);
+    m_othersBoxWidget->setVisible(state);
 }
 
 AppsListModel::AppCategory FullScreenFrame::nextCategoryType(const AppsListModel::AppCategory category)

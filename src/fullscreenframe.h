@@ -74,6 +74,7 @@ public:
     int dockPosition();
     void updateDisplayMode(const int mode);
     void nextTabWidget(int key);
+    void setBlurWidgetVisible(bool state = false);
 
 signals:
     void visibleChanged(bool visible);

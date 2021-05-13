@@ -189,7 +189,7 @@ private:
     QLabel *m_tipsLabel;
 
     AppItemDelegate *m_appItemDelegate;                 // 全屏模式下listview视图代理
-    MultiPagesView *m_multiPagesView;                   // 全屏分类模式下控件类（listview + 分页控件））
+    MultiPagesView *m_multiPagesView;                   // 全屏视图控件类（listview + 分页控件））
 
     BlurBoxWidget *m_internetBoxWidget;                 // 全屏应用分类下网络应用控件
     BlurBoxWidget *m_chatBoxWidget;                     // 全屏应用分类下社交沟通控件

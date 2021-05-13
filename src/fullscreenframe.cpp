@@ -867,6 +867,10 @@ void FullScreenFrame::initUI()
     boxSize.setHeight(appsContentHeight);
     m_appsIconBox->setFixedSize(boxSize);
 
+    // 启动时全屏自由模式设置控件大小，解决模式切换界面抖动问题
+    if (m_calcUtil->displayMode() == ALL_APPS)
+        m_multiPagesView->setFixedSize(boxSize);
+
     QVBoxLayout *scrollVLayout = new QVBoxLayout;
     scrollVLayout->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN, 0, 0);
     scrollVLayout->setSpacing(0);

@@ -27,6 +27,10 @@
 #include "backgroundmanager.h"
 #include "sharedeventfilter.h"
 
+#include <DWindowManagerHelper>
+#include <DDBusSender>
+#include <DDialog>
+
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QClipboard>
@@ -37,13 +41,6 @@
 #include <QKeyEvent>
 #include <QProcess>
 #include <QScroller>
-
-#include <DWindowManagerHelper>
-#include <DDBusSender>
-
-#include <ddialog.h>
-
-#define     SIDES_SPACE_SCALE   0.10
 
 DGUI_USE_NAMESPACE
 
@@ -100,7 +97,11 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_topSpacing(new QFrame),
     m_bottomSpacing(new QFrame),
     m_animationGroup(new ScrollParallelAnimationGroup(this)),
-    m_displayInter(new DBusDisplay(this))
+    m_displayInter(new DBusDisplay(this)),
+    m_bMousePress(false),
+    m_nMousePos(0),
+    m_scrollValue(0),
+    m_scrollStart(0)
 {
     // accessible.h 中使用
     setAccessibleName("FullScrreenFrame");
@@ -184,27 +185,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     initConnection();
 
     updateDisplayMode(m_calcUtil->displayMode());
-
-    // 支持全屏空白区域切换分页
-    connect(this, &FullScreenFrame::changePage, [&](bool isNext) {
-        int curPage = m_multiPagesView->currentPage();
-        int pageCount = m_multiPagesView->pageCount();
-
-        if (isNext) {
-            if (curPage >= pageCount - 1)
-                return;
-
-            m_multiPagesView->showCurrentPage(curPage + 1);
-            m_multiPagesView->setGradientVisible(true);
-        }
-        else {
-            if (curPage <= 0)
-                return;
-
-            m_multiPagesView->showCurrentPage(curPage - 1);
-            m_multiPagesView->setGradientVisible(true);
-        }
-    });
 }
 
 FullScreenFrame::~FullScreenFrame()
@@ -635,6 +615,10 @@ void FullScreenFrame::mousePressEvent(QMouseEvent *e)
     m_mouse_press_pos = e->pos();
 
     m_startPoint = e->globalPos();
+
+    // 全屏模式下支持全屏范围滑动翻页
+    // m_multiPagesView->mousePress(e);
+    mousePressDrag(e);
 }
 
 void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
@@ -670,6 +654,10 @@ void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
     }
 
     m_mouse_move_pos = e->pos();
+
+    // 全屏模式下支持全屏范围滑动翻页
+    // m_multiPagesView->mouseMove(e);
+    mouseMoveDrag(e);
 }
 
 void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
@@ -704,16 +692,11 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
     m_mouse_press = false;
 
     // 全屏分类模式才支持鼠标拖动触发分页的操作，鼠标小范围移动不触发分页
-    if ((CalculateUtil::instance()->displayMode() != ALL_APPS) || (abs(e->globalX() - m_startPoint.x()) < 10))
+    if ((CalculateUtil::instance()->displayMode() != ALL_APPS) || (abs(e->globalX() - m_startPoint.x()) < DLauncher::SLIDE_DIFF_THRESH))
         return;
 
-    // 向左滑动翻页
-    if ((e->globalX() - m_startPoint.x()) > DLauncher::SLIDE_DIFF_THRESH)
-        emit changePage(false);
-
-    // 向右滑动翻页
-    if ((e->globalX() - m_startPoint.x() )< -DLauncher::SLIDE_DIFF_THRESH)
-        emit changePage(true);
+    // 全屏模式下支持全屏范围滑动翻页
+    mouseReleaseDrag(e);
 }
 
 void FullScreenFrame::wheelEvent(QWheelEvent *e)
@@ -859,17 +842,12 @@ void FullScreenFrame::initUI()
     m_pHBoxLayout = m_appsIconBox->layout();
 
     //启动时默认按屏幕大小设置自由排序widget的大小
-    int padding = m_calcUtil->getScreenSize().width() * SIDES_SPACE_SCALE;
-    QSize boxSize;
-    const int appsContentWidth = (m_calcUtil->getScreenSize().width() - padding * 2);
-    const int appsContentHeight = (m_calcUtil->getScreenSize().height() - DLauncher::APPS_AREA_TOP_MARGIN);
-    boxSize.setWidth(appsContentWidth);
-    boxSize.setHeight(appsContentHeight);
-    m_appsIconBox->setFixedSize(boxSize);
+    const int appsContentWidth = m_calcUtil->getScreenSize().width();
+    const int appsContentHeight = m_calcUtil->getScreenSize().height() - DLauncher::APPS_AREA_TOP_MARGIN;
+    m_appsIconBox->setFixedSize(appsContentWidth, appsContentHeight);
 
     // 启动时全屏自由模式设置控件大小，解决模式切换界面抖动问题
-    if (m_calcUtil->displayMode() == ALL_APPS)
-        m_multiPagesView->setFixedSize(boxSize);
+    m_multiPagesView->setFixedSize(appsContentWidth, appsContentHeight);
 
     QVBoxLayout *scrollVLayout = new QVBoxLayout;
     scrollVLayout->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN, 0, 0);
@@ -1592,11 +1570,11 @@ void FullScreenFrame::updateDockPosition()
         break;
     }
 
-    int padding = m_calcUtil->getScreenSize().width() * SIDES_SPACE_SCALE;
+    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
 
     // 全屏App模式或者正在搜索
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
-        m_calcUtil->calculateAppLayout(m_contentFrame->size() - QSize(padding * 2, DLauncher::APPS_AREA_TOP_MARGIN), m_displayMode);
+        m_calcUtil->calculateAppLayout(m_contentFrame->size() - QSize(padding * 1, DLauncher::APPS_AREA_TOP_MARGIN), m_displayMode);
     } else {
         m_calcUtil->calculateAppLayout(m_contentFrame->size() - QSize(0, DLauncher::APPS_AREA_TOP_MARGIN + 12), m_displayMode);
     }
@@ -1674,6 +1652,71 @@ void FullScreenFrame::setBlurWidgetVisible(bool state)
     m_othersBoxWidget->setVisible(state);
 }
 
+/**
+ * @brief FullScreenFrame::mousePressDrag 处理全屏区域按住鼠标拖动翻页
+ * @param e
+ */
+void FullScreenFrame::mousePressDrag(QMouseEvent *e)
+{
+    m_bMousePress = true;
+    m_nMousePos = e->x();
+    m_scrollValue = m_multiPagesView->getListArea()->horizontalScrollBar()->value();
+    m_scrollStart = m_scrollValue;
+
+    if(e->button() != Qt::RightButton) m_multiPagesView->updateGradient();
+}
+
+void FullScreenFrame::mouseMoveDrag(QMouseEvent *e)
+{
+    int pageCount = m_multiPagesView->pageCount();
+    int curPage = m_multiPagesView->currentPage();
+
+    if (!m_bMousePress)
+        return;
+
+    int nDiff = m_nMousePos - e->x();
+    m_scrollValue += nDiff;
+
+    // 处于首页继续向右滑动
+    if (curPage == 0 && nDiff < 0)
+        return;
+
+    // 处于尾页继续向左滑动
+    if (curPage == pageCount -1 && nDiff > 0)
+        return;
+
+    m_multiPagesView->getListArea()->horizontalScrollBar()->setValue(m_scrollValue);
+}
+
+void FullScreenFrame::mouseReleaseDrag(QMouseEvent *e)
+{
+    int curPage = m_multiPagesView->currentPage();
+    int nDiff = m_nMousePos - e->x();
+
+    if (nDiff > DLauncher::TOUCH_DIFF_THRESH) {
+        // 加大范围来避免手指点击触摸屏抖动问题
+        m_multiPagesView->showCurrentPage(curPage + 1);
+    } else if (nDiff < -DLauncher::TOUCH_DIFF_THRESH) {
+        // 加大范围来避免手指点击触摸屏抖动问题
+        m_multiPagesView->showCurrentPage(curPage - 1);
+    } else {
+       int nScroll = m_multiPagesView->getListArea()->horizontalScrollBar()->value();
+        //多个分页是点击直接隐藏
+        if (nScroll == m_scrollStart && curPage != 1)
+            emit m_multiPagesView->getAppGridViewList()[curPage]->clicked(QModelIndex());
+        else if (nScroll - m_scrollStart > DLauncher::MOUSE_MOVE_TO_NEXT)
+            m_multiPagesView->showCurrentPage(curPage + 1);
+        else if (nScroll - m_scrollStart < -DLauncher::MOUSE_MOVE_TO_NEXT)
+            m_multiPagesView->showCurrentPage(curPage - 1);
+        else
+            m_multiPagesView->showCurrentPage(curPage);
+    }
+
+    m_bMousePress = false;
+
+    m_multiPagesView->setGradientVisible(false);
+}
+
 AppsListModel::AppCategory FullScreenFrame::nextCategoryType(const AppsListModel::AppCategory category)
 {
     AppsListModel::AppCategory nextCategory = AppsListModel::AppCategory(category + 1);
@@ -1714,11 +1757,10 @@ const QScreen *FullScreenFrame::currentScreen()
 void FullScreenFrame::layoutChanged()
 {
     QSize boxSize;
-    int padding = m_calcUtil->getScreenSize().width() * SIDES_SPACE_SCALE;
-
     QPixmap pixmap = cachePixmap();
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
-        const int appsContentWidth = (m_contentFrame->width() - padding * 2);
+        // 全屏模式下给控件设置整个屏幕大小
+        const int appsContentWidth = (m_contentFrame->width());
         const int appsContentHeight = (m_contentFrame->height() - DLauncher::APPS_AREA_TOP_MARGIN);
         boxSize.setWidth(appsContentWidth);
         boxSize.setHeight(appsContentHeight);

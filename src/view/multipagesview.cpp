@@ -25,7 +25,6 @@
 #include "../widgets/blurboxwidget.h"
 
 #include <QHBoxLayout>
-#define     SIDES_SPACE_SCALE   0.10
 
 /**
  * @brief MultiPagesView::MultiPagesView 全屏模式下多页列表控件类
@@ -68,6 +67,14 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_appListArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appListArea->viewport()->installEventFilter(this);
     m_appListArea->installEventFilter(this);
+
+    // 全屏视图管理类设置左右边距
+    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
+
+    if (m_calcUtil->displayMode() == ALL_APPS) {
+        m_viewBox->layout()->setContentsMargins(padding, 0, padding, 0);
+        m_viewBox->layout()->setSpacing(padding);
+    }
 
     // 翻页按钮和动画
     m_pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value");
@@ -295,12 +302,33 @@ void MultiPagesView::setModel(AppsListModel::AppCategory category)
 
 void MultiPagesView::updatePosition()
 {
-    m_pageControl->UpdateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
-    QSize tmpSize = size() - QSize(0,m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
-    m_appListArea->setFixedSize(tmpSize);
-    m_viewBox->setFixedHeight(tmpSize.height());
-    for (auto *pView : m_appGridViewList)
-        pView->setFixedSize(tmpSize);
+    // 更新全屏两种模式下界面布局的左右边距和间隔
+    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
+    if (m_calcUtil->displayMode() == ALL_APPS) {
+        m_viewBox->layout()->setContentsMargins(padding, 0, padding, 0);
+        m_viewBox->layout()->setSpacing(padding);
+    } else {
+        m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
+        m_viewBox->layout()->setSpacing(0);
+    }
+
+    // 更新视图列表的大小
+    if (m_calcUtil->displayMode() == ALL_APPS) {
+        int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
+        m_pageControl->UpdateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
+        QSize tmpSize = size() - QSize(padding, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
+        m_appListArea->setFixedSize(size());
+        m_viewBox->setFixedHeight(tmpSize.height());
+        for (auto pView : m_appGridViewList)
+            pView->setFixedSize(tmpSize);
+    } else {
+        m_pageControl->UpdateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
+        QSize tmpSize = size() - QSize(0,m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
+        m_appListArea->setFixedSize(tmpSize);
+        m_viewBox->setFixedHeight(tmpSize.height());
+        for (auto pView : m_appGridViewList)
+            pView->setFixedSize(tmpSize);
+    }
 
     showCurrentPage(0);
 }
@@ -323,8 +351,12 @@ void MultiPagesView::InitUI()
 
 void MultiPagesView::showCurrentPage(int currentPage)
 {
+    int padding = 0;
+    if (m_calcUtil->displayMode() == ALL_APPS)
+        padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
+
     m_pageIndex = currentPage > 0 ? (currentPage < m_pageCount ? currentPage : m_pageCount - 1) : 0;
-    int endValue = m_pageIndex == 0 ? 0 : m_appGridViewList[m_pageIndex]->x();
+    int endValue = m_pageIndex == 0 ? 0 : (m_appGridViewList[m_pageIndex]->x() - padding);
     int startValue = m_appListArea->horizontalScrollBar()->value();
     m_appListArea->setProperty("curPage", m_pageIndex);
 
@@ -460,7 +492,7 @@ QPropertyAnimation::State MultiPagesView::getPageSwitchAnimationState()
     return m_pageSwitchAnimation->state();
 }
 
-QWidget* MultiPagesView::getParentWidget()
+QWidget *MultiPagesView::getParentWidget()
 {
     // 找到背景widget
     QWidget *backgroundWidget = parentWidget();
@@ -482,13 +514,28 @@ QPoint MultiPagesView::calculPadding(MultiPagesView::Direction dir)
     QScreen *screen = QGuiApplication::primaryScreen();
     int screen_height = screen->availableGeometry().height();
     // 计算过渡动画开始的位置 区分左右位置与上下位置
-    int paddingL = m_calcUtil->getScreenSize().width() * SIDES_SPACE_SCALE;
+    int paddingL = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
     int paddingR = m_calcUtil->getScreenSize().width() - paddingL - 1;
     int topPos = mapToGlobal(rect().topLeft()).y() > screen_height ? mapToGlobal(rect().topLeft()).y() - screen_height : mapToGlobal(rect().topLeft()).y();
 
     QPoint padding(((dir == MultiPagesView::Left) ? paddingL : paddingR), topPos);
 
     return padding;
+}
+
+AppListArea *MultiPagesView::getListArea()
+{
+    return m_appListArea;
+}
+
+AppGridViewList MultiPagesView::getAppGridViewList()
+{
+    return m_appGridViewList;
+}
+
+AppsListModel::AppCategory MultiPagesView::getCategory()
+{
+    return m_category;
 }
 
 // 更新边框渐变，在屏幕变化时需要更新，类别拖动时需要隐藏

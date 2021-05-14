@@ -72,10 +72,15 @@ public:
     void mouseRelease(QMouseEvent *e) override;
 
     void setGradientVisible(bool visible);
+    void updateGradient();
+    void updateGradient(QPixmap& pixmap, QPoint startPoint, QPoint topRightImg);
 
     QPropertyAnimation::State getPageSwitchAnimationState();
-    QWidget* getParentWidget();
+    QWidget *getParentWidget();
     QPoint calculPadding(MultiPagesView::Direction dir);
+    AppListArea *getListArea();
+    AppGridViewList getAppGridViewList();
+    AppsListModel::AppCategory getCategory();
 
 signals:
     void connectViewEvent(AppGridView* pView);
@@ -88,8 +93,6 @@ private slots:
 protected:
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
     void InitUI();
-    void updateGradient();
-    void updateGradient(QPixmap& pixmap, QPoint startPoint, QPoint topRightImg);
 
 private:
     bool m_bDragStart;

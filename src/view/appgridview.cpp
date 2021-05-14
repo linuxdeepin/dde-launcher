@@ -93,8 +93,11 @@ AppGridView::AppGridView(QWidget *parent)
     setFrameStyle(QFrame::NoFrame);
     setViewportMargins(0, 0, 0, 0);
 
-    // init origin size
-    setFixedSize(m_appManager->currentScreen()->size());
+    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
+    const int appsContentWidth = m_calcUtil->getScreenSize().width() - padding;
+    const int appsContentHeight = m_calcUtil->getScreenSize().height() - DLauncher::APPS_AREA_TOP_MARGIN;
+
+    setFixedSize(appsContentWidth, appsContentHeight);
 
     viewport()->setAutoFillBackground(false);
 
@@ -309,11 +312,12 @@ void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 
     m_dropThresholdTimer->stop();
 
-    const QPoint pos = m_containerBox->mapFromGlobal(QCursor::pos());
+    const QPoint pos = QCursor::pos();
 
     int nSpace = m_calcUtil->appItemSpacing() + m_calcUtil->appMarginLeft();
-    const QRect containerRect = m_containerBox->rect().marginsRemoved(QMargins(nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
-                                                                               nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
+    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
+    const QRect containerRect = this->contentsRect().marginsRemoved(QMargins(padding, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
+                                                                               padding, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
 
     const QModelIndex dropStart = QListView::indexAt(m_dragStartPos);
 
@@ -575,11 +579,14 @@ void AppGridView::startDrag(const QModelIndex &index)
     posAni->setDuration(DLauncher::APP_DRAG_MININUM_TIME);
     posAni->setStartValue((QCursor::pos() - rectIcon.center()));
 
+    // 添加因为添加了水平方向的偏移，导致拖动item释放后终点位置不对导致的动画异常问题
+    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE * 5 / 6;
+
     // 使用mapToGlobal出现终点坐标转换异常问题，故而使用坐标偏移
     if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY)
         posAni->setEndValue(mapToGlobal(m_dropPoint) + QPoint(60, 0));
     else
-        posAni->setEndValue(m_containerBox->mapToGlobal(QPoint()) + m_dropPoint);
+        posAni->setEndValue(m_containerBox->mapToGlobal(QPoint()) + m_dropPoint + QPoint(padding, 0));
 
     posAni->start(QPropertyAnimation::DeleteWhenStopped);
 }

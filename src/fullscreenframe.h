@@ -75,6 +75,9 @@ public:
     void updateDisplayMode(const int mode);
     void nextTabWidget(int key);
     void setBlurWidgetVisible(bool state = false);
+    void mousePressDrag(QMouseEvent *e);
+    void mouseMoveDrag(QMouseEvent *e);
+    void mouseReleaseDrag(QMouseEvent *e);
 
 signals:
     void visibleChanged(bool visible);
@@ -82,7 +85,6 @@ signals:
     void categoryAppNumsChanged(const AppsListModel::AppCategory category, const int appNums);
     void currentVisibleCategoryChanged(const AppsListModel::AppCategory currentVisibleCategory) const;
     void scrollChanged(const AppsListModel::AppCategory &category);
-    void changePage(bool isNext = true);
 
 public slots:
     void scrollToCategory(const AppsListModel::AppCategory oldCategory, const AppsListModel::AppCategory newCategory);
@@ -213,5 +215,10 @@ private:
     DBusDisplay *m_displayInter;
 
     bool m_canResizeDockPosition = false;               // 只有窗口在完全显示出来后，才允许自动调整各部件位置
+
+    bool m_bMousePress;                                 // 鼠标按下标识
+    int m_nMousePos;                                    // 鼠标按住的起始坐标
+    int m_scrollValue;                                  // 滑动区域当前停留的数值
+    int m_scrollStart;                                  // 鼠标按下时滑动区域停留的数值
 };
 #endif // MAINFRAME_H

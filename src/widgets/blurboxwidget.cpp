@@ -73,7 +73,7 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     m_vLayout->addWidget(m_categoryMultiPagesView);
 
     m_bg->setFixedSize(m_calcUtil->getAppBoxSize());
-    m_bg->setColor(new QColor(255,255,255,25));
+    m_bg->setColor(QColor(255, 255, 255, 25));
     m_bg->lower();
 }
 

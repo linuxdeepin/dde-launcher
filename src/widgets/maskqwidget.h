@@ -29,13 +29,13 @@ class MaskQWidget : public QWidget
 public:
     explicit MaskQWidget(QWidget *parent = nullptr);
 
-    void setColor(QColor* color);
+    void setColor(QColor color);
 
 protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    QColor* m_color;
+    QColor m_color;
 
 signals:
 

@@ -456,8 +456,7 @@ QIcon getIcon(const QString &name)
         return QIcon::fromTheme(name);
 
     QIconEngine * const engine = platformTheme->createIconEngine(name);
-    QIcon *cachedIcon  = new QIcon(engine);
-    return *cachedIcon;
+    return QIcon(engine);
 }
 
 QString cacheKey(const ItemInfo &itemInfo, CacheType type)

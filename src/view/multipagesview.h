@@ -63,7 +63,7 @@ public:
     QModelIndex getAppItem(int index);
     void setDataDelegate(QAbstractItemDelegate *delegate);
     void setModel(AppsListModel::AppCategory category);
-    void updatePosition();
+    void updatePosition(int mode = 0);
 
     void ShowPageView(AppsListModel::AppCategory category);
 

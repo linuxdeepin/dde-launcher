@@ -1514,7 +1514,8 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         AppsListModel::AppCategory category = (m_displayMode == SEARCH) ? AppsListModel::Search : AppsListModel::All;
         m_multiPagesView->setModel(category);
 
-        m_multiPagesView->updatePosition();
+        // 全屏模式（自由模式或者应用分类模式）下，当处于搜索状态时，更新界面布局
+        m_multiPagesView->updatePosition(m_displayMode);
 
         // 隐藏分类模式显示
         m_navigationWidget->setVisible(false);
@@ -1767,7 +1768,7 @@ void FullScreenFrame::layoutChanged()
 
         m_appsIconBox->setFixedSize(boxSize);
         m_multiPagesView->setFixedSize(boxSize);
-        m_multiPagesView->updatePosition();
+        m_multiPagesView->updatePosition(m_displayMode);
     } else {
         const int appsContentWidth = (m_contentFrame->width());
         const int appsContentHeight = (m_contentFrame->height() - DLauncher::APPS_AREA_TOP_MARGIN);

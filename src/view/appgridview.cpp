@@ -312,12 +312,21 @@ void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 
     m_dropThresholdTimer->stop();
 
-    const QPoint pos = QCursor::pos();
+    QPoint pos;
+    QRect containerRect;
 
-    int nSpace = m_calcUtil->appItemSpacing() + m_calcUtil->appMarginLeft();
-    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
-    const QRect containerRect = this->contentsRect().marginsRemoved(QMargins(padding, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
-                                                                               padding, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
+    // 解决全屏分类模式下拖动item无法触发分页的问题
+    if (m_calcUtil->displayMode() == ALL_APPS) {
+        int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
+        pos = QCursor::pos();
+        containerRect = this->contentsRect().marginsRemoved(QMargins(padding, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
+                                                                                   padding, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
+    } else {
+        pos = m_containerBox->mapFromGlobal(QCursor::pos());
+        int nSpace = m_calcUtil->appItemSpacing() + m_calcUtil->appMarginLeft();
+        containerRect = m_containerBox->rect().marginsRemoved(QMargins(nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
+                                                                                     nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
+    }
 
     const QModelIndex dropStart = QListView::indexAt(m_dragStartPos);
 

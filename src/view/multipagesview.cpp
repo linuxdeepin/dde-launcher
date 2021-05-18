@@ -300,11 +300,11 @@ void MultiPagesView::setModel(AppsListModel::AppCategory category)
     }
 }
 
-void MultiPagesView::updatePosition()
+void MultiPagesView::updatePosition(int mode)
 {
     // 更新全屏两种模式下界面布局的左右边距和间隔
     int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
-    if (m_calcUtil->displayMode() == ALL_APPS) {
+    if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
         m_viewBox->layout()->setContentsMargins(padding, 0, padding, 0);
         m_viewBox->layout()->setSpacing(padding);
     } else {
@@ -313,7 +313,7 @@ void MultiPagesView::updatePosition()
     }
 
     // 更新视图列表的大小
-    if (m_calcUtil->displayMode() == ALL_APPS) {
+    if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
         int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
         m_pageControl->UpdateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
         QSize tmpSize = size() - QSize(padding, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);

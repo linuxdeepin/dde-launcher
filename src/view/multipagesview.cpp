@@ -436,8 +436,6 @@ void MultiPagesView::mousePress(QMouseEvent *e)
     m_scrollValue = m_appListArea->horizontalScrollBar()->value();
     m_scrollStart = m_scrollValue;
 
-    if(e->button() != Qt::RightButton) updateGradient();
-
     if(m_pageCount == 1 && m_category != AppsListModel::Search)
         QWidget::mousePressEvent(e);
 }

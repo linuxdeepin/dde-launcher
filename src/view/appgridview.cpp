@@ -510,6 +510,13 @@ void AppGridView::startDrag(const QModelIndex &index)
         fullscreenFrame = qobject_cast<FullScreenFrame*>(
                     this->parentWidget()->parentWidget()->parentWidget()->parentWidget()
                     ->parentWidget()->parentWidget()->parentWidget()->parentWidget());
+
+        // 解决全屏分类模式，搜索模式下拖动应用父对象为空导致出现空页面问题的情况
+        if (!fullscreenFrame) {
+            fullscreenFrame = qobject_cast<FullScreenFrame*>(
+                        this->parentWidget()->parentWidget()->parentWidget()->parentWidget()
+                        ->parentWidget()->parentWidget()->parentWidget());
+        }
     } else {
         fullscreenFrame = qobject_cast<FullScreenFrame*>(
                     this->parentWidget()->parentWidget()->parentWidget()->parentWidget()

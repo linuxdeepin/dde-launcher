@@ -435,9 +435,6 @@ void AppsManager::uninstallApp(const QString &appKey)
     // 从应用列表中删除该应用信息
     stashItem(appKey);
 
-    //卸载前，将应用从任务栏移除
-    m_dockInter->RequestUndock(appKey);
-
     // 向后端发起卸载请求
     m_launcherInter->RequestUninstall(appKey, false);
 

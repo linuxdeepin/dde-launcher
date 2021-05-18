@@ -470,8 +470,6 @@ void AppsManager::uninstallApp(const QString &appKey)
 
     // begin uninstall, remove icon first.
     stashItem(appKey);
-    //卸载前，将应用从任务栏移除
-    m_dockInter->RequestUndock(appKey);
     // request backend
     m_launcherInter->RequestUninstall(appKey, false);
 

@@ -82,12 +82,13 @@ AppsManager::AppsManager(QObject *parent) :
     m_itemInfo(ItemInfo()),
     m_iconValid(false)
 {
-    if (QGSettings::isSchemaInstalled("com.deepin.dde.Launcher")) {
-        m_filterSetting = new QGSettings("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher/");
+    if (QGSettings::isSchemaInstalled("com.deepin.dde.launcher")) {
+        m_filterSetting = new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
+
         connect(m_filterSetting, &QGSettings::changed, this, [ & ] (const QString & keyName) {
-            if (keyName != "filter-keys" && keyName != "filterKeys") {
+            if (keyName != "filter-keys" && keyName != "filterKeys")
                 return;
-            }
+
             refreshAllList();
         });
     }
@@ -698,10 +699,7 @@ void AppsManager::refreshCategoryInfoList()
         qApp->quit();
     }
 
-    QStringList filters;
-    if (m_filterSetting != nullptr) {
-        filters = m_filterSetting->get("filter-keys").toStringList();
-    }
+    QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
 
     QByteArray readBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
     QDataStream in(&readBuf, QIODevice::ReadOnly);
@@ -833,9 +831,7 @@ void AppsManager::refreshUserInfoList()
     }
 
     // 从启动器小屏应用列表移除被限制使用的应用
-    QStringList filters;
-    if (m_filterSetting != nullptr)
-        filters = m_filterSetting->get("filter-keys").toStringList();
+    QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
 
     for (auto it = m_userSortedList.begin(); it != m_userSortedList.end(); it++) {
         if (fuzzyMatching(filters, it->m_key))
@@ -1091,13 +1087,13 @@ void AppsManager::searchDone(const QStringList &resultList)
     m_appSearchResultList.clear();
 
     QStringList resultCopy = resultList;
-    if (m_filterSetting != nullptr) {
-        QStringList filters = m_filterSetting->get("filter-keys").toStringList();
-        for (const QString& result : resultCopy) {
-            bool bContains = fuzzyMatching(filters, result);
-            if (bContains) {
-                resultCopy.removeAll(result);
-            }
+
+    QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
+
+    for (const QString& result : resultCopy) {
+        bool bContains = fuzzyMatching(filters, result);
+        if (bContains) {
+            resultCopy.removeAll(result);
         }
     }
 
@@ -1132,14 +1128,10 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
         IconFreshThread::setQueue(newInstallQueue);
         IconFreshThread::releaseInstallAppSemo();
 
-        QStringList filters;
-        if (m_filterSetting != nullptr) {
-            filters = m_filterSetting->get("filter-keys").toStringList();
-        }
+        QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
 
-        if (fuzzyMatching(filters, appInfo.m_key)) {
+        if (fuzzyMatching(filters, appInfo.m_key))
             return;
-        }
 
         m_allAppInfoList.append(appInfo);
         m_usedSortedList.append(appInfo);

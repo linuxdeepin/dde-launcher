@@ -52,12 +52,12 @@ TEST_F(Tst_Appgridview, appGridView_test)
     QMouseEvent event2(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::RightButton, Qt::RightButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
     QApplication::sendEvent(widget->viewport(), &event2);
 
-    QMimeData *data = new QMimeData();
-    data->setData("RequestDock","test");
-    QDragEnterEvent event3(QPoint(0, 1), Qt::CopyAction, data, Qt::LeftButton, Qt::NoModifier);
+    QMimeData data;
+    data.setData("RequestDock","test");
+    QDragEnterEvent event3(QPoint(0, 1), Qt::CopyAction, &data, Qt::LeftButton, Qt::NoModifier);
     QApplication::sendEvent(widget->viewport(), &event3);
 
-    QDragMoveEvent event4(QPoint(0, 2), Qt::MoveAction, data, Qt::LeftButton, Qt::NoModifier);
+    QDragMoveEvent event4(QPoint(0, 2), Qt::MoveAction, &data, Qt::LeftButton, Qt::NoModifier);
     QApplication::sendEvent(widget->viewport(), &event4);
 
     widget->dragOut(-1);

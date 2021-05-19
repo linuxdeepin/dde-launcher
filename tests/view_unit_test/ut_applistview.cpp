@@ -51,19 +51,19 @@ TEST_F(Tst_Applistview, appListView_test)
     QMouseEvent event3(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
     QApplication::sendEvent(widget->viewport(), &event3);
 
-    QMimeData *mimeData = new QMimeData;
-    mimeData->setData("test", "test");
+    QMimeData mimeData;
+    mimeData.setData("test", "test");
 
-    QDragEnterEvent event4(QPoint(0, 1), Qt::CopyAction, mimeData, Qt::LeftButton, Qt::NoModifier);
+    QDragEnterEvent event4(QPoint(0, 1), Qt::CopyAction, &mimeData, Qt::LeftButton, Qt::NoModifier);
     QApplication::sendEvent(widget->viewport(), &event4);
 
-    QDragMoveEvent event5(QPoint(0, 2), Qt::MoveAction, mimeData, Qt::LeftButton, Qt::NoModifier);
+    QDragMoveEvent event5(QPoint(0, 2), Qt::MoveAction, &mimeData, Qt::LeftButton, Qt::NoModifier);
     QApplication::sendEvent(widget, &event5);
 
     QDragLeaveEvent event6;
     QApplication::sendEvent(widget, &event6);
 
-    QDropEvent event7(QPointF(0, 0), Qt::CopyAction, mimeData, Qt::LeftButton, Qt::NoModifier);
+    QDropEvent event7(QPointF(0, 0), Qt::CopyAction, &mimeData, Qt::LeftButton, Qt::NoModifier);
     QApplication::sendEvent(widget->viewport(), &event7);
 
     QEvent event8(QEvent::Enter);

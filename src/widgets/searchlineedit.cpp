@@ -34,8 +34,9 @@ DGUI_USE_NAMESPACE
 
 SearchLineEdit::SearchLineEdit(QWidget *parent) :
     QLineEdit(parent)
-    , m_icon(new DIconButton(this))
-    , m_clear(new DIconButton(this))
+  , m_icon(new DIconButton(this))
+  , m_clear(new DIconButton(this))
+  , m_editStyle(new SearchLineeditStyle(style()))
 {
     setTextMargins(20, 0, 0, 0);
     m_icon->setIconSize(QSize(16, 16));
@@ -61,8 +62,6 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     m_floatWidget = new QWidget(this);
     m_placeholderText->setAccessibleName("PlaceholderText");
     m_floatWidget->setAccessibleName("floatWidget");
-
-    m_editStyle = new SearchLineeditStyle(style());
 
     QHBoxLayout *floatLayout = new QHBoxLayout;
     floatLayout->addWidget(m_icon);
@@ -124,8 +123,8 @@ bool SearchLineEdit::event(QEvent *e)
             }
         }
     }
-    break;
-//    case QEvent::FocusOut:      normalMode();       break;
+        break;
+        //    case QEvent::FocusOut:      normalMode();       break;
     default:;
     }
 

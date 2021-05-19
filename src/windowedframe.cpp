@@ -79,26 +79,26 @@ inline const QPoint scaledPosition(const QPoint &xpos)
 WindowedFrame::WindowedFrame(QWidget *parent)
     : DBlurEffectWidget(parent)
     , m_dockInter(new DBusDock(this))
-    , m_menuWorker(new MenuWorker)
+    , m_menuWorker(new MenuWorker(this))
     , m_eventFilter(new SharedEventFilter(this))
     , m_windowHandle(this, this)
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_maskBg(new QWidget(this))
     , m_appsManager(AppsManager::instance())
-    , m_appsView(new AppListView)
-    , m_appsModel(new AppsListModel(AppsListModel::Custom))
-    , m_searchModel(new AppsListModel(AppsListModel::Search))
-    , m_leftBar(new MiniFrameRightBar)
-    , m_switchBtn(new MiniFrameSwitchBtn)
+    , m_appsView(new AppListView(this))
+    , m_appsModel(new AppsListModel(AppsListModel::Custom, this))
+    , m_searchModel(new AppsListModel(AppsListModel::Search, this))
+    , m_leftBar(new MiniFrameRightBar(this))
+    , m_switchBtn(new MiniFrameSwitchBtn(this))
     , m_tipsLabel(new QLabel(this))
-    , m_delayHideTimer(new QTimer)
-    , m_autoScrollTimer(new QTimer)
+    , m_delayHideTimer(new QTimer(this))
+    , m_autoScrollTimer(new QTimer(this))
     , m_appearanceInter(new Appearance("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
     , m_displayMode(All)
     , m_calcUtil(CalculateUtil::instance())
     , m_focusPos(Applist)
     , m_modeToggleBtn(new ModeToggleButton(this))
-    , m_searcherEdit(new DSearchEdit)
+    , m_searcherEdit(new DSearchEdit(this))
     , m_enterSearchEdit(false)
 {
     m_searcherEdit->setAccessibleName("searcherEdit");
@@ -120,7 +120,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_windowHandle.setTranslucentBackground(false);
 
     m_appsView->setModel(m_appsModel);
-    m_appsView->setItemDelegate(new AppListDelegate);
+    m_appsView->setItemDelegate(new AppListDelegate(this));
 
     m_appsView->installEventFilter(m_eventFilter);
     m_switchBtn->installEventFilter(m_eventFilter);
@@ -243,11 +243,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     resetWidgetStyle();
     m_maskBg->setAutoFillBackground(true);
     m_maskBg->setFixedSize(size());
-}
-
-WindowedFrame::~WindowedFrame()
-{
-    m_eventFilter->deleteLater();
 }
 
 void WindowedFrame::showLauncher()

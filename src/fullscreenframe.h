@@ -207,8 +207,6 @@ private:
 
     QFrame *m_topSpacing;
     QFrame *m_bottomSpacing;
-    QLayout *m_pHBoxLayout = nullptr;
-    QVBoxLayout *m_mainLayout;
 
     QList<ScrollWidgetAgent *> m_widgetAgentList;
     ScrollParallelAnimationGroup *m_animationGroup;

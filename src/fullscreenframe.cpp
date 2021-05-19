@@ -81,8 +81,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_appsItemBox(new DHBoxWidget(m_contentFrame)),
     m_appsItemSeizeBox(new MaskQWidget),
     m_tipsLabel(new QLabel(this)),
-    m_appItemDelegate(new AppItemDelegate),
-    m_multiPagesView(new MultiPagesView()),
+    m_appItemDelegate(new AppItemDelegate(this)),
+    m_multiPagesView(new MultiPagesView(AppsListModel::All, this)),
 
     m_internetBoxWidget(new BlurBoxWidget(AppsListModel::Internet, const_cast<char *>("Internet"),m_appsItemBox)),
     m_chatBoxWidget(new BlurBoxWidget(AppsListModel::Chat, const_cast<char *>("Chat"),m_appsItemBox)),
@@ -95,8 +95,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_developmentBoxWidget(new BlurBoxWidget(AppsListModel::Development, const_cast<char *>("Development"),m_appsItemBox)),
     m_systemBoxWidget(new BlurBoxWidget(AppsListModel::System, const_cast<char *>("System"),m_appsItemBox)),
     m_othersBoxWidget(new BlurBoxWidget(AppsListModel::Others, const_cast<char *>("Other"),m_appsItemBox)),
-    m_topSpacing(new QFrame),
-    m_bottomSpacing(new QFrame),
+    m_topSpacing(new QFrame(this)),
+    m_bottomSpacing(new QFrame(this)),
     m_animationGroup(new ScrollParallelAnimationGroup(this)),
     m_displayInter(new DBusDisplay(this)),
     m_bMousePress(false),
@@ -194,10 +194,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
 FullScreenFrame::~FullScreenFrame()
 {
-    while (m_widgetAgentList.count() > 0) {
-        ScrollWidgetAgent *widgetAgent = m_widgetAgentList.takeAt(0);
-        delete widgetAgent;
-    }
 }
 
 void FullScreenFrame::exit()
@@ -844,7 +840,6 @@ void FullScreenFrame::initUI()
     m_appsIconBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_appsIconBox->layout()->setSpacing(0);
     m_appsIconBox->layout()->addWidget(m_multiPagesView, 0, Qt::AlignCenter);
-    m_pHBoxLayout = m_appsIconBox->layout();
 
     //启动时默认按屏幕大小设置自由排序widget的大小
     const int appsContentWidth = m_calcUtil->getScreenSize().width();
@@ -854,7 +849,7 @@ void FullScreenFrame::initUI()
     // 启动时全屏自由模式设置控件大小，解决模式切换界面抖动问题
     m_multiPagesView->setFixedSize(appsContentWidth, appsContentHeight);
 
-    QVBoxLayout *scrollVLayout = new QVBoxLayout;
+    QVBoxLayout *scrollVLayout = new QVBoxLayout(this);
     scrollVLayout->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN, 0, 0);
     scrollVLayout->setSpacing(0);
     scrollVLayout->addWidget(m_appsIconBox,0,Qt::AlignCenter);
@@ -867,16 +862,16 @@ void FullScreenFrame::initUI()
 
     m_navigationWidget->setFixedHeight(m_calcUtil->instance()->navigationHeight());
 
-    m_mainLayout = new QVBoxLayout;
-    m_mainLayout->setMargin(0);
-    m_mainLayout->setSpacing(0);
-    m_mainLayout->addWidget(m_topSpacing);
-    m_mainLayout->addWidget(m_searchWidget);
-    m_mainLayout->addWidget(m_navigationWidget, 0, Qt::AlignHCenter);
-    m_mainLayout->addWidget(m_contentFrame);
-    m_mainLayout->addWidget(m_bottomSpacing);
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setMargin(0);
+    mainLayout->setSpacing(0);
+    mainLayout->addWidget(m_topSpacing);
+    mainLayout->addWidget(m_searchWidget);
+    mainLayout->addWidget(m_navigationWidget, 0, Qt::AlignHCenter);
+    mainLayout->addWidget(m_contentFrame);
+    mainLayout->addWidget(m_bottomSpacing);
 
-    setLayout(m_mainLayout);
+    setLayout(mainLayout);
 }
 
 MultiPagesView *FullScreenFrame::getCategoryGridViewList(const AppsListModel::AppCategory category)

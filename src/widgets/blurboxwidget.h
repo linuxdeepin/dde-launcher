@@ -48,6 +48,7 @@ class BlurBoxWidget : public QWidget
     Q_OBJECT
 public:
     explicit BlurBoxWidget(AppsListModel::AppCategory m_category, char *name, QWidget *parent = nullptr);
+    ~BlurBoxWidget() override;
 
     void setMaskVisible(bool visible);
     void setMaskSize(QSize size);

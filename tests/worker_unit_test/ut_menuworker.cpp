@@ -40,6 +40,9 @@ TEST_F(Tst_MenuWorker, menuWorker_test)
     }
     menu->aboutToHide();
 
+    delete menu;
+    menu = nullptr;
+
     const QModelIndex index;
     obj->setCurrentModelIndex(index);
     QVERIFY(index == obj->getCurrentModelIndex());

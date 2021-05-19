@@ -75,27 +75,27 @@ TEST_F(Tst_Windowedframe, privateSlots_test)
 
 TEST_F(Tst_Windowedframe, eventFilter_test)
 {
-    QEvent *event = new QEvent(QEvent::Type::None);
-    m_windowedframe->m_eventFilter->eventFilter(nullptr, event);
+    QEvent event(QEvent::Type::None);
+    m_windowedframe->m_eventFilter->eventFilter(nullptr, &event);
 
-    QEvent *event1 = new QEvent(QEvent::Type::KeyPress);
-    QKeyEvent *keyPress = static_cast<QKeyEvent *>(event1);
+    QEvent event1(QEvent::Type::KeyPress);
+    QKeyEvent *keyPress = static_cast<QKeyEvent *>(&event1);
 
-    QKeyEvent *keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_F1, static_cast<QKeyEvent *>(keyPress)->modifiers());
-    m_windowedframe->m_eventFilter->eventFilter(nullptr, keyEvent);
+    QKeyEvent f1KeyEvent(QEvent::Type::KeyPress, Qt::Key_F1, static_cast<QKeyEvent *>(keyPress)->modifiers());
+    m_windowedframe->m_eventFilter->eventFilter(nullptr, &f1KeyEvent);
 
-    keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_Return, static_cast<QKeyEvent *>(keyPress)->modifiers());
-    m_windowedframe->m_eventFilter->eventFilter(nullptr, keyEvent);
+    QKeyEvent returnKeyEvent(QEvent::Type::KeyPress, Qt::Key_Return, static_cast<QKeyEvent *>(keyPress)->modifiers());
+    m_windowedframe->m_eventFilter->eventFilter(nullptr, &returnKeyEvent);
 
-    keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_Escape, static_cast<QKeyEvent *>(keyPress)->modifiers());
-    m_windowedframe->m_eventFilter->eventFilter(nullptr, keyEvent);
+    QKeyEvent escapeKeyEvent(QEvent::Type::KeyPress, Qt::Key_Escape, static_cast<QKeyEvent *>(keyPress)->modifiers());
+    m_windowedframe->m_eventFilter->eventFilter(nullptr, &escapeKeyEvent);
 
-    keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_Space, static_cast<QKeyEvent *>(keyPress)->modifiers());
-    m_windowedframe->m_eventFilter->eventFilter(nullptr, keyEvent);
+    QKeyEvent spaceKeyEvent(QEvent::Type::KeyPress, Qt::Key_Space, static_cast<QKeyEvent *>(keyPress)->modifiers());
+    m_windowedframe->m_eventFilter->eventFilter(nullptr, &spaceKeyEvent);
 
-    keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_Tab, static_cast<QKeyEvent *>(keyPress)->modifiers());
-    m_windowedframe->m_eventFilter->eventFilter(nullptr, keyEvent);
+    QKeyEvent tabKeyEvent(QEvent::Type::KeyPress, Qt::Key_Tab, static_cast<QKeyEvent *>(keyPress)->modifiers());
+    m_windowedframe->m_eventFilter->eventFilter(nullptr, &tabKeyEvent);
 
-    keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_Backspace, static_cast<QKeyEvent *>(keyPress)->modifiers());
-    m_windowedframe->m_eventFilter->eventFilter(nullptr, keyEvent);
+    QKeyEvent backSpaceKeyEvent(QEvent::Type::KeyPress, Qt::Key_Backspace, static_cast<QKeyEvent *>(keyPress)->modifiers());
+    m_windowedframe->m_eventFilter->eventFilter(nullptr, &backSpaceKeyEvent);
 }

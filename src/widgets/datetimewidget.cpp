@@ -29,9 +29,9 @@ DWIDGET_USE_NAMESPACE
 
 DatetimeWidget::DatetimeWidget(QWidget *parent)
     : QWidget(parent),
-      m_currentTimeLabel(new QLabel),
-      m_currentDateLabel(new QLabel),
-      m_refreshDateTimer(new QTimer)
+      m_currentTimeLabel(new QLabel(this)),
+      m_currentDateLabel(new QLabel(this)),
+      m_refreshDateTimer(new QTimer(this))
 {
     m_refreshDateTimer->setInterval(1000);
     m_refreshDateTimer->start();

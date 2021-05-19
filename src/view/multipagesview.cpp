@@ -77,7 +77,7 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     }
 
     // 翻页按钮和动画
-    m_pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value");
+    m_pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value", this);
     m_pageSwitchAnimation->setEasingCurve(QEasingCurve::Linear);
 
     InitUI();

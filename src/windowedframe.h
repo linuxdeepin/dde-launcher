@@ -58,7 +58,6 @@ class WindowedFrame : public DBlurEffectWidget, public LauncherInterface
 
 public:
     explicit WindowedFrame(QWidget *parent = nullptr);
-    ~WindowedFrame() override;
 
     enum DisplayMode
     {

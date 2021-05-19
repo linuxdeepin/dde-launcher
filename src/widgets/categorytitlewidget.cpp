@@ -32,7 +32,7 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     QFrame(parent),
     m_calcUtil(CalculateUtil::instance()),
     m_title(new QLabel(this)),
-    m_opacityAnimation(new QPropertyAnimation(this, "titleOpacity")),
+    m_opacityAnimation(new QPropertyAnimation(this, "titleOpacity", this)),
     m_titleOpacity(0)
 {
     m_title->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);

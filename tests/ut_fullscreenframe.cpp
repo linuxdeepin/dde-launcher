@@ -71,7 +71,7 @@ TEST_F(Tst_Fullscreenframe, scrollToCategory_scrollNext1_test)
 TEST_F(Tst_Fullscreenframe, scrollBlurBoxWidget_test)
 {
     BlurBoxWidget *blueBox = new BlurBoxWidget(AppsListModel::AppCategory::Internet, nullptr);
-    ScrollWidgetAgent* scrollWidgetAgent = new ScrollWidgetAgent;
+    ScrollWidgetAgent* scrollWidgetAgent = new ScrollWidgetAgent(m_fullScreenFrame);
     scrollWidgetAgent->setPosType(Pos_M);
     scrollWidgetAgent->setBlurBoxWidget(blueBox);
 

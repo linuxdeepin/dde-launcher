@@ -180,16 +180,16 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
 
     setCurrentModelIndex(index);
 
-    QMenu *menu = new QMenu;
+    QScopedPointer<QMenu> menu(new QMenu);
     menu->setAccessibleName("popmenu");
 
-    QSignalMapper *signalMapper = new QSignalMapper(menu);
+    QSignalMapper *signalMapper = new QSignalMapper(menu.get());
 
-    creatMenuByAppItem(menu, signalMapper);
+    creatMenuByAppItem(menu.get(), signalMapper);
 
     connect(signalMapper, static_cast<void (QSignalMapper::*)(const int)>(&QSignalMapper::mapped), this, &MenuWorker::handleMenuAction);
-    connect(menu, &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);
-    connect(menu, &QMenu::aboutToHide, menu, &QMenu::deleteLater);
+    connect(menu.get(), &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);
+    connect(menu.get(), &QMenu::aboutToHide, menu.get(), &QMenu::deleteLater);
 
     menu->move(pos);
     m_menuIsShown = true;

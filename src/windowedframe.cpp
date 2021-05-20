@@ -229,7 +229,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher, Qt::QueuedConnection);
 
     connect(m_appearanceInter, &Appearance::OpacityChanged, this, &WindowedFrame::onOpacityChanged);
-    connect(m_modeToggleBtn, &DToolButton::clicked, m_leftBar, &MiniFrameRightBar::modeToggleBtnClicked);
+    connect(m_modeToggleBtn, &DToolButton::clicked, this, &WindowedFrame::onToggleFullScreen);
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
     onOpacityChanged(m_appearanceInter->opacity());
 

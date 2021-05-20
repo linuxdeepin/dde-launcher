@@ -144,9 +144,9 @@ void LauncherSys::displayModeChanged()
             connect(m_fullLauncher, &FullScreenFrame::visibleChanged, this, &LauncherSys::onVisibleChanged);
             connect(m_fullLauncher, &FullScreenFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
         }
+
         m_launcherInter = static_cast<LauncherInterface*>(m_fullLauncher);
-    }
-    else {
+    } else {
         if (!m_windowLauncher) {
             m_windowLauncher = new WindowedFrame;
             m_windowLauncher->installEventFilter(this);
@@ -159,14 +159,14 @@ void LauncherSys::displayModeChanged()
     lastLauncher = lastLauncher ? lastLauncher : m_launcherInter;
 
     if (lastLauncher->visible()) {
-        m_launcherInter->showLauncher();// 多态 晚绑定
-    }
-    else {
-        m_launcherInter->hideLauncher();
-    }
 
-    if (lastLauncher != m_launcherInter) {
-        lastLauncher->hideLauncher();
+        // 先关闭小窗口,再show全屏窗口,规避全屏窗口出现后,小窗口有迟滞关闭的视觉体验问题
+        if (lastLauncher != m_launcherInter)
+            lastLauncher->hideLauncher();
+
+        m_launcherInter->showLauncher();
+    } else {
+        m_launcherInter->hideLauncher();
     }
 
     QTimer::singleShot(0, this, [=] {

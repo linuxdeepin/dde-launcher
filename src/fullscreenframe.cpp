@@ -26,6 +26,7 @@
 #include "xcb_misc.h"
 #include "backgroundmanager.h"
 #include "sharedeventfilter.h"
+#include "constants.h"
 
 #include <DWindowManagerHelper>
 #include <DDBusSender>
@@ -183,6 +184,10 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
 
     initUI();
     initConnection();
+
+    // 获取搜索控件,应用分类导航控件默认大小
+    CalculateUtil::instance()->setSearchWidgetSizeHint(m_searchWidget->sizeHint());
+    CalculateUtil::instance()->setNavigationWidgetSizeHint(m_navigationWidget->sizeHint());
 
     updateDisplayMode(m_calcUtil->displayMode());
 }
@@ -1547,23 +1552,23 @@ void FullScreenFrame::updateDockPosition()
     m_bottomSpacing->setFixedHeight(bottomMargin);
 
     switch (m_appsManager->dockPosition()) {
-    case DOCK_POS_TOP:
+    case DLauncher::DOCK_POS_TOP:
         m_topSpacing->setFixedHeight(30 + dockGeometry.height());
         bottomMargin = m_topSpacing->height() + DLauncher::APPS_AREA_TOP_MARGIN;
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(0);
         break;
-    case DOCK_POS_BOTTOM:
+    case DLauncher::DOCK_POS_BOTTOM:
         bottomMargin += dockGeometry.height();
         m_bottomSpacing->setFixedHeight(bottomMargin);
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(0);
         break;
-    case DOCK_POS_LEFT:
+    case DLauncher::DOCK_POS_LEFT:
         m_searchWidget->setLeftSpacing(dockGeometry.width());
         m_searchWidget->setRightSpacing(0);
         break;
-    case DOCK_POS_RIGHT:
+    case DLauncher::DOCK_POS_RIGHT:
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(dockGeometry.width());
         break;

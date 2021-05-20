@@ -29,7 +29,6 @@ void Tst_NavigationWidget::TearDown()
     }
 }
 
-
 TEST_F(Tst_NavigationWidget, categoryButton_test)
 {
     EXPECT_NE(m_widget->button(AppsListModel::Internet), nullptr);

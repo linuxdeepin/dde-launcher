@@ -81,10 +81,14 @@ static const int TOUCH_DIFF_THRESH = 15;
 static const int SLIDE_DIFF_THRESH = 15;                // 按住鼠标滑动翻页的最小间距
 
 static const int MINI_FRAME_LAYOUT_SPACE1 = 10;         // 小窗口布局间隔距离1
-
 static const int MINI_FRAME_LAYOUT_SPACE2 = 8;          // 小窗口布局间隔距离2
 
 static const qreal SIDES_SPACE_SCALE = 0.10;            // 全屏模式下设置左右边距的系数
+
+static const int DOCK_POS_TOP = 0;                      // 任务栏位置: 顶部
+static const int DOCK_POS_RIGHT = 1;                    // 任务栏位置: 右边
+static const int DOCK_POS_BOTTOM = 2;                   // 任务栏位置: 底部
+static const int DOCK_POS_LEFT = 3;                     // 任务栏位置: 左边
 }
 
 #endif // CONSTANTS_H

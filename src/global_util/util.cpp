@@ -279,9 +279,9 @@ bool createCalendarIcon(const QString &fileName)
     if (!QFile(fileName).exists()) {
         // create svg
         QFile file(fileName);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
             return false;
-        }
+
         file.write(QByteArray("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"96\" height=\"96\" viewBox=\"0 0 96 96\">\n"
                               "  <defs>\n"
                               "    <filter id=\"test-a\" width=\"131.2%\" height=\"132.5%\" x=\"-15%\" y=\"-15%\" filterUnits=\"objectBoundingBox\">\n"

@@ -65,8 +65,14 @@ public:
     void setCurrentCategory(int category){m_currentCategory = category;}
     void setFullScreen(bool bFullScreen){isFullScreen = bFullScreen;}
     QSize appIconSize() const;
+    QSize appIconSize(bool fullscreen, double ratio, int iconSize = 0) const;
     int displayMode() const;
     void setDisplayMode(const int mode);
+    int calculateIconSize(const int mode);
+    QSize getSearchWidgetSizeHint() const { return  m_searchWidgetHintSize; }
+    void setSearchWidgetSizeHint(const QSize &size) { m_searchWidgetHintSize = size; }
+    QSize getNavigationWidgetSizeHint() const { return m_navigationWidgetHintSize; }
+    void setNavigationWidgetSizeHint(const QSize &size) { m_navigationWidgetHintSize = size; }
 
     bool increaseIconSize();
     bool decreaseIconSize();
@@ -82,6 +88,7 @@ public:
     double getScreenScaleY();
 
     QStringList calendarSelectIcon() const;
+
 public slots:
     void calculateAppLayout(const QSize &containerSize, const int currentmode);
 
@@ -89,6 +96,7 @@ private:
     explicit CalculateUtil(QObject *parent);
     void calculateTextSize();
     QScreen *currentScreen() const;
+
 private:
     static QPointer<CalculateUtil> INSTANCE;
 
@@ -110,6 +118,9 @@ private:
     DBusDock *m_dockInter;
 
     QGSettings *m_launcherGsettings;
+
+    QSize m_searchWidgetHintSize;
+    QSize m_navigationWidgetHintSize;
 };
 
 #endif // CALCULATE_UTIL_H

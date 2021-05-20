@@ -25,6 +25,7 @@
 #include "monitorinterface.h"
 #include "dbusdisplay.h"
 #include "util.h"
+#include "constants.h"
 
 #include <QDebug>
 #include <QDesktopWidget>
@@ -54,6 +55,111 @@ void CalculateUtil::setDisplayMode(const int mode)
 {
     if (m_launcherGsettings)
         m_launcherGsettings->set(DisplayModeKey, mode == ALL_APPS ? DisplayModeFree : DisplayModeCategory);
+}
+
+/**
+ * @brief CalculateUtil::calculateIconSize 计算全屏两种模式下应用图标的实际大小
+ * @param mode 全屏自由模式或者全屏分类模式的标识
+ * @return 返回对应模式下应用的实际大小
+ */
+int CalculateUtil::calculateIconSize(int mode)
+{
+    // 0.064815 是从FullScreenFrame::updateDockPosition接口中迁移过来用的,为保证间距一致而使用
+    int topSpacing = 30;
+    int leftSpacing = 0;
+    int rightSpacing = 0;
+    int bottomSpacing = (mode == GROUP_BY_CATEGORY) ? getScreenSize().height() * 0.064815 : 20;
+
+    // 计算任务栏位置变化时全屏窗口上各控件的大小
+    switch (m_dockInter->position()) {
+    case DLauncher::DOCK_POS_TOP:
+        topSpacing += QRect(m_dockInter->frontendRect()).height();
+        bottomSpacing = topSpacing + DLauncher::APPS_AREA_TOP_MARGIN;
+        break;
+    case DLauncher::DOCK_POS_BOTTOM:
+        bottomSpacing += QRect(m_dockInter->frontendRect()).height();
+        break;
+    case DLauncher::DOCK_POS_LEFT:
+        leftSpacing = QRect(m_dockInter->frontendRect()).width();
+        break;
+    case DLauncher::DOCK_POS_RIGHT:
+        rightSpacing = QRect(m_dockInter->frontendRect()).width();
+        break;
+    default:
+        break;
+    }
+
+    QSize otherAreaSize;
+    QSize containerSize;
+
+    if (mode == ALL_APPS) {
+        int padding = getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
+        otherAreaSize = QSize(padding + leftSpacing + rightSpacing, DLauncher::APPS_AREA_TOP_MARGIN + bottomSpacing + topSpacing + getSearchWidgetSizeHint().height());
+        containerSize = getScreenSize() - otherAreaSize;
+    } else {
+        otherAreaSize = QSize(leftSpacing + rightSpacing, topSpacing + bottomSpacing + getSearchWidgetSizeHint().height() + getNavigationWidgetSizeHint().height() + DLauncher::APPS_AREA_TOP_MARGIN + 12);
+        containerSize = getScreenSize() -  otherAreaSize;
+    }
+
+    double scaleX = getScreenScaleX();
+    double scaleY = getScreenScaleY();
+    double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
+
+    calculateTextSize();
+
+    int containerW = containerSize.width();
+    int containerH = containerSize.height();
+
+    int appColumnCount = 0;
+    int appRowCount = 0;
+
+    // 全屏App模式或者正在搜索列表以4行7列模式排布，全屏分类模式以4行3列模式排布
+    if (mode == ALL_APPS) {
+        appColumnCount = 7;
+        appRowCount = 4;
+
+        containerW = containerSize.width();
+        containerH = containerSize.height() - 20 * scale - DLauncher::DRAG_THRESHOLD;
+    } else {
+        appColumnCount = 4;
+        appRowCount = 3;
+
+        containerW = getAppBoxSize().width();
+        //BlurBoxWidget上边距24,　分组标题高度70 ,　MultiPagesView页面切换按钮高度20 * scale;
+        containerH = containerSize.height() - 24 - 60 - 20 * scale - DLauncher::DRAG_THRESHOLD;
+    }
+
+    // 默认边距保留最小５像素
+    int appMarginLeft = 5;
+    int appMarginTop = 5;
+
+    // 去除默认边距后，计算每个Item区域的宽高
+    int perItemWidth  = (containerW - appMarginLeft * 2) / appColumnCount;
+    int perItemHeight = (containerH - appMarginTop) / appRowCount;
+
+    // 因为每个Item是一个正方形的，所以取宽高中最小的值
+    int perItemSize = qMin(perItemHeight, perItemWidth);
+
+    // 图标大小取区域的4 / 5
+    int appIconSize = perItemSize * 4 / 5;
+
+    return appIconSize;
+}
+
+/**
+ * @brief CalculateUtil::appIconSize 获取对应模式下图标大小
+ * @param fullscreen 是否全屏模式
+ * @param iconSize 应用图标大小
+ * @param ratio 缩放比率
+ * @return 返回对应模式下图标的尺寸
+ */
+QSize CalculateUtil::appIconSize(bool fullscreen, double ratio, int iconSize) const
+{
+    if (!fullscreen)
+        return QSize(24, 24);
+
+    QSize appSize(iconSize, iconSize);
+    return appSize * ratio;
 }
 
 QSize CalculateUtil::appIconSize() const

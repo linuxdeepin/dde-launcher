@@ -643,26 +643,32 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
         return pix;
     } else {
         m_itemInfo = info;
-
         QPixmap pixmap;
-        m_iconValid = getThemeIcon(pixmap, info, size, !m_iconValid);
-        if (!m_iconValid) {
-            if (m_tryNums < 10) {
-                ++m_tryNums;
 
-                if (!QFile::exists(info.m_iconKey))
-                    QIcon::setThemeSearchPaths(QIcon::themeSearchPaths());
-
-                QTimer::singleShot(30 * 1000, this, &AppsManager::refreshIcon);
-            } else {
-                if (!m_iconValid) {
-                    QTimer::singleShot(60 * 1000, this, &AppsManager::refreshIcon);
-                }
-            }
+        // 日历应用只让它执行一次,为保证时间信息长期更新,不写入缓存,因此也不用多次重复调用,减少系统资源消耗
+        if (info.m_iconKey == "dde-calendar") {
+            m_iconValid = getThemeIcon(pixmap, info, size, false);
         } else {
-            if (m_tryNums > 0)
-                m_tryNums = 0;
+            m_iconValid = getThemeIcon(pixmap, info, size, !m_iconValid);
+
+            if (!m_iconValid) {
+                if (m_tryNums < 10) {
+                    ++m_tryNums;
+
+                    if (!QFile::exists(info.m_iconKey))
+                        QIcon::setThemeSearchPaths(QIcon::themeSearchPaths());
+
+                    QTimer::singleShot(30 * 1000, this, &AppsManager::refreshIcon);
+                } else {
+                    if (!m_iconValid)
+                        QTimer::singleShot(60 * 1000, this, &AppsManager::refreshIcon);
+                }
+            } else {
+                if (m_tryNums > 0)
+                    m_tryNums = 0;
+            }
         }
+
         return pixmap;
     }
 }

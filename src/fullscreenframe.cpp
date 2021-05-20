@@ -1676,7 +1676,6 @@ void FullScreenFrame::mouseMoveDrag(QMouseEvent *e)
         return;
 
     int nDiff = m_nMousePos - e->x();
-    m_scrollValue += nDiff;
 
     // 处于首页继续向右滑动
     if (curPage == 0 && nDiff < 0)
@@ -1686,7 +1685,7 @@ void FullScreenFrame::mouseMoveDrag(QMouseEvent *e)
     if (curPage == pageCount -1 && nDiff > 0)
         return;
 
-    m_multiPagesView->getListArea()->horizontalScrollBar()->setValue(m_scrollValue);
+    m_multiPagesView->getListArea()->horizontalScrollBar()->setValue(nDiff + m_scrollValue);
 }
 
 void FullScreenFrame::mouseReleaseDrag(QMouseEvent *e)

@@ -107,6 +107,10 @@ const QModelIndex AppListView::indexAt(const int index) const
  */
 void AppListView::wheelEvent(QWheelEvent *e)
 {
+    // 解决蓝牙连接时触摸板斜对角方向双指按住滑动时滑条滚动异常问题
+    if (e->orientation() == Qt::Horizontal)
+        return;
+
     int offset = -e->delta();
 
     m_scrollAni->stop();

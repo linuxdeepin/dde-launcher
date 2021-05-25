@@ -81,6 +81,9 @@ BlurBoxWidget::~BlurBoxWidget()
 {
     delete m_blurGroup;
     m_blurGroup = nullptr;
+
+     delete m_categoryMultiPagesView;
+    m_categoryMultiPagesView = nullptr;
 }
 
 void BlurBoxWidget::layoutAddWidget(QWidget *child)

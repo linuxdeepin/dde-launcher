@@ -81,7 +81,6 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, MiniFrameButton);
     USE_ACCESSIBLE(classname, BoxFrame);
     USE_ACCESSIBLE(classname, SearchWidget);
-    USE_ACCESSIBLE(classname, AppGridView);
     USE_ACCESSIBLE(classname, QLineEdit);
     USE_ACCESSIBLE(classname, DatetimeWidget);
     USE_ACCESSIBLE(classname, Avatar);

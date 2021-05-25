@@ -104,6 +104,14 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     normalMode();
 }
 
+SearchLineEdit::~SearchLineEdit()
+{
+    if (m_editStyle) {
+        m_editStyle->deleteLater();
+        m_editStyle = nullptr;
+    }
+}
+
 bool SearchLineEdit::event(QEvent *e)
 {
     switch (e->type()) {

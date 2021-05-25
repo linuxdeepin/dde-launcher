@@ -4,6 +4,7 @@
 #include <QApplication>
 
 #include "sharedeventfilter.h"
+#include "fullscreenframe.h"
 
 class Tst_SharedEventFilter: public testing::Test
 {
@@ -12,12 +13,14 @@ public:
     void TearDown() override;
 
 public:
-    SharedEventFilter* m_eventFilter;
+    FullScreenFrame *m_frame;
+    SharedEventFilter *m_eventFilter;
 };
 
 void Tst_SharedEventFilter::SetUp()
 {
-    m_eventFilter = new SharedEventFilter;
+    m_frame = new FullScreenFrame;
+    m_eventFilter = new SharedEventFilter(m_frame);
 }
 
 void Tst_SharedEventFilter::TearDown()
@@ -25,6 +28,11 @@ void Tst_SharedEventFilter::TearDown()
     if (m_eventFilter) {
         delete m_eventFilter;
         m_eventFilter = nullptr;
+    }
+
+    if (m_frame) {
+        delete m_frame;
+        m_frame = nullptr;
     }
 }
 

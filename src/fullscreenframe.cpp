@@ -849,7 +849,7 @@ void FullScreenFrame::initUI()
     // 启动时全屏自由模式设置控件大小，解决模式切换界面抖动问题
     m_multiPagesView->setFixedSize(appsContentWidth, appsContentHeight);
 
-    QVBoxLayout *scrollVLayout = new QVBoxLayout(this);
+    QVBoxLayout *scrollVLayout = new QVBoxLayout;
     scrollVLayout->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN, 0, 0);
     scrollVLayout->setSpacing(0);
     scrollVLayout->addWidget(m_appsIconBox,0,Qt::AlignCenter);
@@ -862,7 +862,7 @@ void FullScreenFrame::initUI()
 
     m_navigationWidget->setFixedHeight(m_calcUtil->instance()->navigationHeight());
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
     mainLayout->addWidget(m_topSpacing);

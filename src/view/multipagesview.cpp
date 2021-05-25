@@ -140,7 +140,7 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             pModel->setPageIndex(m_pageCount);
             m_pageAppsModelList.push_back(pModel);
 
-            AppGridView *pageView = new AppGridView;
+            AppGridView *pageView = new AppGridView(this);
             pageView->setModel(pModel);
             pageView->setItemDelegate(m_delegate);
             pageView->setContainerBox(m_appListArea);

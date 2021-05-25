@@ -45,6 +45,7 @@ class LauncherSys : public QObject
 
 public:
     explicit LauncherSys(QObject *parent = nullptr);
+    ~ LauncherSys() override;
 
     bool visible();
     void showLauncher();

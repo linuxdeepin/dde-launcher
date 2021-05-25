@@ -87,6 +87,15 @@ LauncherSys::LauncherSys(QObject *parent)
     m_autoExitTimer->start();
 }
 
+LauncherSys::~LauncherSys()
+{
+    if (m_windowLauncher)
+        delete m_windowLauncher;
+
+    if (m_fullLauncher)
+        delete m_fullLauncher;
+}
+
 void LauncherSys::showLauncher()
 {
     if (m_sessionManagerInter->locked()) {
@@ -137,7 +146,7 @@ void LauncherSys::displayModeChanged()
         m_calcUtil->setFullScreen(m_dbusLauncherInter->fullscreen());
     }
 
-   if (m_calcUtil->fullscreen()) {
+    if (m_calcUtil->fullscreen()) {
         if (!m_fullLauncher) {
             m_fullLauncher = new FullScreenFrame;
             m_fullLauncher->installEventFilter(this);

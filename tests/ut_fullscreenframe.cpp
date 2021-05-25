@@ -29,7 +29,6 @@ public:
 
 TEST_F(Tst_Fullscreenframe, fullScreenFrame)
 {
-    m_fullScreenFrame->initUI();
     QWheelEvent event(QPointF(0, 0), 0, Qt::MiddleButton, Qt::ControlModifier);
     QApplication::sendEvent(m_fullScreenFrame, &event);
 

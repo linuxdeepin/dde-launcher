@@ -167,7 +167,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     containLayout->addLayout(appsLayout);
     containLayout->addLayout(switchLayout);
 
-    m_rightWidget = new QWidget;
+    m_rightWidget = new QWidget(this);
     m_rightWidget->setContentsMargins(0, 0, 0, 0);
     m_rightWidget->setLayout(containLayout);
     m_rightWidget->setFixedWidth(320);

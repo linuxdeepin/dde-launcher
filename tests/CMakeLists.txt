@@ -9,6 +9,11 @@ set(CMAKE_AUTORCC ON)
 # 用于测试覆盖率的编译条件
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -lgcov")
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O2")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -O2")
+endif()
+
 # 源文件
 file(GLOB_RECURSE SRCS "*.h" "*.cpp" "/widget_unit_test/*.cpp" "/view_unit_test/*.cpp" "/worker_unit_test/*.cpp" "/global_util_unit_test/*cpp" "/boxfram_unit_test/*.cpp" "/dbusinterface_unit_test/*.cpp" test_res.qrc ${CMAKE_CURRENT_SOURCE_DIR}/../src/skin.qrc)
 # 查找依赖库

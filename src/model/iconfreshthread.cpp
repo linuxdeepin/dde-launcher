@@ -54,7 +54,7 @@ IconFreshThread::IconFreshThread(QObject *parent) :
 {
     m_runningState.store(true);
     m_loadAllIconState.store(true);
-    m_iconValid.store(false);
+    m_iconValid.store(true);
 }
 
 void IconFreshThread::releaseSemo()
@@ -168,8 +168,6 @@ void IconFreshThread::run()
             for (int j = 0; j < itemList.size(); j++) {
                 const ItemInfo &info = itemList.at(j);
                 for (int k = 0; k < 5; k++) {
-                    m_iconValid.store(false);
-
                     // 多种类型尺寸的图标，appslistmodel::data()接口中可以看到
                     const qreal ratio =  ratioArray[k];
                     int iconSize = CalculateUtil::instance()->appIconSize(false, ratio).width();
@@ -178,16 +176,16 @@ void IconFreshThread::run()
                     int listIconSize = 18 * ratio;
 
                     // 生成各个场景下的应用缓存数据
-                    m_iconValid.store(false);
+                    m_iconValid.store(true);
                     createPixmap(info, (iconSize));
 
-                    m_iconValid.store(false);
+                    m_iconValid.store(true);
                     createPixmap(info, (dlgIconSize));
 
-                    m_iconValid.store(false);
+                    m_iconValid.store(true);
                     createPixmap(info, (dragIconSize));
 
-                    m_iconValid.store(false);
+                    m_iconValid.store(true);
                     createPixmap(info, (listIconSize));
 
                     // 程序出现异常,加载缓存的过程中就出现了crash,加上可以直接退出线程
@@ -213,16 +211,16 @@ void IconFreshThread::run()
                 int listIconSize = 18 * ratio;
 
                 // 生成各个场景下的应用缓存数据
-                m_iconValid.store(false);
+                m_iconValid.store(true);
                 createPixmap(info, (iconWidth));
 
-                m_iconValid.store(false);
+                m_iconValid.store(true);
                 createPixmap(info, (listIconSize));
 
-                m_iconValid.store(false);
+                m_iconValid.store(true);
                 createPixmap(info, (dlgIconSize));
 
-                m_iconValid.store(false);
+                m_iconValid.store(true);
                 createPixmap(info, (dragIconSize));
 
                 // 程序出现异常,加载缓存的过程中就出现了crash,加上可以直接退出线程
@@ -246,16 +244,16 @@ void IconFreshThread::run()
                 int listIconSize = 18 * ratio;
 
                 // 生成各个场景下的应用缓存数据
-                m_iconValid.store(false);
+                m_iconValid.store(true);
                 createPixmap(info, (iconWidth));
 
-                m_iconValid.store(false);
+                m_iconValid.store(true);
                 createPixmap(info, (listIconSize));
 
-                m_iconValid.store(false);
+                m_iconValid.store(true);
                 createPixmap(info, (dlgIconSize));
 
-                m_iconValid.store(false);
+                m_iconValid.store(true);
                 createPixmap(info, (dragIconSize));
 
                 // 程序出现异常,加载缓存的过程中就出现了crash,加上可以直接退出线程
@@ -283,16 +281,16 @@ void IconFreshThread::run()
                 int listIconSize = 18 * ratio;
 
                 // 生成各个场景下的应用缓存数据
-                m_iconValid.store(false);
+                m_iconValid.store(true);
                 createPixmap(info, (iconSize));
 
-                m_iconValid.store(false);
+                m_iconValid.store(true);
                 createPixmap(info, (dlgIconSize));
 
-                m_iconValid.store(false);
+                m_iconValid.store(true);
                 createPixmap(info, (dragIconSize));
 
-                m_iconValid.store(false);
+                m_iconValid.store(true);
                 createPixmap(info, (listIconSize));
             }
 

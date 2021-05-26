@@ -420,9 +420,6 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
 
         if (icon.isNull()) {
             icon = QIcon::fromTheme("application-x-desktop");
-            //手动更新缓存
-            system("gtk-update-icon-cache /usr/share/icons/hicolor/");
-
             findIcon = false;
         }
 
@@ -450,14 +447,34 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
  */
 QIcon getIcon(const QString &name)
 {
-    QPlatformTheme * const platformTheme = QGuiApplicationPrivate::platformTheme();
-    bool hasUserTheme = QIconLoader::instance()->hasUserTheme();
+    //TODO 这里找图标会耗时，界面轻微卡顿，后面可以改成单独开启线程去查找
+    auto getIconList = [ = ] (const QString &iconName) {
+        QProcess process;
+        process.start("qtxdg-iconfinder", QStringList() << iconName);
+        process.closeWriteChannel();
+        process.waitForFinished();
 
-    if (!platformTheme || hasUserTheme)
-        return QIcon::fromTheme(name);
+        int exitCode = process.exitCode();
+        QString outputTxt = process.readAllStandardOutput();
 
-    QIconEngine * const engine = platformTheme->createIconEngine(name);
-    return QIcon(engine);
+        auto list = outputTxt.split("\n");
+
+        if (exitCode != 0 || list.size() <= 3)
+            return QStringList() << "";
+
+        // 去掉无用数据
+        list.removeFirst();
+        list.removeLast();
+        list.removeLast();
+
+        for (auto &s : list) {
+            s = s.simplified();
+        }
+
+        return list;
+    };
+
+    return QIcon::fromTheme(getIconList(name).first());
 }
 
 QString cacheKey(const ItemInfo &itemInfo, CacheType type)

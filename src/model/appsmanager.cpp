@@ -80,7 +80,7 @@ AppsManager::AppsManager(QObject *parent) :
     m_lastShowDate(0),
     m_tryNums(0),
     m_itemInfo(ItemInfo()),
-    m_iconValid(false)
+    m_iconValid(true)
 {
     if (QGSettings::isSchemaInstalled("com.deepin.dde.launcher")) {
         m_filterSetting = new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");

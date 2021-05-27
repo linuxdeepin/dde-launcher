@@ -912,8 +912,6 @@ void WindowedFrame::searchText(const QString &text)
         auto temp = text;
         m_appsManager->searchApp(temp.replace(" ",""));
     }
-
-    m_displayMode = All;
 }
 
 void WindowedFrame::showTips(const QString &text)

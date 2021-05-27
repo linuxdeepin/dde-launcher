@@ -493,6 +493,7 @@ void WindowedFrame::launchCurrentApp()
 
     if (m_displayMode == Category && m_appsModel->category() == AppsListModel::Category) {
         switchToCategory(m_appsView->currentIndex());
+        m_focusPos = RightBottom;
         return;
     }
 

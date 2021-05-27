@@ -76,6 +76,7 @@ const QStringList sysHoldPackages()
                << "deepin-defender"
                << "kwin-wm-multitaskingview"
                << "dde-printer"
+               << "dmcw"
                << "com.deepin.dmcw"
                << "aisbdfz"
                << "aisuninstall"

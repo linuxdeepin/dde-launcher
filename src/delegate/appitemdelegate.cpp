@@ -76,7 +76,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 #else
     const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
 #endif
-    const int fontPixelSize = index.data(AppsListModel::AppFontSizeRole).value<int>();
+    int fontPixelSize = index.data(AppsListModel::AppFontSizeRole).value<int>();
     const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();
     const bool is_current = CurrentIndex == index;
     const QRect ibr = itemBoundingRect(option.rect);
@@ -85,7 +85,6 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // process font
     QFont appNamefont(painter->font());
     appNamefont.setPixelSize(fontPixelSize);
-    const QFontMetrics fm(appNamefont);
 
     // Curve Fitting Result from MATLAB
 //    const int x = iconSize.width();
@@ -122,10 +121,25 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
         // calc text
         appNameRect = itemTextRect(br, iconRect, drawBlueDot);
-        const QPair<QString, bool> appTextResolvedInfo = holdTextInRect(fm, itemInfo.m_name, appNameRect.toRect());
+        //不能通过字体的尺寸来计算字体显示打区域，因为中英文获取的字体的尺寸高和宽不一致，会导致中英文显示不在同一条线上
+        //这里可以用icon的坐标为基准来设置字体区域坐标
+        appNameRect.setY(iconRect.bottom() + 5);
+        //当分辨率调低，把字体设置为最大，会导致字体显示的高度大于字体显示区域，需要适应字体大小，设置最小字体为5。
+        while (1) {
+            if (QFontMetrics(appNamefont).height() < appNameRect.height() || fontPixelSize <= 5) {
+                break;
+            }
+            fontPixelSize = fontPixelSize - 1;
+            appNamefont.setPixelSize(fontPixelSize);
+        }
+
+        if (fontPixelSize == 5 && QFontMetrics(appNamefont).height() > appNameRect.height()) {
+            appNameRect.setHeight(QFontMetrics(appNamefont).height());
+        }
+        const QPair<QString, bool> appTextResolvedInfo = holdTextInRect(QFontMetrics(appNamefont), itemInfo.m_name, appNameRect.toRect(), appNamefont);
         appNameResolved = appTextResolvedInfo.first;
 
-        if (margin == 1 || appTextResolvedInfo.second)
+        if (margin == 0 || appTextResolvedInfo.second)
             break;
 
         // we need adjust again!
@@ -137,6 +151,17 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 //    painter->fillRect(appNameRect, Qt::blue);
 //    painter->fillRect(iconRect, Qt::magenta);
 
+    // draw app name
+    QTextOption appNameOption;
+    appNameOption.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+    appNameOption.setWrapMode(QTextOption::WordWrap);
+    painter->setFont(appNamefont);
+    painter->setBrush(QBrush(Qt::transparent));
+    painter->setPen(QColor(0, 0, 0, 80));
+    painter->drawText(appNameRect.adjusted(0.8, 1, 0.8, 1), appNameResolved, appNameOption);
+    painter->drawText(appNameRect.adjusted(-0.8, 1, -0.8, 1), appNameResolved, appNameOption);
+    painter->setPen(Qt::white);
+    painter->drawText(appNameRect, appNameResolved, appNameOption);
 
     // draw focus background
    if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay))
@@ -150,54 +175,38 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         if(drawBlueDot) {
             drawBlueDotWidth = m_blueDotPixmap.width();
         }
-
-        if(iconSize.width() > (fm.width(appNameResolved) + drawBlueDotWidth)) {
-            br.setX(iconRect.x()-ICONTOLETF);
-            br.setWidth(iconSize.width()+ICONTOLETF*2);
-        }
-        painter->drawRoundedRect(br, radius, radius);
+        painter->drawRoundedRect(br.adjusted(0, 0, 0, -1), radius, radius);
     }
 
-    // draw app name
-    QTextOption appNameOption;
-    appNameOption.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-    appNameOption.setWrapMode(QTextOption::WordWrap);
-    appNameRect.setY(br.y() + br.height()  - TEXTTOLEFT + (fm.height() >= 28 ? 2 : 0)- fm.height() - fontPixelSize*TextSecond);
-    painter->setFont(appNamefont);
-    painter->setBrush(QBrush(Qt::transparent));
-    painter->setPen(QColor(0, 0, 0, 80));
-    painter->drawText(appNameRect.adjusted(0.8, 1, 0.8, 1), appNameResolved, appNameOption);
-    painter->drawText(appNameRect.adjusted(-0.8, 1, -0.8, 1), appNameResolved, appNameOption);
-    painter->setPen(Qt::white);
-    painter->drawText(appNameRect, appNameResolved, appNameOption);
+   // draw app icon
+   if("dde-calendar"==itemInfo.m_key)
+   {
+       //根据不同日期显示不同日历图表
+       int tw = iconRect.width();
+       int th = iconRect.height();
+       int tx = iconRect.x();
+       int ty = iconRect.y();
+       const double  iconZoom =  iconRect.width() /256.0;
 
-    // draw app icon
-    if("dde-calendar"==itemInfo.m_key)
-    {
-        //根据不同日期显示不同日历图表
-        int tw = iconRect.width();
-        int th = iconRect.height();
-        int tx = iconRect.x();
-        int ty = iconRect.y();
-        const double  iconZoom =  iconRect.width() /256.0;
+       QStringList calIconList = m_calcUtil->calendarSelectIcon();
+        //绘制背景
+       QSvgRenderer renderer_bg(calIconList.at(0));
+       renderer_bg.render(painter, iconRect);
+       //绘制月份
+       QSvgRenderer renderer_month(calIconList.at(1));
+       renderer_month.render(painter, QRect(tx + (tw / 3.6), ty + (th / 7), 80 * iconZoom, 40 * iconZoom));
+       //绘制日
+       QSvgRenderer renderer_day(calIconList.at(2));
+       renderer_day.render(painter, QRect(tx + (tw / 4), ty + th / 3.6, 112 * iconZoom, 104 * iconZoom));
+       //绘制周
+       QSvgRenderer renderer_week(calIconList.at(3));
+       renderer_week.render(painter, QRect(tx + (tw / 2.5), ty + ((th / 4) * 2.8), 56 * iconZoom, 24 * iconZoom));
+   } else {
+       // draw app icon
+       const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+       painter->drawPixmap(iconRect, iconPix, iconPix.rect());
+   }
 
-        QStringList calIconList = m_calcUtil->calendarSelectIcon();
-         //绘制背景
-        QSvgRenderer renderer_bg(calIconList.at(0));
-        renderer_bg.render(painter, iconRect);
-        //绘制月份
-        QSvgRenderer renderer_month(calIconList.at(1));
-        renderer_month.render(painter, QRect(tx + (tw / 3.6), ty + (th / 7), 80 * iconZoom, 40 * iconZoom));
-        //绘制日
-        QSvgRenderer renderer_day(calIconList.at(2));
-        renderer_day.render(painter, QRect(tx + (tw / 4), ty + th / 3.6, 112 * iconZoom, 104 * iconZoom));
-        //绘制周
-        QSvgRenderer renderer_week(calIconList.at(3));
-        renderer_week.render(painter, QRect(tx + (tw / 2.5), ty + ((th / 4) * 2.8), 56 * iconZoom, 24 * iconZoom));
-    }else {
-        const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
-        painter->drawPixmap(iconRect, iconPix, iconPix.rect());
-    }
 
     // draw icon if app is auto startup
     const QPoint autoStartIconPos = iconRect.bottomLeft()
@@ -212,11 +221,11 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // draw blue dot if needed
     if (drawBlueDot)
     {
-        const int marginRight = 2;
-        const QRectF textRect = fm.boundingRect(appNameRect.toRect(), Qt::AlignTop | Qt::AlignHCenter | Qt::TextWordWrap, appNameResolved);
+        const int marginRight = 1;
+        const QRectF textRect = QFontMetrics(appNamefont).boundingRect(appNameRect.toRect(), Qt::AlignTop | Qt::AlignHCenter | Qt::TextWordWrap, appNameResolved);
         const auto ratio = m_blueDotPixmap.devicePixelRatioF();
         const QPointF blueDotPos = textRect.topLeft() + QPoint(-m_blueDotPixmap.width() / ratio - marginRight,
-                                                               (fm.height() - m_blueDotPixmap.height() / ratio) / 2);
+                                                               (QFontMetrics(appNamefont).height() - m_blueDotPixmap.height() / ratio) / 2);
         painter->drawPixmap(blueDotPos, m_blueDotPixmap);
     }
 }
@@ -265,26 +274,15 @@ const QRect AppItemDelegate::itemTextRect(const QRect &boundingRect, const QRect
     return result;
 }
 
-const QPair<QString, bool> AppItemDelegate::holdTextInRect(const QFontMetrics &fm, const QString &text, const QRect &rect) const
+const QPair<QString, bool> AppItemDelegate::holdTextInRect(const QFontMetrics &fm, const QString &text, const QRect &rect, const QFont font) const
 {
     const int textFlag = Qt::AlignTop | Qt::AlignHCenter | Qt::TextWordWrap;
 
     if (rect.contains(fm.boundingRect(rect, textFlag, text)))
         return QPair<QString, bool>(text, true);
 
-    QString str(text + "...");
 
-    while (true)
-    {
-        if (str.size() < 4)
-            break;
-
-        QRect boundingRect = fm.boundingRect(rect, textFlag, str);
-        if (rect.contains(boundingRect))
-            break;
-
-        str.remove(str.size() - 4, 1);
-    }
+    QString str = QFontMetrics(font).elidedText(text, Qt::ElideRight, rect.width() - 3);
 
     return QPair<QString, bool>(str, false);
 }

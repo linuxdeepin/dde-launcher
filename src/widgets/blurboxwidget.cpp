@@ -53,7 +53,7 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     m_blurBackground->setBlurRectYRadius(DLauncher::APPHBOX_RADIUS);
     m_blurGroup->addWidget(m_blurBackground);
 
-    m_vLayout->setContentsMargins(0, 24, 0, 0);
+    m_vLayout->setContentsMargins(0, 10, 0, 0);
     m_vLayout->setAlignment(Qt::AlignTop);
     layoutAddWidget(m_categoryTitle, m_calcUtil->getAppBoxSize().width() / 2, Qt::AlignHCenter);
     m_vLayout->addWidget(m_categoryMultiPagesView);
@@ -62,6 +62,8 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
 
     m_bg->setFixedSize(m_calcUtil->getAppBoxSize());
     m_bg->setColor(new QColor(255,255,255,25));
+    screenGeometryChanged();
+    connect(qApp->primaryScreen(), &QScreen::geometryChanged, this, &BlurBoxWidget::screenGeometryChanged);
 }
 
 void BlurBoxWidget::layoutAddWidget(QWidget *child)
@@ -133,6 +135,17 @@ void BlurBoxWidget::setDataDelegate(QAbstractItemDelegate *delegate)
 void BlurBoxWidget::setBlurBgVisible(bool visible)
 {
     m_blurBackground->setVisible(visible);
+}
+
+void BlurBoxWidget::screenGeometryChanged()
+{
+    //将整个高度分为7等份，标题栏占1，app占6,分页button占20
+    //标题栏最大高度为70
+    int h = (m_calcUtil->getAppBoxSize().height() - 20) / 7;
+    if (h > 70)
+        h = 70;
+    m_categoryTitle->setFixedHeight(h);
+    m_calcUtil->setcategoryTitleHeight(h);
 }
 
 void BlurBoxWidget::setMaskVisible(bool visible)

@@ -29,7 +29,6 @@
 #include <QMouseEvent>
 #include "src/global_util/calculate_util.h"
 
-
 class QPropertyAnimation;
 
 class CategoryTitleWidget : public QFrame

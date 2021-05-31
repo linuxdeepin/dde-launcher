@@ -49,7 +49,7 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
 
     setAccessibleName(title);
     setText(title);
-    DFontSizeManager::instance()->bind(m_title, DFontSizeManager::T1);
+    DFontSizeManager::instance()->bind(m_title, DFontSizeManager::T4);
     setTitleOpacity(1);  // update the style of this widget by force.
     m_opacityAnimation->setDuration(300);
 
@@ -122,6 +122,17 @@ void CategoryTitleWidget::relayout()
     QFontMetrics fontMetric(titleFont);
     const int width = fontMetric.width(m_title->text());
     m_title->setFixedWidth(width + 10);
+
+    //根据字体的高度选择不同字号
+    if (height() >= 69) {
+        DFontSizeManager::instance()->bind(m_title, DFontSizeManager::T1);
+    } else if (height() >= 54){
+        DFontSizeManager::instance()->bind(m_title, DFontSizeManager::T2);
+    } else if (height() >= 45){
+        DFontSizeManager::instance()->bind(m_title, DFontSizeManager::T3);
+    } else {
+        DFontSizeManager::instance()->bind(m_title, DFontSizeManager::T8);
+    }
 }
 
 qreal CategoryTitleWidget::titleOpacity() const

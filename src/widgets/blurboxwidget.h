@@ -62,6 +62,7 @@ public:
 
     void setBlurBgVisible(bool visible);
     void setOperationType(OperationType operType) { m_operationType = operType;}
+    void screenGeometryChanged();
 signals:
     void maskClick(AppsListModel::AppCategory m_category, AppsListModel::scrollType nType);
     void hideLauncher();

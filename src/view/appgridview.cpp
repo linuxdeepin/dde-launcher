@@ -82,7 +82,7 @@ AppGridView::AppGridView(QWidget *parent)
 
     // update item spacing
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] { setSpacing(m_calcUtil->appItemSpacing());
-                                                                      setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), 0, 0);
+                                                                      setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), m_calcUtil->appMarginLeft(), 0);
                                                                     });
 
 #ifndef DISABLE_DRAG_ANIMATION

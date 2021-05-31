@@ -65,6 +65,7 @@ public:
     QSize appIconSize() const;
     int displayMode() const;
     void setDisplayMode(const int mode);
+    void setcategoryTitleHeight(int h);
 
     bool increaseIconSize();
     bool decreaseIconSize();
@@ -102,6 +103,7 @@ private:
     int m_categoryAppPageItemCount = 12;
     int m_categoryCount = 11;
     bool isFullScreen;
+    int m_categoryTitleHeight = 60;
 
     DBusLauncher *m_launcherInter;
     DBusDock *m_dockInter;

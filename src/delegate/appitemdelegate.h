@@ -51,7 +51,7 @@ protected:
 private:
     const QRect itemBoundingRect(const QRect &itemRect) const;
     const QRect itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool extraWidthMargin) const;
-    const QPair<QString, bool> holdTextInRect(const QFontMetrics &fm, const QString &text, const QRect &rect) const;
+    const QPair<QString, bool> holdTextInRect(const QFontMetrics &fm, const QString &text, const QRect &rect, const QFont font) const;
 
 private:
     CalculateUtil *m_calcUtil;

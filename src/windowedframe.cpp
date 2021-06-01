@@ -483,10 +483,12 @@ void WindowedFrame::appendToSearchEdit(const char ch)
 
 void WindowedFrame::launchCurrentApp()
 {
+    const QModelIndex currentIdx = m_appsView->currentIndex();
+
     if (m_focusPos == Computer || m_focusPos == Setting || m_focusPos == Power) {
         m_leftBar->execCurrent();
         return;
-    } else if (m_focusPos == RightBottom) {
+    } else if (m_focusPos == RightBottom && !currentIdx.isValid()) {
         m_switchBtn->click();
         return;
     }
@@ -496,8 +498,6 @@ void WindowedFrame::launchCurrentApp()
         m_focusPos = RightBottom;
         return;
     }
-
-    const QModelIndex currentIdx = m_appsView->currentIndex();
 
     if (currentIdx.isValid() && currentIdx.model() == m_appsView->model()) {
         m_appsManager->launchApp(currentIdx);
@@ -869,7 +869,6 @@ void WindowedFrame::onSwitchBtnClicked()
     if (m_displayMode == All) {
         m_appsModel->setCategory(AppsListModel::Category);
         m_displayMode = Category;
-        m_focusPos = Applist;
     } else if (m_displayMode == Category && m_appsModel->category() != AppsListModel::Category) {
         m_appsModel->setCategory(AppsListModel::Category);
     } else {

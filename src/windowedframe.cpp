@@ -757,7 +757,7 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
     if (event->type() == QEvent::KeyPress && m_searcherEdit->lineEdit()->hasFocus()) {
         QKeyEvent *keyPress = static_cast<QKeyEvent *>(event);
         if (keyPress && keyPress->key() == Qt::Key_Tab)
-            m_searcherEdit->clearEdit();
+            m_searcherEdit->lineEdit()->clearFocus();
     }
 
     return QWidget::eventFilter(watched, event);

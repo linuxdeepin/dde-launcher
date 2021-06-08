@@ -902,6 +902,7 @@ void WindowedFrame::searchText(const QString &text)
         m_appsView->setModel(m_appsModel);
         hideTips();
         m_switchBtn->setVisible(true);
+        m_displayMode = Category;
     } else {
         m_switchBtn->setVisible(false);
         if (m_appsView->model() != m_searchModel) {
@@ -911,6 +912,7 @@ void WindowedFrame::searchText(const QString &text)
         }
         auto temp = text;
         m_appsManager->searchApp(temp.replace(" ",""));
+        m_displayMode = All;
     }
 }
 

@@ -30,6 +30,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <DGuiApplicationHelper>
+#include <QGSettings>
 
 DGUI_USE_NAMESPACE
 
@@ -43,6 +44,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     : QWidget(parent)
     , m_avatar(new Avatar)
     , m_currentIndex(0)
+    , m_gsettings(new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/"))
 {
     setFixedWidth(60);
     QSize m_size(36, 36);
@@ -98,7 +100,12 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     }
 
     updateIcon();
-
+    updateFixedButton();
+    connect(m_gsettings, &QGSettings::changed, this, [this] (const QString& key) {
+        if (key == "appsHiddenFixed") {
+            updateFixedButton();
+        }
+    });
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
         updateIcon();
 });
@@ -353,5 +360,19 @@ void MiniFrameRightBar::updateIcon()
          m_pictureBtn->setIcon(QIcon(":/widgets/images/folder-pictures-symbolic.svg"));
          m_documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic.svg"));
          m_downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic.svg"));
-     }
+    }
+}
+
+void MiniFrameRightBar::updateFixedButton()
+{
+    if (!m_gsettings) {
+        return;
+    }
+    if (m_gsettings->keys().contains("appsHiddenFixed"))
+    {
+        auto hidden_list = m_gsettings->get("apps-hidden-fixed").toList();
+        for (MiniFrameButton *it : m_btns.values()) {
+            it->setVisible(!hidden_list.contains(it->accessibleName()));
+        }
+    }
 }

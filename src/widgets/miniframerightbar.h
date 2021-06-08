@@ -31,6 +31,7 @@
 DWIDGET_USE_NAMESPACE
 
 class MiniFrameButton;
+class QGSettings;
 class MiniFrameRightBar : public QWidget
 {
     Q_OBJECT
@@ -65,6 +66,7 @@ private slots:
     void showManual();
    // void hideAllHoverState() const;
     void updateIcon();
+    void updateFixedButton();
 
 private:
     Avatar *m_avatar;
@@ -78,6 +80,7 @@ private:
     MiniFrameButton *m_pictureBtn;
     MiniFrameButton *m_documentBtn;
     MiniFrameButton *m_downloadBtn;
+    QGSettings      *m_gsettings;
 };
 
 #endif // MINIFRAMERIGHTBAR_H

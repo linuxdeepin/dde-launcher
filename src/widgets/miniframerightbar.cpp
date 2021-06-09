@@ -138,6 +138,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     layout->addSpacing(13);
     layout->addWidget(center_widget);
+    layout->addStretch();
     layout->addWidget(bottom_widget, 0, Qt::AlignBottom);
     layout->setContentsMargins(0, 0, 0, 6);
 

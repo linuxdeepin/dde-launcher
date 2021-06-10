@@ -40,7 +40,7 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     , m_category(curCategory)
     , m_name(name)
     , m_categoryMultiPagesView(new MultiPagesView(curCategory))
-    , m_categoryTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", name), this))
+    , m_categoryTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", name)))
     , m_blurGroup(new DBlurEffectGroup)
     , m_blurBackground(new DBlurEffectWidget(this))
     , m_bg(new MaskQWidget(this))

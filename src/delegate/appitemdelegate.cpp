@@ -86,7 +86,8 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     appNamefont.setPixelSize(fontPixelSize);
     const QFontMetrics fm(appNamefont);
     //分类模式且不是当前的分类就设置透明度
-    if( index.data(AppsListModel::AppGroupRole).toInt() >= 4 && index.data(AppsListModel::AppCategoryRole).toInt() != m_calcUtil->currentCategory()) {
+    if (index.data(AppsListModel::AppGroupRole).toInt() >= 4
+            && index.data(AppsListModel::AppCategoryRole).toInt() != m_calcUtil->currentCategory()) {
         painter->setOpacity(0.3);
     } else {
         painter->setOpacity(1);
@@ -115,24 +116,22 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
         // calc icon rect
         const int iconLeftMargins = (br.width() - iconSize.width()) / 2;
-        int  iconTopMargin = ICONTOTOP;// ibr.height() * .2 - iconSize.height() * .3;
+        int iconTopMargin = ICONTOTOP;// ibr.height() * .2 - iconSize.height() * .3;
         //iconTopMargin = 6; //std::max(iconTopMargin, 1.);
         iconRect = QRect(br.topLeft() + QPoint(iconLeftMargins, iconTopMargin - 2), iconSize);
 
         //31是字体设置20的时候的高度
         br.setHeight(ICONTOTOP + iconRect.height() + TEXTTOICON + 31 + fontPixelSize * TextSecond + TEXTTOLEFT);
-        if (br.height() > ibr.height()) {
+        if (br.height() > ibr.height())
             br.setHeight(ibr.height() - 1);
-        }
 
         // calc text
         appNameRect = itemTextRect(br, iconRect, drawBlueDot);
         const QPair<QString, bool> appTextResolvedInfo = holdTextInRect(fm, itemInfo.m_name, appNameRect.toRect());
         appNameResolved = appTextResolvedInfo.first;
 
-        if((fm.width(appNameResolved) + (drawBlueDot?(m_blueDotPixmap.width()+ 10) : 0) ) > appNameRect.width()){
-           TextSecond = 1;
-        }
+        if ((fm.width(appNameResolved) + (drawBlueDot ? (m_blueDotPixmap.width() + 10) : 0)) >= appNameRect.width())
+            TextSecond = 1;
 
         if (margin == 1 || appTextResolvedInfo.second)
             break;
@@ -146,37 +145,34 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 //    painter->fillRect(appNameRect, Qt::blue);
 //    painter->fillRect(iconRect, Qt::magenta);
 
-
-    // draw focus background
-   if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay))
-    {
+    // 绘制选中样式
+   if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay)) {
         const int radius = 18;
         const QColor brushColor(255, 255, 255, 51);
 
         painter->setPen(Qt::transparent);
         painter->setBrush(brushColor);
         int drawBlueDotWidth = 0;
-        if(drawBlueDot) {
+        if (drawBlueDot)
             drawBlueDotWidth = m_blueDotPixmap.width();
-        }
 
-        if(iconSize.width() > (fm.width(appNameResolved) + drawBlueDotWidth)) {
-            br.setX(iconRect.x()-ICONTOLETF);
-            br.setWidth(iconSize.width()+ICONTOLETF*2);
+        if (iconSize.width() > (fm.width(appNameResolved) + drawBlueDotWidth)) {
+            br.setX(iconRect.x() - ICONTOLETF);
+            br.setWidth(iconSize.width() + ICONTOLETF * 2);
         }
 
         painter->drawRoundedRect(br, radius, radius);
     }
 
-    // draw app name
+    // 绘制应用名称
     QTextOption appNameOption;
     appNameOption.setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     appNameOption.setWrapMode(QTextOption::WordWrap);
 
-    appNameRect.setY(br.y() + br.height()  - TEXTTOLEFT + (fm.height() >= 28 ? 2 : 0)- fm.height() - fontPixelSize*TextSecond);
+    appNameRect.setY(br.y() + br.height() - TEXTTOLEFT + (fm.height() >= 28 ? 2 : 0) - fm.height() - fontPixelSize * TextSecond);
 
-    if(drawBlueDot){
-        appNameRect.setX(appNameRect.x() + m_blueDotPixmap.width()/2 + 5);
+    if (drawBlueDot) {
+        appNameRect.setX(appNameRect.x() + m_blueDotPixmap.width() / 2 + 5);
         appNameRect.setWidth(appNameRect.width() - m_blueDotPixmap.width());
     }
 
@@ -187,6 +183,10 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->drawText(appNameRect.adjusted(-0.8, 1, -0.8, 1), appNameResolved, appNameOption);
     painter->setPen(Qt::white);
     painter->drawText(appNameRect, appNameResolved, appNameOption);
+
+    // 文字矩形
+    // painter->setPen(QColor(255, 0, 0));
+    // painter->drawRect(appNameRect);
 
     // draw app icon
     const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
@@ -203,8 +203,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         painter->drawPixmap(autoStartIconPos, m_autoStartPixmap);
 
     // draw blue dot if needed
-    if (drawBlueDot)
-    {
+    if (drawBlueDot) {
         const int marginRight = 2;
         const QRectF textRect = fm.boundingRect(appNameRect.toRect(), Qt::AlignTop | Qt::AlignHCenter | Qt::TextWordWrap, appNameResolved);
         const auto ratio = m_blueDotPixmap.devicePixelRatioF();

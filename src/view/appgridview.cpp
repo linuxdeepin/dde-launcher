@@ -92,13 +92,6 @@ AppGridView::AppGridView(QWidget *parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(QFrame::NoFrame);
     setViewportMargins(0, 0, 0, 0);
-
-    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
-    const int appsContentWidth = m_calcUtil->getScreenSize().width() - padding;
-    const int appsContentHeight = m_calcUtil->getScreenSize().height() - DLauncher::APPS_AREA_TOP_MARGIN;
-
-    setFixedSize(appsContentWidth, appsContentHeight);
-
     viewport()->setAutoFillBackground(false);
 
     // update item spacing
@@ -112,10 +105,6 @@ AppGridView::AppGridView(QWidget *parent)
 #else
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::dropSwap);
 #endif
-
-    connect(m_appManager, &AppsManager::iconLoadFinished, this, [ = ] {
-        QListView::update();
-    });
 
     // 根据后端延迟触屏信号控制是否可进行图标拖动，收到延迟触屏信号可拖动，没有收到延迟触屏信号、点击松开就不可拖动
     connect(m_gestureInter, &Gesture::TouchSinglePressTimeout, m_gestureInter, [] {

@@ -86,7 +86,6 @@ private:
 
     QPropertyAnimation *m_lastFakeAni = nullptr;
     QPropertyAnimation *m_scrollAni;
-    DWindowManagerHelper *m_wmHelper;
     double m_speedTime = 1.0;
 
     QTimer *m_updateEnableSelectionByMouseTimer;        // 限制拖拽时间不能少于200ms

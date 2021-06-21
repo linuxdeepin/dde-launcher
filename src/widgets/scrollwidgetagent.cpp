@@ -9,7 +9,6 @@ ScrollWidgetAgent::ScrollWidgetAgent(QObject *parent)
     , m_animation(new QPropertyAnimation(this,"pos", this))
     , m_currentPosType(Pos_None)
     , m_scrollToType(Pos_None)
-    , m_calcUtil(CalculateUtil::instance())
 {
     m_mainWidget = static_cast<QWidget *>(parent);
 
@@ -127,7 +126,7 @@ QPoint ScrollWidgetAgent::getScrollWidgetAgentPos(PosType posType)
         return pos;
     }
 
-    int boxWidth = m_calcUtil->getAppBoxSize().width();
+    int boxWidth = CalculateUtil::instance()->getAppBoxSize().width();
 
     pos.setY(0);
     switch (posType) {

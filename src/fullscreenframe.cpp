@@ -84,17 +84,17 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_appItemDelegate(new AppItemDelegate(this)),
     m_multiPagesView(new MultiPagesView(AppsListModel::All, this)),
 
-    m_internetBoxWidget(new BlurBoxWidget(AppsListModel::Internet, const_cast<char *>("Internet"),m_appsItemBox)),
-    m_chatBoxWidget(new BlurBoxWidget(AppsListModel::Chat, const_cast<char *>("Chat"),m_appsItemBox)),
-    m_musicBoxWidget(new BlurBoxWidget(AppsListModel::Music, const_cast<char *>("Music"),m_appsItemBox)),
-    m_videoBoxWidget(new BlurBoxWidget(AppsListModel::Video, const_cast<char *>("Video"),m_appsItemBox)),
-    m_graphicsBoxWidget(new BlurBoxWidget(AppsListModel::Graphics, const_cast<char *>("Graphics"),m_appsItemBox)),
-    m_gameBoxWidget(new BlurBoxWidget(AppsListModel::Game, const_cast<char *>("Games"),m_appsItemBox)),
-    m_officeBoxWidget(new BlurBoxWidget(AppsListModel::Office, const_cast<char *>("Office"),m_appsItemBox)),
-    m_readingBoxWidget(new BlurBoxWidget(AppsListModel::Reading, const_cast<char *>("Reading"),m_appsItemBox)),
-    m_developmentBoxWidget(new BlurBoxWidget(AppsListModel::Development, const_cast<char *>("Development"),m_appsItemBox)),
-    m_systemBoxWidget(new BlurBoxWidget(AppsListModel::System, const_cast<char *>("System"),m_appsItemBox)),
-    m_othersBoxWidget(new BlurBoxWidget(AppsListModel::Others, const_cast<char *>("Other"),m_appsItemBox)),
+    m_internetBoxWidget(new BlurBoxWidget(AppsListModel::Internet, const_cast<char *>("Internet"), m_appsItemBox)),
+    m_chatBoxWidget(new BlurBoxWidget(AppsListModel::Chat, const_cast<char *>("Chat"), m_appsItemBox)),
+    m_musicBoxWidget(new BlurBoxWidget(AppsListModel::Music, const_cast<char *>("Music"), m_appsItemBox)),
+    m_videoBoxWidget(new BlurBoxWidget(AppsListModel::Video, const_cast<char *>("Video"), m_appsItemBox)),
+    m_graphicsBoxWidget(new BlurBoxWidget(AppsListModel::Graphics, const_cast<char *>("Graphics"), m_appsItemBox)),
+    m_gameBoxWidget(new BlurBoxWidget(AppsListModel::Game, const_cast<char *>("Games"), m_appsItemBox)),
+    m_officeBoxWidget(new BlurBoxWidget(AppsListModel::Office, const_cast<char *>("Office"), m_appsItemBox)),
+    m_readingBoxWidget(new BlurBoxWidget(AppsListModel::Reading, const_cast<char *>("Reading"), m_appsItemBox)),
+    m_developmentBoxWidget(new BlurBoxWidget(AppsListModel::Development, const_cast<char *>("Development"), m_appsItemBox)),
+    m_systemBoxWidget(new BlurBoxWidget(AppsListModel::System, const_cast<char *>("System"), m_appsItemBox)),
+    m_othersBoxWidget(new BlurBoxWidget(AppsListModel::Others, const_cast<char *>("Other"), m_appsItemBox)),
     m_topSpacing(new QFrame(this)),
     m_bottomSpacing(new QFrame(this)),
     m_animationGroup(new ScrollParallelAnimationGroup(this)),
@@ -140,8 +140,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     QColor colorButton(255, 255, 255, 0.15 * 255);
     QColor colorText(255, 255, 255);
     palette.setColor(QPalette::Button, colorButton);
-    palette.setColor(QPalette::Text,colorText);
-    palette.setColor(QPalette::ButtonText,colorText);
+    palette.setColor(QPalette::Text, colorText);
+    palette.setColor(QPalette::ButtonText, colorText);
 
     m_searchWidget->edit()->lineEdit()->setPalette(palette);
     m_searchWidget->categoryBtn()->setPalette(palette);
@@ -169,7 +169,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     connect(m_multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
     for (int i = AppsListModel::Internet; i <= AppsListModel::Others; i++) {
         AppsListModel::AppCategory appCategory = AppsListModel::AppCategory(i);
-        MultiPagesView * multiPagesView = getCategoryGridViewList(appCategory);
+        MultiPagesView *multiPagesView = getCategoryGridViewList(appCategory);
         connect(multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
     }
 
@@ -186,10 +186,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     initConnection();
 
     // 获取搜索控件,应用分类导航控件默认大小
-    CalculateUtil::instance()->setSearchWidgetSizeHint(m_searchWidget->sizeHint());
-    CalculateUtil::instance()->setNavigationWidgetSizeHint(m_navigationWidget->sizeHint());
-
-    updateDisplayMode(m_calcUtil->displayMode());
+    m_calcUtil->setSearchWidgetSizeHint(m_searchWidget->sizeHint());
+    m_calcUtil->setNavigationWidgetSizeHint(m_navigationWidget->sizeHint());
 }
 
 FullScreenFrame::~FullScreenFrame()
@@ -693,7 +691,7 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
     m_mouse_press = false;
 
     // 全屏分类模式才支持鼠标拖动触发分页的操作，鼠标小范围移动不触发分页
-    if ((CalculateUtil::instance()->displayMode() != ALL_APPS) || (abs(e->globalX() - m_startPoint.x()) < DLauncher::SLIDE_DIFF_THRESH))
+    if ((m_calcUtil->displayMode() != ALL_APPS) || (abs(e->globalX() - m_startPoint.x()) < DLauncher::SLIDE_DIFF_THRESH))
         return;
 
     // 全屏模式下支持全屏范围滑动翻页
@@ -1501,19 +1499,16 @@ void FullScreenFrame::updateDisplayMode(const int mode)
 
     setBlurWidgetVisible(false);
 
+    AppsListModel::AppCategory category = (m_displayMode == SEARCH) ? AppsListModel::Search : AppsListModel::All;
+    m_multiPagesView->setModel(category);
+
     if (m_displayMode == GROUP_BY_CATEGORY) {
         // 隐藏自由模式显示
         m_appsIconBox->setVisible(false);
-        AppsListModel::AppCategory category = (m_displayMode == SEARCH) ? AppsListModel::Search : AppsListModel::All;
-        m_multiPagesView->setModel(category);
         // 再显示分类模式
         m_navigationWidget->setVisible(true);
         m_appsItemBox->setVisible(true);
     } else {
-        // 先刷新后端数据
-        AppsListModel::AppCategory category = (m_displayMode == SEARCH) ? AppsListModel::Search : AppsListModel::All;
-        m_multiPagesView->setModel(category);
-
         // 全屏模式（自由模式或者应用分类模式）下，当处于搜索状态时，更新界面布局
         m_multiPagesView->updatePosition(m_displayMode);
 
@@ -1527,6 +1522,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
 
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
+    // 搜索模式下的文字描述
     hideTips();
 
     emit displayModeChanged(m_displayMode);

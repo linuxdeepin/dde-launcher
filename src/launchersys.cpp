@@ -62,12 +62,12 @@ LauncherSys::LauncherSys(QObject *parent)
     m_ignoreRepeatVisibleChangeTimer->setInterval(200);
     m_ignoreRepeatVisibleChangeTimer->setSingleShot(true);
 
+    AppsManager::instance();
+
     displayModeChanged();
 
     // 启动应用图标和应用名称缓存线程,减少系统加载应用时的开销
     m_appIconFreshThread->start();
-
-    AppsManager::instance();
 
     connect(m_dbusLauncherInter, &DBusLauncher::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
     connect(m_dbusLauncherInter, &DBusLauncher::DisplayModeChanged, this, &LauncherSys::onDisplayModeChanged, Qt::QueuedConnection);

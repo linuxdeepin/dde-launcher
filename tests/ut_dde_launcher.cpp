@@ -321,7 +321,7 @@ TEST_F(LauncherUnitTest, testLauncher)
     });
 }
 
-/** 
+/**
  * @brief LauncherUnitTest::checkSendToDesktop
  * 测试发送到桌面是否正常显示
  */
@@ -341,7 +341,7 @@ TEST_F(LauncherUnitTest, checkSendToDesktop)
     QCOMPARE(value, false);
 }
 
-/** 
+/**
  * @brief LauncherUnitTest::check_gsettings_default
  * 验证启动器的默认配置值是否正确，后续如果还有类似验证，应一并放到这里
  * 1.图标默认大小比例为0.5
@@ -351,9 +351,8 @@ TEST_F(LauncherUnitTest, checkSendToDesktop)
 TEST_F(LauncherUnitTest, check_gsettings_default)
 {
     // 服务器环境没有gsetting配置，加检验防止崩溃
-    if (!QGSettings::isSchemaInstalled("com.deepin.dde.launcher")) {
+    if (!QGSettings::isSchemaInstalled("com.deepin.dde.launcher"))
         return;
-    }
 
     QGSettings setting("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
     if (setting.keys().contains("appsIconRatio")) {

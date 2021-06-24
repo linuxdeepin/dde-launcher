@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
+#include "appslistmodel.h"
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QApplication>
 #include <QDropEvent>
 #include <QDragEnterEvent>
@@ -8,31 +9,37 @@
 
 #define private public
 #include "applistview.h"
+#include "windowedframe.h"
 #undef private
-#include "appslistmodel.h"
 
+/**使用小窗口类WindowedFrame间接测试AppListView的
+ * 接口, 因为AppListView的视图代码是在小窗口类初始
+ * 化列表中创建的, 规避该类appListView_test中偶现的
+ * 崩溃问题
+ * @brief The Tst_Applistview class
+ */
 class Tst_Applistview : public testing::Test
 {
 public:
     void SetUp() override
     {
-        widget = new AppListView;
+        windowFrame = new WindowedFrame;
     }
 
     void TearDown() override
     {
-        if (widget) {
-            delete widget;
-            widget = nullptr;
-        }
+        delete windowFrame;
+        windowFrame = nullptr;
     }
 
 public:
-    AppListView* widget = nullptr;
+    WindowedFrame *windowFrame;
 };
 
 TEST_F(Tst_Applistview, appListView_test)
 {
+    AppListView *widget = windowFrame->m_appsView;
+
     AppsListModel *pModel = new AppsListModel(AppsListModel::All);
     QModelIndex index;
     pModel->insertRow(0, index);

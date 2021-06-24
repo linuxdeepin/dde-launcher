@@ -43,7 +43,7 @@
 #include "multipagesview.h"
 #include "scrollwidgetagent.h"
 
-#include <memory>
+#include <dboxwidget.h>
 
 #include <QWidget>
 #include <QFrame>
@@ -51,9 +51,8 @@
 #include <QPropertyAnimation>
 #include <QSettings>
 #include <QTimer>
-#include <QDebug>
 
-#include <dboxwidget.h>
+#include <memory>
 
 DWIDGET_USE_NAMESPACE
 
@@ -63,14 +62,21 @@ class SharedEventFilter;
 class FullScreenFrame : public BoxFrame, public LauncherInterface
 {
     Q_OBJECT
+
     Q_PROPERTY(int dockPosition READ dockPosition DESIGNABLE true)
+
 public:
-    enum tabFocus {FirstItem, SearchEdit, CategoryChangeBtn, CategoryTital};
+    enum TabFocus
+    {
+        FirstItem,
+        SearchEdit,
+        CategoryChangeBtn,
+        CategoryTital
+    };
+
     explicit FullScreenFrame(QWidget *parent = nullptr);
-    ~FullScreenFrame() override;
 
     void exit();
-    void showByMode(const qlonglong mode);
     int dockPosition();
     void updateDisplayMode(const int mode);
     void nextTabWidget(int key);

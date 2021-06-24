@@ -45,8 +45,10 @@ DWIDGET_USE_NAMESPACE
 class MultiPagesView : public QWidget, public DragPageDelegate
 {
     Q_OBJECT
+
 public:
-    enum Direction {
+    enum Direction
+    {
         Left,
         Right
     };
@@ -95,32 +97,32 @@ protected:
     void InitUI();
 
 private:
+    GradientLabel *m_pLeftGradient;
+    GradientLabel *m_pRightGradient;
+
+    AppsManager *m_appsManager;                         // 应用管理类
+    CalculateUtil *m_calcUtil;                          // 界面布局计算类
+    AppListArea *m_appListArea;                         // 滑动区域控件
+    AppGridViewList m_appGridViewList;                  // 多视图列表
+    PageAppsModelist m_pageAppsModelList;               // 多视图模型列表
+
+    DHBoxWidget *m_viewBox;
+
+    QPropertyAnimation *m_pageSwitchAnimation;          // 分页切换动画
+
+    QAbstractItemDelegate *m_delegate;                  // 视图代理基类
+    PageControl *m_pageControl;                         // 分页控件
+
+    int m_pageCount;
+    int m_pageIndex;
+    AppsListModel::AppCategory m_category;
+
     bool m_bDragStart;
 
     bool m_bMousePress;
     int m_nMousePos;
     int m_scrollValue;
     int m_scrollStart;
-
-    GradientLabel *m_pLeftGradient;
-    GradientLabel *m_pRightGradient;
-
-    int m_pageCount;
-    int m_pageIndex;
-    AppsListModel::AppCategory m_category;
-
-    AppsManager *m_appsManager;                         // 应用管理类
-    CalculateUtil *m_calcUtil;                          // 界面布局计算类
-    AppListArea *m_appListArea;                         // 滑动区域控件
-    AppGridViewList m_appGridViewList;                  // 多视图列表
-    pageAppsModelist m_pageAppsModelList;               // 多视图模型列表
-
-    DHBoxWidget *m_viewBox;
-
-    QPropertyAnimation *m_pageSwitchAnimation;          // 分页切换动画
-
-    QAbstractItemDelegate *m_delegate = nullptr;        // 视图代理基类
-    pageControl *m_pageControl;                         // 分页控件
 };
 
 #endif // MULTIPAGESVIEW_H

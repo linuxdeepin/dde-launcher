@@ -24,18 +24,19 @@
 
 #include <QBoxLayout>
 
-pageControl::pageControl(QWidget *parent) : QWidget(parent)
+PageControl::PageControl(QWidget *parent)
+    : QWidget(parent)
 {
     QHBoxLayout *layout = new QHBoxLayout();
     layout->setMargin(0);
     layout->setSpacing(PAGE_ICON_SPACE);
     setLayout(layout);
 
-    m_iconActive = loadSvg(":/widgets/images/page_indicator_active.svg",PAGE_ICON_SIZE);
-    m_iconNormal = loadSvg(":/widgets/images/page_indicator.svg",PAGE_ICON_SIZE);
+    m_iconActive = loadSvg(":/widgets/images/page_indicator_active.svg", PAGE_ICON_SIZE);
+    m_iconNormal = loadSvg(":/widgets/images/page_indicator.svg", PAGE_ICON_SIZE);
 }
 
-void pageControl::setPageCount(int count)
+void PageControl::setPageCount(int count)
 {
     for (int i = m_pageCount ; i < count ; i++)
         addButton();
@@ -50,7 +51,7 @@ void pageControl::setPageCount(int count)
     setCurrent(0);
 }
 
-void pageControl::setCurrent(int pageIndex)
+void PageControl::setCurrent(int pageIndex)
 {
     if (pageIndex < layout()->count()) {
         DIconButton *pageButton = qobject_cast<DIconButton *>(layout()->itemAt(pageIndex)->widget());
@@ -58,7 +59,7 @@ void pageControl::setCurrent(int pageIndex)
     }
 }
 
-void pageControl::UpdateIconSize(double scaleX, double scaleY)
+void PageControl::updateIconSize(double scaleX, double scaleY)
 {
     double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
     for (int i = 0; i < m_pageCount ; i++) {
@@ -66,10 +67,11 @@ void pageControl::UpdateIconSize(double scaleX, double scaleY)
         pageButton->setIconSize(QSize(PAGE_ICON_SIZE * scale, PAGE_ICON_SIZE * scale));
         pageButton->setFixedSize(QSize(PAGE_BUTTON_SIZE * scale, PAGE_BUTTON_SIZE * scale));
     }
+
     setFixedHeight(PAGE_BUTTON_SIZE * scale);
 }
 
-void pageControl::addButton()
+void PageControl::addButton()
 {
     DIconButton *pageButton = new DIconButton(this);
     pageButton->setIcon(m_iconNormal);
@@ -84,10 +86,10 @@ void pageControl::addButton()
 
     layout()->addWidget(pageButton);
 
-    connect(pageButton, &DIconButton::toggled, this, &pageControl::pageBtnClicked);
+    connect(pageButton, &DIconButton::toggled, this, &PageControl::pageBtnClicked);
 }
 
-void pageControl::pageBtnClicked(bool checked)
+void PageControl::pageBtnClicked(bool checked)
 {
     DIconButton *pageButton = qobject_cast<DIconButton *>(sender());
     if (!pageButton)

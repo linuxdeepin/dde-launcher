@@ -119,6 +119,6 @@ private:
     QPoint m_dragStartPos;                               // 拖拽起点坐标
 };
 
-typedef QList<AppGridView*> AppGridViewList;
+typedef QList<AppGridView *> AppGridViewList;
 
 #endif // APPGRIDVIEW_H

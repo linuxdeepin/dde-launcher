@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <QApplication>
-#include <QtTest/QtTest>
+#include <QTest>
 
 #define private public
 #include "pagecontrol.h"
@@ -14,9 +14,9 @@ class Tst_Pagecontrol : public testing::Test
 public:
     void SetUp() override
     {
-        widget = new pageControl;
+        widget = new PageControl;
         widget->setPageCount(1);
-        widget->UpdateIconSize(0.5, 0.5);
+        widget->updateIconSize(0.5, 0.5);
     }
 
     void TearDown() override
@@ -28,7 +28,7 @@ public:
     }
 
 public:
-    pageControl* widget = nullptr;
+    PageControl *widget;
 };
 
 TEST_F(Tst_Pagecontrol, pageControl_test)

@@ -23,6 +23,12 @@
 #include "widgets/hseparator.h"
 #include "global_util/util.h"
 
+#include <DWindowManagerHelper>
+#include <DForeignWindow>
+#include <DGuiApplicationHelper>
+#include <DDBusSender>
+#include <DDialog>
+
 #include <QApplication>
 #include <QHBoxLayout>
 #include <QClipboard>
@@ -37,11 +43,6 @@
 #include <QDebug>
 
 #include <qpa/qplatformwindow.h>
-#include <DWindowManagerHelper>
-#include <DForeignWindow>
-#include <DGuiApplicationHelper>
-#include <DDBusSender>
-#include <DDialog>
 
 #define DOCK_TOP        0
 #define DOCK_RIGHT      1
@@ -251,13 +252,12 @@ void WindowedFrame::showLauncher()
         return;
 
     qApp->processEvents();
-	activateWindow();
+    activateWindow();
     setFocus(Qt::ActiveWindowFocusReason);
 
     // 初始化所有应用数据
-    if (!m_appsManager->isVaild()) {
+    if (!m_appsManager->isVaild())
         m_appsManager->refreshAllList();
-    }
 
     m_appsView->setCurrentIndex(QModelIndex());
 
@@ -625,11 +625,12 @@ void WindowedFrame::resetWidgetStyle()
     m_tipsLabel->setPalette(palette);
 
     palette = m_maskBg->palette();
-    if( DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType){
-        palette.setColor(QPalette::Background, QColor(0,0,0,0.3*255));
-    }else{
-        palette.setColor(QPalette::Background, QColor(255,255,255,0.3*255));
-    }
+
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType)
+        palette.setColor(QPalette::Background, QColor(0, 0, 0, 0.3 * 255));
+    else
+        palette.setColor(QPalette::Background, QColor(255, 255, 255, 0.3 * 255));
+
     m_maskBg->setPalette(palette);
 }
 
@@ -749,9 +750,8 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
-    if (watched == m_searcherEdit && event->type() == QEvent::Enter) {
+    if (watched == m_searcherEdit && event->type() == QEvent::Enter)
         m_enterSearchEdit = true;
-    }
 
     // 清除行编辑器的焦点(已被dtk封装了)
     if (event->type() == QEvent::KeyPress && m_searcherEdit->lineEdit()->hasFocus()) {
@@ -769,7 +769,7 @@ void WindowedFrame::resizeEvent(QResizeEvent *event)
         initAnchoredCornor();
         m_cornerPath = getCornerPath(m_anchoredCornor);
         m_windowHandle.setClipPath(m_cornerPath);
-        //event.size() 第一次启动有时候会很大或者很小的负数,直接用固定的size
+        // event.size() 第一次启动有时候会很大或者很小的负数,直接用固定的size
         m_maskBg->setFixedSize(size());
         m_maskBg->move(0,0);
     });
@@ -842,15 +842,13 @@ void WindowedFrame::adjustPosition()
 void WindowedFrame::onToggleFullScreen()
 {
     // 后台没有启动,切换全屏会造成后台默认数据和前台数据不统一,造成显示问题
-    if(!m_appsManager->appNums(AppsListModel::All)) {
+    if (!m_appsManager->appNums(AppsListModel::All))
         return;
-    }
 
     // 切换到全屏就不绘制小窗口列表中的item
-    AppListDelegate * delegate = static_cast<AppListDelegate *>(m_appsView->itemDelegate());
-    if (delegate) {
+    AppListDelegate *delegate = static_cast<AppListDelegate *>(m_appsView->itemDelegate());
+    if (delegate)
         delegate->setActived(false);
-    }
 
     // 全屏状态标识
     m_calcUtil->setFullScreen(true);
@@ -886,11 +884,11 @@ void WindowedFrame::onSwitchBtnClicked()
 
 void WindowedFrame::onWMCompositeChanged()
 {
-    if (m_wmHelper->hasComposite()) {
+    if (m_wmHelper->hasComposite())
         m_radius = 18;
-    } else {
+    else
         m_radius = 0;
-    }
+
     initAnchoredCornor();
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
@@ -936,13 +934,11 @@ void WindowedFrame::hideTips()
 
 void WindowedFrame::prepareHideLauncher()
 {
-    if (!visible()) {
+    if (!visible())
         return;
-    }
 
-    if (geometry().contains(QCursor::pos()) || m_menuWorker->menuGeometry().contains(QCursor::pos())) {
+    if (geometry().contains(QCursor::pos()) || m_menuWorker->menuGeometry().contains(QCursor::pos()))
         return activateWindow(); /* get focus back */
-    }
 
     hideLauncher();
 }

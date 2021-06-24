@@ -39,15 +39,16 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     , m_calcUtil(CalculateUtil::instance())
     , m_appListArea(new AppListArea)
     , m_viewBox(new DHBoxWidget)
-    , m_pageControl(new pageControl)
+    , m_delegate(Q_NULLPTR)
+    , m_pageControl(new PageControl)
+    , m_pageCount(0)
+    , m_pageIndex(0)
     , m_category(categoryModel)
     , m_bDragStart(false)
     , m_bMousePress(false)
     , m_nMousePos(0)
     , m_scrollValue(0)
     , m_scrollStart(0)
-    , m_pageCount(0)
-    , m_pageIndex(0)
 {
     m_pRightGradient->setAccessibleName("thisRightGradient");
     m_pLeftGradient->setAccessibleName("thisLeftGradient");
@@ -80,7 +81,7 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
 
     connect(m_appListArea, &AppListArea::increaseIcon, this, [ = ] { if (m_calcUtil->increaseIconSize()) emit m_appsManager->layoutChanged(AppsListModel::All); });
     connect(m_appListArea, &AppListArea::decreaseIcon, this, [ = ] { if (m_calcUtil->decreaseIconSize()) emit m_appsManager->layoutChanged(AppsListModel::All); });
-    connect(m_pageControl, &pageControl::onPageChanged, this, &MultiPagesView::showCurrentPage);
+    connect(m_pageControl, &PageControl::onPageChanged, this, &MultiPagesView::showCurrentPage);
 }
 
 /**
@@ -325,7 +326,7 @@ void MultiPagesView::updatePosition(int mode)
     // 更新视图列表的大小
     if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
         int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
-        m_pageControl->UpdateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
+        m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
 
         QSize tmpSize = size() - QSize(padding, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
         m_appListArea->setFixedSize(size());
@@ -334,7 +335,7 @@ void MultiPagesView::updatePosition(int mode)
         for (auto pView : m_appGridViewList)
             pView->setFixedSize(tmpSize);
     } else {
-        m_pageControl->UpdateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
+        m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
 
         QSize tmpSize = size() - QSize(0, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
         m_appListArea->setFixedSize(tmpSize);

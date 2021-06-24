@@ -190,18 +190,9 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_calcUtil->setNavigationWidgetSizeHint(m_navigationWidget->sizeHint());
 }
 
-FullScreenFrame::~FullScreenFrame()
-{
-}
-
 void FullScreenFrame::exit()
 {
     qApp->quit();
-}
-
-void FullScreenFrame::showByMode(const qlonglong mode)
-{
-    qDebug() << mode;
 }
 
 int FullScreenFrame::dockPosition()
@@ -212,13 +203,14 @@ int FullScreenFrame::dockPosition()
 void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory oldCategory, const AppsListModel::AppCategory newCategory)
 {
     m_searchWidget->clearSearchContent();
-    if (m_animationGroup->state() == m_animationGroup->Running) return;
+    if (m_animationGroup->state() == m_animationGroup->Running)
+        return;
 
     int spaceCount = nearestCategory(oldCategory, newCategory);
 
     if (spaceCount == 0) {
         scrollCurrent();
-    }  else if (spaceCount == -1) {
+    } else if (spaceCount == -1) {
         scrollPrev();
     } else if (spaceCount == 1) {
         scrollNext();
@@ -237,13 +229,11 @@ void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory oldCateg
 
 void FullScreenFrame::blurBoxWidgetMaskClick(const AppsListModel::AppCategory appCategory)
 {
-    if (m_mouse_press) {
+    if (m_mouse_press)
         m_mouse_press = false;
-    }
 
-    if (m_animationGroup->state() == m_animationGroup->Running) {
+    if (m_animationGroup->state() == m_animationGroup->Running)
         return;
-    }
 
     if (appCategory == m_currentCategory) {
         hide();
@@ -573,15 +563,14 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     updateGeometry();
     updateBackground();
 
-    if (!m_appsManager->isVaild()) {
+    if (!m_appsManager->isVaild())
         m_appsManager->refreshAllList();
-    }
 
     updateDockPosition();
 
     QFrame::showEvent(e);
 
-    QTimer::singleShot(0, this, [this]() {
+    QTimer::singleShot(0, this, [ this ]() {
         raise();
         activateWindow();
         m_searchWidget->raise();
@@ -598,8 +587,6 @@ void FullScreenFrame::hideEvent(QHideEvent *e)
     BoxFrame::hideEvent(e);
 
     QTimer::singleShot(1, this, [ = ] { emit visibleChanged(false); });
-
-//    m_clearCacheTimer->start();
 }
 
 void FullScreenFrame::mousePressEvent(QMouseEvent *e)
@@ -616,7 +603,6 @@ void FullScreenFrame::mousePressEvent(QMouseEvent *e)
     m_startPoint = e->globalPos();
 
     // 全屏模式下支持全屏范围滑动翻页
-    // m_multiPagesView->mousePress(e);
     mousePressDrag(e);
 }
 
@@ -645,17 +631,15 @@ void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
     }
 
     if (mouse_release_time - m_mouse_press_time > DLauncher::MOUSE_PRESS_TIME_DIFF) {
-        if (moved_diff < 0) {
+        if (moved_diff < 0)
             m_animationGroup->setScrollType(Scroll_Next);
-        } else {
+        else
             m_animationGroup->setScrollType(Scroll_Prev);
-        }
     }
 
     m_mouse_move_pos = e->pos();
 
     // 全屏模式下支持全屏范围滑动翻页
-    // m_multiPagesView->mouseMove(e);
     mouseMoveDrag(e);
 }
 
@@ -701,29 +685,28 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
 void FullScreenFrame::wheelEvent(QWheelEvent *e)
 {
     if (m_displayMode == GROUP_BY_CATEGORY) {
-        if (m_animationGroup->state() == m_animationGroup->Running) return;
-        //优先MultiPagesView中的滑动事件，如果MultiPagesView中动画在运行，外层滑动鼠标就不处理
-        if( getCategoryBoxWidget(m_currentCategory)->getMultiPagesView()->getPageSwitchAnimationState() == QPropertyAnimation::Running) return;
+        if (m_animationGroup->state() == m_animationGroup->Running)
+            return;
+
+        // 优先MultiPagesView中的滑动事件，如果MultiPagesView中动画在运行，外层滑动鼠标就不处理
+        if (getCategoryBoxWidget(m_currentCategory)->getMultiPagesView()->getPageSwitchAnimationState() == QPropertyAnimation::Running)
+            return;
 
         static int  wheelTime = 0;
-        if (e->angleDelta().y() < 0 ||  e-> angleDelta().x() < 0) {
+        if (e->angleDelta().y() < 0 ||  e-> angleDelta().x() < 0)
             wheelTime++;
-        } else {
+        else
             wheelTime--;
-        }
 
         if (wheelTime >= DLauncher::WHOOLTIME_TO_SCROOL || wheelTime <= -DLauncher::WHOOLTIME_TO_SCROOL) {
-            if (wheelTime > 0) {
+            if (wheelTime > 0)
                 scrollNext();
-            } else {
+            else
                 scrollPrev();
-            }
 
             wheelTime = 0;
         }
-        return;
     }
-
 }
 
 bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
@@ -778,8 +761,10 @@ QVariant FullScreenFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
         return true;
     case Qt::ImCursorRectangle:
         return widgetRelativeOffset(this, m_searchWidget->edit()->lineEdit());
-    default:;
+    default:
+        break;
     }
+
     return QWidget::inputMethodQuery(prop);
 }
 
@@ -808,9 +793,8 @@ void FullScreenFrame::initUI()
     m_multiPagesView->installEventFilter(this);
 
     foreach (QAbstractButton * button, m_navigationWidget->buttonGroup()->buttons()) {
-        if (button) {
+        if (button)
             button->installEventFilter(m_eventFilter);
-        }
     }
 
     setBlurWidgetVisible(false);
@@ -827,19 +811,18 @@ void FullScreenFrame::initUI()
     m_systemBoxWidget->setDataDelegate(m_appItemDelegate);
     m_othersBoxWidget->setDataDelegate(m_appItemDelegate);
 
-    //m_appsItemBox->installEventFilter(this);
     m_appsItemBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_appsItemBox->layout()->setMargin(0);
     m_appsItemBox->layout()->setSpacing(0);
     m_appsItemBox->layout()->addWidget(m_appsItemSeizeBox);
     m_appsItemSeizeBox->lower();
 
-    //自由排序模式，设置大小调整方式为固定方式
+    // 自由排序模式，设置大小调整方式为固定方式
     m_appsIconBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_appsIconBox->layout()->setSpacing(0);
     m_appsIconBox->layout()->addWidget(m_multiPagesView, 0, Qt::AlignCenter);
 
-    //启动时默认按屏幕大小设置自由排序widget的大小
+    // 启动时默认按屏幕大小设置自由排序widget的大小
     const int appsContentWidth = m_calcUtil->getScreenSize().width();
     const int appsContentHeight = m_calcUtil->getScreenSize().height() - DLauncher::APPS_AREA_TOP_MARGIN;
     m_appsIconBox->setFixedSize(appsContentWidth, appsContentHeight);
@@ -874,9 +857,12 @@ void FullScreenFrame::initUI()
 
 MultiPagesView *FullScreenFrame::getCategoryGridViewList(const AppsListModel::AppCategory category)
 {
-    BlurBoxWidget * widget = getCategoryBoxWidget(category);
+    BlurBoxWidget *widget = getCategoryBoxWidget(category);
 
-    return widget->getMultiPagesView();
+    if (widget)
+        return widget->getMultiPagesView();
+    else
+        return nullptr;
 }
 
 /**
@@ -901,7 +887,7 @@ BlurBoxWidget *FullScreenFrame::getCategoryBoxWidget(const AppsListModel::AppCat
     case AppsListModel::Development:    view = m_developmentBoxWidget;   break;
     case AppsListModel::System:         view = m_systemBoxWidget;        break;
     case AppsListModel::Others:         view = m_othersBoxWidget;        break;
-    default: view = m_internetBoxWidget;
+    default:                            view = m_internetBoxWidget;      break;
     }
 
     return view;
@@ -910,14 +896,13 @@ BlurBoxWidget *FullScreenFrame::getCategoryBoxWidget(const AppsListModel::AppCat
 void FullScreenFrame::checkCurrentCategoryVisible()
 {
     AppsListModel::AppCategory tmpCategory = m_currentCategory;
-    //判断当前分类是否允许显示，如果应用当前分类应用个数小于等于0，则当前分类不允许显示，显示其他分类
+    // 判断当前分类是否允许显示，如果应用当前分类应用个数小于等于0，则当前分类不允许显示，显示其他分类
     if (m_appsManager->appNums(tmpCategory) <= 0) {
-        //使用前一分类作为当前分类，若前一分类循环变成others等后面的分类，则使用当前分类的后一分类作为当前分类
+        // 使用前一分类作为当前分类，若前一分类循环变成others等后面的分类，则使用当前分类的后一分类作为当前分类
         tmpCategory =  prevCategoryType(m_currentCategory);
 
-        if (tmpCategory > m_currentCategory) {
+        if (tmpCategory > m_currentCategory)
             tmpCategory = nextCategoryType(m_currentCategory);
-        }
     }
 
     m_currentCategory = tmpCategory;
@@ -1025,40 +1010,32 @@ BlurBoxWidget *FullScreenFrame::getCategoryBoxWidgetByPostType(PosType posType, 
     int categoryCount = m_appsManager->getVisibleCategoryCount();
 
     switch (posType) {
-    case Pos_LL: {
-        if (categoryCount >= 3) {
+    case Pos_LL:
+        if (categoryCount >= 3)
             blurBoxWidget = getCategoryBoxWidget(prevCategoryType(prevCategoryType(appCategory)));
-        } else if (categoryCount == 2) {
+        else if (categoryCount == 2)
             blurBoxWidget = getCategoryBoxWidget(prevCategoryType(appCategory));
-        }
         break;
-    }
-    case Pos_L: {
-        if (categoryCount >= 3) {
+    case Pos_L:
+        if (categoryCount >= 3)
             blurBoxWidget = getCategoryBoxWidget(prevCategoryType(appCategory));
-        }
         break;
-    }
-    case Pos_M: {
-        if (categoryCount >= 1) {
+    case Pos_M:
+        if (categoryCount >= 1)
             blurBoxWidget = getCategoryBoxWidget(appCategory);
-        }
         break;
-    }
-    case Pos_R: {
-        if (categoryCount >= 3) {
+    case Pos_R:
+        if (categoryCount >= 3)
             blurBoxWidget = getCategoryBoxWidget(nextCategoryType(appCategory));
-        }
         break;
-    }
     case Pos_RR:
-        if (categoryCount >= 3) {
+        if (categoryCount >= 3)
             blurBoxWidget = getCategoryBoxWidget(nextCategoryType(nextCategoryType(appCategory)));
-        } else if (categoryCount == 2) {
+        else if (categoryCount == 2)
             blurBoxWidget = getCategoryBoxWidget(nextCategoryType(appCategory));
-        }
         break;
-    case Pos_None: break;
+    case Pos_None:
+        break;
     }
 
     return blurBoxWidget;
@@ -1081,16 +1058,15 @@ int FullScreenFrame::nearestCategory(const AppsListModel::AppCategory oldCategor
     }
 
     if (prevCount != 0 || nextCount != 0) {
-        if (abs(prevCount) < abs(nextCount)) {
+        if (abs(prevCount) < abs(nextCount))
             return prevCount;
-        } else if (abs(prevCount) > abs(nextCount)) {
+        else if (abs(prevCount) > abs(nextCount))
             return nextCount;
-        } else if (oldCategory < newCategory) {
+        else if (oldCategory < newCategory)
             return nextCount;
-        } else {
+        else
             return prevCount;
-        }
-    } else{
+    } else {
         return 0;
     }
 }
@@ -1157,10 +1133,13 @@ void FullScreenFrame::showLauncher()
 {
     m_focusIndex = 1;
     m_appItemDelegate->setCurrentIndex(QModelIndex());
+
     m_searchWidget->categoryBtn()->clearFocus();
     m_searchWidget->edit()->clearEdit();
     m_searchWidget->edit()->clear();
+
     updateDisplayMode(m_calcUtil->displayMode());
+
     m_searchWidget->edit()->lineEdit()->clearFocus();
     setFixedSize(m_appsManager->currentScreen()->geometry().size());
     show();
@@ -1169,9 +1148,9 @@ void FullScreenFrame::showLauncher()
 
 void FullScreenFrame::hideLauncher()
 {
-    if (!isVisible()) {
+    if (!isVisible())
         return;
-    }
+
     disconnect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::hideLauncher);
     m_searchWidget->clearSearchContent();
     hide();
@@ -1185,7 +1164,6 @@ bool FullScreenFrame::visible()
 void FullScreenFrame::updateGeometry()
 {
     QRect rect = m_appsManager->currentScreen()->geometry();
-
     setGeometry(rect);
 
     QFrame::updateGeometry();
@@ -1202,36 +1180,37 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     if (Qt::Key_Undo == key) {
         auto  oldStr =  m_searchWidget->edit()->lineEdit()->text();
         m_searchWidget->edit()->lineEdit()->undo();
-        if (!oldStr.isEmpty() && oldStr == m_searchWidget->edit()->lineEdit()->text()) {
+
+        if (!oldStr.isEmpty() && oldStr == m_searchWidget->edit()->lineEdit()->text())
             m_searchWidget->edit()->lineEdit()->clear();
-        }
+
         return;
     }
 
     if (Qt::Key_Space == key) {
-        if (m_searchWidget->categoryBtn()->hasFocus()) {
+        if (m_searchWidget->categoryBtn()->hasFocus())
             m_searchWidget->categoryBtn()->click();
-        }
+
         return;
     }
 
     if (m_focusIndex == CategoryTital) {
         switch (key) {
         case Qt::Key_Backtab:
-        case Qt::Key_Left: {
+        case Qt::Key_Left:
             scrollPrev();
             return;
-        }
-        case Qt::Key_Right: {
+        case Qt::Key_Right:
             scrollNext();
             return;
-        }
-        case Qt::Key_Down: {
+        case Qt::Key_Down:
             m_focusIndex = FirstItem;
-        } break;
-        default:;
+            break;
+        default:
+            break;
         }
     }
+
     const QModelIndex currentIndex = m_appItemDelegate->currentIndex();
     // move operation should be start from a valid location, if not, just init it.
     if (!currentIndex.isValid()) {
@@ -1250,14 +1229,23 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     // calculate destination sibling by keys, it may cause an invalid position.
     switch (key) {
     case Qt::Key_Backtab:
-    case Qt::Key_Left:      index = currentIndex.sibling(currentIndex.row() - 1, 0); break;
-    case Qt::Key_Right:    index = currentIndex.sibling(currentIndex.row() + 1, 0); break;
-    case Qt::Key_Up:        index = currentIndex.sibling(currentIndex.row() - column, 0); break;
-    case Qt::Key_Down:   index = currentIndex.sibling(currentIndex.row() + column, 0); break;
-    default:;
+    case Qt::Key_Left:
+        index = currentIndex.sibling(currentIndex.row() - 1, 0);
+        break;
+    case Qt::Key_Right:
+        index = currentIndex.sibling(currentIndex.row() + 1, 0);
+        break;
+    case Qt::Key_Up:
+        index = currentIndex.sibling(currentIndex.row() - column, 0);
+        break;
+    case Qt::Key_Down:
+        index = currentIndex.sibling(currentIndex.row() + column, 0);
+        break;
+    default:
+        break;
     }
 
-    //to next page
+    // to next page
     if (m_displayMode != GROUP_BY_CATEGORY && !index.isValid()) {
         index = m_multiPagesView->selectApp(key);
         index = index.isValid() ? index : currentIndex;
@@ -1288,6 +1276,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
             currentIndex = getCategoryGridViewList(m_currentCategory)->currentPage();
             nAppIndex = getCategoryGridViewList(m_currentCategory)->pageModel(currentIndex)->rowCount(QModelIndex()) - 1;
         }
+
         index = getCategoryGridViewList(m_currentCategory)->getAppItem(nAppIndex);
 
     } while (false);
@@ -1535,7 +1524,7 @@ void FullScreenFrame::updateDockPosition()
 {
     const QRect dockGeometry = m_appsManager->dockGeometry();
 
-    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? m_calcUtil->getScreenSize().height() *0.064815 : 20;
+    int bottomMargin = (m_displayMode == GROUP_BY_CATEGORY) ? m_calcUtil->getScreenSize().height() * 0.064815 : 20;
 
     m_navigationWidget->updateSize();
 
@@ -1720,9 +1709,8 @@ AppsListModel::AppCategory FullScreenFrame::nextCategoryType(const AppsListModel
     if (nextCategory > AppsListModel::Others)
         nextCategory = AppsListModel::Internet;
 
-    if (m_appsManager->appNums(nextCategory) <= 0) {
+    if (m_appsManager->appNums(nextCategory) <= 0)
         nextCategory = nextCategoryType(nextCategory);
-    }
 
     return nextCategory;
 }
@@ -1739,9 +1727,8 @@ AppsListModel::AppCategory FullScreenFrame::prevCategoryType(const AppsListModel
     if (prevCategory < AppsListModel::Internet)
         prevCategory = AppsListModel::Others;
 
-    if (m_appsManager->appNums(prevCategory) <= 0) {
+    if (m_appsManager->appNums(prevCategory) <= 0)
         prevCategory = prevCategoryType(prevCategory);
-    }
 
     return prevCategory;
 }
@@ -1800,8 +1787,6 @@ void FullScreenFrame::searchTextChanged(const QString &keywords)
     else
         updateDisplayMode(SEARCH);
 
-    if (m_searchWidget->edit()->lineEdit()->text().isEmpty()) {
+    if (m_searchWidget->edit()->lineEdit()->text().isEmpty())
         m_searchWidget->edit()->lineEdit()->clearFocus();
-    }
 }
-

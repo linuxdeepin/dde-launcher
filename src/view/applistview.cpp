@@ -85,12 +85,6 @@ AppListView::AppListView(QWidget *parent)
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::dropSwap);
 #endif
 
-#if QT_VERSION < QT_VERSION_CHECK(5,9,0)
-    touchTapDistance = 15;
-#else
-    touchTapDistance = QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::TouchDoubleTapDistance).toInt();
-#endif
-
     connect(m_scrollAni, &QPropertyAnimation::valueChanged, this, &AppListView::handleScrollValueChanged);
     connect(m_scrollAni, &QPropertyAnimation::finished, this, &AppListView::handleScrollFinished);
 }

@@ -35,23 +35,20 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     : QWidget(parent)
     , m_pLeftGradient(new GradientLabel(this))
     , m_pRightGradient(new GradientLabel(this))
-    , m_pageCount(0)
-    , m_pageIndex(0)
-    , m_category(categoryModel)
     , m_appsManager(AppsManager::instance())
     , m_calcUtil(CalculateUtil::instance())
     , m_appListArea(new AppListArea)
     , m_viewBox(new DHBoxWidget)
     , m_pageControl(new pageControl)
+    , m_category(categoryModel)
+    , m_bDragStart(false)
+    , m_bMousePress(false)
+    , m_nMousePos(0)
+    , m_scrollValue(0)
+    , m_scrollStart(0)
+    , m_pageCount(0)
+    , m_pageIndex(0)
 {
-    m_bDragStart = false;
-
-    m_bMousePress = false;
-    m_nMousePos = 0;
-    m_scrollValue = 0;
-    m_scrollStart = 0;
-
-    // 测试用
     m_pRightGradient->setAccessibleName("thisRightGradient");
     m_pLeftGradient->setAccessibleName("thisLeftGradient");
     m_pageControl->setAccessibleName("pageControl");
@@ -86,6 +83,12 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     connect(m_pageControl, &pageControl::onPageChanged, this, &MultiPagesView::showCurrentPage);
 }
 
+/**
+ * @brief MultiPagesView::updateGradient 切换分页时屏幕左右两边30pixel的过渡效果
+ * @param pixmap 屏幕背景图片对象
+ * @param topLeftImg 左侧过渡范围起点
+ * @param topRightImg 右侧过渡范围起点
+ */
 void MultiPagesView::updateGradient(QPixmap &pixmap, QPoint topLeftImg, QPoint topRightImg)
 {
     m_pLeftGradient->setDirection(GradientLabel::LeftToRight);
@@ -127,6 +130,7 @@ void MultiPagesView::updateGradient(QPixmap &pixmap, QPoint topLeftImg, QPoint t
 void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
 {
     int pageCount = m_appsManager->getPageCount(category == AppsListModel::All ? m_category : category);
+
     if (pageCount < 1)
         pageCount = 1;
 
@@ -149,7 +153,7 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
 
             m_viewBox->layout()->insertWidget(m_pageCount, pageView);
 
-            m_pageCount ++;
+            m_pageCount++;
 
             connect(pageView, &AppGridView::requestScrollLeft, this, &MultiPagesView::dragToLeft);
             connect(pageView, &AppGridView::requestScrollRight, this, &MultiPagesView::dragToRight);
@@ -159,7 +163,7 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             });
             connect(pageView, &AppGridView::dragEnd, this, &MultiPagesView::dragStop);
             connect(m_pageSwitchAnimation, &QPropertyAnimation::finished,pageView,&AppGridView::setDragAnimationEnable);
-            connect(m_pageSwitchAnimation, &QPropertyAnimation::finished,this, [ = ]{
+            connect(m_pageSwitchAnimation, &QPropertyAnimation::finished,this, [ = ] {
                     setGradientVisible(false);
             });
             emit connectViewEvent(pageView);
@@ -168,12 +172,13 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
         while (pageCount < m_pageCount) {
             AppGridView *pageView = qobject_cast<AppGridView *>(m_viewBox->layout()->itemAt(m_pageCount - 1)->widget());
             m_viewBox->layout()->removeWidget(pageView);
+            pageView->model()->deleteLater();
             pageView->deleteLater();
 
             m_pageAppsModelList.removeLast();
             m_appGridViewList.removeLast();
 
-            m_pageCount --;
+            m_pageCount--;
         }
     }
 
@@ -299,11 +304,17 @@ void MultiPagesView::setModel(AppsListModel::AppCategory category)
     }
 }
 
+/**
+ * @brief MultiPagesView::updatePosition
+ * 给自由模式,分类模式下分别给滑动区域, 透明控件, 视图列表设置大小,
+ * 并设置边距,默认回到首页
+ * @param mode 模式分类: 自由模式: 0, 分类模式: 1, 搜索模式: 2
+ */
 void MultiPagesView::updatePosition(int mode)
 {
     // 更新全屏两种模式下界面布局的左右边距和间隔
-    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
     if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
+        int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
         m_viewBox->layout()->setContentsMargins(padding, 0, padding, 0);
         m_viewBox->layout()->setSpacing(padding);
     } else {
@@ -315,16 +326,20 @@ void MultiPagesView::updatePosition(int mode)
     if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
         int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
         m_pageControl->UpdateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
+
         QSize tmpSize = size() - QSize(padding, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
         m_appListArea->setFixedSize(size());
         m_viewBox->setFixedHeight(tmpSize.height());
+
         for (auto pView : m_appGridViewList)
             pView->setFixedSize(tmpSize);
     } else {
         m_pageControl->UpdateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
-        QSize tmpSize = size() - QSize(0,m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
+
+        QSize tmpSize = size() - QSize(0, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
         m_appListArea->setFixedSize(tmpSize);
         m_viewBox->setFixedHeight(tmpSize.height());
+
         for (auto pView : m_appGridViewList)
             pView->setFixedSize(tmpSize);
     }
@@ -342,8 +357,8 @@ void MultiPagesView::InitUI()
     QVBoxLayout *layoutMain = new QVBoxLayout;
     layoutMain->setContentsMargins(0, 0, 0, DLauncher::DRAG_THRESHOLD);
     layoutMain->setSpacing(0);
-    layoutMain->addWidget(m_appListArea,0,Qt::AlignHCenter);
-    layoutMain->addWidget(m_pageControl,0,Qt::AlignHCenter);
+    layoutMain->addWidget(m_appListArea, 0, Qt::AlignHCenter);
+    layoutMain->addWidget(m_pageControl, 0, Qt::AlignHCenter);
 
     setLayout(layoutMain);
 }
@@ -418,10 +433,10 @@ void MultiPagesView::wheelEvent(QWheelEvent *e)
     int page = m_pageIndex;
     if (e->delta() > 0) {
         if (page - 1 >= 0)
-            -- page;
+            --page;
     } else if (e->delta() < 0) {
         if (page + 1 < m_pageCount)
-            ++ page;
+            ++page;
     }
 
     if (page != m_pageIndex)
@@ -443,6 +458,7 @@ void MultiPagesView::mouseMove(QMouseEvent *e)
 {
     if (!m_bMousePress)
         return;
+
     int nDiff = m_nMousePos - e->x();
     m_scrollValue += nDiff;
 
@@ -462,7 +478,7 @@ void MultiPagesView::mouseRelease(QMouseEvent *e)
         showCurrentPage(m_pageIndex - 1);
     } else {
         int nScroll = m_appListArea->horizontalScrollBar()->value();
-        //多个分页是点击直接隐藏
+        // 多个分页是点击直接隐藏
         if (nScroll == m_scrollStart && m_pageCount != 1)
             emit m_appGridViewList[m_pageIndex]->clicked(QModelIndex());
         else if (nScroll - m_scrollStart > DLauncher::MOUSE_MOVE_TO_NEXT)
@@ -504,6 +520,7 @@ QWidget *MultiPagesView::getParentWidget()
 
         backgroundWidget = backgroundWidget->parentWidget();
     }
+
     return backgroundWidget;
 }
 
@@ -511,11 +528,13 @@ QPoint MultiPagesView::calculPadding(MultiPagesView::Direction dir)
 {
     // 获取当前屏幕的高度
     QScreen *screen = QGuiApplication::primaryScreen();
-    int screen_height = screen->availableGeometry().height();
+    int screenHeight = screen->availableGeometry().height();
+
     // 计算过渡动画开始的位置 区分左右位置与上下位置
     int paddingL = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
     int paddingR = m_calcUtil->getScreenSize().width() - paddingL - 1;
-    int topPos = mapToGlobal(rect().topLeft()).y() > screen_height ? mapToGlobal(rect().topLeft()).y() - screen_height : mapToGlobal(rect().topLeft()).y();
+    int topPos = (mapToGlobal(rect().topLeft()).y() > screenHeight) ?
+                 (mapToGlobal(rect().topLeft()).y() - screenHeight) : mapToGlobal(rect().topLeft()).y();
 
     QPoint padding(((dir == MultiPagesView::Left) ? paddingL : paddingR), topPos);
 

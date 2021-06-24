@@ -5,7 +5,6 @@
 
 #include "applistarea.h"
 
-
 class Tst_Applistarea : public testing::Test
 {
 public:
@@ -23,14 +22,11 @@ public:
     }
 
 public:
-    AppListArea* widget = nullptr;
+    AppListArea* widget;
 };
 
 TEST_F(Tst_Applistarea, appListArea_test)
 {
-    QWidget *view = new QWidget;
-    widget->addWidget(view);
-
     QWheelEvent event(QPointF(0, 0), 0, Qt::MiddleButton, Qt::ControlModifier);
     QApplication::sendEvent(widget, &event);
 
@@ -42,6 +38,4 @@ TEST_F(Tst_Applistarea, appListArea_test)
 
     QMouseEvent event3(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
     QApplication::sendEvent(widget, &event3);
-
 }
-

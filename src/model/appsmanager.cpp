@@ -452,7 +452,6 @@ void AppsManager::markLaunched(QString appKey)
         return;
 
     m_newInstalledAppsList.removeOne(appKey);
-    m_launcherInter->MarkLaunched(appKey);
 
     refreshUserInfoList();
 

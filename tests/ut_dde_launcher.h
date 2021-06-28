@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 ~ 2028 Uniontech Technology Co., Ltd.
+ * Copyright (C) 2018 ~ 2021 Uniontech Technology Co., Ltd.
  *
  * Author:     chenjun <chenjun@uniontech.com>
  *
@@ -23,6 +23,7 @@
 #define LauncherUnitTest_H
 
 #include <QObject>
+
 #include <gtest/gtest.h>
 
 class LauncherUnitTest : public QObject, public testing::Test

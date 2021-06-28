@@ -1,9 +1,9 @@
-#include <gtest/gtest.h>
-
 #define private public
 #include "launchersys.h"
 #include "iconfreshthread.h"
 #undef private
+
+#include <gtest/gtest.h>
 
 class Tst_LauncherSys : public testing::Test
 {
@@ -25,7 +25,7 @@ public:
     }
 
 public:
-    LauncherSys* m_launcherSys;
+    LauncherSys *m_launcherSys;
 };
 
 TEST_F(Tst_LauncherSys, launcherSys_test)

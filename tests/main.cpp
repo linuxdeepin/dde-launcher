@@ -1,13 +1,13 @@
-#include <gtest/gtest.h>
+#include <DLog>
+
+#include <QApplication>
+#include <QDebug>
 
 #ifdef SANITIZER_CHECK
 #include <sanitizer/asan_interface.h>
 #endif
 
-#include <DLog>
-
-#include <QDebug>
-#include <QApplication>
+#include <gtest/gtest.h>
 
 DCORE_USE_NAMESPACE
 

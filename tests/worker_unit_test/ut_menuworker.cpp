@@ -1,30 +1,30 @@
-#include <gtest/gtest.h>
-#include <QtTest/QtTest>
-#include <QMenu>
-
 #define private public
 #include "menuworker.h"
 #undef private
+
+#include <QTest>
+#include <QMenu>
+
+#include <gtest/gtest.h>
 
 class Tst_MenuWorker : public testing::Test
 {
 public:
     void SetUp() override
     {
-        obj = new MenuWorker();
-
+        m_widget = new MenuWorker();
     }
 
     void TearDown() override
     {
-        if (obj) {
-            delete obj;
-            obj = nullptr;
+        if (m_widget) {
+            delete m_widget;
+            m_widget = nullptr;
         }
     }
 
 public:
-    MenuWorker* obj;
+    MenuWorker *m_widget;
 };
 
 TEST_F(Tst_MenuWorker, menuWorker_test)
@@ -33,17 +33,17 @@ TEST_F(Tst_MenuWorker, menuWorker_test)
     menu->setAccessibleName("popmenu");
 
     QSignalMapper *signalMapper = new QSignalMapper(menu);
-    obj->creatMenuByAppItem(menu, signalMapper);
+    m_widget->creatMenuByAppItem(menu, signalMapper);
 
-    for (int index = 0; index < 7; index++) {
+    for (int index = 0; index < 7; index++)
         signalMapper->mapped(1);
-    }
+
     menu->aboutToHide();
 
     delete menu;
     menu = nullptr;
 
     const QModelIndex index;
-    obj->setCurrentModelIndex(index);
-    QVERIFY(index == obj->getCurrentModelIndex());
+    m_widget->setCurrentModelIndex(index);
+    QVERIFY(index == m_widget->getCurrentModelIndex());
 }

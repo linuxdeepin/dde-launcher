@@ -1,11 +1,12 @@
-#include <gtest/gtest.h>
+#define private public
+#include "minicategorywidget.h"
+#undef private
+
 #include <QApplication>
 #include <QMouseEvent>
 #include <QKeyEvent>
 
-#define private public
-#include "minicategorywidget.h"
-#undef private
+#include <gtest/gtest.h>
 
 class Tst_Minicategorywidget : public testing::Test
 {
@@ -49,4 +50,3 @@ TEST_F(Tst_Minicategorywidget, miniCategoryWidget_test)
 
     m_miniCategoryWidget->onCategoryListChanged();
 }
-

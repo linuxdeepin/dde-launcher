@@ -1,13 +1,12 @@
-#include <gtest/gtest.h>
+#include "util.h"
+
 #include <QPixmap>
 #include <QSize>
 
-#include "util.h"
-
+#include <gtest/gtest.h>
 
 class Tst_Util : public testing::Test
 {
-public:
 };
 
 TEST_F(Tst_Util, util)

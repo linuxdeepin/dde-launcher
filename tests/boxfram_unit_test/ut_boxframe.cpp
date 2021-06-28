@@ -1,4 +1,8 @@
-#include <gtest/gtest.h>
+// 欺骗编译器的操作, 旨在单元测试中方便使用该类中的私有成员函数或者对象
+#define private public
+#include "boxframe.h"
+#include "backgroundmanager.h"
+#undef private
 
 #include <QPixmap>
 #include <QApplication>
@@ -7,11 +11,7 @@
 #include <QTest>
 #include <QSignalSpy>
 
-// 欺骗编译器的操作, 旨在单元测试中方便使用该类中的私有成员函数或者对象
-#define private public
-
-#include "boxframe.h"
-#include "backgroundmanager.h"
+#include <gtest/gtest.h>
 
 class Tst_Boxframe : public testing::Test
 {
@@ -61,4 +61,3 @@ TEST_F(Tst_Boxframe, paintEvent_test)
     QApplication::sendEvent(m_frame, &event1);
     QTest::qWait(100);
 }
-

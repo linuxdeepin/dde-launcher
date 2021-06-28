@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
-
 #define private public
 #include "windowedframe.h"
 #undef private
+
+#include <gtest/gtest.h>
 
 class Tst_Windowedframe : public testing::Test
 {
@@ -21,7 +21,7 @@ public:
     }
 
 public:
-    WindowedFrame* m_windowedframe;
+    WindowedFrame *m_windowedframe;
 };
 
 TEST_F(Tst_Windowedframe, privateMethod_test)

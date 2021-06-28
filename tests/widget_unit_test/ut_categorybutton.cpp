@@ -1,59 +1,59 @@
-#include <gtest/gtest.h>
+#include "appslistmodel.h"
+#define private public
+#include "categorybutton.h"
+#undef private
 
 #include <QApplication>
 #include <QWheelEvent>
 
-#define private public
-#include "categorybutton.h"
-#undef private
-#include "appslistmodel.h"
-
+#include <gtest/gtest.h>
 
 class Tst_Categorybutton : public testing::Test
 {
 public:
     void SetUp() override
     {
-        widget = new CategoryButton(AppsListModel::Others);
+        m_widget = new CategoryButton(AppsListModel::Others);
     }
 
     void TearDown() override
     {
-        if (widget) {
-            delete widget;
-            widget = nullptr;
+        if (m_widget) {
+            delete m_widget;
+            m_widget = nullptr;
         }
     }
 
 public:
-    CategoryButton* widget = nullptr;
+    CategoryButton *m_widget;
 };
 
 TEST_F(Tst_Categorybutton, bategoryButton_test)
 {
     QEvent event(QEvent::Enter);
-    QApplication::sendEvent(widget, &event);
+    QApplication::sendEvent(m_widget, &event);
 
     QEvent event1(QEvent::Leave);
-    QApplication::sendEvent(widget, &event1);
+    QApplication::sendEvent(m_widget, &event1);
 
     QMouseEvent event2(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    QApplication::sendEvent(widget, &event2);
+    QApplication::sendEvent(m_widget, &event2);
 
     QMouseEvent event3(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    QApplication::sendEvent(widget, &event3);
+    QApplication::sendEvent(m_widget, &event3);
 
-    widget->updateState(CategoryButton::Checked);
-    QApplication::sendEvent(widget, &event3);
+    m_widget->updateState(CategoryButton::Checked);
+    QApplication::sendEvent(m_widget, &event3);
 
     QPaintEvent event4(QRect(10, 10, 10, 10));
-    QApplication::sendEvent(widget, &event4);
-    widget->updateState(CategoryButton::Hover);
-    QApplication::sendEvent(widget, &event4);
-    widget->updateState(CategoryButton::Checked);
-    QApplication::sendEvent(widget, &event4);
-    widget->updateState(CategoryButton::Press);
-    QApplication::sendEvent(widget, &event4);
+    QApplication::sendEvent(m_widget, &event4);
 
+    m_widget->updateState(CategoryButton::Hover);
+    QApplication::sendEvent(m_widget, &event4);
+
+    m_widget->updateState(CategoryButton::Checked);
+    QApplication::sendEvent(m_widget, &event4);
+
+    m_widget->updateState(CategoryButton::Press);
+    QApplication::sendEvent(m_widget, &event4);
 }
-

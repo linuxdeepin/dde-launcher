@@ -1,10 +1,10 @@
-#include "gtest/gtest.h"
-
-#include<QEvent>
-#include <QApplication>
-
 #include "sharedeventfilter.h"
 #include "fullscreenframe.h"
+
+#include <QEvent>
+#include <QApplication>
+
+#include "gtest/gtest.h"
 
 class Tst_SharedEventFilter: public testing::Test
 {

@@ -1,11 +1,11 @@
-#include <gtest/gtest.h>
+#include "appslistmodel.h"
 
 #define private public
 #include "fullscreenframe.h"
 #include "multipagesview.h"
 #undef private
 
-#include "../src/model/appslistmodel.h"
+#include <gtest/gtest.h>
 
 class Tst_Fullscreenframe : public testing::Test
 {

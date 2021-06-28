@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
-
 #define private public
 #include "searchlineedit.h"
 #undef private
+
+#include <gtest/gtest.h>
 
 class Tst_Searchlineedit : public testing::Test
 {
@@ -21,7 +21,7 @@ public:
     }
 
 public:
-    SearchLineEdit* m_searchLineEdit;
+    SearchLineEdit *m_searchLineEdit;
 };
 
 TEST_F(Tst_Searchlineedit, searchLineEdit_test)

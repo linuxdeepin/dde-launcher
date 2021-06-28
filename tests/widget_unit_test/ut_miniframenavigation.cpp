@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
-
 #define private public
 #include "miniframenavigation.h"
 #undef private
+
+#include <gtest/gtest.h>
 
 class Tst_Miniframenavigation : public testing::Test
 {
@@ -27,8 +27,8 @@ public:
     }
 
 public:
-    UserButton* m_userButton;
-    MiniFrameNavigation* m_miniFrameNavigation;
+    UserButton *m_userButton;
+    MiniFrameNavigation *m_miniFrameNavigation;
 };
 
 TEST_F(Tst_Miniframenavigation, userButton_test)

@@ -1,30 +1,28 @@
-#include <gtest/gtest.h>
-
 #define private public
 #include "roundedbutton.h"
 #undef private
 
+#include <gtest/gtest.h>
 
 class Tst_Roundedbutton : public testing::Test
 {
 public:
     void SetUp() override
     {
-        widget = new RoundedButton();
+        m_widget = new RoundedButton();
     }
 
     void TearDown() override
     {
-        delete widget;
-        widget = nullptr;
+        delete m_widget;
+        m_widget = nullptr;
     }
 
 public:
-    RoundedButton* widget = nullptr;
+    RoundedButton *m_widget;
 };
 
 TEST_F(Tst_Roundedbutton, roundedButton_test)
 {
-    widget->setText("test");
+    m_widget->setText("test");
 }
-

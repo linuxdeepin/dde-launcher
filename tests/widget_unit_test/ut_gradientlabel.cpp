@@ -1,49 +1,49 @@
-#include <gtest/gtest.h>
-#include <QtTest/QtTest>
-
 #define private public
 #include "gradientlabel.h"
 #undef private
+
+#include <QTest>
+
+#include <gtest/gtest.h>
 
 class Tst_Gradientlabel : public testing::Test
 {
 public:
     void SetUp() override
     {
-        widget = new GradientLabel();
+        m_widget = new GradientLabel();
     }
 
     void TearDown() override
     {
-        if (widget) {
-            delete widget;
-            widget = nullptr;
+        if (m_widget) {
+            delete m_widget;
+            m_widget = nullptr;
         }
     }
 
 public:
-    GradientLabel* widget = nullptr;
+    GradientLabel *m_widget;
 };
 
 TEST_F(Tst_Gradientlabel, gradientLabel_test)
 {
-    QVERIFY(GradientLabel::TopToBottom == widget->direction());
+    QVERIFY(GradientLabel::TopToBottom == m_widget->direction());
     QPixmap pix(10, 10);
 
-    widget->setDirection(GradientLabel::TopToBottom);
-    QVERIFY(GradientLabel::TopToBottom == widget->direction());
-    widget->setPixmap(pix);
-    widget->setDirection(GradientLabel::BottomToTop);
-    QVERIFY(GradientLabel::BottomToTop == widget->direction());
-    widget->setPixmap(pix);
-    widget->setDirection(GradientLabel::LeftToRight);
-    QVERIFY(GradientLabel::LeftToRight == widget->direction());
-    widget->setPixmap(pix);
-    widget->setDirection(GradientLabel::RightToLeft);
-    QVERIFY(GradientLabel::RightToLeft == widget->direction());
-    widget->setPixmap(pix);
+    m_widget->setDirection(GradientLabel::TopToBottom);
+    QVERIFY(GradientLabel::TopToBottom == m_widget->direction());
+    m_widget->setPixmap(pix);
+    m_widget->setDirection(GradientLabel::BottomToTop);
+    QVERIFY(GradientLabel::BottomToTop == m_widget->direction());
+    m_widget->setPixmap(pix);
+    m_widget->setDirection(GradientLabel::LeftToRight);
+    QVERIFY(GradientLabel::LeftToRight == m_widget->direction());
+    m_widget->setPixmap(pix);
+    m_widget->setDirection(GradientLabel::RightToLeft);
+    QVERIFY(GradientLabel::RightToLeft == m_widget->direction());
+    m_widget->setPixmap(pix);
 
     QPaintEvent event4(QRect(10, 10, 10, 10));
-    QApplication::sendEvent(widget, &event4);
+    QApplication::sendEvent(m_widget, &event4);
 }
-

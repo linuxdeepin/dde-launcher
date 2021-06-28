@@ -11,7 +11,7 @@ cd $BUILD_DIR
 cmake -DCMAKE_BUILD_TYPE=Debug ..
 
 cmake ../
-make
+make -j 8
 
 cd tests/
 

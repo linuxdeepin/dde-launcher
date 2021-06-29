@@ -1434,7 +1434,7 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
         if (clickedResult == 0)
             return;
 
-        m_appsManager->uninstallApp(appKey);
+        m_appsManager->uninstallApp(appKey, m_displayMode);
     });
 
     unInstallDialog.exec();
@@ -1453,11 +1453,14 @@ void FullScreenFrame::refreshPageView(AppsListModel::AppCategory category)
         m_multiPagesView->ShowPageView(AppsListModel::AppCategory(m_displayMode));
     } else {
         m_multiPagesView->updatePageCount(category);
+        m_multiPagesView->showCurrentPage(m_multiPagesView->currentPage());
     }
 
     if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY) {
         for (int i = AppsListModel::Internet; i <= AppsListModel::Others; i++) {
-            getCategoryGridViewList(AppsListModel::AppCategory(i))->updatePageCount(AppsListModel::AppCategory(i));
+            MultiPagesView *pageView = getCategoryGridViewList(AppsListModel::AppCategory(i));
+            pageView->updatePageCount(AppsListModel::AppCategory(i));
+            pageView->showCurrentPage(pageView->currentPage());
         }
     }
 

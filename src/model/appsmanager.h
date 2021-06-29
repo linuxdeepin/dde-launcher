@@ -88,7 +88,7 @@ public slots:
     void saveUsedSortedList();
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
-    void uninstallApp(const QString &appKey);
+    void uninstallApp(const QString &appKey, const int displayMode = ALL_APPS);
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
     static int appsInfoListSize(const AppsListModel::AppCategory &category);
     static const ItemInfo appsInfoListIndex(const AppsListModel::AppCategory &category,const int index);

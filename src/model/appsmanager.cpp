@@ -424,7 +424,7 @@ void AppsManager::launchApp(const QModelIndex &index)
         m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
 }
 
-void AppsManager::uninstallApp(const QString &appKey)
+void AppsManager::uninstallApp(const QString &appKey, const int displayMode)
 {
     // 遍历应用列表,存在则从列表中移除
     for (const ItemInfo &info : m_allAppInfoList) {
@@ -443,7 +443,8 @@ void AppsManager::uninstallApp(const QString &appKey)
     emit dataChanged(AppsListModel::All);
 
     // 重置下搜索结果
-    m_searchTimer->start();
+    if (displayMode != ALL_APPS)
+        m_searchTimer->start();
 }
 
 void AppsManager::markLaunched(QString appKey)

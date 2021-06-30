@@ -1164,6 +1164,8 @@ bool FullScreenFrame::visible()
 void FullScreenFrame::updateGeometry()
 {
     QRect rect = m_appsManager->currentScreen()->geometry();
+
+    // 设置启动器显示位置，触发BoxFrame::moveEvent事件．
     setGeometry(rect);
 
     QFrame::updateGeometry();

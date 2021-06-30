@@ -63,6 +63,9 @@ void BoxFrame::setBackground(const QString &url)
 
     m_lastUrl = url;
 
+    // 背景发生变化时需要重新生成背景样式
+    QPixmapCache::remove(m_cacheNormalKey);
+
     m_pixmap = QPixmap(url);
     if (m_pixmap.isNull())
         m_pixmap.load(m_defaultBg);
@@ -77,52 +80,67 @@ void BoxFrame::setBlurBackground(const QString &url)
 
     m_lastBlurUrl = url;
 
+    // 背景发生变化时需要重新生成模糊背景样式
+    QPixmapCache::remove(m_cacheBlurKey);
+
     QPixmap pix(url);
     if (pix.isNull())
         pix.load(m_defaultBg);
 
-    const QSize &size = currentScreen()->size() ;//* currentScreen()->devicePixelRatio();
+    const QSize &size = currentScreen()->size() * currentScreen()->devicePixelRatio();
+
+    QPixmap blurCache;
+    if (!QPixmapCache::find(m_cacheBlurKey, &blurCache)) {
+        blurCache = pix.scaled(size,
+                               Qt::KeepAspectRatioByExpanding,
+                               Qt::SmoothTransformation);
+
+        m_cacheBlurKey = QPixmapCache::insert(blurCache);
+    }
+
+    emit backgroundImageChanged(blurCache);
+}
+
+/**更新桌面模糊背景,桌面背景不改变时进行缓存桌面模糊背景
+ * @brief BoxFrame::updateBlurBackground
+ */
+void BoxFrame::updateBlurBackground()
+{
+    QPixmap pix(m_lastBlurUrl);
+
+    if (pix.isNull())
+        pix.load(m_defaultBg);
+
+    const QSize &size = currentScreen()->size() * currentScreen()->devicePixelRatio();
 
     QPixmap cache = pix.scaled(size,
                                Qt::KeepAspectRatioByExpanding,
                                Qt::SmoothTransformation);
 
-    QRect copyRect((cache.width() - size.width()) / 2,
-                   (cache.height() - size.height()) / 2,
-                   size.width(), size.height());
-    cache = cache.copy(copyRect);
-    cache.setDevicePixelRatio(devicePixelRatioF());
     emit backgroundImageChanged(cache);
 }
 
-/**
- * @brief BoxFrame::backgroundPixmap 缓存桌面背景,减少40+ms启动器显示耗时
- * @return 桌面背景图片对象
+/** 更新桌面背景,桌面背景不改变时进行缓存桌面背景
+ * @brief BoxFrame::updateBackground
  */
-const QPixmap BoxFrame::backgroundPixmap()
+void BoxFrame::updateBackground()
 {
     const QSize &size = currentScreen()->size() * currentScreen()->devicePixelRatio();
 
     if (m_pixmap.isNull()) {
-        QPixmapCache::remove(m_cacheKey);
-        return QPixmap();
+        m_pixmap.load(m_defaultBg);
+        QPixmapCache::remove(m_cacheNormalKey);
     }
 
     QPixmap cache;
-    if (!QPixmapCache::find(m_cacheKey, &cache)) {
+    if (!QPixmapCache::find(m_cacheNormalKey, &cache)) {
         cache = m_pixmap.scaled(size,
                                 Qt::KeepAspectRatioByExpanding,
                                 Qt::SmoothTransformation);
-        m_cacheKey = QPixmapCache::insert(cache);
+        m_cacheNormalKey = QPixmapCache::insert(cache);
     }
 
-    QRect copyRect((cache.width() - size.width()) / 2,
-                   (cache.height() - size.height()) / 2,
-                   size.width(), size.height());
-
-    cache = cache.copy(copyRect);
-    cache.setDevicePixelRatio(devicePixelRatioF());
-    return cache;
+    m_cache = cache;
 }
 
 const QScreen *BoxFrame::currentScreen()
@@ -130,42 +148,12 @@ const QScreen *BoxFrame::currentScreen()
     if (m_bgManager->dispalyMode() == MERGE_MODE)
         return qApp->primaryScreen();
 
-    QDesktopWidget *desktopwidget = QApplication::desktop();
-    int screenIndex = desktopwidget->screenNumber(this);
+    int screenIndex = QApplication::desktop()->screenNumber(this);
     QList<QScreen *> screens = qApp->screens();
-    if (screenIndex < screens.count()) {
+    if (screenIndex < screens.count())
         return screens[screenIndex];
-    }
 
-//    qDebug() << "index out of bound in BoxFrame::currentScreen method";
     return qApp->primaryScreen();
-}
-
-void BoxFrame::updateBlurBackground()
-{
-    QPixmap pix(m_lastBlurUrl);
-
-    if (pix.isNull()) {
-        pix.load(m_defaultBg);
-    }
-
-    const QSize &size = currentScreen()->size() ;//* currentScreen()->devicePixelRatio();
-
-    QPixmap cache = pix.scaled(size,
-                                    Qt::KeepAspectRatioByExpanding,
-                                    Qt::SmoothTransformation);
-    QRect copyRect((cache.width() - size.width()) / 2,
-                   (cache.height() - size.height()) / 2,
-                   size.width(), size.height());
-    cache = cache.copy(copyRect);
-    cache.setDevicePixelRatio(devicePixelRatioF());
-    emit backgroundImageChanged(cache);
-}
-
-void BoxFrame::updateBackground()
-{
-    m_cache = backgroundPixmap();
-    update();
 }
 
 void BoxFrame::paintEvent(QPaintEvent *event)
@@ -173,14 +161,9 @@ void BoxFrame::paintEvent(QPaintEvent *event)
     Q_UNUSED(event);
     QPainter painter(this);
 
-    QScreen const *s = currentScreen();
-    const QRect &geom = s->geometry();
-    QRect tr(QPoint(0, 0), geom.size());
-
-    painter.drawPixmap(tr,
-                       m_cache,
-                       QRect(tr.topLeft(),
-                             tr.size() * m_cache.devicePixelRatioF()));
+    QRect screenSize(QPoint(0, 0), currentScreen()->geometry().size());
+    painter.drawPixmap(screenSize, m_cache, QRect(screenSize.topLeft(),
+                                                  screenSize.size() * currentScreen()->devicePixelRatio()));
 }
 
 void BoxFrame::moveEvent(QMoveEvent *event)

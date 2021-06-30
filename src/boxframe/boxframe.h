@@ -53,15 +53,16 @@ protected:
     void moveEvent(QMoveEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    const QPixmap backgroundPixmap();
     virtual const QScreen * currentScreen();
+
 private:
     QString m_lastUrl;
     QString m_lastBlurUrl;
     QPixmap m_pixmap;
     QPixmap m_cache;
     QString m_defaultBg;
-    QPixmapCache::Key m_cacheKey;
+    QPixmapCache::Key m_cacheNormalKey;
+    QPixmapCache::Key m_cacheBlurKey;
     BackgroundManager *m_bgManager;
 };
 

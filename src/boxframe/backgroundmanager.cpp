@@ -22,6 +22,7 @@
  */
 
 #include "backgroundmanager.h"
+#include "appsmanager.h"
 
 #include <QApplication>
 #include <QtConcurrent>
@@ -124,7 +125,7 @@ void BackgroundManager::getImageDataFromDbus(const QString &filePath)
 
 void BackgroundManager::updateBlurBackgrounds()
 {
-    QString screenName = qApp->primaryScreen()->name();
+    QString screenName = AppsManager::instance()->currentScreen()->name();
 
     if (m_displayMode != MERGE_MODE) {
         QWidget *parentWidget =qobject_cast<QWidget *>(parent());

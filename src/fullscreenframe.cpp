@@ -84,17 +84,17 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_appItemDelegate(new AppItemDelegate(this)),
     m_multiPagesView(new MultiPagesView(AppsListModel::All, this)),
 
-    m_internetBoxWidget(new BlurBoxWidget(AppsListModel::Internet, const_cast<char *>("Internet"),m_appsItemBox)),
-    m_chatBoxWidget(new BlurBoxWidget(AppsListModel::Chat, const_cast<char *>("Chat"),m_appsItemBox)),
-    m_musicBoxWidget(new BlurBoxWidget(AppsListModel::Music, const_cast<char *>("Music"),m_appsItemBox)),
-    m_videoBoxWidget(new BlurBoxWidget(AppsListModel::Video, const_cast<char *>("Video"),m_appsItemBox)),
-    m_graphicsBoxWidget(new BlurBoxWidget(AppsListModel::Graphics, const_cast<char *>("Graphics"),m_appsItemBox)),
-    m_gameBoxWidget(new BlurBoxWidget(AppsListModel::Game, const_cast<char *>("Games"),m_appsItemBox)),
-    m_officeBoxWidget(new BlurBoxWidget(AppsListModel::Office, const_cast<char *>("Office"),m_appsItemBox)),
-    m_readingBoxWidget(new BlurBoxWidget(AppsListModel::Reading, const_cast<char *>("Reading"),m_appsItemBox)),
-    m_developmentBoxWidget(new BlurBoxWidget(AppsListModel::Development, const_cast<char *>("Development"),m_appsItemBox)),
-    m_systemBoxWidget(new BlurBoxWidget(AppsListModel::System, const_cast<char *>("System"),m_appsItemBox)),
-    m_othersBoxWidget(new BlurBoxWidget(AppsListModel::Others, const_cast<char *>("Other"),m_appsItemBox)),
+    m_internetBoxWidget(new BlurBoxWidget(AppsListModel::Internet, const_cast<char *>("Internet"), m_appsItemBox)),
+    m_chatBoxWidget(new BlurBoxWidget(AppsListModel::Chat, const_cast<char *>("Chat"), m_appsItemBox)),
+    m_musicBoxWidget(new BlurBoxWidget(AppsListModel::Music, const_cast<char *>("Music"), m_appsItemBox)),
+    m_videoBoxWidget(new BlurBoxWidget(AppsListModel::Video, const_cast<char *>("Video"), m_appsItemBox)),
+    m_graphicsBoxWidget(new BlurBoxWidget(AppsListModel::Graphics, const_cast<char *>("Graphics"), m_appsItemBox)),
+    m_gameBoxWidget(new BlurBoxWidget(AppsListModel::Game, const_cast<char *>("Games"), m_appsItemBox)),
+    m_officeBoxWidget(new BlurBoxWidget(AppsListModel::Office, const_cast<char *>("Office"), m_appsItemBox)),
+    m_readingBoxWidget(new BlurBoxWidget(AppsListModel::Reading, const_cast<char *>("Reading"), m_appsItemBox)),
+    m_developmentBoxWidget(new BlurBoxWidget(AppsListModel::Development, const_cast<char *>("Development"), m_appsItemBox)),
+    m_systemBoxWidget(new BlurBoxWidget(AppsListModel::System, const_cast<char *>("System"), m_appsItemBox)),
+    m_othersBoxWidget(new BlurBoxWidget(AppsListModel::Others, const_cast<char *>("Other"), m_appsItemBox)),
     m_topSpacing(new QFrame(this)),
     m_bottomSpacing(new QFrame(this)),
     m_animationGroup(new ScrollParallelAnimationGroup(this)),
@@ -186,8 +186,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     initConnection();
 
     // 获取搜索控件,应用分类导航控件默认大小
-    CalculateUtil::instance()->setSearchWidgetSizeHint(m_searchWidget->sizeHint());
-    CalculateUtil::instance()->setNavigationWidgetSizeHint(m_navigationWidget->sizeHint());
+    m_calcUtil->setSearchWidgetSizeHint(m_searchWidget->sizeHint());
+    m_calcUtil->setNavigationWidgetSizeHint(m_navigationWidget->sizeHint());
 
     updateDisplayMode(m_calcUtil->displayMode());
 }
@@ -1188,6 +1188,7 @@ void FullScreenFrame::updateGeometry()
 {
     QRect rect = m_appsManager->currentScreen()->geometry();
 
+    // 设置启动器显示位置，触发BoxFrame::moveEvent事件．
     setGeometry(rect);
 
     QFrame::updateGeometry();
@@ -1204,34 +1205,33 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     if (Qt::Key_Undo == key) {
         auto  oldStr =  m_searchWidget->edit()->lineEdit()->text();
         m_searchWidget->edit()->lineEdit()->undo();
-        if (!oldStr.isEmpty() && oldStr == m_searchWidget->edit()->lineEdit()->text()) {
+        if (!oldStr.isEmpty() && oldStr == m_searchWidget->edit()->lineEdit()->text())
             m_searchWidget->edit()->lineEdit()->clear();
-        }
+
         return;
     }
 
     if (Qt::Key_Space == key) {
-        if (m_searchWidget->categoryBtn()->hasFocus()) {
+        if (m_searchWidget->categoryBtn()->hasFocus())
             m_searchWidget->categoryBtn()->click();
-        }
+
         return;
     }
 
     if (m_focusIndex == CategoryTital) {
         switch (key) {
         case Qt::Key_Backtab:
-        case Qt::Key_Left: {
+        case Qt::Key_Left:
             scrollPrev();
             return;
-        }
-        case Qt::Key_Right: {
+        case Qt::Key_Right:
             scrollNext();
             return;
-        }
-        case Qt::Key_Down: {
+        case Qt::Key_Down:
             m_focusIndex = FirstItem;
-        } break;
-        default:;
+            break;
+        default:
+            break;
         }
     }
     const QModelIndex currentIndex = m_appItemDelegate->currentIndex();
@@ -1252,11 +1252,20 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     // calculate destination sibling by keys, it may cause an invalid position.
     switch (key) {
     case Qt::Key_Backtab:
-    case Qt::Key_Left:      index = currentIndex.sibling(currentIndex.row() - 1, 0); break;
-    case Qt::Key_Right:    index = currentIndex.sibling(currentIndex.row() + 1, 0); break;
-    case Qt::Key_Up:        index = currentIndex.sibling(currentIndex.row() - column, 0); break;
-    case Qt::Key_Down:   index = currentIndex.sibling(currentIndex.row() + column, 0); break;
-    default:;
+    case Qt::Key_Left:
+        index = currentIndex.sibling(currentIndex.row() - 1, 0);
+        break;
+    case Qt::Key_Right:
+        index = currentIndex.sibling(currentIndex.row() + 1, 0);
+        break;
+    case Qt::Key_Up:
+        index = currentIndex.sibling(currentIndex.row() - column, 0);
+        break;
+    case Qt::Key_Down:
+       index = currentIndex.sibling(currentIndex.row() + column, 0);
+       break;
+    default:
+       break;
     }
 
     //to next page
@@ -1726,9 +1735,8 @@ AppsListModel::AppCategory FullScreenFrame::nextCategoryType(const AppsListModel
     if (nextCategory > AppsListModel::Others)
         nextCategory = AppsListModel::Internet;
 
-    if (m_appsManager->appNums(nextCategory) <= 0) {
+    if (m_appsManager->appNums(nextCategory) <= 0)
         nextCategory = nextCategoryType(nextCategory);
-    }
 
     return nextCategory;
 }
@@ -1745,9 +1753,8 @@ AppsListModel::AppCategory FullScreenFrame::prevCategoryType(const AppsListModel
     if (prevCategory < AppsListModel::Internet)
         prevCategory = AppsListModel::Others;
 
-    if (m_appsManager->appNums(prevCategory) <= 0) {
+    if (m_appsManager->appNums(prevCategory) <= 0)
         prevCategory = prevCategoryType(prevCategory);
-    }
 
     return prevCategory;
 }

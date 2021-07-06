@@ -75,7 +75,6 @@ private:
     QPropertyAnimation *m_animation;
     PosType m_currentPosType;
     PosType m_scrollToType;
-    CalculateUtil * m_calcUtil;
 };
 
 #endif // SCROLLWIDGETAGENT_H

@@ -68,10 +68,9 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_appListArea->viewport()->installEventFilter(this);
     m_appListArea->installEventFilter(this);
 
-    // 全屏视图管理类设置左右边距
-    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
-
     if (m_calcUtil->displayMode() == ALL_APPS) {
+        // 全屏视图管理类设置左右边距
+        int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
         m_viewBox->layout()->setContentsMargins(padding, 0, padding, 0);
         m_viewBox->layout()->setSpacing(padding);
     }

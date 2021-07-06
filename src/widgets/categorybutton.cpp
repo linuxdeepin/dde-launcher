@@ -36,7 +36,6 @@
 
 CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidget *parent) :
     QAbstractButton(parent)
-    , m_calcUtil(CalculateUtil::instance())
     , m_category(category)
     , m_fScale(1)
 {
@@ -45,7 +44,7 @@ CategoryButton::CategoryButton(const AppsListModel::AppCategory category, QWidge
     setCheckable(true);
     setAutoExclusive(true);
     setFocusPolicy(Qt::NoFocus);
-    setFixedSize(QSize(DLauncher::NAVIGATION_BUTTON_SIZE, DLauncher::NAVIGATION_BUTTON_SIZE));
+    setFixedSize(DLauncher::NAVIGATION_BUTTON_SIZE, DLauncher::NAVIGATION_BUTTON_SIZE);
     setInfoByCategory();
     connect(this, &CategoryButton::toggled, this, &CategoryButton::setChecked);
 }

@@ -51,7 +51,7 @@ public slots:
     AppsListModel::AppCategory category() const;
 
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
     void mousePressEvent(QMouseEvent *e) override;
@@ -62,7 +62,6 @@ private:
     void updateState(const State state);
 
 private:
-    CalculateUtil *m_calcUtil;
     State m_state = Normal;
     AppsListModel::AppCategory m_category;
     QString m_iconName;

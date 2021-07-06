@@ -49,7 +49,6 @@ AppListView::AppListView(QWidget *parent)
     , m_dropThresholdTimer(new QTimer(this))
     , m_touchMoveFlag(false)
     , m_scrollAni(new QPropertyAnimation(verticalScrollBar(), "value", this))
-    , m_wmHelper(DWindowManagerHelper::instance())
     , m_updateEnableSelectionByMouseTimer(nullptr)
     , m_updateEnableShowSelectionByMouseTimer(nullptr)
 {

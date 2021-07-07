@@ -54,6 +54,7 @@ Gesture *AppGridView::m_gestureInter = nullptr;
  */
 AppGridView::AppGridView(QWidget *parent)
     : QListView(parent)
+    , m_mousePress(false)
     , m_dropThresholdTimer(new QTimer(this))
 {
     m_pDelegate = nullptr;
@@ -174,6 +175,10 @@ void AppGridView::dropEvent(QDropEvent *e)
 
 void AppGridView::mousePressEvent(QMouseEvent *e)
 {
+    // 识别出鼠标左键按下还是触摸按下
+    if (e->source() != Qt::MouseEventSynthesizedByQt && e->button() == Qt::LeftButton)
+        m_mousePress = true;
+
     if (e->button() == Qt::RightButton) {
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
         if (clickedIndex.isValid() && !m_moveGridView) {
@@ -192,7 +197,10 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
                 }
             }
 
-            emit popupMenuRequested(rightClickPoint, clickedIndex);
+            // 鼠标左键点击和触摸按住应用的情况同时存在则不触发右键菜单，因为右键菜单exec()会导致全屏模式下的触摸失效,
+            // 但如果鼠标左键点击的时刻刚好等于触摸按住应用然后触发该信号但右键菜单还没有出来的时刻，触摸依旧会失效
+            if ((!m_mousePress || !m_longPressed))
+                emit popupMenuRequested(rightClickPoint, clickedIndex);
         }
     }
 
@@ -364,6 +372,8 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
 
 void AppGridView::mouseReleaseEvent(QMouseEvent *e)
 {
+    m_mousePress = false;
+
     // request main frame hide when click invalid area
     if (e->button() != Qt::LeftButton)
         return;
@@ -594,13 +604,6 @@ void AppGridView::startDrag(const QModelIndex &index)
         posAni->setEndValue(m_containerBox->mapToGlobal(QPoint()) + m_dropPoint + QPoint(padding, 0));
 
     posAni->start(QPropertyAnimation::DeleteWhenStopped);
-}
-
-bool AppGridView::eventFilter(QObject *o, QEvent *e)
-{
-    Q_UNUSED(o);
-    Q_UNUSED(e);
-    return false;
 }
 
 /**

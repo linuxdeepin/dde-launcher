@@ -16,7 +16,7 @@ make
 cd tests/
 
 lcov -c -i -d ./ -o init.info
-./dde_launcher_unit_test
+./dde_launcher_unit_test --gtest_output=xml:dde_test_report_dde_launcher.xml
 lcov -c -d ./ -o cover.info
 lcov -a init.info -a cover.info -o total.info
 lcov -r total.info "*/tests/*" "*/usr/include*" "*build/src*" -o final.info

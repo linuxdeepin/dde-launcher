@@ -528,8 +528,22 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
 
     const QString appKey = context.data(AppsListModel::AppKeyRole).toString();
     unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall it?")));
-    QPixmap appIcon = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
-    unInstallDialog.setIcon(appIcon);
+
+    int size = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>().size().height();
+    ItemInfo item = context.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
+
+    QPair<QString, int> tmpKey { cacheKey(item, CacheType::ImageType), size};
+
+    // 命令行安装应用后，卸载应用的确认弹框偶现左上角图标呈齿轮的情况
+    QPixmap appIcon;
+    if (AppsManager::existInCache(tmpKey)) {
+        AppsManager::getPixFromCache(tmpKey, appIcon);
+        unInstallDialog.setIcon(appIcon);
+    } else {
+        UNINSTALL_DIALOG_SHOWN = false;
+        uninstallApp(context);
+        return;
+    }
 
     QStringList buttons;
     buttons << tr("Cancel") << tr("Confirm");

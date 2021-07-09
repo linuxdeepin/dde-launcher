@@ -59,7 +59,10 @@ static QMap<int, AppsListModel::AppCategory> CateGoryMap {
     { 10, AppsListModel::Others      }
 };
 
+const QStringList sysHideUseProxyPackages();
+
 static QGSettings *gSetting = SettingsPtr("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
+static QStringList hideUseProxyPackages(sysHideUseProxyPackages());
 
 const QStringList sysHideOpenPackages()
 {
@@ -123,6 +126,11 @@ const QStringList sysHideUseProxyPackages()
     if (gSetting && gSetting->keys().contains("appsHideUseProxyList")) {
         hideUseProxy_list << gSetting->get("apps-hide-use-proxy-list").toStringList();
     }
+
+    QObject::connect(gSetting, &QGSettings::changed, [ & ](const QString &key) {
+        if (!key.compare("appsHideUseProxyList"))
+            hideUseProxyPackages = sysHideUseProxyPackages();
+    });
 
     return hideUseProxy_list;
 }
@@ -195,7 +203,6 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent)
     , m_hideSendToDockPackages(sysHideSendToDockPackages())
     , m_hideStartUpPackages(sysHideStartUpPackages())
     , m_hideUninstallPackages(sysHideUninstallPackages())
-    , m_hideUseProxyPackages(sysHideUseProxyPackages())
     , m_cantOpenPackages(sysCantOpenPackages())
     , m_cantSendToDesktopPackages(sysCantSendToDesktopPackages())
     , m_cantSendToDockPackages(sysCantSendToDockPackages())
@@ -504,7 +511,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return (m_actionSettings && !m_actionSettings->get("uninstall").toBool()) || m_hideUninstallPackages.contains(itemInfo.m_key);
     case AppHideUseProxyRole:
     {
-        bool hideUse = ((m_actionSettings && !m_actionSettings->get("use-proxy").toBool()) || m_hideUseProxyPackages.contains(itemInfo.m_key));
+        bool hideUse = ((m_actionSettings && !m_actionSettings->get("use-proxy").toBool()) || hideUseProxyPackages.contains(itemInfo.m_key));
         return DSysInfo::isCommunityEdition() ? hideUse : (!QFile::exists(ChainsProxy_path) || hideUse);
     }
     case AppCanOpenRole:

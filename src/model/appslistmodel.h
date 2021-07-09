@@ -143,7 +143,6 @@ private:
     QStringList m_hideSendToDockPackages;
     QStringList m_hideStartUpPackages;
     QStringList m_hideUninstallPackages;
-    QStringList m_hideUseProxyPackages;
 
     QStringList m_cantOpenPackages;
     QStringList m_cantSendToDesktopPackages;

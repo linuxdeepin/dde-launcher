@@ -1,8 +1,8 @@
-#include <gtest/gtest.h>
-
 #define private public
 #include "recentlyused.h"
 #undef private
+
+#include <gtest/gtest.h>
 
 class Tst_RecentlyUsed : public testing::Test
 {
@@ -21,7 +21,7 @@ public:
     }
 
 public:
-    RecentlyUsed* m_recentlyUsed;
+    RecentlyUsed *m_recentlyUsed;
 };
 
 TEST_F(Tst_RecentlyUsed, recentlyUsed_test)

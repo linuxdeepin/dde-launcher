@@ -1,8 +1,8 @@
-#include "gtest/gtest.h"
+#include "minicategorywidget.h"
 
 #include <QTest>
 
-#include "minicategorywidget.h"
+#include "gtest/gtest.h"
 
 class Tst_MiniCategoryItem : public testing::Test
 {
@@ -11,7 +11,7 @@ public:
     void TearDown() override;
 
 public:
-    MiniCategoryItem* m_miniCategoryItem;
+    MiniCategoryItem *m_miniCategoryItem;
 };
 
 void Tst_MiniCategoryItem::SetUp()

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 ~ 2028 Uniontech Technology Co., Ltd.
+ * Copyright (C) 2018 ~ 2021 Uniontech Technology Co., Ltd.
  *
  * Author:     chenjun <chenjun@uniontech.com>
  *
@@ -31,12 +31,12 @@
 #include "dbuslauncher.h"
 #include "calculate_util.h"
 
-#include <QtTest/QtTest>
 #include <QDBusInterface>
 #include <QDBusMetaType>
 #include <QDBusMessage>
 #include <QDBusArgument>
 #include <QGSettings>
+#include <QTest>
 
 /**
  * @brief LauncherUnitTest::testDisplayDBus 测试显示Dbus服务

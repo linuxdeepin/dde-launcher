@@ -1,10 +1,10 @@
-#include "gtest/gtest.h"
+#include "navigationwidget.h"
+#include "appslistmodel.h"
 
 #include <QTest>
 #include <QSignalSpy>
 
-#include "navigationwidget.h"
-#include "appslistmodel.h"
+#include "gtest/gtest.h"
 
 class Tst_NavigationWidget : public testing::Test
 {
@@ -13,7 +13,7 @@ public:
     void TearDown() override;
 
 public:
-    NavigationWidget* m_widget;
+    NavigationWidget *m_widget;
 };
 
 void Tst_NavigationWidget::SetUp()
@@ -55,4 +55,3 @@ TEST_F(Tst_NavigationWidget, enterEvent_test)
 
     QCOMPARE(spy.count(), 1);
 }
-

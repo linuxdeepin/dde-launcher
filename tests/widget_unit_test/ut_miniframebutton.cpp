@@ -1,45 +1,45 @@
-#include <gtest/gtest.h>
+#define private public
+#include "miniframebutton.h"
+#undef private
+
 #include <QApplication>
 #include <QMouseEvent>
 #include <QKeyEvent>
 
-#define private public
-#include "miniframebutton.h"
-#undef private
+#include <gtest/gtest.h>
 
 class Tst_Miniframebutton : public testing::Test
 {
 public:
     void SetUp() override
     {
-        widget = new MiniFrameButton("OK");
+        m_widget = new MiniFrameButton("OK");
     }
 
     void TearDown() override
     {
-        if (widget) {
-            delete widget;
-            widget = nullptr;
+        if (m_widget) {
+            delete m_widget;
+            m_widget = nullptr;
         }
     }
 
 public:
-    MiniFrameButton* widget = nullptr;
+    MiniFrameButton *m_widget;
 };
 
 TEST_F(Tst_Miniframebutton, miniFrameButton_test)
 {
     QEvent event(QEvent::Enter);
-    QApplication::sendEvent(widget, &event);
+    QApplication::sendEvent(m_widget, &event);
 
     QEvent event1(QEvent::Leave);
-    QApplication::sendEvent(widget, &event1);
+    QApplication::sendEvent(m_widget, &event1);
 
     QEvent event2(QEvent::ApplicationFontChange);
-    QApplication::sendEvent(widget, &event2);
+    QApplication::sendEvent(m_widget, &event2);
 
-    widget->setChecked(true);
+    m_widget->setChecked(true);
     QPaintEvent event3(QRect(10, 10, 10, 10));
-    QApplication::sendEvent(widget, &event3);
+    QApplication::sendEvent(m_widget, &event3);
 }
-

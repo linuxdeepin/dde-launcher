@@ -1,38 +1,35 @@
-#include <gtest/gtest.h>
+#define private public
+#include "pagecontrol.h"
+#undef private
 
 #include <QApplication>
 #include <QTest>
 
-#define private public
-#include "pagecontrol.h"
-#undef private
-#include "applistdelegate.h"
-
+#include <gtest/gtest.h>
 
 class Tst_Pagecontrol : public testing::Test
 {
 public:
     void SetUp() override
     {
-        widget = new PageControl;
-        widget->setPageCount(1);
-        widget->updateIconSize(0.5, 0.5);
+        m_widget = new PageControl;
+        m_widget->setPageCount(1);
+        m_widget->updateIconSize(0.5, 0.5);
     }
 
     void TearDown() override
     {
-        if (widget) {
-            delete widget;
-            widget = nullptr;
+        if (m_widget) {
+            delete m_widget;
+            m_widget = nullptr;
         }
     }
 
 public:
-    PageControl *widget;
+    PageControl *m_widget;
 };
 
 TEST_F(Tst_Pagecontrol, pageControl_test)
 {
-    widget->pageBtnClicked(true);
+    m_widget->pageBtnClicked(true);
 }
-

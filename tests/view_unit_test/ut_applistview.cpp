@@ -1,5 +1,9 @@
-#include <gtest/gtest.h>
 #include "appslistmodel.h"
+
+#define private public
+#include "applistview.h"
+#include "windowedframe.h"
+#undef private
 
 #include <QTest>
 #include <QApplication>
@@ -7,10 +11,7 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 
-#define private public
-#include "applistview.h"
-#include "windowedframe.h"
-#undef private
+#include <gtest/gtest.h>
 
 /**使用小窗口类WindowedFrame间接测试AppListView的
  * 接口, 因为AppListView的视图代码是在小窗口类初始
@@ -85,4 +86,3 @@ TEST_F(Tst_Applistview, appListView_test)
     widget->dropSwap();
     widget->menuHide();
 }
-

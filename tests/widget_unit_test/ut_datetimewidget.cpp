@@ -1,38 +1,36 @@
-#include <gtest/gtest.h>
-#include <QtTest/QtTest>
-
 #define private public
 #include "datetimewidget.h"
 #undef private
 
+#include <QTest>
 
+#include <gtest/gtest.h>
 
 class Tst_Datetimewidget : public testing::Test
 {
 public:
     void SetUp() override
     {
-        widget = new DatetimeWidget();
+        m_widget = new DatetimeWidget();
     }
 
     void TearDown() override
     {
-        if (widget) {
-            delete widget;
-            widget = nullptr;
+        if (m_widget) {
+            delete m_widget;
+            m_widget = nullptr;
         }
     }
 
 public:
-    DatetimeWidget* widget = nullptr;
+    DatetimeWidget *m_widget;
 };
 
 TEST_F(Tst_Datetimewidget, datetimeWidget_test)
 {
-    widget->getDateTextWidth();
-    widget->updateTime();
+    m_widget->getDateTextWidth();
+    m_widget->updateTime();
 
     QMouseEvent event(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    QApplication::sendEvent(widget, &event);
+    QApplication::sendEvent(m_widget, &event);
 }
-

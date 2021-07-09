@@ -1,9 +1,8 @@
-#include <gtest/gtest.h>
-
 #include "calculate_util.h"
 
 #include <QTest>
 
+#include <gtest/gtest.h>
 
 class Tst_calculate : public testing::Test
 {

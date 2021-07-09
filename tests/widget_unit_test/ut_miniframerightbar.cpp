@@ -1,42 +1,42 @@
-#include <gtest/gtest.h>
+#define private public
+#include "miniframerightbar.h"
+#undef private
+
 #include <QApplication>
 #include <QMouseEvent>
 #include <QKeyEvent>
 
-#define private public
-#include "miniframerightbar.h"
-#undef private
+#include <gtest/gtest.h>
 
 class Tst_Miniframerightbar : public testing::Test
 {
 public:
     void SetUp() override
     {
-        widget = new MiniFrameRightBar();
+        m_widget = new MiniFrameRightBar();
     }
 
     void TearDown() override
     {
-        if (widget) {
-            delete widget;
-            widget = nullptr;
+        if (m_widget) {
+            delete m_widget;
+            m_widget = nullptr;
         }
     }
 
 public:
-    MiniFrameRightBar* widget = nullptr;
+    MiniFrameRightBar *m_widget;
 };
 
 TEST_F(Tst_Miniframerightbar, miniFrameRightBar_test)
 {
-    widget->setCurrentCheck(true);
-    widget->moveUp();
-    widget->moveDown();
-    widget->execCurrent();
+    m_widget->setCurrentCheck(true);
+    m_widget->moveUp();
+    m_widget->moveDown();
+    m_widget->execCurrent();
 
     QPaintEvent event(QRect(10, 10, 10, 10));
-    QApplication::sendEvent(widget, &event);
+    QApplication::sendEvent(m_widget, &event);
 
-    widget->openDirectory(":/test_res/test.jpg");
+    m_widget->openDirectory(":/test_res/test.jpg");
 }
-

@@ -1,8 +1,8 @@
-#include "gtest/gtest.h"
+#include "searchwidget.h"
 
 #include <QTest>
 
-#include "searchwidget.h"
+#include "gtest/gtest.h"
 
 class Tst_SearchWidget : public testing::Test
 {
@@ -11,7 +11,7 @@ public:
     void TearDown() override;
 
 public:
-    SearchWidget* m_widget;
+    SearchWidget *m_widget;
 };
 
 /**
@@ -47,4 +47,3 @@ TEST_F(Tst_SearchWidget, hideToggle_test)
     QCOMPARE(!m_widget->categoryBtn()->isVisible(), true);
     QCOMPARE(!m_widget->toggleModeBtn()->isVisible(), true);
 }
-

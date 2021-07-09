@@ -36,7 +36,7 @@ TEST_F(Tst_Appgridview, appGridView_test)
     m_widget->setModel(pModel);
 
     m_widget->indexYOffset(m_widget->indexAt(0));
-    QWidget *w = new QWidget();
+    QWidget *w = new QWidget(m_widget);
     m_widget->setContainerBox(w);
 
     m_widget->updateItemHiDPIFixHook(m_widget->indexAt(0));

@@ -105,12 +105,12 @@ void IconFreshThread::createPixmap(const ItemInfo &itemInfo, int size)
                     m_itemInfo = itemInfo;
 
                     // 10秒从缓存中取一次
-                    QTimer::singleShot(10 * 1000, this, [=]() { refreshIcon(); });
+                    QTimer::singleShot(10 * 1000, this, SLOT(refreshIcon()));
                 } else {
                     m_itemInfo = itemInfo;
 
                     // 如果图标获取失败，每隔1分钟(1 * 60 * 1000)刷新一次
-                    QTimer::singleShot(60 * 1000, this, [=]() { refreshIcon(); });
+                    QTimer::singleShot(60 * 1000, this, SLOT(refreshIcon()));
                 }
             } else {
                 if (m_tryNums > 0)

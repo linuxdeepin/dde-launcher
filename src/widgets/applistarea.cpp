@@ -32,23 +32,7 @@
 
 AppListArea::AppListArea(QWidget *parent)
     : QScrollArea(parent)
-    , m_updateEnableSelectionByMouseTimer(nullptr)
 {
-#if QT_VERSION < QT_VERSION_CHECK(5,9,0)
-    touchTapDistance = 15;
-#else
-    touchTapDistance = QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::TouchDoubleTapDistance).toInt();
-#endif
-    //setContentsMargins(100, 0, 100, 0);
-
-    addWidget(this);
-}
-
-void AppListArea::addWidget(QWidget *view)
-{
-    view->installEventFilter(this);
-
-    m_views << view;
 }
 
 void AppListArea::wheelEvent(QWheelEvent *e)
@@ -60,70 +44,5 @@ void AppListArea::wheelEvent(QWheelEvent *e)
             emit increaseIcon();
         else
             emit decreaseIcon();
-    } else {
-        //qDebug() << "miniHeight:" << minimumHeight() << "       maximumHeight:" <<  layout()->horizontalScrollBar().minimum() ;
-        // 默认是上下滚动，这里改成左右滚动
-//        if (horizontalScrollBar()->value() <= minimum() && e->delta() > 0) {
-        //QWheelEvent *event = new QWheelEvent(e->pos(), e->delta(), e->buttons(), e->modifiers(),Qt::Horizontal);
-//        } else if (e->horizontalScrollBar().value() >= maxmum() && e->delta() < 0) {
-
-//        } else {
-//            QScrollArea::wheelEvent(e);
-//        }
-        //QScrollArea::wheelEvent(e);
     }
-}
-
-void AppListArea::enterEvent(QEvent *e)
-{
-    QScrollArea::enterEvent(e);
-
-    emit mouseEntered();
-}
-
-bool AppListArea::eventFilter(QObject *watched, QEvent *e)
-{
-    QWidget     *view  = qobject_cast<QWidget *>(watched);
-    QMouseEvent *event = static_cast<QMouseEvent *>(e);
-
-    if (view && m_views.contains(view) && event) {
-        if (event->source() == Qt::MouseEventSynthesizedByQt) {
-            switch (event->type()) {
-            case QMouseEvent::MouseButtonPress:
-                m_lastTouchBeginPos = event->pos();
-
-                if (m_updateEnableSelectionByMouseTimer) {
-                    m_updateEnableSelectionByMouseTimer->stop();
-                } else {
-                    m_updateEnableSelectionByMouseTimer = new QTimer(this);
-                    m_updateEnableSelectionByMouseTimer->setSingleShot(true);
-
-                    static QObject *theme_settings =
-                        reinterpret_cast<QObject *>(qvariant_cast<quintptr>(qApp->property("_d_theme_settings_object")));
-                    QVariant touchFlickBeginMoveDelay;
-
-                    if (theme_settings) {
-                        touchFlickBeginMoveDelay = theme_settings->property("touchFlickBeginMoveDelay");
-                    }
-
-                    m_updateEnableSelectionByMouseTimer->setInterval(touchFlickBeginMoveDelay.isValid() ? touchFlickBeginMoveDelay.toInt()
-                                                                     : 300);
-
-                    connect(m_updateEnableSelectionByMouseTimer, &QTimer::timeout, this, [ = ] {
-                        m_updateEnableSelectionByMouseTimer->deleteLater();
-                        m_updateEnableSelectionByMouseTimer = nullptr;
-                    });
-                }
-                m_updateEnableSelectionByMouseTimer->start();
-                break;
-            case QMouseEvent::MouseButtonRelease:
-                if (QScroller::hasScroller(this)) {
-                    return true;
-                }
-                break;
-            default: break;
-            }
-        }
-    }
-    return QScrollArea::eventFilter(watched, e);
 }

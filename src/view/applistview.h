@@ -91,7 +91,6 @@ private:
     QTimer *m_updateEnableSelectionByMouseTimer;        // 限制拖拽时间不能少于200ms
     QTimer *m_updateEnableShowSelectionByMouseTimer;    // 检测按压是否现实选择灰色背景
     QPoint m_lastTouchBeginPos;
-    int touchTapDistance = -1;
 };
 
 #endif // APPLISTVIEW_H

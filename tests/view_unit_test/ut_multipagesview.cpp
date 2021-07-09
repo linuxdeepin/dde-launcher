@@ -31,7 +31,6 @@ public:
 
 TEST_F(Tst_Multipagesview, multiPagesView_test)
 {
-    fullscreen->initUI();
     fullscreen->m_multiPagesView->updatePageCount(AppsListModel::Category);
     QMouseEvent event(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     QApplication::sendEvent(fullscreen->m_multiPagesView, &event);

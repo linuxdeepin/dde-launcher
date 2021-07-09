@@ -99,7 +99,7 @@ void CategoryButton::setInfoByCategory()
 
 //    const auto ratio = devicePixelRatioF();
     m_systemTheme = "_dark";
-    m_icon = loadSvg(QString(":/icons/skin/icons/category_%1%2.svg").arg(m_iconName, m_systemTheme), DLauncher::NAVIGATION_ICON_SIZE*qApp->devicePixelRatio());
+    m_icon = loadSvg(QString(":/icons/skin/icons/category_%1%2.svg").arg(m_iconName, m_systemTheme), DLauncher::NAVIGATION_ICON_SIZE * qApp->devicePixelRatio());
     m_icon.setDevicePixelRatio(qApp->devicePixelRatio());
 }
 

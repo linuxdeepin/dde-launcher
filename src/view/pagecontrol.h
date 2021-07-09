@@ -22,24 +22,26 @@
 #ifndef PAGECONTROL_H
 #define PAGECONTROL_H
 
+#include <DFloatingButton>
+
 #include <QWidget>
 
-#include <DFloatingButton>
 DWIDGET_USE_NAMESPACE
 
 #define     PAGE_ICON_SPACE  0
 #define     PAGE_ICON_SIZE   10
 #define     PAGE_BUTTON_SIZE 20
 
-class pageControl : public QWidget
+class PageControl : public QWidget
 {
     Q_OBJECT
+
 public:
-    explicit pageControl(QWidget *parent = nullptr);
+    explicit PageControl(QWidget *parent = nullptr);
 
     void setPageCount(int count);
     void setCurrent(int pageIndex);
-    void UpdateIconSize(double scaleX, double scaleY);
+    void updateIconSize(double scaleX, double scaleY);
 signals:
     void onPageChanged(int pageIndex);
 
@@ -53,7 +55,6 @@ private:
     int m_pageCount = 0;
     QIcon m_iconActive;
     QIcon m_iconNormal;
-
 };
 
 #endif // PAGECONTROL_H

@@ -35,11 +35,6 @@ MenuWorker::MenuWorker(QObject *parent)
     , m_calcUtil(CalculateUtil::instance())
     , m_appManager(AppsManager::instance())
 {
-    initConnect();
-}
-
-void MenuWorker::initConnect(){
-
 }
 
 MenuWorker::~MenuWorker()

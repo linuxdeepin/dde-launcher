@@ -24,6 +24,12 @@
 #ifndef MENUWORKER_H
 #define MENUWORKER_H
 
+#include "dbusdock.h"
+#include "dbuslauncher.h"
+#include "dbustartmanager.h"
+#include "appsmanager.h"
+#include "appslistmodel.h"
+
 #include <QVariant>
 #include <QProcess>
 #include <QX11Info>
@@ -35,23 +41,18 @@
 #include <QtCore>
 #include <QModelIndex>
 
-#include "dbusdock.h"
-#include "dbuslauncher.h"
-#include "dbustartmanager.h"
-#include "appsmanager.h"
-#include "appslistmodel.h"
-
 class QMenu;
+
 class MenuWorker : public QObject
 {
     Q_OBJECT
 
 public:
-
     explicit MenuWorker(QObject *parent = nullptr);
     ~MenuWorker();
 
-    enum MenuAction {
+    enum MenuAction
+    {
         Open = 1,
         Desktop = 2,
         Dock = 3,
@@ -61,7 +62,6 @@ public:
         Uninstall = 7
     };
 
-    void initConnect();
     bool isMenuShown() const {return m_menuIsShown;}
     bool isItemOnDock(QString appKey);
     bool isItemOnDesktop(QString appKey);

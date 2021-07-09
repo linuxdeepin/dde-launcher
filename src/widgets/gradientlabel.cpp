@@ -21,11 +21,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "gradientlabel.h"
+
 #include <QPainter>
 #include <QDebug>
 #include <QLinearGradient>
-
-#include "gradientlabel.h"
 
 /**
  * @brief GradientLabel::GradientLabel 分页时当前屏幕左右背景特效控件
@@ -90,11 +90,6 @@ GradientLabel::Direction GradientLabel::direction() const
 void GradientLabel::setDirection(const GradientLabel::Direction &direction)
 {
     m_direction = direction;
-}
-
-void setText(const QString &)
-{
-    // do nothing !
 }
 
 void GradientLabel::paintEvent(QPaintEvent*)

@@ -43,8 +43,8 @@ DWIDGET_USE_NAMESPACE
  * @brief SearchWidget::SearchWidget 顶部搜索控件
  * @param parent
  */
-SearchWidget::SearchWidget(QWidget *parent) :
-    QFrame(parent)
+SearchWidget::SearchWidget(QWidget *parent)
+    : QFrame(parent)
 {
     setAccessibleName("From_Search");
     m_leftSpacing = new QFrame(this);
@@ -75,15 +75,15 @@ SearchWidget::SearchWidget(QWidget *parent) :
 
     m_searchEdit = new DSearchEdit(this);
     m_searchEdit->setAccessibleName("search-edit");
+
     // 添加launcher搜索框图标
     QAction *leftaction = m_searchEdit->findChild<QAction *>("_d_search_leftAction");
-    if (leftaction) {
+    if (leftaction)
         leftaction->setIcon(QIcon(":/icons/skin/icons/search_36px.svg"));
-    }
+
     QAction *clearAction = m_searchEdit->findChild<QAction *>(QLatin1String("_q_qlineeditclearaction"));
-    if (clearAction) {
+    if (clearAction)
         clearAction->setIcon(QIcon(":/icons/skin/icons/clear_36px.svg"));
-    }
 
     m_searchEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_searchEdit->lineEdit()->setFixedSize(SEARCHEIT_WIDTH, SEARCHEIT_HEIGHT);
@@ -107,7 +107,7 @@ SearchWidget::SearchWidget(QWidget *parent) :
 
     setLayout(mainLayout);
 
-    connect(m_searchEdit, &DSearchEdit::textChanged, [this] {
+    connect(m_searchEdit, &DSearchEdit::textChanged, [ this ] {
         m_searchEdit->lineEdit()->setFocus();
         auto searchStr = m_searchEdit->text();
         emit searchTextChanged(searchStr.mid(0, 1) + searchStr.mid(1).replace(" ", ""));

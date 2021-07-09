@@ -99,12 +99,13 @@ LauncherSys::~LauncherSys()
 void LauncherSys::showLauncher()
 {
     if (m_sessionManagerInter->locked()) {
-        qDebug() << "session locked, can not show launcher";
+        qInfo() << "session locked, can not show launcher";
         return;
     }
 
     if (m_ignoreRepeatVisibleChangeTimer->isActive())
         return;
+
     m_ignoreRepeatVisibleChangeTimer->start();
 
     registerRegion();
@@ -119,6 +120,7 @@ void LauncherSys::hideLauncher()
 {
     if (m_ignoreRepeatVisibleChangeTimer->isActive())
         return;
+
     m_ignoreRepeatVisibleChangeTimer->start();
 
     unRegisterRegion();
@@ -142,9 +144,8 @@ void LauncherSys::displayModeChanged()
     LauncherInterface* lastLauncher = m_launcherInter;
 
     // 后端启动器FullScreen变化,更新m_calcUtil
-    if (m_launcherInter && m_dbusLauncherInter) {
+    if (m_launcherInter && m_dbusLauncherInter)
         m_calcUtil->setFullScreen(m_dbusLauncherInter->fullscreen());
-    }
 
     if (m_calcUtil->fullscreen()) {
         if (!m_fullLauncher) {
@@ -178,10 +179,9 @@ void LauncherSys::displayModeChanged()
         m_launcherInter->hideLauncher();
     }
 
-    QTimer::singleShot(0, this, [=] {
-        if (m_launcherInter->visible()) {
+    QTimer::singleShot(0, this, [ = ] {
+        if (m_launcherInter->visible())
             registerRegion();
-        }
     });
 }
 
@@ -212,26 +212,25 @@ bool LauncherSys::eventFilter(QObject *watched, QEvent *event)
     return QObject::eventFilter(watched, event);
 }
 
-void LauncherSys::registerRegion() {
-    m_regionMonitorConnect = connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [=] (const QPoint &p, const int flag) {
-        if (flag == MOUSE_LEFTBUTTON) {
+void LauncherSys::registerRegion()
+{
+    m_regionMonitorConnect = connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [ = ](const QPoint &p, const int flag) {
+        if (flag == MOUSE_LEFTBUTTON)
             m_launcherInter->regionMonitorPoint(p);
-        }
     });
 
-    if (!m_regionMonitor->registered()) {
+    if (!m_regionMonitor->registered())
         m_regionMonitor->registerRegion();
-    }
 }
 
-void LauncherSys::unRegisterRegion() {
+void LauncherSys::unRegisterRegion()
+{
     m_regionMonitor->unregisterRegion();
     disconnect(m_regionMonitorConnect);
 }
 
 void LauncherSys::onDisplayModeChanged()
 {
-    if (m_fullLauncher) {
+    if (m_fullLauncher)
         m_fullLauncher->updateDisplayMode(m_dbusLauncherInter->displaymode());
-    }
 }

@@ -27,16 +27,16 @@
 #include "dbuslauncherservice.h"
 #include "accessible.h"
 
+#include <DApplication>
+#include <DGuiApplicationHelper>
+#include <DLog>
+
 #include <QCommandLineParser>
+#include <QAccessible>
 #include <QTranslator>
 #include <QDebug>
 
 #include <unistd.h>
-
-#include <dapplication.h>
-#include <DGuiApplicationHelper>
-#include <DLog>
-#include <QAccessible>
 
 DWIDGET_USE_NAMESPACE
 #ifdef DCORE_NAMESPACE
@@ -55,7 +55,7 @@ void dump_user_apss_preset_order_list()
     for (const auto &app : appsList)
         buf << QString("'%1'").arg(app.m_key);
 
-    qDebug().noquote() << '[' << buf.join(", ") << ']';
+    qInfo().noquote() << '[' << buf.join(", ") << ']';
 }
 
 int main(int argc, char *argv[])
@@ -75,6 +75,7 @@ int main(int argc, char *argv[])
     QAccessible::installFactory(accessibleFactory);
 
 #ifndef QT_DEBUG
+    // 默认日志路径是 ~/.cache/dde-launcher/dde-launcher.log
     DLogManager::registerFileAppender();
 #endif
 
@@ -93,16 +94,13 @@ int main(int argc, char *argv[])
     cmdParser.addOption(dumpPresetOrder);
     cmdParser.process(*app);
 
-    if (cmdParser.isSet(dumpPresetOrder))
-    {
+    if (cmdParser.isSet(dumpPresetOrder)) {
         quit = true;
         dump_user_apss_preset_order_list();
     }
 
-    if (quit)
-    {
+    if (quit) {
         DBusLauncherFrame launcherFrame;
-
         do {
             if (!launcherFrame.isValid())
                 break;
@@ -117,7 +115,7 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    // INFO: what's this?
+    // 设置当前程序使用的本地化信息,当前为系统默认的设置
     setlocale(LC_ALL, "");
 
     LauncherSys launcher;
@@ -125,11 +123,13 @@ int main(int argc, char *argv[])
     Q_UNUSED(service);
     QDBusConnection connection = QDBusConnection::sessionBus();
     if (!connection.registerService("com.deepin.dde.Launcher") ||
-        !connection.registerObject("/com/deepin/dde/Launcher", &launcher))
+            !connection.registerObject("/com/deepin/dde/Launcher", &launcher)) {
+
         qWarning() << "register dbus service failed";
+    }
 
 #ifndef QT_DEBUG
-    if (/*!positionArgs.isEmpty() && */cmdParser.isSet(showOption))
+    if (cmdParser.isSet(showOption))
 #endif
         QTimer::singleShot(1, &launcher, &LauncherSys::showLauncher);
 

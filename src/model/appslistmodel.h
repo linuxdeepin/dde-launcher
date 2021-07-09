@@ -158,7 +158,7 @@ private:
     bool m_drawBackground;
     int m_pageIndex;
 };
-typedef QList<AppsListModel*> pageAppsModelist;
+typedef QList<AppsListModel *> PageAppsModelist;
 
 Q_DECLARE_METATYPE(AppsListModel::AppCategory)
 

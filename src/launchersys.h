@@ -27,9 +27,10 @@
 #include "dbusinterface/dbuslauncher.h"
 #include "calculate_util.h"
 
+#include <DRegionMonitor>
+
 #include <QObject>
 #include <QTimer>
-#include <DRegionMonitor>
 
 #include <com_deepin_sessionmanager.h>
 
@@ -39,13 +40,14 @@ class LauncherInterface;
 class WindowedFrame;
 class FullScreenFrame;
 class IconFreshThread;
+
 class LauncherSys : public QObject
 {
     Q_OBJECT
 
 public:
     explicit LauncherSys(QObject *parent = nullptr);
-    ~ LauncherSys() override;
+    ~LauncherSys() override;
 
     bool visible();
     void showLauncher();

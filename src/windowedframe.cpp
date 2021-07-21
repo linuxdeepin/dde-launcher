@@ -494,7 +494,7 @@ void WindowedFrame::launchCurrentApp()
     }
 
     if (m_displayMode == Category && m_appsModel->category() == AppsListModel::Category) {
-        switchToCategory(m_appsView->currentIndex());
+        switchToCategory(currentIdx);
         m_focusPos = RightBottom;
         return;
     }
@@ -881,6 +881,8 @@ void WindowedFrame::onSwitchBtnClicked()
     if (m_displayMode == All) {
         m_appsModel->setCategory(AppsListModel::Category);
         m_displayMode = Category;
+        m_appsView->setCurrentIndex(QModelIndex());
+        m_focusPos = RightBottom;
     } else if (m_displayMode == Category && m_appsModel->category() != AppsListModel::Category) {
         m_appsModel->setCategory(AppsListModel::Category);
     } else {

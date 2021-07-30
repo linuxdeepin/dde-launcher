@@ -506,14 +506,19 @@ void FullScreenFrame::showTips(const QString &tips)
     if (m_displayMode != SEARCH)
         return;
 
-    m_tipsLabel->setText(tips);
-    QPalette palette;
-    QColor color(255, 255, 255, 0.5 * 255);
-    QFont font;
+    QFont font(m_tipsLabel->font());
     font.setPointSize(30);
-    palette.setColor(QPalette::WindowText,color);
+    QColor color(255, 255, 255, 0.5 * 255);
+    QPalette palette(m_tipsLabel->palette());
+    palette.setColor(QPalette::WindowText, color);
     m_tipsLabel->setPalette(palette);
     m_tipsLabel->setFont(font);
+
+    // 根据文字内容的边界矩形设置label大小, 避免在葡萄牙语等语言下内容被截断而显示不全
+    QFontMetricsF fontMetric(m_tipsLabel->font());
+    int width = qCeil(fontMetric.boundingRect(m_tipsLabel->text()).width());
+    int height = qCeil(fontMetric.boundingRect(m_tipsLabel->text()).height());
+    m_tipsLabel->setFixedSize(width, height);
 
     const QPoint center = rect().center() - m_tipsLabel->rect().center();
     m_tipsLabel->move(center);

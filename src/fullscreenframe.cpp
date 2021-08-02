@@ -506,6 +506,7 @@ void FullScreenFrame::showTips(const QString &tips)
     if (m_displayMode != SEARCH)
         return;
 
+    m_tipsLabel->setText(tips);
     QFont font(m_tipsLabel->font());
     font.setPointSize(30);
     QColor color(255, 255, 255, 0.5 * 255);
@@ -518,6 +519,7 @@ void FullScreenFrame::showTips(const QString &tips)
     QFontMetricsF fontMetric(m_tipsLabel->font());
     int width = qCeil(fontMetric.boundingRect(m_tipsLabel->text()).width());
     int height = qCeil(fontMetric.boundingRect(m_tipsLabel->text()).height());
+
     m_tipsLabel->setFixedSize(width, height);
 
     const QPoint center = rect().center() - m_tipsLabel->rect().center();

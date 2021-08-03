@@ -59,6 +59,8 @@ DWIDGET_USE_NAMESPACE
 class BackgroundManager;
 class DBusLauncherService;
 class SharedEventFilter;
+class DBusDisplay;
+
 class FullScreenFrame : public BoxFrame, public LauncherInterface
 {
     Q_OBJECT

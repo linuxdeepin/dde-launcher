@@ -29,7 +29,6 @@
 #include "dbusfileinfo.h"
 #include "dbustartmanager.h"
 #include "dbusdock.h"
-#include "dbusdisplay.h"
 #include "calculate_util.h"
 
 #include <QHash>

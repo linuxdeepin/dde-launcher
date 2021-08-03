@@ -45,12 +45,13 @@
 #include <DSearchEdit>
 #include <DToolButton>
 
-#include <QLabel>
 #include <memory>
 
 DWIDGET_USE_NAMESPACE
 
 using Appearance = com::deepin::daemon::Appearance;
+class DBusDisplay;
+class QLabel;
 
 class WindowedFrame : public DBlurEffectWidget, public LauncherInterface
 {
@@ -130,6 +131,8 @@ private slots:
     void prepareHideLauncher();
     void recoveryAll();
     void onOpacityChanged(const double value);
+    void primaryScreenChanged();
+    void updatePosition();
 
 private:
     DBusDock *m_dockInter;
@@ -163,6 +166,7 @@ private:
     ModeToggleButton *m_modeToggleBtn;   // 小窗口右上角窗口模式切换按钮
     DSearchEdit *m_searcherEdit;         // 搜索控件
     bool m_enterSearchEdit;
+    DBusDisplay *m_displayInter;
 };
 
 #endif // WINDOWEDFRAME_H

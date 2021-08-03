@@ -27,10 +27,7 @@
 #include "backgroundmanager.h"
 #include "sharedeventfilter.h"
 #include "constants.h"
-
-#include <DWindowManagerHelper>
-#include <DDBusSender>
-#include <DDialog>
+#include "dbusdisplay.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -42,6 +39,10 @@
 #include <QKeyEvent>
 #include <QProcess>
 #include <QScroller>
+
+#include <DWindowManagerHelper>
+#include <DDBusSender>
+#include <DDialog>
 
 DGUI_USE_NAMESPACE
 
@@ -1080,8 +1081,6 @@ int FullScreenFrame::nearestCategory(const AppsListModel::AppCategory oldCategor
 
 void FullScreenFrame::initConnection()
 {
-//    connect(qApp, &QApplication::primaryScreenChanged, this, &FullScreenFrame::updateGeometry);
-//    connect(qApp->primaryScreen(), &QScreen::geometryChanged, this, &FullScreenFrame::updateGeometry);
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
 
     connect(m_navigationWidget, &NavigationWidget::scrollToCategory, this, &FullScreenFrame::scrollToCategory);
@@ -1150,7 +1149,6 @@ void FullScreenFrame::showLauncher()
     m_searchWidget->edit()->lineEdit()->clearFocus();
     setFixedSize(m_appsManager->currentScreen()->geometry().size());
     show();
-    connect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::hideLauncher);
 }
 
 void FullScreenFrame::hideLauncher()
@@ -1158,7 +1156,6 @@ void FullScreenFrame::hideLauncher()
     if (!isVisible())
         return;
 
-    disconnect(m_appsManager, &AppsManager::dockGeometryChanged, this, &FullScreenFrame::hideLauncher);
     m_searchWidget->clearSearchContent();
     hide();
 }
@@ -1466,10 +1463,11 @@ void FullScreenFrame::refreshPageView(AppsListModel::AppCategory category)
 
 void FullScreenFrame::primaryScreenChanged()
 {
+    removeCache();
+    setFixedSize(m_appsManager->currentScreen()->size());
     updateBackground();
     updateBlurBackground();
-    setFixedSize(m_appsManager->currentScreen()->size());
-    updateDockPosition();
+    update();
 }
 
 /**
@@ -1565,10 +1563,10 @@ void FullScreenFrame::updateDockPosition()
         break;
     }
 
-    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
 
     // 全屏App模式或者正在搜索
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
+        int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
         m_calcUtil->calculateAppLayout(m_contentFrame->size() - QSize(padding * 1, DLauncher::APPS_AREA_TOP_MARGIN), m_displayMode);
     } else {
         m_calcUtil->calculateAppLayout(m_contentFrame->size() - QSize(0, DLauncher::APPS_AREA_TOP_MARGIN + 12), m_displayMode);

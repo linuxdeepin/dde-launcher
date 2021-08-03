@@ -22,12 +22,15 @@
 #include "windowedframe.h"
 #include "widgets/hseparator.h"
 #include "global_util/util.h"
+#include "dbusdockinterface.h"
+#include "dbusdisplay.h"
 
 #include <DWindowManagerHelper>
 #include <DForeignWindow>
 #include <DGuiApplicationHelper>
 #include <DDBusSender>
 #include <DDialog>
+#include <QLabel>
 
 #include <QApplication>
 #include <QHBoxLayout>
@@ -41,6 +44,7 @@
 #include <QEvent>
 #include <QTimer>
 #include <QDebug>
+#include <QDBusConnection>
 
 #include <qpa/qplatformwindow.h>
 
@@ -101,6 +105,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_modeToggleBtn(new ModeToggleButton(this))
     , m_searcherEdit(new DSearchEdit(this))
     , m_enterSearchEdit(false)
+    , m_displayInter(new DBusDisplay(this))
 {
     m_searcherEdit->setAccessibleName("searcherEdit");
     m_maskBg->setAccessibleName("MaskBg");
@@ -234,6 +239,11 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
     onOpacityChanged(m_appearanceInter->opacity());
 
+    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &WindowedFrame::primaryScreenChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &WindowedFrame::primaryScreenChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &WindowedFrame::primaryScreenChanged, Qt::QueuedConnection);
+    connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &WindowedFrame::primaryScreenChanged, Qt::QueuedConnection);
+
     // 状态切换
     m_switchBtn->updateStatus(All);
     m_modeToggleBtn->setIconSize(QSize(32,32));
@@ -266,8 +276,6 @@ void WindowedFrame::showLauncher()
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
     show();
-
-    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::hideLauncher);
 }
 
 void WindowedFrame::hideLauncher()
@@ -277,8 +285,6 @@ void WindowedFrame::hideLauncher()
     }
 
     m_delayHideTimer->stop();
-
-    disconnect(m_dockInter, &DBusDock::FrontendRectChanged, this, &WindowedFrame::hideLauncher);
 
     m_searcherEdit->lineEdit()->clear();
     m_searcherEdit->clearEdit();
@@ -743,6 +749,7 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point)
         if (m_menuWorker->isMenuShown() && m_menuWorker->menuGeometry().contains(point)) {
             return;
         }
+
         hideLauncher();
     }
 }
@@ -819,31 +826,27 @@ void WindowedFrame::initAnchoredCornor()
 
 void WindowedFrame::adjustPosition()
 {
-    const int dockPos = m_dockInter->position();
     QRect r =  m_dockInter->frontendRect();
     QRect dockRect = QRect(scaledPosition(r.topLeft()),scaledPosition(r.bottomRight()));
 
-    const auto &s = size();
+    // 启动器高效模式和时尚模式与任务栏的间隙不同
     int dockSpacing = 0;
-    if (m_dockInter->displayMode() == DOCK_FASHION) {
+    if (m_dockInter->displayMode() == DOCK_FASHION)
         dockSpacing = 8;
-    }
 
     QPoint p;
-
-    // The position of the launcher is different in different modes
-    switch (dockPos) {
+    switch (m_dockInter->position()) {
     case DOCK_TOP:
         p = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
         break;
     case DOCK_BOTTOM:
-        p = QPoint(dockRect.left(), dockRect.top() - s.height() - dockSpacing);
+        p = QPoint(dockRect.left(), dockRect.top() - height() - dockSpacing);
         break;
     case DOCK_LEFT:
         p = QPoint(dockRect.right() + dockSpacing + 1, dockRect.top());
         break;
     case DOCK_RIGHT:
-        p = QPoint(dockRect.left() - s.width() - dockSpacing, dockRect.top());
+        p = QPoint(dockRect.left() - width() - dockSpacing, dockRect.top());
         break;
     default:
         Q_UNREACHABLE_IMPL();
@@ -978,6 +981,47 @@ void WindowedFrame::recoveryAll()
 void WindowedFrame::onOpacityChanged(const double value)
 {
     setMaskAlpha(value * 255);
+}
+
+void WindowedFrame::primaryScreenChanged()
+{
+    adjustSize();
+    updatePosition();
+    m_cornerPath = getCornerPath(m_anchoredCornor);
+    m_windowHandle.setClipPath(m_cornerPath);
+}
+
+void WindowedFrame::updatePosition()
+{
+   // 该接口获取数据是翻转后的数据
+   DBusDockInterface inter;
+   QRect dockGeo = inter.geometry();
+   QRect dockRect = QRect(scaledPosition(dockGeo.topLeft()),scaledPosition(dockGeo.bottomRight()));
+
+    int dockSpacing = 0;
+    if (m_dockInter->displayMode() == DOCK_FASHION)
+        dockSpacing = 8;
+
+    QPoint p;
+    switch (m_dockInter->position()) {
+    case DOCK_TOP:
+        p = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
+        break;
+    case DOCK_BOTTOM:
+        p = QPoint(dockRect.left(), dockRect.top() - height() - dockSpacing);
+        break;
+    case DOCK_LEFT:
+        p = QPoint(dockRect.right() + dockSpacing + 1, dockRect.top());
+        break;
+    case DOCK_RIGHT:
+        p = QPoint(dockRect.left() - width() - dockSpacing, dockRect.top());
+        break;
+    default:
+        Q_UNREACHABLE_IMPL();
+    }
+
+    initAnchoredCornor();
+    move(p);
 }
 
 void WindowedFrame:: paintEvent(QPaintEvent *e)

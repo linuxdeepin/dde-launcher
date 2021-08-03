@@ -13,9 +13,9 @@ Build-Depends:
  libqt5x11extras5-dev,
  libxcb-ewmh-dev,
  libdframeworkdbus-dev (>=5.4.6),
- libdtkwidget-dev (>=5.4.19),
- libdtkcore-dev (>=5.4.14),
- libdtkgui-dev (>=5.4.13),
+ libdtkwidget-dev (>=5.4.1),
+ libdtkcore-dev (>=5.4.0),
+ libdtkgui-dev (>=5.4.0),
  libgsettings-qt-dev,
  libgtest-dev,
  libgmock-dev
@@ -25,11 +25,10 @@ Homepage: http://www.deepin.org/
 Package: dde-launcher
 Architecture: any
 Depends:
- qtxdg-dev-tools,
  deepin-desktop-schemas (>=5.9.14),
- libdtkwidget5 (>=5.4.19),
- libdtkcore5 (>=5.4.14),
- libdtkgui5 (>=5.4.13),
+ libdtkwidget5 (>=5.4.1),
+ libdtkcore5 (>=5.4.0),
+ libdtkgui5 (>=5.4.0),
  libdframeworkdbus2 (>=5.4.6),
  dde-daemon (>=5.13.12),
  startdde (>=5.8.9),

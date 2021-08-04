@@ -43,6 +43,8 @@ public:
     void setBlurBackground(const QString &url);
     inline QPixmap cachePixmap() { return m_cache; }
 
+    void removeCache();
+
 signals:
     void backgroundImageChanged(const QPixmap & img);
 

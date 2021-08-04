@@ -101,6 +101,15 @@ void BoxFrame::setBlurBackground(const QString &url)
     emit backgroundImageChanged(blurCache);
 }
 
+/**当桌面发生旋转、背景更换时需要更新缓存
+ * @brief BoxFrame::removeCache
+ */
+void BoxFrame::removeCache()
+{
+    QPixmapCache::remove(m_cacheNormalKey);
+    QPixmapCache::remove(m_cacheBlurKey);
+}
+
 /**更新桌面模糊背景,桌面背景不改变时进行缓存桌面模糊背景
  * @brief BoxFrame::updateBlurBackground
  */

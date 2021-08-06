@@ -26,6 +26,9 @@
 
 #include <QMenu>
 #include <QSignalMapper>
+#include <QWindow>
+
+const bool IS_WAYLAND_DISPLAY = !qgetenv("WAYLAND_DISPLAY").isEmpty();
 
 MenuWorker::MenuWorker(QObject *parent)
     : QObject(parent)
@@ -177,7 +180,10 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
 
     QScopedPointer<QMenu> menu(new QMenu);
     menu->setAccessibleName("popmenu");
-
+    if (IS_WAYLAND_DISPLAY) {
+        menu->setAttribute(Qt::WA_NativeWindow);
+        menu->windowHandle()->setProperty("_d_dwayland_window-type", "session-shell");
+    }
     QSignalMapper *signalMapper = new QSignalMapper(menu.get());
 
     creatMenuByAppItem(menu.get(), signalMapper);

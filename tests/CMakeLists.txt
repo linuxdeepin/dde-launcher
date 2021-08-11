@@ -31,7 +31,7 @@ find_package(GTest REQUIRED)
 
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
-pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh x11)
+pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh)
 
 include_directories(
     ../src

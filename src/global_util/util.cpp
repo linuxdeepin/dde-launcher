@@ -91,6 +91,8 @@ const QPixmap loadSvg(const QString &fileName, const int size)
     renderer.render(&painter);
     painter.end();
 
+    pixmap.setDevicePixelRatio(qRound(qApp->devicePixelRatio()));
+
     return pixmap;
 }
 
@@ -109,7 +111,7 @@ const QPixmap renderSVG(const QString &path, const QSize &size)
     QPixmap pixmap;
     reader.setFileName(path);
     if (reader.canRead()) {
-        const qreal ratio = qApp->devicePixelRatio();
+        const qreal ratio = qRound(qApp->devicePixelRatio());
         reader.setScaledSize(size * ratio);
         pixmap = QPixmap::fromImage(reader.read());
         pixmap.setDevicePixelRatio(ratio);

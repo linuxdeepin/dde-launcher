@@ -32,8 +32,8 @@ PageControl::PageControl(QWidget *parent)
     layout->setSpacing(PAGE_ICON_SPACE);
     setLayout(layout);
 
-    m_iconActive = loadSvg(":/widgets/images/page_indicator_active.svg", PAGE_ICON_SIZE);
-    m_iconNormal = loadSvg(":/widgets/images/page_indicator.svg", PAGE_ICON_SIZE);
+    m_iconActive = loadSvg(":/widgets/images/page_indicator_active.svg", qRound(PAGE_ICON_SIZE * devicePixelRatioF()));
+    m_iconNormal = loadSvg(":/widgets/images/page_indicator.svg", qRound(PAGE_ICON_SIZE * devicePixelRatioF()));
 }
 
 void PageControl::setPageCount(int count)

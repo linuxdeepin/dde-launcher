@@ -404,7 +404,7 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
 
         if (QFile::exists(iconName)) {
             if (iconName.endsWith(".svg"))
-                pixmap = loadSvg(iconName, iconSize * ratio);
+                pixmap = loadSvg(iconName, qRound(iconSize * ratio));
             else
                 pixmap = DHiDPIHelper::loadNxPixmap(iconName);
 
@@ -425,7 +425,7 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
             findIcon = false;
         }
 
-        pixmap = icon.pixmap(QSize(iconSize, iconSize));
+        pixmap = icon.pixmap(QSize(iconSize, iconSize) * ratio);
         if (!pixmap.isNull())
             break;
     } while (false);

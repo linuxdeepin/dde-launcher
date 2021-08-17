@@ -537,7 +537,9 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
     const QString appKey = context.data(AppsListModel::AppKeyRole).toString();
     unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall it?")));
 
-    int size = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>().size().height();
+    QPixmap pixmap = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
+
+    int size = (pixmap.size() / qApp->devicePixelRatio()).width();
     ItemInfo item = context.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
 
     QPair<QString, int> tmpKey { cacheKey(item, CacheType::ImageType), size};
@@ -548,9 +550,17 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
         AppsManager::getPixFromCache(tmpKey, appIcon);
         unInstallDialog.setIcon(appIcon);
     } else {
+        static int tryNum = 0;
         UNINSTALL_DIALOG_SHOWN = false;
-        uninstallApp(context);
-        return;
+        ++tryNum;
+        if (tryNum <= 5) {
+            QTimer::singleShot(100, this, [ = ]() { uninstallApp(context); });
+            return;
+        } else {
+            QIcon icon = QIcon::fromTheme("application-x-desktop");
+            appIcon = icon.pixmap(QSize(size, size));
+            unInstallDialog.setIcon(appIcon);
+        }
     }
 
     QStringList buttons;

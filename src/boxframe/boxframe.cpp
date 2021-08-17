@@ -150,6 +150,7 @@ void BoxFrame::updateBackground()
     }
 
     m_cache = cache;
+    update();
 }
 
 const QScreen *BoxFrame::currentScreen()

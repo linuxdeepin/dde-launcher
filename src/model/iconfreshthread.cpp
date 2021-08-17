@@ -162,36 +162,33 @@ void IconFreshThread::run()
 
     while (m_loadAllIconState.load()) {
         // 小窗口模式,item的真实大小有默认值QSize(24, 24)
-        for (int i = AppsListModel::All; i < AppsListModel::Others; i++) {
+        for (int i = AppsListModel::All; i <= AppsListModel::Others; i++) {
             const ItemInfoList &itemList = AppsManager::getAllAppInfo().value((AppsListModel::AppCategory)(i));
 
             for (int j = 0; j < itemList.size(); j++) {
                 const ItemInfo &info = itemList.at(j);
-                for (int k = 0; k < 5; k++) {
-                    // 多种类型尺寸的图标，appslistmodel::data()接口中可以看到
-                    const qreal ratio =  ratioArray[k];
-                    int iconSize = CalculateUtil::instance()->appIconSize(false, ratio).width();
-                    int dlgIconSize = 36 * ratio;
-                    int dragIconSize = CalculateUtil::instance()->appIconSize(false, ratio, 0).width() * 1.2;
-                    int listIconSize = 18 * ratio;
+                // 多种类型尺寸的图标，appslistmodel::data()接口中可以看到
+                int iconSize = 24;
+                int dlgIconSize = 36;
+                int dragIconSize = iconSize * 1.2;
+                int listIconSize = 18;
 
-                    // 生成各个场景下的应用缓存数据
-                    m_iconValid.store(true);
-                    createPixmap(info, (iconSize));
+                // 生成各个场景下的应用缓存数据
+                m_iconValid.store(true);
+                createPixmap(info, iconSize);
 
-                    m_iconValid.store(true);
-                    createPixmap(info, (dlgIconSize));
+                m_iconValid.store(true);
+                createPixmap(info, dlgIconSize);
 
-                    m_iconValid.store(true);
-                    createPixmap(info, (dragIconSize));
+                m_iconValid.store(true);
+                createPixmap(info, dragIconSize);
 
-                    m_iconValid.store(true);
-                    createPixmap(info, (listIconSize));
+                m_iconValid.store(true);
+                createPixmap(info, listIconSize);
 
-                    // 程序出现异常,加载缓存的过程中就出现了crash,加上可以直接退出线程
-                    if (!m_loadAllIconState.load())
-                        return;
-                }
+                // 程序出现异常,加载缓存的过程中就出现了crash,加上可以直接退出线程
+                if (!m_loadAllIconState.load())
+                    return;
             }
         }
 
@@ -212,16 +209,16 @@ void IconFreshThread::run()
 
                 // 生成各个场景下的应用缓存数据
                 m_iconValid.store(true);
-                createPixmap(info, (iconWidth));
+                createPixmap(info, iconWidth);
 
                 m_iconValid.store(true);
-                createPixmap(info, (listIconSize));
+                createPixmap(info, listIconSize);
 
                 m_iconValid.store(true);
-                createPixmap(info, (dlgIconSize));
+                createPixmap(info, dlgIconSize);
 
                 m_iconValid.store(true);
-                createPixmap(info, (dragIconSize));
+                createPixmap(info, dragIconSize);
 
                 // 程序出现异常,加载缓存的过程中就出现了crash,加上可以直接退出线程
                 if (!m_loadAllIconState.load())
@@ -245,16 +242,16 @@ void IconFreshThread::run()
 
                 // 生成各个场景下的应用缓存数据
                 m_iconValid.store(true);
-                createPixmap(info, (iconWidth));
+                createPixmap(info, iconWidth);
 
                 m_iconValid.store(true);
-                createPixmap(info, (listIconSize));
+                createPixmap(info, listIconSize);
 
                 m_iconValid.store(true);
-                createPixmap(info, (dlgIconSize));
+                createPixmap(info, dlgIconSize);
 
                 m_iconValid.store(true);
-                createPixmap(info, (dragIconSize));
+                createPixmap(info, dragIconSize);
 
                 // 程序出现异常,加载缓存的过程中就出现了crash,加上可以直接退出线程
                 if (!m_loadAllIconState.load())
@@ -282,16 +279,16 @@ void IconFreshThread::run()
 
                 // 生成各个场景下的应用缓存数据
                 m_iconValid.store(true);
-                createPixmap(info, (iconSize));
+                createPixmap(info, iconSize);
 
                 m_iconValid.store(true);
-                createPixmap(info, (dlgIconSize));
+                createPixmap(info, dlgIconSize);
 
                 m_iconValid.store(true);
-                createPixmap(info, (dragIconSize));
+                createPixmap(info, dragIconSize);
 
                 m_iconValid.store(true);
-                createPixmap(info, (listIconSize));
+                createPixmap(info, listIconSize);
             }
 
             // 程序出现异常,加载缓存的过程中就出现了crash,加上可以直接退出线程

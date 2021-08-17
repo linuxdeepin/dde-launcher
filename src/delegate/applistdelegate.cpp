@@ -79,16 +79,11 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const bool isDragItem = option.features & QStyleOptionViewItem::Alternate;
     const bool isCategoryList(static_cast<AppsListModel::AppCategory>(index.data(AppsListModel::AppGroupRole).toInt()) == AppsListModel::Category);
 
-    QSize iconSize = isCategoryList ? QSize(18, 18) * ratio : index.data(AppsListModel::AppIconSizeRole).value<QSize>();
-
     QPixmap iconPixmap = index.data(AppsListModel::AppListIconRole).value<QPixmap>();
 
     if (isDragItem) {
-        iconSize = iconSize * 1.1;
-
         QPixmap dragIndicator = renderSVG(":/widgets/images/drag_indicator.svg",
                                           QSize(20, 20));
-        dragIndicator.setDevicePixelRatio(ratio);
         painter->drawPixmap(rect.right() - 30,
                             rect.y() + (rect.height() - dragIndicator.height() / ratio) / 2,
                             dragIndicator);

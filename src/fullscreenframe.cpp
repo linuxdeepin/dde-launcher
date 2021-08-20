@@ -1751,7 +1751,6 @@ const QScreen *FullScreenFrame::currentScreen()
 void FullScreenFrame::layoutChanged()
 {
     QSize boxSize;
-    QPixmap pixmap = cachePixmap();
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
         // 全屏模式下给控件设置整个屏幕大小
         const int appsContentWidth = (m_contentFrame->width());

@@ -37,11 +37,9 @@ class BoxFrame : public QLabel
 
 public:
     explicit BoxFrame(QWidget* parent = nullptr);
-    ~BoxFrame() Q_DECL_OVERRIDE;
 
     void setBackground(const QString &url);
     void setBlurBackground(const QString &url);
-    inline QPixmap cachePixmap() { return m_cache; }
 
     void removeCache();
 

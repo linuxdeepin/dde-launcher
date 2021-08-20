@@ -37,15 +37,36 @@ public:
 
 TEST_F(Tst_Boxframe, checkBackground_test)
 {
-    // 确保函数正常执行
-    m_frame->setBackground(m_frame->m_defaultBg);
-    QVERIFY(m_frame->m_lastUrl.compare(m_frame->m_defaultBg));
+    /* 模拟一下四种模式下修改屏幕的背景和模糊处理过的背景
+    #define CUSTOM_MODE     0
+    #define MERGE_MODE      1
+    #define EXTEND_MODE     2
+    #define SINGLE_MODE     3
+    */
+    for (int i = 0; i < 4; i++) {
+        m_frame->m_bgManager->m_displayMode = i;
+        m_frame->setBackground(m_frame->m_defaultBg);
+        QVERIFY(m_frame->m_lastUrl.compare(m_frame->m_defaultBg));
 
-    QSignalSpy spy(m_frame, SIGNAL(backgroundImageChanged(const QPixmap & img)));
-    m_frame->setBlurBackground(m_frame->m_defaultBg);
-    QVERIFY(m_frame->m_lastBlurUrl.compare(m_frame->m_defaultBg));
+        // url和上一次相同时
+        m_frame->setBackground(m_frame->m_defaultBg);
 
-    QCOMPARE(spy.count(), 1);
+        QSignalSpy spy(m_frame, SIGNAL(backgroundImageChanged(const QPixmap & img)));
+        m_frame->setBlurBackground(m_frame->m_defaultBg);
+        QVERIFY(m_frame->m_lastBlurUrl.compare(m_frame->m_defaultBg));
+
+        // url和上一次相同时
+        m_frame->setBlurBackground(m_frame->m_defaultBg);
+
+        // 清空缓存
+        m_frame->removeCache();
+
+        // 清空上一次的背景
+        m_frame->m_lastUrl.clear();
+        m_frame->m_lastBlurUrl.clear();
+
+        QCOMPARE(spy.count(), 1);
+    }
 }
 
 TEST_F(Tst_Boxframe, moveEvent_test)

@@ -46,10 +46,6 @@ BoxFrame::BoxFrame(QWidget *parent)
     connect(m_bgManager, &BackgroundManager::currentWorkspaceBlurBackgroundChanged, this, &BoxFrame::setBlurBackground);
 }
 
-BoxFrame::~BoxFrame()
-{
-}
-
 // Message for maintainers: DON'T use QSS to set the background !
 
 // This function takes ~2ms by setting QSS to set backgrounds, but causes show() of

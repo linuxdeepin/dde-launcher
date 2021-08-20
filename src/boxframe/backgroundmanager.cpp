@@ -57,8 +57,13 @@ BackgroundManager::BackgroundManager(QObject *parent)
             updateBlurBackgrounds();
         }
     });
-    connect(m_displayInter, &DisplayInter::DisplayModeChanged, this, [=](uchar) {
+    connect(m_displayInter, &DisplayInter::DisplayModeChanged, this, [ = ](uchar) {
         m_displayMode = m_displayInter->GetRealDisplayMode();
+    });
+
+    connect(m_displayInter, &DisplayInter::PrimaryChanged, this, [ = ] {
+        m_displayMode = m_displayInter->GetRealDisplayMode();
+        updateBlurBackgrounds();
     });
 
     connect(m_displayInter, &DisplayInter::DisplayModeChanged, this, &BackgroundManager::updateBlurBackgrounds);

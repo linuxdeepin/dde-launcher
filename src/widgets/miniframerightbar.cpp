@@ -33,6 +33,7 @@
 #include <DDesktopServices>
 #include <DGuiApplicationHelper>
 #include <DDBusSender>
+#include <QtConcurrent>
 
 DGUI_USE_NAMESPACE
 
@@ -333,12 +334,14 @@ void MiniFrameRightBar::showShutdown()
 
 void MiniFrameRightBar::showSettings()
 {
-    DDBusSender()
+    QtConcurrent::run([] {
+        DDBusSender()
             .service("com.deepin.dde.ControlCenter")
             .interface("com.deepin.dde.ControlCenter")
             .path("/com/deepin/dde/ControlCenter")
             .method(QString("Toggle"))
             .call();
+    });
 
     emit requestFrameHide();
 }

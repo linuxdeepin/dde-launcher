@@ -1,4 +1,5 @@
 #include "appslistmodel.h"
+#include "applistdelegate.h"
 
 #define private public
 #include "applistview.h"
@@ -10,6 +11,7 @@
 #include <QDropEvent>
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include <DGuiApplicationHelper>
 
 #include <gtest/gtest.h>
 
@@ -24,27 +26,48 @@ class Tst_Applistview : public testing::Test
 public:
     void SetUp() override
     {
-        windowFrame = new WindowedFrame;
+        m_windowFrame = new WindowedFrame;
     }
 
     void TearDown() override
     {
-        delete windowFrame;
-        windowFrame = nullptr;
+        delete m_windowFrame;
+        m_windowFrame = nullptr;
     }
 
 public:
-    WindowedFrame *windowFrame;
+    WindowedFrame *m_windowFrame;
 };
+
+TEST_F(Tst_Applistview, appDelegate_test)
+{
+    AppListView *appListView = m_windowFrame->m_appsView;
+
+    //　light type
+    DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::ColorType(1));
+    appListView->setModel(m_windowFrame->m_appsModel);
+    appListView->setItemDelegate(new AppListDelegate(m_windowFrame));
+
+    //　dark type
+    DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::ColorType(1));
+    appListView->setItemDelegate(new AppListDelegate(m_windowFrame->m_appsModel));
+
+    m_windowFrame->show();
+    QTest::qWait(500);
+    m_windowFrame->hide();
+}
 
 TEST_F(Tst_Applistview, appListView_test)
 {
-    AppListView *widget = windowFrame->m_appsView;
+    AppListView *widget = m_windowFrame->m_appsView;
 
     AppsListModel *pModel = new AppsListModel(AppsListModel::All);
     QModelIndex index;
     pModel->insertRow(0, index);
     widget->setModel(pModel);
+
+    m_windowFrame->show();
+    QTest::qWait(1000);
 
     QWheelEvent event(QPointF(0, 0), 0, Qt::MiddleButton, Qt::ControlModifier);
     QApplication::sendEvent(widget->viewport(), &event);
@@ -85,4 +108,5 @@ TEST_F(Tst_Applistview, appListView_test)
     widget->prepareDropSwap();
     widget->dropSwap();
     widget->menuHide();
+    m_windowFrame->hide();
 }

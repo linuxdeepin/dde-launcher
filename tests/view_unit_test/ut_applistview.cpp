@@ -47,10 +47,16 @@ TEST_F(Tst_Applistview, appDelegate_test)
     DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::ColorType(1));
     appListView->setModel(m_windowFrame->m_appsModel);
     appListView->setItemDelegate(new AppListDelegate(m_windowFrame));
+    AppListDelegate * delegate = static_cast<AppListDelegate *>(appListView->itemDelegate());
+    if (delegate)
+        delegate->setActived(true);
 
     //　dark type
     DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::ColorType(1));
+    delegate = static_cast<AppListDelegate *>(appListView->itemDelegate());
     appListView->setItemDelegate(new AppListDelegate(m_windowFrame->m_appsModel));
+    if (delegate)
+        delegate->setActived(true);
 
     m_windowFrame->show();
     QTest::qWait(500);
@@ -60,6 +66,7 @@ TEST_F(Tst_Applistview, appDelegate_test)
 TEST_F(Tst_Applistview, appListView_test)
 {
     AppListView *widget = m_windowFrame->m_appsView;
+    widget->setItemDelegate(new AppListDelegate(m_windowFrame));
 
     AppsListModel *pModel = new AppsListModel(AppsListModel::All);
     QModelIndex index;

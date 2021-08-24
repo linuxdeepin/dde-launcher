@@ -2,6 +2,8 @@
 #include "windowedframe.h"
 #undef private
 
+#include <QTest>
+
 #include <gtest/gtest.h>
 
 class Tst_Windowedframe : public testing::Test
@@ -98,4 +100,23 @@ TEST_F(Tst_Windowedframe, eventFilter_test)
 
     QKeyEvent backSpaceKeyEvent(QEvent::Type::KeyPress, Qt::Key_Backspace, static_cast<QKeyEvent *>(keyPress)->modifiers());
     m_windowedframe->m_eventFilter->eventFilter(nullptr, &backSpaceKeyEvent);
+}
+
+TEST_F(Tst_Windowedframe, updatePostion_test)
+{
+    /*
+     * 上: 0, 右: 1, 下: 2, 左: 3
+    */
+    for (int i = 0; i < 4; i++) {
+        /*
+         * 时尚模式: 0
+         * 高效模式: 1
+        */
+        for (int j = 0; j < 2; j++) {
+            m_windowedframe->m_dockInter->setPosition(i);
+            m_windowedframe->m_dockInter->setDisplayMode(j);
+            m_windowedframe->updatePosition();
+            QTest::qWait(500);
+        }
+    }
 }

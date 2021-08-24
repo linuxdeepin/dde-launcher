@@ -26,7 +26,6 @@
 
 #include "appslistmodel.h"
 #include "dbuslauncher.h"
-#include "dbusfileinfo.h"
 #include "dbustartmanager.h"
 #include "dbusdock.h"
 #include "calculate_util.h"

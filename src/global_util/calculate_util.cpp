@@ -22,7 +22,6 @@
  */
 
 #include "calculate_util.h"
-#include "monitorinterface.h"
 #include "dbusdisplay.h"
 #include "util.h"
 #include "constants.h"

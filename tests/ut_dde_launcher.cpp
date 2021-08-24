@@ -22,14 +22,13 @@
 #include "ut_dde_launcher.h"
 #include "dbuslauncherframe.h"
 #include "dbusdisplay.h"
-#include "dbusfileinfo.h"
-#include "dbusmenu.h"
-#include "dbusmenumanager.h"
 #include "dbustartmanager.h"
-#include "monitorinterface.h"
 #include "dbusdock.h"
 #include "dbuslauncher.h"
 #include "calculate_util.h"
+#include "dbusdockinterface.h"
+#include "launchersys.h"
+#include "dbuslauncherservice.h"
 
 #include <QDBusInterface>
 #include <QDBusMetaType>
@@ -108,57 +107,6 @@ TEST_F(LauncherUnitTest, testDockDBus)
 }
 
 /**
- * @brief LauncherUnitTest::testFileInfoDBus 测试文件信息Dbus服务
- */
-TEST_F(LauncherUnitTest, testFileInfoDBus)
-{
-    DBusFileInfo fileInfoInteface(this);
-    QVERIFY(fileInfoInteface.isValid());
-
-    uint driveStartStopTypeMultidisk = fileInfoInteface.driveStartStopTypeMultidisk();
-    qDebug() << QString("Test fileInfoInteface driveStartStopTypeMultidisk:%1").arg(driveStartStopTypeMultidisk);
-
-    uint driveStartStopTypeNetwork = fileInfoInteface.driveStartStopTypeNetwork();
-    qDebug() << QString("Test fileInfoInteface driveStartStopTypeMultidisk:%1").arg(driveStartStopTypeNetwork);
-
-    uint driveStartStopTypePassword = fileInfoInteface.driveStartStopTypePassword();
-    qDebug() << QString("Test fileInfoInteface driveStartStopTypeMultidisk:%1").arg(driveStartStopTypePassword);
-
-    uint driveStartStopTypeShutdown = fileInfoInteface.driveStartStopTypeShutdown();
-    qDebug() << QString("Test fileInfoInteface driveStartStopTypeShutdown:%1").arg(driveStartStopTypeShutdown);
-
-    uint driveStartStopTypeUnknown = fileInfoInteface.driveStartStopTypeUnknown();
-    qDebug() << QString("Test fileInfoInteface driveStartStopTypeUnknown:%1").arg(driveStartStopTypeUnknown);
-
-    QString fileAttributeAccessCanDelete = fileInfoInteface.fileAttributeAccessCanDelete();
-    qDebug() << QString("Test fileInfoInteface fileAttributeAccessCanDelete:%1").arg(fileAttributeAccessCanDelete);
-
-    QString fileAttributeAccessCanExecute = fileInfoInteface.fileAttributeAccessCanExecute();
-    qDebug() << QString("Test fileInfoInteface fileAttributeAccessCanDelete:%1").arg(fileAttributeAccessCanExecute);
-
-    QString fileAttributeAccessCanRead = fileInfoInteface.fileAttributeAccessCanRead();
-    qDebug() << QString("Test fileInfoInteface fileAttributeAccessCanRead:%1").arg(fileAttributeAccessCanRead);
-
-    QString fileAttributeAccessCanRename = fileInfoInteface.fileAttributeAccessCanRename();
-    qDebug() << QString("Test fileInfoInteface fileAttributeAccessCanRename:%1").arg(fileAttributeAccessCanRename);
-
-    QString fileAttributeAccessCanTrash = fileInfoInteface.fileAttributeAccessCanTrash();
-    qDebug() << QString("Test fileInfoInteface fileAttributeAccessCanTrash:%1").arg(fileAttributeAccessCanTrash);
-
-    QString fileAttributeAccessCanWrite = fileInfoInteface.fileAttributeAccessCanWrite();
-    qDebug() << QString("Test fileInfoInteface fileAttributeAccessCanWrite:%1").arg(fileAttributeAccessCanWrite);
-
-    QString fileAttributeDosIsArchive = fileInfoInteface.fileAttributeDosIsArchive();
-    qDebug() << QString("Test fileInfoInteface fileAttributeDosIsArchive:%1").arg(fileAttributeDosIsArchive);
-
-    QString fileAttributeDosIsSystem = fileInfoInteface.fileAttributeDosIsSystem();
-    qDebug() << QString("Test fileInfoInteface fileAttributeDosIsSystem:%1").arg(fileAttributeDosIsSystem);
-
-    QString fileAttributeEtagValue = fileInfoInteface.fileAttributeEtagValue();
-    qDebug() << QString("Test fileInfoInteface fileAttributeEtagValue:%1").arg(fileAttributeEtagValue);
-}
-
-/**
  * @brief LauncherUnitTest::testLauncherDBus 测试启动器Dbus服务
  */
 TEST_F(LauncherUnitTest, testLauncherDBus)
@@ -171,24 +119,6 @@ TEST_F(LauncherUnitTest, testLauncherDBus)
 
     int displaymode = launcherInterface.displaymode();
     qDebug() << QString("Test launcherInterface displaymode:%1").arg(displaymode);
-}
-
-/**
- * @brief LauncherUnitTest::testMenuDBus 测试菜单Dbus服务
- */
-TEST_F(LauncherUnitTest, testMenuDBus)
-{
-    DBusMenu menuInterface("com.deepin.menu.Menu", "/com/deepin/menu/Menu", QDBusConnection::sessionBus(), this);
-    QVERIFY(menuInterface.isValid());
-}
-
-/**
- * @brief LauncherUnitTest::testMenuManagerDBus 测试菜单管理器Dbus服务
- */
-TEST_F(LauncherUnitTest, testMenuManagerDBus)
-{
-    DBusMenuManager menuManagerInterface(this);
-    QVERIFY(menuManagerInterface.isValid());
 }
 
 TEST_F(LauncherUnitTest, CalculateUtil)
@@ -206,54 +136,19 @@ TEST_F(LauncherUnitTest, testStartManagerDBus)
 {
     DBusStartManager startManagerInterface(this);
     QVERIFY(startManagerInterface.isValid());
-}
 
-/**
- * @brief LauncherUnitTest::testMonitorInterface 测试显示Dbus服务
- */
-TEST_F(LauncherUnitTest, testMonitorInterface)
-{
-    MonitorInterface monitorInterface("/com/deepin/daemon/Display", this);
-    QVERIFY(monitorInterface.isValid());
+    // 检测是否自启动
+    QString appName = QString("deepin-editor");
+    QVERIFY(startManagerInterface.IsAutostart(appName));
 
-    MonitorMode bestMode = monitorInterface.bestMode();
-    qDebug() << QString("Test monitorInterface Test monitorInterface bestMode(ID:%1,width:%2,height:%3,rate:%4)").arg(bestMode.id).arg(bestMode.width).arg(bestMode.height).arg(bestMode.rate);
+    // 设置自启动
+    startManagerInterface.AddAutostart(appName);
 
-    MonitorMode currentMode = monitorInterface.currentMode();
-    qDebug() << QString("Test monitorInterface currentMode(ID:%1,width:%2,height:%3,rate:%4)").arg(currentMode.id).arg(currentMode.width).arg(currentMode.height).arg(currentMode.rate);
+    // 启动应用
+    startManagerInterface.Launch(appName);
 
-    QString fullName = monitorInterface.fullName();
-    qDebug() << QString("Test monitorInterface fullName:%1").arg(fullName);
-
-    ushort height = monitorInterface.height();
-    qDebug() << QString("Test monitorInterface height:%1").arg(height);
-
-    bool isComposited = monitorInterface.isComposited();
-    qDebug() << QString("Test monitorInterface isComposited:%1").arg(isComposited);
-
-    QString name = monitorInterface.name();
-    qDebug() << QString("Test monitorInterface name:%1").arg(name);
-
-    bool opened = monitorInterface.opened();
-    qDebug() << QString("Test monitorInterface opened:%1").arg(opened);
-
-    QStringList outputs = monitorInterface.outputs();
-    qDebug() << QString("Test monitorInterface output count:%1").arg(outputs.count());
-
-    ushort reflect = monitorInterface.reflect();
-    qDebug() << QString("Test monitorInterface reflect:%1").arg(reflect);
-
-    ushort rotation = monitorInterface.rotation();
-    qDebug() << QString("Test monitorInterface rotation:%1").arg(rotation);
-
-    ushort width = monitorInterface.width();
-    qDebug() << QString("Test monitorInterface width:%1").arg(width);
-
-    short x = monitorInterface.x();
-    qDebug() << QString("Test monitorInterface x:%1").arg(x);
-
-    short y = monitorInterface.x();
-    qDebug() << QString("Test monitorInterface y:%1").arg(y);
+    // 解除自启动
+    startManagerInterface.RemoveAutostart(appName);
 }
 
 /**
@@ -287,7 +182,6 @@ TEST_F(LauncherUnitTest, testDockPos)
     if (r == QRect(0, 0, 0, 0)) {
         QFAIL("dock pos error");
     }
-
 }
 
 /**
@@ -303,22 +197,29 @@ TEST_F(LauncherUnitTest, testLauncher)
     QVERIFY(inter.isValid());
 
     inter.call("Hide");
-    QDBusReply<bool> replyHide = inter.call("IsVisible");
-    bool hideVal = replyHide.value();
-    QCOMPARE(hideVal, false);
+    QDBusPendingReply<> replyHide = inter.call("IsVisible");
+    replyHide.waitForFinished();
+    QTest::qWait(200);
 
-    inter.call("Show");
-    QDBusReply<bool> replyShow = inter.call("IsVisible");
-    bool showVal = replyShow.value();
-    QCOMPARE(showVal, true);
+    QDBusPendingReply<> replyShow = inter.call("Show");
+    replyShow.waitForFinished();
+    QTest::qWait(200);
 
-    inter.call("UninstallApp", "deepin-music");
-    DBusLauncher launcherInterface(this);
-    QVERIFY(launcherInterface.isValid());
-    connect(&launcherInterface, &DBusLauncher::UninstallSuccess, this, [ = ](const QString & app) {
-        qDebug() << "uninstall: " << app;
-        QCOMPARE(app, "deepin-music");
-    });
+    QDBusPendingReply<> replyVisible = inter.call("IsVisible");
+    replyVisible.waitForFinished();
+    QTest::qWait(200);
+
+    QDBusPendingReply<> windowedReply = inter.call("ShowByMode", 0);
+    replyVisible.waitForFinished();
+    QTest::qWait(200);
+
+    QDBusPendingReply<> fullscreenReply = inter.call("ShowByMode", 1);
+    replyVisible.waitForFinished();
+    QTest::qWait(200);
+
+    QDBusPendingReply<> toggleReply = inter.call("Toggle");
+    toggleReply.waitForFinished();
+    QTest::qWait(200);
 }
 
 /**
@@ -400,4 +301,85 @@ TEST_F(LauncherUnitTest, check_toggleLauncher)
 
         QCOMPARE(fullScreen, false);
     }
+
+    QDBusPendingReply<CategoryInfoList> categoryInfoListReply = launcherBusInter.call("GetAllCategoryInfos");
+    categoryInfoListReply.waitForFinished();
+
+    QDBusPendingReply<FrequencyInfoList> frequencyListReply = launcherBusInter.call("GetAllFrequency");
+    frequencyListReply.waitForFinished();
+
+    QDBusPendingReply<InstalledTimeInfoList> installedTimeInfoListReply = launcherBusInter.call("GetAllTimeInstalled");
+    installedTimeInfoListReply.waitForFinished();
+
+    QDBusPendingReply<CategoryInfo> categoryInfoReply = launcherBusInter.call("GetCategoryInfo");
+    categoryInfoReply.waitForFinished();
+
+    QDBusPendingReply<ItemInfo> getItemInfoReply = launcherBusInter.call("GetItemInfo");
+    categoryInfoReply.waitForFinished();
+
+    QDBusPendingReply<> recordFrequency = launcherBusInter.call("RecordFrequency");
+    recordFrequency.waitForFinished();
+
+    QDBusPendingReply<> recordRotate = launcherBusInter.call("RecordRate");
+    recordRotate.waitForFinished();
+
+    QDBusPendingReply<> reqUninstall = launcherBusInter.call("RequestUninstall", "deepin-editor", false);
+    reqUninstall.waitForFinished();
+
+    QDBusPendingReply<> setProxyReply = launcherBusInter.call("SetUseProxy", "deepin-editor", false);
+    setProxyReply.waitForFinished();
+
+    QDBusPendingReply<bool> getProxyReply = launcherBusInter.call("GetUseProxy", "deepin-editor");
+    getProxyReply.waitForFinished();
+
+    QVERIFY(getProxyReply.argumentAt(0).toBool());
+
+    QDBusPendingReply<> setDisableScaleReply = launcherBusInter.call("SetDisableScaling", "deepin-editor", false);
+    setDisableScaleReply.waitForFinished();
+
+    QDBusPendingReply<bool> getScaleReply = launcherBusInter.call("GetDisableScaling", "deepin-editor");
+    getScaleReply.waitForFinished();
+
+    QVERIFY(getScaleReply.argumentAt(0).toBool());
 }
+
+TEST_F(LauncherUnitTest, check_dbusDockInterface)
+{
+    DBusDockInterface dockInter;
+    QVERIFY(dockInter.isValid());
+
+    qDebug() << "dock rect:" << dockInter.geometry();
+}
+
+TEST_F(LauncherUnitTest, check_dbusLauncherService)
+{
+    LauncherSys launcher;
+    DBusLauncherService service(&launcher);
+
+    // 启动器显示
+    launcher.showLauncher();
+    QTest::qWait(500);
+
+    // 启动器隐藏
+    service.Hide();
+    QTest::qWait(1000);
+
+    // 窗口模式
+    service.ShowByMode(0);
+    QTest::qWait(1000);
+
+    // 全屏模式
+    service.ShowByMode(1);
+    QTest::qWait(1000);
+
+    // 模式切换
+    service.Toggle();
+    QTest::qWait(1000);
+
+    // 启动器是否可见
+    QVERIFY(service.IsVisible());
+
+    // 启动器退出
+    service.Exit();
+}
+

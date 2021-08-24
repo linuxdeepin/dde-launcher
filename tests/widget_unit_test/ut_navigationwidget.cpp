@@ -42,6 +42,7 @@ TEST_F(Tst_NavigationWidget, categoryButton_test)
     EXPECT_NE(m_widget->button(AppsListModel::Development), nullptr);
     EXPECT_NE(m_widget->button(AppsListModel::System), nullptr);
     EXPECT_NE(m_widget->button(AppsListModel::Others), nullptr);
+    EXPECT_EQ(m_widget->button(AppsListModel::AppCategory(-1)), nullptr);
 }
 
 TEST_F(Tst_NavigationWidget, enterEvent_test)

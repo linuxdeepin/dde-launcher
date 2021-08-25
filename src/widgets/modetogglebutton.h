@@ -23,8 +23,10 @@
 #define MODETOGGLEBUTTON_H
 
 #include <DToolButton>
+#include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 class ModeToggleButton : public DToolButton
 {
@@ -38,7 +40,7 @@ protected:
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
 
-private:
+private slots:
     void resetStyle();
 
 private:

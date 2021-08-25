@@ -4,7 +4,11 @@
 
 #include <QTest>
 
+#include <DGuiApplicationHelper>
+
 #include <gtest/gtest.h>
+
+DGUI_USE_NAMESPACE
 
 class Tst_calculate : public testing::Test
 {
@@ -72,6 +76,7 @@ TEST_F(Tst_calculate, size_test)
     QVERIFY(!CalculateUtil::instance()->getNavigationWidgetSizeHint().isNull());
 
     int defaultPos = CalculateUtil::instance()->m_dockInter->position();
+    DGuiApplicationHelper::ColorType defaultType = DGuiApplicationHelper::instance()->themeType();
 
     /*
      * 全屏自由模式: 0
@@ -81,7 +86,7 @@ TEST_F(Tst_calculate, size_test)
         /*
          * 顶部：0, 右边:1, 底部: 2, 左边：3
         */
-        for (int j = 0; j < 4; j++)
+        for (int j = 0; j < 4; j++) {
             CalculateUtil::instance()->m_dockInter->setPosition(j);
 
         /*
@@ -89,17 +94,19 @@ TEST_F(Tst_calculate, size_test)
          * 全屏分类模式: 1
          * 全屏搜索模式：２
         */
-        for (int k = 0; k < 3; k++)
-            CalculateUtil::instance()->setDisplayMode(k);
-
-        CalculateUtil::instance()->calculateIconSize(i);
-        QTest::qWait(100);
+            for (int k = 0; k < 3; k++) {
+                CalculateUtil::instance()->setDisplayMode(k);
+                CalculateUtil::instance()->calculateIconSize(i);
+                QTest::qWait(500);
+            }
+        }
     }
 
     QTest::qWait(500);
 
     //　恢复默认位置．
     CalculateUtil::instance()->m_dockInter->setPosition(defaultPos);
+    DGuiApplicationHelper::instance()->setThemeType(defaultType);
 }
 
 TEST_F(Tst_calculate, appIconSize_test)

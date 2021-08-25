@@ -7,43 +7,27 @@
 #include <gtest/gtest.h>
 
 class Tst_Gradientlabel : public testing::Test
-{
-public:
-    void SetUp() override
-    {
-        m_widget = new GradientLabel();
-    }
-
-    void TearDown() override
-    {
-        if (m_widget) {
-            delete m_widget;
-            m_widget = nullptr;
-        }
-    }
-
-public:
-    GradientLabel *m_widget;
-};
+{};
 
 TEST_F(Tst_Gradientlabel, gradientLabel_test)
 {
-    QVERIFY(GradientLabel::TopToBottom == m_widget->direction());
+    GradientLabel label;
+    QVERIFY(GradientLabel::TopToBottom == label.direction());
     QPixmap pix(10, 10);
 
-    m_widget->setDirection(GradientLabel::TopToBottom);
-    QVERIFY(GradientLabel::TopToBottom == m_widget->direction());
-    m_widget->setPixmap(pix);
-    m_widget->setDirection(GradientLabel::BottomToTop);
-    QVERIFY(GradientLabel::BottomToTop == m_widget->direction());
-    m_widget->setPixmap(pix);
-    m_widget->setDirection(GradientLabel::LeftToRight);
-    QVERIFY(GradientLabel::LeftToRight == m_widget->direction());
-    m_widget->setPixmap(pix);
-    m_widget->setDirection(GradientLabel::RightToLeft);
-    QVERIFY(GradientLabel::RightToLeft == m_widget->direction());
-    m_widget->setPixmap(pix);
+    label.setDirection(GradientLabel::TopToBottom);
+    QVERIFY(GradientLabel::TopToBottom == label.direction());
+    label.setPixmap(pix);
+    label.setDirection(GradientLabel::BottomToTop);
+    QVERIFY(GradientLabel::BottomToTop == label.direction());
+    label.setPixmap(pix);
+    label.setDirection(GradientLabel::LeftToRight);
+    QVERIFY(GradientLabel::LeftToRight == label.direction());
+    label.setPixmap(pix);
+    label.setDirection(GradientLabel::RightToLeft);
+    QVERIFY(GradientLabel::RightToLeft == label.direction());
+    label.setPixmap(pix);
 
     QPaintEvent event4(QRect(10, 10, 10, 10));
-    QApplication::sendEvent(m_widget, &event4);
+    QApplication::sendEvent(&label, &event4);
 }

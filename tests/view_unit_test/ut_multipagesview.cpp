@@ -12,26 +12,12 @@
  * @brief The Tst_Multipagesview class
  */
 class Tst_Multipagesview : public testing::Test
-{
-public:
-    void SetUp() override
-    {
-        m_fullscreen = new FullScreenFrame;
-    }
-
-    void TearDown() override
-    {
-        delete m_fullscreen;
-        m_fullscreen = nullptr;
-    }
-
-public:
-    FullScreenFrame *m_fullscreen;
-};
+{};
 
 TEST_F(Tst_Multipagesview, multiPagesView_test)
 {
-    MultiPagesView *multipageView = m_fullscreen->m_multiPagesView;
+    FullScreenFrame frame;
+    MultiPagesView *multipageView = frame.m_multiPagesView;
     ASSERT_TRUE(multipageView);
 
     multipageView->updatePageCount(AppsListModel::Category);

@@ -24,6 +24,10 @@
 #include <QWidget>
 #include <QLabel>
 
+#include <DGuiApplicationHelper>
+
+DGUI_USE_NAMESPACE
+
 class MiniFrameSwitchBtn : public QWidget
 {
     Q_OBJECT
@@ -43,6 +47,8 @@ protected:
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+
+public slots:
     void updateIcon();
 
 private:

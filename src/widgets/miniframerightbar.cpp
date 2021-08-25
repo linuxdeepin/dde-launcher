@@ -31,11 +31,8 @@
 #include <QDesktopWidget>
 
 #include <DDesktopServices>
-#include <DGuiApplicationHelper>
 #include <DDBusSender>
 #include <QtConcurrent>
-
-DGUI_USE_NAMESPACE
 
 /**
  * @brief MiniFrameRightBar::MiniFrameRightBar 启动器小窗口模式最左侧按钮组
@@ -139,9 +136,7 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     updateIcon();
 
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
-        updateIcon();
-});
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MiniFrameRightBar::updateIcon);
 
     bottomLayout->addWidget(m_settingsBtn, 0, Qt::AlignCenter);
     bottomLayout->addWidget(m_powerBtn,0 ,Qt::AlignCenter);
@@ -392,5 +387,5 @@ void MiniFrameRightBar::updateIcon()
              m_documentBtn->setIcon(QIcon(":/widgets/images/folder-documents-symbolic.svg"));
          if (m_hasDownloadIcon)
              m_downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic.svg"));
-     }
+    }
 }

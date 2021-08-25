@@ -5,38 +5,35 @@
 #include <QApplication>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QTest>
+#include <DGuiApplicationHelper>
 
 #include <gtest/gtest.h>
 
+DGUI_USE_NAMESPACE
+
 class Tst_Miniframerightbar : public testing::Test
-{
-public:
-    void SetUp() override
-    {
-        m_widget = new MiniFrameRightBar();
-    }
-
-    void TearDown() override
-    {
-        if (m_widget) {
-            delete m_widget;
-            m_widget = nullptr;
-        }
-    }
-
-public:
-    MiniFrameRightBar *m_widget;
-};
+{};
 
 TEST_F(Tst_Miniframerightbar, miniFrameRightBar_test)
 {
-    m_widget->setCurrentCheck(true);
-    m_widget->moveUp();
-    m_widget->moveDown();
-    m_widget->execCurrent();
+    MiniFrameRightBar bar;
+    DGuiApplicationHelper::ColorType defaultType = DGuiApplicationHelper::instance()->themeType();
 
-    QPaintEvent event(QRect(10, 10, 10, 10));
-    QApplication::sendEvent(m_widget, &event);
+    bar.setCurrentCheck(true);
+    bar.moveUp();
+    bar.moveDown();
+    bar.execCurrent();
+    bar.openStandardDirectory(QStandardPaths::DesktopLocation);
 
-    m_widget->openDirectory(":/test_res/test.jpg");
+    for (int i = 0; i <= 2; i++) {
+        DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::ColorType(i));
+        QPaintEvent event(QRect(10, 10, 10, 10));
+        QApplication::sendEvent(&bar, &event);
+        QTest::qWait(10);
+    }
+
+    bar.openDirectory(":/test_res/test.jpg");
+
+    DGuiApplicationHelper::instance()->setThemeType(defaultType);
 }

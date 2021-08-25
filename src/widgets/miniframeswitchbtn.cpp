@@ -46,10 +46,7 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     m_textLabel->setAccessibleDescription("This refers to the label with 'all categories'. Since this control will become 'return', it uses 'text' instead");
     DFontSizeManager::instance()->bind(m_textLabel, DFontSizeManager::T6);
 
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
-        updateIcon();
-        update();
-    });
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MiniFrameSwitchBtn::updateIcon);
 
     m_enterIcon->setFixedSize(16, 16);
     m_enterIcon->setVisible(false);
@@ -140,4 +137,5 @@ void MiniFrameSwitchBtn::updateIcon()
     QPalette pa = m_textLabel->palette();
     pa.setBrush(QPalette::WindowText, pa.brightText());
     m_textLabel->setPalette(pa);
+    update();
 }

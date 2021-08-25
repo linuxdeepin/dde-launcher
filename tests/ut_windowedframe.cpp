@@ -104,6 +104,8 @@ TEST_F(Tst_Windowedframe, eventFilter_test)
 
 TEST_F(Tst_Windowedframe, updatePostion_test)
 {
+    int defaultPos = CalculateUtil::instance()->m_dockInter->position();
+
     /*
      * 上: 0, 右: 1, 下: 2, 左: 3
     */
@@ -119,4 +121,8 @@ TEST_F(Tst_Windowedframe, updatePostion_test)
             QTest::qWait(500);
         }
     }
+
+    QTest::qWait(500);
+    //　恢复默认位置．
+    CalculateUtil::instance()->m_dockInter->setPosition(defaultPos);
 }

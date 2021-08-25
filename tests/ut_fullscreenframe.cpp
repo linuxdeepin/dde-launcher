@@ -5,6 +5,8 @@
 #include "multipagesview.h"
 #undef private
 
+#include <QTest>
+
 #include <gtest/gtest.h>
 
 class Tst_Fullscreenframe : public testing::Test
@@ -29,17 +31,25 @@ public:
 
 TEST_F(Tst_Fullscreenframe, fullScreenFrame)
 {
+    ASSERT_TRUE(m_fullScreenFrame);
     QWheelEvent event(QPointF(0, 0), 0, Qt::MiddleButton, Qt::ControlModifier);
     QApplication::sendEvent(m_fullScreenFrame, &event);
+    QTest::qWait(10);
 
+    ASSERT_TRUE(m_fullScreenFrame);
     QMouseEvent event2(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
     QApplication::sendEvent(m_fullScreenFrame, &event2);
+    QTest::qWait(10);
 
+    ASSERT_TRUE(m_fullScreenFrame);
     QMouseEvent event3(QEvent::MouseMove, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
     QApplication::sendEvent(m_fullScreenFrame, &event3);
+    QTest::qWait(10);
 
+    ASSERT_TRUE(m_fullScreenFrame);
     QMouseEvent event4(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
     QApplication::sendEvent(m_fullScreenFrame, &event4);
+    QTest::qWait(10);
 }
 
 TEST_F(Tst_Fullscreenframe, scrollToCategory_scrollCurrent_test)

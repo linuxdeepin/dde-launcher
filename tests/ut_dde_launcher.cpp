@@ -350,36 +350,3 @@ TEST_F(LauncherUnitTest, check_dbusDockInterface)
 
     qDebug() << "dock rect:" << dockInter.geometry();
 }
-
-TEST_F(LauncherUnitTest, check_dbusLauncherService)
-{
-    LauncherSys launcher;
-    DBusLauncherService service(&launcher);
-
-    // 启动器显示
-    launcher.showLauncher();
-    QTest::qWait(500);
-
-    // 启动器隐藏
-    service.Hide();
-    QTest::qWait(1000);
-
-    // 窗口模式
-    service.ShowByMode(0);
-    QTest::qWait(1000);
-
-    // 全屏模式
-    service.ShowByMode(1);
-    QTest::qWait(1000);
-
-    // 模式切换
-    service.Toggle();
-    QTest::qWait(1000);
-
-    // 启动器是否可见
-    QVERIFY(service.IsVisible());
-
-    // 启动器退出
-    service.Exit();
-}
-

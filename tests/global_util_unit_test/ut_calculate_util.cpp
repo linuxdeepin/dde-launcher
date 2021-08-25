@@ -71,6 +71,8 @@ TEST_F(Tst_calculate, size_test)
     CalculateUtil::instance()->setNavigationWidgetSizeHint(QSize(40, 40));
     QVERIFY(!CalculateUtil::instance()->getNavigationWidgetSizeHint().isNull());
 
+    int defaultPos = CalculateUtil::instance()->m_dockInter->position();
+
     /*
      * 全屏自由模式: 0
      * 全屏分类模式: 1
@@ -93,6 +95,11 @@ TEST_F(Tst_calculate, size_test)
         CalculateUtil::instance()->calculateIconSize(i);
         QTest::qWait(100);
     }
+
+    QTest::qWait(500);
+
+    //　恢复默认位置．
+    CalculateUtil::instance()->m_dockInter->setPosition(defaultPos);
 }
 
 TEST_F(Tst_calculate, appIconSize_test)

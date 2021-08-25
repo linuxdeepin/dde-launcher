@@ -12,30 +12,14 @@
 #include <gtest/gtest.h>
 
 class Tst_Appgridview : public testing::Test
-{
-public:
-    void SetUp() override
-    {
-        m_fullScreenFrame = new FullScreenFrame;
-    }
-
-    void TearDown() override
-    {
-        if (m_fullScreenFrame) {
-            delete m_fullScreenFrame;
-            m_fullScreenFrame = nullptr;
-        }
-    }
-
-public:
-    FullScreenFrame *m_fullScreenFrame;
-};
+{};
 
 TEST_F(Tst_Appgridview, appGridView_test)
 {
-    m_fullScreenFrame->initUI();
+    FullScreenFrame frame;
+    frame.initUI();
 
-    AppGridView *view = m_fullScreenFrame->m_multiPagesView->m_appGridViewList.at(m_fullScreenFrame->m_multiPagesView->currentPage());
+    AppGridView *view =frame.m_multiPagesView->m_appGridViewList.at(frame.m_multiPagesView->currentPage());
 
     ASSERT_TRUE(view);
 

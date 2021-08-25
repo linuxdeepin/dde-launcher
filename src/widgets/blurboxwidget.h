@@ -53,7 +53,6 @@ public:
     void setMaskVisible(bool visible);
     void setMaskSize(QSize size);
     void setDataDelegate(QAbstractItemDelegate *delegate);
-    void layoutAddWidget(QWidget *child);
     void layoutAddWidget(QWidget *, int stretch = 0, Qt::Alignment alignment = Qt::Alignment());
     void setCategory(AppsListModel::AppCategory category) {m_category = category;}
     AppsListModel::AppCategory category() { return  m_category;}

@@ -8,7 +8,7 @@ rm -rf $BUILD_DIR
 mkdir $BUILD_DIR
 cd $BUILD_DIR
 
-cmake -DCMAKE_BUILD_TYPE=Debug ..
+#cmake -DCMAKE_BUILD_TYPE=Debug ..
 
 cmake ../
 make -j 8

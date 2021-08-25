@@ -25,6 +25,8 @@
 #include <QWidget>
 #include <QLabel>
 
+#include <DGuiApplicationHelper>
+
 #include <diconbutton.h>
 #include "avatar.h"
 

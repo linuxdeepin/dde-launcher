@@ -43,15 +43,7 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     m_currentTimeLabel->setFixedHeight(40);
     m_currentTimeLabel->setAlignment(Qt::AlignVCenter);
 
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
-        QPalette pa = m_currentTimeLabel->palette();
-        pa.setBrush(QPalette::WindowText, pa.brightText());
-        m_currentTimeLabel->setPalette(pa);
-
-        pa = m_currentDateLabel->palette();
-        pa.setBrush(QPalette::WindowText, pa.brightText());
-        m_currentDateLabel->setPalette(pa);
-    });
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &DatetimeWidget::onThemeTypeChange);
 
     DFontSizeManager::instance()->bind(m_currentDateLabel, DFontSizeManager::T8);
 
@@ -70,10 +62,6 @@ DatetimeWidget::DatetimeWidget(QWidget *parent)
     connect(m_refreshDateTimer, &QTimer::timeout, this, &DatetimeWidget::updateTime);
 }
 
-DatetimeWidget::~DatetimeWidget()
-{
-}
-
 int DatetimeWidget::getDateTextWidth()
 {
     return m_currentDateLabel->fontMetrics().boundingRect(m_currentDateLabel->text()).width();
@@ -86,6 +74,19 @@ void DatetimeWidget::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton) {
         emit clicked();
     }
+}
+
+void DatetimeWidget::onThemeTypeChange(DGuiApplicationHelper::ColorType themeType)
+{
+    Q_UNUSED(themeType);
+
+    QPalette pa = m_currentTimeLabel->palette();
+    pa.setBrush(QPalette::WindowText, pa.brightText());
+    m_currentTimeLabel->setPalette(pa);
+
+    pa = m_currentDateLabel->palette();
+    pa.setBrush(QPalette::WindowText, pa.brightText());
+    m_currentDateLabel->setPalette(pa);
 }
 
 void DatetimeWidget::updateTime()

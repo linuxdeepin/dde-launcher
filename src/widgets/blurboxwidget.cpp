@@ -86,11 +86,6 @@ BlurBoxWidget::~BlurBoxWidget()
     m_categoryMultiPagesView = nullptr;
 }
 
-void BlurBoxWidget::layoutAddWidget(QWidget *child)
-{
-    m_vLayout->addWidget(child);
-}
-
 void BlurBoxWidget::layoutAddWidget(QWidget *child, int stretch, Qt::Alignment alignment)
 {
     m_vLayout->addWidget(child, stretch, alignment);

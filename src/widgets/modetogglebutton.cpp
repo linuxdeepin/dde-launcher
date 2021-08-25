@@ -21,13 +21,8 @@
 
 #include "modetogglebutton.h"
 
-#include <DGuiApplicationHelper>
-
 #include <QPainter>
 #include <QPainterPath>
-
-DGUI_USE_NAMESPACE
-DWIDGET_USE_NAMESPACE
 
 /**
  * @brief ModeToggleButton::ModeToggleButton
@@ -40,10 +35,7 @@ ModeToggleButton::ModeToggleButton(QWidget *parent)
     setFocusPolicy(Qt::NoFocus);
 
     resetStyle();
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
-        resetStyle();
-        update();
-    });
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &ModeToggleButton::resetStyle);
 }
 
 void ModeToggleButton::paintEvent(QPaintEvent *event)
@@ -91,4 +83,5 @@ void ModeToggleButton::resetStyle()
         m_colorHover.setRgb(0, 0, 0, 25);
         setIcon(QIcon(":/icons/skin/icons/fullscreen_normal.svg"));
     }
+    update();
 }

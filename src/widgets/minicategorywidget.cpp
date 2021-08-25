@@ -119,12 +119,6 @@ MiniCategoryWidget::MiniCategoryWidget(QWidget *parent)
     QTimer::singleShot(1, this, &MiniCategoryWidget::onCategoryListChanged);
 }
 
-void MiniCategoryWidget::mousePressEvent(QMouseEvent *e)
-{
-    // ignore this event to prohibit launcher auto-hide
-    Q_UNUSED(e);
-}
-
 void MiniCategoryWidget::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key())

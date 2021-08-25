@@ -55,7 +55,6 @@ signals:
     void requestCategory(const AppsListModel::AppCategory &category) const;
 
 protected:
-    void mousePressEvent(QMouseEvent *e);
     void keyPressEvent(QKeyEvent *e);
     void enterEvent(QEvent *e);
     bool event(QEvent *event);

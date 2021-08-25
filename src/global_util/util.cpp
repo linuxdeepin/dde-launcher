@@ -417,34 +417,30 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
  */
 QIcon getIcon(const QString &name)
 {
-    //TODO 这里找图标会耗时，界面轻微卡顿，后面可以改成单独开启线程去查找
-    auto getIconList = [ = ] (const QString &iconName) {
-        QProcess process;
-        process.start("qtxdg-iconfinder", QStringList() << iconName);
-        process.closeWriteChannel();
-        process.waitForFinished();
+    //TODO 这里找图标会耗时，界面轻微卡顿，后面有时间可以放到AppItem里面，单独开启线程去查找
+    QProcess process;
+    process.start("qtxdg-iconfinder", QStringList() << name);
+    process.closeWriteChannel();
+    process.waitForFinished();
 
-        int exitCode = process.exitCode();
-        QString outputTxt = process.readAllStandardOutput();
+    int exitCode = process.exitCode();
+    QString outputTxt = process.readAllStandardOutput();
 
-        auto list = outputTxt.split("\n");
+    auto list = outputTxt.split("\n");
 
-        if (exitCode != 0 || list.size() <= 3)
-            return QStringList() << "";
+    if (exitCode != 0 || list.size() <= 3)
+        return QIcon::fromTheme(name);
 
-        // 去掉无用数据
-        list.removeFirst();
-        list.removeLast();
-        list.removeLast();
+    // 去掉无用数据
+    list.removeFirst();
+    list.removeLast();
+    list.removeLast();
 
-        for (auto &s : list) {
-            s = s.simplified();
-        }
+    for (auto &s : list) {
+        s = s.simplified();
+    }
 
-        return list;
-    };
-
-    return QIcon::fromTheme(getIconList(name).first());
+    return QIcon::fromTheme(list.first());
 }
 
 QString cacheKey(const ItemInfo &itemInfo, CacheType type)

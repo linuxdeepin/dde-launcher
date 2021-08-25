@@ -25,6 +25,6 @@ TEST_F(Tst_Avatar, avatar_test)
 
     QPaintEvent event1(QRect(0, 0, 32, 32));
     QApplication::sendEvent(&avatar, &event1);
-
+    
     avatar.setFilePath(QString());
 }

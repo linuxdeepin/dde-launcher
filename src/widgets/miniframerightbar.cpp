@@ -388,4 +388,6 @@ void MiniFrameRightBar::updateIcon()
          if (m_hasDownloadIcon)
              m_downloadBtn->setIcon(QIcon(":/widgets/images/folder-downloads-symbolic.svg"));
     }
+
+    update();
 }

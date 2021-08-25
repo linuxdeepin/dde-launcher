@@ -25,12 +25,6 @@ TEST_F(Tst_Modetogglebutton, modeToggleButton_test)
     QPaintEvent paintEvent1(QRect(10, 10, 10, 10));
     QApplication::sendEvent(&button, &paintEvent1);
 
-    QTest::qWait(50);
-
-    button.clearFocus();
-    button.m_hover = false;
-    QApplication::sendEvent(&button, &paintEvent1);
-
     QEvent event1(QEvent::Enter);
     QApplication::sendEvent(&button, &event1);
 

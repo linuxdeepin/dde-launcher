@@ -28,5 +28,4 @@ TEST_F(Tst_Applistarea, appListArea_test)
 
     QWheelEvent wheelEvent2(QPointF(0, 0), -10, Qt::MiddleButton, Qt::ControlModifier);
     QApplication::sendEvent(&area, &wheelEvent2);
-
 }

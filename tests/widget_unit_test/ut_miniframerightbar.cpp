@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QTest>
+
 #include <DGuiApplicationHelper>
 
 #include <gtest/gtest.h>

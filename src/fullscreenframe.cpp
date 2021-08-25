@@ -839,6 +839,7 @@ void FullScreenFrame::initUI()
     m_multiPagesView->setFixedSize(appsContentWidth, appsContentHeight);
 
     QVBoxLayout *scrollVLayout = new QVBoxLayout;
+    scrollVLayout->setParent(m_contentFrame);
     scrollVLayout->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN, 0, 0);
     scrollVLayout->setSpacing(0);
     scrollVLayout->addWidget(m_appsIconBox,0,Qt::AlignCenter);
@@ -852,6 +853,7 @@ void FullScreenFrame::initUI()
     m_navigationWidget->setFixedHeight(m_calcUtil->instance()->navigationHeight());
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->setParent(this);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
     mainLayout->addWidget(m_topSpacing);

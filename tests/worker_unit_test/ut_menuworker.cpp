@@ -1,6 +1,5 @@
 #define private public
 #include "menuworker.h"
-#include "appgridview.h"
 #undef private
 
 #include <QTest>

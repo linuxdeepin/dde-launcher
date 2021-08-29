@@ -77,6 +77,8 @@ public:
     void updateGradient();
     void updateGradient(QPixmap& pixmap, QPoint startPoint, QPoint topRightImg);
 
+    void setViewContentMargin();
+
     QPropertyAnimation::State getPageSwitchAnimationState();
     QWidget *getParentWidget();
     QPoint calculPadding(MultiPagesView::Direction dir);

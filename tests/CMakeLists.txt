@@ -1,3 +1,4 @@
+ADD_COMPILE_OPTIONS(-fno-access-control)
 cmake_minimum_required(VERSION 3.7)
 
 set(BIN_NAME dde_launcher_unit_test)

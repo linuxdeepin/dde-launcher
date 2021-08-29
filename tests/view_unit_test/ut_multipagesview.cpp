@@ -16,23 +16,20 @@ class Tst_Multipagesview : public testing::Test
 
 TEST_F(Tst_Multipagesview, multiPagesView_test)
 {
+//   该类使用当前方法调用很容易出现段错误，本地无法复现，包括tty,但gerrit会出现，暂时屏蔽，放到最后处理。
+//    CalculateUtil::instance()->setDisplayMode(0);
+
 //    FullScreenFrame frame;
-//    MultiPagesView *multipageView = frame.m_multiPagesView;
-//    ASSERT_TRUE(multipageView);
+//    MultiPagesView view(AppsListModel::All, &frame);
+//    view.setViewContentMargin();
 
-//    multipageView->updatePageCount(AppsListModel::Category);
-//    QMouseEvent event(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-//    QApplication::sendEvent(multipageView, &event);
+//// crash point
+////    view.updateGradient();
 
-//    multipageView->updatePageCount(AppsListModel::Internet);
-//    QMouseEvent event1(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-//    QApplication::sendEvent(multipageView, &event1);
+//    QPixmap pix;
+//    view.updateGradient(pix, QPoint(0, 0), QPoint(10, 10));
 
-//    QMouseEvent event2(QEvent::MouseMove, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-//    QApplication::sendEvent(multipageView, &event2);
-
-//    QMouseEvent event3(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-//    QApplication::sendEvent(multipageView, &event3);
-
-//    multipageView->setGradientVisible(false);
+//    view.updatePageCount(AppsListModel::Category);
+//    view.updatePageCount(AppsListModel::Internet);
+//    view.setGradientVisible(false);
 }

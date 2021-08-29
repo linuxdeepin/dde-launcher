@@ -66,12 +66,8 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_appListArea->viewport()->installEventFilter(this);
     m_appListArea->installEventFilter(this);
 
-    if (m_calcUtil->displayMode() == ALL_APPS) {
-        // 全屏视图管理类设置左右边距
-        int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
-        m_viewBox->layout()->setContentsMargins(padding, 0, padding, 0);
-        m_viewBox->layout()->setSpacing(padding);
-    }
+    if (m_calcUtil->displayMode() == ALL_APPS)
+        setViewContentMargin();
 
     // 翻页按钮和动画
     m_pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value", this);
@@ -122,6 +118,14 @@ void MultiPagesView::updateGradient(QPixmap &pixmap, QPoint topLeftImg, QPoint t
     m_pRightGradient->move(topRight);
     m_pRightGradient->raise();
     setGradientVisible(true);
+}
+
+void MultiPagesView::setViewContentMargin()
+{
+    // 全屏视图管理类设置左右边距
+    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
+    m_viewBox->layout()->setContentsMargins(padding, 0, padding, 0);
+    m_viewBox->layout()->setSpacing(padding);
 }
 
 /**

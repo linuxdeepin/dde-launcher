@@ -1,8 +1,7 @@
-#include "appslistmodel.h"
-#include "applistdelegate.h"
-
 #define private public
+#include "appslistmodel.h"
 #include "applistview.h"
+#include "applistdelegate.h"
 #include "windowedframe.h"
 #undef private
 
@@ -24,85 +23,80 @@
 class Tst_Applistview : public testing::Test
 {};
 
-TEST_F(Tst_Applistview, appDelegate_test)
-{
-    WindowedFrame frame;
-    AppListView *appListView = frame.m_appsView;
-
-    //　light type
-    DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::ColorType(1));
-    appListView->setModel(frame.m_appsModel);
-    appListView->setItemDelegate(new AppListDelegate(&frame));
-    AppListDelegate * delegate = static_cast<AppListDelegate *>(appListView->itemDelegate());
-    if (delegate)
-        delegate->setActived(true);
-
-    //　dark type
-    DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::ColorType(2));
-    delegate = static_cast<AppListDelegate *>(appListView->itemDelegate());
-    appListView->setItemDelegate(new AppListDelegate(frame.m_appsModel));
-    if (delegate)
-        delegate->setActived(true);
-
-    frame.show();
-    QTest::qWait(500);
-    frame.hide();
-    DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::ColorType(1));
-}
-
 TEST_F(Tst_Applistview, appListView_test)
 {
-    WindowedFrame frame;
+    AppListView widget;
+    AppListDelegate delegate(&widget);
+    widget.setItemDelegate(&delegate);
 
-    AppListView *widget = frame.m_appsView;
-    widget->setItemDelegate(new AppListDelegate(&frame));
-
-    AppsListModel *pModel = new AppsListModel(AppsListModel::All);
+    AppsListModel model(AppsListModel::All);
     QModelIndex index;
-    pModel->insertRow(0, index);
-    widget->setModel(pModel);
+    model.insertRow(0, index);
+    widget.setModel(&model);
 
-    frame.show();
     QTest::qWait(1000);
 
-    QWheelEvent event(QPointF(0, 0), 0, Qt::MiddleButton, Qt::ControlModifier);
-    QApplication::sendEvent(widget->viewport(), &event);
+    QWheelEvent wheelEvent(QPointF(0, 0), 0, Qt::MiddleButton, Qt::ControlModifier);
+    widget.wheelEvent(&wheelEvent);
 
-    QMouseEvent event1(QEvent::MouseMove, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    QApplication::sendEvent(widget->viewport(), &event1);
+    QMouseEvent mouseMoveEvent(QEvent::MouseMove, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
+    widget.mouseMoveEvent(&mouseMoveEvent);
 
-    QMouseEvent event2(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    QApplication::sendEvent(widget->viewport(), &event2);
+    QMouseEvent mousePress(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
+    widget.mousePressEvent(&mousePress);
 
-    widget->hasAutoScroll();
-    QMouseEvent event3(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    QApplication::sendEvent(widget->viewport(), &event3);
+    widget.m_updateEnableSelectionByMouseTimer->start();
+    widget.mousePressEvent(&mousePress);
+
+    widget.hasAutoScroll();
+    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
+    widget.mouseReleaseEvent(&releaseEvent);
 
     QMimeData mimeData;
     mimeData.setData("test", "test");
 
-    QDragEnterEvent event4(QPoint(0, 1), Qt::CopyAction, &mimeData, Qt::LeftButton, Qt::NoModifier);
-    QApplication::sendEvent(widget->viewport(), &event4);
+    QDragEnterEvent dragEnterEvent(QPoint(0, 1), Qt::CopyAction, &mimeData, Qt::LeftButton, Qt::NoModifier);
+    widget.dragEnterEvent(&dragEnterEvent);
 
-    QDragMoveEvent event5(QPoint(0, 2), Qt::MoveAction, &mimeData, Qt::LeftButton, Qt::NoModifier);
-    QApplication::sendEvent(widget, &event5);
+    QDragMoveEvent dragMoveEvent(QPoint(0, 2), Qt::MoveAction, &mimeData, Qt::LeftButton, Qt::NoModifier);
+    widget.dragMoveEvent(&dragMoveEvent);
 
-    QDragLeaveEvent event6;
-    QApplication::sendEvent(widget, &event6);
+    QDragLeaveEvent dragLeaveEvent;
+    widget.dragLeaveEvent(&dragLeaveEvent);
 
-    QDropEvent event7(QPointF(0, 0), Qt::CopyAction, &mimeData, Qt::LeftButton, Qt::NoModifier);
-    QApplication::sendEvent(widget->viewport(), &event7);
+    QDropEvent dropEvent(QPointF(0, 0), Qt::CopyAction, &mimeData, Qt::LeftButton, Qt::NoModifier);
+    widget.dropEvent(&dropEvent);
 
-    QEvent event8(QEvent::Enter);
-    QApplication::sendEvent(widget, &event8);
+    QEvent enterEvent(QEvent::Enter);
+    widget.enterEvent(&enterEvent);
 
-    QEvent event9(QEvent::Leave);
-    QApplication::sendEvent(widget, &event9);
+    QEvent leaveEvent(QEvent::Leave);
+    widget.leaveEvent(&leaveEvent);
 
-    widget->handleScrollValueChanged();
-    widget->handleScrollFinished();
-    widget->prepareDropSwap();
-    widget->dropSwap();
-    widget->menuHide();
-    frame.hide();
+    widget.handleScrollValueChanged();
+    widget.handleScrollFinished();
+    widget.prepareDropSwap();
+    widget.dropSwap();
+    widget.menuHide();
+}
+
+TEST_F(Tst_Applistview, appListDelegate_test)
+{
+    AppListDelegate appListDelegate;
+    appListDelegate.setActived(false);
+
+    ASSERT_FALSE(appListDelegate.m_actived);
+
+    QPixmap pix;
+    appListDelegate.dropShadow(pix, 5, QColor(Qt::red), QPoint(10, 10));
+
+    pix.load("/usr/share/backgrounds/default_background.jpg");
+    appListDelegate.dropShadow(pix, 5, QColor(Qt::red), QPoint(10, 10));
+}
+
+TEST_F(Tst_Applistview, viewApi_test)
+{
+    AppListView view;
+    QModelIndex index = QModelIndex();
+    view.startDrag(index);
 }

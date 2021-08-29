@@ -8,6 +8,7 @@
 #include <QApplication>
 #include <QDropEvent>
 #include <QDragEnterEvent>
+#include <QTest>
 
 #include <gtest/gtest.h>
 
@@ -16,49 +17,106 @@ class Tst_Appgridview : public testing::Test
 
 TEST_F(Tst_Appgridview, appGridView_test)
 {
-//    FullScreenFrame frame;
-//    frame.initUI();
+    AppGridView view;
+    view.indexYOffset(QModelIndex());
+    QWidget w;
+    view.setContainerBox(&w);
 
-//    AppGridView *view =frame.m_multiPagesView->m_appGridViewList.at(frame.m_multiPagesView->currentPage());
+    view.updateItemHiDPIFixHook(QModelIndex());
 
-//    ASSERT_TRUE(view);
+    view.fitToContent();
 
-//    view->indexYOffset(view->indexAt(0));
-//    QWidget *w = new QWidget(view);
-//    view->setContainerBox(w);
+    view.creatSrcPix(QModelIndex(), QString("dde-calendar"));
+    view.creatSrcPix(QModelIndex(), QString("deepin-editor"));
 
-//    view->updateItemHiDPIFixHook(view->indexAt(0));
+    view.appIconRect(QModelIndex());
 
-//    view->setDelegate(view->getDelegate());
+    QMouseEvent leftPressEvent(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
+    view.mousePressEvent(&leftPressEvent);
 
-//    QDropEvent event(QPointF(0, 0), Qt::CopyAction, nullptr, Qt::LeftButton, Qt::NoModifier);
-//    QApplication::sendEvent(view->viewport(), &event);
+    view.m_mousePress = false;
+    QMouseEvent rightPressEvent(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::RightButton, Qt::RightButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
+    view.mousePressEvent(&rightPressEvent);
 
-//    QMouseEvent event1(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-//    QApplication::sendEvent(view->viewport(), &event1);
+    QMouseEvent moveEvent(QEvent::MouseMove, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    view.mouseMoveEvent(&moveEvent);
 
-//    QMouseEvent event2(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::RightButton, Qt::RightButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-//    QApplication::sendEvent(view->viewport(), &event2);
+    QMouseEvent leftRelease(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+    view.mouseReleaseEvent(&leftRelease);
 
-//    QMimeData data;
-//    data.setData("RequestDock","test");
-//    QDragEnterEvent event3(QPoint(0, 1), Qt::CopyAction, &data, Qt::LeftButton, Qt::NoModifier);
-//    QApplication::sendEvent(view->viewport(), &event3);
+    QMouseEvent rightRelease(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::RightButton, Qt::LeftButton, Qt::NoModifier);
+    view.mouseReleaseEvent(&rightRelease);
 
-//    QDragMoveEvent event4(QPoint(0, 2), Qt::MoveAction, &data, Qt::LeftButton, Qt::NoModifier);
-//    QApplication::sendEvent(view->viewport(), &event4);
+    QMimeData data;
+    data.setText("test");
 
-//    view->dragOut(-1);
-//    view->dragIn(view->indexAt(0));
+    QDragMoveEvent dragMoveEvent(QPoint(0, 10), Qt::DropAction::CopyAction, &data, Qt::LeftButton, Qt::NoModifier);
+    view.dragMoveEvent(&dragMoveEvent);
 
-//    QDragLeaveEvent event5;
-//    QApplication::sendEvent(view->viewport(), &event5);
+    QDropEvent dropEvent(QPointF(0, 20), Qt::CopyAction, &data, Qt::LeftButton, Qt::NoModifier, QEvent::Drop);
+    view.dropEvent(&dropEvent);
 
-//    QMouseEvent event6(QEvent::MouseMove, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-//    QApplication::sendEvent(view->viewport(), &event6);
+    QDragLeaveEvent dragLeaveEvent;
+    view.dragLeaveEvent(&dragLeaveEvent);
 
-//    QMouseEvent event7(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-//    QApplication::sendEvent(view->viewport(), &event7);
+    view.m_calcUtil->setDisplayMode(GROUP_BY_CATEGORY);
+    view.dragLeaveEvent(&dragLeaveEvent);
 
-//    view->fitToContent();
+    view.dragOut(-1);
+    view.dragIn(QModelIndex());
 }
+
+TEST_F(Tst_Appgridview, appItemDelegate_test)
+{
+    AppItemDelegate appItemDelegate;
+
+    QFont font;
+    const QFontMetrics fontMetrics(font);
+
+    QRect rect(QPoint(10, 10), QSize(20, 30));
+    appItemDelegate.itemBoundingRect(rect);
+
+    rect.setSize(QSize(30, 20));
+    appItemDelegate.itemBoundingRect(rect);
+
+    rect.setSize(QSize(20, 20));
+    appItemDelegate.itemBoundingRect(rect);
+}
+
+TEST_F(Tst_Appgridview, listModel_test)
+{
+    AppsListModel model(AppsListModel::Category, nullptr);
+
+    model.setDragDropIndex(QModelIndex());
+
+    model.setDraggingIndex(QModelIndex());
+
+    model.dropInsert("deepin-editor", 0);
+
+    model.dropSwap(0);
+
+    model.clearDraggingIndex();
+
+    model.layoutChanged(AppsListModel::Category);
+
+    model.indexDragging(QModelIndex());
+
+    ItemInfo info;
+    model.itemDataChanged(info);
+}
+
+TEST_F(Tst_Appgridview, itemDelegate_test)
+{
+    AppGridView view;
+    AppItemDelegate delegate(&view);
+
+// painter无效
+//    QRect paintRect(QPoint(10, 10), QSize(100, 100));
+//    QPainter painter(&view);
+//    QStyleOptionViewItem item;
+//    delegate.paint(&painter, item, QModelIndex());
+
+    QRect boundRect(QPoint(10, 10), QSize(20, 20));
+    delegate.itemTextRect(boundRect, boundRect, true);
+}
+

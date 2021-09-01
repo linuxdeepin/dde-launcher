@@ -11,21 +11,21 @@ class Tst_Applistarea : public testing::Test
 TEST_F(Tst_Applistarea, appListArea_test)
 {
     AppListArea area;
-    QWheelEvent event(QPointF(0, 0), 0, Qt::MiddleButton, Qt::ControlModifier);
-    QApplication::sendEvent(&area, &event);
+    QWheelEvent wheelEvent(QPointF(0, 0), 0, Qt::MiddleButton, Qt::ControlModifier);
+    area.wheelEvent(&wheelEvent);
 
-    QEvent event1(QEvent::Enter);
-    QApplication::sendEvent(&area, &event1);
+    QEvent enterEvent(QEvent::Enter);
+    area.enterEvent(&enterEvent);
 
-    QMouseEvent event2(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    QApplication::sendEvent(&area, &event2);
+    QMouseEvent pressEvent(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
+    area.mousePressEvent(&pressEvent);
 
-    QMouseEvent event3(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    QApplication::sendEvent(&area, &event3);
+    QMouseEvent releaseEvent(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
+    area.mouseReleaseEvent(&releaseEvent);
 
-    QWheelEvent wheelEvent(QPointF(0, 0), 10, Qt::MiddleButton, Qt::ControlModifier);
-    QApplication::sendEvent(&area, &wheelEvent);
+    QWheelEvent plusWheelEvent(QPointF(0, 0), 10, Qt::MiddleButton, Qt::ControlModifier);
+    QApplication::sendEvent(&area, &plusWheelEvent);
 
-    QWheelEvent wheelEvent2(QPointF(0, 0), -10, Qt::MiddleButton, Qt::ControlModifier);
-    QApplication::sendEvent(&area, &wheelEvent2);
+    QWheelEvent minusWheelEvent(QPointF(0, 0), -10, Qt::MiddleButton, Qt::ControlModifier);
+    QApplication::sendEvent(&area, &minusWheelEvent);
 }

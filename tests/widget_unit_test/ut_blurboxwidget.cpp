@@ -16,11 +16,11 @@ TEST_F(Tst_Blurboxwidget, blurBoxWidget_test)
     BlurBoxWidget widget(AppsListModel::Others, const_cast<char *>("Others"));
     widget.setFixedSize(QSize(10, 10));
 
-    QMouseEvent event(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    QApplication::sendEvent(&widget, &event);
+    QMouseEvent mousePress(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
+    widget.mousePressEvent(&mousePress);
 
-    QMouseEvent event1(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    QApplication::sendEvent(&widget, &event1);
+    QMouseEvent mouseRelease(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
+    widget.mouseReleaseEvent(&mouseRelease);
 
     QWidget w;
     widget.layoutAddWidget(&w, 0, Qt::AlignCenter);

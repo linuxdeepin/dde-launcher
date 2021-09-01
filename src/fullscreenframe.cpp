@@ -191,11 +191,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_calcUtil->setNavigationWidgetSizeHint(m_navigationWidget->sizeHint());
 }
 
-void FullScreenFrame::exit()
-{
-    qApp->quit();
-}
-
 int FullScreenFrame::dockPosition()
 {
     return m_appsManager->dockPosition();

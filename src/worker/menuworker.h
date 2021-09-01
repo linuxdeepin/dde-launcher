@@ -49,7 +49,6 @@ class MenuWorker : public QObject
 
 public:
     explicit MenuWorker(QObject *parent = nullptr);
-    ~MenuWorker();
 
     enum MenuAction
     {

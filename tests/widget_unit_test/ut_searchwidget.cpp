@@ -25,3 +25,10 @@ TEST_F(Tst_SearchWidget, hideToggle_test)
     QCOMPARE(!widget.categoryBtn()->isVisible(), true);
     QCOMPARE(!widget.toggleModeBtn()->isVisible(), true);
 }
+
+TEST_F(Tst_SearchWidget, otherApi_test)
+{
+    SearchWidget widget;
+    widget.updateSize(1.5, 1.2);
+}
+

@@ -17,6 +17,9 @@ TEST_F(Tst_Minicategorywidget, miniCategoryWidget_test)
     QMouseEvent event(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
     QApplication::sendEvent(&widget, &event);
 
+    QKeyEvent rightKeyEvent(QEvent::KeyPress, Qt::Key_Right,Qt::NoModifier);
+    widget.keyPressEvent(&rightKeyEvent);
+
 //    crash
 //    QKeyEvent event1(QEvent::KeyPress, Qt::Key_Down,Qt::NoModifier);
 //    QApplication::sendEvent(m_miniCategoryWidget, &event1);
@@ -34,6 +37,7 @@ TEST_F(Tst_Minicategorywidget, miniCategoryWidget_test)
     QApplication::sendEvent(&widget, &event6);
 
     widget.onCategoryListChanged();
+    ASSERT_TRUE(widget.active() == widget.m_active);
 
 //    crash
 //    m_miniCategoryWidget->selectNext();

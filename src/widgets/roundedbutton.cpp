@@ -27,10 +27,6 @@ RoundedButton::RoundedButton(QWidget *parent)
     setFixedSize(60, 30);
 }
 
-RoundedButton::~RoundedButton()
-{
-}
-
 void RoundedButton::setText(const QString &text)
 {
     const QFontMetrics fm(fontMetrics());

@@ -78,7 +78,6 @@ public:
 
     explicit FullScreenFrame(QWidget *parent = nullptr);
 
-    void exit();
     int dockPosition();
     void updateDisplayMode(const int mode);
     void nextTabWidget(int key);

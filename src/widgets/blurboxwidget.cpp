@@ -121,20 +121,17 @@ void BlurBoxWidget::mousePressEvent(QMouseEvent *e)
 void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     QPoint fullscreenPoint = QCursor::pos();
-    //单击事件
     if( (e->button() == Qt::LeftButton && fullscreenPoint == mousePos)) {
         emit maskClick(m_category);
         return;
     } else  if ( e->button() == Qt::LeftButton && e->source() == Qt::MouseEventSynthesizedByQt) {
-        // 处理触屏点击事件
         int diff_x = qAbs(fullscreenPoint.x() - mousePos.x());
         int diff_y = qAbs(fullscreenPoint.y() - mousePos.y());
         if (diff_x < DLauncher::TOUCH_DIFF_THRESH && diff_y < DLauncher::TOUCH_DIFF_THRESH) {
-            emit maskClick(m_category); //处理触屏点击事件
+            emit maskClick(m_category);
             return;
         }
     }
-    //把事件往下传fullscreenframe处理
     QWidget::mouseReleaseEvent(e);
 }
 
@@ -173,7 +170,6 @@ void BlurBoxWidget::setFixedSize(const QSize &size)
 
 void BlurBoxWidget::setMaskVisible(bool visible)
 {
-    //设置标题的文本的透明度，icon还需要在deegate中设置
     if (visible) {
        m_categoryTitle->setTitleOpacity(0.3);
     } else {

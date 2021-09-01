@@ -37,10 +37,6 @@ MenuWorker::MenuWorker(QObject *parent)
 {
 }
 
-MenuWorker::~MenuWorker()
-{
-}
-
 void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
 {
     m_appKey = m_currentModelIndex.data(AppsListModel::AppKeyRole).toString();

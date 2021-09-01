@@ -91,6 +91,59 @@
 //    //    FullScreenFrame fullscreen;
 //    //    fullscreen.showLauncher();
 
+
+//TEST_F(Tst_Fullscreenframe, releaseEvent_test)
+//{
+//    FullScreenFrame fullscreen;
+
+//    // 普通模式时
+//    QMouseEvent normalReleaseEvent(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
+//    fullscreen.mouseReleaseEvent(&normalReleaseEvent);
+
+//    // m_mouse_press点击时
+//    fullscreen.m_mouse_press = false;
+//    QMouseEvent pressReleaseEvent(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
+//    fullscreen.mouseReleaseEvent(&pressReleaseEvent);
+
+//    // 分类模式时
+//    fullscreen.m_displayMode = GROUP_BY_CATEGORY;
+//    QMouseEvent releaseEvent_(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+//    fullscreen.mouseReleaseEvent(&releaseEvent_);
+//}
+
+//TEST_F(Tst_Fullscreenframe, wheelEvent_test)
+//{
+//    FullScreenFrame fullscreen;
+
+//    fullscreen.m_displayMode = GROUP_BY_CATEGORY;
+//    QWheelEvent wheelEvent(QPointF(0, 0), 0, Qt::MiddleButton, Qt::ControlModifier);
+//    fullscreen.wheelEvent(&wheelEvent);
+
+//    fullscreen.m_displayMode = SEARCH;
+//}
+
+//TEST_F(Tst_Fullscreenframe, keyEvent_test)
+//{
+//    FullScreenFrame fullscreen;
+
+//    QKeyEvent minusKeyEvent(QEvent::KeyPress, Qt::Key_Minus, Qt::NoModifier, QString(""));
+//    fullscreen.keyPressEvent(&minusKeyEvent);
+
+//    QKeyEvent ctrlMinusKeyEvent(QEvent::KeyPress, Qt::Key_Minus, Qt::ControlModifier, QString(""));
+//    fullscreen.keyPressEvent(&ctrlMinusKeyEvent);
+
+//    QKeyEvent equalKeyEvent(QEvent::KeyPress, Qt::Key_Equal, Qt::NoModifier, QString(""));
+//    fullscreen.keyPressEvent(&equalKeyEvent);
+
+//    QKeyEvent controlVKeyEvent(QEvent::KeyPress, Qt::Key_Equal, Qt::ControlModifier, QString(""));
+//    fullscreen.keyPressEvent(&controlVKeyEvent);
+//}
+
+//TEST_F(Tst_Fullscreenframe, showAndHideEvent_test)
+//{
+//    // 涉及xcb模块代码，会导致crash
+//    //    FullScreenFrame fullscreen;
+//    //    fullscreen.showLauncher();
 //    //    fullscreen.hideLauncher();
 //}
 

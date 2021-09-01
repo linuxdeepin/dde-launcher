@@ -28,7 +28,6 @@ class RoundedButton : public QPushButton
 
 public:
     RoundedButton(QWidget *parent = nullptr);
-    ~RoundedButton();
 
 public slots:
     void setText(const QString &text);

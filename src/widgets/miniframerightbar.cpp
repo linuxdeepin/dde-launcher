@@ -196,10 +196,6 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     connect(m_avatar, &Avatar::clicked, this, &MiniFrameRightBar::handleAvatarClicked);
 }
 
-MiniFrameRightBar::~MiniFrameRightBar()
-{
-}
-
 void MiniFrameRightBar::setCurrentCheck(bool checked) const
 {
     m_btns[m_currentIndex]->setChecked(checked);

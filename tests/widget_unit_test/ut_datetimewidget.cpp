@@ -2,9 +2,13 @@
 #include "datetimewidget.h"
 #undef private
 
+#include <DGuiApplicationHelper>
+
 #include <QTest>
 
 #include <gtest/gtest.h>
+
+DGUI_USE_NAMESPACE
 
 class Tst_Datetimewidget : public testing::Test
 {};
@@ -17,4 +21,6 @@ TEST_F(Tst_Datetimewidget, datetimeWidget_test)
 
     QMouseEvent event(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
     QApplication::sendEvent(&widget, &event);
+
+    widget.onThemeTypeChange(DGuiApplicationHelper::instance()->themeType());
 }

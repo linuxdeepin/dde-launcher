@@ -93,30 +93,30 @@ TEST_F(Tst_Windowedframe, eventFilter_test)
 
 TEST_F(Tst_Windowedframe, updatePostion_test)
 {
-    WindowedFrame frame;
+//    WindowedFrame frame;
 
-    int defaultPos = CalculateUtil::instance()->m_dockInter->position();
-    DGuiApplicationHelper::ColorType defaultMode = DGuiApplicationHelper::instance()->themeType();
+//    int defaultPos = CalculateUtil::instance()->m_dockInter->position();
+//    DGuiApplicationHelper::ColorType defaultMode = DGuiApplicationHelper::instance()->themeType();
 
-    /*
-     * 上: 0, 右: 1, 下: 2, 左: 3
-    */
-    for (int i = 0; i < 4; i++) {
-        frame.m_dockInter->setPosition(i);
+//    /*
+//     * 上: 0, 右: 1, 下: 2, 左: 3
+//    */
+//    for (int i = 0; i < 4; i++) {
+//        frame.m_dockInter->setPosition(i);
 
-        /*
-         * 时尚模式: 0
-         * 高效模式: 1
-        */
-        for (int j = 0; j < 2; j++) {
-            frame.m_dockInter->setDisplayMode(j);
-            frame.updatePosition();
-            QTest::qWait(500);
-        }
-    }
+//        /*
+//         * 时尚模式: 0
+//         * 高效模式: 1
+//        */
+//        for (int j = 0; j < 2; j++) {
+//            frame.m_dockInter->setDisplayMode(j);
+//            frame.updatePosition();
+//            QTest::qWait(500);
+//        }
+//    }
 
-    QTest::qWait(500);
-    //　恢复默认位置．
-    CalculateUtil::instance()->m_dockInter->setPosition(defaultPos);
-    DGuiApplicationHelper::instance()->setThemeType(defaultMode);
+//    QTest::qWait(500);
+//    //　恢复默认位置．
+//    CalculateUtil::instance()->m_dockInter->setPosition(defaultPos);
+//    DGuiApplicationHelper::instance()->setThemeType(defaultMode);
 }

@@ -27,6 +27,7 @@
 #include <QAbstractItemDelegate>
 
 class CalculateUtil;
+
 class AppListDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT

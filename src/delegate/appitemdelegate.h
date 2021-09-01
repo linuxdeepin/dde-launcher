@@ -30,6 +30,7 @@
 #include <QPainter>
 
 class CalculateUtil;
+
 class AppItemDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
@@ -39,7 +40,6 @@ public:
 
     void setCurrentIndex(const QModelIndex &index);
     const QModelIndex &currentIndex() const {return CurrentIndex;}
-
 
 signals:
     void requestUpdate(const QModelIndex &idx) const;

@@ -1,5 +1,6 @@
 #define private public
 #include "menuworker.h"
+#include "appgridview.h"
 #undef private
 
 #include <QTest>
@@ -32,10 +33,31 @@ TEST_F(Tst_MenuWorker, menuWorker_test)
     qDebug() << "menu worker's rect: " << worker.menuGeometry();
 
     worker.handleOpen();
+
+    worker.m_appKey = "deepin-editor";
+    worker.m_isItemOnDesktop = true;
     worker.handleToDesktop();
+
+    worker.m_isItemOnDesktop = false;
+    worker.handleToDesktop();
+
+    worker.m_isItemOnDock = true;
     worker.handleToDock();
+
+    worker.m_isItemOnDock = false;
+    worker.handleToDock();
+
+    worker.m_isItemStartup = true;
     worker.handleToStartup();
+
+    worker.m_isItemStartup = false;
+    worker.handleToStartup();
+
     worker.handleToProxy();
     worker.handleSwitchScaling();
+
+    for (int i = 1; i < 7; i++)
+        worker.handleMenuAction(MenuWorker::MenuAction(i));
+
     worker.handleMenuClosed();
 }

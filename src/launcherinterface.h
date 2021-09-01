@@ -26,6 +26,7 @@
 
 class QString;
 class QPoint;
+
 class LauncherInterface
 {
 public:

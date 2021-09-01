@@ -39,7 +39,6 @@ class MiniFrameRightBar : public QWidget
 
 public:
     explicit MiniFrameRightBar(QWidget *parent = nullptr);
-    ~MiniFrameRightBar() override;
 
     void setCurrentCheck(bool checked) const;
     void setCurrentIndex(int index) { m_currentIndex = index; }

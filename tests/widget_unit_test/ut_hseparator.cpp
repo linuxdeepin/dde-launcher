@@ -13,5 +13,5 @@ TEST_F(Tst_Hseparator, hSeparator_test)
 {
     HSeparator seperator;
     QPaintEvent event(QRect(10, 10, 10, 10));
-    QApplication::sendEvent(&seperator, &event);
+    seperator.paintEvent(&event);
 }

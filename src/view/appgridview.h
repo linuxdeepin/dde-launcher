@@ -71,6 +71,7 @@ public:
 
 public slots:
     void setDragAnimationEnable() {m_enableAnimation = true;}
+    void setAppItemSpacing();
 
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;

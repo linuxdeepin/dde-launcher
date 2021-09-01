@@ -82,31 +82,25 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QPixmap iconPixmap = index.data(AppsListModel::AppListIconRole).value<QPixmap>();
 
     if (isDragItem) {
-        QPixmap dragIndicator = renderSVG(":/widgets/images/drag_indicator.svg",
-                                          QSize(20, 20));
-        painter->drawPixmap(rect.right() - 30,
-                            rect.y() + (rect.height() - dragIndicator.height() / ratio) / 2,
-                            dragIndicator);
+        QPixmap dragIndicator = renderSVG(":/widgets/images/drag_indicator.svg", QSize(20, 20));
+        int xPos = rect.right() - 30;
+        int yPos = rect.y() + (rect.height() - dragIndicator.height() / ratio) / 2;
+        painter->drawPixmap(xPos, yPos,  dragIndicator);
     }
 
     painter->setPen(Qt::NoPen);
 
     if (option.state.testFlag(QStyle::State_Selected)) {
-        // hover background color.
         painter->setBrush(m_color);
     } else if (isDragItem) {
-        // drag item background color.
         painter->setBrush(QColor(255, 255, 255, 255 * 0.4));
         painter->setPen(QColor(0, 0, 0, 255 * 0.05));
     } else {
-        // normal item.
         painter->setBrush(Qt::NoBrush);
     }
 
-    if (index.data(AppsListModel::DrawBackgroundRole).toBool()) {
-        // draw the background.
+    if (index.data(AppsListModel::DrawBackgroundRole).toBool())
         painter->drawRoundedRect(option.rect, 8, 8);
-    }
 
     const int iconX = rect.x() + 10;
     const int iconY = rect.y() + (rect.height() - iconPixmap.height() / ratio) / 2;
@@ -146,18 +140,18 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     if (isCategoryList) {
         const QPixmap &pixmap = index.data(AppsListModel::CategoryEnterIconRole).value<QPixmap>();
         painter->setRenderHints(QPainter::SmoothPixmapTransform);
-        painter->drawPixmap(rect.right() - pixmap.width() / ratio,
-                            rect.y() + (rect.height() - pixmap.height() / ratio) / 2,
-                            pixmap.width() /  ratio,
-                            pixmap.height() / ratio,
-                            pixmap);
+        int xPos = rect.right() - pixmap.width() / ratio;
+        int yPos = rect.y() + (rect.height() - pixmap.height() / ratio) / 2;
+        int width = pixmap.width() / ratio;
+        int height = pixmap.height() / ratio;
+        painter->drawPixmap(xPos, yPos, width, height, pixmap);
     }
 
     // draw blue dot if needed
     if (index.data(AppsListModel::AppNewInstallRole).toBool() && !isDragItem) {
-        const QPointF blueDotPos(rect.width() - m_blueDotPixmap.width() / ratio - (isCategoryList ? 20 : 6),
-                                 rect.y() + (+ rect.height() - m_blueDotPixmap.height() / ratio) / 2);
-
+        int xPos = rect.width() - m_blueDotPixmap.width() / ratio - (isCategoryList ? 20 : 6);
+        int yPos = rect.y() + (rect.height() - m_blueDotPixmap.height() / ratio) / 2;
+        const QPointF blueDotPos(xPos, yPos);
         painter->drawPixmap(blueDotPos, m_blueDotPixmap);
     }
 }

@@ -548,7 +548,10 @@ void AppGridView::startDrag(const QModelIndex &index)
             if (m_enableDropInside)
                 listModel->dropSwap(m_dropToPos);// 无动画时,在listview内释放鼠标
             else
-                listModel->dropSwap(indexAt(m_dragStartPos).row());// 无动画时,listview之外释放鼠标
+                // 搜索模式下，不需要做删除被拖拽的item，插入移动到新位置的item的操作，否则会导致被拖拽item的位置改变
+                if (listModel->category() != AppsListModel::AppCategory::Search){
+                    listModel->dropSwap(indexAt(m_dragStartPos).row());// 无动画时,listview之外释放鼠标
+                }
 
             listModel->clearDraggingIndex();
         } else {

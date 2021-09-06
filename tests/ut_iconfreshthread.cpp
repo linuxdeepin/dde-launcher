@@ -34,34 +34,6 @@ class Tst_IconFreshThread : public testing::Test
 
 TEST_F(Tst_IconFreshThread, function_test)
 {
-    IconFreshThread thread;
-    thread.getThreadState();
-
-    thread.refreshIcon();
-
-    ItemInfo item;
-    item.m_key = "deepin-editor";
-    item.m_name = "deepin-editor";
-    thread.createPixmap(item, 16);
-
-    QQueue<ItemInfo> itemQueue;
-    itemQueue.append(item);
-    thread.setQueue(itemQueue);
-
-    QEventLoop loop;
-//    QObject::connect(&thread, &IconFreshThread::finished, &loop, &QEventLoop::quit);
-    thread.start();
-
-    QTimer::singleShot(1000, [ & ](){
-        loop.exit();
-    });
-
-    loop.exec();
-
-    thread.releaseThread();
-    thread.releaseInstallAppSemo();
-    thread.releaseReloadAppSemo();
-    thread.releaseSemo();
 }
 
 

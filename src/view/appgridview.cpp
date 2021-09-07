@@ -396,7 +396,7 @@ QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey
         const double  iconZoom =  s.width() / 64.0;
         QStringList calIconList = m_calcUtil->calendarSelectIcon();
 
-        auto calendar = new QWidget() ;
+        auto calendar = new QWidget(this) ;
         calendar->setFixedSize(s);
 
         calendar->setAutoFillBackground(true);
@@ -437,6 +437,7 @@ QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey
         layout->setContentsMargins(0, 10 * iconZoom, 0, 10 * iconZoom);
         calendar->setLayout(layout);
         srcPix = calendar->grab(calendar->rect());
+        calendar->deleteLater();
     } else {
         srcPix = index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
     }

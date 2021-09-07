@@ -502,7 +502,6 @@ void WindowedFrame::launchCurrentApp()
 
     if (m_displayMode == Category && m_appsModel->category() == AppsListModel::Category) {
         switchToCategory(currentIdx);
-        m_focusPos = RightBottom;
         return;
     }
 
@@ -593,8 +592,13 @@ bool WindowedFrame::windowDeactiveEvent()
     return false;
 }
 
+/**分类模式下，进入到某一分类目录的处理
+ * @brief WindowedFrame::switchToCategory
+ * @param index 当前视图的模型索引
+ */
 void WindowedFrame::switchToCategory(const QModelIndex &index)
 {
+    m_focusPos = Applist;
     m_appsView->setModel(m_appsModel);
     m_appsView->setCurrentIndex(QModelIndex());
     m_appsModel->setCategory(index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>());

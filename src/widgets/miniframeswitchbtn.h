@@ -34,7 +34,6 @@ class MiniFrameSwitchBtn : public QWidget
 
 public:
     MiniFrameSwitchBtn(QWidget *parent = nullptr);
-    ~MiniFrameSwitchBtn() override;
 
     void updateStatus(int status);
     void click();

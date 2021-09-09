@@ -4,7 +4,6 @@
 #include <QEvent>
 #include <QApplication>
 #include <QDesktopWidget>
-#include <DGuiApplicationHelper>
 #include <QPainter>
 #include <QPainterPath>
 
@@ -19,23 +18,18 @@ MiniFrameButton::MiniFrameButton(const QString &text, QWidget *parent)
     setToolTip(text);
     setToolTipDuration(1000);
 
-    if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()){
-         m_color.setRgb(255, 255, 255, 25);
-    }else {
-        m_color.setRgb(0, 0, 0, 25);
-    }
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
-        if (DGuiApplicationHelper::DarkType == themeType) {
-            m_color.setRgb(255, 255, 255, 25);
-        } else {
-            m_color.setRgb(0, 0, 0, 25);
-        }
-        update();
-    });
+    onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &MiniFrameButton::onThemeTypeChanged);
 }
 
-MiniFrameButton::~MiniFrameButton()
+void MiniFrameButton::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 {
+    if (DGuiApplicationHelper::DarkType == themeType)
+        m_color.setRgb(255, 255, 255, 25);
+    else
+        m_color.setRgb(0, 0, 0, 25);
+
+    update();
 }
 
 void MiniFrameButton::enterEvent(QEvent *event)

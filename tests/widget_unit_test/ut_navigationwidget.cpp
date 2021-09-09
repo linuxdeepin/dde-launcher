@@ -14,6 +14,7 @@ class Tst_NavigationWidget : public testing::Test
 TEST_F(Tst_NavigationWidget, categoryButton_test)
 {
     NavigationWidget widget;
+
     EXPECT_NE(widget.button(AppsListModel::Internet), nullptr);
     EXPECT_NE(widget.button(AppsListModel::Chat), nullptr);
     EXPECT_NE(widget.button(AppsListModel::Music), nullptr);
@@ -41,8 +42,8 @@ TEST_F(Tst_NavigationWidget, event_test)
 {
     NavigationWidget widget;
 
-    QEvent event(QEvent::Enter);
-    QApplication::sendEvent(&widget, &event);
+    QEnterEvent enterEvent(QPoint(0, 0), QPoint(10, 0), QPoint(10, 10));
+    QApplication::sendEvent(&widget, &enterEvent);
 
     QTest::qWait(10);
 
@@ -53,7 +54,6 @@ TEST_F(Tst_NavigationWidget, event_test)
     QApplication::sendEvent(&widget, &leaveEvent);
     QTest::qWait(50);
 
-    QEvent showEvent(QEvent::Show);
+    QShowEvent showEvent;
     QApplication::sendEvent(&widget, &showEvent);
-    QTest::qWait(50);
 }

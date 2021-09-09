@@ -61,6 +61,9 @@ signals:
 
 public slots:
     void updateBlurBackgrounds();
+    void onAppearanceChanged(const QString & type, const QString &str);
+    void onDisplayModeChanged(uchar  value);
+    void onPrimaryChanged(const QString & value);
 
 private:
     int m_currentWorkspace;

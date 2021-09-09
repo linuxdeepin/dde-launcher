@@ -19,16 +19,31 @@ TEST_F(Tst_Miniframebutton, miniFrameButton_test)
 {
     MiniFrameButton button("OK");
 
-    QEvent event(QEvent::Enter);
-    QApplication::sendEvent(&button, &event);
+    QEvent enterEvent(QEvent::Enter);
+    QApplication::sendEvent(&button, &enterEvent);
 
-    QEvent event1(QEvent::Leave);
-    QApplication::sendEvent(&button, &event1);
+    QEvent leaveEvent(QEvent::Leave);
+    QApplication::sendEvent(&button, &leaveEvent);
 
-    QEvent event2(QEvent::ApplicationFontChange);
-    QApplication::sendEvent(&button, &event2);
+    QEvent fontEvent(QEvent::ApplicationFontChange);
+    QApplication::sendEvent(&button, &fontEvent);
 
     button.setChecked(true);
-    QPaintEvent event3(QRect(10, 10, 10, 10));
-    QApplication::sendEvent(&button, &event3);
+    button.setIcon(QIcon(":/icons/skin/icons/clear_36px.svg"));
+    QPaintEvent paintEvent(QRect(10, 10, 10, 10));
+    QApplication::sendEvent(&button, &paintEvent);
 }
+
+TEST_F(Tst_Miniframebutton, themeTypeChange_test)
+{
+    MiniFrameButton button("OK");
+
+    int themeType = DGuiApplicationHelper::instance()->themeType();
+
+    DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::DarkType);
+    button.onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
+
+    // 恢复模式值
+    DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::ColorType(themeType));
+}
+

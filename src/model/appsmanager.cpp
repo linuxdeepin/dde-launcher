@@ -46,7 +46,6 @@
 #include <qpa/qplatformtheme.h>
 #include <DHiDPIHelper>
 #include <DApplication>
-#include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -80,46 +79,39 @@ AppsManager::AppsManager(QObject *parent) :
     m_lastShowDate(0),
     m_tryNums(0),
     m_itemInfo(ItemInfo()),
+    m_filterSetting(nullptr),
     m_iconValid(true)
 {
     if (QGSettings::isSchemaInstalled("com.deepin.dde.launcher")) {
         m_filterSetting = new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
-
-        connect(m_filterSetting, &QGSettings::changed, this, [ & ] (const QString & keyName) {
-            if (keyName != "filter-keys" && keyName != "filterKeys")
-                return;
-
-            refreshAllList();
-        });
+        connect(m_filterSetting, &QGSettings::changed, this, &AppsManager::onGSettingChanged);
     }
 
     // 分类目录名称
-    m_categoryTs
-            << tr("Internet")
-            << tr("Chat")
-            << tr("Music")
-            << tr("Video")
-            << tr("Graphics")
-            << tr("Games")
-            << tr("Office")
-            << tr("Reading")
-            << tr("Development")
-            << tr("System")
-            << tr("Other");
+    m_categoryTs.append(tr("Internet"));
+    m_categoryTs.append(tr("Chat"));
+    m_categoryTs.append(tr("Music"));
+    m_categoryTs.append(tr("Video"));
+    m_categoryTs.append(tr("Graphics"));
+    m_categoryTs.append(tr("Games"));
+    m_categoryTs.append(tr("Office"));
+    m_categoryTs.append(tr("Reading"));
+    m_categoryTs.append(tr("Development"));
+    m_categoryTs.append(tr("System"));
+    m_categoryTs.append(tr("Other"));
 
     // 分类目录图标
-    m_categoryIcon
-            << QString(":/icons/skin/icons/internet_normal_22px.svg")
-            << QString(":/icons/skin/icons/chat_normal_22px.svg")
-            << QString(":/icons/skin/icons/music_normal_22px.svg")
-            << QString(":/icons/skin/icons/multimedia_normal_22px.svg")
-            << QString(":/icons/skin/icons/graphics_normal_22px.svg")
-            << QString(":/icons/skin/icons/game_normal_22px.svg")
-            << QString(":/icons/skin/icons/office_normal_22px.svg")
-            << QString(":/icons/skin/icons/reading_normal_22px.svg")
-            << QString(":/icons/skin/icons/development_normal_22px.svg")
-            << QString(":/icons/skin/icons/system_normal_22px.svg")
-            << QString(":/icons/skin/icons/others_normal_22px.svg");
+    m_categoryIcon.append(QString(":/icons/skin/icons/internet_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/chat_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/music_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/multimedia_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/graphics_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/game_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/office_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/reading_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/development_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/system_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/others_normal_22px.svg"));
 
     refreshAllList();
     refreshAppAutoStartCache();
@@ -144,17 +136,8 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
 
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
-        refreshAppListIcon();
-        generateCategoryMap();
-    });
-    connect(m_RefreshCalendarIconTimer, &QTimer::timeout, this,  [=](){
-        m_curDate = QDate::currentDate();
-        if(m_lastShowDate != m_curDate.day()){
-            delayRefreshData();
-            m_lastShowDate = m_curDate.day();
-        }
-    });
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppsManager::onThemeTypeChanged);
+    connect(m_RefreshCalendarIconTimer, &QTimer::timeout, this, &AppsManager::onRefreshCalendarTimer);
 
     if (!m_RefreshCalendarIconTimer->isActive())
         m_RefreshCalendarIconTimer->start();
@@ -499,6 +482,32 @@ bool AppsManager::fuzzyMatching(const QStringList& list, const QString& key)
         }
     }
     return false;
+}
+
+void AppsManager::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
+{
+    Q_UNUSED(themeType);
+
+    refreshAppListIcon();
+    generateCategoryMap();
+}
+
+void AppsManager::onRefreshCalendarTimer()
+{
+    m_curDate = QDate::currentDate();
+
+    if(m_lastShowDate != m_curDate.day()) {
+        delayRefreshData();
+        m_lastShowDate = m_curDate.day();
+    }
+}
+
+void AppsManager::onGSettingChanged(const QString &keyName)
+{
+    if (keyName != "filter-keys" && keyName != "filterKeys")
+        return;
+
+    refreshAllList();
 }
 
 /**

@@ -30,6 +30,8 @@
 #include "dbusdock.h"
 #include "calculate_util.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QHash>
 #include <QSettings>
 #include <QPixmap>
@@ -39,6 +41,8 @@
 #include <QScreen>
 #include <QDBusArgument>
 #include <QList>
+
+DGUI_USE_NAMESPACE
 
 #define LEFT_PADDING 200
 #define RIGHT_PADDING 200
@@ -136,6 +140,9 @@ private slots:
     void delayRefreshData();
     void refreshIcon();
     bool fuzzyMatching(const QStringList& list, const QString& key);
+    void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
+    void onRefreshCalendarTimer();
+    void onGSettingChanged(const QString & keyName);
 
 public:
     static QReadWriteLock m_cacheDataLock;
@@ -179,7 +186,7 @@ private:
     static QSettings APP_CATEGORY_USED_SORTED_LIST;
     QStringList m_categoryTs;
     QStringList m_categoryIcon;
-    QGSettings *m_filterSetting = nullptr;
+    QGSettings *m_filterSetting;
 
     bool m_iconValid;                                                       // 获取图标状态标示
 };

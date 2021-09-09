@@ -52,20 +52,9 @@ BackgroundManager::BackgroundManager(QObject *parent)
 
     connect(m_wmInter, &__wm::WorkspaceSwitched, this, &BackgroundManager::updateBlurBackgrounds);
     connect(m_wmInter, &__wm::WorkspaceBackgroundChanged, this, &BackgroundManager::updateBlurBackgrounds);
-    connect(m_appearanceInter, &AppearanceInter::Changed, this, [ = ](const QString & type, const QString &) {
-        if (type == "background") {
-            updateBlurBackgrounds();
-        }
-    });
-    connect(m_displayInter, &DisplayInter::DisplayModeChanged, this, [ = ](uchar) {
-        m_displayMode = m_displayInter->GetRealDisplayMode();
-    });
-
-    connect(m_displayInter, &DisplayInter::PrimaryChanged, this, [ = ] {
-        m_displayMode = m_displayInter->GetRealDisplayMode();
-        updateBlurBackgrounds();
-    });
-
+    connect(m_appearanceInter, &AppearanceInter::Changed, this, &BackgroundManager::onAppearanceChanged);
+    connect(m_displayInter, &DisplayInter::DisplayModeChanged, this, &BackgroundManager::onDisplayModeChanged);
+    connect(m_displayInter, &DisplayInter::PrimaryChanged, this, &BackgroundManager::onPrimaryChanged);
     connect(m_displayInter, &DisplayInter::DisplayModeChanged, this, &BackgroundManager::updateBlurBackgrounds);
 
     updateBlurBackgrounds();
@@ -146,4 +135,27 @@ void BackgroundManager::updateBlurBackgrounds()
     QString filePath = QFile::exists(path) ? path : DefaultWallpaper;
 
     getImageDataFromDbus(filePath);
+}
+
+void BackgroundManager::onAppearanceChanged(const QString &type, const QString &str)
+{
+    Q_UNUSED(str);
+
+    if (type == "background")
+        updateBlurBackgrounds();
+}
+
+void BackgroundManager::onDisplayModeChanged(uchar value)
+{
+    Q_UNUSED(value);
+
+    m_displayMode = m_displayInter->GetRealDisplayMode();
+}
+
+void BackgroundManager::onPrimaryChanged(const QString &value)
+{
+    Q_UNUSED(value);
+
+    m_displayMode = m_displayInter->GetRealDisplayMode();
+    updateBlurBackgrounds();
 }

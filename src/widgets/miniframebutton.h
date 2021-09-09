@@ -2,6 +2,9 @@
 #define MINIFRAMEBUTTON_H
 
 #include <QPushButton>
+#include <DGuiApplicationHelper>
+
+DGUI_USE_NAMESPACE
 
 class MiniFrameButton : public QPushButton
 {
@@ -9,10 +12,12 @@ class MiniFrameButton : public QPushButton
 
 public:
     explicit MiniFrameButton(const QString &text, QWidget *parent = nullptr);
-    ~MiniFrameButton() override;
 
 signals:
     void entered() const;
+
+public slots:
+    void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
 
 protected:
     void enterEvent(QEvent *event) override;

@@ -30,10 +30,10 @@ public:
 TEST_F(Tst_Fullscreenframe, pressEvent_test)
 {
     QMouseEvent leftPressEvent(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    m_fullScreenFrame->mousePressEvent(&leftPressEvent);
+    QApplication::sendEvent(m_fullScreenFrame, &leftPressEvent);
 
     QMouseEvent rightPressEvent(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::RightButton, Qt::RightButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    m_fullScreenFrame->mousePressEvent(&rightPressEvent);
+    QApplication::sendEvent(m_fullScreenFrame, &rightPressEvent);
 }
 
 TEST_F(Tst_Fullscreenframe, moveEvent_test)
@@ -41,35 +41,35 @@ TEST_F(Tst_Fullscreenframe, moveEvent_test)
     // m_mouse_press未点击时
     m_fullScreenFrame->m_mouse_press = false;
     QMouseEvent moveEvent(QEvent::MouseMove, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    m_fullScreenFrame->mouseMoveEvent(&moveEvent);
+    QApplication::sendEvent(m_fullScreenFrame, &moveEvent);
 
     // m_mouse_press点击时
     m_fullScreenFrame->m_mouse_press = true;
-    m_fullScreenFrame->mouseMoveEvent(&moveEvent);
+    QApplication::sendEvent(m_fullScreenFrame, &moveEvent);
 }
 
 TEST_F(Tst_Fullscreenframe, releaseEvent_test)
 {
     // 普通模式时
     QMouseEvent normalReleaseEvent(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    m_fullScreenFrame->mouseReleaseEvent(&normalReleaseEvent);
+    QApplication::sendEvent(m_fullScreenFrame, &normalReleaseEvent);
 
     // m_mouse_press点击时
     m_fullScreenFrame->m_mouse_press = false;
     QMouseEvent pressReleaseEvent(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    m_fullScreenFrame->mouseReleaseEvent(&pressReleaseEvent);
+    QApplication::sendEvent(m_fullScreenFrame, &pressReleaseEvent);
 
     // 分类模式时
     m_fullScreenFrame->m_displayMode = GROUP_BY_CATEGORY;
-    m_fullScreenFrame->mouseReleaseEvent(&pressReleaseEvent);
+    QApplication::sendEvent(m_fullScreenFrame, &pressReleaseEvent);
 }
 
 TEST_F(Tst_Fullscreenframe, wheelEvent_test)
 {
     m_fullScreenFrame->m_displayMode = GROUP_BY_CATEGORY;
 
-    QWheelEvent wheelEve(QPointF(0, 0), QPointF(0, 0), 10, Qt::MiddleButton, Qt::ControlModifier, Qt::Vertical);
-    m_fullScreenFrame->wheelEvent(&wheelEve);
+    QWheelEvent wheelEve(QPointF(0, 0), 10, Qt::MiddleButton, Qt::ControlModifier, Qt::Vertical);
+    QApplication::sendEvent(m_fullScreenFrame, &wheelEve);
 
     m_fullScreenFrame->m_displayMode = SEARCH;
 }
@@ -77,16 +77,16 @@ TEST_F(Tst_Fullscreenframe, wheelEvent_test)
 TEST_F(Tst_Fullscreenframe, keyEvent_test)
 {
     QKeyEvent minusKeyEvent(QEvent::KeyPress, Qt::Key_Minus, Qt::NoModifier, QString(""));
-    m_fullScreenFrame->keyPressEvent(&minusKeyEvent);
+    QApplication::sendEvent(m_fullScreenFrame, &minusKeyEvent);
 
     QKeyEvent ctrlMinusKeyEvent(QEvent::KeyPress, Qt::Key_Minus, Qt::ControlModifier, QString(""));
-    m_fullScreenFrame->keyPressEvent(&ctrlMinusKeyEvent);
+    QApplication::sendEvent(m_fullScreenFrame, &ctrlMinusKeyEvent);
 
     QKeyEvent equalKeyEvent(QEvent::KeyPress, Qt::Key_Equal, Qt::NoModifier, QString(""));
-    m_fullScreenFrame->keyPressEvent(&equalKeyEvent);
+    QApplication::sendEvent(m_fullScreenFrame, &equalKeyEvent);
 
     QKeyEvent controlVKeyEvent(QEvent::KeyPress, Qt::Key_Equal, Qt::ControlModifier, QString(""));
-    m_fullScreenFrame->keyPressEvent(&controlVKeyEvent);
+    QApplication::sendEvent(m_fullScreenFrame, &controlVKeyEvent);
 }
 
 TEST_F(Tst_Fullscreenframe, scrollBlurBoxWidget_test)

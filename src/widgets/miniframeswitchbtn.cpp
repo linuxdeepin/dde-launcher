@@ -65,10 +65,6 @@ MiniFrameSwitchBtn::MiniFrameSwitchBtn(QWidget *parent)
     mainLayout->addWidget(m_enterIcon);
 }
 
-MiniFrameSwitchBtn::~MiniFrameSwitchBtn()
-{
-}
-
 void MiniFrameSwitchBtn::updateStatus(int status)
 {
     if (status == WindowedFrame::All) {

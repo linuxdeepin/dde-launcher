@@ -107,31 +107,9 @@ SearchWidget::SearchWidget(QWidget *parent)
 
     setLayout(mainLayout);
 
-    connect(m_searchEdit, &DSearchEdit::textChanged, [ this ] {
-        m_searchEdit->lineEdit()->setFocus();
-        auto searchStr = m_searchEdit->text();
-        emit searchTextChanged(searchStr.mid(0, 1) + searchStr.mid(1).replace(" ", ""));
-    });
-
-    connect(m_toggleModeBtn, &DIconButton::clicked, this, [ = ] {
-        m_calcUtil->setFullScreen(false);
-        DDBusSender()
-        .service("com.deepin.dde.daemon.Launcher")
-        .interface("com.deepin.dde.daemon.Launcher")
-        .path("/com/deepin/dde/daemon/Launcher")
-        .property("Fullscreen")
-        .set(false);
-    });
-
-    connect(m_toggleCategoryBtn, &DIconButton::clicked, this, [ = ] {
-        m_searchEdit->lineEdit()->clearFocus();
-        clearSearchContent();
-
-        emit toggleMode();
-
-        // 点击分组按钮，切换分组模式，更新分组图标
-        updateCurrentCategoryBtnIcon();
-    });
+    connect(m_searchEdit, &DSearchEdit::textChanged, this, &SearchWidget::onTextChanged);
+    connect(m_toggleModeBtn, &DIconButton::clicked, this, &SearchWidget::onModeClicked);
+    connect(m_toggleCategoryBtn, &DIconButton::clicked, this, &SearchWidget::onToggleCategoryChanged);
 }
 
 DSearchEdit *SearchWidget::edit()
@@ -155,6 +133,37 @@ void SearchWidget::clearSearchContent()
 //    m_searchEdit->moveFloatWidget();
     m_searchEdit->clear();
     m_searchEdit->clearEdit();
+}
+
+void SearchWidget::onTextChanged(const QString &str)
+{
+    Q_UNUSED(str);
+
+    m_searchEdit->lineEdit()->setFocus();
+    auto searchStr = m_searchEdit->text();
+    emit searchTextChanged(searchStr.mid(0, 1) + searchStr.mid(1).replace(" ", ""));
+}
+
+void SearchWidget::onModeClicked()
+{
+    m_calcUtil->setFullScreen(false);
+    DDBusSender()
+            .service("com.deepin.dde.daemon.Launcher")
+            .interface("com.deepin.dde.daemon.Launcher")
+            .path("/com/deepin/dde/daemon/Launcher")
+            .property("Fullscreen")
+            .set(false);
+}
+
+void SearchWidget::onToggleCategoryChanged()
+{
+    m_searchEdit->lineEdit()->clearFocus();
+    clearSearchContent();
+
+    emit toggleMode();
+
+    // 点击分组按钮，切换分组模式，更新分组图标
+    updateCurrentCategoryBtnIcon();
 }
 
 void SearchWidget::setLeftSpacing(int spacing)

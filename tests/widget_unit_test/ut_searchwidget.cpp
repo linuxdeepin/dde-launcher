@@ -1,4 +1,6 @@
+#define private public
 #include "searchwidget.h"
+#undef private
 
 #include <QTest>
 
@@ -30,5 +32,17 @@ TEST_F(Tst_SearchWidget, otherApi_test)
 {
     SearchWidget widget;
     widget.updateSize(1.5, 1.2);
-}
 
+    widget.edit();
+
+    widget.categoryBtn();
+    widget.clearSearchContent();
+    widget.setLeftSpacing(10);
+    widget.setRightSpacing(10);
+
+    widget.m_calcUtil->setDisplayMode(0);
+    widget.updateCurrentCategoryBtnIcon();
+
+    widget.m_calcUtil->setDisplayMode(1);
+    widget.updateCurrentCategoryBtnIcon();
+}

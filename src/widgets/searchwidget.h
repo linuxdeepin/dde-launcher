@@ -53,6 +53,9 @@ public:
 
 public slots:
     void clearSearchContent();
+    void onTextChanged(const QString &str);
+    void onModeClicked();
+    void onToggleCategoryChanged();
 
 signals:
     void searchTextChanged(const QString &text) const;

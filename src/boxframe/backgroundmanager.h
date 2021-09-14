@@ -58,12 +58,14 @@ private:
 signals:
     void currentWorkspaceBackgroundChanged(const QString &background);
     void currentWorkspaceBlurBackgroundChanged(const QString &background);
+    void blurImageAcquired();
 
 public slots:
     void updateBlurBackgrounds();
     void onAppearanceChanged(const QString & type, const QString &str);
     void onDisplayModeChanged(uchar  value);
     void onPrimaryChanged(const QString & value);
+    void onGetBlurImageFromDbus(const QString &file, const QString &blurFile, bool status);
 
 private:
     int m_currentWorkspace;
@@ -76,6 +78,7 @@ private:
     QPointer<AppearanceInter> m_appearanceInter;
     QPointer<DisplayInter> m_displayInter;
     int m_displayMode;
+    QString m_fileName;
 };
 
 #endif // BACKGROUNDMANAGER_H

@@ -1796,8 +1796,6 @@ void FullScreenFrame::searchTextChanged(const QString &keywords)
 {
     m_appsManager->searchApp(keywords.trimmed());
 
-    if (!m_searchWidget->edit()->lineEdit()->hasFocus()) return;
-
     if (keywords.isEmpty())
         updateDisplayMode(m_calcUtil->displayMode());
     else

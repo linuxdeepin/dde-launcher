@@ -75,7 +75,6 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     const qreal ratio = qApp->devicePixelRatio();
     const QRect rect = option.rect;
-    const bool isDrawTips = index.data(AppsListModel::AppNewInstallRole).toBool();
     const bool isDragItem = option.features & QStyleOptionViewItem::Alternate;
     const bool isCategoryList(static_cast<AppsListModel::AppCategory>(index.data(AppsListModel::AppGroupRole).toInt()) == AppsListModel::Category);
 
@@ -114,17 +113,13 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
     painter->drawPixmap(iconX, iconY, iconPixmap);
 
-
     // draw icon if app is auto startup
     if (index.data(AppsListModel::AppAutoStartRole).toBool()) {
         painter->drawPixmap(iconX, iconY + 16, m_autoStartPixmap);
     }
 
     QRect textRect = rect.marginsRemoved(QMargins(60, 1, 1, 1));
-
-    if (isDrawTips) {
-        textRect.setWidth(textRect.width() - 90);
-    }
+    textRect.setWidth(textRect.width() - m_blueDotPixmap.width() / ratio - 10);
 
     if (isDragItem) {
         QFont nameFont = painter->font();
@@ -140,7 +135,9 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         textRect.setY(textRect.y() - 2);
     }
 
-    painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, index.data(AppsListModel::AppNameRole).toString());
+    // 使用省略号显示超长的应用名称
+    const QString appName = painter->fontMetrics().elidedText(index.data(AppsListModel::AppNameRole).toString(), Qt::ElideRight, textRect.width());
+    painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, appName);
 
     // draw category right icon
     if (isCategoryList) {

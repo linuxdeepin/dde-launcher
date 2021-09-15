@@ -44,7 +44,7 @@ class ScrollWidgetAgent : public QObject
 
 public:
     explicit ScrollWidgetAgent(QObject *parent = nullptr);
-    ~ScrollWidgetAgent();
+
     void setControlWidget(QWidget *widget);
     BlurBoxWidget * blurBoxWidget() { return m_blurBoxWidget;}
     void setBlurBoxWidget(BlurBoxWidget * blurBoxWidget);

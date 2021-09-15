@@ -13,6 +13,7 @@ TEST_F(Tst_Miniframenavigation, userButton_test)
     button.initUser();
     button.setUserPath("");
     button.setUserIconURL("");
+    button.setUserIconURL(":/icons/skin/icons/clear_36px.svg");
 }
 
 TEST_F(Tst_Miniframenavigation, navi_test)

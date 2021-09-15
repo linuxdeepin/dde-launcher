@@ -17,11 +17,6 @@ ScrollWidgetAgent::ScrollWidgetAgent(QObject *parent)
     connect(m_animation, &QPropertyAnimation::finished, this, &ScrollWidgetAgent::scrollFinished);
 }
 
-ScrollWidgetAgent::~ScrollWidgetAgent()
-{
-
-}
-
 void ScrollWidgetAgent::setControlWidget(QWidget *widget)
 {
     m_controlWidget = widget;

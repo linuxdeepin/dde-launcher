@@ -192,24 +192,14 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     setFixedHeight(538);
     setObjectName("MiniFrame");
 
-    initAnchoredCornor();
+    initAnchoredCornor(m_wmHelper->hasComposite());
     installEventFilter(m_eventFilter);
 
     // auto scroll when drag to app list box border
     connect(m_appsView, &AppListView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
-    connect(m_autoScrollTimer, &QTimer::timeout, [this] {
-        m_appsView->verticalScrollBar()->setValue(m_appsView->verticalScrollBar()->value() + m_autoScrollStep);
-    });
-    connect(m_appsView, &AppListView::requestScrollUp, [this] {
-        m_autoScrollStep = -DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
-        if (!m_autoScrollTimer->isActive())
-            m_autoScrollTimer->start();
-    });
-    connect(m_appsView, &AppListView::requestScrollDown, [this] {
-        m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
-        if (!m_autoScrollTimer->isActive())
-            m_autoScrollTimer->start();
-    });
+    connect(m_autoScrollTimer, &QTimer::timeout, this, &WindowedFrame::onVerticalScroll);
+    connect(m_appsView, &AppListView::requestScrollUp, this, &WindowedFrame::onRequestScrollUp);
+    connect(m_appsView, &AppListView::requestScrollDown, this, &WindowedFrame::onRequestScrollDown);
 
     connect(m_leftBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &WindowedFrame::onToggleFullScreen);
     connect(m_leftBar, &MiniFrameRightBar::requestFrameHide, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
@@ -273,7 +263,7 @@ void WindowedFrame::showLauncher()
     m_appsView->setCurrentIndex(QModelIndex());
 
     adjustSize(); // right widget need calculate width based on font
-    adjustPosition();
+    adjustPosition(m_dockInter->position(), m_dockInter->displayMode());
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
     show();
@@ -584,11 +574,6 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
 
 bool WindowedFrame::windowDeactiveEvent()
 {
-    // don't need
-//    if (isVisible() && !m_menuWorker->isMenuShown() && !m_delayHideTimer->isActive()) {
-//        m_delayHideTimer->start();
-//    }
-
     return false;
 }
 
@@ -673,11 +658,6 @@ void WindowedFrame::resetWidgetStyle()
 void WindowedFrame::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
-
-    // PM don't want auto-hide when click WindowedFrame blank area.
-//    if (e->button() == Qt::LeftButton) {
-//        hideLauncher();
-//    }
 }
 
 void WindowedFrame::keyPressEvent(QKeyEvent *e)
@@ -704,12 +684,7 @@ void WindowedFrame::showEvent(QShowEvent *e)
 
     QWidget::showEvent(e);
 
-    QTimer::singleShot(1, this, [this]() {
-        raise();
-        activateWindow();
-        setFocus();
-        emit visibleChanged(true);
-    });
+    QTimer::singleShot(1, this, &WindowedFrame::onActiveWindow);
     m_focusPos = Applist;
 }
 
@@ -741,14 +716,6 @@ void WindowedFrame::inputMethodEvent(QInputMethodEvent *e)
 
 QVariant WindowedFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
 {
-//    switch (prop) {
-//    case Qt::ImEnabled:
-//        return true;
-//    case Qt::ImCursorRectangle:
-//        return widgetRelativeOffset(this, m_searchWidget);
-//    default: ;
-//    }
-
     return QWidget::inputMethodQuery(prop);
 }
 
@@ -757,7 +724,8 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point)
     auto windowList = DWindowManagerHelper::instance()->currentWorkspaceWindows();
     for (auto window : windowList) {
         if (window->handle()->geometry().contains(point)) {
-            if (window->wmClass() == "onboard") return;
+            if (window->wmClass() == "onboard")
+                return;
         }
     }
 
@@ -802,21 +770,14 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
 
 void WindowedFrame::resizeEvent(QResizeEvent *event)
 {
-    QTimer::singleShot(0, this, [ = ] {
-        initAnchoredCornor();
-        m_cornerPath = getCornerPath(m_anchoredCornor);
-        m_windowHandle.setClipPath(m_cornerPath);
-        // event.size() 第一次启动有时候会很大或者很小的负数,直接用固定的size
-        m_maskBg->setFixedSize(size());
-        m_maskBg->move(0,0);
-    });
+    QTimer::singleShot(0, this, &WindowedFrame::onSetFixSize);
 
     return DBlurEffectWidget::resizeEvent(event);
 }
 
-void WindowedFrame::initAnchoredCornor()
+void WindowedFrame::initAnchoredCornor(bool composite)
 {
-    if (m_wmHelper->hasComposite()) {
+    if (composite) {
         const int dockPos = m_dockInter->position();
 
         switch (dockPos) {
@@ -840,18 +801,18 @@ void WindowedFrame::initAnchoredCornor()
     update();
 }
 
-void WindowedFrame::adjustPosition()
+void WindowedFrame::adjustPosition(int position, int mode)
 {
     QRect r =  m_dockInter->frontendRect();
     QRect dockRect = QRect(scaledPosition(r.topLeft()),scaledPosition(r.bottomRight()));
 
     // 启动器高效模式和时尚模式与任务栏的间隙不同
     int dockSpacing = 0;
-    if (m_dockInter->displayMode() == DOCK_FASHION)
+    if (mode == DOCK_FASHION)
         dockSpacing = 8;
 
     QPoint p;
-    switch (m_dockInter->position()) {
+    switch (position) {
     case DOCK_TOP:
         p = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
         break;
@@ -868,7 +829,7 @@ void WindowedFrame::adjustPosition()
         Q_UNREACHABLE_IMPL();
     }
 
-    initAnchoredCornor();
+    initAnchoredCornor(m_wmHelper->hasComposite());
     move(p);
 }
 
@@ -924,7 +885,7 @@ void WindowedFrame::onWMCompositeChanged()
     else
         m_radius = 0;
 
-    initAnchoredCornor();
+    initAnchoredCornor(m_wmHelper->hasComposite());
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
 }
@@ -1002,12 +963,12 @@ void WindowedFrame::onOpacityChanged(const double value)
 void WindowedFrame::primaryScreenChanged()
 {
     adjustSize();
-    updatePosition();
+    updatePosition(m_dockInter->position(), m_dockInter->displayMode());
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
 }
 
-void WindowedFrame::updatePosition()
+void WindowedFrame::updatePosition(int position, int mode)
 {
    // 该接口获取数据是翻转后的数据
    DBusDockInterface inter;
@@ -1015,11 +976,11 @@ void WindowedFrame::updatePosition()
    QRect dockRect = QRect(scaledPosition(dockGeo.topLeft()),scaledPosition(dockGeo.bottomRight()));
 
     int dockSpacing = 0;
-    if (m_dockInter->displayMode() == DOCK_FASHION)
+    if (mode == DOCK_FASHION)
         dockSpacing = 8;
 
     QPoint p;
-    switch (m_dockInter->position()) {
+    switch (position) {
     case DOCK_TOP:
         p = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
         break;
@@ -1036,8 +997,45 @@ void WindowedFrame::updatePosition()
         Q_UNREACHABLE_IMPL();
     }
 
-    initAnchoredCornor();
+    initAnchoredCornor(m_wmHelper->hasComposite());
     move(p);
+}
+
+void WindowedFrame::onVerticalScroll()
+{
+    m_appsView->verticalScrollBar()->setValue(m_appsView->verticalScrollBar()->value() + m_autoScrollStep);
+}
+
+void WindowedFrame::onRequestScrollUp()
+{
+    m_autoScrollStep = -DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
+    if (!m_autoScrollTimer->isActive())
+        m_autoScrollTimer->start();
+}
+
+void WindowedFrame::onRequestScrollDown()
+{
+    m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
+    if (!m_autoScrollTimer->isActive())
+        m_autoScrollTimer->start();
+}
+
+void WindowedFrame::onActiveWindow()
+{
+    raise();
+    activateWindow();
+    setFocus();
+    emit visibleChanged(true);
+}
+
+void WindowedFrame::onSetFixSize()
+{
+    initAnchoredCornor(m_wmHelper->hasComposite());
+    m_cornerPath = getCornerPath(m_anchoredCornor);
+    m_windowHandle.setClipPath(m_cornerPath);
+    // event.size() 第一次启动有时候会很大或者很小的负数,直接用固定的size
+    m_maskBg->setFixedSize(size());
+    m_maskBg->move(0,0);
 }
 
 void WindowedFrame:: paintEvent(QPaintEvent *e)

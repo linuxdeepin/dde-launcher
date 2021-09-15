@@ -5,6 +5,8 @@
 #include "multipagesview.h"
 #undef private
 
+#include <QTest>
+
 #include <gtest/gtest.h>
 
 class Tst_Fullscreenframe : public testing::Test
@@ -26,43 +28,6 @@ public:
 public:
     FullScreenFrame *m_fullScreenFrame;
 };
-
-TEST_F(Tst_Fullscreenframe, pressEvent_test)
-{
-    QMouseEvent leftPressEvent(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    QApplication::sendEvent(m_fullScreenFrame, &leftPressEvent);
-
-    QMouseEvent rightPressEvent(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::RightButton, Qt::RightButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    QApplication::sendEvent(m_fullScreenFrame, &rightPressEvent);
-}
-
-TEST_F(Tst_Fullscreenframe, moveEvent_test)
-{
-    // m_mouse_press未点击时
-    m_fullScreenFrame->m_mouse_press = false;
-    QMouseEvent moveEvent(QEvent::MouseMove, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-    QApplication::sendEvent(m_fullScreenFrame, &moveEvent);
-
-    // m_mouse_press点击时
-    m_fullScreenFrame->m_mouse_press = true;
-    QApplication::sendEvent(m_fullScreenFrame, &moveEvent);
-}
-
-TEST_F(Tst_Fullscreenframe, releaseEvent_test)
-{
-    // 普通模式时
-    QMouseEvent normalReleaseEvent(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    QApplication::sendEvent(m_fullScreenFrame, &normalReleaseEvent);
-
-    // m_mouse_press点击时
-    m_fullScreenFrame->m_mouse_press = false;
-    QMouseEvent pressReleaseEvent(QEvent::MouseButtonRelease, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
-    QApplication::sendEvent(m_fullScreenFrame, &pressReleaseEvent);
-
-    // 分类模式时
-    m_fullScreenFrame->m_displayMode = GROUP_BY_CATEGORY;
-    QApplication::sendEvent(m_fullScreenFrame, &pressReleaseEvent);
-}
 
 TEST_F(Tst_Fullscreenframe, wheelEvent_test)
 {

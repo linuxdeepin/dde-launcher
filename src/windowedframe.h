@@ -120,8 +120,8 @@ protected:
     void paintEvent(QPaintEvent *e) override;
 
 private slots:
-    void initAnchoredCornor();
-    void adjustPosition();
+    void initAnchoredCornor(bool composite);
+    void adjustPosition(int position, int mode);
     void onToggleFullScreen();
     void onSwitchBtnClicked();
     void onWMCompositeChanged();
@@ -132,7 +132,12 @@ private slots:
     void recoveryAll();
     void onOpacityChanged(const double value);
     void primaryScreenChanged();
-    void updatePosition();
+    void updatePosition(int position, int mode);
+    void onVerticalScroll();
+    void onRequestScrollUp();
+    void onRequestScrollDown();
+    void onActiveWindow();
+    void onSetFixSize();
 
 private:
     DBusDock *m_dockInter;

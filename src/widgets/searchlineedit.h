@@ -24,13 +24,14 @@
 #ifndef SEARCHLINEEDIT_H
 #define SEARCHLINEEDIT_H
 
+#include <DIconButton>
+#include <DGuiApplicationHelper>
+
 #include <QLineEdit>
 #include <QLabel>
 #include <QSpacerItem>
 #include <QPropertyAnimation>
 #include <QProxyStyle>
-
-#include <DIconButton>
 
 DWIDGET_USE_NAMESPACE
 
@@ -63,11 +64,11 @@ public slots:
 private slots:
     void editMode();
     void onTextChanged();
+    void themeChanged(DGuiApplicationHelper::ColorType themeType);
 
 protected:
     bool event(QEvent *e) override;
     void resizeEvent(QResizeEvent *e) override;
-    void themeChanged();
 
 private:
     DIconButton *m_icon;

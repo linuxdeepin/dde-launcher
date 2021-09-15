@@ -28,9 +28,6 @@
 #include <QEvent>
 #include <QTimer>
 #include <QResizeEvent>
-#include <DGuiApplicationHelper>
-
-DGUI_USE_NAMESPACE
 
 SearchLineEdit::SearchLineEdit(QWidget *parent) :
     QLineEdit(parent)
@@ -50,10 +47,8 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
     m_clear->setFlat(true);
     m_clear->setAccessibleName("Clear");
 
-    themeChanged();
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
-        themeChanged();
-    });
+    themeChanged(DGuiApplicationHelper::instance()->themeType());
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &SearchLineEdit::themeChanged);
 
     m_placeholderText = new QLabel(tr("Search"));
     QFontMetrics fm(m_placeholderText->font());
@@ -207,9 +202,9 @@ void SearchLineEdit::moveFloatWidget()
     m_floatWidget->move(rect().center() - m_floatWidget->rect().center());
 }
 
-void SearchLineEdit::themeChanged()
+void SearchLineEdit::themeChanged(DGuiApplicationHelper::ColorType themeType)
 {
-    if (DGuiApplicationHelper::LightType == DGuiApplicationHelper::instance()->themeType()) {
+    if (DGuiApplicationHelper::LightType == themeType) {
         m_icon->setIcon(QIcon::fromTheme(":/skin/images/search-dark.svg"));
         m_clear->setIcon(QIcon::fromTheme(":/icons/skin/icons/input_clear_normal-dark.svg"));
     } else {

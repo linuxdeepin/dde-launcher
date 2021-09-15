@@ -30,7 +30,6 @@ TEST_F(Tst_MenuWorker, menuWorker_test)
     QVERIFY(index == worker.getCurrentModelIndex());
 
     ASSERT_FALSE(worker.isMenuShown());
-    qDebug() << "menu worker's rect: " << worker.menuGeometry();
 
     worker.handleOpen();
 
@@ -46,12 +45,6 @@ TEST_F(Tst_MenuWorker, menuWorker_test)
 
     worker.m_isItemOnDock = false;
     worker.handleToDock();
-
-    worker.m_isItemStartup = true;
-    worker.handleToStartup();
-
-    worker.m_isItemStartup = false;
-    worker.handleToStartup();
 
     worker.handleToProxy();
     worker.handleSwitchScaling();

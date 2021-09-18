@@ -134,6 +134,13 @@ private slots:
     void primaryScreenChanged();
     void updatePosition();
 
+    void onVerticalScroll();
+    void onRequestScrollUp();
+    void onRequestScrollDown();
+    void onActiveWindow();
+    void onSetFixSize();
+    void onHideMenu();
+
 private:
     DBusDock *m_dockInter;
     std::unique_ptr<MenuWorker> m_menuWorker;

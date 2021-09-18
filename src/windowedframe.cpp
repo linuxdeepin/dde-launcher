@@ -244,6 +244,8 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &WindowedFrame::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &WindowedFrame::primaryScreenChanged, Qt::QueuedConnection);
 
+    connect(this, &WindowedFrame::visibleChanged, this, &WindowedFrame::onHideMenu);
+
     // 状态切换
     m_switchBtn->updateStatus(All);
     m_modeToggleBtn->setIconSize(QSize(32,32));
@@ -1037,6 +1039,49 @@ void WindowedFrame::updatePosition()
 
     initAnchoredCornor();
     move(p);
+}
+
+void WindowedFrame::onVerticalScroll()
+{
+    m_appsView->verticalScrollBar()->setValue(m_appsView->verticalScrollBar()->value() + m_autoScrollStep);
+}
+
+void WindowedFrame::onRequestScrollUp()
+{
+    m_autoScrollStep = -DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
+    if (!m_autoScrollTimer->isActive())
+        m_autoScrollTimer->start();
+}
+
+void WindowedFrame::onRequestScrollDown()
+{
+    m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
+    if (!m_autoScrollTimer->isActive())
+        m_autoScrollTimer->start();
+}
+
+void WindowedFrame::onActiveWindow()
+{
+    raise();
+    activateWindow();
+    setFocus();
+    emit visibleChanged(true);
+}
+
+void WindowedFrame::onSetFixSize()
+{
+    initAnchoredCornor();
+    m_cornerPath = getCornerPath(m_anchoredCornor);
+    m_windowHandle.setClipPath(m_cornerPath);
+    // event.size() 第一次启动有时候会很大或者很小的负数,直接用固定的size
+    m_maskBg->setFixedSize(size());
+    m_maskBg->move(0,0);
+}
+
+void WindowedFrame::onHideMenu()
+{
+    if (m_menuWorker.get() && !isVisible())
+        m_menuWorker.get()->onHideMenu();
 }
 
 void WindowedFrame:: paintEvent(QPaintEvent *e)

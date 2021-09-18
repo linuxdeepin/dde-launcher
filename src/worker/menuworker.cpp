@@ -22,9 +22,9 @@
  */
 
 #include "menuworker.h"
+#include "menudialog.h"
 #include "util.h"
 
-#include <QMenu>
 #include <QSignalMapper>
 
 MenuWorker::MenuWorker(QObject *parent)
@@ -34,11 +34,13 @@ MenuWorker::MenuWorker(QObject *parent)
     , m_startManagerInterface(new DBusStartManager(this))
     , m_calcUtil(CalculateUtil::instance())
     , m_appManager(AppsManager::instance())
+    , m_menu(new Menu)
 {
 }
 
 MenuWorker::~MenuWorker()
 {
+    delete m_menu;
 }
 
 void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
@@ -173,25 +175,31 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
         signalMapper->setMapping(proxy, Proxy);
 }
 
-void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
+bool MenuWorker::isMenuVisible()
+{
+    if (m_menu)
+        return m_menu->isVisible();
+    else
+        return false;
+}
 
+void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)
+{
     setCurrentModelIndex(index);
 
-    QScopedPointer<QMenu> menu(new QMenu);
-    menu->setAccessibleName("popmenu");
+    QSignalMapper *signalMapper = new QSignalMapper(m_menu);
 
-    QSignalMapper *signalMapper = new QSignalMapper(menu.get());
-
-    creatMenuByAppItem(menu.get(), signalMapper);
+    m_menu->clear();
+    creatMenuByAppItem(m_menu, signalMapper);
 
     connect(signalMapper, static_cast<void (QSignalMapper::*)(const int)>(&QSignalMapper::mapped), this, &MenuWorker::handleMenuAction);
-    connect(menu.get(), &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);
-    connect(menu.get(), &QMenu::aboutToHide, menu.get(), &QMenu::deleteLater);
+    connect(m_menu, &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);
 
-    menu->move(pos);
+    m_menu->move(pos);
     m_menuIsShown = true;
-    m_menuGeometry = menu->geometry();
-    menu->exec();
+    m_menuGeometry = m_menu->geometry();
+    m_menu->show();
+    m_menu->raise();
 }
 
 void MenuWorker::handleOpen()
@@ -219,6 +227,9 @@ const QModelIndex MenuWorker::getCurrentModelIndex()
 
 void MenuWorker::handleMenuAction(int index)
 {
+    // 隐藏右键菜单
+    onHideMenu();
+
     switch (index) {
     case Open:
         handleOpen();
@@ -244,6 +255,12 @@ void MenuWorker::handleMenuAction(int index)
     default:
         break;
     }
+}
+
+void MenuWorker::onHideMenu()
+{
+    if (m_menu && m_menu->isVisible())
+        m_menu->hide();
 }
 
 void MenuWorker::handleToDesktop(){

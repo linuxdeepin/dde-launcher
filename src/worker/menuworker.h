@@ -42,6 +42,7 @@
 #include <QModelIndex>
 
 class QMenu;
+class Menu;
 
 class MenuWorker : public QObject
 {
@@ -68,11 +69,13 @@ public:
     bool isItemStartup(QString appKey);
     QRect menuGeometry() const {return m_menuGeometry;}
     void creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper);
+    bool isMenuVisible();
 
 signals:
     void appLaunched();
     void menuAccepted();
     void unInstallApp(const QModelIndex &index);
+    void menuShowMouseMoving();
 
 public slots:
     void showMenuByAppItem(QPoint pos, const QModelIndex &index);
@@ -88,6 +91,7 @@ public slots:
     void setCurrentModelIndex(const QModelIndex &index);
     const QModelIndex getCurrentModelIndex();
     void handleMenuAction(int index);
+    void onHideMenu();
 
 private:
     DBusDock* m_dockAppManagerInterface;
@@ -109,6 +113,7 @@ private:
     bool m_isItemEnableScaling;
 
     bool m_menuIsShown = false;
+    Menu *m_menu;
 };
 
 #endif // MENUWORKER_H

@@ -69,7 +69,7 @@ const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w)
  */
 FullScreenFrame::FullScreenFrame(QWidget *parent) :
     BoxFrame(parent),
-    m_menuWorker(new MenuWorker),
+    m_menuWorker(new MenuWorker(this)),
     m_eventFilter(new SharedEventFilter(this)),
     m_calcUtil(CalculateUtil::instance()),
     m_appsManager(AppsManager::instance()),
@@ -500,6 +500,12 @@ void FullScreenFrame::scrollBlurBoxWidget(ScrollWidgetAgent * widgetAgent)
             scrollToCategoryFinish();
         }
     }
+}
+
+void FullScreenFrame::onHideMenu()
+{
+    if (m_menuWorker.get() && !isVisible())
+        m_menuWorker->onHideMenu();
 }
 
 void FullScreenFrame::showTips(const QString &tips)
@@ -1090,6 +1096,7 @@ void FullScreenFrame::initConnection()
     connect(this, &FullScreenFrame::currentVisibleCategoryChanged, m_navigationWidget, &NavigationWidget::setCurrentCategory);
     connect(this, &FullScreenFrame::categoryAppNumsChanged, m_navigationWidget, &NavigationWidget::refershCategoryVisible);
     connect(this, &FullScreenFrame::displayModeChanged, this, &FullScreenFrame::categoryListChanged);
+    connect(this, &FullScreenFrame::visibleChanged, this, &FullScreenFrame::onHideMenu);
 
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
     connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hide, Qt::QueuedConnection);

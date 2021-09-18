@@ -105,6 +105,7 @@ public slots:
     void hideTips();
     void addViewEvent(AppGridView *pView);
     void scrollBlurBoxWidget(ScrollWidgetAgent * widgetAgent);
+    void onHideMenu();
 
 protected:
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;

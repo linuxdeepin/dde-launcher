@@ -566,7 +566,9 @@ void FullScreenFrame::showEvent(QShowEvent *e)
 {
     m_delayHideTimer->stop();
     m_searchWidget->clearSearchContent();
-    XcbMisc::instance()->set_deepin_override(winId());
+
+    if (QApplication::platformName() != "wayland")
+        XcbMisc::instance()->set_deepin_override(winId());
     // To make sure the window is placed at the right position.
     updateGeometry();
     updateBackground();

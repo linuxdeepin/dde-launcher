@@ -1505,7 +1505,6 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         m_navigationWidget->setVisible(true);
         m_appsItemBox->setVisible(true);
     } else {
-        // 全屏模式（自由模式或者应用分类模式）下，当处于搜索状态时，更新界面布局
         m_multiPagesView->updatePosition(m_displayMode);
 
         // 隐藏分类模式显示
@@ -1785,8 +1784,6 @@ void FullScreenFrame::layoutChanged()
 void FullScreenFrame::searchTextChanged(const QString &keywords)
 {
     m_appsManager->searchApp(keywords.trimmed());
-
-    if (!m_searchWidget->edit()->lineEdit()->hasFocus()) return;
 
     if (keywords.isEmpty())
         updateDisplayMode(m_calcUtil->displayMode());

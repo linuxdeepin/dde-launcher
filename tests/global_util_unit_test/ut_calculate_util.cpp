@@ -123,4 +123,3 @@ TEST_F(Tst_calculate, appIconSize_test)
     QVERIFY(CalculateUtil::instance()->increaseIconSize());
     QVERIFY(CalculateUtil::instance()->decreaseIconSize());
 }
-

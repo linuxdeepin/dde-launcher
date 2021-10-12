@@ -60,9 +60,11 @@ static QMap<int, AppsListModel::AppCategory> CateGoryMap {
 };
 
 const QStringList sysHideUseProxyPackages();
+const QStringList sysCantUseProxyPackages();
 
 static QGSettings *gSetting = SettingsPtr("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
 static QStringList hideUseProxyPackages(sysHideUseProxyPackages());
+static QStringList cantUseProxyPackages(sysCantUseProxyPackages());
 
 const QStringList sysHideOpenPackages()
 {
@@ -133,6 +135,22 @@ const QStringList sysHideUseProxyPackages()
     });
 
     return hideUseProxy_list;
+}
+
+const QStringList sysCantUseProxyPackages()
+{
+    QStringList cantUseProxy_list;
+    //从gschema读取隐藏使用代理功能软件列表
+    if (gSetting && gSetting->keys().contains("appsCanNotUseProxyList")) {
+        cantUseProxy_list << gSetting->get("apps-can-not-use-proxy-list").toStringList();
+    }
+
+    QObject::connect(gSetting, &QGSettings::changed, [ & ](const QString &key) {
+        if (!key.compare("appsCanNotUseProxyList"))
+            cantUseProxyPackages = sysCantUseProxyPackages();
+    });
+
+    return cantUseProxy_list;
 }
 
 const QStringList sysCantOpenPackages()
@@ -522,6 +540,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return !m_cantSendToDockPackages.contains(itemInfo.m_key);
     case AppCanStartUpRole:
         return !m_cantStartUpPackages.contains(itemInfo.m_key);
+    case AppCanOpenProxyRole:
+        return !cantUseProxyPackages.contains(itemInfo.m_key);
     default:;
     }
 

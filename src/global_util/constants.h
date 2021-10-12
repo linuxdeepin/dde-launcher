@@ -89,6 +89,8 @@ static const int DOCK_POS_TOP = 0;                      // 任务栏位置: 顶�
 static const int DOCK_POS_RIGHT = 1;                    // 任务栏位置: 右边
 static const int DOCK_POS_BOTTOM = 2;                   // 任务栏位置: 底部
 static const int DOCK_POS_LEFT = 3;                     // 任务栏位置: 左边
+
+static const int CHANGE_PAGE_DELAY_TIME = 250;          // 翻页延时时间，防抖动
 }
 
 #endif // CONSTANTS_H

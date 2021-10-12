@@ -28,6 +28,8 @@
 #include "appslistmodel.h"
 #include "fullscreenframe.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QDebug>
 #include <QWheelEvent>
 #include <QTimer>
@@ -40,6 +42,8 @@
 #include <QPainter>
 #include <QScrollBar>
 #include <QVBoxLayout>
+
+DGUI_USE_NAMESPACE
 
 QPointer<AppsManager> AppGridView::m_appManager = nullptr;
 QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
@@ -268,9 +272,9 @@ void AppGridView::dragOut(int pos)
     dropSwap();
 }
 
-void AppGridView::dragIn(const QModelIndex &index)
+void AppGridView::dragIn(const QModelIndex &index, bool enableAnimation)
 {
-    m_enableAnimation = false;
+    m_enableAnimation = enableAnimation;
     m_dragStartPos = indexRect(index).center();
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     if (!listModel)
@@ -589,6 +593,12 @@ void AppGridView::startDrag(const QModelIndex &index)
     else
         posAni->setEndValue(m_containerBox->mapToGlobal(QPoint()) + m_dropPoint + QPoint(padding, 0));
 
+    //不开启特效则不展示动画
+    if (!DGuiApplicationHelper::isSpecialEffectsEnvironment()) {
+        posAni->setStartValue(posAni->endValue());
+        posAni->setDuration(0);
+    }
+
     posAni->start(QPropertyAnimation::DeleteWhenStopped);
 }
 
@@ -693,6 +703,11 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     // InOutQuad 描述起点矩形到终点矩形的速度曲线
     ani->setEasingCurve(QEasingCurve::Linear);
     ani->setDuration(DLauncher::APP_DRAG_MININUM_TIME);
+
+    if (!DGuiApplicationHelper::isSpecialEffectsEnvironment()) {
+        ani->setStartValue(ani->endValue());
+        ani->setDuration(0);
+    }
 
     connect(ani, &QPropertyAnimation::finished, floatLabel, &QLabel::deleteLater);
     if (isLastAni) {

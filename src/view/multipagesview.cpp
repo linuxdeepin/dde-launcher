@@ -24,7 +24,11 @@
 #include "../fullscreenframe.h"
 #include "../widgets/blurboxwidget.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QHBoxLayout>
+
+DGUI_USE_NAMESPACE
 
 /**
  * @brief MultiPagesView::MultiPagesView 全屏模式下多页列表控件类
@@ -49,6 +53,7 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     , m_nMousePos(0)
     , m_scrollValue(0)
     , m_scrollStart(0)
+    , m_changePageDelayTime(nullptr)
 {
     m_pRightGradient->setAccessibleName("thisRightGradient");
     m_pLeftGradient->setAccessibleName("thisLeftGradient");
@@ -76,12 +81,24 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     // 翻页按钮和动画
     m_pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value", this);
     m_pageSwitchAnimation->setEasingCurve(QEasingCurve::Linear);
+    if (!DGuiApplicationHelper::isSpecialEffectsEnvironment()) {
+        m_changePageDelayTime = new QTime();
+        m_pageSwitchAnimation->setDuration(0);
+    }
 
     InitUI();
 
     connect(m_appListArea, &AppListArea::increaseIcon, this, [ = ] { if (m_calcUtil->increaseIconSize()) emit m_appsManager->layoutChanged(AppsListModel::All); });
     connect(m_appListArea, &AppListArea::decreaseIcon, this, [ = ] { if (m_calcUtil->decreaseIconSize()) emit m_appsManager->layoutChanged(AppsListModel::All); });
     connect(m_pageControl, &PageControl::onPageChanged, this, &MultiPagesView::showCurrentPage);
+}
+
+MultiPagesView::~MultiPagesView()
+{
+    if (m_changePageDelayTime) {
+        delete m_changePageDelayTime;
+        m_changePageDelayTime = nullptr;
+    }
 }
 
 /**
@@ -198,7 +215,7 @@ void MultiPagesView::dragToLeft(const QModelIndex &index)
     if (m_pageIndex <= 0)
         return;
 
-    if (m_pageSwitchAnimation->state() == QPropertyAnimation::Running || m_bDragStart)
+    if (isScrolling() || m_bDragStart)
         return;
 
     m_appGridViewList[m_pageIndex]->dragOut(-1);
@@ -207,7 +224,7 @@ void MultiPagesView::dragToLeft(const QModelIndex &index)
 
     int lastApp = m_pageAppsModelList[m_pageIndex]->rowCount(QModelIndex());
     QModelIndex firstModel = m_appGridViewList[m_pageIndex]->indexAt(lastApp - 1);
-    m_appGridViewList[m_pageIndex]->dragIn(firstModel);
+    m_appGridViewList[m_pageIndex]->dragIn(firstModel, m_pageSwitchAnimation->state() != QPropertyAnimation::Running);
 
     // 保存向左拖拽后item回归的终点位置
     const QPoint &dropCursorPoint = m_appGridViewList[m_pageIndex]->appIconRect(firstModel).topLeft();
@@ -226,7 +243,7 @@ void MultiPagesView::dragToRight(const QModelIndex &index)
     if (m_pageIndex >= m_pageCount - 1)
         return;
 
-    if (m_pageSwitchAnimation->state() == QPropertyAnimation::Running || m_bDragStart)
+    if (isScrolling() || m_bDragStart)
         return;
 
     // 当前页面准备空出最后一个图标
@@ -240,7 +257,7 @@ void MultiPagesView::dragToRight(const QModelIndex &index)
     // 将最后一个App'挤走'
     int lastApp = m_pageAppsModelList[m_pageIndex]->rowCount(QModelIndex());
     QModelIndex lastModel = m_appGridViewList[m_pageIndex]->indexAt(lastApp - 1);
-    m_appGridViewList[m_pageIndex]->dragIn(lastModel);
+    m_appGridViewList[m_pageIndex]->dragIn(lastModel, m_pageSwitchAnimation->state() != QPropertyAnimation::Running);
 
     // 保存向右拖拽后item回归的终点位置
     const QPoint &dropCursorPoint = m_appGridViewList[m_pageIndex]->appIconRect(lastModel).topLeft();
@@ -382,6 +399,9 @@ void MultiPagesView::showCurrentPage(int currentPage)
     m_pageSwitchAnimation->setEndValue(endValue);
     m_pageSwitchAnimation->start();
 
+    if (m_changePageDelayTime)
+        m_changePageDelayTime->start();
+
     m_pageControl->setCurrent(m_pageIndex);
 }
 
@@ -430,7 +450,7 @@ AppsListModel *MultiPagesView::pageModel(int pageIndex)
 
 void MultiPagesView::wheelEvent(QWheelEvent *e)
 {
-    if (m_pageSwitchAnimation->state() == QPropertyAnimation::Running)
+    if (isScrolling())
         return;
 
     int page = m_pageIndex;
@@ -568,4 +588,12 @@ void MultiPagesView::updateGradient()
 
     QPixmap background = backgroundWidget->grab();
     updateGradient(background, calculPadding(MultiPagesView::Left), calculPadding(MultiPagesView::Right));
+}
+
+bool MultiPagesView::isScrolling()
+{
+    if (m_changePageDelayTime)
+        return m_changePageDelayTime->isValid() && m_changePageDelayTime->elapsed() < DLauncher::CHANGE_PAGE_DELAY_TIME;
+
+    return m_pageSwitchAnimation->state() == QPropertyAnimation::Running;
 }

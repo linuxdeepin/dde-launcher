@@ -1,4 +1,9 @@
 #include "scrollwidgetagent.h"
+#include "constants.h"
+
+#include <DGuiApplicationHelper>
+
+DGUI_USE_NAMESPACE
 
 ScrollWidgetAgent::ScrollWidgetAgent(QObject *parent)
     : QObject(parent)
@@ -12,7 +17,7 @@ ScrollWidgetAgent::ScrollWidgetAgent(QObject *parent)
 {
     m_mainWidget = static_cast<QWidget *>(parent);
 
-    m_animation->setDuration(200);
+    m_animation->setDuration(DGuiApplicationHelper::isSpecialEffectsEnvironment() ? 200 : 0);
 
     connect(m_animation, &QPropertyAnimation::finished, this, &ScrollWidgetAgent::scrollFinished);
 }

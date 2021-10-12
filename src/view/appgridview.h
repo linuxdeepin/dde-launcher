@@ -61,7 +61,7 @@ public:
     DragPageDelegate* getDelegate();
 
     void dragOut(int pos);
-    void dragIn(const QModelIndex &index);
+    void dragIn(const QModelIndex &index, bool enableAnimation);
     void setDropAndLastPos(const QPoint& itemPos);
     void flashDrag();
     QPixmap creatSrcPix(const QModelIndex &index, const QString &appKey);

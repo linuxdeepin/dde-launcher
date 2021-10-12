@@ -54,6 +54,7 @@ public:
     };
 
     explicit MultiPagesView(AppsListModel::AppCategory categoryModel = AppsListModel::All, QWidget *parent = nullptr);
+    ~MultiPagesView();
 
     void updatePageCount(AppsListModel::AppCategory category = AppsListModel::All);
     void showCurrentPage(int currentPage);
@@ -84,6 +85,7 @@ public:
     AppGridViewList getAppGridViewList();
     AppsListModel::AppCategory getCategory();
 
+    bool isScrolling();
 signals:
     void connectViewEvent(AppGridView* pView);
 
@@ -123,6 +125,7 @@ private:
     int m_nMousePos;
     int m_scrollValue;
     int m_scrollStart;
+    QTime *m_changePageDelayTime;                      // 滚动延时，设定时间内只允许滚动一次
 };
 
 #endif // MULTIPAGESVIEW_H

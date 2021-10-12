@@ -43,6 +43,7 @@
 #include <DWindowManagerHelper>
 #include <DDBusSender>
 #include <DDialog>
+#include <DGuiApplicationHelper>
 
 DGUI_USE_NAMESPACE
 
@@ -103,7 +104,8 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_bMousePress(false),
     m_nMousePos(0),
     m_scrollValue(0),
-    m_scrollStart(0)
+    m_scrollStart(0),
+    m_changePageDelayTime(nullptr)
 {
     // accessible.h 中使用
     setAccessibleName("FullScrreenFrame");
@@ -189,6 +191,17 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     // 获取搜索控件,应用分类导航控件默认大小
     m_calcUtil->setSearchWidgetSizeHint(m_searchWidget->sizeHint());
     m_calcUtil->setNavigationWidgetSizeHint(m_navigationWidget->sizeHint());
+
+    if (!DGuiApplicationHelper::isSpecialEffectsEnvironment())
+        m_changePageDelayTime = new QTime();
+}
+
+FullScreenFrame::~FullScreenFrame()
+{
+    if (m_changePageDelayTime) {
+        delete m_changePageDelayTime;
+        m_changePageDelayTime = nullptr;
+    }
 }
 
 void FullScreenFrame::exit()
@@ -204,7 +217,7 @@ int FullScreenFrame::dockPosition()
 void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory oldCategory, const AppsListModel::AppCategory newCategory)
 {
     m_searchWidget->clearSearchContent();
-    if (m_animationGroup->state() == m_animationGroup->Running)
+    if (isScrolling())
         return;
 
     int spaceCount = nearestCategory(oldCategory, newCategory);
@@ -233,7 +246,7 @@ void FullScreenFrame::blurBoxWidgetMaskClick(const AppsListModel::AppCategory ap
     if (m_mouse_press)
         m_mouse_press = false;
 
-    if (m_animationGroup->state() == m_animationGroup->Running)
+    if (isScrolling())
         return;
 
     if (appCategory == m_currentCategory) {
@@ -289,7 +302,7 @@ void FullScreenFrame::scrollPrev()
     }
 
     m_animationGroup->setScrollType(Scroll_Prev);
-    m_animationGroup->start();
+    doScrolling();
 }
 
 void FullScreenFrame::scrollNext()
@@ -337,7 +350,7 @@ void FullScreenFrame::scrollNext()
     }
 
     m_animationGroup->setScrollType(Scroll_Next);
-    m_animationGroup->start();
+    doScrolling();
 }
 
 void FullScreenFrame::scrollCurrent()
@@ -349,7 +362,7 @@ void FullScreenFrame::scrollCurrent()
     }
 
     m_animationGroup->setScrollType(Scroll_Current);
-    m_animationGroup->start();
+    doScrolling();
 }
 
 /**
@@ -625,7 +638,7 @@ void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
     if (!m_mouse_press || e->button() == Qt::RightButton)
         return;
 
-    if (m_animationGroup->state() == m_animationGroup->Running)
+    if (isScrolling())
         return;
 
     int categoryCount = m_appsManager->getVisibleCategoryCount();
@@ -699,11 +712,11 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
 void FullScreenFrame::wheelEvent(QWheelEvent *e)
 {
     if (m_displayMode == GROUP_BY_CATEGORY) {
-        if (m_animationGroup->state() == m_animationGroup->Running)
+        if (isScrolling())
             return;
 
         // 优先MultiPagesView中的滑动事件，如果MultiPagesView中动画在运行，外层滑动鼠标就不处理
-        if (getCategoryBoxWidget(m_currentCategory)->getMultiPagesView()->getPageSwitchAnimationState() == QPropertyAnimation::Running)
+        if (getCategoryBoxWidget(m_currentCategory)->getMultiPagesView()->isScrolling())
             return;
 
         static int  wheelTime = 0;
@@ -1804,4 +1817,19 @@ void FullScreenFrame::searchTextChanged(const QString &keywords)
 
     if (m_searchWidget->edit()->lineEdit()->text().isEmpty())
         m_searchWidget->edit()->lineEdit()->clearFocus();
+}
+
+bool FullScreenFrame::isScrolling()
+{
+    if (m_changePageDelayTime)
+        return m_changePageDelayTime->isValid() && m_changePageDelayTime->elapsed() < DLauncher::CHANGE_PAGE_DELAY_TIME;
+
+    return m_animationGroup->state() == QPropertyAnimation::Running;
+}
+
+void FullScreenFrame::doScrolling()
+{
+    m_animationGroup->start();
+    if (m_changePageDelayTime)
+        m_changePageDelayTime->restart();
 }

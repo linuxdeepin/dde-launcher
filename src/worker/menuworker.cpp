@@ -65,6 +65,7 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
     const bool canSendToDock = m_currentModelIndex.data(AppsListModel::AppCanSendToDockRole).toBool();
     const bool canStartUp = m_currentModelIndex.data(AppsListModel::AppCanStartUpRole).toBool();
     const bool canDisableScale = m_calcUtil->IsServerSystem || qFuzzyCompare(1.0, scale_ratio);
+    const bool canUseProxy = m_currentModelIndex.data(AppsListModel::AppCanOpenProxyRole).toBool();
 
     qDebug() << "appKey" << m_appKey;
 
@@ -134,6 +135,7 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
     uninstall->setEnabled(isRemovable);
     proxy->setCheckable(true);
     proxy->setChecked(m_isItemProxy);
+    proxy->setEnabled(canUseProxy);
 
 #ifndef WITHOUT_UNINSTALL_APP
     if (!hideUninstall)

@@ -59,7 +59,12 @@ static QMap<int, AppsListModel::AppCategory> CateGoryMap {
     { 10, AppsListModel::Others      }
 };
 
+const QStringList sysHideUseProxyPackages();
+const QStringList sysCantUseProxyPackages();
+
 static QGSettings *gSetting = SettingsPtr("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
+static QStringList hideUseProxyPackages(sysHideUseProxyPackages());
+static QStringList cantUseProxyPackages(sysCantUseProxyPackages());
 
 const QStringList sysHideOpenPackages()
 {
@@ -124,7 +129,28 @@ const QStringList sysHideUseProxyPackages()
         hideUseProxy_list << gSetting->get("apps-hide-use-proxy-list").toStringList();
     }
 
+    QObject::connect(gSetting, &QGSettings::changed, [ & ](const QString &key) {
+        if (!key.compare("appsHideUseProxyList"))
+            hideUseProxyPackages = sysHideUseProxyPackages();
+    });
+
     return hideUseProxy_list;
+}
+
+const QStringList sysCantUseProxyPackages()
+{
+    QStringList cantUseProxy_list;
+    //从gschema读取隐藏使用代理功能软件列表
+    if (gSetting && gSetting->keys().contains("appsCanNotUseProxyList")) {
+        cantUseProxy_list << gSetting->get("apps-can-not-use-proxy-list").toStringList();
+    }
+
+    QObject::connect(gSetting, &QGSettings::changed, [ & ](const QString &key) {
+        if (!key.compare("appsCanNotUseProxyList"))
+            cantUseProxyPackages = sysCantUseProxyPackages();
+    });
+
+    return cantUseProxy_list;
 }
 
 const QStringList sysCantOpenPackages()
@@ -195,7 +221,6 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent)
     , m_hideSendToDockPackages(sysHideSendToDockPackages())
     , m_hideStartUpPackages(sysHideStartUpPackages())
     , m_hideUninstallPackages(sysHideUninstallPackages())
-    , m_hideUseProxyPackages(sysHideUseProxyPackages())
     , m_cantOpenPackages(sysCantOpenPackages())
     , m_cantSendToDesktopPackages(sysCantSendToDesktopPackages())
     , m_cantSendToDockPackages(sysCantSendToDockPackages())
@@ -504,7 +529,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return (m_actionSettings && !m_actionSettings->get("uninstall").toBool()) || m_hideUninstallPackages.contains(itemInfo.m_key);
     case AppHideUseProxyRole:
     {
-        bool hideUse = ((m_actionSettings && !m_actionSettings->get("use-proxy").toBool()) || m_hideUseProxyPackages.contains(itemInfo.m_key));
+        bool hideUse = ((m_actionSettings && !m_actionSettings->get("use-proxy").toBool()) || hideUseProxyPackages.contains(itemInfo.m_key));
         return DSysInfo::isCommunityEdition() ? hideUse : (!QFile::exists(ChainsProxy_path) || hideUse);
     }
     case AppCanOpenRole:
@@ -515,6 +540,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return !m_cantSendToDockPackages.contains(itemInfo.m_key);
     case AppCanStartUpRole:
         return !m_cantStartUpPackages.contains(itemInfo.m_key);
+    case AppCanOpenProxyRole:
+        return !cantUseProxyPackages.contains(itemInfo.m_key);
     default:;
     }
 

@@ -74,7 +74,8 @@ public:
         AppCanOpenRole,
         AppCanSendToDesktopRole,
         AppCanSendToDockRole,
-        AppCanStartUpRole
+        AppCanStartUpRole,
+        AppCanOpenProxyRole
     };
 
     enum AppCategory {
@@ -143,12 +144,12 @@ private:
     QStringList m_hideSendToDockPackages;
     QStringList m_hideStartUpPackages;
     QStringList m_hideUninstallPackages;
-    QStringList m_hideUseProxyPackages;
 
     QStringList m_cantOpenPackages;
     QStringList m_cantSendToDesktopPackages;
     QStringList m_cantSendToDockPackages;
     QStringList m_cantStartUpPackages;
+    QStringList m_cantUseProxyPackages;
     QStringList m_holdPackages;
 
     QModelIndex m_dragStartIndex = QModelIndex();

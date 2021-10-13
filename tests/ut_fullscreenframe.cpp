@@ -29,16 +29,6 @@ public:
     FullScreenFrame *m_fullScreenFrame;
 };
 
-TEST_F(Tst_Fullscreenframe, wheelEvent_test)
-{
-    m_fullScreenFrame->m_displayMode = GROUP_BY_CATEGORY;
-
-    QWheelEvent wheelEve(QPointF(0, 0), 10, Qt::MiddleButton, Qt::ControlModifier, Qt::Vertical);
-    QApplication::sendEvent(m_fullScreenFrame, &wheelEve);
-
-    m_fullScreenFrame->m_displayMode = SEARCH;
-}
-
 TEST_F(Tst_Fullscreenframe, keyEvent_test)
 {
     QKeyEvent minusKeyEvent(QEvent::KeyPress, Qt::Key_Minus, Qt::NoModifier, QString(""));

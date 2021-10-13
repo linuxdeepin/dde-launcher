@@ -74,39 +74,6 @@ TEST_F(Tst_calculate, size_test)
 
     CalculateUtil::instance()->setNavigationWidgetSizeHint(QSize(40, 40));
     QVERIFY(!CalculateUtil::instance()->getNavigationWidgetSizeHint().isNull());
-
-    int defaultPos = CalculateUtil::instance()->m_dockInter->position();
-    DGuiApplicationHelper::ColorType defaultType = DGuiApplicationHelper::instance()->themeType();
-
-    /*
-     * 全屏自由模式: 0
-     * 全屏分类模式: 1
-    */
-    for (int i = 0; i < 2; i++) {
-        /*
-         * 顶部：0, 右边:1, 底部: 2, 左边：3
-        */
-        for (int j = 0; j < 4; j++) {
-            CalculateUtil::instance()->m_dockInter->setPosition(j);
-
-        /*
-         * 全屏自由模式：0
-         * 全屏分类模式: 1
-         * 全屏搜索模式：２
-        */
-            for (int k = 0; k < 3; k++) {
-                CalculateUtil::instance()->setDisplayMode(k);
-                CalculateUtil::instance()->calculateIconSize(i);
-                QTest::qWait(500);
-            }
-        }
-    }
-
-    QTest::qWait(500);
-
-    //　恢复默认位置．
-    CalculateUtil::instance()->m_dockInter->setPosition(defaultPos);
-    DGuiApplicationHelper::instance()->setThemeType(defaultType);
 }
 
 TEST_F(Tst_calculate, appIconSize_test)

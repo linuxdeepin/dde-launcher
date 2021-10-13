@@ -50,21 +50,3 @@ TEST_F(Tst_Boxframe, checkBackground_test)
         QCOMPARE(spy.count(), 1);
     }
 }
-
-TEST_F(Tst_Boxframe, moveEvent_test)
-{
-//    BoxFrame frame;
-
-//    QMoveEvent event(QPoint(0, 0), QPoint(0, 1));
-//    QApplication::sendEvent(&frame, &event);
-//    QTest::qWait(100);
-}
-
-TEST_F(Tst_Boxframe, paintEvent_test)
-{
-    BoxFrame frame;
-
-    QPaintEvent event1(QRect(QPoint(0, 0), QPoint(0, 1)));
-    QApplication::sendEvent(&frame, &event1);
-    QTest::qWait(100);
-}

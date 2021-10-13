@@ -133,8 +133,11 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         if ((fm.width(appNameResolved) + (drawBlueDot ? (m_blueDotPixmap.width() + 10) : 0)) >= appNameRect.width())
             TextSecond = 1;
 
-        if (margin == 1 || appTextResolvedInfo.second)
+        if (margin == 1 || appTextResolvedInfo.second) {
+            br.setHeight(ICONTOTOP + iconRect.height() + TEXTTOICON + 31 + fontPixelSize * TextSecond + TEXTTOLEFT);
+            appNameRect = itemTextRect(br, iconRect, drawBlueDot);
             break;
+        }
 
         // we need adjust again!
         adjust = true;
@@ -262,19 +265,7 @@ const QPair<QString, bool> AppItemDelegate::holdTextInRect(const QFontMetrics &f
     if (rect.contains(fm.boundingRect(rect, textFlag, text)))
         return QPair<QString, bool>(text, true);
 
-    QString str(text + "...");
-
-    while (true)
-    {
-        if (str.size() < 4)
-            break;
-
-        QRect boundingRect = fm.boundingRect(rect, textFlag, str);
-        if (rect.contains(boundingRect))
-            break;
-
-        str.remove(str.size() - 4, 1);
-    }
-
-    return QPair<QString, bool>(str, false);
+    QFontMetrics ftm(fm);
+    QString txt = ftm.elidedText(text, Qt::ElideRight, rect.width());
+    return QPair<QString, bool>(txt, false);
 }

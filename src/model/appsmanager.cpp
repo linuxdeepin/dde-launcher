@@ -785,8 +785,7 @@ void AppsManager::refreshUsedInfoList()
 
         updateUsedListInfo();
     }
-
-    // 保存到gsetting配置文件
+    // 保存到qSetting配置文件
     saveUsedSortedList();
 }
 
@@ -897,7 +896,6 @@ void AppsManager::updateUsedListInfo()
             m_usedSortedList[idx].m_openCount = openCount;
         }
     }
-    //    ReflashSortList();
 }
 
 /**
@@ -1156,6 +1154,9 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
         m_allAppInfoList.removeOne(appInfo);
         m_usedSortedList.removeOne(appInfo);
         m_userSortedList.removeOne(appInfo);
+        //一般情况是不需要的，但是类似wps这样的程序有点特殊，删除一个其它的二进制程序也删除了，需要保存列表，否则刷新的时候会刷新出齿轮的图标
+        //新增和更新则无必要
+        saveUsedSortedList();
 
         // 从缓存中移除
         removePixFromCache(appInfo);
@@ -1175,7 +1176,6 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
             m_usedSortedList[sortAppIndex].updateInfo(appInfo);
         }
     }
-    //    ReflashSortList();
 
     m_delayRefreshTimer->start();
 }

@@ -306,21 +306,17 @@ void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 
     m_dropThresholdTimer->stop();
 
-    QPoint pos;
     QRect containerRect;
+    // QCursor::pos()获取的是绝对坐标（在多屏的情况下，(0,0)原点是从最左侧的屏幕开始计算的)，
+    // 因此当启动器ui在最右侧的屏幕时容易出现向左滑动触发翻页，结果响应的是向右翻页，因此统一使用
+    // QScrollArea来计算相对该控件的全局坐标
+    QPoint pos = m_containerBox->mapFromGlobal(QCursor::pos());
 
-    // 解决全屏分类模式下拖动item无法触发分页的问题
-    if (m_calcUtil->displayMode() == ALL_APPS) {
-        int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
-        pos = QCursor::pos();
-        containerRect = this->contentsRect().marginsRemoved(QMargins(padding, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
-                                                                                   padding, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
-    } else {
-        pos = m_containerBox->mapFromGlobal(QCursor::pos());
-        int nSpace = m_calcUtil->appItemSpacing() + m_calcUtil->appMarginLeft();
-        containerRect = m_containerBox->rect().marginsRemoved(QMargins(nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
-                                                                                     nSpace, DLauncher::APP_DRAG_SCROLL_THRESHOLD));
-    }
+    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
+    QMargins margin(padding, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
+                    padding, DLauncher::APP_DRAG_SCROLL_THRESHOLD);
+
+    containerRect = this->contentsRect().marginsRemoved(margin);
 
     const QModelIndex dropStart = QListView::indexAt(m_dragStartPos);
 

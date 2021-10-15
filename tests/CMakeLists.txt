@@ -28,6 +28,7 @@ find_package(Qt5Svg REQUIRED)
 #QTest 依赖库
 find_package(Qt5 COMPONENTS Test REQUIRED)
 find_package(GTest REQUIRED)
+find_package(DtkCore REQUIRED)
 
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
@@ -83,6 +84,7 @@ add_executable(${BIN_NAME} ${SRCS} ${SRC_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../sr
 
 target_include_directories(${BIN_NAME} PUBLIC
     ${DtkWidget_INCLUDE_DIRS}
+    ${DtkCore_INCLUDE_DIRS}
     ${XCB_EWMH_INCLUDE_DIRS}
     ${DFrameworkDBus_INCLUDE_DIRS}
     ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
@@ -94,6 +96,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
     ${XCB_EWMH_LIBRARIES}
     ${DFrameworkDBus_LIBRARIES}
     ${DtkWidget_LIBRARIES}
+    ${DtkCore_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
     ${Qt5Concurrent_LIBRARIES}
     ${Qt5X11Extras_LIBRARIES}

@@ -1,0 +1,33 @@
+{
+    "magic": "dsg.config.meta",
+    "version": "1.0",
+    "contents": {
+        "useSolidBackground": {
+            "value": false,
+            "serial": 0,
+            "name": "useSolidBackground",
+            "name[zh_CN]": "使用纯色背景",
+            "description": "Use a solid background to reduce memory",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "preloadAppsIcon": {
+            "value": true,
+            "serial": 0,
+            "name": "preloadAppsIcon",
+            "name[zh_CN]": "预加载应用图标",
+            "description": "Preload icons for all app",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "enableFullScreenMode": {
+            "value": true,
+            "serial": 0,
+            "name": "enableFullScreenMode",
+            "name[zh_CN]": "允许使用全屏模式",
+            "description": "Whether to display full screen button",
+            "permissions": "readwrite",
+            "visibility": "private"
+        }
+    }
+}

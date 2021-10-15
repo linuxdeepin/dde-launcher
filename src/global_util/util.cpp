@@ -26,6 +26,7 @@
 
 #include <DHiDPIHelper>
 #include <DGuiApplicationHelper>
+#include <DConfig>
 
 #include <QStandardPaths>
 #include <QDir>
@@ -450,4 +451,27 @@ QIcon getIcon(const QString &name)
 QString cacheKey(const ItemInfo &itemInfo, CacheType type)
 {
     return itemInfo.m_name + itemInfo.m_iconKey + QString::number(type);
+}
+
+/**
+ * @brief getDConfigValue 根据传入的\a key获取配置项的值，获取失败返回默认值
+ * @param key 配置项键值
+ * @param defaultValue 默认返回值，为避免出现返回值错误导致程序异常的问题，此参数必填
+ * @param configFileName 配置文件名称
+ * @return 配置项的值
+ */
+QVariant getDConfigValue(const QString &key, const QVariant &defaultValue, const QString &configFileName)
+{
+    DConfig config(configFileName);
+
+    if (!config.isValid()) {
+        qWarning() << QString("DConfig is invalid, name:[%1], subpath[%2].").
+                        arg(config.name(), config.subpath());
+        return defaultValue;
+    }
+
+    if (config.keyList().contains(key))
+        return config.value(key);
+
+    return defaultValue;
 }

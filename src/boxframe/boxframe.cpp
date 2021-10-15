@@ -23,6 +23,8 @@
 
 #include "boxframe.h"
 #include "backgroundmanager.h"
+#include "util.h"
+#include "constants.h"
 
 #include <QDebug>
 #include <QUrl>
@@ -39,9 +41,14 @@
 BoxFrame::BoxFrame(QWidget *parent)
     : QLabel(parent)
     , m_defaultBg("/usr/share/backgrounds/default_background.jpg")
-    , m_bgManager(new BackgroundManager(this))
+    , m_bgManager(nullptr)
+    , m_useSolidBackground(false)
 {
-    QPixmapCache::setCacheLimit(10240000);
+    m_useSolidBackground = getDConfigValue("useSolidBackground", false).toBool();
+    if (m_useSolidBackground) 
+        return;
+
+    m_bgManager = new BackgroundManager(this);
     connect(m_bgManager, &BackgroundManager::currentWorkspaceBackgroundChanged, this, &BoxFrame::setBackground);
     connect(m_bgManager, &BackgroundManager::currentWorkspaceBlurBackgroundChanged, this, &BoxFrame::setBlurBackground);
 }
@@ -59,14 +66,7 @@ void BoxFrame::setBackground(const QString &url)
 
     m_lastUrl = url;
 
-    // 背景发生变化时需要重新生成背景样式
-    QPixmapCache::remove(m_cacheNormalKey);
-
-    m_pixmap = QPixmap(url);
-    if (m_pixmap.isNull())
-        m_pixmap.load(m_defaultBg);
-
-    updateBackground();
+    scaledBackground();
 }
 
 void BoxFrame::setBlurBackground(const QString &url)
@@ -76,82 +76,54 @@ void BoxFrame::setBlurBackground(const QString &url)
 
     m_lastBlurUrl = url;
 
-    // 背景发生变化时需要重新生成模糊背景样式
-    QPixmapCache::remove(m_cacheBlurKey);
+    scaledBlurBackground();
+}
 
-    QPixmap pix(url);
-    if (pix.isNull())
-        pix.load(m_defaultBg);
+/** 缩放图片并缓存
+ * @brief BoxFrame::scaledBackground
+ */
+void BoxFrame::scaledBlurBackground()
+{
+    if (m_useSolidBackground)
+        return;
+        
+    QPixmap pixmap(m_lastBlurUrl);
+    if (pixmap.isNull())
+        pixmap.load(m_defaultBg);
+    if (pixmap.isNull())
+        return;
 
     const QSize &size = currentScreen()->size() * currentScreen()->devicePixelRatio();
-
-    QPixmap blurCache;
-    if (!QPixmapCache::find(m_cacheBlurKey, &blurCache)) {
-        blurCache = pix.scaled(size,
+    QPixmap scaledpixmap = pixmap.scaled(size,
                                Qt::KeepAspectRatioByExpanding,
                                Qt::SmoothTransformation);
-
-        m_cacheBlurKey = QPixmapCache::insert(blurCache);
-    }
-
-    emit backgroundImageChanged(blurCache);
+    emit backgroundImageChanged(scaledpixmap);
 }
 
-/**当桌面发生旋转、背景更换时需要更新缓存
- * @brief BoxFrame::removeCache
+/** 缩放图片并缓存
+ * @brief BoxFrame::scaledBackground
  */
-void BoxFrame::removeCache()
+void BoxFrame::scaledBackground()
 {
-    QPixmapCache::remove(m_cacheNormalKey);
-    QPixmapCache::remove(m_cacheBlurKey);
-}
+    if (m_useSolidBackground)
+        return;
 
-/**更新桌面模糊背景,桌面背景不改变时进行缓存桌面模糊背景
- * @brief BoxFrame::updateBlurBackground
- */
-void BoxFrame::updateBlurBackground()
-{
-    QPixmap pix(m_lastBlurUrl);
-
-    if (pix.isNull())
-        pix.load(m_defaultBg);
+    QPixmap pixmap(m_lastUrl);
+    if (pixmap.isNull())
+        pixmap = QPixmap(m_defaultBg);
+    if (pixmap.isNull())
+        return;
 
     const QSize &size = currentScreen()->size() * currentScreen()->devicePixelRatio();
-
-    QPixmap cache = pix.scaled(size,
-                               Qt::KeepAspectRatioByExpanding,
-                               Qt::SmoothTransformation);
-
-    emit backgroundImageChanged(cache);
-}
-
-/** 更新桌面背景,桌面背景不改变时进行缓存桌面背景
- * @brief BoxFrame::updateBackground
- */
-void BoxFrame::updateBackground()
-{
-    const QSize &size = currentScreen()->size() * currentScreen()->devicePixelRatio();
-
-    if (m_pixmap.isNull()) {
-        m_pixmap.load(m_defaultBg);
-        QPixmapCache::remove(m_cacheNormalKey);
-    }
-
-    QPixmap cache;
-    if (!QPixmapCache::find(m_cacheNormalKey, &cache)) {
-        cache = m_pixmap.scaled(size,
+    m_pixmap = pixmap.scaled(size,
                                 Qt::KeepAspectRatioByExpanding,
                                 Qt::SmoothTransformation);
-        m_cacheNormalKey = QPixmapCache::insert(cache);
-    }
-
-    m_cache = cache;
     update();
 }
 
 const QScreen *BoxFrame::currentScreen()
 {
-    if (m_bgManager->dispalyMode() == MERGE_MODE)
+    if (DisplayHelper::instance()->displayMode() == MERGE_MODE)
         return qApp->primaryScreen();
 
     int screenIndex = QApplication::desktop()->screenNumber(this);
@@ -168,12 +140,17 @@ void BoxFrame::paintEvent(QPaintEvent *event)
     QPainter painter(this);
 
     QRect screenSize(QPoint(0, 0), currentScreen()->geometry().size());
-    painter.drawPixmap(screenSize, m_cache, QRect(screenSize.topLeft(),
-                                                  screenSize.size() * currentScreen()->devicePixelRatio()));
+    if (!m_useSolidBackground && !m_pixmap.isNull()) {
+        painter.drawPixmap(screenSize, m_pixmap, QRect(screenSize.topLeft(),
+                                                    screenSize.size() * currentScreen()->devicePixelRatio()));
+    } else {
+        painter.fillRect(screenSize, QColor(DLauncher::SOLID_BACKGROUND_COLOR));
+    }
 }
 
 void BoxFrame::moveEvent(QMoveEvent *event)
 {
-    m_bgManager->updateBlurBackgrounds();
+    if (m_bgManager)
+        m_bgManager->updateBlurBackgrounds();
     QLabel::moveEvent(event);
 }

@@ -62,6 +62,7 @@ find_package(Qt5X11Extras REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(Qt5Svg REQUIRED)
+find_package(DtkCore REQUIRED)
 
 pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh)
 pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
@@ -113,6 +114,7 @@ file(GLOB SRC_PATH
 add_executable(${BIN_NAME}  ${SRCS} ${SRC_PATH} ${INTERFACES} src/skin.qrc src/widgets/images.qrc)
 target_include_directories(${BIN_NAME} PUBLIC
     ${DtkWidget_INCLUDE_DIRS}
+    ${DtkCore_INCLUDE_DIRS}
     ${XCB_EWMH_INCLUDE_DIRS}
     ${DFrameworkDBus_INCLUDE_DIRS}
     ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
@@ -124,6 +126,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
     ${XCB_EWMH_LIBRARIES}
     ${DFrameworkDBus_LIBRARIES}
     ${DtkWidget_LIBRARIES}
+    ${DtkCore_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
     ${Qt5Concurrent_LIBRARIES}
     ${Qt5X11Extras_LIBRARIES}
@@ -155,3 +158,6 @@ install(FILES data/deepin-launcher.svg DESTINATION /usr/share/icons/hicolor/scal
 
 # bin
 install(TARGETS ${BIN_NAME} DESTINATION bin)
+
+# config
+dconfig_meta_files(APPID dde-launcher BASE ./configs FILES ./configs/default.json)

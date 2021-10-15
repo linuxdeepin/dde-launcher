@@ -91,6 +91,8 @@ static const int DOCK_POS_BOTTOM = 2;                   // 任务栏位置: 底�
 static const int DOCK_POS_LEFT = 3;                     // 任务栏位置: 左边
 
 static const int CHANGE_PAGE_DELAY_TIME = 250;          // 翻页延时时间，防抖动
+static const QString SOLID_BACKGROUND_COLOR = "#000F27";        // 纯色背景色号
+static const QString DEFAULT_META_CONFIG_NAME = "default";      // 默认的配置文件名称
 }
 
 #endif // CONSTANTS_H

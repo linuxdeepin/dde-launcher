@@ -25,6 +25,7 @@
 #define UTIL_H
 
 #include "iteminfo.h"
+#include "constants.h"
 
 #include <QtCore>
 #include <QGSettings>
@@ -47,5 +48,6 @@ int perfectIconSize(const int size);
 QString cacheKey(const ItemInfo &itemInfo, CacheType type);
 bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, bool reObtain);
 QIcon getIcon(const QString &name);
+QVariant getDConfigValue(const QString &key, const QVariant &defaultValue, const QString &configFileName = DLauncher::DEFAULT_META_CONFIG_NAME);
 #endif // UTIL_H
 

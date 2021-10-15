@@ -30,9 +30,6 @@ TEST_F(Tst_Boxframe, checkBackground_test)
         frame.setBackground(frame.m_defaultBg);
         frame.setBlurBackground(frame.m_defaultBg);
 
-        // 清空缓存
-        frame.removeCache();
-
         // 清空上一次的背景
         frame.m_lastUrl.clear();
         frame.m_lastBlurUrl.clear();

@@ -24,6 +24,7 @@
 #include "global_util/util.h"
 #include "dbusdockinterface.h"
 #include "dbusdisplay.h"
+#include "constants.h"
 
 #include <DWindowManagerHelper>
 #include <DForeignWindow>
@@ -57,6 +58,7 @@
 #define DOCK_EFFICIENT  1
 
 DGUI_USE_NAMESPACE
+using namespace DLauncher;
 
 extern const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w);
 
@@ -107,6 +109,9 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_enterSearchEdit(false)
     , m_displayInter(new DBusDisplay(this))
 {
+    if (!getDConfigValue("enableFullScreenMode", true).toBool())
+        m_modeToggleBtn->hide();
+    m_searcherEdit->setAccessibleName("searcherEdit");
     m_maskBg->setAccessibleName("MaskBg");
     m_switchBtn->setAccessibleName("switchBtn");
     m_modeToggleBtn->setAccessibleName("modeToggleBtn");

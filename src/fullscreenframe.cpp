@@ -24,7 +24,6 @@
 #include "fullscreenframe.h"
 #include "constants.h"
 #include "xcb_misc.h"
-#include "backgroundmanager.h"
 #include "sharedeventfilter.h"
 #include "constants.h"
 #include "dbusdisplay.h"
@@ -588,7 +587,7 @@ void FullScreenFrame::showEvent(QShowEvent *e)
     XcbMisc::instance()->set_deepin_override(winId());
     // To make sure the window is placed at the right position.
     updateGeometry();
-    updateBackground();
+    update();
 
     if (!m_appsManager->isVaild())
         m_appsManager->refreshAllList();
@@ -1127,17 +1126,7 @@ void FullScreenFrame::initConnection()
     connect(m_systemBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::blurBoxWidgetMaskClick);
     connect(m_othersBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::blurBoxWidgetMaskClick);
 
-    connect(this, &BoxFrame::backgroundImageChanged, m_internetBoxWidget, &BlurBoxWidget::updateBackgroundImage);
-    connect(this, &BoxFrame::backgroundImageChanged, m_chatBoxWidget, &BlurBoxWidget::updateBackgroundImage);
-    connect(this, &BoxFrame::backgroundImageChanged, m_musicBoxWidget, &BlurBoxWidget::updateBackgroundImage);
-    connect(this, &BoxFrame::backgroundImageChanged, m_videoBoxWidget, &BlurBoxWidget::updateBackgroundImage);
-    connect(this, &BoxFrame::backgroundImageChanged, m_graphicsBoxWidget, &BlurBoxWidget::updateBackgroundImage);
-    connect(this, &BoxFrame::backgroundImageChanged, m_gameBoxWidget, &BlurBoxWidget::updateBackgroundImage);
-    connect(this, &BoxFrame::backgroundImageChanged, m_officeBoxWidget, &BlurBoxWidget::updateBackgroundImage);
-    connect(this, &BoxFrame::backgroundImageChanged, m_readingBoxWidget, &BlurBoxWidget::updateBackgroundImage);
-    connect(this, &BoxFrame::backgroundImageChanged, m_developmentBoxWidget, &BlurBoxWidget::updateBackgroundImage);
-    connect(this, &BoxFrame::backgroundImageChanged, m_systemBoxWidget, &BlurBoxWidget::updateBackgroundImage);
-    connect(this, &BoxFrame::backgroundImageChanged, m_othersBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, &BlurBoxWidget::updateBackgroundImage);
 
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
@@ -1488,10 +1477,9 @@ void FullScreenFrame::refreshPageView(AppsListModel::AppCategory category)
 
 void FullScreenFrame::primaryScreenChanged()
 {
-    removeCache();
     setFixedSize(m_appsManager->currentScreen()->size());
-    updateBackground();
-    updateBlurBackground();
+    scaledBackground();
+    scaledBlurBackground();
     update();
 }
 

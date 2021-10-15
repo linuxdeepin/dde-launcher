@@ -37,6 +37,21 @@ static QString getLocalFile(const QString &file)
     return url.isLocalFile() ? url.toLocalFile() : url.url();
 }
 
+DisplayHelper::DisplayHelper(QObject *parent)
+    : QObject(parent)
+    , m_displayInter(new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
+{
+    m_displayMode = m_displayInter->GetRealDisplayMode();
+
+    connect(m_displayInter, &DisplayInter::DisplayModeChanged, this, &DisplayHelper::updateDisplayMode);
+    connect(m_displayInter, &DisplayInter::PrimaryChanged, this, &DisplayHelper::updateDisplayMode);
+}
+
+void DisplayHelper::updateDisplayMode()
+{
+    m_displayMode = m_displayInter->GetRealDisplayMode();
+}
+
 BackgroundManager::BackgroundManager(QObject *parent)
     : QObject(parent)
     , m_currentWorkspace(-1)

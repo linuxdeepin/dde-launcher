@@ -28,6 +28,7 @@
 #include "model/appsmanager.h"
 #include "global_util/util.h"
 #include "iconfreshthread.h"
+#include "constants.h"
 
 #define FULL_SCREEN     0
 #define MINI_FRAME      1
@@ -67,7 +68,8 @@ LauncherSys::LauncherSys(QObject *parent)
     displayModeChanged();
 
     // 启动应用图标和应用名称缓存线程,减少系统加载应用时的开销
-    m_appIconFreshThread->start();
+    if (getDConfigValue("preloadAppsIcon", true).toBool())
+        m_appIconFreshThread->start();
 
     connect(m_dbusLauncherInter, &DBusLauncher::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
     connect(m_dbusLauncherInter, &DBusLauncher::DisplayModeChanged, this, &LauncherSys::onDisplayModeChanged, Qt::QueuedConnection);

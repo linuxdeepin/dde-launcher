@@ -28,16 +28,6 @@ TEST_F(Tst_Boxframe, checkBackground_test)
     for (int i = 0; i < 4; i++) {
         frame.m_bgManager->m_displayMode = i;
         frame.setBackground(frame.m_defaultBg);
-        QVERIFY(frame.m_lastUrl.compare(frame.m_defaultBg));
-
-        // url和上一次相同时
-        frame.setBackground(frame.m_defaultBg);
-
-        QSignalSpy spy(&frame, SIGNAL(backgroundImageChanged(const QPixmap & img)));
-        frame.setBlurBackground(frame.m_defaultBg);
-        QVERIFY(frame.m_lastBlurUrl.compare(frame.m_defaultBg));
-
-        // url和上一次相同时
         frame.setBlurBackground(frame.m_defaultBg);
 
         // 清空缓存
@@ -46,7 +36,5 @@ TEST_F(Tst_Boxframe, checkBackground_test)
         // 清空上一次的背景
         frame.m_lastUrl.clear();
         frame.m_lastBlurUrl.clear();
-
-        QCOMPARE(spy.count(), 1);
     }
 }

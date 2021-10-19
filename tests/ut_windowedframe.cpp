@@ -72,9 +72,6 @@ TEST_F(Tst_Windowedframe, eventFilter_test)
     QEvent event1(QEvent::Type::KeyPress);
     QKeyEvent *keyPress = static_cast<QKeyEvent *>(&event1);
 
-    QKeyEvent f1KeyEvent(QEvent::Type::KeyPress, Qt::Key_F1, static_cast<QKeyEvent *>(keyPress)->modifiers());
-    frame.m_eventFilter->eventFilter(nullptr, &f1KeyEvent);
-
     QKeyEvent returnKeyEvent(QEvent::Type::KeyPress, Qt::Key_Return, static_cast<QKeyEvent *>(keyPress)->modifiers());
     frame.m_eventFilter->eventFilter(nullptr, &returnKeyEvent);
 

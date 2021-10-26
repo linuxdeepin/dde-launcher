@@ -107,7 +107,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_enterSearchEdit(false)
     , m_displayInter(new DBusDisplay(this))
 {
-    m_searcherEdit->setAccessibleName("searcherEdit");
     m_maskBg->setAccessibleName("MaskBg");
     m_switchBtn->setAccessibleName("switchBtn");
     m_modeToggleBtn->setAccessibleName("modeToggleBtn");

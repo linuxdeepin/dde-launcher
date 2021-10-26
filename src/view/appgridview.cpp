@@ -94,7 +94,7 @@ AppGridView::AppGridView(QWidget *parent)
     setViewportMargins(0, 0, 0, 0);
     viewport()->setAutoFillBackground(false);
 
-    // update item spacing
+    // 界面大小变化时，设置listview的边距以及间距
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
         setSpacing(m_calcUtil->appItemSpacing());
         setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), m_calcUtil->appMarginLeft(), 0);
@@ -302,17 +302,12 @@ void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 
     m_dropThresholdTimer->stop();
 
-    QRect containerRect;
-    // QCursor::pos()获取的是绝对坐标（在多屏的情况下，(0,0)原点是从最左侧的屏幕开始计算的)，
-    // 因此当启动器ui在最右侧的屏幕时容易出现向左滑动触发翻页，结果响应的是向右翻页，因此统一使用
-    // QScrollArea来计算相对该控件的全局坐标
-    QPoint pos = m_containerBox->mapFromGlobal(QCursor::pos());
-
-    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
+    // 获取光标在listview中的坐标
+    QPoint pos = mapFromGlobal(QCursor::pos());
+    int padding = m_calcUtil->appMarginLeft();
     QMargins margin(padding, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
                     padding, DLauncher::APP_DRAG_SCROLL_THRESHOLD);
-
-    containerRect = this->contentsRect().marginsRemoved(margin);
+    QRect containerRect = this->contentsRect().marginsRemoved(margin);
 
     const QModelIndex dropStart = QListView::indexAt(m_dragStartPos);
 

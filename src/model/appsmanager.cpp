@@ -136,6 +136,7 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
 
+    onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppsManager::onThemeTypeChanged);
     connect(m_RefreshCalendarIconTimer, &QTimer::timeout, this, &AppsManager::onRefreshCalendarTimer);
 
@@ -487,9 +488,7 @@ bool AppsManager::fuzzyMatching(const QStringList& list, const QString& key)
 
 void AppsManager::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 {
-    Q_UNUSED(themeType);
-
-    refreshAppListIcon();
+    refreshAppListIcon(themeType);
     generateCategoryMap();
 }
 
@@ -1251,10 +1250,10 @@ QHash<AppsListModel::AppCategory, ItemInfoList> AppsManager::getAllAppInfo()
     return appInfoList;
 }
 
-void AppsManager::refreshAppListIcon()
+void AppsManager::refreshAppListIcon(DGuiApplicationHelper::ColorType themeType)
 {
     m_categoryIcon.clear();
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+    if (themeType == DGuiApplicationHelper::DarkType) {
         m_categoryIcon
                 << QString(":/icons/skin/icons/category_network_dark.svg")
                 << QString(":/icons/skin/icons/category_chat_dark.svg")

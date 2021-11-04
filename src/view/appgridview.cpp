@@ -527,7 +527,8 @@ void AppGridView::startDrag(const QModelIndex &index)
 
     qInfo() << " 00000000";
 
-    QLabel *pixLabel = new QLabel(fullscreenFrame);
+    QLabel *pixLabel = new QLabel(fullscreenFrame, Qt::Widget);
+    qInfo() << "flag:" << pixLabel->windowFlags();
     pixLabel->setPixmap(srcPix);
     pixLabel->setFixedSize(srcPix.size());
     pixLabel->move(srcPix.rect().center() / ratio);

@@ -492,7 +492,9 @@ void AppGridView::startDrag(const QModelIndex &index)
 
     srcPix = srcPix.scaled(m_calcUtil->appIconSize() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     srcPix.setDevicePixelRatio(ratio);
-    /*
+
+    //////////////////////////////////////////////////////////////ok
+
     QDrag *drag = new QDrag(this);
     drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
     drag->setPixmap(srcPix);
@@ -523,12 +525,14 @@ void AppGridView::startDrag(const QModelIndex &index)
 
     Q_ASSERT(fullscreenFrame);
 
+    qInfo() << " 00000000";
+
     QLabel *pixLabel = new QLabel(fullscreenFrame);
     pixLabel->setPixmap(srcPix);
     pixLabel->setFixedSize(srcPix.size());
     pixLabel->move(srcPix.rect().center() / ratio);
     pixLabel->hide();
-
+    /*
     QPropertyAnimation *posAni = new QPropertyAnimation(pixLabel, "pos", pixLabel);
     connect(posAni, &QPropertyAnimation::finished, this, [this, listModel, pixLabel]() mutable {
         qInfo() << "1111111111";

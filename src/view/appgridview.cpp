@@ -492,11 +492,12 @@ void AppGridView::startDrag(const QModelIndex &index)
 
     srcPix = srcPix.scaled(m_calcUtil->appIconSize() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     srcPix.setDevicePixelRatio(ratio);
-
+    /*
     QDrag *drag = new QDrag(this);
     drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
     drag->setPixmap(srcPix);
     drag->setHotSpot(srcPix.rect().center() / ratio);
+
 
     // 给被拖动item添加鼠标释放的动画效果,避开在龙芯设备上从隐藏到显示的突兀问题
     // 获取全屏指针对象
@@ -578,9 +579,11 @@ void AppGridView::startDrag(const QModelIndex &index)
     if (cur_page != old_page) {
         posAni->stop();
 
-        delete pixLabel;
-        pixLabel = nullptr;
-        return;
+        if (pixLabel) {
+            delete pixLabel;
+            pixLabel = nullptr;
+            return;
+        }
     }
 
     QRect rectIcon(QPoint(), pixLabel->size());
@@ -608,6 +611,7 @@ void AppGridView::startDrag(const QModelIndex &index)
     }
 
     posAni->start(QPropertyAnimation::DeleteWhenStopped);
+    */
 }
 
 /**

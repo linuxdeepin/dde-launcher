@@ -518,6 +518,7 @@ void AppGridView::startDrag(const QModelIndex &index)
                     ->parentWidget()->parentWidget()->parentWidget());
     }
 
+    qInfo() << " fullscreenFrame:" << fullscreenFrame;
     Q_ASSERT(fullscreenFrame);
 
     QLabel *pixLabel = new QLabel(fullscreenFrame);
@@ -527,7 +528,8 @@ void AppGridView::startDrag(const QModelIndex &index)
     pixLabel->hide();
 
     QPropertyAnimation *posAni = new QPropertyAnimation(pixLabel, "pos", pixLabel);
-    connect(posAni, &QPropertyAnimation::finished, [&, listModel, pixLabel]() mutable {
+    connect(posAni, &QPropertyAnimation::finished, this, [this, listModel, pixLabel]() mutable {
+        qInfo() << "1111111111";
         delete pixLabel;
         pixLabel = nullptr;
 
@@ -550,6 +552,7 @@ void AppGridView::startDrag(const QModelIndex &index)
         m_lastFakeAni = nullptr;
     });
 
+    qInfo() << "22222222222";
     m_dropToPos = index.row();
     listModel->setDraggingIndex(index);
 
@@ -557,6 +560,9 @@ void AppGridView::startDrag(const QModelIndex &index)
 
     setState(DraggingState);
     drag->exec(Qt::MoveAction);
+
+
+    qInfo() << "33333333";
 
     // 拖拽操作完成后暂停app移动动画
     m_dropThresholdTimer->stop();

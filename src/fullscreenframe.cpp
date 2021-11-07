@@ -24,6 +24,7 @@
 #include "fullscreenframe.h"
 #include "constants.h"
 #include "xcb_misc.h"
+#include "backgroundmanager.h"
 #include "sharedeventfilter.h"
 #include "constants.h"
 #include "dbusdisplay.h"
@@ -42,7 +43,6 @@
 #include <DWindowManagerHelper>
 #include <DDBusSender>
 #include <DDialog>
-#include <DGuiApplicationHelper>
 
 DGUI_USE_NAMESPACE
 
@@ -69,7 +69,7 @@ const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w)
  */
 FullScreenFrame::FullScreenFrame(QWidget *parent) :
     BoxFrame(parent),
-    m_menuWorker(new MenuWorker(this)),
+    m_menuWorker(new MenuWorker),
     m_eventFilter(new SharedEventFilter(this)),
     m_calcUtil(CalculateUtil::instance()),
     m_appsManager(AppsManager::instance()),
@@ -103,8 +103,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_bMousePress(false),
     m_nMousePos(0),
     m_scrollValue(0),
-    m_scrollStart(0),
-    m_changePageDelayTime(nullptr)
+    m_scrollStart(0)
 {
     // accessible.h 中使用
     setAccessibleName("FullScrreenFrame");
@@ -190,17 +189,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     // 获取搜索控件,应用分类导航控件默认大小
     m_calcUtil->setSearchWidgetSizeHint(m_searchWidget->sizeHint());
     m_calcUtil->setNavigationWidgetSizeHint(m_navigationWidget->sizeHint());
-
-    if (!DGuiApplicationHelper::isSpecialEffectsEnvironment())
-        m_changePageDelayTime = new QTime();
-}
-
-FullScreenFrame::~FullScreenFrame()
-{
-    if (m_changePageDelayTime) {
-        delete m_changePageDelayTime;
-        m_changePageDelayTime = nullptr;
-    }
 }
 
 void FullScreenFrame::exit()
@@ -216,7 +204,7 @@ int FullScreenFrame::dockPosition()
 void FullScreenFrame::scrollToCategory(const AppsListModel::AppCategory oldCategory, const AppsListModel::AppCategory newCategory)
 {
     m_searchWidget->clearSearchContent();
-    if (isScrolling())
+    if (m_animationGroup->state() == m_animationGroup->Running)
         return;
 
     int spaceCount = nearestCategory(oldCategory, newCategory);
@@ -245,7 +233,7 @@ void FullScreenFrame::blurBoxWidgetMaskClick(const AppsListModel::AppCategory ap
     if (m_mouse_press)
         m_mouse_press = false;
 
-    if (isScrolling())
+    if (m_animationGroup->state() == m_animationGroup->Running)
         return;
 
     if (appCategory == m_currentCategory) {
@@ -301,7 +289,7 @@ void FullScreenFrame::scrollPrev()
     }
 
     m_animationGroup->setScrollType(Scroll_Prev);
-    doScrolling();
+    m_animationGroup->start();
 }
 
 void FullScreenFrame::scrollNext()
@@ -349,7 +337,7 @@ void FullScreenFrame::scrollNext()
     }
 
     m_animationGroup->setScrollType(Scroll_Next);
-    doScrolling();
+    m_animationGroup->start();
 }
 
 void FullScreenFrame::scrollCurrent()
@@ -361,7 +349,7 @@ void FullScreenFrame::scrollCurrent()
     }
 
     m_animationGroup->setScrollType(Scroll_Current);
-    doScrolling();
+    m_animationGroup->start();
 }
 
 /**
@@ -514,12 +502,6 @@ void FullScreenFrame::scrollBlurBoxWidget(ScrollWidgetAgent * widgetAgent)
     }
 }
 
-void FullScreenFrame::onHideMenu()
-{
-    if (m_menuWorker.get() && !isVisible())
-        m_menuWorker->onHideMenu();
-}
-
 void FullScreenFrame::showTips(const QString &tips)
 {
     if (m_displayMode != SEARCH)
@@ -584,12 +566,10 @@ void FullScreenFrame::showEvent(QShowEvent *e)
 {
     m_delayHideTimer->stop();
     m_searchWidget->clearSearchContent();
-
-    if (QApplication::platformName() != "wayland")
-        XcbMisc::instance()->set_deepin_override(winId());
+    XcbMisc::instance()->set_deepin_override(winId());
     // To make sure the window is placed at the right position.
     updateGeometry();
-    update();
+    updateBackground();
 
     if (!m_appsManager->isVaild())
         m_appsManager->refreshAllList();
@@ -639,7 +619,7 @@ void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
     if (!m_mouse_press || e->button() == Qt::RightButton)
         return;
 
-    if (isScrolling())
+    if (m_animationGroup->state() == m_animationGroup->Running)
         return;
 
     int categoryCount = m_appsManager->getVisibleCategoryCount();
@@ -713,11 +693,11 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
 void FullScreenFrame::wheelEvent(QWheelEvent *e)
 {
     if (m_displayMode == GROUP_BY_CATEGORY) {
-        if (isScrolling())
+        if (m_animationGroup->state() == m_animationGroup->Running)
             return;
 
         // 优先MultiPagesView中的滑动事件，如果MultiPagesView中动画在运行，外层滑动鼠标就不处理
-        if (getCategoryBoxWidget(m_currentCategory)->getMultiPagesView()->isScrolling())
+        if (getCategoryBoxWidget(m_currentCategory)->getMultiPagesView()->getPageSwitchAnimationState() == QPropertyAnimation::Running)
             return;
 
         static int  wheelTime = 0;
@@ -1110,7 +1090,6 @@ void FullScreenFrame::initConnection()
     connect(this, &FullScreenFrame::currentVisibleCategoryChanged, m_navigationWidget, &NavigationWidget::setCurrentCategory);
     connect(this, &FullScreenFrame::categoryAppNumsChanged, m_navigationWidget, &NavigationWidget::refershCategoryVisible);
     connect(this, &FullScreenFrame::displayModeChanged, this, &FullScreenFrame::categoryListChanged);
-    connect(this, &FullScreenFrame::visibleChanged, this, &FullScreenFrame::onHideMenu);
 
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
     connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hide, Qt::QueuedConnection);
@@ -1128,7 +1107,17 @@ void FullScreenFrame::initConnection()
     connect(m_systemBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::blurBoxWidgetMaskClick);
     connect(m_othersBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::blurBoxWidgetMaskClick);
 
-    connect(this, &BoxFrame::backgroundImageChanged, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_internetBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_chatBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_musicBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_videoBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_graphicsBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_gameBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_officeBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_readingBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_developmentBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_systemBoxWidget, &BlurBoxWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_othersBoxWidget, &BlurBoxWidget::updateBackgroundImage);
 
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
@@ -1479,9 +1468,10 @@ void FullScreenFrame::refreshPageView(AppsListModel::AppCategory category)
 
 void FullScreenFrame::primaryScreenChanged()
 {
+    removeCache();
     setFixedSize(m_appsManager->currentScreen()->size());
-    scaledBackground();
-    scaledBlurBackground();
+    updateBackground();
+    updateBlurBackground();
     update();
 }
 
@@ -1807,19 +1797,4 @@ void FullScreenFrame::searchTextChanged(const QString &keywords)
 
     if (m_searchWidget->edit()->lineEdit()->text().isEmpty())
         m_searchWidget->edit()->lineEdit()->clearFocus();
-}
-
-bool FullScreenFrame::isScrolling()
-{
-    if (m_changePageDelayTime)
-        return m_changePageDelayTime->isValid() && m_changePageDelayTime->elapsed() < DLauncher::CHANGE_PAGE_DELAY_TIME;
-
-    return m_animationGroup->state() == QPropertyAnimation::Running;
-}
-
-void FullScreenFrame::doScrolling()
-{
-    m_animationGroup->start();
-    if (m_changePageDelayTime)
-        m_changePageDelayTime->restart();
 }

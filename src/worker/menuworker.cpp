@@ -22,13 +22,10 @@
  */
 
 #include "menuworker.h"
-#include "menudialog.h"
 #include "util.h"
 
+#include <QMenu>
 #include <QSignalMapper>
-#include <QWindow>
-
-const bool IS_WAYLAND_DISPLAY = !qgetenv("WAYLAND_DISPLAY").isEmpty();
 
 MenuWorker::MenuWorker(QObject *parent)
     : QObject(parent)
@@ -37,13 +34,11 @@ MenuWorker::MenuWorker(QObject *parent)
     , m_startManagerInterface(new DBusStartManager(this))
     , m_calcUtil(CalculateUtil::instance())
     , m_appManager(AppsManager::instance())
-    , m_menu(new Menu)
 {
 }
 
 MenuWorker::~MenuWorker()
 {
-    delete m_menu;
 }
 
 void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
@@ -178,36 +173,25 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
         signalMapper->setMapping(proxy, Proxy);
 }
 
-bool MenuWorker::isMenuVisible()
-{
-    if (m_menu)
-        return m_menu->isVisible();
-    else
-        return false;
-}
+void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index) {
 
-void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)
-{
     setCurrentModelIndex(index);
 
-    QSignalMapper *signalMapper = new QSignalMapper(m_menu);
+    QScopedPointer<QMenu> menu(new QMenu);
+    menu->setAccessibleName("popmenu");
 
-    if (IS_WAYLAND_DISPLAY) {
-        m_menu->setAttribute(Qt::WA_NativeWindow);
-        m_menu->windowHandle()->setProperty("_d_dwayland_window-type", "session-shell");
-    }
+    QSignalMapper *signalMapper = new QSignalMapper(menu.get());
 
-    m_menu->clear();
-    creatMenuByAppItem(m_menu, signalMapper);
+    creatMenuByAppItem(menu.get(), signalMapper);
 
     connect(signalMapper, static_cast<void (QSignalMapper::*)(const int)>(&QSignalMapper::mapped), this, &MenuWorker::handleMenuAction);
-    connect(m_menu, &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);
+    connect(menu.get(), &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);
+    connect(menu.get(), &QMenu::aboutToHide, menu.get(), &QMenu::deleteLater);
 
-    m_menu->move(pos);
+    menu->move(pos);
     m_menuIsShown = true;
-    m_menuGeometry = m_menu->geometry();
-    m_menu->show();
-    m_menu->raise();
+    m_menuGeometry = menu->geometry();
+    menu->exec();
 }
 
 void MenuWorker::handleOpen()
@@ -235,9 +219,6 @@ const QModelIndex MenuWorker::getCurrentModelIndex()
 
 void MenuWorker::handleMenuAction(int index)
 {
-    // 隐藏右键菜单
-    onHideMenu();
-
     switch (index) {
     case Open:
         handleOpen();
@@ -263,12 +244,6 @@ void MenuWorker::handleMenuAction(int index)
     default:
         break;
     }
-}
-
-void MenuWorker::onHideMenu()
-{
-    if (m_menu && m_menu->isVisible())
-        m_menu->hide();
 }
 
 void MenuWorker::handleToDesktop(){

@@ -61,7 +61,7 @@ public:
     DragPageDelegate* getDelegate();
 
     void dragOut(int pos);
-    void dragIn(const QModelIndex &index, bool enableAnimation);
+    void dragIn(const QModelIndex &index);
     void setDropAndLastPos(const QPoint& itemPos);
     void flashDrag();
     QPixmap creatSrcPix(const QModelIndex &index, const QString &appKey);
@@ -102,6 +102,7 @@ private:
     bool m_enableDropInside = false;                     // 拖拽释放后鼠标所在位置是否在listview范围内的标识
     bool m_enableAnimation = true;                       // app交换动画执行标识
     bool m_moveGridView = false;                         // GridView的mouseMove事件是否结束
+    bool m_mousePress;                                   // 鼠标按下状态
 
     const QWidget *m_containerBox = nullptr;
     QTimer *m_dropThresholdTimer;                        // 推拽过程中app交互动画定时器对象

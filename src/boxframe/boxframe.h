@@ -41,12 +41,14 @@ public:
     void setBackground(const QString &url);
     void setBlurBackground(const QString &url);
 
+    void removeCache();
+
 signals:
     void backgroundImageChanged(const QPixmap & img);
 
 protected:
-    void scaledBackground();
-    void scaledBlurBackground();
+    void updateBlurBackground();
+    void updateBackground();
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
     void moveEvent(QMoveEvent *event) Q_DECL_OVERRIDE;
 
@@ -57,11 +59,11 @@ private:
     QString m_lastUrl;
     QString m_lastBlurUrl;
     QPixmap m_pixmap;
+    QPixmap m_cache;
     QString m_defaultBg;
     QPixmapCache::Key m_cacheNormalKey;
     QPixmapCache::Key m_cacheBlurKey;
     BackgroundManager *m_bgManager;
-    bool m_useSolidBackground;
 };
 
 #endif // BOXFRAME_H

@@ -77,7 +77,6 @@ public:
     };
 
     explicit FullScreenFrame(QWidget *parent = nullptr);
-    ~FullScreenFrame();
 
     void exit();
     int dockPosition();
@@ -106,7 +105,6 @@ public slots:
     void hideTips();
     void addViewEvent(AppGridView *pView);
     void scrollBlurBoxWidget(ScrollWidgetAgent * widgetAgent);
-    void onHideMenu();
 
 protected:
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
@@ -165,8 +163,6 @@ private:
     ScrollWidgetAgent *getScrollWidgetAgent(PosType type);
     BlurBoxWidget  *getCategoryBoxWidgetByPostType(PosType posType, AppsListModel::AppCategory appCategory);
     int nearestCategory(const AppsListModel::AppCategory oldCategory, const AppsListModel::AppCategory newCategory);
-    bool isScrolling();
-    void doScrolling();
 
 private:
     bool m_isConfirmDialogShown = false;
@@ -230,6 +226,5 @@ private:
     int m_nMousePos;                                    // 鼠标按住的起始坐标
     int m_scrollValue;                                  // 滑动区域当前停留的数值
     int m_scrollStart;                                  // 鼠标按下时滑动区域停留的数值
-    QTime *m_changePageDelayTime;                       // 滚动延时，设定时间内只允许滚动一次
 };
 #endif // MAINFRAME_H

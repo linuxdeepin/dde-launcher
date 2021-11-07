@@ -130,7 +130,7 @@ private:
     void generateCategoryMap();
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
     void onSearchTimeOut();
-    void refreshAppListIcon(DGuiApplicationHelper::ColorType themeType);
+    void refreshAppListIcon();
     const ItemInfo createOfCategory(qlonglong category);
 
 private slots:

@@ -21,15 +21,10 @@
 
 #include "blurboxwidget.h"
 #include "calculate_util.h"
-#include "constants.h"
-#include "util.h"
 
 #include <QPainter>
 
 DWIDGET_USE_NAMESPACE
-using namespace DLauncher;
-
-QSharedPointer<DBlurEffectGroup> BlurBoxWidget::m_blurGroup = nullptr;
 
 /**
  * @brief BlurBoxWidget::BlurBoxWidget 单个分类应用的内容控件（标题+MultiPagesView）
@@ -46,12 +41,10 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     , m_name(name)
     , m_categoryMultiPagesView(new MultiPagesView(curCategory))
     , m_categoryTitle(new CategoryTitleWidget(QApplication::translate("MiniCategoryWidget", name)))
+    , m_blurGroup(new DBlurEffectGroup)
     , m_blurBackground(new DBlurEffectWidget(this))
     , m_bg(new MaskQWidget(this))
 {
-    if (m_blurGroup.isNull())
-        m_blurGroup = QSharedPointer<DBlurEffectGroup>(new DBlurEffectGroup);
-
     setLayout(m_vLayout);
 
     m_blurBackground->setAccessibleName(QString("%1 blurBackground").arg(m_name));
@@ -61,8 +54,7 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     m_blurBackground->setFixedSize(m_calcUtil->getAppBoxSize());
     m_blurBackground->setMaskColor(DBlurEffectWidget::LightColor);
 
-    int maskAlpha = getDConfigValue("useSolidBackground", false).toBool() ? 0 : DLauncher::APPHBOX_ALPHA;
-    m_blurBackground->setMaskAlpha(maskAlpha);
+    m_blurBackground->setMaskAlpha(DLauncher::APPHBOX_ALPHA);
     m_blurBackground->setBlurRectXRadius(DLauncher::APPHBOX_RADIUS);
     m_blurBackground->setBlurRectYRadius(DLauncher::APPHBOX_RADIUS);
     m_blurBackground->raise();
@@ -87,7 +79,10 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
 
 BlurBoxWidget::~BlurBoxWidget()
 {
-    delete m_categoryMultiPagesView;
+    delete m_blurGroup;
+    m_blurGroup = nullptr;
+
+     delete m_categoryMultiPagesView;
     m_categoryMultiPagesView = nullptr;
 }
 

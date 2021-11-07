@@ -25,7 +25,6 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 #include <QAbstractItemDelegate>
-#include <QSharedPointer>
 
 #include <DBlurEffectWidget>
 
@@ -59,7 +58,7 @@ public:
     AppsListModel::AppCategory category() { return  m_category;}
     MultiPagesView *getMultiPagesView();
     void updateBackBlurPos(QPoint p);
-    static void updateBackgroundImage(const QPixmap & img);
+    void updateBackgroundImage(const QPixmap & img);
     void setBlurBgVisible(bool visible);
     void setOperationType(OperationType operType) { m_operationType = operType;}
     void setFixedSize(const QSize &size);
@@ -81,7 +80,7 @@ private:
     QString m_name;
     MultiPagesView *m_categoryMultiPagesView;
     CategoryTitleWidget *m_categoryTitle;
-    static QSharedPointer<DBlurEffectGroup> m_blurGroup;
+    DBlurEffectGroup* m_blurGroup;
     DBlurEffectWidget *m_blurBackground;
     MaskQWidget* m_bg;
     OperationType m_operationType = otNone;

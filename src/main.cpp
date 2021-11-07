@@ -60,8 +60,8 @@ void dump_user_apss_preset_order_list()
 
 int main(int argc, char *argv[])
 {
-    DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::UseInactiveColorGroup, false);
-    DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::ColorCompositing, true);
+    DGuiApplicationHelper::setUseInactiveColorGroup(false);
+    DGuiApplicationHelper::setColorCompositingEnabled(true);
     DApplication *app = DApplication::globalApplication(argc, argv);
     app->setQuitOnLastWindowClosed(false);
     app->setOrganizationName("deepin");

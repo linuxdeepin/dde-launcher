@@ -28,8 +28,6 @@
 #include "appslistmodel.h"
 #include "fullscreenframe.h"
 
-#include <DGuiApplicationHelper>
-
 #include <QDebug>
 #include <QWheelEvent>
 #include <QTimer>
@@ -42,8 +40,6 @@
 #include <QPainter>
 #include <QScrollBar>
 #include <QVBoxLayout>
-
-DGUI_USE_NAMESPACE
 
 QPointer<AppsManager> AppGridView::m_appManager = nullptr;
 QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
@@ -58,6 +54,7 @@ Gesture *AppGridView::m_gestureInter = nullptr;
  */
 AppGridView::AppGridView(QWidget *parent)
     : QListView(parent)
+    , m_mousePress(false)
     , m_dropThresholdTimer(new QTimer(this))
 {
     m_pDelegate = nullptr;
@@ -98,7 +95,7 @@ AppGridView::AppGridView(QWidget *parent)
     setViewportMargins(0, 0, 0, 0);
     viewport()->setAutoFillBackground(false);
 
-    // 界面大小变化时，设置listview的边距以及间距
+    // update item spacing
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
         setSpacing(m_calcUtil->appItemSpacing());
         setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), m_calcUtil->appMarginLeft(), 0);
@@ -178,6 +175,10 @@ void AppGridView::dropEvent(QDropEvent *e)
 
 void AppGridView::mousePressEvent(QMouseEvent *e)
 {
+    // 识别出鼠标左键按下还是触摸按下
+    if (e->source() != Qt::MouseEventSynthesizedByQt && e->button() == Qt::LeftButton)
+        m_mousePress = true;
+
     if (e->button() == Qt::RightButton) {
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
         if (clickedIndex.isValid() && !m_moveGridView) {
@@ -196,8 +197,10 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
                 }
             }
 
-            // 触发右键菜单
-            emit popupMenuRequested(rightClickPoint, clickedIndex);
+            // 鼠标左键点击和触摸按住应用的情况同时存在则不触发右键菜单，因为右键菜单exec()会导致全屏模式下的触摸失效,
+            // 但如果鼠标左键点击的时刻刚好等于触摸按住应用然后触发该信号但右键菜单还没有出来的时刻，触摸依旧会失效
+            if ((!m_mousePress || !m_longPressed))
+                emit popupMenuRequested(rightClickPoint, clickedIndex);
         }
     }
 
@@ -272,9 +275,9 @@ void AppGridView::dragOut(int pos)
     dropSwap();
 }
 
-void AppGridView::dragIn(const QModelIndex &index, bool enableAnimation)
+void AppGridView::dragIn(const QModelIndex &index)
 {
-    m_enableAnimation = enableAnimation;
+    m_enableAnimation = false;
     m_dragStartPos = indexRect(index).center();
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     if (!listModel)
@@ -306,12 +309,17 @@ void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 
     m_dropThresholdTimer->stop();
 
-    // 获取光标在listview中的坐标
-    QPoint pos = mapFromGlobal(QCursor::pos());
-    int padding = m_calcUtil->appMarginLeft();
+    QRect containerRect;
+    // QCursor::pos()获取的是绝对坐标（在多屏的情况下，(0,0)原点是从最左侧的屏幕开始计算的)，
+    // 因此当启动器ui在最右侧的屏幕时容易出现向左滑动触发翻页，结果响应的是向右翻页，因此统一使用
+    // QScrollArea来计算相对该控件的全局坐标
+    QPoint pos = m_containerBox->mapFromGlobal(QCursor::pos());
+
+    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
     QMargins margin(padding, DLauncher::APP_DRAG_SCROLL_THRESHOLD,
                     padding, DLauncher::APP_DRAG_SCROLL_THRESHOLD);
-    QRect containerRect = this->contentsRect().marginsRemoved(margin);
+
+    containerRect = this->contentsRect().marginsRemoved(margin);
 
     const QModelIndex dropStart = QListView::indexAt(m_dragStartPos);
 
@@ -360,6 +368,8 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
 
 void AppGridView::mouseReleaseEvent(QMouseEvent *e)
 {
+    m_mousePress = false;
+
     // request main frame hide when click invalid area
     if (e->button() != Qt::LeftButton)
         return;
@@ -493,13 +503,10 @@ void AppGridView::startDrag(const QModelIndex &index)
     srcPix = srcPix.scaled(m_calcUtil->appIconSize() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     srcPix.setDevicePixelRatio(ratio);
 
-    //////////////////////////////////////////////////////////////ok
-
     QDrag *drag = new QDrag(this);
     drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
     drag->setPixmap(srcPix);
     drag->setHotSpot(srcPix.rect().center() / ratio);
-
 
     // 给被拖动item添加鼠标释放的动画效果,避开在龙芯设备上从隐藏到显示的突兀问题
     // 获取全屏指针对象
@@ -521,24 +528,17 @@ void AppGridView::startDrag(const QModelIndex &index)
                     ->parentWidget()->parentWidget()->parentWidget());
     }
 
-    qInfo() << " fullscreenFrame:" << fullscreenFrame;
-
     Q_ASSERT(fullscreenFrame);
 
-    qInfo() << " 00000000";
-
-    QLabel *pixLabel = new QLabel(fullscreenFrame, Qt::Widget);
-    qInfo() << "flag:" << pixLabel->windowFlags();
+    QLabel *pixLabel = new QLabel(fullscreenFrame);
     pixLabel->setPixmap(srcPix);
     pixLabel->setFixedSize(srcPix.size());
     pixLabel->move(srcPix.rect().center() / ratio);
     pixLabel->hide();
-    /*
+
     QPropertyAnimation *posAni = new QPropertyAnimation(pixLabel, "pos", pixLabel);
-    connect(posAni, &QPropertyAnimation::finished, this, [this, listModel, pixLabel]() mutable {
-        qInfo() << "1111111111";
-//        delete pixLabel;
-        pixLabel->deleteLater();
+    connect(posAni, &QPropertyAnimation::finished, [&, listModel, pixLabel]() mutable {
+        delete pixLabel;
         pixLabel = nullptr;
 
         if (!m_lastFakeAni) {
@@ -560,7 +560,6 @@ void AppGridView::startDrag(const QModelIndex &index)
         m_lastFakeAni = nullptr;
     });
 
-    qInfo() << "22222222222";
     m_dropToPos = index.row();
     listModel->setDraggingIndex(index);
 
@@ -568,9 +567,6 @@ void AppGridView::startDrag(const QModelIndex &index)
 
     setState(DraggingState);
     drag->exec(Qt::MoveAction);
-
-
-    qInfo() << "33333333";
 
     // 拖拽操作完成后暂停app移动动画
     m_dropThresholdTimer->stop();
@@ -584,11 +580,9 @@ void AppGridView::startDrag(const QModelIndex &index)
     if (cur_page != old_page) {
         posAni->stop();
 
-        if (pixLabel) {
-            delete pixLabel;
-            pixLabel = nullptr;
-            return;
-        }
+        delete pixLabel;
+        pixLabel = nullptr;
+        return;
     }
 
     QRect rectIcon(QPoint(), pixLabel->size());
@@ -609,14 +603,7 @@ void AppGridView::startDrag(const QModelIndex &index)
     else
         posAni->setEndValue(m_containerBox->mapToGlobal(QPoint()) + m_dropPoint + QPoint(padding, 0));
 
-    //不开启特效则不展示动画
-    if (!DGuiApplicationHelper::isSpecialEffectsEnvironment()) {
-        posAni->setStartValue(posAni->endValue());
-        posAni->setDuration(0);
-    }
-
     posAni->start(QPropertyAnimation::DeleteWhenStopped);
-    */
 }
 
 /**
@@ -720,11 +707,6 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     // InOutQuad 描述起点矩形到终点矩形的速度曲线
     ani->setEasingCurve(QEasingCurve::Linear);
     ani->setDuration(DLauncher::APP_DRAG_MININUM_TIME);
-
-    if (!DGuiApplicationHelper::isSpecialEffectsEnvironment()) {
-        ani->setStartValue(ani->endValue());
-        ani->setDuration(0);
-    }
 
     connect(ani, &QPropertyAnimation::finished, floatLabel, &QLabel::deleteLater);
     if (isLastAni) {

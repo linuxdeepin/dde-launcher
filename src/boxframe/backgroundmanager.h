@@ -27,7 +27,6 @@
 #include <QObject>
 #include <QDesktopWidget>
 #include <QScreen>
-#include <DSingleton>
 
 #include <com_deepin_wm.h>
 #include <com_deepin_daemon_imageeffect.h>
@@ -45,26 +44,6 @@ using ImageEffectInter = com::deepin::daemon::ImageEffect;
 using AppearanceInter = com::deepin::daemon::Appearance;
 using DisplayInter = com::deepin::daemon::Display;
 
-class DisplayHelper : public QObject, public Dtk::Core::DSingleton<DisplayHelper>
-{
-    Q_OBJECT
-    friend class Dtk::Core::DSingleton<DisplayHelper>;
-
-public:
-    inline int displayMode() const { return m_displayMode;}
-
-private:
-    explicit DisplayHelper(QObject *parent = nullptr);
-
-private slots:
-    void updateDisplayMode();
-
-private:
-    QPointer<DisplayInter> m_displayInter;
-    int m_displayMode;
-};
-
-
 class BackgroundManager : public QObject
 {
     Q_OBJECT
@@ -79,14 +58,12 @@ private:
 signals:
     void currentWorkspaceBackgroundChanged(const QString &background);
     void currentWorkspaceBlurBackgroundChanged(const QString &background);
-    void blurImageAcquired();
 
 public slots:
     void updateBlurBackgrounds();
     void onAppearanceChanged(const QString & type, const QString &str);
     void onDisplayModeChanged(uchar  value);
     void onPrimaryChanged(const QString & value);
-    void onGetBlurImageFromDbus(const QString &file, const QString &blurFile, bool status);
 
 private:
     int m_currentWorkspace;
@@ -99,7 +76,6 @@ private:
     QPointer<AppearanceInter> m_appearanceInter;
     QPointer<DisplayInter> m_displayInter;
     int m_displayMode;
-    QString m_fileName;
 };
 
 #endif // BACKGROUNDMANAGER_H

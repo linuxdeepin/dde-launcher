@@ -48,6 +48,7 @@ TEST_F(Tst_Appgridview, appGridView_test)
     QMouseEvent leftMousePress(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
     QApplication::sendEvent(m_widget, &leftMousePress);
 
+    m_widget->m_mousePress = false;
     QMouseEvent rightMousePress(QEvent::MouseButtonPress, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::RightButton, Qt::RightButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);
     QApplication::sendEvent(m_widget, &rightMousePress);
 

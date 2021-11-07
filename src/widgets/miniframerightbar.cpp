@@ -32,7 +32,6 @@
 
 #include <DDesktopServices>
 #include <DDBusSender>
-#include <QtConcurrent>
 
 /**
  * @brief MiniFrameRightBar::MiniFrameRightBar 启动器小窗口模式最左侧按钮组
@@ -329,14 +328,12 @@ void MiniFrameRightBar::showShutdown()
 
 void MiniFrameRightBar::showSettings()
 {
-    QtConcurrent::run([] {
-        DDBusSender()
+    DDBusSender()
             .service("com.deepin.dde.ControlCenter")
             .interface("com.deepin.dde.ControlCenter")
             .path("/com/deepin/dde/ControlCenter")
             .method(QString("Toggle"))
             .call();
-    });
 
     emit requestFrameHide();
 }

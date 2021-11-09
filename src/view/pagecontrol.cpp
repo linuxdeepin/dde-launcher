@@ -38,13 +38,19 @@ PageControl::PageControl(QWidget *parent)
 
 void PageControl::setPageCount(int count)
 {
-    for (int i = m_pageCount ; i < count ; i++)
+    for (int i = m_pageCount ; i < count ; i++) {
+        qInfo() << "111111111111111111111111";
         addButton();
+        qInfo() << "222222222222222222222222";
+    }
 
     for (int i = count; i < m_pageCount ; i++) {
+        qInfo() << "33333333";
         DIconButton *pageButton = qobject_cast<DIconButton *>(layout()->takeAt(0)->widget());
         pageButton->deleteLater();
     }
+
+    qInfo() << "444444444";
 
     m_pageCount = count;
 

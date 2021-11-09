@@ -749,7 +749,7 @@ void AppGridView::createLabel()
         m_pixLabel->hide();
     }
     if (m_floatLabels.size() == 0) {
-        for (int i = 0; i < 28; i++) {
+        for (int i = 0; i < m_calcUtil->instance()->appPageItemCount(AppsListModel::All); i++) {
             QLabel *label = new QLabel(this);
             label->hide();
             m_floatLabels << label;

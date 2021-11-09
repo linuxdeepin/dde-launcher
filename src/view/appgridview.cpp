@@ -57,7 +57,6 @@ AppGridView::AppGridView(QWidget *parent)
     , m_mousePress(false)
     , m_dropThresholdTimer(new QTimer(this))
     , m_pixLabel(nullptr)
-    , m_floatLabel(nullptr)
 {
     m_pDelegate = nullptr;
 
@@ -660,10 +659,11 @@ void AppGridView::prepareDropSwap()
     if (start == end)
         return;
 
+    int index = 0;
     for (int i = (start + moveToNext); i != (end - !moveToNext); ++i)
-        createFakeAnimation(i, moveToNext);
+        createFakeAnimation(i, moveToNext, index++);
 
-    createFakeAnimation(end - !moveToNext, moveToNext, true);
+    createFakeAnimation(end - !moveToNext, moveToNext, index++, true);
 
     // item最后回归的位置
     setDropAndLastPos(appIconRect(dropIndex).topLeft());
@@ -677,13 +677,13 @@ void AppGridView::prepareDropSwap()
  * @param moveNext item是否移动的标识
  * @param isLastAni 是最后的那个item移动的动画标识
  */
-void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni)
+void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const int xb, const bool isLastAni)
 {
     // listview n行1列,肉眼所及的都是app自动换行后的效果
     const QModelIndex index(indexAt(pos));
 
-    //QLabel *floatLabel = new QLabel(this);
-    QPropertyAnimation *ani = new QPropertyAnimation(m_floatLabel, "pos", m_floatLabel);
+    QLabel *floatLabel = m_floatLabels[xb];
+    QPropertyAnimation *ani = new QPropertyAnimation(floatLabel, "pos", floatLabel);
 
     const auto ratio = devicePixelRatioF();
     const QSize rectSize = index.data(AppsListModel::ItemSizeHintRole).toSize();
@@ -699,9 +699,9 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     QPainter painter(&pixmap);
     itemDelegate()->paint(&painter, item, index);
 
-    m_floatLabel->setFixedSize(rectSize);
-    m_floatLabel->setPixmap(pixmap);
-    m_floatLabel->show();
+    floatLabel->setFixedSize(rectSize);
+    floatLabel->setPixmap(pixmap);
+    floatLabel->show();
 
     int topMargin = m_calcUtil->appMarginTop();
     ani->setStartValue(indexRect(index).topLeft() - QPoint(0, -topMargin));
@@ -711,7 +711,7 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     ani->setEasingCurve(QEasingCurve::Linear);
     ani->setDuration(DLauncher::APP_DRAG_MININUM_TIME);
 
-    connect(ani, &QPropertyAnimation::finished, m_floatLabel, &QLabel::hide);
+    connect(ani, &QPropertyAnimation::finished, floatLabel, &QLabel::hide);
     if (isLastAni) {
         m_lastFakeAni = ani;
         connect(ani, &QPropertyAnimation::finished, this, &AppGridView::dropSwap);
@@ -748,9 +748,12 @@ void AppGridView::createLabel()
         m_pixLabel = new QLabel(fullscreen());
         m_pixLabel->hide();
     }
-    if (!m_floatLabel) {
-        m_floatLabel = new QLabel(this);
-        m_floatLabel->hide();
+    if (m_floatLabels.size() == 0) {
+        for (int i = 0; i < 28; i++) {
+            QLabel *label = new QLabel(this);
+            label->hide();
+            m_floatLabels << label;
+        }
     }
 }
 

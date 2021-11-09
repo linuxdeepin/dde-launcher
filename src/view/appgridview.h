@@ -100,7 +100,7 @@ private slots:
     void dropSwap();
     void fitToContent();
     void prepareDropSwap();
-    void createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni = false);
+    void createFakeAnimation(const int pos, const bool moveNext, const int xb, const bool isLastAni = false);
 
 private:
     int m_dropToPos;
@@ -124,7 +124,7 @@ private:
     QPoint m_dragStartPos;                               // 拖拽起点坐标
 
     QLabel *m_pixLabel;
-    QLabel *m_floatLabel;
+    QList<QLabel *>m_floatLabels;
 };
 
 typedef QList<AppGridView *> AppGridViewList;

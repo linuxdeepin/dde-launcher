@@ -698,6 +698,7 @@ const QString AppsManager::appName(const ItemInfo &info, const int size)
  */
 void AppsManager::refreshCategoryInfoList()
 {
+    // 从应用商店配置文件/var/lib/lastore/applications.json获取应用数据
     QDBusPendingReply<ItemInfoList> reply = m_launcherInter->GetAllItemInfos();
     if (reply.isError()) {
         qWarning() << "data is empty, quit!!";
@@ -717,21 +718,29 @@ void AppsManager::refreshCategoryInfoList()
         }
     }
 
-    // 从配置文件中读取全屏分类下的应用
+    const ItemInfoList &datas = reply.value();
+
+    // 从配置文件中读取分类应用数据
     int beginCategoryIndex = int(AppsListModel::AppCategory::Internet);
     int endCategoryIndex = int(AppsListModel::AppCategory::Others);
     for (; beginCategoryIndex < endCategoryIndex; beginCategoryIndex++) {
         ItemInfoList itemInfoList;
+
         QByteArray readCategoryBuf = APP_CATEGORY_USED_SORTED_LIST.value(QString("%1").arg(beginCategoryIndex)).toByteArray();
         QDataStream categoryIn(&readCategoryBuf, QIODevice::ReadOnly);
         categoryIn >> itemInfoList;
 
         m_appInfoLock.lockForWrite();
+        // 当缓存数据与应用商店数据有差异时，以应用商店数据为准
+        for (auto item : itemInfoList) {
+            int index = datas.indexOf(item);
+            if (index != -1 && datas.at(index).category() != item.category())
+                itemInfoList.removeOne(item);
+        }
         m_appInfos.insert(AppsListModel::AppCategory(beginCategoryIndex), itemInfoList);
         m_appInfoLock.unlock();
     }
 
-    const ItemInfoList &datas = reply.value();
     m_allAppInfoList.clear();
     m_allAppInfoList.reserve(datas.size());
     for (const auto &it : datas) {

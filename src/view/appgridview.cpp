@@ -59,6 +59,7 @@ Gesture *AppGridView::m_gestureInter = nullptr;
 AppGridView::AppGridView(QWidget *parent)
     : QListView(parent)
     , m_dropThresholdTimer(new QTimer(this))
+    , m_pixLabel(nullptr)
 {
     m_pDelegate = nullptr;
 
@@ -79,6 +80,7 @@ AppGridView::AppGridView(QWidget *parent)
 
     viewport()->installEventFilter(this);
     viewport()->setAcceptDrops(true);
+    createMovingLabel();
 
     setUniformItemSizes(true);
     setMouseTracking(true);
@@ -493,56 +495,31 @@ void AppGridView::startDrag(const QModelIndex &index)
     srcPix = srcPix.scaled(m_calcUtil->appIconSize() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     srcPix.setDevicePixelRatio(ratio);
 
+    // 创建拖拽释放时的应用图标
+    m_pixLabel->setPixmap(srcPix);
+    m_pixLabel->setFixedSize(srcPix.size());
+    m_pixLabel->move(srcPix.rect().center() / ratio);
+
     QDrag *drag = new QDrag(this);
     drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
     drag->setPixmap(srcPix);
     drag->setHotSpot(srcPix.rect().center() / ratio);
 
-    // 给被拖动item添加鼠标释放的动画效果,避开在龙芯设备上从隐藏到显示的突兀问题
-    // 获取全屏指针对象
-    FullScreenFrame *fullscreenFrame = nullptr;
-    if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY) {
-        fullscreenFrame = qobject_cast<FullScreenFrame*>(
-                    this->parentWidget()->parentWidget()->parentWidget()->parentWidget()
-                    ->parentWidget()->parentWidget()->parentWidget()->parentWidget());
-
-        // 解决全屏分类模式，搜索模式下拖动应用父对象为空导致出现空页面问题的情况
-        if (!fullscreenFrame) {
-            fullscreenFrame = qobject_cast<FullScreenFrame*>(
-                        this->parentWidget()->parentWidget()->parentWidget()->parentWidget()
-                        ->parentWidget()->parentWidget()->parentWidget());
-        }
-    } else {
-        fullscreenFrame = qobject_cast<FullScreenFrame*>(
-                    this->parentWidget()->parentWidget()->parentWidget()->parentWidget()
-                    ->parentWidget()->parentWidget()->parentWidget());
-    }
-
-    Q_ASSERT(fullscreenFrame);
-
-    QLabel *pixLabel = new QLabel(fullscreenFrame);
-    pixLabel->setPixmap(srcPix);
-    pixLabel->setFixedSize(srcPix.size());
-    pixLabel->move(srcPix.rect().center() / ratio);
-    pixLabel->hide();
-
-    QPropertyAnimation *posAni = new QPropertyAnimation(pixLabel, "pos", pixLabel);
-    connect(posAni, &QPropertyAnimation::finished, [&, listModel, pixLabel]() mutable {
-        delete pixLabel;
-        pixLabel = nullptr;
-
+    QPropertyAnimation *posAni = new QPropertyAnimation(m_pixLabel, "pos", m_pixLabel);
+    connect(posAni, &QPropertyAnimation::finished, [&, listModel] () {
+        m_pixLabel->hide();
         if (!m_lastFakeAni) {
             if (m_enableDropInside)
-                listModel->dropSwap(m_dropToPos);// 无动画时,在listview内释放鼠标
+                listModel->dropSwap(m_dropToPos);
             else
                 // 搜索模式下，不需要做删除被拖拽的item，插入移动到新位置的item的操作，否则会导致被拖拽item的位置改变
                 if (listModel->category() != AppsListModel::AppCategory::Search){
-                    listModel->dropSwap(indexAt(m_dragStartPos).row());// 无动画时,listview之外释放鼠标
+                    listModel->dropSwap(indexAt(m_dragStartPos).row());
                 }
 
             listModel->clearDraggingIndex();
         } else {
-            connect(m_lastFakeAni, &QPropertyAnimation::finished, listModel, &AppsListModel::clearDraggingIndex);// 动画执行结束后清理拖拽数据
+            connect(m_lastFakeAni, &QPropertyAnimation::finished, listModel, &AppsListModel::clearDraggingIndex);
         }
 
         setDropAndLastPos(QPoint(0, 0));
@@ -569,16 +546,13 @@ void AppGridView::startDrag(const QModelIndex &index)
     // 当拖动应用出现触发分页的情况，关闭上一个动画， 直接处理当前当前页的动画
     if (cur_page != old_page) {
         posAni->stop();
-
-        delete pixLabel;
-        pixLabel = nullptr;
         return;
     }
 
-    QRect rectIcon(QPoint(), pixLabel->size());
+    QRect rectIcon(QPoint(), m_pixLabel ->size());
 
-    pixLabel->move((QCursor::pos() - rectIcon.center()));
-    pixLabel->show();
+    m_pixLabel->move((QCursor::pos() - rectIcon.center()));
+    m_pixLabel->show();
 
     posAni->setEasingCurve(QEasingCurve::Linear);
     posAni->setDuration(DLauncher::APP_DRAG_MININUM_TIME);
@@ -652,11 +626,12 @@ void AppGridView::prepareDropSwap()
 
     if (start == end)
         return;
-
+        
+    int index = 0;
     for (int i = (start + moveToNext); i != (end - !moveToNext); ++i)
-        createFakeAnimation(i, moveToNext);
+        createFakeAnimation(i, moveToNext, index++);
 
-    createFakeAnimation(end - !moveToNext, moveToNext, true);
+    createFakeAnimation(end - !moveToNext, moveToNext, index++, true);
 
     // item最后回归的位置
     setDropAndLastPos(appIconRect(dropIndex).topLeft());
@@ -670,12 +645,15 @@ void AppGridView::prepareDropSwap()
  * @param moveNext item是否移动的标识
  * @param isLastAni 是最后的那个item移动的动画标识
  */
-void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni)
+void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const int rIndex, const bool isLastAni)
 {
+    if (rIndex >= m_floatLabels.size())
+        return;
+
     // listview n行1列,肉眼所及的都是app自动换行后的效果
     const QModelIndex index(indexAt(pos));
 
-    QLabel *floatLabel = new QLabel(this);
+    QLabel *floatLabel = m_floatLabels[rIndex];
     QPropertyAnimation *ani = new QPropertyAnimation(floatLabel, "pos", floatLabel);
 
     const auto ratio = devicePixelRatioF();
@@ -709,7 +687,7 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
         ani->setDuration(0);
     }
 
-    connect(ani, &QPropertyAnimation::finished, floatLabel, &QLabel::deleteLater);
+    connect(ani, &QPropertyAnimation::finished, floatLabel, &QLabel::hide);
     if (isLastAni) {
         m_lastFakeAni = ani;
         connect(ani, &QPropertyAnimation::finished, this, &AppGridView::dropSwap);
@@ -738,4 +716,36 @@ void AppGridView::dropSwap()
 const QRect AppGridView::indexRect(const QModelIndex &index) const
 {
     return rectForIndex(index);
+}
+
+/** 提前创建好拖拽过程中需要用到的label
+ * @brief AppGridView::createMovingLabel
+ */
+void AppGridView::createMovingLabel()
+{
+    // 拖拽释放鼠标时显示的应用图标
+    if (!m_pixLabel) {
+        m_pixLabel = new QLabel(fullscreen());
+        m_pixLabel->hide();
+    }
+
+    // 拖拽过程中位置交换时显示的应用图标
+    if (!m_floatLabels.size()) {
+        // 单页最多28个应用
+        for (int i = 0; i < m_calcUtil->appPageItemCount(AppsListModel::All); i++) {
+            QLabel *moveLabel = new QLabel(this);
+            moveLabel->hide();
+            m_floatLabels << moveLabel;
+        }
+    }
+}
+
+FullScreenFrame *AppGridView::fullscreen()
+{
+    FullScreenFrame *fullscreenFrame = nullptr;
+    fullscreenFrame = qobject_cast<FullScreenFrame*>(topLevelWidget());
+
+    Q_ASSERT(fullscreenFrame);
+
+    return fullscreenFrame;
 }

@@ -44,6 +44,8 @@ public:
 
 class CalculateUtil;
 class AppsListModel;
+class FullScreenFrame;
+
 class AppGridView : public QListView
 {
     Q_OBJECT
@@ -68,6 +70,10 @@ public:
 
     QRect appIconRect(const QModelIndex &index);
     const QRect indexRect(const QModelIndex &index) const;
+
+private:
+    void createMovingLabel();
+    FullScreenFrame *fullscreen();
 
 public slots:
     void setDragAnimationEnable() {m_enableAnimation = true;}
@@ -95,7 +101,7 @@ private slots:
     void dropSwap();
     void fitToContent();
     void prepareDropSwap();
-    void createFakeAnimation(const int pos, const bool moveNext, const bool isLastAni = false);
+    void createFakeAnimation(const int pos, const bool moveNext, const int rIndex, const bool isLastAni = false);
 
 private:
     int m_dropToPos;
@@ -116,6 +122,9 @@ private:
     QTime m_dragLastTime;                                // 拖拽开始到结束的持续时间(ms)
     QPoint m_dropPoint;                                  // 过度动画的终点坐标
     QPoint m_dragStartPos;                               // 拖拽起点坐标
+
+    QLabel *m_pixLabel;
+    QList<QLabel *> m_floatLabels;
 };
 
 typedef QList<AppGridView *> AppGridViewList;

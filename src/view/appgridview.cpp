@@ -56,6 +56,7 @@ AppGridView::AppGridView(QWidget *parent)
     : QListView(parent)
     , m_mousePress(false)
     , m_dropThresholdTimer(new QTimer(this))
+    , m_pixLabel(nullptr)
 {
     m_pDelegate = nullptr;
 
@@ -507,13 +508,13 @@ void AppGridView::startDrag(const QModelIndex &index)
     qInfo() << "1111111";
 
 
-    QLabel *pixLabel = new QLabel(fullscreen());
+    //QLabel *pixLabel = new QLabel(fullscreen());
 
     qInfo() << "22222222";
-    pixLabel->setPixmap(srcPix);
-    pixLabel->setFixedSize(srcPix.size());
-    pixLabel->move(srcPix.rect().center() / ratio);
-    pixLabel->hide();
+    m_pixLabel->setPixmap(srcPix);
+    m_pixLabel->setFixedSize(srcPix.size());
+    m_pixLabel->move(srcPix.rect().center() / ratio);
+
 
     qInfo() << "33333";
 
@@ -533,10 +534,10 @@ void AppGridView::startDrag(const QModelIndex &index)
 
     qInfo() << "4444444";
 
-    QPropertyAnimation *posAni = new QPropertyAnimation(pixLabel, "pos", pixLabel);
-    connect(posAni, &QPropertyAnimation::finished, [&, listModel, pixLabel]() mutable {
-        pixLabel->deleteLater();
-        pixLabel = nullptr;
+    QPropertyAnimation *posAni = new QPropertyAnimation(m_pixLabel, "pos", m_pixLabel);
+    connect(posAni, &QPropertyAnimation::finished, [&, listModel]() mutable {
+//        m_pixLabel->deleteLater();
+//        pixLabel = nullptr;
 
         if (!m_lastFakeAni) {
             if (m_enableDropInside)
@@ -577,15 +578,15 @@ void AppGridView::startDrag(const QModelIndex &index)
     if (cur_page != old_page) {
         posAni->stop();
 
-        pixLabel->deleteLater();
-        pixLabel = nullptr;
+        //pixLabel->deleteLater();
+        //pixLabel = nullptr;
         return;
     }
 
-    QRect rectIcon(QPoint(), pixLabel->size());
+    QRect rectIcon(QPoint(), m_pixLabel->size());
 
-    pixLabel->move((QCursor::pos() - rectIcon.center()));
-    pixLabel->show();
+    m_pixLabel->move((QCursor::pos() - rectIcon.center()));
+    m_pixLabel->show();
 
     posAni->setEasingCurve(QEasingCurve::Linear);
     posAni->setDuration(DLauncher::APP_DRAG_MININUM_TIME);
@@ -734,6 +735,13 @@ void AppGridView::dropSwap()
 const QRect AppGridView::indexRect(const QModelIndex &index) const
 {
     return rectForIndex(index);
+}
+
+void AppGridView::createLabel()
+{
+    if (!m_pixLabel) {
+        m_pixLabel = new QLabel(fullscreen());
+    }
 }
 
 FullScreenFrame *AppGridView::fullscreen()

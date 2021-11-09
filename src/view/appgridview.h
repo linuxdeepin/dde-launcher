@@ -70,6 +70,8 @@ public:
     QRect appIconRect(const QModelIndex &index);
     const QRect indexRect(const QModelIndex &index) const;
 
+    void createLabel();
+
     FullScreenFrame *fullscreen();
 
 public slots:
@@ -120,6 +122,8 @@ private:
     QTime m_dragLastTime;                                // 拖拽开始到结束的持续时间(ms)
     QPoint m_dropPoint;                                  // 过度动画的终点坐标
     QPoint m_dragStartPos;                               // 拖拽起点坐标
+
+    QLabel *m_pixLabel;
 };
 
 typedef QList<AppGridView *> AppGridViewList;

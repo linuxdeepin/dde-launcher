@@ -12,12 +12,12 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "-g -Wall")
 
 # 增加安全编译参数
-ADD_DEFINITIONS("-fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy")
+#ADD_DEFINITIONS("-fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy")
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O2")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -O2")
-endif()
+#if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+#    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fsanitize=address -O2")
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -O2")
+#endif()
 
 if (DEFINED ENABLE_MIEEE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mieee")
@@ -33,7 +33,7 @@ endif ()
 
 set(BIN_NAME dde-launcher)
 
-add_subdirectory("tests")
+#add_subdirectory("tests")
 
 # Sources files
 file(GLOB_RECURSE SRCS "src/*.h" "src/*.cpp")

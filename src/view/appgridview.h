@@ -44,6 +44,7 @@ public:
 
 class CalculateUtil;
 class AppsListModel;
+class FullScreenFrame;
 class AppGridView : public QListView
 {
     Q_OBJECT
@@ -68,6 +69,8 @@ public:
 
     QRect appIconRect(const QModelIndex &index);
     const QRect indexRect(const QModelIndex &index) const;
+
+    FullScreenFrame *fullscreen();
 
 public slots:
     void setDragAnimationEnable() {m_enableAnimation = true;}

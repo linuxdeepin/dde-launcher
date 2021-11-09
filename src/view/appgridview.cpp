@@ -494,6 +494,7 @@ void AppGridView::startDrag(const QModelIndex &index)
     if (!listModel)
         return;
 
+    qInfo() << "00000000000000000";
     const QModelIndex &dragIndex = index;
     const qreal ratio = qApp->devicePixelRatio();
     QString appKey = index.data(AppsListModel::AppKeyRole).value<QString>();
@@ -503,6 +504,19 @@ void AppGridView::startDrag(const QModelIndex &index)
     srcPix = srcPix.scaled(m_calcUtil->appIconSize() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     srcPix.setDevicePixelRatio(ratio);
 
+    qInfo() << "1111111";
+
+
+    QLabel *pixLabel = new QLabel(fullscreen());
+
+    qInfo() << "22222222";
+    pixLabel->setPixmap(srcPix);
+    pixLabel->setFixedSize(srcPix.size());
+    pixLabel->move(srcPix.rect().center() / ratio);
+    pixLabel->hide();
+
+    qInfo() << "33333";
+
     QDrag *drag = new QDrag(this);
     drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
     drag->setPixmap(srcPix);
@@ -510,35 +524,18 @@ void AppGridView::startDrag(const QModelIndex &index)
 
     // 给被拖动item添加鼠标释放的动画效果,避开在龙芯设备上从隐藏到显示的突兀问题
     // 获取全屏指针对象
-    FullScreenFrame *fullscreenFrame = nullptr;
-    if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY) {
-        fullscreenFrame = qobject_cast<FullScreenFrame*>(
-                    this->parentWidget()->parentWidget()->parentWidget()->parentWidget()
-                    ->parentWidget()->parentWidget()->parentWidget()->parentWidget());
+//    QLabel *pixLabel = new QLabel(fullscreen());
+//    pixLabel->setPixmap(srcPix);
+//    pixLabel->setFixedSize(srcPix.size());
+//    pixLabel->move(srcPix.rect().center() / ratio);
+//    pixLabel->hide();
 
-        // 解决全屏分类模式，搜索模式下拖动应用父对象为空导致出现空页面问题的情况
-        if (!fullscreenFrame) {
-            fullscreenFrame = qobject_cast<FullScreenFrame*>(
-                        this->parentWidget()->parentWidget()->parentWidget()->parentWidget()
-                        ->parentWidget()->parentWidget()->parentWidget());
-        }
-    } else {
-        fullscreenFrame = qobject_cast<FullScreenFrame*>(
-                    this->parentWidget()->parentWidget()->parentWidget()->parentWidget()
-                    ->parentWidget()->parentWidget()->parentWidget());
-    }
 
-    Q_ASSERT(fullscreenFrame);
-
-    QLabel *pixLabel = new QLabel(fullscreenFrame);
-    pixLabel->setPixmap(srcPix);
-    pixLabel->setFixedSize(srcPix.size());
-    pixLabel->move(srcPix.rect().center() / ratio);
-    pixLabel->hide();
+    qInfo() << "4444444";
 
     QPropertyAnimation *posAni = new QPropertyAnimation(pixLabel, "pos", pixLabel);
     connect(posAni, &QPropertyAnimation::finished, [&, listModel, pixLabel]() mutable {
-        delete pixLabel;
+        pixLabel->deleteLater();
         pixLabel = nullptr;
 
         if (!m_lastFakeAni) {
@@ -580,7 +577,7 @@ void AppGridView::startDrag(const QModelIndex &index)
     if (cur_page != old_page) {
         posAni->stop();
 
-        delete pixLabel;
+        pixLabel->deleteLater();
         pixLabel = nullptr;
         return;
     }
@@ -737,4 +734,29 @@ void AppGridView::dropSwap()
 const QRect AppGridView::indexRect(const QModelIndex &index) const
 {
     return rectForIndex(index);
+}
+
+FullScreenFrame *AppGridView::fullscreen()
+{
+    FullScreenFrame *fullscreenFrame = nullptr;
+    if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY) {
+        fullscreenFrame = qobject_cast<FullScreenFrame*>(
+                    this->parentWidget()->parentWidget()->parentWidget()->parentWidget()
+                    ->parentWidget()->parentWidget()->parentWidget()->parentWidget());
+
+        // 解决全屏分类模式，搜索模式下拖动应用父对象为空导致出现空页面问题的情况
+        if (!fullscreenFrame) {
+            fullscreenFrame = qobject_cast<FullScreenFrame*>(
+                        this->parentWidget()->parentWidget()->parentWidget()->parentWidget()
+                        ->parentWidget()->parentWidget()->parentWidget());
+        }
+    } else {
+        fullscreenFrame = qobject_cast<FullScreenFrame*>(
+                    this->parentWidget()->parentWidget()->parentWidget()->parentWidget()
+                    ->parentWidget()->parentWidget()->parentWidget());
+    }
+
+    Q_ASSERT(fullscreenFrame);
+
+    return fullscreenFrame;
 }

@@ -57,6 +57,7 @@ AppGridView::AppGridView(QWidget *parent)
     , m_mousePress(false)
     , m_dropThresholdTimer(new QTimer(this))
     , m_pixLabel(nullptr)
+    , m_floatLabel(nullptr)
 {
     m_pDelegate = nullptr;
 
@@ -516,7 +517,7 @@ void AppGridView::startDrag(const QModelIndex &index)
     m_pixLabel->move(srcPix.rect().center() / ratio);
 
     qInfo() << "2.5555555555";
-    m_pixLabel->hide();
+//    m_pixLabel->hide();
 
 
     qInfo() << "33333";
@@ -681,8 +682,8 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     // listview n行1列,肉眼所及的都是app自动换行后的效果
     const QModelIndex index(indexAt(pos));
 
-    QLabel *floatLabel = new QLabel(this);
-    QPropertyAnimation *ani = new QPropertyAnimation(floatLabel, "pos", floatLabel);
+    //QLabel *floatLabel = new QLabel(this);
+    QPropertyAnimation *ani = new QPropertyAnimation(m_floatLabel, "pos", m_floatLabel);
 
     const auto ratio = devicePixelRatioF();
     const QSize rectSize = index.data(AppsListModel::ItemSizeHintRole).toSize();
@@ -698,9 +699,9 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     QPainter painter(&pixmap);
     itemDelegate()->paint(&painter, item, index);
 
-    floatLabel->setFixedSize(rectSize);
-    floatLabel->setPixmap(pixmap);
-    floatLabel->show();
+    m_floatLabel->setFixedSize(rectSize);
+    m_floatLabel->setPixmap(pixmap);
+    m_floatLabel->show();
 
     int topMargin = m_calcUtil->appMarginTop();
     ani->setStartValue(indexRect(index).topLeft() - QPoint(0, -topMargin));
@@ -710,7 +711,7 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     ani->setEasingCurve(QEasingCurve::Linear);
     ani->setDuration(DLauncher::APP_DRAG_MININUM_TIME);
 
-    connect(ani, &QPropertyAnimation::finished, floatLabel, &QLabel::deleteLater);
+    connect(ani, &QPropertyAnimation::finished, m_floatLabel, &QLabel::hide);
     if (isLastAni) {
         m_lastFakeAni = ani;
         connect(ani, &QPropertyAnimation::finished, this, &AppGridView::dropSwap);
@@ -745,6 +746,11 @@ void AppGridView::createLabel()
 {
     if (!m_pixLabel) {
         m_pixLabel = new QLabel(fullscreen());
+        m_pixLabel->hide();
+    }
+    if (!m_floatLabel) {
+        m_floatLabel = new QLabel(this);
+        m_floatLabel->hide();
     }
 }
 

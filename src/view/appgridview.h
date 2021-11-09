@@ -124,6 +124,7 @@ private:
     QPoint m_dragStartPos;                               // 拖拽起点坐标
 
     QLabel *m_pixLabel;
+    QLabel *m_floatLabel;
 };
 
 typedef QList<AppGridView *> AppGridViewList;

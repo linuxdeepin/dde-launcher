@@ -515,6 +515,9 @@ void AppGridView::startDrag(const QModelIndex &index)
     m_pixLabel->setFixedSize(srcPix.size());
     m_pixLabel->move(srcPix.rect().center() / ratio);
 
+    qInfo() << "2.5555555555";
+    m_pixLabel->hide();
+
 
     qInfo() << "33333";
 
@@ -538,6 +541,7 @@ void AppGridView::startDrag(const QModelIndex &index)
     connect(posAni, &QPropertyAnimation::finished, [&, listModel]() mutable {
 //        m_pixLabel->deleteLater();
 //        pixLabel = nullptr;
+        m_pixLabel->hide();
 
         if (!m_lastFakeAni) {
             if (m_enableDropInside)
@@ -746,22 +750,16 @@ void AppGridView::createLabel()
 
 FullScreenFrame *AppGridView::fullscreen()
 {
+    qInfo() << "top:" << this->topLevelWidget();
     FullScreenFrame *fullscreenFrame = nullptr;
     if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY) {
-        fullscreenFrame = qobject_cast<FullScreenFrame*>(
-                    this->parentWidget()->parentWidget()->parentWidget()->parentWidget()
-                    ->parentWidget()->parentWidget()->parentWidget()->parentWidget());
-
+        fullscreenFrame = qobject_cast<FullScreenFrame*>(topLevelWidget());
         // 解决全屏分类模式，搜索模式下拖动应用父对象为空导致出现空页面问题的情况
         if (!fullscreenFrame) {
-            fullscreenFrame = qobject_cast<FullScreenFrame*>(
-                        this->parentWidget()->parentWidget()->parentWidget()->parentWidget()
-                        ->parentWidget()->parentWidget()->parentWidget());
+            fullscreenFrame = qobject_cast<FullScreenFrame*>(topLevelWidget());
         }
     } else {
-        fullscreenFrame = qobject_cast<FullScreenFrame*>(
-                    this->parentWidget()->parentWidget()->parentWidget()->parentWidget()
-                    ->parentWidget()->parentWidget()->parentWidget());
+        fullscreenFrame = qobject_cast<FullScreenFrame*>(topLevelWidget());
     }
 
     Q_ASSERT(fullscreenFrame);

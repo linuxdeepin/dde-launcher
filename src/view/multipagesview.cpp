@@ -151,7 +151,6 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             pageView->installEventFilter(this);
             pageView->setDelegate(this);
             m_appGridViewList.push_back(pageView);
-            pageView->createLabel();
 
             m_viewBox->layout()->insertWidget(m_pageCount, pageView);
 
@@ -171,6 +170,7 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             emit connectViewEvent(pageView);
             //新增的页面需要设置一下大小
             updatePosition();
+            pageView->createLabel();
         }
     } else {
         while (pageCount < m_pageCount) {

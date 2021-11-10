@@ -53,6 +53,7 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_pRightGradient->setAccessibleName("thisRightGradient");
     m_pLeftGradient->setAccessibleName("thisLeftGradient");
     m_pageControl->setAccessibleName("pageControl");
+    m_pageControl->addButton();
 
     // 滚动区域
     m_appListArea->setObjectName("MultiPageBox");

@@ -21,6 +21,7 @@
 
 #include "pagecontrol.h"
 #include "util.h"
+#include "appsmanager.h"
 
 #include <QBoxLayout>
 
@@ -38,19 +39,25 @@ PageControl::PageControl(QWidget *parent)
 
 void PageControl::setPageCount(int count)
 {
+    qInfo() << "count:" << count << ",m_pageCount:" << m_pageCount;
+
     for (int i = m_pageCount ; i < count ; i++) {
-        qInfo() << "111111111111111111111111";
-        addButton();
-        qInfo() << "222222222222222222222222";
+        qInfo() << "index:" << layout()->indexOf(m_buttonList[i]);
+        qInfo() << "count:" << layout()->count();
+//        if (!layout()->count())
+            addButtonToLayout(m_buttonList[i]);
+//        else if (layout()->indexOf(m_buttonList[i]) != -1)
+//            addButtonToLayout(m_buttonList[i]);
     }
 
     for (int i = count; i < m_pageCount ; i++) {
         qInfo() << "33333333";
         DIconButton *pageButton = qobject_cast<DIconButton *>(layout()->takeAt(0)->widget());
-        pageButton->deleteLater();
+        int index = m_buttonList.indexOf(pageButton);
+        if (index != -1) {
+            m_buttonList[index]->setVisible(false);
+        }
     }
-
-    qInfo() << "444444444";
 
     m_pageCount = count;
 
@@ -59,8 +66,12 @@ void PageControl::setPageCount(int count)
 
 void PageControl::setCurrent(int pageIndex)
 {
+    qInfo() << "pageINdex:" << pageIndex << ", count:" << layout()->count();
     if (pageIndex < layout()->count()) {
         DIconButton *pageButton = qobject_cast<DIconButton *>(layout()->itemAt(pageIndex)->widget());
+        if (!pageButton)
+            return;
+
         pageButton->setChecked(true);
     }
 }
@@ -70,6 +81,9 @@ void PageControl::updateIconSize(double scaleX, double scaleY)
     double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
     for (int i = 0; i < m_pageCount ; i++) {
         DIconButton *pageButton = qobject_cast<DIconButton *>(layout()->itemAt(i)->widget());
+        if (!pageButton)
+            return;
+
         pageButton->setIconSize(QSize(PAGE_ICON_SIZE * scale, PAGE_ICON_SIZE * scale));
         pageButton->setFixedSize(QSize(PAGE_BUTTON_SIZE * scale, PAGE_BUTTON_SIZE * scale));
     }
@@ -79,9 +93,17 @@ void PageControl::updateIconSize(double scaleX, double scaleY)
 
 void PageControl::addButton()
 {
-    DIconButton *pageButton = new DIconButton(this);
+    // 获取当前最大可能的页数(假设都在一个分类)
+    int totalPage = qCeil(AppsManager::instance()->appsInfoListSize(AppsListModel::All) / 12);
+    for (int i = 0; i < totalPage; i++) {
+        DIconButton *pageButton = new DIconButton(this);
+        pageButton->setVisible(false);
+        m_buttonList.append(pageButton);
+    }
+}
 
-    qInfo() << "add 0000000000000";
+void PageControl::addButtonToLayout(DIconButton *pageButton)
+{
     pageButton->setIcon(m_iconNormal);
     pageButton->setAccessibleName("thisPageButton");
     pageButton->setIconSize(QSize(PAGE_ICON_SIZE, PAGE_ICON_SIZE));
@@ -91,10 +113,8 @@ void PageControl::addButton()
     pageButton->setFocusPolicy(Qt::NoFocus);
     pageButton->setCheckable(true);
     pageButton->setFlat(true);
-
-    qInfo() << "add 111111111";
+    pageButton->setVisible(true);
     layout()->addWidget(pageButton);
-    qInfo() << "add 2222222222";
 
     connect(pageButton, &DIconButton::toggled, this, &PageControl::pageBtnClicked);
 }

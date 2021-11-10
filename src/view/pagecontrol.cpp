@@ -80,6 +80,8 @@ void PageControl::updateIconSize(double scaleX, double scaleY)
 void PageControl::addButton()
 {
     DIconButton *pageButton = new DIconButton(this);
+
+    qInfo() << "add 0000000000000";
     pageButton->setIcon(m_iconNormal);
     pageButton->setAccessibleName("thisPageButton");
     pageButton->setIconSize(QSize(PAGE_ICON_SIZE, PAGE_ICON_SIZE));
@@ -90,7 +92,9 @@ void PageControl::addButton()
     pageButton->setCheckable(true);
     pageButton->setFlat(true);
 
+    qInfo() << "add 111111111";
     layout()->addWidget(pageButton);
+    qInfo() << "add 2222222222";
 
     connect(pageButton, &DIconButton::toggled, this, &PageControl::pageBtnClicked);
 }

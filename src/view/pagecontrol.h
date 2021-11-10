@@ -42,6 +42,7 @@ public:
     void setPageCount(int count);
     void setCurrent(int pageIndex);
     void updateIconSize(double scaleX, double scaleY);
+    void createButtons();
 signals:
     void onPageChanged(int pageIndex);
 
@@ -49,12 +50,13 @@ public slots:
     void pageBtnClicked(bool checked = false);
 
 private:
-    void addButton();
+    void addButton(DIconButton *pageButton);
 
 private:
     int m_pageCount = 0;
     QIcon m_iconActive;
     QIcon m_iconNormal;
+    QList<DIconButton *> m_buttonList;
 };
 
 #endif // PAGECONTROL_H

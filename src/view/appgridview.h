@@ -45,6 +45,8 @@ public:
 class CalculateUtil;
 class AppsListModel;
 class FullScreenFrame;
+class QVBoxLayout;
+
 class AppGridView : public QListView
 {
     Q_OBJECT
@@ -69,9 +71,9 @@ public:
 
     QRect appIconRect(const QModelIndex &index);
     const QRect indexRect(const QModelIndex &index) const;
-
-    void createLabel();
-
+    
+private:
+    void createMovingComponent();
     FullScreenFrame *fullscreen();
 
 public slots:
@@ -107,7 +109,6 @@ private:
     bool m_enableDropInside = false;                     // 拖拽释放后鼠标所在位置是否在listview范围内的标识
     bool m_enableAnimation = true;                       // app交换动画执行标识
     bool m_moveGridView = false;                         // GridView的mouseMove事件是否结束
-    bool m_mousePress;                                   // 鼠标按下状态
 
     const QWidget *m_containerBox = nullptr;
     QTimer *m_dropThresholdTimer;                        // 推拽过程中app交互动画定时器对象
@@ -124,7 +125,13 @@ private:
     QPoint m_dragStartPos;                               // 拖拽起点坐标
 
     QLabel *m_pixLabel;
-    QList<QLabel *>m_floatLabels;
+    QList<QLabel *> m_floatLabels;
+
+    QWidget *m_calendarWidget;
+    QVBoxLayout *m_vlayout;
+    QLabel *m_monthLabel;
+    QLabel *m_dayLabel;
+    QLabel *m_weekLabel;
 };
 
 typedef QList<AppGridView *> AppGridViewList;

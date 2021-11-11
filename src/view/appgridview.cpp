@@ -54,9 +54,13 @@ Gesture *AppGridView::m_gestureInter = nullptr;
  */
 AppGridView::AppGridView(QWidget *parent)
     : QListView(parent)
-    , m_mousePress(false)
     , m_dropThresholdTimer(new QTimer(this))
     , m_pixLabel(nullptr)
+    , m_calendarWidget(nullptr)
+    , m_vlayout(nullptr)
+    , m_monthLabel(nullptr)
+    , m_dayLabel(nullptr)
+    , m_weekLabel(nullptr)
 {
     m_pDelegate = nullptr;
 
@@ -77,6 +81,7 @@ AppGridView::AppGridView(QWidget *parent)
 
     viewport()->installEventFilter(this);
     viewport()->setAcceptDrops(true);
+    createMovingComponent();
 
     setUniformItemSizes(true);
     setMouseTracking(true);
@@ -176,10 +181,6 @@ void AppGridView::dropEvent(QDropEvent *e)
 
 void AppGridView::mousePressEvent(QMouseEvent *e)
 {
-    // 识别出鼠标左键按下还是触摸按下
-    if (e->source() != Qt::MouseEventSynthesizedByQt && e->button() == Qt::LeftButton)
-        m_mousePress = true;
-
     if (e->button() == Qt::RightButton) {
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
         if (clickedIndex.isValid() && !m_moveGridView) {
@@ -198,10 +199,7 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
                 }
             }
 
-            // 鼠标左键点击和触摸按住应用的情况同时存在则不触发右键菜单，因为右键菜单exec()会导致全屏模式下的触摸失效,
-            // 但如果鼠标左键点击的时刻刚好等于触摸按住应用然后触发该信号但右键菜单还没有出来的时刻，触摸依旧会失效
-            if ((!m_mousePress || !m_longPressed))
-                emit popupMenuRequested(rightClickPoint, clickedIndex);
+            emit popupMenuRequested(rightClickPoint, clickedIndex);
         }
     }
 
@@ -369,8 +367,6 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
 
 void AppGridView::mouseReleaseEvent(QMouseEvent *e)
 {
-    m_mousePress = false;
-
     // request main frame hide when click invalid area
     if (e->button() != Qt::LeftButton)
         return;
@@ -396,48 +392,49 @@ QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey
         const double  iconZoom =  s.width() / 64.0;
         QStringList calIconList = m_calcUtil->calendarSelectIcon();
 
-        auto calendar = new QWidget(this) ;
-        calendar->setFixedSize(s);
-
-        calendar->setAutoFillBackground(true);
-        QPalette palette = calendar->palette();
+        m_calendarWidget->setFixedSize(s);
+        m_calendarWidget->setAutoFillBackground(true);
+        QPalette palette = m_calendarWidget->palette();
         palette.setBrush(QPalette::Window,
                          QBrush(QPixmap(calIconList.at(0)).scaled(
-                                    calendar->size(),
+                                    m_calendarWidget->size(),
                                     Qt::IgnoreAspectRatio,
                                     Qt::SmoothTransformation)));
-        calendar->setPalette(palette);
+        m_calendarWidget->setPalette(palette);
 
-        QVBoxLayout *layout = new QVBoxLayout;
-        layout->setSpacing(0);
-        auto month = new QLabel();
+        m_vlayout->setSpacing(0);
         auto monthPix = loadSvg(calIconList.at(1), QSize(20, 10) * iconZoom);
-        month->setPixmap(monthPix.scaled(monthPix.width(), monthPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        month->setFixedHeight(monthPix.height());
-        month->setAlignment(Qt::AlignCenter);
-        month->setFixedWidth(s.width() - 5 * iconZoom);
-        layout->addWidget(month, Qt::AlignVCenter);
+        m_monthLabel->setPixmap(monthPix.scaled(monthPix.width(), monthPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        m_monthLabel->setFixedHeight(monthPix.height());
+        m_monthLabel->setAlignment(Qt::AlignCenter);
+        m_monthLabel->setFixedWidth(s.width() - 5 * iconZoom);
+        m_monthLabel->show();
+        m_vlayout->addWidget(m_monthLabel, Qt::AlignVCenter);
 
-        auto day = new QLabel();
         auto dayPix = loadSvg(calIconList.at(2), QSize(28, 26) * iconZoom);
-        day->setPixmap(dayPix.scaled(dayPix.width(), dayPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        day->setAlignment(Qt::AlignCenter);
-        day->setFixedHeight(day->pixmap()->height());
-        day->raise();
-        layout->addWidget(day, Qt::AlignVCenter);
+        m_dayLabel->setPixmap(dayPix.scaled(dayPix.width(), dayPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        m_dayLabel->setAlignment(Qt::AlignCenter);
+        m_dayLabel->setFixedHeight(m_dayLabel->pixmap()->height());
+        m_dayLabel->raise();
+        m_dayLabel->show();
+        m_vlayout->addWidget(m_dayLabel, Qt::AlignVCenter);
 
-        auto week = new QLabel();
         auto weekPix = loadSvg(calIconList.at(3), QSize(14, 6) * iconZoom);
-        week->setPixmap(weekPix.scaled(weekPix.width(), weekPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        week->setFixedHeight(week->pixmap()->height());
-        week->setAlignment(Qt::AlignCenter);
-        week->setFixedWidth(s.width() + 5 * iconZoom);
-        layout->addWidget(week, Qt::AlignVCenter);
-        layout->setSpacing(0);
-        layout->setContentsMargins(0, 10 * iconZoom, 0, 10 * iconZoom);
-        calendar->setLayout(layout);
-        srcPix = calendar->grab(calendar->rect());
-        calendar->deleteLater();
+        m_weekLabel->setPixmap(weekPix.scaled(weekPix.width(), weekPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        m_weekLabel->setFixedHeight(m_weekLabel->pixmap()->height());
+        m_weekLabel->setAlignment(Qt::AlignCenter);
+        m_weekLabel->setFixedWidth(s.width() + 5 * iconZoom);
+        m_weekLabel->show();
+
+        m_vlayout->addWidget(m_weekLabel, Qt::AlignVCenter);
+        m_vlayout->setSpacing(0);
+        m_vlayout->setContentsMargins(0, 10 * iconZoom, 0, 10 * iconZoom);
+        m_calendarWidget->setLayout(m_vlayout);
+        m_calendarWidget->show();
+
+        srcPix = m_calendarWidget->grab(m_calendarWidget->rect());
+        m_calendarWidget->hide();
+        m_calendarWidget->setLayout(nullptr);
     } else {
         srcPix = index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
     }
@@ -742,7 +739,11 @@ const QRect AppGridView::indexRect(const QModelIndex &index) const
     return rectForIndex(index);
 }
 
-void AppGridView::createLabel()
+/** 提前创建好拖拽过程中需要用到的label
+ * （修复在龙芯下运行时创建对象会崩溃的问题）
+ * @brief AppGridView::createMovingLabel
+ */
+void AppGridView::createMovingComponent()
 {
     if (!m_pixLabel) {
         m_pixLabel = new QLabel(fullscreen());
@@ -754,6 +755,30 @@ void AppGridView::createLabel()
             label->hide();
             m_floatLabels << label;
         }
+    }
+
+    if (!m_calendarWidget) {
+        m_calendarWidget = new QWidget(this);
+        m_calendarWidget->hide();
+    }
+
+    if (!m_vlayout) {
+        m_vlayout = new QVBoxLayout;
+    }
+
+    if (!m_monthLabel) {
+        m_monthLabel = new QLabel(this);
+        m_monthLabel->hide();
+    }
+
+    if (!m_dayLabel) {
+        m_dayLabel = new QLabel(this);
+        m_dayLabel->hide();
+    }
+
+    if (!m_weekLabel) {
+        m_weekLabel = new QLabel(this);
+        m_weekLabel->hide();
     }
 }
 

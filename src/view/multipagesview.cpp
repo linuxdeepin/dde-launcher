@@ -171,7 +171,6 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             emit connectViewEvent(pageView);
             //新增的页面需要设置一下大小
             updatePosition();
-            pageView->createLabel();
         }
     } else {
         while (pageCount < m_pageCount) {

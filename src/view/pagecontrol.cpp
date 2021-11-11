@@ -56,6 +56,7 @@ void PageControl::setPageCount(int count)
         int index = m_buttonList.indexOf(pageButton);
         if (index != -1) {
             m_buttonList[index]->setVisible(false);
+            m_buttonList[index]->disconnect(this);
         }
     }
 
@@ -66,13 +67,13 @@ void PageControl::setPageCount(int count)
 
 void PageControl::setCurrent(int pageIndex)
 {
-    qInfo() << "pageINdex:" << pageIndex << ", count:" << layout()->count();
     if (pageIndex < layout()->count()) {
         DIconButton *pageButton = qobject_cast<DIconButton *>(layout()->itemAt(pageIndex)->widget());
         if (!pageButton)
             return;
 
         pageButton->setChecked(true);
+        pageButton->setIcon(m_iconActive);
     }
 }
 

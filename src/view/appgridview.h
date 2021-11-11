@@ -45,6 +45,7 @@ public:
 class CalculateUtil;
 class AppsListModel;
 class FullScreenFrame;
+class QVBoxLayout;
 
 class AppGridView : public QListView
 {
@@ -72,7 +73,7 @@ public:
     const QRect indexRect(const QModelIndex &index) const;
 
 private:
-    void createMovingLabel();
+    void createMovingComponent();
     FullScreenFrame *fullscreen();
 
 public slots:
@@ -125,6 +126,12 @@ private:
 
     QLabel *m_pixLabel;
     QList<QLabel *> m_floatLabels;
+
+    QWidget *m_calendarWidget;
+    QVBoxLayout *m_vlayout;
+    QLabel *m_monthLabel;
+    QLabel *m_dayLabel;
+    QLabel *m_weekLabel;
 };
 
 typedef QList<AppGridView *> AppGridViewList;

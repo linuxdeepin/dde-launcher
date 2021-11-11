@@ -52,6 +52,7 @@ void PageControl::setPageCount(int count)
         int index = m_buttonList.indexOf(pageButton);
         if (index != -1) {
             m_buttonList[index]->setVisible(false);
+            m_buttonList[index]->disconnect(this);
         }
     }
 
@@ -68,6 +69,7 @@ void PageControl::setCurrent(int pageIndex)
             return;
 
         pageButton->setChecked(true);
+        pageButton->setIcon(m_iconActive);
     }
 }
 

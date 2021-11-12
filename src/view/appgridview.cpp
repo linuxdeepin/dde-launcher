@@ -681,8 +681,9 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     floatLabel->show();
 
     int topMargin = m_calcUtil->appMarginTop();
-    ani->setStartValue(indexRect(index).topLeft() - QPoint(0, -topMargin));
-    ani->setEndValue(indexRect(indexAt(moveNext ? pos - 1 : pos + 1)).topLeft() - QPoint(0, -topMargin));
+    int leftMargin = m_calcUtil->appMarginLeft();
+    ani->setStartValue(indexRect(index).topLeft() - QPoint(0, -topMargin) + QPoint(leftMargin, 0));
+    ani->setEndValue(indexRect(indexAt(moveNext ? pos - 1 : pos + 1)).topLeft() - QPoint(0, -topMargin) + QPoint(leftMargin, 0));
 
     // InOutQuad 描述起点矩形到终点矩形的速度曲线
     ani->setEasingCurve(QEasingCurve::Linear);

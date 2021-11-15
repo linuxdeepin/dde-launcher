@@ -74,17 +74,86 @@ bool Menu::eventFilter(QObject *watched, QEvent *event)
              }
         }
 
-        // 处理当右键菜单显示时,esc按下，关闭右键菜单，保持和模态框一样的效果
+        /*
+         * 1.处理当右键菜单显示时,esc按下，关闭右键菜单
+         * 2.右键菜单出现后支持键盘上下选中菜单项,支持键盘点击回车键触发右键菜单选项
+        */
         if (event->type() == QEvent::KeyPress) {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            if (keyEvent->key() == Qt::Key_Escape) {
+
+            int size = actions().size();
+            if (size <= 0)
+                return false;
+
+            switch (keyEvent->key()) {
+            case Qt::Key_Escape:
                 if (isVisible()) {
                     hide();
                     return true;
                 }
+                break;
+            case Qt::Key_Up:
+                moveUp(size);
+                return true;
+            case Qt::Key_Down:
+                moveDown();
+                return true;
+            case Qt::Key_Return:
+            case Qt::Key_Enter:
+                // Qt::Key_Return[center enter], Qt::Key_Enter[right enter]
+                openItem();
+                return true;
+            default:
+                break;
             }
         }
     }
 
     return QMenu::eventFilter(watched, event);
+}
+
+void Menu::moveDown(int size)
+{
+    Q_UNUSED(size);
+
+    QAction *activeAction = this->activeAction();
+    int index = this->actions().indexOf(activeAction);
+    if (index == this->actions().size() - 1) {
+        index = 0;
+    } else {
+        index += 1;
+    }
+
+    if (this->actions().at(index)->isSeparator()) {
+        index += 1;
+        if (index > this->actions().size() - 1)
+            index = this->actions().size() - 1;
+    }
+    this->setActiveAction(this->actions().at(index));
+}
+
+void Menu::moveUp(int size)
+{
+    QAction *activeAction = this->activeAction();
+    int index = this->actions().indexOf(activeAction);
+    if (index == 0) {
+        index = size - 1;
+    } else {
+        index -= 1;
+    }
+
+    if (this->actions().at(index)->isSeparator()) {
+        index -= 1;
+        if (index < 0)
+            index = 0;
+    }
+    this->setActiveAction(this->actions().at(index));
+}
+
+void Menu::openItem()
+{
+    QAction *activeAction = this->activeAction();
+    int index = this->actions().indexOf(activeAction);
+    if (index != -1)
+        activeAction->triggered();
 }

@@ -38,6 +38,11 @@ public:
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
+
+private:
+    void moveDown(int size = 0);
+    void moveUp(int size = 0);
+    void openItem();
 };
 
 #endif //MYMENU_H

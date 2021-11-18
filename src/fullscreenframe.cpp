@@ -587,9 +587,6 @@ void FullScreenFrame::showEvent(QShowEvent *e)
 
     if (QApplication::platformName() != "wayland")
         XcbMisc::instance()->set_deepin_override(winId());
-    // To make sure the window is placed at the right position.
-    updateGeometry();
-    update();
 
     if (!m_appsManager->isVaild())
         m_appsManager->refreshAllList();
@@ -1153,6 +1150,8 @@ void FullScreenFrame::showLauncher()
     m_focusIndex = 1;
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
+    // 启动器跟随任务栏位置
+    updateGeometry();
     m_searchWidget->categoryBtn()->clearFocus();
     m_searchWidget->edit()->clearEdit();
     m_searchWidget->edit()->clear();

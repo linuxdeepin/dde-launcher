@@ -278,7 +278,9 @@ void WindowedFrame::showLauncher()
 
     m_appsView->setCurrentIndex(QModelIndex());
 
-    adjustSize(); // right widget need calculate width based on font
+    adjustSize();
+
+    // 启动器跟随任务栏位置
     adjustPosition();
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);

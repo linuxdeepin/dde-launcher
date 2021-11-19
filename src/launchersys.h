@@ -65,6 +65,7 @@ private slots:
     void onAutoExitTimeout();
     void onVisibleChanged();
     void onDisplayModeChanged();
+    void onFrontendRectChanged();
 
 private:
     void registerRegion();
@@ -83,6 +84,7 @@ private:
     QMetaObject::Connection m_regionMonitorConnect;         // 信号和槽连接返回的对象
     CalculateUtil *m_calcUtil;                              // 界面布局计算处理类
     QPointer<IconFreshThread> m_appIconFreshThread;         // 缓存应用图标和文本处理线程
+    DBusDock *m_dockInter;
 };
 
 #endif // LAUNCHERSYS_H

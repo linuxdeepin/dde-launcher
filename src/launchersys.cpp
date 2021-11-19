@@ -54,6 +54,7 @@ LauncherSys::LauncherSys(QObject *parent)
     , m_ignoreRepeatVisibleChangeTimer(new QTimer(this))
     , m_calcUtil(CalculateUtil::instance())
     , m_appIconFreshThread(new IconFreshThread(this))
+    , m_dockInter(new DBusDock(this))
 {
     m_regionMonitor->setCoordinateType(DRegionMonitor::Original);
 
@@ -75,6 +76,7 @@ LauncherSys::LauncherSys(QObject *parent)
     connect(m_dbusLauncherInter, &DBusLauncher::DisplayModeChanged, this, &LauncherSys::onDisplayModeChanged, Qt::QueuedConnection);
     connect(m_autoExitTimer, &QTimer::timeout, this, &LauncherSys::onAutoExitTimeout, Qt::QueuedConnection);
     connect(this, &LauncherSys::destroyed, m_appIconFreshThread, &IconFreshThread::releaseThread);
+    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &LauncherSys::onFrontendRectChanged);
 
     // 当刷新系统图标主题时,会对系统所有应用缓存进行清空,该线程也退出,这里重新开启,重新加载应用信息到缓存中
     connect(m_appIconFreshThread, &IconFreshThread::finished, [&]() {
@@ -235,4 +237,13 @@ void LauncherSys::onDisplayModeChanged()
 {
     if (m_fullLauncher)
         m_fullLauncher->updateDisplayMode(m_dbusLauncherInter->displaymode());
+}
+
+/** 启动器跟随任务栏进行显示
+ * @brief LauncherSys::onFrontendRectChanged
+ */
+void LauncherSys::onFrontendRectChanged()
+{
+    if (m_launcherInter && m_launcherInter->visible())
+        m_launcherInter->showLauncher();
 }

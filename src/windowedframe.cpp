@@ -265,7 +265,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
 void WindowedFrame::showLauncher()
 {
-    if (visible() || m_delayHideTimer->isActive())
+    if (m_delayHideTimer->isActive())
         return;
 
     qApp->processEvents();

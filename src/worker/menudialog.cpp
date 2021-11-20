@@ -115,39 +115,55 @@ bool Menu::eventFilter(QObject *watched, QEvent *event)
 void Menu::moveDown(int size)
 {
     Q_UNUSED(size);
-
     QAction *activeAction = this->activeAction();
-    int index = this->actions().indexOf(activeAction);
-    if (index == this->actions().size() - 1) {
-        index = 0;
-    } else {
-        index += 1;
-    }
+    const int index = this->actions().indexOf(activeAction);
 
-    if (this->actions().at(index)->isSeparator()) {
-        index += 1;
-        if (index > this->actions().size() - 1)
-            index = this->actions().size() - 1;
+    for(int i = index + 1; i > -1; ++i) {
+        // 循环一遍后找不到可用的action，直接退出
+        if (i == index) {
+            return;
+        }
+
+        // 从头查找
+        if (i >= this->actions().size()) {
+            i = 0;
+        }
+
+        auto act = this->actions().at(i);
+        if (act->isSeparator() || !act->isEnabled()) {
+            continue;
+        }
+
+        setActiveAction(act);
+        break;
     }
-    this->setActiveAction(this->actions().at(index));
 }
 
 void Menu::moveUp(int size)
 {
+    Q_UNUSED(size);
     QAction *activeAction = this->activeAction();
-    int index = this->actions().indexOf(activeAction);
-    if (index == 0) {
-        index = size - 1;
-    } else {
-        index -= 1;
-    }
+    const int index = this->actions().indexOf(activeAction);
 
-    if (this->actions().at(index)->isSeparator()) {
-        index -= 1;
-        if (index < 0)
-            index = 0;
+    for(int i = index - 1; i < this->actions().size(); --i) {
+        // 循环一遍后找不到可用的action，直接退出
+        if (i == index) {
+            return;
+        }
+
+        // 从末尾查找
+        if (i <= -1) {
+            i = this->actions().size() - 1;
+        }
+
+        auto act = this->actions().at(i);
+        if (act->isSeparator() || !act->isEnabled()) {
+            continue;
+        }
+
+        setActiveAction(act);
+        break;
     }
-    this->setActiveAction(this->actions().at(index));
 }
 
 void Menu::openItem()

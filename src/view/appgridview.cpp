@@ -777,7 +777,5 @@ FullScreenFrame *AppGridView::fullscreen()
     FullScreenFrame *fullscreenFrame = nullptr;
     fullscreenFrame = qobject_cast<FullScreenFrame*>(topLevelWidget());
 
-    Q_ASSERT(fullscreenFrame);
-
     return fullscreenFrame;
 }

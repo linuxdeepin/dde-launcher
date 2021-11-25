@@ -51,6 +51,8 @@ QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
 bool AppGridView::m_longPressed = false;
 Gesture *AppGridView::m_gestureInter = nullptr;
 
+const bool IS_WAYLAND_DISPLAY = !qgetenv("WAYLAND_DISPLAY").isEmpty();
+
 /**
  * @brief AppGridView::AppGridView
  * 全屏模式下 应用网格视图，主要处理全屏图标的拖拽事件及分组切换的动画效果
@@ -322,9 +324,9 @@ void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 
     const QModelIndex dropStart = QListView::indexAt(m_dragStartPos);
 
-    if (pos.x() > containerRect.right())
+    if (pos.x() > (IS_WAYLAND_DISPLAY ? containerRect.center().x() : containerRect.right()))
         emit requestScrollRight(dropStart);
-    else if (pos.x() < containerRect.left())
+    else if (pos.x() < (IS_WAYLAND_DISPLAY ? containerRect.center().x() : containerRect.left()))
         emit requestScrollLeft(dropStart);
 
     QListView ::dragLeaveEvent(e);

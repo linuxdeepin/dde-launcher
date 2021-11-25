@@ -141,7 +141,8 @@ void SearchWidget::onTextChanged(const QString &str)
 
     m_searchEdit->lineEdit()->setFocus();
     auto searchStr = m_searchEdit->text();
-    emit searchTextChanged(searchStr.mid(0, 1) + searchStr.mid(1).replace(" ", ""));
+
+    emit searchTextChanged(searchStr.replace(" ", ""));
 }
 
 void SearchWidget::onModeClicked()
@@ -216,6 +217,3 @@ void SearchWidget::updateCurrentCategoryBtnIcon()
         m_toggleCategoryBtn->setIconSize(QSize(ICON_SIZE - 10, ICON_SIZE - 10));
     }
 }
-
-
-

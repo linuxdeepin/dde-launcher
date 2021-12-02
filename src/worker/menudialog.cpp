@@ -49,14 +49,12 @@ Menu::Menu(QWidget *parent)
 bool Menu::eventFilter(QObject *watched, QEvent *event)
 {
     // 存在rightMenu和rightMenuWindow的对象名
-    if (!watched->objectName().startsWith("rightMenu")) {
+    if (!watched->objectName().startsWith("rightMenu") && isVisible()) {
         if (event->type() == QEvent::MouseButtonPress) {
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if (mouseEvent->button() == Qt::LeftButton) {
-                if (isVisible()) {
-                    hide();
-                    return true;
-                }
+                hide();
+                return true;
             }
         } else if (event->type() == QEvent::DragMove || event->type() == QEvent::Wheel
                    || event->type() == QEvent::Move) {
@@ -68,10 +66,8 @@ bool Menu::eventFilter(QObject *watched, QEvent *event)
         // 让click无效，从而让启动器窗口不关闭
         if (event->type() == QEvent::MouseButtonRelease) {
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-             if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt) {
-                 if (isVisible())
-                     return true;
-             }
+            if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt)
+                return true;
         }
 
         /*
@@ -87,11 +83,8 @@ bool Menu::eventFilter(QObject *watched, QEvent *event)
 
             switch (keyEvent->key()) {
             case Qt::Key_Escape:
-                if (isVisible()) {
-                    hide();
-                    return true;
-                }
-                break;
+                hide();
+                return true;
             case Qt::Key_Up:
                 moveUp(size);
                 return true;

@@ -203,6 +203,16 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)
     connect(signalMapper, static_cast<void (QSignalMapper::*)(const int)>(&QSignalMapper::mapped), this, &MenuWorker::handleMenuAction);
     connect(m_menu, &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);
 
+    // 菜单超出屏幕范围时，菜单显示位置向上移动超出区域的高度
+    int screenHeight = m_appManager->instance()->currentScreen()->size().height();
+    int screenWidth = m_appManager->instance()->currentScreen()->size().width();
+    int menuWidth = m_menu->sizeHint().width();
+    int menuHeight = m_menu->sizeHint().height();
+    if (screenHeight < pos.y() + menuHeight)
+        pos = pos - QPoint(0, pos.y() + menuHeight - screenHeight);
+    else if (screenWidth < pos.x() + menuWidth)
+        pos = pos - QPoint(pos.x() + menuWidth - screenWidth, 0);
+
     m_menu->move(pos);
     m_menuIsShown = true;
     m_menuGeometry = m_menu->geometry();

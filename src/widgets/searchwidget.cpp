@@ -124,8 +124,11 @@ SearchWidget::SearchWidget(QWidget *parent)
     });
 
     connect(m_toggleCategoryBtn, &DIconButton::clicked, this, [ = ] {
+        // 先阻塞m_searchEdit的信号，避免在清空内容时重新切换显示模式
+        m_searchEdit->blockSignals(true);
         m_searchEdit->lineEdit()->clearFocus();
         clearSearchContent();
+        m_searchEdit->blockSignals(false);
 
         emit toggleMode();
 

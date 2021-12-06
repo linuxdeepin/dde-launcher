@@ -158,8 +158,10 @@ void SearchWidget::onModeClicked()
 
 void SearchWidget::onToggleCategoryChanged()
 {
+    m_searchEdit->blockSignals(true);
     m_searchEdit->lineEdit()->clearFocus();
     clearSearchContent();
+    m_searchEdit->blockSignals(false);
 
     emit toggleMode();
 

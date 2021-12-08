@@ -216,9 +216,6 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)
     m_menu->move(pos);
     m_menuIsShown = true;
     m_menuGeometry = m_menu->geometry();
-    // 设置第一项为高亮选中项
-    if (!m_menu->actions().isEmpty() && !m_menu->actions().at(0)->isSeparator())
-        m_menu->setActiveAction(m_menu->actions().at(0));
     m_menu->show();
     m_menu->raise();
 }

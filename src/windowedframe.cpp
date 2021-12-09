@@ -109,7 +109,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_enterSearchEdit(false)
     , m_displayInter(new DBusDisplay(this))
 {
-    if (!getDConfigValue("enableFullScreenMode", true).toBool())
+    if (!getDConfigValue("enable-full-screen-mode", true).toBool())
         m_modeToggleBtn->hide();
     m_searcherEdit->setAccessibleName("searcherEdit");
     m_maskBg->setAccessibleName("MaskBg");

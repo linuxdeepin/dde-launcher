@@ -61,7 +61,7 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     m_blurBackground->setFixedSize(m_calcUtil->getAppBoxSize());
     m_blurBackground->setMaskColor(DBlurEffectWidget::LightColor);
 
-    int maskAlpha = getDConfigValue("useSolidBackground", false).toBool() ? 0 : DLauncher::APPHBOX_ALPHA;
+    int maskAlpha = getDConfigValue("use-solid-background", false).toBool() ? 0 : DLauncher::APPHBOX_ALPHA;
     m_blurBackground->setMaskAlpha(maskAlpha);
     m_blurBackground->setBlurRectXRadius(DLauncher::APPHBOX_RADIUS);
     m_blurBackground->setBlurRectYRadius(DLauncher::APPHBOX_RADIUS);

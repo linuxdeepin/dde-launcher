@@ -69,7 +69,7 @@ LauncherSys::LauncherSys(QObject *parent)
     displayModeChanged();
 
     // 启动应用图标和应用名称缓存线程,减少系统加载应用时的开销
-    if (getDConfigValue("preloadAppsIcon", true).toBool())
+    if (getDConfigValue("preload-apps-icon", true).toBool())
         m_appIconFreshThread->start();
 
     connect(m_dbusLauncherInter, &DBusLauncher::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);

@@ -203,15 +203,19 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)
     connect(signalMapper, static_cast<void (QSignalMapper::*)(const int)>(&QSignalMapper::mapped), this, &MenuWorker::handleMenuAction);
     connect(m_menu, &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);
 
-    // 菜单超出屏幕范围时，菜单显示位置向上移动超出区域的高度
-    int screenHeight = m_appManager->instance()->currentScreen()->size().height();
-    int screenWidth = m_appManager->instance()->currentScreen()->size().width();
+    // 菜单超出当前屏幕范围时，菜单显示位置向上或者向左移动超出区域的差值
+    QRect screenRect = m_appManager->instance()->currentScreen()->geometry();
+    int widthToGlobal = screenRect.x() + screenRect.width();
+    int heigthToGlobal = screenRect.y() + screenRect.height();
     int menuWidth = m_menu->sizeHint().width();
     int menuHeight = m_menu->sizeHint().height();
-    if (screenHeight < pos.y() + menuHeight)
-        pos = pos - QPoint(0, pos.y() + menuHeight - screenHeight);
-    else if (screenWidth < pos.x() + menuWidth)
-        pos = pos - QPoint(pos.x() + menuWidth - screenWidth, 0);
+
+    if (heigthToGlobal <= pos.y() + menuHeight)
+        pos = pos - QPoint(0, pos.y() + menuHeight - heigthToGlobal);
+    else if (widthToGlobal <= pos.x() + menuWidth)
+        pos = pos - QPoint(pos.x() + menuWidth - widthToGlobal, 0);
+    else if ((heigthToGlobal <= pos.y() + menuHeight) || (widthToGlobal <= pos.x() + menuWidth))
+        pos = pos - QPoint(pos.x() + menuWidth - widthToGlobal, pos.y() + menuHeight - heigthToGlobal);
 
     m_menu->move(pos);
     m_menuIsShown = true;

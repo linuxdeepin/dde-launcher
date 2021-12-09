@@ -219,7 +219,7 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)
 
     m_menu->move(pos);
     m_menuIsShown = true;
-    m_menuGeometry = m_menu->geometry();
+    m_menuGeometry = QRect(m_menu->geometry().topLeft(), m_menu->sizeHint());
     m_menu->show();
     m_menu->raise();
 }

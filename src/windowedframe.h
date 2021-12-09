@@ -114,7 +114,7 @@ protected:
     void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
     void inputMethodEvent(QInputMethodEvent *e) Q_DECL_OVERRIDE;
     QVariant inputMethodQuery(Qt::InputMethodQuery prop) const Q_DECL_OVERRIDE;
-    void regionMonitorPoint(const QPoint &point) Q_DECL_OVERRIDE;
+    void regionMonitorPoint(const QPoint &point, int flag = 1) Q_DECL_OVERRIDE;
     bool eventFilter(QObject *watched, QEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *e) override;

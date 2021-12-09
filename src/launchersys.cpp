@@ -30,11 +30,6 @@
 #include "iconfreshthread.h"
 #include "constants.h"
 
-#define FULL_SCREEN     0
-#define MINI_FRAME      1
-
-#define MOUSE_LEFTBUTTON 1
-
 #define SessionManagerService "com.deepin.SessionManager"
 #define SessionManagerPath "/com/deepin/SessionManager"
 
@@ -218,10 +213,7 @@ bool LauncherSys::eventFilter(QObject *watched, QEvent *event)
 
 void LauncherSys::registerRegion()
 {
-    m_regionMonitorConnect = connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, [ = ](const QPoint &p, const int flag) {
-        if (flag == MOUSE_LEFTBUTTON)
-            m_launcherInter->regionMonitorPoint(p);
-    });
+    m_regionMonitorConnect = connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, &LauncherSys::onButtonPress);
 
     if (!m_regionMonitor->registered())
         m_regionMonitor->registerRegion();
@@ -246,4 +238,9 @@ void LauncherSys::onFrontendRectChanged()
 {
     if (m_launcherInter && m_launcherInter->visible())
         m_launcherInter->showLauncher();
+}
+
+void LauncherSys::onButtonPress(const QPoint &p, const int flag)
+{
+    m_launcherInter->regionMonitorPoint(p, flag);
 }

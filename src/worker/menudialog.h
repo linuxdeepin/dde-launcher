@@ -37,7 +37,7 @@ public:
     explicit Menu(QWidget *parent = nullptr);
 
 protected:
-    bool eventFilter(QObject *watched, QEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     void moveDown(int size = 0);

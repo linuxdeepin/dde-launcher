@@ -760,9 +760,11 @@ QVariant WindowedFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
     return QWidget::inputMethodQuery(prop);
 }
 
-void WindowedFrame::regionMonitorPoint(const QPoint &point)
+void WindowedFrame::regionMonitorPoint(const QPoint &point, int flag)
 {
+    Q_UNUSED(flag);
     auto windowList = DWindowManagerHelper::instance()->currentWorkspaceWindows();
+
     for (auto window : windowList) {
         if (window->handle()->geometry().contains(point)) {
             if (window->wmClass() == "onboard") return;

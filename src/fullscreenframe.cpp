@@ -1362,10 +1362,46 @@ bool FullScreenFrame::windowDeactiveEvent()
     return false;
 }
 
-void FullScreenFrame::regionMonitorPoint(const QPoint &point)
+void FullScreenFrame::regionMonitorPoint(const QPoint &point, int flag)
 {
-    if (!m_menuWorker->isMenuShown() && !m_isConfirmDialogShown && !m_delayHideTimer->isActive()) {
-        if (m_appsManager->dockGeometry().contains(point)) {
+    QRect screenRect = m_appsManager->currentScreen()->geometry();
+    int screenWidth = screenRect.width();
+    int screenHeight = screenRect.height();
+
+    QRect dockRect = m_appsManager->dockGeometry();
+    QRect visiblableRect;
+
+    switch (m_appsManager->dockPosition()) {
+    case DLauncher::DOCK_POS_TOP:
+        visiblableRect = QRect(dockRect.bottomLeft(), QSize(screenWidth, screenHeight - dockRect.height()));
+        break;
+    case DLauncher::DOCK_POS_RIGHT:
+        visiblableRect = QRect(screenRect.topLeft(), QSize(screenWidth - dockRect.width(), screenHeight));
+        break;
+    case DLauncher::DOCK_POS_BOTTOM:
+        visiblableRect = QRect(screenRect.topLeft(), QSize(screenWidth, screenHeight - dockRect.height()));
+        break;
+    case DLauncher::DOCK_POS_LEFT:
+        visiblableRect = QRect(dockRect.topRight(), QSize(screenWidth - dockRect.width(), screenHeight));
+        break;
+    default:
+        Q_UNREACHABLE_IMPL();
+    }
+
+    if (flag == DLauncher::MOUSE_RIGHTBUTTON) {
+        // 右键点击时，仅关闭右键菜单
+        if (m_menuWorker->isMenuShown() && !visiblableRect.contains(point))
+            m_menuWorker->onHideMenu();
+    } else if (flag == DLauncher::MOUSE_LEFTBUTTON) {
+        // 左键点击时
+        if (!m_menuWorker->isMenuShown() && !m_isConfirmDialogShown && !m_delayHideTimer->isActive()) {
+            if (dockRect.contains(point)) {
+                m_delayHideTimer->start();
+                hideLauncher();
+            }
+        }
+
+        if (m_menuWorker->isMenuShown() && !visiblableRect.contains(point)) {
             m_delayHideTimer->start();
             hideLauncher();
         }

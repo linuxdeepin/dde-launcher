@@ -859,8 +859,8 @@ void FullScreenFrame::initUI()
     scrollVLayout->setParent(m_contentFrame);
     scrollVLayout->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN, 0, 0);
     scrollVLayout->setSpacing(0);
-    scrollVLayout->addWidget(m_appsIconBox,0,Qt::AlignCenter);
-    scrollVLayout->addWidget(m_appsItemBox,0,Qt::AlignCenter);
+    scrollVLayout->addWidget(m_appsIconBox, 0, Qt::AlignCenter);
+    scrollVLayout->addWidget(m_appsItemBox, 0, Qt::AlignCenter);
 
     m_contentFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_contentFrame->setFrameStyle(QFrame::NoFrame);

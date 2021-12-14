@@ -149,7 +149,7 @@ public:
     static QReadWriteLock m_cacheDataLock;
     static QReadWriteLock m_appInfoLock;
     static QHash<QPair<QString, int>, QVariant> m_CacheData;                // 缓存应用图标和应用名称
-    static QHash<AppsListModel::AppCategory, ItemInfoList> m_appInfos;      // 全屏分类模式下保存的应用
+    static QHash<AppsListModel::AppCategory, ItemInfoList> m_appInfos;      // 应用分类容器
 
 private:
     DBusLauncher *m_launcherInter;
@@ -159,8 +159,8 @@ private:
     QString m_searchText;
     QStringList m_newInstalledAppsList;                                     // 新安装应用列表
     ItemInfoList m_allAppInfoList;                                          // 所有app信息列表
-    static ItemInfoList m_usedSortedList; // FullScreen                     // 按照最近使用的时间顺序排序后的应用列表
-    static ItemInfoList m_userSortedList; // Mini                           // 分类后的应用列表
+    static ItemInfoList m_usedSortedList;                                   // 全屏应用列表
+    static ItemInfoList m_userSortedList;                                   // 小窗口应用列表
     static ItemInfoList m_appSearchResultList;                              // 搜索结果列表
     ItemInfoList m_stashList;
     static ItemInfoList m_categoryList;                                     // 小窗口应用分类目录列表

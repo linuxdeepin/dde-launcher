@@ -193,6 +193,7 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
     QStringList preset;
     if (m_launcherSettings && m_launcherSettings->keys().contains(key))
         preset = m_launcherSettings->get(key).toStringList();
+
     if (m_launcherSettings && preset.isEmpty())
         preset = m_launcherSettings->get("apps-order").toStringList();
 
@@ -551,8 +552,9 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
 }
 
 /**
- * @brief AppsManager::appsInfoListSize 获取自定义模式,自由模式,搜索模式,多应用分类模式,单个分类模式下app数量
- * @param category 场景模式
+ * @brief AppsManager::appsInfoListSize 获取不同窗口模式下相应分类的应用个数
+ * @param category 窗口模式，小窗口默认为Custom类型，全屏窗口默认为All类型
+ * 这样也就决定了两种窗口模式下独立的应用排序逻辑
  * @return
  */
 int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category)
@@ -575,8 +577,8 @@ int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category)
 }
 
 /**
- * @brief AppsManager::appsInfoListIndex 获取具体场景模式下app信息
- * @param category 场景模式
+ * @brief AppsManager::appsInfoListIndex 获取单个模式下第n个app的信息
+ * @param category 分类类型
  * @param index app在列表中的索引
  * @return 返回单个应用信息
  */
@@ -789,14 +791,12 @@ void AppsManager::refreshUsedInfoList()
             m_usedSortedList = m_allAppInfoList;
         }
 
-        // 没有使用的插入到后面
         for (QList<ItemInfo>::ConstIterator it = m_allAppInfoList.constBegin(); it != m_allAppInfoList.constEnd(); ++it) {
             if (!m_usedSortedList.contains(*it)) {
                 m_usedSortedList.append(*it);
             }
         }
 
-        // 使用的应用列表是否也存在于所有应用列表中,不存在就删除掉
         for (QList<ItemInfo>::iterator it = m_usedSortedList.begin(); it != m_usedSortedList.end();) {
             if (m_allAppInfoList.contains(*it)) {
                 it++;
@@ -876,7 +876,6 @@ void AppsManager::refreshUserInfoList()
 
     // 从启动器小屏应用列表移除被限制使用的应用
     QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
-
     for (auto it = m_userSortedList.begin(); it != m_userSortedList.end(); it++) {
         if (fuzzyMatching(filters, it->m_key))
             m_userSortedList.erase(it);
@@ -1023,7 +1022,6 @@ void AppsManager::generateCategoryMap()
             idx = m_stashList.indexOf(*it);
         }
 
-        // 多个应用被移除这里会出现迭代器失效问题
         if (idx == -1) {
             it = m_usedSortedList.erase(it);
             break;

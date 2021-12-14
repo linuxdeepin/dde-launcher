@@ -452,7 +452,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     int start = nFixCount * m_pageIndex;
-    const ItemInfo &itemInfo = m_appsManager->appsInfoListIndex(m_category,start + index.row());
+    const ItemInfo &itemInfo = m_appsManager->appsInfoListIndex(m_category, start + index.row());
 
     switch (role) {
     case AppRawItemInfoRole:

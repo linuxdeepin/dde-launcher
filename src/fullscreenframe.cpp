@@ -1795,9 +1795,12 @@ void FullScreenFrame::layoutChanged()
     }
 }
 
-void FullScreenFrame::searchTextChanged(const QString &keywords)
+void FullScreenFrame::searchTextChanged(const QString &keywords, bool enableUpdateMode)
 {
     m_appsManager->searchApp(keywords.trimmed());
+
+    if (!enableUpdateMode)
+        return;
 
     if (keywords.isEmpty())
         updateDisplayMode(m_calcUtil->displayMode());

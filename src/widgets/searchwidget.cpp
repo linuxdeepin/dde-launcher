@@ -45,6 +45,7 @@ DWIDGET_USE_NAMESPACE
  */
 SearchWidget::SearchWidget(QWidget *parent)
     : QFrame(parent)
+    , m_enableUpdateMode(true)
 {
     setAccessibleName("From_Search");
     m_leftSpacing = new QFrame(this);
@@ -142,7 +143,7 @@ void SearchWidget::onTextChanged(const QString &str)
     m_searchEdit->lineEdit()->setFocus();
     auto searchStr = m_searchEdit->text();
 
-    emit searchTextChanged(searchStr.replace(" ", ""));
+    emit searchTextChanged(searchStr.replace(" ", ""), m_enableUpdateMode);
 }
 
 void SearchWidget::onModeClicked()
@@ -158,8 +159,10 @@ void SearchWidget::onModeClicked()
 
 void SearchWidget::onToggleCategoryChanged()
 {
+    m_enableUpdateMode = false;
     m_searchEdit->lineEdit()->clearFocus();
     clearSearchContent();
+    m_enableUpdateMode = true;
 
     emit toggleMode();
 

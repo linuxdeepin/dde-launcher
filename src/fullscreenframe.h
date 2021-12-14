@@ -147,7 +147,7 @@ private:
 
 private slots:
     void layoutChanged();
-    void searchTextChanged(const QString &keywords);
+    void searchTextChanged(const QString &keywords, bool enableUpdateMode);
     void refreshPageView(const AppsListModel::AppCategory category);
     void primaryScreenChanged();
 

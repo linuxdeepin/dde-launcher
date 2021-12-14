@@ -55,10 +55,11 @@ public slots:
     void clearSearchContent();
 
 signals:
-    void searchTextChanged(const QString &text) const;
+    void searchTextChanged(const QString &text, bool enableUpdateMode) const;
     void toggleMode();
 
 private:
+    bool m_enableUpdateMode;
     DSearchEdit *m_searchEdit;
     QFrame *m_leftSpacing;
     QFrame *m_rightSpacing;

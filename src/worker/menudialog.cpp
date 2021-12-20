@@ -58,7 +58,6 @@ bool Menu::eventFilter(QObject *watched, QEvent *event)
             }
         } else if (event->type() == QEvent::DragMove || event->type() == QEvent::Wheel
                    || event->type() == QEvent::Move) {
-            // 按下应用拖动，按下应用从菜单上方移动时，鼠标滚轮滚动时，隐藏右键菜单
             hide();
         }
 
@@ -70,12 +69,13 @@ bool Menu::eventFilter(QObject *watched, QEvent *event)
                 return true;
         }
 
-        /*
-         * 1.处理当右键菜单显示时,esc按下，关闭右键菜单
-         * 2.右键菜单出现后支持键盘上下选中菜单项,支持键盘点击回车键触发右键菜单选项
-        */
         if (event->type() == QEvent::KeyPress) {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+
+           if (keyEvent->key() == Qt::Key_Meta) {
+               hide();
+               return false;
+           }
 
             int size = actions().size();
             if (size <= 0)

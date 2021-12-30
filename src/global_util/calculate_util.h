@@ -64,6 +64,7 @@ public:
     inline int currentCategory() const {return m_currentCategory;}
     void setCurrentCategory(int category){m_currentCategory = category;}
     void setFullScreen(bool bFullScreen){isFullScreen = bFullScreen;}
+
     QSize appIconSize() const;
     QSize appIconSize(bool fullscreen, double ratio, int iconSize = 0) const;
     int displayMode() const;
@@ -88,6 +89,10 @@ public:
     double getScreenScaleY();
 
     QStringList calendarSelectIcon() const;
+
+signals:
+     void ratioChanged(double ratio);
+     void loadWindowIcon();
 
 public slots:
     void calculateAppLayout(const QSize &containerSize, const int currentmode);

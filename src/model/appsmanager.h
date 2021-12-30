@@ -51,6 +51,8 @@ DGUI_USE_NAMESPACE
 #define CATEGORY_COUNT    11
 
 class CalculateUtil;
+class QThread;
+class IconCacheManager;
 class AppsManager : public QObject
 {
     Q_OBJECT
@@ -70,6 +72,8 @@ public:
     int getPageCount(const AppsListModel::AppCategory category);
     const QScreen * currentScreen();
     int getVisibleCategoryCount();
+    bool fullscreen() const;
+    int displayMode() const;
 
 signals:
     void itemDataChanged(const ItemInfo &info) const;
@@ -83,7 +87,17 @@ signals:
     void dockGeometryChanged() const;
 
     void itemRedraw(const QModelIndex &index);
-    void iconLoadFinished();
+
+    void categoryToFull();
+    void fullToCategory();
+    void smallToFullFree();
+    void smallToCategory();
+
+    void preloadCategory();
+    void preloadFullFree();
+
+    void startLoadIcon();
+    void loadItem(const ItemInfo &info, const QString &operationStr);
 
 public slots:
     void saveUserSortedList();
@@ -94,6 +108,10 @@ public slots:
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
     static int appsInfoListSize(const AppsListModel::AppCategory &category);
     static const ItemInfo appsInfoListIndex(const AppsListModel::AppCategory &category,const int index);
+    static const ItemInfoList &windowedCategoryList();
+    static const ItemInfoList &windowedFrameItemInfoList();
+    static const ItemInfoList &fullscreenItemInfoList();
+    static const QHash<AppsListModel::AppCategory, ItemInfoList> &categoryList();
 
     bool appIsNewInstall(const QString &key);
     bool appIsAutoStart(const QString &desktop);
@@ -104,15 +122,8 @@ public slots:
     const QPixmap appIcon(const ItemInfo &info, const int size = 0);
     const QString appName(const ItemInfo &info, const int size);
     int appNums(const AppsListModel::AppCategory &category) const;
-    void clearCache();
 
     void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
-    static void cachePixData(QPair<QString, int> &tmpKey, const QPixmap &pix);
-    static void cacheStrData(QPair<QString, int> &tmpKey, QString &str);
-    static bool existInCache(QPair<QString, int> &tmpKey);
-    static void getPixFromCache(QPair<QString, int> &tmpKey, QPixmap &pix);
-    static QString getStrFromCache(QPair<QString, int> &tmpKey);
-    static void removePixFromCache(const ItemInfo &info);
     static QHash<AppsListModel::AppCategory, ItemInfoList> getAllAppInfo();
 
 private:
@@ -144,6 +155,7 @@ private slots:
     void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
     void onRefreshCalendarTimer();
     void onGSettingChanged(const QString & keyName);
+    void stopThread();
 
 public:
     static QReadWriteLock m_cacheDataLock;
@@ -193,6 +205,10 @@ private:
 
     bool m_trashIsEmpty;
     QFileSystemWatcher *m_fsWatcher;
+
+    IconCacheManager *m_iconCacheManager;
+    QThread *m_iconCacheThread;
+    QTimer *m_updateCalendarTimer;
 };
 
 #endif // APPSMANAGER_H

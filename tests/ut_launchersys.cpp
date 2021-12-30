@@ -1,6 +1,5 @@
 #define private public
 #include "launchersys.h"
-#include "iconfreshthread.h"
 #undef private
 
 #include <gtest/gtest.h>
@@ -15,9 +14,6 @@ public:
 
     void TearDown() override
     {
-        if (m_launcherSys->m_appIconFreshThread->isRunning())
-            m_launcherSys->m_appIconFreshThread->releaseThread();
-
         if (m_launcherSys) {
             delete m_launcherSys;
             m_launcherSys = nullptr;

@@ -27,8 +27,8 @@
 #include "windowedframe.h"
 #include "model/appsmanager.h"
 #include "global_util/util.h"
-#include "iconfreshthread.h"
 #include "constants.h"
+#include "iconcachemanager.h"
 
 #define SessionManagerService "com.deepin.SessionManager"
 #define SessionManagerPath "/com/deepin/SessionManager"
@@ -39,6 +39,7 @@
  */
 LauncherSys::LauncherSys(QObject *parent)
     : QObject(parent)
+    , m_appManager(AppsManager::instance())
     , m_launcherInter(nullptr)
     , m_dbusLauncherInter(new DBusLauncher(this))
     , m_sessionManagerInter(new com::deepin::SessionManager(SessionManagerService, SessionManagerPath, QDBusConnection::sessionBus(), this))
@@ -48,40 +49,26 @@ LauncherSys::LauncherSys(QObject *parent)
     , m_autoExitTimer(new QTimer(this))
     , m_ignoreRepeatVisibleChangeTimer(new QTimer(this))
     , m_calcUtil(CalculateUtil::instance())
-    , m_appIconFreshThread(new IconFreshThread(this))
     , m_dockInter(new DBusDock(this))
+    , m_checkTimer(new QTimer(this))
 {
+    setClickState(false);
+    m_checkTimer->setInterval(10);
     m_regionMonitor->setCoordinateType(DRegionMonitor::Original);
+    displayModeChanged();
 
     m_autoExitTimer->setInterval(60 * 1000);
     m_autoExitTimer->setSingleShot(true);
 
-    m_ignoreRepeatVisibleChangeTimer->setInterval(200);
+    m_ignoreRepeatVisibleChangeTimer->setInterval(100);
     m_ignoreRepeatVisibleChangeTimer->setSingleShot(true);
-
-    AppsManager::instance();
-
-    displayModeChanged();
-
-    // 启动应用图标和应用名称缓存线程,减少系统加载应用时的开销
-    if (getDConfigValue("preload-apps-icon", true).toBool())
-        m_appIconFreshThread->start();
 
     connect(m_dbusLauncherInter, &DBusLauncher::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
     connect(m_dbusLauncherInter, &DBusLauncher::DisplayModeChanged, this, &LauncherSys::onDisplayModeChanged, Qt::QueuedConnection);
     connect(m_autoExitTimer, &QTimer::timeout, this, &LauncherSys::onAutoExitTimeout, Qt::QueuedConnection);
-    connect(this, &LauncherSys::destroyed, m_appIconFreshThread, &IconFreshThread::releaseThread);
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &LauncherSys::onFrontendRectChanged);
-
-    // 当刷新系统图标主题时,会对系统所有应用缓存进行清空,该线程也退出,这里重新开启,重新加载应用信息到缓存中
-    connect(m_appIconFreshThread, &IconFreshThread::finished, [&]() {
-        m_appIconFreshThread->deleteLater();
-
-        if (m_appIconFreshThread->getThreadState()) {
-            m_appIconFreshThread = new IconFreshThread(this);
-            m_appIconFreshThread->start();
-        }
-    });
+    connect(IconCacheManager::instance(), &IconCacheManager::iconLoaded, this, &LauncherSys::aboutToShowLauncher, Qt::QueuedConnection);
+    connect(m_checkTimer, &QTimer::timeout, this, &LauncherSys::aboutToShowLauncher);
 
     m_autoExitTimer->start();
 }
@@ -102,6 +89,9 @@ void LauncherSys::showLauncher()
         return;
     }
 
+    if (m_checkTimer->isActive())
+        m_ignoreRepeatVisibleChangeTimer->stop();
+
     if (m_ignoreRepeatVisibleChangeTimer->isActive())
         return;
 
@@ -111,8 +101,10 @@ void LauncherSys::showLauncher()
 
     qApp->processEvents();
 
-    m_autoExitTimer->stop();
-    m_launcherInter->showLauncher();
+    if (IconCacheManager::iconLoadState()) {
+        m_autoExitTimer->stop();
+        m_launcherInter->showLauncher();
+    }
 }
 
 void LauncherSys::hideLauncher()
@@ -131,6 +123,16 @@ void LauncherSys::hideLauncher()
 void LauncherSys::uninstallApp(const QString &appKey)
 {
     m_launcherInter->uninstallApp(appKey);
+}
+
+void LauncherSys::setClickState(bool state)
+{
+    m_clicked = state;
+}
+
+bool LauncherSys::clickState() const
+{
+    return m_clicked;
 }
 
 bool LauncherSys::visible()
@@ -168,12 +170,14 @@ void LauncherSys::displayModeChanged()
     lastLauncher = lastLauncher ? lastLauncher : m_launcherInter;
 
     if (lastLauncher->visible()) {
-
         // 先关闭小窗口,再show全屏窗口,规避全屏窗口出现后,小窗口有迟滞关闭的视觉体验问题
         if (lastLauncher != m_launcherInter)
             lastLauncher->hideLauncher();
 
-        m_launcherInter->showLauncher();
+        setClickState(true);
+
+        if (IconCacheManager::iconLoadState())
+            m_launcherInter->showLauncher();
     } else {
         m_launcherInter->hideLauncher();
     }
@@ -243,4 +247,20 @@ void LauncherSys::onFrontendRectChanged()
 void LauncherSys::onButtonPress(const QPoint &p, const int flag)
 {
     m_launcherInter->regionMonitorPoint(p, flag);
+}
+
+void LauncherSys::aboutToShowLauncher()
+{
+    if (!m_checkTimer->isActive())
+        m_checkTimer->start();
+
+    if (m_launcherInter->visible()) {
+        m_checkTimer->stop();
+    }
+
+    if (IconCacheManager::iconLoadState() && clickState()) {
+        showLauncher();
+        m_checkTimer->stop();
+        setClickState(false);
+    }
 }

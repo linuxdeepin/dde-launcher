@@ -39,7 +39,6 @@ DGUI_USE_NAMESPACE
 class LauncherInterface;
 class WindowedFrame;
 class FullScreenFrame;
-class IconFreshThread;
 
 class LauncherSys : public QObject
 {
@@ -53,6 +52,9 @@ public:
     void showLauncher();
     void hideLauncher();
     void uninstallApp(const QString &appKey);
+    void setClickState(bool state);
+    bool clickState() const;
+    void aboutToShowLauncher();
 
 signals:
     void visibleChanged(bool visible);
@@ -66,12 +68,14 @@ private slots:
     void onVisibleChanged();
     void onDisplayModeChanged();
     void onFrontendRectChanged();
+    void onButtonPress(const QPoint &p);
 
 private:
     void registerRegion();
     void unRegisterRegion();
 
 private:
+    AppsManager *m_appManager;
     LauncherInterface *m_launcherInter;                     // 启动器界面处理基类
     DBusLauncher *m_dbusLauncherInter;                      // dbus访问远程服务类 数据初始化
     com::deepin::SessionManager *m_sessionManagerInter;     // dbus访问远程服务类 业务逻辑处理
@@ -83,8 +87,9 @@ private:
     QTimer *m_ignoreRepeatVisibleChangeTimer;               // 添加200ms延时操作，避开重复显示、隐藏启动器
     QMetaObject::Connection m_regionMonitorConnect;         // 信号和槽连接返回的对象
     CalculateUtil *m_calcUtil;                              // 界面布局计算处理类
-    QPointer<IconFreshThread> m_appIconFreshThread;         // 缓存应用图标和文本处理线程
     DBusDock *m_dockInter;
+    QTimer *m_checkTimer;
+    bool m_clicked;                                         // 人的点击操作状态
 };
 
 #endif // LAUNCHERSYS_H

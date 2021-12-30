@@ -23,6 +23,7 @@
 
 #include "util.h"
 #include "appsmanager.h"
+#include "iconcachemanager.h"
 
 #include <DHiDPIHelper>
 #include <DGuiApplicationHelper>
@@ -382,9 +383,6 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
             iconName = itemInfo.m_iconKey;
         else
             iconName = name;
-
-        // 不加入缓存，保证日期和图标对应
-        findIcon = false;
     } else {
         iconName = itemInfo.m_iconKey;
     }
@@ -435,8 +433,8 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
 
     QPair<QString, int> tmpKey { cacheKey(itemInfo, CacheType::ImageType) , iconSize};
 
-    if (!AppsManager::existInCache(tmpKey) && findIcon)
-        AppsManager::cachePixData(tmpKey, pixmap);
+    if (!IconCacheManager::existInCache(tmpKey) && findIcon)
+        IconCacheManager::insertCache(tmpKey, pixmap);
 
     return findIcon;
 }

@@ -25,7 +25,7 @@
 #include "util.h"
 #include "constants.h"
 #include "calculate_util.h"
-#include "iconfreshthread.h"
+#include "iconcachemanager.h"
 
 #include <QDebug>
 #include <QX11Info>
@@ -58,15 +58,17 @@ QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-l
 QSettings AppsManager::APP_USED_SORTED_LIST("deepin", "dde-launcher-app-used-sorted-list");
 QSettings AppsManager::APP_CATEGORY_USED_SORTED_LIST("deepin","dde-launcher-app-category-used-sorted-list");
 static constexpr int USER_SORT_UNIT_TIME = 3600; // 1 hours
+const QString TrashDir = QDir::homePath() + "/.local/share/Trash";
+const QString TrashDirFiles = TrashDir + "/files";
+const QDir::Filters ItemsShouldCount = QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot;
 
 QReadWriteLock AppsManager::m_cacheDataLock;
 QReadWriteLock AppsManager::m_appInfoLock;
-QHash<QPair<QString, int>, QVariant> AppsManager::m_CacheData;
 QHash<AppsListModel::AppCategory, ItemInfoList> AppsManager::m_appInfos;
-ItemInfoList AppsManager::m_usedSortedList;
-ItemInfoList AppsManager::m_userSortedList;
-ItemInfoList AppsManager::m_appSearchResultList;
-ItemInfoList AppsManager::m_categoryList;
+ItemInfoList AppsManager::m_usedSortedList = QList<ItemInfo>();
+ItemInfoList AppsManager::m_userSortedList = QList<ItemInfo>();
+ItemInfoList AppsManager::m_appSearchResultList = QList<ItemInfo>();
+ItemInfoList AppsManager::m_categoryList = QList<ItemInfo>();
 
 AppsManager::AppsManager(QObject *parent) :
     QObject(parent),
@@ -80,7 +82,12 @@ AppsManager::AppsManager(QObject *parent) :
     m_lastShowDate(0),
     m_tryNums(0),
     m_itemInfo(ItemInfo()),
-    m_iconValid(true)
+    m_filterSetting(nullptr),
+    m_iconValid(true),
+    m_trashIsEmpty(false),
+    m_fsWatcher(new QFileSystemWatcher(this)),
+    m_iconCacheThread(new QThread(this)),
+    m_updateCalendarTimer(new QTimer(this))
 {
     if (QGSettings::isSchemaInstalled("com.deepin.dde.launcher")) {
         m_filterSetting = new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
@@ -108,18 +115,46 @@ AppsManager::AppsManager(QObject *parent) :
             << tr("Other");
 
     // 分类目录图标
-    m_categoryIcon
-            << QString(":/icons/skin/icons/internet_normal_22px.svg")
-            << QString(":/icons/skin/icons/chat_normal_22px.svg")
-            << QString(":/icons/skin/icons/music_normal_22px.svg")
-            << QString(":/icons/skin/icons/multimedia_normal_22px.svg")
-            << QString(":/icons/skin/icons/graphics_normal_22px.svg")
-            << QString(":/icons/skin/icons/game_normal_22px.svg")
-            << QString(":/icons/skin/icons/office_normal_22px.svg")
-            << QString(":/icons/skin/icons/reading_normal_22px.svg")
-            << QString(":/icons/skin/icons/development_normal_22px.svg")
-            << QString(":/icons/skin/icons/system_normal_22px.svg")
-            << QString(":/icons/skin/icons/others_normal_22px.svg");
+    m_categoryIcon.append(QString(":/icons/skin/icons/internet_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/chat_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/music_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/multimedia_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/graphics_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/game_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/office_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/reading_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/development_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/system_normal_22px.svg"));
+    m_categoryIcon.append(QString(":/icons/skin/icons/others_normal_22px.svg"));
+
+    m_iconCacheManager = IconCacheManager::instance();
+    m_iconCacheManager->moveToThread(m_iconCacheThread);
+
+    m_updateCalendarTimer->setInterval(60 * 1000);// 1min
+    m_updateCalendarTimer->start();
+
+    // 启动应用图标和应用名称缓存线程,减少系统加载应用时的开销
+    m_iconCacheThread->start();
+
+    connect(this, &AppsManager::startLoadIcon, m_iconCacheManager, &IconCacheManager::loadWindowIcon, Qt::QueuedConnection);
+    connect(this, &AppsManager::categoryToFull, m_iconCacheManager, static_cast<void(IconCacheManager::*)()>(&IconCacheManager::loadFullWindowIcon), Qt::QueuedConnection);
+
+    connect(this, &AppsManager::preloadFullFree, m_iconCacheManager, &IconCacheManager::preloadFullFree, Qt::QueuedConnection);
+    connect(this, &AppsManager::smallToFullFree, m_iconCacheManager, static_cast<void(IconCacheManager::*)()>(&IconCacheManager::loadFullWindowIcon), Qt::QueuedConnection);
+    connect(this, &AppsManager::smallToCategory, m_iconCacheManager, static_cast<void(IconCacheManager::*)()>(&IconCacheManager::loadCategoryWindowIcon), Qt::QueuedConnection);
+    connect(m_calUtil, &CalculateUtil::loadWindowIcon, m_iconCacheManager, &IconCacheManager::loadWindowIcon, Qt::QueuedConnection);
+
+    connect(this, &AppsManager::fullToCategory, m_iconCacheManager, static_cast<void(IconCacheManager::*)()>(&IconCacheManager::loadCategoryWindowIcon), Qt::QueuedConnection);
+    connect(this, &AppsManager::preloadCategory, m_iconCacheManager, &IconCacheManager::preloadCategory, Qt::QueuedConnection);
+
+    connect(m_calUtil, &CalculateUtil::ratioChanged, m_iconCacheManager, &IconCacheManager::ratioChange, Qt::QueuedConnection);
+    connect(this, &AppsManager::loadItem, m_iconCacheManager, &IconCacheManager::loadItem, Qt::QueuedConnection);
+
+    connect(qApp, &QCoreApplication::aboutToQuit, m_iconCacheManager, &IconCacheManager::deleteLater);
+    connect(qApp, &QCoreApplication::aboutToQuit, this, &AppsManager::stopThread, Qt::QueuedConnection);
+    connect(m_updateCalendarTimer, &QTimer::timeout, m_iconCacheManager, &IconCacheManager::updateCanlendarIcon, Qt::QueuedConnection);
+
+    updateTrashState();
 
     refreshAllList();
     refreshAppAutoStartCache();
@@ -144,10 +179,7 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
 
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
-        refreshAppListIcon();
-        generateCategoryMap();
-    });
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppsManager::onThemeTypeChanged);
     connect(m_RefreshCalendarIconTimer, &QTimer::timeout, this,  [=](){
         m_curDate = QDate::currentDate();
         if(m_lastShowDate != m_curDate.day()){
@@ -367,6 +399,10 @@ void AppsManager::refreshAllList()
     refreshUsedInfoList();
     refreshCategoryUsedInfoList();
     refreshUserInfoList();
+
+    // 全屏分类模式/全屏自由模式都需要界面计算,小窗口直接加载
+    if (!m_launcherInter->fullscreen())
+        emit startLoadIcon();
 }
 
 void AppsManager::saveUserSortedList()
@@ -502,6 +538,36 @@ bool AppsManager::fuzzyMatching(const QStringList& list, const QString& key)
     return false;
 }
 
+void AppsManager::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
+{
+    refreshAppListIcon(themeType);
+    generateCategoryMap();
+}
+
+void AppsManager::onRefreshCalendarTimer()
+{
+    m_curDate = QDate::currentDate();
+
+    if(m_lastShowDate != m_curDate.day()) {
+        delayRefreshData();
+        m_lastShowDate = m_curDate.day();
+    }
+}
+
+void AppsManager::onGSettingChanged(const QString &keyName)
+{
+    if (keyName != "filter-keys" && keyName != "filterKeys")
+        return;
+
+    refreshAllList();
+}
+
+void AppsManager::stopThread()
+{
+    m_iconCacheThread->quit();
+    m_iconCacheThread->wait();
+}
+
 /**
  * @brief AppsManager::createOfCategory 创建分类目录信息
  * @param category 目录类型
@@ -594,6 +660,26 @@ const ItemInfo AppsManager::appsInfoListIndex(const AppsListModel::AppCategory &
     return itemInfo;
 }
 
+const ItemInfoList &AppsManager::windowedFrameItemInfoList()
+{
+    return m_userSortedList;
+}
+
+const ItemInfoList &AppsManager::windowedCategoryList()
+{
+    return m_categoryList;
+}
+
+const ItemInfoList &AppsManager::fullscreenItemInfoList()
+{
+    return m_usedSortedList;
+}
+
+const QHash<AppsListModel::AppCategory, ItemInfoList> &AppsManager::categoryList()
+{
+    return m_appInfos;
+}
+
 bool AppsManager::appIsNewInstall(const QString &key)
 {
     return m_newInstalledAppsList.contains(key);
@@ -625,6 +711,7 @@ bool AppsManager::appIsEnableScaling(const QString &desktop)
     return !m_launcherInter->GetDisableScaling(desktop);
 }
 
+#include <QDebug>
 /**
  * @brief AppsManager::appIcon 从缓存中获取app图片
  * @param info app信息
@@ -634,42 +721,32 @@ bool AppsManager::appIsEnableScaling(const QString &desktop)
 const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
 {
     const int iconSize = perfectIconSize(size);
-
     QPair<QString, int> tmpKey { cacheKey(info, CacheType::ImageType) , iconSize};
 
     QPixmap pix;
-    if (existInCache(tmpKey)) {
-        getPixFromCache(tmpKey, pix);
+    if (IconCacheManager::existInCache(tmpKey)) {
+        IconCacheManager::getPixFromCache(tmpKey, pix);
         return pix;
+    }
+
+    // 没有预缓存时，资源从主线程加载
+    m_itemInfo = info;
+    m_iconValid = getThemeIcon(pix, info, size, !m_iconValid);
+
+    if (m_iconValid) {
+        m_tryNums = 0;
+        return pix;
+    }
+
+    if (m_tryNums < 10) {
+        ++m_tryNums;
+
+        if (!QFile::exists(info.m_iconKey))
+            QIcon::setThemeSearchPaths(QIcon::themeSearchPaths());
+
+        QTimer::singleShot(30 * 1000, this, &AppsManager::refreshIcon);
     } else {
-        m_itemInfo = info;
-        QPixmap pixmap;
-
-        // 日历应用只让它执行一次,为保证时间信息长期更新,不写入缓存,因此也不用多次重复调用,减少系统资源消耗
-        if (info.m_iconKey == "dde-calendar") {
-            m_iconValid = getThemeIcon(pixmap, info, size, false);
-        } else {
-            m_iconValid = getThemeIcon(pixmap, info, size, !m_iconValid);
-
-            if (!m_iconValid) {
-                if (m_tryNums < 10) {
-                    ++m_tryNums;
-
-                    if (!QFile::exists(info.m_iconKey))
-                        QIcon::setThemeSearchPaths(QIcon::themeSearchPaths());
-
-                    QTimer::singleShot(30 * 1000, this, &AppsManager::refreshIcon);
-                } else {
-                    if (!m_iconValid)
-                        QTimer::singleShot(60 * 1000, this, &AppsManager::refreshIcon);
-                }
-            } else {
-                if (m_tryNums > 0)
-                    m_tryNums = 0;
-            }
-        }
-
-        return pixmap;
+        QTimer::singleShot(60 * 1000, this, &AppsManager::refreshIcon);
     }
 }
 
@@ -681,16 +758,9 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
  */
 const QString AppsManager::appName(const ItemInfo &info, const int size)
 {
-    QPair<QString, int> tmpKey { cacheKey(info, CacheType::TextType) , size };
-
-    if (existInCache(tmpKey)) {
-        return getStrFromCache(tmpKey);
-    } else {
-        const QFontMetrics fm = qApp->fontMetrics();
-        QString fm_string = fm.elidedText(info.m_name, Qt::ElideRight, size);
-        cacheStrData(tmpKey, fm_string);
-        return fm_string;
-    }
+    const QFontMetrics fm = qApp->fontMetrics();
+    const QString &fm_string = fm.elidedText(info.m_name, Qt::ElideRight, size);
+    return fm_string;
 }
 
 /**
@@ -1031,11 +1101,6 @@ int AppsManager::appNums(const AppsListModel::AppCategory &category) const
     return appsInfoListSize(category);
 }
 
-void AppsManager::clearCache()
-{
-    m_CacheData.clear();
-}
-
 /**
  * @brief AppsManager::refreshAppAutoStartCache 刷新自启动应用集
  * @param type 操作类型
@@ -1084,10 +1149,6 @@ void AppsManager::onSearchTimeOut()
 
 void AppsManager::onIconThemeChanged()
 {
-    m_CacheData.clear();
-
-    IconFreshThread::releaseReloadAppSemo();
-
     emit dataChanged(AppsListModel::All);
 }
 
@@ -1131,15 +1192,9 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
 {
     Q_UNUSED(categoryNumber);
 
+    //　更新应用到缓存
+    emit loadItem(appInfo, operation);
     if (operation == "created") {
-        // 多个应用同时安装将信息缓存到本地
-        QQueue<ItemInfo> newInstallQueue;
-        if (newInstallQueue.indexOf(appInfo) == -1)
-            newInstallQueue.enqueue(appInfo);
-
-        // 更新该应用的icon信息
-        IconFreshThread::setQueue(newInstallQueue);
-        IconFreshThread::releaseInstallAppSemo();
 
         QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
 
@@ -1150,16 +1205,12 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
         m_usedSortedList.append(appInfo);
         m_userSortedList.push_front(appInfo);
     } else if (operation == "deleted") {
-
         m_allAppInfoList.removeOne(appInfo);
         m_usedSortedList.removeOne(appInfo);
         m_userSortedList.removeOne(appInfo);
         //一般情况是不需要的，但是类似wps这样的程序有点特殊，删除一个其它的二进制程序也删除了，需要保存列表，否则刷新的时候会刷新出齿轮的图标
         //新增和更新则无必要
         saveUsedSortedList();
-
-        // 从缓存中移除
-        removePixFromCache(appInfo);
     } else if (operation == "updated") {
 
         Q_ASSERT(m_allAppInfoList.contains(appInfo));
@@ -1180,67 +1231,6 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
     m_delayRefreshTimer->start();
 }
 
-void AppsManager::cachePixData(QPair<QString, int> &tmpKey, const QPixmap &pix)
-{
-    m_cacheDataLock.lockForWrite();
-    m_CacheData[tmpKey] = pix;
-    m_cacheDataLock.unlock();
-}
-
-void AppsManager::cacheStrData(QPair<QString, int> &tmpKey, QString &str)
-{
-    m_cacheDataLock.lockForWrite();
-    m_CacheData[tmpKey] = str;
-    m_cacheDataLock.unlock();
-}
-
-/**
- * @brief AppsManager::existInCache 缓存中存在且内容非空
- * @param tmpKey 缓存key
- * @return 图标在缓存中的状态表示,存在返回true,不存在返回false
- */
-bool AppsManager::existInCache(QPair<QString, int> &tmpKey)
-{
-    bool exist = false;
-
-    m_cacheDataLock.lockForRead();
-    exist = m_CacheData.contains(tmpKey) && !m_CacheData[tmpKey].isNull();
-    m_cacheDataLock.unlock();
-
-    return exist;
-}
-
-void AppsManager::getPixFromCache(QPair<QString, int> &tmpKey, QPixmap &pix)
-{
-    m_cacheDataLock.lockForRead();
-    pix = m_CacheData[tmpKey].value<QPixmap>();
-    m_cacheDataLock.unlock();
-}
-
-QString AppsManager::getStrFromCache(QPair<QString, int> &tmpKey)
-{
-    QString appName = QString();
-    m_cacheDataLock.lockForRead();
-    appName = m_CacheData[tmpKey].toString();
-    m_cacheDataLock.unlock();
-
-    return appName;
-}
-
-void AppsManager::removePixFromCache(const ItemInfo &info)
-{
-    const int arraySize = 8;
-    const int iconArray[arraySize] = { 16, 18, 24, 32, 64, 96, 128, 256 };
-    for (int i = 0; i < arraySize; i++) {
-        QPair<QString, int> tmpKey { cacheKey(info, CacheType::ImageType), iconArray[i]};
-        if (existInCache(tmpKey)) {
-            m_cacheDataLock.lockForWrite();
-            m_CacheData.remove(tmpKey);
-            m_cacheDataLock.unlock();
-        }
-    }
-}
-
 QHash<AppsListModel::AppCategory, ItemInfoList> AppsManager::getAllAppInfo()
 {
     QHash<AppsListModel::AppCategory, ItemInfoList> appInfoList;
@@ -1251,7 +1241,7 @@ QHash<AppsListModel::AppCategory, ItemInfoList> AppsManager::getAllAppInfo()
     return appInfoList;
 }
 
-void AppsManager::refreshAppListIcon()
+void AppsManager::refreshAppListIcon(DGuiApplicationHelper::ColorType themeType)
 {
     m_categoryIcon.clear();
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
@@ -1326,4 +1316,32 @@ int AppsManager::getVisibleCategoryCount()
     }
 
     return ret;
+}
+
+bool AppsManager::fullscreen() const
+{
+    return m_launcherInter->fullscreen();
+}
+
+int AppsManager::displayMode() const
+{
+    return m_launcherInter->displaymode();
+}
+
+void AppsManager::updateTrashState()
+{
+    int trashItemsCount = 0;
+    m_fsWatcher->addPath(TrashDir);
+    if (QDir(TrashDirFiles).exists()) {
+        m_fsWatcher->addPath(TrashDirFiles);
+        trashItemsCount = QDir(TrashDirFiles).entryList(ItemsShouldCount).count();
+    }
+
+    if (m_trashIsEmpty == !trashItemsCount)
+        return;
+
+    m_trashIsEmpty = !trashItemsCount;
+    refreshAllList();
+
+    emit dataChanged(AppsListModel::All);
 }

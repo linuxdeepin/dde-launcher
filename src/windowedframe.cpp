@@ -24,6 +24,8 @@
 #include "global_util/util.h"
 #include "dbusdockinterface.h"
 #include "dbusdisplay.h"
+#include "constants.h"
+#include "iconcachemanager.h"
 
 #include <DWindowManagerHelper>
 #include <DForeignWindow>
@@ -57,6 +59,8 @@
 #define DOCK_EFFICIENT  1
 
 DGUI_USE_NAMESPACE
+
+using namespace DLauncher;
 
 extern const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w);
 
@@ -211,7 +215,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
             m_autoScrollTimer->start();
     });
 
-    connect(m_leftBar, &MiniFrameRightBar::modeToggleBtnClicked, this, &WindowedFrame::onToggleFullScreen);
     connect(m_leftBar, &MiniFrameRightBar::requestFrameHide, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
 
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &WindowedFrame::onWMCompositeChanged);
@@ -237,6 +240,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     connect(m_appearanceInter, &Appearance::OpacityChanged, this, &WindowedFrame::onOpacityChanged);
     connect(m_modeToggleBtn, &DToolButton::clicked, this, &WindowedFrame::onToggleFullScreen);
+
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
     onOpacityChanged(m_appearanceInter->opacity());
 
@@ -276,7 +280,9 @@ void WindowedFrame::showLauncher()
     adjustPosition();
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
-    show();
+
+    if (IconCacheManager::iconLoadState())
+        show();
 }
 
 void WindowedFrame::hideLauncher()
@@ -545,8 +551,8 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
 
     // 命令行安装应用后，卸载应用的确认弹框偶现左上角图标呈齿轮的情况
     QPixmap appIcon;
-    if (AppsManager::existInCache(tmpKey)) {
-        AppsManager::getPixFromCache(tmpKey, appIcon);
+    if (IconCacheManager::existInCache(tmpKey)) {
+        IconCacheManager::getPixFromCache(tmpKey, appIcon);
         unInstallDialog.setIcon(appIcon);
     } else {
         static int tryNum = 0;

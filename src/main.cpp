@@ -129,9 +129,12 @@ int main(int argc, char *argv[])
     }
 
 #ifndef QT_DEBUG
-    if (cmdParser.isSet(showOption))
+    if (cmdParser.isSet(showOption)) {
+        launcher.setClickState(true);
+        launcher.aboutToShowLauncher();
+    }
 #endif
-        QTimer::singleShot(1, &launcher, &LauncherSys::showLauncher);
+    QTimer::singleShot(1, &launcher, &LauncherSys::showLauncher);
 
     return app->exec();
 }

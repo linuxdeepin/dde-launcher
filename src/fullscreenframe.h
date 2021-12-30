@@ -60,6 +60,7 @@ class BackgroundManager;
 class DBusLauncherService;
 class SharedEventFilter;
 class DBusDisplay;
+class DBusLauncher;
 
 class FullScreenFrame : public BoxFrame, public LauncherInterface
 {

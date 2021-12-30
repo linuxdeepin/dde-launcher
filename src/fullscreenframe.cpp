@@ -28,6 +28,7 @@
 #include "sharedeventfilter.h"
 #include "constants.h"
 #include "dbusdisplay.h"
+#include "iconcachemanager.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -189,6 +190,12 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     // 获取搜索控件,应用分类导航控件默认大小
     m_calcUtil->setSearchWidgetSizeHint(m_searchWidget->sizeHint());
     m_calcUtil->setNavigationWidgetSizeHint(m_navigationWidget->sizeHint());
+
+    // 全屏分类/自由模式，搜索或者导航栏的高度无法确定，确定后开始加载所有应用资源
+    if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY)
+        emit m_appsManager->smallToCategory();
+    else
+        emit m_appsManager->smallToFullFree();
 }
 
 void FullScreenFrame::exit()
@@ -1090,8 +1097,7 @@ void FullScreenFrame::initConnection()
     connect(this, &FullScreenFrame::displayModeChanged, this, &FullScreenFrame::categoryListChanged);
 
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
-    connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hide, Qt::QueuedConnection);
-    connect(m_clearCacheTimer, &QTimer::timeout, m_appsManager, &AppsManager::clearCache);
+    connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hideLauncher, Qt::QueuedConnection);
 
     connect(m_internetBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::blurBoxWidgetMaskClick);
     connect(m_chatBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::blurBoxWidgetMaskClick);
@@ -1140,6 +1146,9 @@ void FullScreenFrame::showLauncher()
     m_focusIndex = 1;
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
+    // 启动器跟随任务栏位置
+    updateGeometry();
+
     m_searchWidget->categoryBtn()->clearFocus();
     m_searchWidget->edit()->clearEdit();
     m_searchWidget->edit()->clear();
@@ -1147,8 +1156,17 @@ void FullScreenFrame::showLauncher()
     updateDisplayMode(m_calcUtil->displayMode());
 
     m_searchWidget->edit()->lineEdit()->clearFocus();
-    setFixedSize(m_appsManager->currentScreen()->geometry().size());
-    show();
+
+    if (IconCacheManager::iconLoadState()) {
+        setFixedSize(m_appsManager->currentScreen()->geometry().size());
+        show();
+
+        // 预加载全屏下另一种模式下当前ratio的资源
+        if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY)
+            m_appsManager->preloadFullFree();
+        else
+            m_appsManager->preloadCategory();
+    }
 }
 
 void FullScreenFrame::hideLauncher()
@@ -1484,6 +1502,8 @@ void FullScreenFrame::updateDisplayMode(const int mode)
 
     m_displayMode = mode;
 
+    emit displayModeChanged(m_displayMode);
+
     // 切换全屏应用列表展现模式, 修改对应的schemaid = com.deepin.dde.launcherd的xml文件
     switch (m_displayMode) {
     case ALL_APPS:
@@ -1518,12 +1538,16 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         m_appsIconBox->setVisible(true);
     }
 
+    // 模式切换时加载相应图标到缓存
+    if (m_displayMode == ALL_APPS)
+        emit m_appsManager->categoryToFull();
+    else if (m_displayMode == GROUP_BY_CATEGORY)
+        emit m_appsManager->fullToCategory();
+
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
     // 搜索模式下的文字描述
     hideTips();
-
-    emit displayModeChanged(m_displayMode);
 }
 
 /**
@@ -1564,7 +1588,6 @@ void FullScreenFrame::updateDockPosition()
     default:
         break;
     }
-
 
     // 全屏App模式或者正在搜索
     if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {

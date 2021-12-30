@@ -97,7 +97,7 @@ int CalculateUtil::calculateIconSize(int mode)
         otherAreaSize = QSize(padding + leftSpacing + rightSpacing, DLauncher::APPS_AREA_TOP_MARGIN + bottomSpacing + topSpacing + getSearchWidgetSizeHint().height());
         containerSize = getScreenSize() - otherAreaSize;
     } else {
-        otherAreaSize = QSize(leftSpacing + rightSpacing, topSpacing + bottomSpacing + getSearchWidgetSizeHint().height() + getNavigationWidgetSizeHint().height() + DLauncher::APPS_AREA_TOP_MARGIN + 12);
+        otherAreaSize = QSize(0, DLauncher::APPS_AREA_TOP_MARGIN + bottomSpacing + topSpacing + getSearchWidgetSizeHint().height() + getNavigationWidgetSizeHint().height() + 12);
         containerSize = getScreenSize() -  otherAreaSize;
     }
 
@@ -156,7 +156,7 @@ int CalculateUtil::calculateIconSize(int mode)
 QSize CalculateUtil::appIconSize(bool fullscreen, double ratio, int iconSize) const
 {
     if (!fullscreen)
-        return QSize(24, 24);
+        return QSize(DLauncher::APP_ITEM_ICON_SIZE, DLauncher::APP_ITEM_ICON_SIZE);
 
     QSize appSize(iconSize, iconSize);
     return appSize * ratio;
@@ -165,7 +165,7 @@ QSize CalculateUtil::appIconSize(bool fullscreen, double ratio, int iconSize) co
 QSize CalculateUtil::appIconSize() const
 {
     if (!isFullScreen)
-        return QSize(24, 24);
+        return QSize(DLauncher::APP_ITEM_ICON_SIZE, DLauncher::APP_ITEM_ICON_SIZE);
 
     QSize s(m_appItemSize, m_appItemSize);
     double ratio = m_launcherGsettings ? m_launcherGsettings->get("apps-icon-ratio").toDouble() : 0.6;
@@ -214,9 +214,11 @@ bool CalculateUtil::increaseIconSize()
     const double value = m_launcherGsettings->get("apps-icon-ratio").toDouble();
     const double ratio = std::min(0.6, value + 0.1);
 
-    if (qFuzzyCompare(value, ratio)) return false;
+    if (qFuzzyCompare(value, ratio))
+        return false;
 
     m_launcherGsettings->set("apps-icon-ratio", ratio);
+    emit ratioChanged(ratio);
 
     return true;
 }
@@ -275,9 +277,11 @@ bool CalculateUtil::decreaseIconSize()
     const double value = m_launcherGsettings->get("apps-icon-ratio").toDouble();
     const double ratio = std::max(0.2, value - 0.1);
 
-    if (qFuzzyCompare(value, ratio)) return false;
+    if (qFuzzyCompare(value, ratio))
+        return false;
 
     m_launcherGsettings->set("apps-icon-ratio", ratio);
+    emit ratioChanged(ratio);
 
     return true;
 }
@@ -348,6 +352,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int cur
 
     // 图标大小取区域的4 / 5
     m_appItemSize = perItemSize * 4 / 5;
+
     // 其他区域为间隔区域
     m_appItemSpacing = (perItemSize - m_appItemSize) / 2;
 

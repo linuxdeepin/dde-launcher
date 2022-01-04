@@ -29,6 +29,10 @@
 #include <QMenu>
 #include <QWidget>
 
+#include <com_deepin_api_xeventmonitor.h>
+
+using XEventMonitor = com::deepin::api::XEventMonitor;
+
 class Menu : public QMenu
 {
     Q_OBJECT
@@ -38,11 +42,16 @@ public:
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
+    void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
 
 private:
     void moveDown(int size = 0);
     void moveUp(int size = 0);
     void openItem();
+
+private:
+    XEventMonitor *m_monitor;
 };
 
 #endif //MYMENU_H

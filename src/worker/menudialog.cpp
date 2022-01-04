@@ -29,6 +29,12 @@
 #include <QEvent>
 #include <QMouseEvent>
 #include <QDebug>
+#include <QTimer>
+#include <QDBusConnection>
+
+#include <com_deepin_api_xeventmonitor.h>
+
+using XEventMonitor = com::deepin::api::XEventMonitor;
 
 Menu::Menu(QWidget *parent)
     : QMenu(parent)
@@ -37,6 +43,10 @@ Menu::Menu(QWidget *parent)
     setAccessibleName("popmenu");
     setObjectName("rightMenu");
     qApp->installEventFilter(this);
+
+    // 点击任意区域均退出即可，启动器中菜单无二级菜单
+    m_monitor = new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this);
+    connect(m_monitor, &XEventMonitor::ButtonPress, this, &QMenu::hide);
 }
 
 /** 右键菜单显示后在很多场景下都需要隐藏，为避免在各个控件中分别做隐藏右键菜单窗口的处理，
@@ -50,17 +60,6 @@ bool Menu::eventFilter(QObject *watched, QEvent *event)
 {
     // 存在rightMenu和rightMenuWindow的对象名
     if (!watched->objectName().startsWith("rightMenu") && isVisible()) {
-        if (event->type() == QEvent::MouseButtonPress) {
-            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-            if (mouseEvent->button() == Qt::LeftButton) {
-                hide();
-                return true;
-            }
-        } else if (event->type() == QEvent::DragMove || event->type() == QEvent::Wheel
-                   || event->type() == QEvent::Move) {
-            hide();
-        }
-
         // 当右键菜单显示时捕获鼠标的release事件,click=press+release，
         // 让click无效，从而让启动器窗口不关闭
         if (event->type() == QEvent::MouseButtonRelease) {
@@ -103,6 +102,24 @@ bool Menu::eventFilter(QObject *watched, QEvent *event)
     }
 
     return QMenu::eventFilter(watched, event);
+}
+
+void Menu::showEvent(QShowEvent *event)
+{
+    m_monitor->blockSignals(true);
+    QMenu::showEvent(event);
+
+    // dbus信号可能发来的稍微比点击操作慢一瞬间，会导致显示时立刻消失，做个很小的延时去避免这种现象
+    QTimer::singleShot(10, this, [ = ] {
+        m_monitor->blockSignals(false);
+    });
+}
+
+void Menu::hideEvent(QHideEvent *event)
+{
+    QMenu::hideEvent(event);
+
+    m_monitor->blockSignals(true);
 }
 
 void Menu::moveDown(int size)

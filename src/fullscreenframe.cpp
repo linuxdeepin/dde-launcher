@@ -1388,11 +1388,7 @@ void FullScreenFrame::regionMonitorPoint(const QPoint &point, int flag)
         Q_UNREACHABLE_IMPL();
     }
 
-    if (flag == DLauncher::MOUSE_RIGHTBUTTON) {
-        // 右键点击时，仅关闭右键菜单
-        if (m_menuWorker->isMenuShown() && !visiblableRect.contains(point))
-            m_menuWorker->onHideMenu();
-    } else if (flag == DLauncher::MOUSE_LEFTBUTTON) {
+    if (flag == DLauncher::MOUSE_LEFTBUTTON) {
         // 左键点击时
         if (!m_menuWorker->isMenuShown() && !m_isConfirmDialogShown && !m_delayHideTimer->isActive()) {
             if (dockRect.contains(point)) {

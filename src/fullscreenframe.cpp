@@ -1110,7 +1110,7 @@ void FullScreenFrame::initConnection()
     connect(this, &FullScreenFrame::visibleChanged, this, &FullScreenFrame::onHideMenu);
 
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
-    connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hide, Qt::QueuedConnection);
+    connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hideLauncher, Qt::QueuedConnection);
     connect(m_clearCacheTimer, &QTimer::timeout, m_appsManager, &AppsManager::clearCache);
 
     connect(m_internetBoxWidget, &BlurBoxWidget::maskClick, this, &FullScreenFrame::blurBoxWidgetMaskClick);
@@ -1393,13 +1393,11 @@ void FullScreenFrame::regionMonitorPoint(const QPoint &point, int flag)
         if (!m_menuWorker->isMenuShown() && !m_isConfirmDialogShown && !m_delayHideTimer->isActive()) {
             if (dockRect.contains(point)) {
                 m_delayHideTimer->start();
-                hideLauncher();
             }
         }
 
         if (m_menuWorker->isMenuShown() && !visiblableRect.contains(point)) {
             m_delayHideTimer->start();
-            hideLauncher();
         }
     }
 }

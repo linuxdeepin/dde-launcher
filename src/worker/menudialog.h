@@ -50,6 +50,9 @@ private:
     void moveUp(int size = 0);
     void openItem();
 
+private Q_SLOTS:
+    void onButtonPress();
+
 private:
     XEventMonitor *m_monitor;
 };

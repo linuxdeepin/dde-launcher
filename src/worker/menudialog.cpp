@@ -46,7 +46,7 @@ Menu::Menu(QWidget *parent)
 
     // 点击任意区域均退出即可，启动器中菜单无二级菜单
     m_monitor = new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this);
-    connect(m_monitor, &XEventMonitor::ButtonPress, this, &QMenu::hide);
+    connect(m_monitor, &XEventMonitor::ButtonPress, this, &Menu::onButtonPress);
 }
 
 /** 右键菜单显示后在很多场景下都需要隐藏，为避免在各个控件中分别做隐藏右键菜单窗口的处理，
@@ -60,15 +60,17 @@ bool Menu::eventFilter(QObject *watched, QEvent *event)
 {
     // 存在rightMenu和rightMenuWindow的对象名
     if (!watched->objectName().startsWith("rightMenu") && isVisible()) {
+        if (event->type() == QEvent::DragMove || event->type() == QEvent::Wheel
+                || event->type() == QEvent::Move) {
+            hide();
+        }
         // 当右键菜单显示时捕获鼠标的release事件,click=press+release，
         // 让click无效，从而让启动器窗口不关闭
         if (event->type() == QEvent::MouseButtonRelease) {
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if (mouseEvent->source() == Qt::MouseEventSynthesizedByQt)
                 return true;
-        }
-
-        if (event->type() == QEvent::KeyPress) {
+        } else if (event->type() == QEvent::KeyPress) {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
 
            if (keyEvent->key() == Qt::Key_Meta) {
@@ -182,4 +184,11 @@ void Menu::openItem()
     int index = this->actions().indexOf(activeAction);
     if (index != -1)
         activeAction->triggered();
+}
+
+void Menu::onButtonPress()
+{
+    if (!this->geometry().contains(QCursor::pos())) {
+        this->hide();
+    }
 }

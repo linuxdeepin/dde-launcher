@@ -60,7 +60,7 @@ LauncherSys::LauncherSys(QObject *parent)
     m_autoExitTimer->setInterval(60 * 1000);
     m_autoExitTimer->setSingleShot(true);
 
-    m_ignoreRepeatVisibleChangeTimer->setInterval(100);
+    m_ignoreRepeatVisibleChangeTimer->setInterval(200);
     m_ignoreRepeatVisibleChangeTimer->setSingleShot(true);
 
     connect(m_dbusLauncherInter, &DBusLauncher::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
@@ -97,12 +97,10 @@ void LauncherSys::showLauncher()
 
     m_ignoreRepeatVisibleChangeTimer->start();
 
-    registerRegion();
-
-    qApp->processEvents();
-
     if (IconCacheManager::iconLoadState()) {
         m_autoExitTimer->stop();
+        registerRegion();
+        qApp->processEvents();
         m_launcherInter->showLauncher();
     }
 }
@@ -144,7 +142,6 @@ void LauncherSys::displayModeChanged()
 {
     LauncherInterface* lastLauncher = m_launcherInter;
 
-    // 后端启动器FullScreen变化,更新m_calcUtil
     if (m_launcherInter && m_dbusLauncherInter)
         m_calcUtil->setFullScreen(m_dbusLauncherInter->fullscreen());
 
@@ -157,6 +154,8 @@ void LauncherSys::displayModeChanged()
         }
 
         m_launcherInter = static_cast<LauncherInterface*>(m_fullLauncher);
+
+        preloadIcon();
     } else {
         if (!m_windowLauncher) {
             m_windowLauncher = new WindowedFrame;
@@ -176,8 +175,8 @@ void LauncherSys::displayModeChanged()
 
         setClickState(true);
 
-        if (IconCacheManager::iconLoadState())
-            m_launcherInter->showLauncher();
+        m_checkTimer->start();
+        m_launcherInter->showLauncher();
     } else {
         m_launcherInter->hideLauncher();
     }
@@ -263,4 +262,19 @@ void LauncherSys::aboutToShowLauncher()
         m_checkTimer->stop();
         setClickState(false);
     }
+}
+
+void LauncherSys::preloadIcon()
+{
+    // 全屏分类/自由模式，搜索或者导航栏的高度无法确定，确定后开始加载所有应用资源
+    if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY)
+        emit m_appManager->smallToCategory();
+    else
+        emit m_appManager->smallToFullFree();
+}
+
+void LauncherSys::show()
+{
+    setClickState(true);
+    aboutToShowLauncher();
 }

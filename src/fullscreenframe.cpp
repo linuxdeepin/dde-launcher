@@ -190,12 +190,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     // 获取搜索控件,应用分类导航控件默认大小
     m_calcUtil->setSearchWidgetSizeHint(m_searchWidget->sizeHint());
     m_calcUtil->setNavigationWidgetSizeHint(m_navigationWidget->sizeHint());
-
-    // 全屏分类/自由模式，搜索或者导航栏的高度无法确定，确定后开始加载所有应用资源
-    if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY)
-        emit m_appsManager->smallToCategory();
-    else
-        emit m_appsManager->smallToFullFree();
 }
 
 void FullScreenFrame::exit()

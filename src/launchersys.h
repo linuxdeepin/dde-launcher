@@ -55,6 +55,7 @@ public:
     void setClickState(bool state);
     bool clickState() const;
     void aboutToShowLauncher();
+    void show();
 
 signals:
     void visibleChanged(bool visible);
@@ -73,6 +74,7 @@ private slots:
 private:
     void registerRegion();
     void unRegisterRegion();
+    void preloadIcon();
 
 private:
     AppsManager *m_appManager;

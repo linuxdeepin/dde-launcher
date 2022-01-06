@@ -171,20 +171,19 @@ void IconCacheManager::loadFullWindowIcon()
     // 移除小窗口的缓存
     removeSmallWindowCache();
 
-    if (fullFreeLoadState())
-        return;
-
-    if (m_launcherInter->fullscreen() && m_launcherInter->displaymode() == ALL_APPS) {
-
-        for (int i = 0; i < ratioList.size(); i++) {
-            double ratio = ratioList.at(i);
-            loadFullWindowIcon(ratio);
-        }
-
+    if (fullFreeLoadState()) {
         setIconLoadState(true);
-        setFullFreeLoadState(true);
-        emit iconLoaded();
+        return;
     }
+
+    for (int i = 0; i < ratioList.size(); i++) {
+        double ratio = ratioList.at(i);
+        loadFullWindowIcon(ratio);
+    }
+
+    setIconLoadState(true);
+    setFullFreeLoadState(true);
+    emit iconLoaded();
 }
 
 void IconCacheManager::loadCategoryWindowIcon(double ratio)
@@ -239,19 +238,19 @@ void IconCacheManager::loadCategoryWindowIcon()
     // 移除小窗口的缓存
     removeSmallWindowCache();
 
-    if (fullCategoryLoadState())
-        return;
-
-    if (m_launcherInter->fullscreen() && m_launcherInter->displaymode() == GROUP_BY_CATEGORY) {
-        for (int i = 0; i < ratioList.size(); i++) {
-            double ratio = ratioList.at(i);
-            loadCategoryWindowIcon(ratio);
-        }
-
+    if (fullCategoryLoadState()) {
         setIconLoadState(true);
-        setFullCategoryLoadState(true);
-        emit iconLoaded();
+        return;
     }
+
+    for (int i = 0; i < ratioList.size(); i++) {
+        double ratio = ratioList.at(i);
+        loadCategoryWindowIcon(ratio);
+    }
+
+    setIconLoadState(true);
+    setFullCategoryLoadState(true);
+    emit iconLoaded();
 }
 
 void IconCacheManager::insertCache(const QPair<QString, int> &tmpKey, const QPixmap &pix)
@@ -300,7 +299,7 @@ void IconCacheManager::removeSmallWindowCache()
     // 小窗口分类图标
     removeCache(AppsManager::AppsManager::windowedCategoryList(), DLauncher::APP_CATEGORY_ICON_SIZE);
     setSmallWindowLoadState(false);
-//    setIconLoadState(false);
+    setIconLoadState(false);
 }
 
 bool IconCacheManager::iconLoadState()

@@ -44,6 +44,7 @@
 #include <DDBusSender>
 #include <DDialog>
 #include <DGuiApplicationHelper>
+#include <DPlatformWindowHandle>
 
 DGUI_USE_NAMESPACE
 
@@ -139,6 +140,10 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_mouse_press_time = 0;
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setProperty("_d_dwayland_window-type", "launcher");
+
+    // disable wayland environment window moving
+    DPlatformWindowHandle handle(this);
+    handle.setEnableSystemMove(false);
 
     QPalette palette;
     QColor colorButton(255, 255, 255, 0.15 * 255);

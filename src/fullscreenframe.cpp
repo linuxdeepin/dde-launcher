@@ -139,11 +139,11 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_mouse_press = false;
     m_mouse_press_time = 0;
     setAttribute(Qt::WA_InputMethodEnabled, true);
-    setProperty("_d_dwayland_window-type", "launcher");
 
-    // disable wayland environment window moving
-    DPlatformWindowHandle handle(this);
-    handle.setEnableSystemMove(false);
+    create();
+    if (windowHandle()) {
+        windowHandle()->setProperty("_d_dwayland_window-type", "launcher");
+    }
 
     QPalette palette;
     QColor colorButton(255, 255, 255, 0.15 * 255);

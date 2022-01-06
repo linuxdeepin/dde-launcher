@@ -198,11 +198,11 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     setFocusPolicy(Qt::ClickFocus);
     setFixedHeight(538);
     setObjectName("MiniFrame");
-    windowHandle()->setProperty("_d_dwayland_window-type", "launcher");
 
-    // disable wayland environment window moving
-    DPlatformWindowHandle handle(this);
-    handle.setEnableSystemMove(false);
+    create();
+    if (windowHandle()) {
+        windowHandle()->setProperty("_d_dwayland_window-type", "launcher");
+    }
 
     initAnchoredCornor();
     installEventFilter(m_eventFilter);

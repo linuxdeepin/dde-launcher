@@ -204,6 +204,7 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)
     connect(m_menu, &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);
 
     // 菜单超出当前屏幕范围时，菜单显示位置向上或者向左移动超出区域的差值
+    qreal ratio = qApp->devicePixelRatio();
     QRect screenRect = m_appManager->instance()->currentScreen()->geometry();
     int widthToGlobal = screenRect.x() + screenRect.width();
     int heigthToGlobal = screenRect.y() + screenRect.height();
@@ -218,10 +219,14 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)
         pos = pos - QPoint(pos.x() + menuWidth - widthToGlobal, pos.y() + menuHeight - heigthToGlobal);
 
     m_menu->move(pos);
-    m_menuIsShown = true;
-    m_menuGeometry = QRect(m_menu->geometry().topLeft(), m_menu->sizeHint());
+
     m_menu->show();
     m_menu->raise();
+
+    // 保存右键菜单实际的物理大小(已将屏幕缩放考虑在内)
+    m_menuIsShown = true;
+    QPoint topLeft = (m_menu->geometry().topLeft() - screenRect.topLeft()) * ratio + screenRect.topLeft();
+    m_menuGeometry = QRect(topLeft, m_menu->size() * ratio);
 }
 
 void MenuWorker::handleOpen()

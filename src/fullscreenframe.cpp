@@ -1380,29 +1380,8 @@ bool FullScreenFrame::windowDeactiveEvent()
 
 void FullScreenFrame::regionMonitorPoint(const QPoint &point, int flag)
 {
-    QRect screenRect = m_appsManager->currentScreen()->geometry();
-    int screenWidth = screenRect.width();
-    int screenHeight = screenRect.height();
-
     QRect dockRect = m_appsManager->dockGeometry();
-    QRect visiblableRect;
-
-    switch (m_appsManager->dockPosition()) {
-    case DLauncher::DOCK_POS_TOP:
-        visiblableRect = QRect(dockRect.bottomLeft(), QSize(screenWidth, screenHeight - dockRect.height()));
-        break;
-    case DLauncher::DOCK_POS_RIGHT:
-        visiblableRect = QRect(screenRect.topLeft(), QSize(screenWidth - dockRect.width(), screenHeight));
-        break;
-    case DLauncher::DOCK_POS_BOTTOM:
-        visiblableRect = QRect(screenRect.topLeft(), QSize(screenWidth, screenHeight - dockRect.height()));
-        break;
-    case DLauncher::DOCK_POS_LEFT:
-        visiblableRect = QRect(dockRect.topRight(), QSize(screenWidth - dockRect.width(), screenHeight));
-        break;
-    default:
-        Q_UNREACHABLE_IMPL();
-    }
+    QRect visiblableRect = m_menuWorker->menuGeometry();
 
     if (flag == DLauncher::MOUSE_LEFTBUTTON) {
         // 左键点击时

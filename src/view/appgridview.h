@@ -89,7 +89,7 @@ signals:
     void requestMouseRelease() const;
 
 protected:
-    void startDrag(const QModelIndex &index);
+    void startDrag(const QModelIndex &index, bool execDrag = true);
     void dragEnterEvent(QDragEnterEvent *e) override;
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dragLeaveEvent(QDragLeaveEvent *e) override;

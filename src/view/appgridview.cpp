@@ -300,7 +300,8 @@ void AppGridView::flashDrag()
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     int dragDropRow = listModel->dragDropIndex().row();
 
-    startDrag(indexAt(dragDropRow));
+    // 刷新的时候不执行drag，因为实际上并没有拖动的动作。在wayland环境中阻塞会在Drag::exec()函数中。
+    startDrag(indexAt(dragDropRow), false);
 }
 
 /**
@@ -481,8 +482,9 @@ QRect AppGridView::appIconRect(const QModelIndex &index)
 /**
  * @brief AppGridView::startDrag 处理listview中app的拖动操作
  * @param index 被拖动app的对应的模型索引
+ * @param execDrag 如果实际执行了drag操作设置为true，否则传入false
  */
-void AppGridView::startDrag(const QModelIndex &index)
+void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
 {
     if (!index.isValid())
         return;
@@ -505,11 +507,6 @@ void AppGridView::startDrag(const QModelIndex &index)
     m_pixLabel->setPixmap(srcPix);
     m_pixLabel->setFixedSize(srcPix.size());
     m_pixLabel->move(srcPix.rect().center() / ratio);
-
-    QDrag *drag = new QDrag(this);
-    drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
-    drag->setPixmap(srcPix);
-    drag->setHotSpot(srcPix.rect().center() / ratio);
 
     QPropertyAnimation *posAni = new QPropertyAnimation(m_pixLabel, "pos", m_pixLabel);
     connect(posAni, &QPropertyAnimation::finished, [&, listModel] () {
@@ -538,8 +535,14 @@ void AppGridView::startDrag(const QModelIndex &index)
 
     int old_page = m_containerBox->property("curPage").toInt();
 
-    setState(DraggingState);
-    drag->exec(Qt::MoveAction);
+    if (execDrag) {
+        setState(DraggingState);
+        QDrag drag(this);
+        drag.setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
+        drag.setPixmap(srcPix);
+        drag.setHotSpot(srcPix.rect().center() / ratio);
+        drag.exec(Qt::MoveAction);
+    }
 
     // 拖拽操作完成后暂停app移动动画
     m_dropThresholdTimer->stop();

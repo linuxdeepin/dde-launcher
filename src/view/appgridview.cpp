@@ -451,7 +451,8 @@ QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey
  */
 QRect AppGridView::appIconRect(const QModelIndex &index)
 {
-    const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).toSize();
+    qreal ratio = qApp->devicePixelRatio();
+    const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).toSize() * ratio;
 
     const static double x1 = 0.26418192;
     const static double x2 = -0.38890932;
@@ -475,7 +476,6 @@ QRect AppGridView::appIconRect(const QModelIndex &index)
     int iconTopMargin = 6;
 
     const int iconLeftMargins = (br.width() - iconSize.width()) / 2;
-
     return QRect(br.topLeft() + QPoint(iconLeftMargins, iconTopMargin - 2), iconSize);
 }
 
@@ -505,7 +505,7 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
 
     // 创建拖拽释放时的应用图标
     m_pixLabel->setPixmap(srcPix);
-    m_pixLabel->setFixedSize(srcPix.size());
+    m_pixLabel->setFixedSize(srcPix.size() / ratio);
     m_pixLabel->move(srcPix.rect().center() / ratio);
 
     QPropertyAnimation *posAni = new QPropertyAnimation(m_pixLabel, "pos", m_pixLabel);
@@ -558,7 +558,7 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
         return;
     }
 
-    QRect rectIcon(QPoint(), m_pixLabel ->size());
+    QRect rectIcon(QPoint(), m_pixLabel->size());
 
     m_pixLabel->move((QCursor::pos() - rectIcon.center()));
     m_pixLabel->show();
@@ -566,15 +566,7 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     posAni->setEasingCurve(QEasingCurve::Linear);
     posAni->setDuration(DLauncher::APP_DRAG_MININUM_TIME);
     posAni->setStartValue((QCursor::pos() - rectIcon.center()));
-
-    // 添加因为添加了水平方向的偏移，导致拖动item释放后终点位置不对导致的动画异常问题
-    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE * 5 / 6;
-
-    // 使用mapToGlobal出现终点坐标转换异常问题，故而使用坐标偏移
-    if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY)
-        posAni->setEndValue(mapToGlobal(m_dropPoint) + QPoint(60, 0));
-    else
-        posAni->setEndValue(m_containerBox->mapToGlobal(QPoint()) + m_dropPoint + QPoint(padding, 0));
+    posAni->setEndValue(mapToGlobal(m_dropPoint) + QPoint(m_calcUtil->appMarginLeft(), 0));
 
     //不开启特效则不展示动画
     if (!DGuiApplicationHelper::isSpecialEffectsEnvironment()) {

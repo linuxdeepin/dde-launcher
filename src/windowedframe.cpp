@@ -600,16 +600,6 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
     UNINSTALL_DIALOG_SHOWN = false;
 }
 
-bool WindowedFrame::windowDeactiveEvent()
-{
-    // don't need
-//    if (isVisible() && !m_menuWorker->isMenuShown() && !m_delayHideTimer->isActive()) {
-//        m_delayHideTimer->start();
-//    }
-
-    return false;
-}
-
 /**分类模式下，进入到某一分类目录的处理
  * @brief WindowedFrame::switchToCategory
  * @param index 当前视图的模型索引
@@ -1058,43 +1048,6 @@ void WindowedFrame::updatePosition()
 
     initAnchoredCornor();
     move(p);
-}
-
-void WindowedFrame::onVerticalScroll()
-{
-    m_appsView->verticalScrollBar()->setValue(m_appsView->verticalScrollBar()->value() + m_autoScrollStep);
-}
-
-void WindowedFrame::onRequestScrollUp()
-{
-    m_autoScrollStep = -DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
-    if (!m_autoScrollTimer->isActive())
-        m_autoScrollTimer->start();
-}
-
-void WindowedFrame::onRequestScrollDown()
-{
-    m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
-    if (!m_autoScrollTimer->isActive())
-        m_autoScrollTimer->start();
-}
-
-void WindowedFrame::onActiveWindow()
-{
-    raise();
-    activateWindow();
-    setFocus();
-    emit visibleChanged(true);
-}
-
-void WindowedFrame::onSetFixSize()
-{
-    initAnchoredCornor();
-    m_cornerPath = getCornerPath(m_anchoredCornor);
-    m_windowHandle.setClipPath(m_cornerPath);
-    // event.size() 第一次启动有时候会很大或者很小的负数,直接用固定的size
-    m_maskBg->setFixedSize(size());
-    m_maskBg->move(0,0);
 }
 
 void WindowedFrame::onHideMenu()

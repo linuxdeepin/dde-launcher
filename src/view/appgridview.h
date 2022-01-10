@@ -58,7 +58,6 @@ public:
     const QModelIndex indexAt(const int index) const;
     int indexYOffset(const QModelIndex &index) const;
     void setContainerBox(const QWidget *container);
-    void updateItemHiDPIFixHook(const QModelIndex &index);
 
     void setDelegate(DragPageDelegate *pDelegate);
     DragPageDelegate* getDelegate();

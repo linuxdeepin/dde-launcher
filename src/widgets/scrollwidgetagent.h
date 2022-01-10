@@ -26,12 +26,14 @@ class ScrollParallelAnimationGroup : public QParallelAnimationGroup
     Q_OBJECT
 
 public:
-    explicit ScrollParallelAnimationGroup(QObject *parent = nullptr) : QParallelAnimationGroup(parent) {
-
+    explicit ScrollParallelAnimationGroup(QObject *parent = nullptr)
+        : QParallelAnimationGroup(parent)
+        , m_currentScrollType(Scroll_Current)
+    {
     }
 
-    ScrollType currentScrollType() {return m_currentScrollType;}
-    void setScrollType(ScrollType scrollType) { m_currentScrollType = scrollType;}
+    ScrollType currentScrollType() { return m_currentScrollType; }
+    void setScrollType(ScrollType scrollType) { m_currentScrollType = scrollType; }
 
 private:
     ScrollType m_currentScrollType;

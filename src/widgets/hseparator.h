@@ -27,7 +27,7 @@ class HSeparator : public QWidget
     Q_OBJECT
 
 public:
-    HSeparator(QWidget *parent = nullptr);
+    explicit HSeparator(QWidget *parent = nullptr);
     ~HSeparator();
 
 protected:

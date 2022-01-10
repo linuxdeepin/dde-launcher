@@ -34,7 +34,7 @@ class DatetimeWidget : public QWidget
     Q_OBJECT
 
 public:
-    DatetimeWidget(QWidget *parent = nullptr);
+    explicit DatetimeWidget(QWidget *parent = nullptr);
 
     int getDateTextWidth();
     void updateTime();
@@ -52,7 +52,7 @@ private:
     QLabel *m_currentTimeLabel;
     QLabel *m_currentDateLabel;
     QTimer *m_refreshDateTimer;
-    QDBusInterface* m_24HourFormatInter;
+    QDBusInterface *m_24HourFormatInter;
 };
 
 #endif

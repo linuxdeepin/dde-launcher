@@ -47,7 +47,6 @@ public:
     void updatePosition(const QPoint pos, int w, int posType);
 
 public slots:
-    void setTextVisible(const bool visible, const bool animation = false);
     void setText(const QString &title);
 
 private slots:

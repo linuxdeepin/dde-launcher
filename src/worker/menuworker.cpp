@@ -37,6 +37,11 @@ MenuWorker::MenuWorker(QObject *parent)
     , m_startManagerInterface(new DBusStartManager(this))
     , m_calcUtil(CalculateUtil::instance())
     , m_appManager(AppsManager::instance())
+    , m_isItemOnDesktop(false)
+    , m_isItemOnDock(false)
+    , m_isItemStartup(false)
+    , m_isItemProxy(false)
+    , m_isItemEnableScaling(false)
     , m_menu(new Menu)
 {
 }
@@ -79,7 +84,6 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
     QAction *dock;
     QAction *startup;
     QAction *proxy;
-    QAction *scale;
     QAction *uninstall;
 
     open = new QAction(tr("Open"), menu);
@@ -125,12 +129,11 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
         menu->addAction(proxy);
 
     if (!canDisableScale) {
-        scale = new QAction(tr("Disable display scaling"), menu);
+        QAction *scale = new QAction(tr("Disable display scaling"), menu);
         scale->setCheckable(true);
         scale->setChecked(!m_isItemEnableScaling);
         menu->addAction(scale);
-        signalMapper->setMapping(scale, SwitchScale);
-        connect(scale, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        signalMapper->setMapping(scale, SwitchScale);        connect(scale, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
     }
 
     open->setEnabled(canOpen);

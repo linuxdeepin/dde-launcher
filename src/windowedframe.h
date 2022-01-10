@@ -89,17 +89,16 @@ signals:
     void visibleChanged(bool visible);
 
 private:
-    void showLauncher() Q_DECL_OVERRIDE;
-    void hideLauncher() Q_DECL_OVERRIDE;
-    bool visible() Q_DECL_OVERRIDE;
+    void showLauncher() override;
+    void hideLauncher() override;
+    bool visible() override;
 
-    void moveCurrentSelectApp(const int key) Q_DECL_OVERRIDE;
-    void appendToSearchEdit(const char ch) Q_DECL_OVERRIDE;
-    void launchCurrentApp() Q_DECL_OVERRIDE;
+    void moveCurrentSelectApp(const int key) override;
+    void appendToSearchEdit(const char ch) override;
+    void launchCurrentApp() override;
 
-    void uninstallApp(const QString &appKey) Q_DECL_OVERRIDE;
+    void uninstallApp(const QString &appKey) override;
     void uninstallApp(const QModelIndex &context);
-    bool windowDeactiveEvent() Q_DECL_OVERRIDE;
     void switchToCategory(const QModelIndex &index);
 
     QPainterPath getCornerPath(AnchoredCornor direction);
@@ -114,7 +113,7 @@ protected:
     void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
     void inputMethodEvent(QInputMethodEvent *e) Q_DECL_OVERRIDE;
     QVariant inputMethodQuery(Qt::InputMethodQuery prop) const Q_DECL_OVERRIDE;
-    void regionMonitorPoint(const QPoint &point, int flag = 1) Q_DECL_OVERRIDE;
+    void regionMonitorPoint(const QPoint &point, int flag = 1) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *e) override;
@@ -133,12 +132,6 @@ private slots:
     void onOpacityChanged(const double value);
     void primaryScreenChanged();
     void updatePosition();
-
-    void onVerticalScroll();
-    void onRequestScrollUp();
-    void onRequestScrollDown();
-    void onActiveWindow();
-    void onSetFixSize();
     void onHideMenu();
 
 private:

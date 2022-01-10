@@ -33,7 +33,7 @@ class MiniFrameSwitchBtn : public QWidget
     Q_OBJECT
 
 public:
-    MiniFrameSwitchBtn(QWidget *parent = nullptr);
+    explicit MiniFrameSwitchBtn(QWidget *parent = nullptr);
 
     void updateStatus(int status);
     void click();
@@ -56,7 +56,6 @@ private:
     QLabel *m_allIconLabel;
     bool m_hover = false;
     QColor m_color;
-
 };
 
 #endif

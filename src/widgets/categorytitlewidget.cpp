@@ -50,24 +50,6 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &CategoryTitleWidget::relayout);
 }
 
-void CategoryTitleWidget::setTextVisible(const bool visible, const bool animation)
-{
-    m_opacityAnimation->stop();
-
-    if (!animation) {
-        setTitleOpacity(visible ? 1 : 0);
-    } else {
-        if (visible) {
-            m_opacityAnimation->setStartValue(titleOpacity());
-            m_opacityAnimation->setEndValue(1);
-        } else {
-            m_opacityAnimation->setStartValue(titleOpacity());
-            m_opacityAnimation->setEndValue(0);
-        }
-        m_opacityAnimation->start();
-    }
-}
-
 void CategoryTitleWidget::setText(const QString &title)
 {
     QFontMetrics fontMetric(m_title->font());

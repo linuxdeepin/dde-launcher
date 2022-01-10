@@ -13,10 +13,6 @@ TEST_F(Tst_Categorytitlewidget, categoryTitleWidget_test)
 {
     CategoryTitleWidget widget("test");
 
-    widget.setTextVisible(true, true);
-    widget.setTextVisible(true, false);
-    widget.setTextVisible(false, false);
-    widget.setTextVisible(false, true);
     widget.updatePosition(QPoint(0, 0), 10, 1);
     widget.updatePosition(QPoint(0, 0), 10, 2);
     widget.updatePosition(QPoint(0, 0), 10, 4);

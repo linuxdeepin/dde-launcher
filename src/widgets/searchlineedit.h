@@ -39,8 +39,7 @@ class SearchLineeditStyle : public QProxyStyle
     friend class SearchLineEdit;
 
 public:
-
-    SearchLineeditStyle(QStyle *style = nullptr);
+    explicit SearchLineeditStyle(QStyle *style = nullptr);
 
     int pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const;
 
@@ -54,7 +53,7 @@ class SearchLineEdit : public QLineEdit
 
 public:
     explicit SearchLineEdit(QWidget *parent = nullptr);
-    ~ SearchLineEdit() override;
+    ~SearchLineEdit() override;
 
 public slots:
     void normalMode();

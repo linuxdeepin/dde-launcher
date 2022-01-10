@@ -36,8 +36,7 @@ class NavigationWidget : public QFrame
 
 public:
     explicit NavigationWidget(QWidget *parent = nullptr);
-
-    void setButtonsVisible(const bool visible);
+    ~NavigationWidget() {}
 
     CategoryButton *button(const AppsListModel::AppCategory category) const;
 

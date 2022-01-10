@@ -106,8 +106,8 @@ int CalculateUtil::calculateIconSize(int mode)
 
     calculateTextSize();
 
-    int containerW = containerSize.width();
-    int containerH = containerSize.height();
+    int containerW;
+    int containerH;
 
     int appColumnCount = 0;
     int appRowCount = 0;

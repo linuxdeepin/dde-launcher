@@ -36,8 +36,6 @@ TEST_F(Tst_Appgridview, appGridView_test)
     QWidget *widget = new QWidget(m_widget);
     m_widget->setContainerBox(widget);
 
-    m_widget->updateItemHiDPIFixHook(QModelIndex());
-
     m_widget->fitToContent();
 
     m_widget->creatSrcPix(QModelIndex(), QString("dde-calendar"));

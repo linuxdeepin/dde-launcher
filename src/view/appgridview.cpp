@@ -146,16 +146,6 @@ void AppGridView::setContainerBox(const QWidget *container)
     m_containerBox = container;
 }
 
-// FIXME(sbw):
-// some white/black lines occurred in non-integer scale hidpi.
-void AppGridView::updateItemHiDPIFixHook(const QModelIndex &index)
-{
-    const QRect &r = indexRect(index);
-    update(r.marginsRemoved(QMargins(0, 0, 1, 1)));
-//    update(r.marginsAdded(QMargins(-1, -1, -1, -1)));
-    //    QListView::update(index);
-}
-
 void AppGridView::setDelegate(DragPageDelegate *pDelegate)
 {
     m_pDelegate = pDelegate;

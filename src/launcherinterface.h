@@ -40,7 +40,6 @@ public:
     virtual void appendToSearchEdit(const char ch) = 0;
     virtual void moveCurrentSelectApp(const int key) = 0;
     virtual void regionMonitorPoint(const QPoint &point, int flag = 1) = 0;
-    virtual bool windowDeactiveEvent() = 0;
 
     virtual void uninstallApp(const QString &appKey) = 0;
 };

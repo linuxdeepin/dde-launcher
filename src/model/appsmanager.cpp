@@ -193,16 +193,6 @@ void AppsManager::appendSearchResult(const QString &appKey)
             return m_appSearchResultList.append(info);
 }
 
-void AppsManager::sortCategory(const AppsListModel::AppCategory category)
-{
-    switch (category) {
-    case AppsListModel::Search:     sortByPresetOrder(m_appSearchResultList);      break;
-        //    case AppsListModel::All:        sortByName(m_appInfoList);              break;
-        // disable sort other category
-    default: Q_ASSERT(false) ;
-    }
-}
-
 /**
  * @brief AppsManager::sortByPresetOrder app应用按照schemas文件中的预装应用列表顺序进行排序
  * @param processList 系统所有应用软件的信息
@@ -257,11 +247,11 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
  */
 void AppsManager::sortByInstallTimeOrder(ItemInfoList &processList)
 {
-    std::sort(processList.begin(), processList.end(), [&](const ItemInfo & i1, const ItemInfo & i2) {
+    std::sort(processList.begin(), processList.end(), [ & ](const ItemInfo & i1, const ItemInfo & i2) {
         if (i1.m_installedTime == i2.m_installedTime && i1.m_installedTime != 0) {
             // If both of them don't exist in the preset list,
             // fallback to comparing their name.
-            return i1.m_installedTime < i2.m_installedTime;
+            return i1.m_name < i2.m_name;
         }
 
         // If one of them doesn't exist in the preset list,
@@ -365,11 +355,6 @@ void AppsManager::restoreItem(const QString &appKey, const int pos)
 int AppsManager::dockPosition() const
 {
     return m_dockInter->position();
-}
-
-int AppsManager::dockWidth() const
-{
-    return dockGeometry().width();
 }
 
 QRect AppsManager::dockGeometry() const
@@ -844,7 +829,7 @@ void AppsManager::refreshUsedInfoList()
 
         for (QList<ItemInfo>::iterator it = m_usedSortedList.begin(); it != m_usedSortedList.end();) {
             if (m_allAppInfoList.contains(*it)) {
-                it++;
+                ++it;
             } else {
                 it = m_usedSortedList.erase(it);
             }
@@ -863,7 +848,7 @@ void AppsManager::refreshCategoryUsedInfoList()
 {
     // 保存排序信息
     QHash<AppsListModel::AppCategory, ItemInfoList>::iterator categoryAppsIter = m_appInfos.begin();
-    for (; categoryAppsIter != m_appInfos.end(); categoryAppsIter++) {
+    for (; categoryAppsIter != m_appInfos.end(); ++categoryAppsIter) {
         int category = categoryAppsIter.key();
 
         QByteArray writeBuf;
@@ -896,7 +881,7 @@ void AppsManager::refreshUserInfoList()
                     // 更换语言的时候更新语言
                     it->updateInfo(m_allAppInfoList.at(idx));
 
-                    it++;
+                    ++it;
                 } else {
                     it = m_userSortedList.erase(it);
                 }
@@ -915,7 +900,7 @@ void AppsManager::refreshUserInfoList()
             if (idx >= 0 && it->m_key == "dde-trash")
                 it->updateInfo(m_allAppInfoList[idx]);
 
-            it++;
+            ++it;
         }
     }
 
@@ -1040,7 +1025,7 @@ void AppsManager::generateCategoryMap()
     m_appInfoLock.lockForRead();
     // 移除 m_appInfos 中已经不存在的应用
     QHash<AppsListModel::AppCategory, ItemInfoList>::iterator categoryAppsIter = m_appInfos.begin();
-    for (; categoryAppsIter != m_appInfos.end(); categoryAppsIter++) {
+    for (; categoryAppsIter != m_appInfos.end(); ++categoryAppsIter) {
         ItemInfoList &item = categoryAppsIter.value();
         for (auto it(item.begin()); it != item.end();) {
             int idx = m_allAppInfoList.indexOf(*it);
@@ -1286,7 +1271,7 @@ int AppsManager::getPageCount(const AppsListModel::AppCategory category)
     int nSize = appsInfoListSize(category);
     int pageCount = m_calUtil->appPageItemCount(category);
     int page = nSize / pageCount;
-    page = nSize % pageCount ? page + 1 : page;
+    page = (nSize % pageCount) ? page + 1 : page;
     return page;
 }
 

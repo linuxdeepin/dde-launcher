@@ -402,8 +402,8 @@ void FullScreenFrame::scrollBlurBoxWidget(ScrollWidgetAgent * widgetAgent)
        return;
     }
 
-    BlurBoxWidget * blurBoxWidget = widgetAgent->blurBoxWidget();
-    if (!blurBoxWidget) {
+    BlurBoxWidget *blurWidget = widgetAgent->blurBoxWidget();
+    if (!blurWidget) {
         return;
     }
 
@@ -432,7 +432,7 @@ void FullScreenFrame::scrollBlurBoxWidget(ScrollWidgetAgent * widgetAgent)
             pos_L_WidgetAgent->setBlurBoxWidget(nullptr);
             pos_L_WidgetAgent->setPos(pos_LL_WidgetAgent->pos() + QPoint(m_calcUtil->getAppBoxSize().width() + DLauncher::APPHBOX_SPACING, 0));
 
-            BlurBoxWidget * blurBoxWidget = getCategoryBoxWidgetByPostType(Pos_RR,m_currentCategory);
+            BlurBoxWidget *blurBoxWidget = getCategoryBoxWidgetByPostType(Pos_RR,m_currentCategory);
             pos_RR_WidgetAgent->setBlurBoxWidget(blurBoxWidget);
             pos_RR_WidgetAgent->setVisible(true);
         } else if (m_animationGroup->currentScrollType() == Scroll_Prev &&
@@ -447,7 +447,7 @@ void FullScreenFrame::scrollBlurBoxWidget(ScrollWidgetAgent * widgetAgent)
             pos_R_WidgetAgent->setBlurBoxWidget(nullptr);
             pos_R_WidgetAgent->setPos(pos_RR_WidgetAgent->pos() - QPoint(m_calcUtil->getAppBoxSize().width() + DLauncher::APPHBOX_SPACING, 0));
 
-            BlurBoxWidget * blurBoxWidget = getCategoryBoxWidgetByPostType(Pos_LL,m_currentCategory);
+            BlurBoxWidget *blurBoxWidget = getCategoryBoxWidgetByPostType(Pos_LL,m_currentCategory);
             pos_LL_WidgetAgent->setBlurBoxWidget(blurBoxWidget);
             pos_LL_WidgetAgent->setVisible(true);
         }  else if (m_animationGroup->currentScrollType() == Scroll_Next &&
@@ -490,7 +490,7 @@ void FullScreenFrame::scrollBlurBoxWidget(ScrollWidgetAgent * widgetAgent)
             pos_R_WidgetAgent->setPosType(Pos_M);
             pos_RR_WidgetAgent->setPosType(Pos_R);
 
-            BlurBoxWidget * blurBoxWidget = getCategoryBoxWidgetByPostType(Pos_RR,m_currentCategory);
+            BlurBoxWidget *blurBoxWidget = getCategoryBoxWidgetByPostType(Pos_RR,m_currentCategory);
             pos_RR_WidgetAgent->setBlurBoxWidget(blurBoxWidget);
             pos_RR_WidgetAgent->setVisible(true);
 
@@ -511,7 +511,7 @@ void FullScreenFrame::scrollBlurBoxWidget(ScrollWidgetAgent * widgetAgent)
             pos_L_WidgetAgent->setPosType(Pos_M);
             pos_LL_WidgetAgent->setPosType(Pos_L);
 
-            BlurBoxWidget * blurBoxWidget = getCategoryBoxWidgetByPostType(Pos_LL,m_currentCategory);
+            BlurBoxWidget *blurBoxWidget = getCategoryBoxWidgetByPostType(Pos_LL,m_currentCategory);
             pos_LL_WidgetAgent->setBlurBoxWidget(blurBoxWidget);
             pos_LL_WidgetAgent->setVisible(true);
 
@@ -1245,9 +1245,9 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         }
     }
 
-    const QModelIndex currentIndex = m_appItemDelegate->currentIndex();
+    const QModelIndex curModelIndex = m_appItemDelegate->currentIndex();
     // move operation should be start from a valid location, if not, just init it.
-    if (!currentIndex.isValid()) {
+    if (!curModelIndex.isValid()) {
         if (m_displayMode == GROUP_BY_CATEGORY)
             m_appItemDelegate->setCurrentIndex(getCategoryGridViewList(m_currentCategory)->getAppItem(0));
         else
@@ -1264,16 +1264,16 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     switch (key) {
     case Qt::Key_Backtab:
     case Qt::Key_Left:
-        index = currentIndex.sibling(currentIndex.row() - 1, 0);
+        index = curModelIndex.sibling(curModelIndex.row() - 1, 0);
         break;
     case Qt::Key_Right:
-        index = currentIndex.sibling(currentIndex.row() + 1, 0);
+        index = curModelIndex.sibling(curModelIndex.row() + 1, 0);
         break;
     case Qt::Key_Up:
-        index = currentIndex.sibling(currentIndex.row() - column, 0);
+        index = curModelIndex.sibling(curModelIndex.row() - column, 0);
         break;
     case Qt::Key_Down:
-        index = currentIndex.sibling(currentIndex.row() + column, 0);
+        index = curModelIndex.sibling(curModelIndex.row() + column, 0);
         break;
     default:
         break;
@@ -1282,7 +1282,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     // to next page
     if (m_displayMode != GROUP_BY_CATEGORY && !index.isValid()) {
         index = m_multiPagesView->selectApp(key);
-        index = index.isValid() ? index : currentIndex;
+        index = index.isValid() ? index : curModelIndex;
     }
 
     // now, we need to check and fix if destination is invalid.
@@ -1316,7 +1316,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     } while (false);
 
     // valid verify and UI adjustment.
-    const QModelIndex selectedIndex = index.isValid() ? index : currentIndex;
+    const QModelIndex selectedIndex = index.isValid() ? index : curModelIndex;
     m_appItemDelegate->setCurrentIndex(selectedIndex);
     update();
 }
@@ -1371,11 +1371,6 @@ void FullScreenFrame::launchCurrentApp()
     }
 
     hide();
-}
-
-bool FullScreenFrame::windowDeactiveEvent()
-{
-    return false;
 }
 
 void FullScreenFrame::regionMonitorPoint(const QPoint &point, int flag)
@@ -1470,11 +1465,6 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
     unInstallDialog.exec();
     //    unInstallDialog.deleteLater();
     m_isConfirmDialogShown = false;
-}
-
-void FullScreenFrame::clickToCategory(const QModelIndex &index)
-{
-    qDebug() << "modeValue" <<  index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>();
 }
 
 void FullScreenFrame::refreshPageView(AppsListModel::AppCategory category)

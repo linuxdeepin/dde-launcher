@@ -27,7 +27,7 @@ class RoundedButton : public QPushButton
     Q_OBJECT
 
 public:
-    RoundedButton(QWidget *parent = nullptr);
+    explicit RoundedButton(QWidget *parent = nullptr);
     ~RoundedButton();
 
 public slots:

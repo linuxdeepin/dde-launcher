@@ -41,12 +41,12 @@
 
 QModelIndex AppItemDelegate::CurrentIndex = QModelIndex();
 
-AppItemDelegate::AppItemDelegate(QObject *parent) :
-    QAbstractItemDelegate(parent),
-    m_calcUtil(CalculateUtil::instance())
+AppItemDelegate::AppItemDelegate(QObject *parent)
+    : QAbstractItemDelegate(parent)
+    , m_calcUtil(CalculateUtil::instance())
+    , m_blueDotPixmap(QIcon(":/skin/images/new_install_indicator.svg").pixmap(QSize(10, 10)))
+    , m_autoStartPixmap(QIcon(":/skin/images/emblem-autostart.svg").pixmap(QSize(24, 24)))
 {
-    m_autoStartPixmap = QIcon(":/skin/images/emblem-autostart.svg").pixmap(QSize(24, 24));
-    m_blueDotPixmap = QIcon(":/skin/images/new_install_indicator.svg").pixmap(QSize(10, 10));
 }
 
 void AppItemDelegate::setCurrentIndex(const QModelIndex &index)

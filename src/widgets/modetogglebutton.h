@@ -33,7 +33,7 @@ class ModeToggleButton : public DToolButton
     Q_OBJECT
 
 public:
-    ModeToggleButton(QWidget *parent = nullptr);
+    explicit ModeToggleButton(QWidget *parent = nullptr);
 
 protected:
     void paintEvent(QPaintEvent *event) override;

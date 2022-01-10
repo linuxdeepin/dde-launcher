@@ -53,7 +53,7 @@ public:
     { return "com.deepin.dde.Dock"; }
 
 public:
-    DBusDockInterface( QObject *parent = nullptr);
+    explicit DBusDockInterface( QObject *parent = nullptr);
     ~DBusDockInterface();
     Q_PROPERTY(QRect geometry READ geometry)
     inline QRect geometry() const

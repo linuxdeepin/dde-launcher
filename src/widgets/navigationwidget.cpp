@@ -51,21 +51,6 @@ NavigationWidget::NavigationWidget(QWidget *parent) :
     initConnection();
 }
 
-void NavigationWidget::setButtonsVisible(const bool visible)
-{
-    m_internetBtn->setVisible(visible);
-    m_chatBtn->setVisible(visible);
-    m_musicBtn->setVisible(visible);
-    m_videoBtn->setVisible(visible);
-    m_graphicsBtn->setVisible(visible);
-    m_gameBtn->setVisible(visible);
-    m_officeBtn->setVisible(visible);
-    m_readingBtn->setVisible(visible);
-    m_developmentBtn->setVisible(visible);
-    m_systemBtn->setVisible(visible);
-    m_othersBtn->setVisible(visible);
-}
-
 void NavigationWidget::setCurrentCategory(const AppsListModel::AppCategory category)
 {
     m_currentCategory = category;

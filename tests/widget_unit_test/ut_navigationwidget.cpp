@@ -28,8 +28,6 @@ TEST_F(Tst_NavigationWidget, categoryButton_test)
     EXPECT_NE(widget.button(AppsListModel::Others), nullptr);
     EXPECT_EQ(widget.button(AppsListModel::AppCategory(-1)), nullptr);
 
-    widget.setButtonsVisible(false);
-
     // sender为nullptr
     widget.buttonClicked();
 

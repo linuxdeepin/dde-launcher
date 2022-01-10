@@ -78,7 +78,7 @@ public:
     };
 
     explicit FullScreenFrame(QWidget *parent = nullptr);
-    ~FullScreenFrame();
+    ~FullScreenFrame() override;
 
     void exit();
     int dockPosition();
@@ -102,7 +102,6 @@ public slots:
     void scrollPrev();
     void scrollNext();
     void scrollCurrent();
-    void clickToCategory(const QModelIndex &index);
     void showTips(const QString &tips);
     void hideTips();
     void addViewEvent(AppGridView *pView);
@@ -127,16 +126,15 @@ private:
     void initUI();
     void initConnection();
 
-    void uninstallApp(const QString &appKey) Q_DECL_OVERRIDE;
+    void uninstallApp(const QString &appKey) override;
     void uninstallApp(const QModelIndex &context);
-    void showLauncher() Q_DECL_OVERRIDE;
-    void hideLauncher() Q_DECL_OVERRIDE;
-    bool visible() Q_DECL_OVERRIDE;
-    void moveCurrentSelectApp(const int key) Q_DECL_OVERRIDE;
-    void appendToSearchEdit(const char ch) Q_DECL_OVERRIDE;
-    void launchCurrentApp() Q_DECL_OVERRIDE;
-    bool windowDeactiveEvent() Q_DECL_OVERRIDE;
-    void regionMonitorPoint(const QPoint &point, int flag = 1) Q_DECL_OVERRIDE;
+    void showLauncher() override;
+    void hideLauncher() override;
+    bool visible() override;
+    void moveCurrentSelectApp(const int key) override;
+    void appendToSearchEdit(const char ch) override;
+    void launchCurrentApp() override;
+    void regionMonitorPoint(const QPoint &point, int flag = 1) override;
 
     void updateGeometry();
     void categoryListChanged();

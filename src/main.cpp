@@ -130,9 +130,8 @@ int main(int argc, char *argv[])
 
 #ifndef QT_DEBUG
     if (cmdParser.isSet(showOption))
-        launcher.show();
 #endif
-    QTimer::singleShot(1, &launcher, &LauncherSys::showLauncher);
+        launcher.show();
 
     return app->exec();
 }

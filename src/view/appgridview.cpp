@@ -526,12 +526,12 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     int old_page = m_containerBox->property("curPage").toInt();
 
     if (execDrag) {
+        QDrag *drag = new QDrag(this);
+        drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
+        drag->setPixmap(srcPix);
+        drag->setHotSpot(srcPix.rect().center() / ratio);
         setState(DraggingState);
-        QDrag drag(this);
-        drag.setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
-        drag.setPixmap(srcPix);
-        drag.setHotSpot(srcPix.rect().center() / ratio);
-        drag.exec(Qt::MoveAction);
+        drag->exec(Qt::MoveAction);
     }
 
     // 拖拽操作完成后暂停app移动动画

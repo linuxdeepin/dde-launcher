@@ -187,6 +187,7 @@ private:
     int m_lastShowDate;
 
     int m_tryNums;                                                          // 获取应用图标时尝试的次数
+    int m_tryCount;                                                         // 超过10次停止遍历
     ItemInfo m_itemInfo;                                                    // 当前需要更新的应用信息
 
     static QPointer<AppsManager> INSTANCE;

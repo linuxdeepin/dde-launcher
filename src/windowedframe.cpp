@@ -574,7 +574,7 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
             QTimer::singleShot(100, this, [ = ]() { uninstallApp(context); });
             return;
         } else {
-            QIcon icon = QIcon::fromTheme("application-x-desktop");
+            QIcon icon = QIcon(":/widgets/images/application-x-desktop.svg");
             appIcon = icon.pixmap(QSize(size, size));
             unInstallDialog.setIcon(appIcon);
         }

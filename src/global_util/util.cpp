@@ -387,8 +387,9 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
         iconName = itemInfo.m_iconKey;
     }
 
-    const auto ratio = qApp->devicePixelRatio();
+    const qreal ratio = qApp->devicePixelRatio();
     const int iconSize = perfectIconSize(size);
+    QPair<QString, int> tmpKey { cacheKey(itemInfo, CacheType::ImageType) , iconSize};
 
     do {
         if (iconName.startsWith("data:image/")) {
@@ -419,8 +420,14 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
             icon = QIcon::fromTheme(iconName);
 
         if (icon.isNull()) {
-            icon = QIcon::fromTheme("application-x-desktop");
+            icon = QIcon(":/widgets/images/application-x-desktop.svg");
             findIcon = false;
+
+            // 当desktop文件中Icon字段为空，不存在该字段或者字段内容错误时，
+            // 直接将齿轮写入缓存，避免显示为空
+            pixmap = icon.pixmap(QSize(iconSize, iconSize) * ratio);
+            pixmap.setDevicePixelRatio(ratio);
+            IconCacheManager::insertCache(tmpKey, pixmap);
         }
 
         pixmap = icon.pixmap(QSize(iconSize, iconSize) * ratio);
@@ -430,8 +437,6 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
 
     pixmap = pixmap.scaled(QSize(iconSize, iconSize) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pixmap.setDevicePixelRatio(ratio);
-
-    QPair<QString, int> tmpKey { cacheKey(itemInfo, CacheType::ImageType) , iconSize};
 
     if (!IconCacheManager::existInCache(tmpKey) && findIcon)
         IconCacheManager::insertCache(tmpKey, pixmap);

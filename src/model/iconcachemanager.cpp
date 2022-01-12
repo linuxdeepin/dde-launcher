@@ -31,7 +31,7 @@ IconCacheManager::IconCacheManager(QObject *parent)
     , m_launcherInter(new DBusLauncher(this))
     , m_iconValid(true)
     , m_tryNums(0)
-    , m_TryCount(0)
+    , m_tryCount(0)
 {
     setIconLoadState(false);
 
@@ -64,12 +64,12 @@ void IconCacheManager::createPixmap(const ItemInfo &itemInfo, int size)
             QThread::msleep(10);
             m_iconValid = getThemeIcon(pixmap, m_itemInfo, m_iconSize, true);
         } else {
-            if (m_TryCount > 10) {
-                m_TryCount = 0;
+            if (m_tryCount > 10) {
+                m_tryCount = 0;
                 return;
             }
 
-            ++m_TryCount;
+            ++m_tryCount;
             QThread::msleep(500);
             m_iconValid = getThemeIcon(pixmap, m_itemInfo, m_iconSize, true);
         }

@@ -101,7 +101,7 @@ private:
     int m_calendarSize;
     bool m_iconValid;
     int m_tryNums;
-    int m_TryCount;
+    int m_tryCount;
 };
 
 #endif // ICONCACHEMANAGER_H

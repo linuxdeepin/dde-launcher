@@ -81,6 +81,7 @@ AppsManager::AppsManager(QObject *parent) :
     m_RefreshCalendarIconTimer(new QTimer(this)),
     m_lastShowDate(0),
     m_tryNums(0),
+    m_tryCount(0),
     m_itemInfo(ItemInfo()),
     m_filterSetting(nullptr),
     m_iconValid(true),
@@ -711,7 +712,6 @@ bool AppsManager::appIsEnableScaling(const QString &desktop)
     return !m_launcherInter->GetDisableScaling(desktop);
 }
 
-#include <QDebug>
 /**
  * @brief AppsManager::appIcon 从缓存中获取app图片
  * @param info app信息
@@ -720,34 +720,52 @@ bool AppsManager::appIsEnableScaling(const QString &desktop)
  */
 const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
 {
+    QPixmap pix;
     const int iconSize = perfectIconSize(size);
     QPair<QString, int> tmpKey { cacheKey(info, CacheType::ImageType) , iconSize};
 
-    QPixmap pix;
-    if (IconCacheManager::existInCache(tmpKey)) {
+    // 开启子线程加载应用图标时
+    if (m_iconCacheThread->isRunning()) {
         IconCacheManager::getPixFromCache(tmpKey, pix);
-        return pix;
-    }
-
-    // 没有预缓存时，资源从主线程加载
-    m_itemInfo = info;
-    m_iconValid = getThemeIcon(pix, info, size, !m_iconValid);
-
-    if (m_iconValid) {
-        m_tryNums = 0;
-        return pix;
-    }
-
-    if (m_tryNums < 10) {
-        ++m_tryNums;
-
-        if (!QFile::exists(info.m_iconKey))
-            QIcon::setThemeSearchPaths(QIcon::themeSearchPaths());
-
-        QTimer::singleShot(30 * 1000, this, &AppsManager::refreshIcon);
     } else {
-        QTimer::singleShot(60 * 1000, this, &AppsManager::refreshIcon);
+        // 如存在，优先读取缓存
+        if (IconCacheManager::existInCache(tmpKey)) {
+            IconCacheManager::getPixFromCache(tmpKey, pix);
+            return pix;
+        }
+
+        // 缓存中没有时，资源从主线程加载
+        m_itemInfo = info;
+        m_iconValid = getThemeIcon(pix, info, size, !m_iconValid);
+
+        if (m_iconValid) {
+            m_tryNums = 0;
+            return pix;
+        }
+
+        // 先返回齿轮，然后继续找
+        qreal ratio = qApp->devicePixelRatio();
+        QIcon icon = QIcon(":/widgets/images/application-x-desktop.svg");
+        pix = icon.pixmap(QSize(iconSize, iconSize) * ratio);
+        pix.setDevicePixelRatio(ratio);
+
+        if (m_tryNums < 10) {
+            ++m_tryNums;
+
+            if (!QFile::exists(info.m_iconKey))
+                QIcon::setThemeSearchPaths(QIcon::themeSearchPaths());
+
+            QTimer::singleShot(5 * 1000, this, &AppsManager::refreshIcon);
+        } else {
+            if (m_tryCount > 10)
+                return pix;
+
+            ++m_tryCount;
+            QTimer::singleShot(10 * 1000, this, &AppsManager::refreshIcon);
+        }
     }
+
+    return pix;
 }
 
 /**

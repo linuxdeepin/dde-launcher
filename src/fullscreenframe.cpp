@@ -385,7 +385,7 @@ void FullScreenFrame::addViewEvent(AppGridView *pView)
     connect(pView, &AppGridView::requestMouseRelease,this,  [ = ]() {
             m_mouse_press = false;
     });
-    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pView, static_cast<void (AppGridView::*)(const QModelIndex &)>(&AppGridView::update));
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pView, qOverload<>(&AppGridView::update));
 }
 
 void FullScreenFrame::scrollBlurBoxWidget(ScrollWidgetAgent * widgetAgent)

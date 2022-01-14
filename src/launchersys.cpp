@@ -84,6 +84,8 @@ LauncherSys::~LauncherSys()
 
 void LauncherSys::showLauncher()
 {
+    setClickState(true);
+
     if (m_sessionManagerInter->locked()) {
         qInfo() << "session locked, can not show launcher";
         return;

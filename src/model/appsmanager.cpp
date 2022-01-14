@@ -776,7 +776,7 @@ void AppsManager::refreshCategoryInfoList()
     QByteArray readBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
     QDataStream in(&readBuf, QIODevice::ReadOnly);
     in >> m_usedSortedList;
-    for(const ItemInfo& used : m_usedSortedList) {
+    foreach(auto used , m_usedSortedList) {
         bool bContains = fuzzyMatching(filters, used.m_key);
         if (bContains) {
             m_usedSortedList.removeOne(used);
@@ -797,7 +797,7 @@ void AppsManager::refreshCategoryInfoList()
 
         m_appInfoLock.lockForWrite();
         // 当缓存数据与应用商店数据有差异时，以应用商店数据为准
-        for (auto item : itemInfoList) {
+        foreach (auto item , itemInfoList) {
             int index = datas.indexOf(item);
             if (index != -1 && datas.at(index).category() != item.category())
                 itemInfoList.removeOne(item);

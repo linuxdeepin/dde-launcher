@@ -498,7 +498,7 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     m_pixLabel->setFixedSize(srcPix.size() / ratio);
     m_pixLabel->move(srcPix.rect().center() / ratio);
 
-    QPropertyAnimation *posAni = new QPropertyAnimation(m_pixLabel, "pos", m_pixLabel);
+    QPropertyAnimation *posAni = new QPropertyAnimation(m_pixLabel.data(), "pos", m_pixLabel.data());
     connect(posAni, &QPropertyAnimation::finished, [&, listModel] () {
         m_pixLabel->hide();
         if (!m_lastFakeAni) {
@@ -617,7 +617,7 @@ void AppGridView::prepareDropSwap()
 
     if (start == end)
         return;
-        
+
     int index = 0;
     for (int i = (start + moveToNext); i != (end - !moveToNext); ++i)
         createFakeAnimation(i, moveToNext, index++);
@@ -718,7 +718,7 @@ void AppGridView::createMovingComponent()
 {
     // 拖拽释放鼠标时显示的应用图标
     if (!m_pixLabel) {
-        m_pixLabel = new QLabel(fullscreen());
+        m_pixLabel.reset(new QLabel(fullscreen()));
         m_pixLabel->hide();
     }
 

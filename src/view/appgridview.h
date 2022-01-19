@@ -123,7 +123,7 @@ private:
     QPoint m_dropPoint;                                  // 过度动画的终点坐标
     QPoint m_dragStartPos;                               // 拖拽起点坐标
 
-    QLabel *m_pixLabel;
+    QScopedPointer<QLabel> m_pixLabel;
     QList<QLabel *> m_floatLabels;
 
     QWidget *m_calendarWidget;

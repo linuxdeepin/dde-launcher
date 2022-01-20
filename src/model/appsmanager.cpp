@@ -741,7 +741,6 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
             QTimer::singleShot(10 * 1000, this, &AppsManager::refreshIcon);
         }
     }
-
     return pix;
 }
 

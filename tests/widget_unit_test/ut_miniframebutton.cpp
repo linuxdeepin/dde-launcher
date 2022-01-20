@@ -40,10 +40,10 @@ TEST_F(Tst_Miniframebutton, themeTypeChange_test)
 
     int themeType = DGuiApplicationHelper::instance()->themeType();
 
-    DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::DarkType);
+    DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::DarkType);
     button.onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
 
     // 恢复模式值
-    DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::ColorType(themeType));
+    DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType(themeType));
 }
 

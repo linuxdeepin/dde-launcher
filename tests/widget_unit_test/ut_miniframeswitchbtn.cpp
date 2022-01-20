@@ -23,7 +23,7 @@ TEST_F(Tst_Miniframeswitchbtn, miniFrameSwitchBtn_test)
     button.click();
 
     for (int i = 0; i <= 2; i++) {
-        DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::ColorType(i));
+        DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType(i));
         button.updateIcon();
     }
 }
@@ -49,5 +49,5 @@ TEST_F(Tst_Miniframeswitchbtn, event_test)
     button.setFocus();
     QApplication::sendEvent(&button, &paintEvent);
 
-    DGuiApplicationHelper::instance()->setThemeType(defaultType);
+    DGuiApplicationHelper::instance()->setPaletteType(defaultType);
 }

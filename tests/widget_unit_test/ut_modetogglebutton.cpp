@@ -21,12 +21,12 @@ TEST_F(Tst_Modetogglebutton, modeToggleButton_test)
     DGuiApplicationHelper::ColorType defaultType = DGuiApplicationHelper::instance()->themeType();
 
     for (int i = 1; i <= 2; i++) {
-        DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::ColorType(i));
+        DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType(i));
         button.resetStyle();
         QTest::qWait(50);
     }
 
-    DGuiApplicationHelper::instance()->setThemeType(defaultType);
+    DGuiApplicationHelper::instance()->setPaletteType(defaultType);
 }
 
 TEST_F(Tst_Modetogglebutton, event_test)

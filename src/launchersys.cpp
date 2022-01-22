@@ -69,6 +69,7 @@ LauncherSys::LauncherSys(QObject *parent)
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &LauncherSys::onFrontendRectChanged);
     connect(IconCacheManager::instance(), &IconCacheManager::iconLoaded, this, &LauncherSys::aboutToShowLauncher, Qt::QueuedConnection);
     connect(m_checkTimer, &QTimer::timeout, this, &LauncherSys::aboutToShowLauncher);
+    connect(IconCacheManager::instance(), &IconCacheManager::iconLoaded, this, &LauncherSys::updateLauncher);
 
     m_autoExitTimer->start();
 }
@@ -248,6 +249,17 @@ void LauncherSys::onFrontendRectChanged()
 void LauncherSys::onButtonPress(const QPoint &p, const int flag)
 {
     m_launcherInter->regionMonitorPoint(p, flag);
+}
+
+void LauncherSys::updateLauncher()
+{
+    if (!m_launcherInter->visible())
+        return;
+
+    if (m_launcherInter == m_fullLauncher)
+        m_fullLauncher->update();
+    else
+        m_windowLauncher->update();
 }
 
 void LauncherSys::aboutToShowLauncher()

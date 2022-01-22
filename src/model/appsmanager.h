@@ -156,9 +156,7 @@ private slots:
     void stopThread();
 
 public:
-    static QReadWriteLock m_cacheDataLock;
     static QReadWriteLock m_appInfoLock;
-    static QHash<QPair<QString, int>, QVariant> m_CacheData;                // 缓存应用图标和应用名称
     static QHash<AppsListModel::AppCategory, ItemInfoList> m_appInfos;      // 应用分类容器
 
 private:

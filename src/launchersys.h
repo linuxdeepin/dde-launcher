@@ -70,6 +70,7 @@ private slots:
     void onDisplayModeChanged();
     void onFrontendRectChanged();
     void onButtonPress(const QPoint &p, const int flag);
+    void updateLauncher();
 
 private:
     void registerRegion();

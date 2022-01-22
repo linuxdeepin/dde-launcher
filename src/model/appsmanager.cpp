@@ -61,7 +61,6 @@ const QString TrashDir = QDir::homePath() + "/.local/share/Trash";
 const QString TrashDirFiles = TrashDir + "/files";
 const QDir::Filters ItemsShouldCount = QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot;
 
-QReadWriteLock AppsManager::m_cacheDataLock;
 QReadWriteLock AppsManager::m_appInfoLock;
 QHash<AppsListModel::AppCategory, ItemInfoList> AppsManager::m_appInfos;
 ItemInfoList AppsManager::m_usedSortedList = QList<ItemInfo>();
@@ -121,16 +120,17 @@ AppsManager::AppsManager(QObject *parent) :
     m_categoryIcon.append(QString(":/icons/skin/icons/others_normal_22px.svg"));
 
     m_iconCacheManager = IconCacheManager::instance();
-    m_iconCacheManager->moveToThread(m_iconCacheThread);
 
     m_updateCalendarTimer->setInterval(60 * 1000);// 1min
     m_updateCalendarTimer->start();
 
     // 启动应用图标和应用名称缓存线程,减少系统加载应用时的开销
-    if (getDConfigValue("preload-apps-icon", true).toBool())
+    if (getDConfigValue("preload-apps-icon", true).toBool()) {
+        m_iconCacheManager->moveToThread(m_iconCacheThread);
         m_iconCacheThread->start();
-    else
+    } else {
         IconCacheManager::setIconLoadState(true);
+    }
 
     connect(this, &AppsManager::startLoadIcon, m_iconCacheManager, &IconCacheManager::loadWindowIcon, Qt::QueuedConnection);
     connect(this, &AppsManager::categoryToFull, m_iconCacheManager, static_cast<void(IconCacheManager::*)()>(&IconCacheManager::loadFullWindowIcon), Qt::QueuedConnection);
@@ -1154,7 +1154,21 @@ void AppsManager::onSearchTimeOut()
 
 void AppsManager::onIconThemeChanged()
 {
-    emit dataChanged(AppsListModel::All);
+    static QString lastIconTheme = QString();
+    if (lastIconTheme == QIcon::themeName())
+        return;
+
+    lastIconTheme = QIcon::themeName();
+
+    IconCacheManager::resetIconData();
+    if (!CalculateUtil::instance()->fullscreen()) {
+        emit startLoadIcon();
+    } else {
+        if (CalculateUtil::instance()->displayMode() == GROUP_BY_CATEGORY)
+            emit fullToCategory();
+        else
+            emit categoryToFull();
+    }
 }
 
 /**

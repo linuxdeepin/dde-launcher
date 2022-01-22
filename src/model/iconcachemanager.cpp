@@ -9,8 +9,8 @@
 #include <QIcon>
 #include <QString>
 
-QHash<QPair<QString, int>, QVariant> IconCacheManager::m_CacheData = QHash<QPair<QString, int>, QVariant>();
-QReadWriteLock IconCacheManager::m_cacheDataLock;
+QHash<QPair<QString, int>, QVariant> IconCacheManager::m_iconCache = QHash<QPair<QString, int>, QVariant>();
+QReadWriteLock IconCacheManager::m_iconLock;
 
 std::atomic<bool> IconCacheManager::m_loadState;
 std::atomic<bool> IconCacheManager::m_fullFreeLoadState;
@@ -75,22 +75,27 @@ void IconCacheManager::createPixmap(const ItemInfo &itemInfo, int size)
     }
 }
 
+double IconCacheManager::getCurRatio()
+{
+    return SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "apps-icon-ratio", 0.6).toDouble();
+}
+
 bool IconCacheManager::existInCache(const QPair<QString, int> &tmpKey)
 {
     std::atomic<bool> exist;
 
-    m_cacheDataLock.lockForRead();
-    exist.store(m_CacheData.contains(tmpKey) && !m_CacheData[tmpKey].value<QPixmap>().isNull());
-    m_cacheDataLock.unlock();
+    m_iconLock.lockForRead();
+    exist.store(m_iconCache.contains(tmpKey) && !m_iconCache[tmpKey].value<QPixmap>().isNull());
+    m_iconLock.unlock();
 
     return exist;
 }
 
 void IconCacheManager::getPixFromCache(QPair<QString, int> &tmpKey, QPixmap &pix)
 {
-    m_cacheDataLock.lockForRead();
-    pix = m_CacheData[tmpKey].value<QPixmap>();
-    m_cacheDataLock.unlock();
+    m_iconLock.lockForRead();
+    pix = m_iconCache[tmpKey].value<QPixmap>();
+    m_iconLock.unlock();
 }
 
 /**获取小窗口的资源
@@ -111,7 +116,7 @@ void IconCacheManager::loadWindowIcon()
         createPixmap(info, DLauncher::APP_ITEM_ICON_SIZE);
     }
 
-    // 小窗口模式分类图标和文本
+    // 小窗口模式分类图标
     const ItemInfoList &categoryList = AppsManager::windowedCategoryList();
     for (int i = 0; i < categoryList.size(); i++) {
         const ItemInfo &info = categoryList.at(i);
@@ -204,14 +209,12 @@ void IconCacheManager::loadCategoryWindowIcon(double ratio)
 
 void IconCacheManager::preloadCategory()
 {
-    double ratio = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "apps-icon-ratio", 0.6).toDouble();
-    loadCategoryWindowIcon(ratio);
+    loadCategoryWindowIcon(getCurRatio());
 }
 
 void IconCacheManager::preloadFullFree()
 {
-    double ratio = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "apps-icon-ratio", 0.6).toDouble();
-    loadFullWindowIcon(ratio);
+    loadFullWindowIcon(getCurRatio());
 }
 
 void IconCacheManager::ratioChange(double ratio)
@@ -255,12 +258,12 @@ void IconCacheManager::loadCategoryWindowIcon()
 
 void IconCacheManager::insertCache(const QPair<QString, int> &tmpKey, const QPixmap &pix)
 {
-    m_cacheDataLock.lockForWrite();
+    m_iconLock.lockForWrite();
 
-    if (!m_CacheData.contains(tmpKey) || (m_CacheData.contains(tmpKey) && m_CacheData[tmpKey].value<QPixmap>().isNull()))
-        m_CacheData[tmpKey] = pix;
+    if (!m_iconCache.contains(tmpKey) || (m_iconCache.contains(tmpKey) && m_iconCache[tmpKey].value<QPixmap>().isNull()))
+        m_iconCache[tmpKey] = pix;
 
-    m_cacheDataLock.unlock();
+    m_iconLock.unlock();
 }
 
 void IconCacheManager::removeItemFromCache(const ItemInfo &info)
@@ -270,11 +273,25 @@ void IconCacheManager::removeItemFromCache(const ItemInfo &info)
     for (int i = 0; i < arraySize; i++) {
         QPair<QString, int> pixKey { cacheKey(info, CacheType::ImageType), iconArray[i] };
         if (existInCache(pixKey)) {
-            m_cacheDataLock.lockForWrite();
-            m_CacheData.remove(pixKey);
-            m_cacheDataLock.unlock();
+            m_iconLock.lockForWrite();
+            m_iconCache.remove(pixKey);
+            m_iconLock.unlock();
         }
     }
+}
+
+void IconCacheManager::resetIconData()
+{
+    // 清缓存
+    m_iconLock.lockForWrite();
+    m_iconCache.clear();
+    m_iconLock.unlock();
+
+    // 重置状态
+    setIconLoadState(false);
+    setSmallWindowLoadState(false);
+    setFullCategoryLoadState(false);
+    setFullFreeLoadState(false);
 }
 
 void IconCacheManager::removeSmallWindowCache()
@@ -286,9 +303,9 @@ void IconCacheManager::removeSmallWindowCache()
             QPair<QString, int> pixKey { cacheKey(itemInfo, CacheType::ImageType), iconSize };
 
             if (existInCache(pixKey)) {
-                m_cacheDataLock.lockForWrite();
-                m_CacheData.remove(pixKey);
-                m_cacheDataLock.unlock();
+                m_iconLock.lockForWrite();
+                m_iconCache.remove(pixKey);
+                m_iconLock.unlock();
             }
         }
     };

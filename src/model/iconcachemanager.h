@@ -33,34 +33,33 @@
 #include <QReadWriteLock>
 
 class DBusLauncher;
-
 class IconCacheManager : public QObject
 {
     Q_OBJECT
-
 public:
     static IconCacheManager *instance();
+    static void resetIconData();
+
     static bool iconLoadState();
     static void setIconLoadState(bool state);
+    static void setSmallWindowLoadState(bool state);
+    static void setFullFreeLoadState(bool state);
+    static void setFullCategoryLoadState(bool state);
 
     static bool existInCache(const QPair<QString, int> &tmpKey);
     static void getPixFromCache(QPair<QString, int> &tmpKey, QPixmap &pix);
     static void insertCache(const QPair<QString, int> &tmpKey, const QPixmap &pix);
-    static void removeItemFromCache(const ItemInfo &info);
 
 private:
     explicit IconCacheManager(QObject *parent = nullptr);
 
     void createPixmap(const ItemInfo &itemInfo, int size);
+    void removeItemFromCache(const ItemInfo &info);
 
-    void setFullFreeLoadState(bool state);
     bool fullFreeLoadState();
-
-    void setFullCategoryLoadState(bool state);
     bool fullCategoryLoadState();
-
-    void setSmallWindowLoadState(bool state);
     bool smallWindowLoadState();
+    double getCurRatio();
 
 signals:
     void iconLoaded();
@@ -78,16 +77,13 @@ public slots:
     void preloadFullFree();
 
     void ratioChange(double ratio);
-
     void loadItem(const ItemInfo &info, const QString &operationStr);
-
     void removeSmallWindowCache();
-
     void updateCanlendarIcon();
 
 private:
-    static QReadWriteLock m_cacheDataLock;
-    static QHash<QPair<QString, int>, QVariant> m_CacheData;
+    static QReadWriteLock m_iconLock;
+    static QHash<QPair<QString, int>, QVariant> m_iconCache;
     static std::atomic<bool> m_loadState;
     static std::atomic<bool> m_fullFreeLoadState;
     static std::atomic<bool> m_fullCategoryLoadState;

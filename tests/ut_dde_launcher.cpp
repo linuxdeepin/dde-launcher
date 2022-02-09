@@ -21,7 +21,6 @@
 
 #include "ut_dde_launcher.h"
 #include "dbuslauncherframe.h"
-#include "dbusdisplay.h"
 #include "dbustartmanager.h"
 #include "dbusdock.h"
 #include "dbuslauncher.h"
@@ -36,42 +35,6 @@
 #include <QDBusArgument>
 #include <QGSettings>
 #include <QTest>
-
-/**
- * @brief LauncherUnitTest::testDisplayDBus 测试显示Dbus服务
- */
-TEST_F(LauncherUnitTest, testDisplayDBus)
-{
-    DBusDisplay displayInterface(this);
-    QVERIFY(displayInterface.isValid());
-
-    BrightnessMap map = displayInterface.brightness();
-    qDebug() << QString("Test displayInterface brightness : %1").arg(map.count());
-
-    QDBusObjectPath objectPath = displayInterface.builtinOutput();
-    qDebug() << QString("Test displayInterface builtinOutput:%1").arg(objectPath.path());
-
-    int displayMode = displayInterface.displayMode();
-    qDebug() << QString("Test displayInterface displayMode:%1").arg(displayMode);
-
-    bool hasChanged = displayInterface.hasChanged();
-    qDebug() << QString("Test displayInterface hasChanged:%1").arg(hasChanged);
-
-    QList<QDBusObjectPath> monitors = displayInterface.monitors();
-    qDebug() << QString("Test displayInterface monitors:%1").arg(monitors.count());
-
-    QString primary = displayInterface.primary();
-    qDebug() << QString("Test displayInterface primary:%1").arg(primary);
-
-    QRect primaryRect = displayInterface.primaryRect();
-    qDebug() << QString("Test displayInterface primary:(%1,%2,%3,%4").arg(primaryRect.left()).arg(primaryRect.top()).arg(primaryRect.right()).arg(primaryRect.bottom());
-
-    int screenHeight = displayInterface.screenHeight();
-    qDebug() << QString("Test displayInterface screenHeight:%1").arg(screenHeight);
-
-    int screenWidth = displayInterface.screenWidth();
-    qDebug() << QString("Test displayInterface ScreenWidth:%1").arg(screenWidth);
-}
 
 /**
  * @brief LauncherUnitTest::testDockDBus 测试任务栏Dbus服务

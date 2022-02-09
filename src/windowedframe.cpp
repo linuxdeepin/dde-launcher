@@ -23,7 +23,6 @@
 #include "widgets/hseparator.h"
 #include "global_util/util.h"
 #include "dbusdockinterface.h"
-#include "dbusdisplay.h"
 #include "constants.h"
 #include "iconcachemanager.h"
 
@@ -109,7 +108,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_modeToggleBtn(new ModeToggleButton(this))
     , m_searcherEdit(new DSearchEdit(this))
     , m_enterSearchEdit(false)
-    , m_displayInter(new DBusDisplay(this))
+    , m_curScreen(m_appsManager->currentScreen())
 {
     if (!getDConfigValue("enable-full-screen-mode", true).toBool())
         m_modeToggleBtn->hide();
@@ -252,10 +251,9 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
     onOpacityChanged(m_appearanceInter->opacity());
 
-    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &WindowedFrame::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &WindowedFrame::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &WindowedFrame::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &WindowedFrame::primaryScreenChanged, Qt::QueuedConnection);
+    connect(m_curScreen, &QScreen::geometryChanged, this, &WindowedFrame::onScreenInfoChange);
+    connect(m_curScreen, &QScreen::orientationChanged, this, &WindowedFrame::onScreenInfoChange);
+    connect(qApp, &QApplication::primaryScreenChanged, this, &WindowedFrame::onScreenInfoChange);
 
     connect(this, &WindowedFrame::visibleChanged, this, &WindowedFrame::onHideMenu);
 
@@ -1009,12 +1007,18 @@ void WindowedFrame::onOpacityChanged(const double value)
     setMaskAlpha(value * 255);
 }
 
-void WindowedFrame::primaryScreenChanged()
+void WindowedFrame::onScreenInfoChange()
 {
+    m_curScreen->disconnect();
+    m_curScreen = m_appsManager->currentScreen();
+
     adjustSize();
     updatePosition();
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
+
+    connect(m_curScreen, &QScreen::geometryChanged, this, &WindowedFrame::onScreenInfoChange);
+    connect(m_curScreen, &QScreen::orientationChanged, this, &WindowedFrame::onScreenInfoChange);
 }
 
 void WindowedFrame::updatePosition()

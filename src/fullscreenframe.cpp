@@ -26,7 +26,6 @@
 #include "xcb_misc.h"
 #include "sharedeventfilter.h"
 #include "constants.h"
-#include "dbusdisplay.h"
 #include "iconcachemanager.h"
 
 #include <QApplication>
@@ -101,12 +100,12 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_topSpacing(new QFrame(this)),
     m_bottomSpacing(new QFrame(this)),
     m_animationGroup(new ScrollParallelAnimationGroup(this)),
-    m_displayInter(new DBusDisplay(this)),
     m_bMousePress(false),
     m_nMousePos(0),
     m_scrollValue(0),
     m_scrollStart(0),
-    m_changePageDelayTime(nullptr)
+    m_changePageDelayTime(nullptr),
+    m_curScreen(m_appsManager->currentScreen())
 {
     // accessible.h 中使用
     setAccessibleName("FullScrreenFrame");
@@ -1145,14 +1144,17 @@ void FullScreenFrame::initConnection()
     connect(m_appsManager, &AppsManager::IconSizeChanged, this, &FullScreenFrame::updateDockPosition);
     connect(m_appsManager, &AppsManager::dataChanged, this, &FullScreenFrame::refreshPageView);
 
-    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &FullScreenFrame::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &FullScreenFrame::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &FullScreenFrame::primaryScreenChanged, Qt::QueuedConnection);
-    connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, &FullScreenFrame::primaryScreenChanged, Qt::QueuedConnection);
+    connect(m_curScreen, &QScreen::geometryChanged, this, &FullScreenFrame::onScreenInfoChange);
+    connect(m_curScreen, &QScreen::orientationChanged, this, &FullScreenFrame::onScreenInfoChange);
+    connect(qApp, &QApplication::primaryScreenChanged, this, &FullScreenFrame::onScreenInfoChange);
 }
 
 void FullScreenFrame::showLauncher()
 {
+    scaledBackground();
+    scaledBlurBackground();
+    update();
+
     m_focusIndex = 1;
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
@@ -1491,12 +1493,18 @@ void FullScreenFrame::refreshPageView(AppsListModel::AppCategory category)
     }
 }
 
-void FullScreenFrame::primaryScreenChanged()
+void FullScreenFrame::onScreenInfoChange()
 {
-    setFixedSize(m_appsManager->currentScreen()->size());
+    m_curScreen->disconnect();
+    m_curScreen = m_appsManager->currentScreen();
+
+    setFixedSize(m_curScreen->size());
     scaledBackground();
     scaledBlurBackground();
     update();
+
+    connect(m_curScreen, &QScreen::geometryChanged, this, &FullScreenFrame::onScreenInfoChange);
+    connect(m_curScreen, &QScreen::orientationChanged, this, &FullScreenFrame::onScreenInfoChange);
 }
 
 /**

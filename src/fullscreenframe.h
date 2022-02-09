@@ -59,7 +59,6 @@ DWIDGET_USE_NAMESPACE
 class BackgroundManager;
 class DBusLauncherService;
 class SharedEventFilter;
-class DBusDisplay;
 class DBusLauncher;
 
 class FullScreenFrame : public BoxFrame, public LauncherInterface
@@ -150,7 +149,7 @@ private slots:
     void layoutChanged();
     void searchTextChanged(const QString &keywords, bool enableUpdateMode);
     void refreshPageView(const AppsListModel::AppCategory category);
-    void primaryScreenChanged();
+    void onScreenInfoChange();
 
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
@@ -221,7 +220,6 @@ private:
 
     QList<ScrollWidgetAgent *> m_widgetAgentList;
     ScrollParallelAnimationGroup *m_animationGroup;
-    DBusDisplay *m_displayInter;
 
     bool m_canResizeDockPosition = false;               // 只有窗口在完全显示出来后，才允许自动调整各部件位置
 
@@ -230,5 +228,6 @@ private:
     int m_scrollValue;                                  // 滑动区域当前停留的数值
     int m_scrollStart;                                  // 鼠标按下时滑动区域停留的数值
     QTime *m_changePageDelayTime;                       // 滚动延时，设定时间内只允许滚动一次
+    const QScreen *m_curScreen;
 };
 #endif // MAINFRAME_H

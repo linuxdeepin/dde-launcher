@@ -391,12 +391,6 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
         if (icon.isNull()) {
             icon = QIcon(":/widgets/images/application-x-desktop.svg");
             findIcon = false;
-
-            // 当desktop文件中Icon字段为空，不存在该字段或者字段内容错误时，
-            // 直接将齿轮写入缓存，避免显示为空
-            pixmap = icon.pixmap(QSize(iconSize, iconSize) * ratio);
-            pixmap.setDevicePixelRatio(ratio);
-            IconCacheManager::insertCache(tmpKey, pixmap);
         }
 
         pixmap = icon.pixmap(QSize(iconSize, iconSize) * ratio);

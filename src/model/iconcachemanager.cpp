@@ -65,6 +65,14 @@ void IconCacheManager::createPixmap(const ItemInfo &itemInfo, int size)
         } else {
             if (m_tryCount > 10) {
                 m_tryCount = 0;
+
+                // 当desktop文件中Icon字段为空，不存在该字段或者字段内容错误时，
+                // 直接将齿轮写入缓存，避免显示为空
+                QIcon icon = QIcon(":/widgets/images/application-x-desktop.svg");
+                const qreal ratio = qApp->devicePixelRatio();
+                pixmap = icon.pixmap(QSize(iconSize, iconSize) * ratio);
+                pixmap.setDevicePixelRatio(ratio);
+                IconCacheManager::insertCache(tmpKey, pixmap);
                 return;
             }
 

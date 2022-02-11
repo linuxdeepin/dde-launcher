@@ -1135,6 +1135,15 @@ void FullScreenFrame::initConnection()
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
     connect(m_searchWidget, &SearchWidget::toggleMode, [this] {
+        // 显示后加载当前模式其他ratio的资源，预加载全屏另一种模式当前ratio的资源
+        if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY) {
+            m_appsManager->loadOtherRatioIcon(ALL_APPS);
+            m_appsManager->loadCurRationIcon(GROUP_BY_CATEGORY);
+        } else {
+            m_appsManager->loadOtherRatioIcon(GROUP_BY_CATEGORY);
+            m_appsManager->loadCurRationIcon(ALL_APPS);
+        }
+
         updateDisplayMode(m_calcUtil->displayMode() == GROUP_BY_CATEGORY ? ALL_APPS : GROUP_BY_CATEGORY);
     });
 
@@ -1173,11 +1182,14 @@ void FullScreenFrame::showLauncher()
         setFixedSize(m_appsManager->currentScreen()->geometry().size());
         show();
 
-        // 预加载全屏下另一种模式下当前ratio的资源
-        if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY)
-            m_appsManager->preloadFullFree();
-        else
-            m_appsManager->preloadCategory();
+        // 显示后加载当前模式其他ratio的资源，预加载全屏另一种模式当前ratio的资源
+        if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY) {
+            m_appsManager->loadOtherRatioIcon(GROUP_BY_CATEGORY);
+            m_appsManager->loadCurRationIcon(ALL_APPS);
+        } else {
+            m_appsManager->loadOtherRatioIcon(ALL_APPS);
+            m_appsManager->loadCurRationIcon(GROUP_BY_CATEGORY);
+        }
     }
 }
 
@@ -1553,12 +1565,6 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         // 再显示自由显示模式
         m_appsIconBox->setVisible(true);
     }
-
-    // 模式切换时加载相应图标到缓存
-    if (m_displayMode == ALL_APPS)
-        emit m_appsManager->categoryToFull();
-    else if (m_displayMode == GROUP_BY_CATEGORY)
-        emit m_appsManager->fullToCategory();
 
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 

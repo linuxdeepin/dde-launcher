@@ -42,9 +42,6 @@ public:
 
     static bool iconLoadState();
     static void setIconLoadState(bool state);
-    static void setSmallWindowLoadState(bool state);
-    static void setFullFreeLoadState(bool state);
-    static void setFullCategoryLoadState(bool state);
 
     static bool existInCache(const QPair<QString, int> &tmpKey);
     static void getPixFromCache(QPair<QString, int> &tmpKey, QPixmap &pix);
@@ -55,10 +52,6 @@ private:
 
     void createPixmap(const ItemInfo &itemInfo, int size);
     void removeItemFromCache(const ItemInfo &info);
-
-    bool fullFreeLoadState();
-    bool fullCategoryLoadState();
-    bool smallWindowLoadState();
     double getCurRatio();
 
 signals:
@@ -67,14 +60,9 @@ signals:
 public slots:
     void loadWindowIcon();
 
+    void loadCurRatioIcon(int mode);
+    void loadOtherRatioIcon(int mode);
     void loadFullWindowIcon();
-    void loadFullWindowIcon(double ratio);
-
-    void loadCategoryWindowIcon();
-    void loadCategoryWindowIcon(double ratio);
-
-    void preloadCategory();
-    void preloadFullFree();
 
     void ratioChange(double ratio);
     void loadItem(const ItemInfo &info, const QString &operationStr);

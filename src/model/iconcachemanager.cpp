@@ -33,11 +33,6 @@ IconCacheManager::IconCacheManager(QObject *parent)
     , m_tryCount(0)
 {
     setIconLoadState(false);
-
-    // 开始时，未加载到内存
-    setFullFreeLoadState(false);
-    setFullCategoryLoadState(false);
-    setSmallWindowLoadState(false);
 }
 
 void IconCacheManager::createPixmap(const ItemInfo &itemInfo, int size)
@@ -111,10 +106,6 @@ void IconCacheManager::getPixFromCache(QPair<QString, int> &tmpKey, QPixmap &pix
  */
 void IconCacheManager::loadWindowIcon()
 {
-    // 加载小窗口图标,写入到缓存
-    if (smallWindowLoadState())
-        return;
-
     setIconLoadState(false);
 
     // 小窗口模式
@@ -132,7 +123,6 @@ void IconCacheManager::loadWindowIcon()
     }
 
     setIconLoadState(true);
-    setSmallWindowLoadState(true);
     emit iconLoaded();
 }
 
@@ -161,113 +151,65 @@ void IconCacheManager::loadItem(const ItemInfo &info, const QString &operationSt
     }
 }
 
-void IconCacheManager::loadFullWindowIcon(double ratio)
+void IconCacheManager::loadCurRatioIcon(int mode)
 {
-    if (fullFreeLoadState())
-        return;
+    const ItemInfoList &itemList = AppsManager::fullscreenItemInfoList();
+    int appSize = CalculateUtil::instance()->calculateIconSize(mode);
 
-    int appSize = CalculateUtil::instance()->calculateIconSize(ALL_APPS);
-    const ItemInfoList itemList = AppsManager::fullscreenItemInfoList();
     for (int i = 0; i < itemList.size(); i++) {
         const ItemInfo &info = itemList.at(i);
+        createPixmap(info, appSize * getCurRatio());
+    }
 
-        int iconWidth = (appSize * ratio);
-        createPixmap(info, iconWidth);
+    setIconLoadState(true);
+    emit iconLoaded();
+}
+
+void IconCacheManager::loadOtherRatioIcon(int mode)
+{
+    int appSize = CalculateUtil::instance()->calculateIconSize(mode);
+    const ItemInfoList &itemList = AppsManager::fullscreenItemInfoList();
+    for (int i = 0; i < ratioList.size(); i++) {
+        double ratio = ratioList.at(i);
+        if (qFuzzyCompare(getCurRatio(), ratio))
+            continue;
+
+        for (int j = 0; j < itemList.size(); j++) {
+            const ItemInfo &info = itemList.at(j);
+            createPixmap(info, appSize * ratio);
+        }
     }
 }
 
-/**获取全屏自由模式资源
+/** 图标主题变化时，加载全屏资源
  * @brief IconCacheManager::loadFullWindowIcon
  */
 void IconCacheManager::loadFullWindowIcon()
 {
-    // 移除小窗口的缓存
-    removeSmallWindowCache();
+    loadCurRatioIcon(ALL_APPS);
+    loadCurRatioIcon(GROUP_BY_CATEGORY);
 
-    if (fullFreeLoadState()) {
-        setIconLoadState(true);
-        return;
-    }
-
-    for (int i = 0; i < ratioList.size(); i++) {
-        double ratio = ratioList.at(i);
-        loadFullWindowIcon(ratio);
-    }
-
-    setIconLoadState(true);
-    setFullFreeLoadState(true);
-    emit iconLoaded();
-}
-
-void IconCacheManager::loadCategoryWindowIcon(double ratio)
-{
-    if (fullCategoryLoadState())
-        return;
-
-    // 全屏分类模式,重新计算item的真实大小
-    int appSize = CalculateUtil::instance()->calculateIconSize(GROUP_BY_CATEGORY);
-    int iconWidth = (appSize * ratio);
-    const ItemInfoList itemList = AppsManager::fullscreenItemInfoList();
-
-    for (int i = 0; i < itemList.size(); i++) {
-        const ItemInfo &info = itemList.at(i);
-        createPixmap(info, iconWidth);
-    }
-}
-
-void IconCacheManager::preloadCategory()
-{
-    loadCategoryWindowIcon(getCurRatio());
-}
-
-void IconCacheManager::preloadFullFree()
-{
-    loadFullWindowIcon(getCurRatio());
+    loadOtherRatioIcon(ALL_APPS);
+    loadOtherRatioIcon(GROUP_BY_CATEGORY);
 }
 
 void IconCacheManager::ratioChange(double ratio)
 {
-    // 预加载－全屏模式另外一种模式当前ratio的资源
-    if (!m_launcherInter->fullscreen())
-        return;
+    Q_UNUSED(ratio);
 
     switch (m_launcherInter->displaymode()) {
     case ALL_APPS:
-        loadCategoryWindowIcon(ratio);
+        loadCurRatioIcon(GROUP_BY_CATEGORY);
         break;
     case GROUP_BY_CATEGORY:
-        loadFullWindowIcon(ratio);
+        loadCurRatioIcon(ALL_APPS);
         break;
     }
-}
-
-/**获取全屏分类模式资源
- * @brief IconCacheManager::loadCategoryWindowIcon
- */
-void IconCacheManager::loadCategoryWindowIcon()
-{
-    // 移除小窗口的缓存
-    removeSmallWindowCache();
-
-    if (fullCategoryLoadState()) {
-        setIconLoadState(true);
-        return;
-    }
-
-    for (int i = 0; i < ratioList.size(); i++) {
-        double ratio = ratioList.at(i);
-        loadCategoryWindowIcon(ratio);
-    }
-
-    setIconLoadState(true);
-    setFullCategoryLoadState(true);
-    emit iconLoaded();
 }
 
 void IconCacheManager::insertCache(const QPair<QString, int> &tmpKey, const QPixmap &pix)
 {
     m_iconLock.lockForWrite();
-
     if (!m_iconCache.contains(tmpKey) || (m_iconCache.contains(tmpKey) && m_iconCache[tmpKey].value<QPixmap>().isNull()))
         m_iconCache[tmpKey] = pix;
 
@@ -297,9 +239,6 @@ void IconCacheManager::resetIconData()
 
     // 重置状态
     setIconLoadState(false);
-    setSmallWindowLoadState(false);
-    setFullCategoryLoadState(false);
-    setFullFreeLoadState(false);
 }
 
 void IconCacheManager::removeSmallWindowCache()
@@ -323,7 +262,6 @@ void IconCacheManager::removeSmallWindowCache()
     removeCache(AppsManager::windowedFrameItemInfoList(), DLauncher::APP_ITEM_ICON_SIZE);
     // 小窗口分类图标
     removeCache(AppsManager::AppsManager::windowedCategoryList(), DLauncher::APP_CATEGORY_ICON_SIZE);
-    setSmallWindowLoadState(false);
     setIconLoadState(false);
 }
 
@@ -335,36 +273,6 @@ bool IconCacheManager::iconLoadState()
 void IconCacheManager::setIconLoadState(bool state)
 {
     m_loadState.store(state);
-}
-
-void IconCacheManager::setFullFreeLoadState(bool state)
-{
-    m_fullFreeLoadState.store(state);
-}
-
-bool IconCacheManager::fullFreeLoadState()
-{
-    return m_fullFreeLoadState.load();
-}
-
-void IconCacheManager::setFullCategoryLoadState(bool state)
-{
-    m_fullCategoryLoadState.store(state);
-}
-
-bool IconCacheManager::fullCategoryLoadState()
-{
-    return m_fullCategoryLoadState.load();
-}
-
-void IconCacheManager::setSmallWindowLoadState(bool state)
-{
-    m_smallWindowLoadState = state;
-}
-
-bool IconCacheManager::smallWindowLoadState()
-{
-    return m_smallWindowLoadState.load();
 }
 
 void IconCacheManager::updateCanlendarIcon()

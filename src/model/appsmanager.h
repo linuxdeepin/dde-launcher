@@ -87,13 +87,9 @@ signals:
 
     void itemRedraw(const QModelIndex &index);
 
-    void categoryToFull();
-    void fullToCategory();
-    void smallToFullFree();
-    void smallToCategory();
-
-    void preloadCategory();
-    void preloadFullFree();
+    void loadFullWindowIcon();
+    void loadCurRationIcon(int mode);
+    void loadOtherRatioIcon(int mode);
 
     void startLoadIcon();
     void loadItem(const ItemInfo &info, const QString &operationStr);

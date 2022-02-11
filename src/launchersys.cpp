@@ -177,9 +177,7 @@ void LauncherSys::displayModeChanged()
             lastLauncher->hideLauncher();
 
         setClickState(true);
-
         m_checkTimer->start();
-        m_launcherInter->showLauncher();
     } else {
         m_launcherInter->hideLauncher();
     }
@@ -283,11 +281,12 @@ void LauncherSys::preloadIcon()
     if (!getDConfigValue("preload-apps-icon", true).toBool())
         return;
 
+    // 进程启动加载图标资源
     // 全屏分类/自由模式，搜索或者导航栏的高度无法确定，确定后开始加载所有应用资源
     if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY)
-        emit m_appManager->smallToCategory();
+        emit m_appManager->loadCurRationIcon(GROUP_BY_CATEGORY);
     else
-        emit m_appManager->smallToFullFree();
+        emit m_appManager->loadCurRationIcon(ALL_APPS);
 }
 
 void LauncherSys::show()

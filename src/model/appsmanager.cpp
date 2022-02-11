@@ -894,13 +894,15 @@ void AppsManager::refreshUserInfoList()
         if (m_userSortedList.isEmpty()) {
             m_userSortedList = m_allAppInfoList;
         } else {
+            QSet<int> idxSet;
             // check used list isvaild
             for (QList<ItemInfo>::iterator it = m_userSortedList.begin(); it != m_userSortedList.end();) {
                 int idx = m_allAppInfoList.indexOf(*it);
-                if (idx >= 0) {
+                if (idx >= 0 && !idxSet.contains(idx)) {
 
                     // 更换语言的时候更新语言
                     it->updateInfo(m_allAppInfoList.at(idx));
+                    idxSet.insert(idx);
 
                     ++it;
                 } else {

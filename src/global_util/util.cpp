@@ -141,6 +141,37 @@ const QPixmap loadSvg(const QString &fileName, const QSize &size)
     return pixmap;
 }
 
+const QPixmap loadIco(const QString &fileName, const int size)
+{
+    QPixmap pixmap;
+
+    QImageReader reader(fileName);
+
+    if (reader.imageCount() > 0) {
+        for (int i = 0; i < reader.imageCount(); i++) {
+            // 如果ico文件中有多个图标,获取更大一点的图标
+            if (reader.jumpToImage(i)) {
+                QImage image = reader.read();
+                if (image.size().width() >= size ) {
+                    pixmap = QPixmap::fromImage(image);
+                    break;
+                }
+            }
+        }
+
+        // 如果列表中没有合适的尺寸,则用列表中最大的尺寸替代
+        if (pixmap.isNull() && reader.jumpToImage(reader.imageCount()  - 1)) {
+            QImage image = reader.read();
+            pixmap = QPixmap::fromImage(image);
+        }
+    }
+
+    if (pixmap.isNull())
+        pixmap.load(fileName);
+
+    return pixmap;
+}
+
 /**
  * @brief SettingsPtr 根据给定信息返回一个QGSettings指针
  * @param schema_id The id of the schema
@@ -404,6 +435,10 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
         if (QFile::exists(iconName)) {
             if (iconName.endsWith(".svg"))
                 pixmap = loadSvg(iconName, qRound(iconSize * ratio));
+            else if (iconName.endsWith(".ico"))
+                // ico文件中是包含一组不同尺寸图标的容器文件, 需要根据不同iconSize获取对应尺寸的图标
+                // 否则只能获取到最小的图标, 缩放时会出现锯齿
+                pixmap = loadIco(iconName, qRound(iconSize * ratio));
             else
                 pixmap = DHiDPIHelper::loadNxPixmap(iconName);
 

@@ -87,9 +87,11 @@ bool Menu::eventFilter(QObject *watched, QEvent *event)
                 hide();
                 return true;
             case Qt::Key_Up:
+            case Qt::Key_Backtab:
                 moveUp(size);
                 return true;
             case Qt::Key_Down:
+            case Qt::Key_Tab:
                 moveDown();
                 return true;
             case Qt::Key_Return:

@@ -274,6 +274,9 @@ void WindowedFrame::showLauncher()
     if (m_delayHideTimer->isActive())
         return;
 
+    // 显示后加载小窗口其他资源
+    emit m_appsManager->loadOtherIcon();
+
     qApp->processEvents();
     activateWindow();
     setFocus(Qt::ActiveWindowFocusReason);
@@ -290,9 +293,7 @@ void WindowedFrame::showLauncher()
     adjustPosition();
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
-
-    if (IconCacheManager::iconLoadState())
-        show();
+    show();
 }
 
 void WindowedFrame::hideLauncher()

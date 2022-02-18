@@ -59,6 +59,7 @@ signals:
 
 public slots:
     void loadWindowIcon();
+    void loadOtherIcon();
 
     void loadCurRatioIcon(int mode);
     void loadOtherRatioIcon(int mode);
@@ -73,16 +74,10 @@ private:
     static QReadWriteLock m_iconLock;
     static QHash<QPair<QString, int>, QVariant> m_iconCache;
     static std::atomic<bool> m_loadState;
-    static std::atomic<bool> m_fullFreeLoadState;
-    static std::atomic<bool> m_fullCategoryLoadState;
-    static std::atomic<bool> m_smallWindowLoadState;
 
     DBusLauncher *m_launcherInter;
 
-    ItemInfo m_itemInfo;
     ItemInfo m_calendarInfo;
-    int m_iconSize;
-    int m_calendarSize;
     bool m_iconValid;
     int m_tryNums;
     int m_tryCount;

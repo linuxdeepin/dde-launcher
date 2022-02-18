@@ -588,6 +588,15 @@ void FullScreenFrame::keyPressEvent(QKeyEvent *e)
 
 void FullScreenFrame::showEvent(QShowEvent *e)
 {
+    // 显示后加载当前模式其他ratio的资源，预加载全屏另一种模式当前ratio的资源
+    if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY) {
+        emit m_appsManager->loadOtherRatioIcon(GROUP_BY_CATEGORY);
+        emit m_appsManager->loadCurRationIcon(ALL_APPS);
+    } else {
+        emit m_appsManager->loadOtherRatioIcon(ALL_APPS);
+        emit m_appsManager->loadCurRationIcon(GROUP_BY_CATEGORY);
+    }
+
     m_delayHideTimer->stop();
     m_searchWidget->clearSearchContent();
 
@@ -1160,10 +1169,6 @@ void FullScreenFrame::initConnection()
 
 void FullScreenFrame::showLauncher()
 {
-    scaledBackground();
-    scaledBlurBackground();
-    update();
-
     m_focusIndex = 1;
     m_appItemDelegate->setCurrentIndex(QModelIndex());
 
@@ -1178,19 +1183,8 @@ void FullScreenFrame::showLauncher()
 
     m_searchWidget->edit()->lineEdit()->clearFocus();
 
-    if (IconCacheManager::iconLoadState()) {
-        setFixedSize(m_appsManager->currentScreen()->geometry().size());
-        show();
-
-        // 显示后加载当前模式其他ratio的资源，预加载全屏另一种模式当前ratio的资源
-        if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY) {
-            m_appsManager->loadOtherRatioIcon(GROUP_BY_CATEGORY);
-            m_appsManager->loadCurRationIcon(ALL_APPS);
-        } else {
-            m_appsManager->loadOtherRatioIcon(ALL_APPS);
-            m_appsManager->loadCurRationIcon(GROUP_BY_CATEGORY);
-        }
-    }
+    setFixedSize(m_appsManager->currentScreen()->geometry().size());
+    show();
 }
 
 void FullScreenFrame::hideLauncher()

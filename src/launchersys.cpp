@@ -50,10 +50,8 @@ LauncherSys::LauncherSys(QObject *parent)
     , m_ignoreRepeatVisibleChangeTimer(new QTimer(this))
     , m_calcUtil(CalculateUtil::instance())
     , m_dockInter(new DBusDock(this))
-    , m_checkTimer(new QTimer(this))
+    , m_clicked(false)
 {
-    setClickState(false);
-    m_checkTimer->setInterval(10);
     m_regionMonitor->setCoordinateType(DRegionMonitor::Original);
     displayModeChanged();
 
@@ -68,7 +66,6 @@ LauncherSys::LauncherSys(QObject *parent)
     connect(m_autoExitTimer, &QTimer::timeout, this, &LauncherSys::onAutoExitTimeout, Qt::QueuedConnection);
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &LauncherSys::onFrontendRectChanged);
     connect(IconCacheManager::instance(), &IconCacheManager::iconLoaded, this, &LauncherSys::aboutToShowLauncher, Qt::QueuedConnection);
-    connect(m_checkTimer, &QTimer::timeout, this, &LauncherSys::aboutToShowLauncher);
     connect(IconCacheManager::instance(), &IconCacheManager::iconLoaded, this, &LauncherSys::updateLauncher);
 
     m_autoExitTimer->start();
@@ -83,6 +80,9 @@ LauncherSys::~LauncherSys()
         delete m_fullLauncher;
 }
 
+/** dbus服务调用显示
+ * @brief LauncherSys::showLauncher
+ */
 void LauncherSys::showLauncher()
 {
     setClickState(true);
@@ -91,9 +91,6 @@ void LauncherSys::showLauncher()
         qInfo() << "session locked, can not show launcher";
         return;
     }
-
-    if (m_checkTimer->isActive())
-        m_ignoreRepeatVisibleChangeTimer->stop();
 
     if (m_ignoreRepeatVisibleChangeTimer->isActive())
         return;
@@ -108,6 +105,9 @@ void LauncherSys::showLauncher()
     }
 }
 
+/**dbus调用隐藏
+ * @brief LauncherSys::hideLauncher
+ */
 void LauncherSys::hideLauncher()
 {
     if (m_ignoreRepeatVisibleChangeTimer->isActive())
@@ -118,6 +118,7 @@ void LauncherSys::hideLauncher()
     unRegisterRegion();
 
     m_autoExitTimer->start();
+    setClickState(false);
     m_launcherInter->hideLauncher();
 }
 
@@ -126,6 +127,10 @@ void LauncherSys::uninstallApp(const QString &appKey)
     m_launcherInter->uninstallApp(appKey);
 }
 
+/**记录显示或者隐藏启动器ui的状态
+ * @brief LauncherSys::setClickState
+ * @param state 显示: true, 隐藏: false
+ */
 void LauncherSys::setClickState(bool state)
 {
     m_clicked = state;
@@ -176,14 +181,12 @@ void LauncherSys::displayModeChanged()
         if (lastLauncher != m_launcherInter)
             lastLauncher->hideLauncher();
 
-        setClickState(true);
-        m_checkTimer->start();
+        m_launcherInter->showLauncher();
     } else {
         m_launcherInter->hideLauncher();
     }
 
     QTimer::singleShot(0, this, [ = ] {
-        if (m_launcherInter->visible())
             registerRegion();
     });
 }
@@ -191,6 +194,7 @@ void LauncherSys::displayModeChanged()
 void LauncherSys::onVisibleChanged()
 {
     emit visibleChanged(m_launcherInter->visible());
+    setClickState(m_launcherInter->visible());
 }
 
 void LauncherSys::onAutoExitTimeout()
@@ -262,18 +266,8 @@ void LauncherSys::updateLauncher()
 
 void LauncherSys::aboutToShowLauncher()
 {
-    if (!m_checkTimer->isActive())
-        m_checkTimer->start();
-
-    if (m_launcherInter->visible()) {
-        m_checkTimer->stop();
-    }
-
-    if (IconCacheManager::iconLoadState() && clickState()) {
-        showLauncher();
-        m_checkTimer->stop();
-        setClickState(false);
-    }
+    if (IconCacheManager::iconLoadState() && clickState())
+        m_launcherInter->showLauncher();
 }
 
 void LauncherSys::preloadIcon()
@@ -292,5 +286,4 @@ void LauncherSys::preloadIcon()
 void LauncherSys::show()
 {
     setClickState(true);
-    aboutToShowLauncher();
 }

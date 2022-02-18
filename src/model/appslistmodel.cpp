@@ -494,11 +494,11 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppIconRole:
         return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize().width());
     case AppDialogIconRole:
-        return m_appsManager->appIcon(itemInfo, 36);
+        return m_appsManager->appIcon(itemInfo, DLauncher::APP_DLG_ICON_SIZE);
     case AppDragIconRole:
         return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize().width() * 1.2);
     case AppListIconRole: {
-        QSize iconSize = (static_cast<AppsListModel::AppCategory>(m_category) == AppsListModel::Category) ? QSize(18, 18) : m_calcUtil->appIconSize();
+        QSize iconSize = (static_cast<AppsListModel::AppCategory>(m_category) == AppsListModel::Category) ? QSize(DLauncher::APP_CATEGORY_ICON_SIZE, DLauncher::APP_CATEGORY_ICON_SIZE) : m_calcUtil->appIconSize();
         return m_appsManager->appIcon(itemInfo, iconSize.width());
     }
     case ItemSizeHintRole:

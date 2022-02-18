@@ -53,12 +53,6 @@ BoxFrame::BoxFrame(QWidget *parent)
     connect(m_bgManager, &BackgroundManager::currentWorkspaceBlurBackgroundChanged, this, &BoxFrame::setBlurBackground);
 }
 
-// Message for maintainers: DON'T use QSS to set the background !
-
-// This function takes ~2ms by setting QSS to set backgrounds, but causes show() of
-// ShutdownFrame takes ~260ms to complete. On the other hand, this function takes
-// ~130ms by setting pixmap, yet takes only ~12ms to complete the show() of ShutdownFrame.
-// It'll be more obvious on dual screens environment.
 void BoxFrame::setBackground(const QString &url)
 {
     if (m_lastUrl == url)
@@ -80,23 +74,30 @@ void BoxFrame::setBlurBackground(const QString &url)
 }
 
 /** 缩放图片并缓存
- * @brief BoxFrame::scaledBackground
+ * @brief BoxFrame::scaledBlurBackground
  */
 void BoxFrame::scaledBlurBackground()
 {
     if (m_useSolidBackground)
         return;
-        
+
+    const QSize &size = currentScreen()->size() * currentScreen()->devicePixelRatio();
+    static QString blurBgPath;
+    static QSize lastSize;
+
+    // 当背景图片路径且屏幕大小没有变化，则无需再次加载,减少资源加载耗时
+    if (blurBgPath == m_lastBlurUrl && size == lastSize)
+        return;
+
+    blurBgPath = m_lastBlurUrl;
+    lastSize = size;
+
     QPixmap pixmap(m_lastBlurUrl);
     if (pixmap.isNull())
         pixmap.load(m_defaultBg);
-    if (pixmap.isNull())
-        return;
 
-    const QSize &size = currentScreen()->size() * currentScreen()->devicePixelRatio();
-    QPixmap scaledpixmap = pixmap.scaled(size,
-                               Qt::KeepAspectRatioByExpanding,
-                               Qt::SmoothTransformation);
+    QPixmap scaledpixmap = pixmap.scaled(size, Qt::KeepAspectRatioByExpanding,
+                                         Qt::SmoothTransformation);
     emit backgroundImageChanged(scaledpixmap);
 }
 
@@ -108,16 +109,23 @@ void BoxFrame::scaledBackground()
     if (m_useSolidBackground)
         return;
 
+    // 当背景图片路径且屏幕大小没有变化，则无需再次加载,减少资源加载耗时
+    const QSize &size = currentScreen()->size() * currentScreen()->devicePixelRatio();
+    static QString bgPath;
+    static QSize lastSize;
+
+    if (bgPath == m_lastUrl && lastSize == size)
+        return;
+
+    bgPath = m_lastUrl;
+    lastSize = size;
+
     QPixmap pixmap(m_lastUrl);
     if (pixmap.isNull())
         pixmap = QPixmap(m_defaultBg);
-    if (pixmap.isNull())
-        return;
 
-    const QSize &size = currentScreen()->size() * currentScreen()->devicePixelRatio();
-    m_pixmap = pixmap.scaled(size,
-                                Qt::KeepAspectRatioByExpanding,
-                                Qt::SmoothTransformation);
+    m_pixmap = pixmap.scaled(size, Qt::KeepAspectRatioByExpanding,
+                             Qt::SmoothTransformation);
     update();
 }
 

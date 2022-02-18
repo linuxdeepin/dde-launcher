@@ -92,6 +92,7 @@ signals:
     void loadOtherRatioIcon(int mode);
 
     void startLoadIcon();
+    void loadOtherIcon();
     void loadItem(const ItemInfo &info, const QString &operationStr);
 
 public slots:

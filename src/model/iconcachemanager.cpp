@@ -13,11 +13,8 @@ QHash<QPair<QString, int>, QVariant> IconCacheManager::m_iconCache = QHash<QPair
 QReadWriteLock IconCacheManager::m_iconLock;
 
 std::atomic<bool> IconCacheManager::m_loadState;
-std::atomic<bool> IconCacheManager::m_fullFreeLoadState;
-std::atomic<bool> IconCacheManager::m_fullCategoryLoadState;
-std::atomic<bool> IconCacheManager::m_smallWindowLoadState;
-
 static QList<double> ratioList = { 0.2, 0.3, 0.4, 0.5, 0.6 };
+static QList<int> sizeList = { 16, 18, 24, 32, 64, 96, 128, 256 };
 
 IconCacheManager *IconCacheManager::instance()
 {
@@ -39,6 +36,8 @@ void IconCacheManager::createPixmap(const ItemInfo &itemInfo, int size)
 {
     const int iconSize = perfectIconSize(size);
     QPair<QString, int> tmpKey { cacheKey(itemInfo, CacheType::ImageType), iconSize};
+    if (itemInfo.m_iconKey == "dde-calendar")
+        m_calendarInfo = itemInfo;
 
     if (existInCache(tmpKey))
         return;
@@ -48,15 +47,13 @@ void IconCacheManager::createPixmap(const ItemInfo &itemInfo, int size)
     if (m_iconValid) {
         m_tryNums = 0;
     } else {
-        m_itemInfo = itemInfo;
-        m_iconSize = size;
         if (m_tryNums < 10) {
             ++m_tryNums;
             if (!QFile::exists(itemInfo.m_iconKey))
                 QIcon::setThemeSearchPaths(QIcon::themeSearchPaths());
 
             QThread::msleep(10);
-            m_iconValid = getThemeIcon(pixmap, m_itemInfo, m_iconSize, true);
+            m_iconValid = getThemeIcon(pixmap, itemInfo, size, true);
         } else {
             if (m_tryCount > 10) {
                 m_tryCount = 0;
@@ -73,7 +70,7 @@ void IconCacheManager::createPixmap(const ItemInfo &itemInfo, int size)
 
             ++m_tryCount;
             QThread::msleep(500);
-            m_iconValid = getThemeIcon(pixmap, m_itemInfo, m_iconSize, true);
+            m_iconValid = getThemeIcon(pixmap, itemInfo, size, true);
         }
     }
 }
@@ -115,6 +112,15 @@ void IconCacheManager::loadWindowIcon()
         createPixmap(info, DLauncher::APP_ITEM_ICON_SIZE);
     }
 
+    setIconLoadState(true);
+    emit iconLoaded();
+}
+
+/**小窗口显示后加载的资源
+ * @brief IconCacheManager::loadOtherIcon
+ */
+void IconCacheManager::loadOtherIcon()
+{
     // 小窗口模式分类图标
     const ItemInfoList &categoryList = AppsManager::windowedCategoryList();
     for (int i = 0; i < categoryList.size(); i++) {
@@ -122,8 +128,13 @@ void IconCacheManager::loadWindowIcon()
         createPixmap(info, DLauncher::APP_CATEGORY_ICON_SIZE);
     }
 
-    setIconLoadState(true);
-    emit iconLoaded();
+    // 小窗口模式卸载,拖拽图标
+    const ItemInfoList &itemList = AppsManager::windowedFrameItemInfoList();
+    for (int i = 0; i < itemList.size(); i++) {
+        const ItemInfo &info = itemList.at(i);
+        createPixmap(info, DLauncher::APP_DLG_ICON_SIZE);
+        createPixmap(info, DLauncher::APP_DRAG_ICON_SIZE);
+    }
 }
 
 void IconCacheManager::loadItem(const ItemInfo &info, const QString &operationStr)
@@ -218,10 +229,8 @@ void IconCacheManager::insertCache(const QPair<QString, int> &tmpKey, const QPix
 
 void IconCacheManager::removeItemFromCache(const ItemInfo &info)
 {
-    const int arraySize = 8;
-    const int iconArray[arraySize] = { 16, 18, 24, 32, 64, 96, 128, 256 };
-    for (int i = 0; i < arraySize; i++) {
-        QPair<QString, int> pixKey { cacheKey(info, CacheType::ImageType), iconArray[i] };
+    for (int i = 0; i < sizeList.size(); i++) {
+        QPair<QString, int> pixKey { cacheKey(info, CacheType::ImageType), sizeList.at(i) };
         if (existInCache(pixKey)) {
             m_iconLock.lockForWrite();
             m_iconCache.remove(pixKey);
@@ -280,6 +289,8 @@ void IconCacheManager::updateCanlendarIcon()
     static int curDay = QDate::currentDate().day();
     if (curDay != QDate::currentDate().day()) {
         removeItemFromCache(m_calendarInfo);
-        createPixmap(m_calendarInfo, m_calendarSize);
+
+        for (int i = 0; i < sizeList.size(); i++)
+            createPixmap(m_calendarInfo, sizeList.at(i));
     }
 }

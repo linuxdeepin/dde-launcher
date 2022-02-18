@@ -31,7 +31,8 @@ namespace DLauncher {
 
 static const int APP_ITEM_ICON_SIZE = 24;                                            // 小窗口应用图标大小
 static const int APP_CATEGORY_ICON_SIZE = 18;                                        // 小窗口分类项图标大小
-static const int APP_DRAG_ICON_SIZE = 48;
+static const int APP_DRAG_ICON_SIZE = 28;                                            // 小窗口拖拽图标大小
+static const int APP_DLG_ICON_SIZE = 36;                                             // 小窗口卸载弹窗图标大小
 static const int APP_DRAG_SWAP_THRESHOLD = 10;
 static const int APP_DRAG_SCROLL_THRESHOLD = 150;
 static const int APP_DRAG_MININUM_TIME = 300;

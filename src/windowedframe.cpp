@@ -806,6 +806,11 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
             m_searcherEdit->lineEdit()->clearFocus();
     }
 
+    // 窗体变为不活动窗口的时候隐藏launcher
+    if (event->type() == QEvent::WindowDeactivate && watched == this) {
+        hideLauncher();
+    }
+
     return QWidget::eventFilter(watched, event);
 }
 

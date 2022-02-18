@@ -132,17 +132,20 @@ AppsManager::AppsManager(QObject *parent) :
         IconCacheManager::setIconLoadState(true);
     }
 
-    // 进程启动加载图标资源
+    // 进程启动加载小窗口主窗体显示的图标资源
     connect(this, &AppsManager::startLoadIcon, m_iconCacheManager, &IconCacheManager::loadWindowIcon, Qt::QueuedConnection);
+
+    // 加载小窗口其他图标资源
+    connect(this, &AppsManager::loadOtherIcon, m_iconCacheManager, &IconCacheManager::loadOtherIcon, Qt::QueuedConnection);
 
     // 全屏切换到小窗口，加载小窗口资源
     connect(m_calUtil, &CalculateUtil::loadWindowIcon, m_iconCacheManager, &IconCacheManager::loadWindowIcon, Qt::QueuedConnection);
 
     // 启动加载当前模式，当前ratio下的资源
-    connect(this, &AppsManager::loadCurRationIcon, m_iconCacheManager, static_cast<void(IconCacheManager::*)(int)>(&IconCacheManager::loadCurRatioIcon), Qt::QueuedConnection);
+    connect(this, &AppsManager::loadCurRationIcon, m_iconCacheManager, &IconCacheManager::loadCurRatioIcon, Qt::QueuedConnection);
 
     // 显示后，加载当前模式其他ratio下的资源， 预加载全屏下其他模式下，当前ratio下的资源
-    connect(this, &AppsManager::loadOtherRatioIcon, m_iconCacheManager, static_cast<void(IconCacheManager::*)(int)>(&IconCacheManager::loadOtherRatioIcon), Qt::QueuedConnection);
+    connect(this, &AppsManager::loadOtherRatioIcon, m_iconCacheManager, &IconCacheManager::loadOtherRatioIcon, Qt::QueuedConnection);
 
     // 全屏状态下，自由模式和分类模式来回切换，加载切换后对应模式下的其他ratio下的资源
     connect(this, &AppsManager::loadFullWindowIcon, m_iconCacheManager, static_cast<void(IconCacheManager::*)()>(&IconCacheManager::loadFullWindowIcon), Qt::QueuedConnection);

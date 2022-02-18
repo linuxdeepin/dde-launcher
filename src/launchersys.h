@@ -91,7 +91,6 @@ private:
     QMetaObject::Connection m_regionMonitorConnect;         // 信号和槽连接返回的对象
     CalculateUtil *m_calcUtil;                              // 界面布局计算处理类
     DBusDock *m_dockInter;
-    QTimer *m_checkTimer;
     bool m_clicked;                                         // 人的点击操作状态
 };
 

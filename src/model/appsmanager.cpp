@@ -150,7 +150,7 @@ AppsManager::AppsManager(QObject *parent) :
     // 全屏状态下，自由模式和分类模式来回切换，加载切换后对应模式下的其他ratio下的资源
     connect(this, &AppsManager::loadFullWindowIcon, m_iconCacheManager, static_cast<void(IconCacheManager::*)()>(&IconCacheManager::loadFullWindowIcon), Qt::QueuedConnection);
 
-    connect(m_calUtil, &CalculateUtil::ratioChanged, m_iconCacheManager, &IconCacheManager::ratioChange, Qt::QueuedConnection);
+    // 应用更新,卸载,安装过程中图标的处理
     connect(this, &AppsManager::loadItem, m_iconCacheManager, &IconCacheManager::loadItem, Qt::QueuedConnection);
 
     connect(qApp, &QCoreApplication::aboutToQuit, m_iconCacheManager, &IconCacheManager::deleteLater);
@@ -706,7 +706,7 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
 {
     QPixmap pix;
     const int iconSize = perfectIconSize(size);
-    QPair<QString, int> tmpKey { cacheKey(info, CacheType::ImageType) , iconSize};
+    QPair<QString, int> tmpKey { cacheKey(info) , iconSize };
 
     // 开启子线程加载应用图标时
     if (m_iconCacheThread->isRunning()) {

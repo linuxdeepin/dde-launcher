@@ -216,8 +216,6 @@ bool CalculateUtil::increaseIconSize()
         return false;
 
     m_launcherGsettings->set("apps-icon-ratio", ratio);
-    emit ratioChanged(ratio);
-
     return true;
 }
 
@@ -279,8 +277,6 @@ bool CalculateUtil::decreaseIconSize()
         return false;
 
     m_launcherGsettings->set("apps-icon-ratio", ratio);
-    emit ratioChanged(ratio);
-
     return true;
 }
 

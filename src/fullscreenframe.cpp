@@ -1781,11 +1781,6 @@ AppsListModel::AppCategory FullScreenFrame::prevCategoryType(const AppsListModel
     return prevCategory;
 }
 
-const QScreen *FullScreenFrame::currentScreen()
-{
-    return m_appsManager->currentScreen();
-}
-
 void FullScreenFrame::layoutChanged()
 {
     QSize boxSize;

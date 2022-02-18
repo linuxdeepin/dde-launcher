@@ -350,12 +350,9 @@ bool createCalendarIcon(const QString &fileName)
 
 int perfectIconSize(const int size)
 {
-    const int s = 8;
-    const int l[s] = { 16, 18, 24, 32, 64, 96, 128, 256 };
-
-    for (int i(0); i != s; ++i)
-        if (size <= l[i])
-            return l[i];
+    for (int i = 0; i < DLauncher::APP_ICON_SIZE_LIST.size(); ++i)
+        if (size <= DLauncher::APP_ICON_SIZE_LIST.at(i))
+            return DLauncher::APP_ICON_SIZE_LIST.at(i);
 
     return 256;
 }
@@ -389,7 +386,7 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
 
     const qreal ratio = qApp->devicePixelRatio();
     const int iconSize = perfectIconSize(size);
-    QPair<QString, int> tmpKey { cacheKey(itemInfo, CacheType::ImageType) , iconSize};
+    QPair<QString, int> tmpKey { cacheKey(itemInfo) , iconSize };
 
     do {
         if (iconName.startsWith("data:image/")) {
@@ -480,9 +477,9 @@ QIcon getIcon(const QString &name)
     return QIcon::fromTheme(getIconList(name).first());
 }
 
-QString cacheKey(const ItemInfo &itemInfo, CacheType type)
+QString cacheKey(const ItemInfo &itemInfo)
 {
-    return itemInfo.m_name + itemInfo.m_iconKey + QString::number(type);
+    return itemInfo.m_name + itemInfo.m_iconKey;
 }
 
 /**

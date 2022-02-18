@@ -3,13 +3,9 @@
 #include "util.h"
 #include "calculate_util.h"
 
-#include "dbuslauncher.h"
-
-#include <QPixmap>
 #include <QIcon>
-#include <QString>
 
-QHash<QPair<QString, int>, QVariant> IconCacheManager::m_iconCache = QHash<QPair<QString, int>, QVariant>();
+QHash<QPair<QString, int>, QPixmap> IconCacheManager::m_iconCache = QHash<QPair<QString, int>, QPixmap>();
 QReadWriteLock IconCacheManager::m_iconLock;
 
 std::atomic<bool> IconCacheManager::m_loadState;
@@ -24,7 +20,6 @@ IconCacheManager *IconCacheManager::instance()
 
 IconCacheManager::IconCacheManager(QObject *parent)
     : QObject(parent)
-    , m_launcherInter(new DBusLauncher(this))
     , m_iconValid(true)
     , m_tryNums(0)
     , m_tryCount(0)
@@ -35,7 +30,8 @@ IconCacheManager::IconCacheManager(QObject *parent)
 void IconCacheManager::createPixmap(const ItemInfo &itemInfo, int size)
 {
     const int iconSize = perfectIconSize(size);
-    QPair<QString, int> tmpKey { cacheKey(itemInfo, CacheType::ImageType), iconSize};
+    QPair<QString, int> tmpKey { cacheKey(itemInfo), iconSize };
+
     if (itemInfo.m_iconKey == "dde-calendar")
         m_calendarInfo = itemInfo;
 
@@ -85,7 +81,7 @@ bool IconCacheManager::existInCache(const QPair<QString, int> &tmpKey)
     std::atomic<bool> exist;
 
     m_iconLock.lockForRead();
-    exist.store(m_iconCache.contains(tmpKey) && !m_iconCache[tmpKey].value<QPixmap>().isNull());
+    exist.store(m_iconCache.contains(tmpKey) && !m_iconCache[tmpKey].isNull());
     m_iconLock.unlock();
 
     return exist;
@@ -94,7 +90,7 @@ bool IconCacheManager::existInCache(const QPair<QString, int> &tmpKey)
 void IconCacheManager::getPixFromCache(QPair<QString, int> &tmpKey, QPixmap &pix)
 {
     m_iconLock.lockForRead();
-    pix = m_iconCache[tmpKey].value<QPixmap>();
+    pix = m_iconCache[tmpKey];
     m_iconLock.unlock();
 }
 
@@ -204,24 +200,10 @@ void IconCacheManager::loadFullWindowIcon()
     loadOtherRatioIcon(GROUP_BY_CATEGORY);
 }
 
-void IconCacheManager::ratioChange(double ratio)
-{
-    Q_UNUSED(ratio);
-
-    switch (m_launcherInter->displaymode()) {
-    case ALL_APPS:
-        loadCurRatioIcon(GROUP_BY_CATEGORY);
-        break;
-    case GROUP_BY_CATEGORY:
-        loadCurRatioIcon(ALL_APPS);
-        break;
-    }
-}
-
 void IconCacheManager::insertCache(const QPair<QString, int> &tmpKey, const QPixmap &pix)
 {
     m_iconLock.lockForWrite();
-    if (!m_iconCache.contains(tmpKey) || (m_iconCache.contains(tmpKey) && m_iconCache[tmpKey].value<QPixmap>().isNull()))
+    if (!m_iconCache.contains(tmpKey) || (m_iconCache.contains(tmpKey) && m_iconCache[tmpKey].isNull()))
         m_iconCache[tmpKey] = pix;
 
     m_iconLock.unlock();
@@ -229,8 +211,8 @@ void IconCacheManager::insertCache(const QPair<QString, int> &tmpKey, const QPix
 
 void IconCacheManager::removeItemFromCache(const ItemInfo &info)
 {
-    for (int i = 0; i < sizeList.size(); i++) {
-        QPair<QString, int> pixKey { cacheKey(info, CacheType::ImageType), sizeList.at(i) };
+    for (int i = 0; i < DLauncher::APP_ICON_SIZE_LIST.size(); i++) {
+        QPair<QString, int> pixKey { cacheKey(info), DLauncher::APP_ICON_SIZE_LIST.at(i) };
         if (existInCache(pixKey)) {
             m_iconLock.lockForWrite();
             m_iconCache.remove(pixKey);
@@ -250,30 +232,6 @@ void IconCacheManager::resetIconData()
     setIconLoadState(false);
 }
 
-void IconCacheManager::removeSmallWindowCache()
-{
-    auto removeCache = [](const ItemInfoList &itemList, int pixSize) {
-        for (int i = 0; i < itemList.size(); i++) {
-            const ItemInfo &itemInfo = itemList.at(i);
-            const int iconSize = perfectIconSize(pixSize);
-            QPair<QString, int> pixKey { cacheKey(itemInfo, CacheType::ImageType), iconSize };
-
-            if (existInCache(pixKey)) {
-                m_iconLock.lockForWrite();
-                m_iconCache.remove(pixKey);
-                m_iconLock.unlock();
-            }
-        }
-    };
-
-
-    // 小窗口应用图标
-    removeCache(AppsManager::windowedFrameItemInfoList(), DLauncher::APP_ITEM_ICON_SIZE);
-    // 小窗口分类图标
-    removeCache(AppsManager::AppsManager::windowedCategoryList(), DLauncher::APP_CATEGORY_ICON_SIZE);
-    setIconLoadState(false);
-}
-
 bool IconCacheManager::iconLoadState()
 {
     return m_loadState.load();
@@ -290,7 +248,7 @@ void IconCacheManager::updateCanlendarIcon()
     if (curDay != QDate::currentDate().day()) {
         removeItemFromCache(m_calendarInfo);
 
-        for (int i = 0; i < sizeList.size(); i++)
-            createPixmap(m_calendarInfo, sizeList.at(i));
+        for (int i = 0; i < DLauncher::APP_ICON_SIZE_LIST.size(); i++)
+            createPixmap(m_calendarInfo, DLauncher::APP_ICON_SIZE_LIST.at(i));
     }
 }

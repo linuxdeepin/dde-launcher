@@ -26,6 +26,7 @@
 
 #include <QtGlobal>
 #include <QString>
+#include <QList>
 
 namespace DLauncher {
 
@@ -36,6 +37,8 @@ static const int APP_DLG_ICON_SIZE = 36;                                        
 static const int APP_DRAG_SWAP_THRESHOLD = 10;
 static const int APP_DRAG_SCROLL_THRESHOLD = 150;
 static const int APP_DRAG_MININUM_TIME = 300;
+
+static const QList<int> APP_ICON_SIZE_LIST = { 16, 18, 24, 32, 64, 96, 128, 256 };   // 应用图标大小列表
 
 static const int DRAG_THRESHOLD = 15;
 

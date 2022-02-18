@@ -28,11 +28,11 @@
 #include "iteminfo.h"
 
 #include <QObject>
-#include <QVariant>
+#include <QString>
 #include <QHash>
+#include <QPixmap>
 #include <QReadWriteLock>
 
-class DBusLauncher;
 class IconCacheManager : public QObject
 {
     Q_OBJECT
@@ -65,17 +65,13 @@ public slots:
     void loadOtherRatioIcon(int mode);
     void loadFullWindowIcon();
 
-    void ratioChange(double ratio);
     void loadItem(const ItemInfo &info, const QString &operationStr);
-    void removeSmallWindowCache();
     void updateCanlendarIcon();
 
 private:
     static QReadWriteLock m_iconLock;
-    static QHash<QPair<QString, int>, QVariant> m_iconCache;
+    static QHash<QPair<QString, int>, QPixmap> m_iconCache;
     static std::atomic<bool> m_loadState;
-
-    DBusLauncher *m_launcherInter;
 
     ItemInfo m_calendarInfo;
     bool m_iconValid;

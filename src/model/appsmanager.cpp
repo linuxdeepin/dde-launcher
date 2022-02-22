@@ -121,7 +121,7 @@ AppsManager::AppsManager(QObject *parent) :
 
     m_iconCacheManager = IconCacheManager::instance();
 
-    m_updateCalendarTimer->setInterval(60 * 1000);// 1min
+    m_updateCalendarTimer->setInterval(1000);// 1s
     m_updateCalendarTimer->start();
 
     // 启动应用图标和应用名称缓存线程,减少系统加载应用时的开销

@@ -266,8 +266,12 @@ void LauncherSys::updateLauncher()
 
 void LauncherSys::aboutToShowLauncher()
 {
-    if (IconCacheManager::iconLoadState() && clickState())
+    if (IconCacheManager::iconLoadState() && clickState()) {
+        if (!m_launcherInter->visible())
+            return;
+
         m_launcherInter->showLauncher();
+    }
 }
 
 void LauncherSys::preloadIcon()

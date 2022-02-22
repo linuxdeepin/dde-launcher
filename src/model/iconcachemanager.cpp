@@ -245,10 +245,16 @@ void IconCacheManager::setIconLoadState(bool state)
 void IconCacheManager::updateCanlendarIcon()
 {
     static int curDay = QDate::currentDate().day();
-    if (curDay != QDate::currentDate().day()) {
+    static QTime curTime = QTime::currentTime();
+
+    // 天数或者分钟变化时,更新图标资源
+    if (curDay != QDate::currentDate().day() || curTime.minute() != QTime::currentTime().minute()) {
         removeItemFromCache(m_calendarInfo);
 
         for (int i = 0; i < DLauncher::APP_ICON_SIZE_LIST.size(); i++)
             createPixmap(m_calendarInfo, DLauncher::APP_ICON_SIZE_LIST.at(i));
+
+        // 刷新界面
+        emit iconLoaded();
     }
 }

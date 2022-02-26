@@ -132,14 +132,11 @@ AppsManager::AppsManager(QObject *parent) :
         IconCacheManager::setIconLoadState(true);
     }
 
-    // 进程启动加载小窗口主窗体显示的图标资源
-    connect(this, &AppsManager::startLoadIcon, m_iconCacheManager, &IconCacheManager::loadWindowIcon, Qt::QueuedConnection);
+    // 进程启动加载小窗口主窗体显示的图标资源 & 全屏切换到小窗口，加载小窗口资源 & 图标主题变化时，加载小窗口图标资源
+    connect(this, &AppsManager::loadWindowIcon, m_iconCacheManager, &IconCacheManager::loadWindowIcon, Qt::QueuedConnection);
 
     // 加载小窗口其他图标资源
     connect(this, &AppsManager::loadOtherIcon, m_iconCacheManager, &IconCacheManager::loadOtherIcon, Qt::QueuedConnection);
-
-    // 全屏切换到小窗口，加载小窗口资源
-    connect(m_calUtil, &CalculateUtil::loadWindowIcon, m_iconCacheManager, &IconCacheManager::loadWindowIcon, Qt::QueuedConnection);
 
     // 启动加载当前模式，当前ratio下的资源
     connect(this, &AppsManager::loadCurRationIcon, m_iconCacheManager, &IconCacheManager::loadCurRatioIcon, Qt::QueuedConnection);
@@ -147,14 +144,14 @@ AppsManager::AppsManager(QObject *parent) :
     // 显示后，加载当前模式其他ratio下的资源， 预加载全屏下其他模式下，当前ratio下的资源
     connect(this, &AppsManager::loadOtherRatioIcon, m_iconCacheManager, &IconCacheManager::loadOtherRatioIcon, Qt::QueuedConnection);
 
-    // 全屏状态下，自由模式和分类模式来回切换，加载切换后对应模式下的其他ratio下的资源
-    connect(this, &AppsManager::loadFullWindowIcon, m_iconCacheManager, static_cast<void(IconCacheManager::*)()>(&IconCacheManager::loadFullWindowIcon), Qt::QueuedConnection);
+    // 图标主题变化时，加载全屏图标资源
+    connect(this, &AppsManager::loadFullWindowIcon, m_iconCacheManager, &IconCacheManager::loadFullWindowIcon, Qt::QueuedConnection);
 
-    // 应用更新,卸载,安装过程中图标的处理
+    // 应用更新, 卸载, 安装过程中图标的处理
     connect(this, &AppsManager::loadItem, m_iconCacheManager, &IconCacheManager::loadItem, Qt::QueuedConnection);
 
-    connect(qApp, &QCoreApplication::aboutToQuit, m_iconCacheManager, &IconCacheManager::deleteLater);
     connect(qApp, &QCoreApplication::aboutToQuit, this, &AppsManager::stopThread, Qt::QueuedConnection);
+    connect(qApp, &QCoreApplication::aboutToQuit, m_iconCacheManager, &IconCacheManager::deleteLater);
     connect(m_updateCalendarTimer, &QTimer::timeout, m_iconCacheManager, &IconCacheManager::updateCanlendarIcon, Qt::QueuedConnection);
 
     updateTrashState();
@@ -386,7 +383,7 @@ void AppsManager::refreshAllList()
 
     // 全屏分类模式/全屏自由模式都需要界面计算,小窗口直接加载
     if (!m_launcherInter->fullscreen())
-        emit startLoadIcon();
+        emit loadWindowIcon();
 }
 
 void AppsManager::saveUserSortedList()
@@ -1171,7 +1168,7 @@ void AppsManager::onIconThemeChanged()
 
     IconCacheManager::resetIconData();
     if (!CalculateUtil::instance()->fullscreen()) {
-        emit startLoadIcon();
+        emit loadWindowIcon();
     } else {
         emit loadFullWindowIcon();
     }

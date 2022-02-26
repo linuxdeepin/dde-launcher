@@ -87,6 +87,7 @@ signals:
 
     void itemRedraw(const QModelIndex &index);
 
+    void loadWindowIcon();
     void loadFullWindowIcon();
     void loadCurRationIcon(int mode);
     void loadOtherRatioIcon(int mode);

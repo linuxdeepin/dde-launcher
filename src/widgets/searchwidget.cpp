@@ -148,7 +148,6 @@ void SearchWidget::onTextChanged(const QString &str)
 
 void SearchWidget::onModeClicked()
 {
-    emit m_calcUtil->loadWindowIcon();
     m_calcUtil->setFullScreen(false);
     DDBusSender()
             .service("com.deepin.dde.daemon.Launcher")

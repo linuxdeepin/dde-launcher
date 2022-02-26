@@ -160,10 +160,7 @@ void LauncherSys::displayModeChanged()
             connect(m_fullLauncher, &FullScreenFrame::visibleChanged, this, &LauncherSys::onVisibleChanged);
             connect(m_fullLauncher, &FullScreenFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
         }
-
         m_launcherInter = static_cast<LauncherInterface*>(m_fullLauncher);
-
-        preloadIcon();
     } else {
         if (!m_windowLauncher) {
             m_windowLauncher = new WindowedFrame;
@@ -173,7 +170,7 @@ void LauncherSys::displayModeChanged()
         }
         m_launcherInter = static_cast<LauncherInterface*>(m_windowLauncher);
     }
-
+    preloadIcon();
     lastLauncher = lastLauncher ? lastLauncher : m_launcherInter;
 
     if (lastLauncher->visible()) {
@@ -277,6 +274,11 @@ void LauncherSys::preloadIcon()
 {
     if (!getDConfigValue("preload-apps-icon", true).toBool())
         return;
+
+    if (!m_dbusLauncherInter->fullscreen()) {
+        emit m_appManager->loadWindowIcon();
+        return;
+    }
 
     // 进程启动加载图标资源
     // 全屏分类/自由模式，搜索或者导航栏的高度无法确定，确定后开始加载所有应用资源

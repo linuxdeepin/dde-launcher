@@ -34,6 +34,7 @@
 #include <com_deepin_daemon_imageblur.h>
 #include <com_deepin_daemon_appearance.h>
 #include <com_deepin_daemon_display.h>
+#include <com_deepin_daemon_display_monitor.h>
 
 #define CUSTOM_MODE     0
 #define MERGE_MODE      1
@@ -44,6 +45,7 @@ using ImageEffeblur = com::deepin::daemon::ImageBlur;
 using ImageEffectInter = com::deepin::daemon::ImageEffect;
 using AppearanceInter = com::deepin::daemon::Appearance;
 using DisplayInter = com::deepin::daemon::Display;
+using DisplayMonitor = com::deepin::daemon::display::Monitor;
 
 class DisplayHelper : public QObject, public Dtk::Core::DSingleton<DisplayHelper>
 {

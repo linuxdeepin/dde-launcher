@@ -504,3 +504,8 @@ QVariant getDConfigValue(const QString &key, const QVariant &defaultValue, const
 
     return defaultValue;
 }
+
+bool isWaylandDisplay()
+{
+    return QGuiApplication::platformName().startsWith("wayland", Qt::CaseInsensitive);
+}

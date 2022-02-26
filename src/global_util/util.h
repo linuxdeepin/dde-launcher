@@ -27,13 +27,11 @@
 #include "iteminfo.h"
 #include "constants.h"
 
-#include <QtCore>
-#include <QGSettings>
+#include <DConfig>
 
-enum CacheType {
-    TextType,
-    ImageType
-};
+#include <QtCore>
+
+DCORE_USE_NAMESPACE
 
 QString getCategoryNames(QString text);
 const QPixmap loadSvg(const QString &fileName, const int size);
@@ -50,5 +48,6 @@ QString cacheKey(const ItemInfo &itemInfo);
 bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, bool reObtain);
 QIcon getIcon(const QString &name);
 QVariant getDConfigValue(const QString &key, const QVariant &defaultValue, const QString &configFileName = DLauncher::DEFAULT_META_CONFIG_NAME);
-#endif // UTIL_H
+bool isWaylandDisplay();
 
+#endif // UTIL_H

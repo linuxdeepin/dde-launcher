@@ -23,13 +23,15 @@
 
 #include "backgroundmanager.h"
 #include "appsmanager.h"
+#include "util.h"
 
 #include <QApplication>
 #include <QtConcurrent>
 
 using namespace com::deepin;
 
-static const QString DefaultWallpaper = "/usr/share/backgrounds/default_background.jpg";
+const QString DefaultWallpaper = "/usr/share/backgrounds/default_background.jpg";
+const QString DisplayInterface("com.deepin.daemon.Display");
 
 static QString getLocalFile(const QString &file)
 {
@@ -59,7 +61,7 @@ BackgroundManager::BackgroundManager(QObject *parent)
     , m_imageEffectInter(new ImageEffectInter("com.deepin.daemon.ImageEffect", "/com/deepin/daemon/ImageEffect", QDBusConnection::systemBus(), this))
     , m_imageblur(new ImageEffeblur("com.deepin.daemon.ImageEffect", "/com/deepin/daemon/ImageBlur", QDBusConnection::systemBus(), this))
     , m_appearanceInter(new AppearanceInter("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
-    , m_displayInter(new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
+    , m_displayInter(new DisplayInter(DisplayInterface, "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
     , m_fileName(QString())
 {
     m_appearanceInter->setSync(false, false);
@@ -132,16 +134,22 @@ void BackgroundManager::getImageDataFromDbus(const QString &filePath)
 
 void BackgroundManager::updateBlurBackgrounds()
 {
-    QString screenName = AppsManager::instance()->currentScreen()->name();
+    const QScreen *screen = AppsManager::instance()->currentScreen();
+    if (!screen)
+        return;
 
-    if (m_displayMode != MERGE_MODE) {
-        QWidget *parentWidget =qobject_cast<QWidget *>(parent());
-        QDesktopWidget *desktopwidget = QApplication::desktop();
-        int screenIndex = desktopwidget->screenNumber(parentWidget);
-        QList<QScreen *> screens = qApp->screens();
+    QString screenName = screen->name();
 
-        if (screenIndex != -1)
-            screenName = screens[screenIndex]->name();
+    if (isWaylandDisplay()) {
+        const QList<QDBusObjectPath> monitorList = m_displayInter->monitors();
+        for (int i = 0; i < monitorList.size(); i++) {
+            DisplayMonitor monitor(DisplayInterface, QString("%1").arg(monitorList.at(i).path()), QDBusConnection::sessionBus(), this);
+            // wayland下 正常接入主机且显示, 当屏幕左上角坐标一致时, 获取屏幕名称
+            if ((monitor.enabled() == true) && (monitor.x() == screen->geometry().x()) && (monitor.y() == screen->geometry().y())) {
+                screenName = monitor.name();
+                break;
+            }
+        }
     }
 
     QString path = getLocalFile(m_wmInter->GetCurrentWorkspaceBackgroundForMonitor(screenName));

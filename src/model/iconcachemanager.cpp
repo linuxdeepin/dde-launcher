@@ -23,6 +23,7 @@ IconCacheManager::IconCacheManager(QObject *parent)
     , m_iconValid(true)
     , m_tryNums(0)
     , m_tryCount(0)
+    , m_day(QDate::currentDate().day())
 {
     setIconLoadState(false);
 }
@@ -244,11 +245,7 @@ void IconCacheManager::setIconLoadState(bool state)
 
 void IconCacheManager::updateCanlendarIcon()
 {
-    static int curDay = QDate::currentDate().day();
-    static QTime curTime = QTime::currentTime();
-
-    // 天数或者分钟变化时,更新图标资源
-    if (curDay != QDate::currentDate().day() || curTime.minute() != QTime::currentTime().minute()) {
+    if (m_day != QDate::currentDate().day()) {
         removeItemFromCache(m_calendarInfo);
 
         for (int i = 0; i < DLauncher::APP_ICON_SIZE_LIST.size(); i++)
@@ -256,5 +253,6 @@ void IconCacheManager::updateCanlendarIcon()
 
         // 刷新界面
         emit iconLoaded();
+        m_day = QDate::currentDate().day();
     }
 }

@@ -48,11 +48,10 @@ void PageControl::setPageCount(int count)
         addButton(m_buttonList[i]);
 
     for (int i = count; i < m_pageCount ; i++) {
-        DIconButton *pageButton = qobject_cast<DIconButton *>(layout()->takeAt(0)->widget());
+        DIconButton *pageButton = qobject_cast<DIconButton *>(layout()->itemAt(i)->widget());
         int index = m_buttonList.indexOf(pageButton);
         if (index != -1) {
             m_buttonList[index]->setVisible(false);
-            m_buttonList[index]->disconnect(this);
         }
     }
 
@@ -114,9 +113,11 @@ void PageControl::addButton(DIconButton *pageButton)
     pageButton->setCheckable(true);
     pageButton->setFlat(true);
     pageButton->setVisible(true);
-    layout()->addWidget(pageButton);
 
-    connect(pageButton, &DIconButton::toggled, this, &PageControl::pageBtnClicked);
+    if (layout()->indexOf(pageButton) == -1) {
+        layout()->addWidget(pageButton);
+        connect(pageButton, &DIconButton::toggled, this, &PageControl::pageBtnClicked);
+    }
 }
 
 void PageControl::pageBtnClicked(bool checked)

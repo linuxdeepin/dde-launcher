@@ -807,7 +807,7 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
     }
 
     // 窗体变为不活动窗口的时候隐藏launcher
-    if (event->type() == QEvent::WindowDeactivate && watched == this) {
+    if (event->type() == QEvent::WindowDeactivate && watched == this && !QGuiApplication::platformName().startsWith("wayland", Qt::CaseInsensitive)) {
         hideLauncher();
     }
 

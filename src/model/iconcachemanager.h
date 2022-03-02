@@ -77,7 +77,7 @@ private:
     bool m_iconValid;
     int m_tryNums;
     int m_tryCount;
-    int m_day;
+    QDate m_date;
 };
 
 #endif // ICONCACHEMANAGER_H

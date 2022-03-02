@@ -399,9 +399,7 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
         }
 
         if (QFile::exists(iconName)) {
-            if (iconName.endsWith(".svg"))
-                pixmap = loadSvg(iconName, qRound(iconSize * ratio));
-            else if (iconName.endsWith(".ico"))
+            if (iconName.endsWith(".ico"))
                 // ico文件中是包含一组不同尺寸图标的容器文件, 需要根据不同iconSize获取对应尺寸的图标
                 // 否则只能获取到最小的图标, 缩放时会出现锯齿
                 pixmap = loadIco(iconName, qRound(iconSize * ratio));

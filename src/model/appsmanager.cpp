@@ -1075,10 +1075,8 @@ void AppsManager::generateCategoryMap()
             idx = m_stashList.indexOf(*it);
         }
 
-        if (idx == -1) {
+        if (idx == -1)
             it = m_usedSortedList.erase(it);
-            break;
-        }
         else
             ++it;
     }

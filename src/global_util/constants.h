@@ -96,7 +96,7 @@ static const int DOCK_POS_LEFT = 3;                     // 任务栏位置: 左�
 
 static const int CHANGE_PAGE_DELAY_TIME = 250;          // 翻页延时时间，防抖动
 static const QString SOLID_BACKGROUND_COLOR = "#000F27";        // 纯色背景色号
-static const QString DEFAULT_META_CONFIG_NAME = "com.deepin.dde.dde-launcher.dconfig";      // 默认的配置文件名称
+static const QString DEFAULT_META_CONFIG_NAME = "org.deepin.launcher";      // 默认的配置文件名称
 
 static const int MOUSE_LEFTBUTTON = 1;
 static const int MOUSE_RIGHTBUTTON  = 3;

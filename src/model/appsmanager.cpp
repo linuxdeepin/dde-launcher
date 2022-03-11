@@ -125,7 +125,7 @@ AppsManager::AppsManager(QObject *parent) :
     m_updateCalendarTimer->start();
 
     // 启动应用图标和应用名称缓存线程,减少系统加载应用时的开销
-    if (getDConfigValue("preload-apps-icon", true).toBool()) {
+    if (getDConfigValue("preloadAppsIcon", true).toBool()) {
         m_iconCacheManager->moveToThread(m_iconCacheThread);
         m_iconCacheThread->start();
     } else {

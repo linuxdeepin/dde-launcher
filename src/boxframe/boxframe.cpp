@@ -44,7 +44,7 @@ BoxFrame::BoxFrame(QWidget *parent)
     , m_bgManager(nullptr)
     , m_useSolidBackground(false)
 {
-    m_useSolidBackground = getDConfigValue("use-solid-background", false).toBool();
+    m_useSolidBackground = getDConfigValue("useSolidBackground", false).toBool();
     if (m_useSolidBackground)
         return;
 

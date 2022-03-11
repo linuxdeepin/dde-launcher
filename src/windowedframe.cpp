@@ -110,7 +110,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_enterSearchEdit(false)
     , m_curScreen(m_appsManager->currentScreen())
 {
-    if (!getDConfigValue("enable-full-screen-mode", true).toBool())
+    if (!getDConfigValue("enableFullScreenMode", true).toBool())
         m_modeToggleBtn->hide();
 
     m_searcherEdit->setAccessibleName("searcherEdit");

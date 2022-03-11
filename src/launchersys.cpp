@@ -272,7 +272,7 @@ void LauncherSys::aboutToShowLauncher()
 
 void LauncherSys::preloadIcon()
 {
-    if (!getDConfigValue("preload-apps-icon", true).toBool())
+    if (!getDConfigValue("preloadAppsIcon", true).toBool())
         return;
 
     if (!m_dbusLauncherInter->fullscreen()) {

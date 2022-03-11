@@ -159,4 +159,4 @@ install(FILES data/deepin-launcher.svg DESTINATION /usr/share/icons/hicolor/scal
 install(TARGETS ${BIN_NAME} DESTINATION bin)
 
 # config
-dconfig_meta_files(APPID dde-launcher FILES ./configs/com.deepin.dde.dde-launcher.dconfig.json)
+dconfig_meta_files(APPID dde-launcher FILES ./configs/org.deepin.launcher.json)

@@ -139,7 +139,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
 
 ## qm files
 file(GLOB QM_FILES "translations/*.qm")
-install(FILES ${QM_FILES} DESTINATION share/dde-launcher/translations)
+install(FILES ${QM_FILES} DESTINATION share/org.deepin.dde.launcher/translations)
 
 ## desktop file
 install(FILES dde-launcher.desktop DESTINATION share/applications/)
@@ -159,4 +159,4 @@ install(FILES data/deepin-launcher.svg DESTINATION /usr/share/icons/hicolor/scal
 install(TARGETS ${BIN_NAME} DESTINATION bin)
 
 # config
-dconfig_meta_files(APPID dde-launcher FILES ./configs/org.deepin.launcher.json)
+dconfig_meta_files(APPID org.deepin.dde.launcher FILES ./configs/org.deepin.dde.launcher.json)

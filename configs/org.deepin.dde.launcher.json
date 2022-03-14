@@ -8,7 +8,7 @@
             "flags": [],
             "name": "UseSolidBackground",
             "name[zh_CN]": "使用纯色背景",
-            "description": "是否使用纯色背景，默认为否。如果使用了纯色背景，那么将不会加载背景图片，降低内存占用。",
+            "description": "是否使用纯色背景，默认为否。如果使用了纯色背景，将不会加载背景图片，降低内存占用。",
             "permissions": "readwrite",
             "visibility": "private"
         },

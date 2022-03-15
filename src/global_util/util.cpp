@@ -39,6 +39,7 @@
 #include <QIcon>
 #include <QScopedPointer>
 #include <QIconEngine>
+#include <QSharedPointer>
 
 #include <private/qguiapplication_p.h>
 #include <private/qiconloader_p.h>
@@ -489,16 +490,15 @@ QString cacheKey(const ItemInfo &itemInfo)
  */
 QVariant getDConfigValue(const QString &key, const QVariant &defaultValue, const QString &configFileName)
 {
-    DConfig config(configFileName);
-
-    if (!config.isValid()) {
+    QSharedPointer<DConfig> config(DConfig::create(DLauncher::DEFAULT_META_CONFIG_NAME, DLauncher::DEFAULT_META_CONFIG_NAME));
+    if (!config->isValid()) {
         qWarning() << QString("DConfig is invalid, name:[%1], subpath[%2].").
-                        arg(config.name(), config.subpath());
+                        arg(config->name(), config->subpath());
         return defaultValue;
     }
 
-    if (config.keyList().contains(key))
-        return config.value(key);
+    if (config->keyList().contains(key))
+        return config->value(key);
 
     return defaultValue;
 }

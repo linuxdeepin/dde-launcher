@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     DApplication *app = DApplication::globalApplication(argc, argv);
     app->setQuitOnLastWindowClosed(false);
     app->setOrganizationName("deepin");
-    app->setApplicationName("org.deepin.dde.launcher");
+    app->setApplicationName("dde-launcher");
     app->setApplicationVersion("3.0");
     app->loadTranslator();
     app->setAttribute(Qt::AA_UseHighDpiPixmaps);
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     DLogManager::registerFileAppender();
 #endif
 
-    bool quit = !app->setSingleInstance(QString("org.deepin.dde.launcher_%1").arg(getuid()));
+    bool quit = !app->setSingleInstance(QString("dde-launcher_%1").arg(getuid()));
 
     QCommandLineOption showOption(QStringList() << "s" << "show", "show launcher(hide for default.)");
     QCommandLineOption toggleOption(QStringList() << "t" << "toggle", "toggle launcher visible.");

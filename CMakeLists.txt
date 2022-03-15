@@ -137,7 +137,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
 
 ## qm files
 file(GLOB QM_FILES "translations/*.qm")
-install(FILES ${QM_FILES} DESTINATION share/org.deepin.dde.launcher/translations)
+install(FILES ${QM_FILES} DESTINATION share/dde-launcher/translations)
 
 ## desktop file
 install(FILES dde-launcher.desktop DESTINATION share/applications/)

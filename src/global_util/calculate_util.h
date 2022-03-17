@@ -57,7 +57,7 @@ public:
     inline int appItemSpacing() const {return m_appItemSpacing;}
     inline int appMarginLeft() const {return m_appMarginLeft;}
     inline int appMarginTop() const {return m_appMarginTop;}
-    inline int appPageItemCount(AppsListModel::AppCategory category) const {return category > AppsListModel::Category ? m_categoryAppPageItemCount : m_appPageItemCount;}
+    inline int appPageItemCount(AppsListModel::AppCategory category) const {return category > AppsListModel::Common ? m_categoryAppPageItemCount : m_appPageItemCount;}
     inline int appCategoryCount() const {return m_categoryCount;}
     inline QSize appItemSize() const { return QSize(m_appItemSize, m_appItemSize); }
     inline bool fullscreen() const {return isFullScreen;}
@@ -65,8 +65,9 @@ public:
     void setCurrentCategory(int category){m_currentCategory = category;}
     void setFullScreen(bool bFullScreen){isFullScreen = bFullScreen;}
 
+    qreal getCurRatio();
+    QSize appIconSize(int modelMode) const;
     QSize appIconSize() const;
-    QSize appIconSize(bool fullscreen, double ratio, int iconSize = 0) const;
     int displayMode() const;
     void setDisplayMode(const int mode);
     int calculateIconSize(const int mode);
@@ -95,7 +96,7 @@ signals:
      void loadWindowIcon();
 
 public slots:
-    void calculateAppLayout(const QSize &containerSize, const int currentmode);
+    void calculateAppLayout(const QSize &containerSize, const int currentmode = 0);
 
 private:
     explicit CalculateUtil(QObject *parent);

@@ -65,7 +65,6 @@ public slots:
     void loadOtherRatioIcon(int mode);
     void loadFullWindowIcon();
 
-    void ratioChange(double ratio);
     void loadItem(const ItemInfo &info, const QString &operationStr);
     void removeSmallWindowCache();
     void updateCanlendarIcon();

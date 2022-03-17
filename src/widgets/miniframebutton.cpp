@@ -6,11 +6,13 @@
 #include <QDesktopWidget>
 #include <QPainter>
 #include <QPainterPath>
+#include <QTextOption>
 
 DGUI_USE_NAMESPACE
 
 MiniFrameButton::MiniFrameButton(const QString &text, QWidget *parent)
     : QPushButton(text, parent)
+    , m_text(text)
 {
     setFocusPolicy(Qt::NoFocus);
     setObjectName("MiniFrameButton");
@@ -80,6 +82,19 @@ void MiniFrameButton::paintEvent(QPaintEvent *event)
     }
 
     if (!icon().isNull()) {
-        painter.drawPixmap(rect().center().x() - iconSize().width() / 2 + 1 , rect().center().y() - iconSize().height() / 2 + 1, icon().pixmap(iconSize()));
+        QFontMetrics font(this->font());
+        int textWidth = font.boundingRect(m_text).width();
+        int textHeight = font.boundingRect(m_text).height();
+
+        // 文字居中显示，左右各保持10像素边距
+        int x = rect().x() + (rect().width() - (iconSize().width() + textWidth)) / 2 + 1 - 10;
+        int y = rect().center().y() - iconSize().height() / 2 + 1;
+        QRect pixmapRect = QRect(QPoint(x, y), iconSize());
+        painter.drawPixmap(x, y, icon().pixmap(iconSize()));
+
+        int x1 = pixmapRect.right() + 10;
+        int y1 = (rect().height() - font.boundingRect(m_text).height()) / 2;
+
+        painter.drawText(QRect(QPoint(x1, y1), QSize(rect().width() - pixmapRect.width() - 10, textHeight)), m_text);
     }
 }

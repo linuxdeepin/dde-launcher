@@ -444,15 +444,33 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
  */
 QVariant AppsListModel::data(const QModelIndex &index, int role) const
 {
+    ItemInfo itemInfo = ItemInfo();
     int nSize = m_appsManager->appsInfoListSize(m_category);
     int nFixCount = m_calcUtil->appPageItemCount(m_category);
     int pageCount = qMin(nFixCount, nSize - nFixCount * m_pageIndex);
-    if(!m_calcUtil->fullscreen()) pageCount = nSize;
+
+    if(!m_calcUtil->fullscreen()) {
+        pageCount = nSize;
+        if (m_category == Custom)
+            itemInfo = m_appsManager->appsCategoryListIndex(index.row());
+        else if (m_category == All) {
+            itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
+        } else if (m_category == Common) {
+            itemInfo = m_appsManager->appsCommonUseListIndex(index.row());
+        } else if (m_category == Search) {
+            itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
+        }
+    } else {
+        if (m_category == Search) {
+            itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
+        } else {
+            int start = nFixCount * m_pageIndex;
+            itemInfo = m_appsManager->appsInfoListIndex(m_category, start + index.row());
+        }
+    }
+
     if (!index.isValid() || index.row() >= pageCount)
         return QVariant();
-
-    int start = nFixCount * m_pageIndex;
-    const ItemInfo &itemInfo = m_appsManager->appsInfoListIndex(m_category, start + index.row());
 
     switch (role) {
     case AppRawItemInfoRole:
@@ -492,11 +510,11 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIsNewInstall(itemInfo.m_key);
     }
     case AppIconRole:
-        return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize().width());
+        return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize(m_category).width());
     case AppDialogIconRole:
         return m_appsManager->appIcon(itemInfo, DLauncher::APP_DLG_ICON_SIZE);
     case AppDragIconRole:
-        return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize().width() * 1.2);
+        return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize(m_category).width() * 1.2);
     case AppListIconRole: {
         QSize iconSize = (static_cast<AppsListModel::AppCategory>(m_category) == AppsListModel::Category) ? QSize(DLauncher::APP_CATEGORY_ICON_SIZE, DLauncher::APP_CATEGORY_ICON_SIZE) : m_calcUtil->appIconSize();
         return m_appsManager->appIcon(itemInfo, iconSize.width());
@@ -504,7 +522,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case ItemSizeHintRole:
         return m_calcUtil->appItemSize();
     case AppIconSizeRole:
-        return m_calcUtil->appIconSize();
+        return m_calcUtil->appIconSize(m_category);
     case AppFontSizeRole:
         return DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6);
     case AppItemIsDraggingRole:

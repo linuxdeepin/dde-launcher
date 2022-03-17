@@ -36,6 +36,8 @@
 #include "widgets/miniframeswitchbtn.h"
 #include "global_util/constants.h"
 #include "global_util/calculate_util.h"
+#include "miniframebutton.h"
+#include "appgridview.h"
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
@@ -88,6 +90,11 @@ signals:
     void visibleChanged(bool visible);
 
 private:
+    void initUi();
+    void initConnection();
+    void setAccessibleName();
+    void updateUi(bool searchedState = false);
+
     void showLauncher() override;
     void hideLauncher() override;
     bool visible() override;
@@ -143,20 +150,26 @@ private:
     QWidget *m_maskBg;
     AppsManager *m_appsManager;
     AppListView *m_appsView;
-    AppsListModel *m_appsModel;          // 应用列表
-    AppsListModel *m_usedModel;
-    AppsListModel *m_searchModel;        // 搜索后的应用列表
+
+    AppsListModel *m_appsModel;
+    AppsListModel *m_allAppsModel;
+    AppsListModel *m_commonUseModel;
+    AppsListModel *m_searchModel;
 
     QWidget *m_rightWidget;
-    MiniFrameRightBar *m_leftBar;        // 左侧分类按钮组
-    MiniFrameSwitchBtn *m_switchBtn;     // 底部所有分类和返回切换控件
+    MiniFrameRightBar *m_bottomBtn;
+    AppGridView *m_commonUseView;
+    AppGridView *m_allAppView;
+    AppGridView *m_searchedView;
+    QLabel *m_commonUseLabel;
+    QLabel *m_allAppLabel;
     QLabel *m_tipsLabel;
     QTimer *m_delayHideTimer;
     QTimer *m_autoScrollTimer;
     Appearance *m_appearanceInter;
     DisplayMode m_displayMode;
 
-    int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
+    int m_autoScrollStep;
     int m_radius = 0;
     CalculateUtil *m_calcUtil;
     AnchoredCornor m_anchoredCornor = Normal;

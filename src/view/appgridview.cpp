@@ -379,7 +379,7 @@ QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey
     QPixmap srcPix;
 
     if (appKey == "dde-calendar") {
-        const  auto  s = m_calcUtil->appIconSize();
+        const  auto s = m_calcUtil->appIconSize();
         const double  iconZoom =  s.width() / 64.0;
         QStringList calIconList = m_calcUtil->calendarSelectIcon();
 

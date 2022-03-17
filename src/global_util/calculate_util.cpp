@@ -144,20 +144,15 @@ int CalculateUtil::calculateIconSize(int mode)
     return appIconSize;
 }
 
-/**
- * @brief CalculateUtil::appIconSize 获取对应模式下图标大小
- * @param fullscreen 是否全屏模式
- * @param iconSize 应用图标大小
- * @param ratio 缩放比率
- * @return 返回对应模式下图标的尺寸
- */
-QSize CalculateUtil::appIconSize(bool fullscreen, double ratio, int iconSize) const
+QSize CalculateUtil::appIconSize(int modelMode) const
 {
-    if (!fullscreen)
-        return QSize(DLauncher::APP_ITEM_ICON_SIZE, DLauncher::APP_ITEM_ICON_SIZE);
+    QSize size;
+    if (modelMode == AppsListModel::Custom)
+        size = QSize(DLauncher::APP_ITEM_ICON_SIZE, DLauncher::APP_ITEM_ICON_SIZE);
+    else
+        size = QSize(m_appItemSize, m_appItemSize) * DLauncher::DEFAULT_RATIO;
 
-    QSize appSize(iconSize, iconSize);
-    return appSize * ratio;
+    return size;
 }
 
 QSize CalculateUtil::appIconSize() const
@@ -165,9 +160,8 @@ QSize CalculateUtil::appIconSize() const
     if (!isFullScreen)
         return QSize(DLauncher::APP_ITEM_ICON_SIZE, DLauncher::APP_ITEM_ICON_SIZE);
 
-    QSize s(m_appItemSize, m_appItemSize);
-    double ratio = m_launcherGsettings ? m_launcherGsettings->get("apps-icon-ratio").toDouble() : 0.6;
-    return s * ratio;
+    QSize size(m_appItemSize, m_appItemSize);
+    return size * DLauncher::DEFAULT_RATIO;
 }
 
 /**
@@ -315,14 +309,19 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int cur
     double scaleY = getScreenScaleY();
     double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
 
-    calculateTextSize();
+    if (fullscreen())
+        calculateTextSize();
 
     int rows = 1;
     int containerW = containerSize.width();
     int containerH = containerSize.height();
 
-    // 全屏App模式或者正在搜索列表以4行7列模式排布，全屏分类模式以4行3列模式排布
-    if (!m_launcherGsettings || ((m_launcherGsettings->get(DisplayModeKey).toString() == DisplayModeFree) || currentmode == SEARCH)) {
+    if (!fullscreen()) {
+        m_appColumnCount = 4;
+        rows = 2;
+        containerW = containerSize.width();
+        containerH = containerSize.height();
+    } else if (!m_launcherGsettings || (currentmode == 0) || (currentmode == SEARCH)) {
         m_appColumnCount = 7;
         rows = 4;
 
@@ -351,13 +350,21 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int cur
     // 图标大小取区域的4 / 5
     m_appItemSize = perItemSize * 4 / 5;
 
-    // 其他区域为间隔区域
-    m_appItemSpacing = (perItemSize - m_appItemSize) / 2;
+    if (!fullscreen()) {
+        // 其他区域为间隔区域
+        m_appItemSpacing = (perItemSize - m_appItemSize) / 2;
 
-    // 重新计算左右上边距
-    m_appMarginLeft = (containerW - m_appItemSize * m_appColumnCount - m_appItemSpacing * m_appColumnCount * 2) / 2 - 1;
-    m_appMarginTop =  (containerH - m_appItemSize * rows - m_appItemSpacing * rows * 2) / 2;
+        // 重新计算左右上边距
+        m_appMarginLeft = (containerW - m_appItemSize * m_appColumnCount - m_appItemSpacing * (m_appColumnCount - 1)) / 6;
+        m_appMarginTop =  (containerH - m_appItemSize * rows - m_appItemSpacing * (rows - 1)) / 2;
+    } else {
+        // 其他区域为间隔区域
+        m_appItemSpacing = (perItemSize - m_appItemSize) / 2;
 
+        // 重新计算左右上边距
+        m_appMarginLeft = (containerW - m_appItemSize * m_appColumnCount - m_appItemSpacing * m_appColumnCount * 2) / 2 - 1;
+        m_appMarginTop =  (containerH - m_appItemSize * rows - m_appItemSpacing * rows * 2) / 2;
+    }
     // 计算字体大小
     m_appItemFontSize = m_appItemSize <= 80 ? 8 : qApp->font().pointSize() + 3;
 

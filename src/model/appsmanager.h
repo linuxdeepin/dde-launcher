@@ -104,6 +104,8 @@ public slots:
     const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
     static int appsInfoListSize(const AppsListModel::AppCategory &category);
     static const ItemInfo appsInfoListIndex(const AppsListModel::AppCategory &category,const int index);
+    static const ItemInfo appsCategoryListIndex(const int index);
+    static const ItemInfo appsCommonUseListIndex(const int index);
     static const ItemInfoList &windowedCategoryList();
     static const ItemInfoList &windowedFrameItemInfoList();
     static const ItemInfoList &fullscreenItemInfoList();
@@ -127,6 +129,7 @@ private:
 
     void appendSearchResult(const QString &appKey);
     void sortByPresetOrder(ItemInfoList &processList);
+    void sortByUseCountOrder(ItemInfoList &processList);
     void sortByInstallTimeOrder(ItemInfoList &processList);
     void refreshCategoryInfoList();
     void refreshUsedInfoList();
@@ -155,6 +158,13 @@ private slots:
 public:
     static QReadWriteLock m_appInfoLock;
     static QHash<AppsListModel::AppCategory, ItemInfoList> m_appInfos;      // 应用分类容器
+    static ItemInfoList m_appCategoryInfos;                                 // 小窗口左侧带分类标题的应用列表
+    static ItemInfoList m_commonSortedList;                                 // 小窗口常用列表
+    static ItemInfoList m_categoryList;                                     // 小窗口应用分类目录列表
+    static ItemInfoList m_appSearchResultList;                              // 搜索结果列表
+    static ItemInfoList m_dirAppInfoList;                                   // 应用抽屉列表
+    static ItemInfoList m_usedSortedList;                                   // 全屏应用列表
+    static ItemInfoList m_userSortedList;
 
 private:
     DBusLauncher *m_launcherInter;
@@ -164,11 +174,7 @@ private:
     QString m_searchText;
     QStringList m_newInstalledAppsList;                                     // 新安装应用列表
     ItemInfoList m_allAppInfoList;                                          // 所有app信息列表
-    static ItemInfoList m_usedSortedList;                                   // 全屏应用列表
-    static ItemInfoList m_userSortedList;                                   // 小窗口应用列表
-    static ItemInfoList m_appSearchResultList;                              // 搜索结果列表
     ItemInfoList m_stashList;
-    static ItemInfoList m_categoryList;                                     // 小窗口应用分类目录列表
 
     ItemInfo m_unInstallItem = ItemInfo();
     ItemInfo m_beDragedItem = ItemInfo();

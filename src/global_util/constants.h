@@ -29,6 +29,7 @@
 
 namespace DLauncher {
 
+static const qreal DEFAULT_RATIO = 0.5;                                              // 默认缩放比
 static const int APP_ITEM_ICON_SIZE = 24;                                            // 小窗口应用图标大小
 static const int APP_CATEGORY_ICON_SIZE = 18;                                        // 小窗口分类项图标大小
 static const int APP_DRAG_ICON_SIZE = 28;                                            // 小窗口拖拽图标大小

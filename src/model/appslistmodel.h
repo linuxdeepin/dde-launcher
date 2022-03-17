@@ -83,6 +83,7 @@ public:
         Custom,                 // 自定义的排序模式
         Search,                 // 搜索模式
         Category,               // 分类模式
+        Common,                 // 常用应用
 
         // apps category
         Internet,               // 网络模式

@@ -63,8 +63,10 @@ const QDir::Filters ItemsShouldCount = QDir::AllEntries | QDir::Hidden | QDir::S
 
 QReadWriteLock AppsManager::m_appInfoLock;
 QHash<AppsListModel::AppCategory, ItemInfoList> AppsManager::m_appInfos;
+ItemInfoList AppsManager::m_appCategoryInfos;
 ItemInfoList AppsManager::m_usedSortedList = QList<ItemInfo>();
 ItemInfoList AppsManager::m_userSortedList = QList<ItemInfo>();
+ItemInfoList AppsManager::m_commonSortedList = QList<ItemInfo>();
 ItemInfoList AppsManager::m_appSearchResultList = QList<ItemInfo>();
 ItemInfoList AppsManager::m_categoryList = QList<ItemInfo>();
 
@@ -150,7 +152,6 @@ AppsManager::AppsManager(QObject *parent) :
     // 全屏状态下，自由模式和分类模式来回切换，加载切换后对应模式下的其他ratio下的资源
     connect(this, &AppsManager::loadFullWindowIcon, m_iconCacheManager, static_cast<void(IconCacheManager::*)()>(&IconCacheManager::loadFullWindowIcon), Qt::QueuedConnection);
 
-    connect(m_calUtil, &CalculateUtil::ratioChanged, m_iconCacheManager, &IconCacheManager::ratioChange, Qt::QueuedConnection);
     connect(this, &AppsManager::loadItem, m_iconCacheManager, &IconCacheManager::loadItem, Qt::QueuedConnection);
 
     connect(qApp, &QCoreApplication::aboutToQuit, m_iconCacheManager, &IconCacheManager::deleteLater);
@@ -246,6 +247,16 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
 
         // If both of them exist, then obey the preset order.
         return index1 < index2;
+    });
+}
+
+void AppsManager::sortByUseCountOrder(ItemInfoList &processList)
+{
+    std::sort(processList.begin(), processList.end(), [](const ItemInfo & i1, const ItemInfo & i2) {
+        if (i1.m_openCount > i2.m_openCount)
+            return true;
+        else
+            return i1.m_installedTime > i2.m_installedTime;
     });
 }
 
@@ -598,6 +609,7 @@ int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category)
     case AppsListModel::All:       return m_usedSortedList.size();
     case AppsListModel::Search:     return m_appSearchResultList.size();
     case AppsListModel::Category:   return m_categoryList.size();
+    case AppsListModel::Common:     return m_commonSortedList.size();
     default:;
     }
 
@@ -631,6 +643,8 @@ const ItemInfo AppsManager::appsInfoListIndex(const AppsListModel::AppCategory &
     case AppsListModel::Category:
         Q_ASSERT(m_categoryList.size() > index);
         return m_categoryList[index];
+    case AppsListModel::Common:
+        return m_commonSortedList[index];
     default:;
     }
 
@@ -643,6 +657,22 @@ const ItemInfo AppsManager::appsInfoListIndex(const AppsListModel::AppCategory &
     m_appInfoLock.unlock();
 
     return itemInfo;
+}
+
+const ItemInfo AppsManager::appsCategoryListIndex(const int index)
+{
+    if (index > m_appCategoryInfos.size() - 1)
+        return ItemInfo();
+
+    return m_appCategoryInfos.at(index);
+}
+
+const ItemInfo AppsManager::appsCommonUseListIndex(const int index)
+{
+    if (index > m_commonSortedList.size() - 1)
+        return ItemInfo();
+
+    return m_commonSortedList.at(index);
 }
 
 const ItemInfoList &AppsManager::windowedFrameItemInfoList()
@@ -1105,6 +1135,25 @@ void AppsManager::generateCategoryMap()
               [ = ](const ItemInfo & info1, const ItemInfo & info2) {
         return info1.m_categoryId < info2.m_categoryId;
     });
+
+    // 获取小窗口应用分类数据.
+    for (int i = 0; i < m_categoryList.size(); i++) {
+        // 获取实际的分类categoryId
+        int categoryId = static_cast<int>(m_categoryList.at(i).m_categoryId + AppsListModel::Internet);
+        if (m_appInfos.value(AppsListModel::AppCategory(categoryId)).size() <= 0)
+            continue;
+
+        m_appCategoryInfos.append(m_categoryList.at(i));
+
+        // TODO:当分类下应用为0时,不显示该分类
+        m_appCategoryInfos.append(m_appInfos.value(AppsListModel::AppCategory(categoryId)));
+    }
+
+    // 获取小窗口常用应用列表
+    ItemInfoList tempData = m_allAppInfoList;
+    sortByUseCountOrder(tempData);
+    m_commonSortedList.clear();
+    m_commonSortedList.append(tempData);
 
     // 更新各个分类下应用的数量
     emit categoryListChanged();

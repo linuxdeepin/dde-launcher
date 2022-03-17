@@ -85,17 +85,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QFont appNamefont(painter->font());
     appNamefont.setPixelSize(fontPixelSize);
     const QFontMetrics fm(appNamefont);
-    //分类模式且不是当前的分类就设置透明度
-    if (index.data(AppsListModel::AppGroupRole).toInt() >= 4
-            && index.data(AppsListModel::AppCategoryRole).toInt() != m_calcUtil->currentCategory()) {
-        painter->setOpacity(0.3);
-    } else {
-        painter->setOpacity(1);
-    }
-
-    // Curve Fitting Result from MATLAB
-//    const int x = iconSize.width();
-//    const int margin = -0.000004236988913209739*x*x*x*x+0.0016406743692943455*x*x*x-0.22885856605074573*x*x+13.187308932617098*x-243.2646393941108;
+    painter->setOpacity(1);
     const static double x1 = 0.26418192;
     const static double x2 = -0.38890932;
     const double result = x1 * ibr.width() + x2 * iconSize.width();
@@ -142,11 +132,6 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         // we need adjust again!
         adjust = true;
     } while (true);
-//    painter->fillRect(option.rect, Qt::gray);
-//    painter->fillRect(ibr, Qt::cyan);
-//    painter->fillRect(br, Qt::green);
-//    painter->fillRect(appNameRect, Qt::blue);
-//    painter->fillRect(iconRect, Qt::magenta);
 
     // 绘制选中样式
    if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay)) {
@@ -182,15 +167,16 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setFont(appNamefont);
     painter->setBrush(QBrush(Qt::transparent));
     painter->setPen(QColor(0, 0, 0, 80));
-    painter->drawText(appNameRect.adjusted(0.8, 1, 0.8, 1), appNameResolved, appNameOption);
-    painter->drawText(appNameRect.adjusted(-0.8, 1, -0.8, 1), appNameResolved, appNameOption);
-    painter->setPen(Qt::white);
-    painter->drawText(appNameRect, appNameResolved, appNameOption);
-
-    // 文字矩形
-    // painter->setPen(QColor(255, 0, 0));
-    // painter->drawRect(appNameRect);
-
+    static QFont font = painter->font();
+    if (!m_calcUtil->fullscreen()) {
+        painter->setPen(Qt::black);
+        painter->setFont(QFont(font.family(), 8));
+        painter->drawText(appNameRect, appNameResolved, appNameOption);
+    } else {
+        painter->setPen(Qt::white);
+        painter->setFont(font);
+        painter->drawText(appNameRect, itemInfo.m_name, appNameOption);
+    }
     // draw app icon
     const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
     painter->drawPixmap(iconRect, iconPix, iconPix.rect());
@@ -223,11 +209,6 @@ QSize AppItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModel
     return index.data(AppsListModel::ItemSizeHintRole).toSize();
 }
 
-///
-/// \brief calculate item background bounding rect, this rect contains all item like icon, text, blue dot, ...
-/// \param itemRect the real item rect
-/// \return item bounding rect
-///
 const QRect AppItemDelegate::itemBoundingRect(const QRect &itemRect) const
 {
     const int w = itemRect.width();
@@ -242,13 +223,6 @@ const QRect AppItemDelegate::itemBoundingRect(const QRect &itemRect) const
         return itemRect - QMargins(0, 0, 0, sub * 2);
 }
 
-///
-/// \brief calculate app item text area rect
-/// \param boundingRect item bounding rect
-/// \param iconRect item icon rect
-/// \param extraWidthMargin remove extra margin if need draw blue dot
-/// \return app name text bounding rect
-///
 const QRect AppItemDelegate::itemTextRect(const QRect &boundingRect, const QRect &iconRect, const bool extraWidthMargin) const
 {
     QRect result = boundingRect;

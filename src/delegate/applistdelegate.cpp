@@ -71,55 +71,48 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         return;
     }
 
-    if (!m_actived) return;
+    if (!m_actived)
+        return;
 
     const qreal ratio = qApp->devicePixelRatio();
     const QRect rect = option.rect;
     const bool isDragItem = option.features & QStyleOptionViewItem::Alternate;
-    const bool isCategoryList(static_cast<AppsListModel::AppCategory>(index.data(AppsListModel::AppGroupRole).toInt()) == AppsListModel::Category);
 
     QPixmap iconPixmap = index.data(AppsListModel::AppListIconRole).value<QPixmap>();
 
-    if (isDragItem) {
-        QPixmap dragIndicator = renderSVG(":/widgets/images/drag_indicator.svg",
-                                          QSize(20, 20));
-        painter->drawPixmap(rect.right() - 30,
-                            rect.y() + (rect.height() - dragIndicator.height() / ratio) / 2,
-                            dragIndicator);
-    }
+    ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
+    bool isCategoryItem = itemInfo.m_desktop.isEmpty();
 
     painter->setPen(Qt::NoPen);
 
-    if (option.state.testFlag(QStyle::State_Selected)) {
-        // hover background color.
+    if (option.state.testFlag(QStyle::State_Selected) && !isCategoryItem) {
         painter->setBrush(m_color);
-    } else if (isDragItem) {
-        // drag item background color.
+    } else if (isDragItem && !isCategoryItem) {
         painter->setBrush(QColor(255, 255, 255, 255 * 0.4));
         painter->setPen(QColor(0, 0, 0, 255 * 0.05));
     } else {
-        // normal item.
         painter->setBrush(Qt::NoBrush);
     }
 
-    if (index.data(AppsListModel::DrawBackgroundRole).toBool()) {
-        // draw the background.
-        painter->drawRoundedRect(option.rect, 8, 8);
-    }
+    if (index.data(AppsListModel::DrawBackgroundRole).toBool())
+        painter->drawRoundedRect(option.rect.marginsRemoved(QMargins(15, 0, 0, 0)), 8, 8);
 
-    const int iconX = rect.x() + 10;
-    const int iconY = rect.y() + (rect.height() - iconPixmap.height() / ratio) / 2;
+    const int iconX = rect.x() + 20;
+    const int iconY = qRound(rect.y() + (rect.height() - iconPixmap.height() / ratio) / 2);
 
-    ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
-    painter->drawPixmap(iconX, iconY, iconPixmap);
+    if (!isCategoryItem)
+        painter->drawPixmap(iconX, iconY, iconPixmap);
 
     // draw icon if app is auto startup
     if (index.data(AppsListModel::AppAutoStartRole).toBool()) {
         painter->drawPixmap(iconX, iconY + 16, m_autoStartPixmap);
     }
 
-    QRect textRect = rect.marginsRemoved(QMargins(60, 1, 1, 1));
-    textRect.setWidth(textRect.width() - m_blueDotPixmap.width() / ratio - 10);
+    QRect textRect = rect.marginsRemoved(QMargins(20, 1, 1, 1));
+    if (!isCategoryItem)
+        textRect = rect.marginsRemoved(QMargins(60, 1, 1, 1)); // 图标 + 间隔,再显示文字
+
+    textRect.setWidth(qRound(textRect.width() - m_blueDotPixmap.width() / ratio - 60));
 
     if (isDragItem) {
         QFont nameFont = painter->font();
@@ -127,32 +120,23 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         painter->setFont(nameFont);
     }
 
-    // draw app name.
-    painter->setPen(QPen(QPalette().brightText(), 1));
-
-    if (isCategoryList) {
-        textRect.setX(textRect.x() - 13);
-        textRect.setY(textRect.y() - 2);
-    }
-
     // 使用省略号显示超长的应用名称
     const QString appName = painter->fontMetrics().elidedText(index.data(AppsListModel::AppNameRole).toString(), Qt::ElideRight, textRect.width());
-    painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, appName);
 
-    // draw category right icon
-    if (isCategoryList) {
-        const QPixmap &pixmap = index.data(AppsListModel::CategoryEnterIconRole).value<QPixmap>();
-        painter->setRenderHints(QPainter::SmoothPixmapTransform);
-        painter->drawPixmap(rect.right() - pixmap.width() / ratio,
-                            rect.y() + (rect.height() - pixmap.height() / ratio) / 2,
-                            pixmap.width() /  ratio,
-                            pixmap.height() / ratio,
-                            pixmap);
+    static QPen pen = painter->pen();
+    static QFont font = painter->font();
+    painter->setPen(Qt::black);
+    if (isCategoryItem) {
+        painter->setFont(font);
+    } else {
+        painter->setFont(QFont(font.family(), 8));
     }
 
+    painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, appName);
+
     // draw blue dot if needed
-    if (index.data(AppsListModel::AppNewInstallRole).toBool() && !isDragItem) {
-        const QPointF blueDotPos(rect.width() - m_blueDotPixmap.width() / ratio - (isCategoryList ? 20 : 6),
+    if (index.data(AppsListModel::AppNewInstallRole).toBool() && !isDragItem && itemInfo.m_desktop != "") {
+        const QPointF blueDotPos(rect.width() - m_blueDotPixmap.width() / ratio - 6,
                                  rect.y() + (+ rect.height() - m_blueDotPixmap.height() / ratio) / 2);
 
         painter->drawPixmap(blueDotPos, m_blueDotPixmap);
@@ -180,10 +164,6 @@ QPixmap AppListDelegate::dropShadow(QPixmap pixmap, int radius, const QColor &co
     }
 
     pixmap.setDevicePixelRatio(1);
-
-    // reference here:
-    // https://forum.qt.io/topic/77576/painting-shadow-around-a-parentless-qwidget
-
     QImage temp(pixmap.size() + QSize(radius * 2, radius * 2),
                 QImage::Format_ARGB32_Premultiplied);
     temp.fill(0);

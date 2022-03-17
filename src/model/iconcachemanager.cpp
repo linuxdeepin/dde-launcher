@@ -204,20 +204,6 @@ void IconCacheManager::loadFullWindowIcon()
     loadOtherRatioIcon(GROUP_BY_CATEGORY);
 }
 
-void IconCacheManager::ratioChange(double ratio)
-{
-    Q_UNUSED(ratio);
-
-    switch (m_launcherInter->displaymode()) {
-    case ALL_APPS:
-        loadCurRatioIcon(GROUP_BY_CATEGORY);
-        break;
-    case GROUP_BY_CATEGORY:
-        loadCurRatioIcon(ALL_APPS);
-        break;
-    }
-}
-
 void IconCacheManager::insertCache(const QPair<QString, int> &tmpKey, const QPixmap &pix)
 {
     m_iconLock.lockForWrite();

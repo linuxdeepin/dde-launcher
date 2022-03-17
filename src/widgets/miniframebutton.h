@@ -2,6 +2,7 @@
 #define MINIFRAMEBUTTON_H
 
 #include <QPushButton>
+
 #include <DGuiApplicationHelper>
 
 DGUI_USE_NAMESPACE
@@ -27,12 +28,12 @@ protected:
 private:
     void updateFont();
 
-    // QWidget interface
 protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
     QColor m_color;
+    QString m_text;
 };
 
 #endif

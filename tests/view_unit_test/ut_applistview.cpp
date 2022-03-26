@@ -60,6 +60,7 @@ TEST_F(Tst_Applistview, event_test)
     appListView->setModel(&model);
 
     QWheelEvent wheelEvent(QPointF(0, 0), 0, Qt::MiddleButton, Qt::ControlModifier);
+
     QApplication::sendEvent(appListView, &wheelEvent);
 
     QMouseEvent mouseMoveEvent(QEvent::MouseMove, QPointF(0, 0), QPointF(0, 1), QPointF(1, 1), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier, Qt::MouseEventSynthesizedByQt);

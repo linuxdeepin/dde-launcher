@@ -19,7 +19,7 @@ TEST_F(Tst_MenuWorker, menuWorker_test)
     worker.creatMenuByAppItem(worker.m_menu, signalMapper);
 
     for (int index = 0; index < 7; index++)
-        signalMapper->mapped(1);
+        signalMapper->mappedInt(1);
 
     worker.m_menu->aboutToHide();
 

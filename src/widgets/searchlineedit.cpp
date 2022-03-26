@@ -57,7 +57,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent) :
 
     m_placeholderText = new QLabel(tr("Search"));
     QFontMetrics fm(m_placeholderText->font());
-    m_placeholderText->setFixedWidth(fm.width(m_placeholderText->text()) + 10);
+    m_placeholderText->setFixedWidth(fm.horizontalAdvance(m_placeholderText->text()) + 10);
     m_placeholderText->setForegroundRole(QPalette::BrightText);
     m_floatWidget = new QWidget(this);
     m_placeholderText->setAccessibleName("PlaceholderText");

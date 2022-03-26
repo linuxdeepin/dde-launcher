@@ -119,7 +119,7 @@ private:
     static QPointer<CalculateUtil> m_calcUtil;
     static bool m_longPressed;                           // 保存触控屏是否可拖拽状态
 
-    QTime m_dragLastTime;                                // 拖拽开始到结束的持续时间(ms)
+    QElapsedTimer m_dragLastTime;                                // 拖拽开始到结束的持续时间(ms)
     QPoint m_dropPoint;                                  // 过度动画的终点坐标
     QPoint m_dragStartPos;                               // 拖拽起点坐标
 

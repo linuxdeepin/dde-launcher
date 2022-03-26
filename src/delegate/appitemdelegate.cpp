@@ -130,7 +130,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         const QPair<QString, bool> appTextResolvedInfo = holdTextInRect(fm, itemInfo.m_name, appNameRect.toRect());
         appNameResolved = appTextResolvedInfo.first;
 
-        if ((fm.width(appNameResolved) + (drawBlueDot ? (m_blueDotPixmap.width() + 10) : 0)) >= appNameRect.width())
+        if ((fm.horizontalAdvance(appNameResolved) + (drawBlueDot ? (m_blueDotPixmap.width() + 10) : 0)) >= appNameRect.width())
             TextSecond = 1;
 
         if (margin == 1 || appTextResolvedInfo.second) {
@@ -159,7 +159,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         if (drawBlueDot)
             drawBlueDotWidth = m_blueDotPixmap.width();
 
-        if (iconSize.width() > (fm.width(appNameResolved) + drawBlueDotWidth)) {
+        if (iconSize.width() > (fm.horizontalAdvance(appNameResolved) + drawBlueDotWidth)) {
             br.setX(iconRect.x() - ICONTOLETF);
             br.setWidth(iconSize.width() + ICONTOLETF * 2);
         } else {

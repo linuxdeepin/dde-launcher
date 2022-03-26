@@ -56,7 +56,7 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
 void CategoryTitleWidget::setText(const QString &title)
 {
     QFontMetrics fontMetric(m_title->font());
-    const int width = fontMetric.width(title);
+    const int width = fontMetric.horizontalAdvance(title);
     m_title->setFixedWidth(width + 10);
     m_title->setText(title);
 }
@@ -105,7 +105,7 @@ void CategoryTitleWidget::relayout()
 {
     QFont titleFont(m_title->font());
     QFontMetrics fontMetric(titleFont);
-    const int width = fontMetric.width(m_title->text());
+    const int width = fontMetric.horizontalAdvance(m_title->text());
     m_title->setFixedWidth(width + 10);
 }
 

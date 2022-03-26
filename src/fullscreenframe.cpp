@@ -198,7 +198,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_calcUtil->setNavigationWidgetSizeHint(m_navigationWidget->sizeHint());
 
     if (!DGuiApplicationHelper::isSpecialEffectsEnvironment())
-        m_changePageDelayTime = new QTime();
+        m_changePageDelayTime = new QElapsedTimer();
 }
 
 FullScreenFrame::~FullScreenFrame()

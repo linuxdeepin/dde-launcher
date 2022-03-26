@@ -82,7 +82,7 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value", this);
     m_pageSwitchAnimation->setEasingCurve(QEasingCurve::Linear);
     if (!DGuiApplicationHelper::isSpecialEffectsEnvironment()) {
-        m_changePageDelayTime = new QTime();
+        m_changePageDelayTime = new QElapsedTimer();
         m_pageSwitchAnimation->setDuration(0);
     }
 
@@ -454,10 +454,10 @@ void MultiPagesView::wheelEvent(QWheelEvent *e)
         return;
 
     int page = m_pageIndex;
-    if (e->delta() > 0) {
+    if (e->angleDelta().y() > 0) {
         if (page - 1 >= 0)
             --page;
-    } else if (e->delta() < 0) {
+    } else if (e->angleDelta().y() < 0) {
         if (page + 1 < m_pageCount)
             ++page;
     }

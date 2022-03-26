@@ -405,14 +405,14 @@ QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey
         auto dayPix = loadSvg(calIconList.at(2), QSize(28, 26) * iconZoom);
         m_dayLabel->setPixmap(dayPix.scaled(dayPix.width(), dayPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         m_dayLabel->setAlignment(Qt::AlignCenter);
-        m_dayLabel->setFixedHeight(m_dayLabel->pixmap()->height());
+        m_dayLabel->setFixedHeight(m_dayLabel->pixmap(Qt::ReturnByValue).height());
         m_dayLabel->raise();
         m_dayLabel->show();
         m_vlayout->addWidget(m_dayLabel, Qt::AlignVCenter);
 
         auto weekPix = loadSvg(calIconList.at(3), QSize(14, 6) * iconZoom);
         m_weekLabel->setPixmap(weekPix.scaled(weekPix.width(), weekPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        m_weekLabel->setFixedHeight(m_weekLabel->pixmap()->height());
+        m_weekLabel->setFixedHeight(m_weekLabel->pixmap(Qt::ReturnByValue).height());
         m_weekLabel->setAlignment(Qt::AlignCenter);
         m_weekLabel->setFixedWidth(s.width() + 5 * iconZoom);
         m_weekLabel->show();

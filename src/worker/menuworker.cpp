@@ -203,7 +203,7 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)
     m_menu->clear();
     creatMenuByAppItem(m_menu, signalMapper);
 
-    connect(signalMapper, static_cast<void (QSignalMapper::*)(const int)>(&QSignalMapper::mapped), this, &MenuWorker::handleMenuAction);
+    connect(signalMapper, static_cast<void (QSignalMapper::*)(const int)>(&QSignalMapper::mappedInt), this, &MenuWorker::handleMenuAction);
     connect(m_menu, &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);
 
     // 菜单超出当前屏幕范围时，菜单显示位置向上或者向左移动超出区域的差值

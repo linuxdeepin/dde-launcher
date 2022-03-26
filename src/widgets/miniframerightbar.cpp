@@ -340,7 +340,7 @@ void MiniFrameRightBar::showSettings()
 
 void MiniFrameRightBar::showManual()
 {
-    QProcess::startDetached("dman");
+    QProcess::startDetached("dman", {});
 
     emit requestFrameHide();
 }

@@ -40,7 +40,7 @@ void AppListArea::wheelEvent(QWheelEvent *e)
     if (e->modifiers().testFlag(Qt::ControlModifier)) {
         e->accept();
 
-        if (e->delta() > 0)
+        if (e->angleDelta().y() > 0 || (e->pixelDelta().x() > 0 && e->pixelDelta().y() > 0))
             emit increaseIcon();
         else
             emit decreaseIcon();

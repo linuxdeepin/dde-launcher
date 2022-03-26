@@ -39,7 +39,6 @@ void ScrollWidgetAgent::setBlurBoxWidget(BlurBoxWidget *blurBoxWidget)
         updateBackBlurWidget();
         if (m_blurBoxWidget) {
             m_blurBoxWidget->move(m_pos);
-            updateBackBlurPos();
         }
     }
 }
@@ -49,7 +48,6 @@ void ScrollWidgetAgent::setPos(QPoint p)
     m_pos = p;
     if (m_blurBoxWidget) {
         m_blurBoxWidget->move(m_pos);
-        updateBackBlurPos();
     }
     emit scrollBlurBoxWidget(this);
 }
@@ -58,14 +56,12 @@ void ScrollWidgetAgent::setVisible(bool visible)
 {
     if (m_blurBoxWidget) {
         m_blurBoxWidget->setVisible(visible);
-        updateBackBlurPos();
     }
 }
 
 void ScrollWidgetAgent::setPosType(PosType posType)
 {
     m_currentPosType = posType;
-    updateBackBlurWidget();
 }
 
 void ScrollWidgetAgent::setScrollToType(PosType posType)
@@ -78,7 +74,6 @@ void ScrollWidgetAgent::setScrollToType(PosType posType)
 void ScrollWidgetAgent::scrollFinished()
 {
     m_currentPosType = m_scrollToType;
-    updateBackBlurWidget();
     m_pos = m_scrollPos;
 }
 
@@ -116,8 +111,6 @@ void ScrollWidgetAgent::updateBackBlurWidget()
 void ScrollWidgetAgent::updateBackBlurPos()
 {
     if (m_mainWidget && m_controlWidget && m_blurBoxWidget->isVisible()) {
-        QPoint p = m_controlWidget->mapTo(m_mainWidget->window(), m_pos);
-        m_blurBoxWidget->updateBackBlurPos(p);
         m_blurBoxWidget->categoryTitle()->updatePosition(m_pos, m_controlWidget->width(), m_currentPosType);
         m_blurBoxWidget->update();
     }

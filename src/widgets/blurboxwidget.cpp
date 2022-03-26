@@ -25,6 +25,7 @@
 #include "util.h"
 
 #include <QPainter>
+#include <QResizeEvent>
 
 DWIDGET_USE_NAMESPACE
 using namespace DLauncher;
@@ -69,10 +70,7 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     m_blurGroup->addWidget(m_blurBackground);
 
     m_categoryTitle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    m_categoryTitle->setFixedHeight(60);
-
-    m_vLayout->setContentsMargins(0, 24, 0, 0);
-    m_vLayout->setAlignment(Qt::AlignTop);
+    m_categoryTitle->setFixedHeight(70);
 
     // 应用分类标题
     layoutAddWidget(m_categoryTitle, m_calcUtil->getAppBoxSize().width() / 2, Qt::AlignHCenter);
@@ -83,6 +81,9 @@ BlurBoxWidget::BlurBoxWidget(AppsListModel::AppCategory curCategory, char *name,
     m_bg->setFixedSize(m_calcUtil->getAppBoxSize());
     m_bg->setColor(QColor(255, 255, 255, 25));
     m_bg->lower();
+
+//    setStyleSheet("QWidget{background: red;}");
+    m_categoryMultiPagesView->installEventFilter(this);
 }
 
 BlurBoxWidget::~BlurBoxWidget()
@@ -142,6 +143,45 @@ void BlurBoxWidget::mouseReleaseEvent(QMouseEvent *e)
     //把事件往下传fullscreenframe处理
     QWidget::mouseReleaseEvent(e);
 }
+
+void BlurBoxWidget::resizeEvent(QResizeEvent *e)
+{
+    QSize boxwidgetSize = m_categoryTitle->size() + m_categoryMultiPagesView->size() + QSize(0, 70);
+    setFixedSize(m_categoryTitle->size() + m_categoryMultiPagesView->size() + QSize(0, 70));
+
+    qInfo() << __FUNCTION__ << __LINE__ << boxwidgetSize;
+    QWidget::resizeEvent(e);
+}
+
+bool BlurBoxWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_categoryMultiPagesView) {
+//        QResizeEvent *event = qobject_cast<QResizeEvent *>(event);
+        if (event->type() == QEvent::Resize) {
+//            QResizeEvent *sizeEvent = static_cast<QResizeEvent *>(event);
+            QSize boxwidgetSize = m_categoryTitle->size() + m_categoryMultiPagesView->size() + QSize(0, 70);
+            qInfo() << "boxwidgetSize:" << boxwidgetSize;
+            setFixedSize(boxwidgetSize);
+            return false;
+        }
+    }
+    return QWidget::eventFilter(watched, event);
+}
+
+//QSize BlurBoxWidget::sizeHint() const
+//{
+//    QSize boxwidgetSize = m_categoryTitle->size() + m_categoryMultiPagesView->size() + QSize(0, 70);
+////    setFixedSize(m_categoryTitle->size() + m_categoryMultiPagesView->size() + QSize(0, 70));
+
+////    qInfo() <<__FUNCTION__ << __LINE__ << ",boxwidgetsize:" << boxwidgetSize;
+//    return boxwidgetSize;
+//    //    QWidget::sizeHint();
+//}
+
+//void BlurBoxWidget::changeEvent(QEvent *event)
+//{
+////    event->type() ==
+//}
 
 void BlurBoxWidget::setMaskSize(QSize size)
 {

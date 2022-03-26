@@ -130,8 +130,6 @@ DFloatingButton *SearchWidget::toggleModeBtn()
 
 void SearchWidget::clearSearchContent()
 {
-//    m_searchEdit->normalMode();
-//    m_searchEdit->moveFloatWidget();
     m_searchEdit->clear();
     m_searchEdit->clearEdit();
 }

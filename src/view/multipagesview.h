@@ -67,7 +67,6 @@ public:
     void setDataDelegate(QAbstractItemDelegate *delegate);
     void setModel(AppsListModel::AppCategory category);
     void updatePosition(int mode = 0);
-
     void ShowPageView(AppsListModel::AppCategory category);
 
     void mousePress(QMouseEvent *e) override;
@@ -84,6 +83,7 @@ public:
     AppListArea *getListArea();
     AppGridViewList getAppGridViewList();
     AppsListModel::AppCategory getCategory();
+    QSize calculateWidgetSize();
 
     bool isScrolling();
 signals:
@@ -96,7 +96,8 @@ private slots:
 
 protected:
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
-    void InitUI();
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void initUi();
 
 private:
     GradientLabel *m_pLeftGradient;
@@ -113,6 +114,7 @@ private:
     QPropertyAnimation *m_pageSwitchAnimation;          // 分页切换动画
 
     QAbstractItemDelegate *m_delegate;                  // 视图代理基类
+    QLabel *m_titleLabel;
     PageControl *m_pageControl;                         // 分页控件
 
     int m_pageCount;
@@ -126,6 +128,8 @@ private:
     int m_scrollValue;
     int m_scrollStart;
     QTime *m_changePageDelayTime;                      // 滚动延时，设定时间内只允许滚动一次
+
+    QMap<AppsListModel::AppCategory, QString> m_typeAndTitleMap;
 };
 
 #endif // MULTIPAGESVIEW_H

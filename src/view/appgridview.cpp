@@ -96,11 +96,13 @@ AppGridView::AppGridView(QWidget *parent)
     setDragDropMode(QAbstractItemView::DragDrop);
     setDropIndicatorShown(false);// 解决拖拽释放前有小黑点出现的问题
     setMovement(QListView::Free);
-    setFlow(QListView::LeftToRight);
+    setWrapping(true);
     setLayoutMode(QListView::Batched);
     setResizeMode(QListView::Adjust);
+    setViewMode(QListView::IconMode);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setFrameStyle(QFrame::NoFrame);
     setViewportMargins(0, 0, 0, 0);
     viewport()->setAutoFillBackground(false);
@@ -108,7 +110,7 @@ AppGridView::AppGridView(QWidget *parent)
     // 界面大小变化时，设置listview的边距以及间距
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
         setSpacing(m_calcUtil->appItemSpacing());
-        setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), m_calcUtil->appMarginLeft(), 0);
+        setViewportMargins(0, m_calcUtil->appMarginTop(), 0, m_calcUtil->appMarginTop());
     });
 
 #ifndef DISABLE_DRAG_ANIMATION
@@ -404,6 +406,12 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
     // 小范围位置变化，当作没有变化，针对触摸屏
     if (diff_x < DLauncher::TOUCH_DIFF_THRESH && diff_y < DLauncher::TOUCH_DIFF_THRESH)
         QListView::mouseReleaseEvent(e);
+}
+
+void AppGridView::showEvent(QShowEvent *e)
+{
+    Q_UNUSED(e);
+    return;
 }
 
 QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey)

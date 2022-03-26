@@ -51,10 +51,13 @@ public:
     BlurBoxWidget * blurBoxWidget() { return m_blurBoxWidget;}
     void setBlurBoxWidget(BlurBoxWidget * blurBoxWidget);
     QPropertyAnimation *animation() { return m_animation;}
+
     QPoint pos() { return  m_pos;}
     void setPos(QPoint p);
+
     PosType posType() { return m_currentPosType;}
     void setPosType(PosType posType);
+
     void setScrollToType(PosType posType);
     void setVisible(bool visible);
     QPoint getScrollWidgetAgentPos(PosType posType);

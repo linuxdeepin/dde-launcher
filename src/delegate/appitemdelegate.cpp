@@ -162,6 +162,12 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         if (iconSize.width() > (fm.width(appNameResolved) + drawBlueDotWidth)) {
             br.setX(iconRect.x() - ICONTOLETF);
             br.setWidth(iconSize.width() + ICONTOLETF * 2);
+        } else {
+            int width = fm.width(appNameResolved) + drawBlueDotWidth + TEXTTOLEFT * 2;
+            if (width < br.width()) {
+                br.setX(br.x() + (br.width() - width) / 2);
+                br.setWidth(width);
+            }
         }
 
         painter->drawRoundedRect(br, radius, radius);
@@ -255,6 +261,9 @@ const QRect AppItemDelegate::itemTextRect(const QRect &boundingRect, const QRect
     //名字宽度需要考虑到未打开应用的小蓝点标识
     if(extraWidthMargin) result.setWidth(result.width() + m_blueDotPixmap.width());
     result.setTop(iconRect.bottom());
+    result.setLeft(result.left() + TEXTTOLEFT);
+    result.setRight(result.right() - TEXTTOLEFT);
+
     return result;
 }
 

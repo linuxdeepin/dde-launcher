@@ -9,7 +9,7 @@ class Tst_LauncherSys : public testing::Test
 public:
     void SetUp() override
     {
-        m_launcherSys = new LauncherSys(nullptr);
+        m_launcherSys = new LauncherSys();
     }
 
     void TearDown() override
@@ -26,12 +26,8 @@ public:
 
 TEST_F(Tst_LauncherSys, launcherSys_test)
 {
-    m_launcherSys->registerRegion();
     m_launcherSys->displayModeChanged();
 
     m_launcherSys->onDisplayModeChanged();
     m_launcherSys->onVisibleChanged();
-
-    m_launcherSys->hideLauncher();
-    m_launcherSys->unRegisterRegion();
 }

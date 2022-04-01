@@ -26,6 +26,7 @@
 #include "util.h"
 #include <DFontSizeManager>
 #include <QHBoxLayout>
+#include <QGuiApplication>
 
 DWIDGET_USE_NAMESPACE
 CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) :
@@ -48,6 +49,8 @@ CategoryTitleWidget::CategoryTitleWidget(const QString &title, QWidget *parent) 
 
     //addTextShadow();
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &CategoryTitleWidget::relayout);
+
+    connect(qApp, &QGuiApplication::fontChanged, this, &CategoryTitleWidget::relayout);
 }
 
 void CategoryTitleWidget::setText(const QString &title)

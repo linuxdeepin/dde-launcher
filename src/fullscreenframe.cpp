@@ -473,11 +473,12 @@ void FullScreenFrame::initUI()
     m_appItemDelegate->installEventFilter(m_eventFilter);
     initAppView();
 
+
     // 自由排序模式，设置大小调整方式为固定方式
     // 启动时默认按屏幕大小设置自由排序widget的大小
     // 启动时全屏自由模式设置控件大小，解决模式切换界面抖动问题
     const int appsContentWidth = m_calcUtil->getScreenSize().width();
-    const int appsContentHeight = m_calcUtil->getScreenSize().height() - DLauncher::APPS_AREA_TOP_MARGIN;
+    const int appsContentHeight = m_calcUtil->getScreenSize().height() - DLauncher::APPS_AREA_TOP_MARGIN - m_searchWidget->sizeHint().height();
 
     m_appsIconBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_appsIconBox->layout()->setSpacing(0);
@@ -509,6 +510,7 @@ void FullScreenFrame::initUI()
     scrollVLayout->setSpacing(0);
     scrollVLayout->addWidget(m_appsIconBox, 0, Qt::AlignCenter);
     scrollVLayout->addWidget(m_appsScrollArea, 0, Qt::AlignHCenter);
+//    scrollVLayout->addWidget(m_searchModeWidget, 0, Qt::AlignCenter);
 
     m_contentFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_contentFrame->setFrameStyle(QFrame::NoFrame);
@@ -573,6 +575,7 @@ void FullScreenFrame::initAppView()
     m_appItemLayout->addWidget(m_developMultiPagesView, 0, Qt::AlignTop);
     m_appItemLayout->addWidget(m_systemMultiPagesView, 0, Qt::AlignTop);
     m_appItemLayout->addWidget(m_othersMultiPagesView, 0, Qt::AlignTop);
+
     m_appItemLayout->setSpacing(40);
     m_appItemLayout->setMargin(0);
 }
@@ -967,14 +970,13 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         break;
     }
 
-    AppsListModel::AppCategory category = (m_displayMode == SEARCH) ? AppsListModel::Search : AppsListModel::All;
-    m_multiPagesView->setModel(category);
-    m_multiPagesView->updatePosition(m_displayMode);
-    layoutChanged();
-
     if (m_displayMode == GROUP_BY_CATEGORY) {
         // 隐藏自由模式显示
         m_appsIconBox->setVisible(false);
+
+        // 隐藏搜索模式
+        m_searchModeWidget->setVisible(false);
+
         // 再显示分类模式
         m_appsScrollArea->setVisible(true);
 
@@ -1209,12 +1211,13 @@ const QScreen *FullScreenFrame::currentScreen()
 void FullScreenFrame::layoutChanged()
 {
     // 全屏模式下给控件设置整个屏幕大小
-    if (m_displayMode == ALL_APPS || m_displayMode == SEARCH) {
+    QSize boxSize = m_contentFrame->size() - QSize(0, DLauncher::APPS_AREA_TOP_MARGIN);
+    if (m_displayMode == ALL_APPS) {
         QSize boxSize = m_contentFrame->size() - QSize(0, DLauncher::APPS_AREA_TOP_MARGIN);
         m_appsIconBox->setFixedSize(boxSize);
         m_multiPagesView->setFixedSize(boxSize);
         m_multiPagesView->updatePosition(m_displayMode);
-    } else {
+    } else if (m_displayMode == GROUP_BY_CATEGORY){
         for (int i = 0; i < m_appItemLayout->count(); i++) {
             MultiPagesView *pView = qobject_cast<MultiPagesView *>(m_appItemLayout->itemAt(i)->widget());
             if (!pView)
@@ -1222,13 +1225,13 @@ void FullScreenFrame::layoutChanged()
 
             pView->updatePosition(pView->getCategory());
         }
+    } else {
+        m_searchModeWidget->setFixedSize(boxSize);
     }
 }
 
 void FullScreenFrame::searchTextChanged(const QString &keywords, bool enableUpdateMode)
 {
-    m_appsManager->searchApp(keywords.trimmed());
-
     if (!enableUpdateMode)
         return;
 

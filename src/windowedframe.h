@@ -93,7 +93,7 @@ private:
     void initUi();
     void initConnection();
     void setAccessibleName();
-    void updateUi(bool searchedState = false);
+    void freshUi(bool searchedState = false);
 
     void showLauncher() override;
     void hideLauncher() override;

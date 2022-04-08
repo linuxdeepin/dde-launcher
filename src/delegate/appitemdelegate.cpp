@@ -83,27 +83,23 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
     const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
-    const QPixmap dragIconPix = m_dragIndex.data(AppsListModel::AppIconRole).value<QPixmap>();
     const bool itemIsDir = index.data(AppsListModel::ItemIsDirRole).toBool();
     const ItemInfoList itemList = index.data(AppsListModel::DirItemInfoRole).value<ItemInfoList>();
     QList<QPixmap> pixmapList;
-    if (itemIsDir)
-       pixmapList = index.data(AppsListModel::DirAppIconsRole).value<QList<QPixmap>>();
 
     const int fontPixelSize = index.data(AppsListModel::AppFontSizeRole).value<int>();
     const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();
     const bool is_current = CurrentIndex == index;
-    const QRect ibr = itemBoundingRect(option.rect);
+    const QRect itemBoundRect = itemBoundingRect(option.rect);
     const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).toSize();
 
-    // process font
     QFont appNamefont(painter->font());
     appNamefont.setPixelSize(fontPixelSize);
     const QFontMetrics fm(appNamefont);
     painter->setOpacity(1);
     const static double x1 = 0.26418192;
     const static double x2 = -0.38890932;
-    const double result = x1 * ibr.width() + x2 * iconSize.width();
+    const double result = x1 * itemBoundRect.width() + x2 * iconSize.width();
     int margin = result > 0 ? result * 0.71 : 1;
 
     // adjust
@@ -117,18 +113,17 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         // adjust
         if (adjust)
             --margin;
-        br = ibr.marginsRemoved(QMargins(margin, 1, margin, margin * 2));
+        br = itemBoundRect.marginsRemoved(QMargins(margin, 1, margin, margin * 2));
 
         // calc icon rect
         const int iconLeftMargins = (br.width() - iconSize.width()) / 2;
-        int iconTopMargin = ICONTOTOP;// ibr.height() * .2 - iconSize.height() * .3;
-        //iconTopMargin = 6; //std::max(iconTopMargin, 1.);
+        int iconTopMargin = ICONTOTOP;
         iconRect = QRect(br.topLeft() + QPoint(iconLeftMargins, iconTopMargin - 2), iconSize);
 
         //31是字体设置20的时候的高度
         br.setHeight(ICONTOTOP + iconRect.height() + TEXTTOICON + 31 + fontPixelSize * TextSecond + TEXTTOLEFT);
-        if (br.height() > ibr.height())
-            br.setHeight(ibr.height() - 1);
+        if (br.height() > itemBoundRect.height())
+            br.setHeight(itemBoundRect.height() - 1);
 
         // calc text
         appNameRect = itemTextRect(br, iconRect, drawBlueDot);
@@ -144,7 +139,6 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
             break;
         }
 
-        // we need adjust again!
         adjust = true;
     } while (true);
 
@@ -155,7 +149,6 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
         painter->setPen(Qt::transparent);
         painter->setBrush(brushColor);
-//        painter->setBrush(QColor(69, 60, 33, 100));
         int drawBlueDotWidth = 0;
         if (drawBlueDot)
             drawBlueDotWidth = m_blueDotPixmap.width();
@@ -183,13 +176,13 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // 文件夹效果
     if (itemIsDir)
        pixmapList = index.data(AppsListModel::DirAppIconsRole).value<QList<QPixmap>>();
+
 #if 1
-    if (itemIsDir && !itemList.isEmpty() && CalculateUtil::instance()->fullscreen()) {
+    if (itemIsDir && !itemList.isEmpty()) {
         const int radius = 18;
         painter->setPen(Qt::transparent);
         painter->setBrush(QColor(93, 92, 90, 100));// 93, 92, 90, 150 // 69, 60, 33, 100
         painter->drawRoundedRect(br, radius, radius);
-
         // 绘制文件夹内其他应用
         for (int i = 0; i < itemList.size(); i++) {
             // todo: 计算每个图标的位置rect()
@@ -267,17 +260,13 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     if (!itemIsDir)
         painter->drawPixmap(iconRect, iconPix, iconPix.rect());
 
-    // draw icon if app is auto startup
     const QPoint autoStartIconPos = iconRect.bottomLeft()
-            // offset for auto-start mark itself
             - QPoint(m_autoStartPixmap.height(), m_autoStartPixmap.width()) / m_autoStartPixmap.devicePixelRatioF() / 2
-            // extra offset
             + QPoint(iconRect.width() / 10, -iconRect.height() / 10);
 
     if (index.data(AppsListModel::AppAutoStartRole).toBool())
         painter->drawPixmap(autoStartIconPos, m_autoStartPixmap);
 
-    // draw blue dot if needed
     if (drawBlueDot) {
         const int marginRight = 2;
         const QRectF textRect = fm.boundingRect(appNameRect.toRect(), Qt::AlignTop | Qt::AlignHCenter | Qt::TextWordWrap, appNameResolved);

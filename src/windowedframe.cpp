@@ -163,9 +163,6 @@ void WindowedFrame::initUi()
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setFixedSize(500, 50);
     m_tipsLabel->setVisible(false);
-
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &WindowedFrame::resetWidgetStyle);
-
     m_delayHideTimer->setInterval(200);
     m_delayHideTimer->setSingleShot(true);
 
@@ -217,13 +214,14 @@ void WindowedFrame::initUi()
     rightVLayout->addLayout(allAppVLayout);
     rightVLayout->addWidget(m_searchedView);
 
-    updateUi(false);
-
     mainHlayout->addLayout(leftVLayout);
     mainHlayout->addLayout(rightVLayout);
     mainHlayout->setStretch(0, 1);
     mainHlayout->setStretch(1, 2);
     setLayout(mainHlayout);
+
+    // 隐藏搜索状态
+    freshUi(false);
 
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_InputMethodEnabled, true);
@@ -336,6 +334,8 @@ void WindowedFrame::initConnection()
     connect(qApp, &QApplication::primaryScreenChanged, this, &WindowedFrame::onScreenInfoChange);
 
     connect(this, &WindowedFrame::visibleChanged, this, &WindowedFrame::onHideMenu);
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &WindowedFrame::resetWidgetStyle);
 }
 
 void WindowedFrame::setAccessibleName()
@@ -352,16 +352,15 @@ void WindowedFrame::setAccessibleName()
 }
 
 /**
- * @brief WindowedFrame::updateUi
+ * @brief WindowedFrame::freshUi
  * @param searchedState 搜索模式, true, 其他模式, false
  */
-void WindowedFrame::updateUi(bool searchedState)
+void WindowedFrame::freshUi(bool searchedState)
 {
     m_commonUseView->setVisible(!searchedState);
     m_commonUseLabel->setVisible(!searchedState);
     m_allAppView->setVisible(!searchedState);
     m_allAppLabel->setVisible(!searchedState);
-    m_searchedView->setVisible(searchedState);
 }
 
 void WindowedFrame::showLauncher()
@@ -1008,14 +1007,13 @@ void WindowedFrame::onWMCompositeChanged()
 void WindowedFrame::searchText(const QString &text)
 {
     if (text.isEmpty()) {
-        updateUi(false);
+        freshUi(false);
         hideTips();
         m_displayMode = Category;
     } else {
-        updateUi(true);
+        freshUi(true);
         m_focusPos = Search;
         auto temp = text;
-        m_appsManager->searchApp(temp.replace(" ",""));
         m_displayMode = All;
     }
 }

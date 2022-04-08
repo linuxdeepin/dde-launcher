@@ -352,6 +352,9 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
         return nSize;
     }
 
+    if (m_category == AppsListModel::Search)
+        return nSize;
+
     return qMin(pageCount, nPageCount);
 }
 

@@ -86,10 +86,11 @@ public:
     enum AppCategory {
         All,
         Custom,                 // 自定义的排序模式
-        Search,                 // 搜索模式
+        Search,                 // 本地搜索模式
         Category,               // 分类模式
         Common,                 // 常用应用
         Dir,                    // 应用抽屉
+        PluginSearch,           // 插件搜索
 
         // apps category
         Internet,               // 网络模式

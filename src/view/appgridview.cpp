@@ -176,7 +176,6 @@ void AppGridView::dropEvent(QDropEvent *e)
     if (m_calcUtil->fullscreen()) {
         QModelIndex dropIndex = indexAt(e->pos());
         QModelIndex dragIndex = indexAt(m_dragStartPos);
-
         if (dropIndex.isValid() && dragIndex.isValid() && dragIndex != dropIndex) {
             itemDelegate->setDirModelIndex(QModelIndex(), QModelIndex());
             listModel->updateModelData(dragIndex, dropIndex);
@@ -408,18 +407,12 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
         QListView::mouseReleaseEvent(e);
 }
 
-void AppGridView::showEvent(QShowEvent *e)
-{
-    Q_UNUSED(e);
-    return;
-}
-
 QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey)
 {
     QPixmap srcPix;
 
     if (appKey == "dde-calendar") {
-        const  auto s = m_calcUtil->appIconSize();
+        const auto s = m_calcUtil->appIconSize();
         const double  iconZoom =  s.width() / 64.0;
         QStringList calIconList = m_calcUtil->calendarSelectIcon();
 
@@ -571,7 +564,9 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     m_dropToPos = index.row();
     listModel->setDraggingIndex(index);
 
-    int old_page = m_containerBox->property("curPage").toInt();
+    int old_page = 0;
+    if (m_containerBox)
+        old_page = m_containerBox->property("curPage").toInt();
 
     if (execDrag) {
         QDrag *drag = new QDrag(this);
@@ -588,7 +583,9 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     // 未触发分页则直接返回,触发分页则执行分页后操作
     emit dragEnd();
 
-    int cur_page = m_containerBox->property("curPage").toInt();
+    int cur_page = 0;
+    if (m_containerBox)
+        cur_page = m_containerBox->property("curPage").toInt();
 
     // 当拖动应用出现触发分页的情况，关闭上一个动画， 直接处理当前当前页的动画
     if (cur_page != old_page) {
@@ -756,6 +753,16 @@ void AppGridView::dropSwap()
 const QRect AppGridView::indexRect(const QModelIndex &index) const
 {
     return rectForIndex(index);
+}
+
+void AppGridView::setViewType(AppGridView::ViewType type)
+{
+    m_viewType = type;
+}
+
+AppGridView::ViewType AppGridView::getViewType() const
+{
+    return m_viewType;
 }
 
 /** 提前创建好拖拽过程中需要用到的label

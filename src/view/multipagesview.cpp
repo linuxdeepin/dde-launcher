@@ -95,7 +95,7 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     if (m_calcUtil->displayMode() == ALL_APPS) {
         // 全屏视图管理类设置左右边距
         int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
-        m_viewBox->layout()->setContentsMargins(padding, 0, padding, 0);
+        m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
         m_viewBox->layout()->setSpacing(padding);
     }
 
@@ -365,7 +365,7 @@ void MultiPagesView::updatePosition(int mode)
     // 更新全屏两种模式下界面布局的左右边距和间隔
     if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
         int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
-        m_viewBox->layout()->setContentsMargins(padding, 0, padding, 0);
+        m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
         m_viewBox->layout()->setSpacing(padding);
     } else {
         m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
@@ -375,9 +375,7 @@ void MultiPagesView::updatePosition(int mode)
     m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
     // 更新视图列表的大小
     if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
-        int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
-
-        QSize tmpSize = size() - QSize(padding, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
+        QSize tmpSize = size()- QSize(0, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
         m_appListArea->setFixedSize(tmpSize);
         m_viewBox->setFixedSize(tmpSize);
 
@@ -406,7 +404,7 @@ void MultiPagesView::initUi()
     QVBoxLayout *layoutMain = new QVBoxLayout;
     layoutMain->setContentsMargins(0, 0, 0, DLauncher::DRAG_THRESHOLD);
     layoutMain->setSpacing(0);
-    if (m_category > AppsListModel::Dir) {
+    if ((m_category > AppsListModel::Dir) || (m_category == AppsListModel::Search) || (m_category == AppsListModel::PluginSearch)) {
         layoutMain->addWidget(m_titleLabel, 0, Qt::AlignHCenter);
     } else {
         m_titleLabel->setVisible(false);
@@ -414,7 +412,6 @@ void MultiPagesView::initUi()
 
     layoutMain->addWidget(m_appListArea, 0, Qt::AlignHCenter);
     layoutMain->addWidget(m_pageControl, 0, Qt::AlignHCenter);
-
     setLayout(layoutMain);
 }
 
@@ -425,7 +422,7 @@ void MultiPagesView::showCurrentPage(int currentPage)
         padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
 
     m_pageIndex = currentPage > 0 ? (currentPage < m_pageCount ? currentPage : m_pageCount - 1) : 0;
-    int endValue = m_pageIndex == 0 ? 0 : (m_appGridViewList[m_pageIndex]->x() - padding);
+    int endValue = m_pageIndex == 0 ? 0 : (m_appGridViewList[m_pageIndex]->x()/* - padding*/);
     int startValue = m_appListArea->horizontalScrollBar()->value();
     m_appListArea->setProperty("curPage", m_pageIndex);
 

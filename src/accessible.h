@@ -66,7 +66,7 @@ SET_FORM_ACCESSIBLE(QLabel, "QLabel")
 SET_FORM_ACCESSIBLE(MaskQWidget, "MaskQWidget")
 SET_FORM_ACCESSIBLE(DHBoxWidget, "DHBoxWidget")
 SET_FORM_ACCESSIBLE(DBoxWidget, "DBoxWidget")
-
+SET_FORM_ACCESSIBLE(SearchModeWidget, "SearchModeWidget")
 
 QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
 {

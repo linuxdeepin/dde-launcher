@@ -44,6 +44,7 @@
 #include "scrollwidgetagent.h"
 #include "appdirwidget.h"
 #include "maskqwidget.h"
+#include "searchmodewidget.h"
 
 #include <dboxwidget.h>
 
@@ -198,6 +199,9 @@ private:
     MultiPagesView *m_developMultiPagesView;           // 全屏应用分类下编程开发控件
     MultiPagesView *m_systemMultiPagesView;            // 全屏应用分类下系统管理控件
     MultiPagesView *m_othersMultiPagesView;            // 全屏应用分类下其他分类控件
+
+    SearchModeWidget *m_searchModeWidget;              // 搜索模式控件
+    MultiPagesView *m_searchPageView;
 
     QFrame *m_topSpacing;
     QFrame *m_bottomSpacing;

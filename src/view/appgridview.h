@@ -52,6 +52,11 @@ class AppGridView : public QListView
     Q_OBJECT
 
 public:
+    enum ViewType {
+        SearchView,
+        OtherView
+    };
+
     explicit AppGridView(QWidget *parent = nullptr);
 
     using QListView::indexAt;
@@ -70,6 +75,9 @@ public:
 
     QRect appIconRect(const QModelIndex &index);
     const QRect indexRect(const QModelIndex &index) const;
+
+    void setViewType(ViewType type = OtherView);
+    ViewType getViewType() const;
 
 private:
     void createMovingComponent();
@@ -96,7 +104,6 @@ protected:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
-    void showEvent(QShowEvent *e) override;
 
 private slots:
     void dropSwap();
@@ -132,6 +139,7 @@ private:
     QLabel *m_monthLabel;
     QLabel *m_dayLabel;
     QLabel *m_weekLabel;
+    ViewType m_viewType;
 };
 
 typedef QList<AppGridView *> AppGridViewList;

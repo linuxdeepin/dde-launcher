@@ -339,7 +339,6 @@ void AppsManager::stashItem(const QString &appKey)
     for (int i(0); i != m_allAppInfoList.size(); ++i) {
         if (m_allAppInfoList[i].m_key == appKey) {
             m_stashList.append(m_allAppInfoList[i]);
-            qInfo() << "stash item:" << m_allAppInfoList[i];
             m_allAppInfoList.removeAt(i);
 
             generateCategoryMap();
@@ -1339,7 +1338,6 @@ void AppsManager::searchDone(const QStringList &resultList)
     m_appSearchResultList.clear();
 
     QStringList resultCopy = resultList;
-
     QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
 
     for (const QString& result : resultCopy) {

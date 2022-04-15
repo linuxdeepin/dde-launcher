@@ -112,13 +112,11 @@ void BoxFrame::scaledBackground()
     // 当背景图片路径且屏幕大小没有变化，则无需再次加载,减少资源加载耗时
     const QSize &size = currentScreen()->size() * currentScreen()->devicePixelRatio();
     static QString bgPath;
-    static QSize lastSize;
 
-    if (bgPath == m_lastUrl && lastSize == size)
+    if (bgPath == m_lastUrl && m_pixmap.size() == size)
         return;
 
     bgPath = m_lastUrl;
-    lastSize = size;
 
     QPixmap pixmap(m_lastUrl);
     if (pixmap.isNull())
@@ -161,4 +159,12 @@ void BoxFrame::moveEvent(QMoveEvent *event)
     if (m_bgManager)
         m_bgManager->updateBlurBackgrounds();
     QLabel::moveEvent(event);
+}
+
+void BoxFrame::resizeEvent(QResizeEvent *event)
+{
+    scaledBackground();
+    scaledBlurBackground();
+
+    QWidget::resizeEvent(event);
 }

@@ -67,6 +67,8 @@ SET_FORM_ACCESSIBLE(MaskQWidget, "MaskQWidget")
 SET_FORM_ACCESSIBLE(DHBoxWidget, "DHBoxWidget")
 SET_FORM_ACCESSIBLE(DBoxWidget, "DBoxWidget")
 SET_FORM_ACCESSIBLE(SearchModeWidget, "SearchModeWidget")
+SET_FORM_ACCESSIBLE(AppDirWidget, "AppDirWidget")
+SET_FORM_ACCESSIBLE(MultiPagesView, "MultiPagesView")
 
 QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
 {
@@ -100,6 +102,9 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, MaskQWidget);
     USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DHBoxWidget);
     USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DBoxWidget);
+    USE_ACCESSIBLE(classname, SearchModeWidget)
+    USE_ACCESSIBLE(classname, AppDirWidget)
+    USE_ACCESSIBLE(classname, MultiPagesView)
 
     if (!interface && object->inherits("QWidget") && !ignoreLst.contains(classname)) {
         QWidget *w = static_cast<QWidget *>(object);

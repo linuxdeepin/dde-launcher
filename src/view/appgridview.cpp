@@ -107,8 +107,6 @@ AppGridView::AppGridView(QWidget *parent)
     setFrameStyle(QFrame::NoFrame);
     setViewportMargins(0, 0, 0, 0);
     viewport()->setAutoFillBackground(false);
-
-    // 界面大小变化时，设置listview的边距以及间距
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
         setSpacing(m_calcUtil->appItemSpacing());
         if (getViewType() != PopupView || m_calcUtil->fullscreen())

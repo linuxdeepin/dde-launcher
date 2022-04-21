@@ -479,11 +479,11 @@ void FullScreenFrame::initAppView()
 
 void FullScreenFrame::initConnection()
 {
-    connect(m_multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
-
-    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
-
+    connect(this, &BoxFrame::backgroundImageChanged, m_dirWidget, &AppDirWidget::updateBackgroundImage);
     connect(this, &FullScreenFrame::visibleChanged, this, &FullScreenFrame::onHideMenu);
+    connect(m_multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
+    connect(m_searchModeWidget, &SearchModeWidget::connectViewEvent, this , &FullScreenFrame::addViewEvent);
+    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
 
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
     connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hideLauncher, Qt::QueuedConnection);

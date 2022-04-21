@@ -78,13 +78,6 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_appListArea->viewport()->installEventFilter(this);
     m_appListArea->installEventFilter(this);
 
-    if (m_calcUtil->displayMode() == ALL_APPS) {
-        // 全屏视图管理类设置左右边距
-        int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
-        m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
-        m_viewBox->layout()->setSpacing(padding);
-    }
-
     // 翻页按钮和动画
     m_pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value", this);
     m_pageSwitchAnimation->setEasingCurve(QEasingCurve::Linear);
@@ -92,7 +85,7 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
         m_changePageDelayTime = new QTime();
         m_pageSwitchAnimation->setDuration(0);
     }
-
+    
     initUi();
 
     connect(m_appListArea, &AppListArea::increaseIcon, this, [ = ] { if (m_calcUtil->increaseIconSize()) emit m_appsManager->layoutChanged(AppsListModel::All); });
@@ -177,6 +170,9 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             m_pageAppsModelList.push_back(pModel);
 
             AppGridView *pageView = new AppGridView(this);
+            if (m_category != AppsListModel::All)
+                pageView->setViewportMargins(QMargins(60, 0, 60, 0));
+
             pageView->setModel(pModel);
             pageView->setItemDelegate(m_delegate);
             pageView->setContainerBox(m_appListArea);
@@ -348,24 +344,23 @@ void MultiPagesView::setModel(AppsListModel::AppCategory category)
 void MultiPagesView::updatePosition(int mode)
 {
     // 更新全屏两种模式下界面布局的左右边距和间隔
-    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
-
-    // 剩余的空间 = (itemSpacing * 7 * 2 * 1/2)
-//    int remainSpacing = m_calcUtil->appItemSpacing() * (14 / 2) / 2;
-
     int remainSpacing = m_calcUtil->appItemSpacing() * 7 / 2;
+
     if (mode == AppsListModel::Dir) {
         m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
         m_viewBox->layout()->setSpacing(20);
-        QSize tmpSize = size()- QSize(0, m_pageControl->height() + m_titleLabel->height());
+        QSize tmpSize = size() - QSize(0, m_pageControl->height() + m_titleLabel->height());
         m_appListArea->setFixedSize(tmpSize);
         m_viewBox->setFixedSize(tmpSize);
 
-        qInfo() << "tmpSize: " << tmpSize << ",padding:" << padding;
-        for (auto pView : m_appGridViewList)
+        for (auto pView : m_appGridViewList) {
             pView->setFixedSize(tmpSize);
+            pView->setViewType(AppGridView::PopupView);
+        }
+
 
         showCurrentPage(0);
+        m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
         return;
     }
 
@@ -404,10 +399,12 @@ void MultiPagesView::initUi()
     layoutMain->setSpacing(0);
     if ((m_category > AppsListModel::Dir) || (m_category == AppsListModel::Search) || (m_category == AppsListModel::PluginSearch)) {
         layoutMain->addWidget(m_titleLabel, 0, Qt::AlignHCenter);
+        m_titleLabel->setVisible(true);
     } else {
         m_titleLabel->setVisible(false);
     }
 
+    layoutMain->addWidget(m_titleLabel, 0, Qt::AlignHCenter);
     layoutMain->addWidget(m_appListArea, 0, Qt::AlignHCenter);
     layoutMain->addWidget(m_pageControl, 0, Qt::AlignHCenter);
     setLayout(layoutMain);
@@ -420,7 +417,7 @@ void MultiPagesView::showCurrentPage(int currentPage)
         padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
 
     m_pageIndex = currentPage > 0 ? (currentPage < m_pageCount ? currentPage : m_pageCount - 1) : 0;
-    int endValue = m_pageIndex == 0 ? 0 : (m_appGridViewList[m_pageIndex]->x()/* - padding*/);
+    int endValue = m_pageIndex == 0 ? 0 : (m_appGridViewList[m_pageIndex]->x());
     int startValue = m_appListArea->horizontalScrollBar()->value();
     m_appListArea->setProperty("curPage", m_pageIndex);
 
@@ -632,8 +629,6 @@ QSize MultiPagesView::calculateWidgetSize()
     QSize itemSize = CalculateUtil::instance()->appItemSize() * 5 / 4;
 
     int leftMargin = CalculateUtil::instance()->appMarginLeft();
-    int topMargin = CalculateUtil::instance()->appMarginTop();
-    int bottomMargin = CalculateUtil::instance()->appMarginTop();
     int spacing = CalculateUtil::instance()->appItemSpacing();
     int itemWidth = itemSize.width();
     int itemHeight = itemSize.height();

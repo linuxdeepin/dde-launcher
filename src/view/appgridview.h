@@ -57,6 +57,7 @@ public:
         MainView,   // 主页面视图
     };
 
+    using QListView::setViewportMargins;
     explicit AppGridView(QWidget *parent = nullptr);
 
     using QListView::indexAt;

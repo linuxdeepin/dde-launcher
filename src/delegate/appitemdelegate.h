@@ -29,6 +29,8 @@
 #include <QStyleOptionViewItem>
 #include <QPainter>
 
+#include "iteminfo.h"
+
 class CalculateUtil;
 class AppItemDelegate : public QAbstractItemDelegate
 {
@@ -39,7 +41,9 @@ public:
 
     void setCurrentIndex(const QModelIndex &index);
     const QModelIndex &currentIndex() const {return CurrentIndex;}
-
+    void setDirModelIndex(QModelIndex dragIndex, QModelIndex dropIndex);
+    void setItemList(const ItemInfoList &items);
+    QRect appSourceRect(QRect rect, int index) const;
 
 signals:
     void requestUpdate(const QModelIndex &idx) const;
@@ -59,6 +63,9 @@ private:
     QPixmap m_autoStartPixmap; // 自启动的app样式
 
     static QModelIndex CurrentIndex;
+    QModelIndex m_dragIndex;
+    QModelIndex m_dropIndex;
+    ItemInfoList m_itemList;
 };
 
 #endif // APPITEMDELEGATE_H

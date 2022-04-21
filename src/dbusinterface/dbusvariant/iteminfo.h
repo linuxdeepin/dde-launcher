@@ -28,6 +28,8 @@
 
 #include <QtDBus>
 
+typedef QList<ItemInfo> ItemInfoList;
+
 class ItemInfo
 {
 public:
@@ -59,9 +61,10 @@ public:
     qlonglong m_installedTime;      // 安装时间
     qlonglong m_openCount;          // 打开次数
     qlonglong m_firstRunTime;       // 首次运行的时间戳
+    bool m_isDir;                   // 是否为文件夹
+    QModelIndexList m_modelIndexList;
+    ItemInfoList m_appInfoList;
 };
-
-typedef QList<ItemInfo> ItemInfoList;
 
 Q_DECLARE_METATYPE(ItemInfo)
 Q_DECLARE_METATYPE(ItemInfoList)

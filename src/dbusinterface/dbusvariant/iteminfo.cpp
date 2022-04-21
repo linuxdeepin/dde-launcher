@@ -28,6 +28,7 @@ ItemInfo::ItemInfo()
     : m_openCount(0)
     , m_firstRunTime(0)
 {
+    m_isDir = false;
 }
 
 ItemInfo::ItemInfo(const ItemInfo &info)
@@ -39,6 +40,8 @@ ItemInfo::ItemInfo(const ItemInfo &info)
     , m_installedTime(info.m_installedTime)
     , m_openCount(info.m_openCount)
     , m_firstRunTime(info.m_firstRunTime)
+    , m_isDir(info.m_isDir)
+    , m_appInfoList(info.m_appInfoList)
 {
 
 }
@@ -90,7 +93,8 @@ void ItemInfo::updateInfo(const ItemInfo &info)
 QDebug operator<<(QDebug argument, const ItemInfo &info)
 {
     argument << info.m_categoryId << info.m_installedTime;
-    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
+    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey
+             << info.m_isDir << info.m_appInfoList;
 
     return argument;
 }
@@ -98,8 +102,8 @@ QDebug operator<<(QDebug argument, const ItemInfo &info)
 QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo &info)
 {
     argument.beginStructure();
-    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
-    argument << info.m_categoryId << info.m_installedTime;
+    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey
+             << info.m_categoryId << info.m_installedTime;
     argument.endStructure();
 
     return argument;
@@ -107,9 +111,11 @@ QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo &info)
 
 QDataStream &operator<<(QDataStream &argument, const ItemInfo &info)
 {
+    // Todo :  这里数据存储结构存在问题, 但为了向下兼容, 似乎没有必要去修改
     argument << info.m_desktop << info.m_openCount;
     argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
     argument << info.m_categoryId << info.m_installedTime << info.m_firstRunTime;
+    argument << info.m_isDir << info.m_appInfoList;
 
     return argument;
 }
@@ -119,6 +125,7 @@ const QDataStream &operator>>(QDataStream &argument, ItemInfo &info)
     argument >> info.m_desktop >> info.m_openCount;
     argument >> info.m_desktop >> info.m_name >> info.m_key >> info.m_iconKey;
     argument >> info.m_categoryId >> info.m_installedTime >> info.m_firstRunTime;
+    argument >> info.m_isDir >> info.m_appInfoList;
 
     return argument;
 }

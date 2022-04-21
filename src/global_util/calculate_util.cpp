@@ -45,6 +45,11 @@ CalculateUtil *CalculateUtil::instance()
     return INSTANCE;
 }
 
+qreal CalculateUtil::getCurRatio()
+{
+    return m_launcherGsettings ? m_launcherGsettings->get("apps-icon-ratio").toDouble() : 0.5;
+}
+
 /**
  * @brief CalculateUtil::setDisplayMode 处理全屏自由模式和全屏分类模式切换
  * @param mode 分类模式

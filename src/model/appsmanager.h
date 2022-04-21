@@ -59,8 +59,10 @@ class AppsManager : public QObject
 
 public:
     static AppsManager *instance();
+    void dragdropStashItem(const QModelIndex &index);
     void stashItem(const QModelIndex &index);
     void stashItem(const QString &appKey);
+    void removeItem(const QString &appKey);
     void abandonStashedItem(const QString &appKey);
     void restoreItem(const QString &appKey, const int pos = -1);
     int dockPosition() const;
@@ -73,6 +75,10 @@ public:
     int getVisibleCategoryCount();
     bool fullscreen() const;
     int displayMode() const;
+    qreal getCurRatio();
+
+    void updateUsedSortData(QModelIndex dragIndex, QModelIndex dropIndex);
+    QList<QPixmap> getDirAppIcon(QModelIndex modelIndex);
 
 signals:
     void itemDataChanged(const ItemInfo &info) const;
@@ -109,6 +115,8 @@ public slots:
     static const ItemInfoList &windowedCategoryList();
     static const ItemInfoList &windowedFrameItemInfoList();
     static const ItemInfoList &fullscreenItemInfoList();
+    static const ItemInfo dirAppInfo(int index);
+    void setDirAppInfoList(const QModelIndex index);
     static const QHash<AppsListModel::AppCategory, ItemInfoList> &categoryList();
 
     bool appIsNewInstall(const QString &key);
@@ -123,6 +131,7 @@ public slots:
 
     void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
     static QHash<AppsListModel::AppCategory, ItemInfoList> getAllAppInfo();
+    const ItemInfo createOfCategory(qlonglong category);
 
 private:
     explicit AppsManager(QObject *parent = nullptr);
@@ -140,7 +149,6 @@ private:
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
     void onSearchTimeOut();
     void refreshAppListIcon(DGuiApplicationHelper::ColorType themeType);
-    const ItemInfo createOfCategory(qlonglong category);
 
 private slots:
     void onIconThemeChanged();
@@ -197,6 +205,7 @@ private:
     static QSettings APP_USER_SORTED_LIST;
     static QSettings APP_USED_SORTED_LIST;
     static QSettings APP_CATEGORY_USED_SORTED_LIST;
+    static QSettings APP_COMMON_USE_LIST;
     QStringList m_categoryTs;
     QStringList m_categoryIcon;
     QGSettings *m_filterSetting;

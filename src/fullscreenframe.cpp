@@ -105,8 +105,11 @@ FullScreenFrame::FullScreenFrame(QWidget *parent) :
     m_scrollValue(0),
     m_scrollStart(0),
     m_changePageDelayTime(nullptr),
-    m_curScreen(m_appsManager->currentScreen())
+    m_curScreen(m_appsManager->currentScreen()),
+    m_dirWidget(new AppDirWidget(this))
 {
+    m_dirWidget->hide();
+
     // accessible.h 中使用
     setAccessibleName("FullScrreenFrame");
     m_topSpacing->setAccessibleName("topspacing");
@@ -379,8 +382,23 @@ void FullScreenFrame::addViewEvent(AppGridView *pView)
 {
     connect(pView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
     connect(pView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(pView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(pView, &AppGridView::clicked, this, &FullScreenFrame::hide);
+    connect(m_appsManager, &AppsManager::dataChanged, [ & ](AppsListModel::AppCategory category) {
+        if (category == AppsListModel::Dir)
+            m_dirWidget->update();
+    });
+    connect(pView, &AppGridView::clicked, [ & ](const QModelIndex &index) {
+        if (!index.isValid())
+            return;
+
+        bool isDir = index.data(AppsListModel::ItemIsDirRole).toBool();
+        if (!isDir) {
+            m_appsManager->launchApp(index);
+            this->hide();
+        } else {
+            m_appsManager->setDirAppInfoList(index);
+            m_dirWidget->show();
+        }
+    });
     connect(pView, &AppGridView::requestMouseRelease,this,  [ = ]() {
             m_mouse_press = false;
     });
@@ -871,7 +889,8 @@ void FullScreenFrame::initUI()
     m_multiPagesView->setFixedSize(appsContentWidth, appsContentHeight);
 
     QVBoxLayout *scrollVLayout = new QVBoxLayout;
-    scrollVLayout->setParent(m_contentFrame);
+    // todo: 同下
+    //    scrollVLayout->setParent(m_contentFrame);
     scrollVLayout->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN, 0, 0);
     scrollVLayout->setSpacing(0);
     scrollVLayout->addWidget(m_appsIconBox, 0, Qt::AlignCenter);
@@ -885,7 +904,8 @@ void FullScreenFrame::initUI()
     m_navigationWidget->setFixedHeight(m_calcUtil->instance()->navigationHeight());
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->setParent(this);
+    // todo: 暂时先屏蔽掉,警告很烦躁.
+    //    mainLayout->setParent(this);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
     mainLayout->addWidget(m_topSpacing);

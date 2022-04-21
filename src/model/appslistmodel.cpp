@@ -235,6 +235,16 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent)
     connect(m_appsManager, &AppsManager::itemDataChanged, this, &AppsListModel::itemDataChanged);
 }
 
+void AppsListModel::setDragToDir(bool state)
+{
+    m_dragToDir = state;
+}
+
+bool AppsListModel::getDragToDir()
+{
+    return m_dragToDir;
+}
+
 void AppsListModel::setCategory(const AppsListModel::AppCategory category)
 {
     m_category = category;
@@ -288,6 +298,9 @@ void AppsListModel::dropSwap(const int nextPos)
     if (!m_dragStartIndex.isValid())
         return;
 
+    if (m_dragStartIndex == m_dragDropIndex)
+        return;
+
     const QString appKey = m_dragStartIndex.data(AppsListModel::AppKeyRole).toString();
 
     removeRows(m_dragStartIndex.row(), 1, QModelIndex());
@@ -296,6 +309,13 @@ void AppsListModel::dropSwap(const int nextPos)
     emit QAbstractItemModel::dataChanged(m_dragStartIndex, m_dragDropIndex);
 
     m_dragStartIndex = m_dragDropIndex = index(nextPos);
+}
+
+void AppsListModel::removeItem()
+{
+    removeRows(m_dragStartIndex.row(), 1, QModelIndex());
+
+    emit QAbstractItemModel::dataChanged(m_dragStartIndex, m_dragDropIndex);
 }
 
 /**
@@ -362,6 +382,15 @@ void AppsListModel::setDrawBackground(bool draw)
     emit QAbstractItemModel::dataChanged(QModelIndex(), QModelIndex());
 }
 
+void AppsListModel::updateModelData(const QModelIndex dragIndex, const QModelIndex dropIndex)
+{
+    m_appsManager->updateUsedSortData(dragIndex, dropIndex);
+//    qInfo() << "dragIndex:" << dragIndex
+//            << ",dropIndex:" << dropIndex;
+    removeRows(dragIndex.row(), 1, QModelIndex());
+    emit QAbstractItemModel::dataChanged(dragIndex, dropIndex);
+}
+
 /**
  * @brief AppsListModel::removeRows 从模式中移除1个item
  * @param row item所在的行
@@ -379,7 +408,7 @@ bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
     Q_ASSERT(count == 1);
 
     beginRemoveRows(parent, row, row);
-    m_appsManager->stashItem(index(row));
+    m_appsManager->dragdropStashItem(index(row));
     endRemoveRows();
 
     return true;
@@ -545,8 +574,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return (m_actionSettings && !m_actionSettings->get("auto-start").toBool()) || m_hideStartUpPackages.contains(itemInfo.m_key);
     case AppHideUninstallRole:
         return (m_actionSettings && !m_actionSettings->get("uninstall").toBool()) || m_hideUninstallPackages.contains(itemInfo.m_key);
-    case AppHideUseProxyRole:
-    {
+    case AppHideUseProxyRole: {
         bool hideUse = ((m_actionSettings && !m_actionSettings->get("use-proxy").toBool()) || hideUseProxyPackages.contains(itemInfo.m_key));
         return DSysInfo::isCommunityEdition() ? hideUse : (!QFile::exists(ChainsProxy_path) || hideUse);
     }
@@ -560,7 +588,22 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return !m_cantStartUpPackages.contains(itemInfo.m_key);
     case AppCanOpenProxyRole:
         return !cantUseProxyPackages.contains(itemInfo.m_key);
-    default:;
+    case ItemIsDirRole:
+        return itemInfo.m_isDir;
+    case DirItemInfoRole:
+        return QVariant::fromValue(itemInfo.m_appInfoList);
+    case DirAppIconsRole: {
+        QList<QPixmap> pixmapList = m_appsManager->getDirAppIcon(index);
+        return QVariant::fromValue(pixmapList);
+    }
+    case AppItemTitleRole:
+        return itemInfo.m_desktop.isEmpty();
+    case DirNameRole: {
+        const ItemInfo info = m_appsManager->createOfCategory(itemInfo.m_categoryId);
+        return QVariant::fromValue(info);
+    }
+    default:
+        break;
     }
 
     return QVariant();

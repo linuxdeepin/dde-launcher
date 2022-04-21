@@ -25,7 +25,6 @@
 #define APPSLISTMODEL_H
 
 #include <QAbstractListModel>
-
 #define MAXIMUM_POPULAR_ITEMS 11
 
 class AppsManager;
@@ -62,7 +61,13 @@ public:
         AppIconSizeRole,
         AppFontSizeRole,
         AppItemIsDraggingRole,
+        ItemIsDirRole,
+        DirItemInfoRole,
+        DirAppIconsRole,
+        AppItemTitleRole,
+        DirNameRole,
         AppDragIconRole,
+        ItemRatio,
         CategoryEnterIconRole,
         DrawBackgroundRole,
         AppHideOpenRole,
@@ -75,7 +80,7 @@ public:
         AppCanSendToDesktopRole,
         AppCanSendToDockRole,
         AppCanStartUpRole,
-        AppCanOpenProxyRole
+        AppCanOpenProxyRole,
     };
 
     enum AppCategory {
@@ -84,6 +89,7 @@ public:
         Search,                 // 搜索模式
         Category,               // 分类模式
         Common,                 // 常用应用
+        Dir,                    // 应用抽屉
 
         // apps category
         Internet,               // 网络模式
@@ -103,17 +109,23 @@ public:
     explicit AppsListModel(const AppCategory& category, QObject *parent = nullptr);
     void setPageIndex(int pageIndex){m_pageIndex = pageIndex;}
 
+    void setDragToDir(bool state);
+    bool getDragToDir();
+
     inline AppCategory category() const {return m_category;}
     void setDraggingIndex(const QModelIndex &index);
     void setDragDropIndex(const QModelIndex &index);
     void dropInsert(const QString &appKey, const int pos);
     void dropSwap(const int nextPos);
+    void removeItem();
     inline QModelIndex dragDropIndex() const {return m_dragDropIndex;}
 
-    int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
+    int rowCount(const QModelIndex &parent) const;
     const QModelIndex indexAt(const QString &appKey) const;
 
     void setDrawBackground(bool draw);
+
+    void updateModelData(const QModelIndex dragIndex, const QModelIndex dropIndex);
 
 public slots:
     void clearDraggingIndex();
@@ -159,6 +171,7 @@ private:
 
     bool m_drawBackground;
     int m_pageIndex;
+    bool m_dragToDir;
 };
 typedef QList<AppsListModel *> PageAppsModelist;
 

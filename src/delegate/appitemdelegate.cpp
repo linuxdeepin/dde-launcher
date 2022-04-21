@@ -61,6 +61,17 @@ void AppItemDelegate::setCurrentIndex(const QModelIndex &index)
     emit requestUpdate(CurrentIndex);
 }
 
+void AppItemDelegate::setDirModelIndex(QModelIndex dragIndex, QModelIndex dropIndex)
+{
+    m_dragIndex = dragIndex;
+    m_dropIndex = dropIndex;
+}
+
+void AppItemDelegate::setItemList(const ItemInfoList &items)
+{
+    m_itemList = items;
+}
+
 void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (index.data(AppsListModel::AppItemIsDraggingRole).value<bool>() && !(option.features & QStyleOptionViewItem::HasDisplay))
@@ -70,11 +81,15 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setPen(Qt::white);
     painter->setBrush(QBrush(Qt::transparent));
 
-#ifdef QT_DEBUG
-    ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
-#else
     const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
-#endif
+    const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+    const QPixmap dragIconPix = m_dragIndex.data(AppsListModel::AppIconRole).value<QPixmap>();
+    const bool itemIsDir = index.data(AppsListModel::ItemIsDirRole).toBool();
+    const ItemInfoList itemList = index.data(AppsListModel::DirItemInfoRole).value<ItemInfoList>();
+    QList<QPixmap> pixmapList;
+    if (itemIsDir)
+       pixmapList = index.data(AppsListModel::DirAppIconsRole).value<QList<QPixmap>>();
+
     const int fontPixelSize = index.data(AppsListModel::AppFontSizeRole).value<int>();
     const bool drawBlueDot = index.data(AppsListModel::AppNewInstallRole).toBool();
     const bool is_current = CurrentIndex == index;
@@ -134,12 +149,13 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     } while (true);
 
     // 绘制选中样式
-   if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay)) {
+   if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay) && !itemIsDir) {
         const int radius = 18;
         const QColor brushColor(255, 255, 255, 51);
 
         painter->setPen(Qt::transparent);
         painter->setBrush(brushColor);
+//        painter->setBrush(QColor(69, 60, 33, 100));
         int drawBlueDotWidth = 0;
         if (drawBlueDot)
             drawBlueDotWidth = m_blueDotPixmap.width();
@@ -164,6 +180,43 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         appNameRect.setWidth(appNameRect.width() - m_blueDotPixmap.width());
     }
 
+    // 文件夹效果
+    if (itemIsDir)
+       pixmapList = index.data(AppsListModel::DirAppIconsRole).value<QList<QPixmap>>();
+#if 1
+    if (itemIsDir && !itemList.isEmpty() && CalculateUtil::instance()->fullscreen()) {
+        const int radius = 18;
+        painter->setPen(Qt::transparent);
+        painter->setBrush(QColor(93, 92, 90, 100));// 93, 92, 90, 150 // 69, 60, 33, 100
+        painter->drawRoundedRect(br, radius, radius);
+
+        // 绘制文件夹内其他应用
+        for (int i = 0; i < itemList.size(); i++) {
+            // todo: 计算每个图标的位置rect()
+            // 4个, 4宫格, 6个,六宫格, 8个, 八格, 9宫格. 超过9个就不显示, 太多应用空间显示不足, 除非图标内实现翻页效果, 翻页那么每个item就是一个listview.
+            // 先按照就九宫格算.暂且没有计算页边距
+            if (i >= 9)
+                return;
+            QPixmap itemPix = iconPix;
+            if (i < pixmapList.size())
+                itemPix = pixmapList.at(i);
+
+            QRect sourceRect = appSourceRect(br, i);
+            painter->drawPixmap(sourceRect, itemPix, itemPix.rect());
+        }
+        return;
+    }
+#endif
+#if 1
+    // 在当前item上且仅给当前的item 绘制文件夹样式
+    if (m_dropIndex.isValid() && (index == m_dropIndex) && CalculateUtil::instance()->fullscreen()) {
+        const int radius = 18;
+        painter->setPen(Qt::transparent);
+        painter->setBrush(QColor(93, 92, 90, 100));
+        painter->drawRoundedRect(br, radius, radius);
+    }
+#endif
+
     painter->setFont(appNamefont);
     painter->setBrush(QBrush(Qt::transparent));
     painter->setPen(QColor(0, 0, 0, 80));
@@ -177,9 +230,9 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         painter->setFont(font);
         painter->drawText(appNameRect, itemInfo.m_name, appNameOption);
     }
-    // draw app icon
-    const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
-    painter->drawPixmap(iconRect, iconPix, iconPix.rect());
+
+    if (!itemIsDir)
+        painter->drawPixmap(iconRect, iconPix, iconPix.rect());
 
     // draw icon if app is auto startup
     const QPoint autoStartIconPos = iconRect.bottomLeft()
@@ -242,4 +295,21 @@ const QPair<QString, bool> AppItemDelegate::holdTextInRect(const QFontMetrics &f
     QFontMetrics ftm(fm);
     QString txt = ftm.elidedText(text, Qt::ElideRight, rect.width());
     return QPair<QString, bool>(txt, false);
+}
+
+/** 默认九宫个格计算每个应用矩形的位置
+ * @brief AppItemDelegate::appSourceRect
+ * @param rect 应用抽屉的大小
+ * @param index 抽屉内的第几个应用
+ * @return 矩形位置
+ */
+QRect AppItemDelegate::appSourceRect(QRect rect, int index) const
+{
+    QRect sourceRect;
+    int width = (rect.width() /*- (3 * 4)*/) / 3;
+    int height = (rect.height()/* - (3 * 4)*/) / 3;
+
+    // 每个应用间隔 3 个像素,
+    sourceRect = QRect(rect.topLeft() + QPoint((index % 3) * width, (index / 3) * height) , QSize(width,height));
+    return sourceRect;
 }

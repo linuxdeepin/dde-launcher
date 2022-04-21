@@ -163,6 +163,24 @@ void AppGridView::dropEvent(QDropEvent *e)
     if (m_dropThresholdTimer->isActive())
         m_dropThresholdTimer->stop();
 
+    AppItemDelegate *itemDelegate = qobject_cast<AppItemDelegate *>(this->itemDelegate());
+    if (!itemDelegate)
+        return;
+
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel)
+        return;
+
+    if (m_calcUtil->fullscreen()) {
+        QModelIndex dropIndex = indexAt(e->pos());
+        QModelIndex dragIndex = indexAt(m_dragStartPos);
+
+        if (dropIndex.isValid() && dragIndex.isValid() && dragIndex != dropIndex) {
+            itemDelegate->setDirModelIndex(QModelIndex(), QModelIndex());
+            listModel->updateModelData(dragIndex, dropIndex);
+        }
+    }
+
     // 解决快速拖动应用，没有动画效果的问题，当拖拽小于200毫秒时，禁止拖动
     if (m_dragLastTime.elapsed() < 200)
         return;
@@ -201,6 +219,7 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
     if (e->buttons() == Qt::LeftButton && !m_lastFakeAni) {
         m_dragStartPos = e->pos();
 
+        // Todo: topLeft --> center();
         // 记录动画的终点位置
         setDropAndLastPos(appIconRect(indexAt(e->pos())).topLeft());
     }
@@ -234,29 +253,42 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
     const QPoint pos = e->pos();
     const QRect containerRect = this->rect();
 
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     const QModelIndex dropIndex = QListView::indexAt(pos);
+    QModelIndex dragIndex = indexAt(m_dragStartPos);
+
     if (dropIndex.isValid()) {
         m_dropToPos = dropIndex.row();
     } else if (containerRect.contains(pos)) {
-        AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
         if (listModel) {
             int lastRow = listModel->rowCount(QModelIndex()) - 1;
-
             QModelIndex lastIndex = listModel->index(lastRow);
-
-            if (lastIndex.isValid()) {
-                QPoint lastPos = indexRect(lastIndex).center();
-                if (pos.x() > lastPos.x() && pos.y() > lastPos.y())
-                    m_dropToPos = lastIndex.row();
-            }
+            QPoint lastPos = indexRect(lastIndex).center();
+            if (pos.x() > lastPos.x() && pos.y() > lastPos.y())
+                m_dropToPos = lastIndex.row();
         }
     }
 
     // 分页切换后隐藏label过渡效果
     emit requestScrollStop();
 
+    bool isDir = indexAt(e->pos()).data(AppsListModel::ItemIsDirRole).toBool();
+    AppItemDelegate *itemDelegate = qobject_cast<AppItemDelegate *>(this->itemDelegate());
+    if (!itemDelegate)
+        return;
+
+    // 设置文件夹效果, 拖动的应用不是自身时, 设置模型中拖向文件夹的标识
+    if (indexRect(dropIndex).contains(e->pos()) && dragIndex != dropIndex) {
+        listModel->setDragToDir(true);
+        itemDelegate->setDirModelIndex(dragIndex, dropIndex);
+    } else {
+        listModel->setDragToDir(false);
+        itemDelegate->setDirModelIndex(QModelIndex(), QModelIndex());
+    }
+    update();
+
     // 释放前执行app交换动画
-    if (m_enableAnimation)
+    if (m_enableAnimation && !indexRect(dropIndex).contains(e->pos()) && !isDir && !listModel->getDragToDir())
         m_dropThresholdTimer->start();
 }
 
@@ -488,7 +520,13 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     const qreal ratio = qApp->devicePixelRatio();
     QString appKey = index.data(AppsListModel::AppKeyRole).value<QString>();
 
-    QPixmap srcPix = creatSrcPix(index, appKey);
+    QPixmap srcPix;
+    bool itemIsDir = index.data(AppsListModel::ItemIsDirRole).toBool();
+    QRect grabRect = indexRect(index);
+    if (itemIsDir)
+        srcPix = grab(grabRect);
+    else
+        srcPix = creatSrcPix(index, appKey);
 
     srcPix = srcPix.scaled(m_calcUtil->appIconSize() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     srcPix.setDevicePixelRatio(ratio);
@@ -502,13 +540,15 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     connect(posAni, &QPropertyAnimation::finished, [&, listModel] () {
         m_pixLabel->hide();
         if (!m_lastFakeAni) {
-            if (m_enableDropInside)
+            if (m_enableDropInside && !listModel->getDragToDir()) {
                 listModel->dropSwap(m_dropToPos);
-            else
+            }
+            else {
                 // 搜索模式下，不需要做删除被拖拽的item，插入移动到新位置的item的操作，否则会导致被拖拽item的位置改变
-                if (listModel->category() != AppsListModel::AppCategory::Search){
+                if ((listModel->category() != AppsListModel::AppCategory::Search) && !listModel->getDragToDir()){
                     listModel->dropSwap(indexAt(m_dragStartPos).row());
                 }
+            }
 
             listModel->clearDraggingIndex();
         } else {

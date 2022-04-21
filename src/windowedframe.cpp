@@ -622,15 +622,14 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
     unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
     unInstallDialog.setWindowModality(Qt::WindowModal);
 
-    const QString appKey = context.data(AppsListModel::AppKeyRole).toString();
-    unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall it?")));
+    const ItemInfo info = context.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
+    const QString appKey = info.m_key;
+    unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall %1 ?").arg(info.m_name)));
 
     QPixmap pixmap = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
-
     int size = (pixmap.size() / qApp->devicePixelRatio()).width();
-    ItemInfo item = context.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
 
-    QPair<QString, int> tmpKey { cacheKey(item), size};
+    QPair<QString, int> tmpKey { cacheKey(info), size};
 
     // 命令行安装应用后，卸载应用的确认弹框偶现左上角图标呈齿轮的情况
     QPixmap appIcon;

@@ -87,7 +87,6 @@ public:
     int dockPosition();
     void updateDisplayMode(const int mode);
     void nextTabWidget(int key);
-    void setMultiWidgetVisible(bool state = false);
     void mousePressDrag(QMouseEvent *e);
     void mouseMoveDrag(QMouseEvent *e);
     void mouseReleaseDrag(QMouseEvent *e);
@@ -112,7 +111,6 @@ protected:
     void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
-    void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
     bool eventFilter(QObject *o, QEvent *e) Q_DECL_OVERRIDE;
 
     // input method
@@ -139,12 +137,7 @@ private:
     void categoryListChanged();
     void showPopupMenu(const QPoint &pos, const QModelIndex &context);
     void updateDockPosition();
-
-    AppsListModel::AppCategory nextCategoryType(const AppsListModel::AppCategory category);
-    AppsListModel::AppCategory prevCategoryType(const AppsListModel::AppCategory category);
-
-    virtual const QScreen *currentScreen() override;
-
+    
 private slots:
     void layoutChanged();
     void searchTextChanged(const QString &keywords, bool enableUpdateMode);
@@ -179,25 +172,10 @@ private:
     DHBoxWidget *m_appsIconBox;
 
     // todo: 用QScrollArea替换试试
-    QScrollArea *m_appsScrollArea;                      // 全屏分类多页视图滑动区域
-    QHBoxLayout *m_appItemLayout;
-    QWidget *m_appItemWidget;
     QLabel *m_tipsLabel;
 
     AppItemDelegate *m_appItemDelegate;                 // 全屏模式下listview视图代理
     MultiPagesView *m_multiPagesView;                   // 全屏视图控件类
-
-    MultiPagesView *m_internetMultiPagesView;          // 全屏应用分类下网络应用控件
-    MultiPagesView *m_chatMultiPagesView;              // 全屏应用分类下社交沟通控件
-    MultiPagesView *m_musicMultiPagesView;             // 全屏应用分类下音乐欣赏控件
-    MultiPagesView *m_videoMultiPagesView;             // 全屏应用分类下视频播放控件
-    MultiPagesView *m_graphicsMultiPagesView;          // 全屏应用分类下图形图像控件
-    MultiPagesView *m_gameMultiPagesView;              // 全屏应用分类下游戏娱乐控件
-    MultiPagesView *m_officeMultiPagesView;            // 全屏应用分类下办公学习控件
-    MultiPagesView *m_readingMultiPagesView;           // 全屏应用分类下阅读翻译控件
-    MultiPagesView *m_developMultiPagesView;           // 全屏应用分类下编程开发控件
-    MultiPagesView *m_systemMultiPagesView;            // 全屏应用分类下系统管理控件
-    MultiPagesView *m_othersMultiPagesView;            // 全屏应用分类下其他分类控件
 
     SearchModeWidget *m_searchModeWidget;              // 搜索模式控件
     AppsListModel *m_allAppsModel;

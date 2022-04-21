@@ -79,23 +79,12 @@ FullScreenFrame::FullScreenFrame(QWidget *parent)
     , m_searchWidget(new SearchWidget(this))
     , m_contentFrame(new QFrame(this))
     , m_appsIconBox(new DHBoxWidget(m_contentFrame))
-    , m_appsScrollArea(new QScrollArea(this))
-    , m_appItemLayout(new QHBoxLayout(this))
-    , m_appItemWidget(new QWidget(this))
     , m_tipsLabel(new QLabel(this))
     , m_appItemDelegate(new AppItemDelegate(this))
     , m_multiPagesView(new MultiPagesView(AppsListModel::All, this))
-    , m_internetMultiPagesView(new MultiPagesView(AppsListModel::Internet, this))
-    , m_chatMultiPagesView(new MultiPagesView(AppsListModel::Chat, this))
-    , m_musicMultiPagesView(new MultiPagesView(AppsListModel::Music, this))
-    , m_videoMultiPagesView(new MultiPagesView(AppsListModel::Video, this))
-    , m_graphicsMultiPagesView(new MultiPagesView(AppsListModel::Graphics, this))
-    , m_gameMultiPagesView(new MultiPagesView(AppsListModel::Game, this))
-    , m_officeMultiPagesView(new MultiPagesView(AppsListModel::Office, this))
-    , m_readingMultiPagesView(new MultiPagesView(AppsListModel::Reading, this))
-    , m_developMultiPagesView(new MultiPagesView(AppsListModel::Development, this))
-    , m_systemMultiPagesView(new MultiPagesView(AppsListModel::System, this))
-    , m_othersMultiPagesView(new MultiPagesView(AppsListModel::Others, this))
+    , m_searchModeWidget(new SearchModeWidget(this))
+    , m_allAppsModel(new AppsListModel(AppsListModel::SearchFilter, this))
+    , m_filterModel(new SortFilterProxyModel(this))
     , m_topSpacing(new QFrame(this))
     , m_bottomSpacing(new QFrame(this))
     , m_focusIndex(0)
@@ -258,13 +247,8 @@ void FullScreenFrame::keyPressEvent(QKeyEvent *e)
 void FullScreenFrame::showEvent(QShowEvent *e)
 {
     // 显示后加载当前模式其他ratio的资源，预加载全屏另一种模式当前ratio的资源
-    if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY) {
-        emit m_appsManager->loadOtherRatioIcon(GROUP_BY_CATEGORY);
-        emit m_appsManager->loadCurRationIcon(ALL_APPS);
-    } else {
-        emit m_appsManager->loadOtherRatioIcon(ALL_APPS);
-        emit m_appsManager->loadCurRationIcon(GROUP_BY_CATEGORY);
-    }
+    emit m_appsManager->loadCurRationIcon(ALL_APPS);
+    emit m_appsManager->loadOtherRatioIcon(ALL_APPS);
 
     m_delayHideTimer->stop();
     m_searchWidget->clearSearchContent();
@@ -364,27 +348,8 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
     mouseReleaseDrag(e);
 }
 
-void FullScreenFrame::wheelEvent(QWheelEvent *e)
-{
-    if (m_displayMode == GROUP_BY_CATEGORY) {
-        int pageStep = 200;
-        int value = m_appsScrollArea->horizontalScrollBar()->value();
-        if (e->angleDelta().y() < 0 ||  e-> angleDelta().x() < 0)
-           m_appsScrollArea->horizontalScrollBar()->setValue(value + pageStep);
-        else
-           m_appsScrollArea->horizontalScrollBar()->setValue(value - pageStep);
-    }
-    QFrame::wheelEvent(e);
-}
-
 bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
 {
-    if (m_displayMode == GROUP_BY_CATEGORY && e->type() == QEvent::KeyPress) {
-        QKeyEvent *keyPress = static_cast<QKeyEvent *>(e);
-        if (keyPress && keyPress->key() == Qt::Key_Tab) {
-        }
-    }
-
     // we filter some key events from LineEdit, to implements cursor move.
     if (o == m_searchWidget->edit()->lineEdit() && e->type() == QEvent::KeyPress) {
         QKeyEvent *keyPress = static_cast<QKeyEvent *>(e);
@@ -431,7 +396,6 @@ QVariant FullScreenFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
 
 void FullScreenFrame::initUI()
 {
-    m_appsScrollArea->horizontalScrollBar()->setRange(0, 1920);
     m_dirWidget->setVisible(false);
 
     m_tipsLabel->setAlignment(Qt::AlignCenter);
@@ -452,10 +416,8 @@ void FullScreenFrame::initUI()
     palette.setColor(QPalette::ButtonText, colorText);
 
     m_searchWidget->edit()->lineEdit()->setPalette(palette);
-    m_searchWidget->categoryBtn()->setPalette(palette);
     m_searchWidget->toggleModeBtn()->setPalette(palette);
 
-    m_searchWidget->categoryBtn()->installEventFilter(m_eventFilter);
     m_searchWidget->edit()->lineEdit()->installEventFilter(this);
     m_searchWidget->installEventFilter(m_eventFilter);
     m_searchWidget->showToggle();
@@ -474,32 +436,13 @@ void FullScreenFrame::initUI()
     m_appsIconBox->setFixedSize(appsContentWidth, appsContentHeight);
     m_multiPagesView->setFixedSize(appsContentWidth, appsContentHeight);
 
-    m_appsScrollArea->viewport()->setAttribute(Qt::WA_TranslucentBackground);
-    m_appsScrollArea->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    m_appsScrollArea->setFixedSize(appsContentWidth, appsContentHeight);
-    m_appsScrollArea->setWidgetResizable(true);
-    m_appsScrollArea->setWidget(m_appItemWidget);
-    m_appsScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_appsScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_appsScrollArea->setAutoFillBackground(false);
-    m_appsScrollArea->setLineWidth(0);
-    m_appsScrollArea->horizontalScrollBar()->setRange(0, 1920);
-    m_appsScrollArea->horizontalScrollBar()->setPageStep(200);
-
-    m_appItemWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_appItemWidget->setAttribute(Qt::WA_TranslucentBackground);
-
-    // todo: 默认给出足够的空间，这里后面需要check下。
-    m_appItemWidget->setLayout(m_appItemLayout);
-    m_appItemLayout->setContentsMargins(20, 50, 20, 20);
-
     // 设置搜索控件大小
     QVBoxLayout *scrollVLayout = new QVBoxLayout;
     scrollVLayout->setContentsMargins(0, DLauncher::APPS_AREA_TOP_MARGIN, 0, 0);
     scrollVLayout->setMargin(0);
     scrollVLayout->setSpacing(0);
     scrollVLayout->addWidget(m_appsIconBox, 0, Qt::AlignCenter);
-    scrollVLayout->addWidget(m_appsScrollArea, 0, Qt::AlignHCenter);
+    scrollVLayout->addWidget(m_searchModeWidget, 0, Qt::AlignCenter);
 
     m_contentFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_contentFrame->setFrameStyle(QFrame::NoFrame);
@@ -532,67 +475,14 @@ void FullScreenFrame::initAppView()
     m_filterModel->setFilterRole(AppsListModel::AppRawItemInfoRole);
     m_filterModel->setFilterKeyColumn(0);
     m_filterModel->setSortCaseSensitivity(Qt::CaseInsensitive);
-
-    // 分类
-    m_internetMultiPagesView->setDataDelegate(m_appItemDelegate);
-    m_internetMultiPagesView->updatePageCount(AppsListModel::Internet);
-    m_chatMultiPagesView->setDataDelegate(m_appItemDelegate);
-    m_chatMultiPagesView->updatePageCount(AppsListModel::Chat);
-    m_musicMultiPagesView->setDataDelegate(m_appItemDelegate);
-    m_musicMultiPagesView->updatePageCount(AppsListModel::Music);
-    m_videoMultiPagesView->setDataDelegate(m_appItemDelegate);
-    m_videoMultiPagesView->updatePageCount(AppsListModel::Video);
-    m_graphicsMultiPagesView->setDataDelegate(m_appItemDelegate);
-    m_graphicsMultiPagesView->updatePageCount(AppsListModel::Graphics);
-    m_gameMultiPagesView->setDataDelegate(m_appItemDelegate);
-    m_gameMultiPagesView->updatePageCount(AppsListModel::Game);
-    m_officeMultiPagesView->setDataDelegate(m_appItemDelegate);
-    m_officeMultiPagesView->updatePageCount(AppsListModel::Office);
-    m_readingMultiPagesView->setDataDelegate(m_appItemDelegate);
-    m_readingMultiPagesView->updatePageCount(AppsListModel::Reading);
-    m_developMultiPagesView->setDataDelegate(m_appItemDelegate);
-    m_developMultiPagesView->updatePageCount(AppsListModel::Development);
-    m_systemMultiPagesView->setDataDelegate(m_appItemDelegate);
-    m_systemMultiPagesView->updatePageCount(AppsListModel::System);
-    m_othersMultiPagesView->setDataDelegate(m_appItemDelegate);
-    m_othersMultiPagesView->updatePageCount(AppsListModel::Others);
-
-    // 偏上
-    m_appItemLayout->addWidget(m_internetMultiPagesView, 0, Qt::AlignTop);
-    m_appItemLayout->addWidget(m_chatMultiPagesView, 0, Qt::AlignTop);
-    m_appItemLayout->addWidget(m_musicMultiPagesView, 0, Qt::AlignTop);
-    m_appItemLayout->addWidget(m_videoMultiPagesView, 0, Qt::AlignTop);
-    m_appItemLayout->addWidget(m_graphicsMultiPagesView, 0, Qt::AlignTop);
-    m_appItemLayout->addWidget(m_gameMultiPagesView, 0, Qt::AlignTop);
-    m_appItemLayout->addWidget(m_officeMultiPagesView, 0, Qt::AlignTop);
-    m_appItemLayout->addWidget(m_readingMultiPagesView, 0, Qt::AlignTop);
-    m_appItemLayout->addWidget(m_developMultiPagesView, 0, Qt::AlignTop);
-    m_appItemLayout->addWidget(m_systemMultiPagesView, 0, Qt::AlignTop);
-    m_appItemLayout->addWidget(m_othersMultiPagesView, 0, Qt::AlignTop);
-
-    m_appItemLayout->setSpacing(40);
-    m_appItemLayout->setMargin(0);
 }
 
 void FullScreenFrame::initConnection()
 {
     connect(m_multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
 
-    connect(m_internetMultiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
-    connect(m_chatMultiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
-    connect(m_musicMultiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
-    connect(m_videoMultiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
-    connect(m_graphicsMultiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
-    connect(m_gameMultiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
-    connect(m_officeMultiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
-    connect(m_readingMultiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
-    connect(m_developMultiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
-    connect(m_systemMultiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
-    connect(m_othersMultiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
-
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
 
-    connect(this, &FullScreenFrame::displayModeChanged, this, &FullScreenFrame::categoryListChanged);
     connect(this, &FullScreenFrame::visibleChanged, this, &FullScreenFrame::onHideMenu);
 
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
@@ -600,18 +490,6 @@ void FullScreenFrame::initConnection()
 
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
-    connect(m_searchWidget, &SearchWidget::toggleMode, [this] {
-        // 显示后加载当前模式其他ratio的资源，预加载全屏另一种模式当前ratio的资源
-        if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY) {
-            m_appsManager->loadOtherRatioIcon(ALL_APPS);
-            m_appsManager->loadCurRationIcon(GROUP_BY_CATEGORY);
-        } else {
-            m_appsManager->loadOtherRatioIcon(GROUP_BY_CATEGORY);
-            m_appsManager->loadCurRationIcon(ALL_APPS);
-        }
-
-        updateDisplayMode(m_calcUtil->displayMode() == GROUP_BY_CATEGORY ? ALL_APPS : GROUP_BY_CATEGORY);
-    });
 
     connect(m_appsManager, &AppsManager::categoryListChanged, this, &FullScreenFrame::categoryListChanged);
     connect(m_appsManager, &AppsManager::requestTips, this, &FullScreenFrame::showTips);
@@ -632,25 +510,12 @@ void FullScreenFrame::initAccessibleName()
     m_bottomSpacing->setAccessibleName("BottomSpacing");
     m_searchWidget->setAccessibleName("searchWidget");
     m_contentFrame->setAccessibleName("ContentFrame");
-    m_appsScrollArea->setAccessibleName("appsScrollArea");
     m_tipsLabel->setAccessibleName("tipsLabel");
     m_appItemDelegate->setObjectName("appItemDelegate");
 
     m_multiPagesView->setAccessibleName("allAppPagesView");
-    m_internetMultiPagesView->setAccessibleName("internetBoxWidget");
-    m_chatMultiPagesView->setAccessibleName("chatBoxWidget");
-    m_musicMultiPagesView->setAccessibleName("musicBoxWidget");
-    m_videoMultiPagesView->setAccessibleName("videoBoxWidget");
-    m_graphicsMultiPagesView->setAccessibleName("graphicsBoxWidget");
-    m_gameMultiPagesView->setAccessibleName("gameBoxWidget");
-    m_officeMultiPagesView->setAccessibleName("officeBoxWidget");
-    m_readingMultiPagesView->setAccessibleName("readingBoxWidget");
-    m_developMultiPagesView->setAccessibleName("developmentBoxWidget");
-    m_systemMultiPagesView->setAccessibleName("systemBoxWidget");
-    m_othersMultiPagesView->setAccessibleName("othersBoxWidget");
-
-    m_searchWidget->categoryBtn()->setAccessibleName("search_categoryBtn");
     m_searchWidget->edit()->setAccessibleName("FullScreenSearchEdit");
+    m_dirWidget->setAccessibleName("dirWidget");
 }
 
 void FullScreenFrame::showLauncher()
@@ -661,7 +526,6 @@ void FullScreenFrame::showLauncher()
     // 启动器跟随任务栏位置
     updateGeometry();
 
-    m_searchWidget->categoryBtn()->clearFocus();
     m_searchWidget->edit()->clearEdit();
     m_searchWidget->edit()->clear();
 
@@ -711,13 +575,6 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
 
         if (!oldStr.isEmpty() && oldStr == m_searchWidget->edit()->lineEdit()->text())
             m_searchWidget->edit()->lineEdit()->clear();
-
-        return;
-    }
-
-    if (Qt::Key_Space == key) {
-        if (m_searchWidget->categoryBtn()->hasFocus())
-            m_searchWidget->categoryBtn()->click();
 
         return;
     }
@@ -795,34 +652,20 @@ void FullScreenFrame::appendToSearchEdit(const char ch)
 
 void FullScreenFrame::launchCurrentApp()
 {
-    if (m_searchWidget->edit()->lineEdit()->text().simplified().isEmpty() && ( m_searchWidget->categoryBtn()->hasFocus() ||  m_focusIndex == CategoryChangeBtn)) {
-        QMouseEvent btnPress(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-        QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnPress);
-        QMouseEvent btnRelease(QEvent::MouseButtonRelease, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-        QApplication::sendEvent(m_searchWidget->categoryBtn(), &btnRelease);
-        return;
-    }
-
     const QModelIndex &index = m_appItemDelegate->currentIndex();
 
     if (index.isValid() && !index.data(AppsListModel::AppDesktopRole).toString().isEmpty()) {
         const AppsListModel::AppCategory category = index.data(AppsListModel::AppGroupRole).value<AppsListModel::AppCategory>();
 
         if ((category == AppsListModel::All && m_displayMode == ALL_APPS) ||
-                (category == AppsListModel::Search && m_displayMode == SEARCH) ||
-                (m_displayMode == GROUP_BY_CATEGORY && category != AppsListModel::All && category != AppsListModel::Search)) {
+                (category == AppsListModel::Search && m_displayMode == SEARCH)) {
             m_appsManager->launchApp(index);
-
             hide();
             return;
         }
     }
 
-    switch (m_displayMode) {
-    case SEARCH:
-    case ALL_APPS:            m_appsManager->launchApp(m_multiPagesView->getAppItem(0));     break;
-    }
-
+    m_appsManager->launchApp(m_multiPagesView->getAppItem(0));
     hide();
 }
 
@@ -850,20 +693,6 @@ void FullScreenFrame::regionMonitorPoint(const QPoint &point, int flag)
  */
 void FullScreenFrame::categoryListChanged()
 {
-    if (m_displayMode != GROUP_BY_CATEGORY)
-        return ;
-
-    emit categoryAppNumsChanged(AppsListModel::Internet, m_appsManager->appNums(AppsListModel::Internet));
-    emit categoryAppNumsChanged(AppsListModel::Chat, m_appsManager->appNums(AppsListModel::Chat));
-    emit categoryAppNumsChanged(AppsListModel::Music, m_appsManager->appNums(AppsListModel::Music));
-    emit categoryAppNumsChanged(AppsListModel::Video, m_appsManager->appNums(AppsListModel::Video));
-    emit categoryAppNumsChanged(AppsListModel::Graphics, m_appsManager->appNums(AppsListModel::Graphics));
-    emit categoryAppNumsChanged(AppsListModel::Game, m_appsManager->appNums(AppsListModel::Game));
-    emit categoryAppNumsChanged(AppsListModel::Office, m_appsManager->appNums(AppsListModel::Office));
-    emit categoryAppNumsChanged(AppsListModel::Reading, m_appsManager->appNums(AppsListModel::Reading));
-    emit categoryAppNumsChanged(AppsListModel::Development, m_appsManager->appNums(AppsListModel::Development));
-    emit categoryAppNumsChanged(AppsListModel::System, m_appsManager->appNums(AppsListModel::System));
-    emit categoryAppNumsChanged(AppsListModel::Others, m_appsManager->appNums(AppsListModel::Others));
 }
 
 void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
@@ -876,10 +705,8 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
 
 void FullScreenFrame::uninstallApp(const QString &appKey)
 {
-    if(m_displayMode != GROUP_BY_CATEGORY){
-        int currentPage = m_multiPagesView->currentPage();
-        uninstallApp(m_multiPagesView->pageModel(currentPage)->indexAt(appKey));
-     }
+    int currentPage = m_multiPagesView->currentPage();
+    uninstallApp(m_multiPagesView->pageModel(currentPage)->indexAt(appKey));
 }
 
 void FullScreenFrame::uninstallApp(const QModelIndex &context)
@@ -952,37 +779,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
 
     m_displayMode = mode;
 
-    emit displayModeChanged(m_displayMode);
-
-    // 切换全屏应用列表展现模式, 修改对应的schemaid = com.deepin.dde.launcherd的xml文件
-    switch (m_displayMode) {
-    case ALL_APPS:
-        m_calcUtil->setDisplayMode(ALL_APPS);
-        break;
-    case GROUP_BY_CATEGORY:
-        m_calcUtil->setDisplayMode(GROUP_BY_CATEGORY);
-        break;
-    default:
-        break;
-    }
-
-    if (m_displayMode == GROUP_BY_CATEGORY) {
-        // 隐藏自由模式显示
-        m_appsIconBox->setVisible(false);
-
-        // 隐藏搜索模式
-        m_searchModeWidget->setVisible(false);
-
-        // 再显示分类模式
-        m_appsScrollArea->setVisible(true);
-
-        // 确认分类模式的应用大小总是相同的， 通过计算设置分类视图的大小
-        CalculateUtil::instance()->calculateAppLayout(m_contentFrame->size(), GROUP_BY_CATEGORY);
-        layoutChanged();
-    } else if (m_displayMode == ALL_APPS) {
-        // 隐藏分类模式显示
-        m_appsScrollArea->setVisible(false);
-
+   if (m_displayMode == ALL_APPS) {
         // 隐藏搜索模式
         m_searchModeWidget->setVisible(false);
 
@@ -990,14 +787,11 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         m_appsIconBox->setVisible(true);
 
         m_multiPagesView->setModel(AppsListModel::All);
-        CalculateUtil::instance()->calculateAppLayout(m_contentFrame->size(), ALL_APPS);
-        m_multiPagesView->updatePosition(m_displayMode);
-        layoutChanged();
-    } else {
+    } else if (m_displayMode == SEARCH) {
         // 隐藏自由模式显示
         m_appsIconBox->setVisible(false);
-        // 隐藏分类模式
-        m_appsScrollArea->setVisible(false);
+        // 显示搜索模式
+        m_searchModeWidget->setVisible(true);
         layoutChanged();
     }
 
@@ -1043,7 +837,7 @@ void FullScreenFrame::updateDockPosition()
     default:
         break;
     }
-    // 全屏自由 + 全屏分类 界面布局没有差异，v23
+    // 全屏自由 界面布局没有差异，v23
     m_calcUtil->calculateAppLayout(m_contentFrame->size() - QSize(0, DLauncher::APPS_AREA_TOP_MARGIN), m_displayMode);
 }
 
@@ -1051,17 +845,15 @@ void FullScreenFrame::nextTabWidget(int key)
 {
     if (Qt::Key_Backtab == key) {
         -- m_focusIndex;
-        if (m_displayMode == GROUP_BY_CATEGORY) {
-            if (m_focusIndex < FirstItem) m_focusIndex = CategoryTital;
-        } else {
-            if (m_focusIndex < FirstItem) m_focusIndex = CategoryChangeBtn;
+        if (m_displayMode == ALL_APPS) {
+            if (m_focusIndex < FirstItem)
+                m_focusIndex = CategoryChangeBtn;
         }
     } else if (Qt::Key_Tab == key) {
         ++ m_focusIndex;
-        if (m_displayMode == GROUP_BY_CATEGORY) {
-            if (m_focusIndex > CategoryTital) m_focusIndex = FirstItem;
-        } else {
-            if (m_focusIndex > CategoryChangeBtn) m_focusIndex = FirstItem;
+        if (m_displayMode == ALL_APPS) {
+            if (m_focusIndex > CategoryChangeBtn)
+                m_focusIndex = FirstItem;
         }
     } else {
         return;
@@ -1069,7 +861,6 @@ void FullScreenFrame::nextTabWidget(int key)
 
     switch (m_focusIndex) {
     case FirstItem: {
-        m_searchWidget->categoryBtn()->clearFocus();
         if (m_displayMode == ALL_APPS)
             m_appItemDelegate->setCurrentIndex(m_multiPagesView->getAppItem(0));
         update();
@@ -1082,37 +873,9 @@ void FullScreenFrame::nextTabWidget(int key)
     break;
     case CategoryChangeBtn: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
-        m_searchWidget->categoryBtn()->setFocus();
     }
     break;
     }
-}
-
-void FullScreenFrame::setMultiWidgetVisible(bool state)
-{
-    m_internetMultiPagesView->setVisible(state);
-    m_chatMultiPagesView->setVisible(state);
-    m_musicMultiPagesView->setVisible(state);
-    m_videoMultiPagesView->setVisible(state);
-    m_graphicsMultiPagesView->setVisible(state);
-    m_gameMultiPagesView->setVisible(state);
-    m_officeMultiPagesView->setVisible(state);
-    m_readingMultiPagesView->setVisible(state);
-    m_developMultiPagesView->setVisible(state);
-    m_systemMultiPagesView->setVisible(state);
-    m_othersMultiPagesView->setVisible(state);
-
-    m_internetMultiPagesView->updatePosition(m_displayMode);
-    m_chatMultiPagesView->updatePosition(m_displayMode);
-    m_musicMultiPagesView->updatePosition(m_displayMode);
-    m_videoMultiPagesView->updatePosition(m_displayMode);
-    m_graphicsMultiPagesView->updatePosition(m_displayMode);
-    m_gameMultiPagesView->updatePosition(m_displayMode);
-    m_officeMultiPagesView->updatePosition(m_displayMode);
-    m_readingMultiPagesView->updatePosition(m_displayMode);
-    m_developMultiPagesView->updatePosition(m_displayMode);
-    m_systemMultiPagesView->updatePosition(m_displayMode);
-    m_othersMultiPagesView->updatePosition(m_displayMode);
 }
 
 /**
@@ -1126,8 +889,8 @@ void FullScreenFrame::mousePressDrag(QMouseEvent *e)
     m_scrollValue = m_multiPagesView->getListArea()->horizontalScrollBar()->value();
     m_scrollStart = m_scrollValue;
 
-    // 这里会导致单元测试程序异常崩溃,暂时屏蔽
-    // if(e->button() != Qt::RightButton) m_multiPagesView->updateGradient();
+////     这里会导致单元测试程序异常崩溃,暂时屏蔽
+//     if(e->button() != Qt::RightButton) m_multiPagesView->updateGradient();
 }
 
 void FullScreenFrame::mouseMoveDrag(QMouseEvent *e)
@@ -1180,41 +943,6 @@ void FullScreenFrame::mouseReleaseDrag(QMouseEvent *e)
     m_multiPagesView->setGradientVisible(false);
 }
 
-AppsListModel::AppCategory FullScreenFrame::nextCategoryType(const AppsListModel::AppCategory category)
-{
-    AppsListModel::AppCategory nextCategory = AppsListModel::AppCategory(category + 1);
-    if (nextCategory > AppsListModel::Others)
-        nextCategory = AppsListModel::Internet;
-
-    if (m_appsManager->appNums(nextCategory) <= 0)
-        nextCategory = nextCategoryType(nextCategory);
-
-    return nextCategory;
-}
-
-/**
- * @brief FullScreenFrame::prevCategoryType
- * 若当前分类下app数为0,，则自动显示上一个分类app
- * @param category 当前分类类型
- * @return 应用分类类型
- */
-AppsListModel::AppCategory FullScreenFrame::prevCategoryType(const AppsListModel::AppCategory category)
-{
-    AppsListModel::AppCategory prevCategory = AppsListModel::AppCategory(category - 1);
-    if (prevCategory < AppsListModel::Internet)
-        prevCategory = AppsListModel::Others;
-
-    if (m_appsManager->appNums(prevCategory) <= 0)
-        prevCategory = prevCategoryType(prevCategory);
-
-    return prevCategory;
-}
-
-const QScreen *FullScreenFrame::currentScreen()
-{
-    return m_appsManager->currentScreen();
-}
-
 void FullScreenFrame::layoutChanged()
 {
     // 全屏模式下给控件设置整个屏幕大小
@@ -1224,14 +952,6 @@ void FullScreenFrame::layoutChanged()
         m_appsIconBox->setFixedSize(boxSize);
         m_multiPagesView->setFixedSize(boxSize);
         m_multiPagesView->updatePosition(m_displayMode);
-    } else if (m_displayMode == GROUP_BY_CATEGORY){
-        for (int i = 0; i < m_appItemLayout->count(); i++) {
-            MultiPagesView *pView = qobject_cast<MultiPagesView *>(m_appItemLayout->itemAt(i)->widget());
-            if (!pView)
-                return;
-
-            pView->updatePosition(pView->getCategory());
-        }
     } else {
         m_searchModeWidget->setFixedSize(boxSize);
     }

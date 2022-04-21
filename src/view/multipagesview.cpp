@@ -64,20 +64,6 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     QPalette palette(m_titleLabel->palette());
     palette.setColor(QPalette::WindowText, color);
     m_titleLabel->setPalette(palette);
-
-    m_typeAndTitleMap.insert(AppsListModel::Internet, tr("Internet"));
-    m_typeAndTitleMap.insert(AppsListModel::Chat, tr("Chat"));
-    m_typeAndTitleMap.insert(AppsListModel::Music, tr("Music"));
-    m_typeAndTitleMap.insert(AppsListModel::Video, tr("Video"));
-    m_typeAndTitleMap.insert(AppsListModel::Graphics, tr("Graphics"));
-    m_typeAndTitleMap.insert(AppsListModel::Game, tr("Games"));
-    m_typeAndTitleMap.insert(AppsListModel::Office, tr("Office"));
-    m_typeAndTitleMap.insert(AppsListModel::Reading, tr("Reading"));
-    m_typeAndTitleMap.insert(AppsListModel::Development, tr("Development"));
-    m_typeAndTitleMap.insert(AppsListModel::System, tr("System"));
-    m_typeAndTitleMap.insert(AppsListModel::Others, tr("Other"));
-
-    m_titleLabel->setText(m_typeAndTitleMap.value(m_category));
     m_titleLabel->setFixedHeight(60);
 
     // 滚动区域
@@ -191,12 +177,6 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             m_pageAppsModelList.push_back(pModel);
 
             AppGridView *pageView = new AppGridView(this);
-            // 默认 QListView::LeftToRight
-            if (m_category > AppsListModel::Dir)
-                pageView->setFlow(QListView::TopToBottom);
-            else
-                pageView->setFlow(QListView::LeftToRight);
-
             pageView->setModel(pModel);
             pageView->setItemDelegate(m_delegate);
             pageView->setContainerBox(m_appListArea);
@@ -374,16 +354,21 @@ void MultiPagesView::updatePosition(int mode)
 //    int remainSpacing = m_calcUtil->appItemSpacing() * (14 / 2) / 2;
 
     int remainSpacing = m_calcUtil->appItemSpacing() * 7 / 2;
-    if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
+    if (mode == AppsListModel::Dir) {
         m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
-        m_viewBox->layout()->setSpacing(padding);
-    } else {
-        m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
-        m_viewBox->layout()->setSpacing(0);
+        m_viewBox->layout()->setSpacing(20);
+        QSize tmpSize = size()- QSize(0, m_pageControl->height() + m_titleLabel->height());
+        m_appListArea->setFixedSize(tmpSize);
+        m_viewBox->setFixedSize(tmpSize);
+
+        qInfo() << "tmpSize: " << tmpSize << ",padding:" << padding;
+        for (auto pView : m_appGridViewList)
+            pView->setFixedSize(tmpSize);
+
+        showCurrentPage(0);
+        return;
     }
 
-    m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
-    // 更新视图列表的大小
     if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
         QSize tmpSize = size()- QSize(remainSpacing, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
         m_appListArea->setFixedSize(tmpSize);
@@ -392,6 +377,9 @@ void MultiPagesView::updatePosition(int mode)
         for (auto pView : m_appGridViewList)
             pView->setFixedSize(tmpSize);
     } else {
+        m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
+        m_viewBox->layout()->setSpacing(0);
+
         QSize viewSize = calculateWidgetSize();
         // 翻页控件是独立的，不在scrollArea范围内
         m_appListArea->setFixedSize(viewSize);
@@ -400,6 +388,7 @@ void MultiPagesView::updatePosition(int mode)
             pView->setFixedSize(viewSize);
     }
 
+    m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
     showCurrentPage(0);
 }
 

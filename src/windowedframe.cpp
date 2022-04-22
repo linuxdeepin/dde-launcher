@@ -95,7 +95,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_maskBg(new QWidget(this))
     , m_appsManager(AppsManager::instance())
     , m_appsView(new AppListView(this))
-    , m_appsModel(new AppsListModel(AppsListModel::Custom, this))
+    , m_appsModel(new AppsListModel(AppsListModel::LetterMode, this))
     , m_allAppsModel(new AppsListModel(AppsListModel::All, this))
     , m_commonUseModel(new AppsListModel(AppsListModel::Common, this))
     , m_searchModel(new AppsListModel(AppsListModel::Search, this))
@@ -116,6 +116,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_searcherEdit(new DSearchEdit(this))
     , m_enterSearchEdit(false)
     , m_curScreen(m_appsManager->currentScreen())
+    , m_modeSwitch(new ModeSwitch(this))
 {
     if (!getDConfigValue("enable-full-screen-mode", true).toBool())
         m_modeToggleBtn->hide();
@@ -184,12 +185,22 @@ void WindowedFrame::initUi()
     mainHlayout->setContentsMargins(10, 10, 10, 10);
     mainHlayout->setSpacing(10);
 
+    // 分类模式标题 +  按钮组
+    QHBoxLayout *topHLayout = new QHBoxLayout;
+    topHLayout->setContentsMargins(QMargins(0, 0, 0, 0));
+    QLabel *titleLabel = new QLabel(this);
+    titleLabel->setText(tr("App Category"));
+    topHLayout->addWidget(titleLabel);
+    topHLayout->addWidget(m_modeSwitch);
+
     // 左侧列表 + 控件
     QVBoxLayout *leftVLayout = new QVBoxLayout;
+    leftVLayout->addLayout(topHLayout);
     leftVLayout->addWidget(m_appsView);
     leftVLayout->addWidget(m_bottomBtn);
-    leftVLayout->setStretch(0, 10);
-    leftVLayout->setStretch(1, 1);
+//    leftVLayout->setStretch(0, 1);
+//    leftVLayout->setStretch(0, 10);
+//    leftVLayout->setStretch(1, 1);
 
     // 右边控件布局器
     QVBoxLayout *rightVLayout = new QVBoxLayout;
@@ -269,7 +280,9 @@ void WindowedFrame::initConnection()
         m_allAppView->setSpacing(m_calcUtil->appItemSpacing());
     });
 
-    // auto scroll when drag to app list box border
+    connect(m_modeSwitch, &ModeSwitch::titleModeClicked, this, &WindowedFrame::onChangeToTitleMode);
+    connect(m_modeSwitch, &ModeSwitch::letterModeClicked, this, &WindowedFrame::onChangeToLetterMode);
+
     connect(m_appsView, &AppListView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
     connect(m_autoScrollTimer, &QTimer::timeout, [this] {
         m_appsView->verticalScrollBar()->setValue(m_appsView->verticalScrollBar()->value() + m_autoScrollStep);
@@ -985,7 +998,7 @@ void WindowedFrame::onSwitchBtnClicked()
         m_appsModel->setCategory(AppsListModel::Category);
     } else {
         m_displayMode = All;
-        m_appsModel->setCategory(AppsListModel::Custom);
+        m_appsModel->setCategory(AppsListModel::TitleMode);
     }
 
     // each time press "switch btn" must hide tips label.
@@ -1046,12 +1059,7 @@ void WindowedFrame::prepareHideLauncher()
 
 void WindowedFrame::recoveryAll()
 {
-    // recovery list view
     m_displayMode = All;
-    m_appsModel->setCategory(AppsListModel::Custom);
-    m_appsView->setModel(m_appsModel);
-
-    // recovery switch button
     hideTips();
 
     m_focusPos = Applist;
@@ -1121,6 +1129,24 @@ void WindowedFrame::addViewEvent(AppGridView *pView)
     connect(pView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
     connect(pView, &AppGridView::entered, m_appsView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
     connect(pView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
+}
+
+void WindowedFrame::onChangeToTitleMode()
+{
+    qInfo() << "change to title mode";
+    m_appsModel->setCategory(AppsListModel::TitleMode);
+    m_appsView->setCurrentIndex(QModelIndex());
+    m_appsView->setModel(m_appsModel);
+    m_appsView->update();
+}
+
+void WindowedFrame::onChangeToLetterMode()
+{
+    qInfo() << "change to letter mode";
+    m_appsModel->setCategory(AppsListModel::LetterMode);
+    m_appsView->setModel(m_appsModel);
+    m_appsView->setCurrentIndex(QModelIndex());
+    m_appsView->update();
 }
 
 void WindowedFrame:: paintEvent(QPaintEvent *e)

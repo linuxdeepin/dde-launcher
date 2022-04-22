@@ -486,9 +486,12 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
 
     if(!m_calcUtil->fullscreen()) {
         pageCount = nSize;
-        if (m_category == Custom)
+        if (m_category == TitleMode)
             itemInfo = m_appsManager->appsCategoryListIndex(index.row());
-        else if (m_category == All) {
+        else if (m_category == LetterMode) {
+            itemInfo = m_appsManager->appsLetterListIndex(index.row());
+//            qInfo() << "itemInfo:" << itemInfo.m_desktop;
+        } else if (m_category == All) {
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
         } else if (m_category == Common) {
             itemInfo = m_appsManager->appsCommonUseListIndex(index.row());
@@ -603,7 +606,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return QVariant::fromValue(pixmapList);
     }
     case AppItemTitleRole:
-        return itemInfo.m_desktop.isEmpty();
+        return itemInfo.m_iconKey.isEmpty();
     case DirNameRole: {
         const ItemInfo info = m_appsManager->createOfCategory(itemInfo.m_categoryId);
         return QVariant::fromValue(info);

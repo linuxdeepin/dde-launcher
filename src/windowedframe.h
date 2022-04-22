@@ -40,6 +40,7 @@
 #include "appgridview.h"
 #include "searchmodewidget.h"
 #include "sortfilterproxymodel.h"
+#include "modeswitch.h"
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
@@ -143,6 +144,9 @@ private slots:
     void onHideMenu();
     void addViewEvent(AppGridView *pView);
 
+    void onChangeToTitleMode();
+    void onChangeToLetterMode();
+
 private:
     DBusDock *m_dockInter;
     std::unique_ptr<MenuWorker> m_menuWorker;
@@ -154,7 +158,7 @@ private:
     AppsManager *m_appsManager;
     AppListView *m_appsView;
 
-    AppsListModel *m_appsModel;
+    AppsListModel *m_appsModel;          // 应用列表
     AppsListModel *m_allAppsModel;
     AppsListModel *m_commonUseModel;
     AppsListModel *m_searchModel;        // 搜索后的应用列表
@@ -183,6 +187,7 @@ private:
     DSearchEdit *m_searcherEdit;         // 搜索控件
     bool m_enterSearchEdit;
     const QScreen *m_curScreen;
+    ModeSwitch *m_modeSwitch;
 };
 
 #endif // WINDOWEDFRAME_H

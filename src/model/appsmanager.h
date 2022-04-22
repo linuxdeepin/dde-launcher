@@ -111,6 +111,7 @@ public slots:
     static int appsInfoListSize(const AppsListModel::AppCategory &category);
     static const ItemInfo appsInfoListIndex(const AppsListModel::AppCategory &category,const int index);
     static const ItemInfo appsCategoryListIndex(const int index);
+    static const ItemInfo appsLetterListIndex(const int index);
     static const ItemInfo appsCommonUseListIndex(const int index);
     static const ItemInfoList &windowedCategoryList();
     static const ItemInfoList &windowedFrameItemInfoList();
@@ -139,6 +140,7 @@ private:
     void appendSearchResult(const QString &appKey);
     void sortByPresetOrder(ItemInfoList &processList);
     void sortByUseFrequence(ItemInfoList &processList);
+    void sortByLetterOrder(ItemInfoList &processList);
     void sortByInstallTimeOrder(ItemInfoList &processList);
     void refreshCategoryInfoList();
     void refreshUsedInfoList();
@@ -164,6 +166,7 @@ public:
     static QReadWriteLock m_appInfoLock;
     static QHash<AppsListModel::AppCategory, ItemInfoList> m_appInfos;      // 应用分类容器
     static ItemInfoList m_appCategoryInfos;                                 // 小窗口左侧带分类标题的应用列表
+    static ItemInfoList m_appLetterModeInfos;                               // 小窗口左侧字母排序模式列表
     static ItemInfoList m_commonSortedList;                                 // 小窗口常用列表
     static ItemInfoList m_categoryList;                                     // 小窗口应用分类目录列表
     static ItemInfoList m_appSearchResultList;                              // 搜索结果列表

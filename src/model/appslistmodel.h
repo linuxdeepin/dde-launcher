@@ -85,7 +85,8 @@ public:
 
     enum AppCategory {
         All,
-        Custom,                 // 自定义的排序模式
+        TitleMode,              // 标题模式
+        LetterMode,             // 字母模式
         Search,                 // 本地搜索模式
         Category,               // 分类模式
         Common,                 // 常用应用

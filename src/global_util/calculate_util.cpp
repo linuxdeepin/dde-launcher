@@ -151,8 +151,10 @@ int CalculateUtil::calculateIconSize(int mode)
 
 QSize CalculateUtil::appIconSize(int modelMode) const
 {
+    Q_UNUSED(modelMode);
+
     QSize size;
-    if (modelMode == AppsListModel::Custom)
+    if (!isFullScreen)
         size = QSize(DLauncher::APP_ITEM_ICON_SIZE, DLauncher::APP_ITEM_ICON_SIZE);
     else
         size = QSize(m_appItemSize, m_appItemSize) * DLauncher::DEFAULT_RATIO;

@@ -26,6 +26,7 @@
 #include "constants.h"
 #include "calculate_util.h"
 #include "iconcachemanager.h"
+#include "languagetranformation.h"
 
 #include <QDebug>
 #include <QX11Info>
@@ -64,11 +65,12 @@ const QDir::Filters NAME_FILTERS = QDir::AllEntries | QDir::Hidden | QDir::Syste
 QReadWriteLock AppsManager::m_appInfoLock;
 QHash<AppsListModel::AppCategory, ItemInfoList> AppsManager::m_appInfos;
 ItemInfoList AppsManager::m_appCategoryInfos;
-ItemInfoList AppsManager::m_usedSortedList = QList<ItemInfo>();
-ItemInfoList AppsManager::m_commonSortedList = QList<ItemInfo>();
-ItemInfoList AppsManager::m_dirAppInfoList = QList<ItemInfo>();
-ItemInfoList AppsManager::m_appSearchResultList = QList<ItemInfo>();
-ItemInfoList AppsManager::m_categoryList = QList<ItemInfo>();
+ItemInfoList AppsManager::m_appLetterModeInfos = ItemInfoList();
+ItemInfoList AppsManager::m_usedSortedList = ItemInfoList();
+ItemInfoList AppsManager::m_commonSortedList = ItemInfoList();
+ItemInfoList AppsManager::m_dirAppInfoList = ItemInfoList();
+ItemInfoList AppsManager::m_appSearchResultList = ItemInfoList();
+ItemInfoList AppsManager::m_categoryList = ItemInfoList();
 
 AppsManager::AppsManager(QObject *parent) :
     QObject(parent),
@@ -187,6 +189,13 @@ AppsManager::AppsManager(QObject *parent) :
 
     if (!m_RefreshCalendarIconTimer->isActive())
         m_RefreshCalendarIconTimer->start();
+}
+
+void AppsManager::sortByLetterOrder(ItemInfoList &list)
+{
+    std::sort(list.begin(), list.end(), [ & ](const ItemInfo info1, const ItemInfo info2) {
+        return info1.m_name < info2.m_name;
+    });
 }
 
 /**
@@ -579,7 +588,7 @@ void AppsManager::delayRefreshData()
     // refresh new installed apps
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
 
-    generateCategoryMap();
+//    generateCategoryMap();
 
     emit newInstallListChanged();
 
@@ -616,7 +625,7 @@ bool AppsManager::fuzzyMatching(const QStringList& list, const QString& key)
 void AppsManager::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 {
     refreshAppListIcon(themeType);
-    generateCategoryMap();
+//    generateCategoryMap();
 }
 
 void AppsManager::onRefreshCalendarTimer()
@@ -660,11 +669,18 @@ const ItemInfo AppsManager::createOfCategory(qlonglong category)
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const
 {
     switch (category) {
-    case AppsListModel::Custom:    return m_appCategoryInfos;
-    case AppsListModel::All:       return m_usedSortedList;
-    case AppsListModel::Search:     return m_appSearchResultList;
-    case AppsListModel::Category:   return m_categoryList;
-    default:;
+    case AppsListModel::TitleMode:
+        return m_appCategoryInfos;
+    case AppsListModel::LetterMode:
+        return m_appLetterModeInfos;
+    case AppsListModel::All:
+        return m_usedSortedList;
+    case AppsListModel::Search:
+        return m_appSearchResultList;
+    case AppsListModel::Category:
+        return m_categoryList;
+    default:
+        break;
     }
 
     ItemInfoList itemInfoList;
@@ -685,14 +701,24 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
 int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category)
 {
     switch (category) {
-    case AppsListModel::Custom:    return m_appCategoryInfos.size();
-    case AppsListModel::All:       return m_usedSortedList.size();
-    case AppsListModel::Search:     return m_appSearchResultList.size();
-    case AppsListModel::Category:   return m_categoryList.size();
-    case AppsListModel::Common:     return m_commonSortedList.size();
-    case AppsListModel::Dir:        return m_dirAppInfoList.size();
-    case AppsListModel::SearchFilter: return m_usedSortedList.size();
-    default:;
+    case AppsListModel::TitleMode:
+        return m_appCategoryInfos.size();
+    case AppsListModel::LetterMode:
+        return m_appLetterModeInfos.size();
+    case AppsListModel::All:
+        return m_usedSortedList.size();
+    case AppsListModel::Search:
+        return m_appSearchResultList.size();
+    case AppsListModel::Category:
+        return m_categoryList.size();
+    case AppsListModel::Common:
+        return m_commonSortedList.size();
+    case AppsListModel::Dir:
+        return m_dirAppInfoList.size();
+    case AppsListModel::SearchFilter:
+        return m_usedSortedList.size();
+    default:
+        break;
     }
 
     int size = 0;
@@ -713,9 +739,12 @@ int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category)
 const ItemInfo AppsManager::appsInfoListIndex(const AppsListModel::AppCategory &category, const int index)
 {
     switch (category) {
-    case AppsListModel::Custom:
+    case AppsListModel::TitleMode:
         Q_ASSERT(m_appCategoryInfos.size() > index);
         return m_appCategoryInfos[index];
+    case AppsListModel::LetterMode:
+        Q_ASSERT(m_appLetterModeInfos.size() > index);
+        return m_appLetterModeInfos[index];
     case AppsListModel::All:
         Q_ASSERT(m_usedSortedList.size() > index);
         return m_usedSortedList[index];
@@ -749,6 +778,14 @@ const ItemInfo AppsManager::appsCategoryListIndex(const int index)
         return ItemInfo();
 
     return m_appCategoryInfos.at(index);
+}
+
+const ItemInfo AppsManager::appsLetterListIndex(const int index)
+{
+    if (index > m_appLetterModeInfos.size() - 1)
+        return ItemInfo();
+
+    return m_appLetterModeInfos.at(index);
 }
 
 const ItemInfo AppsManager::appsCommonUseListIndex(const int index)
@@ -1138,6 +1175,47 @@ void AppsManager::generateCategoryMap()
         m_appCategoryInfos.append(m_appInfos.value(AppsListModel::AppCategory(categoryId)));
     }
 
+    // 字母排序
+    ItemInfoList letterSortList = m_allAppInfoList;
+    // 先分类， 再按照字母标题分组
+    sortByLetterOrder(letterSortList);
+
+    // 字母标题生成器
+    QChar titleArray[27] = { 0 };
+    titleArray[0] = '#';
+    for (int i = 0; i < 26; i++) {
+        titleArray[i + 1] = QChar(65 + i);
+    }
+
+    ItemInfoList lettergroupList;
+    // 字母排序后的分组
+    for (int i = 0; i < 27; i++) {
+        QChar titleChar = titleArray[i];
+        ItemInfo titleInfo;
+        titleInfo.m_name = titleChar;
+        titleInfo.m_desktop = titleChar;
+
+        for (int j = 0; j < letterSortList.size(); j++) {
+            const ItemInfo info = letterSortList.at(j);
+            QString pinYinStr = LanguageTransformation::instance()->zhToPinYin(info.m_name);
+
+            QChar firstKey = pinYinStr.front();
+            if (firstKey.isNumber()) {
+                if (lettergroupList.indexOf(titleInfo) == -1)
+                    lettergroupList.append(titleInfo);
+
+                lettergroupList.append(info);
+            } else if (pinYinStr.startsWith(titleChar, Qt::CaseInsensitive)) {
+                if (lettergroupList.indexOf(titleInfo) == -1) {
+                    lettergroupList.append(titleInfo);
+                }
+
+                lettergroupList.append(info);
+            }
+        }
+    }
+    m_appLetterModeInfos.append(lettergroupList);
+
     // 获取小窗口常用应用列表
     ItemInfoList tempData = m_allAppInfoList;
     m_commonSortedList.clear();
@@ -1440,7 +1518,5 @@ void AppsManager::updateTrashState()
         return;
 
     m_trashIsEmpty = !trashItemsCount;
-    refreshAllList();
-
     emit dataChanged(AppsListModel::All);
 }

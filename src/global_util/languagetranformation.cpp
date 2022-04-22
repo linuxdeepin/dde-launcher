@@ -32,7 +32,8 @@ QString LanguageTransformation::zhToPinYin(const QString &chinese)
         int unicode = QString::number(chinese.at(i).unicode(), 10).toInt();
         if (unicode >= 0x4E00 && unicode <= 0x9FA5) {
             // m_pinyinStrList是按照UNICODE每个汉字对应的拼音数组
-            list.append(m_pinyinStrList.at(unicode - 0x4E00));
+            if ((unicode - 0x4E00) < m_pinyinStrList.size())
+                list.append(m_pinyinStrList.at(unicode - 0x4E00));
         } else {
             list.append(chinese.at(i));
         }
@@ -88,6 +89,7 @@ void LanguageTransformation::readConfigFile()
         QString pinyinStr = pinYinFile.readAll();
         m_pinyinStrList = pinyinStr.split(" ");
         pinYinFile.close();
+//        qInfo() << "m_pinyinStrList:" << m_pinyinStrList;
 
         // 加载简拼配置库
         QFile jianpinFile(":/language/jianpin.txt");

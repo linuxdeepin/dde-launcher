@@ -1175,6 +1175,7 @@ void FullScreenFrame::showLauncher()
     // 启动器跟随任务栏位置
     updateGeometry();
 
+    setFocus(Qt::ActiveWindowFocusReason);
     m_searchWidget->categoryBtn()->clearFocus();
     m_searchWidget->edit()->clearEdit();
     m_searchWidget->edit()->clear();

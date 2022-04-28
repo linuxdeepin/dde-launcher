@@ -28,6 +28,7 @@ class QString;
 class QPoint;
 class MenuWorker;
 class QRect;
+
 class LauncherInterface
 {
 public:

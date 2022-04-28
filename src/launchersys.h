@@ -26,6 +26,7 @@
 
 #include "dbusinterface/dbuslauncher.h"
 #include "calculate_util.h"
+#include "controller/plugincontroller.h"
 
 #include <DRegionMonitor>
 
@@ -92,6 +93,7 @@ private:
     CalculateUtil *m_calcUtil;                              // 界面布局计算处理类
     DBusDock *m_dockInter;
     bool m_clicked;                                         // 人的点击操作状态
+    LauncherPluginController *m_launcherPlugin;
 };
 
 #endif // LAUNCHERSYS_H

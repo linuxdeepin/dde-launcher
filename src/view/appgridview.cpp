@@ -52,11 +52,6 @@ QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
 bool AppGridView::m_longPressed = false;
 Gesture *AppGridView::m_gestureInter = nullptr;
 
-/**
- * @brief AppGridView::AppGridView
- * 全屏模式下 应用网格视图，主要处理全屏图标的拖拽事件及分组切换的动画效果
- * @param parent
- */
 AppGridView::AppGridView(QWidget *parent)
     : QListView(parent)
     , m_dropThresholdTimer(new QTimer(this))

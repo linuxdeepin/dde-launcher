@@ -27,6 +27,12 @@ SearchModeWidget::~SearchModeWidget()
 
 void SearchModeWidget::initUi()
 {
+    m_nativeView->setFixedSize(600, 400);
+    m_outsideView->setFixedSize(600, 400);
+
+//    m_nativeView->setStyleSheet("QListView{border: 1px solid red;}");
+//    m_outsideView->setStyleSheet("QListView{border: 1px solid red;}");
+
     QVBoxLayout *nativeVLayout = new QVBoxLayout;
     nativeVLayout->setContentsMargins(QMargins(0, 10, 0, 0));
     nativeVLayout->setSpacing(10);

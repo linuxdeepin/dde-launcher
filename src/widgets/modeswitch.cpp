@@ -14,6 +14,7 @@ ModeSwitch::ModeSwitch(QWidget *parent)
     setWindowFlag(Qt::FramelessWindowHint);
     m_titleModeButton->setObjectName("categoryButton");
     m_letterModeButton->setObjectName("letterButton");
+    setAccessibleName("modeSwitchWidget");
 
     m_titleModeButton->setIcon(QIcon::fromTheme("computer"));
     m_letterModeButton->setIcon(QIcon::fromTheme("music"));

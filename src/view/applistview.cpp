@@ -249,12 +249,6 @@ void AppListView::mouseReleaseEvent(QMouseEvent *e)
         return;
     }
 
-    // 小窗口模式时，左键释放时切换模型到对应的分类列表中
-    if (qobject_cast<AppsListModel*>(model())->category() == AppsListModel::Category && e->button() == Qt::LeftButton) {
-        emit requestSwitchToCategory(index);
-        return;
-    }
-
     QListView::mouseReleaseEvent(e);
 }
 

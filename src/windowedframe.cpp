@@ -20,7 +20,6 @@
  */
 
 #include "windowedframe.h"
-#include "widgets/hseparator.h"
 #include "global_util/util.h"
 #include "dbusdockinterface.h"
 #include "constants.h"
@@ -50,19 +49,9 @@
 
 #include <qpa/qplatformwindow.h>
 
-#define DOCK_TOP        0
-#define DOCK_RIGHT      1
-#define DOCK_BOTTOM     2
-#define DOCK_LEFT       3
-
-#define DOCK_FASHION    0
-#define DOCK_EFFICIENT  1
-
 DGUI_USE_NAMESPACE
 
 using namespace DLauncher;
-
-extern const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w);
 
 inline const QPoint scaledPosition(const QPoint &xpos)
 {
@@ -95,7 +84,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_maskBg(new QWidget(this))
     , m_appsManager(AppsManager::instance())
     , m_appsView(new AppListView(this))
-    , m_appsModel(new AppsListModel(AppsListModel::LetterMode, this))
+    , m_appsModel(new AppsListModel(AppsListModel::TitleMode, this))
     , m_allAppsModel(new AppsListModel(AppsListModel::All, this))
     , m_commonUseModel(new AppsListModel(AppsListModel::Common, this))
     , m_searchModel(new AppsListModel(AppsListModel::Search, this))
@@ -103,7 +92,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_bottomBtn(new MiniFrameRightBar(this))
     , m_commonUseView(new AppGridView(this))
     , m_allAppView(new AppGridView(this))
-//    , m_searchModeWidget(new SearchModeWidget(this))
     , m_tipsLabel(new QLabel(this))
     , m_delayHideTimer(new QTimer(this))
     , m_autoScrollTimer(new QTimer(this))
@@ -164,10 +152,6 @@ void WindowedFrame::initUi()
     m_allAppView->setModel(m_allAppsModel);
     m_allAppView->setItemDelegate(appItemDelegate);
     m_allAppView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-//    // 搜索应用
-//    m_searchModeWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-//    m_searchModeWidget->setItemDelegate(appItemDelegate);
 
     m_appsView->installEventFilter(m_eventFilter);
 
@@ -235,7 +219,6 @@ void WindowedFrame::initUi()
     rightVLayout->addLayout(rightHLayout);
     rightVLayout->addLayout(commonUseVLayout);
     rightVLayout->addLayout(allAppVLayout);
-//    rightVLayout->addWidget(m_searchModeWidget);
 
     mainHlayout->addLayout(leftVLayout);
     mainHlayout->addLayout(rightVLayout);
@@ -314,17 +297,14 @@ void WindowedFrame::initConnection()
     connect(m_appsView, &QListView::entered, m_appsView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
     connect(m_appsView, &AppListView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
 
-    // 常用应用
-    connect(m_commonUseView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
-    connect(m_commonUseView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
-    connect(m_commonUseView, &AppGridView::entered, m_commonUseView, &AppGridView::setCurrentIndex, Qt::QueuedConnection);
-    connect(m_commonUseView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
+    connect(m_commonUseView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
+    connect(m_commonUseView, &AppListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
+    connect(m_commonUseView, &AppListView::entered, m_commonUseView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
 
     // 所有应用
-    connect(m_allAppView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
-    connect(m_allAppView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
-    connect(m_allAppView, &AppGridView::entered, m_allAppView, &AppGridView::setCurrentIndex, Qt::QueuedConnection);
-    connect(m_allAppView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
+    connect(m_allAppView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
+    connect(m_allAppView, &AppListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
+    connect(m_allAppView, &AppListView::entered, m_allAppView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
 
     connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &WindowedFrame::hideTips);
@@ -368,7 +348,6 @@ void WindowedFrame::freshUi(bool searchedState)
     m_commonUseLabel->setVisible(!searchedState);
     m_allAppView->setVisible(!searchedState);
     m_allAppLabel->setVisible(!searchedState);
-//    m_searchModeWidget->setVisible(searchedState);
 }
 
 // TODO: 业务代码，后面优化
@@ -391,15 +370,9 @@ void WindowedFrame::showLauncher()
     activateWindow();
     setFocus(Qt::ActiveWindowFocusReason);
 
-    // 初始化所有应用数据
-    if (!m_appsManager->isVaild())
-        m_appsManager->refreshAllList();
-
     m_appsView->setCurrentIndex(QModelIndex());
 
     adjustSize();
-
-    // 启动器跟随任务栏位置
     adjustPosition();
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
@@ -433,8 +406,6 @@ bool WindowedFrame::visible()
  */
 void WindowedFrame::moveCurrentSelectApp(const int key)
 {
-    // TODO： 后面优化
-    return;
     if(Qt::Key_Undo == key) {
         auto  oldStr =  m_searcherEdit->lineEdit()->text();
         m_searcherEdit->lineEdit()->undo();
@@ -592,18 +563,11 @@ void WindowedFrame::appendToSearchEdit(const char ch)
 
 void WindowedFrame::launchCurrentApp()
 {
-    // TODO： 后面优化
-    return;
     const QModelIndex currentIdx = m_appsView->currentIndex();
 
     if (m_focusPos == Computer || m_focusPos == Setting || m_focusPos == Power) {
         return;
     } else if (m_focusPos == RightBottom && !currentIdx.isValid()) {
-        return;
-    }
-
-    if (m_displayMode == Category && m_appsModel->category() == AppsListModel::Category) {
-        switchToCategory(currentIdx);
         return;
     }
 
@@ -635,13 +599,12 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
     unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
     unInstallDialog.setWindowModality(Qt::WindowModal);
 
-    const ItemInfo info = context.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
+    const ItemInfo_v1 info = context.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
     const QString appKey = info.m_key;
     unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall %1 ?").arg(info.m_name)));
 
     QPixmap pixmap = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
     int size = (pixmap.size() / qApp->devicePixelRatio()).width();
-
     QPair<QString, int> tmpKey { cacheKey(info), size};
 
     // 命令行安装应用后，卸载应用的确认弹框偶现左上角图标呈齿轮的情况
@@ -683,22 +646,10 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
     UNINSTALL_DIALOG_SHOWN = false;
 }
 
-/**分类模式下，进入到某一分类目录的处理
- * @brief WindowedFrame::switchToCategory
- * @param index 当前视图的模型索引
- */
-void WindowedFrame::switchToCategory(const QModelIndex &index)
-{
-    m_focusPos = Applist;
-    m_appsView->setModel(m_appsModel);
-    m_appsView->setCurrentIndex(QModelIndex());
-    m_appsModel->setCategory(index.data(AppsListModel::AppCategoryRole).value<AppsListModel::AppCategory>());
-}
-
 QPainterPath WindowedFrame::getCornerPath(AnchoredCornor direction)
 {
     QPainterPath path;
-    if (m_dockInter->displayMode() == DOCK_FASHION) {
+    if (m_dockInter->displayMode() == DLauncher::DOCK_FASHION) {
        return path;
     }
     const QRect rect = this->rect();
@@ -833,14 +784,6 @@ void WindowedFrame::inputMethodEvent(QInputMethodEvent *e)
 
 QVariant WindowedFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
 {
-//    switch (prop) {
-//    case Qt::ImEnabled:
-//        return true;
-//    case Qt::ImCursorRectangle:
-//        return widgetRelativeOffset(this, m_searchWidget);
-//    default: ;
-//    }
-
     return QWidget::inputMethodQuery(prop);
 }
 
@@ -866,8 +809,6 @@ void WindowedFrame::regionMonitorPoint(const QPoint &point, int flag)
 
 bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
 {
-    // TODO: 后面处理
-    return false;
     if(watched == m_appsView && event->type() == QEvent::Wheel) {
         m_searcherEdit->lineEdit()->clearFocus();
     }
@@ -912,16 +853,16 @@ void WindowedFrame::initAnchoredCornor()
         const int dockPos = m_dockInter->position();
 
         switch (dockPos) {
-        case DOCK_TOP:
+        case DLauncher::DOCK_TOP:
             m_anchoredCornor = BottomRight;
             break;
-        case DOCK_BOTTOM:
+        case DLauncher::DOCK_BOTTOM:
             m_anchoredCornor = TopRight;
             break;
-        case DOCK_LEFT:
+        case DLauncher::DOCK_LEFT:
             m_anchoredCornor = BottomRight;
             break;
-        case DOCK_RIGHT:
+        case DLauncher::DOCK_RIGHT:
             m_anchoredCornor = BottomLeft;
             break;
         }
@@ -939,21 +880,21 @@ void WindowedFrame::adjustPosition()
 
     // 启动器高效模式和时尚模式与任务栏的间隙不同
     int dockSpacing = 0;
-    if (m_dockInter->displayMode() == DOCK_FASHION)
+    if (m_dockInter->displayMode() == DLauncher::DOCK_FASHION)
         dockSpacing = 8;
 
     QPoint p;
     switch (m_dockInter->position()) {
-    case DOCK_TOP:
+    case DLauncher::DOCK_TOP:
         p = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
         break;
-    case DOCK_BOTTOM:
+    case DLauncher::DOCK_BOTTOM:
         p = QPoint(dockRect.left(), dockRect.top() - height() - dockSpacing);
         break;
-    case DOCK_LEFT:
+    case DLauncher::DOCK_LEFT:
         p = QPoint(dockRect.right() + dockSpacing + 1, dockRect.top());
         break;
-    case DOCK_RIGHT:
+    case DLauncher::DOCK_RIGHT:
         p = QPoint(dockRect.left() - width() - dockSpacing, dockRect.top());
         break;
     default:
@@ -987,25 +928,6 @@ void WindowedFrame::onToggleFullScreen()
     .set(true);
 }
 
-void WindowedFrame::onSwitchBtnClicked()
-{
-    if (m_displayMode == All) {
-        m_appsModel->setCategory(AppsListModel::Category);
-        m_displayMode = Category;
-        m_appsView->setCurrentIndex(QModelIndex());
-        m_focusPos = RightBottom;
-    } else if (m_displayMode == Category && m_appsModel->category() != AppsListModel::Category) {
-        m_appsModel->setCategory(AppsListModel::Category);
-    } else {
-        m_displayMode = All;
-        m_appsModel->setCategory(AppsListModel::TitleMode);
-    }
-
-    // each time press "switch btn" must hide tips label.
-    hideTips();
-    m_searcherEdit->lineEdit()->clear();
-}
-
 void WindowedFrame::onWMCompositeChanged()
 {
     if (m_wmHelper->hasComposite())
@@ -1033,12 +955,11 @@ void WindowedFrame::searchText(const QString &text)
 
 void WindowedFrame::showTips(const QString &text)
 {
-    m_tipsLabel->setText(text);
-
 //    const QPoint center = m_searchModeWidget->rect().center();
+    m_tipsLabel->setText(text);
 //    m_tipsLabel->move(center);
-//    m_tipsLabel->setVisible(true);
-//    m_tipsLabel->raise();
+    m_tipsLabel->setVisible(true);
+    m_tipsLabel->raise();
 }
 
 void WindowedFrame::hideTips()
@@ -1092,21 +1013,21 @@ void WindowedFrame::updatePosition()
    QRect dockRect = QRect(scaledPosition(dockGeo.topLeft()),scaledPosition(dockGeo.bottomRight()));
 
     int dockSpacing = 0;
-    if (m_dockInter->displayMode() == DOCK_FASHION)
+    if (m_dockInter->displayMode() == DLauncher::DOCK_FASHION)
         dockSpacing = 8;
 
     QPoint p;
     switch (m_dockInter->position()) {
-    case DOCK_TOP:
+    case DLauncher::DOCK_TOP:
         p = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
         break;
-    case DOCK_BOTTOM:
+    case DLauncher::DOCK_BOTTOM:
         p = QPoint(dockRect.left(), dockRect.top() - height() - dockSpacing);
         break;
-    case DOCK_LEFT:
+    case DLauncher::DOCK_LEFT:
         p = QPoint(dockRect.right() + dockSpacing + 1, dockRect.top());
         break;
-    case DOCK_RIGHT:
+    case DLauncher::DOCK_RIGHT:
         p = QPoint(dockRect.left() - width() - dockSpacing, dockRect.top());
         break;
     default:
@@ -1133,20 +1054,14 @@ void WindowedFrame::addViewEvent(AppGridView *pView)
 
 void WindowedFrame::onChangeToTitleMode()
 {
-    qInfo() << "change to title mode";
     m_appsModel->setCategory(AppsListModel::TitleMode);
     m_appsView->setCurrentIndex(QModelIndex());
-    m_appsView->setModel(m_appsModel);
-    m_appsView->update();
 }
 
 void WindowedFrame::onChangeToLetterMode()
 {
-    qInfo() << "change to letter mode";
     m_appsModel->setCategory(AppsListModel::LetterMode);
-    m_appsView->setModel(m_appsModel);
     m_appsView->setCurrentIndex(QModelIndex());
-    m_appsView->update();
 }
 
 void WindowedFrame:: paintEvent(QPaintEvent *e)

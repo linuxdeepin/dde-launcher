@@ -101,6 +101,13 @@ static const QString DEFAULT_META_CONFIG_NAME = "com.deepin.dde.dde-launcher.dco
 
 static const int MOUSE_LEFTBUTTON = 1;
 static const int MOUSE_RIGHTBUTTON  = 3;
+
+static const int DOCK_TOP = 0;
+static const int DOCK_RIGHT = 1;
+static const int DOCK_BOTTOM = 2;
+static const int DOCK_LEFT = 3;
+static const int DOCK_FASHION = 0;
+static const int DOCK_EFFICIENT = 1;
 }
 
 #endif // CONSTANTS_H

@@ -79,7 +79,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const bool isDragItem = option.features & QStyleOptionViewItem::Alternate;
 
     QPixmap iconPixmap = index.data(AppsListModel::AppListIconRole).value<QPixmap>();
-    ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
+    ItemInfo_v1 itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
     bool isTitle = index.data(AppsListModel::AppItemTitleRole).toBool();
 
     painter->setPen(Qt::NoPen);

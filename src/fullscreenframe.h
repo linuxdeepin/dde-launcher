@@ -26,8 +26,6 @@
 
 #include "gradientlabel.h"
 #include "searchwidget.h"
-#include "navigationwidget.h"
-#include "categorytitlewidget.h"
 #include "launcherinterface.h"
 #include "appitemdelegate.h"
 #include "util.h"
@@ -39,9 +37,7 @@
 #include "menuworker.h"
 #include "applistarea.h"
 #include "boxframe.h"
-#include "blurboxwidget.h"
 #include "multipagesview.h"
-#include "scrollwidgetagent.h"
 #include "appdirwidget.h"
 #include "maskqwidget.h"
 #include "searchmodewidget.h"
@@ -97,6 +93,7 @@ signals:
     void categoryAppNumsChanged(const AppsListModel::AppCategory category, const int appNums);
     void currentVisibleCategoryChanged(const AppsListModel::AppCategory currentVisibleCategory) const;
     void scrollChanged(const AppsListModel::AppCategory &category);
+    void searchApp(const QString &keyword = QString());
 
 public slots:
     void showTips(const QString &tips);
@@ -134,18 +131,14 @@ private:
     void regionMonitorPoint(const QPoint &point, int flag = 1) override;
 
     void updateGeometry();
-    void categoryListChanged();
     void showPopupMenu(const QPoint &pos, const QModelIndex &context);
     void updateDockPosition();
-    
+
 private slots:
     void layoutChanged();
     void searchTextChanged(const QString &keywords, bool enableUpdateMode);
     void refreshPageView(const AppsListModel::AppCategory category);
     void onScreenInfoChange();
-
-private:
-    CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
 
 private:
     int m_displayMode;
@@ -155,8 +148,8 @@ private:
     bool m_isConfirmDialogShown;
     QPoint m_mouseMovePos;
     QPoint m_mousePressPos;
-
     QPoint m_startPoint;
+
     std::unique_ptr<MenuWorker> m_menuWorker;
     SharedEventFilter *m_eventFilter;                   // 事件过滤类
 
@@ -164,16 +157,10 @@ private:
     AppsManager *m_appsManager;
 
     QTimer *m_delayHideTimer;
-    QTimer *m_clearCacheTimer;
-
     SearchWidget *m_searchWidget;                       // 顶部水平方向控件 (全屏模式下搜索, 左上模式切换按钮,右上全屏和小窗口模式切换按钮)
-
     QFrame *m_contentFrame;
     DHBoxWidget *m_appsIconBox;
-
-    // todo: 用QScrollArea替换试试
     QLabel *m_tipsLabel;
-
     AppItemDelegate *m_appItemDelegate;                 // 全屏模式下listview视图代理
     MultiPagesView *m_multiPagesView;                   // 全屏视图控件类
 
@@ -183,16 +170,13 @@ private:
 
     QFrame *m_topSpacing;
     QFrame *m_bottomSpacing;
-
-    QList<ScrollWidgetAgent *> m_widgetAgentList;
+    AppDirWidget *m_dirWidget;                          // 应用抽屉展开页面
+    const QScreen *m_curScreen;
 
     bool m_canResizeDockPosition = false;               // 只有窗口在完全显示出来后，才允许自动调整各部件位置
-
     bool m_bMousePress;                                 // 鼠标按下标识
     int m_nMousePos;                                    // 鼠标按住的起始坐标
     int m_scrollValue;                                  // 滑动区域当前停留的数值
     int m_scrollStart;                                  // 鼠标按下时滑动区域停留的数值
-    const QScreen *m_curScreen;
-    AppDirWidget *m_dirWidget;                         // 应用抽屉展开页面
 };
 #endif // MAINFRAME_H

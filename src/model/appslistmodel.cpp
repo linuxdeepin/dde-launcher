@@ -497,9 +497,13 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
             itemInfo = m_appsManager->appsCommonUseListIndex(index.row());
         } else if (m_category == Search) {
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
+        } else if (m_category == PluginSearch) {
+            itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
         }
     } else {
         if (m_category == Search) {
+            itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
+        } else if (m_category == PluginSearch) {
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
         } else {
             int start = nFixCount * m_pageIndex;
@@ -519,14 +523,10 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return itemInfo.m_desktop;
     case AppKeyRole:
         return itemInfo.m_key;
-    case AppIconKeyRole:
-        return itemInfo.m_iconKey;
-    case AppCategoryRole:
-        return QVariant::fromValue(itemInfo.category());
     case AppGroupRole:
         return QVariant::fromValue(m_category);
     case AppAutoStartRole:
-        return m_category != Category ? m_appsManager->appIsAutoStart(itemInfo.m_desktop) : false;
+        return m_appsManager->appIsAutoStart(itemInfo.m_desktop);
     case AppIsOnDesktopRole:
         return m_appsManager->appIsOnDesktop(itemInfo.m_key);
     case AppIsOnDockRole:
@@ -537,16 +537,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIsProxy(itemInfo.m_key);
     case AppEnableScalingRole:
         return m_appsManager->appIsEnableScaling(itemInfo.m_key);
-    case AppNewInstallRole: {
-        if (m_category == Category) {
-            const ItemInfoList_v1 &list = m_appsManager->appsInfoList(CateGoryMap[itemInfo.m_categoryId]);
-            for (const ItemInfo_v1 &in : list) {
-                if (m_appsManager->appIsNewInstall(in.m_key)) return true;
-            }
-        }
-
+    case AppNewInstallRole:
         return m_appsManager->appIsNewInstall(itemInfo.m_key);
-    }
     case AppIconRole:
         return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize(m_category).width());
     case AppDialogIconRole:
@@ -554,7 +546,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppDragIconRole:
         return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize(m_category).width() * 1.2);
     case AppListIconRole: {
-        QSize iconSize = (static_cast<AppsListModel::AppCategory>(m_category) == AppsListModel::Category) ? QSize(DLauncher::APP_CATEGORY_ICON_SIZE, DLauncher::APP_CATEGORY_ICON_SIZE) : m_calcUtil->appIconSize();
+        QSize iconSize = m_calcUtil->appIconSize();
         return m_appsManager->appIcon(itemInfo, iconSize.width());
     }
     case ItemSizeHintRole:
@@ -565,12 +557,6 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6);
     case AppItemIsDraggingRole:
         return indexDragging(index);
-    case CategoryEnterIconRole:
-        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
-            return DHiDPIHelper::loadNxPixmap(":/widgets/images/enter_details_normal-dark.svg");
-        } else {
-            return DHiDPIHelper::loadNxPixmap(":/widgets/images/enter_details_normal.svg");
-        }
     case DrawBackgroundRole:
         return m_drawBackground;
     case AppHideOpenRole:
@@ -608,9 +594,11 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppItemTitleRole:
         return itemInfo.m_iconKey.isEmpty();
     case DirNameRole: {
-        const ItemInfo info = m_appsManager->createOfCategory(itemInfo.m_categoryId);
+        const ItemInfo_v1 info = m_appsManager->createOfCategory(itemInfo.m_categoryId);
         return QVariant::fromValue(info);
     }
+    case AppItemStatusRole:
+        return itemInfo.m_status;
     default:
         break;
     }
@@ -676,7 +664,7 @@ bool AppsListModel::indexDragging(const QModelIndex &index) const
  * @brief AppsListModel::itemDataChanged item数据变化时触发模型内部信号
  * @param info 数据发生变化的item信息
  */
-void AppsListModel::itemDataChanged(const ItemInfo &info)
+void AppsListModel::itemDataChanged(const ItemInfo_v1 &info)
 {
     int i = 0;
     const int count = rowCount(QModelIndex());

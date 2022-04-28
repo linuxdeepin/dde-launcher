@@ -51,6 +51,7 @@ LauncherSys::LauncherSys(QObject *parent)
     , m_calcUtil(CalculateUtil::instance())
     , m_dockInter(new DBusDock(this))
     , m_clicked(false)
+    , m_launcherPlugin(new LauncherPluginController(this))
 {
     m_regionMonitor->setCoordinateType(DRegionMonitor::Original);
     displayModeChanged();
@@ -60,6 +61,10 @@ LauncherSys::LauncherSys(QObject *parent)
 
     m_ignoreRepeatVisibleChangeTimer->setInterval(200);
     m_ignoreRepeatVisibleChangeTimer->setSingleShot(true);
+    m_autoExitTimer->start();
+
+    // 插件加载
+    m_launcherPlugin->startLoader();
 
     connect(m_dbusLauncherInter, &DBusLauncher::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
     connect(m_dbusLauncherInter, &DBusLauncher::DisplayModeChanged, this, &LauncherSys::onDisplayModeChanged, Qt::QueuedConnection);
@@ -68,7 +73,8 @@ LauncherSys::LauncherSys(QObject *parent)
     connect(IconCacheManager::instance(), &IconCacheManager::iconLoaded, this, &LauncherSys::aboutToShowLauncher, Qt::QueuedConnection);
     connect(IconCacheManager::instance(), &IconCacheManager::iconLoaded, this, &LauncherSys::updateLauncher);
 
-    m_autoExitTimer->start();
+    connect(m_fullLauncher, &FullScreenFrame::searchApp, m_launcherPlugin, &LauncherPluginController::onSearchedTextChanged, Qt::QueuedConnection);
+    connect(m_windowLauncher, &WindowedFrame::searchApp, m_launcherPlugin, &LauncherPluginController::onSearchedTextChanged, Qt::QueuedConnection);
 }
 
 LauncherSys::~LauncherSys()
@@ -276,10 +282,7 @@ void LauncherSys::preloadIcon()
 
     // 进程启动加载图标资源
     // 全屏分类/自由模式，搜索或者导航栏的高度无法确定，确定后开始加载所有应用资源
-    if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY)
-        emit m_appManager->loadCurRationIcon(GROUP_BY_CATEGORY);
-    else
-        emit m_appManager->loadCurRationIcon(ALL_APPS);
+    emit m_appManager->loadCurRationIcon(ALL_APPS);
 }
 
 void LauncherSys::show()

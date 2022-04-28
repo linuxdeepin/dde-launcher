@@ -35,7 +35,6 @@
 #include "dbusdock.h"
 
 #define ALL_APPS            0       // 全屏自由模式
-#define GROUP_BY_CATEGORY   1       // 全屏分类模式
 #define SEARCH              2       // 全屏搜索模式
 
 DCORE_USE_NAMESPACE
@@ -69,17 +68,10 @@ public:
     QSize appIconSize(int modelMode) const;
     QSize appIconSize() const;
     int displayMode() const;
-    void setDisplayMode(const int mode);
     int calculateIconSize(const int mode);
     QSize getSearchWidgetSizeHint() const { return  m_searchWidgetHintSize; }
     void setSearchWidgetSizeHint(const QSize &size) { m_searchWidgetHintSize = size; }
-    QSize getNavigationWidgetSizeHint() const { return m_navigationWidgetHintSize; }
-    void setNavigationWidgetSizeHint(const QSize &size) { m_navigationWidgetHintSize = size; }
 
-    bool increaseIconSize();
-    bool decreaseIconSize();
-    inline void increaseItemSize() { m_appItemSize += 16; }
-    inline void decreaseItemSize() { m_appItemSize -= 16; }
     const DSysInfo::DeepinType DeepinType = DSysInfo::deepinType();
     const bool IsServerSystem = (DSysInfo::DeepinServer == DeepinType);
 
@@ -126,7 +118,6 @@ private:
     QGSettings *m_launcherGsettings;
 
     QSize m_searchWidgetHintSize;
-    QSize m_navigationWidgetHintSize;
 };
 
 #endif // CALCULATE_UTIL_H

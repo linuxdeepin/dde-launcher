@@ -106,7 +106,7 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("GetCategoryInfo"), argumentList);
     }
 
-    inline QDBusPendingReply<ItemInfo> GetItemInfo(const QString &in0)
+    inline QDBusPendingReply<ItemInfo_v1> GetItemInfo(const QString &in0)
     {
         QList<QVariant> argumentList;
         argumentList << QVariant::fromValue(in0);
@@ -198,7 +198,7 @@ public Q_SLOTS: // METHODS
     }
 
    Q_SIGNALS: // SIGNALS
-       void ItemChanged(const QString &in0, ItemInfo in1, qlonglong in2);
+       void ItemChanged(const QString &in0, ItemInfo_v1 in1, qlonglong in2);
        void NewAppLaunched(const QString &in0);
        void NewAppMarkedAsLaunched(const QString &in0);
        void RemoveFromDesktopFailed(const QString &in0, const QString &in1);

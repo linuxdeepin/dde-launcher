@@ -29,6 +29,7 @@
 #include "dbustartmanager.h"
 #include "dbusdock.h"
 #include "calculate_util.h"
+#include "common.h"
 
 #include <DGuiApplicationHelper>
 
@@ -39,7 +40,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QScreen>
-#include <QDBusArgument>
 #include <QList>
 
 DGUI_USE_NAMESPACE
@@ -53,6 +53,7 @@ DGUI_USE_NAMESPACE
 class CalculateUtil;
 class QThread;
 class IconCacheManager;
+
 class AppsManager : public QObject
 {
     Q_OBJECT
@@ -62,7 +63,6 @@ public:
     void dragdropStashItem(const QModelIndex &index);
     void stashItem(const QModelIndex &index);
     void stashItem(const QString &appKey);
-    void removeItem(const QString &appKey);
     void abandonStashedItem(const QString &appKey);
     void restoreItem(const QString &appKey, const int pos = -1);
     int dockPosition() const;
@@ -82,7 +82,7 @@ public:
     void showSearchedData(const AppInfoList &list);
 
 signals:
-    void itemDataChanged(const ItemInfo &info) const;
+    void itemDataChanged(const ItemInfo_v1 &info) const;
     void dataChanged(const AppsListModel::AppCategory category) const;
     void layoutChanged(const AppsListModel::AppCategory category) const;
     void requestTips(const QString &tips) const;
@@ -100,7 +100,7 @@ signals:
 
     void startLoadIcon();
     void loadOtherIcon();
-    void loadItem(const ItemInfo &info, const QString &operationStr);
+    void loadItem(const ItemInfo_v1 &info, const QString &operationStr);
 
 public slots:
     void saveUsedSortedList();
@@ -131,12 +131,13 @@ public slots:
     const QString appName(const ItemInfo_v1 &info, const int size);
     int appNums(const AppsListModel::AppCategory &category) const;
 
-    void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
+    void handleItemChanged(const QString &operation, const ItemInfo_v1 &appInfo, qlonglong categoryNumber);
     static QHash<AppsListModel::AppCategory, ItemInfoList_v1> getAllAppInfo();
-    const ItemInfo createOfCategory(qlonglong category);
+    const ItemInfo_v1 createOfCategory(qlonglong category);
 
 private:
     explicit AppsManager(QObject *parent = nullptr);
+
 
     void appendSearchResult(const QString &appKey);
     void sortByPresetOrder(ItemInfoList_v1 &processList);
@@ -149,7 +150,6 @@ private:
     void updateUsedListInfo();
     void generateCategoryMap();
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
-    void refreshAppListIcon(DGuiApplicationHelper::ColorType themeType);
 
 private slots:
     void onIconThemeChanged();
@@ -181,15 +181,16 @@ private:
     DBusDock *m_dockInter;
 
     QString m_searchText;
-    QStringList m_newInstalledAppsList;                                     // 新安装应用列表
     ItemInfoList_v1 m_allAppInfoList;                                          // 所有app信息列表
+    QStringList m_newInstalledAppsList;                                     // 新安装应用列表
+
     ItemInfoList_v1 m_stashList;
-    ItemInfo m_unInstallItem = ItemInfo();
-    ItemInfo m_beDragedItem = ItemInfo();
+    ItemInfo_v1 m_unInstallItem;
+    ItemInfo_v1 m_beDragedItem;
 
     CalculateUtil *m_calUtil;
     QTimer *m_delayRefreshTimer;                                            // 延迟刷新应用列表定时器指针对象
-    QTimer *m_RefreshCalendarIconTimer;
+    QTimer *m_refreshCalendarIconTimer;
 
     QDate m_curDate;
     int m_lastShowDate;
@@ -206,7 +207,6 @@ private:
     static QSettings APP_CATEGORY_USED_SORTED_LIST;
     static QSettings APP_COMMON_USE_LIST;
     QStringList m_categoryTs;
-    QStringList m_categoryIcon;
     QGSettings *m_filterSetting;
 
     bool m_iconValid;                                                       // 获取图标状态标示

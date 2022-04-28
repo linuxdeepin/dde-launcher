@@ -29,10 +29,6 @@
 #include <QDesktopWidget>
 #include <QApplication>
 
-static const QString DisplayModeKey = "display-mode";
-static const QString DisplayModeFree = "free";
-static const QString DisplayModeCategory = "category";
-
 QPointer<CalculateUtil> CalculateUtil::INSTANCE = nullptr;
 
 CalculateUtil *CalculateUtil::instance()
@@ -49,16 +45,6 @@ qreal CalculateUtil::getCurRatio()
 }
 
 /**
- * @brief CalculateUtil::setDisplayMode 处理全屏自由模式和全屏分类模式切换
- * @param mode 分类模式
- */
-void CalculateUtil::setDisplayMode(const int mode)
-{
-    if (m_launcherGsettings)
-        m_launcherGsettings->set(DisplayModeKey, mode == ALL_APPS ? DisplayModeFree : DisplayModeCategory);
-}
-
-/**
  * @brief CalculateUtil::calculateIconSize 计算全屏两种模式下应用图标的实际大小
  * @param mode 全屏自由模式或者全屏分类模式的标识
  * @return 返回对应模式下应用的实际大小
@@ -69,7 +55,7 @@ int CalculateUtil::calculateIconSize(int mode)
     int topSpacing = 30;
     int leftSpacing = 0;
     int rightSpacing = 0;
-    int bottomSpacing = (mode == GROUP_BY_CATEGORY) ? getScreenSize().height() * 0.064815 : 20;
+    int bottomSpacing = 20;
 
     // 计算任务栏位置变化时全屏窗口上各控件的大小
     switch (m_dockInter->position()) {
@@ -203,23 +189,6 @@ QSize CalculateUtil::getAppBoxSize()
     return  QSize(width, height);
 }
 
-bool CalculateUtil::increaseIconSize()
-{
-    if (!m_launcherGsettings)
-        return false;
-
-    const double value = m_launcherGsettings->get("apps-icon-ratio").toDouble();
-    const double ratio = std::min(0.6, value + 0.1);
-
-    if (qFuzzyCompare(value, ratio))
-        return false;
-
-    m_launcherGsettings->set("apps-icon-ratio", ratio);
-    emit ratioChanged(ratio);
-
-    return true;
-}
-
 /**
  * @brief CalculateUtil::calendarSelectIcon
  * 根据系统时间设置日历app的月、周、日样式
@@ -266,23 +235,6 @@ QStringList CalculateUtil::calendarSelectIcon() const
     return iconList;
 }
 
-bool CalculateUtil::decreaseIconSize()
-{
-    if (!m_launcherGsettings)
-        return false;
-
-    const double value = m_launcherGsettings->get("apps-icon-ratio").toDouble();
-    const double ratio = std::max(0.2, value - 0.1);
-
-    if (qFuzzyCompare(value, ratio))
-        return false;
-
-    m_launcherGsettings->set("apps-icon-ratio", ratio);
-    emit ratioChanged(ratio);
-
-    return true;
-}
-
 /**
  * @brief CalculateUtil::displayMode 获取当前视图的展示模式
  * 两种模式: 全屏app自由模式、全屏app分类模式
@@ -292,12 +244,6 @@ int CalculateUtil::displayMode() const
 {
     if (!m_launcherGsettings)
         return ALL_APPS;
-
-    const QString displayMode = m_launcherGsettings->get(DisplayModeKey).toString();
-
-    if (displayMode == DisplayModeCategory) {
-        return GROUP_BY_CATEGORY;
-    }
 
     return ALL_APPS;
 }

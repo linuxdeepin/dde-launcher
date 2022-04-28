@@ -67,7 +67,7 @@ void AppItemDelegate::setDirModelIndex(QModelIndex dragIndex, QModelIndex dropIn
     m_dropIndex = dropIndex;
 }
 
-void AppItemDelegate::setItemList(const ItemInfoList &items)
+void AppItemDelegate::setItemList(const ItemInfoList_v1 &items)
 {
     m_itemList = items;
 }
@@ -81,10 +81,12 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setPen(Qt::white);
     painter->setBrush(QBrush(Qt::transparent));
 
-    const ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
+    const ItemInfo_v1 itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
     const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
     const bool itemIsDir = index.data(AppsListModel::ItemIsDirRole).toBool();
-    const ItemInfoList itemList = index.data(AppsListModel::DirItemInfoRole).value<ItemInfoList>();
+    const ItemInfoList_v1 itemList = index.data(AppsListModel::DirItemInfoRole).value<ItemInfoList_v1>();
+    const int itemStatus = index.data(AppsListModel::AppItemStatusRole).toInt();
+
     QList<QPixmap> pixmapList;
 
     const int fontPixelSize = index.data(AppsListModel::AppFontSizeRole).value<int>();
@@ -233,7 +235,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         buttonRect.setWidth(option.rect.width() / 2);
         buttonRect.setHeight(option.rect.height() * 0.15);
 
-        /*if (!itemIsDir && itemStatus == ItemInfo_v1::Busy) {
+        if (!itemIsDir && itemStatus == ItemInfo_v1::Busy) {
             painter->drawText(appNameRect, appNameResolved, appNameOption);
             QStyleOptionProgressBar progressBar;
             progressBar.text = QString::number(itemInfo.m_progressValue);
@@ -251,7 +253,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
             button.text = itemInfo.m_description;
             QApplication::style()->drawControl(QStyle::CE_ProgressBar, &progressBar, painter);
             QApplication::style()->drawControl(QStyle::CE_PushButton, &button, painter);
-        } else*/ {
+        } else {
             const ItemInfo info = index.data(AppsListModel::DirNameRole).value<ItemInfo>();
             painter->drawText(appNameRect, itemInfo.m_name, appNameOption);
         }

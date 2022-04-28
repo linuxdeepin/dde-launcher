@@ -91,6 +91,7 @@ public:
 
 signals:
     void visibleChanged(bool visible);
+    void searchApp(const QString &keyword = "");
 
 private:
     void initUi();
@@ -108,7 +109,6 @@ private:
 
     void uninstallApp(const QString &appKey) override;
     void uninstallApp(const QModelIndex &context);
-    void switchToCategory(const QModelIndex &index);
 
     QPainterPath getCornerPath(AnchoredCornor direction);
 
@@ -131,7 +131,6 @@ private slots:
     void initAnchoredCornor();
     void adjustPosition();
     void onToggleFullScreen();
-    void onSwitchBtnClicked();
     void onWMCompositeChanged();
     void searchText(const QString &text);
     void showTips(const QString &text);
@@ -168,7 +167,6 @@ private:
     MiniFrameRightBar *m_bottomBtn;
     AppGridView *m_commonUseView;
     AppGridView *m_allAppView;
-//    SearchModeWidget *m_searchModeWidget;
     QLabel *m_commonUseLabel;
     QLabel *m_allAppLabel;
     QLabel *m_tipsLabel;

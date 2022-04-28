@@ -14,7 +14,7 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent)
 bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     QModelIndex modelIndex = this->sourceModel()->index(sourceRow, 0, sourceParent);
-    const ItemInfo &info = modelIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
+    const ItemInfo_v1 &info = modelIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
 
     QString jianpinStr = m_languageSwitch->zhToJianPin(info.m_name);
     QString pinyinStr = m_languageSwitch->zhToPinYin(info.m_name);

@@ -32,13 +32,6 @@ class AppListArea : public QScrollArea
 
 public:
     explicit AppListArea(QWidget *parent = nullptr);
-
-signals:
-    void increaseIcon();
-    void decreaseIcon();
-
-protected:
-    void wheelEvent(QWheelEvent *e) override;
 };
 
 #endif // APPLISTAREA_H

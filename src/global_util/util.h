@@ -50,4 +50,3 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, 
 QIcon getIcon(const QString &name);
 QVariant getDConfigValue(const QString &key, const QVariant &defaultValue, const QString &configFileName = DLauncher::DEFAULT_META_CONFIG_NAME);
 #endif // UTIL_H
-

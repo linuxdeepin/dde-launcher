@@ -28,6 +28,7 @@
 #include <QScrollBar>
 #include <QHBoxLayout>
 #include <QPropertyAnimation>
+#include <QWheelEvent>
 
 #include "../widgets/applistarea.h"
 #include "appgridview.h"

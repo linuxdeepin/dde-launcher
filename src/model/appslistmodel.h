@@ -29,7 +29,7 @@
 
 class AppsManager;
 class CalculateUtil;
-class ItemInfo;
+class ItemInfo_v1;
 class QGSettings;
 class AppsListModel : public QAbstractListModel
 {
@@ -47,9 +47,7 @@ public:
         AppDialogIconRole,
         AppListIconRole,
         AppKeyRole,
-        AppIconKeyRole,
         AppDesktopRole,
-        AppCategoryRole,
         AppGroupRole,
         AppAutoStartRole,
         AppNewInstallRole,
@@ -60,15 +58,15 @@ public:
         AppEnableScalingRole,
         AppIconSizeRole,
         AppFontSizeRole,
-        AppItemTitleRole,
         AppItemIsDraggingRole,
         ItemIsDirRole,
         DirItemInfoRole,
         DirAppIconsRole,
         DirNameRole,
         AppDragIconRole,
+        AppItemTitleRole,
+        AppItemStatusRole,
         ItemRatio,
-        CategoryEnterIconRole,
         DrawBackgroundRole,
         AppHideOpenRole,
         AppHideSendToDesktopRole,
@@ -88,7 +86,6 @@ public:
         TitleMode,              // 标题模式
         LetterMode,             // 字母模式
         Search,                 // 本地搜索模式
-        Category,               // 分类模式
         Common,                 // 常用应用
         Dir,                    // 应用抽屉
         PluginSearch,           // 插件搜索
@@ -145,7 +142,7 @@ private:
     void dataChanged(const AppsListModel::AppCategory category);
     void layoutChanged(const AppsListModel::AppCategory category);
     bool indexDragging(const QModelIndex &index) const;
-    void itemDataChanged(const ItemInfo &info);
+    void itemDataChanged(const ItemInfo_v1 &info);
 //    bool itemIsRemovable(const QString &desktop) const;
 
 private:
@@ -153,7 +150,7 @@ private:
     QGSettings *m_actionSettings;
     CalculateUtil *m_calcUtil;
 
-    QList<ItemInfo> m_itemList;
+    QList<ItemInfo_v1> m_itemList;
 
     QStringList m_hideOpenPackages;
     QStringList m_hideSendToDesktopPackages;

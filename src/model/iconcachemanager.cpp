@@ -121,13 +121,6 @@ void IconCacheManager::loadWindowIcon()
  */
 void IconCacheManager::loadOtherIcon()
 {
-    // 小窗口模式分类图标
-    const ItemInfoList_v1 &categoryList = AppsManager::windowedCategoryList();
-    for (int i = 0; i < categoryList.size(); i++) {
-        const ItemInfo_v1 &info = categoryList.at(i);
-        createPixmap(info, DLauncher::APP_CATEGORY_ICON_SIZE);
-    }
-
     // 小窗口模式卸载,拖拽图标
     const ItemInfoList_v1 &itemList = AppsManager::windowedFrameItemInfoList();
     for (int i = 0; i < itemList.size(); i++) {
@@ -147,14 +140,6 @@ void IconCacheManager::loadItem(const ItemInfo_v1 &info, const QString &operatio
 
     // 全屏自由
     int appSize = CalculateUtil::instance()->calculateIconSize(ALL_APPS);
-    for (int i = 0; i < ratioList.size(); i++) {
-        double ratio = ratioList.at(i);
-        int iconWidth = (appSize * ratio);
-        createPixmap(info, iconWidth);
-    }
-
-    // 全屏分类
-    appSize = CalculateUtil::instance()->calculateIconSize(GROUP_BY_CATEGORY);
     for (int i = 0; i < ratioList.size(); i++) {
         double ratio = ratioList.at(i);
         int iconWidth = (appSize * ratio);
@@ -200,6 +185,7 @@ void IconCacheManager::loadFullWindowIcon()
     loadCurRatioIcon(ALL_APPS);
     loadOtherRatioIcon(ALL_APPS);
 }
+
 void IconCacheManager::insertCache(const QPair<QString, int> &tmpKey, const QPixmap &pix)
 {
     m_iconLock.lockForWrite();

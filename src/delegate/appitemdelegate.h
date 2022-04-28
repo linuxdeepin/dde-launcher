@@ -42,7 +42,7 @@ public:
     void setCurrentIndex(const QModelIndex &index);
     const QModelIndex &currentIndex() const {return CurrentIndex;}
     void setDirModelIndex(QModelIndex dragIndex, QModelIndex dropIndex);
-    void setItemList(const ItemInfoList &items);
+    void setItemList(const ItemInfoList_v1 &items);
     QRect appSourceRect(QRect rect, int index) const;
 
 signals:
@@ -65,7 +65,7 @@ private:
     static QModelIndex CurrentIndex;
     QModelIndex m_dragIndex;
     QModelIndex m_dropIndex;
-    ItemInfoList m_itemList;
+    ItemInfoList_v1 m_itemList;
 };
 
 #endif // APPITEMDELEGATE_H

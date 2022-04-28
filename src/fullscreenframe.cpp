@@ -25,19 +25,17 @@
 #include "constants.h"
 #include "xcb_misc.h"
 #include "sharedeventfilter.h"
-#include "constants.h"
 #include "iconcachemanager.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QClipboard>
 #include <QScreen>
 #include <QHBoxLayout>
-#include <QDebug>
 #include <QScrollBar>
 #include <QKeyEvent>
 #include <QProcess>
 #include <QScroller>
+#include <QDebug>
 
 #include <DWindowManagerHelper>
 #include <DDBusSender>
@@ -46,11 +44,6 @@
 #include <DPlatformWindowHandle>
 
 DGUI_USE_NAMESPACE
-
-static const QString WallpaperKey = "pictureUri";
-static const QString DisplayModeKey = "display-mode";
-static const QString DisplayModeFree = "free";
-static const QString DisplayModeCategory = "category";
 
 const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w)
 {
@@ -63,11 +56,6 @@ const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w)
     return offset;
 }
 
-/**
- * @brief FullScreenFrame::FullScreenFrame
- * 全屏模式下的界面类
- * @param parent
- */
 FullScreenFrame::FullScreenFrame(QWidget *parent)
     : BoxFrame(parent)
     , m_menuWorker(new MenuWorker(this))
@@ -75,7 +63,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent)
     , m_calcUtil(CalculateUtil::instance())
     , m_appsManager(AppsManager::instance())
     , m_delayHideTimer(new QTimer(this))
-    , m_clearCacheTimer(new QTimer(this))
     , m_searchWidget(new SearchWidget(this))
     , m_contentFrame(new QFrame(this))
     , m_appsIconBox(new DHBoxWidget(m_contentFrame))
@@ -91,12 +78,12 @@ FullScreenFrame::FullScreenFrame(QWidget *parent)
     , m_mousePressSeconds(0)
 //    , m_animationGroup(new ScrollParallelAnimationGroup(this))
     , m_mousePressState(false)
+    , m_dirWidget(new AppDirWidget(this))
+    , m_curScreen(m_appsManager->currentScreen())
     , m_bMousePress(false)
     , m_nMousePos(0)
     , m_scrollValue(0)
     , m_scrollStart(0)
-    , m_curScreen(m_appsManager->currentScreen())
-    , m_dirWidget(new AppDirWidget(this))
 {
     initAccessibleName();
     setFocusPolicy(Qt::NoFocus);
@@ -192,11 +179,13 @@ void FullScreenFrame::showTips(const QString &tips)
     m_tipsLabel->setText(tips);
     QFont font(m_tipsLabel->font());
     font.setPointSize(30);
-    QColor color(255, 255, 255, 0.5 * 255);
+    m_tipsLabel->setFont(font);
+
+    QColor color(Qt::white);
+    color.setAlpha(0.5 * 255);
     QPalette palette(m_tipsLabel->palette());
     palette.setColor(QPalette::WindowText, color);
     m_tipsLabel->setPalette(palette);
-    m_tipsLabel->setFont(font);
 
     // 根据文字内容的边界矩形设置label大小, 避免在葡萄牙语等语言下内容被截断而显示不全
     QFontMetricsF fontMetric(m_tipsLabel->font());
@@ -218,19 +207,10 @@ void FullScreenFrame::hideTips()
 
 void FullScreenFrame::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_Minus) {
-        if (!e->modifiers().testFlag(Qt::ControlModifier))
-            return;
-
-        e->accept();
-        if (m_calcUtil->decreaseIconSize())
-            emit m_appsManager->layoutChanged(AppsListModel::All);
-    } else if (e->key() == Qt::Key_Equal) {
+    if (e->key() == Qt::Key_Equal) {
         if (!e->modifiers().testFlag(Qt::ControlModifier))
             return;
         e->accept();
-        if (m_calcUtil->increaseIconSize())
-            emit m_appsManager->layoutChanged(AppsListModel::All);
     } else if (e->key() == Qt::Key_V &&
                e->modifiers().testFlag(Qt::ControlModifier)) {
         const QString &clipboardText = QApplication::clipboard()->text();
@@ -269,8 +249,6 @@ void FullScreenFrame::showEvent(QShowEvent *e)
         m_searchWidget->raise();
         emit visibleChanged(true);
     });
-
-    m_clearCacheTimer->stop();
 
     m_canResizeDockPosition = true;
 }
@@ -321,7 +299,6 @@ void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
 //    }
 
     m_mouseMovePos = e->pos();
-
     // 全屏模式下支持全屏范围滑动翻页
     mouseMoveDrag(e);
 }
@@ -339,10 +316,6 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
         hide();
     }
     m_mousePressState = false;
-
-    // 全屏分类模式才支持鼠标拖动触发分页的操作，鼠标小范围移动不触发分页
-    if ((m_calcUtil->displayMode() != ALL_APPS) || (abs(e->globalX() - m_startPoint.x()) < DLauncher::SLIDE_DIFF_THRESH))
-        return;
 
     // 全屏模式下支持全屏范围滑动翻页
     mouseReleaseDrag(e);
@@ -405,11 +378,8 @@ void FullScreenFrame::initUI()
     m_delayHideTimer->setInterval(500);
     m_delayHideTimer->setSingleShot(true);
 
-    m_clearCacheTimer->setSingleShot(true);
-    m_clearCacheTimer->setInterval(DLauncher::CLEAR_CACHE_TIMER * 1000);
-
-    QPalette palette;
-    QColor colorButton(255, 255, 255, 0.15 * 255);
+    QPalette palette = m_searchWidget->palette();
+    QColor colorButton(255, 255, 255, static_cast<int>(0.15 * 255));
     QColor colorText(255, 255, 255);
     palette.setColor(QPalette::Button, colorButton);
     palette.setColor(QPalette::Text, colorText);
@@ -481,17 +451,15 @@ void FullScreenFrame::initConnection()
 {
     connect(this, &BoxFrame::backgroundImageChanged, m_dirWidget, &AppDirWidget::updateBackgroundImage);
     connect(this, &FullScreenFrame::visibleChanged, this, &FullScreenFrame::onHideMenu);
-    connect(m_multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
-    connect(m_searchModeWidget, &SearchModeWidget::connectViewEvent, this , &FullScreenFrame::addViewEvent);
-    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
 
+    connect(m_multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
+    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
     connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hideLauncher, Qt::QueuedConnection);
 
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
 
-    connect(m_appsManager, &AppsManager::categoryListChanged, this, &FullScreenFrame::categoryListChanged);
     connect(m_appsManager, &AppsManager::requestTips, this, &FullScreenFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
     connect(m_appsManager, &AppsManager::IconSizeChanged, this, &FullScreenFrame::updateDockPosition);
@@ -688,13 +656,6 @@ void FullScreenFrame::regionMonitorPoint(const QPoint &point, int flag)
     }
 }
 
-/**
- * @brief FullScreenFrame::categoryListChanged 处理全屏分类模式下各个分类逻辑
- */
-void FullScreenFrame::categoryListChanged()
-{
-}
-
 void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &context)
 {
     qDebug() << "show menu" << pos << context << context.data(AppsListModel::AppNameRole).toString()
@@ -721,7 +682,7 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
     unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
     unInstallDialog.setWindowModality(Qt::WindowModal);
 
-    const ItemInfo info = context.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
+    const ItemInfo_v1 info = context.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
     const QString appKey = info.m_key;
     unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall %1 ?").arg(info.m_name)));
     QPixmap appIcon = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
@@ -768,10 +729,6 @@ void FullScreenFrame::onScreenInfoChange()
     connect(m_curScreen, &QScreen::orientationChanged, this, &FullScreenFrame::onScreenInfoChange);
 }
 
-/**
- * @brief FullScreenFrame::updateDisplayMode 处理全屏模式切换
- * @param mode 全屏自由模式或者全屏分类模式
- */
 void FullScreenFrame::updateDisplayMode(const int mode)
 {
     if (m_displayMode == mode)
@@ -801,9 +758,6 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     hideTips();
 }
 
-/**
- * @brief FullScreenFrame::updateDockPosition 更新任务栏在桌面上的位置
- */
 void FullScreenFrame::updateDockPosition()
 {
     const QRect dockGeometry = m_appsManager->dockGeometry();

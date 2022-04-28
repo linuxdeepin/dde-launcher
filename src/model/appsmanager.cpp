@@ -473,7 +473,7 @@ void AppsManager::saveUsedSortedList()
     QDataStream out(&writeBuf, QIODevice::WriteOnly);
     out << m_usedSortedList;
 
-    APP_USED_SORTED_LIST.setValue("list", writeBuf);
+    APP_USED_SORTED_LIST.setValue("lists", writeBuf);
 }
 
 /**  从常用列表中新增或者应用
@@ -528,7 +528,7 @@ void AppsManager::saveCommonUsedList(const QString appKey, bool state)
     QDataStream out(&writeBuf, QIODevice::WriteOnly);
     out << m_commonSortedList;
 
-    APP_COMMON_USE_LIST.setValue("list", writeBuf);
+    APP_COMMON_USE_LIST.setValue("lists", writeBuf);
 }
 
 void AppsManager::searchApp(const QString &keywords)
@@ -950,11 +950,20 @@ void AppsManager::refreshCategoryInfoList()
 
     QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
 
-    QByteArray usedBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
-    QDataStream in(&usedBuf, QIODevice::ReadOnly);
-    in >> m_usedSortedList;
+    // 兼容历史版本, 1050以前使用list, v23即以后使用lists作为键值
+    if (APP_USED_SORTED_LIST.contains("list")) {
+        ItemInfoList oldUsedSortedList;
+        QByteArray usedBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
+        QDataStream in(&usedBuf, QIODevice::ReadOnly);
+        in >> oldUsedSortedList;
+        m_usedSortedList = ItemInfo_v1::itemListToItem_v1List(oldUsedSortedList);
+    } else {
+        QByteArray usedBuf = APP_USED_SORTED_LIST.value("lists").toByteArray();
+        QDataStream in(&usedBuf, QIODevice::ReadOnly);
+        in >> m_usedSortedList;
+    }
 
-    QByteArray commonBuf = APP_COMMON_USE_LIST.value("list").toByteArray();
+    QByteArray commonBuf = APP_COMMON_USE_LIST.value("lists").toByteArray();
     QDataStream commonData(&commonBuf, QIODevice::ReadOnly);
     commonData >> m_commonSortedList;
 
@@ -971,19 +980,23 @@ void AppsManager::refreshCategoryInfoList()
     int startIndex = AppsListModel::Internet;
     int endIndex = AppsListModel::Others;
     for (; startIndex < endIndex; startIndex++) {
-        ItemInfoList_v1 ItemInfoList_v1;
+        ItemInfoList itemInfoList;
+        ItemInfoList_v1 itemInfoList_v1;
 
-        QByteArray categoryBuf = APP_CATEGORY_USED_SORTED_LIST.value(QString("%1").arg(startIndex)).toByteArray();
-        QDataStream categoryIn(&categoryBuf, QIODevice::ReadOnly);
-        categoryIn >> ItemInfoList_v1;
+        if (APP_CATEGORY_USED_SORTED_LIST.contains(QString("%1").arg(startIndex))) {
+            QByteArray categoryBuf = APP_CATEGORY_USED_SORTED_LIST.value(QString("%1").arg(startIndex)).toByteArray();
+            QDataStream categoryIn(&categoryBuf, QIODevice::ReadOnly);
+            categoryIn >> itemInfoList;
+            itemInfoList_v1 = ItemInfo_v1::itemListToItem_v1List(itemInfoList);
+        }
 
         // 当缓存数据与应用商店数据有差异时，以应用商店数据为准
-        foreach (auto info , ItemInfoList_v1) {
+        foreach (auto info , itemInfoList_v1) {
             int index = datas.indexOf(info);
             if (index != -1 && datas.at(index).category() != info.category())
-                ItemInfoList_v1.removeOne(info);
+                itemInfoList_v1.removeOne(info);
         }
-        m_appInfos.insert(AppsListModel::AppCategory(startIndex), ItemInfoList_v1);
+        m_appInfos.insert(AppsListModel::AppCategory(startIndex), itemInfoList_v1);
     }
 
     m_allAppInfoList.clear();
@@ -1010,7 +1023,7 @@ void AppsManager::refreshUsedInfoList()
     if (!m_usedSortedList.isEmpty())
         return;
 
-    QByteArray readBuffer = APP_USED_SORTED_LIST.value("list").toByteArray();
+    QByteArray readBuffer = APP_USED_SORTED_LIST.value("lists").toByteArray();
     QDataStream in(&readBuffer, QIODevice::ReadOnly);
     in >> m_usedSortedList;
 
@@ -1048,7 +1061,7 @@ void AppsManager::saveAppCategoryInfoList()
         QByteArray writeBuf;
         QDataStream out(&writeBuf, QIODevice::WriteOnly);
         out << categoryAppsIter.value();
-        APP_CATEGORY_USED_SORTED_LIST.setValue(QString("%1").arg(category), writeBuf);
+        APP_CATEGORY_USED_SORTED_LIST.setValue(QString("lists_%1").arg(category), writeBuf);
     }
 }
 

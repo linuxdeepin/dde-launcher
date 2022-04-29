@@ -767,11 +767,7 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
     // we filter some key events from LineEdit, to implements cursor move.
     if (o == m_searchWidget->edit()->lineEdit() && e->type() == QEvent::KeyPress) {
         QKeyEvent *keyPress = static_cast<QKeyEvent *>(e);
-        if (keyPress->key() == Qt::Key_Left || keyPress->key() == Qt::Key_Right) {
-            QKeyEvent *event = new QKeyEvent(keyPress->type(), keyPress->key(), keyPress->modifiers());
-            qApp->postEvent(this, event);
-            return true;
-        } else if (keyPress->key() == Qt::Key_Tab) {
+        if (keyPress->key() == Qt::Key_Tab) {
             m_focusIndex = SearchEdit;
             moveCurrentSelectApp(Qt::Key_Tab);
             return true;

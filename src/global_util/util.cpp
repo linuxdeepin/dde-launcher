@@ -363,6 +363,9 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, 
                 break;
         }
 
+        if (iconName.isEmpty())
+            continue;
+
         if (QFile::exists(iconName)) {
             if (iconName.endsWith(".svg"))
                 pixmap = loadSvg(iconName, qRound(iconSize * ratio));
@@ -374,8 +377,6 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, 
         }
 
         // 重新从主题中获取一次
-        // 如果此提交我们使用的qt版本已经包含，那就可以不需要reObtain的逻辑了
-        // https://codereview.qt-project.org/c/qt/qtbase/+/343396
         if (reObtain)
             icon = getIcon(iconName);
         else
@@ -390,6 +391,9 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, 
         if (!pixmap.isNull())
             break;
     } while (false);
+
+    if (pixmap.isNull())
+        return findIcon;
 
     pixmap = pixmap.scaled(QSize(iconSize, iconSize) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pixmap.setDevicePixelRatio(ratio);

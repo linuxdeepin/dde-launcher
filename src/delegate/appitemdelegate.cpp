@@ -228,7 +228,40 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     } else {
         painter->setPen(Qt::white);
         painter->setFont(font);
-        painter->drawText(appNameRect, itemInfo.m_name, appNameOption);
+
+        QRectF progressRect, buttonRect;
+        progressRect.setTop(appNameRect.bottom() + 5);
+        progressRect.setLeft(option.rect.left() + (option.rect.right() - option.rect.width() / 3) / 2);
+        progressRect.setWidth(option.rect.width() / 3);
+        progressRect.setHeight(option.rect.height() * 0.05);
+
+        buttonRect.setTop(progressRect.bottom() + 5);
+        buttonRect.setLeft(option.rect.left() + (option.rect.right() - option.rect.width() / 2) / 2);
+        buttonRect.setWidth(option.rect.width() / 2);
+        buttonRect.setHeight(option.rect.height() * 0.15);
+
+        /*if (!itemIsDir && itemStatus == ItemInfo_v1::Busy) {
+            painter->drawText(appNameRect, appNameResolved, appNameOption);
+            QStyleOptionProgressBar progressBar;
+            progressBar.text = QString::number(itemInfo.m_progressValue);
+            progressBar.minimum = 0;
+            progressBar.maximum = 100;
+            progressBar.progress = itemInfo.m_progressValue;
+            progressBar.invertedAppearance = true;
+            progressBar.orientation = Qt::Horizontal;
+            progressBar.textVisible = true;
+            progressBar.textAlignment = Qt::AlignHCenter;
+            progressBar.rect = progressRect.toRect();
+
+            QStyleOptionButton button;
+            button.rect = buttonRect.toRect();
+            button.text = itemInfo.m_description;
+            QApplication::style()->drawControl(QStyle::CE_ProgressBar, &progressBar, painter);
+            QApplication::style()->drawControl(QStyle::CE_PushButton, &button, painter);
+        } else*/ {
+            const ItemInfo info = index.data(AppsListModel::DirNameRole).value<ItemInfo>();
+            painter->drawText(appNameRect, itemInfo.m_name, appNameOption);
+        }
     }
 
     if (!itemIsDir)

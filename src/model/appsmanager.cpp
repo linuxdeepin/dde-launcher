@@ -821,7 +821,7 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
 {
     QPixmap pix;
     const int iconSize = perfectIconSize(size);
-    QPair<QString, int> tmpKey { cacheKey(info, CacheType::ImageType) , iconSize};
+    QPair<QString, int> tmpKey { cacheKey(info) , iconSize};
 
     // 开启子线程加载应用图标时
     if (m_iconCacheThread->isRunning()) {

@@ -628,7 +628,7 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
     int size = (pixmap.size() / qApp->devicePixelRatio()).width();
     ItemInfo item = context.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
 
-    QPair<QString, int> tmpKey { cacheKey(item, CacheType::ImageType), size};
+    QPair<QString, int> tmpKey { cacheKey(item), size};
 
     // 命令行安装应用后，卸载应用的确认弹框偶现左上角图标呈齿轮的情况
     QPixmap appIcon;

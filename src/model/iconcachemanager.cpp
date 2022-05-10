@@ -35,7 +35,7 @@ IconCacheManager::IconCacheManager(QObject *parent)
 void IconCacheManager::createPixmap(const ItemInfo &itemInfo, int size)
 {
     const int iconSize = perfectIconSize(size);
-    QPair<QString, int> tmpKey { cacheKey(itemInfo, CacheType::ImageType), iconSize};
+    QPair<QString, int> tmpKey { cacheKey(itemInfo), iconSize};
     if (itemInfo.m_iconKey == "dde-calendar")
         m_calendarInfo = itemInfo;
 
@@ -198,12 +198,8 @@ void IconCacheManager::loadOtherRatioIcon(int mode)
 void IconCacheManager::loadFullWindowIcon()
 {
     loadCurRatioIcon(ALL_APPS);
-    loadCurRatioIcon(GROUP_BY_CATEGORY);
-
     loadOtherRatioIcon(ALL_APPS);
-    loadOtherRatioIcon(GROUP_BY_CATEGORY);
 }
-
 void IconCacheManager::insertCache(const QPair<QString, int> &tmpKey, const QPixmap &pix)
 {
     m_iconLock.lockForWrite();
@@ -216,7 +212,7 @@ void IconCacheManager::insertCache(const QPair<QString, int> &tmpKey, const QPix
 void IconCacheManager::removeItemFromCache(const ItemInfo &info)
 {
     for (int i = 0; i < sizeList.size(); i++) {
-        QPair<QString, int> pixKey { cacheKey(info, CacheType::ImageType), sizeList.at(i) };
+        QPair<QString, int> pixKey { cacheKey(info), sizeList.at(i) };
         if (existInCache(pixKey)) {
             m_iconLock.lockForWrite();
             m_iconCache.remove(pixKey);
@@ -242,7 +238,7 @@ void IconCacheManager::removeSmallWindowCache()
         for (int i = 0; i < itemList.size(); i++) {
             const ItemInfo &itemInfo = itemList.at(i);
             const int iconSize = perfectIconSize(pixSize);
-            QPair<QString, int> pixKey { cacheKey(itemInfo, CacheType::ImageType), iconSize };
+            QPair<QString, int> pixKey { cacheKey(itemInfo), iconSize };
 
             if (existInCache(pixKey)) {
                 m_iconLock.lockForWrite();
@@ -255,8 +251,6 @@ void IconCacheManager::removeSmallWindowCache()
 
     // 小窗口应用图标
     removeCache(AppsManager::windowedFrameItemInfoList(), DLauncher::APP_ITEM_ICON_SIZE);
-    // 小窗口分类图标
-    removeCache(AppsManager::AppsManager::windowedCategoryList(), DLauncher::APP_CATEGORY_ICON_SIZE);
     setIconLoadState(false);
 }
 

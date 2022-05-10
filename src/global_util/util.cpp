@@ -351,7 +351,7 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
 
     const qreal ratio = qApp->devicePixelRatio();
     const int iconSize = perfectIconSize(size);
-    QPair<QString, int> tmpKey { cacheKey(itemInfo, CacheType::ImageType) , iconSize};
+    QPair<QString, int> tmpKey { cacheKey(itemInfo) , iconSize};
 
     do {
         if (iconName.startsWith("data:image/")) {
@@ -438,9 +438,9 @@ QIcon getIcon(const QString &name)
     return QIcon::fromTheme(getIconList(name).first());
 }
 
-QString cacheKey(const ItemInfo &itemInfo, CacheType type)
+QString cacheKey(const ItemInfo &itemInfo)
 {
-    return itemInfo.m_name + itemInfo.m_iconKey + QString::number(type);
+    return itemInfo.m_name + itemInfo.m_iconKey;
 }
 
 /**

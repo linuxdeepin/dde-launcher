@@ -45,8 +45,8 @@ QString qtify_name(const char *name);
 QVariant SettingValue(const QString &schema_id, const QByteArray &path = QByteArray(), const QString &key = QString(), const QVariant &fallback = QVariant());
 bool createCalendarIcon(const QString &fileName);
 int perfectIconSize(const int size);
-QString cacheKey(const ItemInfo &itemInfo);
-bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, bool reObtain);
+QString cacheKey(const ItemInfo_v1 &itemInfo);
+bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, bool reObtain);
 QIcon getIcon(const QString &name);
 QVariant getDConfigValue(const QString &key, const QVariant &defaultValue, const QString &configFileName = DLauncher::DEFAULT_META_CONFIG_NAME);
 #endif // UTIL_H

@@ -479,7 +479,7 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
  */
 QVariant AppsListModel::data(const QModelIndex &index, int role) const
 {
-    ItemInfo itemInfo = ItemInfo();
+    ItemInfo_v1 itemInfo = ItemInfo_v1();
     int nSize = m_appsManager->appsInfoListSize(m_category);
     int nFixCount = m_calcUtil->appPageItemCount(m_category);
     int pageCount = qMin(nFixCount, nSize - nFixCount * m_pageIndex);
@@ -539,8 +539,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIsEnableScaling(itemInfo.m_key);
     case AppNewInstallRole: {
         if (m_category == Category) {
-            const ItemInfoList &list = m_appsManager->appsInfoList(CateGoryMap[itemInfo.m_categoryId]);
-            for (const ItemInfo &in : list) {
+            const ItemInfoList_v1 &list = m_appsManager->appsInfoList(CateGoryMap[itemInfo.m_categoryId]);
+            for (const ItemInfo_v1 &in : list) {
                 if (m_appsManager->appIsNewInstall(in.m_key)) return true;
             }
         }

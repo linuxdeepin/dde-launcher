@@ -50,8 +50,8 @@ public:
 private:
     explicit IconCacheManager(QObject *parent = nullptr);
 
-    void createPixmap(const ItemInfo &itemInfo, int size);
-    void removeItemFromCache(const ItemInfo &info);
+    void createPixmap(const ItemInfo_v1 &itemInfo, int size);
+    void removeItemFromCache(const ItemInfo_v1 &info);
     double getCurRatio();
 
 signals:
@@ -65,7 +65,7 @@ public slots:
     void loadOtherRatioIcon(int mode);
     void loadFullWindowIcon();
 
-    void loadItem(const ItemInfo &info, const QString &operationStr);
+    void loadItem(const ItemInfo_v1 &info, const QString &operationStr);
     void removeSmallWindowCache();
     void updateCanlendarIcon();
 
@@ -76,7 +76,7 @@ private:
 
     DBusLauncher *m_launcherInter;
 
-    ItemInfo m_calendarInfo;
+    ItemInfo_v1 m_calendarInfo;
     bool m_iconValid;
     int m_tryNums;
     int m_tryCount;

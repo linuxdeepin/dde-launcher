@@ -79,6 +79,7 @@ public:
 
     void updateUsedSortData(QModelIndex dragIndex, QModelIndex dropIndex);
     QList<QPixmap> getDirAppIcon(QModelIndex modelIndex);
+    void showSearchedData(const AppInfoList &list);
 
 signals:
     void itemDataChanged(const ItemInfo &info) const;
@@ -107,18 +108,18 @@ public slots:
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
     void uninstallApp(const QString &appKey, const int displayMode = ALL_APPS);
-    const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
+    const ItemInfoList_v1 appsInfoList(const AppsListModel::AppCategory &category) const;
     static int appsInfoListSize(const AppsListModel::AppCategory &category);
-    static const ItemInfo appsInfoListIndex(const AppsListModel::AppCategory &category,const int index);
-    static const ItemInfo appsCategoryListIndex(const int index);
-    static const ItemInfo appsLetterListIndex(const int index);
-    static const ItemInfo appsCommonUseListIndex(const int index);
-    static const ItemInfoList &windowedCategoryList();
-    static const ItemInfoList &windowedFrameItemInfoList();
-    static const ItemInfoList &fullscreenItemInfoList();
-    static const ItemInfo dirAppInfo(int index);
+    static const ItemInfo_v1 appsInfoListIndex(const AppsListModel::AppCategory &category,const int index);
+    static const ItemInfo_v1 appsCategoryListIndex(const int index);
+    static const ItemInfo_v1 appsLetterListIndex(const int index);
+    static const ItemInfo_v1 appsCommonUseListIndex(const int index);
+    static const ItemInfoList_v1 &windowedCategoryList();
+    static const ItemInfoList_v1 &windowedFrameItemInfoList();
+    static const ItemInfoList_v1 &fullscreenItemInfoList();
+    static const ItemInfo_v1 dirAppInfo(int index);
     void setDirAppInfoList(const QModelIndex index);
-    static const QHash<AppsListModel::AppCategory, ItemInfoList> &categoryList();
+    static const QHash<AppsListModel::AppCategory, ItemInfoList_v1> &categoryList();
 
     bool appIsNewInstall(const QString &key);
     bool appIsAutoStart(const QString &desktop);
@@ -126,22 +127,22 @@ public slots:
     bool appIsOnDesktop(const QString &desktop);
     bool appIsProxy(const QString &desktop);
     bool appIsEnableScaling(const QString &desktop);
-    const QPixmap appIcon(const ItemInfo &info, const int size = 0);
-    const QString appName(const ItemInfo &info, const int size);
+    const QPixmap appIcon(const ItemInfo_v1 &info, const int size = 0);
+    const QString appName(const ItemInfo_v1 &info, const int size);
     int appNums(const AppsListModel::AppCategory &category) const;
 
     void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
-    static QHash<AppsListModel::AppCategory, ItemInfoList> getAllAppInfo();
+    static QHash<AppsListModel::AppCategory, ItemInfoList_v1> getAllAppInfo();
     const ItemInfo createOfCategory(qlonglong category);
 
 private:
     explicit AppsManager(QObject *parent = nullptr);
 
     void appendSearchResult(const QString &appKey);
-    void sortByPresetOrder(ItemInfoList &processList);
-    void sortByUseFrequence(ItemInfoList &processList);
-    void sortByLetterOrder(ItemInfoList &processList);
-    void sortByInstallTimeOrder(ItemInfoList &processList);
+    void sortByPresetOrder(ItemInfoList_v1 &processList);
+    void sortByUseFrequence(ItemInfoList_v1 &processList);
+    void sortByLetterOrder(ItemInfoList_v1 &processList);
+    void sortByInstallTimeOrder(ItemInfoList_v1 &processList);
     void refreshCategoryInfoList();
     void refreshUsedInfoList();
     void saveAppCategoryInfoList();
@@ -164,15 +165,15 @@ private slots:
 
 public:
     static QReadWriteLock m_appInfoLock;
-    static QHash<AppsListModel::AppCategory, ItemInfoList> m_appInfos;      // 应用分类容器
-    static ItemInfoList m_appCategoryInfos;                                 // 小窗口左侧带分类标题的应用列表
-    static ItemInfoList m_appLetterModeInfos;                               // 小窗口左侧字母排序模式列表
-    static ItemInfoList m_commonSortedList;                                 // 小窗口常用列表
-    static ItemInfoList m_categoryList;                                     // 小窗口应用分类目录列表
-    static ItemInfoList m_appSearchResultList;                              // 搜索结果列表
-    static ItemInfoList m_dirAppInfoList;                                   // 应用抽屉列表
-    static ItemInfoList m_usedSortedList;                                   // 全屏应用列表
-    static ItemInfoList m_userSortedList;
+    static QHash<AppsListModel::AppCategory, ItemInfoList_v1> m_appInfos;      // 应用分类容器
+    static ItemInfoList_v1 m_appCategoryInfos;                                 // 小窗口左侧带分类标题的应用列表
+    static ItemInfoList_v1 m_appLetterModeInfos;                               // 小窗口左侧字母排序模式列表
+    static ItemInfoList_v1 m_commonSortedList;                                 // 小窗口常用列表
+    static ItemInfoList_v1 m_categoryList;                                     // 小窗口应用分类目录列表
+    static ItemInfoList_v1 m_appSearchResultList;                              // 搜索结果列表
+    static ItemInfoList_v1 m_dirAppInfoList;                                   // 应用抽屉列表
+    static ItemInfoList_v1 m_usedSortedList;                                   // 全屏应用列表
+    static ItemInfoList_v1 m_userSortedList;
 
 private:
     DBusLauncher *m_launcherInter;
@@ -181,8 +182,8 @@ private:
 
     QString m_searchText;
     QStringList m_newInstalledAppsList;                                     // 新安装应用列表
-    ItemInfoList m_allAppInfoList;                                          // 所有app信息列表
-    ItemInfoList m_stashList;
+    ItemInfoList_v1 m_allAppInfoList;                                          // 所有app信息列表
+    ItemInfoList_v1 m_stashList;
     ItemInfo m_unInstallItem = ItemInfo();
     ItemInfo m_beDragedItem = ItemInfo();
 
@@ -195,7 +196,7 @@ private:
 
     int m_tryNums;                                                          // 获取应用图标时尝试的次数
     int m_tryCount;                                                         // 超过10次停止遍历
-    ItemInfo m_itemInfo;                                                    // 当前需要更新的应用信息
+    ItemInfo_v1 m_itemInfo;                                                    // 当前需要更新的应用信息
 
     static QPointer<AppsManager> INSTANCE;
     static QGSettings *m_launcherSettings;

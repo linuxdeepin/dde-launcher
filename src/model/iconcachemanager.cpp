@@ -32,7 +32,7 @@ IconCacheManager::IconCacheManager(QObject *parent)
     setIconLoadState(false);
 }
 
-void IconCacheManager::createPixmap(const ItemInfo &itemInfo, int size)
+void IconCacheManager::createPixmap(const ItemInfo_v1 &itemInfo, int size)
 {
     const int iconSize = perfectIconSize(size);
     QPair<QString, int> tmpKey { cacheKey(itemInfo), iconSize};
@@ -106,9 +106,9 @@ void IconCacheManager::loadWindowIcon()
     setIconLoadState(false);
 
     // 小窗口模式
-    const ItemInfoList &itemList = AppsManager::windowedFrameItemInfoList();
+    const ItemInfoList_v1 &itemList = AppsManager::windowedFrameItemInfoList();
     for (int i = 0; i < itemList.size(); i++) {
-        const ItemInfo &info = itemList.at(i);
+        const ItemInfo_v1 &info = itemList.at(i);
         createPixmap(info, DLauncher::APP_ITEM_ICON_SIZE);
     }
 
@@ -122,22 +122,22 @@ void IconCacheManager::loadWindowIcon()
 void IconCacheManager::loadOtherIcon()
 {
     // 小窗口模式分类图标
-    const ItemInfoList &categoryList = AppsManager::windowedCategoryList();
+    const ItemInfoList_v1 &categoryList = AppsManager::windowedCategoryList();
     for (int i = 0; i < categoryList.size(); i++) {
-        const ItemInfo &info = categoryList.at(i);
+        const ItemInfo_v1 &info = categoryList.at(i);
         createPixmap(info, DLauncher::APP_CATEGORY_ICON_SIZE);
     }
 
     // 小窗口模式卸载,拖拽图标
-    const ItemInfoList &itemList = AppsManager::windowedFrameItemInfoList();
+    const ItemInfoList_v1 &itemList = AppsManager::windowedFrameItemInfoList();
     for (int i = 0; i < itemList.size(); i++) {
-        const ItemInfo &info = itemList.at(i);
+        const ItemInfo_v1 &info = itemList.at(i);
         createPixmap(info, DLauncher::APP_DLG_ICON_SIZE);
         createPixmap(info, DLauncher::APP_DRAG_ICON_SIZE);
     }
 }
 
-void IconCacheManager::loadItem(const ItemInfo &info, const QString &operationStr)
+void IconCacheManager::loadItem(const ItemInfo_v1 &info, const QString &operationStr)
 {
     if (operationStr == "updated" || operationStr == "deleted")
         removeItemFromCache(info);
@@ -164,11 +164,11 @@ void IconCacheManager::loadItem(const ItemInfo &info, const QString &operationSt
 
 void IconCacheManager::loadCurRatioIcon(int mode)
 {
-    const ItemInfoList &itemList = AppsManager::fullscreenItemInfoList();
+    const ItemInfoList_v1 &itemList = AppsManager::fullscreenItemInfoList();
     int appSize = CalculateUtil::instance()->calculateIconSize(mode);
 
     for (int i = 0; i < itemList.size(); i++) {
-        const ItemInfo &info = itemList.at(i);
+        const ItemInfo_v1 &info = itemList.at(i);
         createPixmap(info, appSize * getCurRatio());
     }
 
@@ -179,14 +179,14 @@ void IconCacheManager::loadCurRatioIcon(int mode)
 void IconCacheManager::loadOtherRatioIcon(int mode)
 {
     int appSize = CalculateUtil::instance()->calculateIconSize(mode);
-    const ItemInfoList &itemList = AppsManager::fullscreenItemInfoList();
+    const ItemInfoList_v1 &itemList = AppsManager::fullscreenItemInfoList();
     for (int i = 0; i < ratioList.size(); i++) {
         double ratio = ratioList.at(i);
         if (qFuzzyCompare(getCurRatio(), ratio))
             continue;
 
         for (int j = 0; j < itemList.size(); j++) {
-            const ItemInfo &info = itemList.at(j);
+            const ItemInfo_v1 &info = itemList.at(j);
             createPixmap(info, appSize * ratio);
         }
     }
@@ -209,7 +209,7 @@ void IconCacheManager::insertCache(const QPair<QString, int> &tmpKey, const QPix
     m_iconLock.unlock();
 }
 
-void IconCacheManager::removeItemFromCache(const ItemInfo &info)
+void IconCacheManager::removeItemFromCache(const ItemInfo_v1 &info)
 {
     for (int i = 0; i < sizeList.size(); i++) {
         QPair<QString, int> pixKey { cacheKey(info), sizeList.at(i) };
@@ -234,9 +234,9 @@ void IconCacheManager::resetIconData()
 
 void IconCacheManager::removeSmallWindowCache()
 {
-    auto removeCache = [](const ItemInfoList &itemList, int pixSize) {
+    auto removeCache = [](const ItemInfoList_v1 &itemList, int pixSize) {
         for (int i = 0; i < itemList.size(); i++) {
-            const ItemInfo &itemInfo = itemList.at(i);
+            const ItemInfo_v1 &itemInfo = itemList.at(i);
             const int iconSize = perfectIconSize(pixSize);
             QPair<QString, int> pixKey { cacheKey(itemInfo), iconSize };
 

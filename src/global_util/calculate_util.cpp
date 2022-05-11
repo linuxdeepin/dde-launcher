@@ -29,8 +29,6 @@
 #include <QDesktopWidget>
 #include <QApplication>
 
-#include "constants.h"
-
 static const QString DisplayModeKey = "display-mode";
 static const QString DisplayModeFree = "free";
 static const QString DisplayModeCategory = "category";

@@ -34,6 +34,7 @@ endif ()
 set(BIN_NAME dde-launcher)
 
 #add_subdirectory("tests")
+add_subdirectory("plugins")
 
 # Sources files
 file(GLOB_RECURSE SRCS "src/*.h" "src/*.cpp")
@@ -51,8 +52,7 @@ if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 endif ()
 
-# dev
-file(GLOB INTERFACES "src/dbusinterface/*.h")
+
 
 # Find the library
 find_package(PkgConfig REQUIRED)
@@ -81,6 +81,8 @@ include_directories(
     src/view
     src/widgets
     src/worker
+    interfaces
+    plugins
 )
 
 aux_source_directory(src SRC)
@@ -96,6 +98,8 @@ aux_source_directory(src/view VIEW)
 aux_source_directory(src/widgets WIDGETS)
 aux_source_directory(src/worker WORKER)
 
+file(GLOB PLUGININTERFACES "interfaces/*.h")
+file(GLOB PLUGINCONTROLLER "controller/*.*")
 file(GLOB SRC_PATH
     ${SRC}
     ${BOXFRAME}
@@ -109,6 +113,8 @@ file(GLOB SRC_PATH
     ${VIEW}
     ${WIDGETS}
     ${WORKER}
+    ${PLUGININTERFACES}
+    ${PLUGINCONTROLLER}
 )
 
 add_executable(${BIN_NAME}  ${SRCS} ${SRC_PATH} ${INTERFACES} src/skin.qrc src/widgets/images.qrc)
@@ -155,6 +161,10 @@ install(FILES data/deepin-launcher.svg DESTINATION /usr/share/icons/hicolor/scal
 
 # bin
 install(TARGETS ${BIN_NAME} DESTINATION bin)
+
+#dev
+file(GLOB INTERFACE_FILES "interfaces/*.h")
+install(FILES ${INTERFACE_FILES} DESTINATION include/dde-launcher/interface)
 
 # config
 dconfig_meta_files(APPID dde-launcher FILES ./configs/com.deepin.dde.dde-launcher.dconfig.json)

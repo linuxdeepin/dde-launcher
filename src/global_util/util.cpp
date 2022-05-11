@@ -330,7 +330,7 @@ int perfectIconSize(const int size)
  * @param reObtain 是否重新获取标识
  * @return 返回是否获取到应用图标状态
  */
-bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, bool reObtain)
+bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, bool reObtain)
 {
     QString iconName;
     QIcon icon;
@@ -438,7 +438,7 @@ QIcon getIcon(const QString &name)
     return QIcon::fromTheme(getIconList(name).first());
 }
 
-QString cacheKey(const ItemInfo &itemInfo)
+QString cacheKey(const ItemInfo_v1 &itemInfo)
 {
     return itemInfo.m_name + itemInfo.m_iconKey;
 }

@@ -705,6 +705,9 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
     const int iconSize = perfectIconSize(size);
     QPair<QString, int> tmpKey { cacheKey(info) , iconSize };
 
+    // 当开启预加载时，所有资源只能从子线程中加载到缓存，缓存完毕才显示界面．
+    // 否则，就会存在多个线程同时访问QIcon资源的情况，会出现程序崩溃．这个是QIcon明确禁止的．
+
     // 开启子线程加载应用图标时
     if (m_iconCacheThread->isRunning()) {
         IconCacheManager::getPixFromCache(tmpKey, pix);

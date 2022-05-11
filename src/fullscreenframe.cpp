@@ -1580,7 +1580,6 @@ void FullScreenFrame::updateDockPosition()
     switch (m_appsManager->dockPosition()) {
     case DLauncher::DOCK_POS_TOP:
         m_topSpacing->setFixedHeight(30 + dockGeometry.height());
-        bottomMargin = m_topSpacing->height() + DLauncher::APPS_AREA_TOP_MARGIN;
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(0);
         break;

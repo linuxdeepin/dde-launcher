@@ -538,6 +538,7 @@ void WindowedFrame::uninstallApp(const QString &appKey)
 
 void WindowedFrame::uninstallApp(const QModelIndex &context)
 {
+    // TODO 这个变量后面如果图标不用线程加载的话应该也不需要了
     static bool UNINSTALL_DIALOG_SHOWN = false;
 
     if (UNINSTALL_DIALOG_SHOWN) {
@@ -593,7 +594,7 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
     });
 
     // hide frame
-    QTimer::singleShot(1, this, &WindowedFrame::hideLauncher);
+    QMetaObject::invokeMethod(this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
 
     unInstallDialog.exec();
     UNINSTALL_DIALOG_SHOWN = false;
@@ -804,11 +805,6 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
         QKeyEvent *keyPress = static_cast<QKeyEvent *>(event);
         if (keyPress && keyPress->key() == Qt::Key_Tab)
             m_searcherEdit->lineEdit()->clearFocus();
-    }
-
-    // 窗体变为不活动窗口的时候隐藏launcher
-    if (event->type() == QEvent::WindowDeactivate && watched == this && !QGuiApplication::platformName().startsWith("wayland", Qt::CaseInsensitive)) {
-        hideLauncher();
     }
 
     return QWidget::eventFilter(watched, event);

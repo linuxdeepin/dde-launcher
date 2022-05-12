@@ -9,8 +9,11 @@ SearchModeWidget::SearchModeWidget(QWidget *parent)
     , m_outsideView(new AppGridView(this))
     , m_nativeModel(new AppsListModel(AppsListModel::Search))
     , m_outsideModel(new AppsListModel(AppsListModel::PluginSearch))
+    , m_emptyIcon(new QLabel(this))
+    , m_emptyText(new QLabel(this))
     , m_nativeWidget(new QWidget(this))
     , m_outsideWidget(new QWidget(this))
+    , m_emptyWidget(new QWidget(this))
 {
     initAppView();
     initUi();
@@ -55,23 +58,39 @@ void SearchModeWidget::initUi()
     outsideHLayout->addSpacerItem(new QSpacerItem(5, 5, QSizePolicy::Preferred, QSizePolicy::Preferred));
     m_outsideWidget->setLayout(outsideHLayout);
 
+    // 搜索为空时
+    QVBoxLayout *emptyVLayout  = new QVBoxLayout;
+    emptyVLayout->setContentsMargins(QMargins(0, 0, 0, 0));
+    emptyVLayout->setSpacing(0);
+    emptyVLayout->addWidget(m_emptyIcon);
+    emptyVLayout->addWidget(m_emptyText);
+    m_emptyWidget->setLayout(emptyVLayout);
+
     QVBoxLayout *mainVLayout = new QVBoxLayout;
     mainVLayout->setContentsMargins(QMargins(10, 10 ,10, 0));
     mainVLayout->addWidget(m_nativeWidget);
     mainVLayout->addWidget(m_outsideWidget);
+    mainVLayout->addWidget(m_emptyWidget, 0, Qt::AlignCenter);
     mainVLayout->setStretch(0, 1);
     mainVLayout->setStretch(1, 1);
+    mainVLayout->setStretch(2, 2);
 
     setLayout(mainVLayout);
+
+    m_emptyWidget->setVisible(false);
 }
 
 void SearchModeWidget::initTitle()
 {
-    // TODO: 标题名称有插件提供
     m_nativeLabel->setText(tr("Native Result:"));
     m_nativeLabel->setAlignment(Qt::AlignHCenter);
     m_outsideLabel->setText(tr("Other Result:"));
     m_outsideLabel->setAlignment(Qt::AlignHCenter);
+
+    m_emptyText->setText(tr("No Search Result"));
+    QPalette pal = m_emptyText->palette();
+    pal.setColor(QPalette::WindowText, Qt::white);
+    m_emptyText->setPalette(pal);
 }
 
 void SearchModeWidget::initAppView()
@@ -84,8 +103,8 @@ void SearchModeWidget::initAppView()
     outsidePal.setColor(QPalette::WindowText,Qt::white);
     m_outsideLabel->setPalette(outsidePal);
 
-    m_nativeView->setViewType(AppGridView::SearchView);
-    m_outsideView->setViewType(AppGridView::SearchView);
+    m_nativeView->setViewType(AppGridView::PopupView);
+    m_outsideView->setViewType(AppGridView::PopupView);
 
     m_nativeView->setFlow(QListView::LeftToRight);
     m_outsideView->setFlow(QListView::LeftToRight);
@@ -111,8 +130,8 @@ void SearchModeWidget::setItemDelegate(AppItemDelegate *delegate)
 
 void SearchModeWidget::setSearchModel(QSortFilterProxyModel *model)
 {
-//    qInfo() << "rowCount:" << model->rowCount(QModelIndex());
     m_nativeView->setModel(model);
     m_nativeWidget->setVisible(model->rowCount(QModelIndex()) > 0);
     m_outsideWidget->setVisible(m_outsideModel->rowCount(QModelIndex()) > 0);
+    m_emptyWidget->setVisible(model->rowCount(QModelIndex()) <= 0);
 }

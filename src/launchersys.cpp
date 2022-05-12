@@ -271,8 +271,8 @@ void LauncherSys::aboutToShowLauncher()
 
 void LauncherSys::preloadIcon()
 {
-    qInfo() << "state:" << getDConfigValue("preload-apps-icon", true).toBool();
-    if (!getDConfigValue("preload-apps-icon", true).toBool())
+    qInfo() << "state:" << getDConfigValue("preload-apps-icon", false).toBool();
+    if (!getDConfigValue("preload-apps-icon", false).toBool())
         return;
 
     // 进程启动加载图标资源

@@ -126,7 +126,7 @@ AppsManager::AppsManager(QObject *parent) :
     m_updateCalendarTimer->start();
 
     // 启动应用图标和应用名称缓存线程,减少系统加载应用时的开销
-    if (getDConfigValue("preload-apps-icon", true).toBool()) {
+    if (getDConfigValue("preload-apps-icon", false).toBool()) {
         m_iconCacheManager->moveToThread(m_iconCacheThread);
         m_iconCacheThread->start();
     } else {
@@ -1127,6 +1127,7 @@ void AppsManager::generateCategoryMap()
     });
 
     // 获取小窗口应用分类数据.
+    m_appCategoryInfos.clear();
     for (int i = 0; i < m_categoryList.size(); i++) {
         // 获取实际的分类categoryId
         int categoryId = static_cast<int>(m_categoryList.at(i).m_categoryId + AppsListModel::Internet);

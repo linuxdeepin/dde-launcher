@@ -111,7 +111,7 @@ AppGridView::AppGridView(QWidget *parent)
     // 界面大小变化时，设置listview的边距以及间距
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
         setSpacing(m_calcUtil->appItemSpacing());
-        if (getViewType() != SearchView || m_calcUtil->fullscreen())
+        if (getViewType() != PopupView || m_calcUtil->fullscreen())
             setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), m_calcUtil->appMarginLeft(), 0);
         else
             setViewportMargins(0, m_calcUtil->appMarginTop(), 0, m_calcUtil->appMarginTop());
@@ -176,11 +176,13 @@ void AppGridView::dropEvent(QDropEvent *e)
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     if (!listModel)
         return;
-
+  
+    // TODO: 这个判断可以通过是否支持拖拽进行处理.
     if (m_calcUtil->fullscreen()) {
         QModelIndex dropIndex = indexAt(e->pos());
         QModelIndex dragIndex = indexAt(m_dragStartPos);
         if (dropIndex.isValid() && dragIndex.isValid() && dragIndex != dropIndex) {
+            listModel->setDragToDir(false);
             itemDelegate->setDirModelIndex(QModelIndex(), QModelIndex());
             listModel->updateModelData(dragIndex, dropIndex);
         }
@@ -224,7 +226,7 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
     if (e->buttons() == Qt::LeftButton && !m_lastFakeAni) {
         m_dragStartPos = e->pos();
 
-        // Todo: topLeft --> center();
+        // TODO: topLeft --> center();
         // 记录动画的终点位置
         setDropAndLastPos(appIconRect(indexAt(e->pos())).topLeft());
     }
@@ -281,20 +283,70 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
     AppItemDelegate *itemDelegate = qobject_cast<AppItemDelegate *>(this->itemDelegate());
     if (!itemDelegate)
         return;
-
+#if 0
     // 设置文件夹效果, 拖动的应用不是自身时, 设置模型中拖向文件夹的标识
     if (indexRect(dropIndex).contains(e->pos()) && dragIndex != dropIndex) {
+//        qInfo() << "enter the appitem...";
         listModel->setDragToDir(true);
         itemDelegate->setDirModelIndex(dragIndex, dropIndex);
+    } else {
+        listModel->setDragToDir(false);
+//        qInfo() << "leave the appitem...";
+        itemDelegate->setDirModelIndex(QModelIndex(), QModelIndex());
+    }
+    update();
+#endif
+
+    QPoint moveNext = e->pos() - m_dragStartPos;
+    const QRect curRect = indexRect(dropIndex);
+    bool isDiff = (dragIndex != dropIndex);
+    int eventXPos = e->pos().x();
+    int eventYPos = e->pos().y();
+
+    int rectCenterXPos = curRect.center().x();
+    int rectCenterYPos = curRect.center().y();
+    if (moveNext.x() > 0 || moveNext.y() < 0) {
+        // 向右拖动
+        if ((eventXPos >= rectCenterXPos && (eventXPos <= curRect.right())) && isDiff) {
+            // 触发文件夹特效
+//            qInfo() << "向右拖动, 过了一半与item接近重合但未超越";
+            listModel->setDragToDir(true);
+            itemDelegate->setDirModelIndex(dragIndex, dropIndex);
+        } else if (((eventYPos >= curRect.top()) && (eventYPos <= rectCenterYPos)) && isDiff) {
+//            qInfo() << ",向上拖动, 过了一半与item接近重合但未超越";
+            listModel->setDragToDir(true);
+            itemDelegate->setDirModelIndex(dragIndex, dropIndex);
+        } else {
+            // 释放前执行app交换动画
+            if (m_enableAnimation /*&& !curRect.contains(e->pos()) && !isDir && !listModel->getDragToDir()*/)
+                m_dropThresholdTimer->start();
+        }
+    } else if (moveNext.x() < 0 || moveNext.y() > 0) {
+        // 向左拖动
+        if ((eventXPos >= curRect.left()) && (eventXPos <= rectCenterXPos) && isDiff) {
+            // 触发文件夹特效
+//            qInfo() << "向左拖动, 过了一半与item接近重合但未超越";
+            listModel->setDragToDir(true);
+            itemDelegate->setDirModelIndex(dragIndex, dropIndex);
+        } else if ((eventYPos >= rectCenterYPos) && (eventYPos <= curRect.bottom()) && isDiff) {
+//            qInfo() << "向下拖动，过了一半与item接近重合但未超越";
+            listModel->setDragToDir(true);
+            itemDelegate->setDirModelIndex(dragIndex, dropIndex);
+        }
+        else {
+            // 释放前执行app交换动画
+            if (m_enableAnimation /*&& !curRect.contains(e->pos()) && !isDir && !listModel->getDragToDir()*/)
+                m_dropThresholdTimer->start();
+        }
     } else {
         listModel->setDragToDir(false);
         itemDelegate->setDirModelIndex(QModelIndex(), QModelIndex());
     }
     update();
 
-    // 释放前执行app交换动画
-    if (m_enableAnimation && !indexRect(dropIndex).contains(e->pos()) && !isDir && !listModel->getDragToDir())
-        m_dropThresholdTimer->start();
+//    // 释放前执行app交换动画
+//    if (m_enableAnimation /*&& !curRect.contains(e->pos()) && !isDir && !listModel->getDragToDir()*/)
+//        m_dropThresholdTimer->start();
 }
 
 void AppGridView::dragOut(int pos)
@@ -414,7 +466,7 @@ QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey
     QPixmap srcPix;
 
     if (appKey == "dde-calendar") {
-        const auto s = m_calcUtil->appIconSize();
+        const  auto  s = m_calcUtil->appIconSize();
         const double  iconZoom =  s.width() / 64.0;
         QStringList calIconList = m_calcUtil->calendarSelectIcon();
 
@@ -603,7 +655,7 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     posAni->setEasingCurve(QEasingCurve::Linear);
     posAni->setDuration(DLauncher::APP_DRAG_MININUM_TIME);
     posAni->setStartValue((QCursor::pos() - rectIcon.center()));
-    if (getViewType() != SearchView || m_calcUtil->fullscreen())
+    if (getViewType() != PopupView || m_calcUtil->fullscreen())
         posAni->setEndValue(mapToGlobal(m_dropPoint) + QPoint(m_calcUtil->appMarginLeft(), 0));
     else
         posAni->setEndValue(mapToGlobal(m_dropPoint));

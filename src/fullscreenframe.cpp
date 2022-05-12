@@ -106,7 +106,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent)
     , m_nMousePos(0)
     , m_scrollValue(0)
     , m_scrollStart(0)
-    , m_changePageDelayTime(nullptr)
     , m_curScreen(m_appsManager->currentScreen())
     , m_dirWidget(new AppDirWidget(this))
 {
@@ -139,17 +138,10 @@ FullScreenFrame::FullScreenFrame(QWidget *parent)
 
     initConnection();
     initUI();
-
-    if (!DGuiApplicationHelper::isSpecialEffectsEnvironment())
-        m_changePageDelayTime = new QTime();
 }
 
 FullScreenFrame::~FullScreenFrame()
 {
-    if (m_changePageDelayTime) {
-        delete m_changePageDelayTime;
-        m_changePageDelayTime = nullptr;
-    }
 }
 
 void FullScreenFrame::exit()
@@ -326,9 +318,6 @@ void FullScreenFrame::mousePressEvent(QMouseEvent *e)
 void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
 {
     if (!m_mousePressState || e->button() == Qt::RightButton)
-        return;
-
-    if (isScrolling())
         return;
 
     int categoryCount = m_appsManager->getVisibleCategoryCount();
@@ -1263,16 +1252,4 @@ void FullScreenFrame::searchTextChanged(const QString &keywords, bool enableUpda
 
     if (m_searchWidget->edit()->lineEdit()->text().isEmpty())
         m_searchWidget->edit()->lineEdit()->clearFocus();
-}
-
-bool FullScreenFrame::isScrolling()
-{
-    if (m_changePageDelayTime)
-        return m_changePageDelayTime->isValid() && m_changePageDelayTime->elapsed() < DLauncher::CHANGE_PAGE_DELAY_TIME;
-}
-
-void FullScreenFrame::doScrolling()
-{
-    if (m_changePageDelayTime)
-        m_changePageDelayTime->restart();
 }

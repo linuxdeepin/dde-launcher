@@ -39,8 +39,12 @@ private:
     AppsListModel *m_nativeModel;
     AppsListModel *m_outsideModel;
 
+    QLabel *m_emptyIcon;
+    QLabel *m_emptyText;
+
     QWidget *m_nativeWidget;
     QWidget *m_outsideWidget;
+    QWidget *m_emptyWidget;
 };
 
 

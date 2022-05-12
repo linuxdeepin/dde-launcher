@@ -53,8 +53,8 @@ class AppGridView : public QListView
 
 public:
     enum ViewType {
-        SearchView,
-        OtherView
+        PopupView, // 弹框视图
+        MainView,   // 主页面视图
     };
 
     explicit AppGridView(QWidget *parent = nullptr);
@@ -76,7 +76,7 @@ public:
     QRect appIconRect(const QModelIndex &index);
     const QRect indexRect(const QModelIndex &index) const;
 
-    void setViewType(ViewType type = OtherView);
+    void setViewType(ViewType type = MainView);
     ViewType getViewType() const;
 
 private:

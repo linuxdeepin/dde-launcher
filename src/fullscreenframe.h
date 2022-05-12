@@ -153,8 +153,6 @@ private slots:
 
 private:
     CategoryTitleWidget *categoryTitle(const AppsListModel::AppCategory category) const;
-    bool isScrolling();
-    void doScrolling();
 
 private:
     int m_displayMode;
@@ -216,7 +214,6 @@ private:
     int m_nMousePos;                                    // 鼠标按住的起始坐标
     int m_scrollValue;                                  // 滑动区域当前停留的数值
     int m_scrollStart;                                  // 鼠标按下时滑动区域停留的数值
-    QTime *m_changePageDelayTime;                       // 滚动延时，设定时间内只允许滚动一次
     const QScreen *m_curScreen;
     AppDirWidget *m_dirWidget;                         // 应用抽屉展开页面
 };

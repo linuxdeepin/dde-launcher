@@ -1011,13 +1011,11 @@ void WindowedFrame::searchText(const QString &text)
     if (text.isEmpty()) {
         freshUi(false);
         hideTips();
-        m_displayMode = Category;
     } else {
         freshUi(true);
         QRegExp regExp(text.trimmed(), Qt::CaseInsensitive);
         m_filterModel->setFilterRegExp(regExp);
         m_focusPos = Search;
-        m_displayMode = All;
     }
 }
 

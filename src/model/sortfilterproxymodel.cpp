@@ -18,7 +18,6 @@ bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &so
 
     QString jianpinStr = m_languageSwitch->zhToJianPin(info.m_name);
     QString pinyinStr = m_languageSwitch->zhToPinYin(info.m_name);
-
     QString searchedText = filterRegExp().pattern();
 
     return info.m_desktop.contains(searchedText, Qt::CaseInsensitive) ||

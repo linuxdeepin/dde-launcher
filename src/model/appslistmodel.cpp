@@ -352,7 +352,7 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
         return nSize;
     }
 
-    if (m_category == SearchFilter)
+    if (m_category == SearchFilter || m_category == Common)
         return nSize;
 
     if (m_category == AppsListModel::Search)

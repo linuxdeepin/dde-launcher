@@ -99,6 +99,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_allAppsModel(new AppsListModel(AppsListModel::All, this))
     , m_commonUseModel(new AppsListModel(AppsListModel::Common, this))
     , m_searchModel(new AppsListModel(AppsListModel::Search, this))
+    , m_filterModel(new SortFilterProxyModel(this))
     , m_bottomBtn(new MiniFrameRightBar(this))
     , m_commonUseView(new AppGridView(this))
     , m_allAppView(new AppGridView(this))
@@ -152,6 +153,11 @@ void WindowedFrame::initUi()
     m_commonUseView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_commonUseView->setDragEnabled(false);
     m_commonUseView->setDragDropMode(QAbstractItemView::NoDragDrop);
+
+    m_filterModel->setSourceModel(m_allAppsModel);
+    m_filterModel->setFilterRole(AppsListModel::AppRawItemInfoRole);
+    m_filterModel->setFilterKeyColumn(0);
+    m_filterModel->setSortCaseSensitivity(Qt::CaseInsensitive);
 
     m_allAppView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_allAppView->setModel(m_allAppsModel);
@@ -790,7 +796,6 @@ void WindowedFrame::showEvent(QShowEvent *e)
 
 void WindowedFrame::hideEvent(QHideEvent *e)
 {
-    m_appsModel->setDrawBackground(false);
     QWidget::hideEvent(e);
 
     QTimer::singleShot(1, this, [ = ] { emit visibleChanged(false); });
@@ -1009,8 +1014,9 @@ void WindowedFrame::searchText(const QString &text)
         m_displayMode = Category;
     } else {
         freshUi(true);
+        QRegExp regExp(text.trimmed(), Qt::CaseInsensitive);
+        m_filterModel->setFilterRegExp(regExp);
         m_focusPos = Search;
-        auto temp = text;
         m_displayMode = All;
     }
 }

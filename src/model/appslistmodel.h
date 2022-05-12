@@ -91,6 +91,7 @@ public:
         Common,                 // 常用应用
         Dir,                    // 应用抽屉
         PluginSearch,           // 插件搜索
+        SearchFilter,           // 搜索前的原始数据模式（sourceModel对应的模式）
 
         // apps category
         Internet,               // 网络模式
@@ -121,7 +122,7 @@ public:
     void removeItem();
     inline QModelIndex dragDropIndex() const {return m_dragDropIndex;}
 
-    int rowCount(const QModelIndex &parent) const;
+    int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
     const QModelIndex indexAt(const QString &appKey) const;
 
     void setDrawBackground(bool draw);

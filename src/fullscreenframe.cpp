@@ -100,7 +100,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent)
     , m_bottomSpacing(new QFrame(this))
     , m_focusIndex(0)
     , m_mousePressSeconds(0)
-    , m_animationGroup(new ScrollParallelAnimationGroup(this))
+//    , m_animationGroup(new ScrollParallelAnimationGroup(this))
     , m_mousePressState(false)
     , m_bMousePress(false)
     , m_nMousePos(0)
@@ -336,16 +336,16 @@ void FullScreenFrame::mouseMoveEvent(QMouseEvent *e)
     if (categoryCount <= 2)
         return;
 
-    qint64 mouse_release_time =  QDateTime::currentDateTime().toMSecsSinceEpoch();
+    qint64 mouseReleaseSeconds =  QDateTime::currentDateTime().toMSecsSinceEpoch();
+    int horizontalXOffset = e->pos().x() - m_mousePressPos.x();
 
-    int moved_diff = e->pos().x() - m_mousePressPos.x();
-
-    if (mouse_release_time - m_mousePressSeconds > DLauncher::MOUSE_PRESS_TIME_DIFF) {
-        if (moved_diff < 0)
-            m_animationGroup->setScrollType(Scroll_Next);
-        else
-            m_animationGroup->setScrollType(Scroll_Prev);
-    }
+// TODO: 优化点
+//    if (mouseReleaseSeconds - m_mousePressSeconds > DLauncher::MOUSE_PRESS_TIME_DIFF) {
+//        if (horizontalXOffset < 0)
+//            m_animationGroup->setScrollType(Scroll_Next);
+//        else
+//            m_animationGroup->setScrollType(Scroll_Prev);
+//    }
 
     m_mouseMovePos = e->pos();
 
@@ -378,15 +378,14 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
 void FullScreenFrame::wheelEvent(QWheelEvent *e)
 {
     if (m_displayMode == GROUP_BY_CATEGORY) {
-        if (isScrolling())
-            return;
-
-        static int  wheelTime = 0;
+        int pageStep = 200;
+        int value = m_appsScrollArea->horizontalScrollBar()->value();
         if (e->angleDelta().y() < 0 ||  e-> angleDelta().x() < 0)
-            wheelTime++;
+           m_appsScrollArea->horizontalScrollBar()->setValue(value + pageStep);
         else
-            wheelTime--;
+           m_appsScrollArea->horizontalScrollBar()->setValue(value - pageStep);
     }
+    QFrame::wheelEvent(e);
 }
 
 bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
@@ -443,6 +442,7 @@ QVariant FullScreenFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
 
 void FullScreenFrame::initUI()
 {
+    m_appsScrollArea->horizontalScrollBar()->setRange(0, 1920);
     m_dirWidget->setVisible(false);
 
     m_tipsLabel->setAlignment(Qt::AlignCenter);
@@ -473,12 +473,11 @@ void FullScreenFrame::initUI()
     m_appItemDelegate->installEventFilter(m_eventFilter);
     initAppView();
 
-
     // 自由排序模式，设置大小调整方式为固定方式
     // 启动时默认按屏幕大小设置自由排序widget的大小
     // 启动时全屏自由模式设置控件大小，解决模式切换界面抖动问题
     const int appsContentWidth = m_calcUtil->getScreenSize().width();
-    const int appsContentHeight = m_calcUtil->getScreenSize().height() - DLauncher::APPS_AREA_TOP_MARGIN - m_searchWidget->sizeHint().height();
+    const int appsContentHeight = m_calcUtil->getScreenSize().height() - DLauncher::APPS_AREA_TOP_MARGIN;
 
     m_appsIconBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_appsIconBox->layout()->setSpacing(0);
@@ -495,13 +494,15 @@ void FullScreenFrame::initUI()
     m_appsScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_appsScrollArea->setAutoFillBackground(false);
     m_appsScrollArea->setLineWidth(0);
+    m_appsScrollArea->horizontalScrollBar()->setRange(0, 1920);
+    m_appsScrollArea->horizontalScrollBar()->setPageStep(200);
 
     m_appItemWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_appItemWidget->setAttribute(Qt::WA_TranslucentBackground);
 
     // todo: 默认给出足够的空间，这里后面需要check下。
     m_appItemWidget->setLayout(m_appItemLayout);
-    m_appItemLayout->setContentsMargins(20, 20, 20, 20);
+    m_appItemLayout->setContentsMargins(20, 50, 20, 20);
 
     // 设置搜索控件大小
     QVBoxLayout *scrollVLayout = new QVBoxLayout;
@@ -510,7 +511,6 @@ void FullScreenFrame::initUI()
     scrollVLayout->setSpacing(0);
     scrollVLayout->addWidget(m_appsIconBox, 0, Qt::AlignCenter);
     scrollVLayout->addWidget(m_appsScrollArea, 0, Qt::AlignHCenter);
-//    scrollVLayout->addWidget(m_searchModeWidget, 0, Qt::AlignCenter);
 
     m_contentFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_contentFrame->setFrameStyle(QFrame::NoFrame);
@@ -538,6 +538,11 @@ void FullScreenFrame::initAppView()
     m_multiPagesView->setDataDelegate(m_appItemDelegate);
     m_multiPagesView->updatePageCount(AppsListModel::All);
     m_multiPagesView->installEventFilter(this);
+
+    m_filterModel->setSourceModel(m_allAppsModel);
+    m_filterModel->setFilterRole(AppsListModel::AppRawItemInfoRole);
+    m_filterModel->setFilterKeyColumn(0);
+    m_filterModel->setSortCaseSensitivity(Qt::CaseInsensitive);
 
     // 分类
     m_internetMultiPagesView->setDataDelegate(m_appItemDelegate);
@@ -925,7 +930,7 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
 void FullScreenFrame::refreshPageView(AppsListModel::AppCategory category)
 {
     if (AppsListModel::Search == category) {
-        m_multiPagesView->ShowPageView(AppsListModel::AppCategory(m_displayMode));
+        m_searchModeWidget->setSearchModel(m_filterModel);
     } else {
         m_multiPagesView->updatePageCount(category);
         m_multiPagesView->showCurrentPage(m_multiPagesView->currentPage());
@@ -987,6 +992,17 @@ void FullScreenFrame::updateDisplayMode(const int mode)
     } else if (m_displayMode == ALL_APPS) {
         // 隐藏分类模式显示
         m_appsScrollArea->setVisible(false);
+
+        // 隐藏搜索模式
+        m_searchModeWidget->setVisible(false);
+
+        // 再显示自由显示模式
+        m_appsIconBox->setVisible(true);
+
+        m_multiPagesView->setModel(AppsListModel::All);
+        CalculateUtil::instance()->calculateAppLayout(m_contentFrame->size(), ALL_APPS);
+        m_multiPagesView->updatePosition(m_displayMode);
+        layoutChanged();
     } else {
         // 隐藏自由模式显示
         m_appsIconBox->setVisible(false);
@@ -1236,10 +1252,14 @@ void FullScreenFrame::searchTextChanged(const QString &keywords, bool enableUpda
     if (!enableUpdateMode)
         return;
 
-    if (keywords.isEmpty())
+    if (keywords.isEmpty()) {
         updateDisplayMode(m_calcUtil->displayMode());
-    else
+    } else {
         updateDisplayMode(SEARCH);
+        QRegExp regExp(keywords.trimmed(), Qt::CaseInsensitive);
+        m_filterModel->setFilterRegExp(regExp);
+        m_searchModeWidget->setSearchModel(m_filterModel);
+    }
 
     if (m_searchWidget->edit()->lineEdit()->text().isEmpty())
         m_searchWidget->edit()->lineEdit()->clearFocus();
@@ -1249,13 +1269,10 @@ bool FullScreenFrame::isScrolling()
 {
     if (m_changePageDelayTime)
         return m_changePageDelayTime->isValid() && m_changePageDelayTime->elapsed() < DLauncher::CHANGE_PAGE_DELAY_TIME;
-
-    return m_animationGroup->state() == QPropertyAnimation::Running;
 }
 
 void FullScreenFrame::doScrolling()
 {
-    m_animationGroup->start();
     if (m_changePageDelayTime)
         m_changePageDelayTime->restart();
 }

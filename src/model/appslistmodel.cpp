@@ -348,9 +348,12 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
     int nPageCount = nSize - pageCount * m_pageIndex;
     nPageCount = nPageCount > 0 ? nPageCount : 0;
 
-    if(!m_calcUtil->fullscreen()){
+    if(!m_calcUtil->fullscreen()) {
         return nSize;
     }
+
+    if (m_category == SearchFilter)
+        return nSize;
 
     if (m_category == AppsListModel::Search)
         return nSize;

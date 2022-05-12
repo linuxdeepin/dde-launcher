@@ -76,7 +76,6 @@ AppsManager::AppsManager(QObject *parent) :
     m_startManagerInter(new DBusStartManager(this)),
     m_dockInter(new DBusDock(this)),
     m_calUtil(CalculateUtil::instance()),
-    m_searchTimer(new QTimer(this)),
     m_delayRefreshTimer(new QTimer(this)),
     m_RefreshCalendarIconTimer(new QTimer(this)),
     m_lastShowDate(0),
@@ -162,8 +161,6 @@ AppsManager::AppsManager(QObject *parent) :
     refreshAllList();
     refreshAppAutoStartCache();
 
-    m_searchTimer->setSingleShot(true);
-    m_searchTimer->setInterval(150);
     m_delayRefreshTimer->setSingleShot(true);
     m_delayRefreshTimer->setInterval(500);
 
@@ -182,7 +179,6 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &AppsManager::dockGeometryChanged, Qt::QueuedConnection);
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
-    connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
     connect(m_fsWatcher, &QFileSystemWatcher::directoryChanged, this, &AppsManager::updateTrashState, Qt::QueuedConnection);
 
     onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
@@ -523,7 +519,6 @@ void AppsManager::saveCommonUsedList(const QString appKey, bool state)
 
 void AppsManager::searchApp(const QString &keywords)
 {
-    m_searchTimer->start();
     m_searchText = keywords;
 }
 
@@ -561,9 +556,9 @@ void AppsManager::uninstallApp(const QString &appKey, const int displayMode)
     // 刷新各列表的分页信息
     emit dataChanged(AppsListModel::All);
 
-    // 重置下搜索结果,触发searchdone更新
-    if (displayMode != ALL_APPS)
-        m_searchTimer->start();
+//    // 重置下搜索结果,触发searchdone更新
+//    if (displayMode != ALL_APPS)
+//        m_searchTimer->start();
 }
 
 void AppsManager::markLaunched(QString appKey)
@@ -696,6 +691,7 @@ int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category)
     case AppsListModel::Category:   return m_categoryList.size();
     case AppsListModel::Common:     return m_commonSortedList.size();
     case AppsListModel::Dir:        return m_dirAppInfoList.size();
+    case AppsListModel::SearchFilter: return m_usedSortedList.size();
     default:;
     }
 
@@ -731,6 +727,8 @@ const ItemInfo AppsManager::appsInfoListIndex(const AppsListModel::AppCategory &
         return m_categoryList[index];
     case AppsListModel::Common:
         return m_commonSortedList[index];
+    case AppsListModel::SearchFilter:
+        return m_usedSortedList[index];
     default:;
     }
 
@@ -1186,19 +1184,6 @@ void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &d
 
         emit dataChanged(AppsListModel::All);
     }
-}
-
-/**
- * @brief AppsManager::onSearchTimeOut 搜索超时错误提示
- */
-void AppsManager::onSearchTimeOut()
-{
-    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(m_launcherInter->Search(m_searchText), this);
-    connect(watcher, &QDBusPendingCallWatcher::finished, this, [ = ](QDBusPendingCallWatcher * w) {
-        if (w->isError()) qDebug() << w->error();
-
-        w->deleteLater();
-    });
 }
 
 void AppsManager::onIconThemeChanged()

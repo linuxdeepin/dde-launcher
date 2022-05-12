@@ -100,7 +100,7 @@ int CalculateUtil::calculateIconSize(int mode)
         otherAreaSize = QSize(padding + leftSpacing + rightSpacing, DLauncher::APPS_AREA_TOP_MARGIN + bottomSpacing + topSpacing + getSearchWidgetSizeHint().height());
         containerSize = getScreenSize() - otherAreaSize;
     } else {
-        otherAreaSize = QSize(0, DLauncher::APPS_AREA_TOP_MARGIN + bottomSpacing + topSpacing + getSearchWidgetSizeHint().height() + getNavigationWidgetSizeHint().height() + 12);
+        otherAreaSize = QSize(0, DLauncher::APPS_AREA_TOP_MARGIN + bottomSpacing + topSpacing + getSearchWidgetSizeHint().height() + 12);
         containerSize = getScreenSize() -  otherAreaSize;
     }
 

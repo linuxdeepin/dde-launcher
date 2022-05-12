@@ -368,8 +368,13 @@ void MultiPagesView::setModel(AppsListModel::AppCategory category)
 void MultiPagesView::updatePosition(int mode)
 {
     // 更新全屏两种模式下界面布局的左右边距和间隔
+    int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
+
+    // 剩余的空间 = (itemSpacing * 7 * 2 * 1/2)
+//    int remainSpacing = m_calcUtil->appItemSpacing() * (14 / 2) / 2;
+
+    int remainSpacing = m_calcUtil->appItemSpacing() * 7 / 2;
     if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
-        int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
         m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
         m_viewBox->layout()->setSpacing(padding);
     } else {
@@ -380,7 +385,7 @@ void MultiPagesView::updatePosition(int mode)
     m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
     // 更新视图列表的大小
     if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
-        QSize tmpSize = size()- QSize(0, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
+        QSize tmpSize = size()- QSize(remainSpacing, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
         m_appListArea->setFixedSize(tmpSize);
         m_viewBox->setFixedSize(tmpSize);
 
@@ -388,7 +393,6 @@ void MultiPagesView::updatePosition(int mode)
             pView->setFixedSize(tmpSize);
     } else {
         QSize viewSize = calculateWidgetSize();
-
         // 翻页控件是独立的，不在scrollArea范围内
         m_appListArea->setFixedSize(viewSize);
         m_viewBox->setFixedSize(viewSize);
@@ -511,13 +515,13 @@ void MultiPagesView::paintEvent(QPaintEvent *e)
         return;
 
     QPainter painter(this);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    painter.setRenderHint(QPainter::Antialiasing, true);
     QPen pen;
     pen.setColor(QColor(50, 87, 254));
-    pen.setWidth(4);
+    pen.setWidth(2);
     painter.setPen(pen);
     painter.setBrush(Qt::transparent);
-    painter.drawRoundRect(this->rect(), 25, 25);
+    painter.drawRoundedRect(this->rect(), 40, 40);
 }
 
 void MultiPagesView::mousePress(QMouseEvent *e)
@@ -636,7 +640,6 @@ AppsListModel::AppCategory MultiPagesView::getCategory()
 QSize MultiPagesView::calculateWidgetSize()
 {
     const AppGridViewList &viewList = m_appGridViewList;
-    // 关键的 5 / 4
     QSize itemSize = CalculateUtil::instance()->appItemSize() * 5 / 4;
 
     int leftMargin = CalculateUtil::instance()->appMarginLeft();
@@ -646,9 +649,9 @@ QSize MultiPagesView::calculateWidgetSize()
     int itemWidth = itemSize.width();
     int itemHeight = itemSize.height();
     int viewWidth;
-    int viewHeight = itemHeight * 3 + topMargin * 1 + bottomMargin * 0 + spacing * 2;
+    int viewHeight = itemHeight * 3 /*+ topMargin * 1 + bottomMargin * 0*/ /*+ spacing * 2*/;
     if (viewList.size() > 1) {
-        viewWidth = itemWidth * 4 + leftMargin * 2 + spacing * 3;
+        viewWidth = itemWidth * 4/* + leftMargin * 2*/ /*+ spacing * 3*/;
     } else {
         AppGridView *view = viewList.at(0);
         AppsListModel *listModel = qobject_cast<AppsListModel *>(view->model());

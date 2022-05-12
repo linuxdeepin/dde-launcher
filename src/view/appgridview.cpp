@@ -111,7 +111,10 @@ AppGridView::AppGridView(QWidget *parent)
     // 界面大小变化时，设置listview的边距以及间距
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
         setSpacing(m_calcUtil->appItemSpacing());
-        setViewportMargins(0, m_calcUtil->appMarginTop(), 0, m_calcUtil->appMarginTop());
+        if (getViewType() != SearchView || m_calcUtil->fullscreen())
+            setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), m_calcUtil->appMarginLeft(), 0);
+        else
+            setViewportMargins(0, m_calcUtil->appMarginTop(), 0, m_calcUtil->appMarginTop());
     });
 
 #ifndef DISABLE_DRAG_ANIMATION
@@ -600,7 +603,10 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     posAni->setEasingCurve(QEasingCurve::Linear);
     posAni->setDuration(DLauncher::APP_DRAG_MININUM_TIME);
     posAni->setStartValue((QCursor::pos() - rectIcon.center()));
-    posAni->setEndValue(mapToGlobal(m_dropPoint) + QPoint(m_calcUtil->appMarginLeft(), 0));
+    if (getViewType() != SearchView || m_calcUtil->fullscreen())
+        posAni->setEndValue(mapToGlobal(m_dropPoint) + QPoint(m_calcUtil->appMarginLeft(), 0));
+    else
+        posAni->setEndValue(mapToGlobal(m_dropPoint));
 
     //不开启特效则不展示动画
     if (!DGuiApplicationHelper::isSpecialEffectsEnvironment()) {

@@ -23,7 +23,8 @@ public:
     void initConnection();
     void setItemDelegate(AppItemDelegate *delegate);
 
-    void refreshWidget();
+    void setSearchModel(QSortFilterProxyModel *model);
+//    void refreshWidget();
 
 signals:
     void connectViewEvent(AppGridView* pView);

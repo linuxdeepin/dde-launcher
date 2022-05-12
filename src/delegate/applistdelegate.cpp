@@ -79,15 +79,14 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const bool isDragItem = option.features & QStyleOptionViewItem::Alternate;
 
     QPixmap iconPixmap = index.data(AppsListModel::AppListIconRole).value<QPixmap>();
-
     ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
-    bool isCategoryItem = itemInfo.m_desktop.isEmpty();
+    bool isTitle = index.data(AppsListModel::AppItemTitleRole).toBool();
 
     painter->setPen(Qt::NoPen);
 
-    if (option.state.testFlag(QStyle::State_Selected) && !isCategoryItem) {
+    if (option.state.testFlag(QStyle::State_Selected) && !isTitle) {
         painter->setBrush(m_color);
-    } else if (isDragItem && !isCategoryItem) {
+    } else if (isDragItem && !isTitle) {
         painter->setBrush(QColor(255, 255, 255, 255 * 0.4));
         painter->setPen(QColor(0, 0, 0, 255 * 0.05));
     } else {
@@ -100,7 +99,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const int iconX = rect.x() + 20;
     const int iconY = qRound(rect.y() + (rect.height() - iconPixmap.height() / ratio) / 2);
 
-    if (!isCategoryItem)
+    if (!isTitle)
         painter->drawPixmap(iconX, iconY, iconPixmap);
 
     // draw icon if app is auto startup
@@ -109,7 +108,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     }
 
     QRect textRect = rect.marginsRemoved(QMargins(20, 1, 1, 1));
-    if (!isCategoryItem)
+    if (!isTitle)
         textRect = rect.marginsRemoved(QMargins(60, 1, 1, 1)); // 图标 + 间隔,再显示文字
 
     textRect.setWidth(qRound(textRect.width() - m_blueDotPixmap.width() / ratio - 60));
@@ -126,7 +125,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     static QPen pen = painter->pen();
     static QFont font = painter->font();
     painter->setPen(Qt::black);
-    if (isCategoryItem) {
+    if (isTitle) {
         painter->setFont(font);
     } else {
         painter->setFont(QFont(font.family(), 8));
@@ -135,7 +134,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, appName);
 
     // draw blue dot if needed
-    if (index.data(AppsListModel::AppNewInstallRole).toBool() && !isDragItem && itemInfo.m_desktop != "") {
+    if (index.data(AppsListModel::AppNewInstallRole).toBool() && !isDragItem && !isTitle) {
         const QPointF blueDotPos(rect.width() - m_blueDotPixmap.width() / ratio - 6,
                                  rect.y() + (+ rect.height() - m_blueDotPixmap.height() / ratio) / 2);
 

@@ -25,6 +25,7 @@
 #include "constants.h"
 #include "applistdelegate.h"
 #include "appslistmodel.h"
+#include "iteminfo.h"
 
 #include <QStyleOptionViewItem>
 #include <QPropertyAnimation>
@@ -146,13 +147,11 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
     if (e->buttons() != Qt::LeftButton)
         return;
 
-    // 如果是分类，禁止拖拽
-    AppsListModel::AppCategory isCategoryList = qobject_cast<AppsListModel*>(model())->category();
-    if (isCategoryList == AppsListModel::Category)
-        return;
+    // 列表标题不允许被拖拽
+    bool isTitle = index.data(AppsListModel::AppItemTitleRole).toBool();
 
-    if (qAbs(pos.x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
-        qAbs(pos.y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
+    if (!isTitle && (qAbs(pos.x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
+        qAbs(pos.y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD)) {
         return startDrag(indexAt(m_dragStartPos));
     }
 
@@ -210,9 +209,9 @@ void AppListView::mousePressEvent(QMouseEvent *e)
     if (!index.isValid())
         e->ignore();
 
-    const bool isCategoryList = qobject_cast<AppsListModel*>(model())->category() == AppsListModel::Category;
+    bool isTitle = index.data(AppsListModel::AppItemTitleRole).toBool();
 
-    if (e->button() == Qt::RightButton && !isCategoryList) {
+    if (e->button() == Qt::RightButton && !isTitle) {
         const QPoint rightClickPoint = mapToGlobal(e->pos());
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
 
@@ -220,15 +219,8 @@ void AppListView::mousePressEvent(QMouseEvent *e)
             emit popupMenuRequested(rightClickPoint, clickedIndex);
     }
 
-    if (e->button() == Qt::LeftButton) {
-        // 小窗口模式下，当列表处于分类模式时，禁止鼠标拖动
-        if (isCategoryList) {
-            QListView::mousePressEvent(e);
-            return;
-        } else {
-            m_dragStartRow = indexAt(e->pos()).row();
-        }
-    }
+    if (e->button() == Qt::LeftButton)
+        m_dragStartRow = indexAt(e->pos()).row();
 
     QListView::mousePressEvent(e);
 }

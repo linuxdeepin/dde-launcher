@@ -90,7 +90,7 @@ void SearchModeWidget::initAppView()
     m_nativeView->setFlow(QListView::LeftToRight);
     m_outsideView->setFlow(QListView::LeftToRight);
 
-    m_nativeView->setWrapping(false);
+    m_nativeView->setWrapping(true);
     m_outsideView->setWrapping(false);
 
     m_nativeView->setModel(m_nativeModel);
@@ -109,8 +109,10 @@ void SearchModeWidget::setItemDelegate(AppItemDelegate *delegate)
     m_outsideView->setItemDelegate(delegate);
 }
 
-void SearchModeWidget::refreshWidget()
+void SearchModeWidget::setSearchModel(QSortFilterProxyModel *model)
 {
-    m_nativeWidget->setVisible(m_nativeModel->rowCount(QModelIndex()) > 0);
+//    qInfo() << "rowCount:" << model->rowCount(QModelIndex());
+    m_nativeView->setModel(model);
+    m_nativeWidget->setVisible(model->rowCount(QModelIndex()) > 0);
     m_outsideWidget->setVisible(m_outsideModel->rowCount(QModelIndex()) > 0);
 }

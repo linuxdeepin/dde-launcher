@@ -33,6 +33,7 @@
 AppListArea::AppListArea(QWidget *parent)
     : QScrollArea(parent)
 {
+//    setStyleSheet("QFrame{background: red;}");
 }
 
 void AppListArea::wheelEvent(QWheelEvent *e)

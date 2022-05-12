@@ -146,7 +146,6 @@ private:
     void updateUsedListInfo();
     void generateCategoryMap();
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
-    void onSearchTimeOut();
     void refreshAppListIcon(DGuiApplicationHelper::ColorType themeType);
 
 private slots:
@@ -185,7 +184,6 @@ private:
     ItemInfo m_beDragedItem = ItemInfo();
 
     CalculateUtil *m_calUtil;
-    QTimer *m_searchTimer;
     QTimer *m_delayRefreshTimer;                                            // 延迟刷新应用列表定时器指针对象
     QTimer *m_RefreshCalendarIconTimer;
 

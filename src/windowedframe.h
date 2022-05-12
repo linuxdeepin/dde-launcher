@@ -39,6 +39,7 @@
 #include "miniframebutton.h"
 #include "appgridview.h"
 #include "searchmodewidget.h"
+#include "sortfilterproxymodel.h"
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
@@ -156,7 +157,8 @@ private:
     AppsListModel *m_appsModel;
     AppsListModel *m_allAppsModel;
     AppsListModel *m_commonUseModel;
-    AppsListModel *m_searchModel;
+    AppsListModel *m_searchModel;        // 搜索后的应用列表
+    SortFilterProxyModel *m_filterModel;
 
     QWidget *m_rightWidget;
     MiniFrameRightBar *m_bottomBtn;

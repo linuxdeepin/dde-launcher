@@ -45,6 +45,7 @@
 #include "appdirwidget.h"
 #include "maskqwidget.h"
 #include "searchmodewidget.h"
+#include "sortfilterproxymodel.h"
 
 #include <dboxwidget.h>
 
@@ -201,13 +202,13 @@ private:
     MultiPagesView *m_othersMultiPagesView;            // 全屏应用分类下其他分类控件
 
     SearchModeWidget *m_searchModeWidget;              // 搜索模式控件
-    MultiPagesView *m_searchPageView;
+    AppsListModel *m_allAppsModel;
+    SortFilterProxyModel *m_filterModel;
 
     QFrame *m_topSpacing;
     QFrame *m_bottomSpacing;
 
     QList<ScrollWidgetAgent *> m_widgetAgentList;
-    ScrollParallelAnimationGroup *m_animationGroup;
 
     bool m_canResizeDockPosition = false;               // 只有窗口在完全显示出来后，才允许自动调整各部件位置
 

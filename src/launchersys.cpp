@@ -271,6 +271,7 @@ void LauncherSys::aboutToShowLauncher()
 
 void LauncherSys::preloadIcon()
 {
+    qInfo() << "state:" << getDConfigValue("preload-apps-icon", true).toBool();
     if (!getDConfigValue("preload-apps-icon", true).toBool())
         return;
 

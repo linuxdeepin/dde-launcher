@@ -60,6 +60,8 @@
         <file>skin/images/new_install_indicator.svg</file>
         <file>skin/images/search-dark.svg</file>
         <file>skin/icons/category_hover_22pxnew.svg</file>
+        <file>language/jianpin.txt</file>
+        <file>language/pinyin.txt</file>
     </qresource>
     <qresource prefix="/icons">
         <file>skin/icons/category_active_16px.svg</file>

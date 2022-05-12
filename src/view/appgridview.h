@@ -53,7 +53,7 @@ class AppGridView : public QListView
 
 public:
     enum ViewType {
-        PopupView, // 弹框视图
+        PopupView,  // 弹框视图
         MainView,   // 主页面视图
     };
 

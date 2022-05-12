@@ -352,7 +352,7 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
         return nSize;
     }
 
-    if (m_category == SearchFilter || m_category == Common)
+    if (m_category == SearchFilter || m_category == Collect)
         return nSize;
 
     if (m_category == AppsListModel::Search)
@@ -490,10 +490,9 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
             itemInfo = m_appsManager->appsCategoryListIndex(index.row());
         else if (m_category == LetterMode) {
             itemInfo = m_appsManager->appsLetterListIndex(index.row());
-//            qInfo() << "itemInfo:" << itemInfo.m_desktop;
         } else if (m_category == All) {
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
-        } else if (m_category == Common) {
+        } else if (m_category == Collect) {
             itemInfo = m_appsManager->appsCommonUseListIndex(index.row());
         } else if (m_category == Search) {
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());

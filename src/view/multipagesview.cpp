@@ -167,6 +167,9 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             m_pageAppsModelList.push_back(pModel);
 
             AppGridView *pageView = new AppGridView(this);
+            if (m_category != AppsListModel::All)
+                pageView->setViewportMargins(QMargins(60, 0, 60, 0));
+
             pageView->setModel(pModel);
             pageView->setItemDelegate(m_delegate);
             pageView->setContainerBox(m_appListArea);
@@ -338,6 +341,7 @@ void MultiPagesView::setModel(AppsListModel::AppCategory category)
 void MultiPagesView::updatePosition(int mode)
 {
     // 更新全屏两种模式下界面布局的左右边距和间隔
+    // TODO: 左右间隔，现在是根据剩余控件进行计算得出的，待优化
     int remainSpacing = m_calcUtil->appItemSpacing() * 7 / 2;
     if (mode == AppsListModel::Dir) {
         m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
@@ -364,9 +368,6 @@ void MultiPagesView::updatePosition(int mode)
         for (auto pView : m_appGridViewList)
             pView->setFixedSize(tmpSize);
     } else {
-        m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
-        m_viewBox->layout()->setSpacing(0);
-
         QSize viewSize = calculateWidgetSize();
         // 翻页控件是独立的，不在scrollArea范围内
         m_appListArea->setFixedSize(viewSize);
@@ -375,6 +376,8 @@ void MultiPagesView::updatePosition(int mode)
             pView->setFixedSize(viewSize);
     }
 
+    m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
+    m_viewBox->layout()->setSpacing(0);
     m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
     showCurrentPage(0);
 }
@@ -404,7 +407,7 @@ void MultiPagesView::initUi()
 
 void MultiPagesView::showCurrentPage(int currentPage)
 {
-    m_pageIndex = currentPage > 0 ? (currentPage < m_pageCount ? currentPage : m_pageCount - 1) : 0;
+    m_pageIndex = ((currentPage > 0) ? (currentPage < m_pageCount ? currentPage : m_pageCount - 1) : 0);
     int endValue = ((m_pageIndex == 0) ? 0 : (m_appGridViewList[m_pageIndex]->x()));
     int startValue = m_appListArea->horizontalScrollBar()->value();
     m_appListArea->setProperty("curPage", m_pageIndex);

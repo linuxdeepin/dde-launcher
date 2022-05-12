@@ -97,7 +97,7 @@ private:
     void initUi();
     void initConnection();
     void setAccessibleName();
-    void freshUi(bool searchedState = false);
+    void setRightViewVisibleState(bool searched = false);
 
     void showLauncher() override;
     void hideLauncher() override;
@@ -159,15 +159,16 @@ private:
 
     AppsListModel *m_appsModel;          // 应用列表
     AppsListModel *m_allAppsModel;
-    AppsListModel *m_commonUseModel;
+    AppsListModel *m_collectionModel;
     AppsListModel *m_searchModel;        // 搜索后的应用列表
     SortFilterProxyModel *m_filterModel;
+    SearchModeWidget *m_searchWidget;
 
     QWidget *m_rightWidget;
     MiniFrameRightBar *m_bottomBtn;
-    AppGridView *m_commonUseView;
+    AppGridView *m_collectionView;
     AppGridView *m_allAppView;
-    QLabel *m_commonUseLabel;
+    QLabel *m_collectLabel;
     QLabel *m_allAppLabel;
     QLabel *m_tipsLabel;
     QTimer *m_delayHideTimer;

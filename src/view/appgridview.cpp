@@ -169,8 +169,7 @@ void AppGridView::dropEvent(QDropEvent *e)
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     if (!listModel)
         return;
-  
-    // TODO: 这个判断可以通过是否支持拖拽进行处理.
+
     if (m_calcUtil->fullscreen()) {
         QModelIndex dropIndex = indexAt(e->pos());
         QModelIndex dragIndex = indexAt(m_dragStartPos);
@@ -279,12 +278,10 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
 #if 0
     // 设置文件夹效果, 拖动的应用不是自身时, 设置模型中拖向文件夹的标识
     if (indexRect(dropIndex).contains(e->pos()) && dragIndex != dropIndex) {
-//        qInfo() << "enter the appitem...";
         listModel->setDragToDir(true);
         itemDelegate->setDirModelIndex(dragIndex, dropIndex);
     } else {
         listModel->setDragToDir(false);
-//        qInfo() << "leave the appitem...";
         itemDelegate->setDirModelIndex(QModelIndex(), QModelIndex());
     }
     update();
@@ -459,7 +456,7 @@ QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey
     QPixmap srcPix;
 
     if (appKey == "dde-calendar") {
-        const  auto  s = m_calcUtil->appIconSize();
+        const auto s = m_calcUtil->appIconSize();
         const double  iconZoom =  s.width() / 64.0;
         QStringList calIconList = m_calcUtil->calendarSelectIcon();
 

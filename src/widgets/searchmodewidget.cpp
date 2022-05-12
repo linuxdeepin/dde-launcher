@@ -14,6 +14,7 @@ SearchModeWidget::SearchModeWidget(QWidget *parent)
     , m_nativeWidget(new QWidget(this))
     , m_outsideWidget(new QWidget(this))
     , m_emptyWidget(new QWidget(this))
+    , m_launcherInter(new DBusLauncher(this))
 {
     initAppView();
     initUi();
@@ -27,12 +28,6 @@ SearchModeWidget::~SearchModeWidget()
 
 void SearchModeWidget::initUi()
 {
-    m_nativeView->setFixedSize(600, 400);
-    m_outsideView->setFixedSize(600, 400);
-
-//    m_nativeView->setStyleSheet("QListView{border: 1px solid red;}");
-//    m_outsideView->setStyleSheet("QListView{border: 1px solid red;}");
-
     QVBoxLayout *nativeVLayout = new QVBoxLayout;
     nativeVLayout->setContentsMargins(QMargins(0, 10, 0, 0));
     nativeVLayout->setSpacing(10);
@@ -43,11 +38,10 @@ void SearchModeWidget::initUi()
     nativeHLayout->setContentsMargins(QMargins(0, 0, 0, 0));
     nativeHLayout->setSpacing(0);
 
-    nativeHLayout->addSpacerItem(new QSpacerItem(5, 5, QSizePolicy::Expanding, QSizePolicy::Preferred));
+    addSpacerItem(nativeHLayout);
     nativeHLayout->addLayout(nativeVLayout);
     nativeHLayout->setStretch(1, 1);
-    nativeHLayout->addSpacerItem(new QSpacerItem(5, 5, QSizePolicy::Expanding, QSizePolicy::Expanding));
-    m_nativeWidget->setLayout(nativeHLayout);
+    addSpacerItem(nativeHLayout);
 
     QVBoxLayout *outsideVLayout = new QVBoxLayout;
     outsideVLayout->setContentsMargins(QMargins(0, 10, 0, 0));
@@ -59,10 +53,10 @@ void SearchModeWidget::initUi()
     outsideHLayout->setContentsMargins(QMargins(0, 0, 0, 0));
     outsideHLayout->setSpacing(0);
 
-    outsideHLayout->addSpacerItem(new QSpacerItem(5, 5, QSizePolicy::Preferred, QSizePolicy::Preferred));
+    addSpacerItem(outsideHLayout);
     outsideHLayout->addLayout(outsideVLayout);
-    outsideHLayout->addSpacerItem(new QSpacerItem(5, 5, QSizePolicy::Preferred, QSizePolicy::Preferred));
-    m_outsideWidget->setLayout(outsideHLayout);
+    outsideHLayout->setStretch(1, 1);
+    addSpacerItem(outsideHLayout);
 
     // 搜索为空时
     QVBoxLayout *emptyVLayout  = new QVBoxLayout;
@@ -70,6 +64,9 @@ void SearchModeWidget::initUi()
     emptyVLayout->setSpacing(0);
     emptyVLayout->addWidget(m_emptyIcon);
     emptyVLayout->addWidget(m_emptyText);
+
+    m_nativeWidget->setLayout(nativeHLayout);
+    m_outsideWidget->setLayout(outsideHLayout);
     m_emptyWidget->setLayout(emptyVLayout);
 
     QVBoxLayout *mainVLayout = new QVBoxLayout;
@@ -88,14 +85,14 @@ void SearchModeWidget::initUi()
 
 void SearchModeWidget::initTitle()
 {
-    m_nativeLabel->setText(tr("Native Result:"));
-    m_nativeLabel->setAlignment(Qt::AlignHCenter);
-    m_outsideLabel->setText(tr("Other Result:"));
-    m_outsideLabel->setAlignment(Qt::AlignHCenter);
+    QPalette pal = QPalette();
+    if (CalculateUtil::instance()->fullscreen())
+        pal.setColor(QPalette::WindowText, Qt::white);
+    else
+        pal.setColor(QPalette::WindowText, Qt::black);
 
-    m_emptyText->setText(tr("No Search Result"));
-    QPalette pal = m_emptyText->palette();
-    pal.setColor(QPalette::WindowText, Qt::white);
+    m_nativeLabel->setPalette(pal);
+    m_outsideLabel->setPalette(pal);
     m_emptyText->setPalette(pal);
 }
 
@@ -136,8 +133,42 @@ void SearchModeWidget::setItemDelegate(AppItemDelegate *delegate)
 
 void SearchModeWidget::setSearchModel(QSortFilterProxyModel *model)
 {
+    updateTitleContent();
+    updateTitlePos(m_launcherInter->fullscreen());
+
     m_nativeView->setModel(model);
     m_nativeWidget->setVisible(model->rowCount(QModelIndex()) > 0);
     m_outsideWidget->setVisible(m_outsideModel->rowCount(QModelIndex()) > 0);
     m_emptyWidget->setVisible(model->rowCount(QModelIndex()) <= 0);
+}
+
+void SearchModeWidget::updateTitleContent()
+{
+    m_nativeLabel->setText(tr("Your searched apps in local:"));
+
+    ItemInfoList_v1 list = AppsManager::instance()->appsInfoList(AppsListModel::PluginSearch);
+    ItemInfo_v1 info;
+    if (list.size() > 0)
+        info = list.at(0);
+
+    m_outsideLabel->setText(info.m_description);
+}
+
+void SearchModeWidget::updateTitlePos(bool alignCenter)
+{
+    if (alignCenter) {
+        m_nativeLabel->setAlignment(Qt::AlignCenter);
+        m_outsideLabel->setAlignment(Qt::AlignCenter);
+    } else {
+        m_nativeLabel->setAlignment(Qt::AlignLeft);
+        m_outsideLabel->setAlignment(Qt::AlignLeft);
+    }
+}
+
+void SearchModeWidget::addSpacerItem(QBoxLayout *layout)
+{
+    if (m_launcherInter->fullscreen())
+        layout->addSpacerItem(new QSpacerItem(300, 5, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    else
+        layout->addSpacerItem(new QSpacerItem(5, 5, QSizePolicy::Expanding, QSizePolicy::Expanding));
 }

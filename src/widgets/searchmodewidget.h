@@ -9,6 +9,8 @@
 #include "appitemdelegate.h"
 #include "multipagesview.h"
 
+#include "dbuslauncher.h"
+
 class SearchModeWidget : public QWidget
 {
     Q_OBJECT
@@ -24,7 +26,9 @@ public:
     void setItemDelegate(AppItemDelegate *delegate);
 
     void setSearchModel(QSortFilterProxyModel *model);
-//    void refreshWidget();
+    void updateTitleContent();
+    void updateTitlePos(bool alignCenter);
+    void addSpacerItem(QBoxLayout *layout = nullptr);
 
 signals:
     void connectViewEvent(AppGridView* pView);
@@ -45,6 +49,8 @@ private:
     QWidget *m_nativeWidget;
     QWidget *m_outsideWidget;
     QWidget *m_emptyWidget;
+
+    DBusLauncher *m_launcherInter;
 };
 
 

@@ -26,7 +26,6 @@
 #include "constants.h"
 #include "calculate_util.h"
 #include "iconcachemanager.h"
-#include "languagetranformation.h"
 
 #include <QDebug>
 #include <QX11Info>
@@ -47,6 +46,7 @@
 #include <qpa/qplatformtheme.h>
 #include <DHiDPIHelper>
 #include <DApplication>
+#include "dpinyin.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -67,7 +67,7 @@ QHash<AppsListModel::AppCategory, ItemInfoList_v1> AppsManager::m_appInfos;
 ItemInfoList_v1 AppsManager::m_appCategoryInfos;
 ItemInfoList_v1 AppsManager::m_appLetterModeInfos = ItemInfoList_v1();
 ItemInfoList_v1 AppsManager::m_usedSortedList = ItemInfoList_v1();
-ItemInfoList_v1 AppsManager::m_commonSortedList = ItemInfoList_v1();
+ItemInfoList_v1 AppsManager::m_collectSortedList = ItemInfoList_v1();
 ItemInfoList_v1 AppsManager::m_dirAppInfoList = ItemInfoList_v1();
 ItemInfoList_v1 AppsManager::m_appSearchResultList = ItemInfoList_v1();
 ItemInfoList_v1 AppsManager::m_categoryList = ItemInfoList_v1();
@@ -443,26 +443,26 @@ void AppsManager::saveCommonUsedList(const QString appKey, bool state)
             }
         }
 
-        const int index = m_commonSortedList.indexOf(info);
+        const int index = m_collectSortedList.indexOf(info);
         // add
         if (state) {
             if (index != -1) {
-                m_commonSortedList[index].updateInfo(info);
+                m_collectSortedList[index].updateInfo(info);
             } else {
-                m_commonSortedList.append(info);
+                m_collectSortedList.append(info);
             }
         } else {
             // del
             if (index != -1) {
-                m_commonSortedList.removeAt(index);
+                m_collectSortedList.removeAt(index);
             }
         }
     }
 
     // 排序并移除(界面上只显示8个常用应用，没有就不显示常用应用模块)
-    sortByUseFrequence(m_commonSortedList);
-    if (m_commonSortedList.size() > 8) {
-        ItemInfoList_v1 &tempList = m_commonSortedList;
+    sortByUseFrequence(m_collectSortedList);
+    if (m_collectSortedList.size() > 8) {
+        ItemInfoList_v1 &tempList = m_collectSortedList;
         for (int index = 8; index < tempList.size(); index++) {
             tempList.removeAt(index);
         }
@@ -470,7 +470,7 @@ void AppsManager::saveCommonUsedList(const QString appKey, bool state)
 
     QByteArray writeBuf;
     QDataStream out(&writeBuf, QIODevice::WriteOnly);
-    out << m_commonSortedList;
+    out << m_collectSortedList;
 
     APP_COMMON_USE_LIST.setValue("lists", writeBuf);
 }
@@ -611,6 +611,7 @@ const ItemInfoList_v1 AppsManager::appsInfoList(const AppsListModel::AppCategory
     case AppsListModel::All:
         return m_usedSortedList;
     case AppsListModel::Search:
+    case AppsListModel::PluginSearch:
         return m_appSearchResultList;
     default:
         break;
@@ -632,8 +633,8 @@ int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category)
         return m_usedSortedList.size();
     case AppsListModel::Search:
         return m_appSearchResultList.size();
-    case AppsListModel::Common:
-        return m_commonSortedList.size();
+    case AppsListModel::Collect:
+        return m_collectSortedList.size();
     case AppsListModel::Dir:
         return m_dirAppInfoList.size();
     case AppsListModel::SearchFilter:
@@ -660,15 +661,16 @@ const ItemInfo_v1 AppsManager::appsInfoListIndex(const AppsListModel::AppCategor
         Q_ASSERT(m_usedSortedList.size() > index);
         return m_usedSortedList[index];
     case AppsListModel::Search:
+    case AppsListModel::PluginSearch:
         Q_ASSERT(m_appSearchResultList.size() > index);
         return m_appSearchResultList[index];
-    case AppsListModel::Common:
-        Q_ASSERT(m_commonSortedList.size() > index);
-        return m_commonSortedList[index];
+    case AppsListModel::Collect:
+        Q_ASSERT(m_collectSortedList.size() > index);
+        return m_collectSortedList[index];
     case AppsListModel::SearchFilter:
         return m_usedSortedList[index];
-    case AppsListModel::PluginSearch:
-        return m_appSearchResultList[index];
+    case AppsListModel::Dir:
+        return m_dirAppInfoList[index];
     default:
         break;
     }
@@ -702,10 +704,10 @@ const ItemInfo_v1 AppsManager::appsLetterListIndex(const int index)
 
 const ItemInfo_v1 AppsManager::appsCommonUseListIndex(const int index)
 {
-    if (index > m_commonSortedList.size() - 1)
+    if (index > m_collectSortedList.size() - 1)
         return ItemInfo_v1();
 
-    return m_commonSortedList.at(index);
+    return m_collectSortedList.at(index);
 }
 
 const ItemInfoList_v1 &AppsManager::windowedFrameItemInfoList()
@@ -734,6 +736,7 @@ const ItemInfo_v1 AppsManager::dirAppInfo(int index)
 void AppsManager::setDirAppInfoList(const QModelIndex index)
 {
     m_dirAppInfoList = index.data(AppsListModel::DirItemInfoRole).value<ItemInfoList_v1>();
+    qInfo() << "m_dirAppInfoList size:" << m_dirAppInfoList.size();
     emit dataChanged(AppsListModel::All);
 }
 
@@ -864,7 +867,7 @@ void AppsManager::refreshCategoryInfoList()
 
     QByteArray commonBuf = APP_COMMON_USE_LIST.value("lists").toByteArray();
     QDataStream commonData(&commonBuf, QIODevice::ReadOnly);
-    commonData >> m_commonSortedList;
+    commonData >> m_collectSortedList;
 
     foreach(auto info , m_usedSortedList) {
         bool bContains = fuzzyMatching(filters, info.m_key);
@@ -1114,8 +1117,9 @@ void AppsManager::generateCategoryMap()
 
         for (int j = 0; j < letterSortList.size(); j++) {
             const ItemInfo_v1 info = letterSortList.at(j);
-            QString pinYinStr = LanguageTransformation::instance()->zhToPinYin(info.m_name);
-
+            // 同步接口，加延时等待处理
+            QString pinYinStr = Chinese2Pinyin(info.m_name);
+            QThread::usleep(10);
             QChar firstKey = pinYinStr.front();
             if (firstKey.isNumber()) {
                 if (lettergroupList.indexOf(titleInfo) == -1)
@@ -1135,10 +1139,10 @@ void AppsManager::generateCategoryMap()
 
     // 获取小窗口常用应用列表
     ItemInfoList_v1 tempData = m_allAppInfoList;
-    m_commonSortedList.clear();
-    m_commonSortedList.append(tempData);
+    m_collectSortedList.clear();
+    m_collectSortedList.append(tempData);
 
-    sortByUseFrequence(m_commonSortedList);
+    sortByUseFrequence(m_collectSortedList);
 
     // 更新各个分类下应用的数量
     emit categoryListChanged();

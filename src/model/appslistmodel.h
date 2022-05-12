@@ -86,7 +86,7 @@ public:
         TitleMode,              // 标题模式
         LetterMode,             // 字母模式
         Search,                 // 本地搜索模式
-        Common,                 // 常用应用
+        Collect,                // 收藏应用
         Dir,                    // 应用抽屉
         PluginSearch,           // 插件搜索
         SearchFilter,           // 搜索前的原始数据模式（sourceModel对应的模式）

@@ -76,7 +76,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent)
     , m_bottomSpacing(new QFrame(this))
     , m_focusIndex(0)
     , m_mousePressSeconds(0)
-//    , m_animationGroup(new ScrollParallelAnimationGroup(this))
     , m_mousePressState(false)
     , m_dirWidget(new AppDirWidget(this))
     , m_curScreen(m_appsManager->currentScreen())
@@ -226,9 +225,7 @@ void FullScreenFrame::keyPressEvent(QKeyEvent *e)
 
 void FullScreenFrame::showEvent(QShowEvent *e)
 {
-    // 显示后加载当前模式其他ratio的资源，预加载全屏另一种模式当前ratio的资源
     emit m_appsManager->loadCurRationIcon(ALL_APPS);
-    emit m_appsManager->loadOtherRatioIcon(ALL_APPS);
 
     m_delayHideTimer->stop();
     m_searchWidget->clearSearchContent();
@@ -453,6 +450,8 @@ void FullScreenFrame::initConnection()
     connect(this, &FullScreenFrame::visibleChanged, this, &FullScreenFrame::onHideMenu);
 
     connect(m_multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
+    connect(m_searchModeWidget, &SearchModeWidget::connectViewEvent, this , &FullScreenFrame::addViewEvent);
+
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
     connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hideLauncher, Qt::QueuedConnection);
@@ -899,10 +898,8 @@ void FullScreenFrame::mouseReleaseDrag(QMouseEvent *e)
 
 void FullScreenFrame::layoutChanged()
 {
-    // 全屏模式下给控件设置整个屏幕大小
     QSize boxSize = m_contentFrame->size() - QSize(0, DLauncher::APPS_AREA_TOP_MARGIN);
     if (m_displayMode == ALL_APPS) {
-        QSize boxSize = m_contentFrame->size() - QSize(0, DLauncher::APPS_AREA_TOP_MARGIN);
         m_appsIconBox->setFixedSize(boxSize);
         m_multiPagesView->setFixedSize(boxSize);
         m_multiPagesView->updatePosition(m_displayMode);
@@ -920,6 +917,8 @@ void FullScreenFrame::searchTextChanged(const QString &keywords, bool enableUpda
         updateDisplayMode(m_calcUtil->displayMode());
     } else {
         updateDisplayMode(SEARCH);
+
+        emit searchApp(keywords.trimmed());
         QRegExp regExp(keywords.trimmed(), Qt::CaseInsensitive);
         m_filterModel->setFilterRegExp(regExp);
         m_searchModeWidget->setSearchModel(m_filterModel);

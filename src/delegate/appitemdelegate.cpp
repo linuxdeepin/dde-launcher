@@ -218,11 +218,9 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     static QFont font = painter->font();
     if (!m_calcUtil->fullscreen()) {
         painter->setPen(Qt::black);
-        painter->setFont(QFont(font.family(), 8));
         painter->drawText(appNameRect, appNameResolved, appNameOption);
     } else {
         painter->setPen(Qt::white);
-        painter->setFont(font);
 
         QRectF progressRect, buttonRect;
         progressRect.setTop(appNameRect.bottom() + 5);

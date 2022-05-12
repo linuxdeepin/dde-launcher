@@ -86,11 +86,12 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_appsView(new AppListView(this))
     , m_appsModel(new AppsListModel(AppsListModel::TitleMode, this))
     , m_allAppsModel(new AppsListModel(AppsListModel::All, this))
-    , m_commonUseModel(new AppsListModel(AppsListModel::Common, this))
+    , m_collectionModel(new AppsListModel(AppsListModel::Collect, this))
     , m_searchModel(new AppsListModel(AppsListModel::Search, this))
     , m_filterModel(new SortFilterProxyModel(this))
+    , m_searchWidget(new SearchModeWidget(this))
     , m_bottomBtn(new MiniFrameRightBar(this))
-    , m_commonUseView(new AppGridView(this))
+    , m_collectionView(new AppGridView(this))
     , m_allAppView(new AppGridView(this))
     , m_tipsLabel(new QLabel(this))
     , m_delayHideTimer(new QTimer(this))
@@ -135,13 +136,13 @@ void WindowedFrame::initUi()
     m_appsView->setModel(m_appsModel);
     m_appsView->setItemDelegate(itemDelegate);
 
-    m_commonUseView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_commonUseView->setModel(m_commonUseModel);
-    m_commonUseView->setItemDelegate(appItemDelegate);
-    m_commonUseView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_commonUseView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_commonUseView->setDragEnabled(false);
-    m_commonUseView->setDragDropMode(QAbstractItemView::NoDragDrop);
+    m_collectionView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_collectionView->setModel(m_collectionModel);
+    m_collectionView->setItemDelegate(appItemDelegate);
+    m_collectionView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_collectionView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_collectionView->setDragEnabled(false);
+    m_collectionView->setDragDropMode(QAbstractItemView::NoDragDrop);
 
     m_filterModel->setSourceModel(m_allAppsModel);
     m_filterModel->setFilterRole(AppsListModel::AppRawItemInfoRole);
@@ -198,27 +199,28 @@ void WindowedFrame::initUi()
     rightHLayout->addWidget(m_searcherEdit);
     rightHLayout->addWidget(m_modeToggleBtn);
 
-    // 常用应用
+    // 收藏应用
     QVBoxLayout *commonUseVLayout = new QVBoxLayout;
     commonUseVLayout->setMargin(0);
     commonUseVLayout->setSpacing(0);
     commonUseVLayout->setContentsMargins(0, 0, 0, 0);
-    m_commonUseLabel = new QLabel(tr("common use app"), this);
-    commonUseVLayout->addWidget(m_commonUseLabel);
-    commonUseVLayout->addWidget(m_commonUseView);
+    m_collectLabel = new QLabel(tr("Collected Apps"), this);
+    commonUseVLayout->addWidget(m_collectLabel);
+    commonUseVLayout->addWidget(m_collectionView);
 
     // 所有应用
     QVBoxLayout *allAppVLayout = new QVBoxLayout;
     allAppVLayout->setMargin(0);
     allAppVLayout->setSpacing(0);
     allAppVLayout->setContentsMargins(0, 0, 0, 0);
-    m_allAppLabel = new QLabel(tr("all app"), this);
+    m_allAppLabel = new QLabel(tr("All Apps"), this);
     allAppVLayout->addWidget(m_allAppLabel);
     allAppVLayout->addWidget(m_allAppView);
 
     rightVLayout->addLayout(rightHLayout);
     rightVLayout->addLayout(commonUseVLayout);
     rightVLayout->addLayout(allAppVLayout);
+    rightVLayout->addWidget(m_searchWidget);
 
     mainHlayout->addLayout(leftVLayout);
     mainHlayout->addLayout(rightVLayout);
@@ -226,8 +228,7 @@ void WindowedFrame::initUi()
     mainHlayout->setStretch(1, 2);
     setLayout(mainHlayout);
 
-    // 隐藏搜索状态
-    freshUi(false);
+    setRightViewVisibleState(false);
 
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_InputMethodEnabled, true);
@@ -256,7 +257,7 @@ void WindowedFrame::initUi()
 void WindowedFrame::initConnection()
 {
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
-        m_commonUseView->setSpacing(m_calcUtil->appItemSpacing());
+        m_collectionView->setSpacing(m_calcUtil->appItemSpacing());
     });
 
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
@@ -297,14 +298,19 @@ void WindowedFrame::initConnection()
     connect(m_appsView, &QListView::entered, m_appsView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
     connect(m_appsView, &AppListView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
 
-    connect(m_commonUseView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
-    connect(m_commonUseView, &AppListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
-    connect(m_commonUseView, &AppListView::entered, m_commonUseView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
+    connect(m_collectionView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
+    connect(m_collectionView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
+    connect(m_collectionView, &AppGridView::entered, m_collectionView, &AppGridView::setCurrentIndex, Qt::QueuedConnection);
+    connect(m_collectionView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
 
     // 所有应用
-    connect(m_allAppView, &AppListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
-    connect(m_allAppView, &AppListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
-    connect(m_allAppView, &AppListView::entered, m_allAppView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
+    connect(m_allAppView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
+    connect(m_allAppView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
+    connect(m_allAppView, &AppGridView::entered, m_allAppView, &AppGridView::setCurrentIndex, Qt::QueuedConnection);
+    connect(m_allAppView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
+
+    // 搜索页面
+    connect(m_searchWidget, &SearchModeWidget::connectViewEvent, this , &WindowedFrame::addViewEvent);
 
     connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &WindowedFrame::hideTips);
@@ -323,6 +329,8 @@ void WindowedFrame::initConnection()
     connect(this, &WindowedFrame::visibleChanged, this, &WindowedFrame::onHideMenu);
 
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &WindowedFrame::resetWidgetStyle);
+
+    connect(m_bottomBtn, &MiniFrameRightBar::requestFrameHide, this, &WindowedFrame::hideLauncher);
 }
 
 void WindowedFrame::setAccessibleName()
@@ -333,30 +341,23 @@ void WindowedFrame::setAccessibleName()
     m_searcherEdit->setAccessibleName("WindowedSearcherEdit");
     m_tipsLabel->setAccessibleName("tipsLabel");
     m_allAppView->setAccessibleName("allAppView");
-    m_commonUseView->setAccessibleName("commonuUseView");
+    m_collectionView->setAccessibleName("collectView");
     m_appsView->setAccessibleName("appsView");
-//    m_searchModeWidget->setAccessibleName("searchModeWidget");
+    m_searchWidget->setAccessibleName("searchWidget");
 }
 
-/**
- * @brief WindowedFrame::freshUi
- * @param searchedState 搜索模式, true, 其他模式, false
- */
-void WindowedFrame::freshUi(bool searchedState)
+void WindowedFrame::setRightViewVisibleState(bool searched)
 {
-    m_commonUseView->setVisible(!searchedState);
-    m_commonUseLabel->setVisible(!searchedState);
-    m_allAppView->setVisible(!searchedState);
-    m_allAppLabel->setVisible(!searchedState);
-}
+    m_collectLabel->setVisible(!searched);
+    m_allAppLabel->setVisible(!searched);
+    m_collectionView->setVisible(!searched);
+    m_allAppView->setVisible(!searched);
 
-// TODO: 业务代码，后面优化
-//void WindowedFrame::freshUi()
-//{
-//    bool visible = (m_commonUseModel->rowCount(QModelIndex()) > 0);
-//    m_commonUseView->setVisible(visible);
-//    m_commonUseLabel->setVisible(visible);
-//}
+    // 搜索控件
+    m_searchWidget->setVisible(searched);
+
+    update();
+}
 
 void WindowedFrame::showLauncher()
 {
@@ -605,6 +606,7 @@ void WindowedFrame::uninstallApp(const QModelIndex &context)
 
     QPixmap pixmap = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
     int size = (pixmap.size() / qApp->devicePixelRatio()).width();
+
     QPair<QString, int> tmpKey { cacheKey(info), size};
 
     // 命令行安装应用后，卸载应用的确认弹框偶现左上角图标呈齿轮的情况
@@ -746,7 +748,7 @@ void WindowedFrame::showEvent(QShowEvent *e)
 
     QWidget::showEvent(e);
     m_calcUtil->calculateAppLayout(m_allAppView->size());
-    m_calcUtil->calculateAppLayout(m_commonUseView->size());
+    m_calcUtil->calculateAppLayout(m_collectionView->size());
 
     QTimer::singleShot(1, this, [this]() {
         raise();
@@ -943,21 +945,24 @@ void WindowedFrame::onWMCompositeChanged()
 void WindowedFrame::searchText(const QString &text)
 {
     if (text.isEmpty()) {
-        freshUi(false);
+        setRightViewVisibleState(false);
         hideTips();
     } else {
-        freshUi(true);
+        emit searchApp(text.trimmed());
+
+        setRightViewVisibleState(true);
         QRegExp regExp(text.trimmed(), Qt::CaseInsensitive);
         m_filterModel->setFilterRegExp(regExp);
+        m_searchWidget->setSearchModel(m_filterModel);
         m_focusPos = Search;
     }
 }
 
 void WindowedFrame::showTips(const QString &text)
 {
-//    const QPoint center = m_searchModeWidget->rect().center();
+    const QPoint center = m_searchWidget->rect().center();
     m_tipsLabel->setText(text);
-//    m_tipsLabel->move(center);
+    m_tipsLabel->move(center);
     m_tipsLabel->setVisible(true);
     m_tipsLabel->raise();
 }

@@ -1,13 +1,20 @@
 #include "appdirwidget.h"
 
-/**TODO: 后面提交更新
- * @brief AppDirWidget::AppDirWidget
- * @param parent
- */
+#include <QHBoxLayout>
+
+#include "calculate_util.h"
+#include "appsmanager.h"
+#include "constants.h"
+
 AppDirWidget::AppDirWidget(QWidget *parent)
     : QWidget (parent)
 {
     setWindowFlag(Qt::Popup);
+}
+
+AppDirWidget::~AppDirWidget()
+{
+
 }
 
 void AppDirWidget::showEvent(QShowEvent *event)

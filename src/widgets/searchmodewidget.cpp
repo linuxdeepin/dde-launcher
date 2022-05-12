@@ -34,9 +34,10 @@ void SearchModeWidget::initUi()
     nativeHLayout->setContentsMargins(QMargins(0, 0, 0, 0));
     nativeHLayout->setSpacing(0);
 
-    nativeHLayout->addSpacerItem(new QSpacerItem(510, 5, QSizePolicy::Fixed, QSizePolicy::Preferred));
+    nativeHLayout->addSpacerItem(new QSpacerItem(5, 5, QSizePolicy::Expanding, QSizePolicy::Preferred));
     nativeHLayout->addLayout(nativeVLayout);
-    nativeHLayout->addSpacerItem(new QSpacerItem(510, 5, QSizePolicy::Fixed, QSizePolicy::Expanding));
+    nativeHLayout->setStretch(1, 1);
+    nativeHLayout->addSpacerItem(new QSpacerItem(5, 5, QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_nativeWidget->setLayout(nativeHLayout);
 
     QVBoxLayout *outsideVLayout = new QVBoxLayout;
@@ -75,9 +76,13 @@ void SearchModeWidget::initTitle()
 
 void SearchModeWidget::initAppView()
 {
-    QPalette pal = m_nativeLabel->palette();
-    pal.setColor(QPalette::WindowText,Qt::white);
-    m_nativeLabel->setPalette(pal);
+    QPalette nativePal = m_nativeLabel->palette();
+    nativePal.setColor(QPalette::WindowText,Qt::white);
+    m_nativeLabel->setPalette(nativePal);
+
+    QPalette outsidePal = m_outsideLabel->palette();
+    outsidePal.setColor(QPalette::WindowText,Qt::white);
+    m_outsideLabel->setPalette(outsidePal);
 
     m_nativeView->setViewType(AppGridView::SearchView);
     m_outsideView->setViewType(AppGridView::SearchView);

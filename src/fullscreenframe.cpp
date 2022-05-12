@@ -774,6 +774,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     default:
         break;
     }
+
     // valid verify and UI adjustment.
     const QModelIndex selectedIndex = index.isValid() ? index : curModelIndex;
     m_appItemDelegate->setCurrentIndex(selectedIndex);

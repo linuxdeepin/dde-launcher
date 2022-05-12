@@ -88,6 +88,7 @@ void ItemInfo::updateInfo(const ItemInfo &info)
 
     m_name = info.m_name;
     m_iconKey = info.m_iconKey;
+    m_openCount = info.m_openCount;
 }
 
 QDebug operator<<(QDebug argument, const ItemInfo &info)

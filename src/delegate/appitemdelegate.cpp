@@ -178,7 +178,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
        pixmapList = index.data(AppsListModel::DirAppIconsRole).value<QList<QPixmap>>();
 
 #if 1
-    if (itemIsDir && !itemList.isEmpty()) {
+    if (itemIsDir && !itemList.isEmpty() && CalculateUtil::instance()->fullscreen()) {
         const int radius = 18;
         painter->setPen(Qt::transparent);
         painter->setBrush(QColor(93, 92, 90, 100));// 93, 92, 90, 150 // 69, 60, 33, 100

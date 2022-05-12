@@ -122,6 +122,11 @@ MultiPagesView::~MultiPagesView()
     }
 }
 
+void MultiPagesView::setTitle(const QString &str)
+{
+    m_titleLabel->setText(str);
+}
+
 /**
  * @brief MultiPagesView::updateGradient 切换分页时屏幕左右两边30pixel的过渡效果
  * @param pixmap 屏幕背景图片对象

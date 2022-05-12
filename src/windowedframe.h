@@ -38,6 +38,7 @@
 #include "global_util/calculate_util.h"
 #include "miniframebutton.h"
 #include "appgridview.h"
+#include "searchmodewidget.h"
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
@@ -139,6 +140,7 @@ private slots:
     void onScreenInfoChange();
     void updatePosition();
     void onHideMenu();
+    void addViewEvent(AppGridView *pView);
 
 private:
     DBusDock *m_dockInter;
@@ -160,7 +162,7 @@ private:
     MiniFrameRightBar *m_bottomBtn;
     AppGridView *m_commonUseView;
     AppGridView *m_allAppView;
-    AppGridView *m_searchedView;
+//    SearchModeWidget *m_searchModeWidget;
     QLabel *m_commonUseLabel;
     QLabel *m_allAppLabel;
     QLabel *m_tipsLabel;

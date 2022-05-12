@@ -81,7 +81,6 @@ public:
 
 private:
     void createMovingComponent();
-    FullScreenFrame *fullscreen();
 
 public slots:
     void setDragAnimationEnable() {m_enableAnimation = true;}

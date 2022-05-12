@@ -56,6 +56,7 @@ public:
     explicit MultiPagesView(AppsListModel::AppCategory categoryModel = AppsListModel::All, QWidget *parent = nullptr);
     ~MultiPagesView();
 
+    void setTitle(const QString &str);
     void updatePageCount(AppsListModel::AppCategory category = AppsListModel::All);
     void showCurrentPage(int currentPage);
     QModelIndex selectApp(const int key);

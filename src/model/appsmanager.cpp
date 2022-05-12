@@ -53,20 +53,18 @@ QPointer<AppsManager> AppsManager::INSTANCE = nullptr;
 
 QGSettings *AppsManager::m_launcherSettings = SettingsPtr("com.deepin.dde.launcher", "", nullptr);
 QSet<QString> AppsManager::APP_AUTOSTART_CACHE;
-QSettings AppsManager::APP_USER_SORTED_LIST("deepin", "dde-launcher-app-sorted-list", nullptr);
 QSettings AppsManager::APP_USED_SORTED_LIST("deepin", "dde-launcher-app-used-sorted-list");
 QSettings AppsManager::APP_CATEGORY_USED_SORTED_LIST("deepin","dde-launcher-app-category-used-sorted-list");
 QSettings AppsManager::APP_COMMON_USE_LIST("deepin", "dde-launcher-app-common-used-list");
 static constexpr int USER_SORT_UNIT_TIME = 3600; // 1 hours
-const QString TrashDir = QDir::homePath() + "/.local/share/Trash";
-const QString TrashDirFiles = TrashDir + "/files";
-const QDir::Filters ItemsShouldCount = QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot;
+const QString TRASH_DIR = QDir::homePath() + "/.local/share/Trash";
+const QString TRASH_PATH = TRASH_DIR + "/files";
+const QDir::Filters NAME_FILTERS = QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot;
 
 QReadWriteLock AppsManager::m_appInfoLock;
 QHash<AppsListModel::AppCategory, ItemInfoList> AppsManager::m_appInfos;
 ItemInfoList AppsManager::m_appCategoryInfos;
 ItemInfoList AppsManager::m_usedSortedList = QList<ItemInfo>();
-ItemInfoList AppsManager::m_userSortedList = QList<ItemInfo>();
 ItemInfoList AppsManager::m_commonSortedList = QList<ItemInfo>();
 ItemInfoList AppsManager::m_dirAppInfoList = QList<ItemInfo>();
 ItemInfoList AppsManager::m_appSearchResultList = QList<ItemInfo>();
@@ -185,7 +183,6 @@ AppsManager::AppsManager(QObject *parent) :
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_searchTimer, &QTimer::timeout, this, &AppsManager::onSearchTimeOut);
-    connect(m_launcherInter, &DBusLauncher::SearchDone, this, &AppsManager::searchDone);
     connect(m_fsWatcher, &QFileSystemWatcher::directoryChanged, this, &AppsManager::updateTrashState, Qt::QueuedConnection);
 
     onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
@@ -202,9 +199,10 @@ AppsManager::AppsManager(QObject *parent) :
  */
 void AppsManager::appendSearchResult(const QString &appKey)
 {
-    for (const ItemInfo &info : m_allAppInfoList)
+    for (const ItemInfo &info : m_allAppInfoList) {
         if (info.m_key == appKey)
             return m_appSearchResultList.append(info);
+    }
 }
 
 /**
@@ -255,13 +253,15 @@ void AppsManager::sortByPresetOrder(ItemInfoList &processList)
     });
 }
 
-void AppsManager::sortByUseCountOrder(ItemInfoList &processList)
+void AppsManager::sortByUseFrequence(ItemInfoList &processList)
 {
-    std::sort(processList.begin(), processList.end(), [](const ItemInfo & i1, const ItemInfo & i2) {
-        if (i1.m_openCount > i2.m_openCount)
-            return true;
-        else
-            return i1.m_installedTime > i2.m_installedTime;
+    std::sort(processList.begin(), processList.end(), [](const ItemInfo & info1, const ItemInfo & info2) {
+        // 当前系统时间-秒数
+        qint64 second = QDateTime::currentMSecsSinceEpoch() / 1000;
+        qreal average1 = (info1.m_openCount * 1.0 / ((second - info1.m_installedTime) / USER_SORT_UNIT_TIME));
+        qreal average2 = (info2.m_openCount * 1.0 / ((second - info2.m_installedTime) / USER_SORT_UNIT_TIME));
+
+        return average1 > average2;
     });
 }
 
@@ -316,8 +316,7 @@ void AppsManager::dragdropStashItem(const QModelIndex &index)
 
             generateCategoryMap();
             refreshUsedInfoList();
-            refreshUserInfoList();
-            refreshCategoryUsedInfoList();
+            saveAppCategoryInfoList();
             break;
         }
     }
@@ -343,8 +342,7 @@ void AppsManager::stashItem(const QString &appKey)
 
             generateCategoryMap();
             refreshUsedInfoList();
-            refreshUserInfoList();
-            refreshCategoryUsedInfoList();
+            saveAppCategoryInfoList();
             break;
         }
     }
@@ -362,13 +360,6 @@ void AppsManager::removeItem(const QString &appKey)
     for (int i = 0; i != m_stashList.size(); ++i) {
         if (m_stashList[i].m_key == appKey) {
             m_stashList.removeAt(i);
-            break;
-        }
-    }
-
-    for (int i = 0; i < m_userSortedList.size(); i++) {
-        if (m_userSortedList[i].m_key == appKey) {
-            m_userSortedList.removeAt(i);
             break;
         }
     }
@@ -431,7 +422,7 @@ void AppsManager::restoreItem(const QString &appKey, const int pos)
             m_stashList.removeAt(i);
 
             generateCategoryMap();
-            refreshCategoryUsedInfoList();
+            saveAppCategoryInfoList();
 
             return saveUsedSortedList();
         }
@@ -459,26 +450,13 @@ void AppsManager::refreshAllList()
 
     refreshCategoryInfoList();
     refreshUsedInfoList();
-    refreshCategoryUsedInfoList();
-    refreshUserInfoList();
+    saveAppCategoryInfoList();
 
     // 全屏分类模式/全屏自由模式都需要界面计算,小窗口直接加载
     if (!m_launcherInter->fullscreen())
         emit startLoadIcon();
 }
 
-void AppsManager::saveUserSortedList()
-{
-    // save cache
-    QByteArray writeBuf;
-    QDataStream out(&writeBuf, QIODevice::WriteOnly);
-    out << m_userSortedList;
-    APP_USER_SORTED_LIST.setValue("list", writeBuf);
-}
-
-/**
- * @brief AppsManager::saveUsedSortedList 保存应用使用排序(时间上的先后)列表
- */
 void AppsManager::saveUsedSortedList()
 {
     QByteArray writeBuf;
@@ -486,6 +464,61 @@ void AppsManager::saveUsedSortedList()
     out << m_usedSortedList;
 
     APP_USED_SORTED_LIST.setValue("list", writeBuf);
+}
+
+/**  从常用列表中新增或者应用
+ * @brief AppsManager::saveCommonUsedList
+ * @param appKey 应用所对应的二进制名称
+ * @param state true: 新增操作， false: 删除操作
+ */
+void AppsManager::saveCommonUsedList(const QString appKey, bool state)
+{
+    for (ItemInfo &info : m_usedSortedList) {
+        if (info.m_key != appKey)
+            continue;
+
+        const int idx = m_usedSortedList.indexOf(info);
+
+        if (idx != -1) {
+//            qInfo() << "openCount1: " << m_usedSortedList[idx].m_openCount;
+            m_usedSortedList[idx].m_openCount++;
+//            qInfo() << "openCount2: " << m_usedSortedList[idx].m_openCount;
+
+            if (m_usedSortedList[idx].m_firstRunTime == 0) {
+                m_usedSortedList[idx].m_firstRunTime = QDateTime::currentMSecsSinceEpoch() / 1000;
+            }
+        }
+
+        const int index = m_commonSortedList.indexOf(info);
+        // add
+        if (state) {
+            if (index != -1) {
+                m_commonSortedList[index].updateInfo(info);
+            } else {
+                m_commonSortedList.append(info);
+            }
+        } else {
+            // del
+            if (index != -1) {
+                m_commonSortedList.removeAt(index);
+            }
+        }
+    }
+
+    // 排序并移除(界面上只显示8个常用应用，没有就不显示常用应用模块)
+    sortByUseFrequence(m_commonSortedList);
+    if (m_commonSortedList.size() > 8) {
+        ItemInfoList &tempList = m_commonSortedList;
+        for (int index = 8; index < tempList.size(); index++) {
+            tempList.removeAt(index);
+        }
+    }
+
+    QByteArray writeBuf;
+    QDataStream out(&writeBuf, QIODevice::WriteOnly);
+    out << m_commonSortedList;
+
+    APP_COMMON_USE_LIST.setValue("list", writeBuf);
 }
 
 void AppsManager::searchApp(const QString &keywords)
@@ -500,23 +533,8 @@ void AppsManager::launchApp(const QModelIndex &index)
     QString appKey = index.data(AppsListModel::AppKeyRole).toString();
     markLaunched(appKey);
 
-    for (ItemInfo &info : m_userSortedList) {
-        if (info.m_key == appKey) {
-            const int idx = m_userSortedList.indexOf(info);
-
-            if (idx != -1) {
-                m_userSortedList[idx].m_openCount++;
-
-                if (m_userSortedList[idx].m_firstRunTime == 0) {
-                    m_userSortedList[idx].m_firstRunTime = QDateTime::currentMSecsSinceEpoch() / 1000;
-                }
-            }
-
-            break;
-        }
-    }
-
-    refreshUserInfoList();
+    // 更新打开次数，第一次运行的时间
+    saveCommonUsedList(appKey, true);
 
     if (!appDesktop.isEmpty())
         m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
@@ -533,6 +551,9 @@ void AppsManager::uninstallApp(const QString &appKey, const int displayMode)
     }
     // 从应用列表中删除该应用信息
     stashItem(appKey);
+
+    // 更新打开次数，第一次运行的时间
+    saveCommonUsedList(appKey, false);
 
     // 向后端发起卸载请求
     m_launcherInter->RequestUninstall(appKey, false);
@@ -552,8 +573,6 @@ void AppsManager::markLaunched(QString appKey)
 
     m_newInstalledAppsList.removeOne(appKey);
 
-    refreshUserInfoList();
-
     emit newInstallListChanged();
 }
 
@@ -566,7 +585,6 @@ void AppsManager::delayRefreshData()
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
 
     generateCategoryMap();
-    saveUserSortedList();
 
     emit newInstallListChanged();
 
@@ -647,7 +665,7 @@ const ItemInfo AppsManager::createOfCategory(qlonglong category)
 const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const
 {
     switch (category) {
-    case AppsListModel::Custom:    return m_userSortedList;
+    case AppsListModel::Custom:    return m_appCategoryInfos;
     case AppsListModel::All:       return m_usedSortedList;
     case AppsListModel::Search:     return m_appSearchResultList;
     case AppsListModel::Category:   return m_categoryList;
@@ -672,7 +690,7 @@ const ItemInfoList AppsManager::appsInfoList(const AppsListModel::AppCategory &c
 int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category)
 {
     switch (category) {
-    case AppsListModel::Custom:    return m_userSortedList.size();
+    case AppsListModel::Custom:    return m_appCategoryInfos.size();
     case AppsListModel::All:       return m_usedSortedList.size();
     case AppsListModel::Search:     return m_appSearchResultList.size();
     case AppsListModel::Category:   return m_categoryList.size();
@@ -700,8 +718,8 @@ const ItemInfo AppsManager::appsInfoListIndex(const AppsListModel::AppCategory &
 {
     switch (category) {
     case AppsListModel::Custom:
-        Q_ASSERT(m_userSortedList.size() > index);
-        return m_userSortedList[index];
+        Q_ASSERT(m_appCategoryInfos.size() > index);
+        return m_appCategoryInfos[index];
     case AppsListModel::All:
         Q_ASSERT(m_usedSortedList.size() > index);
         return m_usedSortedList[index];
@@ -745,7 +763,7 @@ const ItemInfo AppsManager::appsCommonUseListIndex(const int index)
 
 const ItemInfoList &AppsManager::windowedFrameItemInfoList()
 {
-    return m_userSortedList;
+    return m_appCategoryInfos;
 }
 
 const ItemInfoList &AppsManager::windowedCategoryList()
@@ -886,108 +904,101 @@ void AppsManager::refreshCategoryInfoList()
     // 从应用商店配置文件/var/lib/lastore/applications.json获取应用数据
     QDBusPendingReply<ItemInfoList> reply = m_launcherInter->GetAllItemInfos();
     if (reply.isError()) {
-        qWarning() << "data is empty, quit!!";
         qWarning() << reply.error();
         qApp->quit();
     }
 
     QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
 
-    QByteArray readBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
-    QDataStream in(&readBuf, QIODevice::ReadOnly);
+    QByteArray usedBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
+    QDataStream in(&usedBuf, QIODevice::ReadOnly);
     in >> m_usedSortedList;
 
     QByteArray commonBuf = APP_COMMON_USE_LIST.value("list").toByteArray();
     QDataStream commonData(&commonBuf, QIODevice::ReadOnly);
     commonData >> m_commonSortedList;
-//    qInfo() << "cache m_usedSortedList size: " << m_usedSortedList.size() << ", content:" << m_usedSortedList;
-    foreach(auto used , m_usedSortedList) {
-        bool bContains = fuzzyMatching(filters, used.m_key);
+
+    foreach(auto info , m_usedSortedList) {
+        bool bContains = fuzzyMatching(filters, info.m_key);
         if (bContains) {
-            m_usedSortedList.removeOne(used);
+            m_usedSortedList.removeOne(info);
         }
     }
 
     const ItemInfoList &datas = reply.value();
 
     // 从配置文件中读取分类应用数据
-    int beginCategoryIndex = int(AppsListModel::AppCategory::Internet);
-    int endCategoryIndex = int(AppsListModel::AppCategory::Others);
-    for (; beginCategoryIndex < endCategoryIndex; beginCategoryIndex++) {
+    int startIndex = AppsListModel::Internet;
+    int endIndex = AppsListModel::Others;
+    for (; startIndex < endIndex; startIndex++) {
         ItemInfoList itemInfoList;
 
-        QByteArray readCategoryBuf = APP_CATEGORY_USED_SORTED_LIST.value(QString("%1").arg(beginCategoryIndex)).toByteArray();
-        QDataStream categoryIn(&readCategoryBuf, QIODevice::ReadOnly);
+        QByteArray categoryBuf = APP_CATEGORY_USED_SORTED_LIST.value(QString("%1").arg(startIndex)).toByteArray();
+        QDataStream categoryIn(&categoryBuf, QIODevice::ReadOnly);
         categoryIn >> itemInfoList;
 
-        m_appInfoLock.lockForWrite();
         // 当缓存数据与应用商店数据有差异时，以应用商店数据为准
-        foreach (auto item , itemInfoList) {
-            int index = datas.indexOf(item);
-            if (index != -1 && datas.at(index).category() != item.category())
-                itemInfoList.removeOne(item);
+        foreach (auto info , itemInfoList) {
+            int index = datas.indexOf(info);
+            if (index != -1 && datas.at(index).category() != info.category())
+                itemInfoList.removeOne(info);
         }
-        m_appInfos.insert(AppsListModel::AppCategory(beginCategoryIndex), itemInfoList);
-        m_appInfoLock.unlock();
+        m_appInfos.insert(AppsListModel::AppCategory(startIndex), itemInfoList);
     }
 
     m_allAppInfoList.clear();
     m_allAppInfoList.reserve(datas.size());
-    for (const auto &it : datas) {
-        bool bContains = fuzzyMatching(filters, it.m_key);
-        if (!m_stashList.contains(it) && !bContains) {
-            if (it.m_key == "dde-trash") {
-                ItemInfo trashItem = it;
+    for (const auto &info : datas) {
+        bool bContains = fuzzyMatching(filters, info.m_key);
+        if (!m_stashList.contains(info) && !bContains) {
+            if (info.m_key == "dde-trash") {
+                ItemInfo trashItem = info;
                 trashItem.m_iconKey = m_trashIsEmpty ? "user-trash" : "user-trash-full";
                 m_allAppInfoList.append(trashItem);
                 continue;
             }
 
-            m_allAppInfoList.append(it);
+            m_allAppInfoList.append(info);
         }
     }
 
     generateCategoryMap();
 }
 
-/**
- * @brief AppsManager::refreshUsedInfoList 更新使用过的应用列表
- */
 void AppsManager::refreshUsedInfoList()
 {
+    if (!m_usedSortedList.isEmpty())
+        return;
+
+    QByteArray readBuffer = APP_USED_SORTED_LIST.value("list").toByteArray();
+    QDataStream in(&readBuffer, QIODevice::ReadOnly);
+    in >> m_usedSortedList;
+
     if (m_usedSortedList.isEmpty()) {
-        QByteArray readBuffer = APP_USED_SORTED_LIST.value("list").toByteArray();
-        QDataStream in(&readBuffer, QIODevice::ReadOnly);
-        in >> m_usedSortedList;
-
-        if (m_usedSortedList.isEmpty()) {
-            m_usedSortedList = m_allAppInfoList;
-        }
-
-        for (QList<ItemInfo>::ConstIterator it = m_allAppInfoList.constBegin(); it != m_allAppInfoList.constEnd(); ++it) {
-            if (!m_usedSortedList.contains(*it)) {
-                m_usedSortedList.append(*it);
-            }
-        }
-
-        for (QList<ItemInfo>::iterator it = m_usedSortedList.begin(); it != m_usedSortedList.end();) {
-            if (m_allAppInfoList.contains(*it)) {
-                ++it;
-            } else {
-                it = m_usedSortedList.erase(it);
-            }
-        }
-
-        updateUsedListInfo();
+        m_usedSortedList = m_allAppInfoList;
     }
-    // 保存到qSetting配置文件
+
+    ItemInfoList::ConstIterator allItemItor = m_allAppInfoList.constBegin();
+    for (; allItemItor != m_allAppInfoList.constEnd(); ++allItemItor) {
+        if (!m_usedSortedList.contains(*allItemItor)) {
+            m_usedSortedList.append(*allItemItor);
+        }
+    }
+
+    ItemInfoList::iterator usedItemItor = m_usedSortedList.begin();
+    for (; usedItemItor != m_usedSortedList.end();) {
+        if (m_allAppInfoList.contains(*usedItemItor)) {
+            ++usedItemItor;
+        } else {
+            usedItemItor = m_usedSortedList.erase(usedItemItor);
+        }
+    }
+
+    updateUsedListInfo();
     saveUsedSortedList();
 }
 
-/**
- * @brief AppsManager::refreshCategoryUsedInfoList 保存全屏分类排序数据
- */
-void AppsManager::refreshCategoryUsedInfoList()
+void AppsManager::saveAppCategoryInfoList()
 {
     // 保存排序信息
     QHash<AppsListModel::AppCategory, ItemInfoList>::iterator categoryAppsIter = m_appInfos.begin();
@@ -1001,110 +1012,18 @@ void AppsManager::refreshCategoryUsedInfoList()
     }
 }
 
-/**
- * @brief AppsManager::refreshUserInfoList app安装时间排序
- */
-void AppsManager::refreshUserInfoList()
-{
-    if (m_userSortedList.isEmpty()) {
-        // first reads the config file.
-        QByteArray readBuffer = APP_USER_SORTED_LIST.value("list").toByteArray();
-        QDataStream in(&readBuffer, QIODevice::ReadOnly);
-        in >> m_userSortedList;
-
-        // if data cache file is empty.
-        if (m_userSortedList.isEmpty()) {
-            m_userSortedList = m_allAppInfoList;
-        } else {
-            QSet<int> idxSet;
-            // check used list isvaild
-            for (QList<ItemInfo>::iterator it = m_userSortedList.begin(); it != m_userSortedList.end();) {
-                int idx = m_allAppInfoList.indexOf(*it);
-                if (idx >= 0 && !idxSet.contains(idx)) {
-
-                    // 更换语言的时候更新语言
-                    it->updateInfo(m_allAppInfoList.at(idx));
-                    idxSet.insert(idx);
-
-                    ++it;
-                } else {
-                    it = m_userSortedList.erase(it);
-                }
-            }
-
-            // m_userSortedList没有的插入到后面
-            for (QList<ItemInfo>::Iterator it = m_allAppInfoList.begin(); it != m_allAppInfoList.end(); ++it) {
-                if (!m_userSortedList.contains(*it)) {
-                    m_userSortedList.append(*it);
-                }
-            }
-        }
-    } else {
-        for (QList<ItemInfo>::iterator it = m_userSortedList.begin(); it != m_userSortedList.end();) {
-            int idx = m_allAppInfoList.indexOf(*it);
-            if (idx >= 0 && it->m_key == "dde-trash")
-                it->updateInfo(m_allAppInfoList[idx]);
-
-            ++it;
-        }
-    }
-
-    // 从启动器小屏应用列表移除被限制使用的应用
-    QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
-    for (auto it = m_userSortedList.begin(); it != m_userSortedList.end(); it++) {
-        if (fuzzyMatching(filters, it->m_key))
-            m_userSortedList.erase(it);
-    }
-
-    const qint64 currentTime = QDateTime::currentMSecsSinceEpoch() / 1000;
-    std::stable_sort(m_userSortedList.begin(), m_userSortedList.end(), [ = ](const ItemInfo & a, const ItemInfo & b) {
-        const bool ANewInsatll = m_newInstalledAppsList.contains(a.m_key);
-        const bool BNewInsatll = m_newInstalledAppsList.contains(b.m_key);
-        if (ANewInsatll || BNewInsatll) {
-            if(ANewInsatll && BNewInsatll)
-                return a.m_installedTime > b.m_installedTime;
-
-            if(ANewInsatll) return true;
-            if(BNewInsatll) return false;
-        }
-
-        const auto AFirstRunTime = a.m_firstRunTime;
-        const auto BFirstRunTime = b.m_firstRunTime;
-
-        // If it's past time, will be sorted by open count
-        if (AFirstRunTime > currentTime || BFirstRunTime > currentTime) {
-            return a.m_openCount > b.m_openCount;
-        }
-
-        int hours_diff_a = (currentTime - AFirstRunTime) / USER_SORT_UNIT_TIME + 1;
-        int hours_diff_b = (currentTime - BFirstRunTime) / USER_SORT_UNIT_TIME + 1;
-
-        // Average number of starts
-        return (static_cast<double>(a.m_openCount) / hours_diff_a) > (static_cast<double>(b.m_openCount) / hours_diff_b);
-    });
-
-    saveUserSortedList();
-}
-
-/**
- * @brief AppsManager::updateUsedListInfo 更新应用信息
- */
 void AppsManager::updateUsedListInfo()
 {
     for (const ItemInfo &info : m_allAppInfoList) {
-        const int idx = m_usedSortedList.indexOf(info);
+        const int index = m_usedSortedList.indexOf(info);
 
-        if (idx != -1) {
-            const int openCount = m_usedSortedList[idx].m_openCount;
-            m_usedSortedList[idx].updateInfo(info);
-            m_usedSortedList[idx].m_openCount = openCount;
-        }
+        if (index == -1)
+            continue;
+
+        m_usedSortedList[index].updateInfo(info);
     }
 }
 
-/**
- * @brief AppsManager::generateCategoryMap 重新生成/更新应用分类目录信息以及所有应用信息
- */
 void AppsManager::generateCategoryMap()
 {
     m_categoryList.clear();
@@ -1113,18 +1032,14 @@ void AppsManager::generateCategoryMap()
     ItemInfoList newInstallAppList;
     ItemInfoList dirAppInfoList;
     for (const ItemInfo &itemInfo : m_usedSortedList) {
-//        qInfo() << "itemInfo:" << itemInfo;
         if (itemInfo.m_isDir) {
             // 应用文件夹中也没有时就加入
             dirAppInfoList.append(itemInfo.m_appInfoList);
         }
     }
 
-//    qInfo() << "dirAppInfoList: " << dirAppInfoList << ", list size:" << dirAppInfoList.size();
-
     // 分类数据整理, 新安装应用整理
     for (const ItemInfo &info : m_allAppInfoList) {
-
         const int userIdx = m_usedSortedList.indexOf(info);
         const int dirIdx = dirAppInfoList.indexOf(info);
 
@@ -1135,101 +1050,73 @@ void AppsManager::generateCategoryMap()
         if (userIdx == -1) {
             m_usedSortedList.append(info);
         } else {
-            const int openCount = m_usedSortedList[userIdx].m_openCount;
             m_usedSortedList[userIdx].updateInfo(info);
-            m_usedSortedList[userIdx].m_openCount = openCount;
         }
 
         const AppsListModel::AppCategory category = info.category();
 
-        m_appInfoLock.lockForWrite();
-
         if (!m_appInfos.contains(category))
             m_appInfos.insert(category, ItemInfoList());
 
-        // 将已有应用保存到 m_appInfos， 新添加应用保存到 newInstallAppList
         if (!m_newInstalledAppsList.contains(info.m_key)) {
-            // 检查应用是否已经存在
             const int idx = m_appInfos[category].indexOf(info);
             if (idx == -1) {
                 m_appInfos[category].append(info);
             } else {
-                // 更新一下已有应用信息
-                qlonglong openCount = m_appInfos[category][idx].m_openCount;
                 m_appInfos[category][idx].updateInfo(info);
-                m_appInfos[category][idx].m_openCount = openCount;
             }
         } else {
             newInstallAppList.append(info);
         }
-
-        m_appInfoLock.unlock();
     }
 
-    // 新安装的应用以安装时间先后排序(升序),并对安装的应用做分类保存或者更新该应用信息
     sortByInstallTimeOrder(newInstallAppList);
 
+    // TODO: 这段代码从逻辑上，没有意义。。。暂且搁置。2022-04-13。SWT
     if (!newInstallAppList.isEmpty()) {
-        m_appInfoLock.lockForWrite();
         for (const ItemInfo &info : newInstallAppList) {
             if (!m_appInfos[info.category()].contains(info)) {
                 m_appInfos[info.category()].append(info);
             } else {
-                // 更新一下新应用信息
                 const int idx = m_appInfos[info.category()].indexOf(info);
-                qlonglong openCount = m_appInfos[info.category()][idx].m_openCount;
                 m_appInfos[info.category()][idx].updateInfo(info);
-                m_appInfos[info.category()][idx].m_openCount = openCount;
             }
         }
-        m_appInfoLock.unlock();
     }
 
-    m_appInfoLock.lockForRead();
     // 移除 m_appInfos 中已经不存在的应用
     QHash<AppsListModel::AppCategory, ItemInfoList>::iterator categoryAppsIter = m_appInfos.begin();
     for (; categoryAppsIter != m_appInfos.end(); ++categoryAppsIter) {
         ItemInfoList &item = categoryAppsIter.value();
         for (auto it(item.begin()); it != item.end();) {
             int idx = m_allAppInfoList.indexOf(*it);
-            // 在全屏自由排序模式下，m_allAppInfoList 中不存在的应用，可能缓存到 m_stashList 里面了，需要查一下
-            // 检查是为了不更新 m_appInfos
-
-            // 这里存在问题, 删除应用时只从m_allAppInfoList中移除了.
-            // Todo: 因此, 需要从m_stashList 和 其他列表中移除.
-            // 先屏蔽掉
-//            if (idx == -1 && (m_calUtil->displayMode() == ALL_APPS))
-//                idx = m_stashList.indexOf(*it);
-
             if (idx == -1)
                 it = item.erase(it);
             else
                 it++;
         }
     }
-    m_appInfoLock.unlock();
 
-    // remove uninstalled app item
     for (auto it(m_usedSortedList.begin()); it != m_usedSortedList.end();) {
         int idx = m_allAppInfoList.indexOf(*it);
 
         if (idx == -1) {
             it = m_usedSortedList.erase(it);
             break;
-        }
-        else
+        } else {
             ++it;
+        }
     }
 
     // 从所有应用中获取所有分类目录类型id,存放到临时列表categoryID中
-    std::list<qlonglong> categoryID;
+    QList<qlonglong> categoryID;
     for (const ItemInfo &it : m_allAppInfoList) {
-        if (std::find(categoryID.begin(), categoryID.end(), it.m_categoryId) == categoryID.end()) {
-            categoryID.push_back(it.m_categoryId);
+        if (!categoryID.contains(it.m_categoryId)) {
+            categoryID.append(it.m_categoryId);
         }
     }
 
-    // 根据分类目录类型id,生成分类目录图标等信息
+    // 生成分类标题、图标等信息
     for (auto it = categoryID.begin(); it != categoryID.end(); ++it) {
         m_categoryList << createOfCategory(*it);
     }
@@ -1254,9 +1141,10 @@ void AppsManager::generateCategoryMap()
 
     // 获取小窗口常用应用列表
     ItemInfoList tempData = m_allAppInfoList;
-    sortByUseCountOrder(tempData);
     m_commonSortedList.clear();
     m_commonSortedList.append(tempData);
+
+    sortByUseFrequence(m_commonSortedList);
 
     // 更新各个分类下应用的数量
     emit categoryListChanged();
@@ -1330,35 +1218,6 @@ void AppsManager::onIconThemeChanged()
 }
 
 /**
- * @brief AppsManager::searchDone 搜索完成
- * @param resultList 搜索后接口返回的结果列表
- */
-void AppsManager::searchDone(const QStringList &resultList)
-{
-    m_appSearchResultList.clear();
-
-    QStringList resultCopy = resultList;
-    QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
-
-    for (const QString& result : resultCopy) {
-        bool bContains = fuzzyMatching(filters, result);
-        if (bContains) {
-            resultCopy.removeAll(result);
-        }
-    }
-
-    for (const QString &key : resultCopy)
-        appendSearchResult(key);
-
-    emit dataChanged(AppsListModel::Search);
-
-    if (m_appSearchResultList.isEmpty())
-        emit requestTips(tr("No search results"));
-    else
-        emit requestHideTips();
-}
-
-/**
  * @brief AppsManager::handleItemChanged 处理应用安装、卸载、更新
  * @param operation 操作类型
  * @param appInfo 操作的应用对象信息
@@ -1379,11 +1238,9 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
 
         m_allAppInfoList.append(appInfo);
         m_usedSortedList.append(appInfo);
-        m_userSortedList.push_front(appInfo);
     } else if (operation == "deleted") {
         m_allAppInfoList.removeOne(appInfo);
         m_usedSortedList.removeOne(appInfo);
-        m_userSortedList.removeOne(appInfo);
         //一般情况是不需要的，但是类似wps这样的程序有点特殊，删除一个其它的二进制程序也删除了，需要保存列表，否则刷新的时候会刷新出齿轮的图标
         //新增和更新则无必要
         saveUsedSortedList();
@@ -1417,35 +1274,37 @@ QHash<AppsListModel::AppCategory, ItemInfoList> AppsManager::getAllAppInfo()
     return appInfoList;
 }
 
+/**TODO: 这块最后可以移除掉。界面上已经不需要这块了。
+ * @brief AppsManager::refreshAppListIcon
+ * @param themeType
+ */
 void AppsManager::refreshAppListIcon(DGuiApplicationHelper::ColorType themeType)
 {
     m_categoryIcon.clear();
+
+    QStringList iconList;
+    iconList << QString(":/icons/skin/icons/category_network.svg")
+             << QString(":/icons/skin/icons/category_chat.svg")
+             << QString(":/icons/skin/icons/category_music.svg")
+             << QString(":/icons/skin/icons/category_video.svg")
+             << QString(":/icons/skin/icons/category_graphic.svg")
+             << QString(":/icons/skin/icons/category_game.svg")
+             << QString(":/icons/skin/icons/category_office.svg")
+             << QString(":/icons/skin/icons/category_reading.svg")
+             << QString(":/icons/skin/icons/category_develop.svg")
+             << QString(":/icons/skin/icons/category_system.svg")
+             << QString(":/icons/skin/icons/category_others.svg");
+
     if (themeType == DGuiApplicationHelper::DarkType) {
-        m_categoryIcon
-                << QString(":/icons/skin/icons/category_network_dark.svg")
-                << QString(":/icons/skin/icons/category_chat_dark.svg")
-                << QString(":/icons/skin/icons/category_music_dark.svg")
-                << QString(":/icons/skin/icons/category_video_dark.svg")
-                << QString(":/icons/skin/icons/category_graphic_dark.svg")
-                << QString(":/icons/skin/icons/category_game_dark.svg")
-                << QString(":/icons/skin/icons/category_office_dark.svg")
-                << QString(":/icons/skin/icons/category_reading_dark.svg")
-                << QString(":/icons/skin/icons/category_develop_dark.svg")
-                << QString(":/icons/skin/icons/category_system_dark.svg")
-                << QString(":/icons/skin/icons/category_others_dark.svg");
+        foreach (QString iconPath, iconList) {
+            QStringList pathList = iconPath.split(".svg");
+            if (pathList.size() == 2) {
+                iconPath = pathList.at(0) + "_dark" + pathList.at(1);
+            }
+            m_categoryIcon.append(iconPath);
+        }
     } else {
-        m_categoryIcon
-                << QString(":/icons/skin/icons/category_network.svg")
-                << QString(":/icons/skin/icons/category_chat.svg")
-                << QString(":/icons/skin/icons/category_music.svg")
-                << QString(":/icons/skin/icons/category_video.svg")
-                << QString(":/icons/skin/icons/category_graphic.svg")
-                << QString(":/icons/skin/icons/category_game.svg")
-                << QString(":/icons/skin/icons/category_office.svg")
-                << QString(":/icons/skin/icons/category_reading.svg")
-                << QString(":/icons/skin/icons/category_develop.svg")
-                << QString(":/icons/skin/icons/category_system.svg")
-                << QString(":/icons/skin/icons/category_others.svg");
+        m_categoryIcon.append(iconList);
     }
 }
 
@@ -1569,7 +1428,6 @@ QList<QPixmap> AppsManager::getDirAppIcon(QModelIndex modelIndex)
             return pixmapList;
 
         infoList = info.m_appInfoList;
-        // qInfo() << "infoList size:" << infoList.size() << ", infoList, " << infoList;
     } else {
         infoList = m_usedSortedList.at(index).m_appInfoList;
     }
@@ -1586,10 +1444,10 @@ QList<QPixmap> AppsManager::getDirAppIcon(QModelIndex modelIndex)
 void AppsManager::updateTrashState()
 {
     int trashItemsCount = 0;
-    m_fsWatcher->addPath(TrashDir);
-    if (QDir(TrashDirFiles).exists()) {
-        m_fsWatcher->addPath(TrashDirFiles);
-        trashItemsCount = QDir(TrashDirFiles).entryList(ItemsShouldCount).count();
+    m_fsWatcher->addPath(TRASH_DIR);
+    if (QDir(TRASH_PATH).exists()) {
+        m_fsWatcher->addPath(TRASH_PATH);
+        trashItemsCount = QDir(TRASH_PATH).entryList(NAME_FILTERS).count();
     }
 
     if (m_trashIsEmpty == !trashItemsCount)

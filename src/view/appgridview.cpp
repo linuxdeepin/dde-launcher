@@ -27,6 +27,7 @@
 #include "util.h"
 #include "appslistmodel.h"
 #include "fullscreenframe.h"
+#include "windowedframe.h"
 
 #include <DGuiApplicationHelper>
 
@@ -333,8 +334,6 @@ void AppGridView::flashDrag()
  */
 void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 {
-    Q_ASSERT(m_containerBox);
-
     m_dropThresholdTimer->stop();
 
     // 获取光标在listview中的坐标
@@ -773,7 +772,7 @@ void AppGridView::createMovingComponent()
 {
     // 拖拽释放鼠标时显示的应用图标
     if (!m_pixLabel) {
-        m_pixLabel.reset(new QLabel(fullscreen()));
+        m_pixLabel.reset(new QLabel(topLevelWidget()));
         m_pixLabel->hide();
     }
 
@@ -810,12 +809,4 @@ void AppGridView::createMovingComponent()
         m_weekLabel = new QLabel(this);
         m_weekLabel->hide();
     }
-}
-
-FullScreenFrame *AppGridView::fullscreen()
-{
-    FullScreenFrame *fullscreenFrame = nullptr;
-    fullscreenFrame = qobject_cast<FullScreenFrame*>(topLevelWidget());
-
-    return fullscreenFrame;
 }

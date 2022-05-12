@@ -102,7 +102,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_bottomBtn(new MiniFrameRightBar(this))
     , m_commonUseView(new AppGridView(this))
     , m_allAppView(new AppGridView(this))
-    , m_searchedView(new AppGridView(this))
+//    , m_searchModeWidget(new SearchModeWidget(this))
     , m_tipsLabel(new QLabel(this))
     , m_delayHideTimer(new QTimer(this))
     , m_autoScrollTimer(new QTimer(this))
@@ -148,15 +148,19 @@ void WindowedFrame::initUi()
     m_commonUseView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_commonUseView->setModel(m_commonUseModel);
     m_commonUseView->setItemDelegate(appItemDelegate);
+    m_commonUseView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_commonUseView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_commonUseView->setDragEnabled(false);
+    m_commonUseView->setDragDropMode(QAbstractItemView::NoDragDrop);
 
     m_allAppView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_allAppView->setModel(m_allAppsModel);
     m_allAppView->setItemDelegate(appItemDelegate);
+    m_allAppView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    // 搜索应用
-    m_searchedView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_searchedView->setModel(m_searchModel);
-    m_searchedView->setItemDelegate(appItemDelegate);
+//    // 搜索应用
+//    m_searchModeWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//    m_searchModeWidget->setItemDelegate(appItemDelegate);
 
     m_appsView->installEventFilter(m_eventFilter);
 
@@ -196,6 +200,7 @@ void WindowedFrame::initUi()
     // 常用应用
     QVBoxLayout *commonUseVLayout = new QVBoxLayout;
     commonUseVLayout->setMargin(0);
+    commonUseVLayout->setSpacing(0);
     commonUseVLayout->setContentsMargins(0, 0, 0, 0);
     m_commonUseLabel = new QLabel(tr("common use app"), this);
     commonUseVLayout->addWidget(m_commonUseLabel);
@@ -204,6 +209,7 @@ void WindowedFrame::initUi()
     // 所有应用
     QVBoxLayout *allAppVLayout = new QVBoxLayout;
     allAppVLayout->setMargin(0);
+    allAppVLayout->setSpacing(0);
     allAppVLayout->setContentsMargins(0, 0, 0, 0);
     m_allAppLabel = new QLabel(tr("all app"), this);
     allAppVLayout->addWidget(m_allAppLabel);
@@ -212,7 +218,7 @@ void WindowedFrame::initUi()
     rightVLayout->addLayout(rightHLayout);
     rightVLayout->addLayout(commonUseVLayout);
     rightVLayout->addLayout(allAppVLayout);
-    rightVLayout->addWidget(m_searchedView);
+//    rightVLayout->addWidget(m_searchModeWidget);
 
     mainHlayout->addLayout(leftVLayout);
     mainHlayout->addLayout(rightVLayout);
@@ -251,18 +257,12 @@ void WindowedFrame::initConnection()
 {
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
         m_commonUseView->setSpacing(m_calcUtil->appItemSpacing());
-        //m_commonUseView->setViewportMargins(m_calcUtil->appMarginLeft(), 0, m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop());
     });
 
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
         m_allAppView->setSpacing(m_calcUtil->appItemSpacing());
-        //m_allAppView->setViewportMargins(m_calcUtil->appMarginLeft(), 0, m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop());
     });
 
-    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
-        m_searchedView->setSpacing(m_calcUtil->appItemSpacing());
-        //m_searchedView->setViewportMargins(m_calcUtil->appMarginLeft(), 0, m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop());
-    });
     // auto scroll when drag to app list box border
     connect(m_appsView, &AppListView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
     connect(m_autoScrollTimer, &QTimer::timeout, [this] {
@@ -296,28 +296,16 @@ void WindowedFrame::initConnection()
     connect(m_appsView, &AppListView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
 
     // 常用应用
-    connect(m_commonUseView, &DListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
-    connect(m_commonUseView, &DListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
-    connect(m_commonUseView, &DListView::entered, m_commonUseView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
+    connect(m_commonUseView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
+    connect(m_commonUseView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
+    connect(m_commonUseView, &AppGridView::entered, m_commonUseView, &AppGridView::setCurrentIndex, Qt::QueuedConnection);
     connect(m_commonUseView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
 
     // 所有应用
-    connect(m_allAppView, &DListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
-    connect(m_allAppView, &DListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
-    connect(m_allAppView, &DListView::entered, m_commonUseView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
+    connect(m_allAppView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
+    connect(m_allAppView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
+    connect(m_allAppView, &AppGridView::entered, m_allAppView, &AppGridView::setCurrentIndex, Qt::QueuedConnection);
     connect(m_allAppView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
-
-    // 所有应用
-    connect(m_allAppView, &DListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
-    connect(m_allAppView, &DListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
-    connect(m_allAppView, &DListView::entered, m_commonUseView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
-    connect(m_allAppView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
-
-    // 搜索
-    connect(m_searchedView, &DListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
-    connect(m_searchedView, &DListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
-    connect(m_searchedView, &DListView::entered, m_commonUseView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
-    connect(m_searchedView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
 
     connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &WindowedFrame::hideTips);
@@ -348,7 +336,7 @@ void WindowedFrame::setAccessibleName()
     m_allAppView->setAccessibleName("allAppView");
     m_commonUseView->setAccessibleName("commonuUseView");
     m_appsView->setAccessibleName("appsView");
-    m_searchedView->setAccessibleName("searchView");
+//    m_searchModeWidget->setAccessibleName("searchModeWidget");
 }
 
 /**
@@ -361,7 +349,16 @@ void WindowedFrame::freshUi(bool searchedState)
     m_commonUseLabel->setVisible(!searchedState);
     m_allAppView->setVisible(!searchedState);
     m_allAppLabel->setVisible(!searchedState);
+//    m_searchModeWidget->setVisible(searchedState);
 }
+
+// TODO: 业务代码，后面优化
+//void WindowedFrame::freshUi()
+//{
+//    bool visible = (m_commonUseModel->rowCount(QModelIndex()) > 0);
+//    m_commonUseView->setVisible(visible);
+//    m_commonUseLabel->setVisible(visible);
+//}
 
 void WindowedFrame::showLauncher()
 {
@@ -1022,10 +1019,10 @@ void WindowedFrame::showTips(const QString &text)
 {
     m_tipsLabel->setText(text);
 
-    const QPoint center = m_searchedView->rect().center();
-    m_tipsLabel->move(center);
-    m_tipsLabel->setVisible(true);
-    m_tipsLabel->raise();
+//    const QPoint center = m_searchModeWidget->rect().center();
+//    m_tipsLabel->move(center);
+//    m_tipsLabel->setVisible(true);
+//    m_tipsLabel->raise();
 }
 
 void WindowedFrame::hideTips()
@@ -1113,6 +1110,14 @@ void WindowedFrame::onHideMenu()
 {
     if (m_menuWorker.get() && !isVisible())
         m_menuWorker.get()->onHideMenu();
+}
+
+void WindowedFrame::addViewEvent(AppGridView *pView)
+{
+    connect(pView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
+    connect(pView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
+    connect(pView, &AppGridView::entered, m_appsView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
+    connect(pView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
 }
 
 void WindowedFrame:: paintEvent(QPaintEvent *e)

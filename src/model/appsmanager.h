@@ -102,8 +102,8 @@ signals:
     void loadItem(const ItemInfo &info, const QString &operationStr);
 
 public slots:
-    void saveUserSortedList();
     void saveUsedSortedList();
+    void saveCommonUsedList(const QString appKey, bool state);
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
     void uninstallApp(const QString &appKey, const int displayMode = ALL_APPS);
@@ -138,12 +138,11 @@ private:
 
     void appendSearchResult(const QString &appKey);
     void sortByPresetOrder(ItemInfoList &processList);
-    void sortByUseCountOrder(ItemInfoList &processList);
+    void sortByUseFrequence(ItemInfoList &processList);
     void sortByInstallTimeOrder(ItemInfoList &processList);
     void refreshCategoryInfoList();
     void refreshUsedInfoList();
-    void refreshCategoryUsedInfoList();
-    void refreshUserInfoList();
+    void saveAppCategoryInfoList();
     void updateUsedListInfo();
     void generateCategoryMap();
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
@@ -152,7 +151,6 @@ private:
 
 private slots:
     void onIconThemeChanged();
-    void searchDone(const QStringList &resultList);
     void markLaunched(QString appKey);
     void delayRefreshData();
     void refreshIcon();
@@ -183,7 +181,6 @@ private:
     QStringList m_newInstalledAppsList;                                     // 新安装应用列表
     ItemInfoList m_allAppInfoList;                                          // 所有app信息列表
     ItemInfoList m_stashList;
-
     ItemInfo m_unInstallItem = ItemInfo();
     ItemInfo m_beDragedItem = ItemInfo();
 

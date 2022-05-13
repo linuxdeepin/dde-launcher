@@ -56,6 +56,7 @@ public:
         AppIsRemovableRole,
         AppIsProxyRole,
         AppEnableScalingRole,
+        AppIsInCollectRole,
         AppIconSizeRole,
         AppFontSizeRole,
         AppItemIsDraggingRole,

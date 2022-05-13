@@ -493,7 +493,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         } else if (m_category == All) {
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
         } else if (m_category == Collect) {
-            itemInfo = m_appsManager->appsCommonUseListIndex(index.row());
+            itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
         } else if (m_category == Search) {
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
         } else if (m_category == PluginSearch) {
@@ -598,6 +598,10 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     }
     case AppItemStatusRole:
         return itemInfo.m_status;
+    case AppIsInCollectRole: {
+        const ItemInfoList_v1 list = m_appsManager->appsInfoList(Collect);
+        return list.contains(itemInfo);
+    }
     default:
         break;
     }

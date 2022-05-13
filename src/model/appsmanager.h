@@ -104,7 +104,6 @@ signals:
 
 public slots:
     void saveUsedSortedList();
-    void saveCommonUsedList(const QString appKey, bool state);
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
     void uninstallApp(const QString &appKey, const int displayMode = ALL_APPS);
@@ -113,7 +112,6 @@ public slots:
     static const ItemInfo_v1 appsInfoListIndex(const AppsListModel::AppCategory &category,const int index);
     static const ItemInfo_v1 appsCategoryListIndex(const int index);
     static const ItemInfo_v1 appsLetterListIndex(const int index);
-    static const ItemInfo_v1 appsCommonUseListIndex(const int index);
     static const ItemInfoList_v1 &windowedCategoryList();
     static const ItemInfoList_v1 &windowedFrameItemInfoList();
     static const ItemInfoList_v1 &fullscreenItemInfoList();
@@ -138,10 +136,10 @@ public slots:
 private:
     explicit AppsManager(QObject *parent = nullptr);
 
-
     void appendSearchResult(const QString &appKey);
     void sortByPresetOrder(ItemInfoList_v1 &processList);
     void sortByUseFrequence(ItemInfoList_v1 &processList);
+    void filterCollectedApp(ItemInfoList_v1 &processList);
     void sortByLetterOrder(ItemInfoList_v1 &processList);
     void sortByInstallTimeOrder(ItemInfoList_v1 &processList);
     void refreshCategoryInfoList();
@@ -205,7 +203,7 @@ private:
     static QSettings APP_USER_SORTED_LIST;
     static QSettings APP_USED_SORTED_LIST;
     static QSettings APP_CATEGORY_USED_SORTED_LIST;
-    static QSettings APP_COMMON_USE_LIST;
+    static QSettings APP_COLLECT_LIST;
     QStringList m_categoryTs;
     QGSettings *m_filterSetting;
 

@@ -30,6 +30,8 @@
 
 const bool IS_WAYLAND_DISPLAY = !qgetenv("WAYLAND_DISPLAY").isEmpty();
 
+class AppsListModel;
+
 MenuWorker::MenuWorker(QObject *parent)
     : QObject(parent)
     , m_dockAppManagerInterface(new DBusDock(this))
@@ -76,8 +78,10 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
     const bool canStartUp = m_currentModelIndex.data(AppsListModel::AppCanStartUpRole).toBool();
     const bool canDisableScale = m_calcUtil->IsServerSystem || qFuzzyCompare(1.0, scale_ratio);
     const bool canUseProxy = m_currentModelIndex.data(AppsListModel::AppCanOpenProxyRole).toBool();
-
-    qDebug() << "appKey" << m_appKey;
+    const bool isInCollectedList = m_currentModelIndex.data(AppsListModel::AppIsInCollectRole).toBool();
+    const bool isTopInCollectList = (m_currentModelIndex.row() == 0);
+    const bool canMoveToTop = (m_currentModelIndex.row() != 0);
+    const bool onlyShownInCollectedList = (qobject_cast<const AppsListModel *>(m_currentModelIndex.model())->category() == AppsListModel::Collect);
 
     QAction *open;
     QAction *desktop;
@@ -85,6 +89,8 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
     QAction *startup;
     QAction *proxy;
     QAction *uninstall;
+    QAction *collectAction;
+    QAction *moveAction;
 
     open = new QAction(tr("Open"), menu);
     desktop = new QAction(m_isItemOnDesktop ? tr("Remove from desktop") : tr("Send to desktop"), menu);
@@ -92,6 +98,8 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
     startup = new QAction(m_isItemStartup ? tr("Remove from startup") : tr("Add to startup"), menu);
     uninstall = new QAction(tr("Uninstall"), menu);
     proxy = new QAction(tr("Use a proxy"), menu);
+    moveAction = new QAction(canMoveToTop ? tr("Move to first") : tr("Move to last"));
+    collectAction = new QAction(isInCollectedList ? tr("Remove From Collected List") : tr("Add to Collected List"));
 
     // 分割线绘制的必要条件是，在打开功能之后，还有其他的功能选项
     if (!hideOpen) {
@@ -104,6 +112,21 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
 
             menu->addSeparator();
     }
+
+    // 收藏应用
+    if (!m_launcherInterface->fullscreen()) {
+        if (isInCollectedList && !isTopInCollectList && onlyShownInCollectedList) {
+            menu->addAction(moveAction);
+            signalMapper->setMapping(moveAction, MoveToTop);
+            connect(moveAction, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        }
+
+        menu->addAction(collectAction);
+        signalMapper->setMapping(collectAction, AddToCollected);
+        connect(collectAction, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        menu->addSeparator();
+    }
+
 
     if (!hideSendToDesktop)
         menu->addAction(desktop);
@@ -133,7 +156,8 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
         scale->setCheckable(true);
         scale->setChecked(!m_isItemEnableScaling);
         menu->addAction(scale);
-        signalMapper->setMapping(scale, SwitchScale);        connect(scale, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        signalMapper->setMapping(scale, SwitchScale);
+        connect(scale, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
     }
 
     open->setEnabled(canOpen);
@@ -152,6 +176,7 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
 
     if (!hideOpen)
         connect(open, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+
     if (!hideSendToDesktop)
         connect(desktop, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
     if (!hideSendToDock)
@@ -257,6 +282,7 @@ const QModelIndex MenuWorker::getCurrentModelIndex()
 
 void MenuWorker::handleMenuAction(int index)
 {
+    qInfo() << "index:" << index;
     // 隐藏右键菜单
     onHideMenu();
 
@@ -281,6 +307,12 @@ void MenuWorker::handleMenuAction(int index)
         break;
     case Uninstall:
         emit unInstallApp(m_currentModelIndex);
+        break;
+    case MoveToTop:
+        emit requestMoveToTop(m_currentModelIndex);
+        break;
+    case AddToCollected:
+        emit requestAddToCollected(m_currentModelIndex);
         break;
     default:
         break;

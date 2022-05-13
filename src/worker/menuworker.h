@@ -60,7 +60,9 @@ public:
         Startup = 4,
         Proxy = 5,
         SwitchScale = 6,
-        Uninstall = 7
+        Uninstall = 7,
+        MoveToTop = 8,
+        AddToCollected = 9
     };
 
     bool isMenuShown() const {return m_menuIsShown;}
@@ -76,6 +78,8 @@ signals:
     void menuAccepted();
     void unInstallApp(const QModelIndex &index);
     void menuShowMouseMoving();
+    void requestMoveToTop(const QModelIndex &index);
+    void requestAddToCollected(const QModelIndex &index);
 
 public slots:
     void showMenuByAppItem(QPoint pos, const QModelIndex &index);

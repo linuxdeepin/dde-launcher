@@ -60,8 +60,8 @@ bool Menu::eventFilter(QObject *watched, QEvent *event)
 {
     // 存在rightMenu和rightMenuWindow的对象名
     if (!watched->objectName().startsWith("rightMenu") && isVisible()) {
-        if (event->type() == QEvent::DragMove || event->type() == QEvent::Wheel
-                || event->type() == QEvent::Move) {
+        if (event->type() == QEvent::DragMove || event->type() == QEvent::Wheel) {
+            qDebug() << Q_FUNC_INFO << watched->objectName() <<  event->type() << this->pos();
             hide();
         }
         // 当右键菜单显示时捕获鼠标的release事件,click=press+release，
@@ -192,5 +192,14 @@ void Menu::onButtonPress()
 {
     if (!this->geometry().contains(QCursor::pos())) {
         this->hide();
+    }
+}
+
+void Menu::moveEvent(QMoveEvent *event)
+{
+    QWidget::moveEvent(event);
+    // 如果移动事件旧点位和新点位不同则需要隐藏右键菜单
+    if(event->oldPos() != event->pos()){
+        hide();
     }
 }

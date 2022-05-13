@@ -44,6 +44,7 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
     void showEvent(QShowEvent *event) override;
     void hideEvent(QHideEvent *event) override;
+    void moveEvent(QMoveEvent *event) override;
 
 private:
     void moveDown(int size = 0);

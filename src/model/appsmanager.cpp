@@ -490,15 +490,11 @@ void AppsManager::markLaunched(QString appKey)
     emit newInstallListChanged();
 }
 
-/**
- * @brief AppsManager::delayRefreshData 延迟刷新安装的应用列表,保存用户操作后的应用排序
- */
 void AppsManager::delayRefreshData()
 {
-    // refresh new installed apps
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
 
-//    generateCategoryMap();
+    generateCategoryMap();
 
     emit newInstallListChanged();
     emit dataChanged(AppsListModel::All);
@@ -828,8 +824,6 @@ void AppsManager::refreshCategoryInfoList()
     QDataStream commonData(&commonBuf, QIODevice::ReadOnly);
     commonData >> m_collectSortedList;
 
-    qInfo() << "m_collectSortedList:" << m_collectSortedList.size();
-
     foreach(auto info , m_usedSortedList) {
         bool bContains = fuzzyMatching(filters, info.m_key);
         if (bContains) {
@@ -1080,7 +1074,6 @@ void AppsManager::generateCategoryMap()
             const ItemInfo_v1 info = letterSortList.at(j);
             // 同步接口，加延时等待处理
             QString pinYinStr = Chinese2Pinyin(info.m_name);
-            QThread::usleep(10);
             QChar firstKey = pinYinStr.front();
             if (firstKey.isNumber()) {
                 if (lettergroupList.indexOf(titleInfo) == -1)
@@ -1096,6 +1089,7 @@ void AppsManager::generateCategoryMap()
             }
         }
     }
+    m_appLetterModeInfos.clear();
     m_appLetterModeInfos.append(lettergroupList);
 
     // 获取小窗口默认收藏应用列表

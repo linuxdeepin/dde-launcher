@@ -348,14 +348,11 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
     int nPageCount = nSize - pageCount * m_pageIndex;
     nPageCount = nPageCount > 0 ? nPageCount : 0;
 
-    if(!m_calcUtil->fullscreen()) {
-        return nSize;
-    }
-
-    if (m_category == SearchFilter || m_category == Collect)
+    if(!m_calcUtil->fullscreen())
         return nSize;
 
-    if (m_category == AppsListModel::Search)
+    if (m_category == Collect || (m_category == AppsListModel::Search) 
+                              || (m_category == AppsListModel::PluginSearch))
         return nSize;
 
     return qMin(pageCount, nPageCount);
@@ -494,15 +491,13 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
         } else if (m_category == Collect) {
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
-        } else if (m_category == Search) {
-            itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
-        } else if (m_category == PluginSearch) {
+        } else if ((m_category == Search) || (m_category == PluginSearch)) {
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
         }
     } else {
-        if (m_category == Search) {
-            itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
-        } else if (m_category == PluginSearch) {
+        if ((m_category == Search) || (m_category == PluginSearch)) {
+            // 保证搜索原数据模型中的数据未经过翻页处理
+            pageCount = nSize;
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
         } else {
             int start = nFixCount * m_pageIndex;

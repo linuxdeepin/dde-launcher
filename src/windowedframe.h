@@ -160,7 +160,6 @@ private:
     AppsListModel *m_appsModel;          // 应用列表
     AppsListModel *m_allAppsModel;
     AppsListModel *m_collectionModel;
-    AppsListModel *m_searchModel;        // 搜索后的应用列表
     SortFilterProxyModel *m_filterModel;
     SearchModeWidget *m_searchWidget;
 

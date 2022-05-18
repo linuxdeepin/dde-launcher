@@ -90,7 +90,6 @@ public:
         Collect,                // 收藏应用
         Dir,                    // 应用抽屉
         PluginSearch,           // 插件搜索
-        SearchFilter,           // 搜索前的原始数据模式（sourceModel对应的模式）
 
         // apps category
         Internet,               // 网络模式

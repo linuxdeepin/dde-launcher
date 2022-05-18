@@ -595,15 +595,13 @@ int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category)
     case AppsListModel::All:
         return m_usedSortedList.size();
     case AppsListModel::Search:
+        return m_usedSortedList.size();
+    case AppsListModel::PluginSearch:
         return m_appSearchResultList.size();
     case AppsListModel::Collect:
         return m_collectSortedList.size();
     case AppsListModel::Dir:
         return m_dirAppInfoList.size();
-    case AppsListModel::SearchFilter:
-        return m_usedSortedList.size();
-    case AppsListModel::PluginSearch:
-        return m_appSearchResultList.size();
     default:
         break;
     }
@@ -627,11 +625,11 @@ const ItemInfo_v1 AppsManager::appsInfoListIndex(const AppsListModel::AppCategor
         Q_ASSERT(m_usedSortedList.size() > index);
         return m_usedSortedList[index];
     case AppsListModel::Search:
+        Q_ASSERT(m_usedSortedList.size() > index);
+        return m_usedSortedList[index];
     case AppsListModel::PluginSearch:
         Q_ASSERT(m_appSearchResultList.size() > index);
         return m_appSearchResultList[index];
-    case AppsListModel::SearchFilter:
-        return m_usedSortedList[index];
     case AppsListModel::Dir:
         return m_dirAppInfoList[index];
     default:

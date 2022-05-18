@@ -113,7 +113,7 @@ void SearchModeWidget::initAppView()
     m_outsideView->setFlow(QListView::LeftToRight);
 
     m_nativeView->setWrapping(true);
-    m_outsideView->setWrapping(false);
+    m_outsideView->setWrapping(true);
 
     m_nativeView->setModel(m_nativeModel);
     m_outsideView->setModel(m_outsideModel);

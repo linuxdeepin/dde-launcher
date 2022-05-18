@@ -87,7 +87,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_appsModel(new AppsListModel(AppsListModel::TitleMode, this))
     , m_allAppsModel(new AppsListModel(AppsListModel::All, this))
     , m_collectionModel(new AppsListModel(AppsListModel::Collect, this))
-    , m_searchModel(new AppsListModel(AppsListModel::Search, this))
     , m_filterModel(new SortFilterProxyModel(this))
     , m_searchWidget(new SearchModeWidget(this))
     , m_bottomBtn(new MiniFrameRightBar(this))
@@ -527,7 +526,6 @@ void WindowedFrame::moveCurrentSelectApp(const int key)
 
     if (m_focusPos == Applist) {
         m_appsModel->setDrawBackground(true);
-        m_searchModel->setDrawBackground(true);
         m_appsView->setFocus();
     } else if (m_focusPos == RightBottom) {
         m_appsView->setCurrentIndex(QModelIndex());

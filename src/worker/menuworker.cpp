@@ -81,7 +81,11 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
     const bool isInCollectedList = m_currentModelIndex.data(AppsListModel::AppIsInCollectRole).toBool();
     const bool isTopInCollectList = (m_currentModelIndex.row() == 0);
     const bool canMoveToTop = (m_currentModelIndex.row() != 0);
-    const bool onlyShownInCollectedList = (qobject_cast<const AppsListModel *>(m_currentModelIndex.model())->category() == AppsListModel::Collect);
+    bool onlyShownInCollectedList = false;
+
+    const AppsListModel *listModel = qobject_cast<const AppsListModel *>(m_currentModelIndex.model());
+    if (listModel)
+        onlyShownInCollectedList = (listModel->category() == AppsListModel::Collect);
 
     QAction *open;
     QAction *desktop;

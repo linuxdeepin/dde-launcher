@@ -28,7 +28,6 @@ ItemInfo::ItemInfo()
     : m_openCount(0)
     , m_firstRunTime(0)
 {
-    m_isDir = false;
 }
 
 ItemInfo::ItemInfo(const ItemInfo &info)
@@ -40,8 +39,6 @@ ItemInfo::ItemInfo(const ItemInfo &info)
     , m_installedTime(info.m_installedTime)
     , m_openCount(info.m_openCount)
     , m_firstRunTime(info.m_firstRunTime)
-    , m_isDir(info.m_isDir)
-    , m_appInfoList(info.m_appInfoList)
 {
 
 }
@@ -94,8 +91,7 @@ void ItemInfo::updateInfo(const ItemInfo &info)
 QDebug operator<<(QDebug argument, const ItemInfo &info)
 {
     argument << info.m_categoryId << info.m_installedTime;
-    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey
-             << info.m_isDir << info.m_appInfoList;
+    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
 
     return argument;
 }
@@ -116,7 +112,6 @@ QDataStream &operator<<(QDataStream &argument, const ItemInfo &info)
     argument << info.m_desktop << info.m_openCount;
     argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
     argument << info.m_categoryId << info.m_installedTime << info.m_firstRunTime;
-    argument << info.m_isDir << info.m_appInfoList;
 
     return argument;
 }
@@ -126,7 +121,6 @@ const QDataStream &operator>>(QDataStream &argument, ItemInfo &info)
     argument >> info.m_desktop >> info.m_openCount;
     argument >> info.m_desktop >> info.m_name >> info.m_key >> info.m_iconKey;
     argument >> info.m_categoryId >> info.m_installedTime >> info.m_firstRunTime;
-    argument >> info.m_isDir >> info.m_appInfoList;
 
     return argument;
 }
@@ -141,7 +135,8 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, ItemInfo &info)
     return argument;
 }
 
-bool ItemInfo::operator<(const ItemInfo &info) const {
+bool ItemInfo::operator<(const ItemInfo &info) const
+{
     return info.m_name < m_name;
 }
 
@@ -200,7 +195,7 @@ ItemInfo_v1::ItemInfo_v1(const ItemInfo &info)
     , m_installedTime(info.m_installedTime)
     , m_openCount(info.m_openCount)
     , m_firstRunTime(info.m_firstRunTime)
-    , m_isDir(info.m_isDir)
+    , m_isDir(false)
     , m_appInfoList(ItemInfoList_v1())
 {
 
@@ -294,6 +289,7 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, ItemInfo_v1 &info
 
 QDataStream &operator<<(QDataStream &argument, const ItemInfo_v1 &info)
 {
+    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
     argument << info.m_categoryId << info.m_installedTime << info.m_firstRunTime;
     argument << info.m_progressValue << info.m_openCount;
     argument << info.m_isDir << info.m_appInfoList;
@@ -306,7 +302,7 @@ const QDataStream &operator>>(QDataStream &argument, ItemInfo_v1 &info)
 {
     argument >> info.m_desktop >> info.m_name >> info.m_key >> info.m_iconKey;
     argument >> info.m_categoryId >> info.m_installedTime >> info.m_firstRunTime;
-    argument >> info.m_progressValue << info.m_openCount;
+    argument >> info.m_progressValue >> info.m_openCount;
     argument >> info.m_isDir >> info.m_appInfoList;
 
     return argument;

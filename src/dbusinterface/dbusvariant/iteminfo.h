@@ -69,10 +69,6 @@ public:
     qlonglong m_installedTime;      // 安装时间
     qlonglong m_openCount;          // 打开次数
     qlonglong m_firstRunTime;       // 首次运行的时间戳
-
-    // Todo: 二进制兼容， 后面可以重新写一个ItemInfo2, 读取缓存配置的时候也要留意该问题。升级后，删除旧的配置文件。
-    bool m_isDir;                   // 是否为文件夹
-    ItemInfoList m_appInfoList;
 };
 
 class ItemInfo_v1
@@ -121,7 +117,6 @@ public:
     qlonglong m_openCount;          // 打开次数
     qlonglong m_firstRunTime;       // 首次运行的时间戳
 
-    // Todo: 二进制兼容， 后面可以重新写一个ItemInfo2, 读取缓存配置的时候也要留意该问题。升级后，删除旧的配置文件。
     bool m_isDir;                   // 是否为文件夹
     ItemInfoList_v1 m_appInfoList;
 };

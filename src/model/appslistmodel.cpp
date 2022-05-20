@@ -284,8 +284,12 @@ void AppsListModel::setDragDropIndex(const QModelIndex &index)
 void AppsListModel::dropInsert(const QString &appKey, const int pos)
 {
     beginInsertRows(QModelIndex(), pos, pos);
-    int appPos = m_pageIndex * m_calcUtil->appPageItemCount(m_category) + pos;
-    m_appsManager->restoreItem(appKey, appPos);
+
+    int appPos = pos;
+    if (m_category == AppsListModel::All)
+        appPos = m_pageIndex * m_calcUtil->appPageItemCount(m_category) + pos;
+
+    m_appsManager->restoreItem(appKey, m_category, appPos);
     endInsertRows();
 }
 
@@ -351,7 +355,7 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
     if(!m_calcUtil->fullscreen())
         return nSize;
 
-    if (m_category == Collect || (m_category == AppsListModel::Search) 
+    if (m_category == Collect || (m_category == AppsListModel::Search)
                               || (m_category == AppsListModel::PluginSearch))
         return nSize;
 
@@ -388,6 +392,7 @@ void AppsListModel::setDrawBackground(bool draw)
 void AppsListModel::updateModelData(const QModelIndex dragIndex, const QModelIndex dropIndex)
 {
     m_appsManager->updateUsedSortData(dragIndex, dropIndex);
+    m_appsManager->saveUsedSortedList();
 //    qInfo() << "dragIndex:" << dragIndex
 //            << ",dropIndex:" << dropIndex;
     removeRows(dragIndex.row(), 1, QModelIndex());
@@ -411,7 +416,7 @@ bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
     Q_ASSERT(count == 1);
 
     beginRemoveRows(parent, row, row);
-    m_appsManager->dragdropStashItem(index(row));
+    m_appsManager->dragdropStashItem(index(row), m_category);
     endRemoveRows();
 
     return true;
@@ -460,7 +465,6 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
     QMimeData *mime = new QMimeData;
     mime->setData("RequestDock", index.data(AppDesktopRole).toByteArray());
     mime->setData("AppKey", index.data(AppKeyRole).toByteArray());
-
     if (index.data(AppIsRemovableRole).toBool())
         mime->setData("Removable", "");
 

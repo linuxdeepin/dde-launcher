@@ -62,7 +62,7 @@ public:
         SwitchScale = 6,
         Uninstall = 7,
         MoveToTop = 8,
-        AddToCollected = 9
+        EditCollected = 9        // 添加到收藏列表或从收藏列表中移除
     };
 
     bool isMenuShown() const {return m_menuIsShown;}
@@ -79,7 +79,7 @@ signals:
     void unInstallApp(const QModelIndex &index);
     void menuShowMouseMoving();
     void requestMoveToTop(const QModelIndex &index);
-    void requestAddToCollected(const QModelIndex &index);
+    void requestEditCollected(const QModelIndex &index, const bool isInCollected);
 
 public slots:
     void showMenuByAppItem(QPoint pos, const QModelIndex &index);
@@ -115,6 +115,7 @@ private:
     bool m_isItemStartup;
     bool m_isItemProxy;
     bool m_isItemEnableScaling;
+    bool m_isItemInCollected;
 
     bool m_menuIsShown = false;
     Menu *m_menu;

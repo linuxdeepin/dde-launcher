@@ -158,16 +158,23 @@ DragPageDelegate *AppGridView::getDelegate()
 void AppGridView::dropEvent(QDropEvent *e)
 {
     e->accept();
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel)
+        return;
+
+    // 收藏列表允许从其他视图拖拽进入
+    if (listModel->category() == AppsListModel::Collect) {
+        ItemInfo_v1 info = m_appManager->getItemInfo(e->mimeData()->data("AppKey"));
+        int row = indexAt(e->pos()).row();
+        m_appManager->dropToCollected(info, row);
+        return;
+    }
 
     if (m_dropThresholdTimer->isActive())
         m_dropThresholdTimer->stop();
 
     AppItemDelegate *itemDelegate = qobject_cast<AppItemDelegate *>(this->itemDelegate());
     if (!itemDelegate)
-        return;
-
-    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
-    if (!listModel)
         return;
 
     if (m_calcUtil->fullscreen()) {
@@ -243,7 +250,6 @@ void AppGridView::dragEnterEvent(QDragEnterEvent *e)
 
 void AppGridView::dragMoveEvent(QDragMoveEvent *e)
 {
-    Q_UNUSED(e);
     m_dropThresholdTimer->stop();
 
     if (m_lastFakeAni)

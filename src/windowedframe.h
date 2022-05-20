@@ -155,9 +155,8 @@ private:
 
     QWidget *m_maskBg;
     AppsManager *m_appsManager;
-    AppListView *m_appsView;
 
-    AppsListModel *m_appsModel;          // 应用列表
+    AppsListModel *m_appsModel;
     AppsListModel *m_allAppsModel;
     AppsListModel *m_collectionModel;
     SortFilterProxyModel *m_filterModel;
@@ -165,6 +164,7 @@ private:
 
     QWidget *m_rightWidget;
     MiniFrameRightBar *m_bottomBtn;
+    AppListView *m_appsView;
     AppGridView *m_collectionView;
     AppGridView *m_allAppView;
     QLabel *m_collectLabel;

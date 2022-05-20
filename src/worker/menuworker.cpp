@@ -44,6 +44,7 @@ MenuWorker::MenuWorker(QObject *parent)
     , m_isItemStartup(false)
     , m_isItemProxy(false)
     , m_isItemEnableScaling(false)
+    , m_isItemInCollected(false)
     , m_menu(new Menu)
 {
 }
@@ -62,6 +63,7 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
     m_isItemStartup = m_currentModelIndex.data(AppsListModel::AppAutoStartRole).toBool();
     m_isItemProxy = m_currentModelIndex.data(AppsListModel::AppIsProxyRole).toBool();
     m_isItemEnableScaling = m_currentModelIndex.data(AppsListModel::AppEnableScalingRole).toBool();
+    m_isItemInCollected = m_currentModelIndex.data(AppsListModel::AppIsInCollectRole).toBool();
 
     const double scale_ratio = SettingValue("com.deepin.xsettings", QByteArray(), "scale-factor", 1.0).toDouble();;
 
@@ -126,7 +128,7 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
         }
 
         menu->addAction(collectAction);
-        signalMapper->setMapping(collectAction, AddToCollected);
+        signalMapper->setMapping(collectAction, EditCollected);
         connect(collectAction, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
         menu->addSeparator();
     }
@@ -286,7 +288,6 @@ const QModelIndex MenuWorker::getCurrentModelIndex()
 
 void MenuWorker::handleMenuAction(int index)
 {
-    qInfo() << "index:" << index;
     // 隐藏右键菜单
     onHideMenu();
 
@@ -315,8 +316,8 @@ void MenuWorker::handleMenuAction(int index)
     case MoveToTop:
         emit requestMoveToTop(m_currentModelIndex);
         break;
-    case AddToCollected:
-        emit requestAddToCollected(m_currentModelIndex);
+    case EditCollected:
+        emit requestEditCollected(m_currentModelIndex, m_isItemInCollected);
         break;
     default:
         break;

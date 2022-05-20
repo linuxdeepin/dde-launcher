@@ -140,6 +140,7 @@ private:
     QLabel *m_dayLabel;
     QLabel *m_weekLabel;
     ViewType m_viewType;
+    QString m_appKey;
 };
 
 typedef QList<AppGridView *> AppGridViewList;

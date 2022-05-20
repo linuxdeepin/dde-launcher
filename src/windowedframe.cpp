@@ -83,13 +83,13 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_wmHelper(DWindowManagerHelper::instance())
     , m_maskBg(new QWidget(this))
     , m_appsManager(AppsManager::instance())
-    , m_appsView(new AppListView(this))
     , m_appsModel(new AppsListModel(AppsListModel::TitleMode, this))
     , m_allAppsModel(new AppsListModel(AppsListModel::All, this))
     , m_collectionModel(new AppsListModel(AppsListModel::Collect, this))
     , m_filterModel(new SortFilterProxyModel(this))
     , m_searchWidget(new SearchModeWidget(this))
     , m_bottomBtn(new MiniFrameRightBar(this))
+    , m_appsView(new AppListView(this))
     , m_collectionView(new AppGridView(this))
     , m_allAppView(new AppGridView(this))
     , m_tipsLabel(new QLabel(this))
@@ -134,14 +134,17 @@ void WindowedFrame::initUi()
 
     m_appsView->setModel(m_appsModel);
     m_appsView->setItemDelegate(itemDelegate);
+    m_appsView->setAcceptDrops(false);
+    m_appsView->installEventFilter(m_eventFilter);
 
     m_collectionView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_collectionView->setModel(m_collectionModel);
     m_collectionView->setItemDelegate(appItemDelegate);
     m_collectionView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_collectionView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_collectionView->setDragEnabled(false);
-    m_collectionView->setDragDropMode(QAbstractItemView::NoDragDrop);
+    m_collectionView->setDragEnabled(true);
+    m_collectionView->setDragDropMode(QAbstractItemView::DragDrop);
+    m_collectionView->setAcceptDrops(true);
 
     m_filterModel->setSourceModel(m_allAppsModel);
     m_filterModel->setFilterRole(AppsListModel::AppRawItemInfoRole);
@@ -152,8 +155,7 @@ void WindowedFrame::initUi()
     m_allAppView->setModel(m_allAppsModel);
     m_allAppView->setItemDelegate(appItemDelegate);
     m_allAppView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    m_appsView->installEventFilter(m_eventFilter);
+    m_allAppView->setAcceptDrops(false);
 
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setFixedSize(500, 50);
@@ -290,6 +292,8 @@ void WindowedFrame::initConnection()
     connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_delayHideTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
     connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_appsView, &AppListView::menuHide);
+    connect(m_menuWorker.get(), &MenuWorker::requestEditCollected, m_appsManager, &AppsManager::onEditCollected);
+    connect(m_menuWorker.get(), &MenuWorker::requestMoveToTop, m_appsManager, &AppsManager::onMoveToFirstInCollected);
 
     // 左侧应用列表
     connect(m_appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);

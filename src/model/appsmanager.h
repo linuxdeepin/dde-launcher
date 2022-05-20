@@ -60,11 +60,11 @@ class AppsManager : public QObject
 
 public:
     static AppsManager *instance();
-    void dragdropStashItem(const QModelIndex &index);
+    void dragdropStashItem(const QModelIndex &index, AppsListModel::AppCategory mode);
     void stashItem(const QModelIndex &index);
     void stashItem(const QString &appKey);
     void abandonStashedItem(const QString &appKey);
-    void restoreItem(const QString &appKey, const int pos = -1);
+    void restoreItem(const QString &appKey, AppsListModel::AppCategory mode, const int pos = -1);
     int dockPosition() const;
     QRect dockGeometry() const;
     bool isHaveNewInstall() const { return !m_newInstalledAppsList.isEmpty(); }
@@ -80,6 +80,8 @@ public:
     void updateUsedSortData(QModelIndex dragIndex, QModelIndex dropIndex);
     QList<QPixmap> getDirAppIcon(QModelIndex modelIndex);
     void showSearchedData(const AppInfoList &list);
+    const ItemInfo_v1 getItemInfo(const QString &appKey);
+    void dropToCollected(const ItemInfo_v1 &info, int row);
 
 signals:
     void itemDataChanged(const ItemInfo_v1 &info) const;
@@ -104,9 +106,12 @@ signals:
 
 public slots:
     void saveUsedSortedList();
+    void saveCollectedSortedList();
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
     void uninstallApp(const QString &appKey, const int displayMode = ALL_APPS);
+    void onEditCollected(const QModelIndex index, const bool isInCollected);
+    void onMoveToFirstInCollected(const QModelIndex index);
     const ItemInfoList_v1 appsInfoList(const AppsListModel::AppCategory &category) const;
     static int appsInfoListSize(const AppsListModel::AppCategory &category);
     static const ItemInfo_v1 appsInfoListIndex(const AppsListModel::AppCategory &category,const int index);
@@ -136,7 +141,6 @@ public slots:
 private:
     explicit AppsManager(QObject *parent = nullptr);
 
-    void appendSearchResult(const QString &appKey);
     void sortByPresetOrder(ItemInfoList_v1 &processList);
     void sortByUseFrequence(ItemInfoList_v1 &processList);
     void filterCollectedApp(ItemInfoList_v1 &processList);
@@ -147,6 +151,7 @@ private:
     void saveAppCategoryInfoList();
     void updateUsedListInfo();
     void generateCategoryMap();
+    void readCollectedCacheData();
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
 
 private slots:
@@ -171,7 +176,6 @@ public:
     static ItemInfoList_v1 m_appSearchResultList;                              // 搜索结果列表
     static ItemInfoList_v1 m_dirAppInfoList;                                   // 应用抽屉列表
     static ItemInfoList_v1 m_usedSortedList;                                   // 全屏应用列表
-    static ItemInfoList_v1 m_userSortedList;
 
 private:
     DBusLauncher *m_launcherInter;

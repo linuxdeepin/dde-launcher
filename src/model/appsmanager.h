@@ -83,6 +83,13 @@ public:
     const ItemInfo_v1 getItemInfo(const QString &appKey);
     void dropToCollected(const ItemInfo_v1 &info, int row);
 
+    static bool readJsonFile(QIODevice &device, QSettings::SettingsMap &map);
+    static bool writeJsonFile(QIODevice &device, const QSettings::SettingsMap &map);
+    void registerSettingsFormat();
+
+    QSettings::SettingsMap getCacheMapData(const ItemInfoList_v1 &list);
+    const ItemInfoList_v1 readCacheData(const QSettings::SettingsMap &map);
+
 signals:
     void itemDataChanged(const ItemInfo_v1 &info) const;
     void dataChanged(const AppsListModel::AppCategory category) const;
@@ -207,7 +214,11 @@ private:
     static QSettings APP_USER_SORTED_LIST;
     static QSettings APP_USED_SORTED_LIST;
     static QSettings APP_CATEGORY_USED_SORTED_LIST;
-    static QSettings APP_COLLECT_LIST;
+
+    QSettings *m_collectedSetting;
+    QSettings *m_categorySetting;
+    QSettings *m_usedSortSetting;
+
     QStringList m_categoryTs;
     QGSettings *m_filterSetting;
 

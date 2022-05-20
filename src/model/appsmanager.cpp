@@ -56,11 +56,32 @@ QGSettings *AppsManager::m_launcherSettings = SettingsPtr("com.deepin.dde.launch
 QSet<QString> AppsManager::APP_AUTOSTART_CACHE;
 QSettings AppsManager::APP_USED_SORTED_LIST("deepin", "dde-launcher-app-used-sorted-list");
 QSettings AppsManager::APP_CATEGORY_USED_SORTED_LIST("deepin","dde-launcher-app-category-used-sorted-list");
-QSettings AppsManager::APP_COLLECT_LIST("deepin", "dde-launcher-app-collect-list");
 static constexpr int USER_SORT_UNIT_TIME = 3600; // 1 hours
 const QString TRASH_DIR = QDir::homePath() + "/.local/share/Trash";
 const QString TRASH_PATH = TRASH_DIR + "/files";
 const QDir::Filters NAME_FILTERS = QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot;
+
+bool AppsManager::readJsonFile(QIODevice &device, QSettings::SettingsMap &map)
+{
+    QJsonParseError jsonParser;
+    map = QJsonDocument::fromJson(device.readAll(), &jsonParser).toVariant().toMap();
+
+    return jsonParser.error == QJsonParseError::NoError;
+}
+
+bool AppsManager::writeJsonFile(QIODevice &device, const QSettings::SettingsMap &map)
+{
+    QJsonDocument jsonDocument = QJsonDocument::fromVariant(QVariant::fromValue(map));
+    return device.write(jsonDocument.toJson()) != -1;
+}
+
+void AppsManager::registerSettingsFormat()
+{
+    const QSettings::Format JsonFormat = QSettings::registerFormat("json", readJsonFile, writeJsonFile);
+    m_collectedSetting = new QSettings(JsonFormat, QSettings::UserScope, "deepin","dde-launcher-app-collect-list");
+    m_categorySetting = new QSettings(JsonFormat, QSettings::UserScope, "deepin","dde-launcher-app-category-used-sorted-list");
+    m_usedSortSetting = new QSettings(JsonFormat, QSettings::UserScope, "deepin","dde-launcher-app-used-sorted-list");
+}
 
 QReadWriteLock AppsManager::m_appInfoLock;
 QHash<AppsListModel::AppCategory, ItemInfoList_v1> AppsManager::m_appInfos;
@@ -95,6 +116,9 @@ AppsManager::AppsManager(QObject *parent) :
         m_filterSetting = new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
         connect(m_filterSetting, &QGSettings::changed, this, &AppsManager::onGSettingChanged);
     }
+
+    // QSettings 添加Json格式支持
+    registerSettingsFormat();
 
     // 分类目录名称
     m_categoryTs.append(tr("Internet"));
@@ -216,6 +240,83 @@ void AppsManager::dropToCollected(const ItemInfo_v1 &info, int row)
 
     saveCollectedSortedList();
     emit dataChanged(AppsListModel::Collect);
+}
+
+QSettings::SettingsMap AppsManager::getCacheMapData(const ItemInfoList_v1 &list)
+{
+    auto fillMapData = [ & ](QSettings::SettingsMap &map, const ItemInfo_v1 &info) {
+        map.insert("desktop", info.m_desktop);
+        map.insert("appName", info.m_name);
+        map.insert("appKey", info.m_key);
+        map.insert("iconKey", info.m_iconKey);
+        map.insert("appStatus", info.m_status);
+        map.insert("categoryId", info.m_categoryId);
+        map.insert("description", info.m_description);
+        map.insert("progressValue", info.m_progressValue);
+        map.insert("installTime", info.m_installedTime);
+        map.insert("openCount", info.m_openCount);
+        map.insert("firstRunTime", info.m_firstRunTime);
+        map.insert("isDir", info.m_isDir);
+    };
+
+    QSettings::SettingsMap map;
+    for (int i = 0; i < list.size(); i++) {
+        QSettings::SettingsMap itemMap, itemDirMap;
+        const ItemInfo_v1 info = list.at(i);
+        fillMapData(itemMap, info);
+
+        for (int j = 0; j < info.m_appInfoList.size(); j++) {
+            QSettings::SettingsMap dirMap;
+            const ItemInfo_v1 dirInfo = info.m_appInfoList.at(j);
+            fillMapData(dirMap, dirInfo);
+            itemDirMap.insert("dirItem", dirMap);
+        }
+
+        itemMap.insert(QString("appInfoList_%1").arg(i), itemDirMap);
+        map.insert(QString("itemInfoList_%1").arg(i), itemMap);
+    }
+
+    return map;
+}
+
+// m_collectedSetting->value("lists").toMap();
+const ItemInfoList_v1 AppsManager::readCacheData(const QMap<QString, QVariant> &map)
+{
+    auto getMapData = [ & ](ItemInfo_v1 &info, const QMap<QString, QVariant> &infoMap) {
+        info.m_desktop = infoMap.value("desktop").toString();
+        info.m_name = infoMap.value("appName").toString();
+        info.m_key = infoMap.value("appKey").toString();
+        info.m_iconKey = infoMap.value("iconKey").toString();
+        info.m_status = infoMap.value("appStatus").toInt();
+        info.m_categoryId = infoMap.value("categoryId").toLongLong();
+        info.m_description = infoMap.value("description").toString();
+        info.m_progressValue = infoMap.value("progressValue").toInt();
+        info.m_installedTime = infoMap.value("installTime").toInt();
+        info.m_openCount = infoMap.value("openCount").toLongLong();
+        info.m_firstRunTime = infoMap.value("firstRunTime").toLongLong();
+        info.m_isDir = infoMap.value("isDir").toLongLong();
+    };
+
+    ItemInfoList_v1 infoList;
+    for (int i = 0; i < map.size(); i++) {
+        QMap<QString, QVariant> itemInfoMap = map.value(QString("itemInfoList_%1").arg(i)).toMap();
+        ItemInfo_v1 info;
+        for (int j = 0; j < itemInfoMap.size(); j++) {
+            getMapData(info, itemInfoMap);
+
+            QMap<QString, QVariant> appInfoMap = itemInfoMap.value(QString("appInfoList_%1").arg(i)).toMap();
+            ItemInfoList_v1 appList;
+            for (int k = 0; k < appInfoMap.size(); k++) {
+                ItemInfo_v1 appInfo;
+                getMapData(appInfo, appInfoMap);
+                appList.append(appInfo);
+            }
+            info.m_appInfoList.append(appList);
+        }
+        infoList.append(info);
+    }
+
+    return infoList;
 }
 
 /**
@@ -468,20 +569,12 @@ void AppsManager::refreshAllList()
 
 void AppsManager::saveUsedSortedList()
 {
-    QByteArray writeBuf;
-    QDataStream out(&writeBuf, QIODevice::WriteOnly);
-    out << m_usedSortedList;
-
-    APP_USED_SORTED_LIST.setValue("lists", writeBuf);
+    m_usedSortSetting->setValue("lists", getCacheMapData(m_usedSortedList));
 }
 
 void AppsManager::saveCollectedSortedList()
 {
-    QByteArray writeBuf;
-    QDataStream out(&writeBuf, QIODevice::WriteOnly);
-    out << m_collectSortedList;
-
-    APP_COLLECT_LIST.setValue("lists", writeBuf);
+    m_collectedSetting->setValue("lists", QVariant::fromValue(getCacheMapData(m_collectSortedList)));
 }
 
 void AppsManager::searchApp(const QString &keywords)
@@ -888,9 +981,7 @@ void AppsManager::refreshCategoryInfoList()
         in >> oldUsedSortedList;
         m_usedSortedList = ItemInfo_v1::itemListToItem_v1List(oldUsedSortedList);
     } else {
-        QByteArray usedBuf = APP_USED_SORTED_LIST.value("lists").toByteArray();
-        QDataStream in(&usedBuf, QIODevice::ReadOnly);
-        in >> m_usedSortedList;
+        m_usedSortedList.append(readCacheData(m_usedSortSetting->value("lists").toMap()));
     }
 
     foreach(auto info , m_usedSortedList) {
@@ -914,6 +1005,8 @@ void AppsManager::refreshCategoryInfoList()
             QDataStream categoryIn(&categoryBuf, QIODevice::ReadOnly);
             categoryIn >> itemInfoList;
             itemInfoList_v1 = ItemInfo_v1::itemListToItem_v1List(itemInfoList);
+        } else if (m_categorySetting->contains(QString("lists_%1").arg(startIndex))) {
+            itemInfoList_v1 << readCacheData(m_categorySetting->value(QString("lists_%1").arg(startIndex)).toMap());
         }
 
         // 当缓存数据与应用商店数据有差异时，以应用商店数据为准
@@ -949,9 +1042,7 @@ void AppsManager::refreshUsedInfoList()
     if (!m_usedSortedList.isEmpty())
         return;
 
-    QByteArray readBuffer = APP_USED_SORTED_LIST.value("lists").toByteArray();
-    QDataStream in(&readBuffer, QIODevice::ReadOnly);
-    in >> m_usedSortedList;
+    m_usedSortedList.append(readCacheData(m_usedSortSetting->value("lists").toMap()));
 
     if (m_usedSortedList.isEmpty()) {
         m_usedSortedList = m_allAppInfoList;
@@ -987,11 +1078,7 @@ void AppsManager::saveAppCategoryInfoList()
     QHash<AppsListModel::AppCategory, ItemInfoList_v1>::iterator categoryAppsIter = m_appInfos.begin();
     for (; categoryAppsIter != m_appInfos.end(); ++categoryAppsIter) {
         int category = categoryAppsIter.key();
-
-        QByteArray writeBuf;
-        QDataStream out(&writeBuf, QIODevice::WriteOnly);
-        out << categoryAppsIter.value();
-        APP_CATEGORY_USED_SORTED_LIST.setValue(QString("lists_%1").arg(category), writeBuf);
+        m_categorySetting->setValue(QString("lists_%1").arg(category), getCacheMapData(categoryAppsIter.value()));
     }
 }
 
@@ -1172,7 +1259,7 @@ void AppsManager::generateCategoryMap()
 
 void AppsManager::readCollectedCacheData()
 {
-    QString filePath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QString("/%1/dde-launcher-app-collect-list.conf").arg(qApp->organizationName());
+    QString filePath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QString("/%1/dde-launcher-app-collect-list.json").arg(qApp->organizationName());
 
     if (!QFile::exists(filePath)) {
         // 获取小窗口默认收藏列表
@@ -1180,9 +1267,7 @@ void AppsManager::readCollectedCacheData()
         m_collectSortedList.clear();
         filterCollectedApp(tempData);
     } else {
-        QByteArray commonBuf = APP_COLLECT_LIST.value("lists").toByteArray();
-        QDataStream commonData(&commonBuf, QIODevice::ReadOnly);
-        commonData >> m_collectSortedList;
+        m_collectSortedList.append(readCacheData(m_collectedSetting->value("lists").toMap()));
     }
 }
 
@@ -1381,6 +1466,8 @@ void AppsManager::updateUsedSortData(QModelIndex dragIndex, QModelIndex dropInde
 
         if (!list[index].m_appInfoList.contains(dragItemInfo)) {
             if (!dragItemIsDir) {
+                // 当被拖动的应用和释放的应用都不是应用文件夹时,更新被拖动的应用此刻需要文件夹标识
+                dragItemInfo.m_isDir = true;
                 itemList.append(dragItemInfo);
             } else {
                 // 确保被拖动的应用放到后面
@@ -1404,13 +1491,10 @@ QList<QPixmap> AppsManager::getDirAppIcon(QModelIndex modelIndex)
     ItemInfoList_v1 infoList;
     ItemInfo_v1 info = modelIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
 
-    int  index = m_usedSortedList.indexOf(info);
+    int index = m_usedSortedList.indexOf(info);
 
     if (index == -1) {
-        // 在应用的目录中查找
-        if (!info.m_isDir)
-            return pixmapList;
-
+        // 在应用的目录中查找不到时, 继续从应用抽屉中查找
         index = info.m_appInfoList.indexOf(info);
         if (index == -1)
             return pixmapList;

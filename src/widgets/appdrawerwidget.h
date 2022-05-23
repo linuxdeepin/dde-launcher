@@ -1,5 +1,5 @@
-#ifndef APPDIRWIDGET_H
-#define APPDIRWIDGET_H
+#ifndef APPDRAWERWIDGET_H
+#define APPDRAWERWIDGET_H
 
 #include "appitemdelegate.h"
 #include "multipagesview.h"
@@ -11,13 +11,13 @@
 
 DWIDGET_USE_NAMESPACE
 
-class AppDirWidget : public QWidget
+class AppDrawerWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    AppDirWidget(QWidget *parent = Q_NULLPTR);
-    virtual ~AppDirWidget();
+    AppDrawerWidget(QWidget *parent = Q_NULLPTR);
+    virtual ~AppDrawerWidget();
 
     void initUi();
     void initAccessible();

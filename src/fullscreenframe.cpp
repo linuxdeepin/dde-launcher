@@ -77,7 +77,7 @@ FullScreenFrame::FullScreenFrame(QWidget *parent)
     , m_focusIndex(0)
     , m_mousePressSeconds(0)
     , m_mousePressState(false)
-    , m_dirWidget(new AppDirWidget(this))
+    , m_drawerWidget(new AppDrawerWidget(this))
     , m_curScreen(m_appsManager->currentScreen())
     , m_bMousePress(false)
     , m_nMousePos(0)
@@ -143,7 +143,7 @@ void FullScreenFrame::addViewEvent(AppGridView *pView)
 
     connect(m_appsManager, &AppsManager::dataChanged, [ & ](AppsListModel::AppCategory category) {
         if (category == AppsListModel::Dir)
-            m_dirWidget->update();
+            m_drawerWidget->update();
     });
     connect(pView, &AppGridView::clicked, [ & ](const QModelIndex &index) {
         if (!index.isValid())
@@ -155,7 +155,7 @@ void FullScreenFrame::addViewEvent(AppGridView *pView)
             this->hide();
         } else {
             m_appsManager->setDirAppInfoList(index);
-            m_dirWidget->show();
+            m_drawerWidget->show();
         }
     });
     connect(pView, &AppGridView::requestMouseRelease,this,  [ = ]() {
@@ -366,7 +366,7 @@ QVariant FullScreenFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
 
 void FullScreenFrame::initUI()
 {
-    m_dirWidget->setVisible(false);
+    m_drawerWidget->setVisible(false);
 
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setFixedSize(500, 50);
@@ -448,7 +448,7 @@ void FullScreenFrame::initAppView()
 
 void FullScreenFrame::initConnection()
 {
-    connect(this, &BoxFrame::backgroundImageChanged, m_dirWidget, &AppDirWidget::updateBackgroundImage);
+    connect(this, &BoxFrame::backgroundImageChanged, m_drawerWidget, &AppDrawerWidget::updateBackgroundImage);
     connect(this, &FullScreenFrame::visibleChanged, this, &FullScreenFrame::onHideMenu);
 
     connect(m_multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
@@ -484,7 +484,7 @@ void FullScreenFrame::initAccessibleName()
 
     m_multiPagesView->setAccessibleName("allAppPagesView");
     m_searchWidget->edit()->setAccessibleName("FullScreenSearchEdit");
-    m_dirWidget->setAccessibleName("dirWidget");
+    m_drawerWidget->setAccessibleName("dirWidget");
 }
 
 void FullScreenFrame::showLauncher()

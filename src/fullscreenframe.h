@@ -38,7 +38,7 @@
 #include "applistarea.h"
 #include "boxframe.h"
 #include "multipagesview.h"
-#include "appdirwidget.h"
+#include "appdrawerwidget.h"
 #include "maskqwidget.h"
 #include "searchmodewidget.h"
 #include "sortfilterproxymodel.h"
@@ -169,7 +169,7 @@ private:
 
     QFrame *m_topSpacing;
     QFrame *m_bottomSpacing;
-    AppDirWidget *m_dirWidget;                          // 应用抽屉展开页面
+    AppDrawerWidget *m_drawerWidget;                    // 应用抽屉展开页面
     const QScreen *m_curScreen;
 
     bool m_canResizeDockPosition = false;               // 只有窗口在完全显示出来后，才允许自动调整各部件位置

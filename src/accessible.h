@@ -55,7 +55,7 @@ SET_FORM_ACCESSIBLE(MaskQWidget, "MaskQWidget")
 SET_FORM_ACCESSIBLE(DHBoxWidget, "DHBoxWidget")
 SET_FORM_ACCESSIBLE(DBoxWidget, "DBoxWidget")
 SET_FORM_ACCESSIBLE(SearchModeWidget, "SearchModeWidget")
-SET_FORM_ACCESSIBLE(AppDirWidget, "AppDirWidget")
+SET_FORM_ACCESSIBLE(AppDrawerWidget, "AppDrawerWidget")
 SET_FORM_ACCESSIBLE(MultiPagesView, "MultiPagesView")
 SET_FORM_ACCESSIBLE(IconButton, "IconButton")
 SET_FORM_ACCESSIBLE(ModeSwitch, "ModeSwitch")
@@ -90,7 +90,7 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DHBoxWidget);
     USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DBoxWidget);
     USE_ACCESSIBLE(classname, SearchModeWidget)
-    USE_ACCESSIBLE(classname, AppDirWidget)
+    USE_ACCESSIBLE(classname, AppDrawerWidget)
     USE_ACCESSIBLE(classname, MultiPagesView)
     USE_ACCESSIBLE(classname, IconButton)
     USE_ACCESSIBLE(classname, ModeSwitch)

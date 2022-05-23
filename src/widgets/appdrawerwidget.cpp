@@ -1,12 +1,11 @@
-#include "appdirwidget.h"
-
-#include <QHBoxLayout>
-
+#include "appdrawerwidget.h"
 #include "calculate_util.h"
 #include "appsmanager.h"
 #include "constants.h"
 
-AppDirWidget::AppDirWidget(QWidget *parent)
+#include <QHBoxLayout>
+
+AppDrawerWidget::AppDrawerWidget(QWidget *parent)
     : QWidget (parent)
     , m_appDelegate(new AppItemDelegate(this))
     , m_multipageView(new MultiPagesView(AppsListModel::Dir, this))
@@ -17,11 +16,11 @@ AppDirWidget::AppDirWidget(QWidget *parent)
     initAccessible();
 }
 
-AppDirWidget::~AppDirWidget()
+AppDrawerWidget::~AppDrawerWidget()
 {
 }
 
-void AppDirWidget::initUi()
+void AppDrawerWidget::initUi()
 {
     setWindowFlags(Qt::Popup);
     setAttribute(Qt::WA_TranslucentBackground);
@@ -45,18 +44,18 @@ void AppDirWidget::initUi()
     m_multipageView->raise();
 }
 
-void AppDirWidget::initAccessible()
+void AppDrawerWidget::initAccessible()
 {
     m_multipageView->setAccessibleName("drawerWidget");
 }
 
-void AppDirWidget::updateBackgroundImage(const QPixmap &img)
+void AppDrawerWidget::updateBackgroundImage(const QPixmap &img)
 {
     m_pix = img;
     update();
 }
 
-void AppDirWidget::showEvent(QShowEvent *event)
+void AppDrawerWidget::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event);
 

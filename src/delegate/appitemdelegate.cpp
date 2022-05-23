@@ -147,7 +147,9 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     // 绘制选中样式
    if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay) && !itemIsDir) {
         const int radius = 18;
-        const QColor brushColor(255, 255, 255, 51);
+        QColor brushColor(Qt::white);
+        brushColor.setAlpha(51);
+
 
         painter->setPen(Qt::transparent);
         painter->setBrush(brushColor);
@@ -214,7 +216,9 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     painter->setFont(appNamefont);
     painter->setBrush(QBrush(Qt::transparent));
-    painter->setPen(QColor(0, 0, 0, 80));
+    QColor color(Qt::black);
+    color.setAlpha(80);
+    painter->setPen(color);
     static QFont font = painter->font();
     if (!m_calcUtil->fullscreen()) {
         painter->setPen(Qt::black);

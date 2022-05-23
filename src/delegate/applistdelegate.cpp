@@ -87,8 +87,13 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     if (option.state.testFlag(QStyle::State_Selected) && !isTitle) {
         painter->setBrush(m_color);
     } else if (isDragItem && !isTitle) {
-        painter->setBrush(QColor(255, 255, 255, 255 * 0.4));
-        painter->setPen(QColor(0, 0, 0, 255 * 0.05));
+        QColor brushColor(Qt::white);
+        brushColor.setAlpha(static_cast<int>(255 * 0.4));
+        painter->setBrush(brushColor);
+
+        QColor penColor(Qt::black);
+        penColor.setAlpha(static_cast<int>(255 * 0.05));
+        painter->setPen(penColor);
     } else {
         painter->setBrush(Qt::NoBrush);
     }

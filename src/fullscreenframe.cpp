@@ -376,8 +376,10 @@ void FullScreenFrame::initUI()
     m_delayHideTimer->setSingleShot(true);
 
     QPalette palette = m_searchWidget->palette();
-    QColor colorButton(255, 255, 255, static_cast<int>(0.15 * 255));
-    QColor colorText(255, 255, 255);
+    QColor colorButton(Qt::white);
+    colorButton.setAlpha(static_cast<int>(255 * 0.15));
+
+    QColor colorText(Qt::white);
     palette.setColor(QPalette::Button, colorButton);
     palette.setColor(QPalette::Text, colorText);
     palette.setColor(QPalette::ButtonText, colorText);

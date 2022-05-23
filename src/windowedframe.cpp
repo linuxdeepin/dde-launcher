@@ -647,10 +647,15 @@ void WindowedFrame::resetWidgetStyle()
 
     palette = m_maskBg->palette();
 
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType)
-        palette.setColor(QPalette::Background, QColor(0, 0, 0, 0.3 * 255));
-    else
-        palette.setColor(QPalette::Background, QColor(255, 255, 255, 0.3 * 255));
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+        QColor color(Qt::black);
+        color.setAlpha(static_cast<int>(255 * 0.3));
+        palette.setColor(QPalette::Background, color);
+    } else {
+        QColor color(Qt::white);
+        color.setAlpha(static_cast<int>(255 * 0.3));
+        palette.setColor(QPalette::Background, color);
+    }
 
     m_maskBg->setPalette(palette);
 }

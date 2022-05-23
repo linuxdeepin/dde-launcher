@@ -73,4 +73,7 @@ void AppDirWidget::showEvent(QShowEvent *event)
     m_multipageView->updatePageCount(AppsListModel::Dir);
     m_multipageView->updatePosition(5);
     m_multipageView->setModel(AppsListModel::Dir);
+
+    // TODO: 更新并显示标题名称
+    m_multipageView->refreshTitle("");
 }

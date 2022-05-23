@@ -20,12 +20,12 @@
  */
 
 #include "multipagesview.h"
-#include "../global_util/constants.h"
-#include "../fullscreenframe.h"
-
-#include <DGuiApplicationHelper>
+#include "constants.h"
+#include "fullscreenframe.h"
 
 #include <QHBoxLayout>
+
+#include <DGuiApplicationHelper>
 
 DGUI_USE_NAMESPACE
 
@@ -98,9 +98,10 @@ MultiPagesView::~MultiPagesView()
     }
 }
 
-void MultiPagesView::setTitle(const QString &str)
+void MultiPagesView::refreshTitle(const QString &str)
 {
     m_titleLabel->setText(str);
+    m_titleLabel->setVisible(true);
 }
 
 /**
@@ -392,12 +393,7 @@ void MultiPagesView::initUi()
     QVBoxLayout *layoutMain = new QVBoxLayout;
     layoutMain->setContentsMargins(0, 0, 0, DLauncher::DRAG_THRESHOLD);
     layoutMain->setSpacing(0);
-    if ((m_category > AppsListModel::Dir) || (m_category == AppsListModel::Search) || (m_category == AppsListModel::PluginSearch)) {
-        layoutMain->addWidget(m_titleLabel, 0, Qt::AlignHCenter);
-        m_titleLabel->setVisible(true);
-    } else {
-        m_titleLabel->setVisible(false);
-    }
+    m_titleLabel->setVisible(false);
 
     layoutMain->addWidget(m_titleLabel, 0, Qt::AlignHCenter);
     layoutMain->addWidget(m_appListArea, 0, Qt::AlignHCenter);

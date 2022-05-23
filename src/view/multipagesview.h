@@ -57,15 +57,18 @@ public:
     explicit MultiPagesView(AppsListModel::AppCategory categoryModel = AppsListModel::All, QWidget *parent = nullptr);
     ~MultiPagesView();
 
-    void setTitle(const QString &str);
+    void refreshTitle(const QString &str);
+
     void updatePageCount(AppsListModel::AppCategory category = AppsListModel::All);
     void showCurrentPage(int currentPage);
     QModelIndex selectApp(const int key);
+    QModelIndex getAppItem(int index);
     AppGridView *pageView(int pageIndex);
     AppsListModel *pageModel(int pageIndex);
+
     int currentPage(){return m_pageIndex;}
     int pageCount() { return m_pageCount;}
-    QModelIndex getAppItem(int index);
+
     void setDataDelegate(QAbstractItemDelegate *delegate);
     void setModel(AppsListModel::AppCategory category);
     void updatePosition(int mode = 0);

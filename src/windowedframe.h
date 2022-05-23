@@ -108,7 +108,6 @@ private:
     void launchCurrentApp() override;
 
     void uninstallApp(const QString &appKey) override;
-    void uninstallApp(const QModelIndex &context);
 
     QPainterPath getCornerPath(AnchoredCornor direction);
 

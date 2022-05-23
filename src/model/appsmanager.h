@@ -32,6 +32,7 @@
 #include "common.h"
 
 #include <DGuiApplicationHelper>
+#include <DDialog>
 
 #include <QHash>
 #include <QSettings>
@@ -76,6 +77,8 @@ public:
     bool fullscreen() const;
     int displayMode() const;
     qreal getCurRatio();
+    void uninstallApp(const QModelIndex &modelIndex);
+    bool uninstallDlgShownState() const;
 
     void updateUsedSortData(QModelIndex dragIndex, QModelIndex dropIndex);
     QList<QPixmap> getDirAppIcon(QModelIndex modelIndex);
@@ -110,6 +113,7 @@ signals:
     void startLoadIcon();
     void loadOtherIcon();
     void loadItem(const ItemInfo_v1 &info, const QString &operationStr);
+    void requestHideLauncher();
 
 public slots:
     void saveUsedSortedList();
@@ -230,6 +234,7 @@ private:
     IconCacheManager *m_iconCacheManager;
     QThread *m_iconCacheThread;
     QTimer *m_updateCalendarTimer;
+    bool m_uninstallDlgIsShown;
 };
 
 #endif // APPSMANAGER_H

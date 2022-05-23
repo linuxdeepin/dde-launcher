@@ -288,7 +288,8 @@ void WindowedFrame::initConnection()
     connect(m_searcherEdit, &DSearchEdit::textChanged, this, &WindowedFrame::searchText, Qt::QueuedConnection);
 
     // 右键菜单
-    connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (WindowedFrame::*)(const QModelIndex &)>(&WindowedFrame::uninstallApp));
+    connect(m_menuWorker.get(), &MenuWorker::unInstallApp, m_appsManager, QOverload<const QModelIndex &>::of(&AppsManager::uninstallApp));
+    connect(m_appsManager, &AppsManager::requestHideLauncher, this, &WindowedFrame::hideLauncher);
     connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_delayHideTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
     connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_appsView, &AppListView::menuHide);
@@ -585,69 +586,7 @@ void WindowedFrame::launchCurrentApp()
 
 void WindowedFrame::uninstallApp(const QString &appKey)
 {
-    uninstallApp(m_appsModel->indexAt(appKey));
-}
-
-void WindowedFrame::uninstallApp(const QModelIndex &context)
-{
-    static bool UNINSTALL_DIALOG_SHOWN = false;
-
-    if (UNINSTALL_DIALOG_SHOWN) {
-        return;
-    }
-
-    UNINSTALL_DIALOG_SHOWN = true;
-    DTK_WIDGET_NAMESPACE::DDialog unInstallDialog;
-    unInstallDialog.setAccessibleName("unInstallDialog");
-    unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
-    unInstallDialog.setWindowModality(Qt::WindowModal);
-
-    const ItemInfo_v1 info = context.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
-    const QString appKey = info.m_key;
-    unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall %1 ?").arg(info.m_name)));
-
-    QPixmap pixmap = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
-    int size = (pixmap.size() / qApp->devicePixelRatio()).width();
-
-    QPair<QString, int> tmpKey { cacheKey(info), size};
-
-    // 命令行安装应用后，卸载应用的确认弹框偶现左上角图标呈齿轮的情况
-    QPixmap appIcon;
-    if (IconCacheManager::existInCache(tmpKey)) {
-        IconCacheManager::getPixFromCache(tmpKey, appIcon);
-        unInstallDialog.setIcon(appIcon);
-    } else {
-        static int tryNum = 0;
-        UNINSTALL_DIALOG_SHOWN = false;
-        ++tryNum;
-        if (tryNum <= 5) {
-            QTimer::singleShot(100, this, [ = ]() { uninstallApp(context); });
-            return;
-        } else {
-            QIcon icon = QIcon(":/widgets/images/application-x-desktop.svg");
-            appIcon = icon.pixmap(QSize(size, size));
-            unInstallDialog.setIcon(appIcon);
-        }
-    }
-
-    QStringList buttons;
-    buttons << tr("Cancel") << tr("Confirm");
-    unInstallDialog.addButtons(buttons);
-
-    connect(&unInstallDialog, &DTK_WIDGET_NAMESPACE::DDialog::buttonClicked, [&](int clickedResult) {
-        // 0 means "cancel" button clicked
-        if (clickedResult == 0) {
-            return;
-        }
-
-        m_appsManager->uninstallApp(appKey);
-    });
-
-    // hide frame
-    QTimer::singleShot(1, this, &WindowedFrame::hideLauncher);
-
-    unInstallDialog.exec();
-    UNINSTALL_DIALOG_SHOWN = false;
+    m_appsManager->uninstallApp(m_appsModel->indexAt(appKey));
 }
 
 QPainterPath WindowedFrame::getCornerPath(AnchoredCornor direction)

@@ -457,7 +457,7 @@ void FullScreenFrame::initConnection()
     connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hideLauncher, Qt::QueuedConnection);
 
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
-    connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
+    connect(m_menuWorker.get(), &MenuWorker::unInstallApp, m_appsManager, QOverload<const QModelIndex &>::of(&AppsManager::uninstallApp));
 
     connect(m_appsManager, &AppsManager::requestTips, this, &FullScreenFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
@@ -643,10 +643,9 @@ void FullScreenFrame::regionMonitorPoint(const QPoint &point, int flag)
 
     if (flag == DLauncher::MOUSE_LEFTBUTTON) {
         // 左键点击时
-        if (!m_menuWorker->isMenuShown() && !m_isConfirmDialogShown && !m_delayHideTimer->isActive()) {
-            if (dockRect.contains(point)) {
-                m_delayHideTimer->start();
-            }
+        if (!m_menuWorker->isMenuShown() && !m_appsManager->uninstallDlgShownState()
+                && !m_delayHideTimer->isActive() && dockRect.contains(point)) {
+            m_delayHideTimer->start();
         }
 
         if (m_menuWorker->isMenuShown() && !visiblableRect.contains(point)) {
@@ -666,42 +665,7 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
 void FullScreenFrame::uninstallApp(const QString &appKey)
 {
     int currentPage = m_multiPagesView->currentPage();
-    uninstallApp(m_multiPagesView->pageModel(currentPage)->indexAt(appKey));
-}
-
-void FullScreenFrame::uninstallApp(const QModelIndex &context)
-{
-    if (m_isConfirmDialogShown)
-        return;
-
-    m_isConfirmDialogShown = true;
-
-    DTK_WIDGET_NAMESPACE::DDialog unInstallDialog;
-    unInstallDialog.setWindowState(unInstallDialog.windowState() & ~Qt::WindowFullScreen);
-    unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
-    unInstallDialog.setWindowModality(Qt::WindowModal);
-
-    const ItemInfo_v1 info = context.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
-    const QString appKey = info.m_key;
-    unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall %1 ?").arg(info.m_name)));
-    QPixmap appIcon = context.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
-    unInstallDialog.setIcon(appIcon);
-    unInstallDialog.setAccessibleName("Imge-unInstallDialog");
-
-    QStringList buttons;
-    buttons << tr("Cancel") << tr("Confirm");
-    unInstallDialog.addButtons(buttons);
-
-    connect(&unInstallDialog, &DTK_WIDGET_NAMESPACE::DDialog::buttonClicked, [&](int clickedResult) {
-        // 0 means "cancel" button clicked
-        if (clickedResult == 0)
-            return;
-
-        m_appsManager->uninstallApp(appKey, m_displayMode);
-    });
-
-    unInstallDialog.exec();
-    m_isConfirmDialogShown = false;
+    m_appsManager->uninstallApp(m_multiPagesView->pageModel(currentPage)->indexAt(appKey));
 }
 
 void FullScreenFrame::refreshPageView(AppsListModel::AppCategory category)

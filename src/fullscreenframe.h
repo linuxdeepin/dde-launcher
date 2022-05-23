@@ -121,7 +121,6 @@ private:
     void initAccessibleName();
 
     void uninstallApp(const QString &appKey) override;
-    void uninstallApp(const QModelIndex &context);
     void showLauncher() override;
     void hideLauncher() override;
     bool visible() override;

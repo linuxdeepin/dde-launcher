@@ -49,6 +49,7 @@
 #include "dpinyin.h"
 
 DWIDGET_USE_NAMESPACE
+DWIDGET_USE_NAMESPACE
 
 QPointer<AppsManager> AppsManager::INSTANCE = nullptr;
 
@@ -110,7 +111,8 @@ AppsManager::AppsManager(QObject *parent) :
     m_trashIsEmpty(false),
     m_fsWatcher(new QFileSystemWatcher(this)),
     m_iconCacheThread(new QThread(this)),
-    m_updateCalendarTimer(new QTimer(this))
+    m_updateCalendarTimer(new QTimer(this)),
+    m_uninstallDlgIsShown(false)
 {
     if (QGSettings::isSchemaInstalled("com.deepin.dde.launcher")) {
         m_filterSetting = new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
@@ -1439,6 +1441,70 @@ int AppsManager::displayMode() const
 qreal AppsManager::getCurRatio()
 {
     return m_calUtil->getCurRatio();
+}
+
+void AppsManager::uninstallApp(const QModelIndex &modelIndex)
+{
+    if (m_uninstallDlgIsShown)
+        return;
+
+    m_uninstallDlgIsShown = true;
+    DDialog unInstallDialog;
+    unInstallDialog.setAccessibleName("unInstallDialog");
+    unInstallDialog.setWindowFlags(Qt::Dialog | unInstallDialog.windowFlags());
+    unInstallDialog.setWindowModality(Qt::WindowModal);
+
+    const ItemInfo_v1 info = modelIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
+    const QString appKey = info.m_key;
+    unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall %1 ?").arg(info.m_name)));
+
+    QPixmap pixmap = modelIndex.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
+    int size = (pixmap.size() / qApp->devicePixelRatio()).width();
+
+    QPair<QString, int> tmpKey { cacheKey(info), size};
+
+    // 命令行安装应用后，卸载应用的确认弹框偶现左上角图标呈齿轮的情况
+    QPixmap appIcon;
+    if (IconCacheManager::existInCache(tmpKey)) {
+        IconCacheManager::getPixFromCache(tmpKey, appIcon);
+        unInstallDialog.setIcon(appIcon);
+    } else {
+        static int tryNum = 0;
+        m_uninstallDlgIsShown = false;
+        ++tryNum;
+        if (tryNum <= 5) {
+            QTimer::singleShot(100, this, [ = ]() { uninstallApp(modelIndex); });
+            return;
+        } else {
+            QIcon icon = QIcon(":/widgets/images/application-x-desktop.svg");
+            appIcon = icon.pixmap(QSize(size, size));
+            unInstallDialog.setIcon(appIcon);
+        }
+    }
+
+    QStringList buttons;
+    buttons << tr("Cancel") << tr("Confirm");
+    unInstallDialog.addButtons(buttons);
+
+    connect(&unInstallDialog, &DDialog::buttonClicked, [&](int clickedResult) {
+        // 0 means "cancel" button clicked
+        if (clickedResult == 0) {
+            return;
+        }
+
+        uninstallApp(appKey);
+    });
+
+    if (!fullscreen())
+        Q_EMIT requestHideLauncher();
+
+    unInstallDialog.exec();
+    m_uninstallDlgIsShown = false;
+}
+
+bool AppsManager::uninstallDlgShownState() const
+{
+    return m_uninstallDlgIsShown;
 }
 
 void AppsManager::updateUsedSortData(QModelIndex dragIndex, QModelIndex dropIndex)

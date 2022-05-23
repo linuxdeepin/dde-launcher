@@ -84,16 +84,6 @@ void AppsManager::registerSettingsFormat()
     m_usedSortSetting = new QSettings(JsonFormat, QSettings::UserScope, "deepin","dde-launcher-app-used-sorted-list");
 }
 
-QReadWriteLock AppsManager::m_appInfoLock;
-QHash<AppsListModel::AppCategory, ItemInfoList_v1> AppsManager::m_appInfos;
-ItemInfoList_v1 AppsManager::m_appCategoryInfos;
-ItemInfoList_v1 AppsManager::m_appLetterModeInfos = ItemInfoList_v1();
-ItemInfoList_v1 AppsManager::m_usedSortedList = ItemInfoList_v1();
-ItemInfoList_v1 AppsManager::m_collectSortedList = ItemInfoList_v1();
-ItemInfoList_v1 AppsManager::m_dirAppInfoList = ItemInfoList_v1();
-ItemInfoList_v1 AppsManager::m_appSearchResultList = ItemInfoList_v1();
-ItemInfoList_v1 AppsManager::m_categoryList = ItemInfoList_v1();
-
 AppsManager::AppsManager(QObject *parent) :
     QObject(parent),
     m_launcherInter(new DBusLauncher(this)),
@@ -808,12 +798,9 @@ const ItemInfo_v1 AppsManager::appsInfoListIndex(const AppsListModel::AppCategor
     }
 
     ItemInfo_v1 itemInfo;
-    m_appInfoLock.lockForRead();
 
     Q_ASSERT(m_appInfos[category].size() > index);
     itemInfo = m_appInfos[category][index];
-
-    m_appInfoLock.unlock();
 
     return itemInfo;
 }
@@ -1273,7 +1260,7 @@ void AppsManager::readCollectedCacheData()
     }
 }
 
-int AppsManager::appNums(const AppsListModel::AppCategory &category) const
+int AppsManager::appNums(const AppsListModel::AppCategory &category)
 {
     return appsInfoListSize(category);
 }
@@ -1372,16 +1359,6 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo_v1 
     }
 
     m_delayRefreshTimer->start();
-}
-
-QHash<AppsListModel::AppCategory, ItemInfoList_v1> AppsManager::getAllAppInfo()
-{
-    QHash<AppsListModel::AppCategory, ItemInfoList_v1> appInfoList;
-    m_appInfoLock.lockForRead();
-    appInfoList = m_appInfos;
-    m_appInfoLock.unlock();
-
-    return appInfoList;
 }
 
 /**

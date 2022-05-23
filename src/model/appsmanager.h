@@ -123,17 +123,17 @@ public slots:
     void uninstallApp(const QString &appKey, const int displayMode = ALL_APPS);
     void onEditCollected(const QModelIndex index, const bool isInCollected);
     void onMoveToFirstInCollected(const QModelIndex index);
-    const ItemInfoList_v1 appsInfoList(const AppsListModel::AppCategory &category) const;
-    static int appsInfoListSize(const AppsListModel::AppCategory &category);
-    static const ItemInfo_v1 appsInfoListIndex(const AppsListModel::AppCategory &category,const int index);
-    static const ItemInfo_v1 appsCategoryListIndex(const int index);
-    static const ItemInfo_v1 appsLetterListIndex(const int index);
-    static const ItemInfoList_v1 &windowedCategoryList();
-    static const ItemInfoList_v1 &windowedFrameItemInfoList();
-    static const ItemInfoList_v1 &fullscreenItemInfoList();
-    static const ItemInfo_v1 dirAppInfo(int index);
     void setDirAppInfoList(const QModelIndex index);
-    static const QHash<AppsListModel::AppCategory, ItemInfoList_v1> &categoryList();
+    int appsInfoListSize(const AppsListModel::AppCategory &category);
+    const ItemInfoList_v1 appsInfoList(const AppsListModel::AppCategory &category) const;
+    const ItemInfo_v1 appsInfoListIndex(const AppsListModel::AppCategory &category,const int index);
+    const ItemInfo_v1 appsCategoryListIndex(const int index);
+    const ItemInfo_v1 appsLetterListIndex(const int index);
+    const ItemInfoList_v1 &windowedCategoryList();
+    const ItemInfoList_v1 &windowedFrameItemInfoList();
+    const ItemInfoList_v1 &fullscreenItemInfoList();
+    const ItemInfo_v1 dirAppInfo(int index);
+    const QHash<AppsListModel::AppCategory, ItemInfoList_v1> &categoryList();
 
     bool appIsNewInstall(const QString &key);
     bool appIsAutoStart(const QString &desktop);
@@ -143,10 +143,9 @@ public slots:
     bool appIsEnableScaling(const QString &desktop);
     const QPixmap appIcon(const ItemInfo_v1 &info, const int size = 0);
     const QString appName(const ItemInfo_v1 &info, const int size);
-    int appNums(const AppsListModel::AppCategory &category) const;
+    int appNums(const AppsListModel::AppCategory &category);
 
     void handleItemChanged(const QString &operation, const ItemInfo_v1 &appInfo, qlonglong categoryNumber);
-    static QHash<AppsListModel::AppCategory, ItemInfoList_v1> getAllAppInfo();
     const ItemInfo_v1 createOfCategory(qlonglong category);
 
 private:
@@ -178,15 +177,14 @@ private slots:
     void stopThread();
 
 public:
-    static QReadWriteLock m_appInfoLock;
-    static QHash<AppsListModel::AppCategory, ItemInfoList_v1> m_appInfos;      // 应用分类容器
-    static ItemInfoList_v1 m_appCategoryInfos;                                 // 小窗口左侧带分类标题的应用列表
-    static ItemInfoList_v1 m_appLetterModeInfos;                               // 小窗口左侧字母排序模式列表
-    static ItemInfoList_v1 m_collectSortedList;                                // 小窗口收藏列表
-    static ItemInfoList_v1 m_categoryList;                                     // 小窗口应用分类目录列表
-    static ItemInfoList_v1 m_appSearchResultList;                              // 搜索结果列表
-    static ItemInfoList_v1 m_dirAppInfoList;                                   // 应用抽屉列表
-    static ItemInfoList_v1 m_usedSortedList;                                   // 全屏应用列表
+    QHash<AppsListModel::AppCategory, ItemInfoList_v1> m_appInfos;      // 应用分类容器
+    ItemInfoList_v1 m_appCategoryInfos;                                 // 小窗口左侧带分类标题的应用列表
+    ItemInfoList_v1 m_appLetterModeInfos;                               // 小窗口左侧字母排序模式列表
+    ItemInfoList_v1 m_collectSortedList;                                // 小窗口收藏列表
+    ItemInfoList_v1 m_categoryList;                                     // 小窗口应用分类目录列表
+    ItemInfoList_v1 m_appSearchResultList;                              // 搜索结果列表
+    ItemInfoList_v1 m_dirAppInfoList;                                   // 应用抽屉列表
+    ItemInfoList_v1 m_usedSortedList;                                   // 全屏应用列表
 
 private:
     DBusLauncher *m_launcherInter;

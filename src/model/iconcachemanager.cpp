@@ -106,7 +106,7 @@ void IconCacheManager::loadWindowIcon()
     setIconLoadState(false);
 
     // 小窗口模式
-    const ItemInfoList_v1 &itemList = AppsManager::windowedFrameItemInfoList();
+    const ItemInfoList_v1 &itemList = AppsManager::instance()->windowedFrameItemInfoList();
     for (int i = 0; i < itemList.size(); i++) {
         const ItemInfo_v1 &info = itemList.at(i);
         createPixmap(info, DLauncher::APP_ITEM_ICON_SIZE);
@@ -122,7 +122,7 @@ void IconCacheManager::loadWindowIcon()
 void IconCacheManager::loadOtherIcon()
 {
     // 小窗口模式卸载,拖拽图标
-    const ItemInfoList_v1 &itemList = AppsManager::windowedFrameItemInfoList();
+    const ItemInfoList_v1 &itemList = AppsManager::instance()->windowedFrameItemInfoList();
     for (int i = 0; i < itemList.size(); i++) {
         const ItemInfo_v1 &info = itemList.at(i);
         createPixmap(info, DLauncher::APP_DLG_ICON_SIZE);
@@ -149,7 +149,7 @@ void IconCacheManager::loadItem(const ItemInfo_v1 &info, const QString &operatio
 
 void IconCacheManager::loadCurRatioIcon(int mode)
 {
-    const ItemInfoList_v1 &itemList = AppsManager::fullscreenItemInfoList();
+    const ItemInfoList_v1 &itemList = AppsManager::instance()->fullscreenItemInfoList();
     int appSize = CalculateUtil::instance()->calculateIconSize(mode);
 
     for (int i = 0; i < itemList.size(); i++) {
@@ -164,7 +164,7 @@ void IconCacheManager::loadCurRatioIcon(int mode)
 void IconCacheManager::loadOtherRatioIcon(int mode)
 {
     int appSize = CalculateUtil::instance()->calculateIconSize(mode);
-    const ItemInfoList_v1 &itemList = AppsManager::fullscreenItemInfoList();
+    const ItemInfoList_v1 &itemList = AppsManager::instance()->fullscreenItemInfoList();
     for (int i = 0; i < ratioList.size(); i++) {
         double ratio = ratioList.at(i);
         if (qFuzzyCompare(getCurRatio(), ratio))
@@ -236,7 +236,7 @@ void IconCacheManager::removeSmallWindowCache()
 
 
     // 小窗口应用图标
-    removeCache(AppsManager::windowedFrameItemInfoList(), DLauncher::APP_ITEM_ICON_SIZE);
+    removeCache(AppsManager::instance()->windowedFrameItemInfoList(), DLauncher::APP_ITEM_ICON_SIZE);
     setIconLoadState(false);
 }
 

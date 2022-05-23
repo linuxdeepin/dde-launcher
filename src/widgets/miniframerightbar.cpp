@@ -146,7 +146,7 @@ void MiniFrameRightBar::showSettings()
             .service("com.deepin.dde.ControlCenter")
             .interface("com.deepin.dde.ControlCenter")
             .path("/com/deepin/dde/ControlCenter")
-            .method(QString("Toggle"))
+            .method(QString("Show"))
             .call();
     });
 

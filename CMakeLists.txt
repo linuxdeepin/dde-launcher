@@ -52,8 +52,6 @@ if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 endif ()
 
-
-
 # Find the library
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
@@ -150,21 +148,21 @@ install(FILES dde-launcher.desktop DESTINATION share/applications/)
 install(FILES dde-launcher-wapper DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 ## services files
-install(FILES src/dbusservices/com.deepin.dde.Launcher.service DESTINATION /usr/share/dbus-1/services)
+install(FILES src/dbusservices/com.deepin.dde.Launcher.service DESTINATION share/dbus-1/services)
 
 #schemas
 install(FILES gschema/com.deepin.dde.launcher.gschema.xml DESTINATION share/glib-2.0/schemas)
 install(CODE "execute_process(COMMAND glib-compile-schemas ${CMAKE_INSTALL_PREFIX}/share/glib-2.0/schemas)")
 
 ## icon
-install(FILES data/deepin-launcher.svg DESTINATION /usr/share/icons/hicolor/scalable/apps)
+install(FILES data/deepin-launcher.svg DESTINATION share/icons/hicolor/scalable/apps)
 
 # bin
 install(TARGETS ${BIN_NAME} DESTINATION bin)
 
 #dev
 file(GLOB INTERFACE_FILES "interfaces/*.h")
-install(FILES ${INTERFACE_FILES} DESTINATION include/dde-launcher/interface)
+install(FILES ${INTERFACE_FILES} DESTINATION include/dde-launcher)
 
 # config
 dconfig_meta_files(APPID dde-launcher FILES ./configs/com.deepin.dde.dde-launcher.dconfig.json)

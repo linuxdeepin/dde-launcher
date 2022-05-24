@@ -38,3 +38,12 @@ Conflicts:
 Description:deepin desktop-environment - dde-launcher module
  Deepin desktop environment 2015 - dde-launcher module.
  Display all installation programs, and provide access to open, uninstall, boot and start, which is convenient for users to operate quickly
+
+Package: dde-launcher-dev
+Architecture: any
+Depends:
+ dde-launcher( =${binary:Version}),
+ ${shlibs:Depends}, 
+ ${misc:Depends}
+Description: deepin desktop-environment - launcher module development files
+ Launcher module development files of deepin desktop-environment

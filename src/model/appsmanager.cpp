@@ -258,21 +258,20 @@ QSettings::SettingsMap AppsManager::getCacheMapData(const ItemInfoList_v1 &list)
         fillMapData(itemMap, info);
 
         for (int j = 0; j < info.m_appInfoList.size(); j++) {
-            QSettings::SettingsMap dirMap;
             const ItemInfo_v1 dirInfo = info.m_appInfoList.at(j);
-            fillMapData(dirMap, dirInfo);
-            itemDirMap.insert("dirItem", dirMap);
+            fillMapData(itemDirMap, dirInfo);
+            itemMap.insert(QString("appInfoList_%1").arg(j), itemDirMap);
         }
+        if (info.m_isDir)
+            itemMap.insert("appInfoSize", info.m_appInfoList.size());
 
-        itemMap.insert(QString("appInfoList_%1").arg(i), itemDirMap);
         map.insert(QString("itemInfoList_%1").arg(i), itemMap);
     }
 
     return map;
 }
 
-// m_collectedSetting->value("lists").toMap();
-const ItemInfoList_v1 AppsManager::readCacheData(const QMap<QString, QVariant> &map)
+const ItemInfoList_v1 AppsManager::readCacheData(const QSettings::SettingsMap &map)
 {
     auto getMapData = [ & ](ItemInfo_v1 &info, const QMap<QString, QVariant> &infoMap) {
         info.m_desktop = infoMap.value("desktop").toString();
@@ -291,20 +290,20 @@ const ItemInfoList_v1 AppsManager::readCacheData(const QMap<QString, QVariant> &
 
     ItemInfoList_v1 infoList;
     for (int i = 0; i < map.size(); i++) {
-        QMap<QString, QVariant> itemInfoMap = map.value(QString("itemInfoList_%1").arg(i)).toMap();
         ItemInfo_v1 info;
-        for (int j = 0; j < itemInfoMap.size(); j++) {
-            getMapData(info, itemInfoMap);
+        ItemInfoList_v1 appList;
+        QMap<QString, QVariant> itemInfoMap = map.value(QString("itemInfoList_%1").arg(i)).toMap();
 
-            QMap<QString, QVariant> appInfoMap = itemInfoMap.value(QString("appInfoList_%1").arg(i)).toMap();
-            ItemInfoList_v1 appList;
-            for (int k = 0; k < appInfoMap.size(); k++) {
-                ItemInfo_v1 appInfo;
-                getMapData(appInfo, appInfoMap);
-                appList.append(appInfo);
-            }
-            info.m_appInfoList.append(appList);
+        getMapData(info, itemInfoMap);
+        int appInfoSize = itemInfoMap.contains("appInfoSize") ? itemInfoMap.value("appInfoSize").toInt() : 0;
+
+        ItemInfo_v1 appInfo;
+        for (int j = 0; j < appInfoSize; j++) {
+            QMap<QString, QVariant> appInfoMap = itemInfoMap.value(QString("appInfoList_%1").arg(j)).toMap();
+            getMapData(appInfo, appInfoMap);
+            appList.append(appInfo);
         }
+        info.m_appInfoList.append(appList);
         infoList.append(info);
     }
 
@@ -973,7 +972,7 @@ void AppsManager::refreshCategoryInfoList()
         m_usedSortedList.append(readCacheData(m_usedSortSetting->value("lists").toMap()));
     }
 
-    foreach(auto info , m_usedSortedList) {
+    foreach(ItemInfo_v1 info , m_usedSortedList) {
         bool bContains = fuzzyMatching(filters, info.m_key);
         if (bContains) {
             m_usedSortedList.removeOne(info);
@@ -1131,7 +1130,7 @@ void AppsManager::generateCategoryMap()
 
     sortByInstallTimeOrder(newInstallAppList);
 
-    // TODO: 这段代码从逻辑上，没有意义。。。暂且搁置。2022-04-13。SWT
+    // 更新分类应用列表, 小窗口左侧标题模式的数据源
     if (!newInstallAppList.isEmpty()) {
         for (const ItemInfo_v1 &info : newInstallAppList) {
             if (!m_appInfos[info.category()].contains(info)) {
@@ -1156,6 +1155,7 @@ void AppsManager::generateCategoryMap()
         }
     }
 
+    // 移除 m_usedSortedList 所有应用中不存在的应用
     foreach (ItemInfo_v1 info, m_usedSortedList) {
         int idx = m_allAppInfoList.indexOf(info);
         if (idx == -1) {
@@ -1163,6 +1163,7 @@ void AppsManager::generateCategoryMap()
         }
     }
 
+    // 移除 m_collectSortedList 收藏应用中不存在的应用
     foreach (ItemInfo_v1 info, m_collectSortedList) {
         int idx = m_allAppInfoList.indexOf(info);
         if (idx == -1) {
@@ -1170,7 +1171,7 @@ void AppsManager::generateCategoryMap()
         }
     }
 
-    // 从所有应用中获取所有分类目录类型id,存放到临时列表categoryID中
+    // 获取应用分类ID列表
     QList<qlonglong> categoryID;
     for (const ItemInfo_v1 &it : m_allAppInfoList) {
         if (!categoryID.contains(it.m_categoryId)) {
@@ -1190,6 +1191,15 @@ void AppsManager::generateCategoryMap()
         return info1.m_categoryId < info2.m_categoryId;
     });
 
+    // 获取标题分类分类列表
+    generateTitleCategoryMap();
+
+    // 获取字母排序分类
+    generateLetterCategoryMap();
+}
+
+void AppsManager::generateTitleCategoryMap()
+{
     // 获取小窗口应用分类数据.
     m_appCategoryInfos.clear();
     for (int i = 0; i < m_categoryList.size(); i++) {
@@ -1201,7 +1211,10 @@ void AppsManager::generateCategoryMap()
         m_appCategoryInfos.append(m_categoryList.at(i));
         m_appCategoryInfos.append(m_appInfos.value(AppsListModel::AppCategory(categoryId)));
     }
+}
 
+void AppsManager::generateLetterCategoryMap()
+{
     // 字母排序
     ItemInfoList_v1 letterSortList = m_allAppInfoList;
     // 先分类， 再按照字母标题分组
@@ -1486,14 +1499,18 @@ bool AppsManager::uninstallDlgShownState() const
 
 void AppsManager::updateUsedSortData(QModelIndex dragIndex, QModelIndex dropIndex)
 {
+    /*
+     * 1. 如果拖拽的对象是文件夹, 那么文件夹及其内部的应用都需要写入到dropItem对象的数据中,
+       且拖拽的对象文件夹标识应该修改为普通应用, 并写入到本地数据中.
+       2. 如果拖拽的对象是应用, 那么将拖拽应用的数据写入到dropItem对象的数据中,
+       且应该将dropItem对象文件夹标识设置为true.
+    */
+
     ItemInfo_v1 dragItemInfo = dragIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
     ItemInfo_v1 dropItemInfo = dropIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
+
     bool dragItemIsDir = dragIndex.data(AppsListModel::ItemIsDirRole).toBool();
     bool dropItemIsDir = dropIndex.data(AppsListModel::ItemIsDirRole).toBool();
-
-    // 1. 如果被拖拽的对象是文件夹, 那么文件夹及其内部的应用都需要写入到dropItem对象的数据中.
-    // 2. 如果拖拽的对象不是文件夹, 那么将被拖拽应用的数据写入到dropItem对象的数据中.
-    // 3. 如果拖拽的对象是文件夹, 那么拖拽的应用图标显示文件夹图标.
 
     auto saveAppDirData = [ & ](ItemInfoList_v1 &list) {
         int index = list.indexOf(dropItemInfo);
@@ -1504,23 +1521,32 @@ void AppsManager::updateUsedSortData(QModelIndex dragIndex, QModelIndex dropInde
             list[index].m_isDir = true;
 
         ItemInfoList_v1 itemList;
+        // 释放的对象为应用时, 写入到列表中.
+        // 释放的对象为文件夹时, 内容已经在前一次写入到了列表中, 因此无需处理
         if (!dropItemIsDir)
             itemList.append(dropItemInfo);
 
+        // 释放的对象中不包含拖拽的对象时
         if (!list[index].m_appInfoList.contains(dragItemInfo)) {
             if (!dragItemIsDir) {
-                // 当被拖动的应用和释放的应用都不是应用文件夹时,更新被拖动的应用此刻需要文件夹标识
-                dragItemInfo.m_isDir = true;
+                // 仅仅更新dropItem的文件夹标识即可
+                // 被拖动的应用放在第二位
                 itemList.append(dragItemInfo);
             } else {
-                // 确保被拖动的应用放到后面
-                dragItemInfo.m_appInfoList.removeOne(dragItemInfo);
+                // 当拖动的文件夹进入到另一个文件夹中时, 确保拖动的这个文件夹标识调整为普通应用标识,
+                // 同时保持拖动之前的排列顺序插入到新的文件夹结构中
+                dragItemInfo.m_isDir = false;
+                int dragIndex = list.indexOf(dragItemInfo);
+                if (dragIndex != -1) {
+                    list[dragIndex] = dragItemInfo;
+                }
                 itemList.append(dragItemInfo.m_appInfoList);
-                dragItemInfo.m_appInfoList.clear();
-                itemList.append(dragItemInfo);
             }
 
             list[index].m_appInfoList.append(itemList);
+        } else {
+            // 释放的对象中包含拖拽的对象属于异常情况
+            return;
         }
     };
 
@@ -1534,18 +1560,8 @@ QList<QPixmap> AppsManager::getDirAppIcon(QModelIndex modelIndex)
     ItemInfoList_v1 infoList;
     ItemInfo_v1 info = modelIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
 
-    int index = m_usedSortedList.indexOf(info);
-
-    if (index == -1) {
-        // 在应用的目录中查找不到时, 继续从应用抽屉中查找
-        index = info.m_appInfoList.indexOf(info);
-        if (index == -1)
-            return pixmapList;
-
-        infoList = info.m_appInfoList;
-    } else {
-        infoList = m_usedSortedList.at(index).m_appInfoList;
-    }
+    if (m_usedSortedList.contains(info) && info.m_isDir)
+        infoList.append(info.m_appInfoList);
 
     for (int i = 0; i < infoList.size(); i++) {
         ItemInfo_v1 itemInfo = infoList.at(i);

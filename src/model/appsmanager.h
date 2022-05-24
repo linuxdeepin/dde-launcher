@@ -161,6 +161,8 @@ private:
     void saveAppCategoryInfoList();
     void updateUsedListInfo();
     void generateCategoryMap();
+    void generateTitleCategoryMap();
+    void generateLetterCategoryMap();
     void readCollectedCacheData();
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
 

@@ -16,15 +16,23 @@ class AppDrawerWidget : public QWidget
     Q_OBJECT
 
 public:
-    AppDrawerWidget(QWidget *parent = Q_NULLPTR);
+    explicit AppDrawerWidget(QWidget *parent = Q_NULLPTR);
     virtual ~AppDrawerWidget();
 
     void initUi();
     void initAccessible();
+    void initConnection();
     void updateBackgroundImage(const QPixmap & img);
+    void refreshDrawerTitle(const QString &title = QString());
+    void setCurrentIndex(const QModelIndex &index);
+
+private slots:
+    void onTitleChanged();
 
 protected:
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
 private:
     AppItemDelegate *m_appDelegate;
@@ -33,6 +41,7 @@ private:
     QSharedPointer<DBlurEffectGroup> m_blurGroup;
     DBlurEffectWidget *m_blurBackground;
     QPixmap m_pix;
+    QModelIndex m_clickIndex;
 };
 
 #endif

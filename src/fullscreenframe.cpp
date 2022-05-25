@@ -138,29 +138,8 @@ void FullScreenFrame::addViewEvent(AppGridView *pView)
 {
     connect(pView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
     connect(pView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(pView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
-    connect(pView, &AppGridView::clicked, this, &FullScreenFrame::hide);
-
-    connect(m_appsManager, &AppsManager::dataChanged, [ & ](AppsListModel::AppCategory category) {
-        if (category == AppsListModel::Dir)
-            m_drawerWidget->update();
-    });
-    connect(pView, &AppGridView::clicked, [ & ](const QModelIndex &index) {
-        if (!index.isValid())
-            return;
-
-        bool isDir = index.data(AppsListModel::ItemIsDirRole).toBool();
-        if (!isDir) {
-            m_appsManager->launchApp(index);
-            this->hide();
-        } else {
-            m_appsManager->setDirAppInfoList(index);
-            m_drawerWidget->show();
-        }
-    });
-    connect(pView, &AppGridView::requestMouseRelease,this,  [ = ]() {
-            m_mousePressState = false;
-    });
+    connect(pView, &AppGridView::clicked, this, &FullScreenFrame::onAppClicked);
+    connect(pView, &AppGridView::requestMouseRelease, this, &FullScreenFrame::onRequestMouseRelease);
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pView, qOverload<>(&AppGridView::update));
 }
 
@@ -692,6 +671,29 @@ void FullScreenFrame::onScreenInfoChange()
 
     connect(m_curScreen, &QScreen::geometryChanged, this, &FullScreenFrame::onScreenInfoChange);
     connect(m_curScreen, &QScreen::orientationChanged, this, &FullScreenFrame::onScreenInfoChange);
+}
+
+void FullScreenFrame::onAppClicked(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return;
+
+    const ItemInfo_v1 info = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
+
+    if (!info.m_isDir) {
+        m_appsManager->launchApp(index);
+        hideLauncher();
+    } else {
+        m_drawerWidget->setCurrentIndex(index);
+        m_appsManager->setDirAppInfoList(index);
+        m_drawerWidget->refreshDrawerTitle(info.m_name);
+        m_drawerWidget->show();
+    }
+}
+
+void FullScreenFrame::onRequestMouseRelease()
+{
+    m_mousePressState = false;
 }
 
 void FullScreenFrame::updateDisplayMode(const int mode)

@@ -43,6 +43,8 @@
 
 DWIDGET_USE_NAMESPACE
 
+class EditLabel;
+
 class MultiPagesView : public QWidget, public DragPageDelegate
 {
     Q_OBJECT
@@ -73,6 +75,7 @@ public:
     void setModel(AppsListModel::AppCategory category);
     void updatePosition(int mode = 0);
     void ShowPageView(AppsListModel::AppCategory category);
+    void updateAppDrawerTitle(const QModelIndex &index);
 
     void mousePress(QMouseEvent *e) override;
     void mouseMove(QMouseEvent *e) override;
@@ -89,20 +92,25 @@ public:
     AppGridViewList getAppGridViewList();
     AppsListModel::AppCategory getCategory();
     QSize calculateWidgetSize();
-
     bool isScrolling();
+    EditLabel *getEditLabel();
+
 signals:
     void connectViewEvent(AppGridView* pView);
+    void titleChanged();
 
 private slots:
     void dragToLeft(const QModelIndex &index);
     void dragToRight(const QModelIndex &index);
     void dragStop();
 
+private:
+    void initUi();
+    void initConnection();
+
 protected:
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
-    void initUi();
 
 private:
     GradientLabel *m_pLeftGradient;
@@ -119,7 +127,7 @@ private:
     QPropertyAnimation *m_pageSwitchAnimation;          // 分页切换动画
 
     QAbstractItemDelegate *m_delegate;                  // 视图代理基类
-    QLabel *m_titleLabel;
+    EditLabel *m_titleLabel;
     PageControl *m_pageControl;                         // 分页控件
 
     int m_pageCount;

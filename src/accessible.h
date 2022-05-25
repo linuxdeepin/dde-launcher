@@ -24,7 +24,7 @@
 
 #include "fullscreenframe.h"
 #include "windowedframe.h"
-
+#include "editlabel.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -59,6 +59,7 @@ SET_FORM_ACCESSIBLE(AppDrawerWidget, "AppDrawerWidget")
 SET_FORM_ACCESSIBLE(MultiPagesView, "MultiPagesView")
 SET_FORM_ACCESSIBLE(IconButton, "IconButton")
 SET_FORM_ACCESSIBLE(ModeSwitch, "ModeSwitch")
+SET_FORM_ACCESSIBLE(EditLabel, "EditLabel")
 
 QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
 {
@@ -94,6 +95,7 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, MultiPagesView)
     USE_ACCESSIBLE(classname, IconButton)
     USE_ACCESSIBLE(classname, ModeSwitch)
+    USE_ACCESSIBLE(classname, EditLabel)
 
     if (!interface && object->inherits("QWidget") && !ignoreLst.contains(classname)) {
         QWidget *w = static_cast<QWidget *>(object);

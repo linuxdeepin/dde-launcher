@@ -81,6 +81,7 @@ public:
     bool uninstallDlgShownState() const;
 
     void updateUsedSortData(QModelIndex dragIndex, QModelIndex dropIndex);
+    void updateDrawerTitle(const QModelIndex &index, const QString &newTitle = QString());
     QList<QPixmap> getDirAppIcon(QModelIndex modelIndex);
     void showSearchedData(const AppInfoList &list);
     const ItemInfo_v1 getItemInfo(const QString &appKey);

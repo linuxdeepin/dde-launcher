@@ -138,6 +138,8 @@ private slots:
     void searchTextChanged(const QString &keywords, bool enableUpdateMode);
     void refreshPageView(const AppsListModel::AppCategory category);
     void onScreenInfoChange();
+    void onAppClicked(const QModelIndex &index);
+    void onRequestMouseRelease();
 
 private:
     int m_displayMode;

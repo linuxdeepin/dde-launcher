@@ -22,6 +22,7 @@
 #include "multipagesview.h"
 #include "constants.h"
 #include "fullscreenframe.h"
+#include "editlabel.h"
 
 #include <QHBoxLayout>
 
@@ -43,7 +44,7 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     , m_appListArea(new AppListArea)
     , m_viewBox(new DHBoxWidget)
     , m_delegate(Q_NULLPTR)
-    , m_titleLabel(new QLabel(this))
+    , m_titleLabel(new EditLabel(this))
     , m_pageControl(new PageControl)
     , m_pageCount(0)
     , m_pageIndex(0)
@@ -58,12 +59,6 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_pRightGradient->setAccessibleName("thisRightGradient");
     m_pLeftGradient->setAccessibleName("thisLeftGradient");
     m_pageControl->setAccessibleName("pageControl");
-
-    QColor color(Qt::white);
-    QPalette palette(m_titleLabel->palette());
-    palette.setColor(QPalette::WindowText, color);
-    m_titleLabel->setPalette(palette);
-    m_titleLabel->setFixedHeight(60);
 
     // 滚动区域
     m_appListArea->setObjectName("MultiPageBox");
@@ -86,8 +81,7 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     }
 
     initUi();
-
-    connect(m_pageControl, &PageControl::onPageChanged, this, &MultiPagesView::showCurrentPage);
+    initConnection();
 }
 
 MultiPagesView::~MultiPagesView()
@@ -286,6 +280,15 @@ void MultiPagesView::dragStop()
     m_appGridViewList[m_pageIndex]->flashDrag();
 }
 
+void MultiPagesView::updateAppDrawerTitle(const QModelIndex &index)
+{
+    const QString title = m_titleLabel->text();
+    m_appsManager->updateDrawerTitle(index, title);
+    m_appsManager->saveUsedSortedList();
+
+    emit m_appsManager->dataChanged(AppsListModel::All);
+}
+
 /**
  * @brief MultiPagesView::getAppItem 获取item的模型索引
  * @param index item所在行数
@@ -399,6 +402,12 @@ void MultiPagesView::initUi()
     layoutMain->addWidget(m_appListArea, 0, Qt::AlignHCenter);
     layoutMain->addWidget(m_pageControl, 0, Qt::AlignHCenter);
     setLayout(layoutMain);
+}
+
+void MultiPagesView::initConnection()
+{
+    connect(m_pageControl, &PageControl::onPageChanged, this, &MultiPagesView::showCurrentPage);
+    connect(m_titleLabel, &EditLabel::titleChanged, this, &MultiPagesView::titleChanged);
 }
 
 void MultiPagesView::showCurrentPage(int currentPage)
@@ -659,4 +668,9 @@ bool MultiPagesView::isScrolling()
         return m_changePageDelayTime->isValid() && m_changePageDelayTime->elapsed() < DLauncher::CHANGE_PAGE_DELAY_TIME;
 
     return m_pageSwitchAnimation->state() == QPropertyAnimation::Running;
+}
+
+EditLabel *MultiPagesView::getEditLabel()
+{
+    return m_titleLabel;
 }

@@ -44,6 +44,7 @@ public:
     void setDirModelIndex(QModelIndex dragIndex, QModelIndex dropIndex);
     void setItemList(const ItemInfoList_v1 &items);
     QRect appSourceRect(QRect rect, int index) const;
+    void drawAppDrawer(QPainter *painter, const QModelIndex &index, QRect iconRect) const;
 
 signals:
     void requestUpdate(const QModelIndex &idx) const;

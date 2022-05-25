@@ -34,10 +34,11 @@
 #include <QApplication>
 
 
-#define  ICONTOLETF  12
-#define  ICONTOTOP  6
+#define ICONTOLETF  12
+#define ICONTOTOP  6
 #define TEXTTOICON  2
 #define TEXTTOLEFT  10
+#define RECT_REDIUS 18
 
 QModelIndex AppItemDelegate::CurrentIndex = QModelIndex();
 
@@ -96,6 +97,9 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).toSize();
 
     QFont appNamefont(painter->font());
+    if (fontPixelSize == -1)
+        return;
+
     appNamefont.setPixelSize(fontPixelSize);
     const QFontMetrics fm(appNamefont);
     painter->setOpacity(1);
@@ -146,10 +150,8 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     // 绘制选中样式
    if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay) && !itemIsDir) {
-        const int radius = 18;
         QColor brushColor(Qt::white);
         brushColor.setAlpha(51);
-
 
         painter->setPen(Qt::transparent);
         painter->setBrush(brushColor);
@@ -162,7 +164,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
             br.setWidth(iconSize.width() + ICONTOLETF * 2);
         }
 
-        painter->drawRoundedRect(br, radius, radius);
+        painter->drawRoundedRect(br, RECT_REDIUS, RECT_REDIUS);
     }
 
     // 绘制应用名称
@@ -177,42 +179,8 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         appNameRect.setWidth(appNameRect.width() - m_blueDotPixmap.width());
     }
 
-    // 文件夹效果
-    if (itemIsDir)
-       pixmapList = index.data(AppsListModel::DirAppIconsRole).value<QList<QPixmap>>();
-
-#if 1
-    if (itemIsDir && !itemList.isEmpty() && CalculateUtil::instance()->fullscreen()) {
-        const int radius = 18;
-        painter->setPen(Qt::transparent);
-        painter->setBrush(QColor(93, 92, 90, 100));// 93, 92, 90, 150 // 69, 60, 33, 100
-        painter->drawRoundedRect(br, radius, radius);
-        // 绘制文件夹内其他应用
-        for (int i = 0; i < itemList.size(); i++) {
-            // todo: 计算每个图标的位置rect()
-            // 4个, 4宫格, 6个,六宫格, 8个, 八格, 9宫格. 超过9个就不显示, 太多应用空间显示不足, 除非图标内实现翻页效果, 翻页那么每个item就是一个listview.
-            // 先按照就九宫格算.暂且没有计算页边距
-            if (i >= 9)
-                return;
-            QPixmap itemPix = iconPix;
-            if (i < pixmapList.size())
-                itemPix = pixmapList.at(i);
-
-            QRect sourceRect = appSourceRect(br, i);
-            painter->drawPixmap(sourceRect, itemPix, itemPix.rect());
-        }
-        return;
-    }
-#endif
-#if 1
-    // 在当前item上且仅给当前的item 绘制文件夹样式
-    if (m_dropIndex.isValid() && (index == m_dropIndex) && CalculateUtil::instance()->fullscreen()) {
-        const int radius = 18;
-        painter->setPen(Qt::transparent);
-        painter->setBrush(QColor(93, 92, 90, 100));
-        painter->drawRoundedRect(br, radius, radius);
-    }
-#endif
+    if (m_calcUtil->fullscreen())
+        drawAppDrawer(painter, index, iconRect);
 
     painter->setFont(appNamefont);
     painter->setBrush(QBrush(Qt::transparent));
@@ -257,7 +225,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
             QApplication::style()->drawControl(QStyle::CE_PushButton, &button, painter);
         } else {
             const ItemInfo info = index.data(AppsListModel::DirNameRole).value<ItemInfo>();
-            painter->drawText(appNameRect, itemInfo.m_name, appNameOption);
+            painter->drawText(appNameRect, appNameResolved, appNameOption);
         }
     }
 
@@ -323,6 +291,50 @@ const QPair<QString, bool> AppItemDelegate::holdTextInRect(const QFontMetrics &f
     return QPair<QString, bool>(txt, false);
 }
 
+/** 绘制应用文件夹
+ * @brief AppItemDelegate::drawAppDrawer
+ * @param painter 绘画师
+ * @param index 应用模型索引
+ * @param boundingRect 应用的边界矩形
+ */
+void AppItemDelegate::drawAppDrawer(QPainter *painter, const QModelIndex &index, QRect iconRect) const
+{
+    const bool itemIsDir = index.data(AppsListModel::ItemIsDirRole).toBool();
+    const ItemInfoList_v1 itemList = index.data(AppsListModel::DirItemInfoRole).value<ItemInfoList_v1>();
+    const QPixmap iconPix = index.data(AppsListModel::AppIconRole).value<QPixmap>();
+
+    // 读数据配置应用文件夹效果
+    QRect AppdrawerRect = QRect(iconRect.topLeft(), iconRect.size());
+    if (itemIsDir && !itemList.isEmpty()) {
+        QList<QPixmap> pixmapList = index.data(AppsListModel::DirAppIconsRole).value<QList<QPixmap>>();
+        painter->setPen(Qt::transparent);
+        painter->setBrush(QColor(93, 92, 90, 100));
+        painter->drawRoundedRect(AppdrawerRect, RECT_REDIUS, RECT_REDIUS);
+        // 绘制文件夹内其他应用
+        for (int i = 0; i < itemList.size(); i++) {
+            // TODO: 计算每个图标的位置rect()
+            // 4个, 4宫格, 6个,六宫格, 8个, 八格, 9宫格. 超过9个就不显示, 太多应用空间显示不足, 除非图标内实现翻页效果, 翻页那么每个item就是一个listview.
+            // 先按照就九宫格算.暂且没有计算页边距
+            if (i >= 9)
+                return;
+            QPixmap itemPix = iconPix;
+            if (i < pixmapList.size())
+                itemPix = pixmapList.at(i);
+
+            QRect sourceRect = appSourceRect(AppdrawerRect, i);
+            painter->drawPixmap(sourceRect, itemPix, itemPix.rect());
+        }
+        return;
+    }
+
+    // 应用文件夹特效, 在当前item上且仅给当前的item 绘制文件夹样式
+    if (m_dropIndex.isValid() && (index == m_dropIndex)) {
+        painter->setPen(Qt::transparent);
+        painter->setBrush(QColor(93, 92, 90, 100));
+        painter->drawRoundedRect(AppdrawerRect, RECT_REDIUS, RECT_REDIUS);
+    }
+}
+
 /** 默认九宫个格计算每个应用矩形的位置
  * @brief AppItemDelegate::appSourceRect
  * @param rect 应用抽屉的大小
@@ -331,11 +343,13 @@ const QPair<QString, bool> AppItemDelegate::holdTextInRect(const QFontMetrics &f
  */
 QRect AppItemDelegate::appSourceRect(QRect rect, int index) const
 {
+    // TODO: 文件夹内容间距后面优化
     QRect sourceRect;
     int width = (rect.width() /*- (3 * 4)*/) / 3;
-    int height = (rect.height()/* - (3 * 4)*/) / 3;
+    int height = (rect.height() /*- (3 * 4)*/) / 3;
 
+    int gap = 0/*(index % 3 + 1) * 3*/;
     // 每个应用间隔 3 个像素,
-    sourceRect = QRect(rect.topLeft() + QPoint((index % 3) * width, (index / 3) * height) , QSize(width,height));
+    sourceRect = QRect(rect.topLeft() + QPoint((index % 3) * width + gap, (index / 3) * height + gap), QSize(width,height));
     return sourceRect;
 }

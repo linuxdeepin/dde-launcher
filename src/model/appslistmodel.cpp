@@ -286,7 +286,7 @@ void AppsListModel::dropInsert(const QString &appKey, const int pos)
     beginInsertRows(QModelIndex(), pos, pos);
 
     int appPos = pos;
-    if (m_category == AppsListModel::All)
+    if ((m_category == AppsListModel::All) || (m_category == AppsListModel::Dir))
         appPos = m_pageIndex * m_calcUtil->appPageItemCount(m_category) + pos;
 
     m_appsManager->restoreItem(appKey, m_category, appPos);

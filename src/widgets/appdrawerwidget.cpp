@@ -2,6 +2,7 @@
 #include "calculate_util.h"
 #include "appsmanager.h"
 #include "constants.h"
+#include "editlabel.h"
 
 #include <QHBoxLayout>
 
@@ -11,8 +12,10 @@ AppDrawerWidget::AppDrawerWidget(QWidget *parent)
     , m_multipageView(new MultiPagesView(AppsListModel::Dir, this))
     , m_blurGroup(QSharedPointer<DBlurEffectGroup>(new DBlurEffectGroup))
     , m_blurBackground(new DBlurEffectWidget(this))
+    , m_clickIndex(QModelIndex())
 {
     initUi();
+    initConnection();
     initAccessible();
 }
 
@@ -27,7 +30,6 @@ void AppDrawerWidget::initUi()
 
     m_multipageView->setDataDelegate(m_appDelegate);
 
-    // TODO: 标题命名待优化．
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->setContentsMargins(QMargins(0, 0, 0, 0));
     mainLayout->setSpacing(0);
@@ -49,16 +51,34 @@ void AppDrawerWidget::initAccessible()
     m_multipageView->setAccessibleName("drawerWidget");
 }
 
+void AppDrawerWidget::initConnection()
+{
+    connect(m_multipageView, &MultiPagesView::titleChanged, this, &AppDrawerWidget::onTitleChanged);
+}
+
 void AppDrawerWidget::updateBackgroundImage(const QPixmap &img)
 {
     m_pix = img;
     update();
 }
 
+void AppDrawerWidget::refreshDrawerTitle(const QString &title)
+{
+    m_multipageView->refreshTitle(title);
+}
+
+void AppDrawerWidget::setCurrentIndex(const QModelIndex &index)
+{
+    m_clickIndex = index;
+}
+
+void AppDrawerWidget::onTitleChanged()
+{
+    m_multipageView->updateAppDrawerTitle(m_clickIndex);
+}
+
 void AppDrawerWidget::showEvent(QShowEvent *event)
 {
-    Q_UNUSED(event);
-
     QSize itemSize = CalculateUtil::instance()->appItemSize() * 5 / 4;
     QSize widgetSize = QSize(itemSize.width() * 4, itemSize.height() * 3 + 60);
     setFixedSize(widgetSize);
@@ -73,6 +93,19 @@ void AppDrawerWidget::showEvent(QShowEvent *event)
     m_multipageView->updatePosition(5);
     m_multipageView->setModel(AppsListModel::Dir);
 
-    // TODO: 更新并显示标题名称
-    m_multipageView->refreshTitle("");
+    return QWidget::showEvent(event);
+}
+
+void AppDrawerWidget::mousePressEvent(QMouseEvent *event)
+{
+    m_multipageView->getEditLabel()->cancelEditState();
+
+    return QWidget::mousePressEvent(event);
+}
+
+void AppDrawerWidget::hideEvent(QHideEvent *event)
+{
+    m_multipageView->getEditLabel()->cancelEditState();
+
+    return QWidget::hideEvent(event);
 }

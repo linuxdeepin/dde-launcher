@@ -442,7 +442,7 @@ void AppsManager::dragdropStashItem(const QModelIndex &index, AppsListModel::App
         }
     };
 
-    if (mode == AppsListModel::All)
+    if ((mode == AppsListModel::All) || (mode == AppsListModel::Dir))
         handleData(m_usedSortedList);
     if (mode == AppsListModel::Collect)
         handleData(m_collectSortedList);
@@ -1495,6 +1495,8 @@ void AppsManager::updateUsedSortData(QModelIndex dragIndex, QModelIndex dropInde
        且拖拽的对象文件夹标识应该修改为普通应用, 并写入到本地数据中.
        2. 如果拖拽的对象是应用, 那么将拖拽应用的数据写入到dropItem对象的数据中,
        且应该将dropItem对象文件夹标识设置为true.
+       3. 命名规则, 拖拽对象与释放对象为同类时, 取该分类标题名称;如果不同, 则以释放对象(显示文件夹中第一位应用)的分类
+       标题作为文件夹名称
     */
 
     ItemInfo_v1 dragItemInfo = dragIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
@@ -1508,8 +1510,15 @@ void AppsManager::updateUsedSortData(QModelIndex dragIndex, QModelIndex dropInde
         if (index == -1)
             return;
 
-        if (!dropItemIsDir)
+        // 最初都不是应用文件夹, 当是文件夹了, 应用名称就不用变化了, 因此也无需处理
+        if (!dropItemIsDir) {
             list[index].m_isDir = true;
+
+            // 不论拖拽对象与释放对象是否为同一类应用, 都把释放对象的分类标题作为文件夹名称
+            int idIndex = static_cast<int>(dropItemInfo.m_categoryId);
+            if (m_categoryTs.size() > idIndex)
+                list[index].m_name = m_categoryTs[idIndex];
+        }
 
         ItemInfoList_v1 itemList;
         // 释放的对象为应用时, 写入到列表中.
@@ -1543,6 +1552,19 @@ void AppsManager::updateUsedSortData(QModelIndex dragIndex, QModelIndex dropInde
 
     if (m_calUtil->displayMode() == ALL_APPS)
         saveAppDirData(m_usedSortedList);
+}
+
+void AppsManager::updateDrawerTitle(const QModelIndex &index,const QString &newTitle)
+{
+    if (!index.isValid())
+        return;
+
+    ItemInfo_v1 info = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
+    int itemIndex = m_usedSortedList.indexOf(info);
+    if (itemIndex != -1) {
+        info.m_name = newTitle;
+        m_usedSortedList.replace(itemIndex, info);
+    }
 }
 
 QList<QPixmap> AppsManager::getDirAppIcon(QModelIndex modelIndex)

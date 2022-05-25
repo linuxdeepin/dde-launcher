@@ -24,8 +24,6 @@
 #ifndef MENUWORKER_H
 #define MENUWORKER_H
 
-#include "dbusdock.h"
-#include "dbuslauncher.h"
 #include "dbustartmanager.h"
 #include "appsmanager.h"
 #include "appslistmodel.h"
@@ -43,6 +41,14 @@
 
 class QMenu;
 class Menu;
+
+#ifdef USE_AM_API
+class AMDBusLauncherInter;
+class AMDBusDockInter;
+#else
+class DBusLauncher;
+class DBusDock;
+#endif
 
 class MenuWorker : public QObject
 {
@@ -98,8 +104,14 @@ public slots:
     void onHideMenu();
 
 private:
-    DBusDock* m_dockAppManagerInterface;
+#ifdef USE_AM_API
+    AMDBusLauncherInter *m_amDbusLauncher;
+    AMDBusDockInter *m_amDbusDockInter;
+#else
     DBusLauncher* m_launcherInterface;
+    DBusDock* m_dockInterface;
+#endif
+
     DBusStartManager* m_startManagerInterface;
     CalculateUtil *m_calcUtil;
     AppsManager *m_appManager;

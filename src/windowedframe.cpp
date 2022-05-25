@@ -76,7 +76,11 @@ inline const QPoint scaledPosition(const QPoint &xpos)
  */
 WindowedFrame::WindowedFrame(QWidget *parent)
     : DBlurEffectWidget(parent)
+#ifdef USE_AM_API
+    , m_amDbusDockInter(new AMDBusDockInter(this))
+#else
     , m_dockInter(new DBusDock(this))
+#endif
     , m_menuWorker(new MenuWorker(this))
     , m_eventFilter(new SharedEventFilter(this))
     , m_windowHandle(this, this)
@@ -595,10 +599,14 @@ void WindowedFrame::uninstallApp(const QString &appKey)
 
 QPainterPath WindowedFrame::getCornerPath(AnchoredCornor direction)
 {
+#ifdef USE_AM_API
+    if (m_amDbusDockInter->displayMode() == DLauncher::DOCK_FASHION)
+#else
+    if (m_dockInter->displayMode() == DLauncher::DOCK_FASHION)
+#endif
+       return QPainterPath();
+
     QPainterPath path;
-    if (m_dockInter->displayMode() == DLauncher::DOCK_FASHION) {
-       return path;
-    }
     const QRect rect = this->rect();
     const QPoint topLeft = rect.topLeft();
     const QPoint topRight = rect.topRight();
@@ -801,8 +809,14 @@ void WindowedFrame::resizeEvent(QResizeEvent *event)
 
 void WindowedFrame::initAnchoredCornor()
 {
-    if (m_wmHelper->hasComposite()) {
+    if (!m_wmHelper->hasComposite()) {
+        m_anchoredCornor = Normal;
+    } else {
+#ifdef USE_AM_API
+        const int dockPos = m_amDbusDockInter->position();
+#else
         const int dockPos = m_dockInter->position();
+#endif
 
         switch (dockPos) {
         case DLauncher::DOCK_TOP:
@@ -818,8 +832,6 @@ void WindowedFrame::initAnchoredCornor()
             m_anchoredCornor = BottomLeft;
             break;
         }
-    } else {
-        m_anchoredCornor = Normal;
     }
 
     update();
@@ -827,34 +839,43 @@ void WindowedFrame::initAnchoredCornor()
 
 void WindowedFrame::adjustPosition()
 {
-    QRect r =  m_dockInter->frontendRect();
-    QRect dockRect = QRect(scaledPosition(r.topLeft()),scaledPosition(r.bottomRight()));
-
     // 启动器高效模式和时尚模式与任务栏的间隙不同
     int dockSpacing = 0;
+
+#ifdef USE_AM_API
+    QRect rect =  m_amDbusDockInter->frontendWindowRect();
+    int dockPos = m_amDbusDockInter->position();
+    if (m_amDbusDockInter->displayMode() == DLauncher::DOCK_FASHION)
+        dockSpacing = 8;
+#else
+    QRect rect =  m_dockInter->frontendRect();
+    int dockPos = m_dockInter->position();
     if (m_dockInter->displayMode() == DLauncher::DOCK_FASHION)
         dockSpacing = 8;
+#endif
 
-    QPoint p;
-    switch (m_dockInter->position()) {
+    QRect dockRect = QRect(scaledPosition(rect.topLeft()),scaledPosition(rect.bottomRight()));
+
+    QPoint launcherPoint;
+    switch (dockPos) {
     case DLauncher::DOCK_TOP:
-        p = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
+        launcherPoint = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
         break;
     case DLauncher::DOCK_BOTTOM:
-        p = QPoint(dockRect.left(), dockRect.top() - height() - dockSpacing);
+        launcherPoint = QPoint(dockRect.left(), dockRect.top() - height() - dockSpacing);
         break;
     case DLauncher::DOCK_LEFT:
-        p = QPoint(dockRect.right() + dockSpacing + 1, dockRect.top());
+        launcherPoint = QPoint(dockRect.right() + dockSpacing + 1, dockRect.top());
         break;
     case DLauncher::DOCK_RIGHT:
-        p = QPoint(dockRect.left() - width() - dockSpacing, dockRect.top());
+        launcherPoint = QPoint(dockRect.left() - width() - dockSpacing, dockRect.top());
         break;
     default:
         Q_UNREACHABLE_IMPL();
     }
 
     initAnchoredCornor();
-    move(p);
+    move(launcherPoint);
 }
 
 void WindowedFrame::onToggleFullScreen()
@@ -968,29 +989,36 @@ void WindowedFrame::updatePosition()
    QRect dockRect = QRect(scaledPosition(dockGeo.topLeft()),scaledPosition(dockGeo.bottomRight()));
 
     int dockSpacing = 0;
+#ifdef USE_AM_API
+    int dockPos = m_amDbusDockInter->position();
+    if (m_amDbusDockInter->displayMode() == DLauncher::DOCK_FASHION)
+        dockSpacing = 8;
+#else
+    int dockPos = m_dockInter->position();
     if (m_dockInter->displayMode() == DLauncher::DOCK_FASHION)
         dockSpacing = 8;
+#endif
 
-    QPoint p;
-    switch (m_dockInter->position()) {
+    QPoint launcherPoint;
+    switch (dockPos) {
     case DLauncher::DOCK_TOP:
-        p = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
+        launcherPoint = QPoint(dockRect.left(), dockRect.bottom() + dockSpacing + 1);
         break;
     case DLauncher::DOCK_BOTTOM:
-        p = QPoint(dockRect.left(), dockRect.top() - height() - dockSpacing);
+        launcherPoint = QPoint(dockRect.left(), dockRect.top() - height() - dockSpacing);
         break;
     case DLauncher::DOCK_LEFT:
-        p = QPoint(dockRect.right() + dockSpacing + 1, dockRect.top());
+        launcherPoint = QPoint(dockRect.right() + dockSpacing + 1, dockRect.top());
         break;
     case DLauncher::DOCK_RIGHT:
-        p = QPoint(dockRect.left() - width() - dockSpacing, dockRect.top());
+        launcherPoint = QPoint(dockRect.left() - width() - dockSpacing, dockRect.top());
         break;
     default:
         Q_UNREACHABLE_IMPL();
     }
 
     initAnchoredCornor();
-    move(p);
+    move(launcherPoint);
 }
 
 void WindowedFrame::onHideMenu()

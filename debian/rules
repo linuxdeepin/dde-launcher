@@ -7,14 +7,19 @@ export QT_SELECT=5
 #export DH_VERBOSE=1
 
 %:
-	dh $@ --parallel
+		dh $@ --parallel
 
 include /usr/share/dpkg/default.mk
 SYSTYPE=Desktop
 SYSTYPE=$(shell cat /etc/deepin-version | grep Type= | awk -F'=' '{print $$2}')
 
+# USE_AM_API this macro controls the internal data source in all platforms, whichs use the deepin application manager's data when it's equal to 'yes'.
 ifeq ($(DEB_BUILD_ARCH), sw_64)
 override_dh_auto_configure:
-	dh_auto_configure -- -DENABLE_MIEEE=YES -DDISABLE_DRAG_ANIMATION=YES
+		dh_auto_configure -- -DENABLE_MIEEE=YES -DDISABLE_DRAG_ANIMATION=YES -DUSE_AM_API=YES
+else
+override_dh_auto_configure:
+		dh_auto_configure -- -DUSE_AM_API=YES
 endif
+
 

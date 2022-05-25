@@ -22,10 +22,15 @@
  */
 
 #include "fullscreenframe.h"
-#include "dbuslauncherframe.h"
 #include "model/appsmanager.h"
 #include "dbuslauncherservice.h"
 #include "accessible.h"
+
+#ifdef USE_AM_API
+#include "amdbuslauncherframe.h"
+#else
+#include "dbuslauncherframe.h"
+#endif
 
 #include <DApplication>
 #include <DGuiApplicationHelper>
@@ -43,6 +48,14 @@ DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 #else
 DUTIL_USE_NAMESPACE
+#endif
+
+#ifdef USE_AM_API
+#define LAUNCHER_INTERFACE "org.deepin.dde.Launcher1"
+#define LAUNCHER_SERVICE_PATH "/org/deepin/dde/Launcher1"
+#else
+#define LAUNCHER_INTERFACE "com.deepin.dde.Launcher"
+#define LAUNCHER_SERVICE_PATH "/com/deepin/dde/Launcher"
 #endif
 
 void dump_user_apss_preset_order_list()
@@ -100,7 +113,12 @@ int main(int argc, char *argv[])
     }
 
     if (quit) {
+#ifdef USE_AM_API
+        AMDBusLauncherFrame launcherFrame;
+#else
         DBusLauncherFrame launcherFrame;
+#endif
+
         do {
             if (!launcherFrame.isValid())
                 break;
@@ -122,8 +140,8 @@ int main(int argc, char *argv[])
     DBusLauncherService service(&launcher);
     Q_UNUSED(service);
     QDBusConnection connection = QDBusConnection::sessionBus();
-    if (!connection.registerService("com.deepin.dde.Launcher") ||
-            !connection.registerObject("/com/deepin/dde/Launcher", &launcher)) {
+    if (!connection.registerService(LAUNCHER_INTERFACE) ||
+            !connection.registerObject(LAUNCHER_SERVICE_PATH, &launcher)) {
 
         qWarning() << "register dbus service failed";
     }

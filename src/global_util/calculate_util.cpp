@@ -25,6 +25,14 @@
 #include "util.h"
 #include "constants.h"
 
+#ifdef USE_AM_API
+#include "amdbuslauncherinterface.h"
+#include "amdbusdockinterface.h"
+#else
+#include "dbuslauncher.h"
+#include "dbusdock.h"
+#endif
+
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QApplication>
@@ -51,26 +59,33 @@ qreal CalculateUtil::getCurRatio()
  */
 int CalculateUtil::calculateIconSize(int mode)
 {
-    // 0.064815 是从FullScreenFrame::updateDockPosition接口中迁移过来用的,为保证间距一致而使用
     int topSpacing = 30;
     int leftSpacing = 0;
     int rightSpacing = 0;
     int bottomSpacing = 20;
 
     // 计算任务栏位置变化时全屏窗口上各控件的大小
-    switch (m_dockInter->position()) {
+#ifdef USE_AM_API
+    int dockPosition = m_amDbusDockInter->position();
+    QRect dockRect = m_amDbusDockInter->FrontendWindowRect();
+#else
+    int dockPosition = m_dockInter->position();
+    QRect dockRect = m_dockInter->frontendRect();
+#endif
+
+    switch (dockPosition) {
     case DLauncher::DOCK_POS_TOP:
-        topSpacing += QRect(m_dockInter->frontendRect()).height();
+        topSpacing += dockRect.height();
         bottomSpacing = topSpacing + DLauncher::APPS_AREA_TOP_MARGIN;
         break;
     case DLauncher::DOCK_POS_BOTTOM:
-        bottomSpacing += QRect(m_dockInter->frontendRect()).height();
+        bottomSpacing += dockRect.height();
         break;
     case DLauncher::DOCK_POS_LEFT:
-        leftSpacing = QRect(m_dockInter->frontendRect()).width();
+        leftSpacing = dockRect.width();
         break;
     case DLauncher::DOCK_POS_RIGHT:
-        rightSpacing = QRect(m_dockInter->frontendRect()).width();
+        rightSpacing = dockRect.width();
         break;
     default:
         break;
@@ -138,7 +153,7 @@ QSize CalculateUtil::appIconSize(int modelMode) const
     Q_UNUSED(modelMode);
 
     QSize size;
-    if (!isFullScreen)
+    if (!m_isFullScreen)
         size = QSize(DLauncher::APP_ITEM_ICON_SIZE, DLauncher::APP_ITEM_ICON_SIZE);
     else
         size = QSize(m_appItemSize, m_appItemSize) * DLauncher::DEFAULT_RATIO;
@@ -148,7 +163,7 @@ QSize CalculateUtil::appIconSize(int modelMode) const
 
 QSize CalculateUtil::appIconSize() const
 {
-    if (!isFullScreen)
+    if (!m_isFullScreen)
         return QSize(DLauncher::APP_ITEM_ICON_SIZE, DLauncher::APP_ITEM_ICON_SIZE);
 
     QSize size(m_appItemSize, m_appItemSize);
@@ -329,11 +344,29 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int cur
  */
 CalculateUtil::CalculateUtil(QObject *parent)
     : QObject(parent)
+#ifdef USE_AM_API
+    , m_amDbusLauncher(new AMDBusLauncherInter(this))
+    , m_amDbusDockInter(new AMDBusDockInter(this))
+    , m_isFullScreen(m_amDbusLauncher->fullscreen())
+#else
+    , m_launcherInter(new DBusLauncher(this))
     , m_dockInter(new DBusDock(this))
+    , m_isFullScreen(m_launcherInter->fullscreen())
+#endif
     , m_launcherGsettings(SettingsPtr("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", this))
+    , m_appItemFontSize(12)
+    , m_appItemSpacing(10)
+    , m_appMarginLeft(0)
+    , m_appMarginTop(0)
+    , m_appItemSize(0)
+    , m_appColumnCount(7)
+    , m_navgationTextSize(14)
+    , m_appPageItemCount(28)
+    , m_titleTextSize(40)
+    , m_categoryAppPageItemCount(12)
+    , m_categoryCount(11)
+    , m_currentCategory(4)
 {
-    m_launcherInter = new DBusLauncher(this);
-    isFullScreen = m_launcherInter->fullscreen();
 }
 
 void CalculateUtil::calculateTextSize()
@@ -349,18 +382,23 @@ void CalculateUtil::calculateTextSize()
 
 QScreen *CalculateUtil::currentScreen() const
 {
-    QScreen * s = qApp->primaryScreen();
+    QScreen *primaryScreen = qApp->primaryScreen();
+
+#ifdef USE_AM_API
+    const QRect dockRect = m_amDbusDockInter->frontendRect();
+#else
     const QRect dockRect = m_dockInter->frontendRect();
+#endif
     const auto ratio = qApp->devicePixelRatio();
 
     for (auto *screen : qApp->screens()) {
         const QRect &sg = screen->geometry();
         const QRect &rg = QRect(sg.topLeft(), sg.size() * ratio);
         if (rg.contains(dockRect.topLeft())) {
-            s = screen;
+            primaryScreen = screen;
             break;
         }
     }
 
-    return  s;
+    return primaryScreen;
 }

@@ -58,8 +58,7 @@ void ItemInfo::registerMetaType()
 
 AppsListModel::AppCategory ItemInfo::category() const
 {
-    switch (m_categoryId)
-    {
+    switch (m_categoryId) {
     case 0:     return AppsListModel::Internet;
     case 1:     return AppsListModel::Chat;
     case 2:     return AppsListModel::Music;
@@ -74,18 +73,15 @@ AppsListModel::AppCategory ItemInfo::category() const
     default:;
     }
 
-    qWarning() << "ItemInfo::category handle wrong category";
     return AppsListModel::All;
 }
 
 void ItemInfo::updateInfo(const ItemInfo &info)
 {
-    if (!this->operator==(info))
+    if (*this == info)
         return;
 
-    m_name = info.m_name;
-    m_iconKey = info.m_iconKey;
-    m_openCount = info.m_openCount;
+    *this = info;
 }
 
 QDebug operator<<(QDebug argument, const ItemInfo &info)
@@ -201,24 +197,43 @@ ItemInfo_v1::ItemInfo_v1(const ItemInfo &info)
 
 }
 
-ItemInfoList_v1 ItemInfo_v1::appListToItemList(const AppInfoList &list)
+ItemInfo_v1::ItemInfo_v1(const ItemInfo_v2 &info)
+    : m_desktop(info.m_desktop)
+    , m_name(info.m_name)
+    , m_key(info.m_key)
+    , m_iconKey(info.m_iconKey)
+    , m_keywords(info.m_keywords)
+    , m_categoryId(info.m_categoryId)
+    , m_installedTime(info.m_installedTime)
+{
+}
+
+ItemInfoList_v1 ItemInfo_v1::appListToItemV1List(const AppInfoList &list)
 {
     ItemInfoList_v1 itemInfoList;
 
-    foreach (const ItemInfo_v1 itemInfo, list) {
+    foreach (const ItemInfo_v1 &itemInfo, list)
         itemInfoList << itemInfo;
-    }
 
     return itemInfoList;
 }
 
-ItemInfoList_v1 ItemInfo_v1::itemListToItem_v1List(const ItemInfoList &list)
+ItemInfoList_v1 ItemInfo_v1::itemListToItemV1List(const ItemInfoList &list)
 {
     ItemInfoList_v1 itemInfoList;
 
-    foreach (const ItemInfo info, list) {
+    foreach (const ItemInfo &info, list)
         itemInfoList << info;
-    }
+
+    return itemInfoList;
+}
+
+ItemInfoList_v1 ItemInfo_v1::itemV2ListToItemV1List(const ItemInfoList_v2 &list)
+{
+    ItemInfoList_v1 itemInfoList;
+
+    for (const ItemInfo_v2 &info : list)
+        itemInfoList << info;
 
     return itemInfoList;
 }
@@ -238,8 +253,7 @@ void ItemInfo_v1::registerMetaType()
 
 AppsListModel::AppCategory ItemInfo_v1::category() const
 {
-    switch (m_categoryId)
-    {
+    switch (m_categoryId) {
     case 0:     return AppsListModel::Internet;
     case 1:     return AppsListModel::Chat;
     case 2:     return AppsListModel::Music;
@@ -254,7 +268,6 @@ AppsListModel::AppCategory ItemInfo_v1::category() const
     default:;
     }
 
-    qWarning() << "ItemInfo::category handle wrong category";
     return AppsListModel::All;
 }
 
@@ -310,15 +323,122 @@ const QDataStream &operator>>(QDataStream &argument, ItemInfo_v1 &info)
 
 void ItemInfo_v1::updateInfo(const ItemInfo_v1 &info)
 {
-    if (!this->operator==(info))
+    if (*this == info)
         return;
 
-    m_name = info.m_name;
-    m_iconKey = info.m_iconKey;
-    m_openCount = info.m_openCount;
+    *this = info;
 }
 
 bool ItemInfo_v1::operator<(const ItemInfo_v1 &info) const
+{
+    return info.m_name < m_name;
+}
+
+ItemInfo_v2::ItemInfo_v2()
+    : m_categoryId(-1)
+    , m_installedTime(0)
+{
+
+}
+
+ItemInfo_v2::ItemInfo_v2(const ItemInfo_v2 &info)
+    : m_desktop(info.m_desktop)
+    , m_name(info.m_name)
+    , m_key(info.m_key)
+    , m_iconKey(info.m_iconKey)
+    , m_categoryId(info.m_categoryId)
+    , m_installedTime(info.m_installedTime)
+    , m_keywords(info.m_keywords)
+{
+
+}
+
+ItemInfo_v2::~ItemInfo_v2()
+{
+
+}
+
+void ItemInfo_v2::registerMetaType()
+{
+    qRegisterMetaType<ItemInfo_v2>("ItemInfo_v2");
+    qDBusRegisterMetaType<ItemInfo_v2>();
+    qRegisterMetaType<ItemInfoList_v2>("ItemInfoList_v2");
+    qDBusRegisterMetaType<ItemInfoList_v2>();
+}
+
+AppsListModel::AppCategory ItemInfo_v2::category() const
+{
+    switch (m_categoryId) {
+    case 0:     return AppsListModel::Internet;
+    case 1:     return AppsListModel::Chat;
+    case 2:     return AppsListModel::Music;
+    case 3:     return AppsListModel::Video;
+    case 4:     return AppsListModel::Graphics;
+    case 5:     return AppsListModel::Game;
+    case 6:     return AppsListModel::Office;
+    case 7:     return AppsListModel::Reading;
+    case 8:     return AppsListModel::Development;
+    case 9:     return AppsListModel::System;
+    case 10:    return AppsListModel::Others;
+    default:;
+    }
+
+    return AppsListModel::All;
+}
+
+QDebug operator<<(QDebug argument, const ItemInfo_v2 &info)
+{
+    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey
+             << info.m_categoryId << info.m_installedTime << info.m_keywords;
+
+    return argument;
+}
+
+QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo_v2 &info)
+{
+    argument.beginStructure();
+    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey
+             << info.m_categoryId << info.m_installedTime << info.m_keywords;
+    argument.endStructure();
+
+    return argument;
+}
+
+QDataStream &operator<<(QDataStream &argument, const ItemInfo_v2 &info)
+{
+    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey;
+    argument << info.m_categoryId << info.m_installedTime << info.m_keywords;
+
+    return argument;
+}
+
+const QDBusArgument &operator>>(const QDBusArgument &argument, ItemInfo_v2 &info)
+{
+    argument.beginStructure();
+    argument >> info.m_desktop >> info.m_name >> info.m_key >> info.m_iconKey
+             >> info.m_categoryId >> info.m_installedTime >> info.m_keywords;
+    argument.endStructure();
+
+    return argument;
+}
+
+const QDataStream &operator>>(QDataStream &argument, ItemInfo_v2 &info)
+{
+    argument >> info.m_desktop >> info.m_name >> info.m_key >> info.m_iconKey;
+    argument >> info.m_categoryId >> info.m_installedTime >> info.m_keywords;
+
+    return argument;
+}
+
+void ItemInfo_v2::updateInfo(const ItemInfo_v2 &info)
+{
+    if (*this == info)
+        return;
+
+    *this = info;
+}
+
+bool ItemInfo_v2::operator<(const ItemInfo_v2 &info) const
 {
     return info.m_name < m_name;
 }

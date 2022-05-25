@@ -25,11 +25,17 @@
 #define APPSMANAGER_H
 
 #include "appslistmodel.h"
-#include "dbuslauncher.h"
 #include "dbustartmanager.h"
-#include "dbusdock.h"
 #include "calculate_util.h"
 #include "common.h"
+
+#ifdef USE_AM_API
+#include "amdbuslauncherinterface.h"
+#include "amdbusdockinterface.h"
+#else
+#include "dbuslauncher.h"
+#include "dbusdock.h"
+#endif
 
 #include <DGuiApplicationHelper>
 #include <DDialog>
@@ -146,7 +152,9 @@ public slots:
     const QString appName(const ItemInfo_v1 &info, const int size);
     int appNums(const AppsListModel::AppCategory &category);
 
-    void handleItemChanged(const QString &operation, const ItemInfo_v1 &appInfo, qlonglong categoryNumber);
+    // 为顺应数据应用数据结构的变动以及兼容性考虑, 对　handleItemChanged 接口进行了重载．
+    void handleItemChanged(const QString &operation, const ItemInfo_v2 &appInfo, qlonglong categoryNumber);
+    void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
     const ItemInfo_v1 createOfCategory(qlonglong category);
 
 private:
@@ -190,9 +198,15 @@ public:
     ItemInfoList_v1 m_usedSortedList;                                   // 全屏应用列表
 
 private:
-    DBusLauncher *m_launcherInter;
     DBusStartManager *m_startManagerInter;
+
+#ifdef USE_AM_API
+    AMDBusLauncherInter *m_amDbusLauncherInter;
+    AMDBusDockInter *m_amDbusDockInter;
+#else
+    DBusLauncher *m_launcherInter;
     DBusDock *m_dockInter;
+#endif
 
     QString m_searchText;
     ItemInfoList_v1 m_allAppInfoList;                                          // 所有app信息列表

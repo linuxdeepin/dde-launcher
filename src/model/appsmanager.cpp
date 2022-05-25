@@ -84,30 +84,39 @@ void AppsManager::registerSettingsFormat()
     m_usedSortSetting = new QSettings(JsonFormat, QSettings::UserScope, "deepin","dde-launcher-app-used-sorted-list");
 }
 
-AppsManager::AppsManager(QObject *parent) :
-    QObject(parent),
-    m_launcherInter(new DBusLauncher(this)),
-    m_startManagerInter(new DBusStartManager(this)),
-    m_dockInter(new DBusDock(this)),
-    m_calUtil(CalculateUtil::instance()),
-    m_delayRefreshTimer(new QTimer(this)),
-    m_refreshCalendarIconTimer(new QTimer(this)),
-    m_lastShowDate(0),
-    m_tryNums(0),
-    m_tryCount(0),
-    m_itemInfo(ItemInfo_v1()),
-    m_filterSetting(nullptr),
-    m_iconValid(true),
-    m_trashIsEmpty(false),
-    m_fsWatcher(new QFileSystemWatcher(this)),
-    m_iconCacheThread(new QThread(this)),
-    m_updateCalendarTimer(new QTimer(this)),
-    m_uninstallDlgIsShown(false)
+AppsManager::AppsManager(QObject *parent)
+    : QObject(parent)
+    , m_startManagerInter(new DBusStartManager(this))
+#ifdef USE_AM_API
+    , m_amDbusLauncherInter(new AMDBusLauncherInter(this))
+    , m_amDbusDockInter(new AMDBusDockInter(this))
+#else
+    , m_launcherInter(new DBusLauncher(this))
+    , m_dockInter(new DBusDock(this))
+#endif
+    , m_calUtil(CalculateUtil::instance())
+    , m_delayRefreshTimer(new QTimer(this))
+    , m_refreshCalendarIconTimer(new QTimer(this))
+    , m_lastShowDate(0)
+    , m_tryNums(0)
+    , m_tryCount(0)
+    , m_itemInfo(ItemInfo_v1())
+    , m_filterSetting(nullptr)
+    , m_iconValid(true)
+    , m_trashIsEmpty(false)
+    , m_fsWatcher(new QFileSystemWatcher(this))
+    , m_iconCacheThread(new QThread(this))
+    , m_updateCalendarTimer(new QTimer(this))
+    , m_uninstallDlgIsShown(false)
 {
     if (QGSettings::isSchemaInstalled("com.deepin.dde.launcher")) {
         m_filterSetting = new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
         connect(m_filterSetting, &QGSettings::changed, this, &AppsManager::onGSettingChanged);
     }
+
+#ifdef USE_AM_API
+    qDebug() << "m_amDbusLauncherInter is valid:" << m_amDbusLauncherInter->isValid();
+#endif
 
     // QSettings 添加Json格式支持
     registerSettingsFormat();
@@ -165,22 +174,38 @@ AppsManager::AppsManager(QObject *parent) :
 
     m_refreshCalendarIconTimer->setInterval(1000);
     m_refreshCalendarIconTimer->setSingleShot(false);
+    onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
 
-    connect(qApp, &DApplication::iconThemeChanged, this, &AppsManager::onIconThemeChanged, Qt::QueuedConnection);
-    connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
-    connect(m_launcherInter, &DBusLauncher::UninstallSuccess, this, &AppsManager::abandonStashedItem);
-    connect(m_launcherInter, &DBusLauncher::UninstallFailed, [this](const QString & appKey) {
+#ifdef USE_AM_API
+    connect(m_amDbusLauncherInter, &AMDBusLauncherInter::NewAppLaunched, this, &AppsManager::markLaunched);
+    connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallSuccess, this, &AppsManager::abandonStashedItem);
+    connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallFailed, [this](const QString &appKey) {
         restoreItem(appKey, AppsListModel::All);
         emit dataChanged(AppsListModel::All);
     });
-    connect(m_launcherInter, &DBusLauncher::ItemChanged, this, &AppsManager::handleItemChanged);
+    connect(m_amDbusLauncherInter, &AMDBusLauncherInter::ItemChanged, this, qOverload<const QString &, const ItemInfo_v2 &, qlonglong>(&AppsManager::handleItemChanged));
+
+    connect(m_amDbusDockInter, &AMDBusDockInter::IconSizeChanged, this, &AppsManager::IconSizeChanged, Qt::QueuedConnection);
+    connect(m_amDbusDockInter, &AMDBusDockInter::FrontendWindowRectChanged, this, &AppsManager::dockGeometryChanged, Qt::QueuedConnection);
+#else
+    connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
+    connect(m_launcherInter, &DBusLauncher::UninstallSuccess, this, &AppsManager::abandonStashedItem);
+    connect(m_launcherInter, &DBusLauncher::UninstallFailed, [this](const QString &appKey) {
+        restoreItem(appKey, AppsListModel::All);
+        emit dataChanged(AppsListModel::All);
+    });
+    connect(m_launcherInter, &DBusLauncher::ItemChanged, this, qOverload<const QString &, const ItemInfo &, qlonglong>(&AppsManager::handleItemChanged));
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &AppsManager::IconSizeChanged, Qt::QueuedConnection);
     connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &AppsManager::dockGeometryChanged, Qt::QueuedConnection);
+#endif
+
+    // TODO：自启动/打开应用这个接口后期sprint2时再改，目前 AM 未做处理
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
+
+    connect(qApp, &DApplication::iconThemeChanged, this, &AppsManager::onIconThemeChanged, Qt::QueuedConnection);
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_fsWatcher, &QFileSystemWatcher::directoryChanged, this, &AppsManager::updateTrashState, Qt::QueuedConnection);
 
-    onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppsManager::onThemeTypeChanged);
     connect(m_refreshCalendarIconTimer, &QTimer::timeout, this, &AppsManager::onRefreshCalendarTimer);
 
@@ -190,7 +215,7 @@ AppsManager::AppsManager(QObject *parent) :
 
 void AppsManager::showSearchedData(const AppInfoList &list)
 {
-    m_appSearchResultList = ItemInfo_v1::appListToItemList(list);
+    m_appSearchResultList = ItemInfo_v1::appListToItemV1List(list);
 }
 
 void AppsManager::sortByLetterOrder(ItemInfoList_v1 &list)
@@ -524,30 +549,49 @@ void AppsManager::restoreItem(const QString &appKey, AppsListModel::AppCategory 
 
 int AppsManager::dockPosition() const
 {
+#ifdef USE_AM_API
+    return m_amDbusDockInter->position();
+#else
     return m_dockInter->position();
+#endif
 }
 
 QRect AppsManager::dockGeometry() const
 {
+#ifdef USE_AM_API
+    return QRect(m_amDbusDockInter->frontendWindowRect());
+#else
     return QRect(m_dockInter->frontendRect());
+#endif
 }
 
 bool AppsManager::isVaild()
 {
+#ifdef USE_AM_API
+    return m_amDbusLauncherInter->isValid() && !m_allAppInfoList.isEmpty();
+#else
     return m_launcherInter->isValid() && !m_allAppInfoList.isEmpty();
+#endif
 }
 
 void AppsManager::refreshAllList()
 {
+#ifdef USE_AM_API
+    m_newInstalledAppsList = m_amDbusLauncherInter->GetAllNewInstalledApps().value();
+#else
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
-
+#endif
     refreshCategoryInfoList();
     refreshUsedInfoList();
     saveAppCategoryInfoList();
     readCollectedCacheData();
 
-    // 全屏分类模式/全屏自由模式都需要界面计算,小窗口直接加载
+    // 全屏全屏自由模式都需要界面计算,小窗口直接加载
+#ifdef USE_AM_API
+    if (!m_amDbusLauncherInter->fullscreen())
+#else
     if (!m_launcherInter->fullscreen())
+#endif
         emit startLoadIcon();
 }
 
@@ -589,7 +633,11 @@ void AppsManager::uninstallApp(const QString &appKey, const int displayMode)
     stashItem(appKey);
 
     // 向后端发起卸载请求
+#ifdef USE_AM_API
+    m_amDbusLauncherInter->RequestUninstall(appKey, false);
+#else
     m_launcherInter->RequestUninstall(appKey, false);
+#endif
 
     // 刷新各列表的分页信息
     emit dataChanged(AppsListModel::All);
@@ -645,7 +693,11 @@ void AppsManager::markLaunched(QString appKey)
 
 void AppsManager::delayRefreshData()
 {
+#ifdef USE_AM_API
+    m_newInstalledAppsList = m_amDbusLauncherInter->GetAllNewInstalledApps().value();
+#else
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
+#endif
 
     generateCategoryMap();
 
@@ -860,22 +912,38 @@ bool AppsManager::appIsAutoStart(const QString &desktop)
 
 bool AppsManager::appIsOnDock(const QString &desktop)
 {
+#ifdef USE_AM_API
+    return m_amDbusDockInter->IsDocked(desktop);
+#else
     return m_dockInter->IsDocked(desktop);
+#endif
 }
 
 bool AppsManager::appIsOnDesktop(const QString &desktop)
 {
+#ifdef USE_AM_API
+    return m_amDbusLauncherInter->IsItemOnDesktop(desktop).value();
+#else
     return m_launcherInter->IsItemOnDesktop(desktop).value();
+#endif
 }
 
 bool AppsManager::appIsProxy(const QString &desktop)
 {
+#ifdef USE_AM_API
+    return m_amDbusLauncherInter->GetUseProxy(desktop).value();
+#else
     return m_launcherInter->GetUseProxy(desktop).value();
+#endif
 }
 
 bool AppsManager::appIsEnableScaling(const QString &desktop)
 {
+#ifdef USE_AM_API
+    return !m_amDbusLauncherInter->GetDisableScaling(desktop);
+#else
     return !m_launcherInter->GetDisableScaling(desktop);
+#endif
 }
 
 /**
@@ -943,7 +1011,13 @@ const QString AppsManager::appName(const ItemInfo_v1 &info, const int size)
 void AppsManager::refreshCategoryInfoList()
 {
     // 从应用商店配置文件/var/lib/lastore/applications.json获取应用数据
+
+#ifdef USE_AM_API
+    QDBusPendingReply<ItemInfoList_v2> reply = m_amDbusLauncherInter->GetAllItemInfos();
+#else
     QDBusPendingReply<ItemInfoList> reply = m_launcherInter->GetAllItemInfos();
+#endif
+
     if (reply.isError()) {
         qWarning() << reply.error();
         qApp->quit();
@@ -957,7 +1031,7 @@ void AppsManager::refreshCategoryInfoList()
         QByteArray usedBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
         QDataStream in(&usedBuf, QIODevice::ReadOnly);
         in >> oldUsedSortedList;
-        m_usedSortedList = ItemInfo_v1::itemListToItem_v1List(oldUsedSortedList);
+        m_usedSortedList = ItemInfo_v1::itemListToItemV1List(oldUsedSortedList);
     } else {
         m_usedSortedList.append(readCacheData(m_usedSortSetting->value("lists").toMap()));
     }
@@ -969,7 +1043,11 @@ void AppsManager::refreshCategoryInfoList()
         }
     }
 
-    const ItemInfoList_v1 &datas = ItemInfo_v1::itemListToItem_v1List(reply.value());
+#ifdef USE_AM_API
+    const ItemInfoList_v1 &datas = ItemInfo_v1::itemV2ListToItemV1List(reply.value());
+#else
+    const ItemInfoList_v1 &datas = ItemInfo_v1::itemListToItemV1List(reply.value());
+#endif
 
     // 从配置文件中读取分类应用数据
     int startIndex = AppsListModel::Internet;
@@ -982,7 +1060,7 @@ void AppsManager::refreshCategoryInfoList()
             QByteArray categoryBuf = APP_CATEGORY_USED_SORTED_LIST.value(QString("%1").arg(startIndex)).toByteArray();
             QDataStream categoryIn(&categoryBuf, QIODevice::ReadOnly);
             categoryIn >> itemInfoList;
-            itemInfoList_v1 = ItemInfo_v1::itemListToItem_v1List(itemInfoList);
+            itemInfoList_v1 = ItemInfo_v1::itemListToItemV1List(itemInfoList);
         } else if (m_categorySetting->contains(QString("lists_%1").arg(startIndex))) {
             itemInfoList_v1 << readCacheData(m_categorySetting->value(QString("lists_%1").arg(startIndex)).toMap());
         }
@@ -1323,42 +1401,80 @@ void AppsManager::onIconThemeChanged()
  * @param appInfo 操作的应用对象信息
  * @param categoryNumber 暂时没有用
  */
-void AppsManager::handleItemChanged(const QString &operation, const ItemInfo_v1 &appInfo, qlonglong categoryNumber)
+void AppsManager::handleItemChanged(const QString &operation, const ItemInfo_v2 &appInfo, qlonglong categoryNumber)
 {
     Q_UNUSED(categoryNumber);
 
+    ItemInfo_v1 info(appInfo);
+
     //　更新应用到缓存
-    emit loadItem(appInfo, operation);
+    emit loadItem(info, operation);
+
     if (operation == "created") {
-
         QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
-
-        if (fuzzyMatching(filters, appInfo.m_key))
+        if (fuzzyMatching(filters, info.m_key))
             return;
 
-        m_allAppInfoList.append(appInfo);
-        m_usedSortedList.append(appInfo);
+        m_allAppInfoList.append(info);
+        m_usedSortedList.append(info);
     } else if (operation == "deleted") {
-        m_allAppInfoList.removeOne(appInfo);
-        m_usedSortedList.removeOne(appInfo);
+        m_allAppInfoList.removeOne(info);
+        m_usedSortedList.removeOne(info);
         //一般情况是不需要的，但是类似wps这样的程序有点特殊，删除一个其它的二进制程序也删除了，需要保存列表，否则刷新的时候会刷新出齿轮的图标
         //新增和更新则无必要
         saveUsedSortedList();
     } else if (operation == "updated") {
-
-        Q_ASSERT(m_allAppInfoList.contains(appInfo));
+        Q_ASSERT(m_allAppInfoList.contains(info));
 
         // 更新所有应用列表
-        int appIndex = m_allAppInfoList.indexOf(appInfo);
-        if (appIndex != -1) {
-            m_allAppInfoList[appIndex].updateInfo(appInfo);
-        }
+        int appIndex = m_allAppInfoList.indexOf(info);
+        if (appIndex != -1)
+            m_allAppInfoList[appIndex].updateInfo(info);
 
         // 更新按照最近使用顺序排序的列表
-        int sortAppIndex = m_usedSortedList.indexOf(appInfo);
-        if (sortAppIndex != -1) {
-            m_usedSortedList[sortAppIndex].updateInfo(appInfo);
-        }
+        int sortAppIndex = m_usedSortedList.indexOf(info);
+        if (sortAppIndex != -1)
+            m_usedSortedList[sortAppIndex].updateInfo(info);
+    } else {
+        qDebug() << "nonexistent condition, operation:" << operation;
+        return;
+    }
+
+    m_delayRefreshTimer->start();
+}
+
+void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber)
+{
+    Q_UNUSED(categoryNumber);
+
+    ItemInfo_v1 info(appInfo);
+    //　更新应用到缓存
+    emit loadItem(info, operation);
+
+    if (operation == "created") {
+        QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
+        if (fuzzyMatching(filters, info.m_key))
+            return;
+
+        m_allAppInfoList.append(info);
+        m_usedSortedList.append(info);
+    } else if (operation == "deleted") {
+        m_allAppInfoList.removeOne(info);
+        m_usedSortedList.removeOne(info);
+        //一般情况是不需要的，但是类似wps这样的程序有点特殊，删除一个其它的二进制程序也删除了，需要保存列表，否则刷新的时候会刷新出齿轮的图标
+        //新增和更新则无必要
+        saveUsedSortedList();
+    } else if (operation == "updated") {
+        Q_ASSERT(m_allAppInfoList.contains(info));
+        // 更新所有应用列表
+        int appIndex = m_allAppInfoList.indexOf(info);
+        if (appIndex != -1)
+            m_allAppInfoList[appIndex].updateInfo(info);
+
+        // 更新按照最近使用顺序排序的列表
+        int sortAppIndex = m_usedSortedList.indexOf(info);
+        if (sortAppIndex != -1)
+            m_usedSortedList[sortAppIndex].updateInfo(info);
     }
 
     m_delayRefreshTimer->start();
@@ -1410,12 +1526,20 @@ int AppsManager::getVisibleCategoryCount()
 
 bool AppsManager::fullscreen() const
 {
+#ifdef USE_AM_API
+    return m_amDbusLauncherInter->fullscreen();
+#else
     return m_launcherInter->fullscreen();
+#endif
 }
 
 int AppsManager::displayMode() const
 {
+#ifdef USE_AM_API
+    return m_amDbusLauncherInter->displaymode();
+#else
     return m_launcherInter->displaymode();
+#endif
 }
 
 qreal AppsManager::getCurRatio()

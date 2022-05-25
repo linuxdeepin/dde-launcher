@@ -57,7 +57,6 @@
 DWIDGET_USE_NAMESPACE
 
 class BackgroundManager;
-class DBusLauncherService;
 class SharedEventFilter;
 class DBusLauncher;
 

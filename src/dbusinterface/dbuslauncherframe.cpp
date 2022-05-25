@@ -16,13 +16,13 @@
  */
 
 DBusLauncherFrame::DBusLauncherFrame(QObject *parent)
-    : QDBusAbstractInterface("com.deepin.dde.Launcher", "/com/deepin/dde/Launcher", staticInterfaceName(), QDBusConnection::sessionBus(), parent)
+    : QDBusAbstractInterface(INTERFACE_NAME, SERVICE_PATH, staticInterfaceName(), QDBusConnection::sessionBus(), parent)
 {
-    QDBusConnection::sessionBus().connect(this->service(), this->path(), "org.freedesktop.DBus.Properties",  "PropertiesChanged","sa{sv}as", this, SLOT(__propertyChanged__(QDBusMessage)));
+    QDBusConnection::sessionBus().connect(this->service(), this->path(), "org.freedesktop.DBus.Properties", "PropertiesChanged","sa{sv}as", this, SLOT(__propertyChanged__(const QDBusMessage &)));
 }
 
 DBusLauncherFrame::~DBusLauncherFrame()
 {
-    QDBusConnection::sessionBus().disconnect(service(), path(), "org.freedesktop.DBus.Properties",  "PropertiesChanged",  "sa{sv}as", this, SLOT(propertyChanged(QDBusMessage)));
+    QDBusConnection::sessionBus().disconnect(service(), path(), "org.freedesktop.DBus.Properties", "PropertiesChanged",  "sa{sv}as", this, SLOT(__propertyChanged__(const QDBusMessage &)));
 }
 

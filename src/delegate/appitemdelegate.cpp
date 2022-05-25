@@ -225,7 +225,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
             QApplication::style()->drawControl(QStyle::CE_ProgressBar, &progressBar, painter);
             QApplication::style()->drawControl(QStyle::CE_PushButton, &button, painter);
         } else {
-            const ItemInfo info = index.data(AppsListModel::DirNameRole).value<ItemInfo>();
+            const ItemInfo_v1 info = index.data(AppsListModel::DirNameRole).value<ItemInfo_v1>();
             painter->drawText(appNameRect, appNameResolved, appNameOption);
         }
     }

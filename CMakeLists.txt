@@ -148,7 +148,11 @@ install(FILES dde-launcher.desktop DESTINATION share/applications/)
 install(FILES dde-launcher-wapper DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 ## services files
+if (DEFINED USE_AM_API)
+install(FILES src/dbusservices/org.deepin.dde.Launcher1.service DESTINATION share/dbus-1/services)
+else ()
 install(FILES src/dbusservices/com.deepin.dde.Launcher.service DESTINATION share/dbus-1/services)
+endif ()
 
 #schemas
 install(FILES gschema/com.deepin.dde.launcher.gschema.xml DESTINATION share/glib-2.0/schemas)

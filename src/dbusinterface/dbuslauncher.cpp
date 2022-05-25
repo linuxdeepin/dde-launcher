@@ -16,7 +16,7 @@
  */
 
 DBusLauncher::DBusLauncher(QObject *parent)
-    : QDBusAbstractInterface("com.deepin.dde.daemon.Launcher", "/com/deepin/dde/daemon/Launcher", staticInterfaceName(), QDBusConnection::sessionBus(), parent)
+    : QDBusAbstractInterface(INTERFACE_NAME, SERVICE_PATH, staticInterfaceName(), QDBusConnection::sessionBus(), parent)
 {
     CategoryInfo::registerMetaType();
     FrequencyInfo::registerMetaType();
@@ -24,11 +24,11 @@ DBusLauncher::DBusLauncher(QObject *parent)
     ItemInfo_v1::registerMetaType();
     InstalledTimeInfo::registerMetaType();
 
-    QDBusConnection::sessionBus().connect(this->service(), this->path(), "org.freedesktop.DBus.Properties",  "PropertiesChanged","sa{sv}as", this, SLOT(__propertyChanged__(QDBusMessage)));
+    QDBusConnection::sessionBus().connect(this->service(), this->path(), "org.freedesktop.DBus.Properties", "PropertiesChanged","sa{sv}as", this, SLOT(__propertyChanged__(const QDBusMessage &)));
 }
 
 DBusLauncher::~DBusLauncher()
 {
-    QDBusConnection::sessionBus().disconnect(service(), path(), "org.freedesktop.DBus.Properties",  "PropertiesChanged",  "sa{sv}as", this, SLOT(propertyChanged(QDBusMessage)));
+    QDBusConnection::sessionBus().disconnect(service(), path(), "org.freedesktop.DBus.Properties", "PropertiesChanged",  "sa{sv}as", this, SLOT(__propertyChanged__(const QDBusMessage &)));
 }
 

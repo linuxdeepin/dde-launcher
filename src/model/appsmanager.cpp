@@ -130,13 +130,7 @@ AppsManager::AppsManager(QObject *parent) :
     m_updateCalendarTimer->setInterval(60 * 1000);// 1min
     m_updateCalendarTimer->start();
 
-    // 启动应用图标和应用名称缓存线程,减少系统加载应用时的开销
-    if (getDConfigValue("preload-apps-icon", false).toBool()) {
-        m_iconCacheManager->moveToThread(m_iconCacheThread);
-        m_iconCacheThread->start();
-    } else {
-        IconCacheManager::setIconLoadState(true);
-    }
+    IconCacheManager::setIconLoadState(true);
 
     // 进程启动加载小窗口主窗体显示的图标资源
     connect(this, &AppsManager::startLoadIcon, m_iconCacheManager, &IconCacheManager::loadWindowIcon, Qt::QueuedConnection);
@@ -897,45 +891,42 @@ const QPixmap AppsManager::appIcon(const ItemInfo_v1 &info, const int size)
     const int iconSize = perfectIconSize(size);
     QPair<QString, int> tmpKey { cacheKey(info) , iconSize};
 
-    // 开启子线程加载应用图标时
-    if (m_iconCacheThread->isRunning()) {
+    // TODO: 直接从主线程加载图标, 避免多线程加载图标影响v23调试效果, 暂时不删除预加载图标缓存模块,
+    // 因为避免龙芯设备上,全屏应用时, 首次切换存在翻页卡顿问题.先解决这个问题,后面优化.
+    // 如存在，优先读取缓存
+    if (IconCacheManager::existInCache(tmpKey)) {
         IconCacheManager::getPixFromCache(tmpKey, pix);
+        return pix;
+    }
+
+    // 缓存中没有时，资源从主线程加载
+    m_itemInfo = info;
+    m_iconValid = getThemeIcon(pix, info, size, !m_iconValid);
+
+    if (m_iconValid) {
+        m_tryNums = 0;
+        return pix;
+    }
+
+    // 先返回齿轮，然后继续找
+    qreal ratio = qApp->devicePixelRatio();
+    QIcon icon = QIcon(":/widgets/images/application-x-desktop.svg");
+    pix = icon.pixmap(QSize(iconSize, iconSize) * ratio);
+    pix.setDevicePixelRatio(ratio);
+
+    if (m_tryNums < 10) {
+        ++m_tryNums;
+
+        if (!QFile::exists(info.m_iconKey))
+            QIcon::setThemeSearchPaths(QIcon::themeSearchPaths());
+
+        QTimer::singleShot(5 * 1000, this, &AppsManager::refreshIcon);
     } else {
-        // 如存在，优先读取缓存
-        if (IconCacheManager::existInCache(tmpKey)) {
-            IconCacheManager::getPixFromCache(tmpKey, pix);
+        if (m_tryCount > 10)
             return pix;
-        }
 
-        // 缓存中没有时，资源从主线程加载
-        m_itemInfo = info;
-        m_iconValid = getThemeIcon(pix, info, size, !m_iconValid);
-
-        if (m_iconValid) {
-            m_tryNums = 0;
-            return pix;
-        }
-
-        // 先返回齿轮，然后继续找
-        qreal ratio = qApp->devicePixelRatio();
-        QIcon icon = QIcon(":/widgets/images/application-x-desktop.svg");
-        pix = icon.pixmap(QSize(iconSize, iconSize) * ratio);
-        pix.setDevicePixelRatio(ratio);
-
-        if (m_tryNums < 10) {
-            ++m_tryNums;
-
-            if (!QFile::exists(info.m_iconKey))
-                QIcon::setThemeSearchPaths(QIcon::themeSearchPaths());
-
-            QTimer::singleShot(5 * 1000, this, &AppsManager::refreshIcon);
-        } else {
-            if (m_tryCount > 10)
-                return pix;
-
-            ++m_tryCount;
-            QTimer::singleShot(10 * 1000, this, &AppsManager::refreshIcon);
-        }
+        ++m_tryCount;
+        QTimer::singleShot(10 * 1000, this, &AppsManager::refreshIcon);
     }
     return pix;
 }

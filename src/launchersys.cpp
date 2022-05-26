@@ -277,9 +277,6 @@ void LauncherSys::aboutToShowLauncher()
 
 void LauncherSys::preloadIcon()
 {
-    if (!getDConfigValue("preload-apps-icon", false).toBool())
-        return;
-
     // 进程启动加载图标资源
     // 全屏分类/自由模式，搜索或者导航栏的高度无法确定，确定后开始加载所有应用资源
     emit m_appManager->loadCurRationIcon(ALL_APPS);

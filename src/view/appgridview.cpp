@@ -104,10 +104,10 @@ AppGridView::AppGridView(QWidget *parent)
     viewport()->setAutoFillBackground(false);
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
         setSpacing(m_calcUtil->appItemSpacing());
-        if (getViewType() != PopupView || m_calcUtil->fullscreen())
-            setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), m_calcUtil->appMarginLeft(), 0);
-        else
+        if (getViewType() == PopupView)
             setViewportMargins(0, m_calcUtil->appMarginTop(), 0, m_calcUtil->appMarginTop());
+        else
+            setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), m_calcUtil->appMarginLeft(), 0);
     });
 
 #ifndef DISABLE_DRAG_ANIMATION

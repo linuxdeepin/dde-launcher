@@ -41,7 +41,6 @@ void PluginLoader::run()
 #ifndef QT_DEBUG
     pluginsDirPath = "/usr/lib/dde-launcher/plugins";
 #endif
-    qInfo() << "using launcher plugins dir:" << pluginsDirPath;
 
     QDir pluginsDir(pluginsDirPath);
 

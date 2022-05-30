@@ -187,7 +187,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QColor color(Qt::black);
     color.setAlpha(80);
     painter->setPen(color);
-    static QFont font = painter->font();
+
     if (!m_calcUtil->fullscreen()) {
         painter->setPen(Qt::black);
         painter->drawText(appNameRect, appNameResolved, appNameOption);

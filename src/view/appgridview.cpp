@@ -46,15 +46,17 @@
 
 DGUI_USE_NAMESPACE
 
-QPointer<AppsManager> AppGridView::m_appManager = nullptr;
-QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
-
-bool AppGridView::m_longPressed = false;
-Gesture *AppGridView::m_gestureInter = nullptr;
-
 AppGridView::AppGridView(QWidget *parent)
     : QListView(parent)
     , m_dropThresholdTimer(new QTimer(this))
+    , m_gestureInter(new Gesture("com.deepin.daemon.Gesture"
+                                 , "/com/deepin/daemon/Gesture"
+                                 , QDBusConnection::systemBus()
+                                 , nullptr))
+    , m_pDelegate(nullptr)
+    , m_appManager(AppsManager::instance())
+    , m_calcUtil(CalculateUtil::instance())
+    , m_longPressed(false)
     , m_pixLabel(nullptr)
     , m_calendarWidget(nullptr)
     , m_vlayout(nullptr)
@@ -62,67 +64,8 @@ AppGridView::AppGridView(QWidget *parent)
     , m_dayLabel(nullptr)
     , m_weekLabel(nullptr)
 {
-    m_pDelegate = nullptr;
-
-    if (!m_gestureInter) {
-        m_gestureInter = new Gesture("com.deepin.daemon.Gesture"
-                                     , "/com/deepin/daemon/Gesture"
-                                     , QDBusConnection::systemBus()
-                                     , nullptr);
-    }
-
-    if (!m_appManager)
-        m_appManager = AppsManager::instance();
-    if (!m_calcUtil)
-        m_calcUtil = CalculateUtil::instance();
-
-    m_dropThresholdTimer->setInterval(DLauncher::APP_DRAG_SWAP_THRESHOLD);
-    m_dropThresholdTimer->setSingleShot(true);
-
-    viewport()->installEventFilter(this);
-    viewport()->setAcceptDrops(true);
-    createMovingComponent();
-
-    setUniformItemSizes(true);
-    setMouseTracking(true);
-    setAcceptDrops(true);
-    setDragEnabled(true);
-    setWrapping(true);
-    setFocusPolicy(Qt::NoFocus);
-    setDragDropMode(QAbstractItemView::DragDrop);
-    setDropIndicatorShown(false);// 解决拖拽释放前有小黑点出现的问题
-    setMovement(QListView::Free);
-    setWrapping(true);
-    setLayoutMode(QListView::Batched);
-    setResizeMode(QListView::Adjust);
-    setViewMode(QListView::IconMode);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setFrameStyle(QFrame::NoFrame);
-    setViewportMargins(0, 0, 0, 0);
-    viewport()->setAutoFillBackground(false);
-    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
-        setSpacing(m_calcUtil->appItemSpacing());
-        if (getViewType() == PopupView)
-            setViewportMargins(0, m_calcUtil->appMarginTop(), 0, m_calcUtil->appMarginTop());
-        else
-            setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), m_calcUtil->appMarginLeft(), 0);
-    });
-
-#ifndef DISABLE_DRAG_ANIMATION
-    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::prepareDropSwap);
-#else
-    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::dropSwap);
-#endif
-
-    // 根据后端延迟触屏信号控制是否可进行图标拖动，收到延迟触屏信号可拖动，没有收到延迟触屏信号、点击松开就不可拖动
-    connect(m_gestureInter, &Gesture::TouchSinglePressTimeout, m_gestureInter, [] {
-        m_longPressed = true;
-    }, Qt::UniqueConnection);
-    connect(m_gestureInter, &Gesture::TouchUpOrCancel, m_gestureInter, [] {
-        m_longPressed = false;
-    }, Qt::UniqueConnection);
+    initUi();
+    initConnection();
 }
 
 const QModelIndex AppGridView::indexAt(const int index) const
@@ -863,4 +806,77 @@ void AppGridView::createMovingComponent()
         m_weekLabel = new QLabel(this);
         m_weekLabel->hide();
     }
+}
+
+void AppGridView::initConnection()
+{
+#ifndef DISABLE_DRAG_ANIMATION
+    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::prepareDropSwap);
+#else
+    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::dropSwap);
+#endif
+
+    // 根据后端延迟触屏信号控制是否可进行图标拖动，收到延迟触屏信号可拖动，没有收到延迟触屏信号、点击松开就不可拖动
+    connect(m_gestureInter, &Gesture::TouchSinglePressTimeout, this, &AppGridView::onTouchSinglePresse, Qt::UniqueConnection);
+    connect(m_gestureInter, &Gesture::TouchUpOrCancel, this, &AppGridView::onTouchUpOrDown, Qt::UniqueConnection);
+    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &AppGridView::onLayoutChanged);
+}
+
+void AppGridView::initUi()
+{
+    m_dropThresholdTimer->setInterval(DLauncher::APP_DRAG_SWAP_THRESHOLD);
+    m_dropThresholdTimer->setSingleShot(true);
+
+    viewport()->installEventFilter(this);
+    viewport()->setAcceptDrops(true);
+    createMovingComponent();
+
+    setUniformItemSizes(true);
+    setMouseTracking(true);
+    setAcceptDrops(true);
+    setDragEnabled(true);
+    setWrapping(true);
+    setFocusPolicy(Qt::NoFocus);
+    setDragDropMode(QAbstractItemView::DragDrop);
+    setDropIndicatorShown(false);// 解决拖拽释放前有小黑点出现的问题
+    setMovement(QListView::Free);
+    setWrapping(true);
+    setLayoutMode(QListView::Batched);
+    setResizeMode(QListView::Adjust);
+    setViewMode(QListView::IconMode);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setFrameStyle(QFrame::NoFrame);
+    setViewportMargins(0, 0, 0, 0);
+    viewport()->setAutoFillBackground(false);
+}
+
+void AppGridView::onLayoutChanged()
+{
+    int leftMargin = m_calcUtil->appMarginLeft();
+    int topMargin = m_calcUtil->appMarginTop();
+    setSpacing(m_calcUtil->appItemSpacing());
+    if (getViewType() == PopupView) {
+        setViewportMargins(0, topMargin, 0, topMargin);
+    } else {
+        setViewportMargins(leftMargin, topMargin, leftMargin, 0);
+    }
+}
+
+void AppGridView::onTouchSinglePresse(int time, double scalex, double scaley)
+{
+    Q_UNUSED(time);
+    Q_UNUSED(scalex);
+    Q_UNUSED(scaley);
+
+    m_longPressed = true;
+}
+
+void AppGridView::onTouchUpOrDown(double scalex, double scaley)
+{
+    Q_UNUSED(scalex);
+    Q_UNUSED(scaley);
+
+    m_longPressed = false;
 }

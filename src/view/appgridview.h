@@ -82,9 +82,17 @@ public:
 
 private:
     void createMovingComponent();
+    void initConnection();
+    void initUi();
 
 public slots:
-    void setDragAnimationEnable() {m_enableAnimation = true;}
+    void setDragAnimationEnable() { m_enableAnimation = true; }
+
+private slots:
+    void onLayoutChanged();
+    void onTouchSinglePresse(int time, double scalex, double scaley);
+    void onTouchUpOrDown(double scalex, double scaley);
+
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
     void requestScrollUp() const;
@@ -120,12 +128,12 @@ private:
     const QWidget *m_containerBox = nullptr;
     QTimer *m_dropThresholdTimer;                        // 推拽过程中app交互动画定时器对象
     QPropertyAnimation *m_lastFakeAni = nullptr;         // 推拽过程中app交换动画对象
-    static Gesture *m_gestureInter;
+    Gesture *m_gestureInter;
     DragPageDelegate *m_pDelegate;
 
-    static QPointer<AppsManager> m_appManager;
-    static QPointer<CalculateUtil> m_calcUtil;
-    static bool m_longPressed;                           // 保存触控屏是否可拖拽状态
+    QPointer<AppsManager> m_appManager;
+    QPointer<CalculateUtil> m_calcUtil;
+    bool m_longPressed;                           // 保存触控屏是否可拖拽状态
 
     QTime m_dragLastTime;                                // 拖拽开始到结束的持续时间(ms)
     QPoint m_dropPoint;                                  // 过度动画的终点坐标

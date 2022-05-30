@@ -371,13 +371,6 @@ void MultiPagesView::updatePosition(int mode)
 
         for (auto pView : m_appGridViewList)
             pView->setFixedSize(tmpSize);
-    } else {
-        QSize viewSize = calculateWidgetSize();
-        // 翻页控件是独立的，不在scrollArea范围内
-        m_appListArea->setFixedSize(viewSize);
-        m_viewBox->setFixedSize(viewSize);
-        for (auto pView : m_appGridViewList)
-            pView->setFixedSize(viewSize);
     }
 
     m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
@@ -487,23 +480,6 @@ void MultiPagesView::wheelEvent(QWheelEvent *e)
 
     if (page != m_pageIndex)
         showCurrentPage(page);
-}
-
-void MultiPagesView::paintEvent(QPaintEvent *e)
-{
-    Q_UNUSED(e);
-
-    if (m_category <= AppsListModel::Dir)
-        return;
-
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    QPen pen;
-    pen.setColor(QColor(50, 87, 254));
-    pen.setWidth(2);
-    painter.setPen(pen);
-    painter.setBrush(Qt::transparent);
-    painter.drawRoundedRect(this->rect(), 40, 40);
 }
 
 void MultiPagesView::mousePress(QMouseEvent *e)
@@ -626,9 +602,9 @@ QSize MultiPagesView::calculateWidgetSize()
     int itemWidth = itemSize.width();
     int itemHeight = itemSize.height();
     int viewWidth;
-    int viewHeight = itemHeight * 3 /*+ topMargin * 1 + bottomMargin * 0*/ /*+ spacing * 2*/;
+    int viewHeight = itemHeight * 3;
     if (viewList.size() > 1) {
-        viewWidth = itemWidth * 4/* + leftMargin * 2*/ /*+ spacing * 3*/;
+        viewWidth = itemWidth * 4;
     } else {
         AppGridView *view = viewList.at(0);
         AppsListModel *listModel = qobject_cast<AppsListModel *>(view->model());

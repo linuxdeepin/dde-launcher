@@ -391,11 +391,16 @@ void AppsListModel::setDrawBackground(bool draw)
 
 void AppsListModel::updateModelData(const QModelIndex dragIndex, const QModelIndex dropIndex)
 {
+    // 保存数据到本地列表
     m_appsManager->updateUsedSortData(dragIndex, dropIndex);
+
+    // 保存列表数据到配置文件
     m_appsManager->saveUsedSortedList();
-//    qInfo() << "dragIndex:" << dragIndex
-//            << ",dropIndex:" << dropIndex;
+
+    // 从本地列表m_usedSortedList 中移除被拖拽的对象信息
     removeRows(dragIndex.row(), 1, QModelIndex());
+    // 通知界面更新翻页控件
+    emit m_appsManager->dataChanged(AppsListModel::All);
     emit QAbstractItemModel::dataChanged(dragIndex, dropIndex);
 }
 

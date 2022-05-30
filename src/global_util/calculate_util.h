@@ -56,7 +56,7 @@ public:
     inline int appItemSpacing() const {return m_appItemSpacing;}
     inline int appMarginLeft() const {return m_appMarginLeft;}
     inline int appMarginTop() const {return m_appMarginTop;}
-    inline int appPageItemCount(AppsListModel::AppCategory category) const {return category >= AppsListModel::Dir ? m_categoryAppPageItemCount : m_appPageItemCount;}
+    inline int appPageItemCount(AppsListModel::AppCategory category) const {return category == AppsListModel::Dir ? m_categoryAppPageItemCount : m_appPageItemCount;}
     inline int appCategoryCount() const {return m_categoryCount;}
     inline QSize appItemSize() const { return QSize(m_appItemSize, m_appItemSize); }
     inline bool fullscreen() const {return isFullScreen;}

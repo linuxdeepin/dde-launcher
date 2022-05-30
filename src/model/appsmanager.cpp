@@ -1550,8 +1550,7 @@ void AppsManager::updateUsedSortData(QModelIndex dragIndex, QModelIndex dropInde
         }
     };
 
-    if (m_calUtil->displayMode() == ALL_APPS)
-        saveAppDirData(m_usedSortedList);
+    saveAppDirData(m_usedSortedList);
 }
 
 void AppsManager::updateDrawerTitle(const QModelIndex &index,const QString &newTitle)

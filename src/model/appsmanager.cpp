@@ -316,13 +316,6 @@ void AppsManager::stashItem(const QString &appKey)
  */
 void AppsManager::abandonStashedItem(const QString &appKey)
 {
-    //qDebug() << "bana" << appKey;
-    for (int i(0); i != m_stashList.size(); ++i) {
-        if (m_stashList[i].m_key == appKey) {
-            m_stashList.removeAt(i);
-            break;
-        }
-    }
     //重新获取分类数据，类似wps一个appkey对应多个desktop文件的时候,有可能会导致漏掉
     refreshCategoryInfoList();
 
@@ -1234,6 +1227,8 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
         //一般情况是不需要的，但是类似wps这样的程序有点特殊，删除一个其它的二进制程序也删除了，需要保存列表，否则刷新的时候会刷新出齿轮的图标
         //新增和更新则无必要
         saveUsedSortedList();
+        // 如果应用被成功删除，则从临时列表中删除应用
+        m_stashList.removeAll(appInfo);
     } else if (operation == "updated") {
 
         Q_ASSERT(m_allAppInfoList.contains(appInfo));

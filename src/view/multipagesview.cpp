@@ -359,7 +359,6 @@ void MultiPagesView::updatePosition(int mode)
             pView->setViewType(AppGridView::PopupView);
         }
 
-        showCurrentPage(0);
         m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
         return;
     }
@@ -376,7 +375,6 @@ void MultiPagesView::updatePosition(int mode)
     m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
     m_viewBox->layout()->setSpacing(0);
     m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
-    showCurrentPage(0);
 }
 
 void MultiPagesView::initUi()

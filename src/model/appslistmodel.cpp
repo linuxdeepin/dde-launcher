@@ -302,9 +302,6 @@ void AppsListModel::dropSwap(const int nextPos)
     if (!m_dragStartIndex.isValid())
         return;
 
-    if (m_dragStartIndex == m_dragDropIndex)
-        return;
-
     const QString appKey = m_dragStartIndex.data(AppsListModel::AppKeyRole).toString();
 
     removeRows(m_dragStartIndex.row(), 1, QModelIndex());

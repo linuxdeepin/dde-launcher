@@ -1,3 +1,7 @@
 usr/bin
 usr/lib/dde-launcher/plugins
 usr/share/glib-2.0/schemas
+usr/share/dde-launcher/translations
+usr/share/applications
+usr/share/dbus-1/services
+usr/share/icons/hicolor/scalable/apps

@@ -1140,18 +1140,10 @@ void AppsManager::generateCategoryMap()
     m_appInfoLock.unlock();
 
     // remove uninstalled app item
-    for (auto it(m_usedSortedList.begin()); it != m_usedSortedList.end();) {
-        int idx = m_allAppInfoList.indexOf(*it);
-
-        // 如果是分类模式，那么再查一下 m_stashList，为了不要更新 m_usedSortedList
-        if (idx == -1 && (m_calUtil->displayMode() == GROUP_BY_CATEGORY)) {
-            idx = m_stashList.indexOf(*it);
+    foreach (auto it, m_usedSortedList) {
+        if (!m_allAppInfoList.contains(it) || m_stashList.contains(it)) {
+            m_usedSortedList.removeOne(it);
         }
-
-        if (idx == -1)
-            it = m_usedSortedList.erase(it);
-        else
-            ++it;
     }
 
     // 从所有应用中获取所有分类目录类型id,存放到临时列表categoryID中
@@ -1221,6 +1213,10 @@ void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &d
  */
 void AppsManager::onSearchTimeOut()
 {
+    if (m_searchText.isEmpty()) {
+        return;
+    }
+
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(m_launcherInter->Search(m_searchText), this);
     connect(watcher, &QDBusPendingCallWatcher::finished, this, [ = ](QDBusPendingCallWatcher * w) {
         if (w->isError()) qDebug() << w->error();

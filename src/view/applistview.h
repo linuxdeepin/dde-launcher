@@ -30,6 +30,8 @@
 #include <DWindowManagerHelper>
 #include <DListView>
 
+#include "widgets/smoothscrollbar.h"
+
 #define DRAG_SCROLL_THRESHOLD 25
 
 DGUI_USE_NAMESPACE
@@ -87,7 +89,7 @@ private:
     bool m_touchMoveFlag;                               // 代表触摸屏移动操作
 
     QPropertyAnimation *m_lastFakeAni = nullptr;
-    QPropertyAnimation *m_scrollAni;
+    SmoothScrollBar *m_scrollbar;
     double m_speedTime = 1.0;
 
     QTimer *m_updateEnableSelectionByMouseTimer;        // 限制拖拽时间不能少于200ms

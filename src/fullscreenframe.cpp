@@ -1487,9 +1487,7 @@ void FullScreenFrame::refreshPageView(AppsListModel::AppCategory category)
             pageView->updatePageCount(AppsListModel::AppCategory(i));
             pageView->showCurrentPage(pageView->currentPage());
         }
-    }
 
-    if (m_displayMode == GROUP_BY_CATEGORY && AppsListModel::Search == category) {
         checkCurrentCategoryVisible();
         hideCategoryBoxWidget();
         showCategoryBoxWidget(m_currentCategory);

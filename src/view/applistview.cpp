@@ -48,15 +48,15 @@ AppListView::AppListView(QWidget *parent)
     : DListView(parent)
     , m_dropThresholdTimer(new QTimer(this))
     , m_touchMoveFlag(false)
-    , m_scrollAni(new QPropertyAnimation(verticalScrollBar(), "value", this))
+    , m_scrollbar(new SmoothScrollBar(this))
     , m_updateEnableSelectionByMouseTimer(nullptr)
     , m_updateEnableShowSelectionByMouseTimer(nullptr)
     , m_bMenuVisible(false)
 {
     this->setAccessibleName("Form_AppList");
     viewport()->setAutoFillBackground(false);
-    m_scrollAni->setEasingCurve(QEasingCurve::OutQuint);
-    m_scrollAni->setDuration(800);
+
+    setVerticalScrollBar(m_scrollbar);
 
     horizontalScrollBar()->setEnabled(false);
     setFocusPolicy(Qt::NoFocus);
@@ -86,8 +86,8 @@ AppListView::AppListView(QWidget *parent)
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::dropSwap);
 #endif
 
-    connect(m_scrollAni, &QPropertyAnimation::valueChanged, this, &AppListView::handleScrollValueChanged);
-    connect(m_scrollAni, &QPropertyAnimation::finished, this, &AppListView::handleScrollFinished);
+    connect(m_scrollbar, &SmoothScrollBar::valueChanged, this, &AppListView::handleScrollValueChanged);
+    connect(m_scrollbar, &SmoothScrollBar::scrollFinished, this, &AppListView::handleScrollFinished);
 }
 
 const QModelIndex AppListView::indexAt(const int index) const
@@ -110,16 +110,7 @@ void AppListView::setMenuVisible(bool value)
  */
 void AppListView::wheelEvent(QWheelEvent *e)
 {
-    // 解决蓝牙连接时触摸板斜对角方向双指按住滑动时滑条滚动异常问题
-    if (e->orientation() == Qt::Horizontal)
-        return;
-
-    int offset = -e->delta();
-
-    m_scrollAni->stop();
-    m_scrollAni->setStartValue(verticalScrollBar()->value());
-    m_scrollAni->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
-    m_scrollAni->start();
+    m_scrollbar->scrollSmooth(-e->angleDelta().y() * m_speedTime);
 }
 
 void AppListView::mouseMoveEvent(QMouseEvent *e)
@@ -181,7 +172,7 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         emit requestEnter(false);
-        m_scrollAni->stop();
+        m_scrollbar->stopScroll();
 
         if (m_updateEnableShowSelectionByMouseTimer) {
             m_updateEnableShowSelectionByMouseTimer->stop();
@@ -257,10 +248,7 @@ void AppListView::mouseReleaseEvent(QMouseEvent *e)
 
         const auto wheelSpeed = inPutInter.property("WheelSpeed").toInt();
         int offset = m_lastTouchBeginPos.y() - e->pos().y();
-        m_scrollAni->stop();
-        m_scrollAni->setStartValue(verticalScrollBar()->value());
-        m_scrollAni->setEndValue(verticalScrollBar()->value() + offset * wheelSpeed);
-        m_scrollAni->start();
+        m_scrollbar->scrollSmooth(offset * wheelSpeed);
         QScroller::scroller(this)->deleteLater();
         return;
     }

@@ -140,6 +140,13 @@ private:
     void refreshAppListIcon(DGuiApplicationHelper::ColorType themeType);
     const ItemInfo createOfCategory(qlonglong category);
 
+    static bool readJsonFile(QIODevice &device, QSettings::SettingsMap &map);
+    static bool writeJsonFile(QIODevice &device, const QSettings::SettingsMap &map);
+    void registerSettingsFormat();
+
+    QSettings::SettingsMap getCacheMapData(const ItemInfoList &list);
+    const ItemInfoList readCacheData(const QSettings::SettingsMap &map);
+
 private slots:
     void onIconThemeChanged();
     void searchDone(const QStringList &resultList);
@@ -192,6 +199,11 @@ private:
     static QSettings APP_USER_SORTED_LIST;
     static QSettings APP_USED_SORTED_LIST;
     static QSettings APP_CATEGORY_USED_SORTED_LIST;
+
+    QSettings *m_userSortedSetting;
+    QSettings *m_usedSortedSetting;
+    QSettings *m_categroySortedSetting;
+
     QStringList m_categoryTs;
     QStringList m_categoryIcon;
     QGSettings *m_filterSetting;

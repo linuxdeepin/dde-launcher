@@ -68,6 +68,77 @@ ItemInfoList AppsManager::m_userSortedList = QList<ItemInfo>();
 ItemInfoList AppsManager::m_appSearchResultList = QList<ItemInfo>();
 ItemInfoList AppsManager::m_categoryList = QList<ItemInfo>();
 
+bool AppsManager::readJsonFile(QIODevice &device, QSettings::SettingsMap &map)
+{
+    QJsonParseError jsonParser;
+    map = QJsonDocument::fromJson(device.readAll(), &jsonParser).toVariant().toMap();
+
+    return jsonParser.error == QJsonParseError::NoError;
+}
+
+bool AppsManager::writeJsonFile(QIODevice &device, const QSettings::SettingsMap &map)
+{
+    QJsonDocument jsonDocument = QJsonDocument::fromVariant(QVariant::fromValue(map));
+    return device.write(jsonDocument.toJson()) != -1;
+}
+
+void AppsManager::registerSettingsFormat()
+{
+    const QSettings::Format JsonFormat = QSettings::registerFormat("json", readJsonFile, writeJsonFile);
+    m_userSortedSetting = new QSettings(JsonFormat, QSettings::UserScope, "deepin","dde-launcher-app-sorted-list");
+    m_usedSortedSetting = new QSettings(JsonFormat, QSettings::UserScope, "deepin","dde-launcher-app-used-sorted-list");
+    m_categroySortedSetting = new QSettings(JsonFormat, QSettings::UserScope, "deepin","dde-launcher-app-category-used-sorted-list");
+}
+
+QSettings::SettingsMap AppsManager::getCacheMapData(const ItemInfoList &list)
+{
+    auto fillMapData = [ & ](QSettings::SettingsMap &map, const ItemInfo &info) {
+        map.insert("desktop", info.m_desktop);
+        map.insert("appName", info.m_name);
+        map.insert("appKey", info.m_key);
+        map.insert("iconKey", info.m_iconKey);
+        map.insert("categoryId", info.m_categoryId);
+        map.insert("installTime", info.m_installedTime);
+        map.insert("openCount", info.m_openCount);
+        map.insert("firstRunTime", info.m_firstRunTime);
+    };
+
+    QSettings::SettingsMap map;
+    for (int i = 0; i < list.size(); i++) {
+        QSettings::SettingsMap itemMap;
+        const ItemInfo &info = list.at(i);
+        fillMapData(itemMap, info);
+        map.insert(QString("itemInfo_%1").arg(i), itemMap);
+    }
+
+    return map;
+}
+
+const ItemInfoList AppsManager::readCacheData(const QSettings::SettingsMap &map)
+{
+    auto getMapData = [ & ](ItemInfo &info, const QMap<QString, QVariant> &infoMap) {
+        info.m_desktop = infoMap.value("desktop").toString();
+        info.m_name = infoMap.value("appName").toString();
+        info.m_key = infoMap.value("appKey").toString();
+        info.m_iconKey = infoMap.value("iconKey").toString();
+        info.m_categoryId = infoMap.value("categoryId").toLongLong();
+        info.m_installedTime = infoMap.value("installTime").toInt();
+        info.m_openCount = infoMap.value("openCount").toLongLong();
+        info.m_firstRunTime = infoMap.value("firstRunTime").toLongLong();
+    };
+
+    ItemInfoList infoList;
+    for (int i = 0; i < map.size(); i++) {
+        ItemInfo info;
+        const QMap<QString, QVariant> &itemInfoMap = map.value(QString("itemInfo_%1").arg(i)).toMap();
+
+        getMapData(info, itemInfoMap);
+        infoList.append(info);
+    }
+
+    return infoList;
+}
+
 AppsManager::AppsManager(QObject *parent) :
     QObject(parent),
     m_launcherInter(new DBusLauncher(this)),
@@ -92,6 +163,9 @@ AppsManager::AppsManager(QObject *parent) :
         m_filterSetting = new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
         connect(m_filterSetting, &QGSettings::changed, this, &AppsManager::onGSettingChanged);
     }
+
+    // QSettings 添加Json格式支持
+    registerSettingsFormat();
 
     // 分类目录名称
     m_categoryTs.append(tr("Internet"));
@@ -381,11 +455,7 @@ void AppsManager::refreshAllList()
 
 void AppsManager::saveUserSortedList()
 {
-    // save cache
-    QByteArray writeBuf;
-    QDataStream out(&writeBuf, QIODevice::WriteOnly);
-    out << m_userSortedList;
-    APP_USER_SORTED_LIST.setValue("list", writeBuf);
+    m_userSortedSetting->setValue("lists", getCacheMapData(m_userSortedList));
 }
 
 /**
@@ -393,11 +463,7 @@ void AppsManager::saveUserSortedList()
  */
 void AppsManager::saveUsedSortedList()
 {
-    QByteArray writeBuf;
-    QDataStream out(&writeBuf, QIODevice::WriteOnly);
-    out << m_usedSortedList;
-
-    APP_USED_SORTED_LIST.setValue("list", writeBuf);
+    m_usedSortedSetting->setValue("lists", getCacheMapData(m_usedSortedList));
 }
 
 void AppsManager::searchApp(const QString &keywords)
@@ -772,14 +838,18 @@ void AppsManager::refreshCategoryInfoList()
 
     QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
 
-    QByteArray readBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
-    QDataStream in(&readBuf, QIODevice::ReadOnly);
-    in >> m_usedSortedList;
-    foreach(auto used , m_usedSortedList) {
-        bool bContains = fuzzyMatching(filters, used.m_key);
-        if (bContains) {
-            m_usedSortedList.removeOne(used);
+    if (APP_USED_SORTED_LIST.contains("list")) {
+        QByteArray readBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
+        QDataStream in(&readBuf, QIODevice::ReadOnly);
+        in >> m_usedSortedList;
+        foreach(auto &used , m_usedSortedList) {
+            bool bContains = fuzzyMatching(filters, used.m_key);
+            if (bContains)
+                m_usedSortedList.removeOne(used);
         }
+    } else {
+        // 读取json缓存文件
+        m_usedSortedList.append(readCacheData(m_usedSortedSetting->value("lists").toMap()));
     }
 
     const ItemInfoList &datas = reply.value();
@@ -790,9 +860,15 @@ void AppsManager::refreshCategoryInfoList()
     for (; beginCategoryIndex < endCategoryIndex; beginCategoryIndex++) {
         ItemInfoList itemInfoList;
 
-        QByteArray readCategoryBuf = APP_CATEGORY_USED_SORTED_LIST.value(QString("%1").arg(beginCategoryIndex)).toByteArray();
-        QDataStream categoryIn(&readCategoryBuf, QIODevice::ReadOnly);
-        categoryIn >> itemInfoList;
+        if (APP_CATEGORY_USED_SORTED_LIST.contains(QString("%1").arg(beginCategoryIndex))) {
+            QByteArray readCategoryBuf = APP_CATEGORY_USED_SORTED_LIST.value(QString("%1").arg(beginCategoryIndex)).toByteArray();
+            QDataStream categoryIn(&readCategoryBuf, QIODevice::ReadOnly);
+            categoryIn >> itemInfoList;
+        } else {
+            // 从json读取缓存数据
+            itemInfoList  << readCacheData(m_categroySortedSetting->value(QString("AppCategory_%1").arg(beginCategoryIndex)).toMap());
+        }
+
 
         m_appInfoLock.lockForWrite();
         // 当缓存数据与应用商店数据有差异时，以应用商店数据为准
@@ -829,49 +905,45 @@ void AppsManager::refreshCategoryInfoList()
  */
 void AppsManager::refreshUsedInfoList()
 {
-    if (m_usedSortedList.isEmpty()) {
-        QByteArray readBuffer = APP_USED_SORTED_LIST.value("list").toByteArray();
+    if (!m_usedSortedList.isEmpty()) {
+        saveUsedSortedList();
+        return;
+    }
+
+    if (APP_USED_SORTED_LIST.contains("list")) {
+        QByteArray readBuffer;
         QDataStream in(&readBuffer, QIODevice::ReadOnly);
         in >> m_usedSortedList;
-
-        if (m_usedSortedList.isEmpty()) {
-            m_usedSortedList = m_allAppInfoList;
-        }
-
-        for (QList<ItemInfo>::ConstIterator it = m_allAppInfoList.constBegin(); it != m_allAppInfoList.constEnd(); ++it) {
-            if (!m_usedSortedList.contains(*it)) {
-                m_usedSortedList.append(*it);
-            }
-        }
-
-        for (QList<ItemInfo>::iterator it = m_usedSortedList.begin(); it != m_usedSortedList.end();) {
-            if (m_allAppInfoList.contains(*it)) {
-                ++it;
-            } else {
-                it = m_usedSortedList.erase(it);
-            }
-        }
-
-        updateUsedListInfo();
+    } else {
+        m_usedSortedList.append(readCacheData(m_usedSortedSetting->value("lists").toMap()));
     }
-    // 保存到qSetting配置文件
+
+    if (m_usedSortedList.isEmpty())
+        m_usedSortedList = m_allAppInfoList;
+
+    for (QList<ItemInfo>::ConstIterator it = m_allAppInfoList.constBegin(); it != m_allAppInfoList.constEnd(); ++it) {
+        if (!m_usedSortedList.contains(*it))
+            m_usedSortedList.append(*it);
+    }
+
+    for (QList<ItemInfo>::iterator it = m_usedSortedList.begin(); it != m_usedSortedList.end();) {
+        if (m_allAppInfoList.contains(*it)) {
+            ++it;
+        } else {
+            it = m_usedSortedList.erase(it);
+        }
+    }
+
+    updateUsedListInfo();
     saveUsedSortedList();
 }
 
-/**
- * @brief AppsManager::refreshCategoryUsedInfoList 保存全屏分类排序数据
- */
 void AppsManager::refreshCategoryUsedInfoList()
 {
-    // 保存排序信息
-    QHash<AppsListModel::AppCategory, ItemInfoList>::iterator categoryAppsIter = m_appInfos.begin();
-    for (; categoryAppsIter != m_appInfos.end(); ++categoryAppsIter) {
-        int category = categoryAppsIter.key();
-
-        QByteArray writeBuf;
-        QDataStream out(&writeBuf, QIODevice::WriteOnly);
-        out << categoryAppsIter.value();
-        APP_CATEGORY_USED_SORTED_LIST.setValue(QString("%1").arg(category), writeBuf);
+    QHash<AppsListModel::AppCategory, ItemInfoList>::iterator categoryApps = m_appInfos.begin();
+    for (; categoryApps != m_appInfos.end(); ++categoryApps) {
+        int category = categoryApps.key();
+        m_categroySortedSetting->setValue(QString("AppCategory_%1").arg(category), getCacheMapData(categoryApps.value()));
     }
 }
 
@@ -882,9 +954,14 @@ void AppsManager::refreshUserInfoList()
 {
     if (m_userSortedList.isEmpty()) {
         // first reads the config file.
-        QByteArray readBuffer = APP_USER_SORTED_LIST.value("list").toByteArray();
-        QDataStream in(&readBuffer, QIODevice::ReadOnly);
-        in >> m_userSortedList;
+        if (APP_USER_SORTED_LIST.contains("list")) {
+            QByteArray readBuffer = APP_USER_SORTED_LIST.value("list").toByteArray();
+            QDataStream in(&readBuffer, QIODevice::ReadOnly);
+            in >> m_userSortedList;
+        } else {
+            // 读取缓存
+            m_userSortedList.append(readCacheData(m_userSortedSetting->value("lists").toMap()));
+        }
 
         // if data cache file is empty.
         if (m_userSortedList.isEmpty()) {

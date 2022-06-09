@@ -481,6 +481,13 @@ void MultiPagesView::wheelEvent(QWheelEvent *e)
         showCurrentPage(page);
 }
 
+void MultiPagesView::showEvent(QShowEvent *e)
+{
+    showCurrentPage(m_pageIndex);
+
+    return QWidget::showEvent(e);
+}
+
 void MultiPagesView::mousePress(QMouseEvent *e)
 {
     m_bMousePress = true;

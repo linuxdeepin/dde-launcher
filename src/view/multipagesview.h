@@ -110,6 +110,7 @@ private:
 
 protected:
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
 
 private:
     GradientLabel *m_pLeftGradient;

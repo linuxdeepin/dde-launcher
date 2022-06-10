@@ -369,6 +369,8 @@ void FullScreenFrame::initUI()
     m_searchWidget->edit()->lineEdit()->installEventFilter(this);
     m_searchWidget->installEventFilter(m_eventFilter);
     m_searchWidget->showToggle();
+
+    m_searchModeWidget->hide();
     m_appItemDelegate->installEventFilter(m_eventFilter);
     initAppView();
 

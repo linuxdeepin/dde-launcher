@@ -223,6 +223,8 @@ void WindowedFrame::initUi()
     rightVLayout->addLayout(allAppVLayout);
     rightVLayout->addWidget(m_searchWidget);
 
+    m_searchWidget->hide();
+
     mainHlayout->addLayout(leftVLayout);
     mainHlayout->addLayout(rightVLayout);
     mainHlayout->setStretch(0, 1);

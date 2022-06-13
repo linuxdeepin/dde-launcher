@@ -32,6 +32,13 @@ void MiniFrameButton::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeT
     update();
 }
 
+void MiniFrameButton::setIconPath(const QString &path)
+{
+    if (!path.isEmpty()) {
+        m_icon = QPixmap(path);
+    }
+}
+
 void MiniFrameButton::enterEvent(QEvent *event)
 {
     QPushButton::enterEvent(event);
@@ -72,6 +79,7 @@ void MiniFrameButton::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
 
     if (isChecked()) {
         QPainterPath path;
@@ -79,7 +87,8 @@ void MiniFrameButton::paintEvent(QPaintEvent *event)
         painter.fillPath(path, m_color);
     }
 
-    if (!icon().isNull()) {
-        painter.drawPixmap(rect().center().x() - iconSize().width() / 2 + 1 , rect().center().y() - iconSize().height() / 2 + 1, icon().pixmap(iconSize()));
+    if (!m_icon.isNull()) {
+        const QPixmap scaled_pixmap = m_icon.scaled(iconSize().width(), iconSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        painter.drawPixmap(rect().center().x() - iconSize().width() / 2 + 1 , rect().center().y() - iconSize().height() / 2 + 1, scaled_pixmap);
     }
 }

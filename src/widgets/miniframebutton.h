@@ -18,6 +18,7 @@ signals:
 
 public slots:
     void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
+    void setIconPath(const QString &path);
 
 protected:
     void enterEvent(QEvent *event) override;
@@ -33,6 +34,7 @@ protected:
 
 private:
     QColor m_color;
+    QPixmap m_icon;
 };
 
 #endif

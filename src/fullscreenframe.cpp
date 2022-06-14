@@ -688,8 +688,8 @@ void FullScreenFrame::onAppClicked(const QModelIndex &index)
     } else {
         m_drawerWidget->setCurrentIndex(index);
         m_appsManager->setDirAppInfoList(index);
-        m_drawerWidget->refreshDrawerTitle(info.m_name);
         m_drawerWidget->show();
+        m_drawerWidget->refreshDrawerTitle(info.m_name);
     }
 }
 

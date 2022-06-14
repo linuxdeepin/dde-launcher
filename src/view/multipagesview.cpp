@@ -92,9 +92,9 @@ MultiPagesView::~MultiPagesView()
     }
 }
 
-void MultiPagesView::refreshTitle(const QString &str)
+void MultiPagesView::refreshTitle(const QString &title, int maxWidth)
 {
-    m_titleLabel->setText(str);
+    m_titleLabel->setText(maxWidth, title);
     m_titleLabel->setVisible(true);
 }
 
@@ -383,6 +383,7 @@ void MultiPagesView::initUi()
     m_appListArea->setWidget(m_viewBox);
 
     m_pageControl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_titleLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     QVBoxLayout *layoutMain = new QVBoxLayout;
     layoutMain->setContentsMargins(0, 0, 0, DLauncher::DRAG_THRESHOLD);

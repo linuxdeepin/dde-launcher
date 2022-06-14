@@ -64,7 +64,7 @@ void AppDrawerWidget::updateBackgroundImage(const QPixmap &img)
 
 void AppDrawerWidget::refreshDrawerTitle(const QString &title)
 {
-    m_multipageView->refreshTitle(title);
+    m_multipageView->refreshTitle(title, rect().width());
 }
 
 void AppDrawerWidget::setCurrentIndex(const QModelIndex &index)
@@ -79,8 +79,11 @@ void AppDrawerWidget::onTitleChanged()
 
 void AppDrawerWidget::showEvent(QShowEvent *event)
 {
+#define TITLE_HEIGHT 130
+
     QSize itemSize = CalculateUtil::instance()->appItemSize() * 5 / 4;
-    QSize widgetSize = QSize(itemSize.width() * 4, itemSize.height() * 3 + 60);
+    // 130为应用文件夹标题控件高度
+    QSize widgetSize = QSize(itemSize.width() * 4, itemSize.height() * 3 + TITLE_HEIGHT);
     setFixedSize(widgetSize);
     m_multipageView->setFixedSize(widgetSize);
     m_blurBackground->setFixedSize(widgetSize);

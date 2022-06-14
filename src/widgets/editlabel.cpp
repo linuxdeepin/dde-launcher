@@ -4,10 +4,14 @@
 #include <QKeyEvent>
 #include <QHBoxLayout>
 
+DWIDGET_USE_NAMESPACE
+#define DOTSWIDTH 80
+
 EditLabel::EditLabel(QWidget *parent)
     : QWidget(parent)
     , m_lineEdit(new QLineEdit(this))
     , m_label(new QLabel(this))
+    , m_maxWidth(0)
 {
     initUi();
     initConnection();
@@ -20,16 +24,14 @@ EditLabel::~EditLabel()
 
 void EditLabel::initUi()
 {
-    this->setFixedSize(150, 60);
+#ifdef QT_DEBUG
+    setStyleSheet("QWidget{border: 1px solid red;}");
+#else
+
+#endif
+
     setWindowFlags(Qt::Widget | Qt::FramelessWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
-
-    QHBoxLayout *hBoxLayout = new QHBoxLayout;
-    hBoxLayout->setContentsMargins(QMargins(0, 0, 0, 0));
-    hBoxLayout->setSpacing(0);
-    hBoxLayout->addWidget(m_label);
-    hBoxLayout->addWidget(m_lineEdit);
-    setLayout(hBoxLayout);
 
     QColor labelColor(Qt::white);
     QPalette palette(m_label->palette());
@@ -41,14 +43,29 @@ void EditLabel::initUi()
     editPalette.setColor(QPalette::Base, editColor);
     m_lineEdit->setPalette(editPalette);
 
-    m_label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    m_lineEdit->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_lineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_lineEdit->setFocusPolicy(Qt::ClickFocus);
     m_lineEdit->hide();
-    m_label->setFixedSize(150, 35);
-    m_lineEdit->setFixedSize(150, 35);
+    m_lineEdit->setGeometry(m_label->geometry());
 
-    m_label->setAlignment(Qt::AlignCenter);
+    m_lineEdit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    m_label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
+    m_label->setFixedHeight(50);
+    m_lineEdit->setFixedHeight(50);
+
+    DFontSizeManager::instance()->bind(m_label, DFontSizeManager::T1);
+    DFontSizeManager::instance()->bind(m_lineEdit, DFontSizeManager::T1); // 40pixel
+
+    QHBoxLayout *hBoxLayout = new QHBoxLayout;
+    hBoxLayout->setContentsMargins(QMargins(40, 40, 40, 40));
+    hBoxLayout->setSpacing(0);
+    hBoxLayout->addStretch();
+    hBoxLayout->addWidget(m_label);
+    hBoxLayout->addWidget(m_lineEdit);
+    hBoxLayout->addStretch();
+    setLayout(hBoxLayout);
 }
 
 void EditLabel::initConnection()
@@ -74,10 +91,10 @@ void EditLabel::mouseDoubleClickEvent(QMouseEvent *event)
     Q_UNUSED(event);
 
     m_oldTitle = m_label->text();
-    m_label->hide();
+    m_lineEdit->setFixedSize(m_label->geometry().size());
     m_lineEdit->show();
-    m_lineEdit->setGeometry(m_label->geometry());
-    m_lineEdit->setText(m_label->text());
+    m_label->hide();
+    m_lineEdit->setText(m_originTitle);
     m_lineEdit->setFocus();
 }
 
@@ -95,18 +112,25 @@ void EditLabel::onReturnPressed()
         return;
     }
 
-    m_label->setText(m_lineEdit->text());
+    QFontMetrics metrics(m_label->font());
+    m_originTitle = m_lineEdit->text();
+    const QString elideText = metrics.elidedText(m_originTitle, Qt::ElideRight, m_maxWidth - DOTSWIDTH);
+    m_label->setText(elideText);
     cancelEditState();
 
     emit titleChanged();
 }
 
-void EditLabel::setText(const QString &str)
+void EditLabel::setText(int maxWidth, const QString &title)
 {
-    m_label->setText(str);
+    m_maxWidth = maxWidth;
+    m_originTitle = title;
+    QFontMetrics metrics(m_label->font());
+    const QString &elideText = metrics.elidedText(title, Qt::ElideRight, m_maxWidth - DOTSWIDTH);
+    m_label->setText(elideText);
 }
 
 QString EditLabel::text() const
 {
-    return m_label->text();
+    return m_originTitle;
 }

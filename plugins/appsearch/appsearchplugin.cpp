@@ -33,6 +33,8 @@ AppInfoList AppSearchPlugin::search(const QString &searchText)
 {
     Q_UNUSED(searchText);
 
+#ifdef QT_DEBUG
+    AppInfoList appList;
     AppInfo list;
     list.m_desktop = "/usr/share/applications/com.youdao.cidian.desktop";
     list.m_name = "youdao-dict";
@@ -42,6 +44,9 @@ AppInfoList AppSearchPlugin::search(const QString &searchText)
     list.m_progressValue = 50;
     list.m_status = 1;
     list.m_description = "Your searched apps in the appstore:";
-
-    return AppInfoList() << list;
+    appList << list;
+    return appList;
+#else
+    return AppInfoList();
+#endif
 }

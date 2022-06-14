@@ -39,7 +39,7 @@ QString LanguageTransformation::zhToPinYin(const QString &chinese)
         }
     }
 
-    return list.join(" ");
+    return list.join("");
 }
 
 /** 中文转简拼
@@ -89,7 +89,6 @@ void LanguageTransformation::readConfigFile()
         QString pinyinStr = pinYinFile.readAll();
         m_pinyinStrList = pinyinStr.split(" ");
         pinYinFile.close();
-//        qInfo() << "m_pinyinStrList:" << m_pinyinStrList;
 
         // 加载简拼配置库
         QFile jianpinFile(":/language/jianpin.txt");

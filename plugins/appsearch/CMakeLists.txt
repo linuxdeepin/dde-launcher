@@ -19,5 +19,3 @@ target_link_libraries(${PLUGIN_NAME} PRIVATE
   ${Qt5DBus_LIBRARIES}
   ${Qt5Concurrent_LIBRARIES}
 )
-
-install(TARGETS ${PLUGIN_NAME} LIBRARY DESTINATION lib/dde-launcher/plugins/)

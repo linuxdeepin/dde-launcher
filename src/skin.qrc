@@ -267,5 +267,9 @@
         <file>skin/icons/search_36px.svg</file>
         <file>skin/icons/clear_36px.svg</file>
         <file>skin/icons/exit_fullscreen.svg</file>
+        <file>skin/icons/letter-icon-normal.svg</file>
+        <file>skin/icons/letter-icon-checked.svg</file>
+        <file>skin/icons/title-icon-normal.svg</file>
+        <file>skin/icons/title-icon-checked.svg</file>
     </qresource>
 </RCC>

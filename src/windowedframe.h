@@ -148,9 +148,7 @@ private slots:
     void onHideMenu();
     void addViewEvent(AppGridView *pView);
     void refreshView(const AppsListModel::AppCategory category);
-
-    void onChangeToTitleMode();
-    void onChangeToLetterMode();
+    void onButtonClick(int buttonid);
 
 private:
 #ifdef USE_AM_API

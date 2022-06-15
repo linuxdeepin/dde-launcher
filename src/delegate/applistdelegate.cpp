@@ -76,7 +76,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     const qreal ratio = qApp->devicePixelRatio();
     const QRect rect = option.rect;
-    const bool isDragItem = option.features & QStyleOptionViewItem::Alternate;
+    const bool isAlternate = option.features & QStyleOptionViewItem::Alternate;
 
     QPixmap iconPixmap = index.data(AppsListModel::AppListIconRole).value<QPixmap>();
     ItemInfo_v1 itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
@@ -86,7 +86,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     if (option.state.testFlag(QStyle::State_Selected) && !isTitle) {
         painter->setBrush(m_color);
-    } else if (isDragItem && !isTitle) {
+    } else if (isAlternate && !isTitle) {
         QColor brushColor(Qt::white);
         brushColor.setAlpha(static_cast<int>(255 * 0.4));
         painter->setBrush(brushColor);
@@ -118,18 +118,19 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     textRect.setWidth(qRound(textRect.width() - m_blueDotPixmap.width() / ratio - 60));
 
-    if (isDragItem) {
+    if (isAlternate) {
         QFont nameFont = painter->font();
         nameFont.setPointSize(nameFont.pointSize() + 2);
         painter->setFont(nameFont);
     }
+
+    painter->setPen(QPen(QPalette().brightText(), 1));
 
     // 使用省略号显示超长的应用名称
     const QString appName = painter->fontMetrics().elidedText(index.data(AppsListModel::AppNameRole).toString(), Qt::ElideRight, textRect.width());
 
     static QPen pen = painter->pen();
     static QFont font = painter->font();
-    painter->setPen(Qt::black);
     if (isTitle) {
         painter->setFont(font);
     } else {
@@ -139,7 +140,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, appName);
 
     // draw blue dot if needed
-    if (index.data(AppsListModel::AppNewInstallRole).toBool() && !isDragItem && !isTitle) {
+    if (index.data(AppsListModel::AppNewInstallRole).toBool() && !isAlternate && !isTitle) {
         const QPointF blueDotPos(rect.width() - m_blueDotPixmap.width() / ratio - 6,
                                  rect.y() + (+ rect.height() - m_blueDotPixmap.height() / ratio) / 2);
 

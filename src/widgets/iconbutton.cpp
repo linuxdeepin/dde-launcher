@@ -1,35 +1,29 @@
 #include "iconbutton.h"
 
 #include <QPainter>
+#include <QPainterPath>
 
 IconButton::IconButton(QWidget *parent)
     : QPushButton (parent)
 {
     setAccessibleName("modeSwitchButton");
     setCheckable(true);
-    setChecked(false);
 }
 
-void IconButton::mousePressEvent(QMouseEvent *event)
+void IconButton::paintEvent(QPaintEvent *event)
 {
-    m_pressed = true;
-    QPushButton::mousePressEvent(event);
-}
+    Q_UNUSED(event);
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing);
 
-void IconButton::mouseReaseEvent(QMouseEvent *event)
-{
-    m_pressed = false;
-    QPushButton::mouseReleaseEvent(event);
-}
+    QPainterPath path;
+    if (isChecked()) {
+        QColor brushColor(Qt::white);
+        brushColor.setAlpha(static_cast<int>(0.7 * 255));
 
-void IconButton::enterEvent(QEvent *event)
-{
-    m_entered = true;
-    QPushButton::enterEvent(event);
-}
+        painter.setBrush(brushColor);
+        painter.drawRoundedRect(rect().marginsRemoved(QMargins(1, 1, 1, 1)), 8, 8);
+    }
 
-void IconButton::leaveEvent(QEvent *event)
-{
-    m_entered = false;
-    QPushButton::leaveEvent(event);
+    return QPushButton::paintEvent(event);
 }

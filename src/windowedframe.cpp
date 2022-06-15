@@ -115,12 +115,11 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
     initUi();
     initConnection();
+    setAccessibleName();
 }
 
 void WindowedFrame::initUi()
 {
-    setAccessibleName();
-
     setMaskColor(DBlurEffectWidget::AutoColor);
     setBlendMode(DBlurEffectWidget::InWindowBlend);
     m_appearanceInter->setSync(false, false);
@@ -173,7 +172,7 @@ void WindowedFrame::initUi()
 
     setFixedSize(780, 600);
     QHBoxLayout *mainHlayout = new QHBoxLayout;
-    mainHlayout->setContentsMargins(10, 10, 10, 10);
+    mainHlayout->setContentsMargins(20, 22, 10, 10);
     mainHlayout->setSpacing(10);
 
     // 分类模式标题 +  按钮组
@@ -189,9 +188,6 @@ void WindowedFrame::initUi()
     leftVLayout->addLayout(topHLayout);
     leftVLayout->addWidget(m_appsView);
     leftVLayout->addWidget(m_bottomBtn);
-//    leftVLayout->setStretch(0, 1);
-//    leftVLayout->setStretch(0, 10);
-//    leftVLayout->setStretch(1, 1);
 
     // 右边控件布局器
     QVBoxLayout *rightVLayout = new QVBoxLayout;
@@ -272,8 +268,7 @@ void WindowedFrame::initConnection()
         m_allAppView->setSpacing(m_calcUtil->appItemSpacing());
     });
 
-    connect(m_modeSwitch, &ModeSwitch::titleModeClicked, this, &WindowedFrame::onChangeToTitleMode);
-    connect(m_modeSwitch, &ModeSwitch::letterModeClicked, this, &WindowedFrame::onChangeToLetterMode);
+    connect(m_modeSwitch, &ModeSwitch::buttonClicked, this, &WindowedFrame::onButtonClick);
 
     connect(m_appsView, &AppListView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
     connect(m_autoScrollTimer, &QTimer::timeout, [this] {
@@ -1047,15 +1042,9 @@ void WindowedFrame::refreshView(const AppsListModel::AppCategory category)
     }
 }
 
-void WindowedFrame::onChangeToTitleMode()
+void WindowedFrame::onButtonClick(int buttonid)
 {
-    m_appsModel->setCategory(AppsListModel::TitleMode);
-    m_appsView->setCurrentIndex(QModelIndex());
-}
-
-void WindowedFrame::onChangeToLetterMode()
-{
-    m_appsModel->setCategory(AppsListModel::LetterMode);
+    m_appsModel->setCategory((buttonid == 1) ? AppsListModel::TitleMode : AppsListModel::LetterMode);
     m_appsView->setCurrentIndex(QModelIndex());
 }
 

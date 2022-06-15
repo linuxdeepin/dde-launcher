@@ -25,6 +25,7 @@
 #include "fullscreenframe.h"
 #include "windowedframe.h"
 #include "editlabel.h"
+#include "iconbutton.h"
 
 DWIDGET_USE_NAMESPACE
 

@@ -1,30 +1,49 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include <QWidget>
-#include <QButtonGroup>
+#include <DGuiApplicationHelper>
 
-#include "iconbutton.h"
+#include <QWidget>
+
+DGUI_USE_NAMESPACE
+
+class QButtonGroup;
+class QSettings;
+class IconButton;
+class QAbstractButton;
 
 class ModeSwitch : public QWidget
 {
     Q_OBJECT
 
 public:
-    ModeSwitch(QWidget *parent = Q_NULLPTR);
+    explicit ModeSwitch(QWidget *parent = Q_NULLPTR);
     ~ModeSwitch();
-
-signals:
-    void titleModeClicked();
-    void letterModeClicked();
 
 protected:
     void paintEvent(QPaintEvent *event);
+
+signals:
+    void buttonClicked(int);
+
+private slots:
+    void onButtonClick(int id);
+    void onButtonToggle(QAbstractButton *button, bool checked);
+    void onThemeTypeChange(DGuiApplicationHelper::ColorType themeType);
+
+private:
+    void initUi();
+    void initConnection();
+    void initAccessibleName();
+    void updateIcon();
+    void changeCategoryMode();
 
 private:
     IconButton *m_titleModeButton;
     IconButton *m_letterModeButton;
     QButtonGroup *m_buttonGrp;
+    QColor m_bgColor;
+    QSettings *m_modeSettings;
 };
 
 #endif // WIDGET_H

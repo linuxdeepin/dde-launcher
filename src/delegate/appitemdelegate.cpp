@@ -28,11 +28,14 @@
 #include "appslistmodel.h"
 #include "iteminfo.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QDebug>
 #include <QPixmap>
 #include <QVariant>
 #include <QApplication>
 
+DGUI_USE_NAMESPACE
 
 #define ICONTOLETF  12
 #define ICONTOTOP  6
@@ -184,17 +187,17 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     painter->setFont(appNamefont);
     painter->setBrush(QBrush(Qt::transparent));
-    QColor color(Qt::black);
-    color.setAlpha(80);
-    painter->setPen(color);
+    painter->setPen(Qt::white);
 
     if (!m_calcUtil->fullscreen()) {
-        painter->setPen(Qt::black);
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType)
+            painter->setPen(Qt::white);
+        else
+            painter->setPen(Qt::black);
+
         painter->setFont(QFont(painter->font().family(), DLauncher::DEFAULT_FONT_SIZE));
         painter->drawText(appNameRect, appNameResolved, appNameOption);
     } else {
-        painter->setPen(Qt::white);
-
         QRectF progressRect, buttonRect;
         progressRect.setTop(appNameRect.bottom() + 5);
         progressRect.setLeft(option.rect.left() + (option.rect.right() - option.rect.width() / 3) / 2);

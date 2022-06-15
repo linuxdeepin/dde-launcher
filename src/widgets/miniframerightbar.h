@@ -22,17 +22,16 @@
 #ifndef MINIFRAMERIGHTBAR_H
 #define MINIFRAMERIGHTBAR_H
 
+#include <DGuiApplicationHelper>
+
 #include <QWidget>
 #include <QLabel>
 
-#include <DGuiApplicationHelper>
-
-#include <diconbutton.h>
-#include "avatar.h"
-
-DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 class MiniFrameButton;
+class QButtonGroup;
+
 class MiniFrameRightBar : public QWidget
 {
     Q_OBJECT
@@ -41,32 +40,27 @@ public:
     explicit MiniFrameRightBar(QWidget *parent = nullptr);
     ~MiniFrameRightBar() override;
 
-    void setCurrentCheck(bool checked) const;
-    void setCurrentIndex(int index) { m_currentIndex = index; }
-    void moveUp();
-    void moveDown();
-    void execCurrent();
-    void hideAllHoverState() const;
+protected:
+    void changeEvent(QEvent *event) override;
+
+private:
+    void initUi();
+    void initConnection();
+    void initAccessibleName();
 
 signals:
-    void modeToggleBtnClicked();
     void requestFrameHide();
-
-protected:
-    void showEvent(QShowEvent *event) override;
-    void changeEvent(QEvent *event) override;
 
 private slots:
     void showShutdown();
     void showSettings();
-    void updateIcon();
+    void updateIcon(DGuiApplicationHelper::ColorType themeType);
 
 private:
-    int m_currentIndex;
-    QStringList m_hideList;
-    QMap<uint, MiniFrameButton*> m_btns;
     MiniFrameButton *m_settingsBtn;
     MiniFrameButton *m_powerBtn;
+    QButtonGroup *m_buttonGroup;
+    QStringList m_hideList;
 };
 
 #endif // MINIFRAMERIGHTBAR_H

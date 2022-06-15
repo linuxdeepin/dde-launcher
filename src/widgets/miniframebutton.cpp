@@ -27,10 +27,11 @@ MiniFrameButton::MiniFrameButton(const QString &text, QWidget *parent)
 void MiniFrameButton::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
 {
     if (DGuiApplicationHelper::DarkType == themeType)
-        m_color.setRgb(255, 255, 255, 25);
+        m_color = Qt::white;
     else
-        m_color.setRgb(0, 0, 0, 25);
+        m_color = Qt::black;
 
+    m_color.setAlpha(25);
     update();
 }
 
@@ -73,7 +74,7 @@ void MiniFrameButton::paintEvent(QPaintEvent *event)
     Q_UNUSED(event);
 
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform, true);
 
     if (isChecked()) {
         QPainterPath path;
@@ -86,11 +87,14 @@ void MiniFrameButton::paintEvent(QPaintEvent *event)
         int textWidth = font.boundingRect(m_text).width();
         int textHeight = font.boundingRect(m_text).height();
 
-        // 文字居中显示，左右各保持10像素边距
+        QPixmap pix = icon().pixmap(iconSize());
+        const QPixmap &scaledPix = pix.scaled(iconSize().width(), iconSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+        // 文字靠左，图标靠右，左右各保持10像素边距
         int x = rect().x() + (rect().width() - (iconSize().width() + textWidth)) / 2 + 1 - 10;
         int y = rect().center().y() - iconSize().height() / 2 + 1;
         QRect pixmapRect = QRect(QPoint(x, y), iconSize());
-        painter.drawPixmap(x, y, icon().pixmap(iconSize()));
+        painter.drawPixmap(x, y, scaledPix);
 
         int x1 = pixmapRect.right() + 10;
         int y1 = (rect().height() - font.boundingRect(m_text).height()) / 2;

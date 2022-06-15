@@ -40,13 +40,15 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     , m_hideList(SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "mini-frame-right-bar-hide-list", QStringList()).toStringList())
 {
     this->setAttribute(Qt::WA_TranslucentBackground);
-    m_settingsBtn = new MiniFrameButton(tr("Settings"));
-    m_settingsBtn->setFixedSize(QSize(100, 36));
+    m_settingsBtn = new MiniFrameButton(tr("Control Center"));
+    m_settingsBtn->setFixedHeight(36);
+    m_settingsBtn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     m_settingsBtn->setIconSize(QSize(20, 20));
     m_settingsBtn->setAccessibleName("settingsbtn");
 
     m_powerBtn = new MiniFrameButton(tr("Power"));
-    m_powerBtn->setFixedSize(QSize(100, 36));
+    m_powerBtn->setFixedHeight(36);
+    m_settingsBtn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     m_powerBtn->setIconSize(QSize(20, 20));
     m_powerBtn->setAccessibleName("powerbtn");
 
@@ -69,11 +71,11 @@ MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
 
     setAccessibleName("buttonwidget");
     QHBoxLayout *hLayout = new QHBoxLayout(this);
-    hLayout->setMargin(0);
-
-    hLayout->addSpacing(13);
+    hLayout->addStretch();
     hLayout->addWidget(m_powerBtn);
+    hLayout->addStretch();
     hLayout->addWidget(m_settingsBtn);
+    hLayout->addStretch();
     hLayout->setContentsMargins(0, 6, 0, 6);
     setLayout(hLayout);
 
@@ -123,8 +125,24 @@ void MiniFrameRightBar::execCurrent()
     emit m_btns[m_currentIndex]->clicked();
 }
 
-void MiniFrameRightBar::showEvent(QShowEvent *event) {
+void MiniFrameRightBar::showEvent(QShowEvent *event)
+{
     return QWidget::showEvent(event);
+}
+
+void MiniFrameRightBar::changeEvent(QEvent *event)
+{
+#define ICON_WIDTH 20
+#define GAP_WIDTH 20
+
+    Q_UNUSED(event);
+
+    QFontMetrics metrics(m_settingsBtn->font());
+    QSize textSize = metrics.boundingRect(m_settingsBtn->text()).size();
+    m_settingsBtn->setFixedSize(textSize + QSize(ICON_WIDTH, 10) + QSize(GAP_WIDTH, 0));
+
+    textSize = metrics.boundingRect(m_settingsBtn->text()).size();
+    m_powerBtn->setFixedSize(textSize + QSize(ICON_WIDTH, 10) + QSize(GAP_WIDTH, 0));
 }
 
 void MiniFrameRightBar::showShutdown()
@@ -149,13 +167,6 @@ void MiniFrameRightBar::showSettings()
             .method(QString("Show"))
             .call();
     });
-
-    emit requestFrameHide();
-}
-
-void MiniFrameRightBar::showManual()
-{
-    QProcess::startDetached("dman");
 
     emit requestFrameHide();
 }

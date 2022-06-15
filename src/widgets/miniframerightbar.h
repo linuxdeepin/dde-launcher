@@ -54,11 +54,11 @@ signals:
 
 protected:
     void showEvent(QShowEvent *event) override;
+    void changeEvent(QEvent *event) override;
 
 private slots:
     void showShutdown();
     void showSettings();
-    void showManual();
     void updateIcon();
 
 private:

@@ -98,6 +98,10 @@ public:
     static ItemInfoList_v1 itemListToItemV1List(const ItemInfoList &list);
     static ItemInfoList_v1 itemV2ListToItemV1List(const ItemInfoList_v2 &list);
 
+    bool isTitle() const;
+    bool startWithLetter() const;
+    bool startWithNum() const;
+
     ~ItemInfo_v1();
 
     static void registerMetaType();

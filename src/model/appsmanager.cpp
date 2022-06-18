@@ -218,10 +218,78 @@ void AppsManager::showSearchedData(const AppInfoList &list)
     m_appSearchResultList = ItemInfo_v1::appListToItemV1List(list);
 }
 
-void AppsManager::sortByLetterOrder(ItemInfoList_v1 &list)
+ItemInfoList_v1 AppsManager::sortByLetterOrder(ItemInfoList_v1 &list)
 {
-    std::sort(list.begin(), list.end(), [ & ](const ItemInfo_v1 info1, const ItemInfo_v1 info2) {
-        return info1.m_name < info2.m_name;
+    // 字母标题生成器
+    static QList<QChar> alphabetList;
+    if (alphabetList.isEmpty()) {
+        alphabetList.append('#');
+        for (int i = 0; i < 26; i++)
+            alphabetList.append(QChar('A' + i));
+    }
+
+    ItemInfoList_v1 letterGroupList;
+    // 按照字母表顺序对应用进行分组排序
+    for (int i = 0; i < alphabetList.size(); i++) {
+        const QChar &titleChar = alphabetList[i];
+        ItemInfo_v1 titleInfo;
+        titleInfo.m_name = titleChar;
+        titleInfo.m_desktop = titleChar;
+
+        ItemInfoList_v1 groupList;
+        for (int j = 0; j < list.size(); j++) {
+            const ItemInfo_v1 &info = list.at(j);
+            const QString pinYinStr = Chinese2Pinyin(info.m_name);
+            QChar firstKey = pinYinStr.front();
+            if (firstKey.isNumber()) {
+                if (!groupList.contains(titleInfo) && (!letterGroupList.contains(titleInfo)))
+                    groupList.append(titleInfo);
+
+                if (!letterGroupList.contains(info))
+                    groupList.append(info);
+            } else if (pinYinStr.startsWith(titleChar, Qt::CaseInsensitive)) {
+                if (!groupList.contains(titleInfo))
+                    groupList.append(titleInfo);
+
+                groupList.append(info);
+            } else {
+                if (j == list.size() - 1) {
+                    // 数字不变, 在首字母相同的且都为中文的分组中比较全拼音，按升序排列
+                    sortByPinyinOrder(groupList);
+                }
+            }
+        }
+
+        // 该字母分类下没有应用时，不加入到列表
+        if (groupList.size() > 1)
+            letterGroupList.append(groupList);
+    }
+
+    return letterGroupList;
+}
+
+void AppsManager::sortByPinyinOrder(ItemInfoList_v1 &processList)
+{
+    std::sort(processList.begin(), processList.end(), [](const ItemInfo_v1 &info1, const ItemInfo_v1 &info2) {
+        QString appPinyinName1 = Chinese2Pinyin(info1.m_name);
+        QString appPinyinName2 = Chinese2Pinyin(info2.m_name);
+
+        // 1. 若是标题则不执行交换位置;二者中只有一个以字母或者数字开头，则不交换位置, 维持通用排序的顺序不变
+        // 2. 二者中都以字母或者数字开头则进行比对
+        // 3. 二者中的其他情况则进行比对, 如果不是从小到大顺序排列，则交换位置
+
+        if (info1.isTitle() || info2.isTitle()
+                || (info1.startWithLetter() && !info2.startWithLetter())
+                || (!info1.startWithLetter() && info2.startWithLetter()))
+            return false;
+
+        if ((info1.startWithLetter() && info2.startWithLetter()) || (info1.startWithNum() && info2.startWithNum())) {
+            // 交换位置
+            return (appPinyinName1.compare(appPinyinName2, Qt::CaseSensitive) < 0);
+        }
+
+        // 交换位置
+        return (appPinyinName1.compare(appPinyinName2, Qt::CaseSensitive) < 0);
     });
 }
 
@@ -411,6 +479,13 @@ void AppsManager::filterCollectedApp(ItemInfoList_v1 &processList)
     index = processList.indexOf(info);
     if (index != -1 && !m_collectSortedList.contains(info))
         m_collectSortedList.append(processList.at(index));
+}
+
+void AppsManager::sortByGeneralOrder(ItemInfoList_v1 &processList)
+{
+    std::sort(processList.begin(), processList.end(), [](const ItemInfo_v1 &info1, const ItemInfo_v1 &info2) {
+        return info1.m_name < info2.m_name;
+    });
 }
 
 /**
@@ -1285,46 +1360,14 @@ void AppsManager::generateLetterCategoryMap()
 {
     // 字母排序
     ItemInfoList_v1 letterSortList = m_allAppInfoList;
-    // 先分类， 再按照字母标题分组
-    sortByLetterOrder(letterSortList);
 
-    // 字母标题生成器
-    QChar titleArray[27] = { 0 };
-    titleArray[0] = '#';
-    for (int i = 0; i < 26; i++) {
-        titleArray[i + 1] = QChar(65 + i);
-    }
+    // 先按照通用规则分类
+    sortByGeneralOrder(letterSortList);
 
-    ItemInfoList_v1 lettergroupList;
-    // 字母排序后的分组
-    for (int i = 0; i < 27; i++) {
-        QChar titleChar = titleArray[i];
-        ItemInfo_v1 titleInfo;
-        titleInfo.m_name = titleChar;
-        titleInfo.m_desktop = titleChar;
-
-        for (int j = 0; j < letterSortList.size(); j++) {
-            const ItemInfo_v1 info = letterSortList.at(j);
-            // 同步接口，加延时等待处理
-            QString pinYinStr = Chinese2Pinyin(info.m_name);
-            QChar firstKey = pinYinStr.front();
-            if (firstKey.isNumber()) {
-                if (lettergroupList.indexOf(titleInfo) == -1)
-                    lettergroupList.append(titleInfo);
-
-                lettergroupList.append(info);
-            } else if (pinYinStr.startsWith(titleChar, Qt::CaseInsensitive)) {
-                if (lettergroupList.indexOf(titleInfo) == -1) {
-                    lettergroupList.append(titleInfo);
-                }
-
-                lettergroupList.append(info);
-            }
-        }
-    }
-
+    // 按照大写字母表顺序对应用列表进行分组排序
+    // 对每个分组的应用列表按照字母表顺序排序
     m_appLetterModeInfos.clear();
-    m_appLetterModeInfos.append(lettergroupList);
+    m_appLetterModeInfos = sortByLetterOrder(letterSortList);
 }
 
 void AppsManager::readCollectedCacheData()

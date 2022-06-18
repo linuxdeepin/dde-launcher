@@ -238,6 +238,33 @@ ItemInfoList_v1 ItemInfo_v1::itemV2ListToItemV1List(const ItemInfoList_v2 &list)
     return itemInfoList;
 }
 
+bool ItemInfo_v1::isTitle() const
+{
+    return (m_name == m_desktop) && m_name.front().isUpper();
+}
+
+bool ItemInfo_v1::startWithLetter() const
+{
+    static QList<QChar> alphabetList;
+    if (alphabetList.isEmpty()) {
+        for (int i = 0; i < 26; i++)
+            alphabetList.append('A' + i);
+    }
+
+    return alphabetList.contains(m_name.left(1).toUpper().front());
+}
+
+bool ItemInfo_v1::startWithNum() const
+{
+    static QList<QChar> numList;
+    if (numList.isEmpty()) {
+        for (int i = 0; i < 10; i++)
+            numList.append('0' + i);
+    }
+
+    return numList.contains(m_name.left(1).front());
+}
+
 ItemInfo_v1::~ItemInfo_v1()
 {
 

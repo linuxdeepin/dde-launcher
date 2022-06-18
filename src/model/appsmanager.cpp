@@ -838,18 +838,21 @@ void AppsManager::refreshCategoryInfoList()
 
     QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
 
-    if (APP_USED_SORTED_LIST.contains("list")) {
-        QByteArray readBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
-        QDataStream in(&readBuf, QIODevice::ReadOnly);
-        in >> m_usedSortedList;
-        foreach(auto &used , m_usedSortedList) {
-            bool bContains = fuzzyMatching(filters, used.m_key);
-            if (bContains)
-                m_usedSortedList.removeOne(used);
+    // 如果为空，先从缓存读取一次应用列表数据
+    if (m_usedSortedList.isEmpty()) {
+        if (APP_USED_SORTED_LIST.contains("list")) {
+            QByteArray readBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
+            QDataStream in(&readBuf, QIODevice::ReadOnly);
+            in >> m_usedSortedList;
+            foreach(auto &used , m_usedSortedList) {
+                bool bContains = fuzzyMatching(filters, used.m_key);
+                if (bContains)
+                    m_usedSortedList.removeOne(used);
+            }
+        } else {
+            // 读取json缓存文件
+            m_usedSortedList.append(readCacheData(m_usedSortedSetting->value("lists").toMap()));
         }
-    } else {
-        // 读取json缓存文件
-        m_usedSortedList.append(readCacheData(m_usedSortedSetting->value("lists").toMap()));
     }
 
     const ItemInfoList &datas = reply.value();

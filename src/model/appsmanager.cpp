@@ -127,9 +127,6 @@ AppsManager::AppsManager(QObject *parent) :
 
     m_iconCacheManager = IconCacheManager::instance();
 
-    m_updateCalendarTimer->setInterval(60 * 1000);// 1min
-    m_updateCalendarTimer->start();
-
     IconCacheManager::setIconLoadState(true);
 
     // 进程启动加载小窗口主窗体显示的图标资源
@@ -155,6 +152,9 @@ AppsManager::AppsManager(QObject *parent) :
     connect(qApp, &QCoreApplication::aboutToQuit, m_iconCacheManager, &IconCacheManager::deleteLater);
     connect(qApp, &QCoreApplication::aboutToQuit, this, &AppsManager::stopThread, Qt::QueuedConnection);
     connect(m_updateCalendarTimer, &QTimer::timeout, m_iconCacheManager, &IconCacheManager::updateCanlendarIcon, Qt::QueuedConnection);
+
+    m_updateCalendarTimer->setInterval(1000);// 1s
+    m_updateCalendarTimer->start();
 
     updateTrashState();
     refreshAllList();

@@ -13,7 +13,6 @@ QHash<QPair<QString, int>, QVariant> IconCacheManager::m_iconCache = QHash<QPair
 QReadWriteLock IconCacheManager::m_iconLock;
 
 std::atomic<bool> IconCacheManager::m_loadState;
-static QList<double> ratioList = { 0.2, 0.3, 0.4, 0.5, 0.6 };
 static QList<int> sizeList = { 16, 18, 24, 32, 64, 96, 128, 256 };
 
 IconCacheManager *IconCacheManager::instance()
@@ -28,6 +27,7 @@ IconCacheManager::IconCacheManager(QObject *parent)
     , m_iconValid(true)
     , m_tryNums(0)
     , m_tryCount(0)
+    , m_date(QDate::currentDate())
 {
     setIconLoadState(false);
 }
@@ -140,11 +140,10 @@ void IconCacheManager::loadItem(const ItemInfo_v1 &info, const QString &operatio
 
     // 全屏自由
     int appSize = CalculateUtil::instance()->calculateIconSize(ALL_APPS);
-    for (int i = 0; i < ratioList.size(); i++) {
-        double ratio = ratioList.at(i);
-        int iconWidth = (appSize * ratio);
-        createPixmap(info, iconWidth);
-    }
+
+    double ratio = CalculateUtil::instance()->getCurRatio();
+    int iconWidth = (appSize * ratio);
+    createPixmap(info, iconWidth);
 }
 
 void IconCacheManager::loadCurRatioIcon(int mode)
@@ -165,15 +164,11 @@ void IconCacheManager::loadOtherRatioIcon(int mode)
 {
     int appSize = CalculateUtil::instance()->calculateIconSize(mode);
     const ItemInfoList_v1 &itemList = AppsManager::instance()->fullscreenItemInfoList();
-    for (int i = 0; i < ratioList.size(); i++) {
-        double ratio = ratioList.at(i);
-        if (qFuzzyCompare(getCurRatio(), ratio))
-            continue;
 
-        for (int j = 0; j < itemList.size(); j++) {
-            const ItemInfo_v1 &info = itemList.at(j);
-            createPixmap(info, appSize * ratio);
-        }
+    double ratio = CalculateUtil::instance()->getCurRatio();
+    for (int i = 0; i < itemList.size(); i++) {
+        const ItemInfo_v1 &info = itemList.at(i);
+        createPixmap(info, appSize * ratio);
     }
 }
 
@@ -252,11 +247,14 @@ void IconCacheManager::setIconLoadState(bool state)
 
 void IconCacheManager::updateCanlendarIcon()
 {
-    static int curDay = QDate::currentDate().day();
-    if (curDay != QDate::currentDate().day()) {
+    if (m_date != QDate::currentDate()) {
         removeItemFromCache(m_calendarInfo);
 
         for (int i = 0; i < sizeList.size(); i++)
             createPixmap(m_calendarInfo, sizeList.at(i));
+
+        // 刷新界面
+        emit iconLoaded();
+        m_date = QDate::currentDate();
     }
 }

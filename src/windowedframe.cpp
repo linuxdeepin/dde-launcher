@@ -1005,6 +1005,18 @@ void WindowedFrame::addViewEvent(AppGridView *pView)
     connect(pView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
 }
 
+void WindowedFrame::refreshView(const AppsListModel::AppCategory category)
+{
+    switch (category) {
+    case AppsListModel::Collect:
+        m_collectionModel->clearDraggingIndex();
+        m_collectionView->update();
+        break;
+    default:
+        break;
+    }
+}
+
 void WindowedFrame::onChangeToTitleMode()
 {
     m_appsModel->setCategory(AppsListModel::TitleMode);

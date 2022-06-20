@@ -97,7 +97,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const QSize iconSize = index.data(AppsListModel::AppIconSizeRole).toSize();
 
     QFont appNamefont(painter->font());
-    if (fontPixelSize == -1)
+    if (fontPixelSize <= 0)
         return;
 
     appNamefont.setPixelSize(fontPixelSize);

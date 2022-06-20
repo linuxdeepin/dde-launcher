@@ -108,8 +108,16 @@ void AppGridView::dropEvent(QDropEvent *e)
     // 收藏列表允许从其他视图拖拽进入
     if (listModel->category() == AppsListModel::Collect) {
         ItemInfo_v1 info = m_appManager->getItemInfo(e->mimeData()->data("AppKey"));
-        int row = indexAt(e->pos()).row();
-        m_appManager->dropToCollected(info, row);
+        const QModelIndex index = indexAt(e->pos());
+        if (index.isValid()) {
+            listModel->setDraggingIndex(index);
+            listModel->setDragDropIndex(index);
+            m_appManager->dropToCollected(info, index.row());
+        } else {
+            listModel->setDraggingIndex(QModelIndex());
+            listModel->setDragDropIndex(indexAt(listModel->rowCount(QModelIndex())));
+            m_appManager->dropToCollected(info, -1);
+        }
         return;
     }
 
@@ -594,7 +602,7 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     posAni->setEasingCurve(QEasingCurve::Linear);
     posAni->setDuration(DLauncher::APP_DRAG_MININUM_TIME);
     posAni->setStartValue((QCursor::pos() - rectIcon.center()));
-    if (getViewType() != PopupView || m_calcUtil->fullscreen())
+    if (getViewType() != PopupView && m_calcUtil->fullscreen())
         posAni->setEndValue(mapToGlobal(m_dropPoint) + QPoint(m_calcUtil->appMarginLeft(), 0));
     else
         posAni->setEndValue(mapToGlobal(m_dropPoint));

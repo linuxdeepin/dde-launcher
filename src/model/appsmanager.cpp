@@ -433,10 +433,10 @@ void AppsManager::dragdropStashItem(const QModelIndex &index, AppsListModel::App
     const QString key = index.data(AppsListModel::AppKeyRole).toString();
 
     auto handleData = [ & ](ItemInfoList_v1 &list) {
-        foreach (const ItemInfo_v1 info, list) {
+        foreach (const ItemInfo_v1 &info, list) {
             if (info.m_key == key) {
                 m_stashList.append(info);
-                m_allAppInfoList.removeOne(info);
+                list.removeOne(info);
                 break;
             }
         }
@@ -444,11 +444,10 @@ void AppsManager::dragdropStashItem(const QModelIndex &index, AppsListModel::App
 
     if ((mode == AppsListModel::All) || (mode == AppsListModel::Dir))
         handleData(m_usedSortedList);
+
     if (mode == AppsListModel::Collect)
         handleData(m_collectSortedList);
 
-    generateCategoryMap();
-    refreshUsedInfoList();
     saveAppCategoryInfoList();
 }
 

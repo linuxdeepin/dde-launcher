@@ -1369,6 +1369,11 @@ void FullScreenFrame::launchCurrentApp()
         }
     }
 
+    if (!index.isValid()) {
+        qWarning() << "Curren index is not valid";
+        return;
+    }
+
     switch (m_displayMode) {
     case SEARCH:
     case ALL_APPS:            m_appsManager->launchApp(m_multiPagesView->getAppItem(0));     break;

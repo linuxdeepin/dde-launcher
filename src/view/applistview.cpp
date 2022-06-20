@@ -182,7 +182,7 @@ void AppListView::mousePressEvent(QMouseEvent *e)
                 int diff_y = qAbs(currentPos.y() - m_fullscreenStartPos.y());
                 if (diff_x < 5 && diff_y < 5) // 触摸按压抖动限制范围
                     emit requestEnter(true);
-                    
+
                 m_updateEnableShowSelectionByMouseTimer->deleteLater();
                 m_updateEnableShowSelectionByMouseTimer = nullptr;
             });

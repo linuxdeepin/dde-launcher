@@ -524,7 +524,12 @@ void WindowedFrame::launchCurrentApp()
     if (currentIdx.isValid() && currentIdx.model() == m_appsView->model()) {
         m_appsManager->launchApp(currentIdx);
     } else {
-        m_appsManager->launchApp(m_appsView->model()->index(0, 0));
+        if (currentIdx.isValid()) {
+            m_appsManager->launchApp(m_appsView->model()->index(0, 0));
+        } else {
+            qWarning() << "Curren index is not valid";
+            return;
+        }
     }
 
     hideLauncher();

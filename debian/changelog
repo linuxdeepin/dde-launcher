@@ -1,8 +1,14 @@
+dde-launcher (6.0.1) unstable; urgency=medium
+
+  * release 6.0.1 
+
+ --  fanpengcheng <fanpengcheng@uniontech.com>  Tue, 21 Jun 2022 16:22:47 +0800
+
 dde-launcher (6.0.0.1) unstable; urgency=medium
 
   * release 6.0.0.1 
 
- --  <donghualin@uniontech.com>  Mon, 6 June 2022 10:40:15 +0800
+ --  <donghualin@uniontech.com>  Mon, 6 Jun 2022 10:40:15 +0800
 
 dde-launcher (6.0.0.0) unstable; urgency=medium
 

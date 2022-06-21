@@ -626,7 +626,6 @@ void AppsListModel::dataChanged(const AppCategory category)
 {
     if (category == FullscreenAll || category == m_category)
         emit QAbstractItemModel::layoutChanged();
-    //        emit QAbstractItemModel::dataChanged(index(0), index(rowCount(QModelIndex())));
 }
 
 ///
@@ -674,29 +673,3 @@ void AppsListModel::itemDataChanged(const ItemInfo_v1 &info)
         ++i;
     }
 }
-
-//bool AppsListModel::itemIsRemovable(const QString &desktop) const
-//{
-//    return m_holdPackages.contains(desktop);
-//    static QStringList blacklist;
-//    if (blacklist.isEmpty()) {
-//        QFile file(UninstallFilterFile);
-//        if (file.open(QFile::ReadOnly)) {
-//            QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-//            QJsonObject obj = doc.object();
-//            QJsonArray arr = obj["blacklist"].toArray();
-//            foreach (QJsonValue val, arr) {
-//                blacklist << val.toString();
-//            }
-//            file.close();
-//        }
-//    }
-
-//    foreach (QString val, blacklist) {
-//        if (desktop.endsWith(val)) {
-//            return false;
-//        }
-//    }
-
-//    return true;
-//}

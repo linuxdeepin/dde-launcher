@@ -50,8 +50,7 @@ class MultiPagesView : public QWidget, public DragPageDelegate
     Q_OBJECT
 
 public:
-    enum Direction
-    {
+    enum Direction {
         Left,
         Right
     };
@@ -130,12 +129,11 @@ private:
     EditLabel *m_titleLabel;
     PageControl *m_pageControl;                         // 分页控件
 
+    AppsListModel::AppCategory m_category;
     int m_pageCount;
     int m_pageIndex;
-    AppsListModel::AppCategory m_category;
 
     bool m_bDragStart;
-
     bool m_bMousePress;
     int m_nMousePos;
     int m_scrollValue;

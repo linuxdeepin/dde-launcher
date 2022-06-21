@@ -50,23 +50,19 @@ void LauncherPluginController::loadPlugin(const QString &pluginFile)
     QPluginLoader *pluginLoader = new QPluginLoader(pluginFile, this);
     const QJsonObject &meta = pluginLoader->metaData().value("MetaData").toObject();
     const QString &pluginApi = meta.value("api").toString();
-    bool pluginIsValid = true;
     if (pluginApi.isEmpty() || !CompatiblePluginApiList.contains(pluginApi)) {
-        pluginIsValid = false;
+        qDebug() << "api is empty or plugin is not compatible";
+        return;
     }
 
     PluginInterface *interface = qobject_cast<PluginInterface *>(pluginLoader->instance());
 
     if (!interface) {
         qInfo() << "load plugin failed!!!" << pluginLoader->errorString() << pluginFile;
-
         pluginLoader->unload();
         pluginLoader->deleteLater();
-
-        pluginIsValid = false;
+        return;
     }
-
-    qInfo() << "plugin name:" << interface->pluginName();
 
     // 保存 PluginLoader 对象指针
     if (!m_pluginAppInterList.contains(interface))

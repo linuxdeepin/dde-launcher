@@ -143,7 +143,6 @@ private:
     void layoutChanged(const AppsListModel::AppCategory category);
     bool indexDragging(const QModelIndex &index) const;
     void itemDataChanged(const ItemInfo_v1 &info);
-//    bool itemIsRemovable(const QString &desktop) const;
 
 private:
     AppsManager *m_appsManager;
@@ -167,7 +166,7 @@ private:
 
     QModelIndex m_dragStartIndex = QModelIndex();
     QModelIndex m_dragDropIndex = QModelIndex();
-    AppCategory m_category = FullscreenAll;
+    AppCategory m_category;
 
     bool m_drawBackground;
     int m_pageIndex;

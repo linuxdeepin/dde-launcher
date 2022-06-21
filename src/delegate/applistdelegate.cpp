@@ -133,7 +133,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     if (isTitle) {
         painter->setFont(font);
     } else {
-        painter->setFont(QFont(font.family(), 8));
+        painter->setFont(QFont(font.family(), DLauncher::DEFAULT_FONT_SIZE));
     }
 
     painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, appName);

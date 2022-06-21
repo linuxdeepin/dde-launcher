@@ -140,7 +140,7 @@ void WindowedFrame::initUi()
     m_collectionView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_collectionView->setModel(m_collectionModel);
     m_collectionView->setItemDelegate(appItemDelegate);
-    m_collectionView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_collectionView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_collectionView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_collectionView->setDragEnabled(true);
     m_collectionView->setDragDropMode(QAbstractItemView::DragDrop);
@@ -155,6 +155,7 @@ void WindowedFrame::initUi()
     m_allAppView->setModel(m_allAppsModel);
     m_allAppView->setItemDelegate(appItemDelegate);
     m_allAppView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_allAppView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_allAppView->setAcceptDrops(false);
 
     m_tipsLabel->setAlignment(Qt::AlignCenter);
@@ -320,6 +321,7 @@ void WindowedFrame::initConnection()
 
     connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &WindowedFrame::hideTips);
+    connect(m_appsManager, &AppsManager::dataChanged, this, &WindowedFrame::refreshView);
     connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher, Qt::QueuedConnection);
 
     connect(m_appearanceInter, &Appearance::OpacityChanged, this, &WindowedFrame::onOpacityChanged);

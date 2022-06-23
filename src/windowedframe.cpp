@@ -88,7 +88,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_maskBg(new QWidget(this))
     , m_appsManager(AppsManager::instance())
     , m_appsModel(new AppsListModel(AppsListModel::TitleMode, this))
-    , m_allAppsModel(new AppsListModel(AppsListModel::All, this))
+    , m_allAppsModel(new AppsListModel(AppsListModel::WindowedAll, this))
     , m_collectionModel(new AppsListModel(AppsListModel::Collect, this))
     , m_filterModel(new SortFilterProxyModel(this))
     , m_searchWidget(new SearchModeWidget(this))
@@ -876,7 +876,7 @@ void WindowedFrame::adjustPosition()
 void WindowedFrame::onToggleFullScreen()
 {
     // 后台没有启动,切换全屏会造成后台默认数据和前台数据不统一,造成显示问题
-    if (!m_appsManager->appNums(AppsListModel::All))
+    if (!m_appsManager->appNums(AppsListModel::FullscreenAll))
         return;
 
     // 切换到全屏就不绘制小窗口列表中的item

@@ -73,7 +73,8 @@ AppsListModel::AppCategory ItemInfo::category() const
     default:;
     }
 
-    return AppsListModel::All;
+    qWarning() << "ItemInfo::category handle wrong category";
+    return AppsListModel::FullscreenAll;
 }
 
 void ItemInfo::updateInfo(const ItemInfo &info)
@@ -295,7 +296,8 @@ AppsListModel::AppCategory ItemInfo_v1::category() const
     default:;
     }
 
-    return AppsListModel::All;
+    qWarning() << "ItemInfo::category handle wrong category";
+    return AppsListModel::FullscreenAll;
 }
 
 QDebug operator<<(QDebug argument, const ItemInfo_v1 &info)
@@ -410,7 +412,7 @@ AppsListModel::AppCategory ItemInfo_v2::category() const
     default:;
     }
 
-    return AppsListModel::All;
+    return AppsListModel::FullscreenAll;
 }
 
 QDebug operator<<(QDebug argument, const ItemInfo_v2 &info)

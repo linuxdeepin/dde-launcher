@@ -83,7 +83,8 @@ public:
     };
 
     enum AppCategory {
-        All,
+        WindowedAll,            // 小窗口所有应用列表
+        FullscreenAll,          // 全屏所有应用列表
         TitleMode,              // 标题模式
         LetterMode,             // 字母模式
         Search,                 // 本地搜索模式
@@ -117,7 +118,6 @@ public:
     void setDragDropIndex(const QModelIndex &index);
     void dropInsert(const QString &appKey, const int pos);
     void dropSwap(const int nextPos);
-    void removeItem();
     inline QModelIndex dragDropIndex() const {return m_dragDropIndex;}
 
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
@@ -167,7 +167,7 @@ private:
 
     QModelIndex m_dragStartIndex = QModelIndex();
     QModelIndex m_dragDropIndex = QModelIndex();
-    AppCategory m_category = All;
+    AppCategory m_category = FullscreenAll;
 
     bool m_drawBackground;
     int m_pageIndex;

@@ -268,8 +268,6 @@ void AppsListModel::setDragDropIndex(const QModelIndex &index)
 {
     if (m_dragDropIndex == index)
         return;
-    //    if (m_dragDropIndex == m_dragStartIndex)
-    //        return;
 
     m_dragDropIndex = index;
 
@@ -286,7 +284,7 @@ void AppsListModel::dropInsert(const QString &appKey, const int pos)
     beginInsertRows(QModelIndex(), pos, pos);
 
     int appPos = pos;
-    if ((m_category == AppsListModel::All) || (m_category == AppsListModel::Dir))
+    if ((m_category == AppsListModel::FullscreenAll) || (m_category == AppsListModel::Dir))
         appPos = m_pageIndex * m_calcUtil->appPageItemCount(m_category) + pos;
 
     m_appsManager->restoreItem(appKey, m_category, appPos);
@@ -310,13 +308,6 @@ void AppsListModel::dropSwap(const int nextPos)
     emit QAbstractItemModel::dataChanged(m_dragStartIndex, m_dragDropIndex);
 
     m_dragStartIndex = m_dragDropIndex = index(nextPos);
-}
-
-void AppsListModel::removeItem()
-{
-    removeRows(m_dragStartIndex.row(), 1, QModelIndex());
-
-    emit QAbstractItemModel::dataChanged(m_dragStartIndex, m_dragDropIndex);
 }
 
 /**
@@ -392,12 +383,12 @@ void AppsListModel::updateModelData(const QModelIndex dragIndex, const QModelInd
     m_appsManager->updateUsedSortData(dragIndex, dropIndex);
 
     // 保存列表数据到配置文件
-    m_appsManager->saveUsedSortedList();
+    m_appsManager->saveFullscreenUsedSortedList();
 
-    // 从本地列表m_usedSortedList 中移除被拖拽的对象信息
+    // 从本地列表 m_fullscreenUsedSortSetting 中移除被拖拽的对象信息
     removeRows(dragIndex.row(), 1, QModelIndex());
     // 通知界面更新翻页控件
-    emit m_appsManager->dataChanged(AppsListModel::All);
+    emit m_appsManager->dataChanged(AppsListModel::FullscreenAll);
     emit QAbstractItemModel::dataChanged(dragIndex, dropIndex);
 }
 
@@ -414,8 +405,10 @@ bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
     Q_UNUSED(count)
     Q_UNUSED(parent)
 
-    // TODO: not support remove multiple rows
-    Q_ASSERT(count == 1);
+    if (count > 1) {
+        qDebug() << "AppsListModel does't support removing multiple rows!";
+        return false;
+    }
 
     beginRemoveRows(parent, row, row);
     m_appsManager->dragdropStashItem(index(row), m_category);
@@ -493,7 +486,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
             itemInfo = m_appsManager->appsCategoryListIndex(index.row());
         else if (m_category == LetterMode) {
             itemInfo = m_appsManager->appsLetterListIndex(index.row());
-        } else if (m_category == All) {
+        } else if (m_category == WindowedAll) {
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
         } else if (m_category == Collect) {
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
@@ -619,10 +612,10 @@ Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const
 {
     const Qt::ItemFlags defaultFlags = QAbstractListModel::flags(index);
 
-    if (m_category == All)
+    if (m_category == FullscreenAll)
         return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
-    else
-        return defaultFlags;
+
+    return defaultFlags;
 }
 
 ///
@@ -631,7 +624,7 @@ Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const
 ///
 void AppsListModel::dataChanged(const AppCategory category)
 {
-    if (category == All || category == m_category)
+    if (category == FullscreenAll || category == m_category)
         emit QAbstractItemModel::layoutChanged();
     //        emit QAbstractItemModel::dataChanged(index(0), index(rowCount(QModelIndex())));
 }
@@ -642,7 +635,7 @@ void AppsListModel::dataChanged(const AppCategory category)
 ///
 void AppsListModel::layoutChanged(const AppsListModel::AppCategory category)
 {
-    if (category == All || category == m_category)
+    if (category == FullscreenAll || category == m_category)
         emit QAbstractItemModel::dataChanged(QModelIndex(), QModelIndex());
 }
 

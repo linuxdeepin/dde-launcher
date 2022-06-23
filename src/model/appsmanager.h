@@ -124,7 +124,8 @@ signals:
     void requestHidePopup();
 
 public slots:
-    void saveUsedSortedList();
+    void saveWidowedUsedSortedList();
+    void saveFullscreenUsedSortedList();
     void saveCollectedSortedList();
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
@@ -157,6 +158,7 @@ public slots:
     void handleItemChanged(const QString &operation, const ItemInfo_v2 &appInfo, qlonglong categoryNumber);
     void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
     const ItemInfo_v1 createOfCategory(qlonglong category);
+    void onUninstallFail(const QString &appKey);
 
 private:
     explicit AppsManager(QObject *parent = nullptr);
@@ -168,13 +170,15 @@ private:
     ItemInfoList_v1 sortByLetterOrder(ItemInfoList_v1 &processList);
     void sortByPinyinOrder(ItemInfoList_v1 &processList);
     void sortByInstallTimeOrder(ItemInfoList_v1 &processList);
+    void removeNonexistentData();
+    void getCategoryListAndSortCategoryId();
     void refreshCategoryInfoList();
     void refreshUsedInfoList();
     void saveAppCategoryInfoList();
     void updateUsedListInfo();
     void generateCategoryMap();
-    void generateTitleCategoryMap();
-    void generateLetterCategoryMap();
+    void generateTitleCategoryList();
+    void generateLetterCategoryList();
     void readCollectedCacheData();
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
 
@@ -198,7 +202,8 @@ public:
     ItemInfoList_v1 m_categoryList;                                     // 小窗口应用分类目录列表
     ItemInfoList_v1 m_appSearchResultList;                              // 搜索结果列表
     ItemInfoList_v1 m_dirAppInfoList;                                   // 应用抽屉列表
-    ItemInfoList_v1 m_usedSortedList;                                   // 全屏应用列表
+    ItemInfoList_v1 m_fullscreenUsedSortedList;                         // 全屏应用列表
+    ItemInfoList_v1 m_windowedUsedSortedList;                           // 小窗口应用列表
 
 private:
     DBusStartManager *m_startManagerInter;
@@ -212,7 +217,7 @@ private:
 #endif
 
     QString m_searchText;
-    ItemInfoList_v1 m_allAppInfoList;                                          // 所有app信息列表
+    ItemInfoList_v1 m_allAppInfoList;                                       // 所有app信息列表
     QStringList m_newInstalledAppsList;                                     // 新安装应用列表
 
     ItemInfoList_v1 m_stashList;
@@ -239,7 +244,8 @@ private:
 
     QSettings *m_collectedSetting;
     QSettings *m_categorySetting;
-    QSettings *m_usedSortSetting;
+    QSettings *m_fullscreenUsedSortSetting;
+    QSettings *m_windowedUsedSortSetting;
 
     QStringList m_categoryTs;
     QGSettings *m_filterSetting;

@@ -545,15 +545,15 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     QPropertyAnimation *posAni = new QPropertyAnimation(m_pixLabel.data(), "pos", m_pixLabel.data());
     connect(posAni, &QPropertyAnimation::finished, [&, listModel] () {
         m_pixLabel->hide();
+        bool dropItemIsDir = indexAt(m_dropToPos).data(AppsListModel::ItemIsDirRole).toBool();
         if (!m_lastFakeAni) {
-            if (m_enableDropInside && !listModel->getDragToDir()) {
+            if (m_enableDropInside && !dropItemIsDir) {
                 listModel->dropSwap(m_dropToPos);
             }
-            else {
-                // 搜索模式下，不需要做删除被拖拽的item，插入移动到新位置的item的操作，否则会导致被拖拽item的位置改变
-                if ((listModel->category() != AppsListModel::AppCategory::Search) && !listModel->getDragToDir()){
-                    listModel->dropSwap(indexAt(m_dragStartPos).row());
-                }
+
+            // 搜索模式下，不需要做删除被拖拽的item，插入移动到新位置的item的操作，否则会导致被拖拽item的位置改变
+            if ((listModel->category() != AppsListModel::Search) && !dropItemIsDir){
+                listModel->dropSwap(indexAt(m_dragStartPos).row());
             }
 
             listModel->clearDraggingIndex();
@@ -798,7 +798,7 @@ void AppGridView::createMovingComponent()
     // 拖拽过程中位置交换时显示的应用图标
     if (!m_floatLabels.size()) {
         // 单页最多28个应用
-        for (int i = 0; i < m_calcUtil->appPageItemCount(AppsListModel::All); i++) {
+        for (int i = 0; i < m_calcUtil->appPageItemCount(AppsListModel::FullscreenAll); i++) {
             QLabel *moveLabel = new QLabel(this);
             moveLabel->hide();
             m_floatLabels << moveLabel;

@@ -56,12 +56,12 @@ public:
         Right
     };
 
-    explicit MultiPagesView(AppsListModel::AppCategory categoryModel = AppsListModel::All, QWidget *parent = nullptr);
+    explicit MultiPagesView(AppsListModel::AppCategory categoryModel = AppsListModel::FullscreenAll, QWidget *parent = nullptr);
     ~MultiPagesView();
 
     void refreshTitle(const QString &title, int maxWidth);
 
-    void updatePageCount(AppsListModel::AppCategory category = AppsListModel::All);
+    void updatePageCount(AppsListModel::AppCategory category = AppsListModel::FullscreenAll);
     void showCurrentPage(int currentPage);
     QModelIndex selectApp(const int key);
     QModelIndex getAppItem(int index);

@@ -144,7 +144,7 @@ void MultiPagesView::updateGradient(QPixmap &pixmap, QPoint topLeftImg, QPoint t
  */
 void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
 {
-    int pageCount = m_appsManager->getPageCount(category == AppsListModel::All ? m_category : category);
+    int pageCount = m_appsManager->getPageCount(category == AppsListModel::FullscreenAll ? m_category : category);
 
     if (pageCount == 0)
         setVisible(false);
@@ -162,7 +162,7 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             m_pageAppsModelList.push_back(pModel);
 
             AppGridView *pageView = new AppGridView(this);
-            if (m_category != AppsListModel::All)
+            if (m_category != AppsListModel::FullscreenAll)
                 pageView->setViewportMargins(QMargins(60, 0, 60, 0));
 
             pageView->setModel(pModel);
@@ -284,9 +284,9 @@ void MultiPagesView::updateAppDrawerTitle(const QModelIndex &index)
 {
     const QString title = m_titleLabel->text();
     m_appsManager->updateDrawerTitle(index, title);
-    m_appsManager->saveUsedSortedList();
+    m_appsManager->saveFullscreenUsedSortedList();
 
-    emit m_appsManager->dataChanged(AppsListModel::All);
+    emit m_appsManager->dataChanged(AppsListModel::FullscreenAll);
 }
 
 /**

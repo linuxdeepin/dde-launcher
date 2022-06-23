@@ -94,7 +94,7 @@ void PageControl::updateIconSize(double scaleX, double scaleY)
 void PageControl::createButtons()
 {
     // 获取当前最大可能的页数(假设都在一个分类)
-    int totalPage = qCeil(AppsManager::instance()->appsInfoListSize(AppsListModel::All) / 12);
+    int totalPage = qCeil(AppsManager::instance()->appsInfoListSize(AppsListModel::FullscreenAll) / 12);
     for (int i = 0; i < totalPage; i++) {
         DIconButton *pageButton = new DIconButton(this);
         pageButton->setVisible(false);

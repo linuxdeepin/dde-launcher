@@ -58,6 +58,9 @@ const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w)
 
 FullScreenFrame::FullScreenFrame(QWidget *parent)
     : BoxFrame(parent)
+    , m_focusIndex(0)
+    , m_mousePressSeconds(0)
+    , m_mousePressState(false)
     , m_menuWorker(new MenuWorker(this))
     , m_eventFilter(new SharedEventFilter(this))
     , m_calcUtil(CalculateUtil::instance())
@@ -68,15 +71,12 @@ FullScreenFrame::FullScreenFrame(QWidget *parent)
     , m_appsIconBox(new DHBoxWidget(m_contentFrame))
     , m_tipsLabel(new QLabel(this))
     , m_appItemDelegate(new AppItemDelegate(this))
-    , m_multiPagesView(new MultiPagesView(AppsListModel::All, this))
+    , m_multiPagesView(new MultiPagesView(AppsListModel::FullscreenAll, this))
     , m_searchModeWidget(new SearchModeWidget(this))
     , m_allAppsModel(new AppsListModel(AppsListModel::Search, this))
     , m_filterModel(new SortFilterProxyModel(this))
     , m_topSpacing(new QFrame(this))
     , m_bottomSpacing(new QFrame(this))
-    , m_focusIndex(0)
-    , m_mousePressSeconds(0)
-    , m_mousePressState(false)
     , m_drawerWidget(new AppDrawerWidget(this))
     , m_curScreen(m_appsManager->currentScreen())
     , m_bMousePress(false)
@@ -433,7 +433,7 @@ void FullScreenFrame::initAppView()
 {
     // 自由
     m_multiPagesView->setDataDelegate(m_appItemDelegate);
-    m_multiPagesView->updatePageCount(AppsListModel::All);
+    m_multiPagesView->updatePageCount(AppsListModel::FullscreenAll);
     m_multiPagesView->installEventFilter(this);
 
     m_filterModel->setSourceModel(m_allAppsModel);
@@ -624,7 +624,7 @@ void FullScreenFrame::launchCurrentApp()
     if (index.isValid() && !index.data(AppsListModel::AppDesktopRole).toString().isEmpty()) {
         const AppsListModel::AppCategory category = index.data(AppsListModel::AppGroupRole).value<AppsListModel::AppCategory>();
 
-        if ((category == AppsListModel::All && m_displayMode == ALL_APPS) ||
+        if ((category == AppsListModel::FullscreenAll && m_displayMode == ALL_APPS) ||
                 (category == AppsListModel::Search && m_displayMode == SEARCH)) {
             m_appsManager->launchApp(index);
             hide();
@@ -775,7 +775,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         // 再显示自由显示模式
         m_appsIconBox->setVisible(true);
 
-        m_multiPagesView->setModel(AppsListModel::All);
+        m_multiPagesView->setModel(AppsListModel::FullscreenAll);
     } else if (m_displayMode == SEARCH) {
         // 隐藏自由模式显示
         m_appsIconBox->setVisible(false);

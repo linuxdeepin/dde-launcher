@@ -121,6 +121,7 @@ signals:
     void loadOtherIcon();
     void loadItem(const ItemInfo_v1 &info, const QString &operationStr);
     void requestHideLauncher();
+    void requestHidePopup();
 
 public slots:
     void saveUsedSortedList();

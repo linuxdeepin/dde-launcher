@@ -523,10 +523,7 @@ void MultiPagesView::mouseRelease(QMouseEvent *e)
         showCurrentPage(m_pageIndex - 1);
     } else {
         int nScroll = m_appListArea->horizontalScrollBar()->value();
-        // 多个分页是点击直接隐藏
-        if (nScroll == m_scrollStart && m_pageCount != 1)
-            emit m_appGridViewList[m_pageIndex]->clicked(QModelIndex());
-        else if (nScroll - m_scrollStart > DLauncher::MOUSE_MOVE_TO_NEXT)
+        if (nScroll - m_scrollStart > DLauncher::MOUSE_MOVE_TO_NEXT)
             showCurrentPage(m_pageIndex + 1);
         else if (nScroll - m_scrollStart < -DLauncher::MOUSE_MOVE_TO_NEXT)
             showCurrentPage(m_pageIndex - 1);
@@ -536,6 +533,10 @@ void MultiPagesView::mouseRelease(QMouseEvent *e)
     m_bMousePress = false;
 
     setGradientVisible(false);
+
+    // 移动完成后，更新状态
+    if ((m_pageIndex >= 0) && (m_pageIndex <= m_appGridViewList.size() - 1))
+        m_appGridViewList[m_pageIndex]->setViewMoveState(false);
 
     if(m_pageCount == 1)
         QWidget::mouseReleaseEvent(e);

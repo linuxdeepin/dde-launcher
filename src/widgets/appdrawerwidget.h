@@ -26,6 +26,9 @@ public:
     void refreshDrawerTitle(const QString &title = QString());
     void setCurrentIndex(const QModelIndex &index);
 
+signals:
+    void drawerClicked(AppGridView *view);
+
 private slots:
     void onTitleChanged();
 

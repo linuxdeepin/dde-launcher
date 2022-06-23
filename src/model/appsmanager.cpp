@@ -1601,6 +1601,8 @@ void AppsManager::uninstallApp(const QModelIndex &modelIndex)
 
     if (!fullscreen())
         Q_EMIT requestHideLauncher();
+    else
+        Q_EMIT requestHidePopup();
 
     unInstallDialog.exec();
     m_uninstallDlgIsShown = false;

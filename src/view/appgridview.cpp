@@ -152,7 +152,7 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::RightButton) {
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
-        if (clickedIndex.isValid() && !m_moveGridView) {
+        if (clickedIndex.isValid() && !getViewMoveState()) {
             QPoint rightClickPoint = QCursor::pos();
             // 触控屏右键
             if (e->source() == Qt::MouseEventSynthesizedByQt) {
@@ -380,7 +380,7 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
 
     if (qAbs(e->x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
             qAbs(e->y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
-        m_moveGridView = true;
+        setViewMoveState(true);
 
         // 开始拖拽后,导致fullscreenframe只收到mousePress事件,收不到mouseRelease事件,需要处理一下异常
         if (idx.isValid())
@@ -396,7 +396,6 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
-    m_moveGridView = false;
     if (m_pDelegate)
         m_pDelegate->mouseRelease(e);
 
@@ -406,6 +405,10 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
     // 小范围位置变化，当作没有变化，针对触摸屏
     if (diff_x < DLauncher::TOUCH_DIFF_THRESH && diff_y < DLauncher::TOUCH_DIFF_THRESH)
         QListView::mouseReleaseEvent(e);
+
+    // 点击列表空白位置且列表没有移动时，手动触发点击信号
+    if (!indexAt(e->pos()).isValid() && !getViewMoveState())
+        emit QListView::clicked(QModelIndex());
 }
 
 QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey)
@@ -513,7 +516,8 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     if (!index.isValid())
         return;
 
-    m_moveGridView = false;
+    setViewMoveState();
+
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     if (!listModel)
         return;
@@ -767,6 +771,16 @@ void AppGridView::setViewType(AppGridView::ViewType type)
 AppGridView::ViewType AppGridView::getViewType() const
 {
     return m_viewType;
+}
+
+void AppGridView::setViewMoveState(bool moving)
+{
+    m_moveGridView = moving;
+}
+
+bool AppGridView::getViewMoveState() const
+{
+    return m_moveGridView;
 }
 
 /** 提前创建好拖拽过程中需要用到的label

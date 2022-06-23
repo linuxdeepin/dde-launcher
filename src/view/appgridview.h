@@ -80,6 +80,9 @@ public:
     void setViewType(ViewType type = MainView);
     ViewType getViewType() const;
 
+    void setViewMoveState(bool moving = false);
+    bool getViewMoveState() const;
+
 private:
     void createMovingComponent();
     void initConnection();

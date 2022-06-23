@@ -137,8 +137,13 @@ private slots:
     void searchTextChanged(const QString &keywords, bool enableUpdateMode);
     void refreshPageView(const AppsListModel::AppCategory category);
     void onScreenInfoChange();
-    void onAppClicked(const QModelIndex &index);
+    void onAppClick(const QModelIndex &index);
+    void onDrawerAppClick(const QModelIndex &index);
+    void onDrawerClick(AppGridView *pView);
     void onRequestMouseRelease();
+    void onRequestHidePopUp();
+    void onAppLaunch();
+    void onWindowHide();
 
 private:
     int m_displayMode;

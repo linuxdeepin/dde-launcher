@@ -25,7 +25,7 @@ AppDrawerWidget::~AppDrawerWidget()
 
 void AppDrawerWidget::initUi()
 {
-    setWindowFlags(Qt::Popup);
+    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::Dialog);
     setAttribute(Qt::WA_TranslucentBackground);
 
     m_multipageView->setDataDelegate(m_appDelegate);
@@ -54,6 +54,7 @@ void AppDrawerWidget::initAccessible()
 void AppDrawerWidget::initConnection()
 {
     connect(m_multipageView, &MultiPagesView::titleChanged, this, &AppDrawerWidget::onTitleChanged);
+    connect(m_multipageView, &MultiPagesView::connectViewEvent, this, &AppDrawerWidget::drawerClicked);
 }
 
 void AppDrawerWidget::updateBackgroundImage(const QPixmap &img)

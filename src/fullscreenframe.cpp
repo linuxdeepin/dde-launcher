@@ -138,7 +138,7 @@ void FullScreenFrame::addViewEvent(AppGridView *pView)
 {
     connect(pView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
     connect(pView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
-    connect(pView, &AppGridView::clicked, this, &FullScreenFrame::onAppClicked);
+    connect(pView, &AppGridView::clicked, this, &FullScreenFrame::onAppClick);
     connect(pView, &AppGridView::requestMouseRelease, this, &FullScreenFrame::onRequestMouseRelease);
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pView, qOverload<>(&AppGridView::update));
 }
@@ -147,6 +147,15 @@ void FullScreenFrame::onHideMenu()
 {
     if (m_menuWorker.get() && !isVisible())
         m_menuWorker->onHideMenu();
+}
+
+void FullScreenFrame::onDrawerClick(AppGridView *pView)
+{
+    connect(pView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
+    connect(pView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(pView, &AppGridView::clicked, this, &FullScreenFrame::onDrawerAppClick);
+    connect(pView, &AppGridView::requestMouseRelease, this, &FullScreenFrame::onRequestMouseRelease);
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pView, qOverload<>(&AppGridView::update));
 }
 
 void FullScreenFrame::showTips(const QString &tips)
@@ -289,6 +298,12 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
     // 小范围位置变化，当作没有变化，针对触摸屏
     if ((e->source() == Qt::MouseEventSynthesizedByQt && diff_x < DLauncher::TOUCH_DIFF_THRESH && diff_y < DLauncher::TOUCH_DIFF_THRESH)
             || (e->source() != Qt::MouseEventSynthesizedByQt && e->pos() == m_mousePressPos )) {
+
+        if (m_drawerWidget->isVisible()) {
+            m_drawerWidget->hide();
+            return;
+        }
+
         hide();
     }
     m_mousePressState = false;
@@ -434,18 +449,20 @@ void FullScreenFrame::initConnection()
 
     connect(m_multiPagesView, &MultiPagesView::connectViewEvent, this, &FullScreenFrame::addViewEvent);
     connect(m_searchModeWidget, &SearchModeWidget::connectViewEvent, this , &FullScreenFrame::addViewEvent);
+    connect(m_drawerWidget, &AppDrawerWidget::drawerClicked, this, &FullScreenFrame::onDrawerClick);
 
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
-    connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::hideLauncher, Qt::QueuedConnection);
+    connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::onWindowHide, Qt::QueuedConnection);
 
-    connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
+    connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::onAppLaunch);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, m_appsManager, QOverload<const QModelIndex &>::of(&AppsManager::uninstallApp));
 
     connect(m_appsManager, &AppsManager::requestTips, this, &FullScreenFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &FullScreenFrame::hideTips);
     connect(m_appsManager, &AppsManager::IconSizeChanged, this, &FullScreenFrame::updateDockPosition);
     connect(m_appsManager, &AppsManager::dataChanged, this, &FullScreenFrame::refreshPageView);
+    connect(m_appsManager, &AppsManager::requestHidePopup, this, &FullScreenFrame::onRequestHidePopUp);
 
     connect(m_curScreen, &QScreen::geometryChanged, this, &FullScreenFrame::onScreenInfoChange);
     connect(m_curScreen, &QScreen::orientationChanged, this, &FullScreenFrame::onScreenInfoChange);
@@ -642,7 +659,9 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
     qDebug() << "show menu" << pos << context << context.data(AppsListModel::AppNameRole).toString()
              << "app key:" << context.data(AppsListModel::AppKeyRole).toString();
 
-    m_menuWorker->showMenuByAppItem(pos, context);
+    const bool isDir = context.data(AppsListModel::ItemIsDirRole).toBool();
+    if (!isDir)
+        m_menuWorker->showMenuByAppItem(pos, context);
 }
 
 void FullScreenFrame::uninstallApp(const QString &appKey)
@@ -675,16 +694,21 @@ void FullScreenFrame::onScreenInfoChange()
     connect(m_curScreen, &QScreen::orientationChanged, this, &FullScreenFrame::onScreenInfoChange);
 }
 
-void FullScreenFrame::onAppClicked(const QModelIndex &index)
+void FullScreenFrame::onAppClick(const QModelIndex &index)
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
+        // 点击全屏空白处隐藏文件夹展开窗口
+       if (m_drawerWidget->isVisible())
+           m_drawerWidget->hide();
+       else
+           hideLauncher();
         return;
+    }
 
     const ItemInfo_v1 info = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
 
     if (!info.m_isDir) {
         m_appsManager->launchApp(index);
-        hideLauncher();
     } else {
         m_drawerWidget->setCurrentIndex(index);
         m_appsManager->setDirAppInfoList(index);
@@ -693,9 +717,48 @@ void FullScreenFrame::onAppClicked(const QModelIndex &index)
     }
 }
 
+void FullScreenFrame::onDrawerAppClick(const QModelIndex &index)
+{
+    // 点击应用文件夹展开窗口空白处隐藏文件夹展开窗口
+    if (!index.isValid()) {
+        m_drawerWidget->hide();
+        return;
+    }
+
+    const bool isDir = index.data(AppsListModel::ItemIsDirRole).toBool();
+    if (!isDir)
+        m_appsManager->launchApp(index);
+}
+
 void FullScreenFrame::onRequestMouseRelease()
 {
     m_mousePressState = false;
+}
+
+void FullScreenFrame::onRequestHidePopUp()
+{
+    if (m_drawerWidget->isVisible())
+        m_drawerWidget->hide();
+}
+
+void FullScreenFrame::onAppLaunch()
+{
+    // 启动应用后，隐藏所有窗口
+    if (m_drawerWidget->isVisible())
+        m_drawerWidget->hide();
+
+    hideLauncher();
+}
+
+void FullScreenFrame::onWindowHide()
+{
+    // 点击列表空白处，应用文件夹展开窗口显示则先关闭，否则隐藏全屏窗口
+    if (m_drawerWidget->isVisible()) {
+        m_drawerWidget->hide();
+        return;
+    }
+
+    hideLauncher();
 }
 
 void FullScreenFrame::updateDisplayMode(const int mode)

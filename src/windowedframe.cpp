@@ -889,11 +889,11 @@ void WindowedFrame::onToggleFullScreen()
 
     // 同步本地当前是全屏的状态
     DDBusSender()
-    .service("com.deepin.dde.daemon.Launcher")
-    .interface("com.deepin.dde.daemon.Launcher")
-    .path("/com/deepin/dde/daemon/Launcher")
-    .property("Fullscreen")
-    .set(true);
+            .service(DBUS_DAEMON_SERVICE_NAME)
+            .interface(DBUS_DAEMON_SERVICE_NAME)
+            .path(DBUS_DAEMON_PATH_NAME)
+            .property("Fullscreen")
+            .set(true);
 }
 
 void WindowedFrame::onWMCompositeChanged()

@@ -11,6 +11,13 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "-g -Wall")
 
+#设置ON, 则使用AM作为服务时打开
+#设置OFF,使用daemon数据
+set(USE_AM_API ON)
+if (${USE_AM_API})
+    add_definitions(-DUSE_AM_API=${USE_AM_API})
+endif()
+
 # 增加安全编译参数
 ADD_DEFINITIONS("-fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy")
 
@@ -148,10 +155,12 @@ install(FILES dde-launcher.desktop DESTINATION share/applications/)
 install(FILES dde-launcher-wapper DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 ## services files
-if (DEFINED USE_AM_API)
-install(FILES src/dbusservices/org.deepin.dde.Launcher1.service DESTINATION share/dbus-1/services)
+if (${USE_AM_API})
+    message("use AM.")
+    install(FILES src/dbusservices/org.deepin.dde.Launcher1.service DESTINATION share/dbus-1/services)
 else ()
-install(FILES src/dbusservices/com.deepin.dde.Launcher.service DESTINATION share/dbus-1/services)
+    message("not use AM.")
+    install(FILES src/dbusservices/com.deepin.dde.Launcher.service DESTINATION share/dbus-1/services)
 endif ()
 
 #schemas

@@ -23,11 +23,14 @@
 
 #ifndef SEARCHWIDGET_H
 #define SEARCHWIDGET_H
+
 #include "calculate_util.h"
 #include "searchlineedit.h"
-#include <QWidget>
+
 #include <DFloatingButton>
 #include <DSearchEdit>
+
+#include <QWidget>
 
 DWIDGET_USE_NAMESPACE
 

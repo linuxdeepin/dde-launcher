@@ -30,7 +30,7 @@ public:
     int DisplayMode;
     QStringList DockedApps;
     QList<QDBusObjectPath> Entries;
-    DockRect FrontendWindowRect;
+    QRect FrontendWindowRect;
     int HideMode;
     int HideState;
     uint HideTimeout;
@@ -51,9 +51,6 @@ AMDBusDockInter::AMDBusDockInter(QObject *parent)
     : QDBusAbstractInterface(INTERFACE_NAME, SERVICE_PATH, staticInterfaceName(), QDBusConnection::sessionBus(), parent)
     , d_ptr(new DockPrivate)
 {
-    if (QMetaType::type("DockRect") == QMetaType::UnknownType)
-        registerDockRectMetaType();
-
     QDBusConnection::sessionBus().connect(service(), path(), "org.freedesktop.DBus.Properties", "PropertiesChanged","sa{sv}as", this, SLOT(onPropertyChanged(const QDBusMessage &)));
 }
 
@@ -106,9 +103,9 @@ QList<QDBusObjectPath> AMDBusDockInter::entries()
     return qvariant_cast<QList<QDBusObjectPath>>(property("Entries"));
 }
 
-DockRect AMDBusDockInter::frontendWindowRect()
+QRect AMDBusDockInter::frontendWindowRect()
 {
-    return qvariant_cast<DockRect>(property("FrontendWindowRect"));
+    return qvariant_cast<QRect>(property("FrontendWindowRect"));
 }
 
 int AMDBusDockInter::hideMode()

@@ -67,6 +67,15 @@ static const int APPS_AREA_AUTO_SCROLL_STEP = 5;
 static const int APPS_AREA_AUTO_SCROLL_STEP = 130;
 #endif
 
+#ifdef USE_AM_API
+static const auto DBUS_DAEMON_SERVICE_NAME = "org.deepin.dde.daemon.Launcher1";
+static const auto DBUS_DAEMON_PATH_NAME = "/org/deepin/dde/daemon/Launcher1";
+#else
+static QString DBUS_DAEMON_SERVICE_NAME = "com.deepin.dde.daemon.Launcher";
+static QString DBUS_DAEMON_PATH_NAME = "/com/deepin/dde/daemon/Launcher";
+#endif
+
+
 static const int APPS_AREA_AUTO_SCROLL_TIMER = 15;
 
 static const int CLEAR_CACHE_TIMER = 60;

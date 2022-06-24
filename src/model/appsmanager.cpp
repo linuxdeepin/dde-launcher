@@ -1254,7 +1254,11 @@ void AppsManager::refreshCategoryInfoList()
     }
 
     // 5. 获取新安装的应用列表
+#ifdef USE_AM_API
+    m_newInstalledAppsList = m_amDbusLauncherInter->GetAllNewInstalledApps().value();
+#else
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
+#endif
 
     generateCategoryMap();
 }

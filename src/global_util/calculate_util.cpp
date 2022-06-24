@@ -67,7 +67,7 @@ int CalculateUtil::calculateIconSize(int mode)
     // 计算任务栏位置变化时全屏窗口上各控件的大小
 #ifdef USE_AM_API
     int dockPosition = m_amDbusDockInter->position();
-    QRect dockRect = m_amDbusDockInter->FrontendWindowRect();
+    QRect dockRect = m_amDbusDockInter->frontendWindowRect();
 #else
     int dockPosition = m_dockInter->position();
     QRect dockRect = m_dockInter->frontendRect();
@@ -385,7 +385,7 @@ QScreen *CalculateUtil::currentScreen() const
     QScreen *primaryScreen = qApp->primaryScreen();
 
 #ifdef USE_AM_API
-    const QRect dockRect = m_amDbusDockInter->frontendRect();
+    const QRect dockRect = m_amDbusDockInter->frontendWindowRect();
 #else
     const QRect dockRect = m_dockInter->frontendRect();
 #endif

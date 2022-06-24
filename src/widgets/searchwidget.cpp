@@ -24,12 +24,13 @@
 #include "searchwidget.h"
 #include "util.h"
 
+#include <DDBusSender>
+
 #include <QHBoxLayout>
 #include <QEvent>
 #include <QAction>
 #include <QDebug>
 #include <QKeyEvent>
-#include <DDBusSender>
 
 #define ICON_SIZE   24
 #define BTN_SIZE    40
@@ -37,7 +38,7 @@
 #define SEARCHEIT_WIDTH 350
 #define SEARCHEIT_HEIGHT 40
 
-DWIDGET_USE_NAMESPACE
+using namespace DLauncher;
 
 /**
  * @brief SearchWidget::SearchWidget 顶部搜索控件
@@ -132,10 +133,11 @@ void SearchWidget::onModeClicked()
 {
     emit m_calcUtil->loadWindowIcon();
     m_calcUtil->setFullScreen(false);
+
     DDBusSender()
-            .service("com.deepin.dde.daemon.Launcher")
-            .interface("com.deepin.dde.daemon.Launcher")
-            .path("/com/deepin/dde/daemon/Launcher")
+            .service(DBUS_DAEMON_SERVICE_NAME)
+            .interface(DBUS_DAEMON_SERVICE_NAME)
+            .path(DBUS_DAEMON_PATH_NAME)
             .property("Fullscreen")
             .set(false);
 }

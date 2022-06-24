@@ -22,8 +22,6 @@
 #ifndef AMDBUSDOCKINTERFACT_H
 #define AMDBUSDOCKINTERFACT_H
 
-#include "types/dockrect.h"
-
 #include <QObject>
 #include <QByteArray>
 #include <QList>
@@ -59,8 +57,8 @@ public:
     Q_PROPERTY(QList<QDBusObjectPath> Entries READ entries NOTIFY EntriesChanged)
     QList<QDBusObjectPath> entries();
 
-    Q_PROPERTY(DockRect FrontendWindowRect READ frontendWindowRect NOTIFY FrontendWindowRectChanged)
-    DockRect frontendWindowRect();
+    Q_PROPERTY(QRect FrontendWindowRect READ frontendWindowRect NOTIFY FrontendWindowRectChanged)
+    QRect frontendWindowRect();
 
     Q_PROPERTY(int HideMode READ hideMode WRITE setHideMode NOTIFY HideModeChanged)
     int hideMode();
@@ -279,7 +277,7 @@ Q_SIGNALS: // SIGNALS
     void DisplayModeChanged(int value) const;
     void DockedAppsChanged(const QStringList &value) const;
     void EntriesChanged(const QList<QDBusObjectPath> &value) const;
-    void FrontendWindowRectChanged(DockRect value) const;
+    void FrontendWindowRectChanged(QRect value) const;
     void HideModeChanged(int value) const;
     void HideStateChanged(int value) const;
     void HideTimeoutChanged(uint value) const;

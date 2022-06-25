@@ -5,8 +5,8 @@ SearchModeWidget::SearchModeWidget(QWidget *parent)
     : QWidget (parent)
     , m_nativeLabel(new QLabel(this))
     , m_outsideLabel(new QLabel(this))
-    , m_nativeView(new AppGridView(this))
-    , m_outsideView(new AppGridView(this))
+    , m_nativeView(new AppGridView(AppGridView::MainView, this))
+    , m_outsideView(new AppGridView(AppGridView::MainView, this))
     , m_nativeModel(new AppsListModel(AppsListModel::Search))
     , m_outsideModel(new AppsListModel(AppsListModel::PluginSearch))
     , m_emptyIcon(new QLabel(this))
@@ -105,9 +105,6 @@ void SearchModeWidget::initAppView()
     QPalette outsidePal = m_outsideLabel->palette();
     outsidePal.setColor(QPalette::WindowText,Qt::white);
     m_outsideLabel->setPalette(outsidePal);
-
-    m_nativeView->setViewType(AppGridView::PopupView);
-    m_outsideView->setViewType(AppGridView::PopupView);
 
     m_nativeView->setFlow(QListView::LeftToRight);
     m_outsideView->setFlow(QListView::LeftToRight);

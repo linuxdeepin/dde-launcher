@@ -39,6 +39,7 @@ static const int APP_DRAG_SCROLL_THRESHOLD = 150;
 static const int APP_DRAG_MININUM_TIME = 300;
 
 static const int DRAG_THRESHOLD = 15;
+static const int DRAW_TITLE_HEIGHT = 130;
 
 static const int CATEGORY_TITLE_WIDGET_HEIGHT = 70;
 

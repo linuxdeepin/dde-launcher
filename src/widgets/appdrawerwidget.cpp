@@ -8,10 +8,11 @@
 
 AppDrawerWidget::AppDrawerWidget(QWidget *parent)
     : QWidget (parent)
+    , m_maskWidget(new QWidget(this))
     , m_appDelegate(new AppItemDelegate(this))
     , m_multipageView(new MultiPagesView(AppsListModel::Dir, this))
     , m_blurGroup(QSharedPointer<DBlurEffectGroup>(new DBlurEffectGroup))
-    , m_blurBackground(new DBlurEffectWidget(this))
+    , m_blurBackground(new DBlurEffectWidget(m_multipageView))
     , m_clickIndex(QModelIndex())
 {
     initUi();
@@ -25,18 +26,26 @@ AppDrawerWidget::~AppDrawerWidget()
 
 void AppDrawerWidget::initUi()
 {
-    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::Dialog);
+#ifdef QT_DEBUG
+    qInfo() << "size:" << AppsManager::instance()->currentScreen()->geometry().size();
+#endif
+
+    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
     setAttribute(Qt::WA_TranslucentBackground);
+    setAttribute(Qt::WA_TransparentForMouseEvents, false);
 
-    m_multipageView->setDataDelegate(m_appDelegate);
+    m_maskWidget->setAttribute(Qt::WA_TranslucentBackground);
+    m_maskWidget->setAttribute(Qt::WA_TransparentForMouseEvents, false);
+    const QSize screenSize = AppsManager::instance()->currentScreen()->geometry().size();
+    m_maskWidget->resize(screenSize);
+    setFixedSize(screenSize);
 
-    QHBoxLayout *mainLayout = new QHBoxLayout(this);
+    QHBoxLayout *mainLayout = new QHBoxLayout(m_maskWidget);
     mainLayout->setContentsMargins(QMargins(0, 0, 0, 0));
     mainLayout->setSpacing(0);
     mainLayout->addWidget(m_multipageView);
-    setLayout(mainLayout);
+    m_maskWidget->setLayout(mainLayout);
 
-    m_blurBackground->setAccessibleName(QString("blurBackground"));
     m_blurBackground->setMaskColor(DBlurEffectWidget::LightColor);
     m_blurBackground->setMaskAlpha(30);
     m_blurBackground->setBlurRectXRadius(DLauncher::APPHBOX_RADIUS);
@@ -44,11 +53,14 @@ void AppDrawerWidget::initUi()
     m_blurBackground->lower();
     m_blurGroup->addWidget(m_blurBackground);
     m_multipageView->raise();
+    m_multipageView->setDataDelegate(m_appDelegate);
 }
 
 void AppDrawerWidget::initAccessible()
 {
     m_multipageView->setAccessibleName("drawerWidget");
+    m_blurBackground->setAccessibleName("blurBackground");
+    m_maskWidget->setAccessibleName("appDrawerMaskWidget");
 }
 
 void AppDrawerWidget::initConnection()
@@ -80,21 +92,14 @@ void AppDrawerWidget::onTitleChanged()
 
 void AppDrawerWidget::showEvent(QShowEvent *event)
 {
-#define TITLE_HEIGHT 130
-
     QSize itemSize = CalculateUtil::instance()->appItemSize() * 5 / 4;
-    // 130为应用文件夹标题控件高度
-    QSize widgetSize = QSize(itemSize.width() * 4, itemSize.height() * 3 + TITLE_HEIGHT);
-    setFixedSize(widgetSize);
+    QSize widgetSize = QSize(itemSize.width() * 4, itemSize.height() * 3 + DLauncher::DRAW_TITLE_HEIGHT);
+
     m_multipageView->setFixedSize(widgetSize);
     m_blurBackground->setFixedSize(widgetSize);
     m_blurGroup->setSourceImage(m_pix.toImage(), 0);
 
-    QPoint center = AppsManager::instance()->currentScreen()->geometry().center() - QPoint(size().width() / 2, size().height() / 2);
-    setGeometry(QRect(center, size()));
-
     m_multipageView->updatePageCount(AppsListModel::Dir);
-    m_multipageView->updatePosition(5);
     m_multipageView->setModel(AppsListModel::Dir);
 
     return QWidget::showEvent(event);
@@ -104,7 +109,9 @@ void AppDrawerWidget::mousePressEvent(QMouseEvent *event)
 {
     m_multipageView->getEditLabel()->cancelEditState();
 
-    return QWidget::mousePressEvent(event);
+    // 多页视图范围之外，蒙板之内点击，向上传递点击事件
+    if (isVisible() && !m_multipageView->geometry().contains(event->pos()))
+        return QWidget::mousePressEvent(event);
 }
 
 void AppDrawerWidget::hideEvent(QHideEvent *event)

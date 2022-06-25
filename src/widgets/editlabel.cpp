@@ -5,6 +5,7 @@
 #include <QHBoxLayout>
 
 DWIDGET_USE_NAMESPACE
+
 #define DOTSWIDTH 80
 
 EditLabel::EditLabel(QWidget *parent)
@@ -26,8 +27,6 @@ void EditLabel::initUi()
 {
 #ifdef QT_DEBUG
     setStyleSheet("QWidget{border: 1px solid red;}");
-#else
-
 #endif
 
     setWindowFlags(Qt::Widget | Qt::FramelessWindowHint);
@@ -54,6 +53,7 @@ void EditLabel::initUi()
 
     m_label->setFixedHeight(50);
     m_lineEdit->setFixedHeight(50);
+    m_lineEdit->setTextMargins(5, 0, 5, 0);
 
     DFontSizeManager::instance()->bind(m_label, DFontSizeManager::T1);
     DFontSizeManager::instance()->bind(m_lineEdit, DFontSizeManager::T1); // 40pixel
@@ -91,7 +91,7 @@ void EditLabel::mouseDoubleClickEvent(QMouseEvent *event)
     Q_UNUSED(event);
 
     m_oldTitle = m_label->text();
-    m_lineEdit->setFixedSize(m_label->geometry().size());
+    m_lineEdit->setFixedSize(m_label->geometry().size() + QSize(40, 0));
     m_lineEdit->show();
     m_label->hide();
     m_lineEdit->setText(m_originTitle);

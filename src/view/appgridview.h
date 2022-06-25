@@ -58,7 +58,7 @@ public:
     };
 
     using QListView::setViewportMargins;
-    explicit AppGridView(QWidget *parent = nullptr);
+    explicit AppGridView(const ViewType viewType = MainView, QWidget *parent = nullptr);
 
     using QListView::indexAt;
     const QModelIndex indexAt(const int index) const;

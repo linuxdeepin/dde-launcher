@@ -46,7 +46,7 @@
 
 DGUI_USE_NAMESPACE
 
-AppGridView::AppGridView(QWidget *parent)
+AppGridView::AppGridView(const ViewType viewType, QWidget *parent)
     : QListView(parent)
     , m_dropThresholdTimer(new QTimer(this))
     , m_gestureInter(new Gesture("com.deepin.daemon.Gesture"
@@ -63,6 +63,7 @@ AppGridView::AppGridView(QWidget *parent)
     , m_monthLabel(nullptr)
     , m_dayLabel(nullptr)
     , m_weekLabel(nullptr)
+    , m_viewType(viewType)
 {
     initUi();
     initConnection();
@@ -846,6 +847,10 @@ void AppGridView::initConnection()
 
 void AppGridView::initUi()
 {
+#ifdef QT_DEBUG
+    setStyleSheet("QListView{border: 1px solid red;}");
+#endif
+
     m_dropThresholdTimer->setInterval(DLauncher::APP_DRAG_SWAP_THRESHOLD);
     m_dropThresholdTimer->setSingleShot(true);
 
@@ -868,7 +873,7 @@ void AppGridView::initUi()
     setViewMode(QListView::IconMode);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     setFrameStyle(QFrame::NoFrame);
     setViewportMargins(0, 0, 0, 0);
     viewport()->setAutoFillBackground(false);
@@ -876,12 +881,24 @@ void AppGridView::initUi()
 
 void AppGridView::onLayoutChanged()
 {
-    int leftMargin = m_calcUtil->appMarginLeft();
-    int topMargin = m_calcUtil->appMarginTop();
-    setSpacing(m_calcUtil->appItemSpacing());
+#define ITEM_SPACING 15
     if (getViewType() == PopupView) {
-        setViewportMargins(0, topMargin, 0, topMargin);
+#ifdef QT_DEBUG
+        int leftMargin = m_calcUtil->appMarginLeft();
+        int topMargin = m_calcUtil->appMarginTop();
+        int itemSpacing = m_calcUtil->appItemSpacing();
+        qInfo() << "set PopView margin" << ":topMargin:" << topMargin << ", leftMargin:" << leftMargin << ", itemSpacing:" << itemSpacing;
+#endif
+        setViewportMargins(0, 0, 0, 0);
+        setSpacing(ITEM_SPACING);
     } else {
+        int leftMargin = m_calcUtil->appMarginLeft();
+        int topMargin = m_calcUtil->appMarginTop();
+        int itemSpacing = m_calcUtil->appItemSpacing();
+#ifdef QT_DEBUG
+        qInfo() << "set MainView margin" << ":topMargin:" << topMargin << ", leftMargin:" << leftMargin << ", itemSpacing:" << itemSpacing;
+#endif
+        setSpacing(itemSpacing);
         setViewportMargins(leftMargin, topMargin, leftMargin, 0);
     }
 }

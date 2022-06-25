@@ -38,6 +38,7 @@ protected:
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
 
 private:
+    QWidget *m_maskWidget;
     AppItemDelegate *m_appDelegate;
     MultiPagesView *m_multipageView;
 

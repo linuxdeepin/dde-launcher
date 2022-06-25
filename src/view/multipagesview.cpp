@@ -161,9 +161,13 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             pModel->setPageIndex(m_pageCount);
             m_pageAppsModelList.push_back(pModel);
 
-            AppGridView *pageView = new AppGridView(this);
-            if (m_category != AppsListModel::FullscreenAll)
-                pageView->setViewportMargins(QMargins(60, 0, 60, 0));
+            AppGridView *pageView = Q_NULLPTR;
+            if (category == AppsListModel::FullscreenAll) {
+                pageView = new AppGridView(AppGridView::MainView, this);
+            } else {
+                // m_category == AppsListModel::Dir的时候
+                pageView = new AppGridView(AppGridView::PopupView, this);
+            }
 
             pageView->setModel(pModel);
             pageView->setItemDelegate(m_delegate);
@@ -347,24 +351,9 @@ void MultiPagesView::updatePosition(int mode)
     // 更新全屏两种模式下界面布局的左右边距和间隔
     // TODO: 左右间隔，现在是根据剩余控件进行计算得出的，待优化
     int remainSpacing = m_calcUtil->appItemSpacing() * 7 / 2;
-    if (mode == AppsListModel::Dir) {
-        m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
-        m_viewBox->layout()->setSpacing(20);
-        QSize tmpSize = size() - QSize(0, m_pageControl->height() + m_titleLabel->height());
-        m_appListArea->setFixedSize(tmpSize);
-        m_viewBox->setFixedSize(tmpSize);
-
-        for (auto pView : m_appGridViewList) {
-            pView->setFixedSize(tmpSize);
-            pView->setViewType(AppGridView::PopupView);
-        }
-
-        m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
-        return;
-    }
 
     if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
-        QSize tmpSize = size()- QSize(remainSpacing, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
+        QSize tmpSize = size() - QSize(remainSpacing, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
         m_appListArea->setFixedSize(tmpSize);
         m_viewBox->setFixedSize(tmpSize);
 

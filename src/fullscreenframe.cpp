@@ -424,9 +424,6 @@ void FullScreenFrame::initUI()
     mainLayout->addWidget(m_bottomSpacing);
 
     setLayout(mainLayout);
-
-    // 获取搜索控件,应用分类导航控件默认大小
-    m_calcUtil->setSearchWidgetSizeHint(m_searchWidget->sizeHint());
 }
 
 void FullScreenFrame::initAppView()

@@ -767,6 +767,11 @@ QVariant WindowedFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
 void WindowedFrame::regionMonitorPoint(const QPoint &point, int flag)
 {
     Q_UNUSED(flag);
+
+    if (isWaylandDisplay()) {
+        return;
+    }
+
     auto windowList = DWindowManagerHelper::instance()->currentWorkspaceWindows();
 
     for (auto window : windowList) {
@@ -811,6 +816,9 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
             m_searcherEdit->lineEdit()->clearFocus();
     }
 
+    if (watched == qApp && event->type() == QEvent::ApplicationDeactivate) {
+        hideLauncher();
+    }
     return QWidget::eventFilter(watched, event);
 }
 

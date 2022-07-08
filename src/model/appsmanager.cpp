@@ -234,7 +234,8 @@ ItemInfoList_v1 AppsManager::sortByLetterOrder(ItemInfoList_v1 &list)
         ItemInfoList_v1 groupList;
         for (int j = 0; j < list.size(); j++) {
             const ItemInfo_v1 &info = list.at(j);
-            const QString pinYinStr = Chinese2Pinyin(info.m_name);
+            // 去掉字符串中的数字
+            const QString pinYinStr = Chinese2Pinyin(info.m_name).remove(QRegExp("\\d"));
             QChar firstKey = pinYinStr.front();
             if (firstKey.isNumber()) {
                 if (!groupList.contains(titleInfo) && (!letterGroupList.contains(titleInfo)))
@@ -246,12 +247,13 @@ ItemInfoList_v1 AppsManager::sortByLetterOrder(ItemInfoList_v1 &list)
                 if (!groupList.contains(titleInfo))
                     groupList.append(titleInfo);
 
-                groupList.append(info);
-            } else {
-                if (j == list.size() - 1) {
-                    // 数字不变, 在首字母相同的且都为中文的分组中比较全拼音，按升序排列
-                    sortByPinyinOrder(groupList);
-                }
+                if (!letterGroupList.contains(info))
+                    groupList.append(info);
+            }
+
+            if (j == list.size() - 1) {
+                // 数字不变, 在首字母相同的且都为中文的分组中比较全拼音，按升序排列
+                sortByPinyinOrder(groupList);
             }
         }
 
@@ -265,25 +267,18 @@ ItemInfoList_v1 AppsManager::sortByLetterOrder(ItemInfoList_v1 &list)
 
 void AppsManager::sortByPinyinOrder(ItemInfoList_v1 &processList)
 {
-    std::sort(processList.begin(), processList.end(), [](const ItemInfo_v1 &info1, const ItemInfo_v1 &info2) {
-        QString appPinyinName1 = Chinese2Pinyin(info1.m_name);
-        QString appPinyinName2 = Chinese2Pinyin(info2.m_name);
+    std::sort(processList.begin(), processList.end(), [ & ](ItemInfo_v1 &info1, ItemInfo_v1 &info2) {
+        QString appPinyinName1 = Chinese2Pinyin(info1.m_name).remove(QRegExp("\\d"));
+        QString appPinyinName2 = Chinese2Pinyin(info2.m_name).remove(QRegExp("\\d"));
 
-        // 1. 若是标题则不执行交换位置;二者中只有一个以字母或者数字开头，则不交换位置, 维持通用排序的顺序不变
-        // 2. 二者中都以字母或者数字开头则进行比对
-        // 3. 二者中的其他情况则进行比对, 如果不是从小到大顺序排列，则交换位置
+        // 1. 若是标题则不执行交换位置;二者中只有一个以字母或者数字开头，保持从小到大的顺序, 维持通用排序的顺序不变
+        // 2. 二者中的其他情况则进行比对, 如果不是从小到大顺序排列，则交换位置
 
         if (info1.isTitle() || info2.isTitle()
                 || (info1.startWithLetter() && !info2.startWithLetter())
                 || (!info1.startWithLetter() && info2.startWithLetter()))
             return false;
 
-        if ((info1.startWithLetter() && info2.startWithLetter()) || (info1.startWithNum() && info2.startWithNum())) {
-            // 交换位置
-            return (appPinyinName1.compare(appPinyinName2, Qt::CaseSensitive) < 0);
-        }
-
-        // 交换位置
         return (appPinyinName1.compare(appPinyinName2, Qt::CaseSensitive) < 0);
     });
 }

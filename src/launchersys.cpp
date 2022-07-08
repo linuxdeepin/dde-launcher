@@ -110,14 +110,14 @@ LauncherSys::~LauncherSys()
  */
 void LauncherSys::showLauncher()
 {
-    setClickState(true);
-
     if (m_sessionManagerInter->locked()) {
         return;
     }
 
     if (m_ignoreRepeatVisibleChangeTimer->isActive())
         return;
+
+    setClickState(true);
 
     m_ignoreRepeatVisibleChangeTimer->start();
 
@@ -245,6 +245,7 @@ bool LauncherSys::eventFilter(QObject *watched, QEvent *event)
         m_regionMonitor->unregisterRegion();
         disconnect(m_regionMonitorConnect);
         m_autoExitTimer->start();
+        setClickState(false);
     }
 
     return QObject::eventFilter(watched, event);

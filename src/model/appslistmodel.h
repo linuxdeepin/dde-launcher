@@ -110,9 +110,6 @@ public:
     explicit AppsListModel(const AppCategory& category, QObject *parent = nullptr);
     void setPageIndex(int pageIndex){m_pageIndex = pageIndex;}
 
-    void setDragToDir(bool state);
-    bool getDragToDir();
-
     inline AppCategory category() const {return m_category;}
     void setDraggingIndex(const QModelIndex &index);
     void setDragDropIndex(const QModelIndex &index);
@@ -170,7 +167,6 @@ private:
 
     bool m_drawBackground;
     int m_pageIndex;
-    bool m_dragToDir;
 };
 typedef QList<AppsListModel *> PageAppsModelist;
 

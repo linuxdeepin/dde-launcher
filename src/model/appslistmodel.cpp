@@ -235,16 +235,6 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent)
     connect(m_appsManager, &AppsManager::itemDataChanged, this, &AppsListModel::itemDataChanged);
 }
 
-void AppsListModel::setDragToDir(bool state)
-{
-    m_dragToDir = state;
-}
-
-bool AppsListModel::getDragToDir()
-{
-    return m_dragToDir;
-}
-
 void AppsListModel::setCategory(const AppsListModel::AppCategory category)
 {
     m_category = category;

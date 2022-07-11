@@ -133,7 +133,6 @@ void AppGridView::dropEvent(QDropEvent *e)
         QModelIndex dropIndex = indexAt(e->pos());
         QModelIndex dragIndex = indexAt(m_dragStartPos);
         if (dropIndex.isValid() && dragIndex.isValid() && dragIndex != dropIndex) {
-            listModel->setDragToDir(false);
             itemDelegate->setDirModelIndex(QModelIndex(), QModelIndex());
             listModel->updateModelData(dragIndex, dropIndex);
         }
@@ -229,25 +228,19 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
     // 分页切换后隐藏label过渡效果
     emit requestScrollStop();
 
-    bool isDir = indexAt(e->pos()).data(AppsListModel::ItemIsDirRole).toBool();
     AppItemDelegate *itemDelegate = qobject_cast<AppItemDelegate *>(this->itemDelegate());
     if (!itemDelegate)
         return;
-#if 0
-    // 设置文件夹效果, 拖动的应用不是自身时, 设置模型中拖向文件夹的标识
-    if (indexRect(dropIndex).contains(e->pos()) && dragIndex != dropIndex) {
-        listModel->setDragToDir(true);
-        itemDelegate->setDirModelIndex(dragIndex, dropIndex);
-    } else {
-        listModel->setDragToDir(false);
-        itemDelegate->setDirModelIndex(QModelIndex(), QModelIndex());
-    }
-    update();
-#endif
 
     QPoint moveNext = e->pos() - m_dragStartPos;
     const QRect curRect = indexRect(dropIndex);
-    bool isDiff = (dragIndex != dropIndex);
+    bool dragIsDir = dragIndex.data(AppsListModel::ItemIsDirRole).toBool();
+    bool dropIsDir = dropIndex.data(AppsListModel::ItemIsDirRole).toBool();
+    bool dragDropIsDir = (dragIsDir && dropIsDir);
+
+    // 拖拽的对象和释放处的对象不同 && 不能同时为文件夹 && 拖拽的对象不能为文件夹
+    // 即只有拖拽对象为普通应用时, 才允许合并入(或者创建)文件夹.
+    bool isDiff = ((dragIndex != dropIndex) && !dragDropIsDir && !dragIsDir);
     int eventXPos = e->pos().x();
     int eventYPos = e->pos().y();
 
@@ -257,44 +250,30 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
         // 向右拖动
         if ((eventXPos >= rectCenterXPos && (eventXPos <= curRect.right())) && isDiff) {
             // 触发文件夹特效
-//            qInfo() << "向右拖动, 过了一半与item接近重合但未超越";
-            listModel->setDragToDir(true);
             itemDelegate->setDirModelIndex(dragIndex, dropIndex);
         } else if (((eventYPos >= curRect.top()) && (eventYPos <= rectCenterYPos)) && isDiff) {
-//            qInfo() << ",向上拖动, 过了一半与item接近重合但未超越";
-            listModel->setDragToDir(true);
             itemDelegate->setDirModelIndex(dragIndex, dropIndex);
         } else {
             // 释放前执行app交换动画
-            if (m_enableAnimation /*&& !curRect.contains(e->pos()) && !isDir && !listModel->getDragToDir()*/)
+            if (m_enableAnimation)
                 m_dropThresholdTimer->start();
         }
     } else if (moveNext.x() < 0 || moveNext.y() > 0) {
         // 向左拖动
         if ((eventXPos >= curRect.left()) && (eventXPos <= rectCenterXPos) && isDiff) {
             // 触发文件夹特效
-//            qInfo() << "向左拖动, 过了一半与item接近重合但未超越";
-            listModel->setDragToDir(true);
             itemDelegate->setDirModelIndex(dragIndex, dropIndex);
         } else if ((eventYPos >= rectCenterYPos) && (eventYPos <= curRect.bottom()) && isDiff) {
-//            qInfo() << "向下拖动，过了一半与item接近重合但未超越";
-            listModel->setDragToDir(true);
             itemDelegate->setDirModelIndex(dragIndex, dropIndex);
         }
         else {
             // 释放前执行app交换动画
-            if (m_enableAnimation /*&& !curRect.contains(e->pos()) && !isDir && !listModel->getDragToDir()*/)
+            if (m_enableAnimation)
                 m_dropThresholdTimer->start();
         }
     } else {
-        listModel->setDragToDir(false);
         itemDelegate->setDirModelIndex(QModelIndex(), QModelIndex());
     }
-    update();
-
-//    // 释放前执行app交换动画
-//    if (m_enableAnimation /*&& !curRect.contains(e->pos()) && !isDir && !listModel->getDragToDir()*/)
-//        m_dropThresholdTimer->start();
 }
 
 void AppGridView::dragOut(int pos)

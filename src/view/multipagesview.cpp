@@ -526,9 +526,6 @@ void MultiPagesView::mouseRelease(QMouseEvent *e)
     // 移动完成后，更新状态
     if ((m_pageIndex >= 0) && (m_pageIndex <= m_appGridViewList.size() - 1))
         m_appGridViewList[m_pageIndex]->setViewMoveState(false);
-
-    if(m_pageCount == 1)
-        QWidget::mouseReleaseEvent(e);
 }
 
 void MultiPagesView::setGradientVisible(bool visible)

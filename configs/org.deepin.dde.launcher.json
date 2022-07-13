@@ -28,6 +28,15 @@
             "description": "是否允许使用全屏模式，默认为是。开启配置时，用户可以通过模式切换按钮将启动器设置为全屏或者窗口模式。关闭配置时，程序隐藏模式切换按钮，且默认为窗口模式，用户无法切换到全屏模式。",
             "permissions": "readwrite",
             "visibility": "private"
+        },
+        "unable-to-dock-list": {
+            "value": [],
+            "serial": 0,
+            "name": "unableToDockList",
+            "name[zh_CN]": "拖动应用到任务栏驻留针对不同应用提供配置功能, 默认为启用.",
+            "description": "拖动应用到任务栏驻留针对不同应用提供配置功能, 默认为启用.针对某应用配置为禁用，拖动该应用到任务栏时无法驻留。",
+            "permissions": "readwrite",
+            "visibility": "private"
         }
     }
 }

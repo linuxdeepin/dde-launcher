@@ -93,21 +93,22 @@ static const int MOUSE_MOVE_TO_NEXT= 100;
 
 static const int TOUCH_DIFF_THRESH = 15;
 
-static const int SLIDE_DIFF_THRESH = 15;                // 按住鼠标滑动翻页的最小间距
+static const int SLIDE_DIFF_THRESH = 15;                                            // 按住鼠标滑动翻页的最小间距
 
-static const int MINI_FRAME_LAYOUT_SPACE1 = 10;         // 小窗口布局间隔距离1
-static const int MINI_FRAME_LAYOUT_SPACE2 = 8;          // 小窗口布局间隔距离2
+static const int MINI_FRAME_LAYOUT_SPACE1 = 10;                                     // 小窗口布局间隔距离1
+static const int MINI_FRAME_LAYOUT_SPACE2 = 8;                                      // 小窗口布局间隔距离2
 
-static const qreal SIDES_SPACE_SCALE = 0.10;            // 全屏模式下设置左右边距的系数
+static const qreal SIDES_SPACE_SCALE = 0.10;                                        // 全屏模式下设置左右边距的系数
 
-static const int DOCK_POS_TOP = 0;                      // 任务栏位置: 顶部
-static const int DOCK_POS_RIGHT = 1;                    // 任务栏位置: 右边
-static const int DOCK_POS_BOTTOM = 2;                   // 任务栏位置: 底部
-static const int DOCK_POS_LEFT = 3;                     // 任务栏位置: 左边
+static const int DOCK_POS_TOP = 0;                                                  // 任务栏位置: 顶部
+static const int DOCK_POS_RIGHT = 1;                                                // 任务栏位置: 右边
+static const int DOCK_POS_BOTTOM = 2;                                               // 任务栏位置: 底部
+static const int DOCK_POS_LEFT = 3;                                                 // 任务栏位置: 左边
 
-static const int CHANGE_PAGE_DELAY_TIME = 250;          // 翻页延时时间，防抖动
-static const QString SOLID_BACKGROUND_COLOR = "#000F27";        // 纯色背景色号
-static const QString DEFAULT_META_CONFIG_NAME = "com.deepin.dde.dde-launcher.dconfig";      // 默认的配置文件名称
+static const int CHANGE_PAGE_DELAY_TIME = 250;                                      // 翻页延时时间，防抖动
+static const QString SOLID_BACKGROUND_COLOR = "#000F27";                            // 纯色背景色号
+static const QString DEFAULT_META_CONFIG_NAME = "org.deepin.dde.launcher";          // 默认的配置文件名称
+static const QString UNABLE_TO_DOCK_LIST = "unable-to-dock-list";                   // 拖拽到任务栏驻留配置功能
 
 static const int MOUSE_LEFTBUTTON = 1;
 static const int MOUSE_RIGHTBUTTON  = 3;

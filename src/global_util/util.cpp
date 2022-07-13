@@ -469,3 +469,17 @@ QVariant getDConfigValue(const QString &key, const QVariant &defaultValue, const
 
     return defaultValue;
 }
+
+void setDConfigValue(const QString &key, const QVariant &value, const QString &fileName)
+{
+    DConfig config(fileName);
+
+    if (config.isValid()) {
+        qWarning() << QString("DConfig is invalid, name:[%1], subpath[%2].").
+                        arg(config.name(), config.subpath());
+        return;
+    }
+
+    if (config.keyList().contains(key))
+        config.setValue(key, value);
+}

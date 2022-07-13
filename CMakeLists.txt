@@ -178,4 +178,6 @@ file(GLOB INTERFACE_FILES "interfaces/*.h")
 install(FILES ${INTERFACE_FILES} DESTINATION include/dde-launcher)
 
 # config
-dconfig_meta_files(APPID dde-launcher FILES ./configs/com.deepin.dde.dde-launcher.dconfig.json)
+file(GLOB DCONFIG_FILES "configs/*.json")
+install(FILES ${DCONFIG_FILES} DESTINATION share/dsg/configs/dde-launcher)
+dconfig_meta_files(APPID org.deepin.dde.launcher BASE ./config/*.json)

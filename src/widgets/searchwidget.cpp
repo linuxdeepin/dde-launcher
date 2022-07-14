@@ -131,6 +131,7 @@ void SearchWidget::onTextChanged(const QString &str)
 
 void SearchWidget::onModeClicked()
 {
+    emit toggleMode();
     emit m_calcUtil->loadWindowIcon();
     m_calcUtil->setFullScreen(false);
 

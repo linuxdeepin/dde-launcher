@@ -317,6 +317,11 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
     // we filter some key events from LineEdit, to implements cursor move.
     if (o == m_searchWidget->edit()->lineEdit() && e->type() == QEvent::KeyPress) {
         QKeyEvent *keyPress = static_cast<QKeyEvent *>(e);
+
+        // 应用搜索时, 隐藏展开窗口
+        if (m_drawerWidget->isVisible())
+            m_drawerWidget->hide();
+
         if (keyPress->key() == Qt::Key_Left || keyPress->key() == Qt::Key_Right) {
             QKeyEvent *event = new QKeyEvent(keyPress->type(), keyPress->key(), keyPress->modifiers());
             qApp->postEvent(this, event);
@@ -450,6 +455,7 @@ void FullScreenFrame::initConnection()
 
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
+    connect(m_searchWidget, &SearchWidget::toggleMode, m_drawerWidget, &AppDrawerWidget::hide);
     connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::onWindowHide, Qt::QueuedConnection);
 
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::onAppLaunch);
@@ -706,6 +712,7 @@ void FullScreenFrame::onAppClick(const QModelIndex &index)
 
     if (!info.m_isDir) {
         m_appsManager->launchApp(index);
+        hideLauncher();
     } else {
         m_drawerWidget->setCurrentIndex(index);
         m_appsManager->setDirAppInfoList(index);
@@ -723,8 +730,10 @@ void FullScreenFrame::onDrawerAppClick(const QModelIndex &index)
     }
 
     const bool isDir = index.data(AppsListModel::ItemIsDirRole).toBool();
-    if (!isDir)
+    if (!isDir) {
         m_appsManager->launchApp(index);
+        onAppLaunch();
+    }
 }
 
 void FullScreenFrame::onRequestMouseRelease()

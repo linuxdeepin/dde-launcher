@@ -117,8 +117,8 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
     startup = new QAction(m_isItemStartup ? tr("Remove from startup") : tr("Add to startup"), menu);
     uninstall = new QAction(tr("Uninstall"), menu);
     proxy = new QAction(tr("Use a proxy"), menu);
-    moveAction = new QAction(canMoveToTop ? tr("Move to first") : tr("Move to last"));
-    collectAction = new QAction(isInCollectedList ? tr("Remove From Collected List") : tr("Add to Collected List"));
+    moveAction = new QAction(canMoveToTop ? tr("Pin to Top") : tr("Pin to Bottom"));
+    collectAction = new QAction(isInCollectedList ? tr("Remove from favorites") : tr("Add to favorites"));
 
     // 分割线绘制的必要条件是，在打开功能之后，还有其他的功能选项
     if (!hideOpen) {

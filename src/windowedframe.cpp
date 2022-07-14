@@ -89,13 +89,17 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_appsManager(AppsManager::instance())
     , m_appsModel(new AppsListModel(AppsListModel::TitleMode, this))
     , m_allAppsModel(new AppsListModel(AppsListModel::WindowedAll, this))
-    , m_collectionModel(new AppsListModel(AppsListModel::Collect, this))
+    , m_favoriteModel(new AppsListModel(AppsListModel::Collect, this))
     , m_filterModel(new SortFilterProxyModel(this))
     , m_searchWidget(new SearchModeWidget(this))
     , m_bottomBtn(new MiniFrameRightBar(this))
     , m_appsView(new AppListView(this))
-    , m_collectionView(new AppGridView(AppGridView::MainView, this))
+    , m_favoriteView(new AppGridView(AppGridView::MainView, this))
     , m_allAppView(new AppGridView(AppGridView::MainView, this))
+    , m_favoriteLabel(nullptr)
+    , m_emptyFavoriteWidget(nullptr)
+    , m_emptyFavoriteButton(nullptr)
+    , m_emptyFavoriteText(nullptr)
     , m_tipsLabel(new QLabel(this))
     , m_delayHideTimer(new QTimer(this))
     , m_autoScrollTimer(new QTimer(this))
@@ -140,14 +144,14 @@ void WindowedFrame::initUi()
     m_appsView->setAcceptDrops(false);
     m_appsView->installEventFilter(m_eventFilter);
 
-    m_collectionView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_collectionView->setModel(m_collectionModel);
-    m_collectionView->setItemDelegate(appItemDelegate);
-    m_collectionView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    m_collectionView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_collectionView->setDragEnabled(true);
-    m_collectionView->setDragDropMode(QAbstractItemView::DragDrop);
-    m_collectionView->setAcceptDrops(true);
+    m_favoriteView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_favoriteView->setModel(m_favoriteModel);
+    m_favoriteView->setItemDelegate(appItemDelegate);
+    m_favoriteView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    m_favoriteView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_favoriteView->setDragEnabled(true);
+    m_favoriteView->setDragDropMode(QAbstractItemView::DragDrop);
+    m_favoriteView->setAcceptDrops(true);
 
     m_filterModel->setSourceModel(m_allAppsModel);
     m_filterModel->setFilterRole(AppsListModel::AppRawItemInfoRole);
@@ -170,7 +174,6 @@ void WindowedFrame::initUi()
     m_autoScrollTimer->setInterval(DLauncher::APPS_AREA_AUTO_SCROLL_TIMER);
     m_autoScrollTimer->setSingleShot(false);
 
-    setFixedSize(780, 600);
     QHBoxLayout *mainHlayout = new QHBoxLayout;
     mainHlayout->setContentsMargins(20, 22, 10, 10);
     mainHlayout->setSpacing(10);
@@ -179,7 +182,7 @@ void WindowedFrame::initUi()
     QHBoxLayout *topHLayout = new QHBoxLayout;
     topHLayout->setContentsMargins(QMargins(0, 0, 0, 0));
     QLabel *titleLabel = new QLabel(this);
-    titleLabel->setText(tr("App Category"));
+    titleLabel->setText(tr("Categories"));
     topHLayout->addWidget(titleLabel);
     topHLayout->addWidget(m_modeSwitch);
 
@@ -201,38 +204,88 @@ void WindowedFrame::initUi()
     rightHLayout->addWidget(m_searcherEdit);
     rightHLayout->addWidget(m_modeToggleBtn);
 
-    // 收藏应用
-    QVBoxLayout *commonUseVLayout = new QVBoxLayout;
-    commonUseVLayout->setMargin(0);
-    commonUseVLayout->setSpacing(0);
-    commonUseVLayout->setContentsMargins(0, 0, 0, 0);
-    m_collectLabel = new QLabel(tr("Collected Apps"), this);
-    commonUseVLayout->addWidget(m_collectLabel);
-    commonUseVLayout->addWidget(m_collectionView);
+    /*****************收藏应用 *******************/
+    m_favoriteLabel = new QLabel(tr("My Favorites"), this);
 
-    // 所有应用
+    QVBoxLayout *favoriteAppVLayout = new QVBoxLayout;
+    favoriteAppVLayout->setMargin(0);
+    favoriteAppVLayout->setSpacing(0);
+    favoriteAppVLayout->setContentsMargins(0, 0, 0, 0);
+    favoriteAppVLayout->addWidget(m_favoriteLabel);
+    favoriteAppVLayout->addWidget(m_favoriteView);
+
+    /*****************收藏列表为空时的页面 *******************/
+    m_emptyFavoriteButton = new DIconButton(this);
+    m_emptyFavoriteButton->setIcon(DDciIcon::fromTheme("favorite_is_empty"));
+    m_emptyFavoriteButton->setIconSize(QSize(16, 16));
+    m_emptyFavoriteButton->setEnabled(false);
+    m_emptyFavoriteButton->setFlat(true);
+
+    m_emptyFavoriteText = new QLabel(tr("Add your favorite apps here"), this);
+    m_emptyFavoriteText->setAlignment(Qt::AlignCenter);
+
+    QPalette emptyFavoritePal = m_emptyFavoriteText->palette();
+    QColor emptyFavoriteColor = Qt::black;
+    emptyFavoriteColor.setAlpha(255 * 0.7);
+    emptyFavoritePal.setColor(QPalette::Text, emptyFavoriteColor);
+    m_emptyFavoriteText->setPalette(emptyFavoritePal);
+
+    QFont emptyFavoriteFont = m_emptyFavoriteText->font();
+    emptyFavoriteFont.setWeight(500);
+
+    DFontSizeManager::instance()->bind(m_emptyFavoriteText, DFontSizeManager::T8);
+    m_emptyFavoriteText->setFont(emptyFavoriteFont);
+    m_emptyFavoriteText->setWindowOpacity(0.4);
+
+    QHBoxLayout *emptyFavoriteHLayout = new QHBoxLayout;
+    emptyFavoriteHLayout->setMargin(0);
+    emptyFavoriteHLayout->setSpacing(0);
+    emptyFavoriteHLayout->setContentsMargins(0, 0, 0, 0);
+    emptyFavoriteHLayout->addStretch();
+    emptyFavoriteHLayout->addWidget(m_emptyFavoriteButton);
+    emptyFavoriteHLayout->addWidget(m_emptyFavoriteText);
+    emptyFavoriteHLayout->addStretch();
+
+    m_emptyFavoriteWidget = new QWidget(this);
+    m_emptyFavoriteWidget->setLayout(emptyFavoriteHLayout);
+    /****************收藏列表为空时的页面 **********************/
+
+    favoriteAppVLayout->addWidget(m_emptyFavoriteWidget);
+
+    /*****************所有应用*******************/
     QVBoxLayout *allAppVLayout = new QVBoxLayout;
     allAppVLayout->setMargin(0);
     allAppVLayout->setSpacing(0);
     allAppVLayout->setContentsMargins(0, 0, 0, 0);
+
     m_allAppLabel = new QLabel(tr("All Apps"), this);
     allAppVLayout->addWidget(m_allAppLabel);
     allAppVLayout->addWidget(m_allAppView);
 
+    /*****************搜索应用*******************/
+    m_searchWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    QVBoxLayout *resultVLayout = new QVBoxLayout;
+    resultVLayout->setMargin(0);
+    resultVLayout->setSpacing(0);
+    resultVLayout->setContentsMargins(0, 0, 0, 0);
+    resultVLayout->addWidget(m_searchWidget);
+
+    /*****************加入布局*******************/
     rightVLayout->addLayout(rightHLayout);
-    rightVLayout->addLayout(commonUseVLayout);
+    rightVLayout->addLayout(favoriteAppVLayout);
     rightVLayout->addLayout(allAppVLayout);
-    rightVLayout->addWidget(m_searchWidget);
+    rightVLayout->addLayout(resultVLayout);
 
-    m_searchWidget->hide();
-
+    /*****************加入到主布局*******************/
     mainHlayout->addLayout(leftVLayout);
     mainHlayout->addLayout(rightVLayout);
     mainHlayout->setStretch(0, 1);
     mainHlayout->setStretch(1, 2);
     setLayout(mainHlayout);
 
-    setRightViewVisibleState(false);
+    // 初始化界面元素
+    searchAppState(false);
 
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_InputMethodEnabled, true);
@@ -252,6 +305,8 @@ void WindowedFrame::initUi()
     m_modeToggleBtn->setFixedSize(40, 40);
     m_modeToggleBtn->setFocusPolicy(Qt::NoFocus);
 
+    setFixedSize(780, 600);
+
     // 重置控件样式
     resetWidgetStyle();
     m_maskBg->setAutoFillBackground(true);
@@ -260,14 +315,7 @@ void WindowedFrame::initUi()
 
 void WindowedFrame::initConnection()
 {
-    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
-        m_collectionView->setSpacing(m_calcUtil->appItemSpacing());
-    });
-
-    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
-        m_allAppView->setSpacing(m_calcUtil->appItemSpacing());
-    });
-
+    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &WindowedFrame::onLayoutChanged);
     connect(m_modeSwitch, &ModeSwitch::buttonClicked, this, &WindowedFrame::onButtonClick);
 
     connect(m_appsView, &AppListView::requestScrollStop, m_autoScrollTimer, &QTimer::stop);
@@ -296,6 +344,7 @@ void WindowedFrame::initConnection()
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
     connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_appsView, &AppListView::menuHide);
     connect(m_menuWorker.get(), &MenuWorker::requestEditCollected, m_appsManager, &AppsManager::onEditCollected);
+    connect(m_menuWorker.get(), &MenuWorker::requestEditCollected, this, &WindowedFrame::onFavoriteListVisibleChaged);
     connect(m_menuWorker.get(), &MenuWorker::requestMoveToTop, m_appsManager, &AppsManager::onMoveToFirstInCollected);
 
     // 左侧应用列表
@@ -304,10 +353,10 @@ void WindowedFrame::initConnection()
     connect(m_appsView, &QListView::entered, m_appsView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
     connect(m_appsView, &AppListView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
 
-    connect(m_collectionView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
-    connect(m_collectionView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
-    connect(m_collectionView, &AppGridView::entered, m_collectionView, &AppGridView::setCurrentIndex, Qt::QueuedConnection);
-    connect(m_collectionView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
+    connect(m_favoriteView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
+    connect(m_favoriteView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
+    connect(m_favoriteView, &AppGridView::entered, m_favoriteView, &AppGridView::setCurrentIndex, Qt::QueuedConnection);
+    connect(m_favoriteView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
 
     // 所有应用
     connect(m_allAppView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
@@ -348,22 +397,26 @@ void WindowedFrame::setAccessibleName()
     m_searcherEdit->setAccessibleName("WindowedSearcherEdit");
     m_tipsLabel->setAccessibleName("tipsLabel");
     m_allAppView->setAccessibleName("allAppView");
-    m_collectionView->setAccessibleName("collectView");
+    m_favoriteView->setAccessibleName("collectView");
     m_appsView->setAccessibleName("appsView");
     m_searchWidget->setAccessibleName("searchWidget");
 }
 
-void WindowedFrame::setRightViewVisibleState(bool searched)
+void WindowedFrame::searchAppState(bool searched)
 {
-    m_collectLabel->setVisible(!searched);
+    // 设置搜索状态
+    setSearchState(searched);
+
+    // 搜索模式下只显示搜索控件,其他控件都不显示
+    m_favoriteLabel->setVisible(!searched);
+    m_favoriteView->setVisible(!searched && (m_favoriteModel->rowCount(QModelIndex()) > 0));
+
+    m_emptyFavoriteWidget->setVisible(!searched);
+
     m_allAppLabel->setVisible(!searched);
-    m_collectionView->setVisible(!searched);
     m_allAppView->setVisible(!searched);
 
-    // 搜索控件
     m_searchWidget->setVisible(searched);
-
-    update();
 }
 
 void WindowedFrame::showLauncher()
@@ -379,6 +432,7 @@ void WindowedFrame::showLauncher()
     setFocus(Qt::ActiveWindowFocusReason);
 
     m_appsView->setCurrentIndex(QModelIndex());
+    onFavoriteListVisibleChaged();
 
     adjustSize();
     adjustPosition();
@@ -664,6 +718,16 @@ void WindowedFrame::resetWidgetStyle()
     m_maskBg->setPalette(palette);
 }
 
+bool WindowedFrame::searchState() const
+{
+    return m_isSearching;
+}
+
+void WindowedFrame::setSearchState(bool searching)
+{
+    m_isSearching = searching;
+}
+
 void WindowedFrame::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
@@ -698,7 +762,6 @@ void WindowedFrame::showEvent(QShowEvent *e)
 
     QWidget::showEvent(e);
     m_calcUtil->calculateAppLayout(m_allAppView->size());
-    m_calcUtil->calculateAppLayout(m_collectionView->size());
 
     QTimer::singleShot(1, this, [this]() {
         raise();
@@ -908,15 +971,15 @@ void WindowedFrame::onWMCompositeChanged()
 void WindowedFrame::searchText(const QString &text)
 {
     if (text.isEmpty()) {
-        setRightViewVisibleState(false);
+        searchAppState(false);
         hideTips();
     } else {
         QString keyWord = text;
         keyWord = keyWord.remove(QRegExp("\\s"));
         emit searchApp(keyWord);
 
-        setRightViewVisibleState(true);
         QRegExp regExp(keyWord, Qt::CaseInsensitive);
+        searchAppState(true);
         m_filterModel->setFilterRegExp(regExp);
         m_searchWidget->setSearchModel(m_filterModel);
         m_focusPos = Search;
@@ -1033,8 +1096,8 @@ void WindowedFrame::refreshView(const AppsListModel::AppCategory category)
 {
     switch (category) {
     case AppsListModel::Collect:
-        m_collectionModel->clearDraggingIndex();
-        m_collectionView->update();
+        m_favoriteModel->clearDraggingIndex();
+        m_favoriteView->update();
         break;
     default:
         break;
@@ -1047,6 +1110,30 @@ void WindowedFrame::onButtonClick(int buttonid)
     m_appsView->setCurrentIndex(QModelIndex());
 }
 
+void WindowedFrame::onFavoriteListVisibleChaged()
+{
+    if (searchState())
+        return;
+
+    const bool visible = (m_favoriteModel->rowCount(QModelIndex()) > 0);
+
+    // 收藏列表为空时显示空页面
+    m_emptyFavoriteWidget->setVisible(!visible);
+
+    // 收藏列表
+    m_favoriteView->setVisible(visible);
+}
+
+void WindowedFrame::onLayoutChanged()
+{
+    int itemSpacing = CalculateUtil::instance()->appItemSpacing();
+    QMargins margin = QMargins(0, 0, 0, 0);
+    m_favoriteView->setSpacing(itemSpacing);
+    m_favoriteView->setViewportMargins(margin);
+    m_allAppView->setSpacing(itemSpacing);
+    m_allAppView->setViewportMargins(margin);
+}
+
 void WindowedFrame:: paintEvent(QPaintEvent *e)
 {
     DBlurEffectWidget::paintEvent(e);
@@ -1055,3 +1142,4 @@ void WindowedFrame:: paintEvent(QPaintEvent *e)
     // 所有左侧工具栏背景绘制应该在左侧工具中
     // 不然绘制出的背景会重新附上透明度达不到想要的效果
 }
+

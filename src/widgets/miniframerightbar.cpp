@@ -36,7 +36,7 @@
 
 MiniFrameRightBar::MiniFrameRightBar(QWidget *parent)
     : QWidget(parent)
-    , m_settingsBtn(new MiniFrameButton(tr("Control Center"), this))
+    , m_settingsBtn(new MiniFrameButton(tr("Settings"), this))
     , m_powerBtn(new MiniFrameButton(tr("Power"), this))
     , m_buttonGroup(new QButtonGroup(this))
     , m_hideList(SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "mini-frame-right-bar-hide-list", QStringList()).toStringList())

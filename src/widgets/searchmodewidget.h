@@ -33,7 +33,14 @@ public:
 signals:
     void connectViewEvent(AppGridView* pView);
 
+private slots:
+    void onLayoutChanged();
+
 private:
+    QWidget *m_nativeWidget;
+    QWidget *m_outsideWidget;
+    QWidget *m_emptyWidget;
+
     QLabel *m_nativeLabel;
     QLabel *m_outsideLabel;
 
@@ -43,12 +50,8 @@ private:
     AppsListModel *m_nativeModel;
     AppsListModel *m_outsideModel;
 
-    QLabel *m_emptyIcon;
+    DIconButton *m_iconButton;
     QLabel *m_emptyText;
-
-    QWidget *m_nativeWidget;
-    QWidget *m_outsideWidget;
-    QWidget *m_emptyWidget;
 
     DBusLauncher *m_launcherInter;
 };

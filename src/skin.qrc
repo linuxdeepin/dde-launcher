@@ -272,4 +272,8 @@
         <file>skin/icons/title-icon-normal.svg</file>
         <file>skin/icons/title-icon-checked.svg</file>
     </qresource>
+    <qresource prefix="/dsg/built-in-icons">
+        <file alias="search_no_result.dci">skin/bloom/search_no_result.dci</file>
+        <file alias="favorite_is_empty.dci">skin/bloom/favorite_is_empty.dci</file>
+    </qresource>
 </RCC>

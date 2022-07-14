@@ -103,7 +103,7 @@ private:
     void initUi();
     void initConnection();
     void setAccessibleName();
-    void setRightViewVisibleState(bool searched = false);
+    void searchAppState(bool searched = false);
 
     void showLauncher() override;
     void hideLauncher() override;
@@ -118,6 +118,8 @@ private:
     QPainterPath getCornerPath(AnchoredCornor direction);
 
     void resetWidgetStyle();
+    bool searchState() const;
+    void setSearchState(bool searching);
 
 protected:
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
@@ -149,6 +151,8 @@ private slots:
     void addViewEvent(AppGridView *pView);
     void refreshView(const AppsListModel::AppCategory category);
     void onButtonClick(int buttonid);
+    void onFavoriteListVisibleChaged();
+    void onLayoutChanged();
 
 private:
 #ifdef USE_AM_API
@@ -166,16 +170,21 @@ private:
 
     AppsListModel *m_appsModel;
     AppsListModel *m_allAppsModel;
-    AppsListModel *m_collectionModel;
+    AppsListModel *m_favoriteModel;
     SortFilterProxyModel *m_filterModel;
     SearchModeWidget *m_searchWidget;
 
     QWidget *m_rightWidget;
     MiniFrameRightBar *m_bottomBtn;
     AppListView *m_appsView;
-    AppGridView *m_collectionView;
+    AppGridView *m_favoriteView;
     AppGridView *m_allAppView;
-    QLabel *m_collectLabel;
+
+    QLabel *m_favoriteLabel;
+    QWidget *m_emptyFavoriteWidget;
+    DIconButton *m_emptyFavoriteButton;
+    QLabel *m_emptyFavoriteText;
+
     QLabel *m_allAppLabel;
     QLabel *m_tipsLabel;
     QTimer *m_delayHideTimer;
@@ -194,6 +203,7 @@ private:
     bool m_enterSearchEdit;
     const QScreen *m_curScreen;
     ModeSwitch *m_modeSwitch;
+    bool m_isSearching;
 };
 
 #endif // WINDOWEDFRAME_H

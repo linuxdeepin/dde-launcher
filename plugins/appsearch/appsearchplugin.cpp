@@ -43,7 +43,7 @@ AppInfoList AppSearchPlugin::search(const QString &searchText)
     list.m_categoryId = 61649644891;
     list.m_progressValue = 50;
     list.m_status = 1;
-    list.m_description = "Your searched apps in the appstore:";
+    list.m_description = "Apps found in App Store";
     appList << list;
     return appList;
 #else

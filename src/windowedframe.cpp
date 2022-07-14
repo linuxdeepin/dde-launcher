@@ -816,7 +816,7 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
             m_searcherEdit->lineEdit()->clearFocus();
     }
 
-    if (watched == qApp && event->type() == QEvent::ApplicationDeactivate) {
+    if (isActiveWindow() && watched == qApp && event->type() == QEvent::ApplicationDeactivate) {
         hideLauncher();
     }
     return QWidget::eventFilter(watched, event);

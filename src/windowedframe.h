@@ -129,7 +129,7 @@ private slots:
     void prepareHideLauncher();
     void recoveryAll();
     void onOpacityChanged(const double value);
-    void onDockInfoChange();
+    void onDockGeometryChanged();
     void updatePosition();
     void onHideMenu();
 

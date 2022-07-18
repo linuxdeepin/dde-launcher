@@ -108,7 +108,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_modeToggleBtn(new ModeToggleButton(this))
     , m_searcherEdit(new DSearchEdit(this))
     , m_enterSearchEdit(false)
-    , m_curScreen(m_appsManager->currentScreen())
+    , m_dockFrontInfc(new DBusDockInterface(this))
 {
     if (!getDConfigValue("enableFullScreenMode", true).toBool())
         m_modeToggleBtn->hide();
@@ -251,9 +251,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
     onOpacityChanged(m_appearanceInter->opacity());
 
-    connect(m_curScreen, &QScreen::geometryChanged, this, &WindowedFrame::onScreenInfoChange);
-    connect(m_curScreen, &QScreen::orientationChanged, this, &WindowedFrame::onScreenInfoChange);
-    connect(qApp, &QApplication::primaryScreenChanged, this, &WindowedFrame::onScreenInfoChange);
+    connect(m_dockFrontInfc, &DBusDockInterface::geometryChanged, this, &WindowedFrame::onDockGeometryChanged);
 
     connect(this, &WindowedFrame::visibleChanged, this, &WindowedFrame::onHideMenu);
 
@@ -291,6 +289,7 @@ void WindowedFrame::showLauncher()
 
     // 启动器跟随任务栏位置
     adjustPosition();
+
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
     show();
@@ -1013,26 +1012,20 @@ void WindowedFrame::onOpacityChanged(const double value)
     setMaskAlpha(value * 255);
 }
 
-void WindowedFrame::onScreenInfoChange()
+void WindowedFrame::onDockGeometryChanged()
 {
-    m_curScreen->disconnect();
-    m_curScreen = m_appsManager->currentScreen();
-
     adjustSize();
     updatePosition();
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
-
-    connect(m_curScreen, &QScreen::geometryChanged, this, &WindowedFrame::onScreenInfoChange);
-    connect(m_curScreen, &QScreen::orientationChanged, this, &WindowedFrame::onScreenInfoChange);
 }
 
 void WindowedFrame::updatePosition()
 {
-   // 该接口获取数据是翻转后的数据
-   DBusDockInterface inter;
-   QRect dockGeo = inter.geometry();
-   QRect dockRect = QRect(scaledPosition(dockGeo.topLeft()),scaledPosition(dockGeo.bottomRight()));
+    if (!m_dockFrontInfc || !m_dockInter)
+        return;
+
+    QRect dockRect = m_dockFrontInfc->geometry();
 
     int dockSpacing = 0;
     if (m_dockInter->displayMode() == DOCK_FASHION)

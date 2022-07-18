@@ -51,7 +51,7 @@ DWIDGET_USE_NAMESPACE
 
 using Appearance = com::deepin::daemon::Appearance;
 class QLabel;
-
+class DBusDockInterface;
 class WindowedFrame : public DBlurEffectWidget, public LauncherInterface
 {
     Q_OBJECT
@@ -129,7 +129,7 @@ private slots:
     void prepareHideLauncher();
     void recoveryAll();
     void onOpacityChanged(const double value);
-    void onScreenInfoChange();
+    void onDockInfoChange();
     void updatePosition();
     void onHideMenu();
 
@@ -165,7 +165,7 @@ private:
     ModeToggleButton *m_modeToggleBtn;   // 小窗口右上角窗口模式切换按钮
     DSearchEdit *m_searcherEdit;         // 搜索控件
     bool m_enterSearchEdit;
-    const QScreen *m_curScreen;
+    const DBusDockInterface *m_dockFrontInfc = nullptr;
 };
 
 #endif // WINDOWEDFRAME_H

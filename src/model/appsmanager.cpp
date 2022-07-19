@@ -1216,10 +1216,6 @@ void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &d
  */
 void AppsManager::onSearchTimeOut()
 {
-    if (m_searchText.isEmpty()) {
-        return;
-    }
-
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(m_launcherInter->Search(m_searchText), this);
     connect(watcher, &QDBusPendingCallWatcher::finished, this, [ = ](QDBusPendingCallWatcher * w) {
         if (w->isError()) qDebug() << w->error();

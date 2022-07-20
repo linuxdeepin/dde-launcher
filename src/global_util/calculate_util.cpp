@@ -72,7 +72,6 @@ int CalculateUtil::calculateIconSize(int mode)
     switch (m_dockInter->position()) {
     case DLauncher::DOCK_POS_TOP:
         topSpacing += QRect(m_dockInter->frontendRect()).height();
-        bottomSpacing = topSpacing + DLauncher::APPS_AREA_TOP_MARGIN;
         break;
     case DLauncher::DOCK_POS_BOTTOM:
         bottomSpacing += QRect(m_dockInter->frontendRect()).height();

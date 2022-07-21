@@ -181,6 +181,7 @@ AppsManager::AppsManager(QObject *parent)
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::NewAppLaunched, this, &AppsManager::markLaunched);
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallSuccess, this, &AppsManager::abandonStashedItem);
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallFailed, this, &AppsManager::onUninstallFail);
+    connect(m_amDbusLauncherInter, &AMDBusLauncherInter::AppSuffixChanged, this, &AppsManager::onAppSuffixChange);
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::ItemChanged, this, qOverload<const QString &, const ItemInfo_v2 &, qlonglong>(&AppsManager::handleItemChanged));
 
     connect(m_amDbusDockInter, &AMDBusDockInter::IconSizeChanged, this, &AppsManager::IconSizeChanged, Qt::QueuedConnection);
@@ -901,6 +902,11 @@ void AppsManager::onUninstallFail(const QString &appKey)
     emit dataChanged(AppsListModel::FullscreenAll);
 }
 
+void AppsManager::onAppSuffixChange()
+{
+    refreshAllList();
+}
+
 const ItemInfoList_v1 AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const
 {
     switch (category) {
@@ -1416,7 +1422,8 @@ void AppsManager::readCollectedCacheData()
         m_collectSortedList.clear();
         filterCollectedApp(tempData);
     } else {
-        m_collectSortedList.append(readCacheData(m_collectedSetting->value("lists").toMap()));
+        if (m_collectSortedList.isEmpty())
+            m_collectSortedList.append(readCacheData(m_collectedSetting->value("lists").toMap()));
     }
 }
 

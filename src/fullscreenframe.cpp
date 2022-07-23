@@ -378,7 +378,17 @@ void FullScreenFrame::scrollCurrent()
 void FullScreenFrame::addViewEvent(AppGridView *pView)
 {
     connect(pView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
-    connect(pView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(pView, &AppGridView::entered, m_appItemDelegate, [=](const QModelIndex &index) {
+        static int lastIndex = -1;
+        m_appItemDelegate->setCurrentIndex(index);
+        if (lastIndex == index.row()) {
+            return;
+        }
+        lastIndex = index.row();
+        if (m_menuWorker->getMenuVisible()) {
+            m_menuWorker->setMenuVisible(false);
+        }
+    });
     connect(pView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
     connect(pView, &AppGridView::clicked, this, &FullScreenFrame::hide);
     connect(pView, &AppGridView::requestMouseRelease,this,  [ = ]() {

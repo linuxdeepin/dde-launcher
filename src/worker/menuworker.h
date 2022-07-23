@@ -70,6 +70,8 @@ public:
     QRect menuGeometry() const {return m_menuGeometry;}
     void creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper);
     bool isMenuVisible();
+    bool getMenuVisible();
+    void setMenuVisible(const bool &state);
 
 signals:
     void appLaunched();

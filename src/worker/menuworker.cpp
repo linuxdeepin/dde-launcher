@@ -189,6 +189,22 @@ bool MenuWorker::isMenuVisible()
         return false;
 }
 
+void MenuWorker::setMenuVisible(const bool &state)
+{
+    if (!m_menu) {
+        return;
+    }
+    m_menu->setVisible(state);
+}
+
+bool MenuWorker::getMenuVisible()
+{
+    if (m_menu) {
+        return m_menu->isVisible();
+    }
+    return false;
+}
+
 void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)
 {
     setCurrentModelIndex(index);

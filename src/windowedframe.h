@@ -144,7 +144,6 @@ private:
     AppsManager *m_appsManager;
     AppListView *m_appsView;
     AppsListModel *m_appsModel;          // 应用列表
-    AppsListModel *m_usedModel;
     AppsListModel *m_searchModel;        // 搜索后的应用列表
 
     QWidget *m_rightWidget;
@@ -166,6 +165,7 @@ private:
     DSearchEdit *m_searcherEdit;         // 搜索控件
     bool m_enterSearchEdit;
     const DBusDockInterface *m_dockFrontInfc = nullptr;
+    int m_currentAppListIndex;
 };
 
 #endif // WINDOWEDFRAME_H

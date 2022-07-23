@@ -114,6 +114,9 @@ public:
 
     void setDrawBackground(bool draw);
 
+Q_SIGNALS:
+    void notifyDrawBackgroundChanged();
+
 public slots:
     void clearDraggingIndex();
     void setCategory(const AppCategory category);

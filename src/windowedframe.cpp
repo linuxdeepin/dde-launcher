@@ -109,6 +109,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_searcherEdit(new DSearchEdit(this))
     , m_enterSearchEdit(false)
     , m_dockFrontInfc(new DBusDockInterface(this))
+    , m_currentAppListIndex(m_appsView->currentIndex().row())
 {
     if (!getDConfigValue("enableFullScreenMode", true).toBool())
         m_modeToggleBtn->hide();
@@ -237,8 +238,36 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_appsView, &AppListView::menuHide); // 当菜单消失时通知菜单结束了
     connect(m_appsView, &AppListView::requestSwitchToCategory, this, &WindowedFrame::switchToCategory);
 
-    connect(m_appsView, &AppListView::requestEnter, m_appsModel, &AppsListModel::setDrawBackground);
-    connect(m_appsView, &AppListView::requestEnter, m_searchModel, &AppsListModel::setDrawBackground);
+    connect(m_appsView, &AppListView::requestEnter, m_menuWorker.get(), [this](bool state) {
+        if (!m_menuWorker.get()->getMenuVisible() && state) {
+            m_appsModel->setDrawBackground(state);
+            QTimer::singleShot(20, this, [this]() {
+                m_currentAppListIndex = m_appsView->currentIndex().row();
+            });
+        }
+    });
+
+    connect(m_appsView, &AppListView::requestEnter, this, [=](bool state) {
+        // 确保窗口模式搜索，键选中效果不消失
+        if (m_searchModel && state) {
+            m_searchModel->setDrawBackground(state);
+        }
+    });
+
+    auto fun_listview_changed = [this]() {
+        if (!m_menuWorker.get() || !m_appsView) return;
+        if (m_menuWorker.get()->getMenuVisible() && m_appsView->currentIndex().row() != m_currentAppListIndex) {
+            m_currentAppListIndex = m_appsView->currentIndex().row();
+            m_menuWorker.get()->setMenuVisible(false);
+        }
+    };
+
+    connect(m_searchModel, &QAbstractItemModel::dataChanged, this, [=]() {
+        fun_listview_changed();
+    });
+    connect(m_searchModel, &AppsListModel::notifyDrawBackgroundChanged, this, [=]() {
+        fun_listview_changed();
+    });
 
     connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &WindowedFrame::hideTips);
@@ -1068,6 +1097,7 @@ void WindowedFrame::onHideMenu()
 {
     if (m_menuWorker.get() && !isVisible())
         m_menuWorker.get()->onHideMenu();
+    m_currentAppListIndex = -1;
 }
 
 void WindowedFrame:: paintEvent(QPaintEvent *e)

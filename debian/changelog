@@ -1,3 +1,23 @@
+dde-launcher (6.0.3) unstable; urgency=medium
+
+  [ TagBuilder ]
+  * feat:  给小窗口排序模式切换按钮增加皮肤(Task: 149869)(Influence: 启动器－小窗口界面排序模块切换控件界面美化)
+  * fix: 修复全屏模式应用全部拖入到应用文件夹,小窗口数据显示异常的问题(Bug: 139619, 142249, 143561, 143633)(Influence: 启动器-全屏模式和窗口模式下操作应用列表, 不会相互影响)
+  * chore: 修改AM的宏配置(Task: 134563)(Influence: AM适配)
+  * chore:  代码整理(Task: 135569)(Influence: 无)
+  * fix: 临时关闭AM宏(Task: 162227)(Influence: 临时关闭AM宏,使用daemon原始数据.)
+  * fix: 修复字母排序模式下应用列表排序异常问题(Bug: 139777)(Influence: 启动器-小窗口-字母排序模式, 排序满足需求条件.)
+  * fix: 修复从Bug-125361发现的一处逻辑错误(Task: 162407)(Influence: 无)
+  * fix: 修复文件夹相关问题(Task: 155249)(Bug: 142321)(Influence: 1. 文件夹展开窗口内拖动应用动画正常.)
+  * fix: 修复拖动文件夹和 应用|文件夹 可以合并成功的问题(Bug: 146605)(Influence: 只有拖拽对象为普通应用时, 才允许合并入(或者创建)文件夹)
+  * feat: recompile(Influence: recompile)
+  * fix: 修复文件夹无法打开的问题.(Bug: 146601, 139591)(Influence: 启动器-全屏-文件夹-可以正常打开.)
+  * feat: 配置需求功能实现(Task: 152865)(Influence: 配置列表中的应用无法通过拖拽从启动器到任务栏驻留)
+  * feat: 玲珑包后缀提供配置功能实现(Task: 152805)(Influence: 默认隐藏后缀,开启,玲珑应用则显示,否则,隐藏.)
+  * fix: 修复全屏模式下单击应用或者文件夹内应用界面没有关闭的问题(Bug: 147567, 142321, 147929)(Influence: 全屏模式下单击应用或者文件夹内应用后, 全屏界面隐藏)
+
+ -- caixiangrong <caixiangrong@uniontech.com>  Mon, 25 Jul 2022 14:12:26 +0800
+
 dde-launcher (6.0.2) unstable; urgency=medium
 
   * release 6.0.2

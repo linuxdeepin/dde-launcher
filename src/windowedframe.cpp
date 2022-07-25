@@ -905,6 +905,8 @@ void WindowedFrame::onToggleFullScreen()
     if (delegate)
         delegate->setActived(false);
 
+    m_modeToggleBtn->setHovered(false);
+
     // 全屏状态标识
     m_calcUtil->setFullScreen(true);
 

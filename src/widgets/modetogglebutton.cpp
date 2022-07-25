@@ -38,6 +38,12 @@ ModeToggleButton::ModeToggleButton(QWidget *parent)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &ModeToggleButton::resetStyle);
 }
 
+void ModeToggleButton::setHovered(bool hover)
+{
+    m_hover = hover;
+    update();
+}
+
 void ModeToggleButton::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);

@@ -34,6 +34,7 @@ class ModeToggleButton : public DToolButton
 
 public:
     explicit ModeToggleButton(QWidget *parent = nullptr);
+    void setHovered(bool hover);
 
 protected:
     void paintEvent(QPaintEvent *event) override;

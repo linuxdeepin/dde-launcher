@@ -451,8 +451,7 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
 
     // 拖动应用到任务栏驻留针对不同应用提供配置功能, 默认为启用
     const QString appKey = index.data(AppKeyRole).toString();
-    bool isDir = index.data(ItemIsDirRole).toBool();
-    if (!getDConfigValue(DLauncher::UNABLE_TO_DOCK_LIST, QStringList()).toStringList().contains(appKey) && !isDir)
+    if (!getDConfigValue(DLauncher::UNABLE_TO_DOCK_LIST, true).toStringList().contains(appKey))
         mime->setData("RequestDock", index.data(AppDesktopRole).toByteArray());
 
     mime->setData("AppKey", index.data(AppKeyRole).toByteArray());

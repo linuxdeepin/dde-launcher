@@ -1044,7 +1044,7 @@ void WindowedFrame::refreshView(const AppsListModel::AppCategory category)
 
 void WindowedFrame::onButtonClick(int buttonid)
 {
-    m_appsModel->setCategory((buttonid == ModeSwitch::TitleMode) ? AppsListModel::TitleMode : AppsListModel::LetterMode);
+    m_appsModel->setCategory((buttonid == 1) ? AppsListModel::TitleMode : AppsListModel::LetterMode);
     m_appsView->setCurrentIndex(QModelIndex());
 }
 

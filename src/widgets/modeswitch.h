@@ -17,11 +17,6 @@ class ModeSwitch : public QWidget
     Q_OBJECT
 
 public:
-    enum WindowMode {
-        TitleMode = 1,  // 标题分类模式
-        LetterMode      // 字母排序模式
-    };
-
     explicit ModeSwitch(QWidget *parent = Q_NULLPTR);
     ~ModeSwitch();
 

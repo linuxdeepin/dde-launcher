@@ -83,8 +83,8 @@ void ModeSwitch::initUi()
     m_titleModeButton->setContentsMargins(6, 4, 6, 4);
     m_letterModeButton->setContentsMargins(6, 4, 6, 4);
 
-    m_buttonGrp->addButton(m_titleModeButton, TitleMode);
-    m_buttonGrp->addButton(m_letterModeButton, LetterMode);
+    m_buttonGrp->addButton(m_titleModeButton, 1);
+    m_buttonGrp->addButton(m_letterModeButton, 2);
     m_buttonGrp->setExclusive(true);
 
     QHBoxLayout *hLayout = new QHBoxLayout;
@@ -142,8 +142,8 @@ void ModeSwitch::updateIcon()
 
 void ModeSwitch::changeCategoryMode()
 {
-    // 默认为字母模式
-    int id = LetterMode;
+    // 默认为标题分类模式
+    int id = 1;
     if (m_modeSettings->contains("mode"))
         id = m_modeSettings->value("mode").toInt();
 

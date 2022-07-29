@@ -816,7 +816,9 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
             m_searcherEdit->lineEdit()->clearFocus();
     }
 
-    if (isActiveWindow() && watched == qApp && event->type() == QEvent::ApplicationDeactivate) {
+    // 第一次弹出菜单时会将界面设置为ApplicationDeactivate状态，导致再次弹出菜单时会满足条件从而隐藏界面
+    // 此时需要判断下是否因为弹出菜单导致的界面ApplicationDeactivate状态
+    if (isActiveWindow() && watched == qApp && event->type() == QEvent::ApplicationDeactivate && !m_menuWorker->isMenuShown()) {
         hideLauncher();
     }
     return QWidget::eventFilter(watched, event);

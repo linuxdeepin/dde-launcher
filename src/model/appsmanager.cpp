@@ -523,10 +523,18 @@ void AppsManager::removeNonexistentData()
     }
 
     // 移除 m_fullscreenUsedSortedList 所有应用中不存在的应用
-    foreach (const ItemInfo_v1 &info, m_fullscreenUsedSortedList) {
-        int idx = m_allAppInfoList.indexOf(info);
-        if (idx == -1)
-            m_fullscreenUsedSortedList.removeOne(info);
+    for (ItemInfo_v1 &info : m_fullscreenUsedSortedList) {
+        if (info.m_isDir) {
+            // 从文件夹中移除不存在的应用
+            for (ItemInfo_v1 &dirItem : info.m_appInfoList) {
+                if (!m_allAppInfoList.contains(dirItem))
+                    info.m_appInfoList.removeOne(dirItem);
+            }
+        } else {
+            //  从全屏所有应用列表中移除不存在的应用
+            if (!m_allAppInfoList.contains(info))
+                m_fullscreenUsedSortedList.removeOne(info);
+        }
     }
 
     // 移除 m_collectSortedList 收藏应用中不存在的应用
@@ -534,6 +542,12 @@ void AppsManager::removeNonexistentData()
         int idx = m_allAppInfoList.indexOf(info);
         if (idx == -1)
             m_collectSortedList.removeOne(info);
+    }
+
+    // 从小窗口移除不存在的应用
+    foreach (const ItemInfo_v1 &info, m_windowedUsedSortedList) {
+        if (!m_allAppInfoList.contains(info))
+            m_windowedUsedSortedList.removeOne(info);
     }
 }
 
@@ -1231,7 +1245,7 @@ void AppsManager::refreshCategoryInfoList()
     // 4. 从缓存中读取已分类的应用数据, 降低数据处理次数
     for (int startIndex = AppsListModel::Internet; startIndex < static_cast<int>(AppsListModel::Others); startIndex++) {
         ItemInfoList itemInfoList;
-        ItemInfoList_v1 itemInfoList_v1;
+        ItemInfoList_v1 itemInfoList_v1 = m_appInfos.value(AppsListModel::AppCategory(startIndex));
 
         // 初始化时读取缓存配置, 其他情况不用读取.
         if (m_appInfos.isEmpty()) {
@@ -1241,7 +1255,7 @@ void AppsManager::refreshCategoryInfoList()
                 categoryIn >> itemInfoList;
                 itemInfoList_v1 = ItemInfo_v1::itemListToItemV1List(itemInfoList);
             } else if (m_categorySetting->contains(QString("lists_%1").arg(startIndex))) {
-                itemInfoList_v1 << readCacheData(m_categorySetting->value(QString("lists_%1").arg(startIndex)).toMap());
+                itemInfoList_v1 = readCacheData(m_categorySetting->value(QString("lists_%1").arg(startIndex)).toMap());
             }
         }
 
@@ -1260,6 +1274,9 @@ void AppsManager::refreshCategoryInfoList()
 #else
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
 #endif
+
+    // 6. 清除不存在的数据
+    removeNonexistentData();
 
     generateCategoryMap();
 }
@@ -1372,10 +1389,8 @@ void AppsManager::generateCategoryMap()
         }
     }
 
-    removeNonexistentData();
     getCategoryListAndSortCategoryId();
     generateTitleCategoryList();
-
     generateLetterCategoryList();
 }
 

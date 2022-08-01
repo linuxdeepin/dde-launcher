@@ -957,8 +957,11 @@ void FullScreenFrame::searchTextChanged(const QString &keywords, bool enableUpda
     } else {
         updateDisplayMode(SEARCH);
 
-        emit searchApp(keywords.trimmed());
-        QRegExp regExp(keywords.trimmed(), Qt::CaseInsensitive);
+        QString keyWord = keywords;
+        keyWord = keyWord.remove(QRegExp("\\s"));
+
+        emit searchApp(keyWord);
+        QRegExp regExp(keyWord, Qt::CaseInsensitive);
         m_filterModel->setFilterRegExp(regExp);
         m_searchModeWidget->setSearchModel(m_filterModel);
     }

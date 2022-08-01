@@ -914,10 +914,12 @@ void WindowedFrame::searchText(const QString &text)
         setRightViewVisibleState(false);
         hideTips();
     } else {
-        emit searchApp(text.trimmed());
+        QString keyWord = text;
+        keyWord = keyWord.remove(QRegExp("\\s"));
+        emit searchApp(keyWord);
 
         setRightViewVisibleState(true);
-        QRegExp regExp(text.trimmed(), Qt::CaseInsensitive);
+        QRegExp regExp(keyWord, Qt::CaseInsensitive);
         m_filterModel->setFilterRegExp(regExp);
         m_searchWidget->setSearchModel(m_filterModel);
         m_focusPos = Search;

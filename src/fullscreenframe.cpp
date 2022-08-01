@@ -719,11 +719,9 @@ void FullScreenFrame::onAppClick(const QModelIndex &index)
 
 void FullScreenFrame::onDrawerAppClick(const QModelIndex &index)
 {
-    // 点击应用文件夹展开窗口空白处隐藏文件夹展开窗口
-    if (!index.isValid()) {
-        m_drawerWidget->hide();
+    // 点击应用文件夹展开窗口空白处, 不响应
+    if (!index.isValid())
         return;
-    }
 
     const bool isDir = index.data(AppsListModel::ItemIsDirRole).toBool();
     if (!isDir) {

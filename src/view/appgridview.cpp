@@ -43,6 +43,7 @@
 #include <QPainter>
 #include <QScrollBar>
 #include <QVBoxLayout>
+#include <QSortFilterProxyModel>
 
 DGUI_USE_NAMESPACE
 
@@ -499,8 +500,16 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     setViewMoveState();
 
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
-    if (!listModel)
-        return;
+    if (!listModel) {
+        // 搜索模式时, model类对象 为 SortFilterProxyModel
+        QSortFilterProxyModel *filterModel = qobject_cast<QSortFilterProxyModel *>(model());
+        if (!filterModel)
+            return;
+
+        listModel = qobject_cast<AppsListModel *>(filterModel->sourceModel());
+        if (!listModel)
+            return;
+    }
 
     const QModelIndex &dragIndex = index;
     const qreal ratio = qApp->devicePixelRatio();

@@ -235,10 +235,9 @@ ItemInfoList_v1 AppsManager::sortByLetterOrder(ItemInfoList_v1 &list)
         ItemInfoList_v1 groupList;
         for (int j = 0; j < list.size(); j++) {
             const ItemInfo_v1 &info = list.at(j);
-            // 去掉字符串中的数字
+            // 去掉字符串中的数字(表示拼音中的声调)
             const QString pinYinStr = Chinese2Pinyin(info.m_name).remove(QRegExp("\\d"));
-            QChar firstKey = pinYinStr.front();
-            if (firstKey.isNumber()) {
+            if (info.startWithNum()) {
                 if (!groupList.contains(titleInfo) && (!letterGroupList.contains(titleInfo)))
                     groupList.append(titleInfo);
 

@@ -580,11 +580,8 @@ void WindowedFrame::launchCurrentApp()
 
     if (currentIdx.isValid() && currentIdx.model() == m_appsView->model()) {
         m_appsManager->launchApp(currentIdx);
-    } else {
-        m_appsManager->launchApp(m_appsView->model()->index(0, 0));
+        hideLauncher();
     }
-
-    hideLauncher();
 }
 
 void WindowedFrame::uninstallApp(const QString &appKey)

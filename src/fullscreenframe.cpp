@@ -631,12 +631,8 @@ void FullScreenFrame::launchCurrentApp()
                 (category == AppsListModel::Search && m_displayMode == SEARCH)) {
             m_appsManager->launchApp(index);
             hide();
-            return;
         }
     }
-
-    m_appsManager->launchApp(m_multiPagesView->getAppItem(0));
-    hide();
 }
 
 void FullScreenFrame::regionMonitorPoint(const QPoint &point, int flag)

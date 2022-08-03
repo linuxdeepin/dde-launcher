@@ -174,7 +174,7 @@ private:
     void removeNonexistentData();
     void getCategoryListAndSortCategoryId();
     void refreshCategoryInfoList();
-    void refreshUsedInfoList();
+    void refreshItemInfoList();
     void saveAppCategoryInfoList();
     void updateUsedListInfo();
     void generateCategoryMap();

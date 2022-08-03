@@ -437,13 +437,33 @@ void AppsManager::sortByPresetOrder(ItemInfoList_v1 &processList)
 
 void AppsManager::sortByUseFrequence(ItemInfoList_v1 &processList)
 {
-    std::sort(processList.begin(), processList.end(), [](const ItemInfo_v1 & info1, const ItemInfo_v1 & info2) {
-        // 当前系统时间-秒数
-        qint64 second = QDateTime::currentMSecsSinceEpoch() / 1000;
-        qreal average1 = (info1.m_openCount * 1.0 / ((second - info1.m_installedTime) / USER_SORT_UNIT_TIME));
-        qreal average2 = (info2.m_openCount * 1.0 / ((second - info2.m_installedTime) / USER_SORT_UNIT_TIME));
+    const qint64 currentTime = QDateTime::currentMSecsSinceEpoch() / 1000;
+    std::sort(processList.begin(), processList.end(), [ = ](const ItemInfo_v1 &itemInfo1, const ItemInfo_v1 &itemInfo2) {
+        const bool itemANewInstall = m_newInstalledAppsList.contains(itemInfo1.m_key);
+        const bool itemBNewInstall = m_newInstalledAppsList.contains(itemInfo2.m_key);
+        if (itemANewInstall || itemBNewInstall) {
+            if(itemANewInstall && itemBNewInstall)
+                return (itemInfo1.m_installedTime > itemInfo2.m_installedTime);
 
-        return average1 > average2;
+            if(itemANewInstall)
+                return true;
+
+            if(itemBNewInstall)
+                return false;
+        }
+
+        const qint64 itemAFirstRunTime = itemInfo1.m_firstRunTime;
+        const qint64 itemBFirstRunTime = itemInfo2.m_firstRunTime;
+
+        // If it's past time, will be sorted by open count
+        if ((itemAFirstRunTime > currentTime) || (itemBFirstRunTime > currentTime))
+            return itemInfo1.m_openCount > itemInfo2.m_openCount;
+
+        qint64 itemAHoursDiff = (currentTime - itemAFirstRunTime) / USER_SORT_UNIT_TIME + 1;
+        qint64 itemBHoursDiff = (currentTime - itemBFirstRunTime) / USER_SORT_UNIT_TIME + 1;
+
+        // Average number of starts
+        return ((static_cast<double>(itemInfo1.m_openCount) / itemAHoursDiff) > (static_cast<double>(itemInfo2.m_openCount) / itemBHoursDiff));
     });
 }
 
@@ -633,7 +653,7 @@ void AppsManager::stashItem(const QString &appKey)
         m_allAppInfoList.removeOne(info);
 
         generateCategoryMap();
-        refreshUsedInfoList();
+        refreshItemInfoList();
         saveAppCategoryInfoList();
         break;
     }
@@ -719,7 +739,7 @@ void AppsManager::refreshAllList()
     m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
 #endif
     refreshCategoryInfoList();
-    refreshUsedInfoList();
+    refreshItemInfoList();
     saveAppCategoryInfoList();
     readCollectedCacheData();
 
@@ -757,6 +777,19 @@ void AppsManager::launchApp(const QModelIndex &index)
     const QString appDesktop = index.data(AppsListModel::AppDesktopRole).toString();
     QString appKey = index.data(AppsListModel::AppKeyRole).toString();
     markLaunched(appKey);
+
+    // 更新应用的打开次数以及首次启动的时间戳
+    for (ItemInfo_v1 &info: m_allAppInfoList) {
+        if (info.m_key == appKey) {
+            ++info.m_openCount;
+            if (info.m_firstRunTime == 0)
+                info.m_firstRunTime = QDateTime::currentMSecsSinceEpoch() / 1000;
+
+            break;
+        }
+    }
+
+    refreshItemInfoList();
 
     if (!appDesktop.isEmpty())
         m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
@@ -1232,7 +1265,7 @@ void AppsManager::refreshCategoryInfoList()
             in >> oldUsedSortedList;
             m_fullscreenUsedSortedList = ItemInfo_v1::itemListToItemV1List(oldUsedSortedList);
         } else {
-            m_fullscreenUsedSortedList.append(readCacheData(m_fullscreenUsedSortSetting->value("lists").toMap()));
+            m_fullscreenUsedSortedList = readCacheData(m_fullscreenUsedSortSetting->value("lists").toMap());
         }
     }
 
@@ -1280,16 +1313,12 @@ void AppsManager::refreshCategoryInfoList()
     generateCategoryMap();
 }
 
-void AppsManager::refreshUsedInfoList()
+void AppsManager::refreshItemInfoList()
 {
-    if (!m_fullscreenUsedSortedList.isEmpty())
-        return;
-
-    m_fullscreenUsedSortedList = readCacheData(m_fullscreenUsedSortSetting->value("lists").toMap());
-
     if (m_fullscreenUsedSortedList.isEmpty())
         m_fullscreenUsedSortedList = m_allAppInfoList;
 
+    // 更新全屏窗口-所有应用列表
     ItemInfoList_v1::ConstIterator allItemItor = m_allAppInfoList.constBegin();
     for (; allItemItor != m_allAppInfoList.constEnd(); ++allItemItor) {
         if (!m_fullscreenUsedSortedList.contains(*allItemItor)) {
@@ -1297,19 +1326,30 @@ void AppsManager::refreshUsedInfoList()
         }
     }
 
-    // 更新所有应用列表
-    foreach (const ItemInfo_v1 &info, m_fullscreenUsedSortedList) {
-           if (!m_allAppInfoList.contains(info))
-               m_fullscreenUsedSortedList.removeOne(info);
+    // 移除全屏窗口-所有应用列表中不存在的应用
+    for (const ItemInfo_v1 &info : m_fullscreenUsedSortedList) {
+        if (!m_allAppInfoList.contains(info))
+            m_fullscreenUsedSortedList.removeOne(info);
     }
 
-    // 更新收藏列表
-    foreach (const ItemInfo_v1 &info, m_collectSortedList) {
-           if (!m_allAppInfoList.contains(info))
-               m_collectSortedList.removeOne(info);
+    // 更新全屏窗口-所有应用列表
+    for (const ItemInfo_v1 &info : m_windowedUsedSortedList) {
+        if (!m_allAppInfoList.contains(info))
+            m_windowedUsedSortedList.removeOne(info);
     }
 
+    // 更新小窗口-收藏列表
+    for (const ItemInfo_v1 &info : m_collectSortedList) {
+        if (!m_allAppInfoList.contains(info))
+            m_collectSortedList.removeOne(info);
+    }
+
+    // 根据使用频率排序
+    sortByUseFrequence(m_allAppInfoList);
+
+    // 更新应用的打开次数等信息
     updateUsedListInfo();
+
     saveFullscreenUsedSortedList();
     saveCollectedSortedList();
 }
@@ -1326,14 +1366,19 @@ void AppsManager::saveAppCategoryInfoList()
 
 void AppsManager::updateUsedListInfo()
 {
-    for (const ItemInfo_v1 &info : m_allAppInfoList) {
-        const int index = m_fullscreenUsedSortedList.indexOf(info);
+    auto updateItemInfo = [ & ](ItemInfoList_v1 &list) {
+        for (const ItemInfo_v1 &info : m_allAppInfoList) {
+            const int index = list.indexOf(info);
 
-        if (index == -1)
-            continue;
+            if (index == -1)
+                continue;
 
-        m_fullscreenUsedSortedList[index].updateInfo(info);
-    }
+            list[index].updateInfo(info);
+        }
+    };
+
+    updateItemInfo(m_fullscreenUsedSortedList);
+    updateItemInfo(m_windowedUsedSortedList);
 }
 
 void AppsManager::generateCategoryMap()
@@ -1517,7 +1562,7 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo_v2 
 
         m_allAppInfoList.append(info);
         m_fullscreenUsedSortedList.append(info);
-        m_windowedUsedSortedList.append(info);
+        m_windowedUsedSortedList.insert(0, info);
     } else if (operation == "deleted") {
         m_allAppInfoList.removeOne(info);
         m_fullscreenUsedSortedList.removeOne(info);
@@ -1564,7 +1609,7 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
 
         m_allAppInfoList.append(info);
         m_fullscreenUsedSortedList.append(info);
-        m_windowedUsedSortedList.append(info);
+        m_windowedUsedSortedList.insert(0, info);
     } else if (operation == "deleted") {
         m_allAppInfoList.removeOne(info);
         m_fullscreenUsedSortedList.removeOne(info);

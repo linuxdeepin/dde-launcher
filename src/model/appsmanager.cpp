@@ -645,17 +645,16 @@ void AppsManager::stashItem(const QModelIndex &index)
  */
 void AppsManager::stashItem(const QString &appKey)
 {
-    foreach (ItemInfo_v1 info, m_allAppInfoList) {
-        if (info.m_key != appKey)
-            continue;
+    for (const ItemInfo_v1 &info : m_allAppInfoList) {
+        if (info.m_key == appKey) {
+            m_stashList.append(info);
+            m_allAppInfoList.removeOne(info);
 
-        m_stashList.append(info);
-        m_allAppInfoList.removeOne(info);
-
-        generateCategoryMap();
-        refreshItemInfoList();
-        saveAppCategoryInfoList();
-        break;
+            generateCategoryMap();
+            refreshItemInfoList();
+            saveAppCategoryInfoList();
+            break;
+        }
     }
 }
 
@@ -665,12 +664,15 @@ void AppsManager::stashItem(const QString &appKey)
  */
 void AppsManager::abandonStashedItem(const QString &appKey)
 {
-    for (int i(0); i != m_stashList.size(); ++i) {
-        if (m_stashList[i].m_key == appKey) {
-            m_stashList.removeAt(i);
+    // 遍历应用列表,存在则从列表中移除
+    for (const ItemInfo_v1 &info : m_allAppInfoList) {
+        if (info.m_key == appKey) {
+            APP_AUTOSTART_CACHE.remove(info.m_desktop);
+            m_allAppInfoList.removeOne(info);
             break;
         }
     }
+
     //重新获取分类数据，类似wps一个appkey对应多个desktop文件的时候,有可能会导致漏掉
     refreshCategoryInfoList();
 
@@ -797,16 +799,6 @@ void AppsManager::launchApp(const QModelIndex &index)
 
 void AppsManager::uninstallApp(const QString &appKey, const int displayMode)
 {
-    // 遍历应用列表,存在则从列表中移除
-    for (const ItemInfo_v1 &info : m_allAppInfoList) {
-        if (info.m_key == appKey) {
-            APP_AUTOSTART_CACHE.remove(info.m_desktop);
-            break;
-        }
-    }
-    // 从应用列表中删除该应用信息
-    stashItem(appKey);
-
     // 向后端发起卸载请求
 #ifdef USE_AM_API
     m_amDbusLauncherInter->RequestUninstall(appKey, false);
@@ -1291,10 +1283,14 @@ void AppsManager::refreshCategoryInfoList()
             }
         }
 
-        // 当缓存数据与应用商店数据有差异时，以应用商店数据为准
-        foreach (auto info , itemInfoList_v1) {
-            int index = datas.indexOf(info);
-            if (index != -1 && datas.at(index).category() != info.category())
+        for (const ItemInfo_v1 &info : itemInfoList_v1) {
+            int index = m_allAppInfoList.indexOf(info);
+            // 当缓存数据与应用商店数据有差异时，以应用商店数据为准
+            if (index != -1 && m_allAppInfoList.at(index).category() != info.category())
+                itemInfoList_v1.removeOne(info);
+
+            // 如果应用已经卸载，从更新缓存数据列表
+            if (index == -1)
                 itemInfoList_v1.removeOne(info);
         }
         m_appInfos.insert(AppsListModel::AppCategory(startIndex), itemInfoList_v1);
@@ -1383,7 +1379,6 @@ void AppsManager::updateUsedListInfo()
 
 void AppsManager::generateCategoryMap()
 {
-    ItemInfoList_v1 newInstallAppList;
     ItemInfoList_v1 dirAppInfoList;
 
     for (const ItemInfo_v1 &itemInfo : m_fullscreenUsedSortedList) {
@@ -1402,15 +1397,11 @@ void AppsManager::generateCategoryMap()
         if (!m_appInfos.contains(category))
             m_appInfos.insert(category, ItemInfoList_v1());
 
-        if (!m_newInstalledAppsList.contains(info.m_key)) {
-            const int idx = m_appInfos[category].indexOf(info);
-            if (idx == -1)
-                m_appInfos[category].append(info);
-            else
-                m_appInfos[category][idx].updateInfo(info);
-        } else {
-            newInstallAppList.append(info);
-        }
+        const int idx = m_appInfos[category].indexOf(info);
+        if (idx == -1)
+            m_appInfos[category].append(info);
+        else
+            m_appInfos[category][idx].updateInfo(info);
 
         // 应用文件夹中的子应用不显示在全屏所有应用列表中
         if (dirIdx != -1)
@@ -1420,17 +1411,6 @@ void AppsManager::generateCategoryMap()
             m_fullscreenUsedSortedList.append(info);
         else
             m_fullscreenUsedSortedList[userIdx].updateInfo(info);
-    }
-
-    sortByInstallTimeOrder(newInstallAppList);
-
-    for (const ItemInfo_v1 &info : newInstallAppList) {
-        if (!m_appInfos[info.category()].contains(info)) {
-            m_appInfos[info.category()].append(info);
-        } else {
-            const int idx = m_appInfos[info.category()].indexOf(info);
-            m_appInfos[info.category()][idx].updateInfo(info);
-        }
     }
 
     getCategoryListAndSortCategoryId();

@@ -407,11 +407,14 @@ void WindowedFrame::searchAppState(bool searched)
     // 设置搜索状态
     setSearchState(searched);
 
+    // 收藏列表是否为空
+    const bool isFavoriteViewEmpty = (m_favoriteModel->rowCount(QModelIndex()) <= 0);
+
     // 搜索模式下只显示搜索控件,其他控件都不显示
     m_favoriteLabel->setVisible(!searched);
-    m_favoriteView->setVisible(!searched && (m_favoriteModel->rowCount(QModelIndex()) > 0));
+    m_favoriteView->setVisible(!searched && !isFavoriteViewEmpty);
 
-    m_emptyFavoriteWidget->setVisible(!searched);
+    m_emptyFavoriteWidget->setVisible(!searched && isFavoriteViewEmpty);
 
     m_allAppLabel->setVisible(!searched);
     m_allAppView->setVisible(!searched);

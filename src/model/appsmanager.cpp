@@ -331,11 +331,11 @@ QSettings::SettingsMap AppsManager::getCacheMapData(const ItemInfoList_v1 &list)
     QSettings::SettingsMap map;
     for (int i = 0; i < list.size(); i++) {
         QSettings::SettingsMap itemMap, itemDirMap;
-        const ItemInfo_v1 info = list.at(i);
+        const ItemInfo_v1 &info = list.at(i);
         fillMapData(itemMap, info);
 
         for (int j = 0; j < info.m_appInfoList.size(); j++) {
-            const ItemInfo_v1 dirInfo = info.m_appInfoList.at(j);
+            const ItemInfo_v1 &dirInfo = info.m_appInfoList.at(j);
             fillMapData(itemDirMap, dirInfo);
             itemMap.insert(QString("appInfoList_%1").arg(j), itemDirMap);
         }
@@ -1266,39 +1266,46 @@ void AppsManager::refreshCategoryInfoList()
         }
     }
 
-    foreach(const ItemInfo_v1 &info , m_fullscreenUsedSortedList) {
+    for (const ItemInfo_v1 &info : m_fullscreenUsedSortedList) {
         if (fuzzyMatching(filters, info.m_key))
             m_fullscreenUsedSortedList.removeOne(info);
     }
 
     // 4. 从缓存中读取已分类的应用数据, 降低数据处理次数
-    for (int startIndex = AppsListModel::Internet; startIndex < static_cast<int>(AppsListModel::Others); startIndex++) {
-        ItemInfoList itemInfoList;
-        ItemInfoList_v1 itemInfoList_v1 = m_appInfos.value(AppsListModel::AppCategory(startIndex));
+    if (m_appInfos.isEmpty()) {
+        for (int categoryIndex = AppsListModel::Internet; categoryIndex < static_cast<int>(AppsListModel::Others); categoryIndex++) {
+            ItemInfoList_v1 itemInfoList_v1 = m_appInfos.value(AppsListModel::AppCategory(categoryIndex));
 
-        // 初始化时读取缓存配置, 其他情况不用读取.
-        if (m_appInfos.isEmpty()) {
-            if (APP_CATEGORY_USED_SORTED_LIST.contains(QString("%1").arg(startIndex))) {
-                QByteArray categoryBuf = APP_CATEGORY_USED_SORTED_LIST.value(QString("%1").arg(startIndex)).toByteArray();
+            // 读取1050缓存的话，需要减去(v23阶段)新增的4个枚举变量的偏移值
+            int originCategoryIndex = categoryIndex - 4;
+            if (APP_CATEGORY_USED_SORTED_LIST.contains(QString("%1").arg(originCategoryIndex))) {
+                ItemInfoList itemInfoList;
+                QByteArray categoryBuf = APP_CATEGORY_USED_SORTED_LIST.value(QString("%1").arg(originCategoryIndex)).toByteArray();
                 QDataStream categoryIn(&categoryBuf, QIODevice::ReadOnly);
                 categoryIn >> itemInfoList;
                 itemInfoList_v1 = ItemInfo_v1::itemListToItemV1List(itemInfoList);
-            } else if (m_categorySetting->contains(QString("lists_%1").arg(startIndex))) {
-                itemInfoList_v1 = readCacheData(m_categorySetting->value(QString("lists_%1").arg(startIndex)).toMap());
+            } else if (m_categorySetting->contains(QString("lists_%1").arg(categoryIndex))) {
+                itemInfoList_v1 = readCacheData(m_categorySetting->value(QString("lists_%1").arg(categoryIndex)).toMap());
+            }
+
+            for (const ItemInfo_v1 &info : itemInfoList_v1) {
+                int index = m_allAppInfoList.indexOf(info);
+                // 当缓存数据与应用商店数据有差异时，以应用商店数据为准
+                if (index != -1 && m_allAppInfoList.at(index).category() != info.category())
+                    itemInfoList_v1.removeOne(info);
+
+                // 如果应用已经卸载，从更新缓存数据列表
+                if (index == -1)
+                    itemInfoList_v1.removeOne(info);
+            }
+            m_appInfos.insert(AppsListModel::AppCategory(categoryIndex), itemInfoList_v1);
+
+            if (categoryIndex == static_cast<int>(AppsListModel::System) && QFileInfo::exists(APP_CATEGORY_USED_SORTED_LIST.fileName())) {
+                QDir removeCacheFileDir;
+                removeCacheFileDir.remove(APP_CATEGORY_USED_SORTED_LIST.fileName());
+                qDebug() << "remove dde-launcher-app-category-used-sorted-list conf file success!";
             }
         }
-
-        for (const ItemInfo_v1 &info : itemInfoList_v1) {
-            int index = m_allAppInfoList.indexOf(info);
-            // 当缓存数据与应用商店数据有差异时，以应用商店数据为准
-            if (index != -1 && m_allAppInfoList.at(index).category() != info.category())
-                itemInfoList_v1.removeOne(info);
-
-            // 如果应用已经卸载，从更新缓存数据列表
-            if (index == -1)
-                itemInfoList_v1.removeOne(info);
-        }
-        m_appInfos.insert(AppsListModel::AppCategory(startIndex), itemInfoList_v1);
     }
 
     // 5. 获取新安装的应用列表

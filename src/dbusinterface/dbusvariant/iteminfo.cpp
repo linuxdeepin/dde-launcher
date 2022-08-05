@@ -266,6 +266,11 @@ bool ItemInfo_v1::startWithNum() const
     return numList.contains(m_name.left(1).front());
 }
 
+bool ItemInfo_v1::isLingLongApp() const
+{
+    return m_desktop.contains("/linglong/");
+}
+
 ItemInfo_v1::~ItemInfo_v1()
 {
 

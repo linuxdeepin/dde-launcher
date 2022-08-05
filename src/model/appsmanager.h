@@ -166,7 +166,7 @@ private:
 
     void sortByPresetOrder(ItemInfoList_v1 &processList);
     void sortByUseFrequence(ItemInfoList_v1 &processList);
-    void filterCollectedApp(ItemInfoList_v1 &processList);
+    void filterCollectedApp(const ItemInfoList_v1 &processList);
     void sortByGeneralOrder(ItemInfoList_v1 &processList);
     ItemInfoList_v1 sortByLetterOrder(ItemInfoList_v1 &processList);
     void sortByPinyinOrder(ItemInfoList_v1 &processList);

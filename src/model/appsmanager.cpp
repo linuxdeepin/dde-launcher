@@ -467,28 +467,33 @@ void AppsManager::sortByUseFrequence(ItemInfoList_v1 &processList)
     });
 }
 
-void AppsManager::filterCollectedApp(ItemInfoList_v1 &processList)
+void AppsManager::filterCollectedApp(const ItemInfoList_v1 &processList)
 {
-    ItemInfo_v1 info;
-    info.m_desktop = "/usr/share/applications/dde-control-center.desktop";
-    int index = processList.indexOf(info);
-    if (index != -1 && !m_collectSortedList.contains(info))
-        m_collectSortedList.append(processList.at(index));
+    m_collectSortedList.clear();
 
-    info.m_desktop = "/usr/share/applications/dde-file-manager.desktop";
-    index = processList.indexOf(info);
-    if (index != -1 && !m_collectSortedList.contains(info))
-        m_collectSortedList.append(processList.at(index));
+    auto defaultFavoriteList = [ & ](const ItemInfoList_v1 &list, const QStringList &strAppKeyList) {
+        for (const QString &appKey: strAppKeyList) {
+            for (const ItemInfo_v1 &info : list) {
+                // 优先显示玲珑应用
+                if (info.m_key == appKey && info.isLingLongApp()) {
+                    m_collectSortedList.append(info);
+                    break;
+                }
 
-    info.m_desktop = "/usr/share/applications/deepin-defender.desktop";
-    index = processList.indexOf(info);
-    if (index != -1 && !m_collectSortedList.contains(info))
-        m_collectSortedList.append(processList.at(index));
+                if (info.m_key == appKey && !info.isLingLongApp()) {
+                    m_collectSortedList.append(info);
+                    break;
+                }
+            }
+        }
+    };
 
-    info.m_desktop = "/usr/share/applications/deepin-mail.desktop";
-    index = processList.indexOf(info);
-    if (index != -1 && !m_collectSortedList.contains(info))
-        m_collectSortedList.append(processList.at(index));
+    QStringList appKeyList;
+    appKeyList.append("dde-control-center");
+    appKeyList.append("dde-file-manager");
+    appKeyList.append("deepin-defender");
+    appKeyList.append("deepin-mail");
+    defaultFavoriteList(processList, appKeyList);
 }
 
 void AppsManager::sortByGeneralOrder(ItemInfoList_v1 &processList)
@@ -1457,9 +1462,7 @@ void AppsManager::readCollectedCacheData()
 
     if (!QFile::exists(filePath)) {
         // 获取小窗口默认收藏列表
-        ItemInfoList_v1 tempData = m_allAppInfoList;
-        m_collectSortedList.clear();
-        filterCollectedApp(tempData);
+        filterCollectedApp(m_allAppInfoList);
     } else {
         if (m_collectSortedList.isEmpty())
             m_collectSortedList.append(readCacheData(m_collectedSetting->value("lists").toMap()));

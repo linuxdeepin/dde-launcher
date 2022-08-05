@@ -101,6 +101,7 @@ public:
     bool isTitle() const;
     bool startWithLetter() const;
     bool startWithNum() const;
+    bool isLingLongApp() const;
 
     ~ItemInfo_v1();
 

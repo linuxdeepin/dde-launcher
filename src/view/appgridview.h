@@ -95,6 +95,7 @@ private slots:
     void onLayoutChanged();
     void onTouchSinglePresse(int time, double scalex, double scaley);
     void onTouchUpOrDown(double scalex, double scaley);
+    void onThemeChanged(DGuiApplicationHelper::ColorType);
 
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;

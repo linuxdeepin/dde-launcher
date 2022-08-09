@@ -46,7 +46,6 @@ private:
     CalculateUtil *m_calcUtil;
     QPixmap m_blueDotPixmap;
     QPixmap m_autoStartPixmap;
-    QColor m_color;
 };
 
 #endif // APPLISTDELEGATE_H

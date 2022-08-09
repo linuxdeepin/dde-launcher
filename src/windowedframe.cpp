@@ -49,6 +49,9 @@
 
 #include <qpa/qplatformwindow.h>
 
+#define ICON_SIZE   24
+#define BTN_SIZE    40
+
 DGUI_USE_NAMESPACE
 
 using namespace DLauncher;
@@ -96,6 +99,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_appsView(new AppListView(this))
     , m_favoriteView(new AppGridView(AppGridView::MainView, this))
     , m_allAppView(new AppGridView(AppGridView::MainView, this))
+    , m_appItemDelegate(new AppItemDelegate(this))
     , m_favoriteLabel(nullptr)
     , m_emptyFavoriteWidget(nullptr)
     , m_emptyFavoriteButton(nullptr)
@@ -107,8 +111,8 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_displayMode(All)
     , m_autoScrollStep(DLauncher::APPS_AREA_AUTO_SCROLL_STEP)
     , m_calcUtil(CalculateUtil::instance())
-    , m_focusPos(Applist)
-    , m_modeToggleBtn(new ModeToggleButton(this))
+    , m_focusPos(Default)
+    , m_modeToggleBtn(new DIconButton(this))
     , m_searcherEdit(new DSearchEdit(this))
     , m_enterSearchEdit(false)
     , m_curScreen(m_appsManager->currentScreen())
@@ -137,7 +141,6 @@ void WindowedFrame::initUi()
     m_windowHandle.setTranslucentBackground(false);
 
     AppListDelegate *itemDelegate = new AppListDelegate(this);
-    AppItemDelegate *appItemDelegate  = new AppItemDelegate(this);
 
     m_appsView->setModel(m_appsModel);
     m_appsView->setItemDelegate(itemDelegate);
@@ -146,7 +149,7 @@ void WindowedFrame::initUi()
 
     m_favoriteView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_favoriteView->setModel(m_favoriteModel);
-    m_favoriteView->setItemDelegate(appItemDelegate);
+    m_favoriteView->setItemDelegate(m_appItemDelegate);
     m_favoriteView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_favoriteView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_favoriteView->setDragEnabled(true);
@@ -160,7 +163,7 @@ void WindowedFrame::initUi()
 
     m_allAppView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_allAppView->setModel(m_allAppsModel);
-    m_allAppView->setItemDelegate(appItemDelegate);
+    m_allAppView->setItemDelegate(m_appItemDelegate);
     m_allAppView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_allAppView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_allAppView->setAcceptDrops(false);
@@ -173,6 +176,10 @@ void WindowedFrame::initUi()
 
     m_autoScrollTimer->setInterval(DLauncher::APPS_AREA_AUTO_SCROLL_TIMER);
     m_autoScrollTimer->setSingleShot(false);
+
+    m_modeToggleBtn->setIcon(DDciIcon::fromTheme("switch_to_fullscreen"));
+    m_modeToggleBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
+    m_modeToggleBtn->setFixedSize(QSize(BTN_SIZE, BTN_SIZE));
 
     QHBoxLayout *mainHlayout = new QHBoxLayout;
     mainHlayout->setContentsMargins(20, 22, 10, 10);
@@ -303,7 +310,6 @@ void WindowedFrame::initUi()
     // 状态切换
     m_modeToggleBtn->setIconSize(QSize(32,32));
     m_modeToggleBtn->setFixedSize(40, 40);
-    m_modeToggleBtn->setFocusPolicy(Qt::NoFocus);
 
     setFixedSize(780, 600);
 
@@ -351,18 +357,23 @@ void WindowedFrame::initConnection()
     connect(m_appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
     connect(m_appsView, &QListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
     connect(m_appsView, &QListView::entered, m_appsView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
+    connect(m_appsView, &AppGridView::entered, this, &WindowedFrame::onEnterView);
     connect(m_appsView, &AppListView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
 
     connect(m_favoriteView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
     connect(m_favoriteView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
-    connect(m_favoriteView, &AppGridView::entered, m_favoriteView, &AppGridView::setCurrentIndex, Qt::QueuedConnection);
+    connect(m_favoriteView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_favoriteView, &AppGridView::entered, this, &WindowedFrame::onEnterView);
     connect(m_favoriteView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_favoriteView, qOverload<>(&AppGridView::update));
 
     // 所有应用
     connect(m_allAppView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
     connect(m_allAppView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
-    connect(m_allAppView, &AppGridView::entered, m_allAppView, &AppGridView::setCurrentIndex, Qt::QueuedConnection);
+    connect(m_allAppView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(m_allAppView, &AppGridView::entered, this, &WindowedFrame::onEnterView);
     connect(m_allAppView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_allAppView, qOverload<>(&AppGridView::update));
 
     // 搜索页面
     connect(m_searchWidget, &SearchModeWidget::connectViewEvent, this , &WindowedFrame::addViewEvent);
@@ -373,7 +384,7 @@ void WindowedFrame::initConnection()
     connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher, Qt::QueuedConnection);
 
     connect(m_appearanceInter, &Appearance::OpacityChanged, this, &WindowedFrame::onOpacityChanged);
-    connect(m_modeToggleBtn, &DToolButton::clicked, this, &WindowedFrame::onToggleFullScreen);
+    connect(m_modeToggleBtn, &DIconButton::clicked, this, &WindowedFrame::onToggleFullScreen);
 
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
     onOpacityChanged(m_appearanceInter->opacity());
@@ -465,146 +476,33 @@ bool WindowedFrame::visible()
     return isVisible();
 }
 
-/**
- * @brief WindowedFrame::moveCurrentSelectApp 处理键盘事件
- * @param key 键盘按键名
- */
 void WindowedFrame::moveCurrentSelectApp(const int key)
 {
-    if(Qt::Key_Undo == key) {
-        auto  oldStr =  m_searcherEdit->lineEdit()->text();
-        m_searcherEdit->lineEdit()->undo();
-        if (!oldStr.isEmpty() && oldStr == m_searcherEdit->lineEdit()->text()) {
-            m_searcherEdit->lineEdit()->clear();
-        }
-        return;
-    }
-
-    const QModelIndex currentIdx = m_appsView->currentIndex();
-    QModelIndex targetIndex;
-
-    const int row = currentIdx.row();
     switch (key) {
-    case Qt::Key_Tab: {
-        switch (m_focusPos) {
-        case Default:
-            m_focusPos = RightBottom;
-            break;
-        case RightBottom:
-            m_focusPos = Computer;
-            break;
-        case Computer:
-            m_focusPos = Setting;
-            break;
-        case Setting:
-            m_focusPos = Power;
-            break;
-        case Power:
-            m_focusPos = Search;
-            m_searcherEdit->lineEdit()->setFocus();
-            break;
-        case Search:
-            if (m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0) {
-                targetIndex = m_appsView->model()->index(0, 0);
-            }
-            m_focusPos = Applist;
-            break;
-        case Applist:
-            m_focusPos = RightBottom;
-            break;
-        }
+    case Qt::Key_Tab:
+        handleTabKey();
         break;
-    }
-    case Qt::Key_Backtab: {
-        switch (m_focusPos) {
-        case Default:
-            m_focusPos = RightBottom;
-            break;
-        case RightBottom:
-            m_focusPos = Applist;
-            if (m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0) {
-                targetIndex = m_appsView->model()->index(0, 0);
-            }
-            break;
-        case Computer:
-            m_focusPos = RightBottom;
-            break;
-        case Setting:
-            m_focusPos = Computer;
-            break;
-        case Power:
-            m_focusPos = Setting;
-            break;
-        case Search:
-            m_focusPos = Power;
-            break;
-        case Applist:
-            m_focusPos = Search;
-            m_searcherEdit->lineEdit()->setFocus();
-            break;
-        }
+    case Qt::Key_Backtab:
+        handleBackTabKey();
         break;
-    }
-    case Qt::Key_Up: {
-        if (m_focusPos == Applist || m_focusPos == Search) {
-            targetIndex = currentIdx.sibling(row - 1, 0);
-            if (!currentIdx.isValid() || !targetIndex.isValid()) {
-                targetIndex = m_appsView->model()->index(m_appsView->model()->rowCount() - 1, 0);
-            }
-        } else if (m_focusPos == Default) {
-            m_focusPos = Computer;
-        } else {
-        }
+    case Qt::Key_Up:
+        handleUpKey();
         break;
-    }
-    case Qt::Key_Down: {
-        if (m_focusPos == Applist || m_focusPos == Search) {
-            targetIndex = currentIdx.sibling(row + 1, 0);
-            if (!currentIdx.isValid() || !targetIndex.isValid()) {
-                targetIndex = m_appsView->model()->index(0, 0);
-            }
-        } else if (m_focusPos == Default) {
-            m_focusPos = Computer;
-        } else {
-        }
+    case Qt::Key_Down:
+        handleDownKey();
         break;
-    }
-    case Qt::Key_Left: {
-        if (m_focusPos == Search || m_focusPos == Applist || m_focusPos == RightBottom || m_focusPos == Default) {
-            m_focusPos = Applist;
-            m_focusPos  = Computer;
-        }
+    case Qt::Key_Right:
+        handleRightKey();
         break;
-    }
-    case Qt::Key_Right: {
-        if (m_focusPos == Computer || m_focusPos == Setting || m_focusPos == Power || m_focusPos == Default) {
-            m_focusPos = Applist;
-            if (m_appsView->model()->rowCount() != 0 && m_appsView->model()->columnCount() != 0) {
-                targetIndex = m_appsView->model()->index(0, 0);
-            }
-        }
+    case Qt::Key_Left:
+        handleLeftKey();
         break;
-    }
+    case Qt::Key_Undo:
+        handleUndoKey();
+        break;
     default:
         break;
     }
-
-    if (m_focusPos == Applist) {
-        m_appsModel->setDrawBackground(true);
-        m_appsView->setFocus();
-    } else if (m_focusPos == RightBottom) {
-        m_appsView->setCurrentIndex(QModelIndex());
-        return;
-    } else if (m_focusPos == Search) {
-    } else {
-        m_appsView->setCurrentIndex(QModelIndex());
-        return;
-    }
-
-    // Hover conflict with the mouse, temporarily blocking the signal
-    m_appsView->blockSignals(true);
-    m_appsView->setCurrentIndex(targetIndex);
-    m_appsView->blockSignals(false);
 }
 
 void WindowedFrame::appendToSearchEdit(const char ch)
@@ -622,23 +520,436 @@ void WindowedFrame::appendToSearchEdit(const char ch)
     }
 
     m_searcherEdit->lineEdit()->setText(m_searcherEdit->lineEdit()->text() + ch);
-
 }
 
 void WindowedFrame::launchCurrentApp()
 {
-    const QModelIndex currentIdx = m_appsView->currentIndex();
-
-    if (m_focusPos == Computer || m_focusPos == Setting || m_focusPos == Power) {
-        return;
-    } else if (m_focusPos == RightBottom && !currentIdx.isValid()) {
-        return;
+    QModelIndex currentIdx;
+    switch (m_focusPos) {
+    case CategoryApp:
+        currentIdx = m_appsView->currentIndex();
+        break;
+    case Favorite:
+        currentIdx = static_cast<AppItemDelegate *>(m_favoriteView->itemDelegate())->currentIndex();
+        break;
+    case AllApp:
+        currentIdx = static_cast<AppItemDelegate *>(m_allAppView->itemDelegate())->currentIndex();
+        break;
+    case Setting:
+        m_bottomBtn->showSettings();
+        m_bottomBtn->setButtonChecked(MiniFrameRightBar::Unknow);
+        break;
+    case Power:
+        m_bottomBtn->showShutdown();
+        m_bottomBtn->setButtonChecked(MiniFrameRightBar::Unknow);
+        break;
+    default:
+        break;
     }
 
-    if (currentIdx.isValid() && currentIdx.model() == m_appsView->model()) {
+#ifdef QT_DEBUG
+    qDebug() << "index valid:" << currentIdx.isValid() << ",appKey:" << currentIdx.data(AppsListModel::AppKeyRole).toString();
+#endif
+
+    if (currentIdx.isValid()) {
         m_appsManager->launchApp(currentIdx);
         hideLauncher();
     }
+}
+
+void WindowedFrame::handleTabKey()
+{
+    QModelIndex targetIndex;
+
+    switch (m_focusPos) {
+    case Default: {
+        m_focusPos = CategoryApp;
+        targetIndex = m_appsView->model()->index(1, 0);
+        m_appsView->blockSignals(true);
+        m_appsView->setCurrentIndex(targetIndex);
+        m_appsView->blockSignals(false);
+    }
+        break;
+    case CategoryApp: {
+        m_focusPos = Power;
+        m_appsView->setCurrentIndex(QModelIndex());
+        m_bottomBtn->setButtonChecked(MiniFrameRightBar::Power);
+    }
+        break;
+    case Power: {
+        m_focusPos = Setting;
+        m_bottomBtn->setButtonChecked(MiniFrameRightBar::Setting);
+    }
+        break;
+    case Setting: {
+        m_focusPos = Search;
+        m_bottomBtn->setButtonChecked(MiniFrameRightBar::Unknow);
+        m_searcherEdit->lineEdit()->setFocus();
+    }
+        break;
+    case Search: {
+        m_searcherEdit->lineEdit()->clearFocus();
+        if (m_favoriteModel->rowCount(QModelIndex()) <= 0) {
+            m_focusPos = AllApp;
+            targetIndex = m_allAppView->model()->index(0, 0);
+            static_cast<AppItemDelegate *>(m_allAppView->itemDelegate())->setCurrentIndex(targetIndex);
+            m_allAppView->update();
+            break;
+        }
+
+        m_focusPos = Favorite;
+        targetIndex = m_favoriteView->model()->index(0, 0);
+        static_cast<AppItemDelegate *>(m_favoriteView->itemDelegate())->setCurrentIndex(targetIndex);
+        m_favoriteView->update();
+    }
+        break;
+    case Favorite: {
+        static_cast<AppItemDelegate *>(m_favoriteView->itemDelegate())->setCurrentIndex(QModelIndex());
+
+        if (m_allAppsModel->rowCount(QModelIndex()) <= 0) {
+            m_focusPos = Switch;
+            m_searcherEdit->lineEdit()->setFocus();
+            break;
+        }
+
+        m_focusPos = AllApp;
+        targetIndex = m_allAppView->model()->index(0, 0);
+        static_cast<AppItemDelegate *>(m_allAppView->itemDelegate())->setCurrentIndex(targetIndex);
+        m_allAppView->update();
+    }
+        break;
+    case AllApp: {
+        static_cast<AppItemDelegate *>(m_allAppView->itemDelegate())->setCurrentIndex(QModelIndex());
+        m_focusPos = Switch;
+        m_modeToggleBtn->setFocus();
+    }
+        break;
+    case Switch: {
+        // 存在切换到搜索栏的问题，待解决，暂未定位到问题。
+        if (m_appsModel->rowCount(QModelIndex()) <= 0) {
+            m_focusPos = Power;
+            m_bottomBtn->setButtonChecked(MiniFrameRightBar::Power);
+            break;
+        }
+
+        m_focusPos = CategoryApp;
+        m_modeToggleBtn->clearFocus();
+        targetIndex = m_appsView->model()->index(1, 0);
+
+        m_appsView->blockSignals(true);
+        m_appsView->setCurrentIndex(targetIndex);
+        m_appsView->blockSignals(false);
+    }
+        break;
+    default:
+        break;
+    }
+}
+
+void WindowedFrame::handleBackTabKey()
+{
+    QModelIndex targetIndex;
+
+    switch (m_focusPos) {
+    case Default: {
+        if (m_appsModel->rowCount(QModelIndex()) <= 0) {
+            m_focusPos = Switch;
+            m_modeSwitch->setFocus();
+            break;
+        }
+
+        m_focusPos = CategoryApp;
+        targetIndex = m_appsView->model()->index(1, 0);
+
+        m_appsView->blockSignals(true);
+        m_appsView->setCurrentIndex(targetIndex);
+        m_appsView->blockSignals(false);
+    }
+        break;
+    case CategoryApp: {
+        m_focusPos = Switch;
+        m_appsView->setCurrentIndex(QModelIndex());
+        m_modeToggleBtn->setFocus();
+    }
+        break;
+    case Switch: {
+        m_appsView->setCurrentIndex(QModelIndex());
+        m_modeToggleBtn->clearFocus();
+        if (m_allAppsModel->rowCount(QModelIndex()) <= 0) {
+            m_focusPos = Favorite;
+
+            targetIndex = m_favoriteView->model()->index(0, 0);
+            static_cast<AppItemDelegate *>(m_favoriteView->itemDelegate())->setCurrentIndex(targetIndex);
+            m_favoriteView->update();
+            break;
+        }
+
+        m_focusPos = AllApp;
+        targetIndex = m_allAppView->model()->index(0, 0);
+        static_cast<AppItemDelegate *>(m_allAppView->itemDelegate())->setCurrentIndex(targetIndex);
+        m_allAppView->update();
+    }
+        break;
+    case AllApp: {
+        static_cast<AppItemDelegate *>(m_allAppView->itemDelegate())->setCurrentIndex(QModelIndex());
+        if (m_favoriteModel->rowCount(QModelIndex()) <= 0) {
+            m_focusPos = Search;
+            m_searcherEdit->lineEdit()->setFocus();
+            break;
+        }
+
+        m_focusPos = Favorite;
+        targetIndex = m_favoriteView->model()->index(0, 0);
+        static_cast<AppItemDelegate *>(m_favoriteView->itemDelegate())->setCurrentIndex(targetIndex);
+        m_favoriteView->update();
+    }
+        break;
+    case Favorite: {
+        m_focusPos = Search;
+        static_cast<AppItemDelegate *>(m_favoriteView->itemDelegate())->setCurrentIndex(QModelIndex());
+        m_searcherEdit->lineEdit()->setFocus();
+    }
+        break;
+    case Search: {
+        m_focusPos = Setting;
+        m_searcherEdit->lineEdit()->clearFocus();
+        m_bottomBtn->setButtonChecked(MiniFrameRightBar::Setting);
+    }
+        break;
+    case Setting: {
+        m_focusPos = Power;
+        m_bottomBtn->setButtonChecked(MiniFrameRightBar::Power);
+    }
+        break;
+    case Power: {
+        m_bottomBtn->setButtonChecked(MiniFrameRightBar::Unknow);
+        if (m_appsModel->rowCount(QModelIndex()) <= 0) {
+            m_focusPos = Switch;
+            m_modeToggleBtn->setFocus();
+            break;
+        }
+
+        m_focusPos = CategoryApp;
+        targetIndex = m_appsView->model()->index(1, 0);
+
+        m_appsView->blockSignals(true);
+        m_appsView->setCurrentIndex(targetIndex);
+        m_appsView->blockSignals(false);
+    }
+        break;
+    default:
+        break;
+    }
+}
+
+void WindowedFrame::handleUpKey()
+{
+    QModelIndex targetIndex;
+
+    switch (m_focusPos) {
+    case CategoryApp: {
+        // 单列视图
+        const QModelIndex currentIdx = m_appsView->currentIndex();
+        const int row = currentIdx.row();
+        targetIndex = currentIdx.sibling(row - 1, 0);
+
+        if (currentIdx.isValid() && !targetIndex.isValid()) {
+            targetIndex = m_appsView->model()->index(m_appsView->model()->rowCount(QModelIndex()) - 1, 0);
+            m_appsView->scrollToBottom();
+        }
+
+        m_appsView->blockSignals(true);
+        m_appsView->setCurrentIndex(targetIndex);
+        m_appsView->blockSignals(false);
+    }
+        break;
+    case Favorite: {
+        // 4列视图
+        const QModelIndex curIndex = static_cast<AppItemDelegate *>(m_favoriteView->itemDelegate())->currentIndex();
+        const int row = curIndex.row();
+
+        targetIndex = curIndex.sibling(row - 4, 0);
+        if (!curIndex.isValid() || !targetIndex.isValid())
+            targetIndex = m_favoriteView->model()->index(m_favoriteView->model()->rowCount() - 4, 0);
+
+        static_cast<AppItemDelegate *>(m_favoriteView->itemDelegate())->setCurrentIndex(targetIndex);
+        m_favoriteView->update();
+    }
+        break;
+    case AllApp: {
+        // 4列视图
+        const QModelIndex curIndex = static_cast<AppItemDelegate *>(m_allAppView->itemDelegate())->currentIndex();
+        const int row = curIndex.row();
+
+        targetIndex = curIndex.sibling(row - 4, 0);
+        if (!curIndex.isValid() || !targetIndex.isValid())
+            targetIndex = m_allAppView->model()->index(m_allAppView->model()->rowCount() - 4, 0);
+
+        static_cast<AppItemDelegate *>(m_allAppView->itemDelegate())->setCurrentIndex(targetIndex);
+        m_allAppView->update();
+    }
+        break;
+    default:
+        break;
+    }
+}
+
+void WindowedFrame::handleDownKey()
+{
+    QModelIndex targetIndex;
+
+    switch (m_focusPos) {
+    case CategoryApp: {
+        const QModelIndex currentIdx = m_appsView->currentIndex();
+        const int row = currentIdx.row();
+        targetIndex = currentIdx.sibling(row + 1, 0);
+
+        if (targetIndex.data(AppsListModel::AppItemTitleRole).toBool()) {
+            targetIndex = currentIdx.sibling(row + 2, 0);
+        } else if (currentIdx.isValid() && !targetIndex.isValid()) {
+            targetIndex = currentIdx.sibling(1, 0);
+            m_appsView->scrollToTop();
+        }
+
+        m_appsView->blockSignals(true);
+        m_appsView->setCurrentIndex(targetIndex);
+        m_appsView->blockSignals(false);
+    }
+        break;
+    case Favorite: {
+        const QModelIndex currentIdx = static_cast<AppItemDelegate *>(m_favoriteView->itemDelegate())->currentIndex();
+
+        const int row = currentIdx.row();
+        targetIndex = currentIdx.sibling(row + 4, 0);
+        if (!currentIdx.isValid() || !targetIndex.isValid())
+            targetIndex = m_favoriteView->model()->index(0, 0);
+
+        static_cast<AppItemDelegate *>(m_favoriteView->itemDelegate())->setCurrentIndex(targetIndex);
+        m_favoriteView->update();
+    }
+        break;
+    case AllApp: {
+        const QModelIndex currentIdx = static_cast<AppItemDelegate *>(m_allAppView->itemDelegate())->currentIndex();
+        const int row = currentIdx.row();
+        targetIndex = currentIdx.sibling(row + 4, 0);
+
+        if (!currentIdx.isValid() || !targetIndex.isValid())
+            targetIndex = m_allAppView->model()->index(0, 0);
+
+        static_cast<AppItemDelegate *>(m_allAppView->itemDelegate())->setCurrentIndex(targetIndex);
+        m_allAppView->update();
+    }
+        break;
+    case Default: {
+        m_focusPos = CategoryApp;
+        const QModelIndex currentIdx = m_appsView->currentIndex();
+        const int row = currentIdx.row();
+        targetIndex = currentIdx.sibling(row + 1, 0);
+        if (currentIdx.isValid() && !targetIndex.isValid())
+            targetIndex = currentIdx.sibling(row + 2, 0);
+
+        m_appsView->blockSignals(true);
+        m_appsView->setCurrentIndex(targetIndex);
+        m_appsView->blockSignals(false);
+    }
+        break;
+    default:
+        break;
+    }
+}
+
+void WindowedFrame::handleRightKey()
+{
+    QModelIndex targetIndex;
+
+    switch (m_focusPos) {
+    case Power:
+        m_focusPos = Setting;
+        m_bottomBtn->setButtonChecked(MiniFrameRightBar::Setting);
+        break;
+    case Setting:
+        m_focusPos = Power;
+        m_bottomBtn->setButtonChecked(MiniFrameRightBar::Power);
+        break;
+    case Search:
+
+        break;
+    case Favorite: {
+        const QModelIndex currentIdx = m_favoriteView->currentIndex();
+        const int row = currentIdx.row();
+        targetIndex = currentIdx.sibling(row + 1, 0);
+        if (!currentIdx.isValid() || !targetIndex.isValid())
+            targetIndex = m_favoriteView->model()->index(0, 0);
+
+        static_cast<AppItemDelegate *>(m_favoriteView->itemDelegate())->setCurrentIndex(targetIndex);
+        m_favoriteView->update();
+    }
+        break;
+    case AllApp: {
+        const QModelIndex currentIdx = static_cast<AppItemDelegate *>(m_allAppView->itemDelegate())->currentIndex();
+        const int row = currentIdx.row();
+        targetIndex = currentIdx.sibling(row + 1, 0);
+
+        if (!currentIdx.isValid() || !targetIndex.isValid())
+            targetIndex = m_allAppView->model()->index(0, 0);
+
+        static_cast<AppItemDelegate *>(m_allAppView->itemDelegate())->setCurrentIndex(targetIndex);
+        m_allAppView->update();
+    }
+        break;
+    default:
+        break;
+    }
+}
+
+void WindowedFrame::handleLeftKey()
+{
+    QModelIndex targetIndex;
+
+    switch (m_focusPos) {
+    case Power:
+        m_focusPos = Setting;
+        m_bottomBtn->setButtonChecked(MiniFrameRightBar::Setting);
+        break;
+    case Setting:
+        m_focusPos = Power;
+        m_bottomBtn->setButtonChecked(MiniFrameRightBar::Power);
+        break;
+    case Search:
+        break;
+    case Favorite: {
+        const QModelIndex curIndex = static_cast<AppItemDelegate *>(m_favoriteView->itemDelegate())->currentIndex();
+        const int row = curIndex.row();
+        targetIndex = curIndex.sibling(row - 1, 0);
+        if (!curIndex.isValid() || !targetIndex.isValid())
+            targetIndex = m_favoriteView->model()->index(m_favoriteModel->rowCount(QModelIndex()) - 1, 0);
+
+        static_cast<AppItemDelegate *>(m_favoriteView->itemDelegate())->setCurrentIndex(targetIndex);
+        m_favoriteView->update();
+    }
+        break;
+    case AllApp: {
+        const QModelIndex curIndex = static_cast<AppItemDelegate *>(m_allAppView->itemDelegate())->currentIndex();
+        const int row = curIndex.row();
+        targetIndex = curIndex.sibling(row - 1, 0);
+        if (!curIndex.isValid() || !targetIndex.isValid())
+            targetIndex = m_allAppView->model()->index(m_allAppsModel->rowCount(QModelIndex()) - 1, 0);
+
+        static_cast<AppItemDelegate *>(m_allAppView->itemDelegate())->setCurrentIndex(targetIndex);
+        m_allAppView->update();
+    }
+        break;
+    default:
+        break;
+    }
+}
+
+void WindowedFrame::handleUndoKey()
+{
+    const QString oldStr = m_searcherEdit->lineEdit()->text();
+    m_searcherEdit->lineEdit()->undo();
+    if (!oldStr.isEmpty() && oldStr == m_searcherEdit->lineEdit()->text())
+        m_searcherEdit->lineEdit()->clear();
 }
 
 void WindowedFrame::uninstallApp(const QString &appKey)
@@ -653,7 +964,7 @@ QPainterPath WindowedFrame::getCornerPath(AnchoredCornor direction)
 #else
     if (m_dockInter->displayMode() == DLauncher::DOCK_FASHION)
 #endif
-       return QPainterPath();
+        return QPainterPath();
 
     QPainterPath path;
     const QRect rect = this->rect();
@@ -731,16 +1042,6 @@ void WindowedFrame::setSearchState(bool searching)
     m_isSearching = searching;
 }
 
-void WindowedFrame::mousePressEvent(QMouseEvent *e)
-{
-    QWidget::mousePressEvent(e);
-
-    // PM don't want auto-hide when click WindowedFrame blank area.
-//    if (e->button() == Qt::LeftButton) {
-//        hideLauncher();
-//    }
-}
-
 void WindowedFrame::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Escape) {
@@ -772,7 +1073,8 @@ void WindowedFrame::showEvent(QShowEvent *e)
         setFocus();
         emit visibleChanged(true);
     });
-    m_focusPos = Applist;
+
+    m_focusPos = Default;
 }
 
 void WindowedFrame::hideEvent(QHideEvent *e)
@@ -844,8 +1146,9 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
     // 清除行编辑器的焦点(已被dtk封装了)
     if (event->type() == QEvent::KeyPress && m_searcherEdit->lineEdit()->hasFocus()) {
         QKeyEvent *keyPress = static_cast<QKeyEvent *>(event);
-        if (keyPress && keyPress->key() == Qt::Key_Tab)
+        if (keyPress && (keyPress->key() == Qt::Key_Tab || keyPress->key() == Qt::Key_Backtab)) {
             m_searcherEdit->lineEdit()->clearFocus();
+        }
     }
 
     return QWidget::eventFilter(watched, event);
@@ -1019,7 +1322,7 @@ void WindowedFrame::recoveryAll()
     m_displayMode = All;
     hideTips();
 
-    m_focusPos = Applist;
+    m_focusPos = Default;
 }
 
 void WindowedFrame::onOpacityChanged(const double value)
@@ -1043,10 +1346,10 @@ void WindowedFrame::onScreenInfoChange()
 
 void WindowedFrame::updatePosition()
 {
-   // 该接口获取数据是翻转后的数据
-   DBusDockInterface inter;
-   QRect dockGeo = inter.geometry();
-   QRect dockRect = QRect(scaledPosition(dockGeo.topLeft()),scaledPosition(dockGeo.bottomRight()));
+    // 该接口获取数据是翻转后的数据
+    DBusDockInterface inter;
+    QRect dockGeo = inter.geometry();
+    QRect dockRect = QRect(scaledPosition(dockGeo.topLeft()),scaledPosition(dockGeo.bottomRight()));
 
     int dockSpacing = 0;
 #ifdef USE_AM_API
@@ -1091,8 +1394,9 @@ void WindowedFrame::addViewEvent(AppGridView *pView)
 {
     connect(pView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
     connect(pView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
-    connect(pView, &AppGridView::entered, m_appsView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
+    connect(pView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(pView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
+    connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pView, qOverload<>(&AppGridView::update));
 }
 
 void WindowedFrame::refreshView(const AppsListModel::AppCategory category)
@@ -1135,6 +1439,22 @@ void WindowedFrame::onLayoutChanged()
     m_favoriteView->setViewportMargins(margin);
     m_allAppView->setSpacing(itemSpacing);
     m_allAppView->setViewportMargins(margin);
+}
+
+void WindowedFrame::onEnterView()
+{
+    if (!sender()) {
+        qInfo() << "sender() is null";
+        m_focusPos = Default;
+        return;
+    }
+
+    if (sender() == m_favoriteView)
+        m_focusPos = Favorite;
+    else if (sender() == m_allAppView)
+        m_focusPos = AllApp;
+    else if (sender() == m_appsView)
+        m_focusPos = CategoryApp;
 }
 
 void WindowedFrame:: paintEvent(QPaintEvent *e)

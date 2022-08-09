@@ -86,8 +86,11 @@ AppListView::AppListView(QWidget *parent)
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::dropSwap);
 #endif
 
+    onThemeChanged(DGuiApplicationHelper::instance()->themeType());
+
     connect(m_scrollAni, &QPropertyAnimation::valueChanged, this, &AppListView::handleScrollValueChanged);
     connect(m_scrollAni, &QPropertyAnimation::finished, this, &AppListView::handleScrollFinished);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppListView::onThemeChanged);
 }
 
 const QModelIndex AppListView::indexAt(const int index) const
@@ -519,4 +522,9 @@ void AppListView::menuHide()
         Q_EMIT entered(index);
     else
         Q_EMIT entered(QModelIndex());
+}
+
+void AppListView::onThemeChanged(DGuiApplicationHelper::ColorType)
+{
+    update();
 }

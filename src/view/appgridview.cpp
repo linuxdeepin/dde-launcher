@@ -831,6 +831,7 @@ void AppGridView::initConnection()
     connect(m_gestureInter, &Gesture::TouchSinglePressTimeout, this, &AppGridView::onTouchSinglePresse, Qt::UniqueConnection);
     connect(m_gestureInter, &Gesture::TouchUpOrCancel, this, &AppGridView::onTouchUpOrDown, Qt::UniqueConnection);
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &AppGridView::onLayoutChanged);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppGridView::onThemeChanged);
 }
 
 void AppGridView::initUi()
@@ -865,6 +866,8 @@ void AppGridView::initUi()
     setFrameStyle(QFrame::NoFrame);
     setViewportMargins(0, 0, 0, 0);
     viewport()->setAutoFillBackground(false);
+
+    onThemeChanged(DGuiApplicationHelper::instance()->themeType());
 }
 
 void AppGridView::onLayoutChanged()
@@ -906,4 +909,9 @@ void AppGridView::onTouchUpOrDown(double scalex, double scaley)
     Q_UNUSED(scaley);
 
     m_longPressed = false;
+}
+
+void AppGridView::onThemeChanged(DGuiApplicationHelper::ColorType)
+{
+    update();
 }

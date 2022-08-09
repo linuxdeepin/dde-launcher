@@ -1,15 +1,18 @@
 #ifndef SEARCHMODEWIDGET_H
 #define SEARCHMODEWIDGET_H
 
-#include <QWidget>
-#include <QLabel>
-
-#include <appgridview.h>
+#include "appgridview.h"
 #include "appslistmodel.h"
 #include "appitemdelegate.h"
-#include "multipagesview.h"
-
 #include "dbuslauncher.h"
+
+#include <DIconButton>
+
+#include <QWidget>
+#include <QLabel>
+#include <QBoxLayout>
+
+DWIDGET_USE_NAMESPACE
 
 class SearchModeWidget : public QWidget
 {

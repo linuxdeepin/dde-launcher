@@ -42,8 +42,7 @@ public:
     explicit SearchWidget(QWidget *parent = nullptr);
 
     DSearchEdit *edit();
-    DFloatingButton *categoryBtn();
-    DFloatingButton *toggleModeBtn();
+    DIconButton *toggleModeBtn();
 
     void setLeftSpacing(int spacing);
     void setRightSpacing(int spacing);
@@ -68,7 +67,7 @@ private:
     DSearchEdit *m_searchEdit;
     QFrame *m_leftSpacing;
     QFrame *m_rightSpacing;
-    DFloatingButton *m_toggleModeBtn;                    // 全屏模式下收起按钮(右上)
+    DIconButton *m_toggleModeBtn;                    // 全屏模式下收起按钮(右上)
     CalculateUtil* m_calcUtil;
 };
 

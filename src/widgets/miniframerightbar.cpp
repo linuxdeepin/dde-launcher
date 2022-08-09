@@ -50,6 +50,25 @@ MiniFrameRightBar::~MiniFrameRightBar()
 {
 }
 
+bool MiniFrameRightBar::isButtonChecked(const ButtonType buttonId) const
+{
+    return m_buttonGroup->button(buttonId)->isChecked();
+}
+
+void MiniFrameRightBar::setButtonChecked(const ButtonType buttonId) const
+{
+    if (buttonId == MiniFrameRightBar::Setting) {
+        m_settingsBtn->setChecked(true);
+        m_powerBtn->setChecked(false);
+    } else if (buttonId == MiniFrameRightBar::Power) {
+        m_powerBtn->setChecked(true);
+        m_settingsBtn->setChecked(false);
+    } else {
+        m_settingsBtn->setChecked(false);
+        m_powerBtn->setChecked(false);
+    }
+}
+
 void MiniFrameRightBar::initUi()
 {
     setAttribute(Qt::WA_TranslucentBackground);
@@ -62,10 +81,11 @@ void MiniFrameRightBar::initUi()
     m_settingsBtn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     m_settingsBtn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-    m_buttonGroup->addButton(m_settingsBtn);
-    m_buttonGroup->addButton(m_powerBtn);
+    m_buttonGroup->addButton(m_settingsBtn, MiniFrameRightBar::Setting);
+    m_buttonGroup->addButton(m_powerBtn, MiniFrameRightBar::Power);
     m_settingsBtn->setCheckable(true);
     m_powerBtn->setCheckable(true);
+    m_buttonGroup->setExclusive(false);
 
     QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->setContentsMargins(0, 6, 0, 6);

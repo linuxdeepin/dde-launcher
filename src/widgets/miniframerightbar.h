@@ -37,8 +37,17 @@ class MiniFrameRightBar : public QWidget
     Q_OBJECT
 
 public:
+    enum ButtonType {
+        Setting,
+        Power,
+        Unknow
+    };
+
     explicit MiniFrameRightBar(QWidget *parent = nullptr);
     ~MiniFrameRightBar() override;
+
+    void setButtonChecked(const ButtonType buttonId) const;
+    bool isButtonChecked(const ButtonType buttonId) const;
 
 protected:
     void changeEvent(QEvent *event) override;
@@ -51,9 +60,11 @@ private:
 signals:
     void requestFrameHide();
 
-private slots:
+public slots:
     void showShutdown();
     void showSettings();
+
+private slots:
     void updateIcon(DGuiApplicationHelper::ColorType themeType);
 
 private:

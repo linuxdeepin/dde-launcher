@@ -47,21 +47,6 @@ AppListDelegate::AppListDelegate(QObject *parent)
 {
     m_blueDotPixmap = renderSVG(":/skin/images/new_install_indicator.svg", QSize(10, 10));
     m_autoStartPixmap = renderSVG(":/skin/images/emblem-autostart.svg", QSize(16, 16));
-
-    // 修改背景颜色
-    if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType()) {
-        m_color.setRgb(255, 255, 255, 25); // 深色背景为:#FFFFFF 透明度: 25
-    } else {
-        m_color.setRgb(0, 0, 0, 25); // 深色背景为:#000000 透明度: 25
-    }
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ](DGuiApplicationHelper::ColorType themeType) {
-        // 修改背景颜色
-        if (DGuiApplicationHelper::DarkType == themeType) {
-            m_color.setRgb(255, 255, 255, 25); // 深色背景为:#FFFFFF 透明度: 25
-        } else {
-            m_color.setRgb(0, 0, 0, 25); // 深色背景为:#000000 透明度: 25
-        }
-    });
 }
 
 void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -85,7 +70,14 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setPen(Qt::NoPen);
 
     if (option.state.testFlag(QStyle::State_Selected) && !isTitle) {
-        painter->setBrush(m_color);
+        QColor brushColor;
+        if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType())
+            brushColor = Qt::white;
+        else
+            brushColor = Qt::black;
+
+        brushColor.setAlpha(25);
+        painter->setBrush(brushColor);
     } else if (isAlternate && !isTitle) {
         QColor brushColor(Qt::white);
         brushColor.setAlpha(static_cast<int>(255 * 0.4));

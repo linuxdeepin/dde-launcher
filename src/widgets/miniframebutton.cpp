@@ -40,8 +40,6 @@ void MiniFrameButton::enterEvent(QEvent *event)
     QPushButton::enterEvent(event);
 
     setChecked(true);
-
-    emit entered();
 }
 
 void MiniFrameButton::leaveEvent(QEvent *event)
@@ -76,11 +74,13 @@ void MiniFrameButton::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform, true);
 
-    if (isChecked()) {
-        QPainterPath path;
-        path.addRoundedRect(rect(), 8, 8);
+    QPainterPath path;
+    path.addRoundedRect(rect(), 8, 8);
+
+    if (isChecked())
         painter.fillPath(path, m_color);
-    }
+    else
+        painter.fillPath(path, Qt::transparent);
 
     if (!icon().isNull()) {
         QFontMetrics font(this->font());

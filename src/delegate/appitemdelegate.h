@@ -23,13 +23,16 @@
 
 #ifndef APPITEMDELEGATE_H
 #define APPITEMDELEGATE_H
+#include "iteminfo.h"
+
+#include <DGuiApplicationHelper>
 
 #include <QAbstractItemDelegate>
 #include <QModelIndex>
 #include <QStyleOptionViewItem>
 #include <QPainter>
 
-#include "iteminfo.h"
+DGUI_USE_NAMESPACE
 
 class CalculateUtil;
 class AppItemDelegate : public QAbstractItemDelegate

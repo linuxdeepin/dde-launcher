@@ -141,20 +141,23 @@ void SearchModeWidget::initAppView()
     outsidePal.setColor(QPalette::WindowText,Qt::white);
     m_outsideLabel->setPalette(outsidePal);
 
+    AppItemDelegate *itemDelegate = new AppItemDelegate(this);
+
     m_nativeView->setFlow(QListView::LeftToRight);
-    m_outsideView->setFlow(QListView::LeftToRight);
-
     m_nativeView->setWrapping(true);
-    m_outsideView->setWrapping(true);
-
     m_nativeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_outsideView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
     m_nativeView->setSizeAdjustPolicy(QListView::AdjustToContents);
-    m_outsideView->setSizeAdjustPolicy(QListView::AdjustToContents);
-
     m_nativeView->setModel(m_nativeModel);
+    m_nativeView->setItemDelegate(itemDelegate);
+    m_nativeView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+    m_outsideView->setFlow(QListView::LeftToRight);
+    m_outsideView->setWrapping(true);
+    m_outsideView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_outsideView->setSizeAdjustPolicy(QListView::AdjustToContents);
+    m_outsideView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_outsideView->setModel(m_outsideModel);
+    m_outsideView->setItemDelegate(itemDelegate);
 }
 
 void SearchModeWidget::initConnection()

@@ -275,5 +275,7 @@
     <qresource prefix="/dsg/built-in-icons">
         <file alias="search_no_result.dci">skin/bloom/search_no_result.dci</file>
         <file alias="favorite_is_empty.dci">skin/bloom/favorite_is_empty.dci</file>
+        <file alias="switch_to_fullscreen.dci">skin/bloom/switch_to_fullscreen.dci</file>
+        <file alias="exit_fullscreen.dci">skin/bloom/exit_fullscreen.dci</file>
     </qresource>
 </RCC>

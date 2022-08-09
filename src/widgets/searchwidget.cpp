@@ -59,8 +59,8 @@ SearchWidget::SearchWidget(QWidget *parent)
     m_leftSpacing->setAccessibleName("LeftSpacing");
     m_rightSpacing->setAccessibleName("RightSpacing");
 
-    m_toggleModeBtn = new DFloatingButton(this);
-    m_toggleModeBtn->setIcon(QIcon(":/icons/skin/icons/exit_fullscreen.svg"));
+    m_toggleModeBtn = new DIconButton(this);
+    m_toggleModeBtn->setIcon(DDciIcon::fromTheme("exit_fullscreen"));
     m_toggleModeBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_toggleModeBtn->setFixedSize(QSize(BTN_SIZE, BTN_SIZE));
     m_toggleModeBtn->setAutoExclusive(true);
@@ -108,7 +108,7 @@ DSearchEdit *SearchWidget::edit()
     return m_searchEdit;
 }
 
-DFloatingButton *SearchWidget::toggleModeBtn()
+DIconButton *SearchWidget::toggleModeBtn()
 {
     return m_toggleModeBtn;
 }

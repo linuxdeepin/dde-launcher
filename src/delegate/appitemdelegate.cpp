@@ -26,16 +26,11 @@
 #include "calculate_util.h"
 #include "util.h"
 #include "appslistmodel.h"
-#include "iteminfo.h"
-
-#include <DGuiApplicationHelper>
 
 #include <QDebug>
 #include <QPixmap>
 #include <QVariant>
 #include <QApplication>
-
-DGUI_USE_NAMESPACE
 
 #define ICONTOLETF  12
 #define ICONTOTOP  6
@@ -152,7 +147,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     } while (true);
 
     // 绘制选中样式
-   if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay) && !itemIsDir) {
+   if (is_current && !(option.features & QStyleOptionViewItem::HasDisplay) && !itemIsDir && m_calcUtil->fullscreen()) {
         QColor brushColor(Qt::white);
         brushColor.setAlpha(51);
 
@@ -168,6 +163,17 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         }
 
         painter->drawRoundedRect(br, RECT_REDIUS, RECT_REDIUS);
+    } else if (is_current && !m_calcUtil->fullscreen()) {
+       QColor brushColor;
+       if (DGuiApplicationHelper::DarkType == DGuiApplicationHelper::instance()->themeType())
+           brushColor = Qt::white;
+       else
+           brushColor = Qt::black;
+
+       brushColor.setAlpha(25);
+       painter->setBrush(brushColor);
+       painter->setPen(Qt::transparent);
+       painter->drawRoundedRect(br, RECT_REDIUS / 2, RECT_REDIUS / 2);
     }
 
     // 绘制应用名称

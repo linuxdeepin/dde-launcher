@@ -31,7 +31,6 @@
 #include "worker/menuworker.h"
 #include "delegate/applistdelegate.h"
 #include "widgets/searchlineedit.h"
-#include "widgets/modetogglebutton.h"
 #include "widgets/miniframerightbar.h"
 #include "widgets/miniframeswitchbtn.h"
 #include "global_util/constants.h"
@@ -86,13 +85,14 @@ public:
     };
 
     enum FocusPosition {
-        RightBottom, //所有分类
-        Computer,
-        Setting,
+        CategoryApp,
         Power,
+        Setting,
         Search,
-        Applist,
-        Default      //确保首次切换都切换到所有分类
+        Favorite,
+        AllApp,
+        Switch,
+        Default
     };
 
 signals:
@@ -113,6 +113,14 @@ private:
     void appendToSearchEdit(const char ch) override;
     void launchCurrentApp() override;
 
+    void handleTabKey();
+    void handleBackTabKey();
+    void handleUpKey();
+    void handleDownKey();
+    void handleRightKey();
+    void handleLeftKey();
+    void handleUndoKey();
+
     void uninstallApp(const QString &appKey) override;
 
     QPainterPath getCornerPath(AnchoredCornor direction);
@@ -122,7 +130,6 @@ private:
     void setSearchState(bool searching);
 
 protected:
-    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
     void hideEvent(QHideEvent *e) Q_DECL_OVERRIDE;
@@ -153,6 +160,7 @@ private slots:
     void onButtonClick(int buttonid);
     void onFavoriteListVisibleChaged();
     void onLayoutChanged();
+    void onEnterView();
 
 private:
 #ifdef USE_AM_API
@@ -180,6 +188,8 @@ private:
     AppGridView *m_favoriteView;
     AppGridView *m_allAppView;
 
+    AppItemDelegate *m_appItemDelegate;
+
     QLabel *m_favoriteLabel;
     QWidget *m_emptyFavoriteWidget;
     DIconButton *m_emptyFavoriteButton;
@@ -198,7 +208,7 @@ private:
     AnchoredCornor m_anchoredCornor = Normal;
     QPainterPath m_cornerPath;
     FocusPosition m_focusPos;
-    ModeToggleButton *m_modeToggleBtn;   // 小窗口右上角窗口模式切换按钮
+    DIconButton *m_modeToggleBtn;        // 小窗口右上角窗口模式切换按钮
     DSearchEdit *m_searcherEdit;         // 搜索控件
     bool m_enterSearchEdit;
     const QScreen *m_curScreen;

@@ -69,43 +69,44 @@ const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w)
  * @param parent
  */
 FullScreenFrame::FullScreenFrame(QWidget *parent) :
-    BoxFrame(parent),
-    m_menuWorker(new MenuWorker(this)),
-    m_eventFilter(new SharedEventFilter(this)),
-    m_calcUtil(CalculateUtil::instance()),
-    m_appsManager(AppsManager::instance()),
-    m_delayHideTimer(new QTimer(this)),
-    m_clearCacheTimer(new QTimer(this)),
-    m_navigationWidget(new NavigationWidget(this)),
-    m_searchWidget(new SearchWidget(this)),
-    m_contentFrame(new QFrame(this)),
-    m_appsIconBox(new DHBoxWidget(m_contentFrame)),
-    m_appsItemBox(new DHBoxWidget(m_contentFrame)),
-    m_appsItemSeizeBox(new MaskQWidget),
-    m_tipsLabel(new QLabel(this)),
-    m_appItemDelegate(new AppItemDelegate(this)),
-    m_multiPagesView(new MultiPagesView(AppsListModel::All, this)),
+    BoxFrame(parent)
+  , m_menuWorker(new MenuWorker(this))
+  , m_eventFilter(new SharedEventFilter(this))
+  , m_calcUtil(CalculateUtil::instance())
+  , m_appsManager(AppsManager::instance())
+  , m_delayHideTimer(new QTimer(this))
+  , m_clearCacheTimer(new QTimer(this))
+  , m_navigationWidget(new NavigationWidget(this))
+  , m_searchWidget(new SearchWidget(this))
+  , m_contentFrame(new QFrame(this))
+  , m_appsIconBox(new DHBoxWidget(m_contentFrame))
+  , m_appsItemBox(new DHBoxWidget(m_contentFrame))
+  , m_appsItemSeizeBox(new MaskQWidget)
+  , m_tipsLabel(new QLabel(this))
+  , m_appItemDelegate(new AppItemDelegate(this))
+  , m_multiPagesView(new MultiPagesView(AppsListModel::All, this))
 
-    m_internetBoxWidget(new BlurBoxWidget(AppsListModel::Internet, const_cast<char *>("Internet"), m_appsItemBox)),
-    m_chatBoxWidget(new BlurBoxWidget(AppsListModel::Chat, const_cast<char *>("Chat"), m_appsItemBox)),
-    m_musicBoxWidget(new BlurBoxWidget(AppsListModel::Music, const_cast<char *>("Music"), m_appsItemBox)),
-    m_videoBoxWidget(new BlurBoxWidget(AppsListModel::Video, const_cast<char *>("Video"), m_appsItemBox)),
-    m_graphicsBoxWidget(new BlurBoxWidget(AppsListModel::Graphics, const_cast<char *>("Graphics"), m_appsItemBox)),
-    m_gameBoxWidget(new BlurBoxWidget(AppsListModel::Game, const_cast<char *>("Games"), m_appsItemBox)),
-    m_officeBoxWidget(new BlurBoxWidget(AppsListModel::Office, const_cast<char *>("Office"), m_appsItemBox)),
-    m_readingBoxWidget(new BlurBoxWidget(AppsListModel::Reading, const_cast<char *>("Reading"), m_appsItemBox)),
-    m_developmentBoxWidget(new BlurBoxWidget(AppsListModel::Development, const_cast<char *>("Development"), m_appsItemBox)),
-    m_systemBoxWidget(new BlurBoxWidget(AppsListModel::System, const_cast<char *>("System"), m_appsItemBox)),
-    m_othersBoxWidget(new BlurBoxWidget(AppsListModel::Others, const_cast<char *>("Other"), m_appsItemBox)),
-    m_topSpacing(new QFrame(this)),
-    m_bottomSpacing(new QFrame(this)),
-    m_animationGroup(new ScrollParallelAnimationGroup(this)),
-    m_bMousePress(false),
-    m_nMousePos(0),
-    m_scrollValue(0),
-    m_scrollStart(0),
-    m_changePageDelayTime(nullptr),
-    m_curScreen(m_appsManager->currentScreen())
+  , m_internetBoxWidget(new BlurBoxWidget(AppsListModel::Internet, const_cast<char *>("Internet"), m_appsItemBox))
+  , m_chatBoxWidget(new BlurBoxWidget(AppsListModel::Chat, const_cast<char *>("Chat"), m_appsItemBox))
+  , m_musicBoxWidget(new BlurBoxWidget(AppsListModel::Music, const_cast<char *>("Music"), m_appsItemBox))
+  , m_videoBoxWidget(new BlurBoxWidget(AppsListModel::Video, const_cast<char *>("Video"), m_appsItemBox))
+  , m_graphicsBoxWidget(new BlurBoxWidget(AppsListModel::Graphics, const_cast<char *>("Graphics"), m_appsItemBox))
+  , m_gameBoxWidget(new BlurBoxWidget(AppsListModel::Game, const_cast<char *>("Games"), m_appsItemBox))
+  , m_officeBoxWidget(new BlurBoxWidget(AppsListModel::Office, const_cast<char *>("Office"), m_appsItemBox))
+  , m_readingBoxWidget(new BlurBoxWidget(AppsListModel::Reading, const_cast<char *>("Reading"), m_appsItemBox))
+  , m_developmentBoxWidget(new BlurBoxWidget(AppsListModel::Development, const_cast<char *>("Development"), m_appsItemBox))
+  , m_systemBoxWidget(new BlurBoxWidget(AppsListModel::System, const_cast<char *>("System"), m_appsItemBox))
+  , m_othersBoxWidget(new BlurBoxWidget(AppsListModel::Others, const_cast<char *>("Other"), m_appsItemBox))
+  , m_topSpacing(new QFrame(this))
+  , m_bottomSpacing(new QFrame(this))
+  , m_animationGroup(new ScrollParallelAnimationGroup(this))
+  , m_bMousePress(false)
+  , m_nMousePos(0)
+  , m_scrollValue(0)
+  , m_scrollStart(0)
+  , m_changePageDelayTime(nullptr)
+  , m_curScreen(m_appsManager->currentScreen())
+  , m_bMenuDisplayState(false)
 {
     // accessible.h 中使用
     setAccessibleName("FullScrreenFrame");
@@ -379,15 +380,16 @@ void FullScreenFrame::addViewEvent(AppGridView *pView)
 {
     connect(pView, &AppGridView::popupMenuRequested, this, &FullScreenFrame::showPopupMenu);
     connect(pView, &AppGridView::entered, m_appItemDelegate, [=](const QModelIndex &index) {
+        if (m_bMenuDisplayState) {
+            return;
+        }
+
         static int lastIndex = -1;
         m_appItemDelegate->setCurrentIndex(index);
         if (lastIndex == index.row()) {
             return;
         }
         lastIndex = index.row();
-        if (m_menuWorker->getMenuVisible()) {
-            m_menuWorker->setMenuVisible(false);
-        }
     });
     connect(pView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp);
     connect(pView, &AppGridView::clicked, this, &FullScreenFrame::hide);
@@ -1149,6 +1151,11 @@ void FullScreenFrame::initConnection()
 
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::hideLauncher);
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (FullScreenFrame::*)(const QModelIndex &)>(&FullScreenFrame::uninstallApp));
+    connect(m_menuWorker.get(), &MenuWorker::notifyMenuDisplayState, this, [this](bool state) {
+        if (state != m_bMenuDisplayState) {
+            m_bMenuDisplayState = state;
+        }
+    });
     connect(m_searchWidget, &SearchWidget::toggleMode, [this] {
         // 显示后加载当前模式其他ratio的资源，预加载全屏另一种模式当前ratio的资源
         if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY) {
@@ -1438,6 +1445,11 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
     qDebug() << "show menu" << pos << context << context.data(AppsListModel::AppNameRole).toString()
              << "app key:" << context.data(AppsListModel::AppKeyRole).toString();
 
+    if (!m_appItemDelegate || !m_menuWorker) {
+        return;
+    }
+
+    m_appItemDelegate->setCurrentIndex(context);
     m_menuWorker->showMenuByAppItem(pos, context);
 }
 

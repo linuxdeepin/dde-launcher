@@ -117,6 +117,8 @@ void Menu::showEvent(QShowEvent *event)
     QTimer::singleShot(10, this, [ = ] {
         m_monitor->blockSignals(false);
     });
+
+    Q_EMIT notifyMenuDisplayState(true);
 }
 
 void Menu::hideEvent(QHideEvent *event)
@@ -124,6 +126,7 @@ void Menu::hideEvent(QHideEvent *event)
     QMenu::hideEvent(event);
 
     m_monitor->blockSignals(true);
+    Q_EMIT notifyMenuDisplayState(false);
 }
 
 void Menu::moveDown(int size)

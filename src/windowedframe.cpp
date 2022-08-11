@@ -230,6 +230,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_menuWorker.get(), &MenuWorker::unInstallApp, this, static_cast<void (WindowedFrame::*)(const QModelIndex &)>(&WindowedFrame::uninstallApp));
     connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_delayHideTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
+    connect(m_menuWorker.get(), &MenuWorker::notifyMenuDisplayState, m_appsView, &AppListView::setMenuVisible);
 
     connect(m_appsView, &QListView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
     connect(m_appsView, &QListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
@@ -237,36 +238,11 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_appsView, &AppListView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
     connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_appsView, &AppListView::menuHide); // 当菜单消失时通知菜单结束了
     connect(m_appsView, &AppListView::requestSwitchToCategory, this, &WindowedFrame::switchToCategory);
-
+    connect(m_appsView, &AppListView::requestEnter, m_searchModel, &AppsListModel::setDrawBackground);
     connect(m_appsView, &AppListView::requestEnter, m_menuWorker.get(), [this](bool state) {
-        if (!m_menuWorker.get()->getMenuVisible() && state) {
+        if (!m_menuWorker.get()->isMenuVisible() && state) {
             m_appsModel->setDrawBackground(state);
-            QTimer::singleShot(20, this, [this]() {
-                m_currentAppListIndex = m_appsView->currentIndex().row();
-            });
         }
-    });
-
-    connect(m_appsView, &AppListView::requestEnter, this, [=](bool state) {
-        // 确保窗口模式搜索，键选中效果不消失
-        if (m_searchModel && state) {
-            m_searchModel->setDrawBackground(state);
-        }
-    });
-
-    auto fun_listview_changed = [this]() {
-        if (!m_menuWorker.get() || !m_appsView) return;
-        if (m_menuWorker.get()->getMenuVisible() && m_appsView->currentIndex().row() != m_currentAppListIndex) {
-            m_currentAppListIndex = m_appsView->currentIndex().row();
-            m_menuWorker.get()->setMenuVisible(false);
-        }
-    };
-
-    connect(m_searchModel, &QAbstractItemModel::dataChanged, this, [=]() {
-        fun_listview_changed();
-    });
-    connect(m_searchModel, &AppsListModel::notifyDrawBackgroundChanged, this, [=]() {
-        fun_listview_changed();
     });
 
     connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
@@ -338,6 +314,7 @@ void WindowedFrame::hideLauncher()
     recoveryAll();
 
     hide();
+    m_appsView->setMenuVisible(false);
 }
 
 bool WindowedFrame::visible()

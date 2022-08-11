@@ -355,7 +355,6 @@ const QModelIndex AppsListModel::indexAt(const QString &appKey) const
 
 void AppsListModel::setDrawBackground(bool draw)
 {
-    Q_EMIT notifyDrawBackgroundChanged();
     if (draw == m_drawBackground) return;
 
     m_drawBackground = draw;

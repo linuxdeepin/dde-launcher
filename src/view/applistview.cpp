@@ -51,6 +51,7 @@ AppListView::AppListView(QWidget *parent)
     , m_scrollAni(new QPropertyAnimation(verticalScrollBar(), "value", this))
     , m_updateEnableSelectionByMouseTimer(nullptr)
     , m_updateEnableShowSelectionByMouseTimer(nullptr)
+    , m_bMenuVisible(false)
 {
     this->setAccessibleName("Form_AppList");
     viewport()->setAutoFillBackground(false);
@@ -94,6 +95,15 @@ const QModelIndex AppListView::indexAt(const int index) const
     return model()->index(index, 0, QModelIndex());
 }
 
+void AppListView::setMenuVisible(bool value)
+{
+    if (value == m_bMenuVisible) {
+        return;
+    }
+    m_bMenuVisible = value;
+    Q_EMIT notifyMenuVisibleChanged(value);
+}
+
 /**
  * @brief AppListView::wheelEvent 鼠标滑轮事件触发滑动区域控件动画
  * @param e 鼠标滑轮事件指针对象
@@ -114,6 +124,10 @@ void AppListView::wheelEvent(QWheelEvent *e)
 
 void AppListView::mouseMoveEvent(QMouseEvent *e)
 {
+    if (m_bMenuVisible) {
+        return;
+    }
+
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         m_touchMoveFlag = true;
 

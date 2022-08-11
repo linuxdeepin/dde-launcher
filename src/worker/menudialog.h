@@ -51,6 +51,9 @@ private:
     void moveUp(int size = 0);
     void openItem();
 
+Q_SIGNALS:
+    void notifyMenuDisplayState(bool);
+
 private Q_SLOTS:
     void onButtonPress();
 

@@ -70,14 +70,13 @@ public:
     QRect menuGeometry() const {return m_menuGeometry;}
     void creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper);
     bool isMenuVisible();
-    bool getMenuVisible();
-    void setMenuVisible(const bool &state);
 
 signals:
     void appLaunched();
     void menuAccepted();
     void unInstallApp(const QModelIndex &index);
     void menuShowMouseMoving();
+    void notifyMenuDisplayState(bool);
 
 public slots:
     void showMenuByAppItem(QPoint pos, const QModelIndex &index);

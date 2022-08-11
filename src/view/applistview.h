@@ -43,6 +43,7 @@ public:
 
     using DListView::indexAt;
     const QModelIndex indexAt(const int index) const;
+    void setMenuVisible(bool value);
 
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
@@ -51,6 +52,7 @@ signals:
     void requestScrollStop() const;
     void requestSwitchToCategory(const QModelIndex &index) const;
     void requestEnter(bool enter) const;
+    void notifyMenuVisibleChanged(bool) const;
 
 public slots:
     void menuHide();
@@ -91,6 +93,7 @@ private:
     QTimer *m_updateEnableSelectionByMouseTimer;        // 限制拖拽时间不能少于200ms
     QTimer *m_updateEnableShowSelectionByMouseTimer;    // 检测按压是否现实选择灰色背景
     QPoint m_lastTouchBeginPos;
+    bool m_bMenuVisible;
 };
 
 #endif // APPLISTVIEW_H

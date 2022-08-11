@@ -44,6 +44,7 @@ MenuWorker::MenuWorker(QObject *parent)
     , m_isItemEnableScaling(false)
     , m_menu(new Menu)
 {
+    connect(m_menu, &Menu::notifyMenuDisplayState, this, &MenuWorker::notifyMenuDisplayState);
 }
 
 MenuWorker::~MenuWorker()
@@ -187,22 +188,6 @@ bool MenuWorker::isMenuVisible()
         return m_menu->isVisible();
     else
         return false;
-}
-
-void MenuWorker::setMenuVisible(const bool &state)
-{
-    if (!m_menu) {
-        return;
-    }
-    m_menu->setVisible(state);
-}
-
-bool MenuWorker::getMenuVisible()
-{
-    if (m_menu) {
-        return m_menu->isVisible();
-    }
-    return false;
 }
 
 void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)

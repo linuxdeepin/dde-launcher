@@ -238,7 +238,11 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     connect(m_appsView, &AppListView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
     connect(m_menuWorker.get(), &MenuWorker::menuAccepted, m_appsView, &AppListView::menuHide); // 当菜单消失时通知菜单结束了
     connect(m_appsView, &AppListView::requestSwitchToCategory, this, &WindowedFrame::switchToCategory);
-    connect(m_appsView, &AppListView::requestEnter, m_searchModel, &AppsListModel::setDrawBackground);
+    connect(m_appsView, &AppListView::requestEnter, m_searchModel, [this](bool state) {
+        if (!m_menuWorker.get()->isMenuVisible() && state) {
+            m_appsModel->setDrawBackground(state);
+        }
+    });
     connect(m_appsView, &AppListView::requestEnter, m_menuWorker.get(), [this](bool state) {
         if (!m_menuWorker.get()->isMenuVisible() && state) {
             m_appsModel->setDrawBackground(state);

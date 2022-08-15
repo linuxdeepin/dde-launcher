@@ -643,3 +643,9 @@ EditLabel *MultiPagesView::getEditLabel()
 {
     return m_titleLabel;
 }
+
+void MultiPagesView::resetCurPageIndex()
+{
+    m_pageIndex = 0;
+    m_appListArea->horizontalScrollBar()->setValue(0);
+}

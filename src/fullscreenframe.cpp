@@ -456,6 +456,7 @@ void FullScreenFrame::initConnection()
     connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &FullScreenFrame::layoutChanged, Qt::QueuedConnection);
     connect(m_searchWidget, &SearchWidget::searchTextChanged, this, &FullScreenFrame::searchTextChanged);
     connect(m_searchWidget, &SearchWidget::toggleMode, m_drawerWidget, &AppDrawerWidget::hide);
+    connect(m_searchWidget, &SearchWidget::toggleMode, m_multiPagesView, &MultiPagesView::resetCurPageIndex);
     connect(m_delayHideTimer, &QTimer::timeout, this, &FullScreenFrame::onWindowHide, Qt::QueuedConnection);
 
     connect(m_menuWorker.get(), &MenuWorker::appLaunched, this, &FullScreenFrame::onAppLaunch);

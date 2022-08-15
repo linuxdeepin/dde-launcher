@@ -98,6 +98,9 @@ signals:
     void connectViewEvent(AppGridView* pView);
     void titleChanged();
 
+public slots:
+    void resetCurPageIndex();
+
 private slots:
     void dragToLeft(const QModelIndex &index);
     void dragToRight(const QModelIndex &index);

@@ -13,7 +13,7 @@ set(CMAKE_CXX_FLAGS "-g -Wall")
 
 #设置ON, 则使用AM作为服务时打开
 #设置OFF,使用daemon数据
-set(USE_AM_API OFF)
+set(USE_AM_API ON)
 if (${USE_AM_API})
     add_definitions(-DUSE_AM_API=${USE_AM_API})
 endif()

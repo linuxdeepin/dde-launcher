@@ -141,7 +141,7 @@ private:
     int m_nMousePos;
     int m_scrollValue;
     int m_scrollStart;
-    QTime *m_changePageDelayTime;                      // 滚动延时，设定时间内只允许滚动一次
+    QElapsedTimer *m_changePageDelayTime;                      // 滚动延时，设定时间内只允许滚动一次
 
     QMap<AppsListModel::AppCategory, QString> m_typeAndTitleMap;
 };

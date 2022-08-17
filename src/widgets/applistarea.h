@@ -32,6 +32,9 @@ class AppListArea : public QScrollArea
 
 public:
     explicit AppListArea(QWidget *parent = nullptr);
+
+    void setHorizontalScrollValue(const int value);
+    int horizontalScrollValue() const;
 };
 
 #endif // APPLISTAREA_H

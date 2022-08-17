@@ -76,7 +76,7 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value", this);
     m_pageSwitchAnimation->setEasingCurve(QEasingCurve::Linear);
     if (!DGuiApplicationHelper::isSpecialEffectsEnvironment()) {
-        m_changePageDelayTime = new QTime();
+        m_changePageDelayTime = new QElapsedTimer();
         m_pageSwitchAnimation->setDuration(0);
     }
 
@@ -395,7 +395,8 @@ void MultiPagesView::showCurrentPage(int currentPage)
 {
     m_pageIndex = ((currentPage > 0) ? (currentPage < m_pageCount ? currentPage : m_pageCount - 1) : 0);
     int endValue = ((m_pageIndex == 0) ? 0 : (m_appGridViewList[m_pageIndex]->x()));
-    int startValue = m_appListArea->horizontalScrollBar()->value();
+    int startValue = m_appListArea->horizontalScrollValue();
+
     m_appListArea->setProperty("curPage", m_pageIndex);
 
     m_pageSwitchAnimation->stop();
@@ -481,7 +482,7 @@ void MultiPagesView::mousePress(QMouseEvent *e)
 {
     m_bMousePress = true;
     m_nMousePos = e->x();
-    m_scrollValue = m_appListArea->horizontalScrollBar()->value();
+    m_scrollValue = m_appListArea->horizontalScrollValue();
     m_scrollStart = m_scrollValue;
 
     if(m_pageCount == 1 && m_category != AppsListModel::Search)
@@ -496,7 +497,7 @@ void MultiPagesView::mouseMove(QMouseEvent *e)
     int nDiff = m_nMousePos - e->x();
     m_scrollValue += nDiff;
 
-    m_appListArea->horizontalScrollBar()->setValue(m_scrollValue);
+    m_appListArea->setHorizontalScrollValue(m_scrollValue);
 
     if(m_pageCount == 1)
         QWidget::mouseMoveEvent(e);
@@ -511,7 +512,7 @@ void MultiPagesView::mouseRelease(QMouseEvent *e)
     } else if (nDiff < -DLauncher::TOUCH_DIFF_THRESH) { // 加大范围来避免手指点击触摸屏抖动问题
         showCurrentPage(m_pageIndex - 1);
     } else {
-        int nScroll = m_appListArea->horizontalScrollBar()->value();
+        int nScroll = m_appListArea->horizontalScrollValue();
         if (nScroll - m_scrollStart > DLauncher::MOUSE_MOVE_TO_NEXT)
             showCurrentPage(m_pageIndex + 1);
         else if (nScroll - m_scrollStart < -DLauncher::MOUSE_MOVE_TO_NEXT)
@@ -647,5 +648,5 @@ EditLabel *MultiPagesView::getEditLabel()
 void MultiPagesView::resetCurPageIndex()
 {
     m_pageIndex = 0;
-    m_appListArea->horizontalScrollBar()->setValue(0);
+    m_appListArea->setHorizontalScrollValue(0);
 }

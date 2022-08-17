@@ -23,12 +23,25 @@
 
 #include "applistarea.h"
 
-#include <QDebug>
-#include <QWheelEvent>
-#include <QScroller>
-#include <QTimer>
+#include <QScrollBar>
 
 AppListArea::AppListArea(QWidget *parent)
     : QScrollArea(parent)
 {
+}
+
+void AppListArea::setHorizontalScrollValue(const int value)
+{
+    if (!horizontalScrollBar())
+        return;
+
+    horizontalScrollBar()->setValue(value);
+}
+
+int AppListArea::horizontalScrollValue() const
+{
+    if (!horizontalScrollBar())
+        return 0;
+
+    return horizontalScrollBar()->value();
 }

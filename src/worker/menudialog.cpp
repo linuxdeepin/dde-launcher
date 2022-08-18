@@ -39,7 +39,7 @@ using XEventMonitor = com::deepin::api::XEventMonitor;
 Menu::Menu(QWidget *parent)
     : QMenu(parent)
 {
-    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::Dialog);
+    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::Popup);
     setAccessibleName("popmenu");
     setObjectName("rightMenu");
     qApp->installEventFilter(this);

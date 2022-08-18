@@ -41,6 +41,7 @@ add_subdirectory("tests")
 file(GLOB_RECURSE SRCS "src/*.h" "src/*.cpp")
 
 # Install settings
+include(GNUInstallDirs)
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX /usr)
 endif ()
@@ -139,24 +140,24 @@ target_link_libraries(${BIN_NAME} PRIVATE
 
 ## qm files
 file(GLOB QM_FILES "translations/*.qm")
-install(FILES ${QM_FILES} DESTINATION share/dde-launcher/translations)
+install(FILES ${QM_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/dde-launcher/translations)
 
 ## desktop file
-install(FILES dde-launcher.desktop DESTINATION share/applications/)
-install(FILES dde-launcher-wapper DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+install(FILES dde-launcher.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications/)
+install(FILES dde-launcher-wapper DESTINATION ${CMAKE_INSTALL_BINDIR} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 ## services files
-install(FILES src/dbusservices/com.deepin.dde.Launcher.service DESTINATION /usr/share/dbus-1/services)
+install(FILES src/dbusservices/com.deepin.dde.Launcher.service DESTINATION ${CMAKE_INSTALL_DATADIR}/dbus-1/services)
 
 #schemas
-install(FILES gschema/com.deepin.dde.launcher.gschema.xml DESTINATION share/glib-2.0/schemas)
+install(FILES gschema/com.deepin.dde.launcher.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)
 install(CODE "execute_process(COMMAND glib-compile-schemas ${CMAKE_INSTALL_PREFIX}/share/glib-2.0/schemas)")
 
 ## icon
-install(FILES data/deepin-launcher.svg DESTINATION /usr/share/icons/hicolor/scalable/apps)
+install(FILES data/deepin-launcher.svg DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
 
 # bin
-install(TARGETS ${BIN_NAME} DESTINATION bin)
+install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 # config
 dconfig_meta_files(APPID org.deepin.dde.launcher FILES ./configs/org.deepin.dde.launcher.json)

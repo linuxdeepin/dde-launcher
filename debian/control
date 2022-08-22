@@ -34,7 +34,7 @@ Depends:
  dde-daemon (>=5.13.12),
  startdde (>=5.8.9),
  lastore-daemon (>=5.2.9),
- libxcb-util0,
+ libxcb-util0 | libxcb-util1,
  ${misc:Depends},
  ${shlibs:Depends},
 Conflicts:

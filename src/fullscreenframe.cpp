@@ -903,6 +903,11 @@ void FullScreenFrame::initUI()
     mainLayout->addWidget(m_bottomSpacing);
 
     setLayout(mainLayout);
+
+    // 在wayland环境中，应用默认有固定的圆角，全屏时视觉效果不佳，将圆角设置为0
+    // X11同样不应该有圆角，此处不作为wayland的差异性处理
+    DPlatformWindowHandle windowHandle(this);
+    windowHandle.setWindowRadius(0);
 }
 
 MultiPagesView *FullScreenFrame::getCategoryGridViewList(const AppsListModel::AppCategory category)

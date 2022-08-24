@@ -805,8 +805,14 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
         setFixedSize(m_rightWidget->width() + m_leftBar->width(), 538);
     }
 
-    if(watched == m_appsView && event->type() == QEvent::Wheel) {
-        m_searcherEdit->lineEdit()->clearFocus();
+    if (watched == m_appsView) {
+        if (event->type() == QEvent::Wheel) {
+            m_searcherEdit->lineEdit()->clearFocus();
+        } else if (event->type() == QEvent::Leave && !m_menuWorker->isMenuVisible()) {
+            // 菜单未显示时鼠标移出列表区域，取消应用选中状态，显示菜单时，移动鼠标菜单保持显示并且左侧图标不显示选中状态
+            m_appsModel->setDrawBackground(false);
+            m_searchModel->setDrawBackground(false);
+        }
     }
 
     if (m_enterSearchEdit && watched->objectName() == QString("MiniFrameWindow")) {

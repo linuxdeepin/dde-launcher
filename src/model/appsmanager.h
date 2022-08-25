@@ -159,7 +159,6 @@ public slots:
     void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
     const ItemInfo_v1 createOfCategory(qlonglong category);
     void onUninstallFail(const QString &appKey);
-    void onAppSuffixChange();
 
 private:
     explicit AppsManager(QObject *parent = nullptr);

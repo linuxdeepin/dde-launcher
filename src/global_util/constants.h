@@ -109,6 +109,7 @@ static const int CHANGE_PAGE_DELAY_TIME = 250;                                  
 static const QString SOLID_BACKGROUND_COLOR = "#000F27";                            // 纯色背景色号
 static const QString DEFAULT_META_CONFIG_NAME = "org.deepin.dde.launcher";          // 默认的配置文件名称
 static const QString UNABLE_TO_DOCK_LIST = "unable-to-dock-list";                   // 拖拽到任务栏驻留配置功能
+static const QString SHOW_LINGLONG_SUFFIX = "show-linglong-suffix-name";            // 显示玲珑应用后缀
 
 static const int MOUSE_LEFTBUTTON = 1;
 static const int MOUSE_RIGHTBUTTON  = 3;

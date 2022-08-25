@@ -227,7 +227,6 @@ public Q_SLOTS: // METHODS
 
        void FullscreenChanged();
        void DisplayModeChanged();
-       void AppSuffixChanged();
 };
 
 #endif

@@ -131,7 +131,11 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
         // calc text
         appNameRect = itemTextRect(br, iconRect, drawBlueDot);
-        const QPair<QString, bool> appTextResolvedInfo = holdTextInRect(fm, itemInfo.m_name, appNameRect.toRect());
+
+        bool showSuffix = ConfigWorker::getValue(DLauncher::SHOW_LINGLONG_SUFFIX);
+        bool isLingLongApp = itemInfo.isLingLongApp();
+        const QString &displayName = (showSuffix && isLingLongApp) ? (QString("%1(%2)").arg(itemInfo.m_name).arg(tr("LingLong"))) : itemInfo.m_name;
+        const QPair<QString, bool> appTextResolvedInfo = holdTextInRect(fm, displayName, appNameRect.toRect());
         appNameResolved = appTextResolvedInfo.first;
 
         if ((fm.width(appNameResolved) + (drawBlueDot ? (m_blueDotPixmap.width() + 10) : 0)) >= appNameRect.width())

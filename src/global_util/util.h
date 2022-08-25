@@ -27,8 +27,12 @@
 #include "iteminfo.h"
 #include "constants.h"
 
+#include <DConfig>
+
 #include <QtCore>
 #include <QGSettings>
+
+DCORE_USE_NAMESPACE
 
 enum CacheType {
     TextType,
@@ -50,4 +54,16 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, 
 QIcon getIcon(const QString &name);
 QVariant getDConfigValue(const QString &key, const QVariant &defaultValue, const QString &configFileName = DLauncher::DEFAULT_META_CONFIG_NAME);
 void setDConfigValue(const QString &key, const QVariant &value, const QString &fileName = DLauncher::DEFAULT_META_CONFIG_NAME);
+
+class ConfigWorker : QObject
+{
+    Q_OBJECT
+public:
+    static DConfig *instance();
+
+    static bool getValue(const QString &key);
+
+private:
+    static DConfig *INSTANCE;
+};
 #endif // UTIL_H

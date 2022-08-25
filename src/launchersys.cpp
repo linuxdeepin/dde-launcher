@@ -94,6 +94,7 @@ LauncherSys::LauncherSys(QObject *parent)
     connect(m_autoExitTimer, &QTimer::timeout, this, &LauncherSys::onAutoExitTimeout, Qt::QueuedConnection);
     connect(IconCacheManager::instance(), &IconCacheManager::iconLoaded, this, &LauncherSys::aboutToShowLauncher, Qt::QueuedConnection);
     connect(IconCacheManager::instance(), &IconCacheManager::iconLoaded, this, &LauncherSys::updateLauncher);
+    connect(ConfigWorker::instance(), &DConfig::valueChanged, this, &LauncherSys::onValueChanged);
 }
 
 LauncherSys::~LauncherSys()
@@ -299,6 +300,15 @@ void LauncherSys::updateLauncher()
         m_fullLauncher->update();
     else
         m_windowLauncher->update();
+}
+
+void LauncherSys::onValueChanged()
+{
+    if (m_windowLauncher)
+        m_windowLauncher->update();
+
+    if (m_fullLauncher)
+        m_fullLauncher->update();
 }
 
 void LauncherSys::aboutToShowLauncher()

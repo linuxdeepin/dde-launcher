@@ -268,6 +268,7 @@ bool ItemInfo_v1::startWithNum() const
 
 bool ItemInfo_v1::isLingLongApp() const
 {
+    // desktop全路径中包含linglong字段
     return m_desktop.contains("/linglong/");
 }
 

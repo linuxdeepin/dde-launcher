@@ -181,7 +181,6 @@ AppsManager::AppsManager(QObject *parent)
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::NewAppLaunched, this, &AppsManager::markLaunched);
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallSuccess, this, &AppsManager::abandonStashedItem);
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallFailed, this, &AppsManager::onUninstallFail);
-    connect(m_amDbusLauncherInter, &AMDBusLauncherInter::AppSuffixChanged, this, &AppsManager::onAppSuffixChange);
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::ItemChanged, this, qOverload<const QString &, const ItemInfo_v2 &, qlonglong>(&AppsManager::handleItemChanged));
 
     connect(m_amDbusDockInter, &AMDBusDockInter::IconSizeChanged, this, &AppsManager::IconSizeChanged, Qt::QueuedConnection);
@@ -945,11 +944,6 @@ void AppsManager::onUninstallFail(const QString &appKey)
     emit dataChanged(AppsListModel::FullscreenAll);
 }
 
-void AppsManager::onAppSuffixChange()
-{
-    refreshAllList();
-}
-
 const ItemInfoList_v1 AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const
 {
     switch (category) {
@@ -1191,7 +1185,10 @@ const QPixmap AppsManager::appIcon(const ItemInfo_v1 &info, const int size)
 const QString AppsManager::appName(const ItemInfo_v1 &info, const int size)
 {
     const QFontMetrics fm = qApp->fontMetrics();
-    const QString &fm_string = fm.elidedText(info.m_name, Qt::ElideRight, size);
+    bool showSuffix = ConfigWorker::getValue(DLauncher::SHOW_LINGLONG_SUFFIX);
+    bool isLingLongApp = info.isLingLongApp();
+    const QString &displayName = (showSuffix && isLingLongApp) ? (QString("%1(%2)").arg(info.m_name).arg(tr("LingLong"))) : info.m_name;
+    const QString &fm_string = fm.elidedText(displayName, Qt::ElideRight, size);
     return fm_string;
 }
 

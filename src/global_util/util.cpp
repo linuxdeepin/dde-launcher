@@ -483,3 +483,22 @@ void setDConfigValue(const QString &key, const QVariant &value, const QString &f
     if (config.keyList().contains(key))
         config.setValue(key, value);
 }
+
+DConfig *ConfigWorker::INSTANCE = Q_NULLPTR;
+
+DConfig *ConfigWorker::instance()
+{
+    if (!INSTANCE)
+        INSTANCE = new DConfig(DLauncher::DEFAULT_META_CONFIG_NAME);
+
+    return INSTANCE;
+}
+
+bool ConfigWorker::getValue(const QString &key)
+{
+    if (instance()->isValid() && instance()->keyList().contains(key))
+        return instance()->value(key).toBool();
+
+    qDebug() << "instance is invalid or key doesn't exist";
+    return false;
+}

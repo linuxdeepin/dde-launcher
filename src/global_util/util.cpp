@@ -447,43 +447,6 @@ QString cacheKey(const ItemInfo_v1 &itemInfo)
     return itemInfo.m_name + itemInfo.m_iconKey;
 }
 
-/**
- * @brief getDConfigValue 根据传入的\a key获取配置项的值，获取失败返回默认值
- * @param key 配置项键值
- * @param defaultValue 默认返回值，为避免出现返回值错误导致程序异常的问题，此参数必填
- * @param configFileName 配置文件名称
- * @return 配置项的值
- */
-QVariant getDConfigValue(const QString &key, const QVariant &defaultValue, const QString &configFileName)
-{
-    DConfig config(configFileName);
-
-    if (!config.isValid()) {
-        qWarning() << QString("DConfig is invalid, name:[%1], subpath[%2].").
-                        arg(config.name(), config.subpath());
-        return defaultValue;
-    }
-
-    if (config.keyList().contains(key))
-        return config.value(key);
-
-    return defaultValue;
-}
-
-void setDConfigValue(const QString &key, const QVariant &value, const QString &fileName)
-{
-    DConfig config(fileName);
-
-    if (config.isValid()) {
-        qWarning() << QString("DConfig is invalid, name:[%1], subpath[%2].").
-                        arg(config.name(), config.subpath());
-        return;
-    }
-
-    if (config.keyList().contains(key))
-        config.setValue(key, value);
-}
-
 DConfig *ConfigWorker::INSTANCE = Q_NULLPTR;
 
 DConfig *ConfigWorker::instance()
@@ -494,11 +457,34 @@ DConfig *ConfigWorker::instance()
     return INSTANCE;
 }
 
-bool ConfigWorker::getValue(const QString &key)
+QVariant ConfigWorker::getValue(const QString &key, const QVariant &defaultValue)
 {
-    if (instance()->isValid() && instance()->keyList().contains(key))
-        return instance()->value(key).toBool();
+    if (!instance()->isValid()) {
+        qWarning() << QString("DConfig is invalid, name:[%1], subpath[%2].").
+                        arg(instance()->name(), instance()->subpath());
+        return defaultValue;
+    }
 
-    qDebug() << "instance is invalid or key doesn't exist";
-    return false;
+    if (!instance()->keyList().contains(key)) {
+        qWarning() << QString("key: (%1) doesn't exist").arg(key);
+        return defaultValue;
+    }
+
+    return instance()->value(key);
+}
+
+void ConfigWorker::setValue(const QString &key, const QVariant &value)
+{
+    if (!instance()->isValid()) {
+        qWarning() << QString("DConfig is invalid, name:[%1], subpath[%2].").
+                        arg(instance()->name(), instance()->subpath());
+        return;
+    }
+
+    if (!instance()->keyList().contains(key)) {
+        qWarning() << QString("key: (%1) doesn't exist").arg(key);
+        return;
+    }
+
+    instance()->setValue(key, value);
 }

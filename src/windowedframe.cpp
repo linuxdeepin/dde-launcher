@@ -118,7 +118,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_curScreen(m_appsManager->currentScreen())
     , m_modeSwitch(new ModeSwitch(this))
 {
-    if (!getDConfigValue("enable-full-screen-mode", true).toBool())
+    if (!ConfigWorker::getValue(DLauncher::ENABLE_FULL_SCREEN_MODE, true).toBool())
         m_modeToggleBtn->hide();
 
     initUi();

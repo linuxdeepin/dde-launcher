@@ -52,8 +52,6 @@ int perfectIconSize(const int size);
 QString cacheKey(const ItemInfo_v1 &itemInfo);
 bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, bool reObtain);
 QIcon getIcon(const QString &name);
-QVariant getDConfigValue(const QString &key, const QVariant &defaultValue, const QString &configFileName = DLauncher::DEFAULT_META_CONFIG_NAME);
-void setDConfigValue(const QString &key, const QVariant &value, const QString &fileName = DLauncher::DEFAULT_META_CONFIG_NAME);
 
 class ConfigWorker : QObject
 {
@@ -61,7 +59,8 @@ class ConfigWorker : QObject
 public:
     static DConfig *instance();
 
-    static bool getValue(const QString &key);
+    static QVariant getValue(const QString &key, const QVariant &defaultValue = QVariant());
+    static void setValue(const QString &key, const QVariant &value = QVariant());
 
 private:
     static DConfig *INSTANCE;

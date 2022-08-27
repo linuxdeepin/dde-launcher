@@ -110,6 +110,8 @@ static const QString SOLID_BACKGROUND_COLOR = "#000F27";                        
 static const QString DEFAULT_META_CONFIG_NAME = "org.deepin.dde.launcher";          // 默认的配置文件名称
 static const QString UNABLE_TO_DOCK_LIST = "unable-to-dock-list";                   // 拖拽到任务栏驻留配置功能
 static const QString SHOW_LINGLONG_SUFFIX = "show-linglong-suffix-name";            // 显示玲珑应用后缀
+static const QString USE_SOLID_BACKGROUND = "use-solid-background";                 // 启动器全屏模式使用纯色背景
+static const QString ENABLE_FULL_SCREEN_MODE = "enable-full-screen-mode";           // 是否支持切换到全屏模式
 
 static const int MOUSE_LEFTBUTTON = 1;
 static const int MOUSE_RIGHTBUTTON  = 3;

@@ -503,8 +503,7 @@ void AppsManager::removeNonexistentData()
     for (; categoryAppsIter != m_appInfos.end(); ++categoryAppsIter) {
         ItemInfoList_v1 &item = categoryAppsIter.value();
         for (auto it(item.begin()); it != item.end();) {
-            int idx = m_allAppInfoList.indexOf(*it);
-            if (idx == -1)
+            if (!m_allAppInfoList.contains(*it))
                 it = item.erase(it);
             else
                 it++;
@@ -512,6 +511,7 @@ void AppsManager::removeNonexistentData()
     }
 
     // 移除 m_fullscreenUsedSortedList 所有应用中不存在的应用
+    ItemInfoList_v1 appListToRemove;
     for (ItemInfo_v1 &info : m_fullscreenUsedSortedList) {
         if (info.m_isDir) {
             // 从文件夹中移除不存在的应用
@@ -520,24 +520,31 @@ void AppsManager::removeNonexistentData()
                     info.m_appInfoList.removeOne(dirItem);
             }
         } else {
-            //  从全屏所有应用列表中移除不存在的应用
             if (!m_allAppInfoList.contains(info))
-                m_fullscreenUsedSortedList.removeOne(info);
+                appListToRemove.append(info);
         }
     }
 
-    // 移除 m_collectSortedList 收藏应用中不存在的应用
-    foreach (const ItemInfo_v1 &info, m_collectSortedList) {
-        int idx = m_allAppInfoList.indexOf(info);
-        if (idx == -1)
-            m_collectSortedList.removeOne(info);
-    }
+    //  移除全屏所有应用列表中不存在的应用
+    for (const ItemInfo_v1 &info : appListToRemove)
+        m_fullscreenUsedSortedList.removeOne(info);
 
-    // 从小窗口移除不存在的应用
-    foreach (const ItemInfo_v1 &info, m_windowedUsedSortedList) {
-        if (!m_allAppInfoList.contains(info))
-            m_windowedUsedSortedList.removeOne(info);
-    }
+    auto removeItems = [ & ](ItemInfoList_v1 &list) {
+        ItemInfoList_v1 listToRemove;
+        for (const ItemInfo_v1 &info : list) {
+            if (!m_allAppInfoList.contains(info))
+                listToRemove.append(info);
+        }
+
+        for (const ItemInfo_v1 &info : listToRemove)
+            list.removeOne(info);
+    };
+
+    // 移除 m_collectSortedList 收藏应用中不存在的应用
+    removeItems(m_collectSortedList);
+
+    // 移除 m_windowedUsedSortedList 中不存在的应用
+    removeItems(m_windowedUsedSortedList);
 }
 
 /** 根据应用分类 ID 对应用分类列表进行排序
@@ -638,7 +645,6 @@ void AppsManager::abandonStashedItem(const QString &appKey)
     for (const ItemInfo_v1 &info : m_allAppInfoList) {
         if (info.m_key == appKey) {
             APP_AUTOSTART_CACHE.remove(info.m_desktop);
-            m_allAppInfoList.removeOne(info);
             break;
         }
     }

@@ -1620,12 +1620,12 @@ void FullScreenFrame::updateDockPosition()
         m_searchWidget->setRightSpacing(0);
         break;
     case DLauncher::DOCK_POS_LEFT:
-        m_searchWidget->setLeftSpacing(dockGeometry.width());
-        m_searchWidget->setRightSpacing(0);
+        m_searchWidget->setRightSpacing(dockGeometry.width());
+        m_searchWidget->setLeftSpacing(0);
         break;
     case DLauncher::DOCK_POS_RIGHT:
-        m_searchWidget->setLeftSpacing(0);
-        m_searchWidget->setRightSpacing(dockGeometry.width());
+        m_searchWidget->setRightSpacing(0);
+        m_searchWidget->setLeftSpacing(dockGeometry.width());
         break;
     default:
         break;

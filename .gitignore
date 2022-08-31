@@ -35,3 +35,6 @@ build*
 .vscode
 .transifexrc
 lupdate.sh
+
+# clangd
+.cache

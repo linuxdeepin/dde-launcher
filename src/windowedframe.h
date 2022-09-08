@@ -107,6 +107,7 @@ private slots:
     void onSwitchBtnClicked();
     void onWMCompositeChanged();
     void searchText(const QString &text);
+    void dataChanged(const AppsListModel::AppCategory category);
     void showTips(const QString &text);
     void hideTips();
     void prepareHideLauncher();

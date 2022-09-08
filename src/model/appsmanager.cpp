@@ -449,6 +449,9 @@ void AppsManager::saveUsedSortedList()
 
 void AppsManager::searchApp(const QString &keywords)
 {
+    if(keywords.isEmpty())
+        return;
+
     m_searchTimer->start();
     m_searchText = keywords;
 }

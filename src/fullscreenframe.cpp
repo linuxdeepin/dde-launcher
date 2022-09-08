@@ -1488,6 +1488,12 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
 void FullScreenFrame::refreshPageView(AppsListModel::AppCategory category)
 {
     if (AppsListModel::Search == category) {
+        // 搜索完成之后再切换model，避免闪烁上次的搜索结果
+        updateDisplayMode(SEARCH);
+
+        // 选中搜索结果中的第一项
+        m_appItemDelegate->setCurrentIndex(m_multiPagesView->getAppItem(0));
+
         m_multiPagesView->ShowPageView(AppsListModel::AppCategory(m_displayMode));
     } else {
         m_multiPagesView->updatePageCount(category);
@@ -1834,8 +1840,6 @@ void FullScreenFrame::searchTextChanged(const QString &keywords, bool enableUpda
 
     if (keywords.isEmpty())
         updateDisplayMode(m_calcUtil->displayMode());
-    else
-        updateDisplayMode(SEARCH);
 
     if (m_searchWidget->edit()->lineEdit()->text().isEmpty())
         m_searchWidget->edit()->lineEdit()->clearFocus();

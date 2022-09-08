@@ -232,6 +232,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
         }
     });
 
+    connect(m_appsManager, &AppsManager::dataChanged, this, &WindowedFrame::dataChanged);
     connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &WindowedFrame::hideTips);
     connect(m_switchBtn, &MiniFrameSwitchBtn::clicked, this, &WindowedFrame::onSwitchBtnClicked);
@@ -963,14 +964,29 @@ void WindowedFrame::searchText(const QString &text)
         m_displayMode = Category;
     } else {
         m_switchBtn->setVisible(false);
-        if (m_appsView->model() != m_searchModel) {
-            m_appsView->setModel(m_searchModel);
-            m_searchModel->setDrawBackground(true);
-            m_focusPos = Search;
-        }
+        m_focusPos = Search;
+
         auto temp = text;
         m_appsManager->searchApp(temp.replace(" ",""));
         m_displayMode = All;
+    }
+}
+
+void WindowedFrame::dataChanged(AppsListModel::AppCategory category)
+{
+    if (m_calcUtil->fullscreen())
+        return;
+
+    if (category == AppsListModel::Search) {
+        // 搜索完成之后再切换model，避免闪烁上次的搜索结果
+        if (m_appsView->model() != m_searchModel) {
+            m_appsView->setModel(m_searchModel);
+            m_searchModel->setDrawBackground(true);
+        }
+
+        // 选中搜索结果中的第一项
+        if (m_appsView->count())
+            m_appsView->setCurrentIndex(m_appsView->indexAt(0));
     }
 }
 

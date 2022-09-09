@@ -32,11 +32,10 @@ sudo make install
 ## 帮助
 任何使用问题都可以通过以下方式寻求帮助：
 
-* [Gitter](https://gitter.im/orgs/linuxdeepin/rooms)
-* [IRC channel](https://webchat.freenode.net/?channels=deepin)
+* [Matrix](https://matrix.to/#/#deepin-community:matrix.org)
 * [WiKi](https://wiki.deepin.org)
 * [官方论坛](https://bbs.deepin.org)
-* [开发者中心](https://github.com/linuxdeepin/dde-launcher) 
+* [开发者中心](https://github.com/linuxdeepin/developer-center/issues) 
 
 ## 贡献指南
 

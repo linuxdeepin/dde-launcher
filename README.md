@@ -33,11 +33,10 @@ sudo make install
 
 Any usage issues can ask for help via
 
-* [Gitter](https://gitter.im/orgs/linuxdeepin/rooms)
-* [IRC channel](https://webchat.freenode.net/?channels=deepin)
+* [Matrix](https://matrix.to/#/#deepin-community:matrix.org)
 * [WiKi](https://wiki.deepin.org)
 * [Forum](https://bbs.deepin.org)
-* [Developer Center](https://github.com/linuxdeepin/dde-launcher) 
+* [Developer Center](https://github.com/linuxdeepin/developer-center/issues) 
 
 ## Getting involved
 

@@ -171,6 +171,7 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
 
             // 触发右键菜单
             emit popupMenuRequested(rightClickPoint, clickedIndex);
+            qInfo() << "appgridview popupMenuRequested emited....";
         }
     }
 

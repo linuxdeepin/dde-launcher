@@ -1217,6 +1217,8 @@ void WindowedFrame::adjustPosition()
 
     QRect dockRect = QRect(scaledPosition(rect.topLeft()),scaledPosition(rect.bottomRight()));
 
+    qInfo() << "dockRect:" << dockRect;
+
     QPoint launcherPoint;
     switch (dockPos) {
     case DLauncher::DOCK_TOP:

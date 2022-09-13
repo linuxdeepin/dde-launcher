@@ -218,8 +218,10 @@ void AppListView::mousePressEvent(QMouseEvent *e)
         const QPoint rightClickPoint = mapToGlobal(e->pos());
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
 
-        if (clickedIndex.isValid())
+        if (clickedIndex.isValid()) {
+            qInfo() << "app listview popupMenuRequested emited....";
             emit popupMenuRequested(rightClickPoint, clickedIndex);
+        }
     }
 
     if (e->button() == Qt::LeftButton)

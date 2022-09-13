@@ -245,9 +245,12 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)
     QSignalMapper *signalMapper = new QSignalMapper(m_menu);
 
     if (IS_WAYLAND_DISPLAY) {
+        qInfo() << "is wayland...";
         m_menu->setAttribute(Qt::WA_NativeWindow);
         m_menu->windowHandle()->setProperty("_d_dwayland_window-type", "session-shell");
     }
+
+    qInfo() << "is X11...";
 
     m_menu->clear();
     creatMenuByAppItem(m_menu, signalMapper);
@@ -274,6 +277,7 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)
 
     m_menu->show();
     m_menu->raise();
+    qInfo() << "menu pos:" << pos << ", menu visible:" << m_menu->isVisible();
 
     // 保存右键菜单实际的物理大小(已将屏幕缩放考虑在内)
     m_menuIsShown = true;
@@ -290,6 +294,7 @@ void MenuWorker::handleOpen()
 
 void MenuWorker::handleMenuClosed()
 {
+    qInfo() << " menu is closed...." ;
     emit menuAccepted();
     m_menuIsShown = false;
 }

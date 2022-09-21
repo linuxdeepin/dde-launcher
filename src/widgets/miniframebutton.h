@@ -38,7 +38,6 @@ protected:
 
 private:
     QColor m_color;
-    QPixmap m_icon;
 };
 
 #endif

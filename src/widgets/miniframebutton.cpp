@@ -39,7 +39,7 @@ void MiniFrameButton::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeT
 void MiniFrameButton::setIconPath(const QString &path)
 {
     if (!path.isEmpty()) {
-        m_icon = QPixmap(path);
+        setIcon(QIcon(path));
     }
 }
 
@@ -91,8 +91,10 @@ void MiniFrameButton::paintEvent(QPaintEvent *event)
         painter.fillPath(path, m_color);
     }
 
-    if (!m_icon.isNull()) {
-        const QPixmap scaled_pixmap = m_icon.scaled(iconSize().width(), iconSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        painter.drawPixmap(rect().center().x() - iconSize().width() / 2 + 1 , rect().center().y() - iconSize().height() / 2 + 1, scaled_pixmap);
+    if (!icon().isNull()) {
+        QRect iconRect;
+        iconRect.setSize(iconSize());
+        iconRect.moveCenter(rect().center());
+        icon().paint(&painter, iconRect);
     }
 }

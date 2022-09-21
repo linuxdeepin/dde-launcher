@@ -989,6 +989,9 @@ void WindowedFrame::showTips(const QString &text)
 
 void WindowedFrame::hideTips()
 {
+    if (m_searchModel == m_appsView->model() && m_appsView->count())
+        m_appsView->setCurrentIndex(m_appsView->indexAt(0));
+
     m_tipsLabel->setVisible(false);
 }
 

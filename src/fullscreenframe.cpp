@@ -548,6 +548,9 @@ void FullScreenFrame::showTips(const QString &tips)
 
 void FullScreenFrame::hideTips()
 {
+    if (m_displayMode == SEARCH)
+        m_appItemDelegate->setCurrentIndex(m_multiPagesView->getAppItem(0));
+
     m_tipsLabel->setVisible(false);
 }
 

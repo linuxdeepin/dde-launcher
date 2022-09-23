@@ -76,7 +76,7 @@ public:
     bool isItemOnDesktop(QString appKey);
     bool isItemStartup(QString appKey);
     QRect menuGeometry() const {return m_menuGeometry;}
-    void creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper);
+    void creatMenuByAppItem();
     bool isMenuVisible();
 
 signals:
@@ -131,6 +131,7 @@ private:
 
     bool m_menuIsShown = false;
     Menu *m_menu;
+    QSignalMapper *m_signalMapper;
 };
 
 #endif // MENUWORKER_H

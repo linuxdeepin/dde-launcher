@@ -1,4 +1,5 @@
 #include "searchmodewidget.h"
+#include "calculate_util.h"
 
 #include <DFontSizeManager>
 
@@ -17,7 +18,6 @@ SearchModeWidget::SearchModeWidget(QWidget *parent)
     , m_outsideModel(new AppsListModel(AppsListModel::PluginSearch))
     , m_iconButton(new DIconButton(m_emptyWidget))
     , m_emptyText(new QLabel(m_emptyWidget))
-    , m_launcherInter(new DBusLauncher(this))
 {
     initAppView();
     initTitle();
@@ -31,6 +31,10 @@ SearchModeWidget::~SearchModeWidget()
 
 void SearchModeWidget::initUi()
 {
+#ifdef QT_DEBUG
+    setStyleSheet("QWidget{border: 1px solid red;}");
+#endif
+
     QMargins contentMargin(0, 0, 0, 0);
 
     // native app
@@ -44,10 +48,8 @@ void SearchModeWidget::initUi()
     nativeHLayout->setContentsMargins(contentMargin);
     nativeHLayout->setSpacing(0);
 
-    addSpacerItem(nativeHLayout);
     nativeHLayout->addLayout(nativeVLayout);
     nativeHLayout->setStretch(1, 1);
-    addSpacerItem(nativeHLayout);
 
     // app store app
     QVBoxLayout *outsideVLayout = new QVBoxLayout;
@@ -60,10 +62,8 @@ void SearchModeWidget::initUi()
     outsideHLayout->setContentsMargins(contentMargin);
     outsideHLayout->setSpacing(0);
 
-    addSpacerItem(outsideHLayout);
     outsideHLayout->addLayout(outsideVLayout);
     outsideHLayout->setStretch(1, 1);
-    addSpacerItem(outsideHLayout);
 
     // 搜索为空时
     QVBoxLayout *emptyVLayout  = new QVBoxLayout;
@@ -106,7 +106,6 @@ void SearchModeWidget::initTitle()
 
     // 搜索标题字体样式设置
     QFont searchTitleFont = m_nativeLabel->font();
-    DFontSizeManager::instance()->bind(m_nativeLabel, DFontSizeManager::T5);
     searchTitleFont.setBold(true);
     searchTitleFont.setWeight(700);
 
@@ -118,7 +117,6 @@ void SearchModeWidget::initTitle()
     noResultTitleFont.setBold(true);
     noResultTitleFont.setWeight(700);
 
-    DFontSizeManager::instance()->bind(m_emptyText, DFontSizeManager::T5);
     m_emptyText->setFont(noResultTitleFont);
     m_emptyText->setWindowOpacity(0.3);
 
@@ -176,7 +174,7 @@ void SearchModeWidget::setItemDelegate(AppItemDelegate *delegate)
 void SearchModeWidget::setSearchModel(QSortFilterProxyModel *model)
 {
     updateTitleContent();
-    updateTitlePos(m_launcherInter->fullscreen());
+    updateTitlePos(CalculateUtil::instance()->fullscreen());
 
     m_nativeView->setModel(model);
     m_nativeWidget->setVisible(model->rowCount(QModelIndex()) > 0);
@@ -199,9 +197,15 @@ void SearchModeWidget::updateTitleContent()
 void SearchModeWidget::updateTitlePos(bool alignCenter)
 {
     if (alignCenter) {
+        DFontSizeManager::instance()->bind(m_nativeLabel, DFontSizeManager::T2);
+        DFontSizeManager::instance()->bind(m_outsideLabel, DFontSizeManager::T2);
+
         m_nativeLabel->setAlignment(Qt::AlignCenter);
         m_outsideLabel->setAlignment(Qt::AlignCenter);
     } else {
+        DFontSizeManager::instance()->bind(m_nativeLabel, DFontSizeManager::T5);
+        DFontSizeManager::instance()->bind(m_outsideLabel, DFontSizeManager::T5);
+
         m_nativeLabel->setAlignment(Qt::AlignLeft);
         m_outsideLabel->setAlignment(Qt::AlignLeft);
     }
@@ -209,10 +213,10 @@ void SearchModeWidget::updateTitlePos(bool alignCenter)
 
 void SearchModeWidget::addSpacerItem(QBoxLayout *layout)
 {
-    if (m_launcherInter->fullscreen())
+    if (CalculateUtil::instance()->fullscreen())
         layout->addSpacerItem(new QSpacerItem(300, 5, QSizePolicy::Expanding, QSizePolicy::Expanding));
     else
-        layout->addSpacerItem(new QSpacerItem(5, 5, QSizePolicy::Expanding, QSizePolicy::Expanding));
+        layout->addSpacerItem(new QSpacerItem(5, 5, QSizePolicy::Preferred, QSizePolicy::Expanding));
 }
 
 void SearchModeWidget::onLayoutChanged()

@@ -36,6 +36,7 @@
 
 #define ALL_APPS            0       // 全屏自由模式
 #define SEARCH              2       // 全屏搜索模式
+#define COLS                7       // 默认列数
 
 DCORE_USE_NAMESPACE
 
@@ -59,7 +60,7 @@ public:
 
     inline int titleTextSize() const { return m_titleTextSize; }
     inline int navgationTextSize() const { return double(m_navgationTextSize) / 1.2; }
-    inline int appColumnCount() const { return m_appColumnCount; }
+    inline int appColumnCount() const { return COLS; }
     inline int appItemFontSize() const { return m_appItemFontSize; }
     inline int appItemSpacing() const { return m_appItemSpacing; }
     inline int appMarginLeft() const { return m_appMarginLeft; }
@@ -125,7 +126,6 @@ private:
     int m_appMarginLeft;
     int m_appMarginTop;
     int m_appItemSize;
-    int m_appColumnCount;
     int m_navgationTextSize;
     int m_appPageItemCount;
     int m_titleTextSize;

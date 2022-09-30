@@ -4,7 +4,6 @@
 #include "appgridview.h"
 #include "appslistmodel.h"
 #include "appitemdelegate.h"
-#include "dbuslauncher.h"
 
 #include <DIconButton>
 
@@ -55,8 +54,6 @@ private:
 
     DIconButton *m_iconButton;
     QLabel *m_emptyText;
-
-    DBusLauncher *m_launcherInter;
 };
 
 

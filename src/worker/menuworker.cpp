@@ -79,7 +79,7 @@ void MenuWorker::creatMenuByAppItem()
     m_isItemStartup = m_currentModelIndex.data(AppsListModel::AppAutoStartRole).toBool();
     m_isItemProxy = m_currentModelIndex.data(AppsListModel::AppIsProxyRole).toBool();
     m_isItemEnableScaling = m_currentModelIndex.data(AppsListModel::AppEnableScalingRole).toBool();
-    m_isItemInCollected = m_currentModelIndex.data(AppsListModel::AppIsInCollectRole).toBool();
+    m_isItemInCollected = m_currentModelIndex.data(AppsListModel::AppIsInFavoriteRole).toBool();
 
     const double scale_ratio = SettingValue("com.deepin.xsettings", QByteArray(), "scale-factor", 1.0).toDouble();;
 
@@ -96,14 +96,14 @@ void MenuWorker::creatMenuByAppItem()
     const bool canStartUp = m_currentModelIndex.data(AppsListModel::AppCanStartUpRole).toBool();
     const bool canDisableScale = m_calcUtil->IsServerSystem || qFuzzyCompare(1.0, scale_ratio);
     const bool canUseProxy = m_currentModelIndex.data(AppsListModel::AppCanOpenProxyRole).toBool();
-    const bool isInCollectedList = m_currentModelIndex.data(AppsListModel::AppIsInCollectRole).toBool();
+    const bool isInCollectedList = m_currentModelIndex.data(AppsListModel::AppIsInFavoriteRole).toBool();
     const bool isTopInCollectList = (m_currentModelIndex.row() == 0);
     const bool canMoveToTop = (m_currentModelIndex.row() != 0);
     bool onlyShownInCollectedList = false;
 
     const AppsListModel *listModel = qobject_cast<const AppsListModel *>(m_currentModelIndex.model());
     if (listModel)
-        onlyShownInCollectedList = (listModel->category() == AppsListModel::Collect);
+        onlyShownInCollectedList = (listModel->category() == AppsListModel::Favorite);
 
     QAction *open;
     QAction *desktop;

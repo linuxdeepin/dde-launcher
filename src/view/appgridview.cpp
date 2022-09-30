@@ -108,7 +108,7 @@ void AppGridView::dropEvent(QDropEvent *e)
         return;
 
     // 收藏列表允许从其他视图拖拽进入
-    if (listModel->category() == AppsListModel::Collect) {
+    if (listModel->category() == AppsListModel::Favorite) {
         ItemInfo_v1 info = m_appManager->getItemInfo(e->mimeData()->data("AppKey"));
         const QModelIndex index = indexAt(e->pos());
         if (index.isValid()) {
@@ -398,11 +398,14 @@ QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey
     QPixmap srcPix;
 
     if (appKey == "dde-calendar") {
-        const auto s = m_calcUtil->appIconSize();
-        const double  iconZoom =  s.width() / 64.0;
+#ifdef QT_DEBUG
+        qInfo() << "category: " << static_cast<AppsListModel *>(model())->category();
+#endif
+        const auto itemSize = m_calcUtil->appIconSize(static_cast<AppsListModel *>(model())->category());
+        const double iconZoom =  itemSize.width() / 64.0;
         QStringList calIconList = m_calcUtil->calendarSelectIcon();
 
-        m_calendarWidget->setFixedSize(s);
+        m_calendarWidget->setFixedSize(itemSize);
         m_calendarWidget->setAutoFillBackground(true);
         QPalette palette = m_calendarWidget->palette();
         palette.setBrush(QPalette::Window,
@@ -417,7 +420,7 @@ QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey
         m_monthLabel->setPixmap(monthPix.scaled(monthPix.width(), monthPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         m_monthLabel->setFixedHeight(monthPix.height());
         m_monthLabel->setAlignment(Qt::AlignCenter);
-        m_monthLabel->setFixedWidth(s.width() - 5 * iconZoom);
+        m_monthLabel->setFixedWidth(itemSize.width() - 5 * iconZoom);
         m_monthLabel->show();
         m_vlayout->addWidget(m_monthLabel, Qt::AlignVCenter);
 
@@ -433,7 +436,7 @@ QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey
         m_weekLabel->setPixmap(weekPix.scaled(weekPix.width(), weekPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         m_weekLabel->setFixedHeight(m_weekLabel->pixmap()->height());
         m_weekLabel->setAlignment(Qt::AlignCenter);
-        m_weekLabel->setFixedWidth(s.width() + 5 * iconZoom);
+        m_weekLabel->setFixedWidth(itemSize.width() + 5 * iconZoom);
         m_weekLabel->show();
 
         m_vlayout->addWidget(m_weekLabel, Qt::AlignVCenter);
@@ -524,7 +527,15 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     else
         srcPix = creatSrcPix(index, appKey);
 
-    srcPix = srcPix.scaled(m_calcUtil->appIconSize() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    if (!qobject_cast<AppsListModel *>(model())) {
+        qDebug() << "appgridview's model is null";
+        return;
+    }
+
+    AppsListModel::AppCategory category;
+    category = qobject_cast<AppsListModel *>(model())->category();
+
+    srcPix = srcPix.scaled(m_calcUtil->appIconSize(category) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     srcPix.setDevicePixelRatio(ratio);
 
     // 创建拖拽释放时的应用图标

@@ -58,6 +58,7 @@ const QPoint widgetRelativeOffset(const QWidget *const self, const QWidget *w)
 
 FullScreenFrame::FullScreenFrame(QWidget *parent)
     : BoxFrame(parent)
+    , m_displayMode(AppsListModel::FullscreenAll)
     , m_focusIndex(0)
     , m_mousePressSeconds(0)
     , m_mousePressState(false)
@@ -160,7 +161,7 @@ void FullScreenFrame::onDrawerClick(AppGridView *pView)
 
 void FullScreenFrame::showTips(const QString &tips)
 {
-    if (m_displayMode != SEARCH)
+    if (m_displayMode != AppsListModel::Search)
         return;
 
     m_tipsLabel->setText(tips);
@@ -500,7 +501,7 @@ void FullScreenFrame::showLauncher()
     m_searchWidget->edit()->clearEdit();
     m_searchWidget->edit()->clear();
 
-    updateDisplayMode(m_calcUtil->displayMode());
+    updateDisplayMode(m_displayMode);
 
     m_searchWidget->edit()->lineEdit()->clearFocus();
 
@@ -568,7 +569,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     const QModelIndex curModelIndex = m_appItemDelegate->currentIndex();
     // move operation should be start from a valid location, if not, just init it.
     if (!curModelIndex.isValid()) {
-        if (m_displayMode == ALL_APPS) {
+        if (m_displayMode == AppsListModel::FullscreenAll) {
             m_appItemDelegate->setCurrentIndex(m_multiPagesView->getAppItem(0));
             update();
             return;
@@ -626,10 +627,8 @@ void FullScreenFrame::launchCurrentApp()
     const QModelIndex &index = m_appItemDelegate->currentIndex();
 
     if (index.isValid() && !index.data(AppsListModel::AppDesktopRole).toString().isEmpty()) {
-        const AppsListModel::AppCategory category = index.data(AppsListModel::AppGroupRole).value<AppsListModel::AppCategory>();
-
-        if ((category == AppsListModel::FullscreenAll && m_displayMode == ALL_APPS) ||
-                (category == AppsListModel::Search && m_displayMode == SEARCH)) {
+        if (m_displayMode == AppsListModel::FullscreenAll ||
+                m_displayMode == AppsListModel::Search) {
             m_appsManager->launchApp(index);
             hide();
         }
@@ -769,7 +768,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
 
     m_displayMode = mode;
 
-   if (m_displayMode == ALL_APPS) {
+   if (m_displayMode == AppsListModel::FullscreenAll) {
         // 隐藏搜索模式
         m_searchModeWidget->setVisible(false);
 
@@ -777,7 +776,7 @@ void FullScreenFrame::updateDisplayMode(const int mode)
         m_appsIconBox->setVisible(true);
 
         m_multiPagesView->setModel(AppsListModel::FullscreenAll);
-    } else if (m_displayMode == SEARCH) {
+    } else if (m_displayMode ==  AppsListModel::Search) {
         // 隐藏自由模式显示
         m_appsIconBox->setVisible(false);
         // 显示搜索模式
@@ -824,7 +823,7 @@ void FullScreenFrame::updateDockPosition()
     default:
         break;
     }
-    // 全屏自由 界面布局没有差异，v23
+
     m_calcUtil->calculateAppLayout(m_contentFrame->size() - QSize(0, DLauncher::APPS_AREA_TOP_MARGIN), m_displayMode);
 }
 
@@ -832,13 +831,13 @@ void FullScreenFrame::nextTabWidget(int key)
 {
     if (Qt::Key_Backtab == key) {
         -- m_focusIndex;
-        if (m_displayMode == ALL_APPS) {
+        if (m_displayMode == AppsListModel::FullscreenAll) {
             if (m_focusIndex < FirstItem)
                 m_focusIndex = CategoryChangeBtn;
         }
     } else if (Qt::Key_Tab == key) {
         ++ m_focusIndex;
-        if (m_displayMode == ALL_APPS) {
+        if (m_displayMode == AppsListModel::FullscreenAll) {
             if (m_focusIndex > CategoryChangeBtn)
                 m_focusIndex = FirstItem;
         }
@@ -848,7 +847,7 @@ void FullScreenFrame::nextTabWidget(int key)
 
     switch (m_focusIndex) {
     case FirstItem: {
-        if (m_displayMode == ALL_APPS)
+        if (m_displayMode == AppsListModel::FullscreenAll)
             m_appItemDelegate->setCurrentIndex(m_multiPagesView->getAppItem(0));
         update();
     }
@@ -933,11 +932,14 @@ void FullScreenFrame::mouseReleaseDrag(QMouseEvent *e)
 void FullScreenFrame::layoutChanged()
 {
     QSize boxSize = m_contentFrame->size() - QSize(0, DLauncher::APPS_AREA_TOP_MARGIN);
-    if (m_displayMode == ALL_APPS) {
+    if (m_displayMode == AppsListModel::FullscreenAll) {
         m_appsIconBox->setFixedSize(boxSize);
         m_multiPagesView->setFixedSize(boxSize);
         m_multiPagesView->updatePosition(m_displayMode);
     } else {
+        // TODO: remainSpacing 临时处理，后面会定制控件封装
+        int remainSpacing = m_calcUtil->appItemSpacing() * 7 / 2;
+        m_searchModeWidget->setContentsMargins(remainSpacing, 0, remainSpacing, 0);
         m_searchModeWidget->setFixedSize(boxSize);
     }
 }
@@ -948,9 +950,9 @@ void FullScreenFrame::searchTextChanged(const QString &keywords, bool enableUpda
         return;
 
     if (keywords.isEmpty()) {
-        updateDisplayMode(m_calcUtil->displayMode());
+        updateDisplayMode(AppsListModel::FullscreenAll);
     } else {
-        updateDisplayMode(SEARCH);
+        updateDisplayMode(AppsListModel::Search);
 
         QString keyWord = keywords;
         keyWord = keyWord.remove(QRegExp("\\s"));

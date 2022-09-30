@@ -24,6 +24,7 @@
 #include "calculate_util.h"
 #include "util.h"
 #include "constants.h"
+#include "appslistmodel.h"
 
 #ifdef USE_AM_API
 #include "amdbuslauncherinterface.h"
@@ -94,7 +95,7 @@ int CalculateUtil::calculateIconSize(int mode)
     QSize otherAreaSize;
     QSize containerSize;
 
-    if (mode == ALL_APPS) {
+    if (mode == AppsListModel::FullscreenAll) {
         int padding = getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
         otherAreaSize = QSize(padding + leftSpacing + rightSpacing, DLauncher::APPS_AREA_TOP_MARGIN + bottomSpacing + topSpacing + getSearchWidgetSizeHint().height());
         containerSize = getScreenSize() - otherAreaSize;
@@ -150,15 +151,11 @@ int CalculateUtil::calculateIconSize(int mode)
 
 QSize CalculateUtil::appIconSize(int modelMode) const
 {
-    Q_UNUSED(modelMode);
+    if (modelMode == AppsListModel::TitleMode || modelMode == AppsListModel::LetterMode)
+        return QSize(DLauncher::APP_ITEM_ICON_SIZE, DLauncher::APP_ITEM_ICON_SIZE);
 
-    QSize size;
-    if (!m_isFullScreen)
-        size = QSize(DLauncher::APP_ITEM_ICON_SIZE, DLauncher::APP_ITEM_ICON_SIZE);
-    else
-        size = QSize(m_appItemSize, m_appItemSize) * DLauncher::DEFAULT_RATIO;
-
-    return size;
+    // 相应模式的应用大小在计算时确定
+    return QSize(m_appItemSize, m_appItemSize) * DLauncher::DEFAULT_RATIO;
 }
 
 QSize CalculateUtil::appIconSize() const
@@ -257,78 +254,71 @@ QStringList CalculateUtil::calendarSelectIcon() const
  */
 int CalculateUtil::displayMode() const
 {
-    if (!m_launcherGsettings)
-        return ALL_APPS;
-
     return ALL_APPS;
 }
 
-/**
- * @brief CalculateUtil::calculateAppLayout
- * 计算app列表布局中控件大小参数
- * @param containerSize 控件存放的容器大小
- * @param currentmode 列表展示的模式
- */
 void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int currentmode)
 {
-    double scaleX = getScreenScaleX();
-    double scaleY = getScreenScaleY();
-    double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
+#ifdef QT_DEBUG
+    qInfo() << " currentmode : " << currentmode;
+#endif
 
     if (fullscreen())
         calculateTextSize();
 
     int rows = 1;
+    int cols = 7;
     int containerW = containerSize.width();
     int containerH = containerSize.height();
 
     if (!fullscreen()) {
-        m_appColumnCount = 4;
+        cols = 4;
         rows = 2;
-        containerW = containerSize.width();
-        containerH = containerSize.height();
-    } else if (!m_launcherGsettings || (currentmode == 0) || (currentmode == SEARCH)) {
-        m_appColumnCount = 7;
+    } else if (currentmode == AppsListModel::FullscreenAll) {
+        cols = 7;
         rows = 4;
-
-        containerW = containerSize.width();
-        containerH = containerSize.height() - 20 * scale - DLauncher::DRAG_THRESHOLD;
-    } else {
-        m_appColumnCount = 4;
-        rows = 3;
-
-        containerW = getAppBoxSize().width();
-        //BlurBoxWidget上边距24,　分组标题高度70 ,　MultiPagesView页面切换按钮高度20 * scale;
-        containerH = containerSize.height() - 24 - 60 - 20 * scale - DLauncher::DRAG_THRESHOLD;
+    } else if (currentmode == AppsListModel::Search) {
+        cols = 7;
+        rows = 1;
+    } else if (currentmode == AppsListModel::PluginSearch) {
+        cols = 4;
+        rows = 1;
     }
 
-    // 默认边距保留最小５像素
+    // 默认边距保留最小5像素
     m_appMarginLeft = 5;
     m_appMarginTop = 5;
 
-    // 去年默认边距后，计算每个Item区域的宽高
-    int perItemWidth  = (containerW - m_appMarginLeft * 2) / m_appColumnCount;
+    // 去掉默认边距后，计算每个Item区域的宽高
+    int perItemWidth  = (containerW - m_appMarginLeft * 2) / cols;
     int perItemHeight = (containerH - m_appMarginTop) / rows;
 
     // 因为每个Item是一个正方形的，所以取宽高中最小的值
-    int perItemSize = qMin(perItemHeight,perItemWidth);
+    int perItemSize = qMin(perItemHeight, perItemWidth);
 
     // 图标大小取区域的4 / 5
     m_appItemSize = perItemSize * 4 / 5;
+    m_appItemSpacing = (perItemSize - m_appItemSize) / 2;
 
     if (!fullscreen()) {
-        // 其他区域为间隔区域
-        m_appItemSpacing = (perItemSize - m_appItemSize) / 2;
-
-        // 重新计算左右上边距
-        m_appMarginLeft = (containerW - m_appItemSize * m_appColumnCount - m_appItemSpacing * (m_appColumnCount - 1)) / 6;
+        /* 分类模式图标固定，收藏列表，所有应用列表图标大小一致*/
+#ifdef QT_DEBUG
+        qInfo() << __LINE__ << ", window app size: " << perItemSize;
+#endif
+        m_appMarginLeft = (containerW - m_appItemSize * cols - m_appItemSpacing * (cols - 1)) / 2;
         m_appMarginTop =  (containerH - m_appItemSize * rows - m_appItemSpacing * (rows - 1)) / 2;
-    } else {
-        // 其他区域为间隔区域
-        m_appItemSpacing = (perItemSize - m_appItemSize) / 2;
-
+    } else if (currentmode == AppsListModel::FullscreenAll) {
+#ifdef QT_DEBUG
+        qInfo() << __LINE__ << ", fullscreen app size: " << perItemSize;
+#endif
         // 重新计算左右上边距
-        m_appMarginLeft = (containerW - m_appItemSize * m_appColumnCount - m_appItemSpacing * m_appColumnCount * 2) / 2 - 1;
+        m_appMarginLeft = (containerW - m_appItemSize * cols - m_appItemSpacing * cols * 2) / 2 - 1;
+        m_appMarginTop =  (containerH - m_appItemSize * rows - m_appItemSpacing * rows * 2) / 2;
+    } else if (currentmode == AppsListModel::Search) {
+#ifdef QT_DEBUG
+        qInfo() << __LINE__ << ", fullscreen search mode app size: " << perItemSize;
+#endif
+        m_appMarginLeft = (containerW - m_appItemSize * cols - m_appItemSpacing * cols * 2) / 2 - 1;
         m_appMarginTop =  (containerH - m_appItemSize * rows - m_appItemSpacing * rows * 2) / 2;
     }
     // 计算字体大小
@@ -359,7 +349,6 @@ CalculateUtil::CalculateUtil(QObject *parent)
     , m_appMarginLeft(0)
     , m_appMarginTop(0)
     , m_appItemSize(0)
-    , m_appColumnCount(7)
     , m_navgationTextSize(14)
     , m_appPageItemCount(28)
     , m_titleTextSize(40)

@@ -92,7 +92,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_appsManager(AppsManager::instance())
     , m_appsModel(new AppsListModel(AppsListModel::TitleMode, this))
     , m_allAppsModel(new AppsListModel(AppsListModel::WindowedAll, this))
-    , m_favoriteModel(new AppsListModel(AppsListModel::Collect, this))
+    , m_favoriteModel(new AppsListModel(AppsListModel::Favorite, this))
     , m_filterModel(new SortFilterProxyModel(this))
     , m_searchWidget(new SearchModeWidget(this))
     , m_bottomBtn(new MiniFrameRightBar(this))
@@ -117,6 +117,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_enterSearchEdit(false)
     , m_curScreen(m_appsManager->currentScreen())
     , m_modeSwitch(new ModeSwitch(this))
+    , m_isSearching(false)
 {
     if (!ConfigWorker::getValue(DLauncher::ENABLE_FULL_SCREEN_MODE, true).toBool())
         m_modeToggleBtn->hide();
@@ -148,6 +149,9 @@ void WindowedFrame::initUi()
     m_appsView->installEventFilter(m_eventFilter);
 
     m_favoriteView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    // TODO:
+    //    m_favoriteView->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+    //    m_favoriteView->setResizeMode(QListView::Fixed);
     m_favoriteView->setModel(m_favoriteModel);
     m_favoriteView->setItemDelegate(m_appItemDelegate);
     m_favoriteView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -1059,14 +1063,13 @@ void WindowedFrame::keyPressEvent(QKeyEvent *e)
 
 void WindowedFrame::showEvent(QShowEvent *e)
 {
-    AppListDelegate * delegate = static_cast<AppListDelegate *>(m_appsView->itemDelegate());
+    AppListDelegate *delegate = static_cast<AppListDelegate *>(m_appsView->itemDelegate());
     if (delegate) {
         delegate->setActived(true);
     }
 
     QWidget::showEvent(e);
-    m_calcUtil->calculateAppLayout(m_allAppView->size());
-
+    m_calcUtil->calculateAppLayout(QSize(m_appsView->rect().width() * 2, m_appsView->height()), m_isSearching ? AppsListModel::Search : AppsListModel::WindowedAll);
     QTimer::singleShot(1, this, [this]() {
         raise();
         activateWindow();
@@ -1278,9 +1281,12 @@ void WindowedFrame::onWMCompositeChanged()
 
 void WindowedFrame::searchText(const QString &text)
 {
+    QSize viewSize = QSize(m_appsView->rect().width() * 2, m_appsView->height());
+
     if (text.isEmpty()) {
         searchAppState(false);
         hideTips();
+        m_calcUtil->calculateAppLayout(viewSize, AppsListModel::WindowedAll);
     } else {
         QString keyWord = text;
         keyWord = keyWord.remove(QRegExp("\\s"));
@@ -1291,6 +1297,7 @@ void WindowedFrame::searchText(const QString &text)
         m_filterModel->setFilterRegExp(regExp);
         m_searchWidget->setSearchModel(m_filterModel);
         m_focusPos = Search;
+        m_calcUtil->calculateAppLayout(viewSize, AppsListModel::Search);
     }
 }
 
@@ -1404,9 +1411,10 @@ void WindowedFrame::addViewEvent(AppGridView *pView)
 void WindowedFrame::refreshView(const AppsListModel::AppCategory category)
 {
     switch (category) {
-    case AppsListModel::Collect:
+    case AppsListModel::Favorite: {
         m_favoriteModel->clearDraggingIndex();
         m_favoriteView->update();
+    }
         break;
     default:
         break;
@@ -1436,6 +1444,10 @@ void WindowedFrame::onFavoriteListVisibleChaged()
 void WindowedFrame::onLayoutChanged()
 {
     int itemSpacing = CalculateUtil::instance()->appItemSpacing();
+#ifdef QT_DEBUG
+    qInfo() << Q_FUNC_INFO << " itemSpacing: " << itemSpacing;
+#endif
+
     QMargins margin = QMargins(0, 0, 0, 0);
     m_favoriteView->setSpacing(itemSpacing);
     m_favoriteView->setViewportMargins(margin);

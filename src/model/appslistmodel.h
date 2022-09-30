@@ -56,7 +56,7 @@ public:
         AppIsRemovableRole,
         AppIsProxyRole,
         AppEnableScalingRole,
-        AppIsInCollectRole,
+        AppIsInFavoriteRole,
         AppIconSizeRole,
         AppFontSizeRole,
         AppItemIsDraggingRole,
@@ -88,7 +88,7 @@ public:
         TitleMode,              // 标题模式
         LetterMode,             // 字母模式
         Search,                 // 本地搜索模式
-        Collect,                // 收藏应用
+        Favorite,               // 收藏应用
         Dir,                    // 应用抽屉
         PluginSearch,           // 插件搜索
 

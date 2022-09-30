@@ -76,6 +76,11 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     if (index.data(AppsListModel::AppItemIsDraggingRole).value<bool>() && !(option.features & QStyleOptionViewItem::HasDisplay))
         return;
 
+#ifdef QT_DEBUG
+    painter->setBrush(Qt::red);
+    painter->drawRect(option.rect);
+#endif
+
     painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
     painter->setPen(Qt::white);
     painter->setBrush(QBrush(Qt::transparent));

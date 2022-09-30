@@ -333,7 +333,7 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
     if(!m_calcUtil->fullscreen())
         return nSize;
 
-    if (m_category == Collect || (m_category == AppsListModel::Search)
+    if (m_category == AppsListModel::Favorite || (m_category == AppsListModel::Search)
                               || (m_category == AppsListModel::PluginSearch))
         return nSize;
 
@@ -485,7 +485,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
             itemInfo = m_appsManager->appsLetterListIndex(index.row());
         } else if (m_category == WindowedAll) {
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
-        } else if (m_category == Collect) {
+        } else if (m_category == Favorite) {
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
         } else if ((m_category == Search) || (m_category == PluginSearch)) {
             itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
@@ -536,7 +536,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     case AppDragIconRole:
         return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize(m_category).width() * 1.2);
     case AppListIconRole: {
-        QSize iconSize = m_calcUtil->appIconSize();
+        QSize iconSize = m_calcUtil->appIconSize(m_category);
         return m_appsManager->appIcon(itemInfo, iconSize.width());
     }
     case ItemSizeHintRole:
@@ -589,8 +589,8 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
     }
     case AppItemStatusRole:
         return itemInfo.m_status;
-    case AppIsInCollectRole: {
-        const ItemInfoList_v1 list = m_appsManager->appsInfoList(Collect);
+    case AppIsInFavoriteRole: {
+        const ItemInfoList_v1 list = m_appsManager->appsInfoList(AppsListModel::Favorite);
         return list.contains(itemInfo);
     }
     default:

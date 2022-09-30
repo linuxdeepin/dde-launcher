@@ -307,7 +307,7 @@ void AppsManager::dropToCollected(const ItemInfo_v1 &info, int row)
         m_collectSortedList.insert(row, info);
 
     saveCollectedSortedList();
-    emit dataChanged(AppsListModel::Collect);
+    emit dataChanged(AppsListModel::Favorite);
 }
 
 QSettings::SettingsMap AppsManager::getCacheMapData(const ItemInfoList_v1 &list)
@@ -629,7 +629,7 @@ void AppsManager::dragdropStashItem(const QModelIndex &index, AppsListModel::App
     if ((mode == AppsListModel::FullscreenAll) || (mode == AppsListModel::Dir))
         handleData(m_fullscreenUsedSortedList);
 
-    if (mode == AppsListModel::Collect)
+    if (mode == AppsListModel::Favorite)
         handleData(m_collectSortedList);
 
     saveAppCategoryInfoList();
@@ -694,7 +694,7 @@ void AppsManager::restoreItem(const QString &appKey, AppsListModel::AppCategory 
             case AppsListModel::FullscreenAll:
                 m_fullscreenUsedSortedList.insert(pos, info);
                 break;
-            case AppsListModel::Collect:
+            case AppsListModel::Favorite:
                 m_collectSortedList.insert(pos, info);
                 break;
             default:
@@ -834,7 +834,7 @@ void AppsManager::onEditCollected(const QModelIndex index, const bool isInCollec
     }
 
     saveCollectedSortedList();
-    emit dataChanged(AppsListModel::Collect);
+    emit dataChanged(AppsListModel::Favorite);
 }
 
 void AppsManager::onMoveToFirstInCollected(const QModelIndex index)
@@ -849,7 +849,7 @@ void AppsManager::onMoveToFirstInCollected(const QModelIndex index)
     }
 
     saveCollectedSortedList();
-    emit dataChanged(AppsListModel::Collect);
+    emit dataChanged(AppsListModel::Favorite);
 }
 
 void AppsManager::markLaunched(QString appKey)
@@ -958,7 +958,7 @@ const ItemInfoList_v1 AppsManager::appsInfoList(const AppsListModel::AppCategory
     case AppsListModel::Search:
     case AppsListModel::PluginSearch:
         return m_appSearchResultList;
-    case AppsListModel::Collect:
+    case AppsListModel::Favorite:
         return m_collectSortedList;
     default:
         break;
@@ -984,7 +984,7 @@ int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category)
         return m_fullscreenUsedSortedList.size();
     case AppsListModel::PluginSearch:
         return m_appSearchResultList.size();
-    case AppsListModel::Collect:
+    case AppsListModel::Favorite:
         return m_collectSortedList.size();
     case AppsListModel::Dir:
         return m_dirAppInfoList.size();
@@ -1004,7 +1004,7 @@ const ItemInfo_v1 AppsManager::appsInfoListIndex(const AppsListModel::AppCategor
     case AppsListModel::LetterMode:
         Q_ASSERT(m_appLetterModeInfos.size() > index);
         return m_appLetterModeInfos[index];
-    case AppsListModel::Collect:
+    case AppsListModel::Favorite:
         Q_ASSERT(m_collectSortedList.size() > index);
         return m_collectSortedList[index];
     case AppsListModel::WindowedAll:
@@ -1851,8 +1851,8 @@ QList<QPixmap> AppsManager::getDirAppIcon(QModelIndex modelIndex)
 
     for (int i = 0; i < infoList.size(); i++) {
         ItemInfo_v1 itemInfo = infoList.at(i);
-        // todo : 图标大小这里可以优化, 看最终方案
-        pixmapList << appIcon(itemInfo, m_calUtil->appIconSize().width());
+        int category = static_cast<const AppsListModel *>(modelIndex.model())->category();
+        pixmapList << appIcon(itemInfo, m_calUtil->appIconSize(category).width());
     }
 
     return pixmapList;

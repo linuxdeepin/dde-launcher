@@ -352,15 +352,12 @@ void MultiPagesView::updatePosition(int mode)
     // TODO: 左右间隔，现在是根据剩余控件进行计算得出的，待优化
     int remainSpacing = m_calcUtil->appItemSpacing() * 7 / 2;
 
-    if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
-        QSize tmpSize = size() - QSize(remainSpacing, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
-        m_appListArea->setFixedSize(tmpSize);
-        m_viewBox->setFixedSize(tmpSize);
+    QSize tmpSize = size() - QSize(remainSpacing, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
+    m_appListArea->setFixedSize(tmpSize);
+    m_viewBox->setFixedSize(tmpSize);
 
-        for (auto pView : m_appGridViewList)
-            pView->setFixedSize(tmpSize);
-    }
-
+    for (auto pView : m_appGridViewList)
+        pView->setFixedSize(tmpSize);
     m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
     m_viewBox->layout()->setSpacing(0);
     m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());

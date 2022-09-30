@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 #ifndef QT_DEBUG
     if (cmdParser.isSet(showOption))
 #endif
-        launcher.show();
+        launcher.showLauncher();
 
     return app->exec();
 }

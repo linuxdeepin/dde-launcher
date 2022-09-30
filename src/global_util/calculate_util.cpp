@@ -53,102 +53,6 @@ qreal CalculateUtil::getCurRatio()
     return m_launcherGsettings ? m_launcherGsettings->get("apps-icon-ratio").toDouble() : 0.5;
 }
 
-/**
- * @brief CalculateUtil::calculateIconSize 计算全屏两种模式下应用图标的实际大小
- * @param mode 全屏自由模式或者全屏分类模式的标识
- * @return 返回对应模式下应用的实际大小
- */
-int CalculateUtil::calculateIconSize(int mode)
-{
-    int topSpacing = 30;
-    int leftSpacing = 0;
-    int rightSpacing = 0;
-    int bottomSpacing = 20;
-
-    // 计算任务栏位置变化时全屏窗口上各控件的大小
-#ifdef USE_AM_API
-    int dockPosition = m_amDbusDockInter->position();
-    QRect dockRect = m_amDbusDockInter->frontendWindowRect();
-#else
-    int dockPosition = m_dockInter->position();
-    QRect dockRect = m_dockInter->frontendRect();
-#endif
-
-    switch (dockPosition) {
-    case DLauncher::DOCK_POS_TOP:
-        topSpacing += dockRect.height();
-        bottomSpacing = topSpacing + DLauncher::APPS_AREA_TOP_MARGIN;
-        break;
-    case DLauncher::DOCK_POS_BOTTOM:
-        bottomSpacing += dockRect.height();
-        break;
-    case DLauncher::DOCK_POS_LEFT:
-        leftSpacing = dockRect.width();
-        break;
-    case DLauncher::DOCK_POS_RIGHT:
-        rightSpacing = dockRect.width();
-        break;
-    default:
-        break;
-    }
-
-    QSize otherAreaSize;
-    QSize containerSize;
-
-    if (mode == AppsListModel::FullscreenAll) {
-        int padding = getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
-        otherAreaSize = QSize(padding + leftSpacing + rightSpacing, DLauncher::APPS_AREA_TOP_MARGIN + bottomSpacing + topSpacing + getSearchWidgetSizeHint().height());
-        containerSize = getScreenSize() - otherAreaSize;
-    } else {
-        otherAreaSize = QSize(0, DLauncher::APPS_AREA_TOP_MARGIN + bottomSpacing + topSpacing + getSearchWidgetSizeHint().height() + 12);
-        containerSize = getScreenSize() -  otherAreaSize;
-    }
-
-    double scaleX = getScreenScaleX();
-    double scaleY = getScreenScaleY();
-    double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
-
-    calculateTextSize();
-
-    int containerW;
-    int containerH;
-
-    int appColumnCount = 0;
-    int appRowCount = 0;
-
-    // 全屏App模式或者正在搜索列表以4行7列模式排布，全屏分类模式以4行3列模式排布
-    if (mode == ALL_APPS) {
-        appColumnCount = 7;
-        appRowCount = 4;
-
-        containerW = containerSize.width();
-        containerH = containerSize.height() - 20 * scale - DLauncher::DRAG_THRESHOLD;
-    } else {
-        appColumnCount = 4;
-        appRowCount = 3;
-
-        containerW = getAppBoxSize().width();
-        //BlurBoxWidget上边距24,　分组标题高度70 ,　MultiPagesView页面切换按钮高度20 * scale;
-        containerH = containerSize.height() - 24 - 60 - 20 * scale - DLauncher::DRAG_THRESHOLD;
-    }
-
-    // 默认边距保留最小５像素
-    int appMarginLeft = 5;
-    int appMarginTop = 5;
-
-    // 去除默认边距后，计算每个Item区域的宽高
-    int perItemWidth  = (containerW - appMarginLeft * 2) / appColumnCount;
-    int perItemHeight = (containerH - appMarginTop) / appRowCount;
-
-    // 因为每个Item是一个正方形的，所以取宽高中最小的值
-    int perItemSize = qMin(perItemHeight, perItemWidth);
-
-    // 图标大小取区域的4 / 5
-    int appIconSize = perItemSize * 4 / 5;
-
-    return appIconSize;
-}
-
 QSize CalculateUtil::appIconSize(int modelMode) const
 {
     if (modelMode == AppsListModel::TitleMode || modelMode == AppsListModel::LetterMode)
@@ -156,15 +60,6 @@ QSize CalculateUtil::appIconSize(int modelMode) const
 
     // 相应模式的应用大小在计算时确定
     return QSize(m_appItemSize, m_appItemSize) * DLauncher::DEFAULT_RATIO;
-}
-
-QSize CalculateUtil::appIconSize() const
-{
-    if (!m_isFullScreen)
-        return QSize(DLauncher::APP_ITEM_ICON_SIZE, DLauncher::APP_ITEM_ICON_SIZE);
-
-    QSize size(m_appItemSize, m_appItemSize);
-    return size * DLauncher::DEFAULT_RATIO;
 }
 
 /**
@@ -245,16 +140,6 @@ QStringList CalculateUtil::calendarSelectIcon() const
         break;
     }
     return iconList;
-}
-
-/**
- * @brief CalculateUtil::displayMode 获取当前视图的展示模式
- * 两种模式: 全屏app自由模式、全屏app分类模式
- * @return
- */
-int CalculateUtil::displayMode() const
-{
-    return ALL_APPS;
 }
 
 void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int currentmode)

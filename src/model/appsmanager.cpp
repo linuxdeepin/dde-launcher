@@ -25,7 +25,6 @@
 #include "util.h"
 #include "constants.h"
 #include "calculate_util.h"
-#include "iconcachemanager.h"
 
 #include <QDebug>
 #include <QX11Info>
@@ -106,7 +105,6 @@ AppsManager::AppsManager(QObject *parent)
     , m_iconValid(true)
     , m_trashIsEmpty(false)
     , m_fsWatcher(new QFileSystemWatcher(this))
-    , m_iconCacheThread(new QThread(this))
     , m_updateCalendarTimer(new QTimer(this))
     , m_uninstallDlgIsShown(false)
 {
@@ -135,34 +133,6 @@ AppsManager::AppsManager(QObject *parent)
     m_categoryTs.append(tr("System"));
     m_categoryTs.append(tr("Other"));
 
-    m_iconCacheManager = IconCacheManager::instance();
-
-    IconCacheManager::setIconLoadState(true);
-
-    // 进程启动加载小窗口主窗体显示的图标资源
-    connect(this, &AppsManager::startLoadIcon, m_iconCacheManager, &IconCacheManager::loadWindowIcon, Qt::QueuedConnection);
-
-    // 加载小窗口其他图标资源
-    connect(this, &AppsManager::loadOtherIcon, m_iconCacheManager, &IconCacheManager::loadOtherIcon, Qt::QueuedConnection);
-
-    // 全屏切换到小窗口，加载小窗口资源
-    connect(m_calUtil, &CalculateUtil::loadWindowIcon, m_iconCacheManager, &IconCacheManager::loadWindowIcon, Qt::QueuedConnection);
-
-    // 启动加载当前模式，当前ratio下的资源
-    connect(this, &AppsManager::loadCurRationIcon, m_iconCacheManager, &IconCacheManager::loadCurRatioIcon, Qt::QueuedConnection);
-
-    // 显示后，加载当前模式其他ratio下的资源， 预加载全屏下其他模式下，当前ratio下的资源
-    connect(this, &AppsManager::loadOtherRatioIcon, m_iconCacheManager, &IconCacheManager::loadOtherRatioIcon, Qt::QueuedConnection);
-
-    // 全屏状态下，自由模式和分类模式来回切换，加载切换后对应模式下的其他ratio下的资源
-    connect(this, &AppsManager::loadFullWindowIcon, m_iconCacheManager, static_cast<void(IconCacheManager::*)()>(&IconCacheManager::loadFullWindowIcon), Qt::QueuedConnection);
-
-    connect(this, &AppsManager::loadItem, m_iconCacheManager, &IconCacheManager::loadItem, Qt::QueuedConnection);
-
-    connect(qApp, &QCoreApplication::aboutToQuit, m_iconCacheManager, &IconCacheManager::deleteLater);
-    connect(qApp, &QCoreApplication::aboutToQuit, this, &AppsManager::stopThread, Qt::QueuedConnection);
-    connect(m_updateCalendarTimer, &QTimer::timeout, m_iconCacheManager, &IconCacheManager::updateCanlendarIcon, Qt::QueuedConnection);
-
     m_updateCalendarTimer->setInterval(1000);// 1s
     m_updateCalendarTimer->start();
 
@@ -175,7 +145,6 @@ AppsManager::AppsManager(QObject *parent)
 
     m_refreshCalendarIconTimer->setInterval(1000);
     m_refreshCalendarIconTimer->setSingleShot(false);
-    onThemeTypeChanged(DGuiApplicationHelper::instance()->themeType());
 
 #ifdef USE_AM_API
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::NewAppLaunched, this, &AppsManager::markLaunched);
@@ -197,11 +166,8 @@ AppsManager::AppsManager(QObject *parent)
     // TODO：自启动/打开应用这个接口后期sprint2时再改，目前 AM 未做处理
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
 
-    connect(qApp, &DApplication::iconThemeChanged, this, &AppsManager::onIconThemeChanged, Qt::QueuedConnection);
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
     connect(m_fsWatcher, &QFileSystemWatcher::directoryChanged, this, &AppsManager::updateTrashState, Qt::QueuedConnection);
-
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppsManager::onThemeTypeChanged);
     connect(m_refreshCalendarIconTimer, &QTimer::timeout, this, &AppsManager::onRefreshCalendarTimer);
 
     if (!m_refreshCalendarIconTimer->isActive())
@@ -748,14 +714,6 @@ void AppsManager::refreshAllList()
     refreshItemInfoList();
     saveAppCategoryInfoList();
     readCollectedCacheData();
-
-    // 全屏全屏自由模式都需要界面计算,小窗口直接加载
-#ifdef USE_AM_API
-    if (!m_amDbusLauncherInter->fullscreen())
-#else
-    if (!m_launcherInter->fullscreen())
-#endif
-        emit startLoadIcon();
 }
 
 void AppsManager::saveWidowedUsedSortedList()
@@ -801,7 +759,7 @@ void AppsManager::launchApp(const QModelIndex &index)
         m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
 }
 
-void AppsManager::uninstallApp(const QString &appKey, const int displayMode)
+void AppsManager::uninstallApp(const QString &appKey)
 {
     // 向后端发起卸载请求
 #ifdef USE_AM_API
@@ -895,11 +853,6 @@ bool AppsManager::fuzzyMatching(const QStringList& list, const QString& key)
     return false;
 }
 
-void AppsManager::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType)
-{
-    Q_UNUSED(themeType);
-}
-
 void AppsManager::onRefreshCalendarTimer()
 {
     m_curDate = QDate::currentDate();
@@ -916,12 +869,6 @@ void AppsManager::onGSettingChanged(const QString &keyName)
         return;
 
     refreshAllList();
-}
-
-void AppsManager::stopThread()
-{
-    m_iconCacheThread->quit();
-    m_iconCacheThread->wait();
 }
 
 /**
@@ -1141,14 +1088,6 @@ const QPixmap AppsManager::appIcon(const ItemInfo_v1 &info, const int size)
     QPixmap pix;
     const int iconSize = perfectIconSize(size);
     QPair<QString, int> tmpKey { cacheKey(info) , iconSize};
-
-    // TODO: 直接从主线程加载图标, 避免多线程加载图标影响v23调试效果, 暂时不删除预加载图标缓存模块,
-    // 因为避免龙芯设备上,全屏应用时, 首次切换存在翻页卡顿问题.先解决这个问题,后面优化.
-    // 如存在，优先读取缓存
-    if (IconCacheManager::existInCache(tmpKey)) {
-        IconCacheManager::getPixFromCache(tmpKey, pix);
-        return pix;
-    }
 
     // 缓存中没有时，资源从主线程加载
     m_itemInfo = info;
@@ -1511,22 +1450,6 @@ void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &d
     }
 }
 
-void AppsManager::onIconThemeChanged()
-{
-    static QString lastIconTheme = QString();
-    if (lastIconTheme == QIcon::themeName())
-        return;
-
-    lastIconTheme = QIcon::themeName();
-
-    IconCacheManager::resetIconData();
-    if (!CalculateUtil::instance()->fullscreen()) {
-        emit startLoadIcon();
-    } else {
-        emit loadFullWindowIcon();
-    }
-}
-
 /**
  * @brief AppsManager::handleItemChanged 处理应用安装、卸载、更新
  * @param operation 操作类型
@@ -1712,32 +1635,10 @@ void AppsManager::uninstallApp(const QModelIndex &modelIndex)
     unInstallDialog.setTitle(QString(tr("Are you sure you want to uninstall %1 ?").arg(info.m_name)));
 
     QPixmap pixmap = modelIndex.data(AppsListModel::AppDialogIconRole).value<QPixmap>();
-    int size = (pixmap.size() / qApp->devicePixelRatio()).width();
-
-    QPair<QString, int> tmpKey { cacheKey(info), size};
-
-    // 命令行安装应用后，卸载应用的确认弹框偶现左上角图标呈齿轮的情况
-    QPixmap appIcon;
-    if (IconCacheManager::existInCache(tmpKey)) {
-        IconCacheManager::getPixFromCache(tmpKey, appIcon);
-        unInstallDialog.setIcon(appIcon);
-    } else {
-        static int tryNum = 0;
-        m_uninstallDlgIsShown = false;
-        ++tryNum;
-        if (tryNum <= 5) {
-            QTimer::singleShot(100, this, [ = ]() { uninstallApp(modelIndex); });
-            return;
-        } else {
-            QIcon icon = QIcon(":/widgets/images/application-x-desktop.svg");
-            appIcon = icon.pixmap(QSize(size, size));
-            unInstallDialog.setIcon(appIcon);
-        }
-    }
-
     QStringList buttons;
     buttons << tr("Cancel") << tr("Confirm");
     unInstallDialog.addButtons(buttons);
+    unInstallDialog.setIcon(pixmap);
 
     connect(&unInstallDialog, &DDialog::buttonClicked, [&](int clickedResult) {
         // 0 means "cancel" button clicked

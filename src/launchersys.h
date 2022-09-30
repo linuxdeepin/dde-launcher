@@ -62,10 +62,6 @@ public:
     void showLauncher();
     void hideLauncher();
     void uninstallApp(const QString &appKey);
-    void setClickState(bool state);
-    bool clickState() const;
-    void aboutToShowLauncher();
-    void show();
 
 signals:
     void visibleChanged(bool visible);
@@ -80,13 +76,11 @@ private slots:
     void onDisplayModeChanged();
     void onFrontendRectChanged();
     void onButtonPress(const QPoint &p, const int flag);
-    void updateLauncher();
     void onValueChanged();
 
 private:
     void registerRegion();
     void unRegisterRegion();
-    void preloadIcon();
 
 private:
     AppsManager *m_appManager;
@@ -108,7 +102,6 @@ private:
     DBusLauncher *m_dbusLauncherInter;                      // dbus访问远程服务类 数据初始化
     DBusDock *m_dockInter;
 #endif
-    bool m_clicked;                                         // 人的点击操作状态
     LauncherPluginController *m_launcherPlugin;
 };
 

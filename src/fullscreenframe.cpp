@@ -25,7 +25,6 @@
 #include "constants.h"
 #include "xcb_misc.h"
 #include "sharedeventfilter.h"
-#include "iconcachemanager.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -214,8 +213,6 @@ void FullScreenFrame::keyPressEvent(QKeyEvent *e)
 
 void FullScreenFrame::showEvent(QShowEvent *e)
 {
-    emit m_appsManager->loadCurRationIcon(ALL_APPS);
-
     m_delayHideTimer->stop();
     m_searchWidget->clearSearchContent();
 

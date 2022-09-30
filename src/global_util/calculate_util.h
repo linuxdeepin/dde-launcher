@@ -25,18 +25,13 @@
 #define CALCULATE_UTIL_H
 
 #include "appslistmodel.h"
+#include "constants.h"
 
 #include <DSysInfo>
 
 #include <QObject>
-#include <QSize>
-#include <QtCore>
 #include <QGSettings>
 #include <QScreen>
-
-#define ALL_APPS            0       // 全屏自由模式
-#define SEARCH              2       // 全屏搜索模式
-#define COLS                7       // 默认列数
 
 DCORE_USE_NAMESPACE
 
@@ -60,7 +55,7 @@ public:
 
     inline int titleTextSize() const { return m_titleTextSize; }
     inline int navgationTextSize() const { return double(m_navgationTextSize) / 1.2; }
-    inline int appColumnCount() const { return COLS; }
+    inline int appColumnCount() const { return DLauncher::DEFAULT_COLUMNS; }
     inline int appItemFontSize() const { return m_appItemFontSize; }
     inline int appItemSpacing() const { return m_appItemSpacing; }
     inline int appMarginLeft() const { return m_appMarginLeft; }
@@ -76,9 +71,6 @@ public:
 
     qreal getCurRatio();
     QSize appIconSize(int modelMode) const;
-    QSize appIconSize() const;
-    int displayMode() const;
-    int calculateIconSize(const int mode);
     QSize getSearchWidgetSizeHint() const { return  m_searchWidgetHintSize; }
     void setSearchWidgetSizeHint(const QSize &size) { m_searchWidgetHintSize = size; }
 

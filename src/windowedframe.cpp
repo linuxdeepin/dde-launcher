@@ -23,7 +23,6 @@
 #include "global_util/util.h"
 #include "dbusdockinterface.h"
 #include "constants.h"
-#include "iconcachemanager.h"
 #include "appitemdelegate.h"
 
 #include <DWindowManagerHelper>
@@ -441,9 +440,6 @@ void WindowedFrame::showLauncher()
 {
     if (m_delayHideTimer->isActive())
         return;
-
-    // 显示后加载小窗口其他资源
-    emit m_appsManager->loadOtherIcon();
 
     qApp->processEvents();
     activateWindow();

@@ -28,7 +28,6 @@
 #include "appsmanager.h"
 #include "util.h"
 #include "constants.h"
-#include "iconcachemanager.h"
 
 #ifdef USE_AM_API
 #include "amdbuslauncherinterface.h"
@@ -63,7 +62,6 @@ LauncherSys::LauncherSys(QObject *parent)
     , m_dbusLauncherInter(new DBusLauncher(this))
     , m_dockInter(new DBusDock(this))
 #endif
-    , m_clicked(false)
     , m_launcherPlugin(new LauncherPluginController(this))
 {
     m_regionMonitor->setCoordinateType(DRegionMonitor::Original);
@@ -92,8 +90,6 @@ LauncherSys::LauncherSys(QObject *parent)
 #endif
 
     connect(m_autoExitTimer, &QTimer::timeout, this, &LauncherSys::onAutoExitTimeout, Qt::QueuedConnection);
-    connect(IconCacheManager::instance(), &IconCacheManager::iconLoaded, this, &LauncherSys::aboutToShowLauncher, Qt::QueuedConnection);
-    connect(IconCacheManager::instance(), &IconCacheManager::iconLoaded, this, &LauncherSys::updateLauncher);
     connect(ConfigWorker::instance(), &DConfig::valueChanged, this, &LauncherSys::onValueChanged);
 }
 
@@ -118,16 +114,12 @@ void LauncherSys::showLauncher()
     if (m_ignoreRepeatVisibleChangeTimer->isActive())
         return;
 
-    setClickState(true);
-
     m_ignoreRepeatVisibleChangeTimer->start();
 
-    if (IconCacheManager::iconLoadState()) {
-        m_autoExitTimer->stop();
-        registerRegion();
-        qApp->processEvents();
-        m_launcherInter->showLauncher();
-    }
+    m_autoExitTimer->stop();
+    registerRegion();
+    qApp->processEvents();
+    m_launcherInter->showLauncher();
 }
 
 /**dbus调用隐藏
@@ -143,27 +135,12 @@ void LauncherSys::hideLauncher()
     unRegisterRegion();
 
     m_autoExitTimer->start();
-    setClickState(false);
     m_launcherInter->hideLauncher();
 }
 
 void LauncherSys::uninstallApp(const QString &appKey)
 {
     m_launcherInter->uninstallApp(appKey);
-}
-
-/**记录显示或者隐藏启动器ui的状态
- * @brief LauncherSys::setClickState
- * @param state 显示: true, 隐藏: false
- */
-void LauncherSys::setClickState(bool state)
-{
-    m_clicked = state;
-}
-
-bool LauncherSys::clickState() const
-{
-    return m_clicked;
 }
 
 bool LauncherSys::visible()
@@ -194,7 +171,6 @@ void LauncherSys::displayModeChanged()
 
         m_launcherInter = static_cast<LauncherInterface*>(m_fullLauncher);
 
-        preloadIcon();
     } else {
         if (!m_windowLauncher) {
             m_windowLauncher = new WindowedFrame;
@@ -226,7 +202,6 @@ void LauncherSys::displayModeChanged()
 void LauncherSys::onVisibleChanged()
 {
     emit visibleChanged(m_launcherInter->visible());
-    setClickState(m_launcherInter->visible());
 }
 
 void LauncherSys::onAutoExitTimeout()
@@ -246,7 +221,6 @@ bool LauncherSys::eventFilter(QObject *watched, QEvent *event)
         m_regionMonitor->unregisterRegion();
         disconnect(m_regionMonitorConnect);
         m_autoExitTimer->start();
-        setClickState(false);
     }
 
     return QObject::eventFilter(watched, event);
@@ -291,17 +265,6 @@ void LauncherSys::onButtonPress(const QPoint &p, const int flag)
     m_launcherInter->regionMonitorPoint(p, flag);
 }
 
-void LauncherSys::updateLauncher()
-{
-    if (!m_launcherInter->visible())
-        return;
-
-    if (m_launcherInter == m_fullLauncher)
-        m_fullLauncher->update();
-    else
-        m_windowLauncher->update();
-}
-
 void LauncherSys::onValueChanged()
 {
     if (m_windowLauncher)
@@ -309,22 +272,4 @@ void LauncherSys::onValueChanged()
 
     if (m_fullLauncher)
         m_fullLauncher->update();
-}
-
-void LauncherSys::aboutToShowLauncher()
-{
-    if (IconCacheManager::iconLoadState() && clickState())
-        m_launcherInter->showLauncher();
-}
-
-void LauncherSys::preloadIcon()
-{
-    // 进程启动加载图标资源
-    // 全屏分类/自由模式，搜索或者导航栏的高度无法确定，确定后开始加载所有应用资源
-    emit m_appManager->loadCurRationIcon(ALL_APPS);
-}
-
-void LauncherSys::show()
-{
-    setClickState(true);
 }

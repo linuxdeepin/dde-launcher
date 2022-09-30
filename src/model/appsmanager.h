@@ -58,8 +58,6 @@ DGUI_USE_NAMESPACE
 #define CATEGORY_COUNT    11
 
 class CalculateUtil;
-class QThread;
-class IconCacheManager;
 
 class AppsManager : public QObject
 {
@@ -113,12 +111,6 @@ signals:
 
     void itemRedraw(const QModelIndex &index);
 
-    void loadFullWindowIcon();
-    void loadCurRationIcon(int mode);
-    void loadOtherRatioIcon(int mode);
-
-    void startLoadIcon();
-    void loadOtherIcon();
     void loadItem(const ItemInfo_v1 &info, const QString &operationStr);
     void requestHideLauncher();
     void requestHidePopup();
@@ -129,7 +121,7 @@ public slots:
     void saveCollectedSortedList();
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
-    void uninstallApp(const QString &appKey, const int displayMode = ALL_APPS);
+    void uninstallApp(const QString &appKey);
     void onEditCollected(const QModelIndex index, const bool isInCollected);
     void onMoveToFirstInCollected(const QModelIndex index);
     void setDirAppInfoList(const QModelIndex index);
@@ -183,16 +175,13 @@ private:
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
 
 private slots:
-    void onIconThemeChanged();
     void markLaunched(QString appKey);
     void delayRefreshData();
     void refreshIcon();
     void updateTrashState();
     bool fuzzyMatching(const QStringList& list, const QString& key);
-    void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
     void onRefreshCalendarTimer();
     void onGSettingChanged(const QString & keyName);
-    void stopThread();
 
 public:
     QHash<AppsListModel::AppCategory, ItemInfoList_v1> m_appInfos;      // 应用分类容器
@@ -255,8 +244,6 @@ private:
     bool m_trashIsEmpty;
     QFileSystemWatcher *m_fsWatcher;
 
-    IconCacheManager *m_iconCacheManager;
-    QThread *m_iconCacheThread;
     QTimer *m_updateCalendarTimer;
     bool m_uninstallDlgIsShown;
 };

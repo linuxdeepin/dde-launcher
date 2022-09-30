@@ -23,7 +23,6 @@
 
 #include "util.h"
 #include "appsmanager.h"
-#include "iconcachemanager.h"
 
 #include <DHiDPIHelper>
 #include <DGuiApplicationHelper>
@@ -397,9 +396,6 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, 
 
     pixmap = pixmap.scaled(QSize(iconSize, iconSize) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pixmap.setDevicePixelRatio(ratio);
-
-    if (!IconCacheManager::existInCache(tmpKey) && findIcon)
-        IconCacheManager::insertCache(tmpKey, pixmap);
 
     return findIcon;
 }

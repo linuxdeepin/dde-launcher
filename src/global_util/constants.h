@@ -76,27 +76,18 @@ static QString DBUS_DAEMON_SERVICE_NAME = "com.deepin.dde.daemon.Launcher";
 static QString DBUS_DAEMON_PATH_NAME = "/com/deepin/dde/daemon/Launcher";
 #endif
 
-
 static const int APPS_AREA_AUTO_SCROLL_TIMER = 15;
-
 static const int CLEAR_CACHE_TIMER = 60;
-
 static const int WHOOLTIME_TO_SCROOL = 1;
-
 static const int APPS_AREA_CATEGORY_INDEX = 255;
-
 static const int APPS_CATEGORY_TITLE_SPACING = 60;
-
 static const int MOUSE_PRESS_TIME_DIFF = 600;
-
 static const int MOUSE_MOVE_TO_NEXT= 100;
-
 static const int TOUCH_DIFF_THRESH = 15;
-
 static const int SLIDE_DIFF_THRESH = 15;                                            // 按住鼠标滑动翻页的最小间距
-
 static const int MINI_FRAME_LAYOUT_SPACE1 = 10;                                     // 小窗口布局间隔距离1
 static const int MINI_FRAME_LAYOUT_SPACE2 = 8;                                      // 小窗口布局间隔距离2
+static const int DEFAULT_COLUMNS = 7;
 
 static const qreal SIDES_SPACE_SCALE = 0.10;                                        // 全屏模式下设置左右边距的系数
 

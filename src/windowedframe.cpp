@@ -1282,7 +1282,6 @@ void WindowedFrame::searchText(const QString &text)
     if (text.isEmpty()) {
         searchAppState(false);
         hideTips();
-        m_calcUtil->calculateAppLayout(viewSize, AppsListModel::WindowedAll);
     } else {
         QString keyWord = text;
         keyWord = keyWord.remove(QRegExp("\\s"));
@@ -1439,6 +1438,11 @@ void WindowedFrame::onFavoriteListVisibleChaged()
 
 void WindowedFrame::onLayoutChanged()
 {
+    if (m_calcUtil->fullscreen()) {
+        qDebug() << "now in the WindowedFrame";
+        return;
+    }
+
     int itemSpacing = CalculateUtil::instance()->appItemSpacing();
 #ifdef QT_DEBUG
     qInfo() << Q_FUNC_INFO << " itemSpacing: " << itemSpacing;

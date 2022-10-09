@@ -928,6 +928,11 @@ void FullScreenFrame::mouseReleaseDrag(QMouseEvent *e)
 
 void FullScreenFrame::layoutChanged()
 {
+    if (!m_calcUtil->fullscreen()) {
+        qDebug() << "now in the FullScreenFrame";
+        return;
+    }
+
     QSize boxSize = m_contentFrame->size() - QSize(0, DLauncher::APPS_AREA_TOP_MARGIN);
     if (m_displayMode == AppsListModel::FullscreenAll) {
         m_appsIconBox->setFixedSize(boxSize);

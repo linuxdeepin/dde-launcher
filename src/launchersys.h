@@ -32,7 +32,7 @@
 #include <QObject>
 #include <QTimer>
 
-#include <com_deepin_sessionmanager.h>
+#include "sessionmanager_interface.h"
 
 DGUI_USE_NAMESPACE
 

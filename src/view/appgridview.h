@@ -28,7 +28,7 @@
 #include <QSize>
 #include <QLabel>
 
-#include <com_deepin_daemon_gesture.h>
+#include "gesture_interface.h"
 
 #include "appsmanager.h"
 

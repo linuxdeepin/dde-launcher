@@ -35,3 +35,7 @@ build*
 .vscode
 .transifexrc
 lupdate.sh
+
+#xml2cpp
+src/global_util/dbus/xml2cpp/*.*
+

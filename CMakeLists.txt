@@ -68,8 +68,74 @@ find_package(Qt5Svg REQUIRED)
 find_package(DtkCore REQUIRED)
 
 pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh)
-pkg_check_modules(DFrameworkDBus REQUIRED dframeworkdbus)
 pkg_check_modules(QGSettings REQUIRED gsettings-qt)
+
+set(XML2CPP_DIR ${PROJECT_SOURCE_DIR}/src/global_util/dbus/xml2cpp)
+
+function(generation_dbus_interface xml class_name class_file)
+    execute_process(COMMAND qdbusxml2cpp-fix -c ${class_name} -p ${class_file} ${xml}
+        WORKING_DIRECTORY ${XML2CPP_DIR})
+endfunction(generation_dbus_interface)
+
+generation_dbus_interface(
+    ${CMAKE_SOURCE_DIR}/xml/org.deepin.daemon.ImageEffect1.xml
+    ImageEffect
+    ${XML2CPP_DIR}/imageeffect_interface
+)
+
+generation_dbus_interface(
+    ${CMAKE_SOURCE_DIR}/xml/org.deepin.daemon.ImageBlur1.xml
+    ImageBlur
+    ${XML2CPP_DIR}/imageblur_interface
+)
+
+generation_dbus_interface(
+    ${CMAKE_SOURCE_DIR}/xml/com.deepin.wm.xml
+    wm
+    ${XML2CPP_DIR}/wm_interface
+)
+
+generation_dbus_interface(
+    ${CMAKE_SOURCE_DIR}/xml/com.deepin.daemon.Display.xml
+    Display
+    ${XML2CPP_DIR}/display_interface
+)
+
+generation_dbus_interface(
+    ${CMAKE_SOURCE_DIR}/xml/com.deepin.daemon.Appearance.xml
+    Appearance
+    ${XML2CPP_DIR}/appearance_interface
+)
+
+generation_dbus_interface(
+    ${CMAKE_SOURCE_DIR}/xml/com.deepin.daemon.Gesture.xml
+    Gesture
+    ${XML2CPP_DIR}/gesture_interface
+)
+
+generation_dbus_interface(
+    ${CMAKE_SOURCE_DIR}/xml/org.deepin.daemon.Accounts1.User.xml
+    AccountsUser
+    ${XML2CPP_DIR}/accountsuser_interface
+)
+
+generation_dbus_interface(
+    ${CMAKE_SOURCE_DIR}/xml/org.deepin.daemon.Accounts1.xml
+    Accounts
+    ${XML2CPP_DIR}/accounts_interface
+)
+
+generation_dbus_interface(
+    ${CMAKE_SOURCE_DIR}/xml/com.deepin.SessionManager.xml
+    SessionManager
+    ${XML2CPP_DIR}/sessionmanager_interface
+)
+
+generation_dbus_interface(
+    ${CMAKE_SOURCE_DIR}/xml/org.deepin.api.XEventMonitor1.xml
+    XEventMonitor
+    ${XML2CPP_DIR}/xeventmonitor_interface
+)
 
 include_directories(
     src
@@ -79,6 +145,9 @@ include_directories(
     src/dbusservices
     src/delegate
     src/global_util
+    src/global_util/dbus/qtdbusextended
+    src/global_util/dbus/xml2cpp
+    src/global_util/dbus/xml2cpp/types
     src/model
     src/skin
     src/view
@@ -100,6 +169,9 @@ aux_source_directory(src/skin SKIN)
 aux_source_directory(src/view VIEW)
 aux_source_directory(src/widgets WIDGETS)
 aux_source_directory(src/worker WORKER)
+aux_source_directory(src/global_util/dbus/xml2cpp/types DBUS_TYPES)
+aux_source_directory(src/global_util/dbus/xml2cpp/ DBUS_INTERFACES)
+aux_source_directory(src/global_util/dbus/qtdbusextended DBUS_EXTENDED)
 
 file(GLOB PLUGININTERFACES "interfaces/*.h")
 file(GLOB PLUGINCONTROLLER "controller/*.*")
@@ -118,14 +190,17 @@ file(GLOB SRC_PATH
     ${WORKER}
     ${PLUGININTERFACES}
     ${PLUGINCONTROLLER}
+    ${DBUS_TYPES}
+    ${DBUS_INTERFACES}
+    ${DBUS_EXTENDED}
 )
 
 add_executable(${BIN_NAME} ${SRCS} ${SRC_PATH} ${INTERFACES} src/skin.qrc src/widgets/images.qrc)
+
 target_include_directories(${BIN_NAME} PUBLIC
     ${DtkWidget_INCLUDE_DIRS}
     ${DtkCore_INCLUDE_DIRS}
     ${XCB_EWMH_INCLUDE_DIRS}
-    ${DFrameworkDBus_INCLUDE_DIRS}
     ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
     ${QGSettings_INCLUDE_DIRS}
     ${PROJECT_BINARY_DIR}
@@ -133,7 +208,6 @@ target_include_directories(${BIN_NAME} PUBLIC
 
 target_link_libraries(${BIN_NAME} PRIVATE
     ${XCB_EWMH_LIBRARIES}
-    ${DFrameworkDBus_LIBRARIES}
     ${DtkWidget_LIBRARIES}
     ${DtkCore_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}

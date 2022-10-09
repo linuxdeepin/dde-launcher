@@ -956,6 +956,7 @@ void WindowedFrame::onWMCompositeChanged()
 
 void WindowedFrame::searchText(const QString &text)
 {
+    m_searcherEdit->lineEdit()->setFocus();
     if (text.isEmpty()) {
         m_appsView->setModel(m_appsModel);
         hideTips();

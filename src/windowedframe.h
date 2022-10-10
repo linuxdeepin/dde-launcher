@@ -162,6 +162,7 @@ private slots:
     void onFavoriteListVisibleChaged();
     void onLayoutChanged();
     void onEnterView();
+    void onHandleHoverAction(const QModelIndex &index);
 
 private:
 #ifdef USE_AM_API

@@ -361,12 +361,15 @@ void WindowedFrame::initConnection()
     connect(m_appsView, &QListView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
     connect(m_appsView, &QListView::entered, m_appsView, &AppListView::setCurrentIndex, Qt::QueuedConnection);
     connect(m_appsView, &AppGridView::entered, this, &WindowedFrame::onEnterView);
+    connect(m_appsView, &AppGridView::entered, this, &WindowedFrame::onHandleHoverAction);
+
     connect(m_appsView, &AppListView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
 
     connect(m_favoriteView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
     connect(m_favoriteView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
     connect(m_favoriteView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_favoriteView, &AppGridView::entered, this, &WindowedFrame::onEnterView);
+    connect(m_favoriteView, &AppGridView::entered, this, &WindowedFrame::onHandleHoverAction);
     connect(m_favoriteView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_favoriteView, qOverload<>(&AppGridView::update));
 
@@ -375,6 +378,7 @@ void WindowedFrame::initConnection()
     connect(m_allAppView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
     connect(m_allAppView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
     connect(m_allAppView, &AppGridView::entered, this, &WindowedFrame::onEnterView);
+    connect(m_allAppView, &AppGridView::entered, this, &WindowedFrame::onHandleHoverAction);
     connect(m_allAppView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_allAppView, qOverload<>(&AppGridView::update));
 
@@ -952,6 +956,38 @@ void WindowedFrame::handleUndoKey()
         m_searcherEdit->lineEdit()->clear();
 }
 
+void WindowedFrame::onHandleHoverAction(const QModelIndex &index)
+{
+    auto checkView = [ = ](const AppGridView *view, const QModelIndex &idx) {
+        AppItemDelegate *itemDelegate = qobject_cast<AppItemDelegate *>(view->itemDelegate());
+        if (!itemDelegate) {
+            qDebug() << "itemDelegate is null";
+            return;
+        }
+
+        itemDelegate->setCurrentIndex(index);
+    };
+
+    const QPoint widgetPos = mapFromGlobal(QCursor::pos());
+#ifdef QT_DEBUG
+    qDebug() << "pos:" << pos << ", favoriteView rect:" << m_favoriteView->geometry() << ", all appview:" << m_allAppView->geometry();
+#endif
+    if (m_appsView->geometry().contains(widgetPos)) {
+       checkView(m_allAppView, QModelIndex());
+       checkView(m_favoriteView, QModelIndex());
+    } else if (m_allAppView->geometry().contains(widgetPos)) {
+        m_appsView->setCurrentIndex(QModelIndex());
+        checkView(m_favoriteView, QModelIndex());
+        checkView(m_allAppView, index);
+    } else if (m_favoriteView->geometry().contains(widgetPos)) {
+        m_appsView->setCurrentIndex(QModelIndex());
+        checkView(m_allAppView, QModelIndex());
+        checkView(m_favoriteView, index);
+    } else if (m_searchWidget->geometry().contains(widgetPos)) {
+        m_appsView->setCurrentIndex(QModelIndex());
+    }
+}
+
 void WindowedFrame::uninstallApp(const QString &appKey)
 {
     m_appsManager->uninstallApp(m_appsModel->indexAt(appKey));
@@ -1399,6 +1435,7 @@ void WindowedFrame::addViewEvent(AppGridView *pView)
     connect(pView, &AppGridView::clicked, m_appsManager, &AppsManager::launchApp, Qt::QueuedConnection);
     connect(pView, &AppGridView::clicked, this, &WindowedFrame::hideLauncher, Qt::QueuedConnection);
     connect(pView, &AppGridView::entered, m_appItemDelegate, &AppItemDelegate::setCurrentIndex);
+    connect(pView, &AppGridView::entered, this, &WindowedFrame::onHandleHoverAction);
     connect(pView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pView, qOverload<>(&AppGridView::update));
 }

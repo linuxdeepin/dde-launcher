@@ -31,6 +31,9 @@ public:
     void updateTitleContent();
     void updateTitlePos(bool alignCenter);
     void addSpacerItem(QBoxLayout *layout = nullptr);
+    void selectFirstItem() const;
+
+    AppGridView *getNativeView() const;
 
 signals:
     void connectViewEvent(AppGridView* pView);

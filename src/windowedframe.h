@@ -114,13 +114,14 @@ private:
     void appendToSearchEdit(const char ch) override;
     void launchCurrentApp() override;
 
-    void handleTabKey();
-    void handleBackTabKey();
-    void handleUpKey();
-    void handleDownKey();
-    void handleRightKey();
-    void handleLeftKey();
-    void handleUndoKey();
+    void handleDefault(const int key);
+    void handleCategoryApp(const int key);
+    void handlePower(const int key);
+    void handleSetting(const int key);
+    void handleSearch(const int key);
+    void handleFavorite(const int key);
+    void handleAllApp(const int key);
+    void handleSwitch(const int key);
 
     void uninstallApp(const QString &appKey) override;
 

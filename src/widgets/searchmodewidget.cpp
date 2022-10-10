@@ -147,13 +147,13 @@ void SearchModeWidget::initAppView()
     m_nativeView->setSizeAdjustPolicy(QListView::AdjustToContents);
     m_nativeView->setModel(m_nativeModel);
     m_nativeView->setItemDelegate(itemDelegate);
-    m_nativeView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    m_nativeView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     m_outsideView->setFlow(QListView::LeftToRight);
     m_outsideView->setWrapping(true);
     m_outsideView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_outsideView->setSizeAdjustPolicy(QListView::AdjustToContents);
-    m_outsideView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    m_outsideView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_outsideView->setModel(m_outsideModel);
     m_outsideView->setItemDelegate(itemDelegate);
 }
@@ -217,6 +217,29 @@ void SearchModeWidget::addSpacerItem(QBoxLayout *layout)
         layout->addSpacerItem(new QSpacerItem(300, 5, QSizePolicy::Expanding, QSizePolicy::Expanding));
     else
         layout->addSpacerItem(new QSpacerItem(5, 5, QSizePolicy::Preferred, QSizePolicy::Expanding));
+}
+
+void SearchModeWidget::selectFirstItem() const
+{
+    if (m_nativeModel->rowCount(QModelIndex()) <= 0) {
+        qDebug() << "model is null";
+        return;
+    }
+
+    AppItemDelegate *itemDelegate = qobject_cast<AppItemDelegate *>(m_nativeView->itemDelegate());
+    if (!itemDelegate) {
+        qDebug() << "itemdelegate is null";
+        return;
+    }
+
+    const QModelIndex targetIndex = m_nativeView->model()->index(0, 0);
+    itemDelegate->setCurrentIndex(targetIndex);
+    m_nativeView->update();
+}
+
+AppGridView *SearchModeWidget::getNativeView() const
+{
+    return m_nativeView;
 }
 
 void SearchModeWidget::onLayoutChanged()

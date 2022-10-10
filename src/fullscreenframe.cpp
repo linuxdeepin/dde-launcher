@@ -539,28 +539,13 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
     }
 
     if (Qt::Key_Undo == key) {
-        auto  oldStr =  m_searchWidget->edit()->lineEdit()->text();
+        auto oldStr = m_searchWidget->edit()->lineEdit()->text();
         m_searchWidget->edit()->lineEdit()->undo();
 
         if (!oldStr.isEmpty() && oldStr == m_searchWidget->edit()->lineEdit()->text())
             m_searchWidget->edit()->lineEdit()->clear();
 
         return;
-    }
-
-    if (m_focusIndex == CategoryTital) {
-        switch (key) {
-        case Qt::Key_Backtab:
-        case Qt::Key_Left:
-            return;
-        case Qt::Key_Right:
-            return;
-        case Qt::Key_Down:
-            m_focusIndex = FirstItem;
-            break;
-        default:
-            break;
-        }
     }
 
     const QModelIndex curModelIndex = m_appItemDelegate->currentIndex();
@@ -624,11 +609,8 @@ void FullScreenFrame::launchCurrentApp()
     const QModelIndex &index = m_appItemDelegate->currentIndex();
 
     if (index.isValid() && !index.data(AppsListModel::AppDesktopRole).toString().isEmpty()) {
-        if (m_displayMode == AppsListModel::FullscreenAll ||
-                m_displayMode == AppsListModel::Search) {
-            m_appsManager->launchApp(index);
-            hide();
-        }
+        m_appsManager->launchApp(index);
+        hide();
     }
 }
 
@@ -963,6 +945,7 @@ void FullScreenFrame::searchTextChanged(const QString &keywords, bool enableUpda
         QRegExp regExp(keyWord, Qt::CaseInsensitive);
         m_filterModel->setFilterRegExp(regExp);
         m_searchModeWidget->setSearchModel(m_filterModel);
+        m_searchModeWidget->selectFirstItem();
     }
 
     if (m_searchWidget->edit()->lineEdit()->text().isEmpty())

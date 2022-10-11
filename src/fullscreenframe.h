@@ -71,8 +71,7 @@ public:
     {
         FirstItem,
         SearchEdit,
-        CategoryChangeBtn,
-        CategoryTital
+        CategoryChangeBtn
     };
 
     explicit FullScreenFrame(QWidget *parent = nullptr);

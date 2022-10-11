@@ -110,7 +110,6 @@ FullScreenFrame::FullScreenFrame(QWidget *parent)
 
     // 全局键盘按键事件处理、搜索框字符输入处理
     installEventFilter(m_eventFilter);
-
     initConnection();
     initUI();
 }
@@ -325,7 +324,6 @@ bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)
             qApp->postEvent(this, event);
             return true;
         } else if (keyPress->key() == Qt::Key_Tab) {
-            m_focusIndex = SearchEdit;
             moveCurrentSelectApp(Qt::Key_Tab);
             return true;
         }
@@ -838,6 +836,7 @@ void FullScreenFrame::nextTabWidget(int key)
     break;
     case CategoryChangeBtn: {
         m_appItemDelegate->setCurrentIndex(QModelIndex());
+        m_searchWidget->toggleModeBtn()->setFocus();
     }
     break;
     }

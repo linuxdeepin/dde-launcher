@@ -1,286 +1,180 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="he">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="he">
+<context>
+    <name>AppItemDelegate</name>
+    <message>
+        <location filename="../src/delegate/appitemdelegate.cpp" line="142"/>
+        <source>LingLong</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
 <context>
     <name>AppsManager</name>
     <message>
-        <source>No search results</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="124"/>
         <source>Internet</source>
         <translation>אינטרנט</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="125"/>
         <source>Chat</source>
         <translation>צ׳אט</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="126"/>
         <source>Music</source>
         <translation>מוזיקה</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="127"/>
         <source>Video</source>
         <translation>וידאו</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="128"/>
         <source>Graphics</source>
         <translation>גרפיקה</translation>
     </message>
     <message>
-        <source>Office</source>
-        <translation>משרדי</translation>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation>קריאה</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation>פיתוח</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>מערכת</translation>
-    </message>
-    <message>
+        <location filename="../src/model/appsmanager.cpp" line="129"/>
         <source>Games</source>
         <translation>משחקים</translation>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="130"/>
+        <source>Office</source>
+        <translation>משרדי</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="131"/>
+        <source>Reading</source>
+        <translation>קריאה</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="132"/>
+        <source>Development</source>
+        <translation>פיתוח</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="133"/>
+        <source>System</source>
+        <translation>מערכת</translation>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="134"/>
         <source>Other</source>
         <translation>אחר</translation>
     </message>
-</context>
-<context>
-    <name>FullScreenFrame</name>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="1135"/>
+        <source>LingLong</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="1641"/>
+        <source>Are you sure you want to uninstall %1 ?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/model/appsmanager.cpp" line="1645"/>
         <source>Cancel</source>
-        <translation>ביטול</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../src/model/appsmanager.cpp" line="1645"/>
         <source>Confirm</source>
-        <translation>אימות</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MenuWorker</name>
     <message>
-        <source>Remove from desktop</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove from dock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Uninstall</source>
-        <translation>הסר</translation>
-    </message>
-    <message>
-        <source>Disable display scaling</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="../src/worker/menuworker.cpp" line="117"/>
         <source>Open</source>
         <translation>פתיחה</translation>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="118"/>
+        <source>Remove from desktop</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="118"/>
         <source>Send to desktop</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="119"/>
+        <source>Remove from dock</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="119"/>
         <source>Send to dock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="120"/>
         <source>Remove from startup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="120"/>
         <source>Add to startup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../src/worker/menuworker.cpp" line="121"/>
+        <source>Uninstall</source>
+        <translation>הסר</translation>
+    </message>
+    <message>
+        <location filename="../src/worker/menuworker.cpp" line="122"/>
         <source>Use a proxy</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MiniCategoryWidget</name>
-    <message>
-        <source>All Apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Internet</source>
-        <translation>אינטרנט</translation>
+        <location filename="../src/worker/menuworker.cpp" line="123"/>
+        <source>Pin to Top</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Chat</source>
-        <translation>צ׳אט</translation>
+        <location filename="../src/worker/menuworker.cpp" line="124"/>
+        <source>Remove from favorites</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Music</source>
-        <translation>מוזיקה</translation>
+        <location filename="../src/worker/menuworker.cpp" line="124"/>
+        <source>Add to favorites</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Video</source>
-        <translation>וידאו</translation>
-    </message>
-    <message>
-        <source>Graphics</source>
-        <translation>גרפיקה</translation>
-    </message>
-    <message>
-        <source>Game</source>
-        <translation>משחק</translation>
-    </message>
-    <message>
-        <source>Office</source>
-        <translation>משרדי</translation>
-    </message>
-    <message>
-        <source>Reading</source>
-        <translation>קריאה</translation>
-    </message>
-    <message>
-        <source>Development</source>
-        <translation>פיתוח</translation>
-    </message>
-    <message>
-        <source>System</source>
-        <translation>מערכת</translation>
-    </message>
-    <message>
-        <source>Others</source>
-        <translation>אחרים</translation>
-    </message>
-</context>
-<context>
-    <name>MiniFrameBottomBar</name>
-    <message>
-        <source>Computer</source>
-        <translation type="vanished">מחשב</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation type="vanished">מוזיקה</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">הורדות</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation type="vanished">נעילה</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation type="vanished">התנתקות</translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation type="vanished">השהיה</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation type="vanished">כיבוי</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">חזרה</translation>
-    </message>
-</context>
-<context>
-    <name>MiniFrameNavigation</name>
-    <message>
-        <source>Computer</source>
-        <translation>מחשב</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation>מוזיקה</translation>
-    </message>
-    <message>
-        <source>Shutdown</source>
-        <translation>כיבוי</translation>
-    </message>
-    <message>
-        <source>Lock</source>
-        <translation>נעילה</translation>
-    </message>
-    <message>
-        <source>Logout</source>
-        <translation>התנתקות</translation>
-    </message>
-    <message>
-        <source>Reboot</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Suspend</source>
-        <translation>השהיה</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation>חזרה</translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Videos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pictures</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation>הורדות</translation>
+        <location filename="../src/worker/menuworker.cpp" line="182"/>
+        <source>Disable display scaling</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MiniFrameRightBar</name>
     <message>
-        <source>Computer</source>
-        <translation type="vanished">מחשב</translation>
-    </message>
-    <message>
-        <source>Music</source>
-        <translation type="vanished">מוזיקה</translation>
-    </message>
-    <message>
-        <source>Downloads</source>
-        <translation type="vanished">הורדות</translation>
-    </message>
-    <message>
-        <source>Manual</source>
-        <translation type="vanished">ידני</translation>
-    </message>
-    <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="39"/>
         <source>Settings</source>
-        <translation type="vanished">הגדרות</translation>
+        <translation>הגדרות</translation>
     </message>
     <message>
+        <location filename="../src/widgets/miniframerightbar.cpp" line="40"/>
         <source>Power</source>
-        <translation type="vanished">צריכת חשמל</translation>
+        <translation>צריכת חשמל</translation>
     </message>
 </context>
 <context>
     <name>MiniFrameSwitchBtn</name>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="71"/>
         <source>All Categories</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="../src/widgets/miniframeswitchbtn.cpp" line="74"/>
         <source>Back</source>
         <translation>חזרה</translation>
     </message>
@@ -288,23 +182,45 @@
 <context>
     <name>SearchLineEdit</name>
     <message>
+        <location filename="../src/widgets/searchlineedit.cpp" line="58"/>
         <source>Search</source>
-        <translation>חפש</translation>
+        <translation>חיפוש</translation>
+    </message>
+</context>
+<context>
+    <name>SearchModeWidget</name>
+    <message>
+        <location filename="../src/widgets/searchmodewidget.cpp" line="129"/>
+        <source>No search results</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/searchmodewidget.cpp" line="187"/>
+        <source>Apps found in App Store</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>WindowedFrame</name>
     <message>
-        <source>Cancel</source>
-        <translation>ביטול</translation>
+        <location filename="../src/windowedframe.cpp" line="195"/>
+        <source>Categories</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Confirm</source>
-        <translation>אימות</translation>
+        <location filename="../src/windowedframe.cpp" line="218"/>
+        <source>My Favorites</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <source>Are you sure you want to uninstall?</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/windowedframe.cpp" line="234"/>
+        <source>Add your favorite apps here</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/windowedframe.cpp" line="271"/>
+        <source>All Apps</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>

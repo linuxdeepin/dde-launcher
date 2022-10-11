@@ -120,7 +120,7 @@ void MenuWorker::creatMenuByAppItem()
     startup = new QAction(m_isItemStartup ? tr("Remove from startup") : tr("Add to startup"), m_menu);
     uninstall = new QAction(tr("Uninstall"), m_menu);
     proxy = new QAction(tr("Use a proxy"), m_menu);
-    moveAction = new QAction(canMoveToTop ? tr("Pin to Top") : tr("Pin to Bottom"));
+    moveAction = new QAction(tr("Pin to Top"));
     collectAction = new QAction(isInCollectedList ? tr("Remove from favorites") : tr("Add to favorites"));
 
     // 分割线绘制的必要条件是，在打开功能之后，还有其他的功能选项

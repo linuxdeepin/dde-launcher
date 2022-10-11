@@ -184,7 +184,7 @@ void SearchModeWidget::setSearchModel(QSortFilterProxyModel *model)
 
 void SearchModeWidget::updateTitleContent()
 {
-    m_nativeLabel->setText(tr("Your searched apps in local:"));
+    m_nativeLabel->setText(tr("Apps found in App Store"));
 
     ItemInfoList_v1 list = AppsManager::instance()->appsInfoList(AppsListModel::PluginSearch);
     ItemInfo_v1 info;

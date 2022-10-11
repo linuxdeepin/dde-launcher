@@ -26,7 +26,7 @@ const QString AppSearchPlugin::pluginName() const
 
 const QString AppSearchPlugin::pluginDisplayName()
 {
-    return QString(tr("Native Result:"));
+    return QString("");
 }
 
 AppInfoList AppSearchPlugin::search(const QString &searchText)

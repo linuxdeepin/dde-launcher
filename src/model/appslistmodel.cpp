@@ -272,7 +272,6 @@ void AppsListModel::setDragDropIndex(const QModelIndex &index)
 void AppsListModel::dropInsert(const QString &appKey, const int pos)
 {
     beginInsertRows(QModelIndex(), pos, pos);
-
     int appPos = pos;
     if ((m_category == AppsListModel::FullscreenAll) || (m_category == AppsListModel::Dir))
         appPos = m_pageIndex * m_calcUtil->appPageItemCount(m_category) + pos;
@@ -291,7 +290,6 @@ void AppsListModel::dropSwap(const int nextPos)
         return;
 
     const QString appKey = m_dragStartIndex.data(AppsListModel::AppKeyRole).toString();
-
     removeRows(m_dragStartIndex.row(), 1, QModelIndex());
     dropInsert(appKey, nextPos);
 
@@ -375,8 +373,9 @@ void AppsListModel::updateModelData(const QModelIndex dragIndex, const QModelInd
     // 保存列表数据到配置文件
     m_appsManager->saveFullscreenUsedSortedList();
 
-    // 从本地列表 m_fullscreenUsedSortSetting 中移除被拖拽的对象信息
-    removeRows(dragIndex.row(), 1, QModelIndex());
+    // 2022年 10月 18日 星期二 11:41:36 CST
+    // appgridview.cpp中本来就有通过信号槽方式连接的逻辑，先移除后插入。无须单独安排接口处理。
+
     // 通知界面更新翻页控件
     emit m_appsManager->dataChanged(AppsListModel::FullscreenAll);
     emit QAbstractItemModel::dataChanged(dragIndex, dropIndex);

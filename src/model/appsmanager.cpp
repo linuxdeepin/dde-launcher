@@ -599,11 +599,24 @@ void AppsManager::dragdropStashItem(const QModelIndex &index, AppsListModel::App
         }
     };
 
-    if ((mode == AppsListModel::FullscreenAll) || (mode == AppsListModel::Dir))
+    if (mode == AppsListModel::FullscreenAll) {
         handleData(m_fullscreenUsedSortedList);
+    } else if (mode == AppsListModel::Dir) {
+        const ItemInfo_v1 removeItemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
 
-    if (mode == AppsListModel::Favorite)
+        if (m_dirAppInfoList.contains(removeItemInfo)) {
+            for (ItemInfo_v1 &info : m_fullscreenUsedSortedList) {
+                if (info.m_isDir && info.m_appInfoList == m_dirAppInfoList) {
+                    m_stashList.append(removeItemInfo);
+                    m_dirAppInfoList.removeOne(removeItemInfo);
+                    info.m_appInfoList.removeOne(removeItemInfo);
+                    break;
+                }
+            }
+        }
+    } else if (mode == AppsListModel::Favorite) {
         handleData(m_collectSortedList);
+    }
 
     saveAppCategoryInfoList();
     saveFullscreenUsedSortedList();
@@ -660,7 +673,7 @@ void AppsManager::restoreItem(const QString &appKey, AppsListModel::AppCategory 
     if (pos == -1)
         return;
 
-    foreach (const ItemInfo_v1 &info, m_stashList) {
+    for (const ItemInfo_v1 &info : m_stashList) {
         if (info.m_key == appKey) {
             switch (mode) {
             case AppsListModel::FullscreenAll:
@@ -668,6 +681,17 @@ void AppsManager::restoreItem(const QString &appKey, AppsListModel::AppCategory 
                 break;
             case AppsListModel::Favorite:
                 m_collectSortedList.insert(pos, info);
+                break;
+            case AppsListModel::Dir:
+                for (ItemInfo_v1 &itemInfo : m_fullscreenUsedSortedList) {
+                    if (itemInfo.m_appInfoList == m_dirAppInfoList) {
+                        itemInfo.m_appInfoList.insert(pos, info);
+
+                        // 文件夹中显示的是本地变量缓存的内容，因此这里进行添加，保持与列表中的数据一致
+                        m_dirAppInfoList.insert(pos, info);
+                        break;
+                    }
+                }
                 break;
             default:
                 break;
@@ -1282,13 +1306,27 @@ void AppsManager::refreshItemInfoList()
             m_fullscreenUsedSortedList.removeOne(info);
     }
 
-    // 更新全屏窗口-所有应用列表
+    // 应用文件夹中的应用不显示在全屏所有应用列表中
+    ItemInfoList_v1 dirAppInfoList;
+    for (const ItemInfo_v1 &itemInfo : m_fullscreenUsedSortedList) {
+        if (itemInfo.m_isDir)
+            dirAppInfoList.append(itemInfo.m_appInfoList);
+    }
+
+    for (const ItemInfo_v1 &dirItemInfo : dirAppInfoList) {
+        int itemIndex = m_fullscreenUsedSortedList.indexOf(dirItemInfo);
+        // 不移除文件夾，只移除之前代码逻辑异常留下的缓存应用
+        if (itemIndex != -1 && !m_fullscreenUsedSortedList[itemIndex].m_isDir)
+            m_fullscreenUsedSortedList.removeOne(dirItemInfo);
+    }
+
+    // 移除小窗口-所有应用列表中不存在的应用
     for (const ItemInfo_v1 &info : m_windowedUsedSortedList) {
         if (!m_allAppInfoList.contains(info))
             m_windowedUsedSortedList.removeOne(info);
     }
 
-    // 更新小窗口-收藏列表
+    // 移除收藏列表中不存在的应用
     for (const ItemInfo_v1 &info : m_collectSortedList) {
         if (!m_allAppInfoList.contains(info))
             m_collectSortedList.removeOne(info);
@@ -1333,21 +1371,9 @@ void AppsManager::updateUsedListInfo()
 
 void AppsManager::generateCategoryMap()
 {
-    ItemInfoList_v1 dirAppInfoList;
-
-    for (const ItemInfo_v1 &itemInfo : m_fullscreenUsedSortedList) {
-        if (itemInfo.m_isDir)
-            dirAppInfoList.append(itemInfo.m_appInfoList);
-    }
-
-    // 梳理应用分类数据, 为后续小窗口标题模式提供数据
-    // 梳理全屏下所有应用数据, 为全屏下所有应用列表提供数据
     for (const ItemInfo_v1 &info : m_allAppInfoList) {
-        const int userIdx = m_fullscreenUsedSortedList.indexOf(info);
-        const int dirIdx = dirAppInfoList.indexOf(info);
-
+        // 梳理应用分类数据, 为后续小窗口标题模式提供数据
         const AppsListModel::AppCategory category = info.category();
-
         if (!m_appInfos.contains(category))
             m_appInfos.insert(category, ItemInfoList_v1());
 
@@ -1356,15 +1382,6 @@ void AppsManager::generateCategoryMap()
             m_appInfos[category].append(info);
         else
             m_appInfos[category][idx].updateInfo(info);
-
-        // 应用文件夹中的子应用不显示在全屏所有应用列表中
-        if (dirIdx != -1)
-            continue;
-
-        if (userIdx == -1)
-            m_fullscreenUsedSortedList.append(info);
-        else
-            m_fullscreenUsedSortedList[userIdx].updateInfo(info);
     }
 
     getCategoryListAndSortCategoryId();
@@ -1672,11 +1689,9 @@ bool AppsManager::uninstallDlgShownState() const
 void AppsManager::updateUsedSortData(QModelIndex dragIndex, QModelIndex dropIndex)
 {
     /*
-     * 1. 如果拖拽的对象是文件夹, 那么文件夹及其内部的应用都需要写入到dropItem对象的数据中,
-       且拖拽的对象文件夹标识应该修改为普通应用, 并写入到本地数据中.
-       2. 如果拖拽的对象是应用, 那么将拖拽应用的数据写入到dropItem对象的数据中,
-       且应该将dropItem对象文件夹标识设置为true.
-       3. 命名规则, 拖拽对象与释放对象为同类时, 取该分类标题名称;如果不同, 则以释放对象(显示文件夹中第一位应用)的分类
+     * 1. 拖拽的对象是应用, 那么将拖拽应用的数据写入到dropItem对象的数据中,
+       且应该将dropItem对象文件夹标识设置为true， 且原被拖拽的应用应从全屏列表中移除
+       2. 命名规则, 拖拽对象与释放对象为同类时, 取该分类标题名称;如果不同, 则以释放对象(显示文件夹中第一位应用)的分类
        标题作为文件夹名称
     */
 
@@ -1687,48 +1702,34 @@ void AppsManager::updateUsedSortData(QModelIndex dragIndex, QModelIndex dropInde
     bool dropItemIsDir = dropIndex.data(AppsListModel::ItemIsDirRole).toBool();
 
     auto saveAppDirData = [ & ](ItemInfoList_v1 &list) {
-        int index = list.indexOf(dropItemInfo);
-        if (index == -1)
+        int dropIndex = list.indexOf(dropItemInfo);
+        int dragIndex = list.indexOf(dragItemInfo);
+        if (dropIndex == -1 || dragIndex == -1)
             return;
 
         // 最初都不是应用文件夹, 当是文件夹了, 应用名称就不用变化了, 因此也无需处理
         if (!dropItemIsDir) {
-            list[index].m_isDir = true;
+            list[dropIndex].m_isDir = true;
 
             // 不论拖拽对象与释放对象是否为同一类应用, 都把释放对象的分类标题作为文件夹名称
             int idIndex = static_cast<int>(dropItemInfo.m_categoryId);
             if (m_categoryTs.size() > idIndex)
-                list[index].m_name = m_categoryTs[idIndex];
+                list[dropIndex].m_name = m_categoryTs[idIndex];
         }
 
         ItemInfoList_v1 itemList;
-        // 释放的对象为应用时, 写入到列表中.
+        // 释放的对象为应用时, 先将释放的对象写入到列表，再将拖拽的对象写入，保证被拖动的应用放在第二位
         // 释放的对象为文件夹时, 内容已经在前一次写入到了列表中, 因此无需处理
         if (!dropItemIsDir)
             itemList.append(dropItemInfo);
 
-        // 释放的对象中不包含拖拽的对象时
-        if (!list[index].m_appInfoList.contains(dragItemInfo)) {
-            if (!dragItemIsDir) {
-                // 仅仅更新dropItem的文件夹标识即可
-                // 被拖动的应用放在第二位
-                itemList.append(dragItemInfo);
-            } else {
-                // 当拖动的文件夹进入到另一个文件夹中时, 确保拖动的这个文件夹标识调整为普通应用标识,
-                // 同时保持拖动之前的排列顺序插入到新的文件夹结构中
-                dragItemInfo.m_isDir = false;
-                int dragIndex = list.indexOf(dragItemInfo);
-                if (dragIndex != -1) {
-                    list[dragIndex] = dragItemInfo;
-                }
-                itemList.append(dragItemInfo.m_appInfoList);
-            }
+        if (!dragItemIsDir)
+            itemList.append(dragItemInfo);
 
-            list[index].m_appInfoList.append(itemList);
-        } else {
-            // 释放的对象中包含拖拽的对象属于异常情况
-            return;
-        }
+        list[dropIndex].m_appInfoList.append(itemList);
+
+        // 被拖动的应用插入文件夹列表后，从全屏列表中移除
+        list.removeAt(dragIndex);
     };
 
     saveAppDirData(m_fullscreenUsedSortedList);

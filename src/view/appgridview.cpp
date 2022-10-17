@@ -133,7 +133,7 @@ void AppGridView::dropEvent(QDropEvent *e)
     if (m_calcUtil->fullscreen()) {
         QModelIndex dropIndex = indexAt(e->pos());
         QModelIndex dragIndex = indexAt(m_dragStartPos);
-        if (dropIndex.isValid() && dragIndex.isValid() && dragIndex != dropIndex) {
+        if (dropIndex.isValid() && dragIndex.isValid() && dragIndex != dropIndex && (m_viewType != PopupView)) {
             itemDelegate->setDirModelIndex(QModelIndex(), QModelIndex());
             listModel->updateModelData(dragIndex, dropIndex);
         }
@@ -548,14 +548,11 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
         m_pixLabel->hide();
         bool dropItemIsDir = indexAt(m_dropToPos).data(AppsListModel::ItemIsDirRole).toBool();
         if (!m_lastFakeAni) {
-            if (m_enableDropInside && !dropItemIsDir) {
+            // 增加文件夹展开视图列表的判断逻辑
+            if (m_enableDropInside && !dropItemIsDir && (m_viewType != PopupView))
                 listModel->dropSwap(m_dropToPos);
-            }
 
-            // 搜索模式下，不需要做删除被拖拽的item，插入移动到新位置的item的操作，否则会导致被拖拽item的位置改变
-            if ((listModel->category() != AppsListModel::Search) && !dropItemIsDir){
-                listModel->dropSwap(indexAt(m_dragStartPos).row());
-            }
+            // TODO: 搜索模式下的会新增一个控件，因此这里暂时删除针对搜索模式的业务，不影响主体功能
 
             listModel->clearDraggingIndex();
         } else {

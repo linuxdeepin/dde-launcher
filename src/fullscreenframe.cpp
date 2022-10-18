@@ -305,8 +305,10 @@ void FullScreenFrame::mouseReleaseEvent(QMouseEvent *e)
     }
     m_mousePressState = false;
 
-    // 全屏模式下支持全屏范围滑动翻页
-    mouseReleaseDrag(e);
+    if (!m_drawerWidget->isVisible()) {
+        // 全屏模式下支持全屏范围滑动翻页
+        mouseReleaseDrag(e);
+    }
 }
 
 bool FullScreenFrame::eventFilter(QObject *o, QEvent *e)

@@ -58,14 +58,22 @@ DGUI_USE_NAMESPACE
 #define CATEGORY_COUNT    11
 
 class CalculateUtil;
+class AppGridView;
 
 class AppsManager : public QObject
 {
     Q_OBJECT
 
 public:
+    enum DragMode {
+        DirOut,             // 文件夹展开窗口移除应用模式
+        Other               // 其他场景模式
+    };
+
     static AppsManager *instance();
     void dragdropStashItem(const QModelIndex &index, AppsListModel::AppCategory mode);
+    void removeDragItem();
+    void insertDropItem(int pos);
     void stashItem(const QModelIndex &index);
     void stashItem(const QString &appKey);
     void abandonStashedItem(const QString &appKey);
@@ -97,6 +105,27 @@ public:
 
     QSettings::SettingsMap getCacheMapData(const ItemInfoList_v1 &list);
     const ItemInfoList_v1 readCacheData(const QSettings::SettingsMap &map);
+
+    void setDragMode(DragMode mode);
+    DragMode getDragMode() const;
+
+    void setDragItem(ItemInfo_v1 &info);
+    const ItemInfo_v1 getDragItem() const;
+
+    void setReleasePos(int row);
+    int getReleasePos() const;
+
+    void setCategory(AppsListModel::AppCategory category);
+    AppsListModel::AppCategory getCategory() const;
+
+    void setPageIndex(int pageIndex);
+    int getPageIndex() const;
+
+    void setListModel(AppsListModel *model);
+    AppsListModel *getListModel() const;
+
+    void setListView(AppGridView *view);
+    AppGridView *getListView() const;
 
 signals:
     void itemDataChanged(const ItemInfo_v1 &info) const;
@@ -222,7 +251,7 @@ private:
 
     int m_tryNums;                                                          // 获取应用图标时尝试的次数
     int m_tryCount;                                                         // 超过10次停止遍历
-    ItemInfo_v1 m_itemInfo;                                                    // 当前需要更新的应用信息
+    ItemInfo_v1 m_itemInfo;                                                 // 当前需要更新的应用信息
 
     static QPointer<AppsManager> INSTANCE;
     static QGSettings *m_launcherSettings;
@@ -246,6 +275,13 @@ private:
 
     QTimer *m_updateCalendarTimer;
     bool m_uninstallDlgIsShown;
+    DragMode m_dragMode;                                                    // 拖拽类型
+    AppsListModel::AppCategory m_curCategory;                               // 当前视图列表的模式类型
+    int m_pageIndex;                                                        // 当前视图列表所在页面索引
+    AppsListModel *m_appModel;                                              // 当前模式
+    AppGridView *m_appView;                                                 // 当前视图
+    ItemInfo_v1 m_dragItemInfo;                                             // 被拖拽应用信息
+    int m_dropRow;                                                          // 拖拽释放时鼠标所在的当前页的行数
 };
 
 #endif // APPSMANAGER_H

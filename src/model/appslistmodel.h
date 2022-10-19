@@ -108,12 +108,14 @@ public:
 
 public:
     explicit AppsListModel(const AppCategory& category, QObject *parent = nullptr);
-    void setPageIndex(int pageIndex){m_pageIndex = pageIndex;}
+    void setPageIndex(int pageIndex) { m_pageIndex = pageIndex; }
+    int getPageIndex() const { return m_pageIndex; }
 
     inline AppCategory category() const {return m_category;}
     void setDraggingIndex(const QModelIndex &index);
     void setDragDropIndex(const QModelIndex &index);
     void dropInsert(const QString &appKey, const int pos);
+    void insertItem(int pos);
     void dropSwap(const int nextPos);
     inline QModelIndex dragDropIndex() const {return m_dragDropIndex;}
 

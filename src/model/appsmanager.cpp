@@ -107,6 +107,13 @@ AppsManager::AppsManager(QObject *parent)
     , m_fsWatcher(new QFileSystemWatcher(this))
     , m_updateCalendarTimer(new QTimer(this))
     , m_uninstallDlgIsShown(false)
+    , m_dragMode(Other)
+    , m_curCategory(AppsListModel::FullscreenAll)
+    , m_pageIndex(0)
+    , m_appModel(nullptr)
+    , m_appView(nullptr)
+    , m_dragItemInfo(ItemInfo_v1())
+    , m_dropRow(0)
 {
     if (QGSettings::isSchemaInstalled("com.deepin.dde.launcher")) {
         m_filterSetting = new QGSettings("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
@@ -350,6 +357,20 @@ const ItemInfoList_v1 AppsManager::readCacheData(const QSettings::SettingsMap &m
     }
 
     return infoList;
+}
+
+/**保存当前拖拽的类型
+ * @brief AppsManager::setDragMode
+ * @param mode 拖拽类型
+ */
+void AppsManager::setDragMode(DragMode mode)
+{
+    m_dragMode = mode;
+}
+
+AppsManager::DragMode AppsManager::getDragMode() const
+{
+    return m_dragMode;
 }
 
 /**
@@ -602,6 +623,7 @@ void AppsManager::dragdropStashItem(const QModelIndex &index, AppsListModel::App
     if (mode == AppsListModel::FullscreenAll) {
         handleData(m_fullscreenUsedSortedList);
     } else if (mode == AppsListModel::Dir) {
+        ItemInfoList_v1 list_toRemove;
         const ItemInfo_v1 removeItemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
 
         if (m_dirAppInfoList.contains(removeItemInfo)) {
@@ -610,16 +632,179 @@ void AppsManager::dragdropStashItem(const QModelIndex &index, AppsListModel::App
                     m_stashList.append(removeItemInfo);
                     m_dirAppInfoList.removeOne(removeItemInfo);
                     info.m_appInfoList.removeOne(removeItemInfo);
+
+                    // 当为空时，清除这个空的文件夹内容
+                    if (info.m_appInfoList.isEmpty())
+                        list_toRemove.append(info);
+
                     break;
                 }
             }
         }
+
+        for (const ItemInfo_v1 &info : list_toRemove)
+            m_fullscreenUsedSortedList.removeOne(info);
+
     } else if (mode == AppsListModel::Favorite) {
         handleData(m_collectSortedList);
     }
 
     saveAppCategoryInfoList();
     saveFullscreenUsedSortedList();
+}
+
+/**保存被拖拽的应用信息
+ * @brief AppsManager::setDragItem
+ * @param info 被拖拽的应用信息
+ */
+void AppsManager::setDragItem(ItemInfo_v1 &info)
+{
+    if (!info.m_desktop.isEmpty())
+        m_dragItemInfo = info;
+}
+
+const ItemInfo_v1 AppsManager::getDragItem() const
+{
+    return m_dragItemInfo;
+}
+
+/**保存拖拽释放时，应用在视图列表中的行数
+ * @brief AppsManager::setReleasePos
+ * @param row
+ */
+void AppsManager::setReleasePos(int row)
+{
+    m_dropRow = row;
+}
+
+int AppsManager::getReleasePos() const
+{
+    return m_dropRow;
+}
+
+/**保存当前视图列表的模式类型
+ * @brief AppsManager::setCategory
+ * @param category
+ */
+void AppsManager::setCategory(AppsListModel::AppCategory category)
+{
+    m_curCategory = category;
+}
+
+AppsListModel::AppCategory AppsManager::getCategory() const
+{
+    return m_curCategory;
+}
+
+/**保存当前模式下的页面索引
+ * @brief AppsManager::setPageIndex
+ * @param pageIndex
+ */
+void AppsManager::setPageIndex(int pageIndex)
+{
+    m_pageIndex = pageIndex;
+}
+
+int AppsManager::getPageIndex() const
+{
+    return m_pageIndex;
+}
+
+AppsListModel *AppsManager::getListModel() const
+{
+    return m_appModel;
+}
+
+/**多个页面间进行拖拽时，需要用到目标视图列表当前页对应的模型
+ * 保存当前视图列表对应的模式对象指针
+ * @brief AppsManager::setListModel
+ * @param model
+ */
+void AppsManager::setListModel(AppsListModel *model)
+{
+    m_appModel = model;
+}
+
+AppGridView *AppsManager::getListView() const
+{
+    return m_appView;
+}
+
+/**多个页面间进行拖拽时，需要用到目标视图列表当前页对应的视图
+ * 保存当前视图列表对象指针
+ * @brief AppsManager::setListView
+ * @param view
+ */
+void AppsManager::setListView(AppGridView *view)
+{
+    m_appView = view;
+}
+
+void AppsManager::removeDragItem()
+{
+    if (getDragMode() != DirOut) {
+        qDebug() << "drag mode: " << getDragMode();
+        return;
+    }
+
+    ItemInfo_v1 removeItemInfo = getDragItem();
+#ifdef QT_DEBUG
+    qDebug() << "removeItemInfo:" << removeItemInfo;
+#endif
+
+    if (!m_dirAppInfoList.contains(removeItemInfo)) {
+        qDebug() << "not exist in dir";
+        return;
+    }
+
+    ItemInfoList_v1 list_toRemove;
+    for (ItemInfo_v1 &info : m_fullscreenUsedSortedList) {
+        if (info.m_isDir && info.m_appInfoList == m_dirAppInfoList) {
+            m_dirAppInfoList.removeOne(removeItemInfo);
+            info.m_appInfoList.removeOne(removeItemInfo);
+
+            // 当为空时，清除这个空的文件夹内容
+            if (info.m_appInfoList.isEmpty())
+                list_toRemove.append(info);
+#ifdef QT_DEBUG
+            qDebug() << QString("remove  %1 successfully").arg(removeItemInfo.m_desktop);
+#endif
+            break;
+        }
+    }
+
+    for (const ItemInfo_v1 &info : list_toRemove)
+        m_fullscreenUsedSortedList.removeOne(info);
+
+    saveFullscreenUsedSortedList();
+    emit dataChanged(AppsListModel::FullscreenAll);
+}
+
+void AppsManager::insertDropItem(int pos)
+{
+    if (getDragMode() != DirOut) {
+        qDebug() << "drag mode != DirOut, cur drag mode: " << getDragMode();
+        return;
+    }
+
+    ItemInfo_v1 dropItemInfo = getDragItem();
+#ifdef QT_DEBUG
+    qDebug() << "dropItemInfo:" << dropItemInfo;
+#endif
+
+    if (!m_fullscreenUsedSortedList.contains(dropItemInfo)) {
+        m_fullscreenUsedSortedList.insert(pos, dropItemInfo);
+#ifdef QT_DEBUG
+        qDebug() << "insert successfully in row : " << pos;
+#endif
+    } else {
+        qDebug() << "dropItem is in the fullscreen list, dropItem is:" << dropItemInfo.m_desktop << ", exist index:" <<
+                    m_fullscreenUsedSortedList.indexOf(dropItemInfo);
+    }
+
+    saveFullscreenUsedSortedList();
+    setDragMode(Other);
+    emit dataChanged(AppsListModel::FullscreenAll);
 }
 
 void AppsManager::stashItem(const QModelIndex &index)
@@ -1695,21 +1880,22 @@ void AppsManager::updateUsedSortData(QModelIndex dragIndex, QModelIndex dropInde
        标题作为文件夹名称
     */
 
-    ItemInfo_v1 dragItemInfo = dragIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
-    ItemInfo_v1 dropItemInfo = dropIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
-
-    bool dragItemIsDir = dragIndex.data(AppsListModel::ItemIsDirRole).toBool();
-    bool dropItemIsDir = dropIndex.data(AppsListModel::ItemIsDirRole).toBool();
-
     auto saveAppDirData = [ & ](ItemInfoList_v1 &list) {
+        ItemInfo_v1 dragItemInfo = dragIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
+        ItemInfo_v1 dropItemInfo = dropIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
+        bool dragItemIsDir = dragIndex.data(AppsListModel::ItemIsDirRole).toBool();
+        bool dropItemIsDir = dropIndex.data(AppsListModel::ItemIsDirRole).toBool();
+
         int dropIndex = list.indexOf(dropItemInfo);
         int dragIndex = list.indexOf(dragItemInfo);
         if (dropIndex == -1 || dragIndex == -1)
             return;
 
         // 最初都不是应用文件夹, 当是文件夹了, 应用名称就不用变化了, 因此也无需处理
+        // 伪造一个应用来作为文件夹(desktop全路径为.dir结尾，m_isDir为true), 当文件夹为空时，从全屏列表移除该伪应用
         if (!dropItemIsDir) {
             list[dropIndex].m_isDir = true;
+            list[dropIndex].m_desktop += ".dir";
 
             // 不论拖拽对象与释放对象是否为同一类应用, 都把释放对象的分类标题作为文件夹名称
             int idIndex = static_cast<int>(dropItemInfo.m_categoryId);

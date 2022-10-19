@@ -256,7 +256,7 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
             - QPoint(m_autoStartPixmap.height(), m_autoStartPixmap.width()) / m_autoStartPixmap.devicePixelRatioF() / 2
             + QPoint(iconRect.width() / 10, -iconRect.height() / 10);
 
-    if (index.data(AppsListModel::AppAutoStartRole).toBool())
+    if (!itemIsDir && index.data(AppsListModel::AppAutoStartRole).toBool())
         painter->drawPixmap(autoStartIconPos, m_autoStartPixmap);
 
     if (drawBlueDot) {

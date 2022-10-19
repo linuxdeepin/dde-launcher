@@ -280,6 +280,20 @@ void AppsListModel::dropInsert(const QString &appKey, const int pos)
     endInsertRows();
 }
 
+/**在当前模型指定的位置插入应用
+ * @brief AppsListModel::insertItem
+ * @param pos 插入应用的行数
+ */
+void AppsListModel::insertItem(int pos)
+{
+    beginInsertRows(QModelIndex(), pos, pos);
+
+    pos += m_appsManager->getPageIndex() * m_calcUtil->appPageItemCount(m_appsManager->getCategory());
+
+    m_appsManager->insertDropItem(pos);
+    endInsertRows();
+}
+
 /**
  * @brief AppsListModel::dropSwap 拖拽释放后删除被拖拽的item，插入移动到新位置的item
  * @param nextPos 拖拽释放后的位置
@@ -289,9 +303,14 @@ void AppsListModel::dropSwap(const int nextPos)
     if (!m_dragStartIndex.isValid())
         return;
 
-    const QString appKey = m_dragStartIndex.data(AppsListModel::AppKeyRole).toString();
-    removeRows(m_dragStartIndex.row(), 1, QModelIndex());
-    dropInsert(appKey, nextPos);
+    const ItemInfo_v1 appInfo = m_dragStartIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
+
+    // 从文件夹展开窗口移除应用时，文件夹本身不执行移动操作
+    if (!appInfo.m_isDir) {
+        qDebug() << QString("app is dir, desktopfilePath is %1").arg(appInfo.m_desktop);
+        removeRows(m_dragStartIndex.row(), 1, QModelIndex());
+        dropInsert(appInfo.m_key, nextPos);
+    }
 
     emit QAbstractItemModel::dataChanged(m_dragStartIndex, m_dragDropIndex);
 
@@ -456,6 +475,7 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
         mime->setData("RequestDock", index.data(AppDesktopRole).toByteArray());
 
     mime->setData("AppKey", index.data(AppKeyRole).toByteArray());
+    mime->setImageData(index.data(AppsListModel::AppRawItemInfoRole));
     if (index.data(AppIsRemovableRole).toBool())
         mime->setData("Removable", "");
 

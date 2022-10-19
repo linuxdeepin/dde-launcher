@@ -26,10 +26,6 @@ AppDrawerWidget::~AppDrawerWidget()
 
 void AppDrawerWidget::initUi()
 {
-#ifdef QT_DEBUG
-    qInfo() << "size:" << AppsManager::instance()->currentScreen()->geometry().size();
-#endif
-
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_TransparentForMouseEvents, false);
@@ -39,6 +35,8 @@ void AppDrawerWidget::initUi()
     const QSize screenSize = AppsManager::instance()->currentScreen()->geometry().size();
     m_maskWidget->resize(screenSize);
     setFixedSize(screenSize);
+
+    qApp->installEventFilter(this);
 
     QHBoxLayout *mainLayout = new QHBoxLayout(m_maskWidget);
     mainLayout->setContentsMargins(QMargins(0, 0, 0, 0));
@@ -103,6 +101,21 @@ void AppDrawerWidget::showEvent(QShowEvent *event)
     m_multipageView->setModel(AppsListModel::Dir);
 
     return QWidget::showEvent(event);
+}
+
+bool AppDrawerWidget::eventFilter(QObject *object, QEvent *event)
+{
+    if ((event->type() == QEvent::DragMove) && isVisible()) {
+        const QRect widgetRect = m_multipageView->geometry().marginsRemoved(QMargins(10, 10, 10, 10));
+        // 左，上，右，下, 等于或者超越边界时，从文件夹移出应用
+        if (!widgetRect.contains(QCursor::pos())) {
+            hide();
+            AppsManager::instance()->setDragMode(AppsManager::DirOut);
+            AppsManager::instance()->removeDragItem();
+        }
+    }
+
+    return QWidget::eventFilter(object, event);
 }
 
 void AppDrawerWidget::mousePressEvent(QMouseEvent *event)

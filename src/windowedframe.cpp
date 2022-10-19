@@ -101,7 +101,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     m_maskBg->setAccessibleName("MaskBg");
     m_switchBtn->setAccessibleName("switchBtn");
     m_modeToggleBtn->setAccessibleName("modeToggleBtn");
-    m_searcherEdit->setAccessibleName("WindowedSearcherEdit");
     m_tipsLabel->setAccessibleName("tipsLabel");
 
     setMaskColor(DBlurEffectWidget::AutoColor);
@@ -141,7 +140,6 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     QHBoxLayout *searchLayout = new QHBoxLayout;
     searchLayout->setContentsMargins(9, 0, DLauncher::MINI_FRAME_LAYOUT_SPACE2, 0);
     searchLayout->addWidget(m_searcherEdit);
-    DStyle::setFocusRectVisible(m_searcherEdit->lineEdit(), false);
     searchLayout->setSpacing(6);
     searchLayout->addWidget(m_modeToggleBtn);
 

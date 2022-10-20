@@ -1839,9 +1839,6 @@ void FullScreenFrame::searchTextChanged(const QString &keywords, bool enableUpda
         updateDisplayMode(m_calcUtil->displayMode());
     else
         updateDisplayMode(SEARCH);
-
-    if (m_searchWidget->edit()->lineEdit()->text().isEmpty())
-        m_searchWidget->edit()->lineEdit()->clearFocus();
 }
 
 bool FullScreenFrame::isScrolling()

@@ -524,10 +524,14 @@ void AppsManager::removeNonexistentData()
     for (; categoryAppsIter != m_appInfos.end(); ++categoryAppsIter) {
         ItemInfoList_v1 &item = categoryAppsIter.value();
         for (auto it(item.begin()); it != item.end();) {
-            if (!m_allAppInfoList.contains(*it))
+            if (!m_allAppInfoList.contains(*it)) {
                 it = item.erase(it);
-            else
-                it++;
+            } else {
+                // 多语言时，更新应用信息
+                int index = m_allAppInfoList.indexOf(*it);
+                it->updateInfo(m_allAppInfoList[index]);
+                ++it;
+            }
         }
     }
 
@@ -537,12 +541,22 @@ void AppsManager::removeNonexistentData()
         if (info.m_isDir) {
             // 从文件夹中移除不存在的应用
             for (ItemInfo_v1 &dirItem : info.m_appInfoList) {
-                if (!m_allAppInfoList.contains(dirItem))
+                if (!m_allAppInfoList.contains(dirItem)) {
                     info.m_appInfoList.removeOne(dirItem);
+                } else {
+                    // 多语言时，更新应用信息
+                    int index = m_allAppInfoList.indexOf(dirItem);
+                    dirItem.updateInfo(m_allAppInfoList[index]);
+                }
             }
         } else {
             if (!m_allAppInfoList.contains(info))
                 appListToRemove.append(info);
+            else {
+                // 多语言时，更新应用信息
+                int index = m_allAppInfoList.indexOf(info);
+                info.updateInfo(m_allAppInfoList[index]);
+            }
         }
     }
 
@@ -1399,8 +1413,13 @@ void AppsManager::refreshCategoryInfoList()
 
     // 缓存数据中没有的, 则加入到所有应用列表中
     for (const ItemInfo_v1 &itemInfo : m_allAppInfoList) {
-        if (!m_windowedUsedSortedList.contains(itemInfo))
+        if (!m_windowedUsedSortedList.contains(itemInfo)) {
             m_windowedUsedSortedList.append(itemInfo);
+        } else {
+            // 多语言时，更新应用信息
+            int index = m_windowedUsedSortedList.indexOf(itemInfo);
+            m_windowedUsedSortedList[index].updateInfo(itemInfo);
+        }
     }
 
     // 3. 读取全屏下所有应用列表的缓存数据
@@ -1482,6 +1501,10 @@ void AppsManager::refreshItemInfoList()
     for (; allItemItor != m_allAppInfoList.constEnd(); ++allItemItor) {
         if (!m_fullscreenUsedSortedList.contains(*allItemItor)) {
             m_fullscreenUsedSortedList.append(*allItemItor);
+        } else {
+            // 多语言时，更新应用信息
+            int index = m_fullscreenUsedSortedList.indexOf(*allItemItor);
+            m_fullscreenUsedSortedList[index].updateInfo(*allItemItor);
         }
     }
 

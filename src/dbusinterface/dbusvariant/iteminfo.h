@@ -55,7 +55,7 @@ public:
 
     AppsListModel::AppCategory category() const;
 
-    inline bool operator==(const ItemInfo &other) const { return m_desktop == other.m_desktop; }
+    bool operator==(const ItemInfo &other) const;
     friend QDebug operator<<(QDebug argument, const ItemInfo &info);
     friend QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo &info);
     friend QDataStream &operator<<(QDataStream &argument, const ItemInfo &info);
@@ -109,7 +109,7 @@ public:
 
     AppsListModel::AppCategory category() const;
 
-    inline bool operator==(const ItemInfo_v1 &other) {  return m_desktop == other.m_desktop; }
+    bool operator==(const ItemInfo_v1 &other) const;
     friend QDebug operator<<(QDebug argument, const ItemInfo_v1 &info);
     friend QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo_v1 &info);
     friend const QDBusArgument &operator>>(const QDBusArgument &argument, ItemInfo_v1 &info);
@@ -153,7 +153,7 @@ public:
 
     AppsListModel::AppCategory category() const;
 
-    inline bool operator==(const ItemInfo_v2 &other) const { return m_desktop == other.m_desktop; }
+    bool operator==(const ItemInfo_v2 &other) const;
     friend QDebug operator<<(QDebug argument, const ItemInfo_v2 &info);
     friend QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo_v2 &info);
     friend QDataStream &operator<<(QDataStream &argument, const ItemInfo_v2 &info);

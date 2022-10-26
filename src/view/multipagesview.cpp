@@ -485,7 +485,7 @@ void MultiPagesView::mouseRelease(QMouseEvent *e)
     } else {
         int nScroll = m_appListArea->horizontalScrollBar()->value();
         // 多个分页是点击直接隐藏
-        if (nScroll == m_scrollStart && m_pageCount != 1)
+        if (nScroll == m_scrollStart && m_pageCount != 1 && m_category != AppsListModel::Search)
             emit m_appGridViewList[m_pageIndex]->clicked(QModelIndex());
         else if (nScroll - m_scrollStart > DLauncher::MOUSE_MOVE_TO_NEXT)
             showCurrentPage(m_pageIndex + 1);

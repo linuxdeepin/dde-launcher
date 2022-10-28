@@ -81,8 +81,7 @@ bool ItemInfo::operator==(const ItemInfo &other) const
 {
     return (m_desktop == other.m_desktop && m_name == other.m_name &&
             m_key == other.m_key && m_iconKey == other.m_iconKey &&
-            m_categoryId == other.m_categoryId && m_installedTime == other.m_installedTime &&
-            m_openCount == other.m_openCount && m_firstRunTime == other.m_firstRunTime);
+            m_categoryId == other.m_categoryId && m_openCount == other.m_openCount);
 }
 
 void ItemInfo::updateInfo(const ItemInfo &info)
@@ -320,8 +319,6 @@ bool ItemInfo_v1::operator==(const ItemInfo_v1 &other) const
             m_key == other.m_key && m_iconKey == other.m_iconKey &&
             m_keywords == other.m_keywords && m_status == other.m_status &&
             m_categoryId == other.m_categoryId && m_description == other.m_description &&
-            m_progressValue == other.m_progressValue && m_installedTime == other.m_installedTime &&
-            m_openCount == other.m_openCount && m_firstRunTime == other.m_firstRunTime &&
             m_isDir == other.m_isDir && m_appInfoList == other.m_appInfoList);
 }
 
@@ -444,8 +441,7 @@ bool ItemInfo_v2::operator==(const ItemInfo_v2 &other) const
 {
     return (m_desktop == other.m_desktop && m_name == other.m_name &&
             m_key == other.m_key && m_iconKey == other.m_iconKey &&
-            m_categoryId == other.m_categoryId && m_installedTime == other.m_installedTime &&
-            m_keywords == other.m_keywords);
+            m_categoryId == other.m_categoryId && m_keywords == other.m_keywords);
 }
 
 QDebug operator<<(QDebug argument, const ItemInfo_v2 &info)

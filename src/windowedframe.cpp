@@ -1482,6 +1482,9 @@ void WindowedFrame::addViewEvent(AppGridView *pView)
 
 void WindowedFrame::refreshView(const AppsListModel::AppCategory category)
 {
+    if (!isVisible())
+        return;
+
     switch (category) {
     case AppsListModel::Favorite: {
         m_favoriteModel->clearDraggingIndex();

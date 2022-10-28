@@ -648,6 +648,9 @@ void FullScreenFrame::uninstallApp(const QString &appKey)
 
 void FullScreenFrame::refreshPageView(AppsListModel::AppCategory category)
 {
+    if (!isVisible())
+        return;
+
     if (AppsListModel::Search == category) {
         m_searchModeWidget->setSearchModel(m_filterModel);
     } else {

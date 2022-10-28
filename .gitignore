@@ -35,3 +35,4 @@ build*
 .vscode
 .transifexrc
 lupdate.sh
+.cache/

@@ -76,8 +76,8 @@ public:
     void insertDropItem(int pos);
     void stashItem(const QModelIndex &index);
     void stashItem(const QString &appKey);
-    void abandonStashedItem(const QString &appKey);
-    void restoreItem(const QString &appKey, AppsListModel::AppCategory mode, const int pos = -1);
+    void abandonStashedItem(const QString &desktop);
+    void restoreItem(const QString &desktop, AppsListModel::AppCategory mode, const int pos = -1);
     int dockPosition() const;
     QRect dockGeometry() const;
     bool isHaveNewInstall() const { return !m_newInstalledAppsList.isEmpty(); }
@@ -151,6 +151,7 @@ public slots:
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
     void uninstallApp(const QString &appKey);
+    void uninstallApp(const ItemInfo_v1 &info);
     void onEditCollected(const QModelIndex index, const bool isInCollected);
     void onMoveToFirstInCollected(const QModelIndex index);
     void setDirAppInfoList(const QModelIndex index);
@@ -179,7 +180,7 @@ public slots:
     void handleItemChanged(const QString &operation, const ItemInfo_v2 &appInfo, qlonglong categoryNumber);
     void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
     const ItemInfo_v1 createOfCategory(qlonglong category);
-    void onUninstallFail(const QString &appKey);
+    void onUninstallFail(const QString &desktop);
 
 private:
     explicit AppsManager(QObject *parent = nullptr);

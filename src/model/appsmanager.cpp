@@ -851,11 +851,11 @@ void AppsManager::stashItem(const QString &appKey)
  * @brief AppsManager::abandonStashedItem 卸载应用更新列表
  * @param appKey 应用的key
  */
-void AppsManager::abandonStashedItem(const QString &appKey)
+void AppsManager::abandonStashedItem(const QString &desktop)
 {
     // 遍历应用列表,存在则从列表中移除
     for (const ItemInfo_v1 &info : m_allAppInfoList) {
-        if (info.m_key == appKey) {
+        if (info.m_desktop == desktop) {
             APP_AUTOSTART_CACHE.remove(info.m_desktop);
             break;
         }
@@ -867,13 +867,13 @@ void AppsManager::abandonStashedItem(const QString &appKey)
     emit dataChanged(AppsListModel::FullscreenAll);
 }
 
-void AppsManager::restoreItem(const QString &appKey, AppsListModel::AppCategory mode, const int pos)
+void AppsManager::restoreItem(const QString &desktop, AppsListModel::AppCategory mode, const int pos)
 {
     if (pos == -1)
         return;
 
     for (const ItemInfo_v1 &info : m_stashList) {
-        if (info.m_key == appKey) {
+        if (info.m_desktop == desktop) {
             switch (mode) {
             case AppsListModel::FullscreenAll:
                 m_fullscreenUsedSortedList.insert(pos, info);
@@ -1001,6 +1001,19 @@ void AppsManager::uninstallApp(const QString &appKey)
     emit dataChanged(AppsListModel::FullscreenAll);
 }
 
+void AppsManager::uninstallApp(const ItemInfo_v1 &info)
+{
+    // 向后端发起卸载请求
+#ifdef USE_AM_API
+    m_amDbusLauncherInter->RequestUninstall(info.m_desktop, false);
+#else
+    m_launcherInter->RequestUninstall(info.m_key, false);
+#endif
+
+    // 刷新各列表的分页信息
+    emit dataChanged(AppsListModel::FullscreenAll);
+}
+
 /**
  * @brief AppsManager::onEditCollected
  * @param index 应用模型索引
@@ -1114,9 +1127,9 @@ const ItemInfo_v1 AppsManager::createOfCategory(qlonglong category)
     return info;
 }
 
-void AppsManager::onUninstallFail(const QString &appKey)
+void AppsManager::onUninstallFail(const QString &desktop)
 {
-    restoreItem(appKey, AppsListModel::FullscreenAll);
+    restoreItem(desktop, AppsListModel::FullscreenAll);
     emit dataChanged(AppsListModel::FullscreenAll);
 }
 
@@ -1877,7 +1890,7 @@ void AppsManager::uninstallApp(const QModelIndex &modelIndex)
             return;
         }
 
-        uninstallApp(appKey);
+        uninstallApp(info);
     });
 
     if (!fullscreen())

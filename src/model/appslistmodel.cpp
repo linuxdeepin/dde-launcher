@@ -269,14 +269,14 @@ void AppsListModel::setDragDropIndex(const QModelIndex &index)
  * @param appKey item应用对应的key值
  * @param pos item 拖拽释放后所在的行数
  */
-void AppsListModel::dropInsert(const QString &appKey, const int pos)
+void AppsListModel::dropInsert(const QString &desktop, const int pos)
 {
     beginInsertRows(QModelIndex(), pos, pos);
     int appPos = pos;
     if ((m_category == AppsListModel::FullscreenAll) || (m_category == AppsListModel::Dir))
         appPos = m_pageIndex * m_calcUtil->appPageItemCount(m_category) + pos;
 
-    m_appsManager->restoreItem(appKey, m_category, appPos);
+    m_appsManager->restoreItem(desktop, m_category, appPos);
     endInsertRows();
 }
 
@@ -309,7 +309,7 @@ void AppsListModel::dropSwap(const int nextPos)
     if (!appInfo.m_isDir) {
         qDebug() << QString("app is dir, desktopfilePath is %1").arg(appInfo.m_desktop);
         removeRows(m_dragStartIndex.row(), 1, QModelIndex());
-        dropInsert(appInfo.m_key, nextPos);
+        dropInsert(appInfo.m_desktop, nextPos);
     }
 
     emit QAbstractItemModel::dataChanged(m_dragStartIndex, m_dragDropIndex);

@@ -1472,7 +1472,7 @@ void FullScreenFrame::uninstallApp(const QModelIndex &context)
     unInstallDialog.setAccessibleName("Imge-unInstallDialog");
 
     unInstallDialog.addButton(tr("Cancel"));
-    unInstallDialog.addButton(tr("Confirm"), false, DDialog::ButtonWarning);
+    unInstallDialog.addButton(tr("Uninstall"), false, DDialog::ButtonWarning);
 
     connect(&unInstallDialog, &DTK_WIDGET_NAMESPACE::DDialog::buttonClicked, [&](int clickedResult) {
         // 0 means "cancel" button clicked

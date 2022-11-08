@@ -985,7 +985,7 @@ void AppsManager::launchApp(const QModelIndex &index)
     refreshItemInfoList();
 
     if (!appDesktop.isEmpty())
-        m_startManagerInter->LaunchWithTimestamp(appDesktop, QX11Info::getTimestamp());
+        m_startManagerInter->Launch(appDesktop);
 }
 
 void AppsManager::uninstallApp(const QString &appKey)

@@ -21,35 +21,37 @@
 #include <QtDBus/QtDBus>
 
 /*
- * Proxy class for interface com.deepin.StartManager
+ * Proxy class for interface org.desktopspec.ApplicationManager
  */
 class DBusStartManager: public QDBusAbstractInterface
 {
     Q_OBJECT
 
-    Q_SLOT void __propertyChanged__(const QDBusMessage& msg)
+    Q_SLOT void __propertyChanged__(const QDBusMessage &msg)
     {
         QList<QVariant> arguments = msg.arguments();
         if (3 != arguments.count())
             return;
+
         QString interfaceName = msg.arguments().at(0).toString();
-        if (interfaceName !="com.deepin.StartManager")
+        if (interfaceName != staticInterfaceName())
             return;
+
         QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
         auto keys = changedProps.keys();
         foreach(const QString &prop, keys) {
-        const QMetaObject* self = metaObject();
-            for (int i=self->propertyOffset(); i < self->propertyCount(); ++i) {
+        const QMetaObject *self = metaObject();
+            for (int i = self->propertyOffset(); i < self->propertyCount(); ++i) {
                 QMetaProperty p = self->property(i);
                 if (p.name() == prop) {
- 	            Q_EMIT p.notifySignal().invoke(this);
+                    Q_EMIT p.notifySignal().invoke(this);
                 }
             }
         }
    }
 public:
     static inline const char *staticInterfaceName()
-    { return "com.deepin.StartManager"; }
+    { return "org.desktopspec.ApplicationManager"; }
 
 public:
     explicit DBusStartManager(QObject *parent = 0);
@@ -77,20 +79,6 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("IsAutostart"), argumentList);
     }
 
-    inline QDBusPendingReply<bool> Launch(const QString &in0)
-    {
-        QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(in0);
-        return asyncCallWithArgumentList(QStringLiteral("Launch"), argumentList);
-    }
-
-    inline QDBusPendingReply<bool> LaunchWithTimestamp(const QString &in0, uint in1)
-    {
-        QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(in0) << QVariant::fromValue(in1);
-        return asyncCallWithArgumentList(QStringLiteral("LaunchWithTimestamp"), argumentList);
-    }
-
     inline QDBusPendingReply<bool> RemoveAutostart(const QString &in0)
     {
         QList<QVariant> argumentList;
@@ -98,12 +86,36 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("RemoveAutostart"), argumentList);
     }
 
+    inline QDBusPendingReply<> Launch(const QString &in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("Launch"), argumentList);
+    }
+
+    inline QDBusPendingReply<> LaunchApp(const QString &desktop, uint timestamp, const QStringList &file)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(desktop);
+        argumentList << QVariant::fromValue(timestamp);
+        argumentList << QVariant::fromValue(file);
+        return asyncCallWithArgumentList(QStringLiteral("LaunchApp"), argumentList);
+    }
+
+    inline QDBusPendingReply<> LaunchAppAction(const QString &desktop, const QString &action, const uint &timestamp)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(desktop);
+        argumentList << QVariant::fromValue(action);
+        argumentList << QVariant::fromValue(timestamp);
+        return asyncCallWithArgumentList(QStringLiteral("LaunchApp"), argumentList);
+    }
+
 Q_SIGNALS: // SIGNALS
     void AutostartChanged(const QString &in0, const QString &in1);
-// begin property changed signals
 };
 
-namespace com {
+namespace org {
   namespace deepin {
     typedef ::DBusStartManager StartManager;
   }

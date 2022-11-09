@@ -102,6 +102,7 @@ public:
     bool startWithLetter() const;
     bool startWithNum() const;
     bool isLingLongApp() const;
+    bool isEqual(const ItemInfo_v1 &other) const;
 
     ~ItemInfo_v1();
 
@@ -152,7 +153,6 @@ public:
     static void registerMetaType();
 
     AppsListModel::AppCategory category() const;
-
     bool operator==(const ItemInfo_v2 &other) const;
     friend QDebug operator<<(QDebug argument, const ItemInfo_v2 &info);
     friend QDBusArgument &operator<<(QDBusArgument &argument, const ItemInfo_v2 &info);

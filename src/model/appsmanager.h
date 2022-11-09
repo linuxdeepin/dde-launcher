@@ -182,6 +182,9 @@ public slots:
     const ItemInfo_v1 createOfCategory(qlonglong category);
     void onUninstallFail(const QString &desktop);
 
+    bool contains(const ItemInfoList_v1 &list, const ItemInfo_v1 &item) const;
+    int itemIndex(const ItemInfoList_v1 &list, const ItemInfo_v1 &item) const;
+
 private:
     explicit AppsManager(QObject *parent = nullptr);
 

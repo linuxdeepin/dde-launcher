@@ -210,16 +210,16 @@ ItemInfoList_v1 AppsManager::sortByLetterOrder(ItemInfoList_v1 &list)
             // 去掉字符串中的数字(表示拼音中的声调)
             const QString pinYinStr = Chinese2Pinyin(info.m_name).remove(QRegExp("\\d"));
             if (info.startWithNum()) {
-                if (!groupList.contains(titleInfo) && (!letterGroupList.contains(titleInfo)))
+                if (!contains(groupList, titleInfo) && (!contains(letterGroupList, titleInfo)))
                     groupList.append(titleInfo);
 
-                if (!letterGroupList.contains(info))
+                if (!contains(letterGroupList, info))
                     groupList.append(info);
             } else if (pinYinStr.startsWith(titleChar, Qt::CaseInsensitive)) {
-                if (!groupList.contains(titleInfo))
+                if (!contains(groupList, titleInfo))
                     groupList.append(titleInfo);
 
-                if (!letterGroupList.contains(info))
+                if (!contains(letterGroupList, info))
                     groupList.append(info);
             }
 
@@ -270,7 +270,7 @@ const ItemInfo_v1 AppsManager::getItemInfo(const QString &appKey)
 
 void AppsManager::dropToCollected(const ItemInfo_v1 &info, int row)
 {
-    if (m_collectSortedList.contains(info))
+    if (contains(m_collectSortedList, info))
         return;
 
     // 越过视图列表区域,默认加入到最后
@@ -399,8 +399,9 @@ void AppsManager::sortByPresetOrder(ItemInfoList_v1 &processList)
         preset = m_launcherSettings->get("apps-order").toStringList();
 
     std::sort(processList.begin(), processList.end(), [&preset](const ItemInfo_v1 & i1, const ItemInfo_v1 & i2) {
-        int index1 = preset.indexOf(i1.m_key);
-        int index2 = preset.indexOf(i2.m_key);
+        int index1 = preset.indexOf(i1.m_desktop);
+        int index2 = preset.indexOf(i2.m_desktop);
+
         if (index1 == index2) {
             // If both of them don't exist in the preset list,
             // fallback to comparing their name.
@@ -524,12 +525,14 @@ void AppsManager::removeNonexistentData()
     for (; categoryAppsIter != m_appInfos.end(); ++categoryAppsIter) {
         ItemInfoList_v1 &item = categoryAppsIter.value();
         for (auto it(item.begin()); it != item.end();) {
-            if (!m_allAppInfoList.contains(*it)) {
+            if (!contains(m_allAppInfoList, *it)) {
                 it = item.erase(it);
             } else {
                 // 多语言时，更新应用信息
-                int index = m_allAppInfoList.indexOf(*it);
-                it->updateInfo(m_allAppInfoList[index]);
+                int index = itemIndex(m_allAppInfoList, *it);
+                if (index != -1)
+                    it->updateInfo(m_allAppInfoList[index]);
+
                 ++it;
             }
         }
@@ -541,21 +544,23 @@ void AppsManager::removeNonexistentData()
         if (info.m_isDir) {
             // 从文件夹中移除不存在的应用
             for (ItemInfo_v1 &dirItem : info.m_appInfoList) {
-                if (!m_allAppInfoList.contains(dirItem)) {
+                if (!contains(m_allAppInfoList, dirItem)) {
                     info.m_appInfoList.removeOne(dirItem);
                 } else {
                     // 多语言时，更新应用信息
-                    int index = m_allAppInfoList.indexOf(dirItem);
-                    dirItem.updateInfo(m_allAppInfoList[index]);
+                    int index = itemIndex(m_allAppInfoList, dirItem);
+                    if (index != -1)
+                        dirItem.updateInfo(m_allAppInfoList[index]);
                 }
             }
         } else {
-            if (!m_allAppInfoList.contains(info))
+            if (!contains(m_allAppInfoList, info)) {
                 appListToRemove.append(info);
-            else {
+            } else {
                 // 多语言时，更新应用信息
-                int index = m_allAppInfoList.indexOf(info);
-                info.updateInfo(m_allAppInfoList[index]);
+                int index = itemIndex(m_allAppInfoList, info);
+                if (index != -1)
+                    info.updateInfo(m_allAppInfoList[index]);
             }
         }
     }
@@ -567,7 +572,7 @@ void AppsManager::removeNonexistentData()
     auto removeItems = [ & ](ItemInfoList_v1 &list) {
         ItemInfoList_v1 listToRemove;
         for (const ItemInfo_v1 &info : list) {
-            if (!m_allAppInfoList.contains(info))
+            if (!contains(m_allAppInfoList, info))
                 listToRemove.append(info);
         }
 
@@ -640,7 +645,7 @@ void AppsManager::dragdropStashItem(const QModelIndex &index, AppsListModel::App
         ItemInfoList_v1 list_toRemove;
         const ItemInfo_v1 removeItemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
 
-        if (m_dirAppInfoList.contains(removeItemInfo)) {
+        if (contains(m_dirAppInfoList, removeItemInfo)) {
             for (ItemInfo_v1 &info : m_fullscreenUsedSortedList) {
                 if (info.m_isDir && info.m_appInfoList == m_dirAppInfoList) {
                     m_stashList.append(removeItemInfo);
@@ -766,7 +771,7 @@ void AppsManager::removeDragItem()
     qDebug() << "removeItemInfo:" << removeItemInfo;
 #endif
 
-    if (!m_dirAppInfoList.contains(removeItemInfo)) {
+    if (!contains(m_dirAppInfoList, removeItemInfo)) {
         qDebug() << "not exist in dir";
         return;
     }
@@ -806,14 +811,14 @@ void AppsManager::insertDropItem(int pos)
     qDebug() << "dropItemInfo:" << dropItemInfo;
 #endif
 
-    if (!m_fullscreenUsedSortedList.contains(dropItemInfo)) {
+    if (!contains(m_fullscreenUsedSortedList, dropItemInfo)) {
         m_fullscreenUsedSortedList.insert(pos, dropItemInfo);
 #ifdef QT_DEBUG
         qDebug() << "insert successfully in row : " << pos;
 #endif
     } else {
         qDebug() << "dropItem is in the fullscreen list, dropItem is:" << dropItemInfo.m_desktop << ", exist index:" <<
-                    m_fullscreenUsedSortedList.indexOf(dropItemInfo);
+                    itemIndex(m_fullscreenUsedSortedList, dropItemInfo);
     }
 
     saveFullscreenUsedSortedList();
@@ -1026,10 +1031,10 @@ void AppsManager::onEditCollected(const QModelIndex index, const bool isInCollec
 
     ItemInfo_v1 info = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
     if (!isInCollected) {
-        if (m_collectSortedList.indexOf(info) == -1)
+        if (itemIndex(m_collectSortedList, info) == -1)
             m_collectSortedList.append(info);
     } else {
-        if (m_collectSortedList.indexOf(info) != -1)
+        if (itemIndex(m_collectSortedList, info) != -1)
             m_collectSortedList.removeOne(info);
     }
 
@@ -1043,7 +1048,7 @@ void AppsManager::onMoveToFirstInCollected(const QModelIndex index)
         return;
 
     ItemInfo_v1 info = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
-    if (m_collectSortedList.indexOf(info) != -1) {
+    if (itemIndex(m_collectSortedList, info) != -1) {
         m_collectSortedList.removeOne(info);
         m_collectSortedList.insert(0, info);
     }
@@ -1131,6 +1136,32 @@ void AppsManager::onUninstallFail(const QString &desktop)
 {
     restoreItem(desktop, AppsListModel::FullscreenAll);
     emit dataChanged(AppsListModel::FullscreenAll);
+}
+
+bool AppsManager::contains(const ItemInfoList_v1 &list, const ItemInfo_v1 &item) const
+{
+    bool find = false;
+    for (const ItemInfo_v1 &info : list) {
+        if (info.isEqual(item)) {
+            find = true;
+            break;
+        }
+    }
+
+    return find;
+}
+
+int AppsManager::itemIndex(const ItemInfoList_v1 &list, const ItemInfo_v1 &item) const
+{
+    int index = -1;
+    for (int i = 0; i < list.size(); i++) {
+        if (list[i].isEqual(item)) {
+            index = i;
+            break;
+        }
+    }
+
+    return index;
 }
 
 const ItemInfoList_v1 AppsManager::appsInfoList(const AppsListModel::AppCategory &category) const
@@ -1426,12 +1457,13 @@ void AppsManager::refreshCategoryInfoList()
 
     // 缓存数据中没有的, 则加入到所有应用列表中
     for (const ItemInfo_v1 &itemInfo : m_allAppInfoList) {
-        if (!m_windowedUsedSortedList.contains(itemInfo)) {
+        if (!contains(m_windowedUsedSortedList, itemInfo)) {
             m_windowedUsedSortedList.append(itemInfo);
         } else {
             // 多语言时，更新应用信息
-            int index = m_windowedUsedSortedList.indexOf(itemInfo);
-            m_windowedUsedSortedList[index].updateInfo(itemInfo);
+            int index = itemIndex(m_windowedUsedSortedList, itemInfo);
+            if (index != -1)
+                m_windowedUsedSortedList[index].updateInfo(itemInfo);
         }
     }
 
@@ -1471,16 +1503,21 @@ void AppsManager::refreshCategoryInfoList()
                 itemInfoList_v1 = readCacheData(m_categorySetting->value(QString("lists_%1").arg(categoryIndex)).toMap());
             }
 
+            ItemInfoList_v1 list_ToRemove;
             for (const ItemInfo_v1 &info : itemInfoList_v1) {
-                int index = m_allAppInfoList.indexOf(info);
+                int index = itemIndex(m_allAppInfoList, info);
                 // 当缓存数据与应用商店数据有差异时，以应用商店数据为准
                 if (index != -1 && m_allAppInfoList.at(index).category() != info.category())
-                    itemInfoList_v1.removeOne(info);
+                    list_ToRemove.append(info);
 
                 // 如果应用已经卸载，从更新缓存数据列表
                 if (index == -1)
-                    itemInfoList_v1.removeOne(info);
+                    list_ToRemove.append(info);
             }
+
+            for (const ItemInfo_v1 &info : list_ToRemove)
+                itemInfoList_v1.removeOne(info);
+
             m_appInfos.insert(AppsListModel::AppCategory(categoryIndex), itemInfoList_v1);
 
             if (categoryIndex == static_cast<int>(AppsListModel::System) && QFileInfo::exists(APP_CATEGORY_USED_SORTED_LIST.fileName())) {
@@ -1512,18 +1549,19 @@ void AppsManager::refreshItemInfoList()
     // 更新全屏窗口-所有应用列表
     ItemInfoList_v1::ConstIterator allItemItor = m_allAppInfoList.constBegin();
     for (; allItemItor != m_allAppInfoList.constEnd(); ++allItemItor) {
-        if (!m_fullscreenUsedSortedList.contains(*allItemItor)) {
+        if (!contains(m_fullscreenUsedSortedList, *allItemItor)) {
             m_fullscreenUsedSortedList.append(*allItemItor);
         } else {
             // 多语言时，更新应用信息
-            int index = m_fullscreenUsedSortedList.indexOf(*allItemItor);
-            m_fullscreenUsedSortedList[index].updateInfo(*allItemItor);
+            int index = itemIndex(m_fullscreenUsedSortedList, *allItemItor);
+            if (index != -1)
+                m_fullscreenUsedSortedList[index].updateInfo(*allItemItor);
         }
     }
 
     // 移除全屏窗口-所有应用列表中不存在的应用
     for (const ItemInfo_v1 &info : m_fullscreenUsedSortedList) {
-        if (!m_allAppInfoList.contains(info))
+        if (!contains(m_allAppInfoList, info))
             m_fullscreenUsedSortedList.removeOne(info);
     }
 
@@ -1535,21 +1573,21 @@ void AppsManager::refreshItemInfoList()
     }
 
     for (const ItemInfo_v1 &dirItemInfo : dirAppInfoList) {
-        int itemIndex = m_fullscreenUsedSortedList.indexOf(dirItemInfo);
+        int index = itemIndex(m_fullscreenUsedSortedList, dirItemInfo);
         // 不移除文件夾，只移除之前代码逻辑异常留下的缓存应用
-        if (itemIndex != -1 && !m_fullscreenUsedSortedList[itemIndex].m_isDir)
+        if (index != -1 && !m_fullscreenUsedSortedList[index].m_isDir)
             m_fullscreenUsedSortedList.removeOne(dirItemInfo);
     }
 
     // 移除小窗口-所有应用列表中不存在的应用
     for (const ItemInfo_v1 &info : m_windowedUsedSortedList) {
-        if (!m_allAppInfoList.contains(info))
+        if (!contains(m_allAppInfoList, info))
             m_windowedUsedSortedList.removeOne(info);
     }
 
     // 移除收藏列表中不存在的应用
     for (const ItemInfo_v1 &info : m_collectSortedList) {
-        if (!m_allAppInfoList.contains(info))
+        if (!contains(m_allAppInfoList, info))
             m_collectSortedList.removeOne(info);
     }
 
@@ -1577,7 +1615,7 @@ void AppsManager::updateUsedListInfo()
 {
     auto updateItemInfo = [ & ](ItemInfoList_v1 &list) {
         for (const ItemInfo_v1 &info : m_allAppInfoList) {
-            const int index = list.indexOf(info);
+            const int index = itemIndex(list, info);
 
             if (index == -1)
                 continue;
@@ -1598,7 +1636,7 @@ void AppsManager::generateCategoryMap()
         if (!m_appInfos.contains(category))
             m_appInfos.insert(category, ItemInfoList_v1());
 
-        const int idx = m_appInfos[category].indexOf(info);
+        const int idx = itemIndex(m_appInfos[category], info);
         if (idx == -1)
             m_appInfos[category].append(info);
         else
@@ -1725,20 +1763,21 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo_v2 
         saveFullscreenUsedSortedList();
         saveWidowedUsedSortedList();
     } else if (operation == "updated") {
-        Q_ASSERT(m_allAppInfoList.contains(info));
+        Q_ASSERT(contains(m_allAppInfoList, info));
+
         // 更新所有应用列表
-        int index = m_allAppInfoList.indexOf(info);
-        if (m_allAppInfoList.contains(info))
+        int index = itemIndex(m_allAppInfoList, info);
+        if (index != -1)
             m_allAppInfoList[index].updateInfo(info);
 
         // 更新按照最近使用顺序排序的列表
-        index = m_fullscreenUsedSortedList.indexOf(info);
-        if (m_fullscreenUsedSortedList.contains(info))
+        index = itemIndex(m_fullscreenUsedSortedList, info);
+        if (index != -1)
             m_fullscreenUsedSortedList[index].updateInfo(info);
 
         // 更新按照最近使用顺序排序的列表
-        index = m_windowedUsedSortedList.indexOf(info);
-        if (m_windowedUsedSortedList.contains(info))
+        index = itemIndex(m_windowedUsedSortedList, info);
+        if (index != -1)
             m_windowedUsedSortedList[index].updateInfo(info);
     } else {
         qDebug() << "nonexistent condition, operation:" << operation;
@@ -1773,20 +1812,20 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo &ap
         saveFullscreenUsedSortedList();
         saveWidowedUsedSortedList();
     } else if (operation == "updated") {
-        Q_ASSERT(m_allAppInfoList.contains(info));
+        Q_ASSERT(contains(m_allAppInfoList, info));
         // 更新所有应用列表
-        int index = m_allAppInfoList.indexOf(info);
-        if (m_allAppInfoList.contains(info))
+        int index = itemIndex(m_allAppInfoList, info);
+        if (index != -1)
             m_allAppInfoList[index].updateInfo(info);
 
         // 更新按照最近使用顺序排序的列表
-        index = m_fullscreenUsedSortedList.indexOf(info);
-        if (m_fullscreenUsedSortedList.contains(info))
+        index = itemIndex(m_fullscreenUsedSortedList, info);
+        if (index != -1)
             m_fullscreenUsedSortedList[index].updateInfo(info);
 
         // 更新按照最近使用顺序排序的列表
-        index = m_windowedUsedSortedList.indexOf(info);
-        if (m_windowedUsedSortedList.contains(info))
+        index = itemIndex(m_windowedUsedSortedList, info);
+        if (index != -1)
             m_windowedUsedSortedList[index].updateInfo(info);
     } else {
         qDebug() << "nonexistent condition, operation:" << operation;
@@ -1922,8 +1961,8 @@ void AppsManager::updateUsedSortData(QModelIndex dragIndex, QModelIndex dropInde
         bool dragItemIsDir = dragIndex.data(AppsListModel::ItemIsDirRole).toBool();
         bool dropItemIsDir = dropIndex.data(AppsListModel::ItemIsDirRole).toBool();
 
-        int dropIndex = list.indexOf(dropItemInfo);
-        int dragIndex = list.indexOf(dragItemInfo);
+        int dropIndex = itemIndex(list, dropItemInfo);
+        int dragIndex = itemIndex(list, dragItemInfo);
         if (dropIndex == -1 || dragIndex == -1)
             return;
 
@@ -1963,10 +2002,10 @@ void AppsManager::updateDrawerTitle(const QModelIndex &index,const QString &newT
         return;
 
     ItemInfo_v1 info = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
-    int itemIndex = m_fullscreenUsedSortedList.indexOf(info);
-    if (itemIndex != -1) {
+    int idx = itemIndex(m_fullscreenUsedSortedList, info);
+    if (idx != -1) {
         info.m_name = newTitle;
-        m_fullscreenUsedSortedList.replace(itemIndex, info);
+        m_fullscreenUsedSortedList.replace(idx, info);
     }
 }
 
@@ -1976,7 +2015,7 @@ QList<QPixmap> AppsManager::getDirAppIcon(QModelIndex modelIndex)
     ItemInfoList_v1 infoList;
     ItemInfo_v1 info = modelIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
 
-    if (m_fullscreenUsedSortedList.contains(info) && info.m_isDir)
+    if (contains(m_fullscreenUsedSortedList, info) && info.m_isDir)
         infoList.append(info.m_appInfoList);
 
     for (int i = 0; i < infoList.size(); i++) {

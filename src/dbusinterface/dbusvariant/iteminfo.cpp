@@ -279,6 +279,14 @@ bool ItemInfo_v1::isLingLongApp() const
     return m_desktop.contains("/linglong/");
 }
 
+bool ItemInfo_v1::isEqual(const ItemInfo_v1 &other) const
+{
+    return (m_desktop == other.m_desktop && m_name == other.m_name &&
+            m_key == other.m_key && m_iconKey == other.m_iconKey &&
+            m_categoryId == other.m_categoryId && m_isDir == other.m_isDir &&
+            m_appInfoList == other.m_appInfoList);
+}
+
 ItemInfo_v1::~ItemInfo_v1()
 {
 
@@ -317,7 +325,7 @@ bool ItemInfo_v1::operator==(const ItemInfo_v1 &other) const
 {
     return (m_desktop == other.m_desktop && m_name == other.m_name &&
             m_key == other.m_key && m_iconKey == other.m_iconKey &&
-            m_keywords == other.m_keywords && m_status == other.m_status &&
+            m_keywords == other.m_keywords && m_openCount == other.m_openCount &&
             m_categoryId == other.m_categoryId && m_description == other.m_description &&
             m_isDir == other.m_isDir && m_appInfoList == other.m_appInfoList);
 }

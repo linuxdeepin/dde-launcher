@@ -545,7 +545,12 @@ void AppsManager::removeNonexistentData()
             // 从文件夹中移除不存在的应用
             for (ItemInfo_v1 &dirItem : info.m_appInfoList) {
                 if (!contains(m_allAppInfoList, dirItem)) {
-                    info.m_appInfoList.removeOne(dirItem);
+                    // 当文件夹只有一个应用且被卸载时，删除该文件夹信息
+                    if (info.m_appInfoList.size() <= 1) {
+                        appListToRemove.append(info);
+                    }
+
+                    appListToRemove.append(dirItem);
                 } else {
                     // 多语言时，更新应用信息
                     int index = itemIndex(m_allAppInfoList, dirItem);
@@ -565,9 +570,19 @@ void AppsManager::removeNonexistentData()
         }
     }
 
-    //  移除全屏所有应用列表中不存在的应用
-    for (const ItemInfo_v1 &info : appListToRemove)
-        m_fullscreenUsedSortedList.removeOne(info);
+    //  移除全屏所有应用列表中, 全屏文件夹列表中不存在的应用
+    for (const ItemInfo_v1 &info : appListToRemove) {
+        if (contains(m_fullscreenUsedSortedList, info)) {
+            m_fullscreenUsedSortedList.removeOne(info);
+        } else {
+            for (ItemInfo_v1 &itemInfo : m_fullscreenUsedSortedList) {
+                if (itemInfo.m_isDir && !itemInfo.m_appInfoList.isEmpty() && contains(itemInfo.m_appInfoList, info)) {
+                    itemInfo.m_appInfoList.removeOne(info);
+                    break;
+                }
+            }
+        }
+    }
 
     auto removeItems = [ & ](ItemInfoList_v1 &list) {
         ItemInfoList_v1 listToRemove;

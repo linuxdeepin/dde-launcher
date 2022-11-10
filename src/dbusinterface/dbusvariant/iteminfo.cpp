@@ -211,8 +211,14 @@ ItemInfo_v1::ItemInfo_v1(const ItemInfo_v2 &info)
     , m_key(info.m_key)
     , m_iconKey(info.m_iconKey)
     , m_keywords(info.m_keywords)
+    , m_status(0)
     , m_categoryId(info.m_categoryId)
+    , m_progressValue(0)
     , m_installedTime(info.m_installedTime)
+    , m_openCount(0)
+    , m_firstRunTime(0)
+    , m_isDir(false)
+    , m_appInfoList(ItemInfoList_v1())
 {
 }
 

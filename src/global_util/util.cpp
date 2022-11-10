@@ -350,7 +350,6 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, 
 
     const qreal ratio = qApp->devicePixelRatio();
     const int iconSize = perfectIconSize(size);
-    QPair<QString, int> tmpKey { cacheKey(itemInfo) , iconSize};
 
     do {
         if (iconName.startsWith("data:image/")) {
@@ -392,7 +391,7 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, 
     } while (false);
 
     if (pixmap.isNull())
-        return findIcon;
+        return false;
 
     pixmap = pixmap.scaled(QSize(iconSize, iconSize) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pixmap.setDevicePixelRatio(ratio);

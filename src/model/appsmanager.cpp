@@ -1375,12 +1375,9 @@ const QPixmap AppsManager::appIcon(const ItemInfo_v1 &info, const int size)
 {
     QPixmap pix;
     const int iconSize = perfectIconSize(size);
-    QPair<QString, int> tmpKey { cacheKey(info) , iconSize};
 
-    // 缓存中没有时，资源从主线程加载
     m_itemInfo = info;
     m_iconValid = getThemeIcon(pix, info, size, !m_iconValid);
-
     if (m_iconValid) {
         m_tryNums = 0;
         return pix;

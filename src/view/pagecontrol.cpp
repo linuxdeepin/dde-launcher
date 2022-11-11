@@ -27,14 +27,13 @@
 
 PageControl::PageControl(QWidget *parent)
     : QWidget(parent)
+    , m_pageCount(0)
+    , m_pixChecked(renderSVG(":/widgets/images/checked_rounded_rect.svg", QSize(20, 12)))
 {
     QHBoxLayout *layout = new QHBoxLayout();
     layout->setMargin(0);
-    layout->setSpacing(PAGE_ICON_SPACE);
+    layout->setSpacing(0);
     setLayout(layout);
-
-    m_iconActive = loadSvg(":/widgets/images/page_indicator_active.svg", qRound(PAGE_ICON_SIZE * devicePixelRatioF()));
-    m_iconNormal = loadSvg(":/widgets/images/page_indicator.svg", qRound(PAGE_ICON_SIZE * devicePixelRatioF()));
 
     createButtons();
 }
@@ -69,7 +68,7 @@ void PageControl::setCurrent(int pageIndex)
             return;
 
         pageButton->setChecked(true);
-        pageButton->setIcon(m_iconActive);
+        update();
     }
 }
 
@@ -93,8 +92,10 @@ void PageControl::updateIconSize(double scaleX, double scaleY)
  */
 void PageControl::createButtons()
 {
-    // 获取当前最大可能的页数(假设都在一个分类)
-    int totalPage = qCeil(AppsManager::instance()->appsInfoListSize(AppsListModel::FullscreenAll) / 12);
+#define SINGLE_PAGE_MINIMUM_ITEM 12.0
+    // 获取当前最大可能的页数
+    int totalPage = qCeil(AppsManager::instance()->appsInfoListSize(AppsListModel::FullscreenAll) / SINGLE_PAGE_MINIMUM_ITEM);
+
     for (int i = 0; i < totalPage; i++) {
         DIconButton *pageButton = new DIconButton(this);
         pageButton->setVisible(false);
@@ -102,9 +103,34 @@ void PageControl::createButtons()
     }
 }
 
+void PageControl::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+
+    for (DIconButton *button : m_buttonList) {
+        if (button->isChecked()) {
+            QRect rect = QRect(button->rect().topLeft(), QSize(20, 12));
+            rect.moveCenter(button->geometry().center());
+            painter.drawPixmap(rect, m_pixChecked);
+        } else {
+            QRect rect = QRect(button->rect().topLeft(), QSize(10, 10));
+            rect.moveCenter(button->geometry().center());
+            QColor penColor = Qt::black;
+            penColor.setAlphaF(0.1);
+            QPen pen(penColor, 1);
+
+            QColor brushColor = Qt::white;
+            brushColor.setAlphaF(0.2);
+            painter.setBrush(brushColor);
+            painter.setPen(pen);
+            painter.drawEllipse(rect);
+        }
+    }
+}
+
 void PageControl::addButton(DIconButton *pageButton)
 {
-    pageButton->setIcon(m_iconNormal);
     pageButton->setAccessibleName("thisPageButton");
     pageButton->setIconSize(QSize(PAGE_ICON_SIZE, PAGE_ICON_SIZE));
     pageButton->setFixedSize(QSize(PAGE_BUTTON_SIZE, PAGE_BUTTON_SIZE));
@@ -126,7 +152,6 @@ void PageControl::pageBtnClicked(bool checked)
         return;
 
     pageButton->setAccessibleName("addPageBtn");
-    pageButton->setIcon(checked ?  m_iconActive : m_iconNormal);
 
     if (checked)
         emit onPageChanged(layout()->indexOf(pageButton));

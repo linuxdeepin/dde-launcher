@@ -116,9 +116,9 @@ void MiniFrameRightBar::initAccessibleName()
 void MiniFrameRightBar::showShutdown()
 {
     DDBusSender()
-            .service("com.deepin.dde.shutdownFront")
-            .interface("com.deepin.dde.shutdownFront")
-            .path("/com/deepin/dde/shutdownFront")
+            .service("org.deepin.dde.ShutdownFront1")
+            .interface("org.deepin.dde.ShutdownFront1")
+            .path("/org/deepin/dde/ShutdownFront1")
             .method("Show")
             .call();
 
@@ -129,9 +129,9 @@ void MiniFrameRightBar::showSettings()
 {
     QtConcurrent::run([] {
         DDBusSender()
-            .service("com.deepin.dde.ControlCenter")
-            .interface("com.deepin.dde.ControlCenter")
-            .path("/com/deepin/dde/ControlCenter")
+            .service("org.deepin.dde.ControlCenter1")
+            .interface("org.deepin.dde.ControlCenter1")
+            .path("/org/deepin/dde/ControlCenter1")
             .method(QString("Show"))
             .call();
     });

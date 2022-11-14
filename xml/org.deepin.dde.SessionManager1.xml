@@ -1,4 +1,4 @@
-<interface name="com.deepin.SessionManager">
+<interface name="org.deepin.dde.SessionManager1">
     <method name="AllowSessionDaemonRun">
         <arg type="b" direction="out"/>
     </method>

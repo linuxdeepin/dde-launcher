@@ -40,10 +40,10 @@
 #define EXTEND_MODE     2
 #define SINGLE_MODE     3
 
-using ImageEffeblur = org::deepin::daemon::ImageBlur1;
-using ImageEffectInter = org::deepin::daemon::ImageEffect1;
-using AppearanceInter = com::deepin::daemon::Appearance;
-using DisplayInter = com::deepin::daemon::Display;
+using ImageEffeblur = org::deepin::dde::ImageBlur1;
+using ImageEffectInter = org::deepin::dde::ImageEffect1;
+using AppearanceInter = org::deepin::dde::Appearance1;
+using DisplayInter = org::deepin::dde::Display1;
 
 class DisplayHelper : public QObject, public Dtk::Core::DSingleton<DisplayHelper>
 {

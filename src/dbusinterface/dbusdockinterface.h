@@ -22,11 +22,11 @@
 #include <QVariant>
 #include <QtDBus>
 
-#define INTERFACE_NAME "com.deepin.dde.Dock"
-#define SERVICE_PATH "/com/deepin/dde/Dock"
+#define INTERFACE_NAME "org.deepin.dde.Dock1"
+#define SERVICE_PATH "/org/deepin/dde/Dock1"
 
 /*
- * Proxy class for interface com.deepin.dde.Dock
+ * Proxy class for interface org.deepin.dde.Dock1
  */
 class DBusDockInterface: public QDBusAbstractInterface
 {

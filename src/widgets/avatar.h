@@ -27,8 +27,8 @@
 #include "accounts_interface.h"
 #include "accountsuser_interface.h"
 
-using AccountsInter = org::deepin::daemon::Accounts1;
-using UserInter = org::deepin::daemon::accounts1::User;
+using AccountsInter = org::deepin::dde::Accounts1;
+using UserInter = org::deepin::dde::accounts1::User;
 
 class Avatar : public QWidget
 {

@@ -1,4 +1,4 @@
-     <interface name="org.deepin.daemon.Accounts1">
+     <interface name="org.deepin.dde.Accounts1">
           <method name="AllowGuestAccount">
                <arg type="b" direction="in"></arg>
           </method>

@@ -35,13 +35,8 @@
 
 DCORE_USE_NAMESPACE
 
-#ifdef USE_AM_API
 class AMDBusLauncherInter;
 class AMDBusDockInter;
-#else
-class DBusLauncher;
-class DBusDock;
-#endif
 
 class CalculateUtil : public QObject
 {
@@ -99,14 +94,8 @@ private:
 
 private:
     static QPointer<CalculateUtil> INSTANCE;
-
-#ifdef USE_AM_API
     AMDBusLauncherInter *m_amDbusLauncher;
     AMDBusDockInter *m_amDbusDockInter;
-#else
-    DBusLauncher *m_launcherInter;
-    DBusDock *m_dockInter;
-#endif
 
     bool m_isFullScreen;
     QGSettings *m_launcherGsettings;

@@ -89,13 +89,8 @@ void AppsManager::registerSettingsFormat()
 AppsManager::AppsManager(QObject *parent)
     : QObject(parent)
     , m_startManagerInter(new DBusStartManager(this))
-#ifdef USE_AM_API
     , m_amDbusLauncherInter(new AMDBusLauncherInter(this))
     , m_amDbusDockInter(new AMDBusDockInter(this))
-#else
-    , m_launcherInter(new DBusLauncher(this))
-    , m_dockInter(new DBusDock(this))
-#endif
     , m_calUtil(CalculateUtil::instance())
     , m_delayRefreshTimer(new QTimer(this))
     , m_refreshCalendarIconTimer(new QTimer(this))
@@ -123,9 +118,7 @@ AppsManager::AppsManager(QObject *parent)
         connect(m_filterSetting, &QGSettings::changed, this, &AppsManager::onGSettingChanged);
     }
 
-#ifdef USE_AM_API
     qDebug() << "m_amDbusLauncherInter is valid:" << m_amDbusLauncherInter->isValid();
-#endif
 
     // QSettings 添加Json格式支持
     registerSettingsFormat();
@@ -155,7 +148,6 @@ AppsManager::AppsManager(QObject *parent)
     m_refreshCalendarIconTimer->setInterval(1000);
     m_refreshCalendarIconTimer->setSingleShot(false);
 
-#ifdef USE_AM_API
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::NewAppLaunched, this, &AppsManager::markLaunched);
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallSuccess, this, &AppsManager::abandonStashedItem);
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallFailed, this, &AppsManager::onUninstallFail);
@@ -163,14 +155,6 @@ AppsManager::AppsManager(QObject *parent)
 
     connect(m_amDbusDockInter, &AMDBusDockInter::IconSizeChanged, this, &AppsManager::IconSizeChanged, Qt::QueuedConnection);
     connect(m_amDbusDockInter, &AMDBusDockInter::FrontendWindowRectChanged, this, &AppsManager::dockGeometryChanged, Qt::QueuedConnection);
-#else
-    connect(m_launcherInter, &DBusLauncher::NewAppLaunched, this, &AppsManager::markLaunched);
-    connect(m_launcherInter, &DBusLauncher::UninstallSuccess, this, &AppsManager::abandonStashedItem);
-    connect(m_launcherInter, &DBusLauncher::UninstallFailed, this, &AppsManager::onUninstallFail);
-    connect(m_launcherInter, &DBusLauncher::ItemChanged, this, qOverload<const QString &, const ItemInfo &, qlonglong>(&AppsManager::handleItemChanged));
-    connect(m_dockInter, &DBusDock::IconSizeChanged, this, &AppsManager::IconSizeChanged, Qt::QueuedConnection);
-    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &AppsManager::dockGeometryChanged, Qt::QueuedConnection);
-#endif
 
     // TODO：自启动/打开应用这个接口后期sprint2时再改，目前 AM 未做处理
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
@@ -995,29 +979,17 @@ void AppsManager::restoreItem(const QString &desktop, AppsListModel::AppCategory
 
 int AppsManager::dockPosition() const
 {
-#ifdef USE_AM_API
     return m_amDbusDockInter->position();
-#else
-    return m_dockInter->position();
-#endif
 }
 
 QRect AppsManager::dockGeometry() const
 {
-#ifdef USE_AM_API
     return QRect(m_amDbusDockInter->frontendWindowRect());
-#else
-    return QRect(m_dockInter->frontendRect());
-#endif
 }
 
 bool AppsManager::isVaild()
 {
-#ifdef USE_AM_API
     return m_amDbusLauncherInter->isValid() && !m_allAppInfoList.isEmpty();
-#else
-    return m_launcherInter->isValid() && !m_allAppInfoList.isEmpty();
-#endif
 }
 
 void AppsManager::refreshAllList()
@@ -1077,11 +1049,7 @@ void AppsManager::launchApp(const QModelIndex &index)
 void AppsManager::uninstallApp(const QString &appKey)
 {
     // 向后端发起卸载请求
-#ifdef USE_AM_API
     m_amDbusLauncherInter->RequestUninstall(appKey, false);
-#else
-    m_launcherInter->RequestUninstall(appKey, false);
-#endif
 
     // 刷新各列表的分页信息
     emit dataChanged(AppsListModel::FullscreenAll);
@@ -1090,11 +1058,7 @@ void AppsManager::uninstallApp(const QString &appKey)
 void AppsManager::uninstallApp(const ItemInfo_v1 &info)
 {
     // 向后端发起卸载请求
-#ifdef USE_AM_API
     m_amDbusLauncherInter->RequestUninstall(info.m_desktop, false);
-#else
-    m_launcherInter->RequestUninstall(info.m_key, false);
-#endif
 
     // 刷新各列表的分页信息
     emit dataChanged(AppsListModel::FullscreenAll);
@@ -1150,14 +1114,11 @@ void AppsManager::markLaunched(const QString &appKey)
 
 void AppsManager::delayRefreshData()
 {
-#ifdef USE_AM_API
     // TODO: 这个接口返回数据存在异常
     m_newInstalledAppsList = m_amDbusLauncherInter->GetAllNewInstalledApps().value();
-#else
-    m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
-#endif
 
     refreshCategoryInfoList();
+
     emit dataChanged(AppsListModel::FullscreenAll);
 }
 
@@ -1395,38 +1356,22 @@ bool AppsManager::appIsAutoStart(const QString &desktop)
 
 bool AppsManager::appIsOnDock(const QString &desktop)
 {
-#ifdef USE_AM_API
     return m_amDbusDockInter->IsDocked(desktop);
-#else
-    return m_dockInter->IsDocked(desktop);
-#endif
 }
 
 bool AppsManager::appIsOnDesktop(const QString &desktop)
 {
-#ifdef USE_AM_API
     return m_amDbusLauncherInter->IsItemOnDesktop(desktop).value();
-#else
-    return m_launcherInter->IsItemOnDesktop(desktop).value();
-#endif
 }
 
 bool AppsManager::appIsProxy(const QString &desktop)
 {
-#ifdef USE_AM_API
     return m_amDbusLauncherInter->GetUseProxy(desktop).value();
-#else
-    return m_launcherInter->GetUseProxy(desktop).value();
-#endif
 }
 
 bool AppsManager::appIsEnableScaling(const QString &desktop)
 {
-#ifdef USE_AM_API
     return !m_amDbusLauncherInter->GetDisableScaling(desktop);
-#else
-    return !m_launcherInter->GetDisableScaling(desktop);
-#endif
 }
 
 /**
@@ -1486,11 +1431,7 @@ const QString AppsManager::appName(const ItemInfo_v1 &info, const int size)
 void AppsManager::refreshCategoryInfoList()
 {
     // 0. 从应用商店配置文件/var/lib/lastore/applications.json获取应用数据
-#ifdef USE_AM_API
     QDBusPendingReply<ItemInfoList_v2> reply = m_amDbusLauncherInter->GetAllItemInfos();
-#else
-    QDBusPendingReply<ItemInfoList> reply = m_launcherInter->GetAllItemInfos();
-#endif
 
     if (reply.isError()) {
         qWarning() << reply.error();
@@ -1500,11 +1441,7 @@ void AppsManager::refreshCategoryInfoList()
     QStringList filters = SettingValue("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", "filter-keys").toStringList();
 
     // 1. 从后端服务获取所有应用列表
-#ifdef USE_AM_API
     const ItemInfoList_v1 &datas = ItemInfo_v1::itemV2ListToItemV1List(reply.value());
-#else
-    const ItemInfoList_v1 &datas = ItemInfo_v1::itemListToItemV1List(reply.value());
-#endif
 
     m_allAppInfoList.clear();
     m_allAppInfoList.reserve(datas.size());
@@ -1599,11 +1536,7 @@ void AppsManager::refreshCategoryInfoList()
     }
 
     // 5. 获取新安装的应用列表
-#ifdef USE_AM_API
     m_newInstalledAppsList = m_amDbusLauncherInter->GetAllNewInstalledApps().value();
-#else
-    m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
-#endif
 
     // 6. 清除不存在的数据
     removeNonexistentData();
@@ -1989,20 +1922,12 @@ int AppsManager::getVisibleCategoryCount()
 
 bool AppsManager::fullscreen() const
 {
-#ifdef USE_AM_API
     return m_amDbusLauncherInter->fullscreen();
-#else
-    return m_launcherInter->fullscreen();
-#endif
 }
 
 int AppsManager::displayMode() const
 {
-#ifdef USE_AM_API
     return m_amDbusLauncherInter->displaymode();
-#else
-    return m_launcherInter->displaymode();
-#endif
 }
 
 qreal AppsManager::getCurRatio()

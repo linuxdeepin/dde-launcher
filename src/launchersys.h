@@ -39,16 +39,10 @@ DGUI_USE_NAMESPACE
 class LauncherInterface;
 class WindowedFrame;
 class FullScreenFrame;
-
-#ifdef USE_AM_API
 class AMDBusLauncherInter;
 class AMDBusDockInter;
-#else
-class DBusLauncher;
-class DBusDock;
-#endif
 
-using com::deepin::SessionManager;
+using SessionManager = org::deepin::dde::SessionManager1;
 
 class LauncherSys : public QObject
 {
@@ -94,14 +88,8 @@ private:
     QTimer *m_ignoreRepeatVisibleChangeTimer;               // 添加200ms延时操作，避开重复显示、隐藏启动器
     QMetaObject::Connection m_regionMonitorConnect;         // 信号和槽连接返回的对象
     CalculateUtil *m_calcUtil;                              // 界面布局计算处理类
-
-#ifdef USE_AM_API
     AMDBusLauncherInter *m_amDbusLauncher;
     AMDBusDockInter *m_amDbusDockInter;
-#else
-    DBusLauncher *m_dbusLauncherInter;                      // dbus访问远程服务类 数据初始化
-    DBusDock *m_dockInter;
-#endif
     LauncherPluginController *m_launcherPlugin;
 };
 

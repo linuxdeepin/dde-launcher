@@ -41,7 +41,7 @@ Menu::Menu(QWidget *parent)
     qApp->installEventFilter(this);
 
     // 点击任意区域均退出即可，启动器中菜单无二级菜单
-    m_monitor = new XEventMonitor("org.deepin.api.XEventMonitor1", "/org/deepin/api/XEventMonitor1", QDBusConnection::sessionBus(), this);
+    m_monitor = new XEventMonitor("org.deepin.dde.XEventMonitor1", "/org/deepin/dde/XEventMonitor1", QDBusConnection::sessionBus(), this);
     connect(m_monitor, &XEventMonitor::ButtonPress, this, &Menu::onButtonPress);
 }
 

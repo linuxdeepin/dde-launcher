@@ -24,14 +24,8 @@
 #include "menuworker.h"
 #include "menudialog.h"
 #include "util.h"
-
-#ifdef USE_AM_API
 #include "amdbuslauncherinterface.h"
 #include "amdbusdockinterface.h"
-#else
-#include "dbuslauncher.h"
-#include "dbusdock.h"
-#endif
 
 #include <QSignalMapper>
 #include <QWindow>
@@ -42,13 +36,8 @@ class AppsListModel;
 
 MenuWorker::MenuWorker(QObject *parent)
     : QObject(parent)
-#ifdef USE_AM_API
     , m_amDbusLauncher(new AMDBusLauncherInter(this))
     , m_amDbusDockInter(new AMDBusDockInter(this))
-#else
-    , m_launcherInterface(new DBusLauncher(this))
-    , m_dockInterface(new DBusDock(this))
-#endif
     , m_startManagerInterface(new DBusStartManager(this))
     , m_calcUtil(CalculateUtil::instance())
     , m_appManager(AppsManager::instance())
@@ -136,11 +125,7 @@ void MenuWorker::creatMenuByAppItem()
     }
 
     // 收藏应用
-#ifdef USE_AM_API
     bool isFullscreen = m_amDbusLauncher->fullscreen();
-#else
-    bool isFullscreen = m_launcherInterface->fullscreen();
-#endif
     if (!isFullscreen) {
         if (isInCollectedList && !isTopInCollectList && onlyShownInCollectedList) {
             m_menu->addAction(moveAction);
@@ -350,32 +335,18 @@ void MenuWorker::onHideMenu()
 
 void MenuWorker::handleToDesktop()
 {
-#ifdef USE_AM_API
     if (m_isItemOnDesktop)
         m_amDbusLauncher->RequestRemoveFromDesktop(m_appKey);
     else
         m_amDbusLauncher->RequestSendToDesktop(m_appKey);
-#else
-    if (m_isItemOnDesktop)
-        m_launcherInterface->RequestRemoveFromDesktop(m_appKey);
-    else
-        m_launcherInterface->RequestSendToDesktop(m_appKey);
-#endif
 }
 
 void MenuWorker::handleToDock()
 {
-#ifdef USE_AM_API
     if (m_isItemOnDock)
         m_amDbusDockInter->RequestUndock(m_appDesktop);
     else
         m_amDbusDockInter->RequestDock(m_appDesktop, -1);
-#else
-    if (m_isItemOnDock)
-        m_dockInterface->RequestUndock(m_appDesktop);
-    else
-        m_dockInterface->RequestDock(m_appDesktop, -1);
-#endif
 }
 
 void MenuWorker::handleToStartup()
@@ -389,18 +360,10 @@ void MenuWorker::handleToStartup()
 
 void MenuWorker::handleToProxy()
 {
-#ifdef USE_AM_API
     m_amDbusLauncher->SetUseProxy(m_appKey, !m_isItemProxy);
-#else
-    m_launcherInterface->SetUseProxy(m_appKey, !m_isItemProxy);
-#endif
 }
 
 void MenuWorker::handleSwitchScaling()
 {
-#ifdef USE_AM_API
     m_amDbusLauncher->SetDisableScaling(m_appKey, m_isItemEnableScaling);
-#else
-    m_launcherInterface->SetDisableScaling(m_appKey, m_isItemEnableScaling);
-#endif
 }

@@ -1,4 +1,4 @@
-<interface name="org.deepin.daemon.ImageBlur1">
+<interface name="org.deepin.dde.ImageBlur1">
     <method name="Get">
         <arg type="s" direction="in"></arg>
         <arg type="s" direction="out"></arg>

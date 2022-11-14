@@ -41,14 +41,8 @@
 
 class QMenu;
 class Menu;
-
-#ifdef USE_AM_API
 class AMDBusLauncherInter;
 class AMDBusDockInter;
-#else
-class DBusLauncher;
-class DBusDock;
-#endif
 
 class MenuWorker : public QObject
 {
@@ -104,13 +98,8 @@ public slots:
     void onHideMenu();
 
 private:
-#ifdef USE_AM_API
     AMDBusLauncherInter *m_amDbusLauncher;
     AMDBusDockInter *m_amDbusDockInter;
-#else
-    DBusLauncher* m_launcherInterface;
-    DBusDock* m_dockInterface;
-#endif
 
     DBusStartManager* m_startManagerInterface;
     CalculateUtil *m_calcUtil;

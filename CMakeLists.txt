@@ -11,13 +11,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "-g -Wall")
 
-#设置ON, 则使用AM作为服务时打开
-#设置OFF,使用daemon数据
-set(USE_AM_API ON)
-if (${USE_AM_API})
-    add_definitions(-DUSE_AM_API=${USE_AM_API})
-endif()
-
 # 增加安全编译参数
 ADD_DEFINITIONS("-fstack-protector-strong -D_FORTITY_SOURCE=1 -z noexecstack -pie -fPIC -z lazy")
 
@@ -78,13 +71,13 @@ function(generation_dbus_interface xml class_name class_file)
 endfunction(generation_dbus_interface)
 
 generation_dbus_interface(
-    ${CMAKE_SOURCE_DIR}/xml/org.deepin.daemon.ImageEffect1.xml
+    ${CMAKE_SOURCE_DIR}/xml/org.deepin.dde.ImageEffect1.xml
     ImageEffect
     ${XML2CPP_DIR}/imageeffect_interface
 )
 
 generation_dbus_interface(
-    ${CMAKE_SOURCE_DIR}/xml/org.deepin.daemon.ImageBlur1.xml
+    ${CMAKE_SOURCE_DIR}/xml/org.deepin.dde.ImageBlur1.xml
     ImageBlur
     ${XML2CPP_DIR}/imageblur_interface
 )
@@ -96,43 +89,43 @@ generation_dbus_interface(
 )
 
 generation_dbus_interface(
-    ${CMAKE_SOURCE_DIR}/xml/com.deepin.daemon.Display.xml
+    ${CMAKE_SOURCE_DIR}/xml/org.deepin.dde.Display1.xml
     Display
     ${XML2CPP_DIR}/display_interface
 )
 
 generation_dbus_interface(
-    ${CMAKE_SOURCE_DIR}/xml/com.deepin.daemon.Appearance.xml
+    ${CMAKE_SOURCE_DIR}/xml/org.deepin.dde.Appearance1.xml
     Appearance
     ${XML2CPP_DIR}/appearance_interface
 )
 
 generation_dbus_interface(
-    ${CMAKE_SOURCE_DIR}/xml/com.deepin.daemon.Gesture.xml
+    ${CMAKE_SOURCE_DIR}/xml/org.deepin.dde.Gesture1.xml
     Gesture
     ${XML2CPP_DIR}/gesture_interface
 )
 
 generation_dbus_interface(
-    ${CMAKE_SOURCE_DIR}/xml/org.deepin.daemon.Accounts1.User.xml
+    ${CMAKE_SOURCE_DIR}/xml/org.deepin.dde.Accounts1.User.xml
     AccountsUser
     ${XML2CPP_DIR}/accountsuser_interface
 )
 
 generation_dbus_interface(
-    ${CMAKE_SOURCE_DIR}/xml/org.deepin.daemon.Accounts1.xml
+    ${CMAKE_SOURCE_DIR}/xml/org.deepin.dde.Accounts1.xml
     Accounts
     ${XML2CPP_DIR}/accounts_interface
 )
 
 generation_dbus_interface(
-    ${CMAKE_SOURCE_DIR}/xml/com.deepin.SessionManager.xml
+    ${CMAKE_SOURCE_DIR}/xml/org.deepin.dde.SessionManager1.xml
     SessionManager
     ${XML2CPP_DIR}/sessionmanager_interface
 )
 
 generation_dbus_interface(
-    ${CMAKE_SOURCE_DIR}/xml/org.deepin.api.XEventMonitor1.xml
+    ${CMAKE_SOURCE_DIR}/xml/org.deepin.dde.XEventMonitor1.xml
     XEventMonitor
     ${XML2CPP_DIR}/xeventmonitor_interface
 )
@@ -227,13 +220,7 @@ install(FILES dde-launcher.desktop DESTINATION share/applications/)
 install(FILES dde-launcher-wapper DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 ## services files
-if (${USE_AM_API})
-    message("use AM.")
-    install(FILES src/dbusservices/org.deepin.dde.Launcher1.service DESTINATION share/dbus-1/services)
-else ()
-    message("not use AM.")
-    install(FILES src/dbusservices/com.deepin.dde.Launcher.service DESTINATION share/dbus-1/services)
-endif ()
+install(FILES src/dbusservices/org.deepin.dde.Launcher1.service DESTINATION share/dbus-1/services)
 
 #schemas
 install(FILES gschema/com.deepin.dde.launcher.gschema.xml DESTINATION share/glib-2.0/schemas)

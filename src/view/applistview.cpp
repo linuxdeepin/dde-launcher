@@ -233,9 +233,9 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 void AppListView::mouseReleaseEvent(QMouseEvent *e)
 {
     if (QScroller::hasScroller(this)) {
-        QDBusInterface inPutInter("com.deepin.daemon.InputDevices",
-                             "/com/deepin/daemon/InputDevices",
-                             "com.deepin.daemon.InputDevices",
+        QDBusInterface inPutInter("org.deepin.dde.InputDevices1",
+                             "/org/deepin/dde/InputDevices1",
+                             "org.deepin.dde.InputDevices1",
                              QDBusConnection::sessionBus() ,this);
 
         const auto wheelSpeed = inPutInter.property("WheelSpeed").toInt();

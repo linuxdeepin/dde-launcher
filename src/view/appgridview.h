@@ -32,7 +32,7 @@
 
 #include "appsmanager.h"
 
-using Gesture = com::deepin::daemon::Gesture;
+using Gesture = org::deepin::dde::Gesture1;
 
 class DragPageDelegate
 {

@@ -25,14 +25,8 @@
 #include "util.h"
 #include "constants.h"
 #include "appslistmodel.h"
-
-#ifdef USE_AM_API
 #include "amdbuslauncherinterface.h"
 #include "amdbusdockinterface.h"
-#else
-#include "dbuslauncher.h"
-#include "dbusdock.h"
-#endif
 
 #include <QDebug>
 #include <QDesktopWidget>
@@ -219,15 +213,9 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int cur
  */
 CalculateUtil::CalculateUtil(QObject *parent)
     : QObject(parent)
-#ifdef USE_AM_API
     , m_amDbusLauncher(new AMDBusLauncherInter(this))
     , m_amDbusDockInter(new AMDBusDockInter(this))
     , m_isFullScreen(m_amDbusLauncher->fullscreen())
-#else
-    , m_launcherInter(new DBusLauncher(this))
-    , m_dockInter(new DBusDock(this))
-    , m_isFullScreen(m_launcherInter->fullscreen())
-#endif
     , m_launcherGsettings(SettingsPtr("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", this))
     , m_appItemFontSize(12)
     , m_appItemSpacing(10)
@@ -258,11 +246,7 @@ QScreen *CalculateUtil::currentScreen() const
 {
     QScreen *primaryScreen = qApp->primaryScreen();
 
-#ifdef USE_AM_API
     const QRect dockRect = m_amDbusDockInter->frontendWindowRect();
-#else
-    const QRect dockRect = m_dockInter->frontendRect();
-#endif
     const auto ratio = qApp->devicePixelRatio();
 
     for (auto *screen : qApp->screens()) {

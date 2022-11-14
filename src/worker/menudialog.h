@@ -31,7 +31,7 @@
 
 #include "xeventmonitor_interface.h"
 
-using XEventMonitor = org::deepin::api::XEventMonitor1;
+using XEventMonitor = org::deepin::dde::XEventMonitor1;
 
 class Menu : public QMenu
 {

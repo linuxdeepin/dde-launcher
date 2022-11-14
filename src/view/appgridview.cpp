@@ -50,8 +50,8 @@ DGUI_USE_NAMESPACE
 AppGridView::AppGridView(const ViewType viewType, QWidget *parent)
     : QListView(parent)
     , m_dropThresholdTimer(new QTimer(this))
-    , m_gestureInter(new Gesture("com.deepin.daemon.Gesture"
-                                 , "/com/deepin/daemon/Gesture"
+    , m_gestureInter(new Gesture("org.deepin.dde.Gesture1"
+                                 , "/org/deepin/dde/Gesture1"
                                  , QDBusConnection::systemBus()
                                  , nullptr))
     , m_pDelegate(nullptr)

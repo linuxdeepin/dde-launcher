@@ -28,14 +28,8 @@
 #include "dbustartmanager.h"
 #include "calculate_util.h"
 #include "common.h"
-
-#ifdef USE_AM_API
 #include "amdbuslauncherinterface.h"
 #include "amdbusdockinterface.h"
-#else
-#include "dbuslauncher.h"
-#include "dbusdock.h"
-#endif
 
 #include <DGuiApplicationHelper>
 #include <DDialog>
@@ -243,14 +237,8 @@ public:
 
 private:
     DBusStartManager *m_startManagerInter;
-
-#ifdef USE_AM_API
     AMDBusLauncherInter *m_amDbusLauncherInter;
     AMDBusDockInter *m_amDbusDockInter;
-#else
-    DBusLauncher *m_launcherInter;
-    DBusDock *m_dockInter;
-#endif
 
     QString m_searchText;
     ItemInfoList_v1 m_allAppInfoList;                                       // 所有app信息列表

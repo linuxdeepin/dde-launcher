@@ -30,11 +30,7 @@ QT_END_NAMESPACE
 class DBusLauncherService: public QDBusAbstractAdaptor
 {
     Q_OBJECT
-#ifdef USE_AM_API
     Q_CLASSINFO("D-Bus Interface", "org.deepin.dde.Launcher1")
-#else
-    Q_CLASSINFO("D-Bus Interface", "com.deepin.dde.Launcher")
-#endif
 
 public:
     explicit DBusLauncherService(LauncherSys *parent);

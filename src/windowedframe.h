@@ -24,7 +24,6 @@
 
 #include "launcherinterface.h"
 #include "sharedeventfilter.h"
-#include "dbusinterface/dbusdock.h"
 #include "view/applistview.h"
 #include "model/appslistmodel.h"
 #include "model/appsmanager.h"
@@ -54,14 +53,10 @@
 
 DWIDGET_USE_NAMESPACE
 
-using Appearance = com::deepin::daemon::Appearance;
+using Appearance = org::deepin::dde::Appearance1;
 class QLabel;
 
-#ifdef USE_AM_API
 class AMDBusDockInter;
-#else
-class DBusDock;
-#endif
 
 class WindowedFrame : public DBlurEffectWidget, public LauncherInterface
 {
@@ -165,11 +160,7 @@ private slots:
     void onHandleHoverAction(const QModelIndex &index);
 
 private:
-#ifdef USE_AM_API
     AMDBusDockInter *m_amDbusDockInter;
-#else
-    DBusDock *m_dockInter;
-#endif
     std::unique_ptr<MenuWorker> m_menuWorker;
     SharedEventFilter *m_eventFilter;
     DPlatformWindowHandle m_windowHandle;

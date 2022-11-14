@@ -28,17 +28,11 @@
 #include "appsmanager.h"
 #include "util.h"
 #include "constants.h"
-
-#ifdef USE_AM_API
 #include "amdbuslauncherinterface.h"
 #include "amdbusdockinterface.h"
-#else
-#include "dbuslauncher.h"
-#include "dbusdock.h"
-#endif
 
-#define SessionManagerService "com.deepin.SessionManager"
-#define SessionManagerPath "/com/deepin/SessionManager"
+#define SessionManagerService "org.deepin.dde.SessionManager1"
+#define SessionManagerPath "/org/deepin/dde/SessionManager1"
 
 /**
  * @brief LauncherSys::LauncherSys 启动器界面实现及逻辑处理类
@@ -55,13 +49,8 @@ LauncherSys::LauncherSys(QObject *parent)
     , m_autoExitTimer(new QTimer(this))
     , m_ignoreRepeatVisibleChangeTimer(new QTimer(this))
     , m_calcUtil(CalculateUtil::instance())
-#ifdef USE_AM_API
     , m_amDbusLauncher(new AMDBusLauncherInter(this))
     , m_amDbusDockInter(new AMDBusDockInter(this))
-#else
-    , m_dbusLauncherInter(new DBusLauncher(this))
-    , m_dockInter(new DBusDock(this))
-#endif
     , m_launcherPlugin(new LauncherPluginController(this))
 {
     m_regionMonitor->setCoordinateType(DRegionMonitor::Original);
@@ -77,17 +66,10 @@ LauncherSys::LauncherSys(QObject *parent)
     // 插件加载
     m_launcherPlugin->startLoader();
 
-#ifdef USE_AM_API
     connect(m_amDbusLauncher, &AMDBusLauncherInter::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
     connect(m_amDbusLauncher, &AMDBusLauncherInter::DisplayModeChanged, this, &LauncherSys::onDisplayModeChanged, Qt::QueuedConnection);
 
     connect(m_amDbusDockInter, &AMDBusDockInter::FrontendWindowRectChanged, this, &LauncherSys::onFrontendRectChanged);
-#else
-    connect(m_dbusLauncherInter, &DBusLauncher::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
-    connect(m_dbusLauncherInter, &DBusLauncher::DisplayModeChanged, this, &LauncherSys::onDisplayModeChanged, Qt::QueuedConnection);
-
-    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &LauncherSys::onFrontendRectChanged);
-#endif
 
     connect(m_autoExitTimer, &QTimer::timeout, this, &LauncherSys::onAutoExitTimeout, Qt::QueuedConnection);
     connect(ConfigWorker::instance(), &DConfig::valueChanged, this, &LauncherSys::onValueChanged);
@@ -151,14 +133,8 @@ bool LauncherSys::visible()
 void LauncherSys::displayModeChanged()
 {
     LauncherInterface *lastLauncher = m_launcherInter;
-
-#ifdef USE_AM_API
     if (m_launcherInter)
         m_calcUtil->setFullScreen(m_amDbusLauncher->fullscreen());
-#else
-    if (m_launcherInter)
-        m_calcUtil->setFullScreen(m_dbusLauncherInter->fullscreen());
-#endif
 
     if (m_calcUtil->fullscreen()) {
         if (!m_fullLauncher) {
@@ -243,11 +219,7 @@ void LauncherSys::unRegisterRegion()
 void LauncherSys::onDisplayModeChanged()
 {
     if (m_fullLauncher) {
-#ifdef USE_AM_API
         m_fullLauncher->updateDisplayMode(m_amDbusLauncher->displaymode());
-#else
-        m_fullLauncher->updateDisplayMode(m_dbusLauncherInter->displaymode());
-#endif
     }
 }
 

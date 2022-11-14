@@ -78,11 +78,7 @@ inline const QPoint scaledPosition(const QPoint &xpos)
  */
 WindowedFrame::WindowedFrame(QWidget *parent)
     : DBlurEffectWidget(parent)
-#ifdef USE_AM_API
     , m_amDbusDockInter(new AMDBusDockInter(this))
-#else
-    , m_dockInter(new DBusDock(this))
-#endif
     , m_menuWorker(new MenuWorker(this))
     , m_eventFilter(new SharedEventFilter(this))
     , m_windowHandle(this, this)
@@ -106,7 +102,7 @@ WindowedFrame::WindowedFrame(QWidget *parent)
     , m_tipsLabel(new QLabel(this))
     , m_delayHideTimer(new QTimer(this))
     , m_autoScrollTimer(new QTimer(this))
-    , m_appearanceInter(new Appearance("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
+    , m_appearanceInter(new Appearance("org.deepin.dde.Appearance1", "/org/deepin/dde/Appearance1", QDBusConnection::sessionBus(), this))
     , m_displayMode(All)
     , m_autoScrollStep(DLauncher::APPS_AREA_AUTO_SCROLL_STEP)
     , m_calcUtil(CalculateUtil::instance())
@@ -1025,11 +1021,7 @@ void WindowedFrame::uninstallApp(const QString &appKey)
 
 QPainterPath WindowedFrame::getCornerPath(AnchoredCornor direction)
 {
-#ifdef USE_AM_API
     if (m_amDbusDockInter->displayMode() == DLauncher::DOCK_FASHION)
-#else
-    if (m_dockInter->displayMode() == DLauncher::DOCK_FASHION)
-#endif
         return QPainterPath();
 
     QPainterPath path;
@@ -1249,11 +1241,7 @@ void WindowedFrame::initAnchoredCornor()
     if (!m_wmHelper->hasComposite()) {
         m_anchoredCornor = Normal;
     } else {
-#ifdef USE_AM_API
         const int dockPos = m_amDbusDockInter->position();
-#else
-        const int dockPos = m_dockInter->position();
-#endif
 
         switch (dockPos) {
         case DLauncher::DOCK_TOP:
@@ -1279,17 +1267,10 @@ void WindowedFrame::adjustPosition()
     // 启动器高效模式和时尚模式与任务栏的间隙不同
     int dockSpacing = 0;
 
-#ifdef USE_AM_API
     QRect rect =  m_amDbusDockInter->frontendWindowRect();
     int dockPos = m_amDbusDockInter->position();
     if (m_amDbusDockInter->displayMode() == DLauncher::DOCK_FASHION)
         dockSpacing = 8;
-#else
-    QRect rect =  m_dockInter->frontendRect();
-    int dockPos = m_dockInter->position();
-    if (m_dockInter->displayMode() == DLauncher::DOCK_FASHION)
-        dockSpacing = 8;
-#endif
 
     QRect dockRect = QRect(scaledPosition(rect.topLeft()),scaledPosition(rect.bottomRight()));
 
@@ -1434,15 +1415,9 @@ void WindowedFrame::updatePosition()
     QRect dockRect = QRect(scaledPosition(dockGeo.topLeft()),scaledPosition(dockGeo.bottomRight()));
 
     int dockSpacing = 0;
-#ifdef USE_AM_API
     int dockPos = m_amDbusDockInter->position();
     if (m_amDbusDockInter->displayMode() == DLauncher::DOCK_FASHION)
         dockSpacing = 8;
-#else
-    int dockPos = m_dockInter->position();
-    if (m_dockInter->displayMode() == DLauncher::DOCK_FASHION)
-        dockSpacing = 8;
-#endif
 
     QPoint launcherPoint;
     switch (dockPos) {

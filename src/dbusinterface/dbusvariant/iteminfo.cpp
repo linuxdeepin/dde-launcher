@@ -254,7 +254,7 @@ ItemInfoList_v1 ItemInfo_v1::itemV2ListToItemV1List(const ItemInfoList_v2 &list)
 
 bool ItemInfo_v1::isTitle() const
 {
-    return (m_name == m_desktop) && m_name.front().isUpper();
+    return ((m_name == m_desktop) && m_name.front().isUpper()) || (m_desktop == "#");
 }
 
 bool ItemInfo_v1::startWithLetter() const

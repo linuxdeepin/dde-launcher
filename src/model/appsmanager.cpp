@@ -255,11 +255,11 @@ void AppsManager::sortByPinyinOrder(ItemInfoList_v1 &processList)
     });
 }
 
-const ItemInfo_v1 AppsManager::getItemInfo(const QString &appKey)
+const ItemInfo_v1 AppsManager::getItemInfo(const QString &desktop)
 {
     ItemInfo_v1 itemInfo;
     for (const ItemInfo_v1 &info : m_allAppInfoList) {
-        if (info.m_key == appKey) {
+        if (info.m_desktop == desktop) {
             itemInfo = info;
             break;
         }
@@ -268,16 +268,12 @@ const ItemInfo_v1 AppsManager::getItemInfo(const QString &appKey)
     return itemInfo;
 }
 
-void AppsManager::dropToCollected(const ItemInfo_v1 &info, int row)
+void AppsManager::dropToCollected(const ItemInfo_v1 &info, const int row)
 {
     if (contains(m_collectSortedList, info))
         return;
 
-    // 越过视图列表区域,默认加入到最后
-    if (row == -1)
-        m_collectSortedList.append(info);
-    else
-        m_collectSortedList.insert(row, info);
+    m_collectSortedList.insert(row, info);
 
     saveCollectedSortedList();
     emit dataChanged(AppsListModel::Favorite);
@@ -764,6 +760,16 @@ AppGridView *AppsManager::getListView() const
     return m_appView;
 }
 
+void AppsManager::setDragModelIndex(const QModelIndex index)
+{
+    m_dragIndex = index;
+}
+
+QModelIndex AppsManager::dragModelIndex() const
+{
+    return m_dragIndex;
+}
+
 /**多个页面间进行拖拽时，需要用到目标视图列表当前页对应的视图
  * 保存当前视图列表对象指针
  * @brief AppsManager::setListView
@@ -1042,7 +1048,7 @@ void AppsManager::onEditCollected(const QModelIndex index, const bool isInCollec
     if (!index.isValid())
         return;
 
-    ItemInfo_v1 info = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
+    const ItemInfo_v1 &info = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
     if (!isInCollected) {
         if (itemIndex(m_collectSortedList, info) == -1)
             m_collectSortedList.append(info);

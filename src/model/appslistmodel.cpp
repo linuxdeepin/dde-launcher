@@ -294,6 +294,13 @@ void AppsListModel::insertItem(int pos)
     endInsertRows();
 }
 
+void AppsListModel::insertItem(const ItemInfo_v1 &item, const int pos)
+{
+    beginInsertRows(QModelIndex(), pos, pos);
+    m_appsManager->dropToCollected(item, pos);
+    endInsertRows();
+}
+
 /**
  * @brief AppsListModel::dropSwap 拖拽释放后删除被拖拽的item，插入移动到新位置的item
  * @param nextPos 拖拽释放后的位置
@@ -445,8 +452,8 @@ bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action
     if (data->data("RequestDock").isEmpty())
         return false;
 
-    // 全屏搜索模式不支持拖拽
-    if (m_category == Search) {
+    // 全屏搜索模式、小窗口所有应用列表不支持drop
+    if (m_category == Search || m_category == WindowedAll) {
         return  false;
     }
 
@@ -474,7 +481,7 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
     if (!ConfigWorker::getValue(DLauncher::UNABLE_TO_DOCK_LIST, QStringList()).toStringList().contains(appKey) && !isDir)
         mime->setData("RequestDock", index.data(AppDesktopRole).toByteArray());
 
-    mime->setData("AppKey", index.data(AppKeyRole).toByteArray());
+    mime->setData("DesktopPath", index.data(AppDesktopRole).toByteArray());
     mime->setImageData(index.data(AppsListModel::AppRawItemInfoRole));
     if (index.data(AppIsRemovableRole).toBool())
         mime->setData("Removable", "");
@@ -628,7 +635,8 @@ Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const
 {
     const Qt::ItemFlags defaultFlags = QAbstractListModel::flags(index);
 
-    if (m_category == FullscreenAll)
+    // 全屏、收藏列表支持拖拽
+    if (m_category == FullscreenAll || m_category == Favorite)
         return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 
     return defaultFlags;

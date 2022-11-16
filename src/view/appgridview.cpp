@@ -109,17 +109,15 @@ void AppGridView::dropEvent(QDropEvent *e)
 
     // 收藏列表允许从其他视图拖拽进入
     if (listModel->category() == AppsListModel::Favorite) {
-        ItemInfo_v1 info = m_appManager->getItemInfo(e->mimeData()->data("AppKey"));
+        const ItemInfo_v1 &info = m_appManager->getItemInfo(e->mimeData()->data("DesktopPath"));
         const QModelIndex index = indexAt(e->pos());
         if (index.isValid()) {
-            listModel->setDraggingIndex(index);
-            listModel->setDragDropIndex(index);
-            m_appManager->dropToCollected(info, index.row());
+            listModel->insertItem(info, index.row());
         } else {
-            listModel->setDraggingIndex(QModelIndex());
-            listModel->setDragDropIndex(indexAt(listModel->rowCount(QModelIndex())));
-            m_appManager->dropToCollected(info, -1);
+            listModel->insertItem(info, listModel->rowCount(QModelIndex()));
         }
+
+        listModel->clearDraggingIndex();
         return;
     }
 
@@ -194,6 +192,17 @@ void AppGridView::dragEnterEvent(QDragEnterEvent *e)
     m_appManager->setReleasePos(indexAt(e->pos()).row());
     m_dragLastTime.start();
 
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    const QModelIndex dragIndex = m_appManager->dragModelIndex();
+    const ItemInfo_v1 &info = m_appManager->getItemInfo(e->mimeData()->data("DesktopPath"));
+    // 从其他视图列表中拖入重复的数据直接返回，避免总有一个item正在拖拽中的状态导致没有绘制的问题
+    if (listModel && listModel->category() == AppsListModel::Favorite && dragIndex.model() && dragIndex.model() != listModel) {
+        if (m_appManager->contains(m_appManager->appsInfoList(AppsListModel::Favorite), info) ) {
+            qDebug() << "repeated data...";
+            return;
+        }
+    }
+
     const QModelIndex index = indexAt(e->pos());
 
     if (model()->canDropMimeData(e->mimeData(), e->dropAction(), index.row(), index.column(), QModelIndex())) {
@@ -267,7 +276,7 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
 
     int rectCenterXPos = curRect.center().x();
     int rectCenterYPos = curRect.center().y();
-    if (moveNext.x() > 0 || moveNext.y() < 0) {
+    if (m_calcUtil->fullscreen() && (moveNext.x() > 0 || moveNext.y() < 0)) {
         // 向右拖动
         if ((eventXPos >= rectCenterXPos && (eventXPos <= curRect.right())) && isDiff) {
             // 触发文件夹特效
@@ -279,7 +288,7 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
             if (m_enableAnimation)
                 m_dropThresholdTimer->start();
         }
-    } else if (moveNext.x() < 0 || moveNext.y() > 0) {
+    } else if (m_calcUtil->fullscreen() && (moveNext.x() < 0 || moveNext.y() > 0)) {
         // 向左拖动
         if ((eventXPos >= curRect.left()) && (eventXPos <= rectCenterXPos) && isDiff) {
             // 触发文件夹特效
@@ -294,6 +303,9 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
         }
     } else {
         itemDelegate->setDirModelIndex(QModelIndex(), QModelIndex());
+        // 释放前执行app交换动画
+        if (m_enableAnimation)
+            m_dropThresholdTimer->start();
     }
 }
 
@@ -412,11 +424,12 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
         emit QListView::clicked(QModelIndex());
 }
 
-QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey)
+QPixmap AppGridView::creatSrcPix(const QModelIndex &index)
 {
     QPixmap srcPix;
 
-    if (appKey == "dde-calendar") {
+    const QString &desktop = index.data(AppsListModel::AppDesktopRole).toString();
+    if (desktop.contains("/dde-calendar.desktop")) {
 #ifdef QT_DEBUG
         qInfo() << "category: " << static_cast<AppsListModel *>(model())->category();
 #endif
@@ -517,9 +530,12 @@ QRect AppGridView::appIconRect(const QModelIndex &index)
  */
 void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
+        qWarning() << "invalid index ...";
         return;
+    }
 
+    m_appManager->setDragModelIndex(index);
     setViewMoveState();
 
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
@@ -536,7 +552,6 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
 
     const QModelIndex &dragIndex = index;
     const qreal ratio = qApp->devicePixelRatio();
-    QString appKey = index.data(AppsListModel::AppKeyRole).value<QString>();
 
     QPixmap srcPix;
     bool itemIsDir = index.data(AppsListModel::ItemIsDirRole).toBool();
@@ -544,7 +559,7 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     if (itemIsDir)
         srcPix = grab(grabRect);
     else
-        srcPix = creatSrcPix(index, appKey);
+        srcPix = creatSrcPix(index);
 
     if (!qobject_cast<AppsListModel *>(model())) {
         qDebug() << "appgridview's model is null";
@@ -655,7 +670,8 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
         qDebug() << "releasePos:" << releasePos << ", model index valid status:" << itemIndex.isValid() << ", itemRect:" << itemRect << ", mapToGlobal:" << m_appManager->getListView()->mapToGlobal(itemRect.center());
 #endif
     } else {
-        posAni->setEndValue(mapToGlobal(m_dropPoint));
+        posAni->setStartValue(mapToGlobal(QCursor::pos()));
+        posAni->setEndValue(mapToGlobal(indexRect(QListView::indexAt(m_dragStartPos)).center()));
     }
 
     //不开启特效则不展示动画
@@ -765,10 +781,16 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     floatLabel->setPixmap(pixmap);
     floatLabel->show();
 
-    int topMargin = m_calcUtil->appMarginTop();
-    int leftMargin = m_calcUtil->appMarginLeft();
-    ani->setStartValue(indexRect(index).topLeft() - QPoint(0, -topMargin) + QPoint(leftMargin, 0));
-    ani->setEndValue(indexRect(indexAt(moveNext ? pos - 1 : pos + 1)).topLeft() - QPoint(0, -topMargin) + QPoint(leftMargin, 0));
+    if (m_calcUtil->fullscreen()) {
+        int topMargin = m_calcUtil->appMarginTop();
+        int leftMargin = m_calcUtil->appMarginLeft();
+        ani->setStartValue(indexRect(index).topLeft() - QPoint(0, -topMargin) + QPoint(leftMargin, 0));
+        ani->setEndValue(indexRect(indexAt(moveNext ? pos - 1 : pos + 1)).topLeft() - QPoint(0, -topMargin) + QPoint(leftMargin, 0));
+    } else {
+        ani->setStartValue(indexRect(index).topLeft());
+        ani->setEndValue(indexRect(indexAt(moveNext ? pos - 1 : pos + 1)).topLeft());
+    }
+
 
     // InOutQuad 描述起点矩形到终点矩形的速度曲线
     ani->setEasingCurve(QEasingCurve::Linear);

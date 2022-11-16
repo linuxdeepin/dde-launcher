@@ -335,7 +335,7 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, 
     QIcon icon;
     bool findIcon = true;
 
-    if (itemInfo.m_iconKey == "dde-calendar") {
+    if (itemInfo.m_desktop.contains("/dde-calendar.desktop")) {
         QString name = QStandardPaths::standardLocations(QStandardPaths::TempLocation).first() + "/"
                 +  QString::number(QDate::currentDate().year())
                 + "_" + QString::number(QDate::currentDate().dayOfYear()) + ".svg";

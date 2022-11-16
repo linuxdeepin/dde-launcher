@@ -96,8 +96,8 @@ public:
     void updateDrawerTitle(const QModelIndex &index, const QString &newTitle = QString());
     QList<QPixmap> getDirAppIcon(QModelIndex modelIndex);
     void showSearchedData(const AppInfoList &list);
-    const ItemInfo_v1 getItemInfo(const QString &appKey);
-    void dropToCollected(const ItemInfo_v1 &info, int row);
+    const ItemInfo_v1 getItemInfo(const QString &desktop);
+    void dropToCollected(const ItemInfo_v1 &info, const int row);
 
     static bool readJsonFile(QIODevice &device, QSettings::SettingsMap &map);
     static bool writeJsonFile(QIODevice &device, const QSettings::SettingsMap &map);
@@ -126,6 +126,9 @@ public:
 
     void setListView(AppGridView *view);
     AppGridView *getListView() const;
+
+    void setDragModelIndex(const QModelIndex index);
+    QModelIndex dragModelIndex() const;
 
 signals:
     void itemDataChanged(const ItemInfo_v1 &info) const;
@@ -285,6 +288,7 @@ private:
     AppGridView *m_appView;                                                 // 当前视图
     ItemInfo_v1 m_dragItemInfo;                                             // 被拖拽应用信息
     int m_dropRow;                                                          // 拖拽释放时鼠标所在的当前页的行数
+    QModelIndex m_dragIndex;                                                // 临时记录当前被拖拽应用的模型索引
 };
 
 #endif // APPSMANAGER_H

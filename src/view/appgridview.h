@@ -72,7 +72,7 @@ public:
     void dragIn(const QModelIndex &index, bool enableAnimation);
     void setDropAndLastPos(const QPoint& itemPos);
     void flashDrag();
-    QPixmap creatSrcPix(const QModelIndex &index, const QString &appKey);
+    QPixmap creatSrcPix(const QModelIndex &index);
 
     QRect appIconRect(const QModelIndex &index);
     const QRect indexRect(const QModelIndex &index) const;

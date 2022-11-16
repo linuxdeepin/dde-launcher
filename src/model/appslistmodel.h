@@ -116,6 +116,7 @@ public:
     void setDragDropIndex(const QModelIndex &index);
     void dropInsert(const QString &desktop, const int pos);
     void insertItem(int pos);
+    void insertItem(const ItemInfo_v1 &item, const int pos);
     void dropSwap(const int nextPos);
     inline QModelIndex dragDropIndex() const {return m_dragDropIndex;}
 

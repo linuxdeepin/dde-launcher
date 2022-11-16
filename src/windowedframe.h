@@ -158,7 +158,6 @@ private slots:
     void updatePosition();
     void onHideMenu();
     void addViewEvent(AppGridView *pView);
-    void refreshView(const AppsListModel::AppCategory category);
     void onButtonClick(int buttonid);
     void onFavoriteListVisibleChaged();
     void onLayoutChanged();

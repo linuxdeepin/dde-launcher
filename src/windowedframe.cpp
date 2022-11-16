@@ -170,7 +170,10 @@ void WindowedFrame::initUi()
     m_allAppView->setItemDelegate(m_appItemDelegate);
     m_allAppView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_allAppView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    m_allAppView->setAcceptDrops(false);
+    // 这里拖拽属性设置为true, 让QListView正常接收dragMoveEvent事件，限制拖拽在model中实现
+    m_allAppView->setDragEnabled(true);
+    m_allAppView->setDragDropMode(QAbstractItemView::DragDrop);
+    m_allAppView->setAcceptDrops(true);
 
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setFixedSize(500, 50);
@@ -388,7 +391,6 @@ void WindowedFrame::initConnection()
 
     connect(m_appsManager, &AppsManager::requestTips, this, &WindowedFrame::showTips);
     connect(m_appsManager, &AppsManager::requestHideTips, this, &WindowedFrame::hideTips);
-    connect(m_appsManager, &AppsManager::dataChanged, this, &WindowedFrame::refreshView);
     connect(m_delayHideTimer, &QTimer::timeout, this, &WindowedFrame::prepareHideLauncher, Qt::QueuedConnection);
 
     connect(m_appearanceInter, &Appearance::OpacityChanged, this, &WindowedFrame::onOpacityChanged);
@@ -1478,22 +1480,6 @@ void WindowedFrame::addViewEvent(AppGridView *pView)
     connect(pView, &AppGridView::entered, this, &WindowedFrame::onHandleHoverAction);
     connect(pView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, pView, qOverload<>(&AppGridView::update));
-}
-
-void WindowedFrame::refreshView(const AppsListModel::AppCategory category)
-{
-    if (!isVisible())
-        return;
-
-    switch (category) {
-    case AppsListModel::Favorite: {
-        m_favoriteModel->clearDraggingIndex();
-        m_favoriteView->update();
-    }
-        break;
-    default:
-        break;
-    }
 }
 
 void WindowedFrame::onButtonClick(int buttonid)

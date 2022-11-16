@@ -62,10 +62,8 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const qreal ratio = qApp->devicePixelRatio();
     const QRect rect = option.rect;
     const bool isAlternate = option.features & QStyleOptionViewItem::Alternate;
-
-    QPixmap iconPixmap = index.data(AppsListModel::AppListIconRole).value<QPixmap>();
-    ItemInfo_v1 itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
-    bool isTitle = index.data(AppsListModel::AppItemTitleRole).toBool();
+    const QPixmap iconPixmap = index.data(AppsListModel::AppListIconRole).value<QPixmap>();
+    const bool isTitle = index.data(AppsListModel::AppItemTitleRole).toBool();
 
     painter->setPen(Qt::NoPen);
 
@@ -108,25 +106,19 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     if (!isTitle)
         textRect = rect.marginsRemoved(QMargins(60, 1, 1, 1)); // 图标 + 间隔,再显示文字
 
-    textRect.setWidth(qRound(textRect.width() - m_blueDotPixmap.width() / ratio - 60));
+    textRect.setWidth(qRound(textRect.width() - m_blueDotPixmap.width() / ratio));
+    painter->setPen(QPen(QPalette().brightText(), 1));
+
+    const QString &appName = painter->fontMetrics().elidedText(index.data(AppsListModel::AppNameRole).toString(), Qt::ElideRight, textRect.width());
+    // TODO: 设计搞显示效果偏大
+    // DFontSizeManager::instance()->t8().pixelSize());
+    if (!isTitle)
+        painter->setFont(QFont(painter->font().family(), DLauncher::DEFAULT_FONT_SIZE));
 
     if (isAlternate) {
         QFont nameFont = painter->font();
-        nameFont.setPointSize(nameFont.pointSize() + 2);
+        nameFont.setPixelSize(nameFont.pixelSize() + 2);
         painter->setFont(nameFont);
-    }
-
-    painter->setPen(QPen(QPalette().brightText(), 1));
-
-    // 使用省略号显示超长的应用名称
-    const QString appName = painter->fontMetrics().elidedText(index.data(AppsListModel::AppNameRole).toString(), Qt::ElideRight, textRect.width());
-
-    static QPen pen = painter->pen();
-    static QFont font = painter->font();
-    if (isTitle) {
-        painter->setFont(font);
-    } else {
-        painter->setFont(QFont(font.family(), DLauncher::DEFAULT_FONT_SIZE));
     }
 
     painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, appName);

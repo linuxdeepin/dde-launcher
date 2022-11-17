@@ -132,7 +132,6 @@ signals:
     void dataChanged(const AppsListModel::AppCategory category) const;
     void layoutChanged(const AppsListModel::AppCategory category) const;
     void requestTips(const QString &tips) const;
-    void newInstallListChanged() const;
     void requestHideTips() const;
     void categoryListChanged() const;
     void IconSizeChanged() const;
@@ -208,7 +207,7 @@ private:
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
 
 private slots:
-    void markLaunched(QString appKey);
+    void markLaunched(const QString &appKey);
     void delayRefreshData();
     void refreshIcon();
     void updateTrashState();

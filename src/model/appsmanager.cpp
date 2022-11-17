@@ -954,11 +954,6 @@ bool AppsManager::isVaild()
 
 void AppsManager::refreshAllList()
 {
-#ifdef USE_AM_API
-    m_newInstalledAppsList = m_amDbusLauncherInter->GetAllNewInstalledApps().value();
-#else
-    m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
-#endif
     refreshCategoryInfoList();
     refreshItemInfoList();
     saveAppCategoryInfoList();
@@ -987,13 +982,18 @@ void AppsManager::searchApp(const QString &keywords)
 
 void AppsManager::launchApp(const QModelIndex &index)
 {
-    const QString appDesktop = index.data(AppsListModel::AppDesktopRole).toString();
-    QString appKey = index.data(AppsListModel::AppKeyRole).toString();
-    markLaunched(appKey);
+    const QString &desktop = index.data(AppsListModel::AppDesktopRole).toString();
+
+    if (desktop.isEmpty()) {
+        qWarning() << "empty desktop file path.";
+        return;
+    }
+
+    m_startManagerInter->Launch(desktop);
 
     // 更新应用的打开次数以及首次启动的时间戳
     for (ItemInfo_v1 &info: m_allAppInfoList) {
-        if (info.m_key == appKey) {
+        if (info.m_desktop == desktop) {
             ++info.m_openCount;
             if (info.m_firstRunTime == 0)
                 info.m_firstRunTime = QDateTime::currentMSecsSinceEpoch() / 1000;
@@ -1003,9 +1003,7 @@ void AppsManager::launchApp(const QModelIndex &index)
     }
 
     refreshItemInfoList();
-
-    if (!appDesktop.isEmpty())
-        m_startManagerInter->Launch(appDesktop);
+    markLaunched(index.data(AppsListModel::AppKeyRole).toString());
 }
 
 void AppsManager::uninstallApp(const QString &appKey)
@@ -1072,27 +1070,19 @@ void AppsManager::onMoveToFirstInCollected(const QModelIndex index)
     emit dataChanged(AppsListModel::Favorite);
 }
 
-void AppsManager::markLaunched(QString appKey)
+void AppsManager::markLaunched(const QString &appKey)
 {
     if (appKey.isEmpty() || !m_newInstalledAppsList.contains(appKey))
         return;
 
     m_newInstalledAppsList.removeOne(appKey);
 
-    emit newInstallListChanged();
+    emit dataChanged(AppsListModel::FullscreenAll);
 }
 
 void AppsManager::delayRefreshData()
 {
-#ifdef USE_AM_API
-    m_newInstalledAppsList = m_amDbusLauncherInter->GetAllNewInstalledApps().value();
-#else
-    m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
-#endif
-
-    generateCategoryMap();
-
-    emit newInstallListChanged();
+    refreshCategoryInfoList();
     emit dataChanged(AppsListModel::FullscreenAll);
 }
 

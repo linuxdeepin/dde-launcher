@@ -46,7 +46,6 @@ private:
     QWidget *m_outsideWidget;
     QWidget *m_emptyWidget;
 
-    QLabel *m_nativeLabel;
     QLabel *m_outsideLabel;
 
     AppGridView *m_nativeView;

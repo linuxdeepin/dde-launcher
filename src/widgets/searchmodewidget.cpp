@@ -10,7 +10,6 @@ SearchModeWidget::SearchModeWidget(QWidget *parent)
     , m_nativeWidget(new QWidget(this))
     , m_outsideWidget(new QWidget(this))
     , m_emptyWidget(new QWidget(this))
-    , m_nativeLabel(new QLabel(m_nativeWidget))
     , m_outsideLabel(new QLabel(m_outsideWidget))
     , m_nativeView(new AppGridView(AppGridView::MainView, this))
     , m_outsideView(new AppGridView(AppGridView::MainView, this))
@@ -41,7 +40,6 @@ void SearchModeWidget::initUi()
     QVBoxLayout *nativeVLayout = new QVBoxLayout;
     nativeVLayout->setContentsMargins(contentMargin);
     nativeVLayout->setSpacing(10);
-    nativeVLayout->addWidget(m_nativeLabel);
     nativeVLayout->addWidget(m_nativeView);
 
     QHBoxLayout *nativeHLayout = new QHBoxLayout;
@@ -101,15 +99,13 @@ void SearchModeWidget::initTitle()
     else
         pal.setColor(QPalette::WindowText, Qt::black);
 
-    m_nativeLabel->setPalette(pal);
     m_outsideLabel->setPalette(pal);
 
     // 搜索标题字体样式设置
-    QFont searchTitleFont = m_nativeLabel->font();
+    QFont searchTitleFont = m_outsideLabel->font();
     searchTitleFont.setBold(true);
     searchTitleFont.setWeight(700);
 
-    m_nativeLabel->setFont(searchTitleFont);
     m_outsideLabel->setFont(searchTitleFont);
 
     // 搜索为空格的字体样式设置
@@ -131,10 +127,6 @@ void SearchModeWidget::initTitle()
 
 void SearchModeWidget::initAppView()
 {
-    QPalette nativePal = m_nativeLabel->palette();
-    nativePal.setColor(QPalette::WindowText,Qt::white);
-    m_nativeLabel->setPalette(nativePal);
-
     QPalette outsidePal = m_outsideLabel->palette();
     outsidePal.setColor(QPalette::WindowText,Qt::white);
     m_outsideLabel->setPalette(outsidePal);
@@ -184,29 +176,21 @@ void SearchModeWidget::setSearchModel(QSortFilterProxyModel *model)
 
 void SearchModeWidget::updateTitleContent()
 {
-    m_nativeLabel->setText(tr("Apps found in App Store"));
-
     ItemInfoList_v1 list = AppsManager::instance()->appsInfoList(AppsListModel::PluginSearch);
     ItemInfo_v1 info;
     if (list.size() > 0)
         info = list.at(0);
 
-    m_outsideLabel->setText(info.m_description);
+    m_outsideLabel->setText(tr("Apps found in App Store"));
 }
 
 void SearchModeWidget::updateTitlePos(bool alignCenter)
 {
     if (alignCenter) {
-        DFontSizeManager::instance()->bind(m_nativeLabel, DFontSizeManager::T2);
         DFontSizeManager::instance()->bind(m_outsideLabel, DFontSizeManager::T2);
-
-        m_nativeLabel->setAlignment(Qt::AlignCenter);
         m_outsideLabel->setAlignment(Qt::AlignCenter);
     } else {
-        DFontSizeManager::instance()->bind(m_nativeLabel, DFontSizeManager::T5);
         DFontSizeManager::instance()->bind(m_outsideLabel, DFontSizeManager::T5);
-
-        m_nativeLabel->setAlignment(Qt::AlignLeft);
         m_outsideLabel->setAlignment(Qt::AlignLeft);
     }
 }

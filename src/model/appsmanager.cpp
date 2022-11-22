@@ -395,8 +395,8 @@ void AppsManager::sortByPresetOrder(ItemInfoList_v1 &processList)
         preset = m_launcherSettings->get("apps-order").toStringList();
 
     std::sort(processList.begin(), processList.end(), [&preset](const ItemInfo_v1 & i1, const ItemInfo_v1 & i2) {
-        int index1 = preset.indexOf(i1.m_desktop);
-        int index2 = preset.indexOf(i2.m_desktop);
+        int index1 = preset.indexOf(i1.m_key);
+        int index2 = preset.indexOf(i2.m_key);
 
         if (index1 == index2) {
             // If both of them don't exist in the preset list,

@@ -380,7 +380,7 @@ void MenuWorker::handleToDock()
 
 void MenuWorker::handleToStartup()
 {
-    QString desktopUrl = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
+    const QString &desktopUrl = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
     if (m_isItemStartup)
         m_startManagerInterface->RemoveAutostart(desktopUrl);
     else

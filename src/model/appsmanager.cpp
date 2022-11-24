@@ -47,6 +47,8 @@
 #include <DApplication>
 #include "dpinyin.h"
 
+#define AUTOSTART_KEY "autostart-desktop-list"
+
 DWIDGET_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
@@ -101,6 +103,7 @@ AppsManager::AppsManager(QObject *parent)
     , m_tryNums(0)
     , m_tryCount(0)
     , m_itemInfo(ItemInfo_v1())
+    , m_autostartDesktopListSetting(new QSettings("deepin", AUTOSTART_KEY, this))
     , m_filterSetting(nullptr)
     , m_iconValid(true)
     , m_trashIsEmpty(false)
@@ -145,7 +148,6 @@ AppsManager::AppsManager(QObject *parent)
 
     updateTrashState();
     refreshAllList();
-    refreshAppAutoStartCache();
 
     m_delayRefreshTimer->setSingleShot(true);
     m_delayRefreshTimer->setInterval(500);
@@ -1328,8 +1330,7 @@ bool AppsManager::appIsNewInstall(const QString &key)
 
 bool AppsManager::appIsAutoStart(const QString &desktop)
 {
-    int index = desktop.lastIndexOf('/');
-    return APP_AUTOSTART_CACHE.contains(index > 0 ? desktop.right(desktop.size() - index - 1) : desktop);
+    return getAutostartValue().contains(desktop);
 }
 
 bool AppsManager::appIsOnDock(const QString &desktop)
@@ -1730,14 +1731,36 @@ void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &d
         if (desktop_file_name.isEmpty())
             return;
 
+        // 记录插入的应用的desktop全路径，区分不同包格式的同一应用，避免都绘制出自启动的样式
+        QStringList autostartList = getAutostartValue();
         if (type == "added") {
             APP_AUTOSTART_CACHE.insert(desktop_file_name);
+
+            if (!autostartList.contains(desktpFilePath)) {
+                autostartList.append(desktpFilePath);
+                setAutostartValue(autostartList);
+            }
         } else if (type == "deleted") {
             APP_AUTOSTART_CACHE.remove(desktop_file_name);
+
+            if (autostartList.contains(desktpFilePath)) {
+                autostartList.removeOne(desktpFilePath);
+                setAutostartValue(autostartList);
+            }
         }
 
         emit dataChanged(AppsListModel::FullscreenAll);
     }
+}
+
+void AppsManager::setAutostartValue(const QStringList &list)
+{
+    m_autostartDesktopListSetting->setValue(AUTOSTART_KEY, list);
+}
+
+QStringList AppsManager::getAutostartValue() const
+{
+    return m_autostartDesktopListSetting->value(AUTOSTART_KEY).toStringList();
 }
 
 /**

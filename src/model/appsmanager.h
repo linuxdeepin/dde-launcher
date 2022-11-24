@@ -209,6 +209,9 @@ private:
     void readCollectedCacheData();
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
 
+    void setAutostartValue(const QStringList &list);
+    QStringList getAutostartValue() const;
+
 private slots:
     void markLaunched(const QString &appKey);
     void delayRefreshData();
@@ -270,6 +273,7 @@ private:
     QSettings *m_categorySetting;
     QSettings *m_fullscreenUsedSortSetting;
     QSettings *m_windowedUsedSortSetting;
+    QSettings *m_autostartDesktopListSetting;
 
     QStringList m_categoryTs;
     QGSettings *m_filterSetting;

@@ -1088,6 +1088,13 @@ void AppsManager::markLaunched(const QString &appKey)
 
 void AppsManager::delayRefreshData()
 {
+#ifdef USE_AM_API
+    // TODO: 这个接口返回数据存在异常
+    m_newInstalledAppsList = m_amDbusLauncherInter->GetAllNewInstalledApps().value();
+#else
+    m_newInstalledAppsList = m_launcherInter->GetAllNewInstalledApps().value();
+#endif
+
     refreshCategoryInfoList();
     emit dataChanged(AppsListModel::FullscreenAll);
 }
@@ -1457,11 +1464,7 @@ void AppsManager::refreshCategoryInfoList()
     sortByPresetOrder(m_allAppInfoList);
 
     // 2. 读取小窗口所有应用列表的缓存数据
-    if (m_windowedUsedSortedList.isEmpty()) {
-        if (m_windowedUsedSortSetting->contains("dde-launcher-windowed-app-used-sorted-list")) {
-            m_windowedUsedSortedList = readCacheData(m_windowedUsedSortSetting->value("dde-launcher-windowed-app-used-sorted-list").toMap());
-        }
-    }
+    m_windowedUsedSortedList = readCacheData(m_windowedUsedSortSetting->value("lists").toMap());
 
     // 缓存数据中没有的, 则加入到所有应用列表中
     for (const ItemInfo_v1 &itemInfo : m_allAppInfoList) {
@@ -1477,16 +1480,14 @@ void AppsManager::refreshCategoryInfoList()
 
     // 3. 读取全屏下所有应用列表的缓存数据
     // 为兼容历史版本, 1050以前使用list, v23即以后使用lists作为键值
-    if (m_fullscreenUsedSortedList.isEmpty()) {
-        if (APP_USED_SORTED_LIST.contains("list")) {
-            ItemInfoList oldUsedSortedList;
-            QByteArray usedBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
-            QDataStream in(&usedBuf, QIODevice::ReadOnly);
-            in >> oldUsedSortedList;
-            m_fullscreenUsedSortedList = ItemInfo_v1::itemListToItemV1List(oldUsedSortedList);
-        } else {
-            m_fullscreenUsedSortedList = readCacheData(m_fullscreenUsedSortSetting->value("lists").toMap());
-        }
+    if (APP_USED_SORTED_LIST.contains("list")) {
+        ItemInfoList oldUsedSortedList;
+        QByteArray usedBuf = APP_USED_SORTED_LIST.value("list").toByteArray();
+        QDataStream in(&usedBuf, QIODevice::ReadOnly);
+        in >> oldUsedSortedList;
+        m_fullscreenUsedSortedList = ItemInfo_v1::itemListToItemV1List(oldUsedSortedList);
+    } else {
+        m_fullscreenUsedSortedList = readCacheData(m_fullscreenUsedSortSetting->value("lists").toMap());
     }
 
     for (const ItemInfo_v1 &info : m_fullscreenUsedSortedList) {
@@ -1545,7 +1546,6 @@ void AppsManager::refreshCategoryInfoList()
 
     // 6. 清除不存在的数据
     removeNonexistentData();
-
     generateCategoryMap();
 }
 
@@ -1766,10 +1766,6 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo_v2 
     } else if (operation == "deleted") {
         m_allAppInfoList.removeOne(info);
         m_fullscreenUsedSortedList.removeOne(info);
-        //一般情况是不需要的，但是类似wps这样的程序有点特殊，删除一个其它的二进制程序也删除了，需要保存列表，否则刷新的时候会刷新出齿轮的图标
-        //新增和更新则无必要
-        saveFullscreenUsedSortedList();
-        saveWidowedUsedSortedList();
     } else if (operation == "updated") {
         Q_ASSERT(contains(m_allAppInfoList, info));
 
@@ -1791,6 +1787,9 @@ void AppsManager::handleItemChanged(const QString &operation, const ItemInfo_v2 
         qDebug() << "nonexistent condition, operation:" << operation;
         return;
     }
+
+    saveFullscreenUsedSortedList();
+    saveWidowedUsedSortedList();
 
     m_delayRefreshTimer->start();
 }

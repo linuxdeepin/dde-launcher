@@ -338,9 +338,10 @@ bool ItemInfo_v1::operator==(const ItemInfo_v1 &other) const
 
 QDebug operator<<(QDebug argument, const ItemInfo_v1 &info)
 {
-    argument << info.m_categoryId << info.m_installedTime
-             << info.m_desktop << info.m_name << info.m_key << info.m_iconKey
-             << info.m_isDir << info.m_appInfoList;
+    argument << "categoryId: " << info.m_categoryId << ", installedTime: " << info.m_installedTime
+             << ", desktop: " << info.m_desktop << ", name: " << info.m_name
+             << ", key: " << info.m_key << ", iconKey: " << info.m_iconKey
+             << ", isDir: " << info.m_isDir << ", appInfoList: " << info.m_appInfoList;
 
     return argument;
 }
@@ -460,8 +461,10 @@ bool ItemInfo_v2::operator==(const ItemInfo_v2 &other) const
 
 QDebug operator<<(QDebug argument, const ItemInfo_v2 &info)
 {
-    argument << info.m_desktop << info.m_name << info.m_key << info.m_iconKey
-             << info.m_categoryId << info.m_installedTime << info.m_keywords;
+    argument << "desktop: " << info.m_desktop << ", name: " << info.m_name
+             << ", key: " << info.m_key << ", iconKey: " << info.m_iconKey
+             << ", categoryId: " << info.m_categoryId << ", installedTime: " << info.m_installedTime
+             << ", keywords: " << info.m_keywords;
 
     return argument;
 }

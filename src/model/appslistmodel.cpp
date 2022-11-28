@@ -310,11 +310,10 @@ void AppsListModel::dropSwap(const int nextPos)
     if (!m_dragStartIndex.isValid())
         return;
 
-    const ItemInfo_v1 appInfo = m_dragStartIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
+    const ItemInfo_v1 &appInfo = m_dragStartIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
 
     // 从文件夹展开窗口移除应用时，文件夹本身不执行移动操作
-    if (!appInfo.m_isDir) {
-        qDebug() << QString("app is dir, desktopfilePath is %1").arg(appInfo.m_desktop);
+    if (m_appsManager->getDragMode() != AppsManager::DirOut) {
         removeRows(m_dragStartIndex.row(), 1, QModelIndex());
         dropInsert(appInfo.m_desktop, nextPos);
     }
@@ -475,10 +474,9 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
     QMimeData *mime = new QMimeData;
 
     // 拖动应用到任务栏驻留针对不同应用提供配置功能, 默认为启用
-    const QString appKey = index.data(AppKeyRole).toString();
-    bool isDir = index.data(ItemIsDirRole).toBool();
+    const QString &appKey = index.data(AppKeyRole).toString();
 
-    if (!ConfigWorker::getValue(DLauncher::UNABLE_TO_DOCK_LIST, QStringList()).toStringList().contains(appKey) && !isDir)
+    if (!ConfigWorker::getValue(DLauncher::UNABLE_TO_DOCK_LIST, QStringList()).toStringList().contains(appKey))
         mime->setData("RequestDock", index.data(AppDesktopRole).toByteArray());
 
     mime->setData("DesktopPath", index.data(AppDesktopRole).toByteArray());

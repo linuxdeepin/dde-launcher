@@ -550,12 +550,15 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
             return;
     }
 
-    const QModelIndex &dragIndex = index;
-    const qreal ratio = qApp->devicePixelRatio();
+    QRect grabRect = appIconRect(index);
+    if (m_calcUtil->fullscreen()) {
+        int topMargin = m_calcUtil->appMarginTop();
+        int leftMargin = m_calcUtil->appMarginLeft();
+        grabRect = QRect(grabRect.topLeft() + QPoint(0, topMargin) + QPoint(leftMargin, 0), grabRect.size());
+    }
 
     QPixmap srcPix;
-    bool itemIsDir = index.data(AppsListModel::ItemIsDirRole).toBool();
-    QRect grabRect = indexRect(index);
+    const bool itemIsDir = index.data(AppsListModel::ItemIsDirRole).toBool();
     if (itemIsDir)
         srcPix = grab(grabRect);
     else
@@ -566,8 +569,8 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
         return;
     }
 
-    AppsListModel::AppCategory category;
-    category = qobject_cast<AppsListModel *>(model())->category();
+    const qreal ratio = qApp->devicePixelRatio();
+    AppsListModel::AppCategory category = qobject_cast<AppsListModel *>(model())->category();
 
     srcPix = srcPix.scaled(m_calcUtil->appIconSize(category) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     srcPix.setDevicePixelRatio(ratio);
@@ -616,7 +619,7 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
 
     if (execDrag) {
         QDrag *drag = new QDrag(this);
-        drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
+        drag->setMimeData(model()->mimeData(QModelIndexList() << index));
         drag->setPixmap(srcPix);
         drag->setHotSpot(srcPix.rect().center() / ratio);
         setState(DraggingState);

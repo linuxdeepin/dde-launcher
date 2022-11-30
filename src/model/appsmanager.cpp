@@ -361,7 +361,7 @@ const ItemInfoList_v1 AppsManager::readCacheData(const QSettings::SettingsMap &m
  * @brief AppsManager::setDragMode
  * @param mode 拖拽类型
  */
-void AppsManager::setDragMode(DragMode mode)
+void AppsManager::setDragMode(const DragMode &mode)
 {
     m_dragMode = mode;
 }
@@ -369,6 +369,26 @@ void AppsManager::setDragMode(DragMode mode)
 AppsManager::DragMode AppsManager::getDragMode() const
 {
     return m_dragMode;
+}
+
+void AppsManager::setRemainedLastItem(const ItemInfo_v1 &info)
+{
+    m_remainedLastItemInfo = info;
+}
+
+const ItemInfo_v1 AppsManager::getRemainedLastItem() const
+{
+    return m_remainedLastItemInfo;
+}
+
+void AppsManager::setDirAppRow(const int &row)
+{
+    m_dirAppRow = row;
+}
+
+int AppsManager::getDirAppRow() const
+{
+    return m_dirAppRow;
 }
 
 /**
@@ -689,7 +709,7 @@ void AppsManager::dragdropStashItem(const QModelIndex &index, AppsListModel::App
  * @brief AppsManager::setDragItem
  * @param info 被拖拽的应用信息
  */
-void AppsManager::setDragItem(ItemInfo_v1 &info)
+void AppsManager::setDragItem(const ItemInfo_v1 &info)
 {
     if (!info.m_desktop.isEmpty())
         m_dragItemInfo = info;
@@ -704,7 +724,7 @@ const ItemInfo_v1 AppsManager::getDragItem() const
  * @brief AppsManager::setReleasePos
  * @param row
  */
-void AppsManager::setReleasePos(int row)
+void AppsManager::setReleasePos(const int &row)
 {
     m_dropRow = row;
 }
@@ -718,7 +738,7 @@ int AppsManager::getReleasePos() const
  * @brief AppsManager::setCategory
  * @param category
  */
-void AppsManager::setCategory(AppsListModel::AppCategory category)
+void AppsManager::setCategory(const AppsListModel::AppCategory category)
 {
     m_curCategory = category;
 }
@@ -732,7 +752,7 @@ AppsListModel::AppCategory AppsManager::getCategory() const
  * @brief AppsManager::setPageIndex
  * @param pageIndex
  */
-void AppsManager::setPageIndex(int pageIndex)
+void AppsManager::setPageIndex(const int &pageIndex)
 {
     m_pageIndex = pageIndex;
 }
@@ -762,7 +782,7 @@ AppGridView *AppsManager::getListView() const
     return m_appView;
 }
 
-void AppsManager::setDragModelIndex(const QModelIndex index)
+void AppsManager::setDragModelIndex(const QModelIndex &index)
 {
     m_dragIndex = index;
 }
@@ -805,9 +825,22 @@ void AppsManager::removeDragItem()
             m_dirAppInfoList.removeOne(removeItemInfo);
             info.m_appInfoList.removeOne(removeItemInfo);
 
-            // 当为空时，清除这个空的文件夹内容
-            if (info.m_appInfoList.isEmpty())
+            // 当从文件夹展开窗口中移除应用且中只剩一个时，把这个应用放置在原文件夹的位置，并清除文件夹样式
+            // 实现步骤：
+            // 1. 把最后一个应用保存下来到AppManager中
+            // 2. 再插入到文件夹所在位置， 界面刷新
+            // 3. 清除文件夹样式
+            // 4. 数据缓存，界面刷新
+            if (info.m_appInfoList.size() < 2) {
+                // 1. 保存最后一个应用数据到本地, 并清空文件夹列表
+                if (info.m_appInfoList.size() > 0) {
+                    setRemainedLastItem(info.m_appInfoList.at(0));
+                    m_dirAppInfoList.removeLast();
+                    info.m_appInfoList.removeLast();
+                }
+
                 list_toRemove.append(info);
+            }
 #ifdef QT_DEBUG
             qDebug() << QString("remove  %1 successfully").arg(removeItemInfo.m_desktop);
 #endif
@@ -815,9 +848,18 @@ void AppsManager::removeDragItem()
         }
     }
 
+    // 2. 将文件夹中剩余的唯一一个应用插入到点击文件夹时的初始位置
+    if (m_dirAppInfoList.isEmpty()) {
+        const int dirRow = getDirAppRow();
+        const ItemInfo_v1 &info = getRemainedLastItem();
+        m_fullscreenUsedSortedList.insert(dirRow, info);
+    }
+
+    // 3. 清除文件夹样式
     for (const ItemInfo_v1 &info : list_toRemove)
         m_fullscreenUsedSortedList.removeOne(info);
 
+    // 4. 数据保存， 界面刷新
     saveFullscreenUsedSortedList();
     emit dataChanged(AppsListModel::FullscreenAll);
 }

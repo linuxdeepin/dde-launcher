@@ -106,19 +106,25 @@ public:
     QSettings::SettingsMap getCacheMapData(const ItemInfoList_v1 &list);
     const ItemInfoList_v1 readCacheData(const QSettings::SettingsMap &map);
 
-    void setDragMode(DragMode mode);
+    void setDragMode(const DragMode &mode);
     DragMode getDragMode() const;
 
-    void setDragItem(ItemInfo_v1 &info);
+    void setRemainedLastItem(const ItemInfo_v1 &info);
+    const ItemInfo_v1 getRemainedLastItem() const;
+
+    void setDirAppRow(const int &row);
+    int getDirAppRow() const;
+
+    void setDragItem(const ItemInfo_v1 &info);
     const ItemInfo_v1 getDragItem() const;
 
-    void setReleasePos(int row);
+    void setReleasePos(const int &row);
     int getReleasePos() const;
 
-    void setCategory(AppsListModel::AppCategory category);
+    void setCategory(const AppsListModel::AppCategory category);
     AppsListModel::AppCategory getCategory() const;
 
-    void setPageIndex(int pageIndex);
+    void setPageIndex(const int &pageIndex);
     int getPageIndex() const;
 
     void setListModel(AppsListModel *model);
@@ -127,7 +133,7 @@ public:
     void setListView(AppGridView *view);
     AppGridView *getListView() const;
 
-    void setDragModelIndex(const QModelIndex index);
+    void setDragModelIndex(const QModelIndex &index);
     QModelIndex dragModelIndex() const;
 
 signals:
@@ -291,8 +297,10 @@ private:
     AppsListModel *m_appModel;                                              // 当前模式
     AppGridView *m_appView;                                                 // 当前视图
     ItemInfo_v1 m_dragItemInfo;                                             // 被拖拽应用信息
+    ItemInfo_v1 m_remainedLastItemInfo;                                     // 从文件夹展开窗口移除应用时，剩下的最后一个应用的信息
     int m_dropRow;                                                          // 拖拽释放时鼠标所在的当前页的行数
     QModelIndex m_dragIndex;                                                // 临时记录当前被拖拽应用的模型索引
+    int m_dirAppRow;                                                        // 应用文件夹所在的列表中的行数
 };
 
 #endif // APPSMANAGER_H

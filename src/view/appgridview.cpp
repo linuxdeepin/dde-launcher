@@ -149,8 +149,8 @@ void AppGridView::dropEvent(QDropEvent *e)
 
 void AppGridView::mousePressEvent(QMouseEvent *e)
 {
+    const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
     if (e->button() == Qt::RightButton) {
-        const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
         if (clickedIndex.isValid() && !getViewMoveState()) {
             QPoint rightClickPoint = QCursor::pos();
             // 触控屏右键
@@ -169,7 +169,6 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
 
             // 触发右键菜单
             emit popupMenuRequested(rightClickPoint, clickedIndex);
-            qInfo() << "appgridview popupMenuRequested emited....";
         }
     }
 
@@ -179,6 +178,10 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
         // TODO: topLeft --> center();
         // 记录动画的终点位置
         setDropAndLastPos(appIconRect(indexAt(e->pos())).topLeft());
+
+        // 记录点击文件夹时的初始行数
+        if (clickedIndex.isValid() && clickedIndex.data(AppsListModel::ItemIsDirRole).toBool())
+            m_appManager->setDirAppRow(clickedIndex.row());
     }
 
     if (m_pDelegate)

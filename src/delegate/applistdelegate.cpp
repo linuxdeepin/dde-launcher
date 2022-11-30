@@ -59,7 +59,17 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const bool isDragItem = option.features & QStyleOptionViewItem::Alternate;
     const bool isCategoryList(static_cast<AppsListModel::AppCategory>(index.data(AppsListModel::AppGroupRole).toInt()) == AppsListModel::Category);
 
+    static QSize size(30, 30);
     QPixmap iconPixmap = index.data(AppsListModel::AppListIconRole).value<QPixmap>();
+    if (!iconPixmap.isNull()) {
+        size = iconPixmap.size();
+    }
+    ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
+    if (iconPixmap.isNull() && itemInfo.m_iconKey != "") {
+        iconPixmap = QPixmap(itemInfo.m_iconKey).scaled(size);
+        iconPixmap.setDevicePixelRatio(ratio);
+        qWarning() << " [paint] iconPixmap is null. use other itemInfo : " << itemInfo << iconPixmap << size;
+    }
 
     if (isDragItem) {
         QPixmap dragIndicator = renderSVG(":/widgets/images/drag_indicator.svg",
@@ -91,7 +101,6 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     const int iconX = rect.x() + 10;
     const int iconY = rect.y() + (rect.height() - iconPixmap.height() / ratio) / 2;
 
-    ItemInfo itemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo>();
     painter->drawPixmap(iconX, iconY, iconPixmap);
 
     // draw icon if app is auto startup

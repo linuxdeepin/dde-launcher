@@ -1568,10 +1568,26 @@ void AppsManager::refreshItemInfoList()
         }
     }
 
-    // 移除全屏窗口-所有应用列表中不存在的应用
+    ItemInfoList_v1 list_toRemove;
     for (const ItemInfo_v1 &info : m_fullscreenUsedSortedList) {
         if (!contains(m_allAppInfoList, info))
+            list_toRemove.append(info);
+    }
+
+    // 从全屏列表中移除不存在的应用
+    for (const ItemInfo_v1 &info : list_toRemove) {
+        // 当是文件夹且其列表内的所有应用本地都存在时，不予处理，避免缓存的文件夹数据被清除
+        // 否则，将文件夹中本地不存在的应用删除
+        if (info.m_isDir) {
+            for (const ItemInfo_v1 &appInfo : info.m_appInfoList) {
+                if (!contains(m_allAppInfoList, appInfo)) {
+                    const int index = itemIndex(m_fullscreenUsedSortedList, info);
+                    m_fullscreenUsedSortedList[index].m_appInfoList.removeOne(appInfo);
+                }
+            }
+        } else {
             m_fullscreenUsedSortedList.removeOne(info);
+        }
     }
 
     // 应用文件夹中的应用不显示在全屏所有应用列表中

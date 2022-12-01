@@ -272,10 +272,10 @@ const ItemInfo_v1 AppsManager::getItemInfo(const QString &desktop)
 
 void AppsManager::dropToCollected(const ItemInfo_v1 &info, const int row)
 {
-    if (contains(m_collectSortedList, info))
+    if (contains(m_favoriteSortedList, info))
         return;
 
-    m_collectSortedList.insert(row, info);
+    m_favoriteSortedList.insert(row, info);
 
     saveCollectedSortedList();
     emit dataChanged(AppsListModel::Favorite);
@@ -492,19 +492,19 @@ void AppsManager::sortByUseFrequence(ItemInfoList_v1 &processList)
 
 void AppsManager::loadDefaultFavoriteList(const ItemInfoList_v1 &processList)
 {
-    m_collectSortedList.clear();
+    m_favoriteSortedList.clear();
 
     auto defaultFavoriteList = [ & ](const ItemInfoList_v1 &list, const QStringList &strAppKeyList) {
         for (const QString &appKey: strAppKeyList) {
             for (const ItemInfo_v1 &info : list) {
                 // 优先显示玲珑应用
                 if (info.m_key == appKey && info.isLingLongApp()) {
-                    m_collectSortedList.append(info);
+                    m_favoriteSortedList.append(info);
                     break;
                 }
 
                 if (info.m_key == appKey && !info.isLingLongApp()) {
-                    m_collectSortedList.append(info);
+                    m_favoriteSortedList.append(info);
                     break;
                 }
             }
@@ -631,8 +631,8 @@ void AppsManager::removeNonexistentData()
             list.removeOne(info);
     };
 
-    // 移除 m_collectSortedList 收藏应用中不存在的应用
-    removeItems(m_collectSortedList);
+    // 移除 m_favoriteSortedList 收藏应用中不存在的应用
+    removeItems(m_favoriteSortedList);
 
     // 移除 m_windowedUsedSortedList 中不存在的应用
     removeItems(m_windowedUsedSortedList);
@@ -716,7 +716,7 @@ void AppsManager::dragdropStashItem(const QModelIndex &index, AppsListModel::App
             m_fullscreenUsedSortedList.removeOne(info);
 
     } else if (mode == AppsListModel::Favorite) {
-        handleData(m_collectSortedList);
+        handleData(m_favoriteSortedList);
     }
 
     saveAppCategoryInfoList();
@@ -967,7 +967,7 @@ void AppsManager::restoreItem(const QString &desktop, AppsListModel::AppCategory
                 m_fullscreenUsedSortedList.insert(pos, info);
                 break;
             case AppsListModel::Favorite:
-                m_collectSortedList.insert(pos, info);
+                m_favoriteSortedList.insert(pos, info);
                 break;
             case AppsListModel::Dir:
                 for (ItemInfo_v1 &itemInfo : m_fullscreenUsedSortedList) {
@@ -1040,7 +1040,7 @@ void AppsManager::saveFullscreenUsedSortedList()
 
 void AppsManager::saveCollectedSortedList()
 {
-    m_collectedSetting->setValue("lists", getCacheMapData(m_collectSortedList));
+    m_collectedSetting->setValue("lists", getCacheMapData(m_favoriteSortedList));
 }
 
 void AppsManager::searchApp(const QString &keywords)
@@ -1112,11 +1112,11 @@ void AppsManager::onEditCollected(const QModelIndex index, const bool isInCollec
 
     const ItemInfo_v1 &info = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
     if (!isInCollected) {
-        if (itemIndex(m_collectSortedList, info) == -1)
-            m_collectSortedList.append(info);
+        if (itemIndex(m_favoriteSortedList, info) == -1)
+            m_favoriteSortedList.append(info);
     } else {
-        if (itemIndex(m_collectSortedList, info) != -1)
-            m_collectSortedList.removeOne(info);
+        if (itemIndex(m_favoriteSortedList, info) != -1)
+            m_favoriteSortedList.removeOne(info);
     }
 
     saveCollectedSortedList();
@@ -1129,9 +1129,9 @@ void AppsManager::onMoveToFirstInCollected(const QModelIndex index)
         return;
 
     ItemInfo_v1 info = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
-    if (itemIndex(m_collectSortedList, info) != -1) {
-        m_collectSortedList.removeOne(info);
-        m_collectSortedList.insert(0, info);
+    if (itemIndex(m_favoriteSortedList, info) != -1) {
+        m_favoriteSortedList.removeOne(info);
+        m_favoriteSortedList.insert(0, info);
     }
 
     saveCollectedSortedList();
@@ -1259,7 +1259,7 @@ const ItemInfoList_v1 AppsManager::appsInfoList(const AppsListModel::AppCategory
     case AppsListModel::PluginSearch:
         return m_appSearchResultList;
     case AppsListModel::Favorite:
-        return m_collectSortedList;
+        return m_favoriteSortedList;
     default:
         break;
     }
@@ -1285,7 +1285,7 @@ int AppsManager::appsInfoListSize(const AppsListModel::AppCategory &category)
     case AppsListModel::PluginSearch:
         return m_appSearchResultList.size();
     case AppsListModel::Favorite:
-        return m_collectSortedList.size();
+        return m_favoriteSortedList.size();
     case AppsListModel::Dir:
         return m_dirAppInfoList.size();
     default:
@@ -1305,8 +1305,8 @@ const ItemInfo_v1 AppsManager::appsInfoListIndex(const AppsListModel::AppCategor
         Q_ASSERT(m_appLetterModeInfos.size() > index);
         return m_appLetterModeInfos[index];
     case AppsListModel::Favorite:
-        Q_ASSERT(m_collectSortedList.size() > index);
-        return m_collectSortedList[index];
+        Q_ASSERT(m_favoriteSortedList.size() > index);
+        return m_favoriteSortedList[index];
     case AppsListModel::WindowedAll:
         Q_ASSERT(m_windowedUsedSortedList.size() > index);
         return m_windowedUsedSortedList[index];
@@ -1671,9 +1671,9 @@ void AppsManager::refreshItemInfoList()
     }
 
     // 移除收藏列表中不存在的应用
-    for (const ItemInfo_v1 &info : m_collectSortedList) {
+    for (const ItemInfo_v1 &info : m_favoriteSortedList) {
         if (!contains(m_allAppInfoList, info))
-            m_collectSortedList.removeOne(info);
+            m_favoriteSortedList.removeOne(info);
     }
 
     // 根据使用频率排序
@@ -1777,7 +1777,7 @@ void AppsManager::readCollectedCacheData()
         // 缓存小窗口收藏列表
         saveCollectedSortedList();
     } else {
-        m_collectSortedList = readCacheData(m_collectedSetting->value("lists").toMap());
+        m_favoriteSortedList = readCacheData(m_collectedSetting->value("lists").toMap());
     }
 }
 

@@ -234,7 +234,7 @@ public:
     QHash<AppsListModel::AppCategory, ItemInfoList_v1> m_appInfos;      // 应用分类容器
     ItemInfoList_v1 m_appCategoryInfos;                                 // 小窗口左侧带分类标题的应用列表
     ItemInfoList_v1 m_appLetterModeInfos;                               // 小窗口左侧字母排序模式列表
-    ItemInfoList_v1 m_collectSortedList;                                // 小窗口收藏列表
+    ItemInfoList_v1 m_favoriteSortedList;                               // 小窗口收藏列表
     ItemInfoList_v1 m_categoryList;                                     // 小窗口应用分类目录列表
     ItemInfoList_v1 m_appSearchResultList;                              // 搜索结果列表
     ItemInfoList_v1 m_dirAppInfoList;                                   // 应用抽屉列表

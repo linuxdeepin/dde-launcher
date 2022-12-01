@@ -352,6 +352,9 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, 
     const int iconSize = perfectIconSize(size);
 
     do {
+        if (iconName.isEmpty())
+            return findIcon;
+
         if (iconName.startsWith("data:image/")) {
             const QStringList strs = iconName.split("base64,");
             if (strs.size() == 2)
@@ -360,9 +363,6 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, 
             if (!pixmap.isNull())
                 break;
         }
-
-        if (iconName.isEmpty())
-            continue;
 
         if (QFile::exists(iconName)) {
             if (iconName.endsWith(".svg"))
@@ -388,10 +388,8 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, 
         pixmap = icon.pixmap(QSize(iconSize, iconSize) * ratio);
         if (!pixmap.isNull())
             break;
-    } while (false);
 
-    if (pixmap.isNull())
-        return false;
+    } while (false);
 
     pixmap = pixmap.scaled(QSize(iconSize, iconSize) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pixmap.setDevicePixelRatio(ratio);

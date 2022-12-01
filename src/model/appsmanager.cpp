@@ -490,7 +490,7 @@ void AppsManager::sortByUseFrequence(ItemInfoList_v1 &processList)
     });
 }
 
-void AppsManager::filterCollectedApp(const ItemInfoList_v1 &processList)
+void AppsManager::loadDefaultFavoriteList(const ItemInfoList_v1 &processList)
 {
     m_collectSortedList.clear();
 
@@ -1040,7 +1040,7 @@ void AppsManager::saveFullscreenUsedSortedList()
 
 void AppsManager::saveCollectedSortedList()
 {
-    m_collectedSetting->setValue("lists", QVariant::fromValue(getCacheMapData(m_collectSortedList)));
+    m_collectedSetting->setValue("lists", getCacheMapData(m_collectSortedList));
 }
 
 void AppsManager::searchApp(const QString &keywords)
@@ -1683,7 +1683,6 @@ void AppsManager::refreshItemInfoList()
     updateUsedListInfo();
 
     saveFullscreenUsedSortedList();
-    saveCollectedSortedList();
 }
 
 void AppsManager::saveAppCategoryInfoList()
@@ -1768,14 +1767,17 @@ void AppsManager::generateLetterCategoryList()
 
 void AppsManager::readCollectedCacheData()
 {
-    QString filePath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QString("/%1/dde-launcher-app-collect-list.json").arg(qApp->organizationName());
+    const QString &filePath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)
+            + QString("/%1/dde-launcher-app-collect-list.json").arg(qApp->organizationName());
 
     if (!QFile::exists(filePath)) {
         // 获取小窗口默认收藏列表
-        filterCollectedApp(m_allAppInfoList);
+        loadDefaultFavoriteList(m_allAppInfoList);
+
+        // 缓存小窗口收藏列表
+        saveCollectedSortedList();
     } else {
-        if (m_collectSortedList.isEmpty())
-            m_collectSortedList.append(readCacheData(m_collectedSetting->value("lists").toMap()));
+        m_collectSortedList = readCacheData(m_collectedSetting->value("lists").toMap());
     }
 }
 

@@ -381,6 +381,10 @@ const ItemInfo_v1 AppsManager::getRemainedLastItem() const
     return m_remainedLastItemInfo;
 }
 
+/** 保存文件夹当前页面的所在行数
+ * @brief AppsManager::setDirAppRow
+ * @param row
+ */
 void AppsManager::setDirAppRow(const int &row)
 {
     m_dirAppRow = row;
@@ -389,6 +393,20 @@ void AppsManager::setDirAppRow(const int &row)
 int AppsManager::getDirAppRow() const
 {
     return m_dirAppRow;
+}
+
+/**保存文件夹当前所在页面索引
+ * @brief AppsManager::setDirAppPageIndex
+ * @param pageIndex
+ */
+void AppsManager::setDirAppPageIndex(const int &pageIndex)
+{
+    m_dirAppPageIndex = pageIndex;
+}
+
+int AppsManager::getDirAppPageIndex() const
+{
+    return m_dirAppPageIndex;
 }
 
 /**
@@ -828,7 +846,7 @@ void AppsManager::removeDragItem()
             // 当从文件夹展开窗口中移除应用且中只剩一个时，把这个应用放置在原文件夹的位置，并清除文件夹样式
             // 实现步骤：
             // 1. 把最后一个应用保存下来到AppManager中
-            // 2. 再插入到文件夹所在位置， 界面刷新
+            // 2. 再插入到文件夹原始页面的所在行数， 界面刷新
             // 3. 清除文件夹样式
             // 4. 数据缓存，界面刷新
             if (info.m_appInfoList.size() < 2) {
@@ -850,9 +868,9 @@ void AppsManager::removeDragItem()
 
     // 2. 将文件夹中剩余的唯一一个应用插入到点击文件夹时的初始位置
     if (m_dirAppInfoList.isEmpty()) {
-        const int dirRow = getDirAppRow();
+        const int originDirAppRow = getDirAppRow() + getDirAppPageIndex() * m_calUtil->appPageItemCount(AppsListModel::FullscreenAll);
         const ItemInfo_v1 &info = getRemainedLastItem();
-        m_fullscreenUsedSortedList.insert(dirRow, info);
+        m_fullscreenUsedSortedList.insert(originDirAppRow, info);
     }
 
     // 3. 清除文件夹样式

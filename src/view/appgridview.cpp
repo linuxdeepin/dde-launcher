@@ -150,12 +150,17 @@ void AppGridView::dropEvent(QDropEvent *e)
 void AppGridView::mousePressEvent(QMouseEvent *e)
 {
     const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel) {
+        qWarning() << "listModel is null";
+        return;
+    }
+
     if (e->button() == Qt::RightButton) {
         if (clickedIndex.isValid() && !getViewMoveState()) {
             QPoint rightClickPoint = QCursor::pos();
             // 触控屏右键
             if (e->source() == Qt::MouseEventSynthesizedByQt) {
-                AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
                 QPoint indexPoint = mapToGlobal(indexRect(clickedIndex).center());
 
                 if (listModel->category() == 0) {
@@ -180,8 +185,10 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
         setDropAndLastPos(appIconRect(indexAt(e->pos())).topLeft());
 
         // 记录点击文件夹时的初始行数
-        if (clickedIndex.isValid() && clickedIndex.data(AppsListModel::ItemIsDirRole).toBool())
+        if (clickedIndex.isValid() && clickedIndex.data(AppsListModel::ItemIsDirRole).toBool()) {
             m_appManager->setDirAppRow(clickedIndex.row());
+            m_appManager->setDirAppPageIndex(listModel->getPageIndex());
+        }
     }
 
     if (m_pDelegate)

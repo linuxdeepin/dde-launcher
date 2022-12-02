@@ -115,6 +115,9 @@ public:
     void setDirAppRow(const int &row);
     int getDirAppRow() const;
 
+    void setDirAppPageIndex(const int &pageIndex);
+    int getDirAppPageIndex() const;
+
     void setDragItem(const ItemInfo_v1 &info);
     const ItemInfo_v1 getDragItem() const;
 
@@ -301,6 +304,7 @@ private:
     int m_dropRow;                                                          // 拖拽释放时鼠标所在的当前页的行数
     QModelIndex m_dragIndex;                                                // 临时记录当前被拖拽应用的模型索引
     int m_dirAppRow;                                                        // 应用文件夹所在的列表中的行数
+    int m_dirAppPageIndex;                                                  // 从文件夹展开窗口移除应用时之前，文件夹所在页面索引
 };
 
 #endif // APPSMANAGER_H

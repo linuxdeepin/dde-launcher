@@ -599,6 +599,10 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
             if (m_enableDropInside && !dropItemIsDir && (getViewType() != PopupView))
                 listModel->dropSwap(m_dropToPos);
 
+            // 删除被拖拽的item，并将被拖拽的应用插入到新的位置
+            if (!dropItemIsDir && getViewType() != PopupView)
+                listModel->dropSwap(indexAt(m_dragStartPos).row());
+
             // TODO: 搜索模式下的会新增一个控件，因此这里暂时删除针对搜索模式的业务，不影响主体功能
             int releasePos = AppsManager::instance()->getReleasePos();
 

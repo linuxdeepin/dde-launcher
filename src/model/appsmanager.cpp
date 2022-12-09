@@ -565,11 +565,6 @@ void AppsManager::removeNonexistentData()
             // 从文件夹中移除不存在的应用
             for (ItemInfo_v1 &dirItem : info.m_appInfoList) {
                 if (!contains(m_allAppInfoList, dirItem)) {
-                    // 当文件夹只有一个应用且被卸载时，删除该文件夹信息
-                    if (info.m_appInfoList.size() <= 1) {
-                        appListToRemove.append(info);
-                    }
-
                     appListToRemove.append(dirItem);
                 } else {
                     // 多语言时，更新应用信息
@@ -590,7 +585,8 @@ void AppsManager::removeNonexistentData()
         }
     }
 
-    //  移除全屏所有应用列表中, 全屏文件夹列表中不存在的应用
+    //  1. 移除全屏所有应用列表中, 全屏文件夹列表中不存在的应用
+    //  2. 当从文件夹展开窗口中卸载应用且只剩一个时，把剩余的这个应用放置在原文件夹的位置，并清除文件夹样式
     for (const ItemInfo_v1 &info : appListToRemove) {
         if (contains(m_fullscreenUsedSortedList, info)) {
             m_fullscreenUsedSortedList.removeOne(info);
@@ -598,7 +594,17 @@ void AppsManager::removeNonexistentData()
             for (ItemInfo_v1 &itemInfo : m_fullscreenUsedSortedList) {
                 if (itemInfo.m_isDir && !itemInfo.m_appInfoList.isEmpty() && contains(itemInfo.m_appInfoList, info)) {
                     itemInfo.m_appInfoList.removeOne(info);
-                    break;
+
+                    if (itemInfo.m_appInfoList.size() == 1) {
+                        const ItemInfo_v1 insertItemInfo = itemInfo.m_appInfoList.at(0);
+                        const int originDirAppRow = getDirAppRow() + getDirAppPageIndex() * m_calUtil->appPageItemCount(AppsListModel::FullscreenAll);
+                        m_dirAppInfoList.clear();
+                        itemInfo.m_appInfoList.clear();
+
+                        m_fullscreenUsedSortedList.insert(originDirAppRow, insertItemInfo);
+                        m_fullscreenUsedSortedList.removeOne(itemInfo);
+                        emit dataChanged(AppsListModel::FullscreenAll);
+                    }
                 }
             }
         }
@@ -827,7 +833,7 @@ void AppsManager::removeDragItem()
             m_dirAppInfoList.removeOne(removeItemInfo);
             info.m_appInfoList.removeOne(removeItemInfo);
 
-            // 当从文件夹展开窗口中移除应用且中只剩一个时，把这个应用放置在原文件夹的位置，并清除文件夹样式
+            // 当从文件夹展开窗口中移除应用且只剩一个时，把这个应用放置在原文件夹的位置，并清除文件夹样式
             // 实现步骤：
             // 1. 把最后一个应用保存下来到AppManager中
             // 2. 再插入到文件夹原始页面的所在行数， 界面刷新

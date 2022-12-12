@@ -152,8 +152,18 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
     const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
     if (!listModel) {
-        qWarning() << "listModel is null";
-        return;
+        // 搜索模式时, model类对象 为 SortFilterProxyModel
+        QSortFilterProxyModel *filterModel = qobject_cast<QSortFilterProxyModel *>(model());
+        if (!filterModel) {
+            qWarning() << "null sortFilterModel !!!";
+            return;
+        }
+
+        listModel = qobject_cast<AppsListModel *>(filterModel->sourceModel());
+        if (!listModel) {
+            qWarning() << "null appListModel !!!";
+            return;
+        }
     }
 
     if (e->button() == Qt::RightButton) {
@@ -163,9 +173,9 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
             if (e->source() == Qt::MouseEventSynthesizedByQt) {
                 QPoint indexPoint = mapToGlobal(indexRect(clickedIndex).center());
 
-                if (listModel->category() == 0) {
+                if (listModel->category() == AppsListModel::FullscreenAll || listModel->category() == AppsListModel::WindowedAll) {
                     rightClickPoint.setX(indexPoint.x() + indexRect(clickedIndex).width() - 58 * m_calcUtil->getScreenScaleX());
-                } else if (listModel->category() == 2) {
+                } else if (listModel->category() == AppsListModel::Search) {
                     rightClickPoint.setX(indexPoint.x() + indexRect(clickedIndex).width()  - 90 * m_calcUtil->getScreenScaleX());
                 } else {
                     rightClickPoint.setX(indexPoint.x() + indexRect(clickedIndex).width() - 3 * m_calcUtil->getScreenScaleX());

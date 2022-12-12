@@ -973,10 +973,10 @@ bool AppsManager::isVaild()
 
 void AppsManager::refreshAllList()
 {
+    readCollectedCacheData();
     refreshCategoryInfoList();
     refreshItemInfoList();
     saveAppCategoryInfoList();
-    readCollectedCacheData();
 }
 
 void AppsManager::saveWidowedUsedSortedList()
@@ -1162,7 +1162,7 @@ bool AppsManager::contains(const ItemInfoList_v1 &list, const ItemInfo_v1 &item)
 {
     bool find = false;
     for (const ItemInfo_v1 &info : list) {
-        if (info.isEqual(item)) {
+        if (info.isSimilar(item)) {
             find = true;
             break;
         }
@@ -1175,7 +1175,7 @@ int AppsManager::itemIndex(const ItemInfoList_v1 &list, const ItemInfo_v1 &item)
 {
     int index = -1;
     for (int i = 0; i < list.size(); i++) {
-        if (list[i].isEqual(item)) {
+        if (list[i].isSimilar(item)) {
             index = i;
             break;
         }
@@ -1546,7 +1546,7 @@ void AppsManager::refreshItemInfoList()
                 }
             }
         } else {
-            // 多语言时，更新应用信息
+            // 更新应用信息(譬如，语言切换时会受用）
             int index = itemIndex(m_fullscreenUsedSortedList, *allItemItor);
             if (index != -1)
                 m_fullscreenUsedSortedList[index].updateInfo(*allItemItor);
@@ -1584,21 +1584,30 @@ void AppsManager::refreshItemInfoList()
 
     for (const ItemInfo_v1 &dirItemInfo : dirAppInfoList) {
         int index = itemIndex(m_fullscreenUsedSortedList, dirItemInfo);
-        // 不移除文件夾，只移除之前代码逻辑异常留下的缓存应用
-        if (index != -1 && !m_fullscreenUsedSortedList[index].m_isDir)
+        if (index != -1)
             m_fullscreenUsedSortedList.removeOne(dirItemInfo);
     }
 
     // 移除小窗口-所有应用列表中不存在的应用
-    for (const ItemInfo_v1 &info : m_windowedUsedSortedList) {
-        if (!contains(m_allAppInfoList, info))
+    // 更新应用信息
+    for (ItemInfo_v1 &info : m_windowedUsedSortedList) {
+        if (!contains(m_allAppInfoList, info)) {
             m_windowedUsedSortedList.removeOne(info);
+        } else {
+            int index = itemIndex(m_allAppInfoList, info);
+            info.updateInfo(m_allAppInfoList.at(index));
+        }
     }
 
     // 移除收藏列表中不存在的应用
-    for (const ItemInfo_v1 &info : m_favoriteSortedList) {
-        if (!contains(m_allAppInfoList, info))
+    // 更新应用信息
+    for (ItemInfo_v1 &info : m_favoriteSortedList) {
+        if (!contains(m_allAppInfoList, info)) {
             m_favoriteSortedList.removeOne(info);
+        } else {
+            int index = itemIndex(m_allAppInfoList, info);
+            info.updateInfo(m_allAppInfoList.at(index));
+        }
     }
 
     // 根据使用频率排序

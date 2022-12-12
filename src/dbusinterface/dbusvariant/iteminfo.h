@@ -102,7 +102,7 @@ public:
     bool startWithLetter() const;
     bool startWithNum() const;
     bool isLingLongApp() const;
-    bool isEqual(const ItemInfo_v1 &other) const;
+    bool isSimilar(const ItemInfo_v1 &other) const;
 
     ~ItemInfo_v1();
 

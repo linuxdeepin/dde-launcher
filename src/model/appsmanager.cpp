@@ -893,32 +893,6 @@ void AppsManager::insertDropItem(int pos)
     emit dataChanged(AppsListModel::FullscreenAll);
 }
 
-void AppsManager::stashItem(const QModelIndex &index)
-{
-    const QString key = index.data(AppsListModel::AppKeyRole).toString();
-
-    return stashItem(key);
-}
-
-/**
- * @brief AppsManager::stashItem 从所有应用列表中删除卸载的应用,并更新各个分类列表数据
- * @param appKey 应用的key
- */
-void AppsManager::stashItem(const QString &appKey)
-{
-    for (const ItemInfo_v1 &info : m_allAppInfoList) {
-        if (info.m_key == appKey) {
-            m_stashList.append(info);
-            m_allAppInfoList.removeOne(info);
-
-            generateCategoryMap();
-            refreshItemInfoList();
-            saveAppCategoryInfoList();
-            break;
-        }
-    }
-}
-
 /**
  * @brief AppsManager::abandonStashedItem 卸载应用更新列表
  * @param appKey 应用的key
@@ -968,7 +942,6 @@ void AppsManager::restoreItem(const QString &desktop, AppsListModel::AppCategory
                 break;
             }
 
-            m_allAppInfoList.append(info);
             m_stashList.removeOne(info);
             saveFullscreenUsedSortedList();
             saveCollectedSortedList();
@@ -1551,8 +1524,21 @@ void AppsManager::refreshItemInfoList()
     // 更新全屏窗口-所有应用列表
     ItemInfoList_v1::ConstIterator allItemItor = m_allAppInfoList.constBegin();
     for (; allItemItor != m_allAppInfoList.constEnd(); ++allItemItor) {
+        // 在全屏列表中存在或者文件夹中存在时，就更新应用信息
+        // 在全屏应用列表以及文件夹中都不存在时，才加入到最后
         if (!contains(m_fullscreenUsedSortedList, *allItemItor)) {
-            m_fullscreenUsedSortedList.append(*allItemItor);
+            for (ItemInfo_v1 &fullItemInfo : m_fullscreenUsedSortedList) {
+
+                if (!fullItemInfo.m_isDir)
+                    continue;
+
+                if (!contains(fullItemInfo.m_appInfoList, *allItemItor)) {
+                    m_fullscreenUsedSortedList.append(*allItemItor);
+                } else {
+                    int index = itemIndex(fullItemInfo.m_appInfoList, *allItemItor);
+                    fullItemInfo.m_appInfoList[index].updateInfo(*allItemItor);
+                }
+            }
         } else {
             // 多语言时，更新应用信息
             int index = itemIndex(m_fullscreenUsedSortedList, *allItemItor);

@@ -68,8 +68,6 @@ public:
     void dragdropStashItem(const QModelIndex &index, AppsListModel::AppCategory mode);
     void removeDragItem();
     void insertDropItem(int pos);
-    void stashItem(const QModelIndex &index);
-    void stashItem(const QString &appKey);
     void abandonStashedItem(const QString &desktop);
     void restoreItem(const QString &desktop, AppsListModel::AppCategory mode, const int pos = -1);
     int dockPosition() const;

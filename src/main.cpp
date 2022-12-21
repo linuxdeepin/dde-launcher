@@ -72,6 +72,7 @@ int main(int argc, char *argv[])
     app->setApplicationVersion("3.0");
     app->loadTranslator();
     app->setAttribute(Qt::AA_UseHighDpiPixmaps);
+    app->setAttribute(Qt::AA_EnableHighDpiScaling);
 
     DLogManager::registerConsoleAppender();
     // 加载 Accessible 插件 测试使用 用sniff查看效果

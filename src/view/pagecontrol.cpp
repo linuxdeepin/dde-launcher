@@ -108,13 +108,17 @@ void PageControl::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
+    qreal ratio = qApp->devicePixelRatio();
     for (DIconButton *button : m_buttonList) {
+        if (!button->isVisible())
+            continue;
+
         if (button->isChecked()) {
-            QRect rect = QRect(button->rect().topLeft(), QSize(20, 12));
+            QRect rect = QRect(button->rect().topLeft(), QSize(20, 12) / ratio);
             rect.moveCenter(button->geometry().center());
             painter.drawPixmap(rect, m_pixChecked);
         } else {
-            QRect rect = QRect(button->rect().topLeft(), QSize(10, 10));
+            QRect rect = QRect(button->rect().topLeft(), QSize(10, 10) / ratio);
             rect.moveCenter(button->geometry().center());
             QColor penColor = Qt::black;
             penColor.setAlphaF(0.1);
@@ -127,6 +131,8 @@ void PageControl::paintEvent(QPaintEvent *event)
             painter.drawEllipse(rect);
         }
     }
+
+    QWidget::paintEvent(event);
 }
 
 void PageControl::addButton(DIconButton *pageButton)

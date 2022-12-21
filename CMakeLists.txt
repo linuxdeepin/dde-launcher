@@ -164,7 +164,6 @@ aux_source_directory(src/widgets WIDGETS)
 aux_source_directory(src/worker WORKER)
 aux_source_directory(src/global_util/dbus/xml2cpp/types DBUS_TYPES)
 aux_source_directory(src/global_util/dbus/xml2cpp/ DBUS_INTERFACES)
-aux_source_directory(src/global_util/dbus/qtdbusextended DBUS_EXTENDED)
 
 file(GLOB PLUGININTERFACES "interfaces/*.h")
 file(GLOB PLUGINCONTROLLER "controller/*.*")
@@ -185,7 +184,6 @@ file(GLOB SRC_PATH
     ${PLUGINCONTROLLER}
     ${DBUS_TYPES}
     ${DBUS_INTERFACES}
-    ${DBUS_EXTENDED}
 )
 
 add_executable(${BIN_NAME} ${SRCS} ${SRC_PATH} ${INTERFACES} src/skin.qrc src/widgets/images.qrc)

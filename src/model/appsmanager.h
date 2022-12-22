@@ -203,7 +203,6 @@ private:
     void refreshCategoryInfoList();
     void refreshItemInfoList();
     void saveAppCategoryInfoList();
-    void updateUsedListInfo();
     void generateCategoryMap();
     void generateTitleCategoryList();
     void generateLetterCategoryList();

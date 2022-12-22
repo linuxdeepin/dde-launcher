@@ -154,7 +154,6 @@ ItemInfo_v1::ItemInfo_v1()
     , m_isDir(false)
     , m_appInfoList(ItemInfoList_v1())
 {
-
 }
 
 ItemInfo_v1::ItemInfo_v1(const ItemInfo_v1 &info)
@@ -172,7 +171,6 @@ ItemInfo_v1::ItemInfo_v1(const ItemInfo_v1 &info)
     , m_isDir(info.m_isDir)
     , m_appInfoList(info.m_appInfoList)
 {
-
 }
 
 ItemInfo_v1::ItemInfo_v1(const AppInfo &info)
@@ -391,7 +389,14 @@ void ItemInfo_v1::updateInfo(const ItemInfo_v1 &info)
     if (*this == info)
         return;
 
+    // 记录缓存的打开次数
+    int openCount = m_openCount;
+
     *this = info;
+
+    // 更新时，如果打开次数为0,则保持原状，保证缓存数据不被重置
+    if (info.m_openCount == 0)
+        this->m_openCount = openCount;
 }
 
 bool ItemInfo_v1::operator<(const ItemInfo_v1 &info) const

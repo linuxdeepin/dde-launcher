@@ -459,6 +459,9 @@ void AppsManager::sortByUseFrequence(ItemInfoList_v1 &processList)
                 return false;
         }
 
+        if (itemInfo1.m_isDir || itemInfo2.m_isDir)
+            return true;
+
         const qint64 itemAFirstRunTime = itemInfo1.m_firstRunTime;
         const qint64 itemBFirstRunTime = itemInfo2.m_firstRunTime;
 
@@ -1610,13 +1613,20 @@ void AppsManager::refreshItemInfoList()
         }
     }
 
-    // 根据使用频率排序
-    sortByUseFrequence(m_allAppInfoList);
+    // 根据使用频率进行排序
+    // 全屏列表、文件夹应用列表、小窗口所有应用列表
+    sortByUseFrequence(m_fullscreenUsedSortedList);
 
-    // 更新应用的打开次数等信息
-    updateUsedListInfo();
+    for (ItemInfo_v1 &info : m_fullscreenUsedSortedList) {
+        if (info.m_isDir) {
+            sortByUseFrequence(info.m_appInfoList);
+        }
+    }
+
+    sortByUseFrequence(m_windowedUsedSortedList);
 
     saveFullscreenUsedSortedList();
+    saveWidowedUsedSortedList();
 }
 
 void AppsManager::saveAppCategoryInfoList()
@@ -1627,23 +1637,6 @@ void AppsManager::saveAppCategoryInfoList()
         int category = categoryAppsIter.key();
         m_categorySetting->setValue(QString("lists_%1").arg(category), getCacheMapData(categoryAppsIter.value()));
     }
-}
-
-void AppsManager::updateUsedListInfo()
-{
-    auto updateItemInfo = [ & ](ItemInfoList_v1 &list) {
-        for (const ItemInfo_v1 &info : m_allAppInfoList) {
-            const int index = itemIndex(list, info);
-
-            if (index == -1)
-                continue;
-
-            list[index].updateInfo(info);
-        }
-    };
-
-    updateItemInfo(m_fullscreenUsedSortedList);
-    updateItemInfo(m_windowedUsedSortedList);
 }
 
 void AppsManager::generateCategoryMap()

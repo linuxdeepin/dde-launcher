@@ -642,10 +642,10 @@ void FullScreenFrame::showPopupMenu(const QPoint &pos, const QModelIndex &contex
         m_menuWorker->showMenuByAppItem(pos, context);
 }
 
-void FullScreenFrame::uninstallApp(const QString &appKey)
+void FullScreenFrame::uninstallApp(const QString &desktopPath)
 {
     int currentPage = m_multiPagesView->currentPage();
-    m_appsManager->uninstallApp(m_multiPagesView->pageModel(currentPage)->indexAt(appKey));
+    m_appsManager->uninstallApp(m_multiPagesView->pageModel(currentPage)->indexAt(desktopPath));
 }
 
 void FullScreenFrame::refreshPageView(AppsListModel::AppCategory category)

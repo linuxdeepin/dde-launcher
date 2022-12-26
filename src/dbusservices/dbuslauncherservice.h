@@ -48,7 +48,7 @@ public Q_SLOTS:
     void Show();
     void ShowByMode(qlonglong in0);
 #ifndef WITHOUT_UNINSTALL_APP
-    void UninstallApp(const QString &appKey);
+    void UninstallApp(const QString &desktopPath);
 #endif
     void Toggle();
     bool IsVisible();

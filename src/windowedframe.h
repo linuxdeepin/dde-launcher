@@ -118,7 +118,7 @@ private:
     void handleAllApp(const int key);
     void handleSwitch(const int key);
 
-    void uninstallApp(const QString &appKey) override;
+    void uninstallApp(const QString &desktopPath) override;
 
     QPainterPath getCornerPath(AnchoredCornor direction);
 

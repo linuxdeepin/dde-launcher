@@ -1025,10 +1025,10 @@ void AppsManager::launchApp(const QModelIndex &index)
     markLaunched(index.data(AppsListModel::AppKeyRole).toString());
 }
 
-void AppsManager::uninstallApp(const QString &appKey)
+void AppsManager::uninstallApp(const QString &desktopPath)
 {
     // 向后端发起卸载请求
-    m_amDbusLauncherInter->RequestUninstall(appKey, false);
+    m_amDbusLauncherInter->RequestUninstall(desktopPath, false);
 
     // 刷新各列表的分页信息
     emit dataChanged(AppsListModel::FullscreenAll);

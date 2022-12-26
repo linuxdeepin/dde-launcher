@@ -118,7 +118,7 @@ private:
     void initConnection();
     void initAccessibleName();
 
-    void uninstallApp(const QString &appKey) override;
+    void uninstallApp(const QString &desktopPath) override;
     void showLauncher() override;
     void hideLauncher() override;
     bool visible() override;

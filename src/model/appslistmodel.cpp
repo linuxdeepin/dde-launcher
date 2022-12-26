@@ -368,17 +368,18 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
  * @param appKey app key
  * @return 根据appkey值,返回app对应的模型索引
  */
-const QModelIndex AppsListModel::indexAt(const QString &appKey) const
+const QModelIndex AppsListModel::indexAt(const QString &desktopPath) const
 {
     int i = 0;
     const int count = rowCount(QModelIndex());
-    while (i != count) {
-        if (index(i).data(AppKeyRole).toString() == appKey)
+    while (i < count) {
+        if (index(i).data(AppDesktopRole).toString() == desktopPath)
             return index(i);
+
         ++i;
     }
 
-    Q_UNREACHABLE();
+    return QModelIndex();
 }
 
 void AppsListModel::setDrawBackground(bool draw)

@@ -55,7 +55,7 @@ public:
     bool visible();
     void showLauncher();
     void hideLauncher();
-    void uninstallApp(const QString &appKey);
+    void uninstallApp(const QString &desktopPath);
 
 signals:
     void visibleChanged(bool visible);

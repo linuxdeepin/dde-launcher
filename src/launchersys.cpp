@@ -120,9 +120,9 @@ void LauncherSys::hideLauncher()
     m_launcherInter->hideLauncher();
 }
 
-void LauncherSys::uninstallApp(const QString &appKey)
+void LauncherSys::uninstallApp(const QString &desktopPath)
 {
-    m_launcherInter->uninstallApp(appKey);
+    m_launcherInter->uninstallApp(desktopPath);
 }
 
 bool LauncherSys::visible()

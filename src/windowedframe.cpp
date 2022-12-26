@@ -1014,9 +1014,9 @@ void WindowedFrame::onHandleHoverAction(const QModelIndex &index)
     }
 }
 
-void WindowedFrame::uninstallApp(const QString &appKey)
+void WindowedFrame::uninstallApp(const QString &desktopPath)
 {
-    m_appsManager->uninstallApp(m_appsModel->indexAt(appKey));
+    m_appsManager->uninstallApp(m_appsModel->indexAt(desktopPath));
 }
 
 QPainterPath WindowedFrame::getCornerPath(AnchoredCornor direction)

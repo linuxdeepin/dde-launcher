@@ -60,9 +60,9 @@ void DBusLauncherService::ShowByMode(qlonglong in0)
 }
 
 #ifndef WITHOUT_UNINSTALL_APP
-void DBusLauncherService::UninstallApp(const QString &appKey)
+void DBusLauncherService::UninstallApp(const QString &desktopPath)
 {
-    parent()->uninstallApp(appKey);
+    parent()->uninstallApp(desktopPath);
 }
 #endif
 

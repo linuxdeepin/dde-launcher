@@ -760,7 +760,7 @@ const QPixmap AppsManager::appIcon(const ItemInfo &info, const int size)
 
         // 缓存中没有时，资源从主线程加载
         m_itemInfo = info;
-        m_iconValid = getThemeIcon(pix, info, size, !m_iconValid);
+        m_iconValid = getThemeIcon(pix, info, size, !DSysInfo::isCommunityEdition());
 
         if (m_iconValid) {
             m_tryNums = 0;

@@ -44,7 +44,7 @@ void IconCacheManager::createPixmap(const ItemInfo &itemInfo, int size)
         return;
 
     QPixmap pixmap;
-    m_iconValid = getThemeIcon(pixmap, itemInfo, size, !m_iconValid);
+    m_iconValid = getThemeIcon(pixmap, itemInfo, size, !DSysInfo::isCommunityEdition());
     if (m_iconValid) {
         m_tryNums = 0;
     } else {
@@ -54,7 +54,7 @@ void IconCacheManager::createPixmap(const ItemInfo &itemInfo, int size)
                 QIcon::setThemeSearchPaths(QIcon::themeSearchPaths());
 
             QThread::msleep(10);
-            m_iconValid = getThemeIcon(pixmap, itemInfo, size, true);
+            m_iconValid = getThemeIcon(pixmap, itemInfo, size, !DSysInfo::isCommunityEdition());
         } else {
             if (m_tryCount > 10) {
                 m_tryCount = 0;
@@ -71,7 +71,7 @@ void IconCacheManager::createPixmap(const ItemInfo &itemInfo, int size)
 
             ++m_tryCount;
             QThread::msleep(500);
-            m_iconValid = getThemeIcon(pixmap, itemInfo, size, true);
+            m_iconValid = getThemeIcon(pixmap, itemInfo, size, !DSysInfo::isCommunityEdition());
         }
     }
 }

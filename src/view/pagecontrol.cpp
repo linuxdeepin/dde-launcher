@@ -94,7 +94,7 @@ void PageControl::createButtons()
 {
 #define SINGLE_PAGE_MINIMUM_ITEM 12.0
     // 获取当前最大可能的页数
-    int totalPage = qCeil(AppsManager::instance()->appsInfoListSize(AppsListModel::FullscreenAll) / SINGLE_PAGE_MINIMUM_ITEM);
+    int totalPage = qCeil(AppsManager::instance()->appsInfoListSize(AppsListModel::WindowedAll) / SINGLE_PAGE_MINIMUM_ITEM);
 
     for (int i = 0; i < totalPage; i++) {
         DIconButton *pageButton = new DIconButton(this);

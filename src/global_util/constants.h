@@ -37,6 +37,7 @@ static const int APP_DLG_ICON_SIZE = 36;                                        
 static const int APP_DRAG_SWAP_THRESHOLD = 10;
 static const int APP_DRAG_SCROLL_THRESHOLD = 150;
 static const int APP_DRAG_MININUM_TIME = 300;
+static const int DEFAULT_VIEW_HEIGHT = 30;
 
 static const int DRAG_THRESHOLD = 15;
 static const int DRAW_TITLE_HEIGHT = 130;

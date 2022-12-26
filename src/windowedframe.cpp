@@ -144,7 +144,7 @@ void WindowedFrame::initUi()
     m_appsView->installEventFilter(m_eventFilter);
     m_searchWidget->getNativeView()->installEventFilter(m_eventFilter);
 
-    m_favoriteView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_favoriteView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     // TODO:
     //    m_favoriteView->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     //    m_favoriteView->setResizeMode(QListView::Fixed);
@@ -371,6 +371,7 @@ void WindowedFrame::initConnection()
     connect(m_favoriteView, &AppGridView::entered, this, &WindowedFrame::onEnterView);
     connect(m_favoriteView, &AppGridView::entered, this, &WindowedFrame::onHandleHoverAction);
     connect(m_favoriteView, &AppGridView::popupMenuRequested, m_menuWorker.get(), &MenuWorker::showMenuByAppItem);
+    connect(m_favoriteModel, &QAbstractItemModel::dataChanged, this, &WindowedFrame::onFavoriteListVisibleChaged);
     connect(m_appItemDelegate, &AppItemDelegate::requestUpdate, m_favoriteView, qOverload<>(&AppGridView::update));
 
     // 所有应用
@@ -429,7 +430,13 @@ void WindowedFrame::searchAppState(bool searched)
 
     // 搜索模式下只显示搜索控件,其他控件都不显示
     m_favoriteLabel->setVisible(!searched);
-    m_favoriteView->setVisible(!searched && !isFavoriteViewEmpty);
+    m_favoriteView->setVisible(!searched);
+
+    const int height = m_appsView->height() / 2;
+    if (isFavoriteViewEmpty)
+        m_favoriteView->setFixedHeight(DLauncher::DEFAULT_VIEW_HEIGHT);
+    else
+        m_favoriteView->setFixedHeight(height);
 
     m_emptyFavoriteWidget->setVisible(!searched && isFavoriteViewEmpty);
 
@@ -1474,7 +1481,11 @@ void WindowedFrame::onFavoriteListVisibleChaged()
     m_emptyFavoriteWidget->setVisible(!visible);
 
     // 收藏列表
-    m_favoriteView->setVisible(visible);
+    const int height = m_appsView->height() / 2;
+    if (!visible)
+        m_favoriteView->setFixedHeight(DLauncher::DEFAULT_VIEW_HEIGHT);
+    else
+        m_favoriteView->setFixedHeight(height);
 }
 
 void WindowedFrame::onLayoutChanged()

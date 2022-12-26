@@ -697,6 +697,7 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
         qDebug() << "releasePos:" << releasePos << ", model index valid status:" << itemIndex.isValid() << ", itemRect:" << itemRect << ", mapToGlobal:" << m_appManager->getListView()->mapToGlobal(itemRect.center());
 #endif
     } else {
+        m_pixLabel->hide();
         posAni->setStartValue(mapToGlobal(QCursor::pos()));
         posAni->setEndValue(mapToGlobal(indexRect(QListView::indexAt(m_dragStartPos)).center()));
     }

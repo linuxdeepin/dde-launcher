@@ -668,11 +668,11 @@ AppsManager *AppsManager::instance()
  */
 void AppsManager::dragdropStashItem(const QModelIndex &index, AppsListModel::AppCategory mode)
 {
-    const QString key = index.data(AppsListModel::AppKeyRole).toString();
+    const QString &desktop = index.data(AppsListModel::AppDesktopRole).toString();
 
     auto handleData = [ & ](ItemInfoList_v1 &list) {
         foreach (const ItemInfo_v1 &info, list) {
-            if (info.m_key == key) {
+            if (info.m_desktop == desktop) {
                 m_stashList.append(info);
                 list.removeOne(info);
                 break;

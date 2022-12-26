@@ -259,6 +259,12 @@ WindowedFrame::WindowedFrame(QWidget *parent)
 
 void WindowedFrame::showLauncher()
 {
+    QGSettings gsetting("com.deepin.dde.launcher", "/com/deepin/dde/launcher/");
+     bool alwaysHideLauncher = gsetting.get("always-hide-launcher").toBool();
+     if (alwaysHideLauncher) {
+         return;
+     }
+
     if (m_delayHideTimer->isActive())
         return;
 

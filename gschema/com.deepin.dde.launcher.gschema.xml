@@ -123,6 +123,11 @@
 			<summary>icons not allowed to show on mini frame right bar</summary>
 			<description>icons not allowed to show on mini frame right bar</description>
 		</key>
+		<key type="b" name="always-hide-launcher">
+			<default>false</default>
+			<summary></summary>
+			<description>always hide launcher</description>
+		</key>
 	</schema>
   	<schema path="/com/deepin/dde/launcher/menu/" id="com.deepin.dde.launcher.menu" gettext-domain="DDE">
 		<key name="open" type='b'>

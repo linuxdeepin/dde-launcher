@@ -116,9 +116,10 @@ void SearchModeWidget::initTitle()
     m_emptyText->setFont(noResultTitleFont);
     m_emptyText->setWindowOpacity(0.3);
 
+    const qreal ratio = qApp->devicePixelRatio();
     m_iconButton->setIcon(DDciIcon::fromTheme("search_no_result"));
     m_iconButton->setFocusPolicy(Qt::NoFocus);
-    m_iconButton->setIconSize(QSize(128, 128));
+    m_iconButton->setIconSize(QSize(128, 128) / ratio);
     m_iconButton->setEnabled(false);
     m_iconButton->setFlat(true);
 

@@ -87,8 +87,10 @@ void MiniFrameButton::paintEvent(QPaintEvent *event)
         int textWidth = font.boundingRect(m_text).width();
         int textHeight = font.boundingRect(m_text).height();
 
+        const qreal ratio = qApp->devicePixelRatio();
         QPixmap pix = icon().pixmap(iconSize());
-        const QPixmap &scaledPix = pix.scaled(iconSize().width(), iconSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        QPixmap scaledPix = pix.scaled(iconSize().width() * ratio, iconSize().height() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        scaledPix.setDevicePixelRatio(ratio);
 
         // 文字靠左，图标靠右，左右各保持10像素边距
         int x = rect().x() + (rect().width() - (iconSize().width() + textWidth)) / 2 + 1 - 10;

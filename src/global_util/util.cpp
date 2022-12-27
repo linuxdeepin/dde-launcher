@@ -80,7 +80,7 @@ const QPixmap renderSVG(const QString &path, const QSize &size)
     QPixmap pixmap;
     reader.setFileName(path);
     if (reader.canRead()) {
-        const qreal ratio = qRound(qApp->devicePixelRatio());
+        const qreal ratio = qApp->devicePixelRatio();
         reader.setScaledSize(size * ratio);
         pixmap = QPixmap::fromImage(reader.read());
         pixmap.setDevicePixelRatio(ratio);

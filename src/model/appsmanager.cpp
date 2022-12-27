@@ -479,7 +479,7 @@ void AppsManager::loadDefaultFavoriteList(const ItemInfoList_v1 &processList)
     m_favoriteSortedList.clear();
 
     auto defaultFavoriteList = [ & ](const ItemInfoList_v1 &list, const QStringList &strAppKeyList) {
-        for (const QString &appKey: strAppKeyList) {
+        for (const QString &appKey : strAppKeyList) {
             for (const ItemInfo_v1 &info : list) {
                 // 优先显示玲珑应用
                 if (info.m_key == appKey && info.isLingLongApp()) {
@@ -973,8 +973,8 @@ bool AppsManager::isVaild()
 
 void AppsManager::refreshAllList()
 {
-    readCollectedCacheData();
     refreshCategoryInfoList();
+    readCollectedCacheData();
     refreshItemInfoList();
     saveAppCategoryInfoList();
 }

@@ -1,3 +1,18 @@
+dde-launcher (6.0.6.1) unstable; urgency=medium
+
+  [ TagBuilder ]
+  * fix: 修复动画异常问题(Bug: 150445)(Influence: 拖拽收藏列表-所有应用列表展示正常)
+  * fix: 修复分页控件未适配系统缩放率问题(Task: 229945)(Influence: 启动器-全屏-分页控件-不同缩放率下正常显示)
+  * fix: 修复启动器卡住问题(Bug: 179289)(Influence: 启动器-全屏模式下-往回收站附近拖拽应用-功能正常)
+  * fix: 修复拖拽应用与文件夹交换位置的过程中，文件夹消失的问题(Bug: 179397)(Influence: 启动器-全屏-拖拽应用与文件夹进行位置交换，文件夹不消失)
+  * fix: 修复文件夹展开窗口翻页控件消失问题(Task: 231337)(Influence: 启动器-全屏-当所有应用都放入一个文件夹时，翻页控件正常显示)
+  * fix: 修复收藏列表默认为空的问题(Bug: 179235)(Influence: 启动器-当本地安装了默认的应用（控制中心、文件管理器、安全中心、邮箱）时，收藏列表默认不为空)
+  * fix: 修复收藏列表为空时无法拖拽进入问题(Task: 219059)(Influence: 启动器-收藏列表为空时，支持拖拽应用到收藏列表中)
+  * fix: 修复启动器在高缩放率下图标显示异常问题(Task: 231729)(Influence: 小窗口模式切换按钮/设置/电源按钮在多倍缩放率下显示正常)
+  * fix: 修复所有应用列表没有按照使用频率排序的问题(Bug: 150679)(Influence: 启动器-小窗口所有应用列表、全屏所有应用列表、当前文件夹展开窗口按照使用频率进行排序)
+
+ -- zhaoyingzhen <zhaoyingzhen@uniontech.com>  Thu, 29 Dec 2022 18:37:42 +0800
+
 dde-launcher (6.0.5.2) unstable; urgency=medium
 
   [ TagBuilder ]

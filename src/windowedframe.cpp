@@ -456,13 +456,13 @@ void WindowedFrame::showLauncher()
     setFocus(Qt::ActiveWindowFocusReason);
 
     m_appsView->setCurrentIndex(QModelIndex());
-    onFavoriteListVisibleChaged();
 
     adjustSize();
     adjustPosition();
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
     show();
+    onFavoriteListVisibleChaged();
 }
 
 void WindowedFrame::hideLauncher()
@@ -1475,14 +1475,15 @@ void WindowedFrame::onFavoriteListVisibleChaged()
     if (searchState())
         return;
 
-    const bool visible = (m_favoriteModel->rowCount(QModelIndex()) > 0);
+    const bool isFavoriteViewEmpty = (m_favoriteModel->rowCount(QModelIndex()) <= 0);
 
     // 收藏列表为空时显示空页面
-    m_emptyFavoriteWidget->setVisible(!visible);
+    m_emptyFavoriteWidget->setVisible(isFavoriteViewEmpty);
 
     // 收藏列表
     const int height = m_appsView->height() / 2;
-    if (!visible)
+
+    if (isFavoriteViewEmpty)
         m_favoriteView->setFixedHeight(DLauncher::DEFAULT_VIEW_HEIGHT);
     else
         m_favoriteView->setFixedHeight(height);

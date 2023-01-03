@@ -290,6 +290,7 @@ private:
     QModelIndex m_dragIndex;                                                // 临时记录当前被拖拽应用的模型索引
     int m_dirAppRow;                                                        // 应用文件夹所在的列表中的行数
     int m_dirAppPageIndex;                                                  // 从文件夹展开窗口移除应用时之前，文件夹所在页面索引
+    ItemInfo_v1 m_clickedItemInfo;                                          // 当前被启动的应用
 };
 
 #endif // APPSMANAGER_H

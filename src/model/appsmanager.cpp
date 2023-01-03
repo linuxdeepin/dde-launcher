@@ -442,6 +442,12 @@ void AppsManager::sortByPresetOrder(ItemInfoList_v1 &processList)
     });
 }
 
+/**按照以下优先级对应用进行排序
+ * 1. 新装应用排列首部
+ * 2. 单位时间内应用的打开次数的大小进行排序
+ * @brief AppsManager::sortByUseFrequence
+ * @param processList
+ */
 void AppsManager::sortByUseFrequence(ItemInfoList_v1 &processList)
 {
     const qint64 currentTime = QDateTime::currentMSecsSinceEpoch() / 1000;
@@ -458,9 +464,6 @@ void AppsManager::sortByUseFrequence(ItemInfoList_v1 &processList)
             if(itemBNewInstall)
                 return false;
         }
-
-        if (itemInfo1.m_isDir || itemInfo2.m_isDir)
-            return true;
 
         const qint64 itemAFirstRunTime = itemInfo1.m_firstRunTime;
         const qint64 itemBFirstRunTime = itemInfo2.m_firstRunTime;
@@ -1004,7 +1007,14 @@ void AppsManager::searchApp(const QString &keywords)
 
 void AppsManager::launchApp(const QModelIndex &index)
 {
-    const QString &desktop = index.data(AppsListModel::AppDesktopRole).toString();
+    if (!index.isValid()) {
+        qWarning() << "clicked index is invalid";
+        return;
+    }
+
+    m_clickedItemInfo = index.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
+
+    const QString &desktop = m_clickedItemInfo.m_desktop;
 
     if (desktop.isEmpty()) {
         qWarning() << "empty desktop file path.";
@@ -1025,7 +1035,7 @@ void AppsManager::launchApp(const QModelIndex &index)
     }
 
     refreshItemInfoList();
-    markLaunched(index.data(AppsListModel::AppKeyRole).toString());
+    markLaunched(m_clickedItemInfo.m_key);
 }
 
 void AppsManager::uninstallApp(const QString &desktopPath)
@@ -1530,6 +1540,13 @@ void AppsManager::refreshItemInfoList()
     if (m_fullscreenUsedSortedList.isEmpty())
         m_fullscreenUsedSortedList = m_allAppInfoList;
 
+    // 获取所有文件夹下的应用列表
+    ItemInfoList_v1 dirAppInfoList;
+    for (const ItemInfo_v1 &itemInfo : m_fullscreenUsedSortedList) {
+        if (itemInfo.m_isDir)
+            dirAppInfoList.append(itemInfo.m_appInfoList);
+    }
+
     // 更新全屏窗口-所有应用列表
     ItemInfoList_v1::ConstIterator allItemItor = m_allAppInfoList.constBegin();
     for (; allItemItor != m_allAppInfoList.constEnd(); ++allItemItor) {
@@ -1541,11 +1558,12 @@ void AppsManager::refreshItemInfoList()
                 if (!fullItemInfo.m_isDir)
                     continue;
 
-                if (!contains(fullItemInfo.m_appInfoList, *allItemItor)) {
+                if (!contains(dirAppInfoList, *allItemItor)) {
                     m_fullscreenUsedSortedList.append(*allItemItor);
                 } else {
                     int index = itemIndex(fullItemInfo.m_appInfoList, *allItemItor);
-                    fullItemInfo.m_appInfoList[index].updateInfo(*allItemItor);
+                    if (index != -1)
+                        fullItemInfo.m_appInfoList[index].updateInfo(*allItemItor);
                 }
             }
         } else {
@@ -1579,12 +1597,6 @@ void AppsManager::refreshItemInfoList()
     }
 
     // 应用文件夹中的应用不显示在全屏所有应用列表中
-    ItemInfoList_v1 dirAppInfoList;
-    for (const ItemInfo_v1 &itemInfo : m_fullscreenUsedSortedList) {
-        if (itemInfo.m_isDir)
-            dirAppInfoList.append(itemInfo.m_appInfoList);
-    }
-
     for (const ItemInfo_v1 &dirItemInfo : dirAppInfoList) {
         int index = itemIndex(m_fullscreenUsedSortedList, dirItemInfo);
         if (index != -1)
@@ -1613,18 +1625,25 @@ void AppsManager::refreshItemInfoList()
         }
     }
 
-    // 根据使用频率进行排序
-    // 全屏列表、文件夹应用列表、小窗口所有应用列表
-    sortByUseFrequence(m_fullscreenUsedSortedList);
-
+    // 判断是否需要对文件夹中应用列表进行排序
+    // 若打开的是文件夹中的应用，则更新文件夹中应用列表的排序，否则不更新文件夹应用列表排序
+    bool isDirItemClicked = false;
     for (ItemInfo_v1 &info : m_fullscreenUsedSortedList) {
-        if (info.m_isDir) {
+        if (info.m_isDir && contains(info.m_appInfoList, m_clickedItemInfo)) {
+            isDirItemClicked = true;
             sortByUseFrequence(info.m_appInfoList);
+            break;
         }
     }
 
+    // 对全屏列表按照使用频率进行排序（文件夹应用是打开次数一直为0的应用，因此把文件夹当作普通应用一样进行排序）
+    if (!isDirItemClicked)
+        sortByUseFrequence(m_fullscreenUsedSortedList);
+
+    // 对小窗口所有应用列表按照使用频率进行排序
     sortByUseFrequence(m_windowedUsedSortedList);
 
+    // 缓存全屏列表和小窗口所有应用列表数据
     saveFullscreenUsedSortedList();
     saveWidowedUsedSortedList();
 }
@@ -1998,6 +2017,9 @@ void AppsManager::updateUsedSortData(QModelIndex dragIndex, QModelIndex dropInde
         if (!dropItemIsDir) {
             list[dropIndex].m_isDir = true;
             list[dropIndex].m_desktop += ".dir";
+            list[dropIndex].m_openCount = 0;
+            list[dropIndex].m_firstRunTime = 0;
+            list[dropIndex].m_installedTime = 0;
 
             // 不论拖拽对象与释放对象是否为同一类应用, 都把释放对象的分类标题作为文件夹名称
             int idIndex = static_cast<int>(dropItemInfo.m_categoryId);

@@ -1625,21 +1625,6 @@ void AppsManager::refreshItemInfoList()
         }
     }
 
-    // 判断是否需要对文件夹中应用列表进行排序
-    // 若打开的是文件夹中的应用，则更新文件夹中应用列表的排序，否则不更新文件夹应用列表排序
-    bool isDirItemClicked = false;
-    for (ItemInfo_v1 &info : m_fullscreenUsedSortedList) {
-        if (info.m_isDir && contains(info.m_appInfoList, m_clickedItemInfo)) {
-            isDirItemClicked = true;
-            sortByUseFrequence(info.m_appInfoList);
-            break;
-        }
-    }
-
-    // 对全屏列表按照使用频率进行排序（文件夹应用是打开次数一直为0的应用，因此把文件夹当作普通应用一样进行排序）
-    if (!isDirItemClicked)
-        sortByUseFrequence(m_fullscreenUsedSortedList);
-
     // 对小窗口所有应用列表按照使用频率进行排序
     sortByUseFrequence(m_windowedUsedSortedList);
 

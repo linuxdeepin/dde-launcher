@@ -144,7 +144,12 @@ void BackgroundManager::updateBlurBackgrounds()
             screenName = screens[screenIndex]->name();
     }
 
-    QString path = getLocalFile(m_wmInter->GetCurrentWorkspaceBackgroundForMonitor(screenName));
+    QDBusMessage message = QDBusMessage::createMethodCall("org.deepin.dde.Appearance1", "/org/deepin/dde/Appearance1", "org.deepin.dde.Appearance1", "GetCurrentWorkspaceBackgroundForMonitor");
+    message << screenName;
+
+    const QDBusPendingReply<QString> result = QDBusConnection::sessionBus().asyncCall(message);
+
+    QString path = getLocalFile(result.value());
     m_fileName = QFile::exists(path) ? path : DefaultWallpaper;
 
     getImageDataFromDbus(m_fileName);

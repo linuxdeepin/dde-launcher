@@ -1,3 +1,11 @@
+dde-launcher (6.0.7) unstable; urgency=medium
+
+  [ TagBuilder ]
+  * fix: 修复启动器壁纸与桌面壁纸不同步的问题(Bug: 181459)(Influence: 启动器-全屏壁纸/文件夹背景样式跟桌面壁纸保持一致)
+  * fix: 修复全屏模式下所有应用列表也根据使用频率排序的问题(Bug: 181449)(Influence: 启动器-全屏模式下所有应用列表只支持自由排序)
+
+ -- lvpeilong <lvpeilong@uniontech.com>  Fri, 06 Jan 2023 15:53:51 +0800
+
 dde-launcher (6.0.6.1) unstable; urgency=medium
 
   [ TagBuilder ]

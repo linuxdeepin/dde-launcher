@@ -86,6 +86,7 @@ private:
     QPainterPath getCornerPath(AnchoredCornor direction);
 
     void resetWidgetStyle();
+    void optimizeColdStart();
 
 protected:
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;

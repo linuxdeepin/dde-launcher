@@ -711,6 +711,7 @@ void WindowedFrame::showEvent(QShowEvent *e)
         activateWindow();
         setFocus();
         emit visibleChanged(true);
+        optimizeColdStart();
     });
     m_focusPos = Applist;
 }
@@ -1071,6 +1072,32 @@ void WindowedFrame::onHideMenu()
     if (m_menuWorker.get() && !isVisible())
         m_menuWorker.get()->onHideMenu();
     m_currentAppListIndex = -1;
+}
+
+/* 优化冷启动速度
+ * warm-daemon目前有bug，不能主动获取launcher的启动，所以增加此函数通知warm-daemon
+ * 原理参考：https://github.com/snyh/warm-sched
+ *
+ * TODO 还需要优化图标加载逻辑，增加线程或动态加载
+*/
+void WindowedFrame::optimizeColdStart()
+{
+    static bool checked = false;
+    if (checked)
+        return;
+
+    qInfo() << "warmctl: emit-event";
+    QProcess process;
+    process.start("warmctl", QStringList() << "-emit-event" << "x11:dde-launcher");
+    process.waitForFinished();
+
+    int exitCode = process.exitCode();
+    if (exitCode != 0) {
+        QString outputTxt = process.readAllStandardError();
+        qWarning() << "warmctl: " << process.errorString() << outputTxt;
+    }
+
+    checked = true;
 }
 
 void WindowedFrame:: paintEvent(QPaintEvent *e)

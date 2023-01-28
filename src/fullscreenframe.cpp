@@ -580,10 +580,28 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
         break;
     }
 
-    // valid verify and UI adjustment.
-    const QModelIndex selectedIndex = index.isValid() ? index : curModelIndex;
-    m_appItemDelegate->setCurrentIndex(selectedIndex);
-    update();
+    int curPage = m_multiPagesView->currentPage();
+    if ((key == Qt::Key_Right || key == Qt::Key_Down) && !index.isValid()) {
+        if (curPage >= m_multiPagesView->pageCount() - 1) {
+            m_multiPagesView->showCurrentPage(0);
+        } else {
+            m_multiPagesView->showCurrentPage(curPage + 1);
+        }
+        m_appItemDelegate->setCurrentIndex(m_multiPagesView->getAppItem(0));
+    } else if ((key == Qt::Key_Left || key == Qt::Key_Up) && !index.isValid()) {
+        if (curPage <= 0) {
+            m_multiPagesView->showCurrentPage(m_multiPagesView->pageCount() - 1);
+        } else {
+            m_multiPagesView->showCurrentPage(curPage - 1);
+        }
+        auto model = m_multiPagesView->pageModel(m_multiPagesView->currentPage());
+        m_appItemDelegate->setCurrentIndex(m_multiPagesView->getAppItem(model->rowCount(QModelIndex()) - 1));
+    } else if (index.isValid()) {
+        // valid verify and UI adjustment.
+        const QModelIndex selectedIndex = index.isValid() ? index : curModelIndex;
+        m_appItemDelegate->setCurrentIndex(selectedIndex);
+        update();
+    }
 }
 
 void FullScreenFrame::appendToSearchEdit(const char ch)

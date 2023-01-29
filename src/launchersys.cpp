@@ -26,14 +26,14 @@ LauncherSys::LauncherSys(QObject *parent)
     , m_sessionManagerInter(new com::deepin::SessionManager(SessionManagerService, SessionManagerPath, QDBusConnection::sessionBus(), this))
     , m_windowLauncher(nullptr)
     , m_fullLauncher(nullptr)
-    , m_regionMonitor(new DRegionMonitor(this))
+    , m_regionMonitor(new DTK_GUI_NAMESPACE::DRegionMonitor(this))
     , m_autoExitTimer(new QTimer(this))
     , m_ignoreRepeatVisibleChangeTimer(new QTimer(this))
     , m_calcUtil(CalculateUtil::instance())
     , m_dockInter(new DBusDock(this))
     , m_clicked(false)
 {
-    m_regionMonitor->setCoordinateType(DRegionMonitor::Original);
+    m_regionMonitor->setCoordinateType(DTK_GUI_NAMESPACE::DRegionMonitor::Original);
     displayModeChanged();
 
     m_autoExitTimer->setInterval(60 * 1000);
@@ -200,7 +200,7 @@ bool LauncherSys::eventFilter(QObject *watched, QEvent *event)
 
 void LauncherSys::registerRegion()
 {
-    m_regionMonitorConnect = connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, &LauncherSys::onButtonPress);
+    m_regionMonitorConnect = connect(m_regionMonitor, &DTK_GUI_NAMESPACE::DRegionMonitor::buttonPress, this, &LauncherSys::onButtonPress);
 
     if (!m_regionMonitor->registered())
         m_regionMonitor->registerRegion();

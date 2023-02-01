@@ -1,3 +1,10 @@
+dde-launcher (6.0.8) unstable; urgency=medium
+
+  [ TagBuilder ]
+  * fix: 修复启动器全屏模式下无法使用键盘翻页的问题(Bug: 180633)
+
+ -- lvpeilong <lvpeilong@uniontech.com>  Wed, 01 Feb 2023 10:39:10 +0800
+
 dde-launcher (6.0.7) unstable; urgency=medium
 
   [ TagBuilder ]

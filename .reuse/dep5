@@ -8,23 +8,28 @@ Files: .gitignore
 Copyright: None
 License: CC0-1.0
 
-# ci
-Files: .github/* .gitlab-ci.yml
+# CI and configuration files for scripts/tools
+Files: .github/* .gitlab-ci.yml .project
 Copyright: None
 License: CC0-1.0
 
 # debian rpm archlinux
-Files: debian/* rpm/* archlinux/*
+Files: debian/* rpm/* archlinux/* .packit.yaml
 Copyright: None
 License: CC0-1.0
 
 # README
-Files: README.md README.zh_CN.md CHANGELOG.md technology-overview.md
+Files: README.md README.zh_CN.md CHANGELOG.md technology-overview.md docs/*.md
 Copyright: UnionTech Software Technology Co., Ltd.
 License: CC-BY-4.0
 
 # Project file
-Files: *.pro *.pri *CMakeLists.txt dde-launcher.desktop *.qrc src/dbusservices/com.deepin.dde.Launcher.service dde-launcher-wapper
+Files: dde-launcher.desktop *.qrc dde-launcher-wapper
+Copyright: None
+License: CC0-1.0
+
+# Service file
+Files: src/dbusservices/org.deepin.dde.Launcher1.service
 Copyright: None
 License: CC0-1.0
 
@@ -39,17 +44,19 @@ Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 
 # xml toml json conf yaml
-Files: *.xml *.json *.conf .packit.yaml .clog.toml
+Files: *.xml *.json *.conf .clog.toml
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 
 # xml2cpp file
-Files: src/dbusinterface/dbusdockinterface.* src/dbusinterface/dbusmenu.* src/dbusinterface/dbusmenumanager.*
+Files: src/dbusinterface/dbusdockinterface.* src/dbusinterface/dbusmenu.*
+  src/dbusinterface/dbusmenumanager.* src/dbusinterface/monitorinterface.*
 Copyright: The Qt Company Ltd.
 License: CC0-1.0
 
 # xml2cpp file
-Files: src/dbusinterface/dbusdisplay.* src/dbusinterface/dbusdock.* src/dbusinterface/dbusfileinfo.* src/dbusinterface/dbuslauncher* src/dbusinterface/dbustartmanager.* src/dbusservices/dbuslauncherservice.*
+Files: src/dbusinterface/dbusdisplay.* src/dbusinterface/dbusdock.* src/dbusinterface/dbusfileinfo.*
+  src/dbusinterface/dbuslauncher* src/dbusinterface/dbustartmanager.* src/dbusservices/dbuslauncherservice.*
 Copyright: Digia Plc and/or its subsidiary(-ies).
 License: CC0-1.0
 

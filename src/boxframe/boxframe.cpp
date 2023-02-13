@@ -117,7 +117,7 @@ const QScreen *BoxFrame::currentScreen()
 
     int screenIndex = QApplication::desktop()->screenNumber(this);
     QList<QScreen *> screens = qApp->screens();
-    if (screenIndex < screens.count() && screenIndex != -1)
+    if (screenIndex < screens.count())
         return screens[screenIndex];
 
     return qApp->primaryScreen();
@@ -142,12 +142,4 @@ void BoxFrame::moveEvent(QMoveEvent *event)
     if (m_bgManager)
         m_bgManager->updateBlurBackgrounds();
     QLabel::moveEvent(event);
-}
-
-void BoxFrame::resizeEvent(QResizeEvent *event)
-{
-    scaledBackground();
-    scaledBlurBackground();
-
-    QWidget::resizeEvent(event);
 }

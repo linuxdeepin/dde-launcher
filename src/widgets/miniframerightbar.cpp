@@ -117,6 +117,7 @@ void MiniFrameRightBar::showSettings()
             .path("/org/deepin/dde/ControlCenter1")
             .method(QString("Show"))
             .call();
+    });
 
     emit requestFrameHide();
 }

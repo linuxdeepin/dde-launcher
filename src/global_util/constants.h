@@ -7,7 +7,6 @@
 
 #include <QtGlobal>
 #include <QString>
-#include <QList>
 
 namespace DLauncher {
 static const int DEFAULT_FONT_SIZE = 8;                                              // 小窗口默认字体大小
@@ -20,8 +19,6 @@ static const int APP_DRAG_SWAP_THRESHOLD = 10;
 static const int APP_DRAG_SCROLL_THRESHOLD = 150;
 static const int APP_DRAG_MININUM_TIME = 300;
 static const int DEFAULT_VIEW_HEIGHT = 30;
-
-static const QList<int> APP_ICON_SIZE_LIST = { 16, 18, 24, 32, 64, 96, 128, 256 };   // 应用图标大小列表
 
 static const int DRAG_THRESHOLD = 15;
 static const int DRAW_TITLE_HEIGHT = 130;

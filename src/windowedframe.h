@@ -132,7 +132,7 @@ private slots:
     void prepareHideLauncher();
     void recoveryAll();
     void onOpacityChanged(const double value);
-    void onDockGeometryChanged();
+    void onScreenInfoChange();
     void updatePosition();
     void onHideMenu();
     void addViewEvent(AppGridView *pView);

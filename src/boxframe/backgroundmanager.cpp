@@ -4,15 +4,13 @@
 
 #include "backgroundmanager.h"
 #include "appsmanager.h"
-#include "util.h"
 
 #include <QApplication>
 #include <QtConcurrent>
 
 using namespace com::deepin;
 
-const QString DefaultWallpaper = "/usr/share/backgrounds/default_background.jpg";
-const QString DisplayInterface("com.deepin.daemon.Display");
+static const QString DefaultWallpaper = "/usr/share/backgrounds/default_background.jpg";
 
 static QString getLocalFile(const QString &file)
 {
@@ -115,24 +113,16 @@ void BackgroundManager::getImageDataFromDbus(const QString &filePath)
 
 void BackgroundManager::updateBlurBackgrounds()
 {
-    const QScreen *screen = AppsManager::instance()->currentScreen();
-    if (!screen)
-        return;
+    QString screenName = AppsManager::instance()->currentScreen()->name();
 
-    QString screenName = screen->name();
+    if (m_displayMode != MERGE_MODE) {
+        QWidget *parentWidget =qobject_cast<QWidget *>(parent());
+        QDesktopWidget *desktopwidget = QApplication::desktop();
+        int screenIndex = desktopwidget->screenNumber(parentWidget);
+        QList<QScreen *> screens = qApp->screens();
 
-    /* wayland下使用QScreen获取屏幕名称存在为空的情况，因此使用后端服务获取屏幕名称
-    wayland下 当正常接入主机并显示，当显示模式为复制模式且屏幕名称为空时，更新屏幕的名称，否则直接使用任务栏所在屏幕的名称*/
-    if (isWaylandDisplay() && screenName.isEmpty()) {
-        const QList<QDBusObjectPath> monitorList = m_displayInter->monitors();
-        for (int i = 0; i < monitorList.size(); i++) {
-            DisplayMonitor monitor(DisplayInterface, QString("%1").arg(monitorList.at(i).path()), QDBusConnection::sessionBus(), this);
-            if ((monitor.enabled() == true) && (monitor.x() == screen->geometry().x())
-                    && (monitor.y() == screen->geometry().y()) && monitor.name() != screenName) {
-                screenName = monitor.name();
-                break;
-            }
-        }
+        if (screenIndex != -1)
+            screenName = screens[screenIndex]->name();
     }
 
     QDBusMessage message = QDBusMessage::createMethodCall("org.deepin.dde.Appearance1", "/org/deepin/dde/Appearance1", "org.deepin.dde.Appearance1", "GetCurrentWorkspaceBackgroundForMonitor");

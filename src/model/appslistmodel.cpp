@@ -368,7 +368,8 @@ void AppsListModel::setDrawBackground(bool draw)
     if (draw == m_drawBackground) return;
 
     m_drawBackground = draw;
-    Q_EMIT QAbstractItemModel::dataChanged(QModelIndex(), QModelIndex());
+
+    emit QAbstractItemModel::dataChanged(QModelIndex(), QModelIndex());
 }
 
 void AppsListModel::updateModelData(const QModelIndex dragIndex, const QModelIndex dropIndex)

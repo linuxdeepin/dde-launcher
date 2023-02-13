@@ -39,13 +39,6 @@ void MiniFrameButton::onThemeTypeChanged(DGuiApplicationHelper::ColorType themeT
     update();
 }
 
-void MiniFrameButton::setIconPath(const QString &path)
-{
-    if (!path.isEmpty()) {
-        setIcon(QIcon(path));
-    }
-}
-
 void MiniFrameButton::enterEvent(QEvent *event)
 {
     QPushButton::enterEvent(event);

@@ -14,7 +14,7 @@
 Menu::Menu(QWidget *parent)
     : QMenu(parent)
 {
-    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::Popup);
+    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::Dialog);
     setAccessibleName("popmenu");
     setObjectName("rightMenu");
     qApp->installEventFilter(this);
@@ -61,11 +61,9 @@ bool Menu::eventFilter(QObject *watched, QEvent *event)
                 hide();
                 return true;
             case Qt::Key_Up:
-            case Qt::Key_Backtab:
                 moveUp(size);
                 return true;
             case Qt::Key_Down:
-            case Qt::Key_Tab:
                 moveDown();
                 return true;
             case Qt::Key_Return:
@@ -91,8 +89,6 @@ void Menu::showEvent(QShowEvent *event)
     QTimer::singleShot(10, this, [ = ] {
         m_monitor->blockSignals(false);
     });
-
-    Q_EMIT notifyMenuDisplayState(true);
 }
 
 void Menu::hideEvent(QHideEvent *event)
@@ -102,7 +98,6 @@ void Menu::hideEvent(QHideEvent *event)
     QMenu::hideEvent(event);
 
     m_monitor->blockSignals(true);
-    Q_EMIT notifyMenuDisplayState(false);
 }
 
 void Menu::moveDown(int size)
@@ -171,14 +166,5 @@ void Menu::onButtonPress()
 {
     if (!this->geometry().contains(QCursor::pos())) {
         this->hide();
-    }
-}
-
-void Menu::moveEvent(QMoveEvent *event)
-{
-    QWidget::moveEvent(event);
-    // 如果移动事件旧点位和新点位不同则需要隐藏右键菜单
-    if(event->oldPos() != event->pos()){
-        hide();
     }
 }

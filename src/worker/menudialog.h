@@ -23,15 +23,11 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
     void showEvent(QShowEvent *event) override;
     void hideEvent(QHideEvent *event) override;
-    void moveEvent(QMoveEvent *event) override;
 
 private:
     void moveDown(int size = 0);
     void moveUp(int size = 0);
     void openItem();
-
-Q_SIGNALS:
-    void notifyMenuDisplayState(bool);
 
 private Q_SLOTS:
     void onButtonPress();

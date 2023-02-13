@@ -17,7 +17,7 @@
     <message>
         <location filename="../src/model/appsmanager.cpp" line="125"/>
         <source>Chat</source>
-        <translation>Czat</translation>
+        <translation>Rozmowy</translation>
     </message>
     <message>
         <location filename="../src/model/appsmanager.cpp" line="126"/>

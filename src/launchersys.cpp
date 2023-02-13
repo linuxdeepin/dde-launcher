@@ -77,8 +77,6 @@ void LauncherSys::showLauncher()
     if (m_ignoreRepeatVisibleChangeTimer->isActive())
         return;
 
-    setClickState(true);
-
     m_ignoreRepeatVisibleChangeTimer->start();
 
     m_autoExitTimer->stop();
@@ -100,7 +98,6 @@ void LauncherSys::hideLauncher()
     unRegisterRegion();
 
     m_autoExitTimer->start();
-    setClickState(false);
     m_launcherInter->hideLauncher();
 }
 
@@ -128,6 +125,7 @@ void LauncherSys::displayModeChanged()
             connect(m_fullLauncher, &FullScreenFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
             connect(m_fullLauncher, &FullScreenFrame::searchApp, m_launcherPlugin, &LauncherPluginController::onSearchedTextChanged, Qt::QueuedConnection);
         }
+
         m_launcherInter = static_cast<LauncherInterface*>(m_fullLauncher);
 
     } else {
@@ -140,7 +138,7 @@ void LauncherSys::displayModeChanged()
         }
         m_launcherInter = static_cast<LauncherInterface*>(m_windowLauncher);
     }
-    preloadIcon();
+
     lastLauncher = lastLauncher ? lastLauncher : m_launcherInter;
 
     if (lastLauncher->visible()) {
@@ -161,7 +159,6 @@ void LauncherSys::displayModeChanged()
 void LauncherSys::onVisibleChanged()
 {
     emit visibleChanged(m_launcherInter->visible());
-    setClickState(m_launcherInter->visible());
 }
 
 void LauncherSys::onAutoExitTimeout()
@@ -181,7 +178,6 @@ bool LauncherSys::eventFilter(QObject *watched, QEvent *event)
         m_regionMonitor->unregisterRegion();
         disconnect(m_regionMonitorConnect);
         m_autoExitTimer->start();
-        setClickState(false);
     }
 
     return QObject::eventFilter(watched, event);

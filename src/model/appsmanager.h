@@ -193,13 +193,6 @@ private:
     void setAutostartValue(const QStringList &list);
     QStringList getAutostartValue() const;
 
-    static bool readJsonFile(QIODevice &device, QSettings::SettingsMap &map);
-    static bool writeJsonFile(QIODevice &device, const QSettings::SettingsMap &map);
-    void registerSettingsFormat();
-
-    QSettings::SettingsMap getCacheMapData(const ItemInfoList &list);
-    const ItemInfoList readCacheData(const QSettings::SettingsMap &map);
-
 private slots:
     void markLaunched(const QString &appKey);
     void delayRefreshData();

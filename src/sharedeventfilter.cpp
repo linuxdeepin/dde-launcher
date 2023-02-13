@@ -6,7 +6,6 @@
 
 #include <QProcess>
 #include <QDebug>
-#include <QApplication>
 
 /*! \class SharedEventFilter
  *
@@ -26,12 +25,6 @@ SharedEventFilter::SharedEventFilter(QObject *parent)
 bool SharedEventFilter::eventFilter(QObject *watched, QEvent *event)
 {
     Q_UNUSED(watched);
-    // 当前没active的窗口的时候，隐藏启动器，满足需求要求的丢失焦点后隐藏
-    if (event->type() == QEvent::WindowDeactivate
-            && !QGuiApplication::platformName().startsWith("wayland", Qt::CaseInsensitive)
-            && !QApplication::activeWindow()) {
-            m_frame->hideLauncher();
-    }
 
     if (event->type() == QEvent::KeyPress)
         return handleKeyEvent(static_cast<QKeyEvent *>(event));

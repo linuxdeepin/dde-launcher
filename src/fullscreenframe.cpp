@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+﻿// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -169,9 +169,6 @@ void FullScreenFrame::showTips(const QString &tips)
 
 void FullScreenFrame::hideTips()
 {
-    if (m_displayMode == SEARCH)
-        m_appItemDelegate->setCurrentIndex(m_multiPagesView->getAppItem(0));
-
     m_tipsLabel->setVisible(false);
 }
 
@@ -196,15 +193,6 @@ void FullScreenFrame::keyPressEvent(QKeyEvent *e)
 
 void FullScreenFrame::showEvent(QShowEvent *e)
 {
-    // 显示后加载当前模式其他ratio的资源，预加载全屏另一种模式当前ratio的资源
-    if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY) {
-        emit m_appsManager->loadOtherRatioIcon(GROUP_BY_CATEGORY);
-        emit m_appsManager->loadCurRationIcon(ALL_APPS);
-    } else {
-        emit m_appsManager->loadOtherRatioIcon(ALL_APPS);
-        emit m_appsManager->loadCurRationIcon(GROUP_BY_CATEGORY);
-    }
-
     m_delayHideTimer->stop();
     m_searchWidget->clearSearchContent();
 
@@ -420,11 +408,6 @@ void FullScreenFrame::initUI()
     mainLayout->addWidget(m_bottomSpacing);
 
     setLayout(mainLayout);
-
-    // 在wayland环境中，应用默认有固定的圆角，全屏时视觉效果不佳，将圆角设置为0
-    // X11同样不应该有圆角，此处不作为wayland的差异性处理
-    DPlatformWindowHandle windowHandle(this);
-    windowHandle.setWindowRadius(0);
 }
 
 void FullScreenFrame::initAppView()
@@ -800,6 +783,7 @@ void FullScreenFrame::updateDockPosition()
     switch (m_appsManager->dockPosition()) {
     case DLauncher::DOCK_POS_TOP:
         m_topSpacing->setFixedHeight(30 + dockGeometry.height());
+        bottomMargin = m_topSpacing->height() + DLauncher::APPS_AREA_TOP_MARGIN;
         m_searchWidget->setLeftSpacing(0);
         m_searchWidget->setRightSpacing(0);
         break;

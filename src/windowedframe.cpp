@@ -379,7 +379,9 @@ void WindowedFrame::initConnection()
     QTimer::singleShot(1, this, &WindowedFrame::onWMCompositeChanged);
     onOpacityChanged(m_appearanceInter->opacity());
 
-    connect(m_dockFrontInfc, &DBusDockInterface::geometryChanged, this, &WindowedFrame::onDockGeometryChanged);
+    connect(m_curScreen, &QScreen::geometryChanged, this, &WindowedFrame::onScreenInfoChange);
+    connect(m_curScreen, &QScreen::orientationChanged, this, &WindowedFrame::onScreenInfoChange);
+    connect(qApp, &QApplication::primaryScreenChanged, this, &WindowedFrame::onScreenInfoChange);
 
     connect(this, &WindowedFrame::visibleChanged, this, &WindowedFrame::onHideMenu);
 
@@ -432,9 +434,6 @@ void WindowedFrame::showLauncher()
     if (m_delayHideTimer->isActive())
         return;
 
-    // 显示后加载小窗口其他资源
-    emit m_appsManager->loadOtherIcon();
-
     qApp->processEvents();
     activateWindow();
     setFocus(Qt::ActiveWindowFocusReason);
@@ -443,7 +442,6 @@ void WindowedFrame::showLauncher()
 
     adjustSize();
     adjustPosition();
-
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
     show();
@@ -464,7 +462,6 @@ void WindowedFrame::hideLauncher()
     recoveryAll();
 
     hide();
-    m_appsView->setMenuVisible(false);
 }
 
 bool WindowedFrame::visible()
@@ -1122,7 +1119,6 @@ void WindowedFrame::showEvent(QShowEvent *e)
         activateWindow();
         setFocus();
         emit visibleChanged(true);
-        optimizeColdStart();
     });
 
     m_focusPos = Default;
@@ -1161,11 +1157,6 @@ QVariant WindowedFrame::inputMethodQuery(Qt::InputMethodQuery prop) const
 void WindowedFrame::regionMonitorPoint(const QPoint &point, int flag)
 {
     Q_UNUSED(flag);
-
-    if (isWaylandDisplay()) {
-        return;
-    }
-
     auto windowList = DWindowManagerHelper::instance()->currentWorkspaceWindows();
 
     for (auto window : windowList) {
@@ -1218,11 +1209,6 @@ bool WindowedFrame::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
-    // 第一次弹出菜单时会将界面设置为ApplicationDeactivate状态，导致再次弹出菜单时会满足条件从而隐藏界面
-    // 此时需要判断下是否因为弹出菜单导致的界面ApplicationDeactivate状态
-    if (isActiveWindow() && watched == qApp && event->type() == QEvent::ApplicationDeactivate && !m_menuWorker->isMenuShown()) {
-        hideLauncher();
-    }
     return QWidget::eventFilter(watched, event);
 }
 
@@ -1313,8 +1299,6 @@ void WindowedFrame::onToggleFullScreen()
     if (delegate)
         delegate->setActived(false);
 
-    m_modeToggleBtn->setHovered(false);
-
     // 全屏状态标识
     m_calcUtil->setFullScreen(true);
 
@@ -1372,9 +1356,6 @@ void WindowedFrame::showTips(const QString &text)
 
 void WindowedFrame::hideTips()
 {
-    if (m_searchModel == m_appsView->model() && m_appsView->count())
-        m_appsView->setCurrentIndex(m_appsView->indexAt(0));
-
     m_tipsLabel->setVisible(false);
 }
 
@@ -1402,12 +1383,18 @@ void WindowedFrame::onOpacityChanged(const double value)
     setMaskAlpha(value * 255);
 }
 
-void WindowedFrame::onDockGeometryChanged()
+void WindowedFrame::onScreenInfoChange()
 {
+    m_curScreen->disconnect();
+    m_curScreen = m_appsManager->currentScreen();
+
     adjustSize();
     updatePosition();
     m_cornerPath = getCornerPath(m_anchoredCornor);
     m_windowHandle.setClipPath(m_cornerPath);
+
+    connect(m_curScreen, &QScreen::geometryChanged, this, &WindowedFrame::onScreenInfoChange);
+    connect(m_curScreen, &QScreen::orientationChanged, this, &WindowedFrame::onScreenInfoChange);
 }
 
 void WindowedFrame::updatePosition()
@@ -1448,33 +1435,6 @@ void WindowedFrame::onHideMenu()
 {
     if (m_menuWorker.get() && !isVisible())
         m_menuWorker.get()->onHideMenu();
-    m_currentAppListIndex = -1;
-}
-
-/* 优化冷启动速度
- * warm-daemon目前有bug，不能主动获取launcher的启动，所以增加此函数通知warm-daemon
- * 原理参考：https://github.com/snyh/warm-sched
- *
- * TODO 还需要优化图标加载逻辑，增加线程或动态加载
-*/
-void WindowedFrame::optimizeColdStart()
-{
-    static bool checked = false;
-    if (checked)
-        return;
-
-    qInfo() << "warmctl: emit-event";
-    QProcess process;
-    process.start("warmctl", QStringList() << "-emit-event" << "x11:dde-launcher");
-    process.waitForFinished();
-
-    int exitCode = process.exitCode();
-    if (exitCode != 0) {
-        QString outputTxt = process.readAllStandardError();
-        qWarning() << "warmctl: " << process.errorString() << outputTxt;
-    }
-
-    checked = true;
 }
 
 void WindowedFrame::addViewEvent(AppGridView *pView)

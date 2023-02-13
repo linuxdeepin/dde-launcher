@@ -61,6 +61,10 @@ public:
 
     QStringList calendarSelectIcon() const;
 
+signals:
+     void ratioChanged(double ratio);
+     void loadWindowIcon();
+
 public slots:
     void calculateAppLayout(const QSize &containerSize, const int currentmode = 0);
 

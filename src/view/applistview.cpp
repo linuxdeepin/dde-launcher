@@ -30,15 +30,14 @@ AppListView::AppListView(QWidget *parent)
     : DListView(parent)
     , m_dropThresholdTimer(new QTimer(this))
     , m_touchMoveFlag(false)
-    , m_scrollbar(new SmoothScrollBar(this))
+    , m_scrollAni(new QPropertyAnimation(verticalScrollBar(), "value", this))
     , m_updateEnableSelectionByMouseTimer(nullptr)
     , m_updateEnableShowSelectionByMouseTimer(nullptr)
-    , m_bMenuVisible(false)
 {
     this->setAccessibleName("Form_AppList");
     viewport()->setAutoFillBackground(false);
-
-    setVerticalScrollBar(m_scrollbar);
+    m_scrollAni->setEasingCurve(QEasingCurve::OutQuint);
+    m_scrollAni->setDuration(800);
 
     horizontalScrollBar()->setEnabled(false);
     setFocusPolicy(Qt::NoFocus);
@@ -80,30 +79,26 @@ const QModelIndex AppListView::indexAt(const int index) const
     return model()->index(index, 0, QModelIndex());
 }
 
-void AppListView::setMenuVisible(bool value)
-{
-    if (value == m_bMenuVisible) {
-        return;
-    }
-    m_bMenuVisible = value;
-    Q_EMIT notifyMenuVisibleChanged(value);
-}
-
 /**
  * @brief AppListView::wheelEvent 鼠标滑轮事件触发滑动区域控件动画
  * @param e 鼠标滑轮事件指针对象
  */
 void AppListView::wheelEvent(QWheelEvent *e)
 {
-    m_scrollbar->scrollSmooth(-e->angleDelta().y() * m_speedTime);
+    // 解决蓝牙连接时触摸板斜对角方向双指按住滑动时滑条滚动异常问题
+    if (e->orientation() == Qt::Horizontal)
+        return;
+
+    int offset = -e->delta();
+
+    m_scrollAni->stop();
+    m_scrollAni->setStartValue(verticalScrollBar()->value());
+    m_scrollAni->setEndValue(verticalScrollBar()->value() + offset * m_speedTime);
+    m_scrollAni->start();
 }
 
 void AppListView::mouseMoveEvent(QMouseEvent *e)
 {
-    if (m_bMenuVisible) {
-        return;
-    }
-
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         m_touchMoveFlag = true;
 
@@ -155,7 +150,7 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         emit requestEnter(false);
-        m_scrollbar->stopScroll();
+        m_scrollAni->stop();
 
         if (m_updateEnableShowSelectionByMouseTimer) {
             m_updateEnableShowSelectionByMouseTimer->stop();
@@ -170,7 +165,7 @@ void AppListView::mousePressEvent(QMouseEvent *e)
                 int diff_y = qAbs(currentPos.y() - m_fullscreenStartPos.y());
                 if (diff_x < 5 && diff_y < 5) // 触摸按压抖动限制范围
                     emit requestEnter(true);
-
+                    
                 m_updateEnableShowSelectionByMouseTimer->deleteLater();
                 m_updateEnableShowSelectionByMouseTimer = nullptr;
             });
@@ -226,7 +221,10 @@ void AppListView::mouseReleaseEvent(QMouseEvent *e)
 
         const auto wheelSpeed = inPutInter.property("WheelSpeed").toInt();
         int offset = m_lastTouchBeginPos.y() - e->pos().y();
-        m_scrollbar->scrollSmooth(offset * wheelSpeed);
+        m_scrollAni->stop();
+        m_scrollAni->setStartValue(verticalScrollBar()->value());
+        m_scrollAni->setEndValue(verticalScrollBar()->value() + offset * wheelSpeed);
+        m_scrollAni->start();
         QScroller::scroller(this)->deleteLater();
         return;
     }

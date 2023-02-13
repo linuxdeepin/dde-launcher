@@ -13,8 +13,6 @@
 #include <QPropertyAnimation>
 #include <QDBusInterface>
 
-#include "widgets/smoothscrollbar.h"
-
 #define DRAG_SCROLL_THRESHOLD 25
 
 DGUI_USE_NAMESPACE
@@ -28,7 +26,6 @@ public:
 
     using DListView::indexAt;
     const QModelIndex indexAt(const int index) const;
-    void setMenuVisible(bool value);
 
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
@@ -37,7 +34,6 @@ signals:
     void requestScrollStop() const;
     void requestSwitchToCategory(const QModelIndex &index) const;
     void requestEnter(bool enter) const;
-    void notifyMenuVisibleChanged(bool) const;
 
 public slots:
     void menuHide();
@@ -75,13 +71,12 @@ private:
     bool m_touchMoveFlag;                               // 代表触摸屏移动操作
 
     QPropertyAnimation *m_lastFakeAni = nullptr;
-    SmoothScrollBar *m_scrollbar;
+    QPropertyAnimation *m_scrollAni;
     double m_speedTime = 1.0;
 
     QTimer *m_updateEnableSelectionByMouseTimer;        // 限制拖拽时间不能少于200ms
     QTimer *m_updateEnableShowSelectionByMouseTimer;    // 检测按压是否现实选择灰色背景
     QPoint m_lastTouchBeginPos;
-    bool m_bMenuVisible;
 };
 
 #endif // APPLISTVIEW_H

@@ -5,11 +5,13 @@
 #ifndef APPLISTVIEW_H
 #define APPLISTVIEW_H
 
+#include <DWindowManagerHelper>
+#include <DGuiApplicationHelper>
+#include <DListView>
+
 #include <QListView>
 #include <QPropertyAnimation>
 #include <QDBusInterface>
-#include <DWindowManagerHelper>
-#include <DListView>
 
 #include "widgets/smoothscrollbar.h"
 
@@ -39,6 +41,9 @@ signals:
 
 public slots:
     void menuHide();
+
+private slots:
+    void onThemeChanged(DGuiApplicationHelper::ColorType);
 
 protected:
     void wheelEvent(QWheelEvent *e) override;

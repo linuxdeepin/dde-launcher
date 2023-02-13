@@ -6,6 +6,7 @@
 #include "constants.h"
 #include "applistdelegate.h"
 #include "appslistmodel.h"
+#include "iteminfo.h"
 
 #include <QStyleOptionViewItem>
 #include <QPropertyAnimation>
@@ -67,8 +68,11 @@ AppListView::AppListView(QWidget *parent)
     connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppListView::dropSwap);
 #endif
 
-    connect(m_scrollbar, &SmoothScrollBar::valueChanged, this, &AppListView::handleScrollValueChanged);
-    connect(m_scrollbar, &SmoothScrollBar::scrollFinished, this, &AppListView::handleScrollFinished);
+    onThemeChanged(DGuiApplicationHelper::instance()->themeType());
+
+    connect(m_scrollAni, &QPropertyAnimation::valueChanged, this, &AppListView::handleScrollValueChanged);
+    connect(m_scrollAni, &QPropertyAnimation::finished, this, &AppListView::handleScrollFinished);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppListView::onThemeChanged);
 }
 
 const QModelIndex AppListView::indexAt(const int index) const
@@ -132,13 +136,11 @@ void AppListView::mouseMoveEvent(QMouseEvent *e)
     if (e->buttons() != Qt::LeftButton)
         return;
 
-    // 如果是分类，禁止拖拽
-    AppsListModel::AppCategory isCategoryList = qobject_cast<AppsListModel*>(model())->category();
-    if (isCategoryList == AppsListModel::Category)
-        return;
+    // 列表标题不允许被拖拽
+    bool isTitle = index.data(AppsListModel::AppItemTitleRole).toBool();
 
-    if (qAbs(pos.x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
-        qAbs(pos.y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
+    if (!isTitle && (qAbs(pos.x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
+        qAbs(pos.y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD)) {
         return startDrag(indexAt(m_dragStartPos));
     }
 
@@ -196,25 +198,20 @@ void AppListView::mousePressEvent(QMouseEvent *e)
     if (!index.isValid())
         e->ignore();
 
-    const bool isCategoryList = qobject_cast<AppsListModel*>(model())->category() == AppsListModel::Category;
+    bool isTitle = index.data(AppsListModel::AppItemTitleRole).toBool();
 
-    if (e->button() == Qt::RightButton && !isCategoryList) {
+    if (e->button() == Qt::RightButton && !isTitle) {
         const QPoint rightClickPoint = mapToGlobal(e->pos());
         const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
 
-        if (clickedIndex.isValid())
+        if (clickedIndex.isValid()) {
+            qInfo() << "app listview popupMenuRequested emited....";
             emit popupMenuRequested(rightClickPoint, clickedIndex);
-    }
-
-    if (e->button() == Qt::LeftButton) {
-        // 小窗口模式下，当列表处于分类模式时，禁止鼠标拖动
-        if (isCategoryList) {
-            QListView::mousePressEvent(e);
-            return;
-        } else {
-            m_dragStartRow = indexAt(e->pos()).row();
         }
     }
+
+    if (e->button() == Qt::LeftButton)
+        m_dragStartRow = indexAt(e->pos()).row();
 
     QListView::mousePressEvent(e);
 }
@@ -222,9 +219,9 @@ void AppListView::mousePressEvent(QMouseEvent *e)
 void AppListView::mouseReleaseEvent(QMouseEvent *e)
 {
     if (QScroller::hasScroller(this)) {
-        QDBusInterface inPutInter("com.deepin.daemon.InputDevices",
-                             "/com/deepin/daemon/InputDevices",
-                             "com.deepin.daemon.InputDevices",
+        QDBusInterface inPutInter("org.deepin.dde.InputDevices1",
+                             "/org/deepin/dde/InputDevices1",
+                             "org.deepin.dde.InputDevices1",
                              QDBusConnection::sessionBus() ,this);
 
         const auto wheelSpeed = inPutInter.property("WheelSpeed").toInt();
@@ -237,12 +234,6 @@ void AppListView::mouseReleaseEvent(QMouseEvent *e)
     const QModelIndex &index = indexAt(e->pos());
     if (!index.isValid()){
         e->ignore();
-        return;
-    }
-
-    // 小窗口模式时，左键释放时切换模型到对应的分类列表中
-    if (qobject_cast<AppsListModel*>(model())->category() == AppsListModel::Category && e->button() == Qt::LeftButton) {
-        emit requestSwitchToCategory(index);
         return;
     }
 
@@ -516,4 +507,9 @@ void AppListView::menuHide()
         Q_EMIT entered(index);
     else
         Q_EMIT entered(QModelIndex());
+}
+
+void AppListView::onThemeChanged(DGuiApplicationHelper::ColorType)
+{
+    update();
 }

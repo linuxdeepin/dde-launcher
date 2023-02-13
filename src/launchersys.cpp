@@ -6,13 +6,14 @@
 #include "launcherinterface.h"
 #include "fullscreenframe.h"
 #include "windowedframe.h"
-#include "model/appsmanager.h"
-#include "global_util/util.h"
+#include "appsmanager.h"
+#include "util.h"
 #include "constants.h"
-#include "iconcachemanager.h"
+#include "amdbuslauncherinterface.h"
+#include "amdbusdockinterface.h"
 
-#define SessionManagerService "com.deepin.SessionManager"
-#define SessionManagerPath "/com/deepin/SessionManager"
+#define SessionManagerService "org.deepin.dde.SessionManager1"
+#define SessionManagerPath "/org/deepin/dde/SessionManager1"
 
 /**
  * @brief LauncherSys::LauncherSys 启动器界面实现及逻辑处理类
@@ -22,18 +23,18 @@ LauncherSys::LauncherSys(QObject *parent)
     : QObject(parent)
     , m_appManager(AppsManager::instance())
     , m_launcherInter(nullptr)
-    , m_dbusLauncherInter(new DBusLauncher(this))
-    , m_sessionManagerInter(new com::deepin::SessionManager(SessionManagerService, SessionManagerPath, QDBusConnection::sessionBus(), this))
+    , m_sessionManagerInter(new SessionManager(SessionManagerService, SessionManagerPath, QDBusConnection::sessionBus(), this))
     , m_windowLauncher(nullptr)
     , m_fullLauncher(nullptr)
-    , m_regionMonitor(new DRegionMonitor(this))
+    , m_regionMonitor(new Dtk::Gui::DRegionMonitor(this))
     , m_autoExitTimer(new QTimer(this))
     , m_ignoreRepeatVisibleChangeTimer(new QTimer(this))
     , m_calcUtil(CalculateUtil::instance())
-    , m_dockInter(new DBusDock(this))
-    , m_clicked(false)
+    , m_amDbusLauncher(new AMDBusLauncherInter(this))
+    , m_amDbusDockInter(new AMDBusDockInter(this))
+    , m_launcherPlugin(new LauncherPluginController(this))
 {
-    m_regionMonitor->setCoordinateType(DRegionMonitor::Original);
+    m_regionMonitor->setCoordinateType(Dtk::Gui::DRegionMonitor::Original);
     displayModeChanged();
 
     m_autoExitTimer->setInterval(60 * 1000);
@@ -41,15 +42,18 @@ LauncherSys::LauncherSys(QObject *parent)
 
     m_ignoreRepeatVisibleChangeTimer->setInterval(200);
     m_ignoreRepeatVisibleChangeTimer->setSingleShot(true);
-
-    connect(m_dbusLauncherInter, &DBusLauncher::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
-    connect(m_dbusLauncherInter, &DBusLauncher::DisplayModeChanged, this, &LauncherSys::onDisplayModeChanged, Qt::QueuedConnection);
-    connect(m_autoExitTimer, &QTimer::timeout, this, &LauncherSys::onAutoExitTimeout, Qt::QueuedConnection);
-    connect(m_dockInter, &DBusDock::FrontendRectChanged, this, &LauncherSys::onFrontendRectChanged);
-    connect(IconCacheManager::instance(), &IconCacheManager::iconLoaded, this, &LauncherSys::aboutToShowLauncher, Qt::QueuedConnection);
-    connect(IconCacheManager::instance(), &IconCacheManager::iconLoaded, this, &LauncherSys::updateLauncher);
-
     m_autoExitTimer->start();
+
+    // 插件加载
+    m_launcherPlugin->startLoader();
+
+    connect(m_amDbusLauncher, &AMDBusLauncherInter::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
+    connect(m_amDbusLauncher, &AMDBusLauncherInter::DisplayModeChanged, this, &LauncherSys::onDisplayModeChanged, Qt::QueuedConnection);
+
+    connect(m_amDbusDockInter, &AMDBusDockInter::FrontendWindowRectChanged, this, &LauncherSys::onFrontendRectChanged);
+
+    connect(m_autoExitTimer, &QTimer::timeout, this, &LauncherSys::onAutoExitTimeout, Qt::QueuedConnection);
+    connect(ConfigWorker::instance(), &DConfig::valueChanged, this, &LauncherSys::onValueChanged);
 }
 
 LauncherSys::~LauncherSys()
@@ -67,7 +71,6 @@ LauncherSys::~LauncherSys()
 void LauncherSys::showLauncher()
 {
     if (m_sessionManagerInter->locked()) {
-        qInfo() << "session locked, can not show launcher";
         return;
     }
 
@@ -78,12 +81,10 @@ void LauncherSys::showLauncher()
 
     m_ignoreRepeatVisibleChangeTimer->start();
 
-    if (IconCacheManager::iconLoadState()) {
-        m_autoExitTimer->stop();
-        registerRegion();
-        qApp->processEvents();
-        m_launcherInter->showLauncher();
-    }
+    m_autoExitTimer->stop();
+    registerRegion();
+    qApp->processEvents();
+    m_launcherInter->showLauncher();
 }
 
 /**dbus调用隐藏
@@ -103,23 +104,9 @@ void LauncherSys::hideLauncher()
     m_launcherInter->hideLauncher();
 }
 
-void LauncherSys::uninstallApp(const QString &appKey)
+void LauncherSys::uninstallApp(const QString &desktopPath)
 {
-    m_launcherInter->uninstallApp(appKey);
-}
-
-/**记录显示或者隐藏启动器ui的状态
- * @brief LauncherSys::setClickState
- * @param state 显示: true, 隐藏: false
- */
-void LauncherSys::setClickState(bool state)
-{
-    m_clicked = state;
-}
-
-bool LauncherSys::clickState() const
-{
-    return m_clicked;
+    m_launcherInter->uninstallApp(desktopPath);
 }
 
 bool LauncherSys::visible()
@@ -129,10 +116,9 @@ bool LauncherSys::visible()
 
 void LauncherSys::displayModeChanged()
 {
-    LauncherInterface* lastLauncher = m_launcherInter;
-
-    if (m_launcherInter && m_dbusLauncherInter)
-        m_calcUtil->setFullScreen(m_dbusLauncherInter->fullscreen());
+    LauncherInterface *lastLauncher = m_launcherInter;
+    if (m_launcherInter)
+        m_calcUtil->setFullScreen(m_amDbusLauncher->fullscreen());
 
     if (m_calcUtil->fullscreen()) {
         if (!m_fullLauncher) {
@@ -140,14 +126,17 @@ void LauncherSys::displayModeChanged()
             m_fullLauncher->installEventFilter(this);
             connect(m_fullLauncher, &FullScreenFrame::visibleChanged, this, &LauncherSys::onVisibleChanged);
             connect(m_fullLauncher, &FullScreenFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
+            connect(m_fullLauncher, &FullScreenFrame::searchApp, m_launcherPlugin, &LauncherPluginController::onSearchedTextChanged, Qt::QueuedConnection);
         }
         m_launcherInter = static_cast<LauncherInterface*>(m_fullLauncher);
+
     } else {
         if (!m_windowLauncher) {
             m_windowLauncher = new WindowedFrame;
             m_windowLauncher->installEventFilter(this);
             connect(m_windowLauncher, &WindowedFrame::visibleChanged, this, &LauncherSys::onVisibleChanged);
             connect(m_windowLauncher, &WindowedFrame::visibleChanged, m_ignoreRepeatVisibleChangeTimer, static_cast<void (QTimer::*)()>(&QTimer::start), Qt::DirectConnection);
+            connect(m_windowLauncher, &WindowedFrame::searchApp, m_launcherPlugin, &LauncherPluginController::onSearchedTextChanged, Qt::QueuedConnection);
         }
         m_launcherInter = static_cast<LauncherInterface*>(m_windowLauncher);
     }
@@ -200,7 +189,7 @@ bool LauncherSys::eventFilter(QObject *watched, QEvent *event)
 
 void LauncherSys::registerRegion()
 {
-    m_regionMonitorConnect = connect(m_regionMonitor, &DRegionMonitor::buttonPress, this, &LauncherSys::onButtonPress);
+    m_regionMonitorConnect = connect(m_regionMonitor, &Dtk::Gui::DRegionMonitor::buttonPress, this, &LauncherSys::onButtonPress);
 
     if (!m_regionMonitor->registered())
         m_regionMonitor->registerRegion();
@@ -214,8 +203,9 @@ void LauncherSys::unRegisterRegion()
 
 void LauncherSys::onDisplayModeChanged()
 {
-    if (m_fullLauncher)
-        m_fullLauncher->updateDisplayMode(m_dbusLauncherInter->displaymode());
+    if (m_fullLauncher) {
+        m_fullLauncher->updateDisplayMode(m_amDbusLauncher->displaymode());
+    }
 }
 
 /** 启动器跟随任务栏进行显示
@@ -232,45 +222,11 @@ void LauncherSys::onButtonPress(const QPoint &p, const int flag)
     m_launcherInter->regionMonitorPoint(p, flag);
 }
 
-void LauncherSys::updateLauncher()
+void LauncherSys::onValueChanged()
 {
-    if (!m_launcherInter->visible())
-        return;
-
-    if (m_launcherInter == m_fullLauncher)
-        m_fullLauncher->update();
-    else
+    if (m_windowLauncher)
         m_windowLauncher->update();
-}
 
-void LauncherSys::aboutToShowLauncher()
-{
-    if (m_launcherInter->visible())
-        return;
-
-    if (IconCacheManager::iconLoadState() && clickState())
-        m_launcherInter->showLauncher();
-}
-
-void LauncherSys::preloadIcon()
-{
-    if (!getDConfigValue("preloadAppsIcon", true).toBool())
-        return;
-
-    if (!m_dbusLauncherInter->fullscreen()) {
-        emit m_appManager->loadWindowIcon();
-        return;
-    }
-
-    // 进程启动加载图标资源
-    // 全屏分类/自由模式，搜索或者导航栏的高度无法确定，确定后开始加载所有应用资源
-    if (m_calcUtil->displayMode() == GROUP_BY_CATEGORY)
-        emit m_appManager->loadCurRationIcon(GROUP_BY_CATEGORY);
-    else
-        emit m_appManager->loadCurRationIcon(ALL_APPS);
-}
-
-void LauncherSys::show()
-{
-    setClickState(true);
+    if (m_fullLauncher)
+        m_fullLauncher->update();
 }

@@ -22,7 +22,7 @@ static QString getLocalFile(const QString &file)
 
 DisplayHelper::DisplayHelper(QObject *parent)
     : QObject(parent)
-    , m_displayInter(new DisplayInter("com.deepin.daemon.Display", "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
+    , m_displayInter(new DisplayInter("org.deepin.dde.Display1", "/org/deepin/dde/Display1", QDBusConnection::sessionBus(), this))
 {
     m_displayMode = m_displayInter->GetRealDisplayMode();
 
@@ -39,10 +39,10 @@ BackgroundManager::BackgroundManager(QObject *parent)
     : QObject(parent)
     , m_currentWorkspace(-1)
     , m_wmInter(new wm("com.deepin.wm", "/com/deepin/wm", QDBusConnection::sessionBus(), this))
-    , m_imageEffectInter(new ImageEffectInter("com.deepin.daemon.ImageEffect", "/com/deepin/daemon/ImageEffect", QDBusConnection::systemBus(), this))
-    , m_imageblur(new ImageEffeblur("com.deepin.daemon.ImageEffect", "/com/deepin/daemon/ImageBlur", QDBusConnection::systemBus(), this))
-    , m_appearanceInter(new AppearanceInter("com.deepin.daemon.Appearance", "/com/deepin/daemon/Appearance", QDBusConnection::sessionBus(), this))
-    , m_displayInter(new DisplayInter(DisplayInterface, "/com/deepin/daemon/Display", QDBusConnection::sessionBus(), this))
+    , m_imageEffectInter(new ImageEffectInter("org.deepin.dde.ImageEffect1", "/org/deepin/dde/ImageEffect1", QDBusConnection::systemBus(), this))
+    , m_imageblur(new ImageEffeblur("org.deepin.dde.ImageEffect1", "/org/deepin/dde/ImageBlur1", QDBusConnection::systemBus(), this))
+    , m_appearanceInter(new AppearanceInter("org.deepin.dde.Appearance1", "/org/deepin/dde/Appearance1", QDBusConnection::sessionBus(), this))
+    , m_displayInter(new DisplayInter("org.deepin.dde.Display1", "/org/deepin/dde/Display1", QDBusConnection::sessionBus(), this))
     , m_fileName(QString())
 {
     m_appearanceInter->setSync(false, false);
@@ -135,7 +135,12 @@ void BackgroundManager::updateBlurBackgrounds()
         }
     }
 
-    QString path = getLocalFile(m_wmInter->GetCurrentWorkspaceBackgroundForMonitor(screenName));
+    QDBusMessage message = QDBusMessage::createMethodCall("org.deepin.dde.Appearance1", "/org/deepin/dde/Appearance1", "org.deepin.dde.Appearance1", "GetCurrentWorkspaceBackgroundForMonitor");
+    message << screenName;
+
+    const QDBusPendingReply<QString> result = QDBusConnection::sessionBus().asyncCall(message);
+
+    QString path = getLocalFile(result.value());
     m_fileName = QFile::exists(path) ? path : DefaultWallpaper;
 
     getImageDataFromDbus(m_fileName);

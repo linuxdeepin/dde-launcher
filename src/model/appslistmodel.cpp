@@ -239,8 +239,6 @@ void AppsListModel::setDragDropIndex(const QModelIndex &index)
 {
     if (m_dragDropIndex == index)
         return;
-    //    if (m_dragDropIndex == m_dragStartIndex)
-    //        return;
 
     m_dragDropIndex = index;
 
@@ -252,11 +250,35 @@ void AppsListModel::setDragDropIndex(const QModelIndex &index)
  * @param appKey item应用对应的key值
  * @param pos item 拖拽释放后所在的行数
  */
-void AppsListModel::dropInsert(const QString &appKey, const int pos)
+void AppsListModel::dropInsert(const QString &desktop, const int pos)
 {
     beginInsertRows(QModelIndex(), pos, pos);
-    int appPos = m_pageIndex * m_calcUtil->appPageItemCount(m_category) + pos;
-    m_appsManager->restoreItem(appKey, appPos);
+    int appPos = pos;
+    if ((m_category == AppsListModel::FullscreenAll) || (m_category == AppsListModel::Dir))
+        appPos = m_pageIndex * m_calcUtil->appPageItemCount(m_category) + pos;
+
+    m_appsManager->restoreItem(desktop, m_category, appPos);
+    endInsertRows();
+}
+
+/**在当前模型指定的位置插入应用
+ * @brief AppsListModel::insertItem
+ * @param pos 插入应用的行数
+ */
+void AppsListModel::insertItem(int pos)
+{
+    beginInsertRows(QModelIndex(), pos, pos);
+
+    pos += m_appsManager->getPageIndex() * m_calcUtil->appPageItemCount(m_appsManager->getCategory());
+
+    m_appsManager->insertDropItem(pos);
+    endInsertRows();
+}
+
+void AppsListModel::insertItem(const ItemInfo_v1 &item, const int pos)
+{
+    beginInsertRows(QModelIndex(), pos, pos);
+    m_appsManager->dropToCollected(item, pos);
     endInsertRows();
 }
 
@@ -269,10 +291,13 @@ void AppsListModel::dropSwap(const int nextPos)
     if (!m_dragStartIndex.isValid())
         return;
 
-    const QString appKey = m_dragStartIndex.data(AppsListModel::AppKeyRole).toString();
+    const ItemInfo_v1 &appInfo = m_dragStartIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
 
-    removeRows(m_dragStartIndex.row(), 1, QModelIndex());
-    dropInsert(appKey, nextPos);
+    // 从文件夹展开窗口移除应用时，文件夹本身不执行移动操作
+    if (m_appsManager->getDragMode() != AppsManager::DirOut) {
+        removeRows(m_dragStartIndex.row(), 1, QModelIndex());
+        dropInsert(appInfo.m_desktop, nextPos);
+    }
 
     emit QAbstractItemModel::dataChanged(m_dragStartIndex, m_dragDropIndex);
 
@@ -309,9 +334,12 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
     int nPageCount = nSize - pageCount * m_pageIndex;
     nPageCount = nPageCount > 0 ? nPageCount : 0;
 
-    if(!m_calcUtil->fullscreen()){
+    if(!m_calcUtil->fullscreen())
         return nSize;
-    }
+
+    if (m_category == AppsListModel::Favorite || (m_category == AppsListModel::Search)
+                              || (m_category == AppsListModel::PluginSearch))
+        return nSize;
 
     return qMin(pageCount, nPageCount);
 }
@@ -321,17 +349,18 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
  * @param appKey app key
  * @return 根据appkey值,返回app对应的模型索引
  */
-const QModelIndex AppsListModel::indexAt(const QString &appKey) const
+const QModelIndex AppsListModel::indexAt(const QString &desktopPath) const
 {
     int i = 0;
     const int count = rowCount(QModelIndex());
-    while (i != count) {
-        if (index(i).data(AppKeyRole).toString() == appKey)
+    while (i < count) {
+        if (index(i).data(AppDesktopRole).toString() == desktopPath)
             return index(i);
+
         ++i;
     }
 
-    Q_UNREACHABLE();
+    return QModelIndex();
 }
 
 void AppsListModel::setDrawBackground(bool draw)
@@ -340,6 +369,22 @@ void AppsListModel::setDrawBackground(bool draw)
 
     m_drawBackground = draw;
     Q_EMIT QAbstractItemModel::dataChanged(QModelIndex(), QModelIndex());
+}
+
+void AppsListModel::updateModelData(const QModelIndex dragIndex, const QModelIndex dropIndex)
+{
+    // 保存数据到本地列表
+    m_appsManager->updateUsedSortData(dragIndex, dropIndex);
+
+    // 保存列表数据到配置文件
+    m_appsManager->saveFullscreenUsedSortedList();
+
+    // 2022年 10月 18日 星期二 11:41:36 CST
+    // appgridview.cpp中本来就有通过信号槽方式连接的逻辑，先移除后插入。无须单独安排接口处理。
+
+    // 通知界面更新翻页控件
+    emit m_appsManager->dataChanged(AppsListModel::FullscreenAll);
+    emit QAbstractItemModel::dataChanged(dragIndex, dropIndex);
 }
 
 /**
@@ -355,11 +400,13 @@ bool AppsListModel::removeRows(int row, int count, const QModelIndex &parent)
     Q_UNUSED(count)
     Q_UNUSED(parent)
 
-    // TODO: not support remove multiple rows
-    Q_ASSERT(count == 1);
+    if (count > 1) {
+        qDebug() << "AppsListModel does't support removing multiple rows!";
+        return false;
+    }
 
     beginRemoveRows(parent, row, row);
-    m_appsManager->stashItem(index(row));
+    m_appsManager->dragdropStashItem(index(row), m_category);
     endRemoveRows();
 
     return true;
@@ -385,8 +432,8 @@ bool AppsListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action
     if (data->data("RequestDock").isEmpty())
         return false;
 
-    // 全屏搜索模式不支持拖拽
-    if (m_category == Search) {
+    // 全屏搜索模式、小窗口所有应用列表不支持drop
+    if (m_category == Search || m_category == WindowedAll) {
         return  false;
     }
 
@@ -406,9 +453,15 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
     const QModelIndex index = indexes.first();
 
     QMimeData *mime = new QMimeData;
-    mime->setData("RequestDock", index.data(AppDesktopRole).toByteArray());
-    mime->setData("AppKey", index.data(AppKeyRole).toByteArray());
 
+    // 拖动应用到任务栏驻留针对不同应用提供配置功能, 默认为启用
+    const QString &appKey = index.data(AppKeyRole).toString();
+
+    if (!ConfigWorker::getValue(DLauncher::UNABLE_TO_DOCK_LIST, QStringList()).toStringList().contains(appKey))
+        mime->setData("RequestDock", index.data(AppDesktopRole).toByteArray());
+
+    mime->setData("DesktopPath", index.data(AppDesktopRole).toByteArray());
+    mime->setImageData(index.data(AppsListModel::AppRawItemInfoRole));
     if (index.data(AppIsRemovableRole).toBool())
         mime->setData("Removable", "");
 
@@ -424,15 +477,37 @@ QMimeData *AppsListModel::mimeData(const QModelIndexList &indexes) const
  */
 QVariant AppsListModel::data(const QModelIndex &index, int role) const
 {
+    ItemInfo_v1 itemInfo = ItemInfo_v1();
     int nSize = m_appsManager->appsInfoListSize(m_category);
     int nFixCount = m_calcUtil->appPageItemCount(m_category);
     int pageCount = qMin(nFixCount, nSize - nFixCount * m_pageIndex);
-    if(!m_calcUtil->fullscreen()) pageCount = nSize;
+
+    if(!m_calcUtil->fullscreen()) {
+        pageCount = nSize;
+        if (m_category == TitleMode)
+            itemInfo = m_appsManager->appsCategoryListIndex(index.row());
+        else if (m_category == LetterMode) {
+            itemInfo = m_appsManager->appsLetterListIndex(index.row());
+        } else if (m_category == WindowedAll) {
+            itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
+        } else if (m_category == Favorite) {
+            itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
+        } else if ((m_category == Search) || (m_category == PluginSearch)) {
+            itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
+        }
+    } else {
+        if ((m_category == Search) || (m_category == PluginSearch)) {
+            // 保证搜索原数据模型中的数据未经过翻页处理
+            pageCount = nSize;
+            itemInfo = m_appsManager->appsInfoListIndex(m_category, index.row());
+        } else {
+            int start = nFixCount * m_pageIndex;
+            itemInfo = m_appsManager->appsInfoListIndex(m_category, start + index.row());
+        }
+    }
+
     if (!index.isValid() || index.row() >= pageCount)
         return QVariant();
-
-    int start = nFixCount * m_pageIndex;
-    const ItemInfo &itemInfo = m_appsManager->appsInfoListIndex(m_category, start + index.row());
 
     switch (role) {
     case AppRawItemInfoRole:
@@ -443,14 +518,10 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return itemInfo.m_desktop;
     case AppKeyRole:
         return itemInfo.m_key;
-    case AppIconKeyRole:
-        return itemInfo.m_iconKey;
-    case AppCategoryRole:
-        return QVariant::fromValue(itemInfo.category());
     case AppGroupRole:
         return QVariant::fromValue(m_category);
     case AppAutoStartRole:
-        return m_category != Category ? m_appsManager->appIsAutoStart(itemInfo.m_desktop) : false;
+        return m_appsManager->appIsAutoStart(itemInfo.m_desktop);
     case AppIsOnDesktopRole:
         return m_appsManager->appIsOnDesktop(itemInfo.m_key);
     case AppIsOnDockRole:
@@ -461,40 +532,26 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return m_appsManager->appIsProxy(itemInfo.m_key);
     case AppEnableScalingRole:
         return m_appsManager->appIsEnableScaling(itemInfo.m_key);
-    case AppNewInstallRole: {
-        if (m_category == Category) {
-            const ItemInfoList &list = m_appsManager->appsInfoList(CateGoryMap[itemInfo.m_categoryId]);
-            for (const ItemInfo &in : list) {
-                if (m_appsManager->appIsNewInstall(in.m_key)) return true;
-            }
-        }
-
+    case AppNewInstallRole:
         return m_appsManager->appIsNewInstall(itemInfo.m_key);
-    }
     case AppIconRole:
-        return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize().width());
+        return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize(m_category).width());
     case AppDialogIconRole:
         return m_appsManager->appIcon(itemInfo, DLauncher::APP_DLG_ICON_SIZE);
     case AppDragIconRole:
-        return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize().width());
+        return m_appsManager->appIcon(itemInfo, m_calcUtil->appIconSize(m_category).width() * 1.2);
     case AppListIconRole: {
-        QSize iconSize = (static_cast<AppsListModel::AppCategory>(m_category) == AppsListModel::Category) ? QSize(DLauncher::APP_CATEGORY_ICON_SIZE, DLauncher::APP_CATEGORY_ICON_SIZE) : m_calcUtil->appIconSize();
+        QSize iconSize = m_calcUtil->appIconSize(m_category);
         return m_appsManager->appIcon(itemInfo, iconSize.width());
     }
     case ItemSizeHintRole:
         return m_calcUtil->appItemSize();
     case AppIconSizeRole:
-        return m_calcUtil->appIconSize();
+        return m_calcUtil->appIconSize(m_category);
     case AppFontSizeRole:
         return DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6);
     case AppItemIsDraggingRole:
         return indexDragging(index);
-    case CategoryEnterIconRole:
-        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
-            return DHiDPIHelper::loadNxPixmap(":/widgets/images/enter_details_normal-dark.svg");
-        } else {
-            return DHiDPIHelper::loadNxPixmap(":/widgets/images/enter_details_normal.svg");
-        }
     case DrawBackgroundRole:
         return m_drawBackground;
     case AppHideOpenRole:
@@ -507,8 +564,7 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return (m_actionSettings && !m_actionSettings->get("auto-start").toBool()) || m_hideStartUpPackages.contains(itemInfo.m_key);
     case AppHideUninstallRole:
         return (m_actionSettings && !m_actionSettings->get("uninstall").toBool()) || m_hideUninstallPackages.contains(itemInfo.m_key);
-    case AppHideUseProxyRole:
-    {
+    case AppHideUseProxyRole: {
         bool hideUse = ((m_actionSettings && !m_actionSettings->get("use-proxy").toBool()) || hideUseProxyPackages.contains(itemInfo.m_key));
         return DSysInfo::isCommunityEdition() ? hideUse : (!QFile::exists(ChainsProxy_path) || hideUse);
     }
@@ -522,7 +578,28 @@ QVariant AppsListModel::data(const QModelIndex &index, int role) const
         return !m_cantStartUpPackages.contains(itemInfo.m_key);
     case AppCanOpenProxyRole:
         return !cantUseProxyPackages.contains(itemInfo.m_key);
-    default:;
+    case ItemIsDirRole:
+        return itemInfo.m_isDir;
+    case DirItemInfoRole:
+        return QVariant::fromValue(itemInfo.m_appInfoList);
+    case DirAppIconsRole: {
+        QList<QPixmap> pixmapList = m_appsManager->getDirAppIcon(index);
+        return QVariant::fromValue(pixmapList);
+    }
+    case AppItemTitleRole:
+        return itemInfo.m_iconKey.isEmpty();
+    case DirNameRole: {
+        const ItemInfo_v1 info = m_appsManager->createOfCategory(itemInfo.m_categoryId);
+        return QVariant::fromValue(info);
+    }
+    case AppItemStatusRole:
+        return itemInfo.m_status;
+    case AppIsInFavoriteRole: {
+        const ItemInfoList_v1 list = m_appsManager->appsInfoList(AppsListModel::Favorite);
+        return list.contains(itemInfo);
+    }
+    default:
+        break;
     }
 
     return QVariant();
@@ -537,10 +614,11 @@ Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const
 {
     const Qt::ItemFlags defaultFlags = QAbstractListModel::flags(index);
 
-    if (m_category == All)
+    // 全屏、收藏列表支持拖拽
+    if (m_category == FullscreenAll || m_category == Favorite)
         return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
-    else
-        return defaultFlags;
+
+    return defaultFlags;
 }
 
 ///
@@ -549,9 +627,8 @@ Qt::ItemFlags AppsListModel::flags(const QModelIndex &index) const
 ///
 void AppsListModel::dataChanged(const AppCategory category)
 {
-    if (category == All || category == m_category)
+    if (category == FullscreenAll || category == m_category)
         emit QAbstractItemModel::layoutChanged();
-    //        emit QAbstractItemModel::dataChanged(index(0), index(rowCount(QModelIndex())));
 }
 
 ///
@@ -560,7 +637,7 @@ void AppsListModel::dataChanged(const AppCategory category)
 ///
 void AppsListModel::layoutChanged(const AppsListModel::AppCategory category)
 {
-    if (category == All || category == m_category)
+    if (category == FullscreenAll || category == m_category)
         emit QAbstractItemModel::dataChanged(QModelIndex(), QModelIndex());
 }
 
@@ -586,7 +663,7 @@ bool AppsListModel::indexDragging(const QModelIndex &index) const
  * @brief AppsListModel::itemDataChanged item数据变化时触发模型内部信号
  * @param info 数据发生变化的item信息
  */
-void AppsListModel::itemDataChanged(const ItemInfo &info)
+void AppsListModel::itemDataChanged(const ItemInfo_v1 &info)
 {
     int i = 0;
     const int count = rowCount(QModelIndex());
@@ -599,29 +676,3 @@ void AppsListModel::itemDataChanged(const ItemInfo &info)
         ++i;
     }
 }
-
-//bool AppsListModel::itemIsRemovable(const QString &desktop) const
-//{
-//    return m_holdPackages.contains(desktop);
-//    static QStringList blacklist;
-//    if (blacklist.isEmpty()) {
-//        QFile file(UninstallFilterFile);
-//        if (file.open(QFile::ReadOnly)) {
-//            QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
-//            QJsonObject obj = doc.object();
-//            QJsonArray arr = obj["blacklist"].toArray();
-//            foreach (QJsonValue val, arr) {
-//                blacklist << val.toString();
-//            }
-//            file.close();
-//        }
-//    }
-
-//    foreach (QString val, blacklist) {
-//        if (desktop.endsWith(val)) {
-//            return false;
-//        }
-//    }
-
-//    return true;
-//}

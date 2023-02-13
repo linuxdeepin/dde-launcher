@@ -15,18 +15,10 @@
 #include <QMenu>
 
 #include "./widgets/avatar.h"
-#include "./widgets/categorybutton.h"
-#include "./widgets/categorytitlewidget.h"
-#include "./widgets/datetimewidget.h"
 #include "./widgets/gradientlabel.h"
-#include "./widgets/hseparator.h"
-#include "./widgets/minicategorywidget.h"
 #include "./widgets/miniframebutton.h"
-#include "./widgets/miniframenavigation.h"
 #include "./widgets/miniframerightbar.h"
 #include "./widgets/miniframeswitchbtn.h"
-#include "./widgets/navigationwidget.h"
-#include "./widgets/roundedbutton.h"
 #include "./widgets/searchlineedit.h"
 #include "./widgets/applistarea.h"
 
@@ -35,7 +27,8 @@
 
 #include "fullscreenframe.h"
 #include "windowedframe.h"
-
+#include "editlabel.h"
+#include "iconbutton.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -48,17 +41,13 @@ SET_BUTTON_ACCESSIBLE(MiniFrameButton, m_w->accessibleName())
 SET_FORM_ACCESSIBLE(QMenu, "Menu")
 SET_FORM_ACCESSIBLE(AppListArea, "AppListArea")
 SET_FORM_ACCESSIBLE(FullScreenFrame, "FullScreenFrame")
-SET_FORM_ACCESSIBLE(NavigationWidget, "NavigationWidget")
 SET_LABEL_ACCESSIBLE(BoxFrame, "LauncherFrame")
 SET_FORM_ACCESSIBLE(SearchWidget, "SearchWidget")
 SET_EDITABLE_ACCESSIBLE(QLineEdit, "LineEdit")
-SET_FORM_ACCESSIBLE(DatetimeWidget, "DatetimeWidget")
 SET_BUTTON_ACCESSIBLE(Avatar, "Avatar")
 SET_BUTTON_ACCESSIBLE(MiniFrameSwitchBtn, "MiniFrameSwitchBtn")
-SET_FORM_ACCESSIBLE(HSeparator, "HSeparator")
 SET_FORM_ACCESSIBLE(MiniFrameRightBar, "MiniFrameRightBar")
 SET_FORM_ACCESSIBLE(WindowedFrame, "WindowedFrame")
-SET_BUTTON_ACCESSIBLE(RoundedButton, m_w->objectName())
 SET_FORM_ACCESSIBLE(QWidget, "widget")
 SET_FORM_ACCESSIBLE(QFrame, "frame")
 SET_SLIDER_ACCESSIBLE(QScrollBar, "scrollerbar")
@@ -69,7 +58,12 @@ SET_FORM_ACCESSIBLE(QLabel, "QLabel")
 SET_FORM_ACCESSIBLE(MaskQWidget, "MaskQWidget")
 SET_FORM_ACCESSIBLE(DHBoxWidget, "DHBoxWidget")
 SET_FORM_ACCESSIBLE(DBoxWidget, "DBoxWidget")
-
+SET_FORM_ACCESSIBLE(SearchModeWidget, "SearchModeWidget")
+SET_FORM_ACCESSIBLE(AppDrawerWidget, "AppDrawerWidget")
+SET_FORM_ACCESSIBLE(MultiPagesView, "MultiPagesView")
+SET_FORM_ACCESSIBLE(IconButton, "IconButton")
+SET_FORM_ACCESSIBLE(ModeSwitch, "ModeSwitch")
+SET_FORM_ACCESSIBLE(EditLabel, "EditLabel")
 
 QAccessibleInterface *accessibleFactory(const QString &classname, QObject *object)
 {
@@ -85,13 +79,10 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, BoxFrame);
     USE_ACCESSIBLE(classname, SearchWidget);
     USE_ACCESSIBLE(classname, QLineEdit);
-    USE_ACCESSIBLE(classname, DatetimeWidget);
     USE_ACCESSIBLE(classname, Avatar);
     USE_ACCESSIBLE(classname, WindowedFrame);
-    USE_ACCESSIBLE(classname, HSeparator);
     USE_ACCESSIBLE(classname, MiniFrameRightBar);
     USE_ACCESSIBLE(classname, MiniFrameSwitchBtn);
-    USE_ACCESSIBLE(classname, RoundedButton);
     USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DIconButton, object->objectName());
     USE_ACCESSIBLE_BY_OBJECTNAME(QString(classname).replace("Dtk::Widget::", ""), DSwitchButton, object->objectName());
     USE_ACCESSIBLE(classname, QWidget);
@@ -103,6 +94,12 @@ QAccessibleInterface *accessibleFactory(const QString &classname, QObject *objec
     USE_ACCESSIBLE(classname, MaskQWidget);
     USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DHBoxWidget);
     USE_ACCESSIBLE(QString(classname).replace("Dtk::Widget::", ""), DBoxWidget);
+    USE_ACCESSIBLE(classname, SearchModeWidget)
+    USE_ACCESSIBLE(classname, AppDrawerWidget)
+    USE_ACCESSIBLE(classname, MultiPagesView)
+    USE_ACCESSIBLE(classname, IconButton)
+    USE_ACCESSIBLE(classname, ModeSwitch)
+    USE_ACCESSIBLE(classname, EditLabel)
 
     if (!interface && object->inherits("QWidget") && !ignoreLst.contains(classname)) {
         QWidget *w = static_cast<QWidget *>(object);

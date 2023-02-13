@@ -11,10 +11,6 @@
 #include <QTimer>
 #include <QDBusConnection>
 
-#include <com_deepin_api_xeventmonitor.h>
-
-using XEventMonitor = com::deepin::api::XEventMonitor;
-
 Menu::Menu(QWidget *parent)
     : QMenu(parent)
 {
@@ -24,7 +20,7 @@ Menu::Menu(QWidget *parent)
     qApp->installEventFilter(this);
 
     // 点击任意区域均退出即可，启动器中菜单无二级菜单
-    m_monitor = new XEventMonitor("com.deepin.api.XEventMonitor", "/com/deepin/api/XEventMonitor", QDBusConnection::sessionBus(), this);
+    m_monitor = new XEventMonitor("org.deepin.dde.XEventMonitor1", "/org/deepin/dde/XEventMonitor1", QDBusConnection::sessionBus(), this);
     connect(m_monitor, &XEventMonitor::ButtonPress, this, &Menu::onButtonPress);
 }
 
@@ -40,7 +36,6 @@ bool Menu::eventFilter(QObject *watched, QEvent *event)
     // 存在rightMenu和rightMenuWindow的对象名
     if (!watched->objectName().startsWith("rightMenu") && isVisible()) {
         if (event->type() == QEvent::DragMove || event->type() == QEvent::Wheel) {
-            qDebug() << Q_FUNC_INFO << watched->objectName() <<  event->type() << this->pos();
             hide();
         }
         // 当右键菜单显示时捕获鼠标的release事件,click=press+release，
@@ -102,6 +97,8 @@ void Menu::showEvent(QShowEvent *event)
 
 void Menu::hideEvent(QHideEvent *event)
 {
+    qDebug() << Q_FUNC_INFO << "hide menu...";
+
     QMenu::hideEvent(event);
 
     m_monitor->blockSignals(true);

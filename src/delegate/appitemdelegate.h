@@ -4,11 +4,16 @@
 
 #ifndef APPITEMDELEGATE_H
 #define APPITEMDELEGATE_H
+#include "iteminfo.h"
+
+#include <DGuiApplicationHelper>
 
 #include <QAbstractItemDelegate>
 #include <QModelIndex>
 #include <QStyleOptionViewItem>
 #include <QPainter>
+
+DGUI_USE_NAMESPACE
 
 class CalculateUtil;
 class AppItemDelegate : public QAbstractItemDelegate
@@ -20,7 +25,10 @@ public:
 
     void setCurrentIndex(const QModelIndex &index);
     const QModelIndex &currentIndex() const {return CurrentIndex;}
-
+    void setDirModelIndex(QModelIndex dragIndex, QModelIndex dropIndex);
+    void setItemList(const ItemInfoList_v1 &items);
+    QRect appSourceRect(QRect rect, int index) const;
+    void drawAppDrawer(QPainter *painter, const QModelIndex &index, QRect iconRect) const;
 
 signals:
     void requestUpdate(const QModelIndex &idx) const;
@@ -40,6 +48,9 @@ private:
     QPixmap m_autoStartPixmap; // 自启动的app样式
 
     static QModelIndex CurrentIndex;
+    QModelIndex m_dragIndex;
+    QModelIndex m_dropIndex;
+    ItemInfoList_v1 m_itemList;
 };
 
 #endif // APPITEMDELEGATE_H

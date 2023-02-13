@@ -4,26 +4,25 @@
 
 #include "applistarea.h"
 
-#include <QDebug>
-#include <QWheelEvent>
-#include <QScroller>
-#include <QTimer>
-#include <private/qguiapplication_p.h>
-#include <qpa/qplatformtheme.h>
+#include <QScrollBar>
 
 AppListArea::AppListArea(QWidget *parent)
     : QScrollArea(parent)
 {
 }
 
-void AppListArea::wheelEvent(QWheelEvent *e)
+void AppListArea::setHorizontalScrollValue(const int value)
 {
-    if (e->modifiers().testFlag(Qt::ControlModifier)) {
-        e->accept();
+    if (!horizontalScrollBar())
+        return;
 
-        if (e->delta() > 0)
-            emit increaseIcon();
-        else
-            emit decreaseIcon();
-    }
+    horizontalScrollBar()->setValue(value);
+}
+
+int AppListArea::horizontalScrollValue() const
+{
+    if (!horizontalScrollBar())
+        return 0;
+
+    return horizontalScrollBar()->value();
 }

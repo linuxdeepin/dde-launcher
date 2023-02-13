@@ -28,5 +28,6 @@
         <file>images/page_indicator.svg</file>
         <file>images/page_indicator_active.svg</file>
         <file>images/application-x-desktop.svg</file>
+        <file>images/checked_rounded_rect.svg</file>
     </qresource>
 </RCC>

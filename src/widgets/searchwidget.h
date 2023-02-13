@@ -4,11 +4,14 @@
 
 #ifndef SEARCHWIDGET_H
 #define SEARCHWIDGET_H
+
 #include "calculate_util.h"
 #include "searchlineedit.h"
-#include <QWidget>
+
 #include <DFloatingButton>
 #include <DSearchEdit>
+
+#include <QWidget>
 
 DWIDGET_USE_NAMESPACE
 
@@ -20,8 +23,7 @@ public:
     explicit SearchWidget(QWidget *parent = nullptr);
 
     DSearchEdit *edit();
-    DFloatingButton *categoryBtn();
-    DFloatingButton *toggleModeBtn();
+    DIconButton *toggleModeBtn();
 
     void setLeftSpacing(int spacing);
     void setRightSpacing(int spacing);
@@ -30,7 +32,6 @@ public:
     void hideToggle();
 
     void updateSize(double scaleX, double scaleY);
-    void updateCurrentCategoryBtnIcon();
 
 public slots:
     void clearSearchContent();
@@ -47,8 +48,7 @@ private:
     DSearchEdit *m_searchEdit;
     QFrame *m_leftSpacing;
     QFrame *m_rightSpacing;
-    DFloatingButton *m_toggleCategoryBtn;                // 所有App模式 和 分类app模式切换按钮（左上侧）
-    DFloatingButton *m_toggleModeBtn;                    // 全屏模式下收起按钮(右上)
+    DIconButton *m_toggleModeBtn;                    // 全屏模式下收起按钮(右上)
     CalculateUtil* m_calcUtil;
 };
 

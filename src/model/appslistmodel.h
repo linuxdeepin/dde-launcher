@@ -6,12 +6,11 @@
 #define APPSLISTMODEL_H
 
 #include <QAbstractListModel>
-
 #define MAXIMUM_POPULAR_ITEMS 11
 
 class AppsManager;
 class CalculateUtil;
-class ItemInfo;
+class ItemInfo_v1;
 class QGSettings;
 class AppsListModel : public QAbstractListModel
 {
@@ -29,9 +28,7 @@ public:
         AppDialogIconRole,
         AppListIconRole,
         AppKeyRole,
-        AppIconKeyRole,
         AppDesktopRole,
-        AppCategoryRole,
         AppGroupRole,
         AppAutoStartRole,
         AppNewInstallRole,
@@ -40,11 +37,18 @@ public:
         AppIsRemovableRole,
         AppIsProxyRole,
         AppEnableScalingRole,
+        AppIsInFavoriteRole,
         AppIconSizeRole,
         AppFontSizeRole,
         AppItemIsDraggingRole,
+        ItemIsDirRole,
+        DirItemInfoRole,
+        DirAppIconsRole,
+        DirNameRole,
         AppDragIconRole,
-        CategoryEnterIconRole,
+        AppItemTitleRole,
+        AppItemStatusRole,
+        ItemRatio,
         DrawBackgroundRole,
         AppHideOpenRole,
         AppHideSendToDesktopRole,
@@ -56,14 +60,18 @@ public:
         AppCanSendToDesktopRole,
         AppCanSendToDockRole,
         AppCanStartUpRole,
-        AppCanOpenProxyRole
+        AppCanOpenProxyRole,
     };
 
     enum AppCategory {
-        All,
-        Custom,                 // 自定义的排序模式
-        Search,                 // 搜索模式
-        Category,               // 分类模式
+        WindowedAll,            // 小窗口所有应用列表
+        FullscreenAll,          // 全屏所有应用列表
+        TitleMode,              // 标题模式
+        LetterMode,             // 字母模式
+        Search,                 // 本地搜索模式
+        Favorite,               // 收藏应用
+        Dir,                    // 应用抽屉
+        PluginSearch,           // 插件搜索
 
         // apps category
         Internet,               // 网络模式
@@ -81,12 +89,15 @@ public:
 
 public:
     explicit AppsListModel(const AppCategory& category, QObject *parent = nullptr);
-    void setPageIndex(int pageIndex){m_pageIndex = pageIndex;}
+    void setPageIndex(int pageIndex) { m_pageIndex = pageIndex; }
+    int getPageIndex() const { return m_pageIndex; }
 
     inline AppCategory category() const {return m_category;}
     void setDraggingIndex(const QModelIndex &index);
     void setDragDropIndex(const QModelIndex &index);
-    void dropInsert(const QString &appKey, const int pos);
+    void dropInsert(const QString &desktop, const int pos);
+    void insertItem(int pos);
+    void insertItem(const ItemInfo_v1 &item, const int pos);
     void dropSwap(const int nextPos);
     inline QModelIndex dragDropIndex() const {return m_dragDropIndex;}
 
@@ -94,6 +105,8 @@ public:
     const QModelIndex indexAt(const QString &appKey) const;
 
     void setDrawBackground(bool draw);
+
+    void updateModelData(const QModelIndex dragIndex, const QModelIndex dropIndex);
 
 public slots:
     void clearDraggingIndex();
@@ -110,15 +123,14 @@ private:
     void dataChanged(const AppsListModel::AppCategory category);
     void layoutChanged(const AppsListModel::AppCategory category);
     bool indexDragging(const QModelIndex &index) const;
-    void itemDataChanged(const ItemInfo &info);
-//    bool itemIsRemovable(const QString &desktop) const;
+    void itemDataChanged(const ItemInfo_v1 &info);
 
 private:
     AppsManager *m_appsManager;
     QGSettings *m_actionSettings;
     CalculateUtil *m_calcUtil;
 
-    QList<ItemInfo> m_itemList;
+    QList<ItemInfo_v1> m_itemList;
 
     QStringList m_hideOpenPackages;
     QStringList m_hideSendToDesktopPackages;
@@ -135,7 +147,7 @@ private:
 
     QModelIndex m_dragStartIndex = QModelIndex();
     QModelIndex m_dragDropIndex = QModelIndex();
-    AppCategory m_category = All;
+    AppCategory m_category;
 
     bool m_drawBackground;
     int m_pageIndex;

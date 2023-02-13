@@ -84,11 +84,9 @@ TEST_F(Tst_calculate, appIconSize_test)
 {
     CalculateUtil::instance()->setFullScreen(true);
     CalculateUtil::instance()->appIconSize();
-    CalculateUtil::instance()->appIconSize(true, 1, 32);
 
     CalculateUtil::instance()->setFullScreen(false);
     CalculateUtil::instance()->appIconSize();
-    CalculateUtil::instance()->appIconSize(true, 1, 32);
 
     QVERIFY(CalculateUtil::instance()->increaseIconSize());
     QVERIFY(CalculateUtil::instance()->decreaseIconSize());

@@ -5,12 +5,13 @@
 #include "searchwidget.h"
 #include "util.h"
 
+#include <DDBusSender>
+
 #include <QHBoxLayout>
 #include <QEvent>
 #include <QAction>
 #include <QDebug>
 #include <QKeyEvent>
-#include <DDBusSender>
 
 #define ICON_SIZE   24
 #define BTN_SIZE    40
@@ -18,7 +19,7 @@
 #define SEARCHEIT_WIDTH 350
 #define SEARCHEIT_HEIGHT 40
 
-DWIDGET_USE_NAMESPACE
+using namespace DLauncher;
 
 /**
  * @brief SearchWidget::SearchWidget 顶部搜索控件
@@ -39,16 +40,8 @@ SearchWidget::SearchWidget(QWidget *parent)
     m_leftSpacing->setAccessibleName("LeftSpacing");
     m_rightSpacing->setAccessibleName("RightSpacing");
 
-    m_toggleCategoryBtn = new DFloatingButton(this);
-    updateCurrentCategoryBtnIcon();
-
-    m_toggleCategoryBtn->setFixedSize(QSize(BTN_SIZE, BTN_SIZE));
-    m_toggleCategoryBtn->setAutoExclusive(true);
-    m_toggleCategoryBtn->setBackgroundRole(DPalette::Button);
-    m_toggleCategoryBtn->setAccessibleName("mode-toggle-button");
-
-    m_toggleModeBtn = new DFloatingButton(this);
-    m_toggleModeBtn->setIcon(QIcon(":/icons/skin/icons/exit_fullscreen.svg"));
+    m_toggleModeBtn = new DIconButton(this);
+    m_toggleModeBtn->setIcon(DDciIcon::fromTheme("exit_fullscreen"));
     m_toggleModeBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
     m_toggleModeBtn->setFixedSize(QSize(BTN_SIZE, BTN_SIZE));
     m_toggleModeBtn->setAutoExclusive(true);
@@ -78,8 +71,6 @@ SearchWidget::SearchWidget(QWidget *parent)
     mainLayout->setSpacing(0);
 
     mainLayout->addSpacing(30);
-    mainLayout->addWidget(m_leftSpacing);
-    mainLayout->addWidget(m_toggleCategoryBtn);
     mainLayout->addStretch();
     mainLayout->addWidget(m_searchEdit);
     mainLayout->addStretch();
@@ -91,7 +82,6 @@ SearchWidget::SearchWidget(QWidget *parent)
 
     connect(m_searchEdit, &DSearchEdit::textChanged, this, &SearchWidget::onTextChanged);
     connect(m_toggleModeBtn, &DIconButton::clicked, this, &SearchWidget::onModeClicked);
-    connect(m_toggleCategoryBtn, &DIconButton::clicked, this, &SearchWidget::onToggleCategoryChanged);
 }
 
 DSearchEdit *SearchWidget::edit()
@@ -99,20 +89,13 @@ DSearchEdit *SearchWidget::edit()
     return m_searchEdit;
 }
 
-DFloatingButton *SearchWidget::categoryBtn()
-{
-    return m_toggleCategoryBtn;
-}
-
-DFloatingButton *SearchWidget::toggleModeBtn()
+DIconButton *SearchWidget::toggleModeBtn()
 {
     return m_toggleModeBtn;
 }
 
 void SearchWidget::clearSearchContent()
 {
-//    m_searchEdit->normalMode();
-//    m_searchEdit->moveFloatWidget();
     m_searchEdit->clear();
     m_searchEdit->clearEdit();
 }
@@ -129,11 +112,14 @@ void SearchWidget::onTextChanged(const QString &str)
 
 void SearchWidget::onModeClicked()
 {
+    emit toggleMode();
+    emit m_calcUtil->loadWindowIcon();
     m_calcUtil->setFullScreen(false);
+
     DDBusSender()
-            .service("com.deepin.dde.daemon.Launcher")
-            .interface("com.deepin.dde.daemon.Launcher")
-            .path("/com/deepin/dde/daemon/Launcher")
+            .service(DBUS_DAEMON_SERVICE_NAME)
+            .interface(DBUS_DAEMON_SERVICE_NAME)
+            .path(DBUS_DAEMON_PATH_NAME)
             .property("Fullscreen")
             .set(false);
 }
@@ -146,9 +132,6 @@ void SearchWidget::onToggleCategoryChanged()
     m_enableUpdateMode = true;
 
     emit toggleMode();
-
-    // 点击分组按钮，切换分组模式，更新分组图标
-    updateCurrentCategoryBtnIcon();
 }
 
 void SearchWidget::setLeftSpacing(int spacing)
@@ -163,13 +146,11 @@ void SearchWidget::setRightSpacing(int spacing)
 
 void SearchWidget::showToggle()
 {
-    m_toggleCategoryBtn->show();
     m_toggleModeBtn->show();
 }
 
 void SearchWidget::hideToggle()
 {
-    m_toggleCategoryBtn->hide();
     m_toggleModeBtn->hide();
 }
 
@@ -182,22 +163,7 @@ void SearchWidget::updateSize(double scaleX, double scaleY)
 {
     m_searchEdit->lineEdit()->setFixedSize(int(SEARCHEIT_WIDTH * scaleX), int(SEARCHEIT_HEIGHT * scaleY));
     double scale = (qAbs(1 - scaleX) < qAbs(1 - scaleY)) ? scaleX : scaleY;
-    m_toggleCategoryBtn->setFixedSize(int(BTN_SIZE * scale), int(BTN_SIZE * scale));
-    m_toggleCategoryBtn->setIconSize(QSize(int(ICON_SIZE * scale), int(ICON_SIZE * scale)));
+
     m_toggleModeBtn->setIconSize(QSize(int(ICON_SIZE * scale), int(ICON_SIZE * scale)));
     m_toggleModeBtn->setFixedSize(int(BTN_SIZE * scale), int(BTN_SIZE * scale));
-}
-
-/**
- * @brief SearchWidget::updateCurrentCategoryBtnIcon 全屏模式下app列表和分类后的列表 切换按钮样式
- */
-void SearchWidget::updateCurrentCategoryBtnIcon()
-{
-    if (m_calcUtil->displayMode() == ALL_APPS) {
-        m_toggleCategoryBtn->setIcon(QIcon(":/icons/skin/icons/category_normal_22px.png"));
-        m_toggleCategoryBtn->setIconSize(QSize(ICON_SIZE, ICON_SIZE));
-    } else {
-        m_toggleCategoryBtn->setIcon(QIcon(":/icons/skin/icons/category_hover_22pxnew.svg"));
-        m_toggleCategoryBtn->setIconSize(QSize(ICON_SIZE - 10, ICON_SIZE - 10));
-    }
 }

@@ -4,7 +4,6 @@
 
 #include "util.h"
 #include "appsmanager.h"
-#include "iconcachemanager.h"
 
 #include <DHiDPIHelper>
 #include <DGuiApplicationHelper>
@@ -63,7 +62,7 @@ const QPixmap renderSVG(const QString &path, const QSize &size)
     QPixmap pixmap;
     reader.setFileName(path);
     if (reader.canRead()) {
-        const qreal ratio = qRound(qApp->devicePixelRatio());
+        const qreal ratio = qApp->devicePixelRatio();
         reader.setScaledSize(size * ratio);
         pixmap = QPixmap::fromImage(reader.read());
         pixmap.setDevicePixelRatio(ratio);
@@ -339,13 +338,13 @@ int perfectIconSize(const int size)
  * @param reObtain 是否重新获取标识
  * @return 返回是否获取到应用图标状态
  */
-bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, bool reObtain)
+bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, bool reObtain)
 {
     QString iconName;
     QIcon icon;
     bool findIcon = true;
 
-    if (itemInfo.m_iconKey == "dde-calendar") {
+    if (itemInfo.m_desktop.contains("/dde-calendar.desktop")) {
         QString name = QStandardPaths::standardLocations(QStandardPaths::TempLocation).first() + "/"
                 +  QString::number(QDate::currentDate().year())
                 + "_" + QString::number(QDate::currentDate().dayOfYear()) + ".svg";
@@ -360,9 +359,11 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
 
     const qreal ratio = qApp->devicePixelRatio();
     const int iconSize = perfectIconSize(size);
-    QPair<QString, int> tmpKey { cacheKey(itemInfo) , iconSize };
 
     do {
+        if (iconName.isEmpty())
+            return findIcon;
+
         if (iconName.startsWith("data:image/")) {
             const QStringList strs = iconName.split("base64,");
             if (strs.size() == 2)
@@ -385,8 +386,6 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
         }
 
         // 重新从主题中获取一次
-        // 如果此提交我们使用的qt版本已经包含，那就可以不需要reObtain的逻辑了
-        // https://codereview.qt-project.org/c/qt/qtbase/+/343396
         if (reObtain)
             icon = getIcon(iconName);
         else
@@ -400,13 +399,11 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo &itemInfo, const int size, boo
         pixmap = icon.pixmap(QSize(iconSize, iconSize) * ratio);
         if (!pixmap.isNull())
             break;
+
     } while (false);
 
     pixmap = pixmap.scaled(QSize(iconSize, iconSize) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pixmap.setDevicePixelRatio(ratio);
-
-    if (!IconCacheManager::existInCache(tmpKey) && findIcon)
-        IconCacheManager::insertCache(tmpKey, pixmap);
 
     return findIcon;
 }
@@ -449,31 +446,51 @@ QIcon getIcon(const QString &name)
     return QIcon::fromTheme(getIconList(name).first());
 }
 
-QString cacheKey(const ItemInfo &itemInfo)
+QString cacheKey(const ItemInfo_v1 &itemInfo)
 {
     return itemInfo.m_name + itemInfo.m_iconKey;
 }
 
-/**
- * @brief getDConfigValue 根据传入的\a key获取配置项的值，获取失败返回默认值
- * @param key 配置项键值
- * @param defaultValue 默认返回值，为避免出现返回值错误导致程序异常的问题，此参数必填
- * @param configFileName 配置文件名称
- * @return 配置项的值
- */
-QVariant getDConfigValue(const QString &key, const QVariant &defaultValue, const QString &configFileName)
+DConfig *ConfigWorker::INSTANCE = Q_NULLPTR;
+
+DConfig *ConfigWorker::instance()
 {
-    QSharedPointer<DConfig> config(DConfig::create(DLauncher::DEFAULT_META_CONFIG_NAME, DLauncher::DEFAULT_META_CONFIG_NAME));
-    if (!config->isValid()) {
+    if (!INSTANCE)
+        INSTANCE = new DConfig(DLauncher::DEFAULT_META_CONFIG_NAME);
+
+    return INSTANCE;
+}
+
+QVariant ConfigWorker::getValue(const QString &key, const QVariant &defaultValue)
+{
+    if (!instance()->isValid()) {
         qWarning() << QString("DConfig is invalid, name:[%1], subpath[%2].").
-                        arg(config->name(), config->subpath());
+                        arg(instance()->name(), instance()->subpath());
         return defaultValue;
     }
 
-    if (config->keyList().contains(key))
-        return config->value(key);
+    if (!instance()->keyList().contains(key)) {
+        qWarning() << QString("key: (%1) doesn't exist").arg(key);
+        return defaultValue;
+    }
 
-    return defaultValue;
+    return instance()->value(key);
+}
+
+void ConfigWorker::setValue(const QString &key, const QVariant &value)
+{
+    if (!instance()->isValid()) {
+        qWarning() << QString("DConfig is invalid, name:[%1], subpath[%2].").
+                        arg(instance()->name(), instance()->subpath());
+        return;
+    }
+
+    if (!instance()->keyList().contains(key)) {
+        qWarning() << QString("key: (%1) doesn't exist").arg(key);
+        return;
+    }
+
+    instance()->setValue(key, value);
 }
 
 bool isWaylandDisplay()

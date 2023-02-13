@@ -6,12 +6,14 @@
 #define APPSMANAGER_H
 
 #include "appslistmodel.h"
-#include "dbuslauncher.h"
 #include "dbustartmanager.h"
-#include "dbusdock.h"
 #include "calculate_util.h"
+#include "common.h"
+#include "amdbuslauncherinterface.h"
+#include "amdbusdockinterface.h"
 
 #include <DGuiApplicationHelper>
+#include <DDialog>
 
 #include <QHash>
 #include <QSettings>
@@ -20,7 +22,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QScreen>
-#include <QDBusArgument>
 #include <QList>
 
 DGUI_USE_NAMESPACE
@@ -32,18 +33,24 @@ DGUI_USE_NAMESPACE
 #define CATEGORY_COUNT    11
 
 class CalculateUtil;
-class QThread;
-class IconCacheManager;
+class AppGridView;
+
 class AppsManager : public QObject
 {
     Q_OBJECT
 
 public:
+    enum DragMode {
+        DirOut,             // 文件夹展开窗口移除应用模式
+        Other               // 其他场景模式
+    };
+
     static AppsManager *instance();
-    void stashItem(const QModelIndex &index);
-    void stashItem(const QString &appKey);
-    void abandonStashedItem(const QString &appKey);
-    void restoreItem(const QString &appKey, const int pos = -1);
+    void dragdropStashItem(const QModelIndex &index, AppsListModel::AppCategory mode);
+    void removeDragItem();
+    void insertDropItem(int pos);
+    void abandonStashedItem(const QString &desktop);
+    void restoreItem(const QString &desktop, AppsListModel::AppCategory mode, const int pos = -1);
     int dockPosition() const;
     QRect dockGeometry() const;
     bool isHaveNewInstall() const { return !m_newInstalledAppsList.isEmpty(); }
@@ -54,13 +61,62 @@ public:
     int getVisibleCategoryCount();
     bool fullscreen() const;
     int displayMode() const;
+    qreal getCurRatio();
+    void uninstallApp(const QModelIndex &modelIndex);
+    bool uninstallDlgShownState() const;
+
+    void updateUsedSortData(QModelIndex dragIndex, QModelIndex dropIndex);
+    void updateDrawerTitle(const QModelIndex &index, const QString &newTitle = QString());
+    QList<QPixmap> getDirAppIcon(QModelIndex modelIndex);
+    void showSearchedData(const AppInfoList &list);
+    const ItemInfo_v1 getItemInfo(const QString &desktop);
+    void dropToCollected(const ItemInfo_v1 &info, const int row);
+
+    static bool readJsonFile(QIODevice &device, QSettings::SettingsMap &map);
+    static bool writeJsonFile(QIODevice &device, const QSettings::SettingsMap &map);
+    void registerSettingsFormat();
+
+    QSettings::SettingsMap getCacheMapData(const ItemInfoList_v1 &list);
+    const ItemInfoList_v1 readCacheData(const QSettings::SettingsMap &map);
+
+    void setDragMode(const DragMode &mode);
+    DragMode getDragMode() const;
+
+    void setRemainedLastItem(const ItemInfo_v1 &info);
+    const ItemInfo_v1 getRemainedLastItem() const;
+
+    void setDirAppRow(const int &row);
+    int getDirAppRow() const;
+
+    void setDirAppPageIndex(const int &pageIndex);
+    int getDirAppPageIndex() const;
+
+    void setDragItem(const ItemInfo_v1 &info);
+    const ItemInfo_v1 getDragItem() const;
+
+    void setReleasePos(const int &row);
+    int getReleasePos() const;
+
+    void setCategory(const AppsListModel::AppCategory category);
+    AppsListModel::AppCategory getCategory() const;
+
+    void setPageIndex(const int &pageIndex);
+    int getPageIndex() const;
+
+    void setListModel(AppsListModel *model);
+    AppsListModel *getListModel() const;
+
+    void setListView(AppGridView *view);
+    AppGridView *getListView() const;
+
+    void setDragModelIndex(const QModelIndex &index);
+    QModelIndex dragModelIndex() const;
 
 signals:
-    void itemDataChanged(const ItemInfo &info) const;
+    void itemDataChanged(const ItemInfo_v1 &info) const;
     void dataChanged(const AppsListModel::AppCategory category) const;
     void layoutChanged(const AppsListModel::AppCategory category) const;
     void requestTips(const QString &tips) const;
-    void newInstallListChanged() const;
     void requestHideTips() const;
     void categoryListChanged() const;
     void IconSizeChanged() const;
@@ -68,28 +124,31 @@ signals:
 
     void itemRedraw(const QModelIndex &index);
 
-    void loadWindowIcon();
-    void loadFullWindowIcon();
-    void loadCurRationIcon(int mode);
-    void loadOtherRatioIcon(int mode);
-
-    void startLoadIcon();
-    void loadOtherIcon();
-    void loadItem(const ItemInfo &info, const QString &operationStr);
+    void loadItem(const ItemInfo_v1 &info, const QString &operationStr);
+    void requestHideLauncher();
+    void requestHidePopup();
 
 public slots:
-    void saveUserSortedList();
-    void saveUsedSortedList();
+    void saveWidowedUsedSortedList();
+    void saveFullscreenUsedSortedList();
+    void saveCollectedSortedList();
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
-    void uninstallApp(const QString &appKey, const int displayMode = ALL_APPS);
-    const ItemInfoList appsInfoList(const AppsListModel::AppCategory &category) const;
-    static int appsInfoListSize(const AppsListModel::AppCategory &category);
-    static const ItemInfo appsInfoListIndex(const AppsListModel::AppCategory &category,const int index);
-    static const ItemInfoList &windowedCategoryList();
-    static const ItemInfoList &windowedFrameItemInfoList();
-    static const ItemInfoList &fullscreenItemInfoList();
-    static const QHash<AppsListModel::AppCategory, ItemInfoList> &categoryList();
+    void uninstallApp(const QString &desktopPath);
+    void uninstallApp(const ItemInfo_v1 &info);
+    void onEditCollected(const QModelIndex index, const bool isInCollected);
+    void onMoveToFirstInCollected(const QModelIndex index);
+    void setDirAppInfoList(const QModelIndex index);
+    int appsInfoListSize(const AppsListModel::AppCategory &category);
+    const ItemInfoList_v1 appsInfoList(const AppsListModel::AppCategory &category) const;
+    const ItemInfo_v1 appsInfoListIndex(const AppsListModel::AppCategory &category,const int index);
+    const ItemInfo_v1 appsCategoryListIndex(const int index);
+    const ItemInfo_v1 appsLetterListIndex(const int index);
+    const ItemInfoList_v1 &windowedCategoryList();
+    const ItemInfoList_v1 &windowedFrameItemInfoList();
+    const ItemInfoList_v1 &fullscreenItemInfoList();
+    const ItemInfo_v1 dirAppInfo(int index);
+    const QHash<AppsListModel::AppCategory, ItemInfoList_v1> &categoryList();
 
     bool appIsNewInstall(const QString &key);
     bool appIsAutoStart(const QString &desktop);
@@ -97,29 +156,42 @@ public slots:
     bool appIsOnDesktop(const QString &desktop);
     bool appIsProxy(const QString &desktop);
     bool appIsEnableScaling(const QString &desktop);
-    const QPixmap appIcon(const ItemInfo &info, const int size = 0);
-    const QString appName(const ItemInfo &info, const int size);
-    int appNums(const AppsListModel::AppCategory &category) const;
+    const QPixmap appIcon(const ItemInfo_v1 &info, const int size = 0);
+    const QString appName(const ItemInfo_v1 &info, const int size);
+    int appNums(const AppsListModel::AppCategory &category);
 
+    // 为顺应数据应用数据结构的变动以及兼容性考虑, 对　handleItemChanged 接口进行了重载．
+    void handleItemChanged(const QString &operation, const ItemInfo_v2 &appInfo, qlonglong categoryNumber);
     void handleItemChanged(const QString &operation, const ItemInfo &appInfo, qlonglong categoryNumber);
-    static QHash<AppsListModel::AppCategory, ItemInfoList> getAllAppInfo();
+    const ItemInfo_v1 createOfCategory(qlonglong category);
+    void onUninstallFail(const QString &desktop);
+
+    bool contains(const ItemInfoList_v1 &list, const ItemInfo_v1 &item) const;
+    int itemIndex(const ItemInfoList_v1 &list, const ItemInfo_v1 &item) const;
 
 private:
     explicit AppsManager(QObject *parent = nullptr);
 
-    void appendSearchResult(const QString &appKey);
-    void sortByPresetOrder(ItemInfoList &processList);
-    void sortByInstallTimeOrder(ItemInfoList &processList);
+    void sortByPresetOrder(ItemInfoList_v1 &processList);
+    void sortByUseFrequence(ItemInfoList_v1 &processList);
+    void loadDefaultFavoriteList(const ItemInfoList_v1 &processList);
+    void sortByGeneralOrder(ItemInfoList_v1 &processList);
+    ItemInfoList_v1 sortByLetterOrder(ItemInfoList_v1 &processList);
+    void sortByPinyinOrder(ItemInfoList_v1 &processList);
+    void sortByInstallTimeOrder(ItemInfoList_v1 &processList);
+    void removeNonexistentData();
+    void getCategoryListAndSortCategoryId();
     void refreshCategoryInfoList();
-    void refreshUsedInfoList();
-    void refreshCategoryUsedInfoList();
-    void refreshUserInfoList();
-    void updateUsedListInfo();
+    void refreshItemInfoList();
+    void saveAppCategoryInfoList();
     void generateCategoryMap();
+    void generateTitleCategoryList();
+    void generateLetterCategoryList();
+    void readCollectedCacheData();
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
-    void onSearchTimeOut();
-    void refreshAppListIcon(DGuiApplicationHelper::ColorType themeType);
-    const ItemInfo createOfCategory(qlonglong category);
+
+    void setAutostartValue(const QStringList &list);
+    QStringList getAutostartValue() const;
 
     static bool readJsonFile(QIODevice &device, QSettings::SettingsMap &map);
     static bool writeJsonFile(QIODevice &device, const QSettings::SettingsMap &map);
@@ -129,50 +201,48 @@ private:
     const ItemInfoList readCacheData(const QSettings::SettingsMap &map);
 
 private slots:
-    void onIconThemeChanged();
-    void searchDone(const QStringList &resultList);
-    void markLaunched(QString appKey);
+    void markLaunched(const QString &appKey);
     void delayRefreshData();
     void refreshIcon();
     void updateTrashState();
     bool fuzzyMatching(const QStringList& list, const QString& key);
-    void onThemeTypeChanged(DGuiApplicationHelper::ColorType themeType);
     void onRefreshCalendarTimer();
     void onGSettingChanged(const QString & keyName);
-    void stopThread();
 
 public:
-    static QReadWriteLock m_appInfoLock;
-    static QHash<AppsListModel::AppCategory, ItemInfoList> m_appInfos;      // 应用分类容器
+    QHash<AppsListModel::AppCategory, ItemInfoList_v1> m_appInfos;      // 应用分类容器
+    ItemInfoList_v1 m_appCategoryInfos;                                 // 小窗口左侧带分类标题的应用列表
+    ItemInfoList_v1 m_appLetterModeInfos;                               // 小窗口左侧字母排序模式列表
+    ItemInfoList_v1 m_favoriteSortedList;                               // 小窗口收藏列表
+    ItemInfoList_v1 m_categoryList;                                     // 小窗口应用分类目录列表
+    ItemInfoList_v1 m_appSearchResultList;                              // 搜索结果列表
+    ItemInfoList_v1 m_dirAppInfoList;                                   // 应用抽屉列表
+    ItemInfoList_v1 m_fullscreenUsedSortedList;                         // 全屏应用列表
+    ItemInfoList_v1 m_windowedUsedSortedList;                           // 小窗口应用列表
 
 private:
-    DBusLauncher *m_launcherInter;
     DBusStartManager *m_startManagerInter;
-    DBusDock *m_dockInter;
+    AMDBusLauncherInter *m_amDbusLauncherInter;
+    AMDBusDockInter *m_amDbusDockInter;
 
     QString m_searchText;
+    ItemInfoList_v1 m_allAppInfoList;                                       // 所有app信息列表
     QStringList m_newInstalledAppsList;                                     // 新安装应用列表
-    ItemInfoList m_allAppInfoList;                                          // 所有app信息列表
-    static ItemInfoList m_usedSortedList;                                   // 全屏应用列表
-    static ItemInfoList m_userSortedList;                                   // 小窗口应用列表
-    static ItemInfoList m_appSearchResultList;                              // 搜索结果列表
-    ItemInfoList m_stashList;
-    static ItemInfoList m_categoryList;                                     // 小窗口应用分类目录列表
 
-    ItemInfo m_unInstallItem = ItemInfo();
-    ItemInfo m_beDragedItem = ItemInfo();
+    ItemInfoList_v1 m_stashList;
+    ItemInfo_v1 m_unInstallItem;
+    ItemInfo_v1 m_beDragedItem;
 
     CalculateUtil *m_calUtil;
-    QTimer *m_searchTimer;
     QTimer *m_delayRefreshTimer;                                            // 延迟刷新应用列表定时器指针对象
-    QTimer *m_RefreshCalendarIconTimer;
+    QTimer *m_refreshCalendarIconTimer;
 
     QDate m_curDate;
     int m_lastShowDate;
 
     int m_tryNums;                                                          // 获取应用图标时尝试的次数
     int m_tryCount;                                                         // 超过10次停止遍历
-    ItemInfo m_itemInfo;                                                    // 当前需要更新的应用信息
+    ItemInfo_v1 m_itemInfo;                                                 // 当前需要更新的应用信息
 
     static QPointer<AppsManager> INSTANCE;
     static QGSettings *m_launcherSettings;
@@ -181,12 +251,13 @@ private:
     static QSettings APP_USED_SORTED_LIST;
     static QSettings APP_CATEGORY_USED_SORTED_LIST;
 
-    QSettings *m_userSortedSetting;
-    QSettings *m_usedSortedSetting;
-    QSettings *m_categroySortedSetting;
+    QSettings *m_collectedSetting;
+    QSettings *m_categorySetting;
+    QSettings *m_fullscreenUsedSortSetting;
+    QSettings *m_windowedUsedSortSetting;
+    QSettings *m_autostartDesktopListSetting;
 
     QStringList m_categoryTs;
-    QStringList m_categoryIcon;
     QGSettings *m_filterSetting;
 
     bool m_iconValid;                                                       // 获取图标状态标示
@@ -194,9 +265,20 @@ private:
     bool m_trashIsEmpty;
     QFileSystemWatcher *m_fsWatcher;
 
-    IconCacheManager *m_iconCacheManager;
-    QThread *m_iconCacheThread;
     QTimer *m_updateCalendarTimer;
+    bool m_uninstallDlgIsShown;
+    DragMode m_dragMode;                                                    // 拖拽类型
+    AppsListModel::AppCategory m_curCategory;                               // 当前视图列表的模式类型
+    int m_pageIndex;                                                        // 当前视图列表所在页面索引
+    AppsListModel *m_appModel;                                              // 当前模式
+    AppGridView *m_appView;                                                 // 当前视图
+    ItemInfo_v1 m_dragItemInfo;                                             // 被拖拽应用信息
+    ItemInfo_v1 m_remainedLastItemInfo;                                     // 从文件夹展开窗口移除应用时，剩下的最后一个应用的信息
+    int m_dropRow;                                                          // 拖拽释放时鼠标所在的当前页的行数
+    QModelIndex m_dragIndex;                                                // 临时记录当前被拖拽应用的模型索引
+    int m_dirAppRow;                                                        // 应用文件夹所在的列表中的行数
+    int m_dirAppPageIndex;                                                  // 从文件夹展开窗口移除应用时之前，文件夹所在页面索引
+    ItemInfo_v1 m_clickedItemInfo;                                          // 当前被启动的应用
 };
 
 #endif // APPSMANAGER_H

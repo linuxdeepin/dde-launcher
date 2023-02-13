@@ -8,9 +8,9 @@
 #include <QMenu>
 #include <QWidget>
 
-#include <com_deepin_api_xeventmonitor.h>
+#include "xeventmonitor_interface.h"
 
-using XEventMonitor = com::deepin::api::XEventMonitor;
+using XEventMonitor = org::deepin::dde::XEventMonitor1;
 
 class Menu : public QMenu
 {

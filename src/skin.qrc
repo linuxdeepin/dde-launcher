@@ -60,6 +60,8 @@
         <file>skin/images/new_install_indicator.svg</file>
         <file>skin/images/search-dark.svg</file>
         <file>skin/icons/category_hover_22pxnew.svg</file>
+        <file>language/jianpin.txt</file>
+        <file>language/pinyin.txt</file>
     </qresource>
     <qresource prefix="/icons">
         <file>skin/icons/category_active_16px.svg</file>
@@ -265,5 +267,15 @@
         <file>skin/icons/search_36px.svg</file>
         <file>skin/icons/clear_36px.svg</file>
         <file>skin/icons/exit_fullscreen.svg</file>
+        <file>skin/icons/letter-icon-normal.svg</file>
+        <file>skin/icons/letter-icon-checked.svg</file>
+        <file>skin/icons/title-icon-normal.svg</file>
+        <file>skin/icons/title-icon-checked.svg</file>
+    </qresource>
+    <qresource prefix="/dsg/built-in-icons">
+        <file alias="search_no_result.dci">skin/bloom/search_no_result.dci</file>
+        <file alias="favorite_is_empty.dci">skin/bloom/favorite_is_empty.dci</file>
+        <file alias="switch_to_fullscreen.dci">skin/bloom/switch_to_fullscreen.dci</file>
+        <file alias="exit_fullscreen.dci">skin/bloom/exit_fullscreen.dci</file>
     </qresource>
 </RCC>

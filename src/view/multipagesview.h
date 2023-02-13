@@ -11,6 +11,7 @@
 #include <QScrollBar>
 #include <QHBoxLayout>
 #include <QPropertyAnimation>
+#include <QWheelEvent>
 
 #include "../widgets/applistarea.h"
 #include "appgridview.h"
@@ -25,33 +26,38 @@
 
 DWIDGET_USE_NAMESPACE
 
+class EditLabel;
+
 class MultiPagesView : public QWidget, public DragPageDelegate
 {
     Q_OBJECT
 
 public:
-    enum Direction
-    {
+    enum Direction {
         Left,
         Right
     };
 
-    explicit MultiPagesView(AppsListModel::AppCategory categoryModel = AppsListModel::All, QWidget *parent = nullptr);
+    explicit MultiPagesView(AppsListModel::AppCategory categoryModel = AppsListModel::FullscreenAll, QWidget *parent = nullptr);
     ~MultiPagesView();
 
-    void updatePageCount(AppsListModel::AppCategory category = AppsListModel::All);
+    void refreshTitle(const QString &title, int maxWidth);
+
+    void updatePageCount(AppsListModel::AppCategory category = AppsListModel::FullscreenAll);
     void showCurrentPage(int currentPage);
     QModelIndex selectApp(const int key);
+    QModelIndex getAppItem(int index);
     AppGridView *pageView(int pageIndex);
     AppsListModel *pageModel(int pageIndex);
+
     int currentPage(){return m_pageIndex;}
     int pageCount() { return m_pageCount;}
-    QModelIndex getAppItem(int index);
+
     void setDataDelegate(QAbstractItemDelegate *delegate);
     void setModel(AppsListModel::AppCategory category);
     void updatePosition(int mode = 0);
-
     void ShowPageView(AppsListModel::AppCategory category);
+    void updateAppDrawerTitle(const QModelIndex &index);
 
     void mousePress(QMouseEvent *e) override;
     void mouseMove(QMouseEvent *e) override;
@@ -67,19 +73,29 @@ public:
     AppListArea *getListArea();
     AppGridViewList getAppGridViewList();
     AppsListModel::AppCategory getCategory();
-
+    QSize calculateWidgetSize();
     bool isScrolling();
+    EditLabel *getEditLabel();
+
 signals:
     void connectViewEvent(AppGridView* pView);
+    void titleChanged();
+
+public slots:
+    void resetCurPageIndex();
 
 private slots:
     void dragToLeft(const QModelIndex &index);
     void dragToRight(const QModelIndex &index);
     void dragStop();
 
+private:
+    void initUi();
+    void initConnection();
+
 protected:
     void wheelEvent(QWheelEvent *e) Q_DECL_OVERRIDE;
-    void InitUI();
+    void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
 
 private:
     GradientLabel *m_pLeftGradient;
@@ -96,19 +112,21 @@ private:
     QPropertyAnimation *m_pageSwitchAnimation;          // 分页切换动画
 
     QAbstractItemDelegate *m_delegate;                  // 视图代理基类
+    EditLabel *m_titleLabel;
     PageControl *m_pageControl;                         // 分页控件
 
+    AppsListModel::AppCategory m_category;
     int m_pageCount;
     int m_pageIndex;
-    AppsListModel::AppCategory m_category;
 
     bool m_bDragStart;
-
     bool m_bMousePress;
     int m_nMousePos;
     int m_scrollValue;
     int m_scrollStart;
-    QTime *m_changePageDelayTime;                      // 滚动延时，设定时间内只允许滚动一次
+    QElapsedTimer *m_changePageDelayTime;                      // 滚动延时，设定时间内只允许滚动一次
+
+    QMap<AppsListModel::AppCategory, QString> m_typeAndTitleMap;
 };
 
 #endif // MULTIPAGESVIEW_H

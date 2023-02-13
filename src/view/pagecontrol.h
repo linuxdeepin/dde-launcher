@@ -26,6 +26,10 @@ public:
     void setCurrent(int pageIndex);
     void updateIconSize(double scaleX, double scaleY);
     void createButtons();
+
+protected:
+    void paintEvent(QPaintEvent *event);
+
 signals:
     void onPageChanged(int pageIndex);
 
@@ -36,9 +40,8 @@ private:
     void addButton(DIconButton *pageButton);
 
 private:
-    int m_pageCount = 0;
-    QIcon m_iconActive;
-    QIcon m_iconNormal;
+    int m_pageCount;
+    QPixmap m_pixChecked;
     QList<DIconButton *> m_buttonList;
 };
 

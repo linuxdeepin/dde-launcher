@@ -5,21 +5,25 @@
 #ifndef LAUNCHERSYS_H
 #define LAUNCHERSYS_H
 
-#include "dbusinterface/dbuslauncher.h"
 #include "calculate_util.h"
+#include "controller/plugincontroller.h"
 
 #include <DRegionMonitor>
 
 #include <QObject>
 #include <QTimer>
 
-#include <com_deepin_sessionmanager.h>
+#include "sessionmanager_interface.h"
 
 DGUI_USE_NAMESPACE
 
 class LauncherInterface;
 class WindowedFrame;
 class FullScreenFrame;
+class AMDBusLauncherInter;
+class AMDBusDockInter;
+
+using SessionManager = org::deepin::dde::SessionManager1;
 
 class LauncherSys : public QObject
 {
@@ -32,11 +36,7 @@ public:
     bool visible();
     void showLauncher();
     void hideLauncher();
-    void uninstallApp(const QString &appKey);
-    void setClickState(bool state);
-    bool clickState() const;
-    void aboutToShowLauncher();
-    void show();
+    void uninstallApp(const QString &desktopPath);
 
 signals:
     void visibleChanged(bool visible);
@@ -51,18 +51,16 @@ private slots:
     void onDisplayModeChanged();
     void onFrontendRectChanged();
     void onButtonPress(const QPoint &p, const int flag);
-    void updateLauncher();
+    void onValueChanged();
 
 private:
     void registerRegion();
     void unRegisterRegion();
-    void preloadIcon();
 
 private:
     AppsManager *m_appManager;
     LauncherInterface *m_launcherInter;                     // 启动器界面处理基类
-    DBusLauncher *m_dbusLauncherInter;                      // dbus访问远程服务类 数据初始化
-    com::deepin::SessionManager *m_sessionManagerInter;     // dbus访问远程服务类 业务逻辑处理
+    SessionManager *m_sessionManagerInter;                  // dbus访问远程服务类 业务逻辑处理
 
     WindowedFrame *m_windowLauncher;                        // 启动器小窗口界面处理类
     FullScreenFrame *m_fullLauncher;                        // 启动器全屏界面处理类
@@ -71,8 +69,9 @@ private:
     QTimer *m_ignoreRepeatVisibleChangeTimer;               // 添加200ms延时操作，避开重复显示、隐藏启动器
     QMetaObject::Connection m_regionMonitorConnect;         // 信号和槽连接返回的对象
     CalculateUtil *m_calcUtil;                              // 界面布局计算处理类
-    DBusDock *m_dockInter;
-    bool m_clicked;                                         // 人的点击操作状态
+    AMDBusLauncherInter *m_amDbusLauncher;
+    AMDBusDockInter *m_amDbusDockInter;
+    LauncherPluginController *m_launcherPlugin;
 };
 
 #endif // LAUNCHERSYS_H

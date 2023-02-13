@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=org.deepin.dde.Launcher1
+Exec=/usr/bin/dde-launcher-wapper

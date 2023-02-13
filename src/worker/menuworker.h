@@ -5,8 +5,6 @@
 #ifndef MENUWORKER_H
 #define MENUWORKER_H
 
-#include "dbusdock.h"
-#include "dbuslauncher.h"
 #include "dbustartmanager.h"
 #include "appsmanager.h"
 #include "appslistmodel.h"
@@ -24,6 +22,8 @@
 
 class QMenu;
 class Menu;
+class AMDBusLauncherInter;
+class AMDBusDockInter;
 
 class MenuWorker : public QObject
 {
@@ -41,7 +41,9 @@ public:
         Startup = 4,
         Proxy = 5,
         SwitchScale = 6,
-        Uninstall = 7
+        Uninstall = 7,
+        MoveToTop = 8,
+        EditCollected = 9        // 添加到收藏列表或从收藏列表中移除
     };
 
     bool isMenuShown() const {return m_menuIsShown;}
@@ -49,7 +51,7 @@ public:
     bool isItemOnDesktop(QString appKey);
     bool isItemStartup(QString appKey);
     QRect menuGeometry() const {return m_menuGeometry;}
-    void creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper);
+    void creatMenuByAppItem();
     bool isMenuVisible();
 
 signals:
@@ -57,7 +59,8 @@ signals:
     void menuAccepted();
     void unInstallApp(const QModelIndex &index);
     void menuShowMouseMoving();
-    void notifyMenuDisplayState(bool);
+    void requestMoveToTop(const QModelIndex &index);
+    void requestEditCollected(const QModelIndex &index, const bool isInCollected);
 
 public slots:
     void showMenuByAppItem(QPoint pos, const QModelIndex &index);
@@ -76,8 +79,9 @@ public slots:
     void onHideMenu();
 
 private:
-    DBusDock* m_dockAppManagerInterface;
-    DBusLauncher* m_launcherInterface;
+    AMDBusLauncherInter *m_amDbusLauncher;
+    AMDBusDockInter *m_amDbusDockInter;
+
     DBusStartManager* m_startManagerInterface;
     CalculateUtil *m_calcUtil;
     AppsManager *m_appManager;
@@ -93,9 +97,11 @@ private:
     bool m_isItemStartup;
     bool m_isItemProxy;
     bool m_isItemEnableScaling;
+    bool m_isItemInCollected;
 
     bool m_menuIsShown = false;
     Menu *m_menu;
+    QSignalMapper *m_signalMapper;
 };
 
 #endif // MENUWORKER_H

@@ -3,10 +3,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "fullscreenframe.h"
-#include "dbuslauncherframe.h"
 #include "model/appsmanager.h"
 #include "dbuslauncherservice.h"
 #include "accessible.h"
+#include "amdbuslauncherframe.h"
 
 #include <DApplication>
 #include <DGuiApplicationHelper>
@@ -26,10 +26,13 @@ DCORE_USE_NAMESPACE
 DUTIL_USE_NAMESPACE
 #endif
 
+#define LAUNCHER_INTERFACE "org.deepin.dde.Launcher1"
+#define LAUNCHER_SERVICE_PATH "/org/deepin/dde/Launcher1"
+
 void dump_user_apss_preset_order_list()
 {
     AppsManager *appsManager = AppsManager::instance();
-    const auto appsList = appsManager->appsInfoList(AppsListModel::All);
+    const auto appsList = appsManager->appsInfoList(AppsListModel::FullscreenAll);
 
     QStringList buf;
 
@@ -50,6 +53,7 @@ int main(int argc, char *argv[])
     app->setApplicationVersion("3.0");
     app->loadTranslator();
     app->setAttribute(Qt::AA_UseHighDpiPixmaps);
+    app->setAttribute(Qt::AA_EnableHighDpiScaling);
 
     DLogManager::registerConsoleAppender();
     // 加载 Accessible 插件 测试使用 用sniff查看效果
@@ -81,7 +85,8 @@ int main(int argc, char *argv[])
     }
 
     if (quit) {
-        DBusLauncherFrame launcherFrame;
+        AMDBusLauncherFrame launcherFrame;
+
         do {
             if (!launcherFrame.isValid())
                 break;
@@ -103,8 +108,8 @@ int main(int argc, char *argv[])
     DBusLauncherService service(&launcher);
     Q_UNUSED(service);
     QDBusConnection connection = QDBusConnection::sessionBus();
-    if (!connection.registerService("com.deepin.dde.Launcher") ||
-            !connection.registerObject("/com/deepin/dde/Launcher", &launcher)) {
+    if (!connection.registerService(LAUNCHER_INTERFACE) ||
+            !connection.registerObject(LAUNCHER_SERVICE_PATH, &launcher)) {
 
         qWarning() << "register dbus service failed";
     }
@@ -112,7 +117,7 @@ int main(int argc, char *argv[])
 #ifndef QT_DEBUG
     if (cmdParser.isSet(showOption))
 #endif
-        launcher.show();
+        launcher.showLauncher();
 
     return app->exec();
 }

@@ -5,71 +5,56 @@
 #ifndef MINIFRAMERIGHTBAR_H
 #define MINIFRAMERIGHTBAR_H
 
+#include <DGuiApplicationHelper>
+
 #include <QWidget>
 #include <QLabel>
 
-#include <DGuiApplicationHelper>
-
-#include <diconbutton.h>
-#include "avatar.h"
-
-DWIDGET_USE_NAMESPACE
+DGUI_USE_NAMESPACE
 
 class MiniFrameButton;
+class QButtonGroup;
+
 class MiniFrameRightBar : public QWidget
 {
     Q_OBJECT
 
 public:
+    enum ButtonType {
+        Setting,
+        Power,
+        Unknow
+    };
+
     explicit MiniFrameRightBar(QWidget *parent = nullptr);
     ~MiniFrameRightBar() override;
 
-    void setCurrentCheck(bool checked) const;
-    void setCurrentIndex(int index) { m_currentIndex = index; }
-    void moveUp();
-    void moveDown();
-    void execCurrent();
-    void hideAllHoverState() const;
-
-signals:
-    void modeToggleBtnClicked();
-    void requestFrameHide();
+    void setButtonChecked(const ButtonType buttonId) const;
+    bool isButtonChecked(const ButtonType buttonId) const;
 
 protected:
-    void showEvent(QShowEvent *event) override;
-    void paintEvent(QPaintEvent *event) override;
-
-private slots:
-    void openDirectory(const QString &dir);
-    void openStandardDirectory(const QStandardPaths::StandardLocation &location);
-    void handleShutdownAction(const QString &action);
-    void handleAvatarClicked();
-    void handleTimedateOpen();
-    void showShutdown();
-    void showSettings();
-    void showManual();
-   // void hideAllHoverState() const;
-    void updateIcon();
+    void changeEvent(QEvent *event) override;
 
 private:
-    Avatar *m_avatar;
-    int m_currentIndex;
-    QStringList m_hideList;
-    bool m_hasCompterIcon;
-    bool m_hasDocumentIcon;
-    bool m_hasPictureIcon;
-    bool m_hasMusicIcon;
-    bool m_hasVideoIcon;
-    bool m_hasDownloadIcon;
-    QMap<uint, MiniFrameButton*> m_btns;
+    void initUi();
+    void initConnection();
+    void initAccessibleName();
+
+signals:
+    void requestFrameHide();
+
+public slots:
+    void showShutdown();
+    void showSettings();
+
+private slots:
+    void updateIcon(DGuiApplicationHelper::ColorType themeType);
+
+private:
     MiniFrameButton *m_settingsBtn;
     MiniFrameButton *m_powerBtn;
-    MiniFrameButton *m_computerBtn;
-    MiniFrameButton *m_videoBtn;
-    MiniFrameButton *m_musicBtn;
-    MiniFrameButton *m_pictureBtn;
-    MiniFrameButton *m_documentBtn;
-    MiniFrameButton *m_downloadBtn;
+    QButtonGroup *m_buttonGroup;
+    QStringList m_hideList;
 };
 
 #endif // MINIFRAMERIGHTBAR_H

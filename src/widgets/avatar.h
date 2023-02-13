@@ -6,11 +6,12 @@
 #define AVATAR_H
 
 #include <QWidget>
-#include <com_deepin_daemon_accounts.h>
-#include <com_deepin_daemon_accounts_user.h>
 
-using AccountsInter = com::deepin::daemon::Accounts;
-using UserInter = com::deepin::daemon::accounts::User;
+#include "accounts_interface.h"
+#include "accountsuser_interface.h"
+
+using AccountsInter = org::deepin::dde::Accounts1;
+using UserInter = org::deepin::dde::accounts1::User;
 
 class Avatar : public QWidget
 {

@@ -8,6 +8,7 @@
 #include "util.h"
 #include "appslistmodel.h"
 #include "fullscreenframe.h"
+#include "windowedframe.h"
 
 #include <DGuiApplicationHelper>
 
@@ -23,88 +24,31 @@
 #include <QPainter>
 #include <QScrollBar>
 #include <QVBoxLayout>
+#include <QSortFilterProxyModel>
 
 DGUI_USE_NAMESPACE
 
-QPointer<AppsManager> AppGridView::m_appManager = nullptr;
-QPointer<CalculateUtil> AppGridView::m_calcUtil = nullptr;
-
-bool AppGridView::m_longPressed = false;
-Gesture *AppGridView::m_gestureInter = nullptr;
-
-/**
- * @brief AppGridView::AppGridView
- * 全屏模式下 应用网格视图，主要处理全屏图标的拖拽事件及分组切换的动画效果
- * @param parent
- */
-AppGridView::AppGridView(QWidget *parent)
+AppGridView::AppGridView(const ViewType viewType, QWidget *parent)
     : QListView(parent)
     , m_dropThresholdTimer(new QTimer(this))
+    , m_gestureInter(new Gesture("org.deepin.dde.Gesture1"
+                                 , "/org/deepin/dde/Gesture1"
+                                 , QDBusConnection::systemBus()
+                                 , nullptr))
+    , m_pDelegate(nullptr)
+    , m_appManager(AppsManager::instance())
+    , m_calcUtil(CalculateUtil::instance())
+    , m_longPressed(false)
     , m_pixLabel(nullptr)
     , m_calendarWidget(nullptr)
     , m_vlayout(nullptr)
     , m_monthLabel(nullptr)
     , m_dayLabel(nullptr)
     , m_weekLabel(nullptr)
+    , m_viewType(viewType)
 {
-    m_pDelegate = nullptr;
-
-    if (!m_gestureInter) {
-        m_gestureInter = new Gesture("com.deepin.daemon.Gesture"
-                                     , "/com/deepin/daemon/Gesture"
-                                     , QDBusConnection::systemBus()
-                                     , nullptr);
-    }
-
-    if (!m_appManager)
-        m_appManager = AppsManager::instance();
-    if (!m_calcUtil)
-        m_calcUtil = CalculateUtil::instance();
-
-    m_dropThresholdTimer->setInterval(DLauncher::APP_DRAG_SWAP_THRESHOLD);
-    m_dropThresholdTimer->setSingleShot(true);
-
-    viewport()->installEventFilter(this);
-    viewport()->setAcceptDrops(true);
-    createMovingComponent();
-
-    setUniformItemSizes(true);
-    setMouseTracking(true);
-    setAcceptDrops(true);
-    setDragEnabled(true);
-    setWrapping(true);
-    setFocusPolicy(Qt::NoFocus);
-    setDragDropMode(QAbstractItemView::DragDrop);
-    setDropIndicatorShown(false);// 解决拖拽释放前有小黑点出现的问题
-    setMovement(QListView::Free);
-    setFlow(QListView::LeftToRight);
-    setLayoutMode(QListView::Batched);
-    setResizeMode(QListView::Adjust);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setFrameStyle(QFrame::NoFrame);
-    setViewportMargins(0, 0, 0, 0);
-    viewport()->setAutoFillBackground(false);
-
-    // 界面大小变化时，设置listview的边距以及间距
-    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, [this] {
-        setSpacing(m_calcUtil->appItemSpacing());
-        setViewportMargins(m_calcUtil->appMarginLeft(), m_calcUtil->appMarginTop(), m_calcUtil->appMarginLeft(), 0);
-    });
-
-#ifndef DISABLE_DRAG_ANIMATION
-    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::prepareDropSwap);
-#else
-    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::dropSwap);
-#endif
-
-    // 根据后端延迟触屏信号控制是否可进行图标拖动，收到延迟触屏信号可拖动，没有收到延迟触屏信号、点击松开就不可拖动
-    connect(m_gestureInter, &Gesture::TouchSinglePressTimeout, m_gestureInter, [] {
-        m_longPressed = true;
-    }, Qt::UniqueConnection);
-    connect(m_gestureInter, &Gesture::TouchUpOrCancel, m_gestureInter, [] {
-        m_longPressed = false;
-    }, Qt::UniqueConnection);
+    initUi();
+    initConnection();
 }
 
 const QModelIndex AppGridView::indexAt(const int index) const
@@ -140,9 +84,39 @@ DragPageDelegate *AppGridView::getDelegate()
 void AppGridView::dropEvent(QDropEvent *e)
 {
     e->accept();
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel)
+        return;
+
+    // 收藏列表允许从其他视图拖拽进入
+    if (listModel->category() == AppsListModel::Favorite) {
+        const ItemInfo_v1 &info = m_appManager->getItemInfo(e->mimeData()->data("DesktopPath"));
+        const QModelIndex index = indexAt(e->pos());
+        if (index.isValid()) {
+            listModel->insertItem(info, index.row());
+        } else {
+            listModel->insertItem(info, listModel->rowCount(QModelIndex()));
+        }
+
+        listModel->clearDraggingIndex();
+        return;
+    }
 
     if (m_dropThresholdTimer->isActive())
         m_dropThresholdTimer->stop();
+
+    AppItemDelegate *itemDelegate = qobject_cast<AppItemDelegate *>(this->itemDelegate());
+    if (!itemDelegate)
+        return;
+
+    if (m_calcUtil->fullscreen() && getViewType() == MainView) {
+        QModelIndex dropIndex = indexAt(e->pos());
+        QModelIndex dragIndex = indexAt(m_dragStartPos);
+        if (dropIndex.isValid() && dragIndex.isValid() && dragIndex != dropIndex && (m_viewType != PopupView)) {
+            itemDelegate->setDirModelIndex(QModelIndex(), QModelIndex());
+            listModel->updateModelData(dragIndex, dropIndex);
+        }
+    }
 
     // 解决快速拖动应用，没有动画效果的问题，当拖拽小于200毫秒时，禁止拖动
     if (m_dragLastTime.elapsed() < 200)
@@ -156,18 +130,33 @@ void AppGridView::dropEvent(QDropEvent *e)
 
 void AppGridView::mousePressEvent(QMouseEvent *e)
 {
+    const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel) {
+        // 搜索模式时, model类对象 为 SortFilterProxyModel
+        QSortFilterProxyModel *filterModel = qobject_cast<QSortFilterProxyModel *>(model());
+        if (!filterModel) {
+            qWarning() << "null sortFilterModel !!!";
+            return;
+        }
+
+        listModel = qobject_cast<AppsListModel *>(filterModel->sourceModel());
+        if (!listModel) {
+            qWarning() << "null appListModel !!!";
+            return;
+        }
+    }
+
     if (e->button() == Qt::RightButton) {
-        const QModelIndex &clickedIndex = QListView::indexAt(e->pos());
-        if (clickedIndex.isValid() && !m_moveGridView) {
+        if (clickedIndex.isValid() && !getViewMoveState()) {
             QPoint rightClickPoint = QCursor::pos();
             // 触控屏右键
             if (e->source() == Qt::MouseEventSynthesizedByQt) {
-                AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
                 QPoint indexPoint = mapToGlobal(indexRect(clickedIndex).center());
 
-                if (listModel->category() == 0) {
+                if (listModel->category() == AppsListModel::FullscreenAll || listModel->category() == AppsListModel::WindowedAll) {
                     rightClickPoint.setX(indexPoint.x() + indexRect(clickedIndex).width() - 58 * m_calcUtil->getScreenScaleX());
-                } else if (listModel->category() == 2) {
+                } else if (listModel->category() == AppsListModel::Search) {
                     rightClickPoint.setX(indexPoint.x() + indexRect(clickedIndex).width()  - 90 * m_calcUtil->getScreenScaleX());
                 } else {
                     rightClickPoint.setX(indexPoint.x() + indexRect(clickedIndex).width() - 3 * m_calcUtil->getScreenScaleX());
@@ -182,8 +171,15 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
     if (e->buttons() == Qt::LeftButton && !m_lastFakeAni) {
         m_dragStartPos = e->pos();
 
+        // TODO: topLeft --> center();
         // 记录动画的终点位置
         setDropAndLastPos(appIconRect(indexAt(e->pos())).topLeft());
+
+        // 记录点击文件夹时的初始行数
+        if (clickedIndex.isValid() && clickedIndex.data(AppsListModel::ItemIsDirRole).toBool()) {
+            m_appManager->setDirAppRow(clickedIndex.row());
+            m_appManager->setDirAppPageIndex(listModel->getPageIndex());
+        }
     }
 
     if (m_pDelegate)
@@ -194,7 +190,19 @@ void AppGridView::mousePressEvent(QMouseEvent *e)
 
 void AppGridView::dragEnterEvent(QDragEnterEvent *e)
 {
+    m_appManager->setReleasePos(indexAt(e->pos()).row());
     m_dragLastTime.start();
+
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    const QModelIndex dragIndex = m_appManager->dragModelIndex();
+    const ItemInfo_v1 &info = m_appManager->getItemInfo(e->mimeData()->data("DesktopPath"));
+    // 从其他视图列表中拖入重复的数据直接返回，避免总有一个item正在拖拽中的状态导致没有绘制的问题
+    if (listModel && listModel->category() == AppsListModel::Favorite && dragIndex.model() && dragIndex.model() != listModel) {
+        if (m_appManager->contains(m_appManager->appsInfoList(AppsListModel::Favorite), info) ) {
+            qDebug() << "repeated data...";
+            return;
+        }
+    }
 
     const QModelIndex index = indexAt(e->pos());
 
@@ -206,7 +214,6 @@ void AppGridView::dragEnterEvent(QDragEnterEvent *e)
 
 void AppGridView::dragMoveEvent(QDragMoveEvent *e)
 {
-    Q_UNUSED(e);
     m_dropThresholdTimer->stop();
 
     if (m_lastFakeAni)
@@ -215,30 +222,92 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
     const QPoint pos = e->pos();
     const QRect containerRect = this->rect();
 
+    AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
+    if (!listModel)
+        return;
+
     const QModelIndex dropIndex = QListView::indexAt(pos);
+    QModelIndex dragIndex = indexAt(m_dragStartPos);
+
     if (dropIndex.isValid()) {
         m_dropToPos = dropIndex.row();
     } else if (containerRect.contains(pos)) {
-        AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
         if (listModel) {
             int lastRow = listModel->rowCount(QModelIndex()) - 1;
-
             QModelIndex lastIndex = listModel->index(lastRow);
-
-            if (lastIndex.isValid()) {
-                QPoint lastPos = indexRect(lastIndex).center();
-                if (pos.x() > lastPos.x() && pos.y() > lastPos.y())
-                    m_dropToPos = lastIndex.row();
-            }
+            QPoint lastPos = indexRect(lastIndex).center();
+            if (pos.x() > lastPos.x() && pos.y() > lastPos.y())
+                m_dropToPos = lastIndex.row();
         }
     }
+
+    // 当文件夹展开窗口隐藏，当前显示的视图类型为 MainView 时，由于展开窗口的QDrag::exec() 其实未执行完毕，所以这里做了特殊处理，
+    // 以便实现两个视图页面进行应用删除和插入的同时，实现动画的路径的计算处理。
+    // 做法：保存从文件夹中的拖拽的应用信息、文件夹展开窗口隐藏后当前显示的视图列表所在页、列表以及模型对象、列表当前页对应的模型类型
+    ItemInfo_v1 dragInfo = e->mimeData()->imageData().value<ItemInfo_v1>();
+    m_appManager->setDragItem(dragInfo);
+    m_appManager->setCategory(listModel->category());
+    m_appManager->setPageIndex(listModel->getPageIndex());
+    m_appManager->setReleasePos(m_dropToPos);
+    m_appManager->setListModel(listModel);
+    m_appManager->setListView(this);
+
+#ifdef QT_DEBUG
+    qDebug() << "list view:" << this;
+#endif
 
     // 分页切换后隐藏label过渡效果
     emit requestScrollStop();
 
-    // 释放前执行app交换动画
-    if (m_enableAnimation)
-        m_dropThresholdTimer->start();
+    AppItemDelegate *itemDelegate = qobject_cast<AppItemDelegate *>(this->itemDelegate());
+    if (!itemDelegate)
+        return;
+
+    QPoint moveNext = e->pos() - m_dragStartPos;
+    const QRect curRect = indexRect(dropIndex);
+    bool dragIsDir = dragIndex.data(AppsListModel::ItemIsDirRole).toBool();
+    bool dropIsDir = dropIndex.data(AppsListModel::ItemIsDirRole).toBool();
+    bool dragDropIsDir = (dragIsDir && dropIsDir);
+
+    // 拖拽的对象和释放处的对象不同 && 不能同时为文件夹 && 拖拽的对象不能为文件夹
+    // 即只有拖拽对象为普通应用时, 才允许合并入(或者创建)文件夹.
+    bool isDiff = ((dragIndex != dropIndex) && !dragDropIsDir && !dragIsDir);
+    int eventXPos = e->pos().x();
+    int eventYPos = e->pos().y();
+
+    int rectCenterXPos = curRect.center().x();
+    int rectCenterYPos = curRect.center().y();
+    if (m_calcUtil->fullscreen() && (moveNext.x() > 0 || moveNext.y() < 0)) {
+        // 向右拖动
+        if ((eventXPos >= rectCenterXPos && (eventXPos <= curRect.right())) && isDiff) {
+            // 触发文件夹特效
+            itemDelegate->setDirModelIndex(dragIndex, dropIndex);
+        } else if (((eventYPos >= curRect.top()) && (eventYPos <= rectCenterYPos)) && isDiff) {
+            itemDelegate->setDirModelIndex(dragIndex, dropIndex);
+        } else {
+            // 释放前执行app交换动画
+            if (m_enableAnimation)
+                m_dropThresholdTimer->start();
+        }
+    } else if (m_calcUtil->fullscreen() && (moveNext.x() < 0 || moveNext.y() > 0)) {
+        // 向左拖动
+        if ((eventXPos >= curRect.left()) && (eventXPos <= rectCenterXPos) && isDiff) {
+            // 触发文件夹特效
+            itemDelegate->setDirModelIndex(dragIndex, dropIndex);
+        } else if ((eventYPos >= rectCenterYPos) && (eventYPos <= curRect.bottom()) && isDiff) {
+            itemDelegate->setDirModelIndex(dragIndex, dropIndex);
+        }
+        else {
+            // 释放前执行app交换动画
+            if (m_enableAnimation)
+                m_dropThresholdTimer->start();
+        }
+    } else {
+        itemDelegate->setDirModelIndex(QModelIndex(), QModelIndex());
+        // 释放前执行app交换动画
+        if (m_enableAnimation)
+            m_dropThresholdTimer->start();
+    }
 }
 
 void AppGridView::dragOut(int pos)
@@ -281,8 +350,6 @@ void AppGridView::flashDrag()
  */
 void AppGridView::dragLeaveEvent(QDragLeaveEvent *e)
 {
-    Q_ASSERT(m_containerBox);
-
     m_dropThresholdTimer->stop();
 
     // 获取光标在listview中的坐标
@@ -327,7 +394,7 @@ void AppGridView::mouseMoveEvent(QMouseEvent *e)
 
     if (qAbs(e->x() - m_dragStartPos.x()) > DLauncher::DRAG_THRESHOLD ||
             qAbs(e->y() - m_dragStartPos.y()) > DLauncher::DRAG_THRESHOLD) {
-        m_moveGridView = true;
+        setViewMoveState(true);
 
         // 开始拖拽后,导致fullscreenframe只收到mousePress事件,收不到mouseRelease事件,需要处理一下异常
         if (idx.isValid())
@@ -343,7 +410,6 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
-    m_moveGridView = false;
     if (m_pDelegate)
         m_pDelegate->mouseRelease(e);
 
@@ -353,18 +419,26 @@ void AppGridView::mouseReleaseEvent(QMouseEvent *e)
     // 小范围位置变化，当作没有变化，针对触摸屏
     if (diff_x < DLauncher::TOUCH_DIFF_THRESH && diff_y < DLauncher::TOUCH_DIFF_THRESH)
         QListView::mouseReleaseEvent(e);
+
+    // 点击列表空白位置且列表没有移动时，手动触发点击信号
+    if (!indexAt(e->pos()).isValid() && !getViewMoveState())
+        emit QListView::clicked(QModelIndex());
 }
 
-QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey)
+QPixmap AppGridView::creatSrcPix(const QModelIndex &index)
 {
     QPixmap srcPix;
 
-    if (appKey == "dde-calendar") {
-        const  auto  s = m_calcUtil->appIconSize();
-        const double  iconZoom =  s.width() / 64.0;
+    const QString &desktop = index.data(AppsListModel::AppDesktopRole).toString();
+    if (desktop.contains("/dde-calendar.desktop")) {
+#ifdef QT_DEBUG
+        qInfo() << "category: " << static_cast<AppsListModel *>(model())->category();
+#endif
+        const auto itemSize = m_calcUtil->appIconSize(static_cast<AppsListModel *>(model())->category());
+        const double iconZoom =  itemSize.width() / 64.0;
         QStringList calIconList = m_calcUtil->calendarSelectIcon();
 
-        m_calendarWidget->setFixedSize(s);
+        m_calendarWidget->setFixedSize(itemSize);
         m_calendarWidget->setAutoFillBackground(true);
         QPalette palette = m_calendarWidget->palette();
         palette.setBrush(QPalette::Window,
@@ -379,7 +453,7 @@ QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey
         m_monthLabel->setPixmap(monthPix.scaled(monthPix.width(), monthPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         m_monthLabel->setFixedHeight(monthPix.height());
         m_monthLabel->setAlignment(Qt::AlignCenter);
-        m_monthLabel->setFixedWidth(s.width() - 5 * iconZoom);
+        m_monthLabel->setFixedWidth(itemSize.width() - 5 * iconZoom);
         m_monthLabel->show();
         m_vlayout->addWidget(m_monthLabel, Qt::AlignVCenter);
 
@@ -395,7 +469,7 @@ QPixmap AppGridView::creatSrcPix(const QModelIndex &index, const QString &appKey
         m_weekLabel->setPixmap(weekPix.scaled(weekPix.width(), weekPix.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         m_weekLabel->setFixedHeight(m_weekLabel->pixmap()->height());
         m_weekLabel->setAlignment(Qt::AlignCenter);
-        m_weekLabel->setFixedWidth(s.width() + 5 * iconZoom);
+        m_weekLabel->setFixedWidth(itemSize.width() + 5 * iconZoom);
         m_weekLabel->show();
 
         m_vlayout->addWidget(m_weekLabel, Qt::AlignVCenter);
@@ -457,21 +531,49 @@ QRect AppGridView::appIconRect(const QModelIndex &index)
  */
 void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
 {
-    if (!index.isValid())
+    if (!index.isValid()) {
+        qWarning() << "invalid index ...";
         return;
+    }
 
-    m_moveGridView = false;
+    m_appManager->setDragModelIndex(index);
+    setViewMoveState();
+
     AppsListModel *listModel = qobject_cast<AppsListModel *>(model());
-    if (!listModel)
+    if (!listModel) {
+        // 搜索模式时, model类对象 为 SortFilterProxyModel
+        QSortFilterProxyModel *filterModel = qobject_cast<QSortFilterProxyModel *>(model());
+        if (!filterModel)
+            return;
+
+        listModel = qobject_cast<AppsListModel *>(filterModel->sourceModel());
+        if (!listModel)
+            return;
+    }
+
+    QRect grabRect = appIconRect(index);
+    if (m_calcUtil->fullscreen()) {
+        int topMargin = m_calcUtil->appMarginTop();
+        int leftMargin = m_calcUtil->appMarginLeft();
+        grabRect = QRect(grabRect.topLeft() + QPoint(0, topMargin) + QPoint(leftMargin, 0), grabRect.size());
+    }
+
+    QPixmap srcPix;
+    const bool itemIsDir = index.data(AppsListModel::ItemIsDirRole).toBool();
+    if (itemIsDir)
+        srcPix = grab(grabRect);
+    else
+        srcPix = creatSrcPix(index);
+
+    if (!qobject_cast<AppsListModel *>(model())) {
+        qDebug() << "appgridview's model is null";
         return;
+    }
 
-    const QModelIndex &dragIndex = index;
     const qreal ratio = qApp->devicePixelRatio();
-    QString appKey = index.data(AppsListModel::AppKeyRole).value<QString>();
+    AppsListModel::AppCategory category = qobject_cast<AppsListModel *>(model())->category();
 
-    QPixmap srcPix = creatSrcPix(index, appKey);
-
-    srcPix = srcPix.scaled(m_calcUtil->appIconSize() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    srcPix = srcPix.scaled(m_calcUtil->appIconSize(category) * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     srcPix.setDevicePixelRatio(ratio);
 
     // 创建拖拽释放时的应用图标
@@ -482,14 +584,26 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     QPropertyAnimation *posAni = new QPropertyAnimation(m_pixLabel.data(), "pos", m_pixLabel.data());
     connect(posAni, &QPropertyAnimation::finished, [&, listModel] () {
         m_pixLabel->hide();
+        bool dropItemIsDir = indexAt(m_dropToPos).data(AppsListModel::ItemIsDirRole).toBool();
         if (!m_lastFakeAni) {
-            if (m_enableDropInside)
+            // 增加文件夹展开视图列表的判断逻辑
+            if (m_enableDropInside && !dropItemIsDir && (getViewType() != PopupView))
                 listModel->dropSwap(m_dropToPos);
-            else
-                // 搜索模式下，不需要做删除被拖拽的item，插入移动到新位置的item的操作，否则会导致被拖拽item的位置改变
-                if (listModel->category() != AppsListModel::AppCategory::Search){
-                    listModel->dropSwap(indexAt(m_dragStartPos).row());
-                }
+
+            // 删除被拖拽的item，并将被拖拽的应用插入到新的位置
+            if (!dropItemIsDir && getViewType() != PopupView)
+                listModel->dropSwap(indexAt(m_dragStartPos).row());
+
+            // TODO: 搜索模式下的会新增一个控件，因此这里暂时删除针对搜索模式的业务，不影响主体功能
+            int releasePos = AppsManager::instance()->getReleasePos();
+
+#ifdef QT_DEBUG
+            qDebug() << "releasePos: " << releasePos << ", dragMode: " << m_appManager->getDragMode();
+#endif
+            if (m_appManager->getListModel() && m_appManager->getDragMode() == AppsManager::DirOut) {
+                m_appManager->getListModel()->insertItem(releasePos);
+                m_appManager->getListModel()->clearDraggingIndex();
+            }
 
             listModel->clearDraggingIndex();
         } else {
@@ -504,11 +618,13 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     m_dropToPos = index.row();
     listModel->setDraggingIndex(index);
 
-    int old_page = m_containerBox->property("curPage").toInt();
+    int old_page = 0;
+    if (m_containerBox)
+        old_page = m_containerBox->property("curPage").toInt();
 
     if (execDrag) {
         QDrag *drag = new QDrag(this);
-        drag->setMimeData(model()->mimeData(QModelIndexList() << dragIndex));
+        drag->setMimeData(model()->mimeData(QModelIndexList() << index));
         drag->setPixmap(srcPix);
         drag->setHotSpot(srcPix.rect().center() / ratio);
         setState(DraggingState);
@@ -521,7 +637,9 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     // 未触发分页则直接返回,触发分页则执行分页后操作
     emit dragEnd();
 
-    int cur_page = m_containerBox->property("curPage").toInt();
+    int cur_page = 0;
+    if (m_containerBox)
+        cur_page = m_containerBox->property("curPage").toInt();
 
     // 当拖动应用出现触发分页的情况，关闭上一个动画， 直接处理当前当前页的动画
     if (cur_page != old_page) {
@@ -537,7 +655,33 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
     posAni->setEasingCurve(QEasingCurve::Linear);
     posAni->setDuration(DLauncher::APP_DRAG_MININUM_TIME);
     posAni->setStartValue((QCursor::pos() - rectIcon.center()));
-    posAni->setEndValue(mapToGlobal(m_dropPoint) + QPoint(m_calcUtil->appMarginLeft(), 0));
+
+    if (getViewType() != PopupView && m_calcUtil->fullscreen()) {
+        // 全屏模式下，主界面视图中应用被拖拽释放后...
+        posAni->setEndValue(mapToGlobal(m_dropPoint) + QPoint(m_calcUtil->appMarginLeft(), 0));
+    } else if (getViewType() == PopupView && m_calcUtil->fullscreen()) {
+        // 全屏模式下，文件夹展开窗口中的应用被拖拽释放后...
+        int releasePos = AppsManager::instance()->getReleasePos();
+
+        // 这里进行坐标计算时，不需要对页码进行计算，因为动画仅仅在当前页面进行展示，所以不需要进行考虑页码对动画起点和终点的影响
+        // releasePos += m_appManager->getPageIndex() * m_calcUtil->appPageItemCount(m_appManager->getCategory());
+        if (!m_appManager->getListView()) {
+            qDebug() << "destination listview ptr is null...";
+            return;
+        }
+
+        QModelIndex itemIndex = m_appManager->getListView()->indexAt(releasePos);
+        QRect itemRect = m_appManager->getListView()->indexRect(itemIndex);
+        QPoint endPos = m_appManager->getListView()->mapToGlobal(itemRect.topLeft());
+        posAni->setEndValue(endPos + QPoint(m_calcUtil->appMarginLeft(), 0));
+#ifdef QT_DEBUG
+        qDebug() << "releasePos:" << releasePos << ", model index valid status:" << itemIndex.isValid() << ", itemRect:" << itemRect << ", mapToGlobal:" << m_appManager->getListView()->mapToGlobal(itemRect.center());
+#endif
+    } else {
+        m_pixLabel->hide();
+        posAni->setStartValue(mapToGlobal(QCursor::pos()));
+        posAni->setEndValue(mapToGlobal(indexRect(QListView::indexAt(m_dragStartPos)).center()));
+    }
 
     //不开启特效则不展示动画
     if (!DGuiApplicationHelper::isSpecialEffectsEnvironment()) {
@@ -646,10 +790,16 @@ void AppGridView::createFakeAnimation(const int pos, const bool moveNext, const 
     floatLabel->setPixmap(pixmap);
     floatLabel->show();
 
-    int topMargin = m_calcUtil->appMarginTop();
-    int leftMargin = m_calcUtil->appMarginLeft();
-    ani->setStartValue(indexRect(index).topLeft() - QPoint(0, -topMargin) + QPoint(leftMargin, 0));
-    ani->setEndValue(indexRect(indexAt(moveNext ? pos - 1 : pos + 1)).topLeft() - QPoint(0, -topMargin) + QPoint(leftMargin, 0));
+    if (m_calcUtil->fullscreen()) {
+        int topMargin = m_calcUtil->appMarginTop();
+        int leftMargin = m_calcUtil->appMarginLeft();
+        ani->setStartValue(indexRect(index).topLeft() - QPoint(0, -topMargin) + QPoint(leftMargin, 0));
+        ani->setEndValue(indexRect(indexAt(moveNext ? pos - 1 : pos + 1)).topLeft() - QPoint(0, -topMargin) + QPoint(leftMargin, 0));
+    } else {
+        ani->setStartValue(indexRect(index).topLeft());
+        ani->setEndValue(indexRect(indexAt(moveNext ? pos - 1 : pos + 1)).topLeft());
+    }
+
 
     // InOutQuad 描述起点矩形到终点矩形的速度曲线
     ani->setEasingCurve(QEasingCurve::Linear);
@@ -691,6 +841,26 @@ const QRect AppGridView::indexRect(const QModelIndex &index) const
     return rectForIndex(index);
 }
 
+void AppGridView::setViewType(AppGridView::ViewType type)
+{
+    m_viewType = type;
+}
+
+AppGridView::ViewType AppGridView::getViewType() const
+{
+    return m_viewType;
+}
+
+void AppGridView::setViewMoveState(bool moving)
+{
+    m_moveGridView = moving;
+}
+
+bool AppGridView::getViewMoveState() const
+{
+    return m_moveGridView;
+}
+
 /** 提前创建好拖拽过程中需要用到的label
  * （修复在龙芯下运行时创建对象会崩溃的问题）
  * @brief AppGridView::createMovingLabel
@@ -699,14 +869,14 @@ void AppGridView::createMovingComponent()
 {
     // 拖拽释放鼠标时显示的应用图标
     if (!m_pixLabel) {
-        m_pixLabel.reset(new QLabel(fullscreen()));
+        m_pixLabel.reset(new QLabel(topLevelWidget()));
         m_pixLabel->hide();
     }
 
     // 拖拽过程中位置交换时显示的应用图标
     if (!m_floatLabels.size()) {
         // 单页最多28个应用
-        for (int i = 0; i < m_calcUtil->appPageItemCount(AppsListModel::All); i++) {
+        for (int i = 0; i < m_calcUtil->appPageItemCount(AppsListModel::FullscreenAll); i++) {
             QLabel *moveLabel = new QLabel(this);
             moveLabel->hide();
             m_floatLabels << moveLabel;
@@ -738,10 +908,100 @@ void AppGridView::createMovingComponent()
     }
 }
 
-FullScreenFrame *AppGridView::fullscreen()
+void AppGridView::initConnection()
 {
-    FullScreenFrame *fullscreenFrame = nullptr;
-    fullscreenFrame = qobject_cast<FullScreenFrame*>(topLevelWidget());
+#ifndef DISABLE_DRAG_ANIMATION
+    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::prepareDropSwap);
+#else
+    connect(m_dropThresholdTimer, &QTimer::timeout, this, &AppGridView::dropSwap);
+#endif
 
-    return fullscreenFrame;
+    // 根据后端延迟触屏信号控制是否可进行图标拖动，收到延迟触屏信号可拖动，没有收到延迟触屏信号、点击松开就不可拖动
+    connect(m_gestureInter, &Gesture::TouchSinglePressTimeout, this, &AppGridView::onTouchSinglePresse, Qt::UniqueConnection);
+    connect(m_gestureInter, &Gesture::TouchUpOrCancel, this, &AppGridView::onTouchUpOrDown, Qt::UniqueConnection);
+    connect(m_calcUtil, &CalculateUtil::layoutChanged, this, &AppGridView::onLayoutChanged);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &AppGridView::onThemeChanged);
+}
+
+void AppGridView::initUi()
+{
+#ifdef QT_DEBUG
+    setStyleSheet("QListView{border: 1px solid red;}");
+#endif
+
+    m_dropThresholdTimer->setInterval(DLauncher::APP_DRAG_SWAP_THRESHOLD);
+    m_dropThresholdTimer->setSingleShot(true);
+
+    viewport()->installEventFilter(this);
+    viewport()->setAcceptDrops(true);
+    createMovingComponent();
+
+    setUniformItemSizes(true);
+    setMouseTracking(true);
+    setAcceptDrops(true);
+    setDragEnabled(true);
+    setWrapping(true);
+    setFocusPolicy(Qt::NoFocus);
+    setDragDropMode(QAbstractItemView::DragDrop);
+    setDropIndicatorShown(false);// 解决拖拽释放前有小黑点出现的问题
+    setMovement(QListView::Free);
+    setWrapping(true);
+    setLayoutMode(QListView::Batched);
+    setResizeMode(QListView::Adjust);
+    setViewMode(QListView::IconMode);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    setFrameStyle(QFrame::NoFrame);
+    setViewportMargins(0, 0, 0, 0);
+    viewport()->setAutoFillBackground(false);
+
+    onThemeChanged(DGuiApplicationHelper::instance()->themeType());
+    onLayoutChanged();
+}
+
+void AppGridView::onLayoutChanged()
+{
+#define ITEM_SPACING 15
+    if (getViewType() == PopupView) {
+#ifdef QT_DEBUG
+        int leftMargin = m_calcUtil->appMarginLeft();
+        int topMargin = m_calcUtil->appMarginTop();
+        int itemSpacing = m_calcUtil->appItemSpacing();
+        qDebug() << "set PopView margin" << ":topMargin:" << topMargin << ", leftMargin:" << leftMargin << ", itemSpacing:" << itemSpacing;
+#endif
+        setViewportMargins(0, 0, 0, 0);
+        setSpacing(ITEM_SPACING);
+    } else {
+        int leftMargin = m_calcUtil->appMarginLeft();
+        int topMargin = m_calcUtil->appMarginTop();
+        int itemSpacing = m_calcUtil->appItemSpacing();
+#ifdef QT_DEBUG
+        qDebug() << "set MainView margin" << ":topMargin:" << topMargin << ", leftMargin:" << leftMargin << ", itemSpacing:" << itemSpacing;
+#endif
+        setSpacing(itemSpacing);
+        setViewportMargins(leftMargin, topMargin, leftMargin, 0);
+    }
+}
+
+void AppGridView::onTouchSinglePresse(int time, double scalex, double scaley)
+{
+    Q_UNUSED(time);
+    Q_UNUSED(scalex);
+    Q_UNUSED(scaley);
+
+    m_longPressed = true;
+}
+
+void AppGridView::onTouchUpOrDown(double scalex, double scaley)
+{
+    Q_UNUSED(scalex);
+    Q_UNUSED(scaley);
+
+    m_longPressed = false;
+}
+
+void AppGridView::onThemeChanged(DGuiApplicationHelper::ColorType)
+{
+    update();
 }

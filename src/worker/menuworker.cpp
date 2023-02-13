@@ -5,16 +5,20 @@
 #include "menuworker.h"
 #include "menudialog.h"
 #include "util.h"
+#include "amdbuslauncherinterface.h"
+#include "amdbusdockinterface.h"
 
 #include <QSignalMapper>
 #include <QWindow>
 
 const bool IS_WAYLAND_DISPLAY = !qgetenv("WAYLAND_DISPLAY").isEmpty();
 
+class AppsListModel;
+
 MenuWorker::MenuWorker(QObject *parent)
     : QObject(parent)
-    , m_dockAppManagerInterface(new DBusDock(this))
-    , m_launcherInterface(new DBusLauncher(this))
+    , m_amDbusLauncher(new AMDBusLauncherInter(this))
+    , m_amDbusDockInter(new AMDBusDockInter(this))
     , m_startManagerInterface(new DBusStartManager(this))
     , m_calcUtil(CalculateUtil::instance())
     , m_appManager(AppsManager::instance())
@@ -23,9 +27,12 @@ MenuWorker::MenuWorker(QObject *parent)
     , m_isItemStartup(false)
     , m_isItemProxy(false)
     , m_isItemEnableScaling(false)
+    , m_isItemInCollected(false)
     , m_menu(new Menu)
+    , m_signalMapper(new QSignalMapper(m_menu))
 {
-    connect(m_menu, &Menu::notifyMenuDisplayState, this, &MenuWorker::notifyMenuDisplayState);
+    connect(m_menu, &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);
+    connect(m_signalMapper, static_cast<void (QSignalMapper::*)(const int)>(&QSignalMapper::mappedInt), this, &MenuWorker::handleMenuAction);
 }
 
 MenuWorker::~MenuWorker()
@@ -33,7 +40,7 @@ MenuWorker::~MenuWorker()
     delete m_menu;
 }
 
-void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
+void MenuWorker::creatMenuByAppItem()
 {
     m_appKey = m_currentModelIndex.data(AppsListModel::AppKeyRole).toString();
     m_appDesktop = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
@@ -42,6 +49,7 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
     m_isItemStartup = m_currentModelIndex.data(AppsListModel::AppAutoStartRole).toBool();
     m_isItemProxy = m_currentModelIndex.data(AppsListModel::AppIsProxyRole).toBool();
     m_isItemEnableScaling = m_currentModelIndex.data(AppsListModel::AppEnableScalingRole).toBool();
+    m_isItemInCollected = m_currentModelIndex.data(AppsListModel::AppIsInFavoriteRole).toBool();
 
     const double scale_ratio = SettingValue("com.deepin.xsettings", QByteArray(), "scale-factor", 1.0).toDouble();;
 
@@ -58,8 +66,14 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
     const bool canStartUp = m_currentModelIndex.data(AppsListModel::AppCanStartUpRole).toBool();
     const bool canDisableScale = m_calcUtil->IsServerSystem || qFuzzyCompare(1.0, scale_ratio);
     const bool canUseProxy = m_currentModelIndex.data(AppsListModel::AppCanOpenProxyRole).toBool();
+    const bool isInCollectedList = m_currentModelIndex.data(AppsListModel::AppIsInFavoriteRole).toBool();
+    const bool isTopInCollectList = (m_currentModelIndex.row() == 0);
+    const bool canMoveToTop = (m_currentModelIndex.row() != 0);
+    bool onlyShownInCollectedList = false;
 
-    qDebug() << "appKey" << m_appKey;
+    const AppsListModel *listModel = qobject_cast<const AppsListModel *>(m_currentModelIndex.model());
+    if (listModel)
+        onlyShownInCollectedList = (listModel->category() == AppsListModel::Favorite);
 
     QAction *open;
     QAction *desktop;
@@ -67,31 +81,51 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
     QAction *startup;
     QAction *proxy;
     QAction *uninstall;
+    QAction *collectAction;
+    QAction *moveAction;
 
-    open = new QAction(tr("Open"), menu);
-    desktop = new QAction(m_isItemOnDesktop ? tr("Remove from desktop") : tr("Send to desktop"), menu);
-    dock = new QAction(m_isItemOnDock ? tr("Remove from dock") : tr("Send to dock"), menu);
-    startup = new QAction(m_isItemStartup ? tr("Remove from startup") : tr("Add to startup"), menu);
-    uninstall = new QAction(tr("Uninstall"), menu);
-    proxy = new QAction(tr("Use a proxy"), menu);
+    open = new QAction(tr("Open"), m_menu);
+    desktop = new QAction(m_isItemOnDesktop ? tr("Remove from desktop") : tr("Send to desktop"), m_menu);
+    dock = new QAction(m_isItemOnDock ? tr("Remove from dock") : tr("Send to dock"), m_menu);
+    startup = new QAction(m_isItemStartup ? tr("Remove from startup") : tr("Add to startup"), m_menu);
+    uninstall = new QAction(tr("Uninstall"), m_menu);
+    proxy = new QAction(tr("Use a proxy"), m_menu);
+    moveAction = new QAction(tr("Pin to Top"));
+    collectAction = new QAction(isInCollectedList ? tr("Remove from favorites") : tr("Add to favorites"));
 
     // 分割线绘制的必要条件是，在打开功能之后，还有其他的功能选项
     if (!hideOpen) {
-        menu->addAction(open);
+        m_menu->addAction(open);
 #ifndef WITHOUT_UNINSTALL_APP
         if (!hideSendToDesktop || !hideSendToDock || !hideStartUp || !hideUseProxy || !hideUninstall || !canDisableScale)
 #else
         if (!hideSendToDesktop || !hideSendToDock || !hideStartUp || !hideUseProxy || !canDisableScale)
 #endif
 
-            menu->addSeparator();
+            m_menu->addSeparator();
     }
 
+    // 收藏应用
+    bool isFullscreen = m_amDbusLauncher->fullscreen();
+    if (!isFullscreen) {
+        if (isInCollectedList && !isTopInCollectList && onlyShownInCollectedList) {
+            m_menu->addAction(moveAction);
+            m_signalMapper->setMapping(moveAction, MoveToTop);
+            connect(moveAction, &QAction::triggered, m_signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        }
+
+        m_menu->addAction(collectAction);
+        m_signalMapper->setMapping(collectAction, EditCollected);
+        connect(collectAction, &QAction::triggered, m_signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        m_menu->addSeparator();
+    }
+
+
     if (!hideSendToDesktop)
-        menu->addAction(desktop);
+        m_menu->addAction(desktop);
 
     if (!hideSendToDock)
-        menu->addAction(dock);
+        m_menu->addAction(dock);
 
     // 分割线绘制的必要条件是，在发送到桌面或者发送到任务栏功能之后，还有其他的功能选项
     if (!hideOpen ||!hideSendToDesktop || !hideSendToDock) {
@@ -100,22 +134,23 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
 #else
         if (!hideStartUp || !hideUseProxy || !canDisableScale) {
 #endif
-            menu->addSeparator();
+            m_menu->addSeparator();
         }
     }
 
     if (!hideStartUp)
-        menu->addAction(startup);
+        m_menu->addAction(startup);
 
     if (!hideUseProxy)
-        menu->addAction(proxy);
+        m_menu->addAction(proxy);
 
     if (!canDisableScale) {
-        QAction *scale = new QAction(tr("Disable display scaling"), menu);
+        QAction *scale = new QAction(tr("Disable display scaling"), m_menu);
         scale->setCheckable(true);
         scale->setChecked(!m_isItemEnableScaling);
-        menu->addAction(scale);
-        signalMapper->setMapping(scale, SwitchScale);        connect(scale, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        m_menu->addAction(scale);
+        m_signalMapper->setMapping(scale, SwitchScale);
+        connect(scale, &QAction::triggered, m_signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
     }
 
     open->setEnabled(canOpen);
@@ -129,38 +164,39 @@ void MenuWorker::creatMenuByAppItem(QMenu *menu, QSignalMapper *signalMapper)
 
 #ifndef WITHOUT_UNINSTALL_APP
     if (!hideUninstall)
-        menu->addAction(uninstall);
+        m_menu->addAction(uninstall);
 #endif
 
     if (!hideOpen)
-        connect(open, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(open, &QAction::triggered, m_signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+
     if (!hideSendToDesktop)
-        connect(desktop, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(desktop, &QAction::triggered, m_signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
     if (!hideSendToDock)
-        connect(dock, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(dock, &QAction::triggered, m_signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
     if (!hideStartUp)
-        connect(startup, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(startup, &QAction::triggered, m_signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
 #ifndef WITHOUT_UNINSTALL_APP
     if (!hideUninstall)
-        connect(uninstall, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(uninstall, &QAction::triggered, m_signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
 #endif
     if (!hideUseProxy)
-        connect(proxy, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(proxy, &QAction::triggered, m_signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
 
     if (!hideOpen)
-        signalMapper->setMapping(open, Open);
+        m_signalMapper->setMapping(open, Open);
     if (!hideSendToDesktop)
-        signalMapper->setMapping(desktop, Desktop);
+        m_signalMapper->setMapping(desktop, Desktop);
     if (!hideSendToDock)
-        signalMapper->setMapping(dock, Dock);
+        m_signalMapper->setMapping(dock, Dock);
     if (!hideStartUp)
-        signalMapper->setMapping(startup, Startup);
+        m_signalMapper->setMapping(startup, Startup);
 #ifndef WITHOUT_UNINSTALL_APP
     if (!hideUninstall)
-        signalMapper->setMapping(uninstall, Uninstall);
+        m_signalMapper->setMapping(uninstall, Uninstall);
 #endif
     if (!hideUseProxy)
-        signalMapper->setMapping(proxy, Proxy);
+        m_signalMapper->setMapping(proxy, Proxy);
 }
 
 bool MenuWorker::isMenuVisible()
@@ -175,18 +211,13 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)
 {
     setCurrentModelIndex(index);
 
-    QSignalMapper *signalMapper = new QSignalMapper(m_menu);
-
     if (IS_WAYLAND_DISPLAY) {
         m_menu->setAttribute(Qt::WA_NativeWindow);
         m_menu->windowHandle()->setProperty("_d_dwayland_window-type", "session-shell");
     }
 
     m_menu->clear();
-    creatMenuByAppItem(m_menu, signalMapper);
-
-    connect(signalMapper, static_cast<void (QSignalMapper::*)(const int)>(&QSignalMapper::mapped), this, &MenuWorker::handleMenuAction);
-    connect(m_menu, &QMenu::aboutToHide, this, &MenuWorker::handleMenuClosed);
+    creatMenuByAppItem();
 
     // 菜单超出当前屏幕范围时，菜单显示位置向上或者向左移动超出区域的差值
     qreal ratio = qApp->devicePixelRatio();
@@ -207,6 +238,8 @@ void MenuWorker::showMenuByAppItem(QPoint pos, const QModelIndex &index)
 
     m_menu->show();
     m_menu->raise();
+
+    qDebug() << "menu pos:" << pos << ", menu visible:" << m_menu->isVisible();
 
     // 保存右键菜单实际的物理大小(已将屏幕缩放考虑在内)
     m_menuIsShown = true;
@@ -264,6 +297,12 @@ void MenuWorker::handleMenuAction(int index)
     case Uninstall:
         emit unInstallApp(m_currentModelIndex);
         break;
+    case MoveToTop:
+        emit requestMoveToTop(m_currentModelIndex);
+        break;
+    case EditCollected:
+        emit requestEditCollected(m_currentModelIndex, m_isItemInCollected);
+        break;
     default:
         break;
     }
@@ -275,87 +314,37 @@ void MenuWorker::onHideMenu()
         m_menu->hide();
 }
 
-void MenuWorker::handleToDesktop(){
-    qDebug() << "handleToDesktop" << m_appKey;
-    if (m_isItemOnDesktop){
-        QDBusPendingReply<bool> reply = m_launcherInterface->RequestRemoveFromDesktop(m_appKey);
-        reply.waitForFinished();
-        if (!reply.isError()) {
-            bool ret = reply.argumentAt(0).toBool();
-            qDebug() << "remove from desktop:" << ret;
-        } else {
-            qCritical() << reply.error().name() << reply.error().message();
-        }
-    }else{
-        QDBusPendingReply<bool> reply = m_launcherInterface->RequestSendToDesktop(m_appKey);
-        reply.waitForFinished();
-        if (!reply.isError()) {
-            bool ret = reply.argumentAt(0).toBool();
-            qDebug() << "send to desktop:" << ret;
-        } else {
-            qCritical() << reply.error().name() << reply.error().message();
-        }
-    }
+void MenuWorker::handleToDesktop()
+{
+    if (m_isItemOnDesktop)
+        m_amDbusLauncher->RequestRemoveFromDesktop(m_appKey);
+    else
+        m_amDbusLauncher->RequestSendToDesktop(m_appKey);
 }
 
-void MenuWorker::handleToDock(){
-    qDebug() << "handleToDock" << m_appKey;
-    if (m_isItemOnDock){
-        QDBusPendingReply<bool> reply = m_dockAppManagerInterface->RequestUndock(m_appDesktop);
-        reply.waitForFinished();
-        if (!reply.isError()) {
-            bool ret = reply.argumentAt(0).toBool();
-            qDebug() << "remove from dock:" << ret;
-        } else {
-            qCritical() << reply.error().name() << reply.error().message();
-        }
-    }else{
-        QDBusPendingReply<bool> reply =  m_dockAppManagerInterface->RequestDock(m_appDesktop, -1);
-        reply.waitForFinished();
-        if (!reply.isError()) {
-            bool ret = reply.argumentAt(0).toBool();
-            qDebug() << "send to dock:" << ret;
-        } else {
-            qCritical() << reply.error().name() << reply.error().message();
-        }
-    }
+void MenuWorker::handleToDock()
+{
+    if (m_isItemOnDock)
+        m_amDbusDockInter->RequestUndock(m_appDesktop);
+    else
+        m_amDbusDockInter->RequestDock(m_appDesktop, -1);
 }
 
-void MenuWorker::handleToStartup(){
-    QString desktopUrl = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
-    if (m_isItemStartup){
-        QDBusPendingReply<bool> reply = m_startManagerInterface->RemoveAutostart(desktopUrl);
-        reply.waitForFinished();
-        if (!reply.isError()) {
-            bool ret = reply.argumentAt(0).toBool();
-            qDebug() << "remove from startup:" << ret;
-            if (ret) {
-                //                emit signalManager->hideAutoStartLabel(appKey);
-            }
-        } else {
-            qCritical() << reply.error().name() << reply.error().message();
-        }
-    }else{
-        QDBusPendingReply<bool> reply =  m_startManagerInterface->AddAutostart(desktopUrl);
-        reply.waitForFinished();
-        if (!reply.isError()) {
-            bool ret = reply.argumentAt(0).toBool();
-            qDebug() << "add to startup:" << ret;
-            if (ret){
-                //                emit signalManager->showAutoStartLabel(appKey);
-            }
-        } else {
-            qCritical() << reply.error().name() << reply.error().message();
-        }
-    }
+void MenuWorker::handleToStartup()
+{
+    const QString &desktopUrl = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
+    if (m_isItemStartup)
+        m_startManagerInterface->RemoveAutostart(desktopUrl);
+    else
+        m_startManagerInterface->AddAutostart(desktopUrl);
 }
 
 void MenuWorker::handleToProxy()
 {
-    m_launcherInterface->SetUseProxy(m_appKey, !m_isItemProxy);
+    m_amDbusLauncher->SetUseProxy(m_appKey, !m_isItemProxy);
 }
 
 void MenuWorker::handleSwitchScaling()
 {
-    m_launcherInterface->SetDisableScaling(m_appKey, m_isItemEnableScaling);
+    m_amDbusLauncher->SetDisableScaling(m_appKey, m_isItemEnableScaling);
 }

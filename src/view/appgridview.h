@@ -9,11 +9,11 @@
 #include <QSize>
 #include <QLabel>
 
-#include <com_deepin_daemon_gesture.h>
+#include "gesture_interface.h"
 
 #include "appsmanager.h"
 
-using Gesture = com::deepin::daemon::Gesture;
+using Gesture = org::deepin::dde::Gesture1;
 
 class DragPageDelegate
 {
@@ -33,7 +33,13 @@ class AppGridView : public QListView
     Q_OBJECT
 
 public:
-    explicit AppGridView(QWidget *parent = nullptr);
+    enum ViewType {
+        PopupView,  // 弹框视图
+        MainView,   // 主页面视图
+    };
+
+    using QListView::setViewportMargins;
+    explicit AppGridView(const ViewType viewType = MainView, QWidget *parent = nullptr);
 
     using QListView::indexAt;
     const QModelIndex indexAt(const int index) const;
@@ -47,17 +53,31 @@ public:
     void dragIn(const QModelIndex &index, bool enableAnimation);
     void setDropAndLastPos(const QPoint& itemPos);
     void flashDrag();
-    QPixmap creatSrcPix(const QModelIndex &index, const QString &appKey);
+    QPixmap creatSrcPix(const QModelIndex &index);
 
     QRect appIconRect(const QModelIndex &index);
     const QRect indexRect(const QModelIndex &index) const;
 
+    void setViewType(ViewType type = MainView);
+    ViewType getViewType() const;
+
+    void setViewMoveState(bool moving = false);
+    bool getViewMoveState() const;
+
 private:
     void createMovingComponent();
-    FullScreenFrame *fullscreen();
+    void initConnection();
+    void initUi();
 
 public slots:
-    void setDragAnimationEnable() {m_enableAnimation = true;}
+    void setDragAnimationEnable() { m_enableAnimation = true; }
+
+private slots:
+    void onLayoutChanged();
+    void onTouchSinglePresse(int time, double scalex, double scaley);
+    void onTouchUpOrDown(double scalex, double scaley);
+    void onThemeChanged(DGuiApplicationHelper::ColorType);
+
 signals:
     void popupMenuRequested(const QPoint &pos, const QModelIndex &index) const;
     void requestScrollUp() const;
@@ -93,12 +113,12 @@ private:
     const QWidget *m_containerBox = nullptr;
     QTimer *m_dropThresholdTimer;                        // 推拽过程中app交互动画定时器对象
     QPropertyAnimation *m_lastFakeAni = nullptr;         // 推拽过程中app交换动画对象
-    static Gesture *m_gestureInter;
+    Gesture *m_gestureInter;
     DragPageDelegate *m_pDelegate;
 
-    static QPointer<AppsManager> m_appManager;
-    static QPointer<CalculateUtil> m_calcUtil;
-    static bool m_longPressed;                           // 保存触控屏是否可拖拽状态
+    QPointer<AppsManager> m_appManager;
+    QPointer<CalculateUtil> m_calcUtil;
+    bool m_longPressed;                           // 保存触控屏是否可拖拽状态
 
     QTime m_dragLastTime;                                // 拖拽开始到结束的持续时间(ms)
     QPoint m_dropPoint;                                  // 过度动画的终点坐标
@@ -112,6 +132,8 @@ private:
     QLabel *m_monthLabel;
     QLabel *m_dayLabel;
     QLabel *m_weekLabel;
+    ViewType m_viewType;
+    QString m_appKey;
 };
 
 typedef QList<AppGridView *> AppGridViewList;

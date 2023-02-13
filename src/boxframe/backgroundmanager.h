@@ -10,23 +10,21 @@
 #include <QScreen>
 #include <DSingleton>
 
-#include <com_deepin_wm.h>
-#include <com_deepin_daemon_imageeffect.h>
-#include <com_deepin_daemon_imageblur.h>
-#include <com_deepin_daemon_appearance.h>
-#include <com_deepin_daemon_display.h>
-#include <com_deepin_daemon_display_monitor.h>
+#include "imageeffect_interface.h"
+#include "imageblur_interface.h"
+#include "wm_interface.h"
+#include "appearance_interface.h"
+#include "display_interface.h"
 
 #define CUSTOM_MODE     0
 #define MERGE_MODE      1
 #define EXTEND_MODE     2
 #define SINGLE_MODE     3
 
-using ImageEffeblur = com::deepin::daemon::ImageBlur;
-using ImageEffectInter = com::deepin::daemon::ImageEffect;
-using AppearanceInter = com::deepin::daemon::Appearance;
-using DisplayInter = com::deepin::daemon::Display;
-using DisplayMonitor = com::deepin::daemon::display::Monitor;
+using ImageEffeblur = org::deepin::dde::ImageBlur1;
+using ImageEffectInter = org::deepin::dde::ImageEffect1;
+using AppearanceInter = org::deepin::dde::Appearance1;
+using DisplayInter = org::deepin::dde::Display1;
 
 class DisplayHelper : public QObject, public Dtk::Core::DSingleton<DisplayHelper>
 {

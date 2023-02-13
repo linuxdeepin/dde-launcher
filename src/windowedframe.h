@@ -7,34 +7,40 @@
 
 #include "launcherinterface.h"
 #include "sharedeventfilter.h"
-#include "dbusinterface/dbusdock.h"
 #include "view/applistview.h"
 #include "model/appslistmodel.h"
 #include "model/appsmanager.h"
 #include "worker/menuworker.h"
 #include "delegate/applistdelegate.h"
 #include "widgets/searchlineedit.h"
-#include "widgets/modetogglebutton.h"
 #include "widgets/miniframerightbar.h"
 #include "widgets/miniframeswitchbtn.h"
 #include "global_util/constants.h"
 #include "global_util/calculate_util.h"
+#include "miniframebutton.h"
+#include "appgridview.h"
+#include "searchmodewidget.h"
+#include "sortfilterproxymodel.h"
+#include "modeswitch.h"
+
+#include "appearance_interface.h"
 
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
-#include <dblureffectwidget.h>
-#include <dregionmonitor.h>
-#include <com_deepin_daemon_appearance.h>
 #include <DSearchEdit>
 #include <DToolButton>
+#include <dblureffectwidget.h>
+#include <dregionmonitor.h>
 
 #include <memory>
 
 DWIDGET_USE_NAMESPACE
 
-using Appearance = com::deepin::daemon::Appearance;
+using Appearance = org::deepin::dde::Appearance1;
 class QLabel;
-class DBusDockInterface;
+
+class AMDBusDockInter;
+
 class WindowedFrame : public DBlurEffectWidget, public LauncherInterface
 {
     Q_OBJECT
@@ -58,19 +64,26 @@ public:
     };
 
     enum FocusPosition {
-        RightBottom, //所有分类
-        Computer,
-        Setting,
+        CategoryApp,
         Power,
+        Setting,
         Search,
-        Applist,
-        Default      //确保首次切换都切换到所有分类
+        Favorite,
+        AllApp,
+        Switch,
+        Default
     };
 
 signals:
     void visibleChanged(bool visible);
+    void searchApp(const QString &keyword = "");
 
 private:
+    void initUi();
+    void initConnection();
+    void setAccessibleName();
+    void searchAppState(bool searched = false);
+
     void showLauncher() override;
     void hideLauncher() override;
     bool visible() override;
@@ -79,17 +92,24 @@ private:
     void appendToSearchEdit(const char ch) override;
     void launchCurrentApp() override;
 
-    void uninstallApp(const QString &appKey) override;
-    void uninstallApp(const QModelIndex &context);
-    void switchToCategory(const QModelIndex &index);
+    void handleDefault(const int key);
+    void handleCategoryApp(const int key);
+    void handlePower(const int key);
+    void handleSetting(const int key);
+    void handleSearch(const int key);
+    void handleFavorite(const int key);
+    void handleAllApp(const int key);
+    void handleSwitch(const int key);
+
+    void uninstallApp(const QString &desktopPath) override;
 
     QPainterPath getCornerPath(AnchoredCornor direction);
 
     void resetWidgetStyle();
-    void optimizeColdStart();
+    bool searchState() const;
+    void setSearchState(bool searching);
 
 protected:
-    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
     void hideEvent(QHideEvent *e) Q_DECL_OVERRIDE;
@@ -105,7 +125,6 @@ private slots:
     void initAnchoredCornor();
     void adjustPosition();
     void onToggleFullScreen();
-    void onSwitchBtnClicked();
     void onWMCompositeChanged();
     void searchText(const QString &text);
     void showTips(const QString &text);
@@ -116,9 +135,15 @@ private slots:
     void onDockGeometryChanged();
     void updatePosition();
     void onHideMenu();
+    void addViewEvent(AppGridView *pView);
+    void onButtonClick(int buttonid);
+    void onFavoriteListVisibleChaged();
+    void onLayoutChanged();
+    void onEnterView();
+    void onHandleHoverAction(const QModelIndex &index);
 
 private:
-    DBusDock *m_dockInter;
+    AMDBusDockInter *m_amDbusDockInter;
     std::unique_ptr<MenuWorker> m_menuWorker;
     SharedEventFilter *m_eventFilter;
     DPlatformWindowHandle m_windowHandle;
@@ -126,30 +151,45 @@ private:
 
     QWidget *m_maskBg;
     AppsManager *m_appsManager;
-    AppListView *m_appsView;
-    AppsListModel *m_appsModel;          // 应用列表
-    AppsListModel *m_searchModel;        // 搜索后的应用列表
+
+    AppsListModel *m_appsModel;
+    AppsListModel *m_allAppsModel;
+    AppsListModel *m_favoriteModel;
+    SortFilterProxyModel *m_filterModel;
+    SearchModeWidget *m_searchWidget;
 
     QWidget *m_rightWidget;
-    MiniFrameRightBar *m_leftBar;        // 左侧分类按钮组
-    MiniFrameSwitchBtn *m_switchBtn;     // 底部所有分类和返回切换控件
+    MiniFrameRightBar *m_bottomBtn;
+    AppListView *m_appsView;
+    AppGridView *m_favoriteView;
+    AppGridView *m_allAppView;
+
+    AppItemDelegate *m_appItemDelegate;
+
+    QLabel *m_favoriteLabel;
+    QWidget *m_emptyFavoriteWidget;
+    DIconButton *m_emptyFavoriteButton;
+    QLabel *m_emptyFavoriteText;
+
+    QLabel *m_allAppLabel;
     QLabel *m_tipsLabel;
     QTimer *m_delayHideTimer;
     QTimer *m_autoScrollTimer;
     Appearance *m_appearanceInter;
     DisplayMode m_displayMode;
 
-    int m_autoScrollStep = DLauncher::APPS_AREA_AUTO_SCROLL_STEP;
+    int m_autoScrollStep;
     int m_radius = 0;
     CalculateUtil *m_calcUtil;
     AnchoredCornor m_anchoredCornor = Normal;
     QPainterPath m_cornerPath;
     FocusPosition m_focusPos;
-    ModeToggleButton *m_modeToggleBtn;   // 小窗口右上角窗口模式切换按钮
+    DIconButton *m_modeToggleBtn;        // 小窗口右上角窗口模式切换按钮
     DSearchEdit *m_searcherEdit;         // 搜索控件
     bool m_enterSearchEdit;
-    const DBusDockInterface *m_dockFrontInfc = nullptr;
-    int m_currentAppListIndex;
+    const QScreen *m_curScreen;
+    ModeSwitch *m_modeSwitch;
+    bool m_isSearching;
 };
 
 #endif // WINDOWEDFRAME_H

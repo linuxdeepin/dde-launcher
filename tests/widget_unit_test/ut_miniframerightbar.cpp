@@ -28,7 +28,6 @@ TEST_F(Tst_Miniframerightbar, miniFrameRightBar_test)
     bar.moveUp();
     bar.moveDown();
     bar.execCurrent();
-    bar.openStandardDirectory(QStandardPaths::DesktopLocation);
 
     for (int i = 0; i <= 2; i++) {
         DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType(i));
@@ -36,8 +35,6 @@ TEST_F(Tst_Miniframerightbar, miniFrameRightBar_test)
         QApplication::sendEvent(&bar, &event);
         QTest::qWait(10);
     }
-
-    bar.openDirectory(":/test_res/test.jpg");
 
     DGuiApplicationHelper::instance()->setPaletteType(defaultType);
 }

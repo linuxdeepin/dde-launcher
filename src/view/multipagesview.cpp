@@ -3,13 +3,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "multipagesview.h"
-#include "../global_util/constants.h"
-#include "../fullscreenframe.h"
-#include "../widgets/blurboxwidget.h"
-
-#include <DGuiApplicationHelper>
+#include "constants.h"
+#include "fullscreenframe.h"
+#include "editlabel.h"
 
 #include <QHBoxLayout>
+
+#include <DGuiApplicationHelper>
 
 DGUI_USE_NAMESPACE
 
@@ -27,10 +27,11 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     , m_appListArea(new AppListArea)
     , m_viewBox(new DHBoxWidget)
     , m_delegate(Q_NULLPTR)
+    , m_titleLabel(new EditLabel(this))
     , m_pageControl(new PageControl)
+    , m_category(categoryModel)
     , m_pageCount(0)
     , m_pageIndex(0)
-    , m_category(categoryModel)
     , m_bDragStart(false)
     , m_bMousePress(false)
     , m_nMousePos(0)
@@ -54,26 +55,16 @@ MultiPagesView::MultiPagesView(AppsListModel::AppCategory categoryModel, QWidget
     m_appListArea->viewport()->installEventFilter(this);
     m_appListArea->installEventFilter(this);
 
-    if (m_calcUtil->displayMode() == ALL_APPS) {
-        // 全屏视图管理类设置左右边距
-        int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
-        m_viewBox->layout()->setContentsMargins(padding, 0, padding, 0);
-        m_viewBox->layout()->setSpacing(padding);
-    }
-
     // 翻页按钮和动画
     m_pageSwitchAnimation = new QPropertyAnimation(m_appListArea->horizontalScrollBar(), "value", this);
     m_pageSwitchAnimation->setEasingCurve(QEasingCurve::Linear);
     if (!DGuiApplicationHelper::isSpecialEffectsEnvironment()) {
-        m_changePageDelayTime = new QTime();
+        m_changePageDelayTime = new QElapsedTimer();
         m_pageSwitchAnimation->setDuration(0);
     }
 
-    InitUI();
-
-    connect(m_appListArea, &AppListArea::increaseIcon, this, [ = ] { if (m_calcUtil->increaseIconSize()) emit m_appsManager->layoutChanged(AppsListModel::All); });
-    connect(m_appListArea, &AppListArea::decreaseIcon, this, [ = ] { if (m_calcUtil->decreaseIconSize()) emit m_appsManager->layoutChanged(AppsListModel::All); });
-    connect(m_pageControl, &PageControl::onPageChanged, this, &MultiPagesView::showCurrentPage);
+    initUi();
+    initConnection();
 }
 
 MultiPagesView::~MultiPagesView()
@@ -82,6 +73,12 @@ MultiPagesView::~MultiPagesView()
         delete m_changePageDelayTime;
         m_changePageDelayTime = nullptr;
     }
+}
+
+void MultiPagesView::refreshTitle(const QString &title, int maxWidth)
+{
+    m_titleLabel->setText(maxWidth, title);
+    m_titleLabel->setVisible(true);
 }
 
 /**
@@ -130,7 +127,10 @@ void MultiPagesView::updateGradient(QPixmap &pixmap, QPoint topLeftImg, QPoint t
  */
 void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
 {
-    int pageCount = m_appsManager->getPageCount(category == AppsListModel::All ? m_category : category);
+    int pageCount = m_appsManager->getPageCount(category == AppsListModel::FullscreenAll ? m_category : category);
+
+    if (pageCount == 0)
+        setVisible(false);
 
     if (pageCount < 1)
         pageCount = 1;
@@ -144,7 +144,14 @@ void MultiPagesView::updatePageCount(AppsListModel::AppCategory category)
             pModel->setPageIndex(m_pageCount);
             m_pageAppsModelList.push_back(pModel);
 
-            AppGridView *pageView = new AppGridView(this);
+            AppGridView *pageView = Q_NULLPTR;
+            if (category == AppsListModel::FullscreenAll) {
+                pageView = new AppGridView(AppGridView::MainView, this);
+            } else {
+                // m_category == AppsListModel::Dir的时候
+                pageView = new AppGridView(AppGridView::PopupView, this);
+            }
+
             pageView->setModel(pModel);
             pageView->setItemDelegate(m_delegate);
             pageView->setContainerBox(m_appListArea);
@@ -260,6 +267,15 @@ void MultiPagesView::dragStop()
     m_appGridViewList[m_pageIndex]->flashDrag();
 }
 
+void MultiPagesView::updateAppDrawerTitle(const QModelIndex &index)
+{
+    const QString title = m_titleLabel->text();
+    m_appsManager->updateDrawerTitle(index, title);
+    m_appsManager->saveFullscreenUsedSortedList();
+
+    emit m_appsManager->dataChanged(AppsListModel::FullscreenAll);
+}
+
 /**
  * @brief MultiPagesView::getAppItem 获取item的模型索引
  * @param index item所在行数
@@ -316,65 +332,51 @@ void MultiPagesView::setModel(AppsListModel::AppCategory category)
 void MultiPagesView::updatePosition(int mode)
 {
     // 更新全屏两种模式下界面布局的左右边距和间隔
-    if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
-        int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
-        m_viewBox->layout()->setContentsMargins(padding, 0, padding, 0);
-        m_viewBox->layout()->setSpacing(padding);
-    } else {
-        m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
-        m_viewBox->layout()->setSpacing(0);
-    }
+    // TODO: 左右间隔，现在是根据剩余控件进行计算得出的，待优化
+    int remainSpacing = m_calcUtil->appItemSpacing() * 7 / 2;
 
-    // 更新视图列表的大小
-    if (m_calcUtil->displayMode() == ALL_APPS || mode == SEARCH) {
-        int padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE;
-        m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
+    QSize tmpSize = size() - QSize(remainSpacing, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
+    m_appListArea->setFixedSize(tmpSize);
+    m_viewBox->setFixedSize(tmpSize);
 
-        QSize tmpSize = size() - QSize(padding, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
-        m_appListArea->setFixedSize(size());
-        m_viewBox->setFixedHeight(tmpSize.height());
-
-        for (auto pView : m_appGridViewList)
-            pView->setFixedSize(tmpSize);
-    } else {
-        m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
-
-        QSize tmpSize = size() - QSize(0, m_pageControl->height() + DLauncher::DRAG_THRESHOLD);
-        m_appListArea->setFixedSize(tmpSize);
-        m_viewBox->setFixedHeight(tmpSize.height());
-
-        for (auto pView : m_appGridViewList)
-            pView->setFixedSize(tmpSize);
-    }
-
-    showCurrentPage(0);
+    for (auto pView : m_appGridViewList)
+        pView->setFixedSize(tmpSize);
+    m_viewBox->layout()->setContentsMargins(0, 0, 0, 0);
+    m_viewBox->layout()->setSpacing(0);
+    m_pageControl->updateIconSize(m_calcUtil->getScreenScaleX(), m_calcUtil->getScreenScaleY());
 }
 
-void MultiPagesView::InitUI()
+void MultiPagesView::initUi()
 {
     m_viewBox->setAttribute(Qt::WA_TranslucentBackground);
     m_appListArea->setWidget(m_viewBox);
 
     m_pageControl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_titleLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
     QVBoxLayout *layoutMain = new QVBoxLayout;
     layoutMain->setContentsMargins(0, 0, 0, DLauncher::DRAG_THRESHOLD);
     layoutMain->setSpacing(0);
+    m_titleLabel->setVisible(false);
+
+    layoutMain->addWidget(m_titleLabel, 0, Qt::AlignHCenter);
     layoutMain->addWidget(m_appListArea, 0, Qt::AlignHCenter);
     layoutMain->addWidget(m_pageControl, 0, Qt::AlignHCenter);
-
     setLayout(layoutMain);
+}
+
+void MultiPagesView::initConnection()
+{
+    connect(m_pageControl, &PageControl::onPageChanged, this, &MultiPagesView::showCurrentPage);
+    connect(m_titleLabel, &EditLabel::titleChanged, this, &MultiPagesView::titleChanged);
 }
 
 void MultiPagesView::showCurrentPage(int currentPage)
 {
-    int padding = 0;
-    if (m_calcUtil->displayMode() == ALL_APPS)
-        padding = m_calcUtil->getScreenSize().width() * DLauncher::SIDES_SPACE_SCALE / 2;
+    m_pageIndex = ((currentPage > 0) ? (currentPage < m_pageCount ? currentPage : m_pageCount - 1) : 0);
+    int endValue = ((m_pageIndex == 0) ? 0 : (m_appGridViewList[m_pageIndex]->x()));
+    int startValue = m_appListArea->horizontalScrollValue();
 
-    m_pageIndex = currentPage > 0 ? (currentPage < m_pageCount ? currentPage : m_pageCount - 1) : 0;
-    int endValue = m_pageIndex == 0 ? 0 : (m_appGridViewList[m_pageIndex]->x() - padding);
-    int startValue = m_appListArea->horizontalScrollBar()->value();
     m_appListArea->setProperty("curPage", m_pageIndex);
 
     m_pageSwitchAnimation->stop();
@@ -449,11 +451,18 @@ void MultiPagesView::wheelEvent(QWheelEvent *e)
         showCurrentPage(page);
 }
 
+void MultiPagesView::showEvent(QShowEvent *e)
+{
+    showCurrentPage(m_pageIndex);
+
+    return QWidget::showEvent(e);
+}
+
 void MultiPagesView::mousePress(QMouseEvent *e)
 {
     m_bMousePress = true;
     m_nMousePos = e->x();
-    m_scrollValue = m_appListArea->horizontalScrollBar()->value();
+    m_scrollValue = m_appListArea->horizontalScrollValue();
     m_scrollStart = m_scrollValue;
 
     if(m_pageCount == 1 && m_category != AppsListModel::Search)
@@ -468,7 +477,7 @@ void MultiPagesView::mouseMove(QMouseEvent *e)
     int nDiff = m_nMousePos - e->x();
     m_scrollValue += nDiff;
 
-    m_appListArea->horizontalScrollBar()->setValue(m_scrollValue);
+    m_appListArea->setHorizontalScrollValue(m_scrollValue);
 
     if(m_pageCount == 1)
         QWidget::mouseMoveEvent(e);
@@ -483,11 +492,8 @@ void MultiPagesView::mouseRelease(QMouseEvent *e)
     } else if (nDiff < -DLauncher::TOUCH_DIFF_THRESH) { // 加大范围来避免手指点击触摸屏抖动问题
         showCurrentPage(m_pageIndex - 1);
     } else {
-        int nScroll = m_appListArea->horizontalScrollBar()->value();
-        // 多个分页是点击直接隐藏
-        if (nScroll == m_scrollStart && m_pageCount != 1 && m_category != AppsListModel::Search)
-            emit m_appGridViewList[m_pageIndex]->clicked(QModelIndex());
-        else if (nScroll - m_scrollStart > DLauncher::MOUSE_MOVE_TO_NEXT)
+        int nScroll = m_appListArea->horizontalScrollValue();
+        if (nScroll - m_scrollStart > DLauncher::MOUSE_MOVE_TO_NEXT)
             showCurrentPage(m_pageIndex + 1);
         else if (nScroll - m_scrollStart < -DLauncher::MOUSE_MOVE_TO_NEXT)
             showCurrentPage(m_pageIndex - 1);
@@ -498,8 +504,9 @@ void MultiPagesView::mouseRelease(QMouseEvent *e)
 
     setGradientVisible(false);
 
-    if(m_pageCount == 1)
-        QWidget::mouseReleaseEvent(e);
+    // 移动完成后，更新状态
+    if ((m_pageIndex >= 0) && (m_pageIndex <= m_appGridViewList.size() - 1))
+        m_appGridViewList[m_pageIndex]->setViewMoveState(false);
 }
 
 void MultiPagesView::setGradientVisible(bool visible)
@@ -520,9 +527,6 @@ QWidget *MultiPagesView::getParentWidget()
     while (backgroundWidget) {
         if (qobject_cast<FullScreenFrame *>(backgroundWidget))
             break;
-
-        if (qobject_cast<BlurBoxWidget *>(backgroundWidget))
-            return nullptr;
 
         backgroundWidget = backgroundWidget->parentWidget();
     }
@@ -562,6 +566,41 @@ AppsListModel::AppCategory MultiPagesView::getCategory()
     return m_category;
 }
 
+QSize MultiPagesView::calculateWidgetSize()
+{
+    const AppGridViewList &viewList = m_appGridViewList;
+    QSize itemSize = CalculateUtil::instance()->appItemSize() * 5 / 4;
+
+    int leftMargin = CalculateUtil::instance()->appMarginLeft();
+    int spacing = CalculateUtil::instance()->appItemSpacing();
+    int itemWidth = itemSize.width();
+    int itemHeight = itemSize.height();
+    int viewWidth;
+    int viewHeight = itemHeight * 3;
+    if (viewList.size() > 1) {
+        viewWidth = itemWidth * 4;
+    } else {
+        AppGridView *view = viewList.at(0);
+        AppsListModel *listModel = qobject_cast<AppsListModel *>(view->model());
+
+        if (!listModel)
+            return QSize();
+
+        int itemCount = listModel->rowCount(QModelIndex());
+        if (itemCount <= 3)
+            viewWidth = itemWidth * 1 + leftMargin * 2;
+        else if (itemCount <= 6)
+            viewWidth = itemWidth * 2 + leftMargin * 2 + spacing * 1;
+        else if (itemCount <= 9)
+            viewWidth = itemWidth * 3 + leftMargin * 2 + spacing * 2;
+        else {
+            viewWidth = itemWidth * 4 + leftMargin * 2 + spacing * 3;
+        }
+    }
+
+    return QSize(viewWidth, viewHeight);
+}
+
 // 更新边框渐变，在屏幕变化时需要更新，类别拖动时需要隐藏
 void MultiPagesView::updateGradient()
 {
@@ -579,4 +618,15 @@ bool MultiPagesView::isScrolling()
         return m_changePageDelayTime->isValid() && m_changePageDelayTime->elapsed() < DLauncher::CHANGE_PAGE_DELAY_TIME;
 
     return m_pageSwitchAnimation->state() == QPropertyAnimation::Running;
+}
+
+EditLabel *MultiPagesView::getEditLabel()
+{
+    return m_titleLabel;
+}
+
+void MultiPagesView::resetCurPageIndex()
+{
+    m_pageIndex = 0;
+    m_appListArea->setHorizontalScrollValue(0);
 }

@@ -48,9 +48,6 @@ set(BIN_NAME dde-launcher)
 #add_subdirectory("tests")
 add_subdirectory("plugins")
 
-# Sources files
-file(GLOB_RECURSE SRCS "src/*.h" "src/*.cpp")
-
 # Install settings
 include(GNUInstallDirs)
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -59,16 +56,14 @@ endif ()
 
 # Find the library
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Concurrent REQUIRED)
-find_package(Qt5X11Extras REQUIRED)
-find_package(Qt5DBus REQUIRED)
-find_package(DtkWidget REQUIRED)
-find_package(Qt5Svg REQUIRED)
-find_package(DtkCore REQUIRED)
+find_package(Qt5 REQUIRED
+    COMPONENTS Widgets Svg X11Extras DBus Concurrent
+)
+find_package(Qt5Gui CONFIG REQUIRED Private)
+find_package(Dtk REQUIRED COMPONENTS Core Widget Gui)
 
-pkg_check_modules(XCB_EWMH REQUIRED xcb-ewmh)
-pkg_check_modules(QGSettings REQUIRED gsettings-qt)
+pkg_check_modules(XCB_EWMH REQUIRED IMPORTED_TARGET xcb-ewmh)
+pkg_check_modules(QGSettings REQUIRED IMPORTED_TARGET gsettings-qt)
 
 set(XML2CPP_DIR ${PROJECT_SOURCE_DIR}/src/global_util/dbus/xml2cpp)
 
@@ -154,7 +149,6 @@ include_directories(
     src/widgets
     src/worker
     interfaces
-    plugins
 )
 
 aux_source_directory(src SRC)
@@ -193,27 +187,25 @@ file(GLOB SRC_PATH
     ${DBUS_INTERFACES}
 )
 
-add_executable(${BIN_NAME} ${SRCS} ${SRC_PATH} ${INTERFACES} src/skin.qrc src/widgets/images.qrc)
+add_executable(${BIN_NAME} ${SRC_PATH} ${INTERFACES} src/skin.qrc src/widgets/images.qrc)
 
 target_include_directories(${BIN_NAME} PUBLIC
     ${DtkWidget_INCLUDE_DIRS}
-    ${DtkCore_INCLUDE_DIRS}
-    ${XCB_EWMH_INCLUDE_DIRS}
-    ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
-    ${QGSettings_INCLUDE_DIRS}
     ${PROJECT_BINARY_DIR}
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
-    ${XCB_EWMH_LIBRARIES}
-    ${DtkWidget_LIBRARIES}
-    ${DtkCore_LIBRARIES}
-    ${Qt5Widgets_LIBRARIES}
-    ${Qt5Concurrent_LIBRARIES}
-    ${Qt5X11Extras_LIBRARIES}
-    ${Qt5DBus_LIBRARIES}
-    ${QGSettings_LIBRARIES}
-    ${Qt5Svg_LIBRARIES}
+    PkgConfig::XCB_EWMH
+    Dtk::Core
+    ${DtkWidget_LIBRARIES} # seems we won't be able to use Dtk::Widget in dtkwidget 5.6.4
+    Dtk::Gui
+    Qt5::Widgets
+    Qt5::Concurrent
+    Qt5::X11Extras
+    Qt5::DBus
+    Qt5::Svg
+    Qt5::GuiPrivate
+    PkgConfig::QGSettings
 )
 
 ## qm files

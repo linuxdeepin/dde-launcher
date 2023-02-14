@@ -19,8 +19,6 @@
 #include <QDebug>
 #include <QDrag>
 #include <QScroller>
-#include <private/qguiapplication_p.h>
-#include <qpa/qplatformtheme.h>
 
 /**
  * @brief AppListView::AppListView 启动器左侧小窗口列表

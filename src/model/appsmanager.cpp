@@ -21,9 +21,6 @@
 #include <QByteArrayList>
 #include <QQueue>
 
-#include <private/qguiapplication_p.h>
-#include <private/qiconloader_p.h>
-#include <qpa/qplatformtheme.h>
 #include <DHiDPIHelper>
 #include <DApplication>
 #include "dpinyin.h"

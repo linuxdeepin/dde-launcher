@@ -20,9 +20,6 @@
 #include <QScopedPointer>
 #include <QIconEngine>
 
-#include <private/qguiapplication_p.h>
-#include <private/qiconloader_p.h>
-#include <qpa/qplatformtheme.h>
 
 DWIDGET_USE_NAMESPACE
 

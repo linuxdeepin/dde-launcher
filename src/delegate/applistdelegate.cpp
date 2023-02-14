@@ -14,7 +14,9 @@
 #include <QPainter>
 #include <QDebug>
 #include <QApplication>
+#include <DFontSizeManager>
 
+DWIDGET_USE_NAMESPACE
 DGUI_USE_NAMESPACE
 
 QT_BEGIN_NAMESPACE
@@ -91,10 +93,14 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->setPen(QPen(QPalette().brightText(), 1));
 
     const QString &appName = painter->fontMetrics().elidedText(index.data(AppsListModel::AppNameRole).toString(), Qt::ElideRight, textRect.width());
-    // TODO: 设计搞显示效果偏大
-    // DFontSizeManager::instance()->t8().pixelSize());
-    if (!isTitle)
+
+    if (isTitle) {
+        painter->setOpacity(0.5);
+        painter->setFont(QFont(painter->font().family(), DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8)));
+    } else {
+        painter->setOpacity(1);
         painter->setFont(QFont(painter->font().family(), DLauncher::DEFAULT_FONT_SIZE));
+    }
 
     if (isAlternate) {
         QFont nameFont = painter->font();
@@ -103,6 +109,7 @@ void AppListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     }
 
     painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, appName);
+    painter->setOpacity(1);
 
     // draw blue dot if needed
     if (index.data(AppsListModel::AppNewInstallRole).toBool() && !isAlternate && !isTitle) {

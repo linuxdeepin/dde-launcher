@@ -230,15 +230,15 @@ void AppItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         }
     }
 
-    if (!itemIsDir)
+    if (!itemIsDir) {
         painter->drawPixmap(iconRect, iconPix, iconPix.rect());
-
-    const QPoint autoStartIconPos = iconRect.bottomLeft()
-            - QPoint(m_autoStartPixmap.height(), m_autoStartPixmap.width()) / m_autoStartPixmap.devicePixelRatioF() / 2
-            + QPoint(iconRect.width() / 10, -iconRect.height() / 10);
-
-    if (!itemIsDir && index.data(AppsListModel::AppAutoStartRole).toBool())
-        painter->drawPixmap(autoStartIconPos, m_autoStartPixmap);
+        if (index.data(AppsListModel::AppAutoStartRole).toBool()) {
+            const QPoint autoStartIconPos = iconRect.bottomLeft()
+                    - QPoint(m_autoStartPixmap.height(), m_autoStartPixmap.width()) / m_autoStartPixmap.devicePixelRatioF() / 2
+                    + QPoint(iconRect.width() / 10, -iconRect.height() / 10);
+            painter->drawPixmap(autoStartIconPos, m_autoStartPixmap);
+        }
+    }
 
     if (drawBlueDot) {
         const int marginRight = 2;
@@ -312,12 +312,9 @@ void AppItemDelegate::drawAppDrawer(QPainter *painter, const QModelIndex &index,
         painter->setBrush(QColor(93, 92, 90, 100));
         painter->drawRoundedRect(AppdrawerRect, RECT_REDIUS, RECT_REDIUS);
         // 绘制文件夹内其他应用
-        for (int i = 0; i < itemList.size(); i++) {
-            // TODO: 计算每个图标的位置rect()
-            // 4个, 4宫格, 6个,六宫格, 8个, 八格, 9宫格. 超过9个就不显示, 太多应用空间显示不足, 除非图标内实现翻页效果, 翻页那么每个item就是一个listview.
-            // 先按照就九宫格算.暂且没有计算页边距
-            if (i >= 9)
-                return;
+        // designer: show max to 4 icons
+        const int iconCount = qMin(4, itemList.size());
+        for (int i = 0; i < iconCount; i++) {
             QPixmap itemPix = iconPix;
             if (i < pixmapList.size())
                 itemPix = pixmapList.at(i);
@@ -346,11 +343,11 @@ QRect AppItemDelegate::appSourceRect(QRect rect, int index) const
 {
     // TODO: 文件夹内容间距后面优化
     QRect sourceRect;
-    int width = (rect.width() /*- (3 * 4)*/) / 3;
-    int height = (rect.height() /*- (3 * 4)*/) / 3;
+    int width = (rect.width() - (2 * 4)) / 2;
+    int height = (rect.height() - (2 * 4)) / 2;
 
-    int gap = 0/*(index % 3 + 1) * 3*/;
+    int gap = (index % 2 + 1) * 3;
     // 每个应用间隔 3 个像素,
-    sourceRect = QRect(rect.topLeft() + QPoint((index % 3) * width + gap, (index / 3) * height + gap), QSize(width,height));
+    sourceRect = QRect(rect.topLeft() + QPoint((index % 2) * width + gap, (index / 2) * height + gap), QSize(width,height));
     return sourceRect;
 }

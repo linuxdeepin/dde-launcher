@@ -60,7 +60,7 @@ TEST_F(Tst_calculate, calendarSelectIcon_test)
         QVERIFY2(iconList.at(3).compare(QString(":/icons/skin/icons/calendar_week/week%1.svg").arg(week_num)), "week num is abnormal...");
         break;
     default:
-        QVERIFY2(iconList.at(3).compare(QString(":/icons/skin/icons/calendar_week/week4.svg")), "defualt week num is abnormal...");
+        QVERIFY2(iconList.at(3).compare(QString(":/icons/skin/icons/calendar_week/week4.svg")), "default week num is abnormal...");
         break;
     }
 }

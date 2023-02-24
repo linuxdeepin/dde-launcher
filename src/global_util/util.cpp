@@ -307,7 +307,7 @@ int perfectIconSize(const int size)
  * @param reObtain 是否重新获取标识
  * @return 返回是否获取到应用图标状态
  */
-bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, bool reObtain)
+bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size)
 {
     QString iconName;
     QIcon icon;
@@ -352,11 +352,7 @@ bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, 
                 break;
         }
 
-        // 重新从主题中获取一次
-        if (reObtain)
-            icon = getIcon(iconName);
-        else
-            icon = QIcon::fromTheme(iconName);
+        icon = QIcon::fromTheme(iconName);
 
         if (icon.isNull()) {
             icon = QIcon(":/widgets/images/application-x-desktop.svg");

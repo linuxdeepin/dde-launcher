@@ -1356,7 +1356,7 @@ const QPixmap AppsManager::appIcon(const ItemInfo_v1 &info, const int size)
     const int iconSize = perfectIconSize(size);
 
     m_itemInfo = info;
-    m_iconValid = getThemeIcon(pix, info, size, !m_iconValid);
+    m_iconValid = getThemeIcon(pix, info, size);
     if (m_iconValid) {
         m_tryNums = 0;
         return pix;

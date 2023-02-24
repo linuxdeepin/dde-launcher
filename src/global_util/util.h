@@ -31,7 +31,7 @@ QVariant SettingValue(const QString &schema_id, const QByteArray &path = QByteAr
 bool createCalendarIcon(const QString &fileName);
 int perfectIconSize(const int size);
 QString cacheKey(const ItemInfo_v1 &itemInfo);
-bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size, bool reObtain);
+bool getThemeIcon(QPixmap &pixmap, const ItemInfo_v1 &itemInfo, const int size);
 QIcon getIcon(const QString &name);
 
 class ConfigWorker : QObject

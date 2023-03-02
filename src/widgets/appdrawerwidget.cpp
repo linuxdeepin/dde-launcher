@@ -10,6 +10,8 @@
 
 #include <QHBoxLayout>
 
+#include <DAnchors>
+
 AppDrawerWidget::AppDrawerWidget(QWidget *parent)
     : QWidget (parent)
     , m_maskWidget(new QWidget(this))
@@ -36,9 +38,17 @@ void AppDrawerWidget::initUi()
 
     m_maskWidget->setAttribute(Qt::WA_TranslucentBackground);
     m_maskWidget->setAttribute(Qt::WA_TransparentForMouseEvents, false);
-    const QSize screenSize = AppsManager::instance()->currentScreen()->geometry().size();
-    m_maskWidget->resize(screenSize);
-    setFixedSize(screenSize);
+
+    DAnchors<QWidget> parentAnchor(this->parentWidget());
+    DAnchors<AppDrawerWidget> currentAnchor(this);
+    DAnchors<QWidget> maskAnchor(m_maskWidget);
+    // not sure why setFill not works properly here...
+    // currentAnchor.setFill(parentAnchor);
+    currentAnchor.setTop(parentAnchor.top());
+    currentAnchor.setLeft(parentAnchor.left());
+    currentAnchor.setBottom(parentAnchor.bottom());
+    currentAnchor.setRight(parentAnchor.right());
+    maskAnchor.setFill(currentAnchor);
 
     qApp->installEventFilter(this);
 

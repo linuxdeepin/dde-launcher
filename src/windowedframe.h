@@ -23,7 +23,6 @@
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
 #include <dblureffectwidget.h>
-#include <dregionmonitor.h>
 #include <com_deepin_daemon_appearance.h>
 #include <DSearchEdit>
 #include <DToolButton>

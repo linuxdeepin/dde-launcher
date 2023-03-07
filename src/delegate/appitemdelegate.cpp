@@ -333,21 +333,27 @@ void AppItemDelegate::drawAppDrawer(QPainter *painter, const QModelIndex &index,
     }
 }
 
-/** 默认九宫个格计算每个应用矩形的位置
- * @brief AppItemDelegate::appSourceRect
+/**
+ * @brief 计算抽屉图标中每个小图标的位置
+ *
+ * 抽屉图标中的图标，总行数与总列数总是相同。
+ *
  * @param rect 应用抽屉的大小
- * @param index 抽屉内的第几个应用
+ * @param index 抽屉内的第几个应用，首个为 0。
  * @return 矩形位置
  */
 QRect AppItemDelegate::appSourceRect(QRect rect, int index) const
 {
-    // TODO: 文件夹内容间距后面优化
-    QRect sourceRect;
-    int width = (rect.width() - (2 * 4)) / 2;
-    int height = (rect.height() - (2 * 4)) / 2;
+    constexpr int margin = 4;
+    constexpr int gutter = 4;
+    constexpr int iconPerRow = 2;
+    constexpr int spaces = margin * 2 + (iconPerRow - 1) * gutter;
+    int iconWidth = (rect.width() - spaces) / iconPerRow;
+    int iconHeight = (rect.height() - spaces) / iconPerRow;
+    int currentRow = index / iconPerRow;
+    int currentColumn = index % iconPerRow;
+    QPoint offset(margin + currentColumn * gutter + currentColumn * iconWidth,
+                  margin + currentRow * gutter + currentRow * iconHeight);
 
-    int gap = (index % 2 + 1) * 3;
-    // 每个应用间隔 3 个像素,
-    sourceRect = QRect(rect.topLeft() + QPoint((index % 2) * width + gap, (index / 2) * height + gap), QSize(width,height));
-    return sourceRect;
+    return QRect(rect.topLeft() + offset, QSize(iconWidth, iconHeight));
 }

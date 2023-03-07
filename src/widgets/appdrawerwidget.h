@@ -47,7 +47,6 @@ private:
     AppItemDelegate *m_appDelegate;
     MultiPagesView *m_multipageView;
 
-    QSharedPointer<DBlurEffectGroup> m_blurGroup;
     DBlurEffectWidget *m_blurBackground;
     QPixmap m_pix;
     QModelIndex m_clickIndex;

@@ -17,7 +17,6 @@ AppDrawerWidget::AppDrawerWidget(QWidget *parent)
     , m_maskWidget(new QWidget(this))
     , m_appDelegate(new AppItemDelegate(this))
     , m_multipageView(new MultiPagesView(AppsListModel::Dir, this))
-    , m_blurGroup(QSharedPointer<DBlurEffectGroup>(new DBlurEffectGroup))
     , m_blurBackground(new DBlurEffectWidget(m_multipageView))
     , m_clickIndex(QModelIndex())
 {
@@ -58,12 +57,12 @@ void AppDrawerWidget::initUi()
     mainLayout->addWidget(m_multipageView);
     m_maskWidget->setLayout(mainLayout);
 
+    constexpr quint8 alpha = std::numeric_limits<quint8>::max() * 0.8;
     m_blurBackground->setMaskColor(DBlurEffectWidget::LightColor);
-    m_blurBackground->setMaskAlpha(30);
+    m_blurBackground->setMaskAlpha(alpha);
     m_blurBackground->setBlurRectXRadius(DLauncher::APPHBOX_RADIUS);
     m_blurBackground->setBlurRectYRadius(DLauncher::APPHBOX_RADIUS);
     m_blurBackground->lower();
-    m_blurGroup->addWidget(m_blurBackground);
     m_multipageView->raise();
     m_multipageView->setDataDelegate(m_appDelegate);
 }
@@ -109,7 +108,6 @@ void AppDrawerWidget::showEvent(QShowEvent *event)
 
     m_multipageView->setFixedSize(widgetSize);
     m_blurBackground->setFixedSize(widgetSize);
-    m_blurGroup->setSourceImage(m_pix.toImage(), 0);
 
     m_multipageView->updatePageCount(AppsListModel::Dir);
     m_multipageView->setModel(AppsListModel::Dir);

@@ -132,9 +132,9 @@ void ModeSwitch::initAccessibleName()
 void ModeSwitch::updateIcon()
 {
     if (m_letterModeButton->isChecked())
-        m_letterModeButton->setIcon(renderSVG(":/icons/skin/icons/letter-icon-checked.svg", QSize(14, 14)));
+        m_letterModeButton->setIcon(renderSVG(":/icons/skin/icons/letter-icon-checked.svg", QSize(16, 16)));
     else
-        m_letterModeButton->setIcon(renderSVG(":/icons/skin/icons/letter-icon-normal.svg", QSize(14, 14)));
+        m_letterModeButton->setIcon(renderSVG(":/icons/skin/icons/letter-icon-normal.svg", QSize(16, 16)));
 
     if (m_titleModeButton->isChecked())
         m_titleModeButton->setIcon(renderSVG(":/icons/skin/icons/title-icon-checked.svg", QSize(16, 16)));

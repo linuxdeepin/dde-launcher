@@ -42,7 +42,7 @@ bool SharedEventFilter::handleKeyEvent(QKeyEvent *e)
     bool ctrlPressed = e->modifiers() & Qt::ControlModifier;
     switch (e->key())
     {
-    case Qt::Key_F1:            QProcess::startDetached("dman dde");            return true;
+    case Qt::Key_F1:            QProcess::startDetached("dman", { "dde" });     return true;
     case Qt::Key_Enter:
     case Qt::Key_Return:        m_frame->launchCurrentApp();                    return true;
     case Qt::Key_Escape:        m_frame->hideLauncher();                        return true;

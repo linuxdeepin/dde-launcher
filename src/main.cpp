@@ -115,9 +115,10 @@ int main(int argc, char *argv[])
     }
 
 #ifndef QT_DEBUG
-    if (cmdParser.isSet(showOption))
-#endif
-        launcher.showLauncher();
+    if (cmdParser.isSet(showOption)) launcher.showLauncher();
+#else
+    launcher.showLauncher();
+#endif // QT_DEBUG
 
     return app->exec();
 }

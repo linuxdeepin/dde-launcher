@@ -1419,6 +1419,7 @@ void AppsManager::refreshCategoryInfoList()
         bool bContains = fuzzyMatching(filters, info.m_key);
         if (!m_stashList.contains(info) && !bContains) {
             if (info.m_key == "dde-trash") {
+                m_trashItemInfo = info;
                 ItemInfo_v1 trashItem = info;
                 trashItem.m_iconKey = m_trashIsEmpty ? "user-trash" : "user-trash-full";
                 m_allAppInfoList.append(trashItem);
@@ -2051,6 +2052,12 @@ void AppsManager::updateTrashState()
     if (m_trashIsEmpty == !trashItemsCount)
         return;
 
-    m_trashIsEmpty = !trashItemsCount;
-    emit dataChanged(AppsListModel::FullscreenAll);
+    m_trashIsEmpty = !trashItemsCount;    
+    int index = itemIndex(m_windowedUsedSortedList, m_trashItemInfo);
+    
+    // 获取到trash,更新trash图标
+    if (index != -1) {
+        m_trashItemInfo.m_iconKey = m_trashIsEmpty ? "user-trash" : "user-trash-full";
+        m_windowedUsedSortedList[index].updateInfo(m_trashItemInfo);
+    }
 }

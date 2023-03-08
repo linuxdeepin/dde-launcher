@@ -439,12 +439,12 @@ void MultiPagesView::wheelEvent(QWheelEvent *e)
         return;
 
     int page = m_pageIndex;
-    if (e->delta() > 0) {
-        if (page - 1 >= 0)
-            --page;
-    } else if (e->delta() < 0) {
-        if (page + 1 < m_pageCount)
-            ++page;
+    const QPoint angleDelta = e->angleDelta();
+    int scrollLen = (qAbs(angleDelta.x()) > qAbs(angleDelta.y()) ? angleDelta.x() : angleDelta.y()) / 8;
+    if (scrollLen > 0 && page - 1 >= 0) {
+        --page;
+    } else if (scrollLen < 0 && page + 1 < m_pageCount) {
+        ++page;
     }
 
     if (page != m_pageIndex)

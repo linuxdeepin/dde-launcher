@@ -44,6 +44,7 @@ void dump_user_apss_preset_order_list()
 
 int main(int argc, char *argv[])
 {
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::UseInactiveColorGroup, false);
     DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::ColorCompositing, true);
     DApplication *app = DApplication::globalApplication(argc, argv);
@@ -53,7 +54,6 @@ int main(int argc, char *argv[])
     app->setApplicationVersion("3.0");
     app->loadTranslator();
     app->setAttribute(Qt::AA_UseHighDpiPixmaps);
-    app->setAttribute(Qt::AA_EnableHighDpiScaling);
 
     DLogManager::registerConsoleAppender();
     // 加载 Accessible 插件 测试使用 用sniff查看效果

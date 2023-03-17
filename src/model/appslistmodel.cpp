@@ -352,7 +352,7 @@ int AppsListModel::rowCount(const QModelIndex &parent) const
 const QModelIndex AppsListModel::indexAt(const QString &desktopPath) const
 {
     int i = 0;
-    const int count = rowCount(QModelIndex());
+    const int count = rowCount();
     while (i < count) {
         if (index(i).data(AppDesktopRole).toString() == desktopPath)
             return index(i);
@@ -667,7 +667,7 @@ bool AppsListModel::indexDragging(const QModelIndex &index) const
 void AppsListModel::itemDataChanged(const ItemInfo_v1 &info)
 {
     int i = 0;
-    const int count = rowCount(QModelIndex());
+    const int count = rowCount();
     while (i != count) {
         if (index(i).data(AppKeyRole).toString() == info.m_key) {
             const QModelIndex modelIndex = index(i);

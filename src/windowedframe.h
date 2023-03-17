@@ -83,6 +83,7 @@ private:
     void initConnection();
     void setAccessibleName();
     void searchAppState(bool searched = false);
+    void updateFavorateViewHeight(bool searched);
 
     void showLauncher() override;
     void hideLauncher() override;

@@ -101,7 +101,7 @@ public:
     void dropSwap(const int nextPos);
     inline QModelIndex dragDropIndex() const {return m_dragDropIndex;}
 
-    int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
     const QModelIndex indexAt(const QString &appKey) const;
 
     void setDrawBackground(bool draw);

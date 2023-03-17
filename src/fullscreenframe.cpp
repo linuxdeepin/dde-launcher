@@ -576,7 +576,7 @@ void FullScreenFrame::moveCurrentSelectApp(const int key)
             m_multiPagesView->showCurrentPage(curPage - 1);
         }
         auto model = m_multiPagesView->pageModel(m_multiPagesView->currentPage());
-        m_appItemDelegate->setCurrentIndex(m_multiPagesView->getAppItem(model->rowCount(QModelIndex()) - 1));
+        m_appItemDelegate->setCurrentIndex(m_multiPagesView->getAppItem(model->rowCount() - 1));
     } else if (index.isValid()) {
         // valid verify and UI adjustment.
         const QModelIndex selectedIndex = index.isValid() ? index : curModelIndex;

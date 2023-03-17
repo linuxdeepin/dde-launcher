@@ -408,25 +408,33 @@ void WindowedFrame::searchAppState(bool searched)
     // 设置搜索状态
     setSearchState(searched);
 
-    // 收藏列表是否为空
-    const bool isFavoriteViewEmpty = (m_favoriteModel->rowCount(QModelIndex()) <= 0);
-
     // 搜索模式下只显示搜索控件,其他控件都不显示
     m_favoriteLabel->setVisible(!searched);
     m_favoriteView->setVisible(!searched);
 
-    const int height = m_appsView->height() / 2;
-    if (isFavoriteViewEmpty)
-        m_favoriteView->setFixedHeight(DLauncher::DEFAULT_VIEW_HEIGHT);
-    else
-        m_favoriteView->setFixedHeight(height);
-
-    m_emptyFavoriteWidget->setVisible(!searched && isFavoriteViewEmpty);
+    updateFavorateViewHeight(searched);
 
     m_allAppLabel->setVisible(!searched);
     m_allAppView->setVisible(!searched);
 
     m_searchWidget->setVisible(searched);
+}
+
+void WindowedFrame::updateFavorateViewHeight(bool searched)
+{
+    // 收藏列表是否为空
+    const int favRowCount = m_favoriteModel->rowCount();
+
+    if (favRowCount <= 0)
+        m_favoriteView->setFixedHeight(DLauncher::DEFAULT_VIEW_HEIGHT);
+    else if (favRowCount <= 4) {
+        m_favoriteView->setFixedHeight(CalculateUtil::instance()->appItemSize().height() +
+                                       CalculateUtil::instance()->appItemSpacing() * 3);
+    } else {
+        m_favoriteView->setFixedHeight(m_appsView->height() / 2);
+    }
+
+    m_emptyFavoriteWidget->setVisible(!searched && (favRowCount <= 0));
 }
 
 void WindowedFrame::showLauncher()
@@ -1458,24 +1466,13 @@ void WindowedFrame::onFavoriteListVisibleChaged()
     if (searchState())
         return;
 
-    const bool isFavoriteViewEmpty = (m_favoriteModel->rowCount(QModelIndex()) <= 0);
-
-    // 收藏列表为空时显示空页面
-    m_emptyFavoriteWidget->setVisible(isFavoriteViewEmpty);
-
-    // 收藏列表
-    const int height = m_appsView->height() / 2;
-
-    if (isFavoriteViewEmpty)
-        m_favoriteView->setFixedHeight(DLauncher::DEFAULT_VIEW_HEIGHT);
-    else
-        m_favoriteView->setFixedHeight(height);
+    updateFavorateViewHeight(false);
 }
 
 void WindowedFrame::onLayoutChanged()
 {
-    if (m_calcUtil->fullscreen()) {
-        qDebug() << "now in the WindowedFrame";
+    if (!visible()) {
+        qDebug() << "not in the WindowedFrame";
         return;
     }
 

@@ -212,7 +212,7 @@ void MultiPagesView::dragToLeft(const QModelIndex &index)
 
     showCurrentPage(m_pageIndex - 1);
 
-    int lastApp = m_pageAppsModelList[m_pageIndex]->rowCount(QModelIndex());
+    int lastApp = m_pageAppsModelList[m_pageIndex]->rowCount();
     QModelIndex firstModel = m_appGridViewList[m_pageIndex]->indexAt(lastApp - 1);
     m_appGridViewList[m_pageIndex]->dragIn(firstModel, m_pageSwitchAnimation->state() != QPropertyAnimation::Running);
 
@@ -245,7 +245,7 @@ void MultiPagesView::dragToRight(const QModelIndex &index)
     showCurrentPage(m_pageIndex + 1);
 
     // 将最后一个App'挤走'
-    int lastApp = m_pageAppsModelList[m_pageIndex]->rowCount(QModelIndex());
+    int lastApp = m_pageAppsModelList[m_pageIndex]->rowCount();
     QModelIndex lastModel = m_appGridViewList[m_pageIndex]->indexAt(lastApp - 1);
     m_appGridViewList[m_pageIndex]->dragIn(lastModel, m_pageSwitchAnimation->state() != QPropertyAnimation::Running);
 
@@ -400,7 +400,7 @@ QModelIndex MultiPagesView::selectApp(const int key)
             itemSelect = m_calcUtil->appPageItemCount(m_category) - 1;
         } else {
             page = m_pageCount - 1;
-            itemSelect = m_pageAppsModelList[page]->rowCount(QModelIndex()) - 1;
+            itemSelect = m_pageAppsModelList[page]->rowCount() - 1;
         }
     } else {
         if (page + 1 < m_pageCount) {
@@ -586,7 +586,7 @@ QSize MultiPagesView::calculateWidgetSize()
         if (!listModel)
             return QSize();
 
-        int itemCount = listModel->rowCount(QModelIndex());
+        int itemCount = listModel->rowCount();
         if (itemCount <= 3)
             viewWidth = itemWidth * 1 + leftMargin * 2;
         else if (itemCount <= 6)

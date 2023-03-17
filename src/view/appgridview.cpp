@@ -95,7 +95,7 @@ void AppGridView::dropEvent(QDropEvent *e)
         if (index.isValid()) {
             listModel->insertItem(info, index.row());
         } else {
-            listModel->insertItem(info, listModel->rowCount(QModelIndex()));
+            listModel->insertItem(info, listModel->rowCount());
         }
 
         listModel->clearDraggingIndex();
@@ -232,13 +232,11 @@ void AppGridView::dragMoveEvent(QDragMoveEvent *e)
     if (dropIndex.isValid()) {
         m_dropToPos = dropIndex.row();
     } else if (containerRect.contains(pos)) {
-        if (listModel) {
-            int lastRow = listModel->rowCount(QModelIndex()) - 1;
-            QModelIndex lastIndex = listModel->index(lastRow);
-            QPoint lastPos = indexRect(lastIndex).center();
-            if (pos.x() > lastPos.x() && pos.y() > lastPos.y())
-                m_dropToPos = lastIndex.row();
-        }
+        int lastRow = listModel->rowCount() - 1;
+        QModelIndex lastIndex = listModel->index(lastRow);
+        QPoint lastPos = indexRect(lastIndex).center();
+        if (pos.x() > lastPos.x() && pos.y() > lastPos.y())
+            m_dropToPos = lastIndex.row();
     }
 
     // 当文件夹展开窗口隐藏，当前显示的视图类型为 MainView 时，由于展开窗口的QDrag::exec() 其实未执行完毕，所以这里做了特殊处理，
@@ -482,7 +480,7 @@ QPixmap AppGridView::creatSrcPix(const QModelIndex &index)
         m_calendarWidget->hide();
         m_calendarWidget->setLayout(nullptr);
     } else {
-        srcPix = index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
+        return index.data(AppsListModel::AppDragIconRole).value<QPixmap>();
     }
 
     return srcPix;

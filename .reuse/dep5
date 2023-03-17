@@ -9,7 +9,7 @@ Copyright: None
 License: CC0-1.0
 
 # CI and configuration files for scripts/tools
-Files: .github/* .gitlab-ci.yml .project
+Files: .github/* .gitlab-ci.yml .project .obs/*
 Copyright: None
 License: CC0-1.0
 

@@ -1,3 +1,17 @@
+dde-launcher (6.0.9) unstable; urgency=medium
+
+  * Make use of Qt CMake module to find package
+  * Correct category text size and color in windowed frame
+  * App group should show max to 4 icons in fullscreen frame
+  * Fix window mode load slow caused by icon reload
+  * avoid hardcode size to screen rect
+  * Fix missing blur in the app drawer of fullscreen frame
+  * Fix icons inside app drawer not aligned up
+  * Fix mode switch button icon size caused blurry icon
+  * Show one favorate row when favorate apps are less than 5
+
+ -- Wang Zichong <wangzichong@deepin.org>  Wed, 29 Mar 2023 13:59:00 +0800
+
 dde-launcher (6.0.8) unstable; urgency=medium
 
   [ TagBuilder ]

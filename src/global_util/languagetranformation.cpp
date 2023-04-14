@@ -103,6 +103,7 @@ void LanguageTransformation::readConfigFile()
 
         QString jianpinStr = jianpinFile.readAll();
         m_jianpingStrList.append(jianpinStr);
+        jianpinFile.close();
 //        qInfo() << "m_jianpingStrList: " << m_jianpingStrList;
     });
 }

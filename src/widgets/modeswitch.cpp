@@ -83,7 +83,9 @@ void ModeSwitch::initUi()
     setFixedSize(57, 24);
 
     m_titleModeButton->setFixedSize(28, 24);
+    m_titleModeButton->setIconSize({20, 20});
     m_letterModeButton->setFixedSize(28, 24);
+    m_letterModeButton->setIconSize({20, 20});
     m_titleModeButton->setContentsMargins(6, 4, 6, 4);
     m_letterModeButton->setContentsMargins(6, 4, 6, 4);
 
@@ -132,14 +134,14 @@ void ModeSwitch::initAccessibleName()
 void ModeSwitch::updateIcon()
 {
     if (m_letterModeButton->isChecked())
-        m_letterModeButton->setIcon(renderSVG(":/icons/skin/icons/letter-icon-checked.svg", QSize(16, 16)));
+        m_letterModeButton->setIcon(QIcon(":/icons/skin/icons/letter-icon-checked.svg"));
     else
-        m_letterModeButton->setIcon(renderSVG(":/icons/skin/icons/letter-icon-normal.svg", QSize(16, 16)));
+        m_letterModeButton->setIcon(QIcon(":/icons/skin/icons/letter-icon-normal.svg"));
 
     if (m_titleModeButton->isChecked())
-        m_titleModeButton->setIcon(renderSVG(":/icons/skin/icons/title-icon-checked.svg", QSize(16, 16)));
+        m_titleModeButton->setIcon(QIcon(":/icons/skin/icons/title-icon-checked.svg"));
     else
-        m_titleModeButton->setIcon(renderSVG(":/icons/skin/icons/title-icon-normal.svg", QSize(16, 16)));
+        m_titleModeButton->setIcon(QIcon(":/icons/skin/icons/title-icon-normal.svg"));
 
     update();
 }

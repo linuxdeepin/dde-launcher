@@ -39,7 +39,7 @@ Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 
 # images
-Files: src/widgets/images/* src/skin/* data/deepin-launcher.svg tests/test_res/test.jpg unittest/test_res/test.jpg
+Files: src/widgets/images/* src/skin/* data/deepin-launcher.svg tests/test_res/test.jpg unittest/test_res/test.jpg docs/show.png
 Copyright: UnionTech Software Technology Co., Ltd.
 License: GPL-3.0-or-later
 

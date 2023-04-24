@@ -1292,7 +1292,11 @@ void WindowedFrame::adjustPosition()
     }
 
     initAnchoredCornor();
-    move(launcherPoint);
+
+    // Can be empty when dde-dock d-bus is missing or in some debug environment.
+    if (!dockRect.isEmpty()) {
+        move(launcherPoint);
+    }
 }
 
 void WindowedFrame::onToggleFullScreen()

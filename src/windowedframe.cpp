@@ -224,7 +224,6 @@ void WindowedFrame::initUi()
     m_emptyFavoriteText->setPalette(emptyFavoritePal);
 
     QFont emptyFavoriteFont = m_emptyFavoriteText->font();
-    emptyFavoriteFont.setWeight(500);
 
     DFontSizeManager::instance()->bind(m_emptyFavoriteText, DFontSizeManager::T8);
     m_emptyFavoriteText->setFont(emptyFavoriteFont);

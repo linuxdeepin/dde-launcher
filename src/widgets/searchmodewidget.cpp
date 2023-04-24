@@ -108,14 +108,12 @@ void SearchModeWidget::initTitle()
     // 搜索标题字体样式设置
     QFont searchTitleFont = m_outsideLabel->font();
     searchTitleFont.setBold(true);
-    searchTitleFont.setWeight(700);
 
     m_outsideLabel->setFont(searchTitleFont);
 
     // 搜索为空格的字体样式设置
     QFont noResultTitleFont = m_emptyText->font();
     noResultTitleFont.setBold(true);
-    noResultTitleFont.setWeight(700);
 
     m_emptyText->setFont(noResultTitleFont);
     m_emptyText->setWindowOpacity(0.3);

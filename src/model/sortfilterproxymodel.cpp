@@ -7,7 +7,10 @@
 #include "iteminfo.h"
 #include "languagetranformation.h"
 
+#include <DPinyin>
 #include <QDebug>
+
+DCORE_USE_NAMESPACE
 
 SortFilterProxyModel::SortFilterProxyModel(QObject *parent)
     : QSortFilterProxyModel (parent)
@@ -15,18 +18,30 @@ SortFilterProxyModel::SortFilterProxyModel(QObject *parent)
 {
 }
 
+static bool matchPinyin(const QString &text, const QString &appName)
+{
+    for (const QString &firstLetter : firstLetters(appName)) {
+        if (firstLetter.contains(text, Qt::CaseInsensitive))
+            return true;
+    }
+
+    for (const QString &py : pinyin(appName, TS_NoneTone)) {
+        if (py.contains(text, Qt::CaseInsensitive))
+            return true;
+    }
+
+    return false;
+}
+
 bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     QModelIndex modelIndex = this->sourceModel()->index(sourceRow, 0, sourceParent);
     const ItemInfo_v1 &info = modelIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
 
-    QString jianpinStr = m_languageSwitch->zhToJianPin(info.m_name);
-    QString pinyinStr = m_languageSwitch->zhToPinYin(info.m_name);
     QString searchedText = filterRegExp().pattern();
 
     return info.m_desktop.contains(searchedText, Qt::CaseInsensitive) ||
            info.m_name.contains(searchedText, Qt::CaseInsensitive) ||
            info.m_key.contains(searchedText, Qt::CaseInsensitive) ||
-           jianpinStr.contains(searchedText, Qt::CaseInsensitive) ||
-           pinyinStr.contains(searchedText, Qt::CaseInsensitive);
+           matchPinyin(searchedText, info.m_name);
 }

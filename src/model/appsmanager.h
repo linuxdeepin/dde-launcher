@@ -180,6 +180,7 @@ private:
     void sortByPinyinOrder(ItemInfoList_v1 &processList);
     void sortByInstallTimeOrder(ItemInfoList_v1 &processList);
     void removeNonexistentData();
+    void removeDuplicateData(ItemInfoList_v1 &processList);
     void getCategoryListAndSortCategoryId();
     void refreshCategoryInfoList();
     void refreshItemInfoList();

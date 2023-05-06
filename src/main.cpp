@@ -59,6 +59,11 @@ int main(int argc, char *argv[])
     // 加载 Accessible 插件 测试使用 用sniff查看效果
     QAccessible::installFactory(accessibleFactory);
 
+    // Cache limit for 4k resolution screen and we need to cache two screens.
+    // Assume we use ARGB8888 per pixel, will results a 64800 KiB cache limit.
+    constexpr int cacheLimit = 3840 * 2160 * 4 / 1024 * 2;
+    QPixmapCache::setCacheLimit(cacheLimit);
+
 #ifndef QT_DEBUG
     // 默认日志路径是 ~/.cache/dde-launcher/dde-launcher.log
     DLogManager::registerFileAppender();

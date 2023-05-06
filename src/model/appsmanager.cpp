@@ -522,6 +522,18 @@ void AppsManager::sortByInstallTimeOrder(ItemInfoList_v1 &processList)
     });
 }
 
+void AppsManager::removeDuplicateData(ItemInfoList_v1 &processList)
+{
+    ItemInfoList_v1 tmpList;
+    for (const auto item : processList) {
+        if (!tmpList.contains(item)) {
+            tmpList.append(item);
+        }
+    }
+
+    processList = tmpList;
+}
+
 void AppsManager::removeNonexistentData()
 {
     // 移除 m_appInfos 中已经不存在的应用
@@ -1511,6 +1523,10 @@ void AppsManager::refreshCategoryInfoList()
 
     // 6. 清除不存在的数据
     removeNonexistentData();
+
+    // 清理可能出现的重复数据
+    removeDuplicateData(m_fullscreenUsedSortedList);
+    removeDuplicateData(m_windowedUsedSortedList);
     generateCategoryMap();
 }
 

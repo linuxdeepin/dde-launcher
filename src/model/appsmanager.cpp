@@ -1407,6 +1407,20 @@ const QString AppsManager::appName(const ItemInfo_v1 &info, const int size)
     return fm_string;
 }
 
+void AppsManager::updateDataFromAllAppList(ItemInfoList_v1 &processList)
+{
+    for (const ItemInfo_v1 &itemInfo : m_allAppInfoList) {
+        if (!contains(processList, itemInfo)) {
+            processList.append(itemInfo);
+        } else {
+            // 多语言时，更新应用信息
+            int index = itemIndex(processList, itemInfo);
+            if (index != -1)
+                processList[index].updateInfo(itemInfo);
+        }
+    }
+}
+
 /**
  * @brief AppsManager::refreshCategoryInfoList 更新所有应用信息
  */
@@ -1447,17 +1461,8 @@ void AppsManager::refreshCategoryInfoList()
     // 2. 读取小窗口所有应用列表的缓存数据
     m_windowedUsedSortedList = readCacheData(m_windowedUsedSortSetting->value("lists").toMap());
 
-    // 缓存数据中没有的, 则加入到所有应用列表中
-    for (const ItemInfo_v1 &itemInfo : m_allAppInfoList) {
-        if (!contains(m_windowedUsedSortedList, itemInfo)) {
-            m_windowedUsedSortedList.append(itemInfo);
-        } else {
-            // 多语言时，更新应用信息
-            int index = itemIndex(m_windowedUsedSortedList, itemInfo);
-            if (index != -1)
-                m_windowedUsedSortedList[index].updateInfo(itemInfo);
-        }
-    }
+    // 所有应用列表有而小窗口缓存数据中没有的, 则加入到小窗口应用列表中
+    updateDataFromAllAppList(m_windowedUsedSortedList);
 
     // 3. 读取全屏下所有应用列表的缓存数据
     // 为兼容历史版本, 1050以前使用list, v23即以后使用lists作为键值
@@ -1470,6 +1475,9 @@ void AppsManager::refreshCategoryInfoList()
     } else {
         m_fullscreenUsedSortedList = readCacheData(m_fullscreenUsedSortSetting->value("lists").toMap());
     }
+
+    // 所有应用列表有而全屏缓存数据中没有的, 则加入到全屏应用列表中
+    updateDataFromAllAppList(m_fullscreenUsedSortedList);
 
     for (const ItemInfo_v1 &info : m_fullscreenUsedSortedList) {
         if (fuzzyMatching(filters, info.m_key))

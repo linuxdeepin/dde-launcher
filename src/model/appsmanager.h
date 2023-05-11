@@ -179,6 +179,7 @@ private:
     ItemInfoList_v1 sortByLetterOrder(ItemInfoList_v1 &processList);
     void sortByPinyinOrder(ItemInfoList_v1 &processList);
     void sortByInstallTimeOrder(ItemInfoList_v1 &processList);
+    void updateDataFromAllAppList(ItemInfoList_v1 &processList);
     void removeNonexistentData();
     void removeDuplicateData(ItemInfoList_v1 &processList);
     void getCategoryListAndSortCategoryId();

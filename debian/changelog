@@ -1,3 +1,9 @@
+dde-launcher (6.0.13) unstable; urgency=medium
+
+  * fix icons will be added repeatedly
+
+ -- Wang Zichong <wangzichong@deepin.org>  Fri, 12 May 2023 17:23:00 +0800
+
 dde-launcher (6.0.12) unstable; urgency=medium
 
   * Fix new icons might not displayed in fullscreen mode

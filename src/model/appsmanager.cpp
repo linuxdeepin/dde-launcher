@@ -1409,8 +1409,14 @@ const QString AppsManager::appName(const ItemInfo_v1 &info, const int size)
 
 void AppsManager::updateDataFromAllAppList(ItemInfoList_v1 &processList)
 {
+    ItemInfoList_v1 dirAppInfoList;
+    for (const ItemInfo_v1 &itemInfo : processList) {
+        if (itemInfo.m_isDir)
+            dirAppInfoList.append(itemInfo.m_appInfoList);
+    }
+
     for (const ItemInfo_v1 &itemInfo : m_allAppInfoList) {
-        if (!contains(processList, itemInfo)) {
+        if (!contains(processList, itemInfo) && !contains(dirAppInfoList, itemInfo)) {
             processList.append(itemInfo);
         } else {
             // 多语言时，更新应用信息

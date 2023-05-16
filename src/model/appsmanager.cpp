@@ -524,14 +524,36 @@ void AppsManager::sortByInstallTimeOrder(ItemInfoList_v1 &processList)
 
 void AppsManager::removeDuplicateData(ItemInfoList_v1 &processList)
 {
-    ItemInfoList_v1 tmpList;
-    for (const auto item : processList) {
-        if (!tmpList.contains(item)) {
-            tmpList.append(item);
+    // https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#desktop-file-id
+    // if applicatons have the same desktop file id, we consider it to be the same application.
+    // if same applications are installed, only show the one which path in front of XDG_DATA_DIRS
+    const auto xdgDataDirs = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
+
+    QList<QPair<int, QPair<QString, ItemInfo_v1>>> tmpList;
+    QSet<QString> desktopIdList;
+
+    for (const auto &item : processList) {
+        for (int index = 0; index < xdgDataDirs.count(); ++index) {
+            if (item.m_desktop.contains(xdgDataDirs[index])) {
+                auto desktopPath = item.m_desktop;
+                auto fullSuffix = xdgDataDirs[index] + "/";
+                auto desktopId = desktopPath.remove(fullSuffix).replace("/", "-");
+                tmpList.append(qMakePair(index, qMakePair(desktopId, item)));
+                break;
+            }
         }
     }
 
-    processList = tmpList;
+    // sort by the index of path which in XDG_DATA_DIRS
+    std::sort(tmpList.begin(), tmpList.end());
+
+    processList.clear();
+    for (const auto &pair : tmpList) {
+        if(!desktopIdList.contains(pair.second.first)) {
+            desktopIdList.insert(pair.second.first);
+            processList.append(pair.second.second);
+        }
+    }
 }
 
 void AppsManager::removeNonexistentData()

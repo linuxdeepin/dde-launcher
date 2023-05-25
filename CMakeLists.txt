@@ -64,6 +64,7 @@ find_package(Dtk REQUIRED COMPONENTS Core Widget Gui)
 
 pkg_check_modules(XCB_EWMH REQUIRED IMPORTED_TARGET xcb-ewmh)
 pkg_check_modules(QGSettings REQUIRED IMPORTED_TARGET gsettings-qt)
+pkg_check_modules(GIO REQUIRED IMPORTED_TARGET gio-2.0)
 
 set(XML2CPP_DIR ${PROJECT_SOURCE_DIR}/src/global_util/dbus/xml2cpp)
 
@@ -130,6 +131,23 @@ generation_dbus_interface(
     ${CMAKE_SOURCE_DIR}/xml/org.deepin.dde.XEventMonitor1.xml
     XEventMonitor
     ${XML2CPP_DIR}/xeventmonitor_interface
+)
+
+add_library(trashutils
+OBJECT
+    src/trashutils/trashmonitor.h
+    src/trashutils/trashmonitor.cpp
+)
+
+target_link_libraries(trashutils
+PUBLIC
+    Qt5::Core
+    PkgConfig::GIO
+)
+
+target_compile_definitions(trashutils
+PRIVATE
+    QT_NO_KEYWORDS
 )
 
 include_directories(
@@ -206,6 +224,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
     Qt5::Svg
     Qt5::GuiPrivate
     PkgConfig::QGSettings
+    trashutils
 )
 
 ## qm files

@@ -37,9 +37,6 @@ QSet<QString> AppsManager::APP_AUTOSTART_CACHE;
 QSettings AppsManager::APP_USED_SORTED_LIST("deepin", "dde-launcher-app-used-sorted-list");
 QSettings AppsManager::APP_CATEGORY_USED_SORTED_LIST("deepin","dde-launcher-app-category-used-sorted-list");
 static constexpr int USER_SORT_UNIT_TIME = 3600; // 1 hours
-const QString TRASH_DIR = QDir::homePath() + "/.local/share/Trash";
-const QString TRASH_PATH = TRASH_DIR + "/files";
-const QDir::Filters NAME_FILTERS = QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot;
 
 bool AppsManager::readJsonFile(QIODevice &device, QSettings::SettingsMap &map)
 {
@@ -80,7 +77,7 @@ AppsManager::AppsManager(QObject *parent)
     , m_filterSetting(nullptr)
     , m_iconValid(true)
     , m_trashIsEmpty(false)
-    , m_fsWatcher(new QFileSystemWatcher(this))
+    , m_trashMonitor(new TrashMonitor(this))
     , m_updateCalendarTimer(new QTimer(this))
     , m_uninstallDlgIsShown(false)
     , m_dragMode(Other)
@@ -138,7 +135,7 @@ AppsManager::AppsManager(QObject *parent)
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
 
     connect(m_delayRefreshTimer, &QTimer::timeout, this, &AppsManager::delayRefreshData);
-    connect(m_fsWatcher, &QFileSystemWatcher::directoryChanged, this, &AppsManager::updateTrashState, Qt::QueuedConnection);
+    connect(m_trashMonitor, &TrashMonitor::trashAttributeChanged, this, &AppsManager::updateTrashState, Qt::QueuedConnection);
     connect(m_refreshCalendarIconTimer, &QTimer::timeout, this, &AppsManager::onRefreshCalendarTimer);
 
     if (!m_refreshCalendarIconTimer->isActive())
@@ -1473,7 +1470,6 @@ void AppsManager::refreshCategoryInfoList()
         bool bContains = fuzzyMatching(filters, info.m_key);
         if (!m_stashList.contains(info) && !bContains) {
             if (info.m_key == "dde-trash") {
-                m_trashItemInfo = info;
                 ItemInfo_v1 trashItem = info;
                 trashItem.m_iconKey = m_trashIsEmpty ? "user-trash" : "user-trash-full";
                 m_allAppInfoList.append(trashItem);
@@ -1662,6 +1658,26 @@ void AppsManager::refreshItemInfoList()
     // 缓存全屏列表和小窗口所有应用列表数据
     saveFullscreenUsedSortedList();
     saveWidowedUsedSortedList();
+}
+
+void AppsManager::updateTrashIconFromInfoList()
+{
+    auto updateTrashIcon = [=](ItemInfoList_v1 &processList) {
+        for (ItemInfo_v1 &info : processList) {
+            if (info.m_key == QLatin1String("dde-trash")) {
+                int index = itemIndex(processList, info);
+                info.m_iconKey = m_trashIsEmpty ? "user-trash" : "user-trash-full";
+                if (index != -1) {
+                    processList[index].updateInfo(info);
+                }
+            }
+        }
+    };
+
+    updateTrashIcon(m_allAppInfoList);
+    updateTrashIcon(m_fullscreenUsedSortedList);
+    updateTrashIcon(m_windowedUsedSortedList);
+    updateTrashIcon(m_favoriteSortedList);
 }
 
 void AppsManager::saveAppCategoryInfoList()
@@ -2094,22 +2110,10 @@ QList<QPixmap> AppsManager::getDirAppIcon(QModelIndex modelIndex)
 
 void AppsManager::updateTrashState()
 {
-    int trashItemsCount = 0;
-    m_fsWatcher->addPath(TRASH_DIR);
-    if (QDir(TRASH_PATH).exists()) {
-        m_fsWatcher->addPath(TRASH_PATH);
-        trashItemsCount = QDir(TRASH_PATH).entryList(NAME_FILTERS).count();
-    }
+    int trashItemsCount = m_trashMonitor->trashItemCount();
 
-    if (m_trashIsEmpty == !trashItemsCount)
-        return;
+    if (m_trashIsEmpty == !trashItemsCount) return;
+    m_trashIsEmpty = !trashItemsCount;
 
-    m_trashIsEmpty = !trashItemsCount;    
-    int index = itemIndex(m_windowedUsedSortedList, m_trashItemInfo);
-    
-    // 获取到trash,更新trash图标
-    if (index != -1) {
-        m_trashItemInfo.m_iconKey = m_trashIsEmpty ? "user-trash" : "user-trash-full";
-        m_windowedUsedSortedList[index].updateInfo(m_trashItemInfo);
-    }
+    updateTrashIconFromInfoList();
 }

@@ -12,6 +12,8 @@
 #include "amdbuslauncherinterface.h"
 #include "amdbusdockinterface.h"
 
+#include "trashutils/trashmonitor.h"
+
 #include <DGuiApplicationHelper>
 #include <DDialog>
 
@@ -115,7 +117,6 @@ public:
 signals:
     void itemDataChanged(const ItemInfo_v1 &info) const;
     void dataChanged(const AppsListModel::AppCategory category) const;
-    void layoutChanged(const AppsListModel::AppCategory category) const;
     void requestTips(const QString &tips) const;
     void requestHideTips() const;
     void categoryListChanged() const;
@@ -185,6 +186,7 @@ private:
     void getCategoryListAndSortCategoryId();
     void refreshCategoryInfoList();
     void refreshItemInfoList();
+    void updateTrashIconFromInfoList();
     void saveAppCategoryInfoList();
     void generateCategoryMap();
     void generateTitleCategoryList();
@@ -258,7 +260,7 @@ private:
     bool m_iconValid;                                                       // 获取图标状态标示
 
     bool m_trashIsEmpty;
-    QFileSystemWatcher *m_fsWatcher;
+    TrashMonitor *m_trashMonitor;
 
     QTimer *m_updateCalendarTimer;
     bool m_uninstallDlgIsShown;
@@ -274,7 +276,6 @@ private:
     int m_dirAppRow;                                                        // 应用文件夹所在的列表中的行数
     int m_dirAppPageIndex;                                                  // 从文件夹展开窗口移除应用时之前，文件夹所在页面索引
     ItemInfo_v1 m_clickedItemInfo;                                          // 当前被启动的应用
-    ItemInfo_v1 m_trashItemInfo;                                            // 回收站，用于直接更新回收站状态
 };
 
 #endif // APPSMANAGER_H

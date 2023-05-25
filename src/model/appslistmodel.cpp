@@ -212,7 +212,6 @@ AppsListModel::AppsListModel(const AppCategory &category, QObject *parent)
     , m_pageIndex(0)
 {
     connect(m_appsManager, &AppsManager::dataChanged, this, &AppsListModel::dataChanged);
-    connect(m_appsManager, &AppsManager::layoutChanged, this, &AppsListModel::layoutChanged);
     connect(m_appsManager, &AppsManager::itemDataChanged, this, &AppsListModel::itemDataChanged);
 }
 

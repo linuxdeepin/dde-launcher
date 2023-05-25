@@ -18,7 +18,8 @@ Build-Depends:
  libdtkgui-dev (>=5.4.13),
  libgsettings-qt-dev,
  libgtest-dev,
- libgmock-dev
+ libgmock-dev,
+ libglib2.0-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org/
 

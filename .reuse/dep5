@@ -24,12 +24,12 @@ Copyright: UnionTech Software Technology Co., Ltd.
 License: CC-BY-4.0
 
 # Project file
-Files: dde-launcher.desktop *.qrc dde-launcher-wapper
+Files: dde-launcher.desktop *.qrc dde-launcher-wapper.in
 Copyright: None
 License: CC0-1.0
 
 # Service file
-Files: src/dbusservices/org.deepin.dde.Launcher1.service
+Files: src/dbusservices/org.deepin.dde.Launcher1.service.in
 Copyright: None
 License: CC0-1.0
 

@@ -1,6 +1,6 @@
 [Desktop Entry]
 Comment=Deepin Launcher
-Exec=/usr/bin/dde-launcher
+Exec=dde-launcher
 Name=Deepin Launcher
 OnlyShowIn=''
 Type=Application

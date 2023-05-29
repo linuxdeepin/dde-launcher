@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_FLAGS "-g -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall")
 
 # 增加安全编译参数
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-all")
@@ -49,10 +49,10 @@ set(BIN_NAME dde-launcher)
 add_subdirectory("plugins")
 
 # Install settings
-include(GNUInstallDirs)
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX /usr)
 endif ()
+include(GNUInstallDirs)
 
 # Find the library
 find_package(PkgConfig REQUIRED)
@@ -233,10 +233,17 @@ install(FILES ${QM_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/dde-launcher/tran
 
 ## desktop file
 install(FILES dde-launcher.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications/)
-install(FILES dde-launcher-wapper DESTINATION ${CMAKE_INSTALL_BINDIR} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
+configure_file(${CMAKE_SOURCE_DIR}/dde-launcher-wapper.in ${CMAKE_CURRENT_BINARY_DIR}/dde-launcher-wapper @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dde-launcher-wapper DESTINATION ${CMAKE_INSTALL_BINDIR} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 ## services files
-install(FILES src/dbusservices/org.deepin.dde.Launcher1.service DESTINATION share/dbus-1/services)
+configure_file(
+    ${CMAKE_SOURCE_DIR}/src/dbusservices/org.deepin.dde.Launcher1.service.in
+    ${CMAKE_CURRENT_BINARY_DIR}/org.deepin.dde.Launcher1.service
+    @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.deepin.dde.Launcher1.service 
+	DESTINATION ${CMAKE_INSTALL_DATADIR}/dbus-1/services)
 
 #schemas
 install(FILES gschema/com.deepin.dde.launcher.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)

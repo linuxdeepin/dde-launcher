@@ -1,0 +1,4 @@
+#!/bin/bash
+# this will launch dde-launcher
+
+dbus-send --print-reply --session --dest=org.deepin.dde.Application1.Manager /org/deepin/dde/Application1/Manager org.deepin.dde.Application1.Manager.Launch string:@CMAKE_INSTALL_FULL_DATADIR@/applications/dde-launcher.desktop

@@ -1,4 +1,0 @@
-#!/bin/bash
-# this will launch dde-launcher
-
-dbus-send --print-reply --session --dest=org.deepin.dde.Application1.Manager /org/deepin/dde/Application1/Manager org.deepin.dde.Application1.Manager.Launch string:/usr/share/applications/dde-launcher.desktop

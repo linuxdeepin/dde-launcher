@@ -1644,6 +1644,13 @@ void AppsManager::refreshItemInfoList()
     // 移除收藏列表中不存在的应用
     // 更新应用信息
     for (ItemInfo_v1 &info : m_favoriteSortedList) {
+        if (info.m_key == "dde-trash") {
+            // blumia: It's possible the icon is changed by appsmanager (the user-trash one).
+            //         This is definitely not the correct approach.
+            //         As a workaround, we also update the icon key here.
+            info.m_iconKey = m_trashIsEmpty ? "user-trash" : "user-trash-full";
+        }
+
         if (!contains(m_allAppInfoList, info)) {
             m_favoriteSortedList.removeOne(info);
         } else {

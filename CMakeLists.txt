@@ -8,6 +8,8 @@ set(VERSION 4.0)
 
 project(dde-launcher)
 
+find_package(DtkTools REQUIRED)
+
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -69,7 +71,7 @@ pkg_check_modules(GIO REQUIRED IMPORTED_TARGET gio-2.0)
 set(XML2CPP_DIR ${PROJECT_SOURCE_DIR}/src/global_util/dbus/xml2cpp)
 
 function(generation_dbus_interface xml class_name class_file)
-    execute_process(COMMAND qdbusxml2cpp-fix -c ${class_name} -p ${class_file} ${xml}
+    execute_process(COMMAND ${DTK_XML2CPP} -c ${class_name} -p ${class_file} ${xml}
         WORKING_DIRECTORY ${XML2CPP_DIR})
 endfunction(generation_dbus_interface)
 

@@ -39,7 +39,7 @@ DWIDGET_USE_NAMESPACE
 using Appearance = org::deepin::dde::Appearance1;
 class QLabel;
 
-class AMDBusDockInter;
+class DBusDockInterface;
 
 class WindowedFrame : public DBlurEffectWidget, public LauncherInterface
 {
@@ -144,7 +144,7 @@ private slots:
     void onHandleHoverAction(const QModelIndex &index);
 
 private:
-    AMDBusDockInter *m_amDbusDockInter;
+    DBusDockInterface *m_dockDBusInter;
     std::unique_ptr<MenuWorker> m_menuWorker;
     SharedEventFilter *m_eventFilter;
     DPlatformWindowHandle m_windowHandle;

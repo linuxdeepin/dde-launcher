@@ -61,7 +61,7 @@ inline const QPoint scaledPosition(const QPoint &xpos)
  */
 WindowedFrame::WindowedFrame(QWidget *parent)
     : DBlurEffectWidget(parent)
-    , m_amDbusDockInter(new AMDBusDockInter(this))
+    , m_dockDBusInter(new DBusDockInterface(this))
     , m_menuWorker(new MenuWorker(this))
     , m_eventFilter(new SharedEventFilter(this))
     , m_windowHandle(this, this)
@@ -1018,7 +1018,7 @@ void WindowedFrame::uninstallApp(const QString &desktopPath)
 
 QPainterPath WindowedFrame::getCornerPath(AnchoredCornor direction)
 {
-    if (m_amDbusDockInter->displayMode() == DLauncher::DOCK_FASHION)
+    if (m_dockDBusInter->displayMode() == DLauncher::DOCK_FASHION)
         return QPainterPath();
 
     QPainterPath path;
@@ -1238,7 +1238,7 @@ void WindowedFrame::initAnchoredCornor()
     if (!m_wmHelper->hasComposite()) {
         m_anchoredCornor = Normal;
     } else {
-        const int dockPos = m_amDbusDockInter->position();
+        const int dockPos = m_dockDBusInter->position();
 
         switch (dockPos) {
         case DLauncher::DOCK_TOP:
@@ -1264,9 +1264,9 @@ void WindowedFrame::adjustPosition()
     // 启动器高效模式和时尚模式与任务栏的间隙不同
     int dockSpacing = 0;
 
-    QRect rect =  m_amDbusDockInter->frontendWindowRect();
-    int dockPos = m_amDbusDockInter->position();
-    if (m_amDbusDockInter->displayMode() == DLauncher::DOCK_FASHION)
+    QRect rect =  m_dockDBusInter->frontendWindowRect();
+    int dockPos = m_dockDBusInter->position();
+    if (m_dockDBusInter->displayMode() == DLauncher::DOCK_FASHION)
         dockSpacing = 8;
 
     QRect dockRect = QRect(scaledPosition(rect.topLeft()),scaledPosition(rect.bottomRight()));
@@ -1416,8 +1416,8 @@ void WindowedFrame::updatePosition()
     QRect dockRect = QRect(scaledPosition(dockGeo.topLeft()),scaledPosition(dockGeo.bottomRight()));
 
     int dockSpacing = 0;
-    int dockPos = m_amDbusDockInter->position();
-    if (m_amDbusDockInter->displayMode() == DLauncher::DOCK_FASHION)
+    int dockPos = m_dockDBusInter->position();
+    if (m_dockDBusInter->displayMode() == DLauncher::DOCK_FASHION)
         dockSpacing = 8;
 
     QPoint launcherPoint;

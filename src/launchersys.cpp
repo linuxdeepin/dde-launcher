@@ -10,7 +10,7 @@
 #include "util.h"
 #include "constants.h"
 #include "amdbuslauncherinterface.h"
-#include "amdbusdockinterface.h"
+#include "dbusdockinterface.h"
 
 #define SessionManagerService "org.deepin.dde.SessionManager1"
 #define SessionManagerPath "/org/deepin/dde/SessionManager1"
@@ -31,7 +31,7 @@ LauncherSys::LauncherSys(QObject *parent)
     , m_ignoreRepeatVisibleChangeTimer(new QTimer(this))
     , m_calcUtil(CalculateUtil::instance())
     , m_amDbusLauncher(new AMDBusLauncherInter(this))
-    , m_amDbusDockInter(new AMDBusDockInter(this))
+    , m_dockDbusInter(new DBusDockInterface(this))
     , m_launcherPlugin(new LauncherPluginController(this))
 {
     m_regionMonitor->setCoordinateType(Dtk::Gui::DRegionMonitor::Original);
@@ -50,7 +50,7 @@ LauncherSys::LauncherSys(QObject *parent)
     connect(m_amDbusLauncher, &AMDBusLauncherInter::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
     connect(m_amDbusLauncher, &AMDBusLauncherInter::DisplayModeChanged, this, &LauncherSys::onDisplayModeChanged, Qt::QueuedConnection);
 
-    connect(m_amDbusDockInter, &AMDBusDockInter::FrontendWindowRectChanged, this, &LauncherSys::onFrontendRectChanged);
+    connect(m_dockDbusInter, &DBusDockInterface::FrontendWindowRectChanged, this, &LauncherSys::onFrontendRectChanged);
 
     connect(m_autoExitTimer, &QTimer::timeout, this, &LauncherSys::onAutoExitTimeout, Qt::QueuedConnection);
     connect(ConfigWorker::instance(), &DConfig::valueChanged, this, &LauncherSys::onValueChanged);

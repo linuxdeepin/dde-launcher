@@ -10,7 +10,7 @@
 #include "calculate_util.h"
 #include "common.h"
 #include "amdbuslauncherinterface.h"
-#include "amdbusdockinterface.h"
+#include "dbusdockinterface.h"
 
 #include "trashutils/trashmonitor.h"
 
@@ -220,7 +220,7 @@ public:
 private:
     DBusStartManager *m_startManagerInter;
     AMDBusLauncherInter *m_amDbusLauncherInter;
-    AMDBusDockInter *m_amDbusDockInter;
+    DBusDockInterface *m_dockDBusInter;
 
     QString m_searchText;
     ItemInfoList_v1 m_allAppInfoList;                                       // 所有app信息列表

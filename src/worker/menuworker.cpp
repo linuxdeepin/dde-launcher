@@ -6,7 +6,7 @@
 #include "menudialog.h"
 #include "util.h"
 #include "amdbuslauncherinterface.h"
-#include "amdbusdockinterface.h"
+#include "dbusdockinterface.h"
 
 #include <QSignalMapper>
 #include <QWindow>
@@ -18,7 +18,7 @@ class AppsListModel;
 MenuWorker::MenuWorker(QObject *parent)
     : QObject(parent)
     , m_amDbusLauncher(new AMDBusLauncherInter(this))
-    , m_amDbusDockInter(new AMDBusDockInter(this))
+    , m_dockDBusInter(new DBusDockInterface(this))
     , m_startManagerInterface(new DBusStartManager(this))
     , m_calcUtil(CalculateUtil::instance())
     , m_appManager(AppsManager::instance())
@@ -325,9 +325,9 @@ void MenuWorker::handleToDesktop()
 void MenuWorker::handleToDock()
 {
     if (m_isItemOnDock)
-        m_amDbusDockInter->RequestUndock(m_appDesktop);
+        m_dockDBusInter->RequestUndock(m_appDesktop);
     else
-        m_amDbusDockInter->RequestDock(m_appDesktop, -1);
+        m_dockDBusInter->RequestDock(m_appDesktop, -1);
 }
 
 void MenuWorker::handleToStartup()

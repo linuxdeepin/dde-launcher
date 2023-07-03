@@ -23,7 +23,7 @@
 class QMenu;
 class Menu;
 class AMDBusLauncherInter;
-class AMDBusDockInter;
+class DBusDockInterface;
 
 class MenuWorker : public QObject
 {
@@ -80,7 +80,7 @@ public slots:
 
 private:
     AMDBusLauncherInter *m_amDbusLauncher;
-    AMDBusDockInter *m_amDbusDockInter;
+    DBusDockInterface *m_dockDBusInter;
 
     DBusStartManager* m_startManagerInterface;
     CalculateUtil *m_calcUtil;

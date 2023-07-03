@@ -65,7 +65,7 @@ AppsManager::AppsManager(QObject *parent)
     : QObject(parent)
     , m_startManagerInter(new DBusStartManager(this))
     , m_amDbusLauncherInter(new AMDBusLauncherInter(this))
-    , m_amDbusDockInter(new AMDBusDockInter(this))
+    , m_dockDBusInter(new DBusDockInterface(this))
     , m_calUtil(CalculateUtil::instance())
     , m_delayRefreshTimer(new QTimer(this))
     , m_refreshCalendarIconTimer(new QTimer(this))
@@ -128,8 +128,8 @@ AppsManager::AppsManager(QObject *parent)
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallFailed, this, &AppsManager::onUninstallFail);
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::ItemChanged, this, qOverload<const QString &, const ItemInfo_v2 &, qlonglong>(&AppsManager::handleItemChanged));
 
-    connect(m_amDbusDockInter, &AMDBusDockInter::IconSizeChanged, this, &AppsManager::IconSizeChanged, Qt::QueuedConnection);
-    connect(m_amDbusDockInter, &AMDBusDockInter::FrontendWindowRectChanged, this, &AppsManager::dockGeometryChanged, Qt::QueuedConnection);
+    connect(m_dockDBusInter, &DBusDockInterface::IconSizeChanged, this, &AppsManager::IconSizeChanged, Qt::QueuedConnection);
+    connect(m_dockDBusInter, &DBusDockInterface::FrontendWindowRectChanged, this, &AppsManager::dockGeometryChanged, Qt::QueuedConnection);
 
     // TODO：自启动/打开应用这个接口后期sprint2时再改，目前 AM 未做处理
     connect(m_startManagerInter, &DBusStartManager::AutostartChanged, this, &AppsManager::refreshAppAutoStartCache);
@@ -973,12 +973,12 @@ void AppsManager::restoreItem(const QString &desktop, AppsListModel::AppCategory
 
 int AppsManager::dockPosition() const
 {
-    return m_amDbusDockInter->position();
+    return m_dockDBusInter->position();
 }
 
 QRect AppsManager::dockGeometry() const
 {
-    return QRect(m_amDbusDockInter->frontendWindowRect());
+    return QRect(m_dockDBusInter->frontendWindowRect());
 }
 
 bool AppsManager::isVaild()
@@ -1357,7 +1357,7 @@ bool AppsManager::appIsAutoStart(const QString &desktop)
 
 bool AppsManager::appIsOnDock(const QString &desktop)
 {
-    return m_amDbusDockInter->IsDocked(desktop);
+    return m_dockDBusInter->IsDocked(desktop);
 }
 
 bool AppsManager::appIsOnDesktop(const QString &desktop)

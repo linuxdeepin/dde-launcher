@@ -21,7 +21,7 @@ class LauncherInterface;
 class WindowedFrame;
 class FullScreenFrame;
 class AMDBusLauncherInter;
-class AMDBusDockInter;
+class DBusDockInterface;
 
 using SessionManager = org::deepin::dde::SessionManager1;
 
@@ -70,7 +70,7 @@ private:
     QMetaObject::Connection m_regionMonitorConnect;         // 信号和槽连接返回的对象
     CalculateUtil *m_calcUtil;                              // 界面布局计算处理类
     AMDBusLauncherInter *m_amDbusLauncher;
-    AMDBusDockInter *m_amDbusDockInter;
+    DBusDockInterface *m_dockDbusInter;
     LauncherPluginController *m_launcherPlugin;
 };
 

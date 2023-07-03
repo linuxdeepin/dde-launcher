@@ -7,7 +7,7 @@
 #include "constants.h"
 #include "appslistmodel.h"
 #include "amdbuslauncherinterface.h"
-#include "amdbusdockinterface.h"
+#include "dbusdockinterface.h"
 
 #include <QDebug>
 #include <QDesktopWidget>
@@ -195,7 +195,7 @@ void CalculateUtil::calculateAppLayout(const QSize &containerSize, const int cur
 CalculateUtil::CalculateUtil(QObject *parent)
     : QObject(parent)
     , m_amDbusLauncher(new AMDBusLauncherInter(this))
-    , m_amDbusDockInter(new AMDBusDockInter(this))
+    , m_dockDBusInter(new DBusDockInterface(this))
     , m_isFullScreen(m_amDbusLauncher->fullscreen())
     , m_launcherGsettings(SettingsPtr("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", this))
     , m_appItemFontSize(12)
@@ -227,7 +227,7 @@ QScreen *CalculateUtil::currentScreen() const
 {
     QScreen *primaryScreen = qApp->primaryScreen();
 
-    const QRect dockRect = m_amDbusDockInter->frontendWindowRect();
+    const QRect dockRect = m_dockDBusInter->frontendWindowRect();
     const auto ratio = qApp->devicePixelRatio();
 
     for (auto *screen : qApp->screens()) {

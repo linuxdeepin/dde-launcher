@@ -11,12 +11,39 @@
 
 #include "dbusdockinterface.h"
 
+class DockPrivate
+{
+public:
+   DockPrivate() = default;
+
+    // begin member variables
+    int DisplayMode;
+    QStringList DockedApps;
+    QList<QDBusObjectPath> Entries;
+    QRect FrontendWindowRect;
+    int HideMode;
+    int HideState;
+    uint HideTimeout;
+    uint IconSize;
+    double Opacity;
+    int Position;
+    uint ShowTimeout;
+    uint WindowSize;
+    uint WindowSizeEfficient;
+    uint WindowSizeFashion;
+
+public:
+    QMap<QString, QDBusPendingCallWatcher *> m_processingCalls;
+    QMap<QString, QList<QVariant>> m_waittingCalls;
+};
+
 /*
  * Implementation of interface class DBusDockInterface
  */
 
 DBusDockInterface::DBusDockInterface(QObject *parent)
     : QDBusAbstractInterface(INTERFACE_NAME, SERVICE_PATH, staticInterfaceName(), QDBusConnection::sessionBus(), parent)
+    , d_ptr(new DockPrivate)
 {
     QDBusConnection::sessionBus().connect(this->service(), this->path(), "org.freedesktop.DBus.Properties", "PropertiesChanged","sa{sv}as", this, SLOT(__propertyChanged__(const QDBusMessage &)));
 }
@@ -24,5 +51,181 @@ DBusDockInterface::DBusDockInterface(QObject *parent)
 DBusDockInterface::~DBusDockInterface()
 {
     QDBusConnection::sessionBus().disconnect(this->service(), this->path(), "org.freedesktop.DBus.Properties", "PropertiesChanged","sa{sv}as", this, SLOT(__propertyChanged__(const QDBusMessage &)));
+    qDeleteAll(d_ptr->m_processingCalls.values());
+    delete d_ptr;
 }
 
+void DBusDockInterface::onPropertyChanged(const QDBusMessage& msg)
+{
+    QList<QVariant> arguments = msg.arguments();
+    if (3 != arguments.count())
+        return;
+
+    QString interfaceName = msg.arguments().at(0).toString();
+    if (interfaceName != staticInterfaceName())
+        return;
+
+    QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
+    QStringList keys = changedProps.keys();
+    foreach(const QString &prop, keys) {
+        const QMetaObject *self = metaObject();
+        for (int i = self->propertyOffset(); i < self->propertyCount(); ++i) {
+            QMetaProperty property = self->property(i);
+            if (property.name() == prop)
+                Q_EMIT property.notifySignal().invoke(this);
+        }
+    }
+}
+
+int DBusDockInterface::displayMode()
+{
+    return qvariant_cast<int>(property("DisplayMode"));
+}
+
+void DBusDockInterface::setDisplayMode(int value)
+{
+    setProperty("DisplayMode", QVariant::fromValue(value));
+}
+
+QStringList DBusDockInterface::dockedApps()
+{
+    return qvariant_cast<QStringList>(property("DockedApps"));
+}
+
+QList<QDBusObjectPath> DBusDockInterface::entries()
+{
+    return qvariant_cast<QList<QDBusObjectPath>>(property("Entries"));
+}
+
+QRect DBusDockInterface::frontendWindowRect()
+{
+    return qvariant_cast<QRect>(property("FrontendWindowRect"));
+}
+
+int DBusDockInterface::hideMode()
+{
+    return qvariant_cast<int>(property("HideMode"));
+}
+
+void DBusDockInterface::setHideMode(int value)
+{
+
+   internalPropSet("HideMode", QVariant::fromValue(value));
+}
+
+int DBusDockInterface::hideState()
+{
+    return qvariant_cast<int>(property("HideState"));
+}
+
+uint DBusDockInterface::hideTimeout()
+{
+    return qvariant_cast<uint>(property("HideTimeout"));
+}
+
+void DBusDockInterface::setHideTimeout(uint value)
+{
+     setProperty("HideTimeout", QVariant::fromValue(value));
+}
+
+uint DBusDockInterface::iconSize()
+{
+     return qvariant_cast<uint>(property("IconSize"));
+}
+
+void DBusDockInterface::setIconSize(uint value)
+{
+    setProperty("IconSize", QVariant::fromValue(value));
+}
+
+double DBusDockInterface::opacity()
+{
+    return qvariant_cast<double>(property("Opacity"));
+}
+
+void DBusDockInterface::setOpacity(double value)
+{
+    setProperty("Opacity", QVariant::fromValue(value));
+}
+
+int DBusDockInterface::position()
+{
+    return qvariant_cast<int>(property("Position"));
+}
+
+void DBusDockInterface::setPosition(int value)
+{
+    setProperty("Position", QVariant::fromValue(value));
+}
+
+uint DBusDockInterface::showTimeout()
+{
+    return qvariant_cast<uint>(property("ShowTimeout"));
+}
+
+void DBusDockInterface::setShowTimeout(uint value)
+{
+    setProperty("ShowTimeout", QVariant::fromValue(value));
+}
+
+uint DBusDockInterface::windowSize()
+{
+    return qvariant_cast<uint>(property("WindowSize"));
+}
+
+void DBusDockInterface::setWindowSize(uint value)
+{
+    setProperty("WindowSize", QVariant::fromValue(value));
+}
+
+uint DBusDockInterface::windowSizeEfficient()
+{
+    return qvariant_cast<uint>(property("WindowSizeEfficient"));
+}
+
+void DBusDockInterface::setWindowSizeEfficient(uint value)
+{
+    setProperty("WindowSizeEfficient", QVariant::fromValue(value));
+}
+
+uint DBusDockInterface::windowSizeFashion()
+{
+    return qvariant_cast<uint>(property("WindowSizeFashion"));
+}
+
+void DBusDockInterface::setWindowSizeFashion(uint value)
+{
+    setProperty("WindowSizeFashion", QVariant::fromValue(value));
+}
+
+void DBusDockInterface::CallQueued(const QString &callName, const QList<QVariant> &args)
+{
+    if (d_ptr->m_waittingCalls.contains(callName)) {
+        d_ptr->m_waittingCalls[callName] = args;
+        return;
+    }
+
+    if (d_ptr->m_processingCalls.contains(callName)) {
+        d_ptr->m_waittingCalls.insert(callName, args);
+    } else {
+        QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(asyncCallWithArgumentList(callName, args));
+        connect(watcher, &QDBusPendingCallWatcher::finished, this, &DBusDockInterface::onPendingCallFinished);
+        d_ptr->m_processingCalls.insert(callName, watcher);
+    }
+}
+
+void DBusDockInterface::onPendingCallFinished(QDBusPendingCallWatcher *w)
+{
+    w->deleteLater();
+    const auto callName = d_ptr->m_processingCalls.key(w);
+    Q_ASSERT(!callName.isEmpty());
+    if (callName.isEmpty())
+        return;
+
+    d_ptr->m_processingCalls.remove(callName);
+    if (!d_ptr->m_waittingCalls.contains(callName))
+        return;
+
+    const auto args = d_ptr->m_waittingCalls.take(callName);
+    CallQueued(callName, args);
+}

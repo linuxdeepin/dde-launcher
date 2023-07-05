@@ -1,3 +1,12 @@
+dde-launcher (6.0.14) unstable; urgency=medium
+
+  * Avoid display multiple entries for desktop files shares the same freedesktop id
+  * Fix incorrect trash icon status when there are trashed files in partitions other than home
+  * Avoid hardcode dde-launcher binary path
+  * Use qdbusxml2cpp-fix path provided by DtkTools CMake module
+
+ -- Wang Zichong <wangzichong@deepin.org>  Wed, 05 Jul 2023 13:51:00 +0800
+
 dde-launcher (6.0.13) unstable; urgency=medium
 
   * fix icons will be added repeatedly

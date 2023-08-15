@@ -325,12 +325,15 @@ void AppItemDelegate::drawAppDrawer(QPainter *painter, const QModelIndex &index,
         return;
     }
 
-    // 应用文件夹特效, 在当前item上且仅给当前的item 绘制文件夹样式
-    if (m_dropIndex.isValid() && (index == m_dropIndex)) {
-        painter->setPen(Qt::transparent);
-        painter->setBrush(QColor(93, 92, 90, 100));
-        painter->drawRoundedRect(AppdrawerRect, RECT_REDIUS, RECT_REDIUS);
-    }
+//    Issue: https://github.com/linuxdeepin/developer-center/issues/3993
+//    实现有问题，暂时屏蔽以免拖放后出现异常文件夹框框
+//
+//    // 应用文件夹特效, 在当前item上且仅给当前的item 绘制文件夹样式
+//    if (m_dropIndex.isValid() && (index == m_dropIndex)) {
+//        painter->setPen(Qt::transparent);
+//        painter->setBrush(QColor(93, 92, 90, 100));
+//        painter->drawRoundedRect(AppdrawerRect, RECT_REDIUS, RECT_REDIUS);
+//    }
 }
 
 /**

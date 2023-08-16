@@ -1,3 +1,9 @@
+dde-launcher (6.0.15) unstable; urgency=medium
+
+  * Fix black box while dragging icon from fullscreen launcher
+
+ -- Wang Zichong <wangzichong@deepin.org>  Wed, 16 Aug 2023 16:12:00 +0800
+
 dde-launcher (6.0.14) unstable; urgency=medium
 
   * Avoid display multiple entries for desktop files shares the same freedesktop id

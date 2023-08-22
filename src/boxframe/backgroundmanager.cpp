@@ -140,7 +140,7 @@ void BackgroundManager::onAppearanceChanged(const QString &type, const QString &
 {
     Q_UNUSED(str);
 
-    if (type == "background")
+    if (type == "allwallpaperuris")
         updateBlurBackgrounds();
 }
 

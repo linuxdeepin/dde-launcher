@@ -526,7 +526,7 @@ void AppsManager::removeDuplicateData(ItemInfoList_v1 &processList)
     // if same applications are installed, only show the one which path in front of XDG_DATA_DIRS
     const auto xdgDataDirs = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
 
-    QList<QPair<int, QPair<QString, ItemInfo_v1>>> tmpList;
+    QMap<QString, ItemInfo_v1> id2Item;
     QSet<QString> desktopIdList;
 
     for (const auto &item : processList) {
@@ -535,22 +535,22 @@ void AppsManager::removeDuplicateData(ItemInfoList_v1 &processList)
                 auto desktopPath = item.m_desktop;
                 auto fullSuffix = xdgDataDirs[index] + "/";
                 auto desktopId = desktopPath.remove(fullSuffix).replace("/", "-");
-                tmpList.append(qMakePair(index, qMakePair(desktopId, item)));
+                if (id2Item.contains(desktopId))
+                    break;
+
+                id2Item[desktopId] = item;
                 break;
             }
         }
     }
 
-    // sort by the index of path which in XDG_DATA_DIRS
-    std::sort(tmpList.begin(), tmpList.end());
+    // id2Item 只会记录 XDG_DATA_DIRS 中找到的首个 item
+    // 这里从列表中移除所有 id2Item 不包含的 item
+    auto it = std::remove_if(processList.begin(), processList.end(), [&](const ItemInfo_v1 &item){
+        return !id2Item.values().contains(item);
+    });
 
-    processList.clear();
-    for (const auto &pair : tmpList) {
-        if(!desktopIdList.contains(pair.second.first)) {
-            desktopIdList.insert(pair.second.first);
-            processList.append(pair.second.second);
-        }
-    }
+    processList.erase(it);
 }
 
 void AppsManager::removeNonexistentData()

@@ -550,7 +550,8 @@ void AppsManager::removeDuplicateData(ItemInfoList_v1 &processList)
         return !id2Item.values().contains(item);
     });
 
-    processList.erase(it);
+    if (it != processList.end())
+        processList.erase(it);
 }
 
 void AppsManager::removeNonexistentData()

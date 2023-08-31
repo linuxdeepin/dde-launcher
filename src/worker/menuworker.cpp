@@ -7,6 +7,7 @@
 #include "util.h"
 #include "amdbuslauncherinterface.h"
 #include "amdbusdockinterface.h"
+#include "aminterface.h"
 
 #include <QSignalMapper>
 #include <QWindow>
@@ -141,9 +142,11 @@ void MenuWorker::creatMenuByAppItem()
     if (!hideStartUp)
         m_menu->addAction(startup);
 
-    if (!hideUseProxy)
-        m_menu->addAction(proxy);
-
+    if (!AMInter::instance()->isAMReborn()) {
+        // It do not support the function temporarily for new AM
+        if (!hideUseProxy)
+            m_menu->addAction(proxy);
+    }
     if (!canDisableScale) {
         QAction *scale = new QAction(tr("Disable display scaling"), m_menu);
         scale->setCheckable(true);
@@ -316,10 +319,17 @@ void MenuWorker::onHideMenu()
 
 void MenuWorker::handleToDesktop()
 {
-    if (m_isItemOnDesktop)
-        m_amDbusLauncher->RequestRemoveFromDesktop(m_appKey);
-    else
-        m_amDbusLauncher->RequestSendToDesktop(m_appKey);
+    if (AMInter::instance()->isAMReborn()) {
+        if (m_isItemOnDesktop)
+            AMInter::instance()->RequestRemoveFromDesktop(m_appKey);
+        else
+            AMInter::instance()->RequestSendToDesktop(m_appKey);
+    } else {
+        if (m_isItemOnDesktop)
+            m_amDbusLauncher->RequestRemoveFromDesktop(m_appKey);
+        else
+            m_amDbusLauncher->RequestSendToDesktop(m_appKey);
+    }
 }
 
 void MenuWorker::handleToDock()
@@ -332,11 +342,18 @@ void MenuWorker::handleToDock()
 
 void MenuWorker::handleToStartup()
 {
-    const QString &desktopUrl = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
-    if (m_isItemStartup)
-        m_startManagerInterface->RemoveAutostart(desktopUrl);
-    else
-        m_startManagerInterface->AddAutostart(desktopUrl);
+    if (AMInter::instance()->isAMReborn()) {
+        if (m_isItemStartup)
+            AMInter::instance()->removeAutostart(m_appKey);
+        else
+            AMInter::instance()->addAutostart(m_appKey);
+    } else {
+        const QString &desktopUrl = m_currentModelIndex.data(AppsListModel::AppDesktopRole).toString();
+        if (m_isItemStartup)
+            m_startManagerInterface->RemoveAutostart(desktopUrl);
+        else
+            m_startManagerInterface->AddAutostart(desktopUrl);
+    }
 }
 
 void MenuWorker::handleToProxy()
@@ -346,5 +363,9 @@ void MenuWorker::handleToProxy()
 
 void MenuWorker::handleSwitchScaling()
 {
-    m_amDbusLauncher->SetDisableScaling(m_appKey, m_isItemEnableScaling);
+    if (AMInter::instance()->isAMReborn()) {
+        AMInter::instance()->setDisableScaling(m_appKey, m_isItemEnableScaling);
+    } else {
+        m_amDbusLauncher->SetDisableScaling(m_appKey, m_isItemEnableScaling);
+    }
 }

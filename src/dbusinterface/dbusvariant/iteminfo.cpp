@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "iteminfo.h"
+#include "aminterface.h"
 #include <QDebug>
 
 ItemInfo::ItemInfo()
@@ -260,8 +261,12 @@ bool ItemInfo_v1::startWithNum() const
 
 bool ItemInfo_v1::isLingLongApp() const
 {
-    // desktop全路径中包含linglong字段
-    return m_desktop.contains("/linglong/");
+    if (AMInter::instance()->isAMReborn()) {
+        return AMInter::instance()->isLingLong(m_key);
+    } else {
+        // desktop全路径中包含linglong字段
+        return m_desktop.contains("/linglong/");
+    }
 }
 
 bool ItemInfo_v1::isSimilar(const ItemInfo_v1 &other) const

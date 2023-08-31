@@ -39,14 +39,254 @@
             "visibility": "private"
         },
         "show-linglong-suffix-name": {
-        "value": false,
-        "serial": 0,
-        "flags": [],
-        "name": "showLingLongSuffixName",
-        "name[zh_CN]": "玲珑包后缀提供配置，默认隐藏; 开启, 玲珑应用显示后缀, 关闭, 后缀隐藏",
-        "description": "***",
-        "permissions": "readwrite",
-        "visibility": "private"
+            "value": false,
+            "serial": 0,
+            "flags": [],
+            "name": "showLingLongSuffixName",
+            "name[zh_CN]": "玲珑包后缀提供配置，默认隐藏; 开启, 玲珑应用显示后缀, 关闭, 后缀隐藏",
+            "description": "***",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Disable_AutoStart": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Disable_AutoStart",
+            "name[zh_CN]": "*****",
+            "description": "apps not allowed to start up",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Order_Zh_Cn": {
+            "value": ["uos-browser", "org.deepin.browser", "dde-file-manager", "deepin-app-store", "deepin-appstore", "deepin-music", "deepin-movie", "deepin-screen-recorder", "deepin-image-viewer", "deepin-album", "deepin-draw", "deepin-reader", "deepin-editor", "deepin-mail", "thunderbird", "deepin-terminal", "terminal", "org.gnome.Terminal", "deepin-contacts", "deepin-voice-note", "downloader", "deepin-manual", "org.deepin.scanner", "org.deepin.scaner", "dde-computer", "dde-trash", "deepin-defender", "dde-control-center", "chineseime-setting", "fcitx-config-gtk3", "chineseime-setting-wizard", "deepin-system-monitor", "deepin-boot-maker", "deepin-devicemanager", "deepin-log-viewer", "dde-printer", "dde-calendar", "deepin-calculator", "deepin-font-manager", "deepin-compressor", "deepin-deb-installer", "deepin-diskmanager", "dde-introduction", "uos-service-support", "uos-remote-assistance", "deepin-camera", "deepin-phone-master", "gparted", "org.gnome.Cheese", "Cheese", "gnome.Cheese"],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Order_Zh_Cn",
+            "name[zh_CN]": "*****",
+            "description": "launcher apps order, ensure that all lowercase.",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Icon_Ratio": {
+            "value": 0.5,
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Icon_Ratio",
+            "name[zh_CN]": "*****",
+            "description": "(null)",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Disable_UseProxy": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Disable_UseProxy",
+            "name[zh_CN]": "*****",
+            "description": "apps disable use proxy menu",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Without_AutoStart": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Without_AutoStart",
+            "name[zh_CN]": "*****",
+            "description": "apps hide function start up",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Fullscreen": {
+            "value": true,
+            "serial": 0,
+            "flags": [],
+            "name": "Fullscreen",
+            "name[zh_CN]": "*****",
+            "description": "(null)",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Mini_Frame_Right_Bar_Hide_List": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Mini_Frame_Right_Bar_Hide_List",
+            "name[zh_CN]": "*****",
+            "description": "icons not allowed to show on mini frame right bar",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Auto_Exit": {
+            "value": false,
+            "serial": 0,
+            "flags": [],
+            "name": "Auto_Exit",
+            "name[zh_CN]": "*****",
+            "description": "(null)",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Order_Zh_Tw": {
+            "value": ["uos-browser", "org.deepin.browser", "dde-file-manager", "deepin-app-store", "deepin-appstore", "deepin-music", "deepin-movie", "deepin-screen-recorder", "deepin-image-viewer", "deepin-album", "deepin-draw", "deepin-reader", "deepin-editor", "deepin-mail", "thunderbird", "deepin-terminal", "terminal", "org.gnome.Terminal", "deepin-contacts", "deepin-voice-note", "downloader", "deepin-manual", "org.deepin.scanner", "org.deepin.scaner", "dde-computer", "dde-trash", "deepin-defender", "dde-control-center", "chineseime-setting", "fcitx-config-gtk3", "chineseime-setting-wizard", "deepin-system-monitor", "deepin-boot-maker", "deepin-devicemanager", "deepin-log-viewer", "dde-printer", "dde-calendar", "deepin-calculator", "deepin-font-manager", "deepin-compressor", "deepin-deb-installer", "deepin-diskmanager", "dde-introduction", "uos-service-support", "uos-remote-assistance", "deepin-camera", "deepin-phone-master", "gparted", "org.gnome.Cheese", "Cheese", "gnome.Cheese"],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Order_Zh_Tw",
+            "name[zh_CN]": "*****",
+            "description": "launcher apps order, ensure that all lowercase.",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Disable_SendDock": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Disable_SendDock",
+            "name[zh_CN]": "*****",
+            "description": "apps not allowed to send to Dock",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Disable_SendDesktop": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Disable_SendDesktop",
+            "name[zh_CN]": "*****",
+            "description": "apps not allowed to send to Desktop",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Without_SendDesktop": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Without_SendDesktop",
+            "name[zh_CN]": "*****",
+            "description": "apps hide function send to desktop",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Hold_List": {
+            "value": ["dde-introduction", "dde-file-manager", "deepin-appstore", "deepin-app-store", "deepin-terminal", "deepin-manual", "dde-computer", "dde-trash", "deepin-defender", "dde-control-center", "fcitx-config-gtk3", "fcitx-configtool", "deepin-system-monitor", "deepin-devicemanager", "dde-printer", "dde-calendar", "uos-service-support", "deepin-toggle-desktop", "deepin-wm-multitaskingview", "kwin-wm-multitaskingview", "com.deepin.store.intranet", "chineseime-setting"],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Hold_List",
+            "name[zh_CN]": "*****",
+            "description": "apps not allowed to uninstall",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Without_Open": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Without_Open",
+            "name[zh_CN]": "*****",
+            "description": "apps hide function open",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Disable_Open": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Disable_Open",
+            "name[zh_CN]": "*****",
+            "description": "apps not allowed to open",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Use_Proxy": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Use_Proxy",
+            "name[zh_CN]": "*****",
+            "description": "",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Search_Package_Name": {
+            "value": false,
+            "serial": 0,
+            "flags": [],
+            "name": "Search_Package_Name",
+            "name[zh_CN]": "*****",
+            "description": "",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Order": {
+            "value": ["uos-browser", "org.deepin.browser", "dde-file-manager", "deepin-app-store", "deepin-appstore", "deepin-music", "deepin-movie", "deepin-screen-recorder", "deepin-image-viewer", "deepin-album", "deepin-draw", "deepin-reader", "deepin-editor", "deepin-mail", "thunderbird", "deepin-terminal", "terminal", "org.gnome.Terminal", "deepin-contacts", "deepin-voice-note", "downloader", "deepin-manual", "org.deepin.scanner", "org.deepin.scaner", "dde-computer", "dde-trash", "deepin-defender", "dde-control-center", "chineseime-setting", "fcitx-config-gtk3", "chineseime-setting-wizard", "deepin-system-monitor", "deepin-boot-maker", "deepin-devicemanager", "deepin-log-viewer", "dde-printer", "dde-calendar", "deepin-calculator", "deepin-font-manager", "deepin-compressor", "deepin-deb-installer", "deepin-diskmanager", "dde-introduction", "uos-service-support", "uos-remote-assistance", "deepin-camera", "deepin-phone-master", "gparted", "org.gnome.Cheese", "Cheese", "gnome.Cheese"],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Order",
+            "name[zh_CN]": "*****",
+            "description": "launcher apps order, ensure that all lowercase.",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Without_UseProxy": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Without_UseProxy",
+            "name[zh_CN]": "*****",
+            "description": "apps hide use proxy menu",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Disable_Scaling": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Disable_Scaling",
+            "name[zh_CN]": "*****",
+            "description": "",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Hidden": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Hidden",
+            "name[zh_CN]": "*****",
+            "description": "",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Without_SendDock": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Without_SendDock",
+            "name[zh_CN]": "*****",
+            "description": "apps hide function send to dock",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Apps_Without_Uninstall": {
+            "value": [],
+            "serial": 0,
+            "flags": [],
+            "name": "Apps_Without_Uninstall",
+            "name[zh_CN]": "*****",
+            "description": "apps hide function uninstall",
+            "permissions": "readwrite",
+            "visibility": "private"
+        },
+        "Display_Mode": {
+            "value": "free",
+            "serial": 0,
+            "flags": [],
+            "name": "Display_Mode",
+            "name[zh_CN]": "*****",
+            "description": "Launcher display mode.",
+            "permissions": "readwrite",
+            "visibility": "private"
         }
     }
 }

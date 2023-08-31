@@ -11,9 +11,13 @@
 #include "constants.h"
 #include "amdbuslauncherinterface.h"
 #include "amdbusdockinterface.h"
+#include "aminterface.h"
 
 #define SessionManagerService "org.deepin.dde.SessionManager1"
 #define SessionManagerPath "/org/deepin/dde/SessionManager1"
+
+static const QString keyDisplayMode = "Display_Mode";
+static const QString keyFullscreen = "Fullscreen";
 
 /**
  * @brief LauncherSys::LauncherSys 启动器界面实现及逻辑处理类
@@ -46,9 +50,18 @@ LauncherSys::LauncherSys(QObject *parent)
 
     // 插件加载
     m_launcherPlugin->startLoader();
-
-    connect(m_amDbusLauncher, &AMDBusLauncherInter::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
-    connect(m_amDbusLauncher, &AMDBusLauncherInter::DisplayModeChanged, this, &LauncherSys::onDisplayModeChanged, Qt::QueuedConnection);
+    if (!AMInter::instance()->isAMReborn()) {
+        connect(m_amDbusLauncher, &AMDBusLauncherInter::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
+        connect(m_amDbusLauncher, &AMDBusLauncherInter::DisplayModeChanged, this, &LauncherSys::onDisplayModeChanged, Qt::QueuedConnection);
+    } else {
+        connect(ConfigWorker::instance(), &DConfig::valueChanged, this, [this] (const QString &key) {
+            if (key == keyFullscreen) {
+                Q_EMIT displayModeChanged();
+            } else if (key == keyDisplayMode) {
+                Q_EMIT onDisplayModeChanged();
+            }
+        });
+    }
 
     connect(m_amDbusDockInter, &AMDBusDockInter::FrontendWindowRectChanged, this, &LauncherSys::onFrontendRectChanged);
 

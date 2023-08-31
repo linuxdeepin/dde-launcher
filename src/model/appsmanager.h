@@ -36,6 +36,7 @@ DGUI_USE_NAMESPACE
 
 class CalculateUtil;
 class AppGridView;
+class AMInter;
 
 class AppsManager : public QObject
 {
@@ -221,7 +222,6 @@ private:
     DBusStartManager *m_startManagerInter;
     AMDBusLauncherInter *m_amDbusLauncherInter;
     AMDBusDockInter *m_amDbusDockInter;
-
     QString m_searchText;
     ItemInfoList_v1 m_allAppInfoList;                                       // 所有app信息列表
     QStringList m_newInstalledAppsList;                                     // 新安装应用列表

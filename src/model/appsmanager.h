@@ -135,8 +135,8 @@ public slots:
     void saveCollectedSortedList();
     void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
-    void uninstallApp(const QString &desktopPath);
-    void uninstallApp(const ItemInfo_v1 &info);
+    void uninstallApp(const QString &name, bool isLinglong = false);
+//    void uninstallApp(const ItemInfo_v1 &info);
     void onEditCollected(const QModelIndex index, const bool isInCollected);
     void onMoveToFirstInCollected(const QModelIndex index);
     void setDirAppInfoList(const QModelIndex index);

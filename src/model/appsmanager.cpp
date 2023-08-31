@@ -124,8 +124,6 @@ AppsManager::AppsManager(QObject *parent)
     m_refreshCalendarIconTimer->setSingleShot(false);
 
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::NewAppLaunched, this, &AppsManager::markLaunched);
-    connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallSuccess, this, &AppsManager::abandonStashedItem);
-    connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallFailed, this, &AppsManager::onUninstallFail);
     connect(m_amDbusLauncherInter, &AMDBusLauncherInter::ItemChanged, this, qOverload<const QString &, const ItemInfo_v2 &, qlonglong>(&AppsManager::handleItemChanged));
 
     connect(m_amDbusDockInter, &AMDBusDockInter::IconSizeChanged, this, &AppsManager::IconSizeChanged, Qt::QueuedConnection);
@@ -1048,19 +1046,64 @@ void AppsManager::launchApp(const QModelIndex &index)
     markLaunched(m_clickedItemInfo.m_key);
 }
 
-void AppsManager::uninstallApp(const QString &desktopPath)
+static inline bool ll_uninstall(const QString &appid)
 {
-    // 向后端发起卸载请求
-    m_amDbusLauncherInter->RequestUninstall(desktopPath, false);
+    QProcess ll;
+    ll.setProgram(QStandardPaths::findExecutable("ll-cli"));
+    ll.setArguments(QStringList() << "uninstall" << appid);
+    ll.start();
+    ll.waitForFinished();
 
-    // 刷新各列表的分页信息
-    emit dataChanged(AppsListModel::FullscreenAll);
+    if (ll.exitCode() != 0) {
+        qWarning() << "uninstall " << appid << "failed. " << ll.errorString();
+        return false;
+    }
+
+    return true;
 }
 
-void AppsManager::uninstallApp(const ItemInfo_v1 &info)
+static bool lastore_uninstall(const QString &pkgName)
 {
-    // 向后端发起卸载请求
-    m_amDbusLauncherInter->RequestUninstall(info.m_desktop, false);
+    QDBusInterface lastoreDbus("org.deepin.dde.Lastore1",
+                               "/org/deepin/dde/Lastore1",
+                               "org.deepin.dde.Lastore1.Manager",
+                               QDBusConnection::systemBus());
+
+    QDBusReply<bool> reply = lastoreDbus.call("PackageExists", pkgName);
+    // 包未安装时
+    if (!(reply.isValid() && reply.value())) {
+        qWarning() << "check packget" << pkgName << " exists failed" << reply.error();
+        return false;
+    }
+
+    // RemovePackage 接口有白名单，需要加上 /usr/bin/dde-launcher
+    QDBusReply<QDBusObjectPath> rmReply = lastoreDbus.call(QDBus::Block,
+                                                           "RemovePackage",
+                                                           QString("%1-rm-job").arg(pkgName), // jobname ?
+                                                           pkgName);
+
+    if (!rmReply.isValid() || rmReply.value().path().isEmpty()) {
+        qWarning() << "RemovePackage failed: " << rmReply.error();
+        return false;
+    }
+
+    return true;
+}
+
+void AppsManager::uninstallApp(const QString &name, bool isLinglong)
+{
+    bool ret = false;
+    if (isLinglong) {
+        ret = ll_uninstall(name);
+    } else {
+        ret = lastore_uninstall(name);
+    }
+
+    if (ret) {
+         AppsManager::instance()->abandonStashedItem(name);
+    } else {
+        AppsManager::instance()->onUninstallFail(name);
+    }
 
     // 刷新各列表的分页信息
     emit dataChanged(AppsListModel::FullscreenAll);
@@ -2015,7 +2058,12 @@ void AppsManager::uninstallApp(const QModelIndex &modelIndex)
             return;
         }
 
-        uninstallApp(info);
+        // TODO 从 am 获取的信息中判断是否是玲珑应用
+        // am 重构后 launcher 无法获取 desktop 文件路径
+        // 只能从返回的字段判断应用的类型（是否玲珑
+        // 需要填充 ItemInfo_v3 ? 有包类型字段来判断
+        bool isLinglong = false;
+        uninstallApp(info.m_name, isLinglong);
     });
 
     if (!fullscreen())

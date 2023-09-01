@@ -522,7 +522,7 @@ void AppsManager::sortByInstallTimeOrder(ItemInfoList_v1 &processList)
 void AppsManager::removeDuplicateData(ItemInfoList_v1 &processList)
 {
     // https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#desktop-file-id
-    // if applicatons have the same desktop file id, we consider it to be the same application.
+    // if applications have the same desktop file id, we consider it to be the same application.
     // if same applications are installed, only show the one which path in front of XDG_DATA_DIRS
     const auto xdgDataDirs = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
 

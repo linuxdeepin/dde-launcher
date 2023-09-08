@@ -1,3 +1,15 @@
+dde-launcher (6.0.16) unstable; urgency=medium
+
+  * fix: onAppearanceChanged use mistake type
+  * fix: move and sort app failed(Issue: https://github.com/linuxdeepin/developer-center/issues/5085)
+  * fix: crashed when starting
+  * chore: correct a typo in appsmanager.cpp
+    Thanks to Felix Yan
+  * chore: adapt to AM
+  * refact: the section about AM Reborn
+
+ -- Deepin Packages Builder <packages@deepin.org>  Fri, 08 Sep 2023 11:31:50 +0800
+
 dde-launcher (6.0.15) unstable; urgency=medium
 
   * Fix black box while dragging icon from fullscreen launcher

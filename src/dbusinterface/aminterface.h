@@ -117,11 +117,16 @@ public:
     QStringList autostartList() const;
     bool addAutostart(const QString &appId);
     bool removeAutostart(const QString &appId);
+    bool fullScreen() const;
+    void setFullScreen(const bool isFullScreen);
+    int displayMode() const;
 
 Q_SIGNALS: // SIGNALS
     void newAppLaunched(const QString &appId);
     void autostartChanged(const QString &action, const QString &appId);
     void itemChanged(const QString &action, ItemInfo_v2 info_v2, qlonglong categoryId);
+    void fullScreenChanged();
+    void displayModeChanged();
 
 public Q_SLOTS:
     void onInterfaceAdded(const QDBusObjectPath &object_path, const ObjectInterfaceMap &interfaces);
@@ -133,7 +138,7 @@ private:
     AMInter(QObject *parent = Q_NULLPTR);
 
     void updateAllInfos();
-    void buildConnect();
+    void buildAppDBusConnect();
     bool llUninstall(const QString &appid);
     bool lastoreUninstall(const QString &pkgName);
     bool shouldDisableScaling(const QString &appId);

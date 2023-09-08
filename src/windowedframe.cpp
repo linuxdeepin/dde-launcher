@@ -7,6 +7,7 @@
 #include "dbusdockinterface.h"
 #include "constants.h"
 #include "appitemdelegate.h"
+#include "aminterface.h"
 
 #include <DWindowManagerHelper>
 #include <DForeignWindow>
@@ -1314,12 +1315,17 @@ void WindowedFrame::onToggleFullScreen()
     m_calcUtil->setFullScreen(true);
 
     // 同步本地当前是全屏的状态
-    DDBusSender()
+
+    if (AMInter::isAMReborn()) {
+        AMInter::instance()->setFullScreen(true);
+    } else {
+        DDBusSender()
             .service(DBUS_DAEMON_SERVICE_NAME)
             .interface(DBUS_DAEMON_SERVICE_NAME)
             .path(DBUS_DAEMON_PATH_NAME)
             .property("Fullscreen")
             .set(true);
+    }
 }
 
 void WindowedFrame::onWMCompositeChanged()

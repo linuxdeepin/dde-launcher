@@ -8,6 +8,7 @@
 #include "appslistmodel.h"
 #include "amdbuslauncherinterface.h"
 #include "amdbusdockinterface.h"
+#include "aminterface.h"
 
 #include <QDebug>
 #include <QDesktopWidget>
@@ -196,7 +197,7 @@ CalculateUtil::CalculateUtil(QObject *parent)
     : QObject(parent)
     , m_amDbusLauncher(new AMDBusLauncherInter(this))
     , m_amDbusDockInter(new AMDBusDockInter(this))
-    , m_isFullScreen(m_amDbusLauncher->fullscreen())
+    , m_isFullScreen(AMInter::isAMReborn() ? AMInter::instance()->fullScreen() : m_amDbusLauncher->fullscreen())
     , m_launcherGsettings(SettingsPtr("com.deepin.dde.launcher", "/com/deepin/dde/launcher/", this))
     , m_appItemFontSize(12)
     , m_appItemSpacing(10)

@@ -206,10 +206,7 @@ file(GLOB SRC_PATH
     ${DBUS_TYPES}
     ${DBUS_INTERFACES}
 )
-set(ENABLE_AM_REBORN true CACHE STRING "Enable New AM backend")
-if (ENABLE_AM_REBORN)
-    add_definitions(-DAM_REBORN)
-endif()
+
 add_executable(${BIN_NAME} ${SRC_PATH} ${INTERFACES} src/skin.qrc src/widgets/images.qrc)
 
 target_include_directories(${BIN_NAME} PUBLIC

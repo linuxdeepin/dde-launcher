@@ -142,7 +142,7 @@ void MenuWorker::creatMenuByAppItem()
     if (!hideStartUp)
         m_menu->addAction(startup);
 
-    if (!AMInter::instance()->isAMReborn()) {
+    if (!AMInter::isAMReborn()) {
         // It do not support the function temporarily for new AM
         if (!hideUseProxy)
             m_menu->addAction(proxy);
@@ -319,11 +319,11 @@ void MenuWorker::onHideMenu()
 
 void MenuWorker::handleToDesktop()
 {
-    if (AMInter::instance()->isAMReborn()) {
+    if (AMInter::isAMReborn()) {
         if (m_isItemOnDesktop)
-            AMInter::instance()->RequestRemoveFromDesktop(m_appKey);
+            AMInter::instance()->requestRemoveFromDesktop(m_appKey);
         else
-            AMInter::instance()->RequestSendToDesktop(m_appKey);
+            AMInter::instance()->requestSendToDesktop(m_appKey);
     } else {
         if (m_isItemOnDesktop)
             m_amDbusLauncher->RequestRemoveFromDesktop(m_appKey);
@@ -342,7 +342,7 @@ void MenuWorker::handleToDock()
 
 void MenuWorker::handleToStartup()
 {
-    if (AMInter::instance()->isAMReborn()) {
+    if (AMInter::isAMReborn()) {
         if (m_isItemStartup)
             AMInter::instance()->removeAutostart(m_appKey);
         else
@@ -363,7 +363,7 @@ void MenuWorker::handleToProxy()
 
 void MenuWorker::handleSwitchScaling()
 {
-    if (AMInter::instance()->isAMReborn()) {
+    if (AMInter::isAMReborn()) {
         AMInter::instance()->setDisableScaling(m_appKey, m_isItemEnableScaling);
     } else {
         m_amDbusLauncher->SetDisableScaling(m_appKey, m_isItemEnableScaling);

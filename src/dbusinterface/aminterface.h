@@ -56,6 +56,7 @@ public:
     bool m_X_Flatpak;
     bool m_X_linglong;
     qulonglong m_installedTime;
+    bool m_noDisplay;
 
     Categorytype category() const;
     friend QDebug operator<<(QDebug argument, const ItemInfo_v3 &info);
@@ -120,6 +121,7 @@ public:
     bool fullScreen() const;
     void setFullScreen(const bool isFullScreen);
     int displayMode() const;
+    bool isNoDisplayed(const ItemInfo_v3 &item) const;
 
 Q_SIGNALS: // SIGNALS
     void newAppLaunched(const QString &appId);
@@ -136,8 +138,9 @@ public Q_SLOTS:
 
 private:
     AMInter(QObject *parent = Q_NULLPTR);
+    Q_DISABLE_COPY(AMInter)
 
-    void updateAllInfos();
+    void fetchAllInfos();
     void buildAppDBusConnect();
     bool llUninstall(const QString &appid);
     bool lastoreUninstall(const QString &pkgName);

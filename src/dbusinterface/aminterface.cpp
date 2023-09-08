@@ -62,7 +62,7 @@ QDebug operator<<(QDebug argument, const ItemInfo_v3 &info)
              << ", instances: " << info.m_instances << ", lastLaunchedTime: " << info.m_lastLaunchedTime
              << ", categories: " << info.m_categories
              << ", X_Flatpak: " << info.m_X_Flatpak << ", X_linglong: " << info.m_X_linglong
-             << ", installedTime: " << info.m_installedTime;
+             << ", installedTime: " << info.m_installedTime << ", noDisplay: " << info.m_noDisplay;
 
     return argument;
 }
@@ -80,14 +80,15 @@ bool ItemInfo_v3::operator==(const ItemInfo_v3 &other) const
            (this->m_categories == other.m_categories) &&
            (this->m_X_Flatpak == other.m_X_Flatpak) &&
            (this->m_X_linglong == other.m_X_linglong) &&
-           (this->m_installedTime == other.m_installedTime);
+           (this->m_installedTime == other.m_installedTime) &&
+           (this->m_noDisplay == other.m_noDisplay);
 }
 
 AMInter::AMInter(QObject *parent)
     : QObject(parent)
     , m_objManagerDbusInter(new AppManagerDBusProxy(this))
 {
-    updateAllInfos();
+    fetchAllInfos();
     buildAppDBusConnect();
     monitorAutoStartFiles();
     connect(ConfigWorker::instance(), &DConfig::valueChanged, this, [this] (const QString &key) {
@@ -102,12 +103,21 @@ AMInter::AMInter(QObject *parent)
         qDebug() << "InterfacesAdded:" << objectPath.path() << objs;
         ItemInfo_v3 info_v3 = itemInfoV3(objs);
         m_infos.insert(objectPath.path(), info_v3);
+        if (isNoDisplayed(info_v3))
+            return;
         ItemInfo_v2 info_v2 = itemInfoV2(info_v3);
         Q_EMIT itemChanged("created", info_v2, info_v3.category());
     });
-    connect(m_objManagerDbusInter, &AppManagerDBusProxy::InterfacesRemoved, this, [] (const QDBusObjectPath &objectPath, const QStringList &interface){
-        qDebug() << "InterfacesRemoved:" << objectPath.path() << interface;
-        // TODO: util AM reborn finish the function!
+    connect(m_objManagerDbusInter, &AppManagerDBusProxy::InterfacesRemoved, this, [this] (const QDBusObjectPath &objectPath, const QStringList &interfaces){
+        qDebug() << "InterfacesRemoved:" << objectPath.path() << interfaces;
+        QString objPath = objectPath.path();
+        if (m_infos.contains(objPath)) {
+            ItemInfo_v3 info_v3 = m_infos.value(objPath);
+            m_infos.remove(objPath);
+
+            ItemInfo_v2 info_v2 = itemInfoV2(info_v3);
+            Q_EMIT itemChanged("deleted", info_v2, info_v3.category());
+        }
     });
 }
 
@@ -138,6 +148,8 @@ ItemInfoList_v2 AMInter::allInfos()
     ItemInfoList_v2 itemInfoList_v2;
     const auto itemInfoList_V3 = m_infos.values();
     for (auto info : itemInfoList_V3) {
+        if (isNoDisplayed(info))
+            continue;
         itemInfoList_v2.append(itemInfoV2(info));
     }
     return itemInfoList_v2;
@@ -193,7 +205,7 @@ void AMInter::requestSendToDesktop(const QString &appId)
     }
 }
 
-void AMInter::updateAllInfos()
+void AMInter::fetchAllInfos()
 {
     auto infos = m_objManagerDbusInter->GetManagedObjects().value();
     for (auto iter = infos.begin(); iter != infos.end(); ++iter) {
@@ -410,20 +422,23 @@ bool AMInter::removeAutostart(const QString &appId)
 
 bool AMInter::fullScreen() const
 {
-    qWarning() << "fullScreen" << ConfigWorker::getValue(KeyFullScreen, false).toBool();
+    qDebug() << "fullScreen" << ConfigWorker::getValue(KeyFullScreen, false).toBool();
     return ConfigWorker::getValue(KeyFullScreen, false).toBool();
 }
 
 void AMInter::setFullScreen(const bool isFullScreen)
 {
-    qWarning() << "setFullScreen:" << isFullScreen;
-
     ConfigWorker::setValue(KeyFullScreen, isFullScreen);
 }
 
 int AMInter::displayMode() const
 {
     return ConfigWorker::getValue(KeyDisplayMode, -1).toInt();
+}
+
+bool AMInter::isNoDisplayed(const ItemInfo_v3 &item) const
+{
+    return item.m_noDisplay;
 }
 
 bool AMInter::llUninstall(const QString &appid)
@@ -504,13 +519,13 @@ void AMInter::monitorAutoStartFiles()
         QString desktop = url.toString().split('/').last();
         desktop.truncate(desktop.lastIndexOf('.'));
         Q_EMIT autostartChanged("added", desktop);
-        qWarning() << "autostartChanged added" << desktop;
+        qDebug() << "autostartChanged added" << desktop;
     });
     connect(m_autoStartFileWather, &DBaseFileWatcher::fileDeleted, this, [this](const QUrl &url){
         QString desktop = url.toString().split('/').last();
         desktop.truncate(desktop.lastIndexOf('.'));
         Q_EMIT autostartChanged("deleted", desktop);
-        qWarning() << "autostartChanged deleted" << desktop;
+        qDebug() << "autostartChanged deleted" << desktop;
     });
     bool ret = m_autoStartFileWather->startWatcher();
     if (!ret) {
@@ -567,6 +582,9 @@ ItemInfo_v3 AMInter::itemInfoV3(const ObjectInterfaceMap &objs) const
             } else if (key == "AutoStart") {
                 qulonglong value = qdbus_cast<qulonglong>(interPropIter.value());
                 info_v3.m_installedTime = value;
+            } else if (key == "NoDisplay") {
+                bool value = qdbus_cast<bool>(interPropIter.value());
+                info_v3.m_noDisplay = value;
             }
         }
     }

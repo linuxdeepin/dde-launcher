@@ -107,7 +107,7 @@ void MenuWorker::creatMenuByAppItem()
     }
 
     // 收藏应用
-    bool isFullscreen = m_amDbusLauncher->fullscreen();
+    bool isFullscreen = AMInter::isAMReborn() ?  AMInter::instance()->fullScreen() : m_amDbusLauncher->fullscreen();
     if (!isFullscreen) {
         if (isInCollectedList && !isTopInCollectList && onlyShownInCollectedList) {
             m_menu->addAction(moveAction);

@@ -3,8 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "searchwidget.h"
-#include "util.h"
-
+#include "aminterface.h"
 #include <DDBusSender>
 
 #include <QHBoxLayout>
@@ -115,13 +114,16 @@ void SearchWidget::onModeClicked()
     emit toggleMode();
     emit m_calcUtil->loadWindowIcon();
     m_calcUtil->setFullScreen(false);
-
-    DDBusSender()
+    if (AMInter::isAMReborn()) {
+        AMInter::instance()->setFullScreen(false);
+    } else {
+        DDBusSender()
             .service(DBUS_DAEMON_SERVICE_NAME)
             .interface(DBUS_DAEMON_SERVICE_NAME)
             .path(DBUS_DAEMON_PATH_NAME)
             .property("Fullscreen")
             .set(false);
+    }
 }
 
 void SearchWidget::onToggleCategoryChanged()

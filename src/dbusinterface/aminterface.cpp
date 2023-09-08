@@ -8,7 +8,12 @@
 
 #include <mutex>
 
+// dconfig key
 static const QString KeyAppsDisableScaling = "Apps_Disable_Scaling";
+static const QString KeyFullScreen = "Fullscreen";
+static const QString KeyDisplayMode = "Display_Mode";
+
+// dbus
 static const QString AMServiceName = "org.desktopspec.ApplicationManager1";
 static const QString AMServicePath  = "/org/desktopspec/ApplicationManager1";
 static const QString AMInterfaceName  = "org.desktopspec.DBus.ObjectManager";
@@ -83,17 +88,25 @@ AMInter::AMInter(QObject *parent)
     , m_objManagerDbusInter(new AppManagerDBusProxy(this))
 {
     updateAllInfos();
-    buildConnect();
+    buildAppDBusConnect();
     monitorAutoStartFiles();
+    connect(ConfigWorker::instance(), &DConfig::valueChanged, this, [this] (const QString &key) {
+        qDebug() << "DConfig" << key << "valueChanged";
+        if (key == KeyFullScreen) {
+            Q_EMIT fullScreenChanged();
+        } else if (key == KeyDisplayMode) {
+            Q_EMIT displayModeChanged();
+        }
+    });
     connect(m_objManagerDbusInter, &AppManagerDBusProxy::InterfacesAdded, this, [this] (const QDBusObjectPath &objectPath, ObjectInterfaceMap objs){
-        qInfo() << objectPath.path() << objs;
+        qDebug() << "InterfacesAdded:" << objectPath.path() << objs;
         ItemInfo_v3 info_v3 = itemInfoV3(objs);
         m_infos.insert(objectPath.path(), info_v3);
         ItemInfo_v2 info_v2 = itemInfoV2(info_v3);
         Q_EMIT itemChanged("created", info_v2, info_v3.category());
     });
-    connect(m_objManagerDbusInter, &AppManagerDBusProxy::InterfacesRemoved, this, [] (const QDBusObjectPath &object_path, const QStringList &interface){
-        qInfo() << object_path.path() << interface;
+    connect(m_objManagerDbusInter, &AppManagerDBusProxy::InterfacesRemoved, this, [] (const QDBusObjectPath &objectPath, const QStringList &interface){
+        qDebug() << "InterfacesRemoved:" << objectPath.path() << interface;
         // TODO: util AM reborn finish the function!
     });
 }
@@ -182,14 +195,19 @@ void AMInter::requestSendToDesktop(const QString &appId)
 
 void AMInter::updateAllInfos()
 {
-    QDBusPendingCall call = m_objManagerDbusInter->GetManagedObjects();
-    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
-    QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
-                     this, SLOT(getManagedObjectsFinished(QDBusPendingCallWatcher*)));
-
+    auto infos = m_objManagerDbusInter->GetManagedObjects().value();
+    for (auto iter = infos.begin(); iter != infos.end(); ++iter) {
+        const auto &objPath = iter.key();
+        const auto &objs = iter.value();
+        auto info_v3 = itemInfoV3(objs);
+        m_infos.insert(objPath.path(), info_v3);
+        if (info_v3.m_autoStart) {
+            m_autoStartApps.append(info_v3.m_id);
+        }
+    }
 }
 
-void AMInter::buildConnect()
+void AMInter::buildAppDBusConnect()
 {
     for (auto path : m_infos.keys()) {
         ApplicationDBusProxy *autoStartInter = new ApplicationDBusProxy(path, this);
@@ -388,6 +406,24 @@ bool AMInter::removeAutostart(const QString &appId)
         qWarning() << "AutoStart" << qPrintable(QDBusConnection::sessionBus().lastError().message());
         return false;
     }
+}
+
+bool AMInter::fullScreen() const
+{
+    qWarning() << "fullScreen" << ConfigWorker::getValue(KeyFullScreen, false).toBool();
+    return ConfigWorker::getValue(KeyFullScreen, false).toBool();
+}
+
+void AMInter::setFullScreen(const bool isFullScreen)
+{
+    qWarning() << "setFullScreen:" << isFullScreen;
+
+    ConfigWorker::setValue(KeyFullScreen, isFullScreen);
+}
+
+int AMInter::displayMode() const
+{
+    return ConfigWorker::getValue(KeyDisplayMode, -1).toInt();
 }
 
 bool AMInter::llUninstall(const QString &appid)

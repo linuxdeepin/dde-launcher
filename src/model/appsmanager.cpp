@@ -2019,12 +2019,12 @@ int AppsManager::getVisibleCategoryCount()
 
 bool AppsManager::fullscreen() const
 {
-    return m_amDbusLauncherInter->fullscreen();
+    return AMInter::isAMReborn() ? AMInter::instance()->fullScreen() : m_amDbusLauncherInter->fullscreen();
 }
 
 int AppsManager::displayMode() const
 {
-    return m_amDbusLauncherInter->displaymode();
+    return AMInter::isAMReborn() ? AMInter::instance()->displayMode() : m_amDbusLauncherInter->displaymode();
 }
 
 qreal AppsManager::getCurRatio()

@@ -8,20 +8,12 @@
 #include "iteminfo.h"
 
 #include <QObject>
-#include <QByteArray>
-#include <QList>
-#include <QMap>
-#include <QString>
-#include <QStringList>
-#include <QVariant>
-#include <QtDBus>
 
 #include <DDBusInterface>
 #include <DFileWatcher>
 
 DCORE_USE_NAMESPACE
 
-using IconMap = QMap<QString, QMap<uint, QMap<QString, QDBusUnixFileDescriptor>>>;
 using ObjectInterfaceMap = QMap<QString, QVariantMap>;
 using ObjectMap = QMap<QDBusObjectPath, ObjectInterfaceMap>;
 using PropMap = QMap<QString, QMap<QString, QString>>;
@@ -30,7 +22,6 @@ Q_DECLARE_METATYPE(ObjectInterfaceMap)
 Q_DECLARE_METATYPE(ObjectMap)
 Q_DECLARE_METATYPE(PropMap)
 
-/* AM */
 class ItemInfo_v3
 {
     // 应用类型
@@ -50,6 +41,9 @@ class ItemInfo_v3
     };
 public:
     ItemInfo_v3();
+
+    inline bool isInvalid() const { return m_id.isEmpty(); }
+
     PropMap m_actionName;
     QStringList m_actions;
     QStringList m_categories;
@@ -62,7 +56,6 @@ public:
     bool m_X_Flatpak;
     bool m_X_linglong;
     qulonglong m_installedTime;
-    QString m_objectPath;
 
     Categorytype category() const;
     friend QDebug operator<<(QDebug argument, const ItemInfo_v3 &info);
@@ -71,24 +64,38 @@ public:
 
 typedef QList<ItemInfo_v3> ItemInfoList_v3;
 
-class DBusProxy : public QObject
+class ApplicationDBusProxy : public QObject
 {
     Q_OBJECT
 public:
-    explicit DBusProxy(const QString &service,
-                       const QString &path,
-                       const QString &interface,
-                       QObject *parent = nullptr);
-    Q_PROPERTY(bool AutoStart2 READ autoStart NOTIFY AutoStartChanged)
-    bool autoStart() const;
+    explicit ApplicationDBusProxy(const QString &path, QObject *parent = nullptr);
+
 signals:
-    void AutoStartChanged(bool ) const;
     void InterfacesAdded(const QDBusObjectPath &, const ObjectInterfaceMap &);
+
 private:
-    DDBusInterface *m_dBusDisplayInter;
+    DDBusInterface *m_applicationDBus;
 };
 
-class AMDBusInter;
+class AppManagerDBusProxy : public QObject
+{
+    Q_OBJECT
+public:
+    explicit AppManagerDBusProxy(QObject *parent = nullptr);
+
+    inline QDBusPendingReply<ObjectMap> GetManagedObjects()
+    {
+        QList<QVariant> argumentList;
+        return m_objectManagerDBus->asyncCallWithArgumentList(QStringLiteral("GetManagedObjects"), argumentList);
+    }
+
+Q_SIGNALS: // SIGNALS
+    void InterfacesAdded(const QDBusObjectPath &objectPath, ObjectInterfaceMap interfacesProperties);
+    void InterfacesRemoved(const QDBusObjectPath &objectPath, const QStringList &interfaces);
+
+private:
+    DDBusInterface *m_objectManagerDBus;
+};
 
 class AMInter: public QObject
 {
@@ -96,44 +103,49 @@ class AMInter: public QObject
 public:
     static AMInter *instance();
 
-    bool isAMReborn();
-    ItemInfoList_v2 GetAllItemInfos();
-    QStringList GetAllNewInstalledApps();
-    void RequestRemoveFromDesktop(const QString &in0);
-    void RequestSendToDesktop(const QString &in0);
-    bool IsItemOnDesktop(QString appId);
-    void Launch(const QString &in0);
+    static bool isAMReborn();
+    ItemInfoList_v2 allInfos();
+    QStringList allNewInstalledApps() const;
+    void requestRemoveFromDesktop(const QString &appId);
+    void requestSendToDesktop(const QString &appId);
+    bool isOnDesktop(const QString &appId);
+    void launch(const QString &desktop);
     bool isLingLong(const QString &appId) const;
-    void uninstallApp(const QString &name, bool isLinglong = false);
-    void setDisableScaling(QString appId, bool value);
-    bool getDisableScaling(QString appId);
+    void uninstallApp(const QString &name, const bool isLinglong = false);
+    void setDisableScaling(const QString &appId, const bool value);
+    bool disableScaling(const QString &appId);
     QStringList autostartList() const;
-    bool addAutostart(const QString &in0);
-    bool removeAutostart(const QString &in0);
+    bool addAutostart(const QString &appId);
+    bool removeAutostart(const QString &appId);
 
 Q_SIGNALS: // SIGNALS
-    void NewAppLaunched(const QString &in0);
-    void autostartChanged(const QString &in0, const QString &in1);
+    void newAppLaunched(const QString &appId);
+    void autostartChanged(const QString &action, const QString &appId);
+    void itemChanged(const QString &action, ItemInfo_v2 info_v2, qlonglong categoryId);
 
 public Q_SLOTS:
     void onInterfaceAdded(const QDBusObjectPath &object_path, const ObjectInterfaceMap &interfaces);
     void onRequestRemoveFromDesktop(QDBusPendingCallWatcher* watcher);
     void onAutoStartChanged(const bool isAutoStart, const QString &id);
+    void getManagedObjectsFinished(QDBusPendingCallWatcher*);
 
 private:
     AMInter(QObject *parent = Q_NULLPTR);
 
-    void GetAllInfos();
+    void updateAllInfos();
     void buildConnect();
-    bool ll_uninstall(const QString &appid);
-    bool lastore_uninstall(const QString &pkgName);
-    bool shouldDisableScaling(QString appId);
-    QStringList getDisableScalingApps();
+    bool llUninstall(const QString &appid);
+    bool lastoreUninstall(const QString &pkgName);
+    bool shouldDisableScaling(const QString &appId);
+    QStringList disableScalingApps() const;
     void setDisableScalingApps(const QStringList &value);
     void monitorAutoStartFiles();
-    AMDBusInter *m_amDbusInter;
-    ItemInfoList_v2 m_itemInfoList_v2;
-    ItemInfoList_v3 m_itemInfoList_v3;
+    ItemInfo_v3 itemInfoV3(const ObjectInterfaceMap &values) const;
+    ItemInfo_v3 itemInfoV3(const QString &appId) const;
+    ItemInfo_v2 itemInfoV2(const ItemInfo_v3 &itemInfoV3);
+
+    AppManagerDBusProxy *m_objManagerDbusInter;
+    QMap<QString, ItemInfo_v3> m_infos;
     QStringList m_autoStartApps;
     DFileWatcher *m_autoStartFileWather;
 };

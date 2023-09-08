@@ -261,7 +261,7 @@ bool ItemInfo_v1::startWithNum() const
 
 bool ItemInfo_v1::isLingLongApp() const
 {
-    if (AMInter::instance()->isAMReborn()) {
+    if (AMInter::isAMReborn()) {
         return AMInter::instance()->isLingLong(m_key);
     } else {
         // desktop全路径中包含linglong字段

@@ -123,8 +123,8 @@ AppsManager::AppsManager(QObject *parent)
     m_refreshCalendarIconTimer->setInterval(1000);
     m_refreshCalendarIconTimer->setSingleShot(false);
 
-    if (AMInter::instance()->isAMReborn()) {
-        connect(AMInter::instance(), &AMInter::NewAppLaunched, this, &AppsManager::markLaunched);
+    if (AMInter::isAMReborn()) {
+        connect(AMInter::instance(), &AMInter::newAppLaunched, this, &AppsManager::markLaunched);
     } else {
         connect(m_amDbusLauncherInter, &AMDBusLauncherInter::NewAppLaunched, this, &AppsManager::markLaunched);
     }
@@ -132,12 +132,12 @@ AppsManager::AppsManager(QObject *parent)
 
     connect(m_amDbusDockInter, &AMDBusDockInter::IconSizeChanged, this, &AppsManager::IconSizeChanged, Qt::QueuedConnection);
     connect(m_amDbusDockInter, &AMDBusDockInter::FrontendWindowRectChanged, this, &AppsManager::dockGeometryChanged, Qt::QueuedConnection);
-    if (!AMInter::instance()->isAMReborn()) {
+    if (!AMInter::isAMReborn()) {
         connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallSuccess, this, &AppsManager::abandonStashedItem);
         connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallFailed, this, &AppsManager::onUninstallFail);
     }
 
-    if (AMInter::instance()->isAMReborn()) {
+    if (AMInter::isAMReborn()) {
         connect(AMInter::instance(), &AMInter::autostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     } else {
         // TODO：自启动/打开应用这个接口后期sprint2时再改，目前 AM 未做处理
@@ -1040,8 +1040,8 @@ void AppsManager::launchApp(const QModelIndex &index)
         return;
     }
 
-    if (AMInter::instance()->isAMReborn()) {
-        AMInter::instance()->Launch(desktop);
+    if (AMInter::isAMReborn()) {
+        AMInter::instance()->launch(desktop);
     } else {
         m_startManagerInter->Launch(desktop);
     }
@@ -1129,8 +1129,8 @@ void AppsManager::markLaunched(const QString &appKey)
 void AppsManager::delayRefreshData()
 {
     // TODO: 这个接口返回数据存在异常
-    if (AMInter::instance()->isAMReborn()) {
-        m_newInstalledAppsList = AMInter::instance()->GetAllNewInstalledApps();
+    if (AMInter::isAMReborn()) {
+        m_newInstalledAppsList = AMInter::instance()->allNewInstalledApps();
     } else {
         m_newInstalledAppsList = m_amDbusLauncherInter->GetAllNewInstalledApps().value();
     }
@@ -1378,8 +1378,8 @@ bool AppsManager::appIsOnDock(const QString &desktop)
 
 bool AppsManager::appIsOnDesktop(const QString &desktop)
 {
-    if (AMInter::instance()->isAMReborn()) {
-        return AMInter::instance()->IsItemOnDesktop(desktop);
+    if (AMInter::isAMReborn()) {
+        return AMInter::instance()->isOnDesktop(desktop);
     } else {
         return m_amDbusLauncherInter->IsItemOnDesktop(desktop).value();
     }
@@ -1392,8 +1392,8 @@ bool AppsManager::appIsProxy(const QString &desktop)
 
 bool AppsManager::appIsEnableScaling(const QString &desktop)
 {
-    if (AMInter::instance()->isAMReborn()) {
-        return !AMInter::instance()->getDisableScaling(desktop);
+    if (AMInter::isAMReborn()) {
+        return !AMInter::instance()->disableScaling(desktop);
     } else {
         return !m_amDbusLauncherInter->GetDisableScaling(desktop);
     }
@@ -1487,8 +1487,8 @@ void AppsManager::refreshCategoryInfoList()
 
     // 1. 从后端服务获取所有应用列表
     ItemInfoList_v1 datas;
-    if (AMInter::instance()->isAMReborn()) {
-        datas = ItemInfo_v1::itemV2ListToItemV1List(AMInter::instance()->GetAllItemInfos());
+    if (AMInter::isAMReborn()) {
+        datas = ItemInfo_v1::itemV2ListToItemV1List(AMInter::instance()->allInfos());
     } else {
         datas = ItemInfo_v1::itemV2ListToItemV1List(reply.value());
     }
@@ -1579,8 +1579,8 @@ void AppsManager::refreshCategoryInfoList()
     }
 
     // 5. 获取新安装的应用列表
-    if (AMInter::instance()->isAMReborn()) {
-        m_newInstalledAppsList = AMInter::instance()->GetAllNewInstalledApps();
+    if (AMInter::isAMReborn()) {
+        m_newInstalledAppsList = AMInter::instance()->allNewInstalledApps();
     } else {
         m_newInstalledAppsList = m_amDbusLauncherInter->GetAllNewInstalledApps().value();
     }
@@ -1812,7 +1812,7 @@ void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &d
 {
     if (type.isEmpty()) {
         APP_AUTOSTART_CACHE.clear();
-        if (AMInter::instance()->isAMReborn()) {
+        if (AMInter::isAMReborn()) {
             const QStringList &appIds = AMInter::instance()->autostartList();
 
             for (const QString &appId : appIds) {
@@ -1831,7 +1831,7 @@ void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &d
         }
     } else {
         QString desktop_file_name;
-        if (AMInter::instance()->isAMReborn()) {
+        if (AMInter::isAMReborn()) {
             desktop_file_name = desktpFilePath;
         } else {
             desktop_file_name = desktpFilePath.split("/").last();
@@ -2058,7 +2058,7 @@ void AppsManager::uninstallApp(const QModelIndex &modelIndex)
         if (clickedResult == 0) {
             return;
         }
-        if (AMInter::instance()->isAMReborn()) {
+        if (AMInter::isAMReborn()) {
             AMInter::instance()->uninstallApp(info.m_key, info.isLingLongApp());
         } else {
             uninstallApp(info);

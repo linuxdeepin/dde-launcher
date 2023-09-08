@@ -3,16 +3,29 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "aminterface.h"
-#include "amdbusinterface.h"
 #include "appsmanager.h"
 #include "util.h"
 
-/*
- * Implementation of interface class AMInter
- */
+#include <mutex>
+
+static const QString KeyAppsDisableScaling = "Apps_Disable_Scaling";
+static const QString AMServiceName = "org.desktopspec.ApplicationManager1";
+static const QString AMServicePath  = "/org/desktopspec/ApplicationManager1";
+static const QString AMInterfaceName  = "org.desktopspec.DBus.ObjectManager";
+static const QString APPInterfaceName  = "org.desktopspec.ApplicationManager1.Application";
+
 static void registerType()
 {
     qDBusRegisterMetaType<QMap<QString, QString>>();
+    qDBusRegisterMetaType<ObjectInterfaceMap>();
+
+    qRegisterMetaType<PropMap>("PropMap");
+    qDBusRegisterMetaType<PropMap>();
+
+    qRegisterMetaType<ObjectMap>("ObjectMap");
+    qDBusRegisterMetaType<ObjectMap>();
+
+    qRegisterMetaType<ObjectInterfaceMap>("ObjectInterfaceMap");
     qDBusRegisterMetaType<ObjectInterfaceMap>();
 }
 Q_CONSTRUCTOR_FUNCTION(registerType)
@@ -44,7 +57,7 @@ QDebug operator<<(QDebug argument, const ItemInfo_v3 &info)
              << ", instances: " << info.m_instances << ", lastLaunchedTime: " << info.m_lastLaunchedTime
              << ", categories: " << info.m_categories
              << ", X_Flatpak: " << info.m_X_Flatpak << ", X_linglong: " << info.m_X_linglong
-             << ", installedTime: " << info.m_installedTime << ", objectPath: " << info.m_objectPath;
+             << ", installedTime: " << info.m_installedTime;
 
     return argument;
 }
@@ -62,24 +75,26 @@ bool ItemInfo_v3::operator==(const ItemInfo_v3 &other) const
            (this->m_categories == other.m_categories) &&
            (this->m_X_Flatpak == other.m_X_Flatpak) &&
            (this->m_X_linglong == other.m_X_linglong) &&
-           (this->m_installedTime == other.m_installedTime) &&
-           (this->m_objectPath == other.m_objectPath);
+           (this->m_installedTime == other.m_installedTime);
 }
-
-static const QString keyAppsDisableScaling = "Apps_Disable_Scaling";
 
 AMInter::AMInter(QObject *parent)
     : QObject(parent)
-    , m_amDbusInter(new AMDBusInter(this))
+    , m_objManagerDbusInter(new AppManagerDBusProxy(this))
 {
-    GetAllInfos();
+    updateAllInfos();
     buildConnect();
     monitorAutoStartFiles();
-    connect(m_amDbusInter, &AMDBusInter::InterfacesAdded, this, [] (const QDBusObjectPath &object_path, ObjectInterfaceMap interfaces_and_propertie){
-        qInfo() << object_path.path() << interfaces_and_propertie;
+    connect(m_objManagerDbusInter, &AppManagerDBusProxy::InterfacesAdded, this, [this] (const QDBusObjectPath &objectPath, ObjectInterfaceMap objs){
+        qInfo() << objectPath.path() << objs;
+        ItemInfo_v3 info_v3 = itemInfoV3(objs);
+        m_infos.insert(objectPath.path(), info_v3);
+        ItemInfo_v2 info_v2 = itemInfoV2(info_v3);
+        Q_EMIT itemChanged("created", info_v2, info_v3.category());
     });
-    connect(m_amDbusInter, &AMDBusInter::InterfacesRemoved, this, [] (const QDBusObjectPath &object_path, const QStringList &interface){
+    connect(m_objManagerDbusInter, &AppManagerDBusProxy::InterfacesRemoved, this, [] (const QDBusObjectPath &object_path, const QStringList &interface){
         qInfo() << object_path.path() << interface;
+        // TODO: util AM reborn finish the function!
     });
 }
 
@@ -91,66 +106,35 @@ AMInter *AMInter::instance()
 
 bool AMInter::isAMReborn()
 {
-    static bool hasEnv = false;
-    if (!hasEnv) {
-        hasEnv = true;
-        if (qEnvironmentVariableIsSet("DISABLE_AM_REBORN"))
-            return !(qEnvironmentVariable("DISABLE_AM_REBORN") == "1");
+    static int result = -1;
+    if (result < 0) {
+        if (qEnvironmentVariableIsSet("DISABLE_AM_REBORN")) {
+            result = !(qEnvironmentVariable("DISABLE_AM_REBORN") == "1");
+        } else {
+            auto services = QDBusConnection::sessionBus().interface()->registeredServiceNames().value();
+            result = std::any_of(services.begin(), services.end(), [=](const QString &name){
+                return name == AMServiceName;
+            });
+        }
     }
-
-#ifdef AM_REBORN
-    return true;
-#else
-    return false
-#endif
+    return result;
 }
 
-ItemInfoList_v2 AMInter::GetAllItemInfos()
+ItemInfoList_v2 AMInter::allInfos()
 {
-    for (auto info : m_itemInfoList_v3) {
-        ItemInfo_v2 info_v2;
-        QString defaultDisplayName;
-        QString zh_displayName;
-        for (auto displayNameKey : info.m_displayName.keys()) {
-            if (displayNameKey == "Name") {
-                auto displayNameValues = info.m_displayName.value(displayNameKey);
-                for (auto key : displayNameValues.keys()) {
-                    if (key == "default") {
-                        defaultDisplayName = displayNameValues.value(key);
-                    }
-                    if (key == "zh_CN") {
-                        zh_displayName = displayNameValues.value(key);
-                    }
-                }
-            }
-        }
-        QString iconName;
-        for (auto iconKey : info.m_icons.keys()) {
-            if (iconKey == "default") {
-                auto iconValues = info.m_icons.value(iconKey);
-                for (auto key : iconValues.keys()) {
-                    if (key == "default") {
-                        iconName = iconValues.value(key);
-                    }
-                }
-            }
-        }
-        info_v2.m_desktop = info.m_id;
-        info_v2.m_name = zh_displayName.isEmpty() ? defaultDisplayName : zh_displayName;
-        info_v2.m_key = info.m_id;
-        info_v2.m_iconKey = iconName;
-        info_v2.m_keywords.append(defaultDisplayName);
-        info_v2.m_categoryId = info.category();
-
-        m_itemInfoList_v2.append(info_v2);
+    ItemInfoList_v2 itemInfoList_v2;
+    const auto itemInfoList_V3 = m_infos.values();
+    for (auto info : itemInfoList_V3) {
+        itemInfoList_v2.append(itemInfoV2(info));
     }
-    return m_itemInfoList_v2;
+    return itemInfoList_v2;
 }
 
-QStringList AMInter::GetAllNewInstalledApps()
+QStringList AMInter::allNewInstalledApps() const
 {
     QStringList apps;
-    for (auto info : m_itemInfoList_v3) {
+    const auto itemInfoList_V3 = m_infos.values();
+    for (auto info : itemInfoList_V3) {
         if (info.m_lastLaunchedTime == 0) {
             apps.append(info.m_id);
         }
@@ -158,18 +142,17 @@ QStringList AMInter::GetAllNewInstalledApps()
     return apps;
 }
 
-void AMInter::RequestRemoveFromDesktop(const QString &in0)
+void AMInter::requestRemoveFromDesktop(const QString &appId)
 {
-    auto it = std::find_if(m_itemInfoList_v3.begin(), m_itemInfoList_v3.end(), [in0](ItemInfo_v3 info){
-        return info.m_id == in0;
-    });
-    if (it == m_itemInfoList_v3.end())
+    const auto itemInfo = itemInfoV3(appId);
+    if (itemInfo.isInvalid())
         return;
-    QDBusInterface iface(AM_SERVICE_NAME, it->m_objectPath, APP_INTERFACE_NAME, QDBusConnection::sessionBus(), this);
+
+    QDBusInterface iface(AMServiceName, m_infos.key(itemInfo), APPInterfaceName, QDBusConnection::sessionBus(), this);
     if (iface.isValid()) {
         QDBusReply<bool> reply = iface.call("RemoveFromDesktop");
         if (reply.isValid()) {
-            qDebug() << "RemoveFromDesktop:" << in0 << reply.value();
+            qDebug() << "RemoveFromDesktop:" << appId << reply.value();
         } else {
             qWarning() << "RemoveFromDesktop failed!";
         }
@@ -178,18 +161,17 @@ void AMInter::RequestRemoveFromDesktop(const QString &in0)
     }
 }
 
-void AMInter::RequestSendToDesktop(const QString &in0)
+void AMInter::requestSendToDesktop(const QString &appId)
 {
-    auto it = std::find_if(m_itemInfoList_v3.begin(), m_itemInfoList_v3.end(), [in0](ItemInfo_v3 info){
-        return info.m_id == in0;
-    });
-    if (it == m_itemInfoList_v3.end())
+    const auto itemInfo = itemInfoV3(appId);
+    if (itemInfo.isInvalid())
         return;
-    QDBusInterface iface(AM_SERVICE_NAME, it->m_objectPath, APP_INTERFACE_NAME, QDBusConnection::sessionBus(), this);
+
+    QDBusInterface iface(AMServiceName, m_infos.key(itemInfo), APPInterfaceName, QDBusConnection::sessionBus(), this);
     if (iface.isValid()) {
         QDBusReply<bool> reply = iface.call("SendToDesktop");
         if (reply.isValid()) {
-            qDebug() << "SendToDesktop:" << in0 << reply.value();
+            qDebug() << "SendToDesktop:" << appId << reply.value();
         } else {
             qWarning() << "SendToDesktop failed!" << qPrintable(QDBusConnection::sessionBus().lastError().message());
         }
@@ -198,83 +180,30 @@ void AMInter::RequestSendToDesktop(const QString &in0)
     }
 }
 
-void AMInter::GetAllInfos()
+void AMInter::updateAllInfos()
 {
-    ObjectMap infos = m_amDbusInter->GetManagedObjects();
-    for (auto objectPath : infos.keys()) {
-        auto objects = infos.value(objectPath);
-        for (auto inter : objects.keys()) {
-            if (inter != "org.desktopspec.ApplicationManager1.Application")
-                continue;
-            auto interProps = objects.value(inter);
-            ItemInfo_v3 info_v3;
-            for (auto key : interProps.keys()) {
-                if (key == "ActionName") {
-                    PropMap value = qdbus_cast<PropMap>(interProps.value(key));
-                    info_v3.m_actionName = value;
-                } else if (key == "Actions") {
-                    QStringList value = qdbus_cast<QStringList>(interProps.value(key));
-                    info_v3.m_actions = value;
-                } else if (key == "AutoStart") {
-                    bool value = qdbus_cast<bool>(interProps.value(key));
-                    info_v3.m_autoStart = value;
-                } else if (key == "Categories") {
-                    QStringList value = qdbus_cast<QStringList>(interProps.value(key));
-                    info_v3.m_categories = value;
-                } else if (key == "DisplayName") {
-                    PropMap value = qdbus_cast<PropMap>(interProps.value(key));
-                    info_v3.m_displayName = value;
-                } else if (key == "ID") {
-                    QString value = qdbus_cast<QString>(interProps.value(key));
-                    info_v3.m_id = value;
-                } else if (key == "Icons") {
-                    PropMap value = qdbus_cast<PropMap>(interProps.value(key));
-                    info_v3.m_icons = value;
-                } else if (key == "Instances") {
-                    QList<QDBusObjectPath> value = qdbus_cast<QList<QDBusObjectPath>>(interProps.value(key));
-                    info_v3.m_instances = value;
-                } else if (key == "LastLaunchedTime") {
-                    qulonglong value = qdbus_cast<qulonglong>(interProps.value(key));
-                    info_v3.m_lastLaunchedTime = value;
-                } else if (key == "X_Flatpak") {
-                    bool value = qdbus_cast<bool>(interProps.value(key));
-                    info_v3.m_X_Flatpak = value;
-                } else if (key == "X_linglong") {
-                    bool value = qdbus_cast<bool>(interProps.value(key));
-                    info_v3.m_X_linglong = value;
-                } else if (key == "installedTime") {
-                    qulonglong value = qdbus_cast<qulonglong>(interProps.value(key));
-                    info_v3.m_installedTime = value;
-                } else if (key == "AutoStart") {
-                    qulonglong value = qdbus_cast<qulonglong>(interProps.value(key));
-                    info_v3.m_installedTime = value;
-                }
-            }
-            info_v3.m_objectPath = objectPath.path();
-            m_itemInfoList_v3.append(info_v3);
-            if (info_v3.m_autoStart) {
-                m_autoStartApps.append(info_v3.m_id);
-            }
-        }
-    }
+    QDBusPendingCall call = m_objManagerDbusInter->GetManagedObjects();
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(call, this);
+    QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
+                     this, SLOT(getManagedObjectsFinished(QDBusPendingCallWatcher*)));
+
 }
 
 void AMInter::buildConnect()
 {
-    for (auto info : m_itemInfoList_v3) {
-        DBusProxy *autoStartInter = new DBusProxy(AM_SERVICE_NAME, info.m_objectPath, AM_INTERFACE_NAME, this);
-        connect(autoStartInter, &DBusProxy::InterfacesAdded, this, &AMInter::onInterfaceAdded);
+    for (auto path : m_infos.keys()) {
+        ApplicationDBusProxy *autoStartInter = new ApplicationDBusProxy(path, this);
+        connect(autoStartInter, &ApplicationDBusProxy::InterfacesAdded, this, &AMInter::onInterfaceAdded);
     }
 }
 
-bool AMInter::IsItemOnDesktop(QString appId)
+bool AMInter::isOnDesktop(const QString &appId)
 {
-    auto it = std::find_if(m_itemInfoList_v3.begin(), m_itemInfoList_v3.end(), [appId](ItemInfo_v3 info){
-        return info.m_id == appId;
-    });
-    if (it == m_itemInfoList_v3.end())
+    const auto itemInfo = itemInfoV3(appId);
+    if (itemInfo.isInvalid())
         return false;
-    QDBusInterface iface(AM_SERVICE_NAME, it->m_objectPath, APP_INTERFACE_NAME, QDBusConnection::sessionBus(), this);
+
+    QDBusInterface iface(AMServiceName, m_infos.key(itemInfo), APPInterfaceName, QDBusConnection::sessionBus(), this);
     if (iface.isValid()) {
         QVariant value = iface.property("isOnDesktop");
         return value.toBool();
@@ -284,77 +213,56 @@ bool AMInter::IsItemOnDesktop(QString appId)
     return false;
 }
 
-void AMInter::Launch(const QString &desktop)
+void AMInter::launch(const QString &desktop)
 {
-    auto it = std::find_if(m_itemInfoList_v3.begin(), m_itemInfoList_v3.end(), [desktop](ItemInfo_v3 info){
-        return info.m_id == desktop;
-    });
-    if (it != m_itemInfoList_v3.end()) {
-        QDBusInterface iface(AM_SERVICE_NAME, it->m_objectPath, APP_INTERFACE_NAME, QDBusConnection::sessionBus(), this);
-        if (iface.isValid()) {
-            QVariantList arguments;
-            arguments << QString();
-            arguments << QStringList();
-            QMap<QString, QVariant> arg3;
-            if (!it->m_id.isEmpty() && !shouldDisableScaling(it->m_id)) {
-                auto dbus = QDBusConnection::sessionBus();
-                QDBusMessage reply = dbus.call(QDBusMessage::createMethodCall("org.deepin.dde.XSettings1",
-                                                                              "/org/deepin/dde/XSettings1",
-                                                                              "org.deepin.dde.XSettings1",
-                                                                              "GetScaleFactor"), QDBus::Block, 2);
-                QString env;
-                if (reply.type() == QDBusMessage::ReplyMessage) {
-                    QDBusReply<double> ret(reply);
-                    double scale = ret.isValid() ? ret.value() : 1.0;
-                    scale = scale > 0 ? scale : 1;
-                    const QString scaleStr = QString::number(scale, 'f', -1);
-                    env= QString("DEEPIN_WINE_SCALE=%1").arg(scaleStr);
-                    arg3.insert("env", QVariant::fromValue(env));
-                }
-            }
-            arguments << QVariant::fromValue(arg3);
-            QDBusReply<QDBusObjectPath> reply = iface.callWithArgumentList(QDBus::Block, "Launch", arguments);
-            if (reply.isValid()) {
-                qDebug() << "Launch:" << desktop << reply.value().path();
-            } else {
-                qWarning() << "Launch failed!" << qPrintable(QDBusConnection::sessionBus().lastError().message());
-            }
+    const auto itemInfo = itemInfoV3(desktop);
+    if (itemInfo.isInvalid())
+        return;
+
+    QDBusInterface iface(AMServiceName, m_infos.key(itemInfo), APPInterfaceName, QDBusConnection::sessionBus(), this);
+    if (iface.isValid()) {
+        QVariantList arguments;
+        arguments << QString();
+        arguments << QStringList();
+        QMap<QString, QVariant> arg3;
+        arguments << QVariant::fromValue(arg3);
+        QDBusReply<QDBusObjectPath> reply = iface.callWithArgumentList(QDBus::Block, "Launch", arguments);
+        if (reply.isValid()) {
+            qDebug() << "Launch:" << desktop << reply.value().path();
         } else {
-            qWarning() << "Launch" << qPrintable(QDBusConnection::sessionBus().lastError().message());
+            qWarning() << "Launch failed!" << qPrintable(QDBusConnection::sessionBus().lastError().message());
         }
+    } else {
+        qWarning() << "Launch" << qPrintable(QDBusConnection::sessionBus().lastError().message());
     }
 }
 
 bool AMInter::isLingLong(const QString &appId) const
 {
-    auto it = std::find_if(m_itemInfoList_v3.begin(), m_itemInfoList_v3.end(), [appId](ItemInfo_v3 info){
-        return info.m_id == appId;
-    });
-    if (it != m_itemInfoList_v3.end()) {
-        return it->m_X_linglong;
-    }
-    return false;
+    const auto itemInfo = itemInfoV3(appId);
+    if (itemInfo.isInvalid())
+        return false;
+    return itemInfo.m_X_linglong;
 }
 
-void AMInter::onInterfaceAdded(const QDBusObjectPath &object_path, const ObjectInterfaceMap &interfaces)
+void AMInter::onInterfaceAdded(const QDBusObjectPath &objPath, const ObjectInterfaceMap &interfaces)
 {
-    QString path = object_path.path();
+    QString path = objPath.path();
     auto index = path.lastIndexOf("/");
     path.truncate(index);
-    auto it = std::find_if(m_itemInfoList_v3.begin(), m_itemInfoList_v3.end(), [path](ItemInfo_v3 info){
-        return info.m_objectPath == path;
-    });
-    if (it != m_itemInfoList_v3.end()) {
-        Q_EMIT NewAppLaunched(it->m_id);
-    }
+    const QStringList objPaths = m_infos.keys();
+    if (!objPaths.contains(path))
+        return;
+
+    Q_EMIT newAppLaunched(m_infos.value(path).m_id);
 }
 
 void AMInter::onRequestRemoveFromDesktop(QDBusPendingCallWatcher *watcher)
 {
     QDBusPendingReply<QString> reply = *watcher;
     if (!reply.isError()) {
-        QString name= reply.argumentAt<0>();
-        qDebug()<<"QDBusPendingReply name = "<<name;
+        QString name = reply.argumentAt<0>();
+        qDebug()<< "QDBusPendingReply name = " << name;
     }
     watcher->deleteLater();
 }
@@ -368,13 +276,31 @@ void AMInter::onAutoStartChanged(const bool isAutoStart, const QString& id)
     }
 }
 
-void AMInter::uninstallApp(const QString &name, bool isLinglong)
+void AMInter::getManagedObjectsFinished(QDBusPendingCallWatcher *watcher)
+{
+    QDBusPendingReply<ObjectMap> reply = *watcher;
+    if (!reply.isError()) {
+        ObjectMap infos = reply.argumentAt<0>();
+        for (auto iter = infos.begin(); iter != infos.end(); ++iter) {
+            const auto &objPath = iter.key();
+            const auto &objs = iter.value();
+            auto info_v3 = itemInfoV3(objs);
+            m_infos.insert(objPath.path(), info_v3);
+            if (info_v3.m_autoStart) {
+                m_autoStartApps.append(info_v3.m_id);
+            }
+        }
+    }
+    watcher->deleteLater();
+}
+
+void AMInter::uninstallApp(const QString &name, const bool isLinglong)
 {
     bool ret = false;
     if (isLinglong) {
-        ret = ll_uninstall(name);
+        ret = llUninstall(name);
     } else {
-        ret = lastore_uninstall(name);
+        ret = lastoreUninstall(name);
     }
 
     if (ret) {
@@ -387,14 +313,13 @@ void AMInter::uninstallApp(const QString &name, bool isLinglong)
     emit AppsManager::instance()->dataChanged(AppsListModel::FullscreenAll);
 }
 
-void AMInter::setDisableScaling(QString appId, bool value)
+void AMInter::setDisableScaling(const QString &appId, const bool value)
 {
-    auto it = std::find_if(m_itemInfoList_v3.begin(), m_itemInfoList_v3.end(), [appId](ItemInfo_v3 info){
-        return info.m_id == appId;
-    });
-    if (it == m_itemInfoList_v3.end())
+    const auto itemInfo = itemInfoV3(appId);
+    if (itemInfo.isInvalid())
         return;
-    QStringList apps = getDisableScalingApps();
+
+    QStringList apps = disableScalingApps();
     if (value) {
         if (apps.contains(appId)) {
             return;
@@ -416,15 +341,13 @@ void AMInter::setDisableScaling(QString appId, bool value)
     setDisableScalingApps(apps);
 }
 
-bool AMInter::getDisableScaling(QString appId)
+bool AMInter::disableScaling(const QString &appId)
 {
-    auto it = std::find_if(m_itemInfoList_v3.begin(), m_itemInfoList_v3.end(), [appId](ItemInfo_v3 info){
-        return info.m_id == appId;
-    });
-    if (it == m_itemInfoList_v3.end())
+    const auto itemInfo = itemInfoV3(appId);
+    if (itemInfo.isInvalid())
         return false;
 
-    if (getDisableScalingApps().contains(appId))
+    if (disableScalingApps().contains(appId))
         return true;
 
     return false;
@@ -437,12 +360,11 @@ QStringList AMInter::autostartList() const
 
 bool AMInter::addAutostart(const QString &appId)
 {
-    auto it = std::find_if(m_itemInfoList_v3.begin(), m_itemInfoList_v3.end(), [appId](ItemInfo_v3 info){
-        return info.m_id == appId;
-    });
-    if (it == m_itemInfoList_v3.end())
+    const auto itemInfo = itemInfoV3(appId);
+    if (itemInfo.isInvalid())
         return false;
-    QDBusInterface iface(AM_SERVICE_NAME, it->m_objectPath, APP_INTERFACE_NAME, QDBusConnection::sessionBus(), this);
+
+    QDBusInterface iface(AMServiceName, m_infos.key(itemInfo), APPInterfaceName, QDBusConnection::sessionBus(), this);
     if (iface.isValid()) {
         bool ret = iface.setProperty("AutoStart", true);
         return ret;
@@ -454,12 +376,11 @@ bool AMInter::addAutostart(const QString &appId)
 
 bool AMInter::removeAutostart(const QString &appId)
 {
-    auto it = std::find_if(m_itemInfoList_v3.begin(), m_itemInfoList_v3.end(), [appId](ItemInfo_v3 info){
-        return info.m_id == appId;
-    });
-    if (it == m_itemInfoList_v3.end())
+    const auto itemInfo = itemInfoV3(appId);
+    if (itemInfo.isInvalid())
         return false;
-    QDBusInterface iface(AM_SERVICE_NAME, it->m_objectPath, APP_INTERFACE_NAME, QDBusConnection::sessionBus(), this);
+
+    QDBusInterface iface(AMServiceName, m_infos.key(itemInfo), APPInterfaceName, QDBusConnection::sessionBus(), this);
     if (iface.isValid()) {
         bool ret = iface.setProperty("AutoStart", false);
         return ret;
@@ -469,7 +390,7 @@ bool AMInter::removeAutostart(const QString &appId)
     }
 }
 
-bool AMInter::ll_uninstall(const QString &appid)
+bool AMInter::llUninstall(const QString &appid)
 {
     QProcess ll;
     ll.setProgram(QStandardPaths::findExecutable("ll-cli"));
@@ -485,7 +406,7 @@ bool AMInter::ll_uninstall(const QString &appid)
     return true;
 }
 
-bool AMInter::lastore_uninstall(const QString &pkgName)
+bool AMInter::lastoreUninstall(const QString &pkgName)
 {
     QDBusInterface lastoreDbus("org.deepin.dde.Lastore1",
                                "/org/deepin/dde/Lastore1",
@@ -513,17 +434,16 @@ bool AMInter::lastore_uninstall(const QString &pkgName)
     return true;
 }
 
-bool AMInter::shouldDisableScaling(QString appId)
+bool AMInter::shouldDisableScaling(const QString &appId)
 {
-    auto disableScalingApps = getDisableScalingApps();
-    return disableScalingApps.contains(appId);
+    return disableScalingApps().contains(appId);
 }
 
-QStringList AMInter::getDisableScalingApps()
+QStringList AMInter::disableScalingApps() const
 {
     QStringList ret;
 
-    QVariant value = ConfigWorker::getValue(keyAppsDisableScaling, ret);
+    QVariant value = ConfigWorker::getValue(KeyAppsDisableScaling, ret);
     auto apps = value.toList();
     for (auto app : apps) {
         ret.append(app.toString());
@@ -538,7 +458,7 @@ void AMInter::setDisableScalingApps(const QStringList &value)
     for (const auto &app : value)
         apps.push_back(app);
 
-    ConfigWorker::setValue(keyAppsDisableScaling, apps);
+    ConfigWorker::setValue(KeyAppsDisableScaling, apps);
 }
 
 void AMInter::monitorAutoStartFiles()
@@ -562,13 +482,122 @@ void AMInter::monitorAutoStartFiles()
     }
 }
 
-DBusProxy::DBusProxy(const QString &service, const QString &path, const QString &interface, QObject *parent)
+ItemInfo_v3 AMInter::itemInfoV3(const ObjectInterfaceMap &objs) const
+{
+    ItemInfo_v3 info_v3;
+    for (auto objIter = objs.begin(); objIter != objs.end(); ++objIter) {
+        const auto obj = objIter.key();
+        if (obj != "org.desktopspec.ApplicationManager1.Application")
+            continue;
+        const auto interProps = objIter.value();
+        for (auto interPropIter = interProps.begin(); interPropIter != interProps.end(); ++interPropIter) {
+            const auto key = interPropIter.key();
+            if (key == "ActionName") {
+                PropMap value = qdbus_cast<PropMap>(interPropIter.value());
+                info_v3.m_actionName = value;
+            } else if (key == "Actions") {
+                QStringList value = qdbus_cast<QStringList>(interPropIter.value());
+                info_v3.m_actions = value;
+            } else if (key == "AutoStart") {
+                bool value = qdbus_cast<bool>(interPropIter.value());
+                info_v3.m_autoStart = value;
+            } else if (key == "Categories") {
+                QStringList value = qdbus_cast<QStringList>(interPropIter.value());
+                info_v3.m_categories = value;
+            } else if (key == "DisplayName") {
+                PropMap value = qdbus_cast<PropMap>(interPropIter.value());
+                info_v3.m_displayName = value;
+            } else if (key == "ID") {
+                QString value = qdbus_cast<QString>(interPropIter.value());
+                info_v3.m_id = value;
+            } else if (key == "Icons") {
+                PropMap value = qdbus_cast<PropMap>(interPropIter.value());
+                info_v3.m_icons = value;
+            } else if (key == "Instances") {
+                QList<QDBusObjectPath> value = qdbus_cast<QList<QDBusObjectPath>>(interPropIter.value());
+                info_v3.m_instances = value;
+            } else if (key == "LastLaunchedTime") {
+                qulonglong value = qdbus_cast<qulonglong>(interPropIter.value());
+                info_v3.m_lastLaunchedTime = value;
+            } else if (key == "X_Flatpak") {
+                bool value = qdbus_cast<bool>(interPropIter.value());
+                info_v3.m_X_Flatpak = value;
+            } else if (key == "X_linglong") {
+                bool value = qdbus_cast<bool>(interPropIter.value());
+                info_v3.m_X_linglong = value;
+            } else if (key == "installedTime") {
+                qulonglong value = qdbus_cast<qulonglong>(interPropIter.value());
+                info_v3.m_installedTime = value;
+            } else if (key == "AutoStart") {
+                qulonglong value = qdbus_cast<qulonglong>(interPropIter.value());
+                info_v3.m_installedTime = value;
+            }
+        }
+    }
+    return info_v3;
+}
+
+ItemInfo_v3 AMInter::itemInfoV3(const QString &appId) const
+{
+    const auto itemInfoList_v3 = m_infos.values();
+    auto it = std::find_if(itemInfoList_v3.begin(), itemInfoList_v3.end(), [appId](ItemInfo_v3 info){
+        return info.m_id == appId;
+    });
+    if (it == itemInfoList_v3.end())
+        return ItemInfo_v3();
+
+    return *it;
+}
+
+ItemInfo_v2 AMInter::itemInfoV2(const ItemInfo_v3 &itemInfoV3)
+{
+    ItemInfo_v2 info_v2;
+
+    QString defaultDisplayName;
+    QString zh_displayName;
+    for (auto displayNameKey : itemInfoV3.m_displayName.keys()) {
+        if (displayNameKey == "Name") {
+            auto displayNameValues = itemInfoV3.m_displayName.value(displayNameKey);
+            for (auto key : displayNameValues.keys()) {
+                if (key == "default") {
+                    defaultDisplayName = displayNameValues.value(key);
+                }
+                if (key == "zh_CN") {
+                    zh_displayName = displayNameValues.value(key);
+                }
+            }
+        }
+    }
+    QString iconName;
+    for (auto iconKey : itemInfoV3.m_icons.keys()) {
+        if (iconKey == "default") {
+            auto iconValues = itemInfoV3.m_icons.value(iconKey);
+            for (auto key : iconValues.keys()) {
+                if (key == "default") {
+                    iconName = iconValues.value(key);
+                }
+            }
+        }
+    }
+    info_v2.m_desktop = itemInfoV3.m_id;
+    info_v2.m_name = zh_displayName.isEmpty() ? defaultDisplayName : zh_displayName;
+    info_v2.m_key = itemInfoV3.m_id;
+    info_v2.m_iconKey = iconName;
+    info_v2.m_keywords.append(defaultDisplayName);
+    info_v2.m_categoryId = itemInfoV3.category();
+
+    return info_v2;
+}
+
+ApplicationDBusProxy::ApplicationDBusProxy(const QString &path, QObject *parent)
     : QObject(parent)
-    , m_dBusDisplayInter(new DDBusInterface(service, path, interface, QDBusConnection::sessionBus(), this))
+    , m_applicationDBus(new DDBusInterface(AMServiceName, path, AMInterfaceName, QDBusConnection::sessionBus(), this))
 {
 }
 
-bool DBusProxy::autoStart() const
+AppManagerDBusProxy::AppManagerDBusProxy(QObject *parent)
+    : QObject(parent)
+    , m_objectManagerDBus(new DDBusInterface(AMServiceName, AMServicePath, AMInterfaceName, QDBusConnection::sessionBus(), this))
 {
-    return m_dBusDisplayInter->property("AutoStart").toBool();
+
 }

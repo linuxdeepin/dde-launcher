@@ -50,7 +50,7 @@ LauncherSys::LauncherSys(QObject *parent)
 
     // 插件加载
     m_launcherPlugin->startLoader();
-    if (!AMInter::instance()->isAMReborn()) {
+    if (!AMInter::isAMReborn()) {
         connect(m_amDbusLauncher, &AMDBusLauncherInter::FullscreenChanged, this, &LauncherSys::displayModeChanged, Qt::QueuedConnection);
         connect(m_amDbusLauncher, &AMDBusLauncherInter::DisplayModeChanged, this, &LauncherSys::onDisplayModeChanged, Qt::QueuedConnection);
     } else {

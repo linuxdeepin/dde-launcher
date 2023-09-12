@@ -633,7 +633,7 @@ ApplicationDBusProxy::ApplicationDBusProxy(const QString &path, QObject *parent)
     : QObject(parent)
     , m_applicationDBus(new DDBusInterface(AMServiceName, path, AMInterfaceName, QDBusConnection::sessionBus(), this))
 {
-    QDBusConnection::sessionBus().connect(AMServiceName, path, APPInterfaceName,
+    QDBusConnection::sessionBus().connect(AMServiceName, path, "org.freedesktop.DBus.Properties",
                                           "PropertiesChanged", "sa{sv}as", this,
                                           SLOT(onPropertiesChanged(const QDBusMessage&)));
 }

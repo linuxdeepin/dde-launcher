@@ -89,8 +89,7 @@ AMInter::AMInter(QObject *parent)
     , m_objManagerDbusInter(new AppManagerDBusProxy(this))
 {
     fetchAllInfos();
-    buildAppDBusConnect();
-    monitorAutoStartFiles();
+    buildAppDBusConnection();
     connect(ConfigWorker::instance(), &DConfig::valueChanged, this, [this] (const QString &key) {
         qDebug() << "DConfig" << key << "valueChanged";
         if (key == KeyFullScreen) {
@@ -173,7 +172,7 @@ void AMInter::requestRemoveFromDesktop(const QString &appId)
     if (itemInfo.isInvalid())
         return;
 
-    QDBusInterface iface(AMServiceName, m_infos.key(itemInfo), APPInterfaceName, QDBusConnection::sessionBus(), this);
+    QDBusInterface iface(AMServiceName, m_infos.key(itemInfo), APPInterfaceName, QDBusConnection::sessionBus());
     if (iface.isValid()) {
         QDBusReply<bool> reply = iface.call("RemoveFromDesktop");
         if (reply.isValid()) {
@@ -192,7 +191,7 @@ void AMInter::requestSendToDesktop(const QString &appId)
     if (itemInfo.isInvalid())
         return;
 
-    QDBusInterface iface(AMServiceName, m_infos.key(itemInfo), APPInterfaceName, QDBusConnection::sessionBus(), this);
+    QDBusInterface iface(AMServiceName, m_infos.key(itemInfo), APPInterfaceName, QDBusConnection::sessionBus());
     if (iface.isValid()) {
         QDBusReply<bool> reply = iface.call("SendToDesktop");
         if (reply.isValid()) {
@@ -219,11 +218,15 @@ void AMInter::fetchAllInfos()
     }
 }
 
-void AMInter::buildAppDBusConnect()
+void AMInter::buildAppDBusConnection()
 {
     for (auto path : m_infos.keys()) {
-        ApplicationDBusProxy *autoStartInter = new ApplicationDBusProxy(path, this);
-        connect(autoStartInter, &ApplicationDBusProxy::InterfacesAdded, this, &AMInter::onInterfaceAdded);
+        ApplicationDBusProxy *appInter = new ApplicationDBusProxy(path, this);
+        connect(appInter, &ApplicationDBusProxy::InterfacesAdded, this, &AMInter::onInterfaceAdded);
+        connect(appInter, &ApplicationDBusProxy::autoStartChanged, this, [this, path] (const bool &isAutoStarted) {
+            onAutoStartChanged(isAutoStarted, m_infos.value(path).m_id);
+        });
+
     }
 }
 
@@ -275,9 +278,11 @@ bool AMInter::isLingLong(const QString &appId) const
     return itemInfo.m_X_linglong;
 }
 
-void AMInter::onInterfaceAdded(const QDBusObjectPath &objPath, const ObjectInterfaceMap &interfaces)
+void AMInter::onInterfaceAdded(const QDBusObjectPath &objectPath, const ObjectInterfaceMap &interfaces)
 {
-    QString path = objPath.path();
+    Q_UNUSED(interfaces)
+
+    QString path = objectPath.path();
     auto index = path.lastIndexOf("/");
     path.truncate(index);
     const QStringList objPaths = m_infos.keys();
@@ -297,12 +302,14 @@ void AMInter::onRequestRemoveFromDesktop(QDBusPendingCallWatcher *watcher)
     watcher->deleteLater();
 }
 
-void AMInter::onAutoStartChanged(const bool isAutoStart, const QString& id)
+void AMInter::onAutoStartChanged(const bool &isAutoStarted, const QString &appId)
 {
-    if (isAutoStart) {
-        Q_EMIT autostartChanged("added", id);
+    if (isAutoStarted) {
+        qDebug() << "autostartChanged added" << appId;
+        Q_EMIT autostartChanged("added", appId);
     } else {
-        Q_EMIT autostartChanged("deleted", id);
+        qDebug() << "autostartChanged deleted" << appId;
+        Q_EMIT autostartChanged("deleted", appId);
     }
 }
 
@@ -394,7 +401,7 @@ bool AMInter::addAutostart(const QString &appId)
     if (itemInfo.isInvalid())
         return false;
 
-    QDBusInterface iface(AMServiceName, m_infos.key(itemInfo), APPInterfaceName, QDBusConnection::sessionBus(), this);
+    QDBusInterface iface(AMServiceName, m_infos.key(itemInfo), APPInterfaceName, QDBusConnection::sessionBus());
     if (iface.isValid()) {
         bool ret = iface.setProperty("AutoStart", true);
         return ret;
@@ -410,7 +417,7 @@ bool AMInter::removeAutostart(const QString &appId)
     if (itemInfo.isInvalid())
         return false;
 
-    QDBusInterface iface(AMServiceName, m_infos.key(itemInfo), APPInterfaceName, QDBusConnection::sessionBus(), this);
+    QDBusInterface iface(AMServiceName, m_infos.key(itemInfo), APPInterfaceName, QDBusConnection::sessionBus());
     if (iface.isValid()) {
         bool ret = iface.setProperty("AutoStart", false);
         return ret;
@@ -510,27 +517,6 @@ void AMInter::setDisableScalingApps(const QStringList &value)
         apps.push_back(app);
 
     ConfigWorker::setValue(KeyAppsDisableScaling, apps);
-}
-
-void AMInter::monitorAutoStartFiles()
-{
-    m_autoStartFileWather = new DFileWatcher( QDir::homePath() + "/.config/autostart");
-    connect(m_autoStartFileWather, &DBaseFileWatcher::subfileCreated, this, [this](const QUrl &url){
-        QString desktop = url.toString().split('/').last();
-        desktop.truncate(desktop.lastIndexOf('.'));
-        Q_EMIT autostartChanged("added", desktop);
-        qDebug() << "autostartChanged added" << desktop;
-    });
-    connect(m_autoStartFileWather, &DBaseFileWatcher::fileDeleted, this, [this](const QUrl &url){
-        QString desktop = url.toString().split('/').last();
-        desktop.truncate(desktop.lastIndexOf('.'));
-        Q_EMIT autostartChanged("deleted", desktop);
-        qDebug() << "autostartChanged deleted" << desktop;
-    });
-    bool ret = m_autoStartFileWather->startWatcher();
-    if (!ret) {
-        qWarning() << "autoStartFileWather failed!";
-    }
 }
 
 ItemInfo_v3 AMInter::itemInfoV3(const ObjectInterfaceMap &objs) const
@@ -647,11 +633,30 @@ ApplicationDBusProxy::ApplicationDBusProxy(const QString &path, QObject *parent)
     : QObject(parent)
     , m_applicationDBus(new DDBusInterface(AMServiceName, path, AMInterfaceName, QDBusConnection::sessionBus(), this))
 {
+    QDBusConnection::sessionBus().connect(AMServiceName, path, APPInterfaceName,
+                                          "PropertiesChanged", "sa{sv}as", this,
+                                          SLOT(onPropertiesChanged(const QDBusMessage&)));
+}
+
+void ApplicationDBusProxy::onPropertiesChanged(const QDBusMessage &msg)
+{
+    QList<QVariant> arguments = msg.arguments();
+    if (3 != arguments.count())
+        return;
+
+    QString interfaceName = msg.arguments().at(0).toString();
+    if (interfaceName != APPInterfaceName)
+        return;
+    QVariantMap propMap = qdbus_cast<QVariantMap>(msg.arguments().at(1));
+    if (propMap.contains("AutoStart")) {
+        Q_EMIT autoStartChanged(propMap.value("AutoStart").toBool());
+    }
+
+    return;
 }
 
 AppManagerDBusProxy::AppManagerDBusProxy(QObject *parent)
     : QObject(parent)
     , m_objectManagerDBus(new DDBusInterface(AMServiceName, AMServicePath, AMInterfaceName, QDBusConnection::sessionBus(), this))
 {
-
 }

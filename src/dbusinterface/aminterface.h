@@ -10,7 +10,6 @@
 #include <QObject>
 
 #include <DDBusInterface>
-#include <DFileWatcher>
 
 DCORE_USE_NAMESPACE
 
@@ -158,7 +157,6 @@ private:
     AppManagerDBusProxy *m_objManagerDbusInter;
     QMap<QString, ItemInfo_v3> m_infos;
     QStringList m_autoStartApps;
-    DFileWatcher *m_autoStartFileWather;
 };
 
 #endif

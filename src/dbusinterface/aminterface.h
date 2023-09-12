@@ -71,8 +71,12 @@ class ApplicationDBusProxy : public QObject
 public:
     explicit ApplicationDBusProxy(const QString &path, QObject *parent = nullptr);
 
-signals:
-    void InterfacesAdded(const QDBusObjectPath &, const ObjectInterfaceMap &);
+public Q_SLOTS:
+    void onPropertiesChanged(const QDBusMessage& msg);
+
+Q_SIGNALS:
+    void InterfacesAdded(const QDBusObjectPath &objPath, const ObjectInterfaceMap &objInterMap);
+    void autoStartChanged(const bool &isAutoStarted) const;
 
 private:
     DDBusInterface *m_applicationDBus;
@@ -131,9 +135,9 @@ Q_SIGNALS: // SIGNALS
     void displayModeChanged();
 
 public Q_SLOTS:
-    void onInterfaceAdded(const QDBusObjectPath &object_path, const ObjectInterfaceMap &interfaces);
+    void onInterfaceAdded(const QDBusObjectPath &objectPath, const ObjectInterfaceMap &interfaces);
     void onRequestRemoveFromDesktop(QDBusPendingCallWatcher* watcher);
-    void onAutoStartChanged(const bool isAutoStart, const QString &id);
+    void onAutoStartChanged(const bool &isAutoStarted, const QString &appId);
     void getManagedObjectsFinished(QDBusPendingCallWatcher*);
 
 private:
@@ -141,13 +145,12 @@ private:
     Q_DISABLE_COPY(AMInter)
 
     void fetchAllInfos();
-    void buildAppDBusConnect();
+    void buildAppDBusConnection();
     bool llUninstall(const QString &appid);
     bool lastoreUninstall(const QString &pkgName);
     bool shouldDisableScaling(const QString &appId);
     QStringList disableScalingApps() const;
     void setDisableScalingApps(const QStringList &value);
-    void monitorAutoStartFiles();
     ItemInfo_v3 itemInfoV3(const ObjectInterfaceMap &values) const;
     ItemInfo_v3 itemInfoV3(const QString &appId) const;
     ItemInfo_v2 itemInfoV2(const ItemInfo_v3 &itemInfoV3);

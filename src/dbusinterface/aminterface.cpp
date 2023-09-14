@@ -6,6 +6,7 @@
 #include "appsmanager.h"
 #include "util.h"
 
+#include <gio/gdesktopappinfo.h>
 #include <mutex>
 
 // dconfig key
@@ -331,19 +332,19 @@ void AMInter::getManagedObjectsFinished(QDBusPendingCallWatcher *watcher)
     watcher->deleteLater();
 }
 
-void AMInter::uninstallApp(const QString &name, const bool isLinglong)
+void AMInter::uninstallApp(const QString &appId, const bool isLinglong)
 {
     bool ret = false;
     if (isLinglong) {
-        ret = llUninstall(name);
+        ret = llUninstall(appId);
     } else {
-        ret = lastoreUninstall(name);
+        ret = lastoreUninstall(appId);
     }
 
     if (ret) {
-        AppsManager::instance()->abandonStashedItem(name);
+        AppsManager::instance()->abandonStashedItem(appId);
     } else {
-        AppsManager::instance()->onUninstallFail(name);
+        AppsManager::instance()->onUninstallFail(appId);
     }
 
     // 刷新各列表的分页信息
@@ -464,26 +465,26 @@ bool AMInter::llUninstall(const QString &appid)
     return true;
 }
 
-bool AMInter::lastoreUninstall(const QString &pkgName)
+bool AMInter::lastoreUninstall(const QString &appId)
 {
+    const QString desktop = getDesktop(appId + ".desktop");
+    const QString pkgName = getPkgName(desktop);
+
     QDBusInterface lastoreDbus("org.deepin.dde.Lastore1",
                                "/org/deepin/dde/Lastore1",
                                "org.deepin.dde.Lastore1.Manager",
                                QDBusConnection::systemBus());
 
     QDBusReply<bool> reply = lastoreDbus.call("PackageExists", pkgName);
-    // 包未安装时
     if (!(reply.isValid() && reply.value())) {
         qWarning() << "check packget" << pkgName << " exists failed" << reply.error();
         return false;
     }
 
-    // RemovePackage 接口有白名单，需要加上 /usr/bin/dde-launcher
     QDBusReply<QDBusObjectPath> rmReply = lastoreDbus.call(QDBus::Block,
                                                            "RemovePackage",
-                                                           QString("%1-rm-job").arg(pkgName), // jobname ?
+                                                           QString("%1-rm-job").arg(pkgName),
                                                            pkgName);
-
     if (!rmReply.isValid() || rmReply.value().path().isEmpty()) {
         qWarning() << "RemovePackage failed: " << rmReply.error();
         return false;
@@ -627,6 +628,38 @@ ItemInfo_v2 AMInter::itemInfoV2(const ItemInfo_v3 &itemInfoV3)
     info_v2.m_categoryId = itemInfoV3.category();
 
     return info_v2;
+}
+
+QString AMInter::getDesktop(const QString &desktopId)
+{
+    GDesktopAppInfo *appInfo = g_desktop_app_info_new(desktopId.toStdString().c_str());
+    if (!appInfo)
+        return QString();
+
+    const char *filePath = g_desktop_app_info_get_filename(appInfo);
+
+    return QString::fromUtf8(filePath);
+}
+
+QString AMInter::getPkgName(const QString &desktop)
+{
+    QProcess process;
+    QStringList args {"-S", desktop};
+    process.start("dpkg", args);
+    if (!process.waitForFinished())
+        return QString();
+
+    const QByteArray output = process.readAllStandardOutput();
+    if (output.size() == 0)
+        return QString();
+
+    const QStringList splits = QString(output).split('\n');
+    if (splits.size() > 0) {
+        const QStringList parts = splits.value(0).split(':');
+        return parts.value(0);
+    }
+
+    return QString();
 }
 
 ApplicationDBusProxy::ApplicationDBusProxy(const QString &path, QObject *parent)

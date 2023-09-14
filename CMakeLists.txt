@@ -9,6 +9,9 @@ set(VERSION 4.0)
 project(dde-launcher)
 
 find_package(DtkTools REQUIRED)
+find_package(PkgConfig REQUIRED)
+
+pkg_check_modules(GIO REQUIRED IMPORTED_TARGET gio-2.0 gio-unix-2.0)
 
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 14)

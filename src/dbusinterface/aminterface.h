@@ -115,7 +115,7 @@ public:
     bool isOnDesktop(const QString &appId);
     void launch(const QString &desktop);
     bool isLingLong(const QString &appId) const;
-    void uninstallApp(const QString &name, const bool isLinglong = false);
+    void uninstallApp(const QString &appId, const bool isLinglong = false);
     void setDisableScaling(const QString &appId, const bool value);
     bool disableScaling(const QString &appId);
     QStringList autostartList() const;
@@ -146,13 +146,15 @@ private:
     void fetchAllInfos();
     void buildAppDBusConnection();
     bool llUninstall(const QString &appid);
-    bool lastoreUninstall(const QString &pkgName);
+    bool lastoreUninstall(const QString &appId);
     bool shouldDisableScaling(const QString &appId);
     QStringList disableScalingApps() const;
     void setDisableScalingApps(const QStringList &value);
     ItemInfo_v3 itemInfoV3(const ObjectInterfaceMap &values) const;
     ItemInfo_v3 itemInfoV3(const QString &appId) const;
     ItemInfo_v2 itemInfoV2(const ItemInfo_v3 &itemInfoV3);
+    QString getDesktop(const QString &desktopId);
+    QString getPkgName(const QString &desktop);
 
     AppManagerDBusProxy *m_objManagerDbusInter;
     QMap<QString, ItemInfo_v3> m_infos;

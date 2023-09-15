@@ -532,43 +532,46 @@ void AppsManager::sortByInstallTimeOrder(ItemInfoList_v1 &processList)
 
 void AppsManager::removeDuplicateData(ItemInfoList_v1 &processList)
 {
-    if (AMInter::isAMReborn()) {
-        ItemInfoList_v1 items;
-        for (const auto &item : processList) {
-            if (!items.contains(item))
-                items.push_back(item);
-        }
-       processList = items;
-    } else {
-        // https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#desktop-file-id
-        // if applications have the same desktop file id, we consider it to be the same application.
-        // if same applications are installed, only show the one which path in front of XDG_DATA_DIRS
-        QMap<QString, ItemInfo_v1> id2Item;
-        const auto xdgDataDirs = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
-        for (const auto &item : processList) {
-            for (int index = 0; index < xdgDataDirs.count(); ++index) {
-                if (item.m_desktop.contains(xdgDataDirs[index])) {
-                    auto desktopPath = item.m_desktop;
-                    auto fullSuffix = xdgDataDirs[index] + "/";
-                    auto desktopId = desktopPath.remove(fullSuffix).replace("/", "-");
-                    if (id2Item.contains(desktopId))
-                        break;
+    // 移除相同的 item
+    ItemInfoList_v1 items;
+    for (const auto &item : processList) {
+        if (!items.contains(item))
+            items.push_back(item);
+    }
+    processList = items;
 
-                    id2Item[desktopId] = item;
+    if (AMInter::isAMReborn())
+        return;
+
+    // 移除 XDG_DATA_DIRS 不同目录下相同的 desktop
+    // https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#desktop-file-id
+    // if applications have the same desktop file id, we consider it to be the same application.
+    // if same applications are installed, only show the one which path in front of XDG_DATA_DIRS
+    QMap<QString, ItemInfo_v1> id2Item;
+    const auto xdgDataDirs = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
+    for (const auto &item : processList) {
+        for (int index = 0; index < xdgDataDirs.count(); ++index) {
+            if (item.m_desktop.contains(xdgDataDirs[index])) {
+                auto desktopPath = item.m_desktop;
+                auto fullSuffix = xdgDataDirs[index] + "/";
+                auto desktopId = desktopPath.remove(fullSuffix).replace("/", "-");
+                if (id2Item.contains(desktopId))
                     break;
-                }
+
+                id2Item[desktopId] = item;
+                break;
             }
         }
-
-        // id2Item 只会记录 XDG_DATA_DIRS 中找到的首个 item
-        // 这里从列表中移除所有 id2Item 不包含的 item
-        auto it = std::remove_if(processList.begin(), processList.end(), [&](const ItemInfo_v1 &item){
-            return !id2Item.values().contains(item);
-        });
-
-        if (it != processList.end())
-            processList.erase(it);
     }
+
+    // id2Item 只会记录 XDG_DATA_DIRS 中找到的首个 item
+    // 这里从列表中移除所有 id2Item 不包含的 item
+    auto it = std::remove_if(processList.begin(), processList.end(), [&](const ItemInfo_v1 &item){
+        return !id2Item.values().contains(item);
+    });
+
+    if (it != processList.end())
+        processList.erase(it, processList.end());
 }
 
 void AppsManager::removeNonexistentData()

@@ -1,3 +1,16 @@
+dde-launcher (6.0.17) unstable; urgency=medium
+
+  [ Deepin Packages Builder ]
+  * fix: switch between fullscreen & window(Issue: 5519)
+  * fix: application with no icon(Issue: 5513)
+  * chore: connect autostartchanged signal
+  * chore: modify interface name of PropertiesChanged signal
+  * chore: adjust removeDuplicateData
+  * fix: uninstall apps failed
+  * fix: duplicated item show in launcher(Issue: 4374)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Fri, 15 Sep 2023 11:38:39 +0800
+
 dde-launcher (6.0.16) unstable; urgency=medium
 
   * fix: onAppearanceChanged use mistake type

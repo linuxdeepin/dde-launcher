@@ -46,16 +46,16 @@ public:
     PropMap m_actionName;
     QStringList m_actions;
     QStringList m_categories;
-    bool m_autoStart;
+    bool m_autoStart = false;
     PropMap m_displayName;
     QString m_id;
     PropMap m_icons;
     QList<QDBusObjectPath> m_instances;
     qulonglong m_lastLaunchedTime;
-    bool m_X_Flatpak;
-    bool m_X_linglong;
+    bool m_X_Flatpak = false;
+    bool m_X_linglong = false;
     qulonglong m_installedTime;
-    bool m_noDisplay;
+    bool m_noDisplay = false;
 
     Categorytype category() const;
     friend QDebug operator<<(QDebug argument, const ItemInfo_v3 &info);

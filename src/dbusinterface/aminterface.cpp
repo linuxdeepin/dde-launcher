@@ -644,7 +644,7 @@ QString AMInter::getDesktop(const QString &desktopId)
 QString AMInter::getPkgName(const QString &desktop)
 {
     QProcess process;
-    QStringList args {"-S", desktop};
+    QStringList args {"-S", desktop.split('/').last()};
     process.start("dpkg", args);
     if (!process.waitForFinished())
         return QString();

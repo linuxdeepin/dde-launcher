@@ -268,7 +268,7 @@ void AppsListModel::insertItem(int pos)
 {
     beginInsertRows(QModelIndex(), pos, pos);
 
-    pos += m_appsManager->getPageIndex() * m_calcUtil->appPageItemCount(m_appsManager->getCategory());
+    pos += m_appsManager->pageIndex() * m_calcUtil->appPageItemCount(m_appsManager->category());
 
     m_appsManager->insertDropItem(pos);
     endInsertRows();
@@ -293,7 +293,7 @@ void AppsListModel::dropSwap(const int nextPos)
     const ItemInfo_v1 &appInfo = m_dragStartIndex.data(AppsListModel::AppRawItemInfoRole).value<ItemInfo_v1>();
 
     // 从文件夹展开窗口移除应用时，文件夹本身不执行移动操作
-    if (m_appsManager->getDragMode() != AppsManager::DirOut) {
+    if (m_appsManager->dragMode() != AppsManager::DirOut) {
         removeRows(m_dragStartIndex.row(), 1, QModelIndex());
         dropInsert(appInfo.m_desktop, nextPos);
     }

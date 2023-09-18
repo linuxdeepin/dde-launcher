@@ -593,14 +593,14 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
                 listModel->dropSwap(indexAt(m_dragStartPos).row());
 
             // TODO: 搜索模式下的会新增一个控件，因此这里暂时删除针对搜索模式的业务，不影响主体功能
-            int releasePos = AppsManager::instance()->getReleasePos();
+            int releasePos = AppsManager::instance()->releasePos();
 
 #ifdef QT_DEBUG
-            qDebug() << "releasePos: " << releasePos << ", dragMode: " << m_appManager->getDragMode();
+            qDebug() << "releasePos: " << releasePos << ", dragMode: " << m_appManager->dragMode();
 #endif
-            if (m_appManager->getListModel() && m_appManager->getDragMode() == AppsManager::DirOut) {
-                m_appManager->getListModel()->insertItem(releasePos);
-                m_appManager->getListModel()->clearDraggingIndex();
+            if (m_appManager->listModel() && m_appManager->dragMode() == AppsManager::DirOut) {
+                m_appManager->listModel()->insertItem(releasePos);
+                m_appManager->listModel()->clearDraggingIndex();
             }
 
             listModel->clearDraggingIndex();
@@ -659,21 +659,21 @@ void AppGridView::startDrag(const QModelIndex &index, bool execDrag)
         posAni->setEndValue(mapToGlobal(m_dropPoint) + QPoint(m_calcUtil->appMarginLeft(), 0));
     } else if (getViewType() == PopupView && m_calcUtil->fullscreen()) {
         // 全屏模式下，文件夹展开窗口中的应用被拖拽释放后...
-        int releasePos = AppsManager::instance()->getReleasePos();
+        int releasePos = AppsManager::instance()->releasePos();
 
         // 这里进行坐标计算时，不需要对页码进行计算，因为动画仅仅在当前页面进行展示，所以不需要进行考虑页码对动画起点和终点的影响
         // releasePos += m_appManager->getPageIndex() * m_calcUtil->appPageItemCount(m_appManager->getCategory());
-        if (!m_appManager->getListView()) {
+        if (!m_appManager->listView()) {
             qDebug() << "destination listview ptr is null...";
             return;
         }
 
-        QModelIndex itemIndex = m_appManager->getListView()->indexAt(releasePos);
-        QRect itemRect = m_appManager->getListView()->indexRect(itemIndex);
-        QPoint endPos = m_appManager->getListView()->mapToGlobal(itemRect.topLeft());
+        QModelIndex itemIndex = m_appManager->listView()->indexAt(releasePos);
+        QRect itemRect = m_appManager->listView()->indexRect(itemIndex);
+        QPoint endPos = m_appManager->listView()->mapToGlobal(itemRect.topLeft());
         posAni->setEndValue(endPos + QPoint(m_calcUtil->appMarginLeft(), 0));
 #ifdef QT_DEBUG
-        qDebug() << "releasePos:" << releasePos << ", model index valid status:" << itemIndex.isValid() << ", itemRect:" << itemRect << ", mapToGlobal:" << m_appManager->getListView()->mapToGlobal(itemRect.center());
+        qDebug() << "releasePos:" << releasePos << ", model index valid status:" << itemIndex.isValid() << ", itemRect:" << itemRect << ", mapToGlobal:" << m_appManager->listView()->mapToGlobal(itemRect.center());
 #endif
     } else {
         m_pixLabel->hide();

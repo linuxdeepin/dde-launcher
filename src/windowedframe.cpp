@@ -7,6 +7,7 @@
 #include "dbusdockinterface.h"
 #include "constants.h"
 #include "appitemdelegate.h"
+#include "amdbusdockinterface.h"
 #include "aminterface.h"
 
 #include <DWindowManagerHelper>

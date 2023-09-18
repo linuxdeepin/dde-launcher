@@ -8,6 +8,7 @@
 #include "amdbuslauncherinterface.h"
 #include "amdbusdockinterface.h"
 #include "aminterface.h"
+#include "calculate_util.h"
 
 #include <QSignalMapper>
 #include <QWindow>

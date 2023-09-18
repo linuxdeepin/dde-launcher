@@ -1,41 +1,23 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #ifndef APPSMANAGER_H
 #define APPSMANAGER_H
 
-#include "appslistmodel.h"
-#include "dbustartmanager.h"
-#include "calculate_util.h"
-#include "common.h"
-#include "amdbuslauncherinterface.h"
-#include "amdbusdockinterface.h"
-
 #include "trashutils/trashmonitor.h"
+#include "appslistmodel.h"
+#include "iteminfo.h"
 
 #include <DGuiApplicationHelper>
-#include <DDialog>
-
-#include <QHash>
-#include <QSettings>
-#include <QPixmap>
-#include <QTimer>
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QScreen>
-#include <QList>
 
 DGUI_USE_NAMESPACE
 
-#define LEFT_PADDING 200
-#define RIGHT_PADDING 200
-
-#define MAX_VIEW_NUM    255
-#define CATEGORY_COUNT    11
-
 class CalculateUtil;
 class AppGridView;
+class DBusStartManager;
+class AMDBusDockInter;
+class AMDBusLauncherInter;
 
 class AppsManager : public QObject
 {
@@ -59,11 +41,9 @@ public:
     bool isVaild();
     void refreshAllList();
     int getPageCount(const AppsListModel::AppCategory category);
-    const QScreen * currentScreen();
+    const QScreen *currentScreen();
     int getVisibleCategoryCount();
     bool fullscreen() const;
-    int displayMode() const;
-    qreal getCurRatio();
     void uninstallApp(const QModelIndex &modelIndex);
     bool uninstallDlgShownState() const;
 
@@ -74,42 +54,32 @@ public:
     const ItemInfo_v1 getItemInfo(const QString &desktop);
     void dropToCollected(const ItemInfo_v1 &info, const int row);
 
-    static bool readJsonFile(QIODevice &device, QSettings::SettingsMap &map);
-    static bool writeJsonFile(QIODevice &device, const QSettings::SettingsMap &map);
-    void registerSettingsFormat();
-
-    QSettings::SettingsMap getCacheMapData(const ItemInfoList_v1 &list);
-    const ItemInfoList_v1 readCacheData(const QSettings::SettingsMap &map);
-
     void setDragMode(const DragMode &mode);
-    DragMode getDragMode() const;
-
-    void setRemainedLastItem(const ItemInfo_v1 &info);
-    const ItemInfo_v1 getRemainedLastItem() const;
+    DragMode dragMode() const;
 
     void setDirAppRow(const int &row);
-    int getDirAppRow() const;
+    int dirAppRow() const;
 
     void setDirAppPageIndex(const int &pageIndex);
-    int getDirAppPageIndex() const;
+    int dirAppPageIndex() const;
 
     void setDragItem(const ItemInfo_v1 &info);
-    const ItemInfo_v1 getDragItem() const;
+    const ItemInfo_v1 dragItem() const;
 
     void setReleasePos(const int &row);
-    int getReleasePos() const;
+    int releasePos() const;
 
     void setCategory(const AppsListModel::AppCategory category);
-    AppsListModel::AppCategory getCategory() const;
+    AppsListModel::AppCategory category() const;
 
     void setPageIndex(const int &pageIndex);
-    int getPageIndex() const;
+    int pageIndex() const;
 
     void setListModel(AppsListModel *model);
-    AppsListModel *getListModel() const;
+    AppsListModel *listModel() const;
 
     void setListView(AppGridView *view);
-    AppGridView *getListView() const;
+    AppGridView *listView() const;
 
     void setDragModelIndex(const QModelIndex &index);
     QModelIndex dragModelIndex() const;
@@ -197,6 +167,13 @@ private:
     void setAutostartValue(const QStringList &list);
     QStringList getAutostartValue() const;
 
+    void registerSettingsFormat();
+    QSettings::SettingsMap getCacheMapData(const ItemInfoList_v1 &list);
+    const ItemInfoList_v1 readCacheData(const QSettings::SettingsMap &map);
+
+    void setRemainedLastItem(const ItemInfo_v1 &info);
+    const ItemInfo_v1 remainedLastItem() const;
+
 private slots:
     void markLaunched(const QString &appKey);
     void delayRefreshData();
@@ -227,8 +204,6 @@ private:
     QStringList m_newInstalledAppsList;                                     // 新安装应用列表
 
     ItemInfoList_v1 m_stashList;
-    ItemInfo_v1 m_unInstallItem;
-    ItemInfo_v1 m_beDragedItem;
 
     CalculateUtil *m_calUtil;
     QTimer *m_delayRefreshTimer;                                            // 延迟刷新应用列表定时器指针对象

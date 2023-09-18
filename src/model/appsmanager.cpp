@@ -1,34 +1,25 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "appsmanager.h"
 #include "util.h"
-#include "constants.h"
 #include "calculate_util.h"
 #include "aminterface.h"
+#include "dbustartmanager.h"
+#include "amdbuslauncherinterface.h"
+#include "amdbusdockinterface.h"
 
 #include <QDebug>
-#include <QX11Info>
-#include <QSvgRenderer>
-#include <QPainter>
-#include <QDataStream>
-#include <QIODevice>
-#include <QIcon>
-#include <QScopedPointer>
-#include <QIconEngine>
-#include <QDate>
-#include <QStandardPaths>
-#include <QByteArrayList>
-#include <QQueue>
+#include <QSettings>
 
-#include <DHiDPIHelper>
 #include <DApplication>
+#include <DDialog>
+
 #include "dpinyin.h"
 
 #define AUTOSTART_KEY "autostart-desktop-list"
 
-DWIDGET_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 QPointer<AppsManager> AppsManager::INSTANCE = nullptr;
@@ -39,7 +30,7 @@ QSettings AppsManager::APP_USED_SORTED_LIST("deepin", "dde-launcher-app-used-sor
 QSettings AppsManager::APP_CATEGORY_USED_SORTED_LIST("deepin","dde-launcher-app-category-used-sorted-list");
 static constexpr int USER_SORT_UNIT_TIME = 3600; // 1 hours
 
-bool AppsManager::readJsonFile(QIODevice &device, QSettings::SettingsMap &map)
+static bool readJsonFile(QIODevice &device, QSettings::SettingsMap &map)
 {
     QJsonParseError jsonParser;
     map = QJsonDocument::fromJson(device.readAll(), &jsonParser).toVariant().toMap();
@@ -47,7 +38,7 @@ bool AppsManager::readJsonFile(QIODevice &device, QSettings::SettingsMap &map)
     return jsonParser.error == QJsonParseError::NoError;
 }
 
-bool AppsManager::writeJsonFile(QIODevice &device, const QSettings::SettingsMap &map)
+static bool writeJsonFile(QIODevice &device, const QSettings::SettingsMap &map)
 {
     QJsonDocument jsonDocument = QJsonDocument::fromVariant(QVariant::fromValue(map));
     return device.write(jsonDocument.toJson()) != -1;
@@ -70,7 +61,6 @@ AppsManager::AppsManager(QObject *parent)
     , m_calUtil(CalculateUtil::instance())
     , m_delayRefreshTimer(new QTimer(this))
     , m_refreshCalendarIconTimer(new QTimer(this))
-    , m_lastShowDate(0)
     , m_tryNums(0)
     , m_tryCount(0)
     , m_itemInfo(ItemInfo_v1())
@@ -336,7 +326,7 @@ void AppsManager::setDragMode(const DragMode &mode)
     m_dragMode = mode;
 }
 
-AppsManager::DragMode AppsManager::getDragMode() const
+AppsManager::DragMode AppsManager::dragMode() const
 {
     return m_dragMode;
 }
@@ -346,7 +336,7 @@ void AppsManager::setRemainedLastItem(const ItemInfo_v1 &info)
     m_remainedLastItemInfo = info;
 }
 
-const ItemInfo_v1 AppsManager::getRemainedLastItem() const
+const ItemInfo_v1 AppsManager::remainedLastItem() const
 {
     return m_remainedLastItemInfo;
 }
@@ -360,7 +350,7 @@ void AppsManager::setDirAppRow(const int &row)
     m_dirAppRow = row;
 }
 
-int AppsManager::getDirAppRow() const
+int AppsManager::dirAppRow() const
 {
     return m_dirAppRow;
 }
@@ -374,7 +364,7 @@ void AppsManager::setDirAppPageIndex(const int &pageIndex)
     m_dirAppPageIndex = pageIndex;
 }
 
-int AppsManager::getDirAppPageIndex() const
+int AppsManager::dirAppPageIndex() const
 {
     return m_dirAppPageIndex;
 }
@@ -633,7 +623,7 @@ void AppsManager::removeNonexistentData()
 
                     if (itemInfo.m_appInfoList.size() == 1) {
                         const ItemInfo_v1 insertItemInfo = itemInfo.m_appInfoList.at(0);
-                        const int originDirAppRow = getDirAppRow() + getDirAppPageIndex() * m_calUtil->appPageItemCount(AppsListModel::FullscreenAll);
+                        const int originDirAppRow = dirAppRow() + dirAppPageIndex() * m_calUtil->appPageItemCount(AppsListModel::FullscreenAll);
                         m_dirAppInfoList.clear();
                         itemInfo.m_appInfoList.clear();
 
@@ -759,7 +749,7 @@ void AppsManager::setDragItem(const ItemInfo_v1 &info)
         m_dragItemInfo = info;
 }
 
-const ItemInfo_v1 AppsManager::getDragItem() const
+const ItemInfo_v1 AppsManager::dragItem() const
 {
     return m_dragItemInfo;
 }
@@ -773,7 +763,7 @@ void AppsManager::setReleasePos(const int &row)
     m_dropRow = row;
 }
 
-int AppsManager::getReleasePos() const
+int AppsManager::releasePos() const
 {
     return m_dropRow;
 }
@@ -787,7 +777,7 @@ void AppsManager::setCategory(const AppsListModel::AppCategory category)
     m_curCategory = category;
 }
 
-AppsListModel::AppCategory AppsManager::getCategory() const
+AppsListModel::AppCategory AppsManager::category() const
 {
     return m_curCategory;
 }
@@ -801,12 +791,12 @@ void AppsManager::setPageIndex(const int &pageIndex)
     m_pageIndex = pageIndex;
 }
 
-int AppsManager::getPageIndex() const
+int AppsManager::pageIndex() const
 {
     return m_pageIndex;
 }
 
-AppsListModel *AppsManager::getListModel() const
+AppsListModel *AppsManager::listModel() const
 {
     return m_appModel;
 }
@@ -821,7 +811,7 @@ void AppsManager::setListModel(AppsListModel *model)
     m_appModel = model;
 }
 
-AppGridView *AppsManager::getListView() const
+AppGridView *AppsManager::listView() const
 {
     return m_appView;
 }
@@ -848,12 +838,12 @@ void AppsManager::setListView(AppGridView *view)
 
 void AppsManager::removeDragItem()
 {
-    if (getDragMode() != DirOut) {
-        qDebug() << "drag mode: " << getDragMode();
+    if (dragMode() != DirOut) {
+        qDebug() << "drag mode: " << dragMode();
         return;
     }
 
-    ItemInfo_v1 removeItemInfo = getDragItem();
+    ItemInfo_v1 removeItemInfo = dragItem();
 #ifdef QT_DEBUG
     qDebug() << "removeItemInfo:" << removeItemInfo;
 #endif
@@ -894,8 +884,8 @@ void AppsManager::removeDragItem()
 
     // 2. 将文件夹中剩余的唯一一个应用插入到点击文件夹时的初始位置
     if (m_dirAppInfoList.isEmpty()) {
-        const int originDirAppRow = getDirAppRow() + getDirAppPageIndex() * m_calUtil->appPageItemCount(AppsListModel::FullscreenAll);
-        const ItemInfo_v1 &info = getRemainedLastItem();
+        const int originDirAppRow = dirAppRow() + dirAppPageIndex() * m_calUtil->appPageItemCount(AppsListModel::FullscreenAll);
+        const ItemInfo_v1 &info = remainedLastItem();
         m_fullscreenUsedSortedList.insert(originDirAppRow, info);
     }
 
@@ -910,12 +900,12 @@ void AppsManager::removeDragItem()
 
 void AppsManager::insertDropItem(int pos)
 {
-    if (getDragMode() != DirOut) {
-        qDebug() << "drag mode != DirOut, cur drag mode: " << getDragMode();
+    if (dragMode() != DirOut) {
+        qDebug() << "drag mode != DirOut, cur drag mode: " << dragMode();
         return;
     }
 
-    ItemInfo_v1 dropItemInfo = getDragItem();
+    ItemInfo_v1 dropItemInfo = dragItem();
 #ifdef QT_DEBUG
     qDebug() << "dropItemInfo:" << dropItemInfo;
 #endif
@@ -2031,16 +2021,6 @@ int AppsManager::getVisibleCategoryCount()
 bool AppsManager::fullscreen() const
 {
     return AMInter::isAMReborn() ? AMInter::instance()->fullScreen() : m_amDbusLauncherInter->fullscreen();
-}
-
-int AppsManager::displayMode() const
-{
-    return AMInter::isAMReborn() ? AMInter::instance()->displayMode() : m_amDbusLauncherInter->displaymode();
-}
-
-qreal AppsManager::getCurRatio()
-{
-    return m_calUtil->getCurRatio();
 }
 
 void AppsManager::uninstallApp(const QModelIndex &modelIndex)

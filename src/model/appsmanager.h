@@ -221,13 +221,12 @@ private:
     QSettings *m_windowedUsedSortSetting;
     QSettings *m_autostartDesktopListSetting;
 
-    QStringList m_categoryTs;
+    QStringList m_categories;
     QGSettings *m_filterSetting;
 
     bool m_trashIsEmpty;
     TrashMonitor *m_trashMonitor;
 
-    QTimer *m_updateCalendarTimer;
     bool m_uninstallDlgIsShown;
     DragMode m_dragMode;                                                    // 拖拽类型
     AppsListModel::AppCategory m_curCategory;                               // 当前视图列表的模式类型

@@ -46,35 +46,11 @@ static bool writeJsonFile(QIODevice &device, const QSettings::SettingsMap &map)
 
 static QSettings::SettingsMap itemInfoList2SettingsMap(const ItemInfoList_v1 &list)
 {
-    auto fillMapData = [ & ](QSettings::SettingsMap &map, const ItemInfo_v1 &info) {
-        map.insert("desktop", info.m_desktop);
-        map.insert("appName", info.m_name);
-        map.insert("appKey", info.m_key);
-        map.insert("iconKey", info.m_iconKey);
-        map.insert("appStatus", info.m_status);
-        map.insert("categoryId", info.m_categoryId);
-        map.insert("description", info.m_description);
-        map.insert("progressValue", info.m_progressValue);
-        map.insert("installTime", info.m_installedTime);
-        map.insert("openCount", info.m_openCount);
-        map.insert("firstRunTime", info.m_firstRunTime);
-        map.insert("isDir", info.m_isDir);
-    };
-
     QSettings::SettingsMap map;
+
     for (int i = 0; i < list.size(); i++) {
-        QSettings::SettingsMap itemMap, itemDirMap;
         const ItemInfo_v1 &info = list.at(i);
-        fillMapData(itemMap, info);
-
-        for (int j = 0; j < info.m_appInfoList.size(); j++) {
-            const ItemInfo_v1 &dirInfo = info.m_appInfoList.at(j);
-            fillMapData(itemDirMap, dirInfo);
-            itemMap.insert(QString("appInfoList_%1").arg(j), itemDirMap);
-        }
-        if (info.m_isDir)
-            itemMap.insert("appInfoSize", info.m_appInfoList.size());
-
+        QSettings::SettingsMap itemMap = info.toSettingsMap();
         map.insert(QString("itemInfoList_%1").arg(i), itemMap);
     }
 
@@ -83,37 +59,11 @@ static QSettings::SettingsMap itemInfoList2SettingsMap(const ItemInfoList_v1 &li
 
 static const ItemInfoList_v1 settingsMap2ItemInfoList(const QSettings::SettingsMap &map)
 {
-    auto getMapData = [ & ](ItemInfo_v1 &info, const QMap<QString, QVariant> &infoMap) {
-        info.m_desktop = infoMap.value("desktop").toString();
-        info.m_name = infoMap.value("appName").toString();
-        info.m_key = infoMap.value("appKey").toString();
-        info.m_iconKey = infoMap.value("iconKey").toString();
-        info.m_status = infoMap.value("appStatus").toInt();
-        info.m_categoryId = infoMap.value("categoryId").toLongLong();
-        info.m_description = infoMap.value("description").toString();
-        info.m_progressValue = infoMap.value("progressValue").toInt();
-        info.m_installedTime = infoMap.value("installTime").toInt();
-        info.m_openCount = infoMap.value("openCount").toLongLong();
-        info.m_firstRunTime = infoMap.value("firstRunTime").toLongLong();
-        info.m_isDir = infoMap.value("isDir").toLongLong();
-    };
-
     ItemInfoList_v1 infoList;
+
     for (int i = 0; i < map.size(); i++) {
-        ItemInfo_v1 info;
-        ItemInfoList_v1 appList;
-        QMap<QString, QVariant> itemInfoMap = map.value(QString("itemInfoList_%1").arg(i)).toMap();
-
-        getMapData(info, itemInfoMap);
-        int appInfoSize = itemInfoMap.contains("appInfoSize") ? itemInfoMap.value("appInfoSize").toInt() : 0;
-
-        ItemInfo_v1 appInfo;
-        for (int j = 0; j < appInfoSize; j++) {
-            QMap<QString, QVariant> appInfoMap = itemInfoMap.value(QString("appInfoList_%1").arg(j)).toMap();
-            getMapData(appInfo, appInfoMap);
-            appList.append(appInfo);
-        }
-        info.m_appInfoList.append(appList);
+        QSettings::SettingsMap itemInfoMap = map.value(QString("itemInfoList_%1").arg(i)).toMap();
+        ItemInfo_v1 info = ItemInfo_v1::fromSettingsMap(itemInfoMap);
         infoList.append(info);
     }
 
@@ -144,7 +94,6 @@ AppsManager::AppsManager(QObject *parent)
     , m_filterSetting(nullptr)
     , m_trashIsEmpty(false)
     , m_trashMonitor(new TrashMonitor(this))
-    , m_updateCalendarTimer(new QTimer(this))
     , m_uninstallDlgIsShown(false)
     , m_dragMode(Other)
     , m_curCategory(AppsListModel::FullscreenAll)
@@ -164,20 +113,17 @@ AppsManager::AppsManager(QObject *parent)
     registerSettingsFormat();
 
     // 分类目录名称
-    m_categoryTs.append(tr("Internet"));
-    m_categoryTs.append(tr("Chat"));
-    m_categoryTs.append(tr("Music"));
-    m_categoryTs.append(tr("Video"));
-    m_categoryTs.append(tr("Graphics"));
-    m_categoryTs.append(tr("Games"));
-    m_categoryTs.append(tr("Office"));
-    m_categoryTs.append(tr("Reading"));
-    m_categoryTs.append(tr("Development"));
-    m_categoryTs.append(tr("System"));
-    m_categoryTs.append(tr("Other"));
-
-    m_updateCalendarTimer->setInterval(1000);// 1s
-    m_updateCalendarTimer->start();
+    m_categories.append(tr("Internet"));
+    m_categories.append(tr("Chat"));
+    m_categories.append(tr("Music"));
+    m_categories.append(tr("Video"));
+    m_categories.append(tr("Graphics"));
+    m_categories.append(tr("Games"));
+    m_categories.append(tr("Office"));
+    m_categories.append(tr("Reading"));
+    m_categories.append(tr("Development"));
+    m_categories.append(tr("System"));
+    m_categories.append(tr("Other"));
 
     updateTrashState();
     refreshAllList();
@@ -185,25 +131,22 @@ AppsManager::AppsManager(QObject *parent)
     m_delayRefreshTimer->setSingleShot(true);
     m_delayRefreshTimer->setInterval(500);
 
-    m_refreshCalendarIconTimer->setInterval(1000);
     m_refreshCalendarIconTimer->setSingleShot(false);
+    m_refreshCalendarIconTimer->setInterval(1000);
 
     if (AMInter::isAMReborn()) {
         connect(AMInter::instance(), &AMInter::newAppLaunched, this, &AppsManager::markLaunched);
         connect(AMInter::instance(), &AMInter::itemChanged, this, qOverload<const QString &, const ItemInfo_v2 &, qlonglong>(&AppsManager::handleItemChanged));
-
     } else {
         connect(m_amDbusLauncherInter, &AMDBusLauncherInter::NewAppLaunched, this, &AppsManager::markLaunched);
         connect(m_amDbusLauncherInter, &AMDBusLauncherInter::ItemChanged, this, qOverload<const QString &, const ItemInfo_v2 &, qlonglong>(&AppsManager::handleItemChanged));
     }
-
     connect(m_amDbusDockInter, &AMDBusDockInter::IconSizeChanged, this, &AppsManager::IconSizeChanged, Qt::QueuedConnection);
     connect(m_amDbusDockInter, &AMDBusDockInter::FrontendWindowRectChanged, this, &AppsManager::dockGeometryChanged, Qt::QueuedConnection);
     if (!AMInter::isAMReborn()) {
         connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallSuccess, this, &AppsManager::abandonStashedItem);
         connect(m_amDbusLauncherInter, &AMDBusLauncherInter::UninstallFailed, this, &AppsManager::onUninstallFail);
     }
-
     if (AMInter::isAMReborn()) {
         connect(AMInter::instance(), &AMInter::autostartChanged, this, &AppsManager::refreshAppAutoStartCache);
     } else {
@@ -214,8 +157,7 @@ AppsManager::AppsManager(QObject *parent)
     connect(m_trashMonitor, &TrashMonitor::trashAttributeChanged, this, &AppsManager::updateTrashState, Qt::QueuedConnection);
     connect(m_refreshCalendarIconTimer, &QTimer::timeout, this, &AppsManager::onRefreshCalendarTimer);
 
-    if (!m_refreshCalendarIconTimer->isActive())
-        m_refreshCalendarIconTimer->start();
+    m_refreshCalendarIconTimer->start();
 }
 
 void AppsManager::showSearchedData(const AppInfoList &list)
@@ -1179,7 +1121,7 @@ void AppsManager::onGSettingChanged(const QString &keyName)
 const ItemInfo_v1 AppsManager::createOfCategory(qlonglong category)
 {
     ItemInfo_v1 info;
-    info.m_name = m_categoryTs[static_cast<int>(category)];
+    info.m_name = m_categories[static_cast<int>(category)];
     info.m_categoryId = category;
     info.m_iconKey = "";
     return info;
@@ -2094,8 +2036,8 @@ void AppsManager::updateUsedSortData(QModelIndex dragIndex, QModelIndex dropInde
 
             // 不论拖拽对象与释放对象是否为同一类应用, 都把释放对象的分类标题作为文件夹名称
             int idIndex = static_cast<int>(dropItemInfo.m_categoryId);
-            if (m_categoryTs.size() > idIndex)
-                list[dropIndex].m_name = m_categoryTs[idIndex];
+            if (m_categories.size() > idIndex)
+                list[dropIndex].m_name = m_categories[idIndex];
         }
 
         ItemInfoList_v1 itemList;

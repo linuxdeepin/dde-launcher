@@ -79,6 +79,9 @@ public:
     static ItemInfoList_v1 itemListToItemV1List(const ItemInfoList &list);
     static ItemInfoList_v1 itemV2ListToItemV1List(const ItemInfoList_v2 &list);
 
+    static ItemInfo_v1 fromSettingsMap(const QSettings::SettingsMap &map);
+    QSettings::SettingsMap toSettingsMap() const;
+
     bool isTitle() const;
     bool startWithLetter() const;
     bool startWithNum() const;

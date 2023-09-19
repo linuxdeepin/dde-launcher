@@ -232,6 +232,61 @@ ItemInfoList_v1 ItemInfo_v1::itemV2ListToItemV1List(const ItemInfoList_v2 &list)
     return itemInfoList;
 }
 
+ItemInfo_v1 ItemInfo_v1::fromSettingsMap(const QSettings::SettingsMap &map)
+{
+    ItemInfo_v1 info;
+    info.m_desktop = map.value("desktop").toString();
+    info.m_name = map.value("appName").toString();
+    info.m_key = map.value("appKey").toString();
+    info.m_iconKey = map.value("iconKey").toString();
+    info.m_status = map.value("appStatus").toInt();
+    info.m_categoryId = map.value("categoryId").toLongLong();
+    info.m_description = map.value("description").toString();
+    info.m_progressValue = map.value("progressValue").toInt();
+    info.m_installedTime = map.value("installTime").toInt();
+    info.m_openCount = map.value("openCount").toLongLong();
+    info.m_firstRunTime = map.value("firstRunTime").toLongLong();
+    info.m_isDir = map.value("isDir").toLongLong();
+
+    int appInfoSize = map.value("appInfoSize", 0).toInt();
+    ItemInfoList_v1 appList;
+    for (int j = 0; j < appInfoSize; j++) {
+        QMap<QString, QVariant> appInfoMap = map.value(QString("appInfoList_%1").arg(j)).toMap();
+        ItemInfo_v1 appInfo = ItemInfo_v1::fromSettingsMap(appInfoMap);
+        appList.append(appInfo);
+    }
+    info.m_appInfoList.append(appList);
+
+    return info;
+}
+
+QSettings::SettingsMap ItemInfo_v1::toSettingsMap() const
+{
+    QSettings::SettingsMap map;
+    map.insert("desktop", m_desktop);
+    map.insert("appName", m_name);
+    map.insert("appKey", m_key);
+    map.insert("iconKey", m_iconKey);
+    map.insert("appStatus", m_status);
+    map.insert("categoryId", m_categoryId);
+    map.insert("description", m_description);
+    map.insert("progressValue", m_progressValue);
+    map.insert("installTime", m_installedTime);
+    map.insert("openCount", m_openCount);
+    map.insert("firstRunTime", m_firstRunTime);
+    map.insert("isDir", m_isDir);
+
+    for (int j = 0; j < m_appInfoList.size(); j++) {
+        const ItemInfo_v1 &dirInfo = m_appInfoList.at(j);
+        QSettings::SettingsMap itemDirMap = dirInfo.toSettingsMap();
+        map.insert(QString("appInfoList_%1").arg(j), itemDirMap);
+    }
+    if (m_isDir)
+        map.insert("appInfoSize", m_appInfoList.size());
+
+    return map;
+}
+
 bool ItemInfo_v1::isTitle() const
 {
     return ((m_name == m_desktop) && m_name.front().isUpper()) || (m_desktop == "#");

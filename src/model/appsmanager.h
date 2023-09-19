@@ -92,9 +92,6 @@ signals:
     void categoryListChanged() const;
     void IconSizeChanged() const;
     void dockGeometryChanged() const;
-
-    void itemRedraw(const QModelIndex &index);
-
     void loadItem(const ItemInfo_v1 &info, const QString &operationStr);
     void requestHideLauncher();
     void requestHidePopup();
@@ -103,7 +100,6 @@ public slots:
     void saveWidowedUsedSortedList();
     void saveFullscreenUsedSortedList();
     void saveCollectedSortedList();
-    void searchApp(const QString &keywords);
     void launchApp(const QModelIndex &index);
     void uninstallApp(const QString &desktopPath);
     void uninstallApp(const ItemInfo_v1 &info);
@@ -165,11 +161,9 @@ private:
     void refreshAppAutoStartCache(const QString &type = QString(), const QString &desktpFilePath = QString());
 
     void setAutostartValue(const QStringList &list);
-    QStringList getAutostartValue() const;
+    QStringList autostartValue() const;
 
     void registerSettingsFormat();
-    QSettings::SettingsMap getCacheMapData(const ItemInfoList_v1 &list);
-    const ItemInfoList_v1 readCacheData(const QSettings::SettingsMap &map);
 
     void setRemainedLastItem(const ItemInfo_v1 &info);
     const ItemInfo_v1 remainedLastItem() const;
@@ -183,7 +177,7 @@ private slots:
     void onRefreshCalendarTimer();
     void onGSettingChanged(const QString & keyName);
 
-public:
+private:
     QHash<AppsListModel::AppCategory, ItemInfoList_v1> m_appInfos;      // 应用分类容器
     ItemInfoList_v1 m_appCategoryInfos;                                 // 小窗口左侧带分类标题的应用列表
     ItemInfoList_v1 m_appLetterModeInfos;                               // 小窗口左侧字母排序模式列表
@@ -194,12 +188,10 @@ public:
     ItemInfoList_v1 m_fullscreenUsedSortedList;                         // 全屏应用列表
     ItemInfoList_v1 m_windowedUsedSortedList;                           // 小窗口应用列表
 
-private:
     DBusStartManager *m_startManagerInter;
     AMDBusLauncherInter *m_amDbusLauncherInter;
     AMDBusDockInter *m_amDbusDockInter;
 
-    QString m_searchText;
     ItemInfoList_v1 m_allAppInfoList;                                       // 所有app信息列表
     QStringList m_newInstalledAppsList;                                     // 新安装应用列表
 
@@ -231,8 +223,6 @@ private:
 
     QStringList m_categoryTs;
     QGSettings *m_filterSetting;
-
-    bool m_iconValid;                                                       // 获取图标状态标示
 
     bool m_trashIsEmpty;
     TrashMonitor *m_trashMonitor;

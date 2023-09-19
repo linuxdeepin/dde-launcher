@@ -44,6 +44,82 @@ static bool writeJsonFile(QIODevice &device, const QSettings::SettingsMap &map)
     return device.write(jsonDocument.toJson()) != -1;
 }
 
+static QSettings::SettingsMap itemInfoList2SettingsMap(const ItemInfoList_v1 &list)
+{
+    auto fillMapData = [ & ](QSettings::SettingsMap &map, const ItemInfo_v1 &info) {
+        map.insert("desktop", info.m_desktop);
+        map.insert("appName", info.m_name);
+        map.insert("appKey", info.m_key);
+        map.insert("iconKey", info.m_iconKey);
+        map.insert("appStatus", info.m_status);
+        map.insert("categoryId", info.m_categoryId);
+        map.insert("description", info.m_description);
+        map.insert("progressValue", info.m_progressValue);
+        map.insert("installTime", info.m_installedTime);
+        map.insert("openCount", info.m_openCount);
+        map.insert("firstRunTime", info.m_firstRunTime);
+        map.insert("isDir", info.m_isDir);
+    };
+
+    QSettings::SettingsMap map;
+    for (int i = 0; i < list.size(); i++) {
+        QSettings::SettingsMap itemMap, itemDirMap;
+        const ItemInfo_v1 &info = list.at(i);
+        fillMapData(itemMap, info);
+
+        for (int j = 0; j < info.m_appInfoList.size(); j++) {
+            const ItemInfo_v1 &dirInfo = info.m_appInfoList.at(j);
+            fillMapData(itemDirMap, dirInfo);
+            itemMap.insert(QString("appInfoList_%1").arg(j), itemDirMap);
+        }
+        if (info.m_isDir)
+            itemMap.insert("appInfoSize", info.m_appInfoList.size());
+
+        map.insert(QString("itemInfoList_%1").arg(i), itemMap);
+    }
+
+    return map;
+}
+
+static const ItemInfoList_v1 settingsMap2ItemInfoList(const QSettings::SettingsMap &map)
+{
+    auto getMapData = [ & ](ItemInfo_v1 &info, const QMap<QString, QVariant> &infoMap) {
+        info.m_desktop = infoMap.value("desktop").toString();
+        info.m_name = infoMap.value("appName").toString();
+        info.m_key = infoMap.value("appKey").toString();
+        info.m_iconKey = infoMap.value("iconKey").toString();
+        info.m_status = infoMap.value("appStatus").toInt();
+        info.m_categoryId = infoMap.value("categoryId").toLongLong();
+        info.m_description = infoMap.value("description").toString();
+        info.m_progressValue = infoMap.value("progressValue").toInt();
+        info.m_installedTime = infoMap.value("installTime").toInt();
+        info.m_openCount = infoMap.value("openCount").toLongLong();
+        info.m_firstRunTime = infoMap.value("firstRunTime").toLongLong();
+        info.m_isDir = infoMap.value("isDir").toLongLong();
+    };
+
+    ItemInfoList_v1 infoList;
+    for (int i = 0; i < map.size(); i++) {
+        ItemInfo_v1 info;
+        ItemInfoList_v1 appList;
+        QMap<QString, QVariant> itemInfoMap = map.value(QString("itemInfoList_%1").arg(i)).toMap();
+
+        getMapData(info, itemInfoMap);
+        int appInfoSize = itemInfoMap.contains("appInfoSize") ? itemInfoMap.value("appInfoSize").toInt() : 0;
+
+        ItemInfo_v1 appInfo;
+        for (int j = 0; j < appInfoSize; j++) {
+            QMap<QString, QVariant> appInfoMap = itemInfoMap.value(QString("appInfoList_%1").arg(j)).toMap();
+            getMapData(appInfo, appInfoMap);
+            appList.append(appInfo);
+        }
+        info.m_appInfoList.append(appList);
+        infoList.append(info);
+    }
+
+    return infoList;
+}
+
 void AppsManager::registerSettingsFormat()
 {
     const QSettings::Format JsonFormat = QSettings::registerFormat("json", readJsonFile, writeJsonFile);
@@ -66,7 +142,6 @@ AppsManager::AppsManager(QObject *parent)
     , m_itemInfo(ItemInfo_v1())
     , m_autostartDesktopListSetting(new QSettings("deepin", AUTOSTART_KEY, this))
     , m_filterSetting(nullptr)
-    , m_iconValid(true)
     , m_trashIsEmpty(false)
     , m_trashMonitor(new TrashMonitor(this))
     , m_updateCalendarTimer(new QTimer(this))
@@ -239,82 +314,6 @@ void AppsManager::dropToCollected(const ItemInfo_v1 &info, const int row)
 
     saveCollectedSortedList();
     emit dataChanged(AppsListModel::Favorite);
-}
-
-QSettings::SettingsMap AppsManager::getCacheMapData(const ItemInfoList_v1 &list)
-{
-    auto fillMapData = [ & ](QSettings::SettingsMap &map, const ItemInfo_v1 &info) {
-        map.insert("desktop", info.m_desktop);
-        map.insert("appName", info.m_name);
-        map.insert("appKey", info.m_key);
-        map.insert("iconKey", info.m_iconKey);
-        map.insert("appStatus", info.m_status);
-        map.insert("categoryId", info.m_categoryId);
-        map.insert("description", info.m_description);
-        map.insert("progressValue", info.m_progressValue);
-        map.insert("installTime", info.m_installedTime);
-        map.insert("openCount", info.m_openCount);
-        map.insert("firstRunTime", info.m_firstRunTime);
-        map.insert("isDir", info.m_isDir);
-    };
-
-    QSettings::SettingsMap map;
-    for (int i = 0; i < list.size(); i++) {
-        QSettings::SettingsMap itemMap, itemDirMap;
-        const ItemInfo_v1 &info = list.at(i);
-        fillMapData(itemMap, info);
-
-        for (int j = 0; j < info.m_appInfoList.size(); j++) {
-            const ItemInfo_v1 &dirInfo = info.m_appInfoList.at(j);
-            fillMapData(itemDirMap, dirInfo);
-            itemMap.insert(QString("appInfoList_%1").arg(j), itemDirMap);
-        }
-        if (info.m_isDir)
-            itemMap.insert("appInfoSize", info.m_appInfoList.size());
-
-        map.insert(QString("itemInfoList_%1").arg(i), itemMap);
-    }
-
-    return map;
-}
-
-const ItemInfoList_v1 AppsManager::readCacheData(const QSettings::SettingsMap &map)
-{
-    auto getMapData = [ & ](ItemInfo_v1 &info, const QMap<QString, QVariant> &infoMap) {
-        info.m_desktop = infoMap.value("desktop").toString();
-        info.m_name = infoMap.value("appName").toString();
-        info.m_key = infoMap.value("appKey").toString();
-        info.m_iconKey = infoMap.value("iconKey").toString();
-        info.m_status = infoMap.value("appStatus").toInt();
-        info.m_categoryId = infoMap.value("categoryId").toLongLong();
-        info.m_description = infoMap.value("description").toString();
-        info.m_progressValue = infoMap.value("progressValue").toInt();
-        info.m_installedTime = infoMap.value("installTime").toInt();
-        info.m_openCount = infoMap.value("openCount").toLongLong();
-        info.m_firstRunTime = infoMap.value("firstRunTime").toLongLong();
-        info.m_isDir = infoMap.value("isDir").toLongLong();
-    };
-
-    ItemInfoList_v1 infoList;
-    for (int i = 0; i < map.size(); i++) {
-        ItemInfo_v1 info;
-        ItemInfoList_v1 appList;
-        QMap<QString, QVariant> itemInfoMap = map.value(QString("itemInfoList_%1").arg(i)).toMap();
-
-        getMapData(info, itemInfoMap);
-        int appInfoSize = itemInfoMap.contains("appInfoSize") ? itemInfoMap.value("appInfoSize").toInt() : 0;
-
-        ItemInfo_v1 appInfo;
-        for (int j = 0; j < appInfoSize; j++) {
-            QMap<QString, QVariant> appInfoMap = itemInfoMap.value(QString("appInfoList_%1").arg(j)).toMap();
-            getMapData(appInfo, appInfoMap);
-            appList.append(appInfo);
-        }
-        info.m_appInfoList.append(appList);
-        infoList.append(info);
-    }
-
-    return infoList;
 }
 
 /**保存当前拖拽的类型
@@ -1007,22 +1006,17 @@ void AppsManager::refreshAllList()
 
 void AppsManager::saveWidowedUsedSortedList()
 {
-    m_windowedUsedSortSetting->setValue("lists", getCacheMapData(m_windowedUsedSortedList));
+    m_windowedUsedSortSetting->setValue("lists", itemInfoList2SettingsMap(m_windowedUsedSortedList));
 }
 
 void AppsManager::saveFullscreenUsedSortedList()
 {
-    m_fullscreenUsedSortSetting->setValue("lists", getCacheMapData(m_fullscreenUsedSortedList));
+    m_fullscreenUsedSortSetting->setValue("lists", itemInfoList2SettingsMap(m_fullscreenUsedSortedList));
 }
 
 void AppsManager::saveCollectedSortedList()
 {
-    m_collectedSetting->setValue("lists", getCacheMapData(m_favoriteSortedList));
-}
-
-void AppsManager::searchApp(const QString &keywords)
-{
-    m_searchText = keywords;
+    m_collectedSetting->setValue("lists", itemInfoList2SettingsMap(m_favoriteSortedList));
 }
 
 void AppsManager::launchApp(const QModelIndex &index)
@@ -1369,7 +1363,7 @@ bool AppsManager::appIsNewInstall(const QString &key)
 
 bool AppsManager::appIsAutoStart(const QString &desktop)
 {
-    return getAutostartValue().contains(desktop);
+    return autostartValue().contains(desktop);
 }
 
 bool AppsManager::appIsOnDock(const QString &desktop)
@@ -1412,8 +1406,7 @@ const QPixmap AppsManager::appIcon(const ItemInfo_v1 &info, const int size)
     const int iconSize = perfectIconSize(size);
 
     m_itemInfo = info;
-    m_iconValid = getThemeIcon(pix, info, size);
-    if (m_iconValid) {
+    if (getThemeIcon(pix, info, size)) {
         m_tryNums = 0;
         return pix;
     }
@@ -1512,7 +1505,7 @@ void AppsManager::refreshCategoryInfoList()
     sortByPresetOrder(m_allAppInfoList);
 
     // 2. 读取小窗口所有应用列表的缓存数据
-    m_windowedUsedSortedList = readCacheData(m_windowedUsedSortSetting->value("lists").toMap());
+    m_windowedUsedSortedList = settingsMap2ItemInfoList(m_windowedUsedSortSetting->value("lists").toMap());
 
     // 所有应用列表有而小窗口缓存数据中没有的, 则加入到小窗口应用列表中
     updateDataFromAllAppList(m_windowedUsedSortedList);
@@ -1526,7 +1519,7 @@ void AppsManager::refreshCategoryInfoList()
         in >> oldUsedSortedList;
         m_fullscreenUsedSortedList = ItemInfo_v1::itemListToItemV1List(oldUsedSortedList);
     } else {
-        m_fullscreenUsedSortedList = readCacheData(m_fullscreenUsedSortSetting->value("lists").toMap());
+        m_fullscreenUsedSortedList = settingsMap2ItemInfoList(m_fullscreenUsedSortSetting->value("lists").toMap());
     }
 
     // 所有应用列表有而全屏缓存数据中没有的, 则加入到全屏应用列表中
@@ -1551,7 +1544,7 @@ void AppsManager::refreshCategoryInfoList()
                 categoryIn >> itemInfoList;
                 itemInfoList_v1 = ItemInfo_v1::itemListToItemV1List(itemInfoList);
             } else if (m_categorySetting->contains(QString("lists_%1").arg(categoryIndex))) {
-                itemInfoList_v1 = readCacheData(m_categorySetting->value(QString("lists_%1").arg(categoryIndex)).toMap());
+                itemInfoList_v1 = settingsMap2ItemInfoList(m_categorySetting->value(QString("lists_%1").arg(categoryIndex)).toMap());
             }
 
             ItemInfoList_v1 list_ToRemove;
@@ -1726,7 +1719,7 @@ void AppsManager::saveAppCategoryInfoList()
     QHash<AppsListModel::AppCategory, ItemInfoList_v1>::iterator categoryAppsIter = m_appInfos.begin();
     for (; categoryAppsIter != m_appInfos.end(); ++categoryAppsIter) {
         int category = categoryAppsIter.key();
-        m_categorySetting->setValue(QString("lists_%1").arg(category), getCacheMapData(categoryAppsIter.value()));
+        m_categorySetting->setValue(QString("lists_%1").arg(category), itemInfoList2SettingsMap(categoryAppsIter.value()));
     }
 }
 
@@ -1795,7 +1788,7 @@ void AppsManager::readCollectedCacheData()
         // 缓存小窗口收藏列表
         saveCollectedSortedList();
     } else {
-        m_favoriteSortedList = readCacheData(m_collectedSetting->value("lists").toMap());
+        m_favoriteSortedList = settingsMap2ItemInfoList(m_collectedSetting->value("lists").toMap());
     }
 }
 
@@ -1841,7 +1834,7 @@ void AppsManager::refreshAppAutoStartCache(const QString &type, const QString &d
             return;
 
         // 记录插入的应用的desktop全路径，区分不同包格式的同一应用，避免都绘制出自启动的样式
-        QStringList autostartList = getAutostartValue();
+        QStringList autostartList = autostartValue();
         if (type == "added") {
             APP_AUTOSTART_CACHE.insert(desktop_file_name);
 
@@ -1867,7 +1860,7 @@ void AppsManager::setAutostartValue(const QStringList &list)
     m_autostartDesktopListSetting->setValue(AUTOSTART_KEY, list);
 }
 
-QStringList AppsManager::getAutostartValue() const
+QStringList AppsManager::autostartValue() const
 {
     return m_autostartDesktopListSetting->value(AUTOSTART_KEY).toStringList();
 }

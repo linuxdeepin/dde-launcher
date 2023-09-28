@@ -236,19 +236,8 @@ target_link_libraries(${BIN_NAME} PRIVATE
 file(GLOB QM_FILES "translations/*.qm")
 install(FILES ${QM_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/dde-launcher/translations)
 
-## desktop file
-install(FILES dde-launcher.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications/)
-
-configure_file(${CMAKE_SOURCE_DIR}/dde-launcher-wapper.in ${CMAKE_CURRENT_BINARY_DIR}/dde-launcher-wapper @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dde-launcher-wapper DESTINATION ${CMAKE_INSTALL_BINDIR} PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-
-## services files
-configure_file(
-    ${CMAKE_SOURCE_DIR}/src/dbusservices/org.deepin.dde.Launcher1.service.in
-    ${CMAKE_CURRENT_BINARY_DIR}/org.deepin.dde.Launcher1.service
-    @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.deepin.dde.Launcher1.service 
-	DESTINATION ${CMAKE_INSTALL_DATADIR}/dbus-1/services)
+# config file
+add_subdirectory(misc)
 
 #schemas
 install(FILES gschema/com.deepin.dde.launcher.gschema.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/glib-2.0/schemas)

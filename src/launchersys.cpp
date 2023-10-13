@@ -223,6 +223,9 @@ void LauncherSys::onFrontendRectChanged()
 
 void LauncherSys::onButtonPress(const QPoint &p, const int flag)
 {
+    if (!m_launcherInter->visible())
+        return;
+
     m_launcherInter->regionMonitorPoint(p, flag);
 }
 

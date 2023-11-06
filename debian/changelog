@@ -1,3 +1,17 @@
+dde-launcher (6.0.18) unstable; urgency=medium
+
+  * chore: initialize member value explicitly
+  * fix: uninstall failed
+  * refact: clean code on appsmanager
+  * refact: optimise code on appsmanager
+  * refact: optimize code on SettingsMaptoItemInfoList
+  * fix: launcher crashed during refershItemInfoList
+  * refact: DBus activation file and add systemd service
+  * chore: not test mouse point if launcher is hidden
+  * fix: compatible with New AM
+
+ -- Deepin Packages Builder <packages@deepin.org>  Mon, 06 Nov 2023 17:19:58 +0800
+
 dde-launcher (6.0.17) unstable; urgency=medium
 
   [ Deepin Packages Builder ]

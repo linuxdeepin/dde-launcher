@@ -25,6 +25,9 @@ static void registerType()
     qDBusRegisterMetaType<QMap<QString, QString>>();
     qDBusRegisterMetaType<ObjectInterfaceMap>();
 
+    qRegisterMetaType<QStringMap>("QStringMap");
+    qDBusRegisterMetaType<QStringMap>();
+
     qRegisterMetaType<PropMap>("PropMap");
     qDBusRegisterMetaType<PropMap>();
 
@@ -57,13 +60,19 @@ ItemInfo_v3::Categorytype ItemInfo_v3::category() const
 
 QDebug operator<<(QDebug argument, const ItemInfo_v3 &info)
 {
-    argument << "actionName: " << info.m_actionName << ", actions: " << info.m_actions
-             << ", autoStart: " << info.m_autoStart << ", displayName: " << info.m_displayName
-             << ", ID: " << info.m_id << ", icons: " << info.m_icons
-             << ", instances: " << info.m_instances << ", lastLaunchedTime: " << info.m_lastLaunchedTime
+    argument << "actionName: " << info.m_actionName
+             << ", actions: " << info.m_actions
+             << ", autoStart: " << info.m_autoStart << ", name: " << info.m_name
+             << ", genericName:" << info.m_genericName << ", ID: " << info.m_id
+             << ", icons: " << info.m_icons
+             << ", instances: " << info.m_instances
+             << ", lastLaunchedTime: " << info.m_lastLaunchedTime
              << ", categories: " << info.m_categories
-             << ", X_Flatpak: " << info.m_X_Flatpak << ", X_linglong: " << info.m_X_linglong
-             << ", installedTime: " << info.m_installedTime << ", noDisplay: " << info.m_noDisplay;
+             << ", X_Flatpak: " << info.m_X_Flatpak
+             << ", X_linglong: " << info.m_X_linglong
+             << ", X_Deepin_Vendor:" << info.m_X_Deepin_Vendor
+             << ", installedTime: " << info.m_installedTime
+             << ", noDisplay: " << info.m_noDisplay;
 
     return argument;
 }
@@ -73,14 +82,15 @@ bool ItemInfo_v3::operator==(const ItemInfo_v3 &other) const
     return (this->m_actionName == other.m_actionName) &&
            (this->m_actions == other.m_actions) &&
            (this->m_autoStart == other.m_autoStart) &&
-           (this->m_displayName == other.m_displayName) &&
-           (this->m_id == other.m_id) &&
-           (this->m_icons == other.m_icons) &&
+           (this->m_name == other.m_name) &&
+           (this->m_genericName == other.m_genericName) &&
+           (this->m_id == other.m_id) && (this->m_icons == other.m_icons) &&
            (this->m_instances == other.m_instances) &&
            (this->m_lastLaunchedTime == other.m_lastLaunchedTime) &&
            (this->m_categories == other.m_categories) &&
            (this->m_X_Flatpak == other.m_X_Flatpak) &&
            (this->m_X_linglong == other.m_X_linglong) &&
+           (this->m_X_Deepin_Vendor == other.m_X_Deepin_Vendor) &&
            (this->m_installedTime == other.m_installedTime) &&
            (this->m_noDisplay == other.m_noDisplay);
 }
@@ -542,14 +552,19 @@ ItemInfo_v3 AMInter::itemInfoV3(const ObjectInterfaceMap &objs) const
             } else if (key == "Categories") {
                 QStringList value = qdbus_cast<QStringList>(interPropIter.value());
                 info_v3.m_categories = value;
-            } else if (key == "DisplayName") {
-                PropMap value = qdbus_cast<PropMap>(interPropIter.value());
-                info_v3.m_displayName = value;
+            } else if (key == "GenericName") {
+                info_v3.m_genericName =
+                    qdbus_cast<QStringMap>(interPropIter.value());
+            } else if (key == "Name") {
+                info_v3.m_name = qdbus_cast<QStringMap>(interPropIter.value());
+            } else if (key == "X_Deepin_Vendor") {
+                info_v3.m_X_Deepin_Vendor =
+                    qdbus_cast<QString>(interPropIter.value());
             } else if (key == "ID") {
                 QString value = qdbus_cast<QString>(interPropIter.value());
                 info_v3.m_id = value;
             } else if (key == "Icons") {
-                PropMap value = qdbus_cast<PropMap>(interPropIter.value());
+                auto value = qdbus_cast<QStringMap>(interPropIter.value());
                 info_v3.m_icons = value;
             } else if (key == "Instances") {
                 QList<QDBusObjectPath> value = qdbus_cast<QList<QDBusObjectPath>>(interPropIter.value());
@@ -596,30 +611,35 @@ ItemInfo_v2 AMInter::itemInfoV2(const ItemInfo_v3 &itemInfoV3)
 
     QString defaultDisplayName;
     QString zh_displayName;
-    for (auto displayNameKey : itemInfoV3.m_displayName.keys()) {
-        if (displayNameKey == "Name") {
-            auto displayNameValues = itemInfoV3.m_displayName.value(displayNameKey);
-            for (auto key : displayNameValues.keys()) {
-                if (key == "default") {
-                    defaultDisplayName = displayNameValues.value(key);
-                }
-                if (key == "zh_CN") {
-                    zh_displayName = displayNameValues.value(key);
-                }
-            }
+
+    if (itemInfoV3.m_X_Deepin_Vendor == "deepin") {
+        if (auto defaultName = itemInfoV3.m_genericName.constFind("default");
+            defaultName != itemInfoV3.m_genericName.constEnd()) {
+            defaultDisplayName = *defaultName;
+        }
+
+        if (auto CNName = itemInfoV3.m_genericName.constFind("zh_CN");
+            CNName != itemInfoV3.m_genericName.constEnd()) {
+            zh_displayName = *CNName;
+        }
+    } else {
+        if (auto defaultName = itemInfoV3.m_name.constFind("default");
+            defaultName != itemInfoV3.m_name.constEnd()) {
+            defaultDisplayName = *defaultName;
+        }
+
+        if (auto CNName = itemInfoV3.m_name.constFind("zh_CN");
+            CNName != itemInfoV3.m_name.constEnd()) {
+            zh_displayName = *CNName;
         }
     }
+
     QString iconName;
-    for (auto iconKey : itemInfoV3.m_icons.keys()) {
-        if (iconKey == "default") {
-            auto iconValues = itemInfoV3.m_icons.value(iconKey);
-            for (auto key : iconValues.keys()) {
-                if (key == "default") {
-                    iconName = iconValues.value(key);
-                }
-            }
-        }
+    if (auto defaultIcon = itemInfoV3.m_icons.constFind("Desktop Entry");
+        defaultIcon != itemInfoV3.m_icons.constEnd()) {
+        iconName = *defaultIcon;
     }
+
     info_v2.m_desktop = itemInfoV3.m_id;
     info_v2.m_name = zh_displayName.isEmpty() ? defaultDisplayName : zh_displayName;
     info_v2.m_key = itemInfoV3.m_id;

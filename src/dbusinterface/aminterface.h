@@ -10,15 +10,18 @@
 #include <QObject>
 
 #include <DDBusInterface>
+#include <QMap>
 
 DCORE_USE_NAMESPACE
 
 using ObjectInterfaceMap = QMap<QString, QVariantMap>;
 using ObjectMap = QMap<QDBusObjectPath, ObjectInterfaceMap>;
-using PropMap = QMap<QString, QMap<QString, QString>>;
+using QStringMap = QMap<QString, QString>;
+using PropMap = QMap<QString, QStringMap>;
 
 Q_DECLARE_METATYPE(ObjectInterfaceMap)
 Q_DECLARE_METATYPE(ObjectMap)
+Q_DECLARE_METATYPE(QStringMap)
 Q_DECLARE_METATYPE(PropMap)
 
 class ItemInfo_v3
@@ -47,13 +50,15 @@ public:
     QStringList m_actions;
     QStringList m_categories;
     bool m_autoStart = false;
-    PropMap m_displayName;
+    QStringMap m_genericName;
+    QStringMap m_name;
     QString m_id;
-    PropMap m_icons;
+    QStringMap m_icons;
     QList<QDBusObjectPath> m_instances;
     qulonglong m_lastLaunchedTime;
     bool m_X_Flatpak = false;
     bool m_X_linglong = false;
+    QString m_X_Deepin_Vendor;
     qulonglong m_installedTime;
     bool m_noDisplay = false;
 

@@ -20,5 +20,15 @@ configure_file(
 
 set(SYSTEMD_USER_UNIT_DIR ${CMAKE_INSTALL_PREFIX}/lib/systemd/user/)
 
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dde-session-initialized.target.wants)
+
+file(CREATE_LINK
+     ${SYSTEMD_USER_UNIT_DIR}/org.deepin.dde.Launcher1.service
+     ${CMAKE_CURRENT_BINARY_DIR}/dde-session-initialized.target.wants/org.deepin.dde.Launcher1.service
+     SYMBOLIC)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dde-session-initialized.target.wants/org.deepin.dde.Launcher1.service
+        DESTINATION ${SYSTEMD_USER_UNIT_DIR}/dde-session-initialized.target.wants)
+
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/systemd/user/org.deepin.dde.Launcher1.service
     DESTINATION ${SYSTEMD_USER_UNIT_DIR})

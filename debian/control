@@ -36,6 +36,8 @@ Depends:
  ${shlibs:Depends},
 Conflicts:
  dde-workspace (<< 2.90.5),
+ dde-launchpad,
+Replaces: dde-launchpad
 Description:deepin desktop-environment - dde-launcher module
  Deepin desktop environment 2015 - dde-launcher module.
  Display all installation programs, and provide access to open, uninstall, boot and start, which is convenient for users to operate quickly

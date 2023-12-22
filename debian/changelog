@@ -1,3 +1,10 @@
+dde-launcher (6.0.19) unstable; urgency=medium
+
+  * fix: declare conflict with dde-launchpad
+  * fix: logout timeout
+
+ -- Wang Zichong <wangzichong@deepin.org>  Fri, 22 Dec 2023 14:34:00 +0800
+
 dde-launcher (6.0.18) unstable; urgency=medium
 
   * chore: initialize member value explicitly
